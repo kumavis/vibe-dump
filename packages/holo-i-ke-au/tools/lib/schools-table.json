@@ -60,7 +60,8 @@
     "year": 2018,
     "n": 314,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "aiea-elementary",
@@ -271,7 +272,8 @@
     "year": 2018,
     "n": 614,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "aliamanu-middle",
@@ -332,7 +334,8 @@
     "year": 2018,
     "n": 226,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "ke-kula-kaiapuni-o-anuenue",
@@ -374,9 +377,9 @@
     "key": 13
    },
    "footprint": "way/455188845",
-   "from": 1999,
+   "from": 1940,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "9–12",
    "sources": [
     {
@@ -386,14 +389,18 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "wikipedia-henry-perrine-baldwin-high-school",
+     "where": "campus"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 1322,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "Opened in 1938; in its present building from 1940."
   },
   {
    "id": "barbers-point-elementary",
@@ -454,7 +461,8 @@
     "year": 2018,
     "n": 3095,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "james-b-castle-high",
@@ -546,7 +554,8 @@
     "year": 2018,
     "n": 451,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "dole-middle",
@@ -577,7 +586,8 @@
     "year": 2018,
     "n": 765,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "eleele-elementary",
@@ -639,7 +649,8 @@
     "year": 2018,
     "n": 385,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "ewa-beach-elementary",
@@ -790,7 +801,8 @@
     "year": 2018,
     "n": 443,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "haaheo-elementary",
@@ -881,7 +893,8 @@
     "year": 2018,
     "n": 452,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "haleiwa-elementary",
@@ -1092,7 +1105,8 @@
     "year": 2018,
     "n": 523,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "hickam-elementary",
@@ -1153,7 +1167,8 @@
     "year": 2018,
     "n": 883,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "hilo-high",
@@ -1364,7 +1379,8 @@
     "year": 2018,
     "n": 133,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "honokaa-elementary",
@@ -1545,7 +1561,8 @@
     "year": 2018,
     "n": 987,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "iliahi-elementary",
@@ -1576,7 +1593,8 @@
     "year": 2018,
     "n": 372,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "ilima-intermediate",
@@ -1607,7 +1625,8 @@
     "year": 2018,
     "n": 875,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "daniel-k-inouye-elementary",
@@ -1788,7 +1807,8 @@
     "year": 2018,
     "n": 506,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kaala-elementary",
@@ -1819,7 +1839,8 @@
     "year": 2018,
     "n": 446,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kaelepulu-elementary",
@@ -1910,7 +1931,8 @@
     "year": 2018,
     "n": 749,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kahala-elementary",
@@ -2061,7 +2083,8 @@
     "year": 2018,
     "n": 989,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kailua-elementary",
@@ -2153,7 +2176,8 @@
     "year": 2018,
     "n": 775,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kaimiloa-elementary",
@@ -2274,7 +2298,8 @@
     "year": 2018,
     "n": 419,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "henry-j-kaiser-high",
@@ -2365,7 +2390,8 @@
     "year": 2018,
     "n": 410,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kalaheo-high",
@@ -2456,7 +2482,8 @@
     "year": 2018,
     "n": 900,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kalani-high",
@@ -2607,7 +2634,8 @@
     "year": 2018,
     "n": 547,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kalihi-uka-elementary",
@@ -2698,7 +2726,8 @@
     "year": 2018,
     "n": 987,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kamalii-elementary",
@@ -2794,7 +2823,8 @@
     "year": 2018,
     "n": 385,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kaneohe-elementary",
@@ -2979,7 +3009,8 @@
     "year": 2018,
     "n": 589,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kapiolani-elementary",
@@ -3010,7 +3041,8 @@
     "year": 2018,
     "n": 373,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kapolei-elementary",
@@ -3311,7 +3343,8 @@
     "year": 2018,
     "n": 286,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kawananakoa-middle",
@@ -3493,7 +3526,8 @@
     "year": 2018,
     "n": 936,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kealakehe-high",
@@ -3554,7 +3588,8 @@
     "year": 2018,
     "n": 689,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "keaukaha-elementary",
@@ -3766,7 +3801,8 @@
     "year": 2018,
     "n": 690,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kilauea-elementary",
@@ -3922,7 +3958,8 @@
     "year": 2018,
     "n": 328,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kohala-high",
@@ -3983,7 +4020,8 @@
     "year": 2018,
     "n": 183,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "koko-head-elementary",
@@ -4164,7 +4202,8 @@
     "year": 2018,
     "n": 215,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kula-elementary",
@@ -4318,7 +4357,8 @@
     "year": 2018,
     "n": 633,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "lanai-high-and-elementary",
@@ -4380,7 +4420,8 @@
     "year": 2018,
     "n": 386,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "lehua-elementary",
@@ -4592,7 +4633,8 @@
     "year": 2018,
     "n": 158,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "lincoln-elementary",
@@ -4684,7 +4726,8 @@
     "year": 2018,
     "n": 321,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "maemae-elementary",
@@ -5078,7 +5121,8 @@
     "year": 2018,
     "n": 359,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "mckinley-high",
@@ -5295,7 +5339,8 @@
     "year": 2018,
     "n": 775,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "moanalua-elementary",
@@ -5416,7 +5461,8 @@
     "year": 2018,
     "n": 911,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "mokulele-elementary",
@@ -5568,7 +5614,8 @@
     "year": 2018,
     "n": 468,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "naalehu-elementary",
@@ -5809,7 +5856,8 @@
     "year": 2018,
     "n": 440,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "nuuanu-elementary",
@@ -5900,7 +5948,8 @@
     "year": 2018,
     "n": 196,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "pahoa-elementary",
@@ -6141,7 +6190,8 @@
     "year": 2018,
     "n": 430,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "pearl-city-high",
@@ -6203,7 +6253,8 @@
     "year": 2018,
     "n": 537,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "pearl-harbor-elementary",
@@ -6444,7 +6495,8 @@
     "year": 2018,
     "n": 247,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "puu-kukui-elementary",
@@ -6576,9 +6628,9 @@
     "key": 217
    },
    "footprint": "way/881577103",
-   "from": 1999,
+   "from": 1932,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "9–12",
    "sources": [
     {
@@ -6588,9 +6640,12 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "wikipedia-president-theodore-roosevelt-high-school",
+     "where": "infobox"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 1372,
@@ -7048,7 +7103,8 @@
     "year": 2018,
     "n": 517,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "waialua-high-intermediate",
@@ -7439,7 +7495,8 @@
     "year": 2018,
     "n": 501,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "waimea-elementary",
@@ -7650,7 +7707,8 @@
     "year": 2018,
     "n": 415,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "wheeler-elementary",
@@ -7681,7 +7739,8 @@
     "year": 2018,
     "n": 708,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "wheeler-middle",
@@ -7712,7 +7771,8 @@
     "year": 2018,
     "n": 800,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "elsie-h-wilcox-elementary",
@@ -7774,7 +7834,8 @@
     "year": 2018,
     "n": 572,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "connections-public-charter",
@@ -8170,7 +8231,8 @@
      "where": "sch_code 552"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "by": "hawaii-gis-public-schools",
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kawaikini-new-century-public-charter",
@@ -8455,7 +8517,8 @@
     "year": 2014,
     "n": 306,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kula-aupuni-niihau-a-kahelelani-aloha",
@@ -8854,7 +8917,8 @@
     "year": 2018,
     "n": 259,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "west-hawaii-explorations-academy",
@@ -8964,7 +9028,8 @@
     "year": 2021,
     "n": 55,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "akaula-school",
@@ -8991,7 +9056,8 @@
     "year": 2021,
     "n": 34,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "asia-pacific-international-school-hawaii-campus",
@@ -9018,7 +9084,8 @@
     "year": 2021,
     "n": 150,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "assets-school",
@@ -9075,7 +9142,8 @@
     "year": 2021,
     "n": 133,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "carden-academy-of-maui",
@@ -9102,7 +9170,8 @@
     "year": 2021,
     "n": 156,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "central-union-preschool-and-kindergarten",
@@ -9189,7 +9258,8 @@
     "year": 2021,
     "n": 198,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "saint-damien-school",
@@ -9280,7 +9350,8 @@
     "year": 2021,
     "n": 264,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "haili-christian-school",
@@ -9307,7 +9378,8 @@
     "year": 2021,
     "n": 153,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "haleakala-waldorf",
@@ -9518,7 +9590,8 @@
     "year": 2021,
     "n": 67,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "hawaiian-mission-academy-ka-lama-iki",
@@ -9545,7 +9618,8 @@
     "year": 2021,
     "n": 73,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "hawaiian-mission-academy-maui",
@@ -9572,7 +9646,8 @@
     "year": 2021,
     "n": 20,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "hoala-school",
@@ -9599,7 +9674,8 @@
     "year": 2021,
     "n": 51,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "holy-family-catholic-academy",
@@ -9656,7 +9732,8 @@
     "year": 2021,
     "n": 140,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "hongwanji-mission-school",
@@ -9743,7 +9820,8 @@
     "year": 2021,
     "n": 6,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "huakailani-school-for-girls",
@@ -9770,7 +9848,8 @@
     "year": 2021,
     "n": 35,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "iolani-school",
@@ -9889,7 +9968,8 @@
     "year": 2021,
     "n": 123,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kahili-adventist-school",
@@ -9916,7 +9996,8 @@
     "year": 2021,
     "n": 23,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kaimuki-christian-school",
@@ -9943,7 +10024,8 @@
     "year": 2021,
     "n": 280,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kamehameha-schools-hawaii",
@@ -10064,7 +10146,8 @@
     "year": 2021,
     "n": 156,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kawaiahao-church-school",
@@ -10151,7 +10234,8 @@
     "year": 2021,
     "n": 20,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kona-adventist-christian-school",
@@ -10178,7 +10262,8 @@
     "year": 2021,
     "n": 21,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "kuleana-education-academy",
@@ -10205,7 +10290,8 @@
     "year": 2021,
     "n": 64,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "la-pietra-hawaii-school-for-girls",
@@ -10232,7 +10318,8 @@
     "year": 2021,
     "n": 133,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "lanakila-baptist-schools",
@@ -10320,7 +10407,8 @@
     "year": 2021,
     "n": 69,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "makua-lani-christian-academy",
@@ -10377,7 +10465,8 @@
     "year": 2021,
     "n": 93,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "mary-star-of-the-sea-early-learning-center",
@@ -10526,7 +10615,8 @@
     "year": 2021,
     "n": 57,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "mid-pacific-institute",
@@ -10644,7 +10734,8 @@
     "year": 2021,
     "n": 213,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "new-hope-christian-school",
@@ -10701,7 +10792,8 @@
     "year": 2021,
     "n": 168,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "our-savior-lutheran-school",
@@ -10728,7 +10820,8 @@
     "year": 2021,
     "n": 93,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "pacific-buddhist-academy",
@@ -10847,7 +10940,8 @@
     "year": 2021,
     "n": 50,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "sacred-hearts-academy",
@@ -10999,7 +11093,8 @@
     "year": 2021,
     "n": 282,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "saint-theresa-school",
@@ -11026,7 +11121,8 @@
     "year": 2021,
     "n": 249,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "seabury-hall",
@@ -11083,7 +11179,8 @@
     "year": 2021,
     "n": 51,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "st-anthony",
@@ -11110,7 +11207,8 @@
     "year": 2021,
     "n": 278,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "st-andrews-schools-the-prep",
@@ -11137,7 +11235,8 @@
     "year": 2021,
     "n": 65,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "st-andrews-schools-the-preschool",
@@ -11164,7 +11263,8 @@
     "year": 2021,
     "n": 101,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "st-andrews-schools-the-priory",
@@ -11222,7 +11322,8 @@
     "year": 2021,
     "n": 170,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "st-clements-school",
@@ -11249,7 +11350,8 @@
     "year": 2021,
     "n": 92,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "st-elizabeth-school",
@@ -11306,7 +11408,8 @@
     "year": 2021,
     "n": 176,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "st-johns-catholic-preschool",
@@ -11425,7 +11528,8 @@
     "year": 2021,
     "n": 98,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "st-philomena-early-learning-center",
@@ -11452,7 +11556,8 @@
     "year": 2021,
     "n": 129,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "st-theresa-school",
@@ -11509,7 +11614,8 @@
     "year": 2021,
     "n": 210,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "trinity-christian-school",
@@ -11627,7 +11733,8 @@
     "year": 2021,
     "n": 46,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "waolani-judd-nazarene-school",
@@ -11684,7 +11791,8 @@
     "year": 2021,
     "n": 147,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
   },
   {
    "id": "chaminade-university",
@@ -11958,7 +12066,7 @@
      "where": "the East Kapolei campus in 2013"
     }
    ],
-   "note": "Opened in 1976 in borrowed rooms and beside Leeward Community College from 1981; the record read shows this Kapolei campus by 2013.",
+   "note": "Opened in 1976 in borrowed rooms and beside Leeward Community College from 1981; the record read shows this Kapolei campus by 2013. No record opened gives the year it opened: it stands from the first record read that shows it, and stood before.",
    "by": "wikipedia-university-of-hawaii-west-oahu"
   },
   {
@@ -14051,6 +14159,30 @@
    "tertiary": true,
    "note": "Read 2026-11-07 (revision of 2026-08-24): founded as the Fort Street English Day School in 1865; moved to Keōua Hale, the former palace of Ruth Keʻelikōlani, in November 1869; to the corner of Beretania and Victoria Streets in 1907 and renamed; to its King Street campus in 1923.",
    "wanted": "The school’s site from 1865 to 1869 on Fort Street, and which corner of Beretania and Victoria it stood on."
+  },
+  {
+   "id": "wikipedia-henry-perrine-baldwin-high-school",
+   "title": "Henry Perrine Baldwin High School",
+   "author": "Wikipedia",
+   "year": 2026,
+   "url": "https://en.wikipedia.org/wiki/Henry_Perrine_Baldwin_High_School",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "tertiary": true,
+   "note": "Read 2026-11-07 (revision of 2026-09-05): the school opened in 1938 and moved to its current building in 1940."
+  },
+  {
+   "id": "wikipedia-president-theodore-roosevelt-high-school",
+   "title": "President Theodore Roosevelt High School",
+   "author": "Wikipedia",
+   "year": 2026,
+   "url": "https://en.wikipedia.org/wiki/President_Theodore_Roosevelt_High_School",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "tertiary": true,
+   "note": "Read 2026-11-07 (revision of 2026-11-03): established 1932 (the infobox)."
   }
  ]
 }
