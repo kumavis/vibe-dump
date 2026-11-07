@@ -1636,8 +1636,9 @@ const V1_PINS = {
 // no pinned match is fought on: data-check's V12; 13, F7b's parapets
 // (built as 8 on 7), which stand on fortified boards alone: the pins as
 // under 12; 14, F7c's collapsing platforms, on fortified boards alone:
-// the pins as under 13)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+// the pins as under 13; 15, F9b's long hulls: `facing` printed only on a
+// footprint unit, which no pinned match fields: the pins as under 14)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
 const PINS_UNDER = (v) => (v >= 12
   ? { ...V1_PINS, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
   : v >= 9 ? { ...V1_PINS, '64-89': { end: '1jmxq628imf' } } : V1_PINS)

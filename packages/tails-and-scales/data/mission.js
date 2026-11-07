@@ -249,7 +249,10 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     // took 644 ms a battle, a movement phase's p90 64 ms (1.84× each; the
     // base commit's, with no Howdah, 505 and 54), and with the budget 509
     // and 48 (1.45× and 1.36×; scale-bench's row run on this mission, one
-    // run, a load under 1.2))
+    // run, a load under 1.2); (F9b's review) run again three times each
+    // way on a quiet, faster box, a copy with this line taken out: without
+    // it 529, 492 and 482 ms, p90 52, 42 and 58 (two of the three over
+    // 1.5×), with it 370, 358 and 350, p90 30, 33 and 31)
     ai: { lattice: 3, targets: 6 },
     list: {
       size: 'Grand', points: 1500, units: 24, models: 90, perKind: 7,

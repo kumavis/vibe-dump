@@ -370,7 +370,8 @@ export function boot(location) {
   const pinAt = human.group.pinAt.bind(human.group)
   human.group.pinAt = (...args) => {
     pinAt(...args)
-    ui.toast.tip('pin')
+    // ((F9b's review) a lone long hull's pin its own tip: one, and turned)
+    ui.toast.tip(human.group.loneHull() ? 'pinHull' : 'pin')
   }
   const give = human.standing.give.bind(human.standing)
   human.standing.give = (seat, ids, order, ...rest) => {

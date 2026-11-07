@@ -1684,10 +1684,21 @@ follows N3.
   the scale/ corpus's Grand row misses on `watch-hulls-grand-1`, 202.3 s
   as watched against 200, main's class; army-sim's Field per-unit gate
   misses on a rider (the Grenadiers 21 ± 9 against 45 at seed 1111, the
-  Venom Spitters 30 ± 8 against 50 at 4444), F9c's to re-fit with the
-  riders shooting. DESIGN's F9b
+  Venom Spitters 30 ± 8 against 50 at 4444), unexplained: perhaps F9c's
+  re-fit with the riders shooting moves it, else noise (the review's
+  wording). DESIGN's F9b
   notes, the slot table, the edge rule and `facing=<h>` corrected in
-  place.)
+  place. The review's fixes (three reviewers, sixteen findings): an
+  engaged Howdah falls back by the one-unit move tool (it was a group of
+  one whose pin planned nothing); a turned ghost plans its group's pin
+  again, so every member lands where its ghost stood, a placement's
+  headings counting the members before it; "no room to turn here" in a
+  wrecker's own mode; the bar's arrow as the camera shows the ghost; the
+  pin's line off the tooltip once sent; the help's long-hull row and a
+  tip of its own; P-prop's `PINNED_UNDER` taking 15; play-report's room
+  row printing its boards' baseline; macro-check's turned-ghost and
+  engaged-hull lanes and input-check's arrow and tooltip rows, each with
+  self-test edits.)
 - [ ] **Later (F9b's):** the AI count budget's rows still over
   scale-bench's `BUDGET` (every cap row over 350 ms a battle or 35 ms a
   movement phase's p90, the open cap battle at the 1.5× line on the final
@@ -1696,10 +1707,15 @@ follows N3.
   14% of a cap battle) and, only if a profile asks for it, binning
   `smashAround` (§4.2.5's note; not among the top costs); the lattice
   about 1.5× the prototype's timings (a fresh plan's arrays 0.25 ms of
-  it); a charge end's rotate handle; a group placement's headings judged with
-  the earlier members of the pin counted (`placeOk` against the table as
-  it stands); the room term's heading where `cellBest`'s isn't a valid
-  end; the Grand rebalance with the Howdah (it fits −224 ± 81 at Grand,
+  it); a charge end's rotate handle; the room term's heading where
+  `cellBest`'s isn't a valid end (`endFacing`'s, a rules change);
+  playback-check's `scale/` Grand row over its 200 s on `hull/`'s
+  `watch-hulls-grand-1` (202.3 s as watched; main's class, beside the
+  Grand fixture's 203.9 s above: a pacing or budget call); checks for
+  the long hull's tooltip breakdown, "no room to turn here", the hatched
+  reach and the minimap's capsule; `--record` refreshing a battle's
+  `why` (the corpus keeps each recording's first description, the
+  budget's eight AI pairs and older battles alike); the Grand rebalance with the Howdah (it fits −224 ± 81 at Grand,
   a random list taking 1.5-1.9 of them whatever the price, the points
   binding 316 of 1,000 Coil lists at its 5); the points binding the
   Coil's Field lists (834 of 1,000 at 20, 981 before the Howdah);

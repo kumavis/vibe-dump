@@ -57,7 +57,7 @@
 // each member's heading, the one turned to or the default, as its `f`. A
 // left drag on the table still orbits the camera.
 import * as THREE from 'three'
-import { previewGroup, slotsOf } from '../present/orders.js'
+import { previewGroup, slotsOf, othersAt, placeFits } from '../present/orders.js'
 import { runGroup } from './orders.js'
 import { unitPrice } from '../core/army.js'
 import { sfx } from '../view/sfx.js'
@@ -76,6 +76,9 @@ const HANDLE_PX = 44
 const tmpV = new THREE.Vector3()
 // the circular distance between two angles
 const turnGap = (a, b) => Math.abs(((((a - b) % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI)) - Math.PI)
+// (F9b's review) the arrows a heading is told by, clockwise from up the
+// screen
+const ARROWS = '↑↗→↘↓↙←↖'
 
 export class GroupInput {
   // `human` (input/human.js), `view` (view/index.js), `selection`
@@ -135,13 +138,16 @@ export class GroupInput {
   }
   // (F9b) The long hull picked up alone, where a ground click pins it: in
   // its seat's deployment, or in its movement phase while it can move; else
-  // null.
+  // null. ((F9b's review) Not while it is engaged: the planner leaves a unit
+  // in combat where it stands, so its pin would plan nothing; its click is
+  // the one-unit move tool's, the fall-back inside the red area the HUD
+  // names, at the move's default heading, as a round unit's is.)
   loneHull() {
     const ms = this.members()
     if (ms.length !== 1 || !ms[0].t.fp) return null
     const u = ms[0], verb = this.phase()
     if (verb === 'place') return u
-    return verb === 'move' && !u.flags.moved && this.human.ask((G, q) => q.canAct(G, u)) ? u : null
+    return verb === 'move' && !u.flags.moved && this.human.ask((G, q) => q.canAct(G, u) && !q.isEngaged(G, u)) ? u : null
   }
   // (F9b) whether a ground click pins: a group, or a lone long hull
   pins() {
@@ -532,12 +538,16 @@ export class GroupInput {
   // ((F10c) `rot`: the formation turned that far round the point, its slots
   // given to the planner, as the executor will give them)
   // ((F9a) a Move or an Approach for the movers, riders riding along)
-  preview(verb, target, line = null, rot = 0) {
+  // ((F9b's review) `heads`, the pinned long hulls' headings (id → { cell,
+  // f }), given to the planner as the executor gives them: each taken
+  // where its member lands on that cell and it is valid there, the members
+  // after it planned round it)
+  preview(verb, target, line = null, rot = 0, heads = null) {
     const go = verb === 'move' || verb === 'approach'
     const seat = this.seat(), ids = (go ? this.movers() : this.members()).map((u) => u.id)
     const p = this.human.ask((G, q) => {
       const us = this.selection.units(G, ids)
-      return previewGroup(G, q, seat, verb, us, target, rot && !line && target.x !== undefined ? turned(G, slotsOf(G, us, target), target, rot, us) : null, { line, advance: verb === 'move' && this.rec.advance })
+      return previewGroup(G, q, seat, verb, us, target, rot && !line && target.x !== undefined ? turned(G, slotsOf(G, us, target), target, rot, us) : null, { line, advance: verb === 'move' && this.rec.advance, heads })
     })
     if (go && p.summary) p.summary += this.rideAlong()
     return p
@@ -599,14 +609,17 @@ export class GroupInput {
 
   // ── (F9b) A pinned long hull's heading ────────────────────────────────────
   // The heading member m of `pin` ends on: the one it was turned to, else
-  // the planner's default.
+  // the planner's default ((F9b's review) both the planner's own, m.f, a
+  // turn planning the pin again with it: face()).
   headOf(pin, m) {
-    return pin.fs?.get(m.u.id) ?? m.f
+    return m.f
   }
   // The headings member m of `pin` may end on at its planned cell, a bit
-  // each (kept on the pin): a placement's those placeOk takes there, a
-  // move's those validEnd takes, the members planned before it standing
-  // where they will (the planner's `at`, their headings as shown).
+  // each (kept on the pin, dropped whenever a ghost turns: face()): a
+  // placement's those placeOk takes there, a move's those validEnd takes,
+  // the members planned before it standing where they will (the planner's
+  // `at`, their headings as shown; (F9b's review) a placement's too, as
+  // the planner counts them: present/orders.js placeFits).
   validHeads(pin, m) {
     pin.heads ??= new Map()
     if (pin.heads.has(m.u.id)) return pin.heads.get(m.u.id)
@@ -614,12 +627,13 @@ export class GroupInput {
     const bits = this.human.ask((G, q) => {
       const u = G.units.find((x) => x.id === m.u.id), nav = G.nav
       let b = 0
-      if (pin.verb === 'place') {
-        for (let h = 0; h < 8; h++) if (q.placeOk(G, u, m.cell, h)) b |= 1 << h
-        return b
-      }
       const at = new Map()
       for (const o of ms.slice(0, k)) if (o.cell >= 0) at.set(o.u.id, o.f === undefined ? { x: nav.x(o.cell), z: nav.z(o.cell) } : { x: nav.x(o.cell), z: nav.z(o.cell), f: this.headOf(pin, o) })
+      if (pin.verb === 'place') {
+        const others = othersAt(G, q, u, at)
+        for (let h = 0; h < 8; h++) if (placeFits(G, q, u, m.cell, h, others)) b |= 1 << h
+        return b
+      }
       const plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
       for (let h = 0; h < 8; h++) if (q.validEnd(G, plan, m.cell, at, h)) b |= 1 << h
       return b
@@ -647,25 +661,53 @@ export class GroupInput {
     return false
   }
   // Turn it to heading h (one validHeads takes): its ghost, its handle and
-  // the bar's line drawn again; nothing sent.
+  // the bar's line drawn again; nothing sent. ((F9b's review) The pin's
+  // preview planned again with every long hull's heading as shown (the
+  // executor's `facings`, the planner's `heads`), so a member planned after
+  // the turned one moves off its ghost where that now overlaps it, each
+  // keeping its heading where its cell holds and the heading is still
+  // valid there; every member's valid headings asked afresh.)
   face(pin, m, h) {
-    pin.fs ??= new Map()
-    pin.fs.set(m.u.id, h)
+    const heads = this.shown(pin)
+    heads.set(m.u.id, { cell: m.cell, f: h })
+    pin.preview = this.preview(pin.verb, pin.target, pin.line, pin.rot, heads)
+    pin.heads = null
     this.draw(pin.preview, pin.target, true)
     this.human.flow.refreshUI()
     if (this.loneHull() && this.human.mouse) this.tooltip?.show(this.pinText(pin), this.human.mouse)
     sfx.click()
     return true
   }
+  // (F9b's review) Each pinned long hull's heading on the cell it shows,
+  // id → { cell, f }: what commit() sends, and the planner's `heads`
+  shown(pin) {
+    return new Map(pin.preview.members.filter((m) => m.u.t.fp && m.cell >= 0 && m.f !== undefined).map((m) => [m.u.id, { cell: m.cell, f: this.headOf(pin, m) }]))
+  }
+  // (F9b's review) Heading f's arrow for a ghost on `cell` as the camera
+  // shows it (a point ahead of the ghost projected: '↑' up the screen), so
+  // "facing ↑" is where its outline points as the player sees it; without
+  // a camera the minimap's frame (+z down its canvas)
+  arrowOf(cell, f) {
+    const cam = this.controls?.object, nav = this.G.nav
+    if (!cam) return '↓↘→↗↑↖←↙'[f]
+    const a = (f * Math.PI) / 4, x = nav.x(cell), z = nav.z(cell)
+    tmpV.set(x, 0, z).project(cam)
+    const x0 = tmpV.x * innerWidth, y0 = tmpV.y * innerHeight
+    tmpV.set(x + Math.sin(a), 0, z + Math.cos(a)).project(cam)
+    // (the screen's y runs down, the projection's up)
+    const dx = tmpV.x * innerWidth - x0, up = tmpV.y * innerHeight - y0
+    return ARROWS[Math.round(Math.atan2(dx, up) / (Math.PI / 4)) & 7]
+  }
   // What a pinned lone long hull's move or placement says: its inches told
   // apart (a move's), its heading, and "no room to turn here" where it
-  // could pivot neither way.
+  // could pivot neither way ((F9b's review) in its own lattice's mode, a
+  // wrecker's 'wreck', as the move tooltip's roomAt asks it).
   pinText(pin) {
     const m = pin.preview.members[0]
     if (!m || m.cell < 0) return pin.preview.summary
-    const f = this.headOf(pin, m), arrow = '↑↗→↘↓↙←↖'[f]
+    const f = this.headOf(pin, m), arrow = this.arrowOf(m.cell, f)
     return this.human.ask((G, q) => {
-      if (pin.verb === 'place') return `Place ${m.u.t.short} facing ${arrow} · [ / ] or the handle turn it · Enter or ✓ places it${G.nav.hullRoom(m.cell, f, m.u.t.fp, 'walk') ? '' : NO_ROOM}`
+      if (pin.verb === 'place') return `Place ${m.u.t.short} facing ${arrow} · [ / ] or the handle turn it · Enter or ✓ places it${G.nav.hullRoom(m.cell, f, m.u.t.fp, q.moveMode(m.u) === 'wreck' ? 'wreck' : 'walk') ? '' : NO_ROOM}`
       const u = G.units.find((x) => x.id === m.u.id), plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
       return `Move ${m.u.t.short} facing ${arrow} · ${hullText(G, plan, m.cell, f)}`
     })
@@ -786,7 +828,10 @@ export class GroupInput {
     if (!pin) return 'nothing pinned to send'
     // ((F9b) each long hull's heading, as its ghost showed it: the
     // executor sends it with the cell it was pinned for)
-    const facings = new Map(pin.preview.members.filter((m) => m.u.t.fp && m.cell >= 0 && m.f !== undefined).map((m) => [m.u.id, { cell: m.cell, f: this.headOf(pin, m) }]))
+    const facings = this.shown(pin)
+    // ((F9b's review) a lone hull's pin line goes with it, as a round
+    // unit's move tooltip goes with its click)
+    if (this.loneHull()) this.tooltip?.hide()
     this.running = this.run(pin.verb, pin.target, pin.line, pin.preview.slots && pin.rot && !pin.line ? pin.preview.slots : null, facings)
     return null
   }

@@ -46,6 +46,13 @@
 //                                    whose members advance first (+D6 each:
 //                                    the preview plans the plain move, the
 //                                    executor each member after its roll)
+//                                    ((F9b's review) and `heads`, pinned
+//                                    long hulls' headings, id → { cell, f }:
+//                                    a member's taken where it lands on that
+//                                    cell and the heading is valid there,
+//                                    else its default, the members after it
+//                                    planned round it; the pin's preview and
+//                                    the executor both give them)
 //   previewSteps(…the same…)          (F8b) the same preview as a generator:
 //                                    it yields after each member planned
 //                                    ({ members so far, slots, summary:
@@ -241,6 +248,23 @@ export function placeAt(G, q, u, slot, others) {
 // (F9b) the planner's `at` entry for a member planned onto `cell`: where
 // it will stand, and a long hull's heading there
 const atOf = (G, cell, f) => (f === undefined ? { x: G.nav.x(cell), z: G.nav.z(cell) } : { x: G.nav.x(cell), z: G.nav.z(cell), f })
+// A placement's others for member u: every other living unit where it
+// stands, or where `at` has it planned ((F9b) a planned long hull's copy
+// facing its planned heading)
+export function othersAt(G, q, u, at) {
+  return G.units.filter((o) => o !== u && q.alive(o)).map((o) => (at.has(o.id) ? (at.get(o.id).f !== undefined ? { ...o, pos: { x: at.get(o.id).x, z: at.get(o.id).z }, facing: at.get(o.id).f } : { ...o, pos: at.get(o.id) }) : o))
+}
+// (F9b's review) Whether long hull u fits on `cell` at heading f in its
+// deployment with `others` (othersAt's): the place command's own test,
+// q.placeOk, asked of the table with them standing there
+export const placeFits = (G, q, u, cell, f, others) => q.placeOk({ ...G, units: [u, ...others] }, u, cell, f)
+// (F9b's review) A pinned heading (`heads`'s, id → { cell, f }) for a long
+// hull planned onto `cell` with heading f: the pinned one where it was
+// pinned for this cell and `ok(h)` takes it, else f
+const pinnedHead = (heads, u, cell, f, ok) => {
+  const p = heads?.get(u.id)
+  return p && f !== undefined && cell >= 0 && p.cell === cell && p.f !== f && ok(p.f) ? p.f : f
+}
 
 // The order the members go in: nearest the point first, then by id.
 const byNearness = (members, p) => [...members].sort((a, b) => Math.hypot(a.pos.x - p.x, a.pos.z - p.z) - Math.hypot(b.pos.x - p.x, b.pos.z - p.z) || a.id - b.id)
@@ -256,7 +280,7 @@ export function previewGroup(G, q, seat, verb, members, target, given = null, op
 // (a member planned: the preview so far)
 const partial = (out, slots, of) => ({ members: out.slice(), slots, summary: `Planning ${out.length} of ${of}…`, of })
 
-export function* previewSteps(G, q, seat, verb, members, target, given = null, { line = null, advance = false } = {}) {
+export function* previewSteps(G, q, seat, verb, members, target, given = null, { line = null, advance = false, heads = null } = {}) {
   const out = []
   const at = new Map()
   if (verb === 'place') {
@@ -265,8 +289,9 @@ export function* previewSteps(G, q, seat, verb, members, target, given = null, {
       const slot = slots.get(u.id)
       // (the others where they stand, or where they were just planned)
       // ((F9b) a planned long hull's copy faces its planned heading)
-      const others = G.units.filter((o) => o !== u && q.alive(o)).map((o) => (at.has(o.id) ? (at.get(o.id).f !== undefined ? { ...o, pos: { x: at.get(o.id).x, z: at.get(o.id).z }, facing: at.get(o.id).f } : { ...o, pos: at.get(o.id) }) : o))
-      const { cell, f } = placeAt(G, q, u, slot, others)
+      const others = othersAt(G, q, u, at)
+      const { cell, f: f0 } = placeAt(G, q, u, slot, others)
+      const f = pinnedHead(heads, u, cell, f0, (h) => placeFits(G, q, u, cell, h, others))
       if (cell >= 0) at.set(u.id, atOf(G, cell, f))
       out.push({ u, cell, slot, how: cell >= 0 ? 'arrive' : 'none', why: cell >= 0 ? '' : 'no room in the zone', ...(f !== undefined ? { f } : {}) })
       yield partial(out, slots, members.length)
@@ -293,6 +318,7 @@ export function* previewSteps(G, q, seat, verb, members, target, given = null, {
       // one, and one for the leg)
       yield partial(out, slots, members.length)
       const leg = legFor(G, q, u, slot, field, at)
+      leg.f = pinnedHead(heads, u, leg.cell, leg.f, (h) => q.validEnd(G, leg.plan, leg.cell, at, h))
       if (leg.cell >= 0) at.set(u.id, atOf(G, leg.cell, leg.f))
       out.push({ u, cell: leg.cell, slot, how: leg.cell < 0 ? 'none' : leg.arrive ? 'arrive' : 'short', why: leg.cell < 0 ? 'no way nearer' : '', ...(leg.f !== undefined ? { f: leg.f } : {}) })
       yield partial(out, slots, members.length)
@@ -308,6 +334,7 @@ export function* previewSteps(G, q, seat, verb, members, target, given = null, {
         continue
       }
       const ap = approachFor(G, q, u, target, at)
+      ap.f = pinnedHead(heads, u, ap.cell, ap.f, (h) => q.validEnd(G, ap.plan, ap.cell, at, h))
       if (ap.cell >= 0) at.set(u.id, atOf(G, ap.cell, ap.f))
       out.push({ u, cell: ap.cell, how: ap.cell === -2 ? 'stay' : ap.cell >= 0 ? 'arrive' : 'none', why: ap.cell === -1 ? 'no way in range' : '', ...(ap.f !== undefined ? { f: ap.f } : {}) })
       yield partial(out, undefined, members.length)

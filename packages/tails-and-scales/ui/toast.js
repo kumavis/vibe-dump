@@ -7,7 +7,8 @@
 // window, blocked site data) shows each tip once per page instead, never an
 // error. The game's tips (TIPS): 'select' (a seat with more than 10 units
 // on its turn), 'pin' (the first group pin), 'order' (the first standing
-// order).
+// order); (F9b's review) 'pinHull' (the first lone long hull's pin: it is
+// one, and it turns).
 const TIPS_KEY = 'ts.tips'
 
 export class Toast {
@@ -47,5 +48,6 @@ export class Toast {
 export const TIPS = Object.freeze({
   select: 'Shift-drag (▭ on touch) to select a group',
   pin: 'Click the flag (or Enter) to send them',
+  pinHull: '[ / ] or its handle turn it · the flag (or Enter) sends it',
   order: 'Orders act when you press End, or now with Go',
 })

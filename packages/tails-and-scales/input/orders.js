@@ -27,6 +27,9 @@
 // for, the heading its pin showed (`facings`); so it lands facing as its
 // ghost did, whatever the hull faced before (a place without f keeps the
 // hull's own facing where it fits, which the preview never showed).
+// ((F9b's review) `facings` go to the planner as its `heads`, as the pin's
+// preview gave them, so a member after a turned hull is planned round it
+// here as its ghost was: each member lands where its ghost stood.)
 //
 // (F10c) runOrders({ session, seat, orders, then? }) → Promise<{ sent,
 // blocked: [{ id, why }], acted: [ids] }>: the seat's standing orders
@@ -57,7 +60,7 @@ async function folded(session, n) {
 export async function runGroup({ session, seat, verb, members, target, line = null, advance = false, slots = null, facings = null }) {
   const blocked = [], left = []
   let sent = 0, fell = false
-  const opts = { line, advance }
+  const opts = { line, advance, heads: facings }
   // the members, in the order the preview plans them, and their places in
   // the formation (kept as each is planned again)
   const first = session.preview((G, q) => previewGroup(G, q, seat, verb, members.map((u) => G.units.find((x) => x.id === u.id)), target, slots, opts))
@@ -116,8 +119,9 @@ export async function runGroup({ session, seat, verb, members, target, line = nu
       continue
     }
     // ((F9b) a long hull's heading with it: the pinned one on its pinned
-    // cell, else the planner's)
-    const pinned = facings?.get(id), f = pinned && pinned.cell === plan.cell ? pinned.f : plan.f
+    // cell where the match takes it, else the default, as the planner
+    // gives it with `heads`)
+    const f = plan.f
     const head = f !== undefined && f >= 0 ? { f } : {}
     await send(verb === 'place' ? { t: 'place', u: id, c: plan.cell, ...head } : { t: 'move', u: id, c: plan.cell, ...head }, u)
   }

@@ -115,7 +115,11 @@
 //     back);
 //   - ≥ 90% of long-hull moves end where the hull can pivot at least one
 //     way (the movement phases' walks; nav.hullRoom on the terrain the
-//     walk left, the memo's bits: the AI's room term's own test);
+//     walk left, the memo's bits: the AI's room term's own test), the
+//     boards' baseline printed beside it ((F9b's review): the share of the
+//     states a hull stands in with room, as each battle began, about what
+//     a hull moving with no room term would meet, so a regression in the
+//     term shows against it);
 //   - riders disembark from a long hull in ≥ 50% of battles (a rider
 //     stepping off a footprint hull of its own accord: a bail-out is no
 //     disembark the AI chose).
@@ -347,7 +351,10 @@ async function f9b() {
   console.log(`\n  ${n} battles: ${sum('hulls')} long hulls, ${sum('moves')} moves (${sum('pivots')} pivots, ${sum('tight')} of them tight; ${sum('reverses')} backing segments), ${sum('charges')} charges' walks (${sum('chargeRoomy')} ending with room), ${sum('steps')} steps off, ${sum('down')} long hulls destroyed (${sum('downLoaded')} with riders aboard: ${sum('bailed')} bail-outs)`)
   const checks = [
     { name: 'Howdahs move in their movement phases', ok: n === battles.length && sum('phases') > 0 && sum('moved') * 10 >= sum('phases') * 9, got: `${sum('moved')} of ${sum('phases')} (${pct(sum('moved'), sum('phases'))})${n < battles.length ? `, ${battles.length - n} battles failed` : ''}`, want: '≥ 90%' },
-    { name: 'long-hull moves end where the hull can pivot at least one way', ok: n === battles.length && sum('moves') > 0 && sum('roomy') * 10 >= sum('moves') * 9, got: `${sum('roomy')} of ${sum('moves')} (${pct(sum('roomy'), sum('moves'))})`, want: '≥ 90%' },
+    // ((F9b's review) with the boards' baseline beside it: the share of the
+    // states a hull stands in that have room, as each battle began, which
+    // a hull moving with no room term would meet about as often)
+    { name: 'long-hull moves end where the hull can pivot at least one way', ok: n === battles.length && sum('moves') > 0 && sum('roomy') * 10 >= sum('moves') * 9, got: `${sum('roomy')} of ${sum('moves')} (${pct(sum('roomy'), sum('moves'))}; the boards' standing states with room ${pct(sum('standRoomy'), sum('standing'))})`, want: '≥ 90%' },
     { name: 'riders disembark from a long hull (of their own accord)', ok: n === battles.length && stepped * 2 >= n, got: `in ${stepped} of ${n} battles (${pct(stepped, n)})`, want: '≥ 50%' },
   ]
   return { checks, failed }

@@ -1483,8 +1483,12 @@ async function checkCarts(page, say) {
 // Enter (the deployment) or a click on the flag (the movement phase) sends
 // it, the Howdah then standing on the pinned cell facing the turned
 // heading; the other Howdah's double click on the ground sends it at once
-// at the default heading (the one a single click there pins). Returns what
-// it saw, for --self-test's verdicts.
+// at the default heading (the one a single click there pins). ((F9b's
+// review) At every heading ] and [ turn it to, the bar's "facing" arrow
+// points as the ghost does on screen; and once Enter or the flag has sent
+// it, the pin's line is off the tooltip. A group pin's turned ghosts and an
+// engaged hull's fall back are macro-check's, through GroupInput in Node.)
+// Returns what it saw, for --self-test's verdicts.
 const HULL_ARMIES = 'races=serpent,squirrel&armies=2232222,field'
 async function checkHulls(page, say) {
   const ev = (fn, arg) => page.evaluate(fn, arg)
@@ -1591,8 +1595,23 @@ async function checkHulls(page, say) {
     }
     fail(`no ground click near (${x.toFixed(1)}, ${z.toFixed(1)}) pinned Howdah ${id} where ${heads} headings fit (${tried.slice(0, 6).join(', ')})`)
   }
+  // ((F9b's review) the bar's arrow for the pinned ghost at heading f: the
+  // way a point 1" ahead of it lies on screen from its centre, '↑' up the
+  // screen; a bearing within 6° of the line between two arrows takes
+  // either)
+  const ARROWS = '↑↗→↘↓↙←↖'
+  const arrowSays = async (id, f) => {
+    const at = (await pin()).members[0].at, a = (f * Math.PI) / 4
+    const p0 = await toScreen(at.x, at.z), p1 = await toScreen(at.x + Math.sin(a), at.z + Math.cos(a))
+    const b = (((Math.atan2(p1.x - p0.x, p0.y - p1.y) * 180) / Math.PI) + 360) % 360, k = b / 45
+    const fits = new Set([Math.round(k) & 7])
+    if (Math.abs(k - Math.floor(k) - 0.5) < 6 / 45) (fits.add(Math.floor(k) & 7), fits.add(Math.ceil(k) & 7))
+    const said = /facing (\S)/.exec((await ev(() => window.__ts.group.bar())).summary ?? '')?.[1]
+    if (!said || ![...fits].some((i) => ARROWS[i] === said)) fail(`the bar says Howdah ${id}'s ghost faces ${said ?? 'nothing'} at heading ${f}, which points ${[...fits].map((i) => ARROWS[i]).join(' or ')} on screen (a bearing of ${b.toFixed(0)}°)`)
+  }
   // ] or [ pressed round: every heading it shows one the match takes, and
-  // every one the match takes shown
+  // every one the match takes shown ((F9b's review) the bar's arrow
+  // pointing as the ghost does on screen at each)
   const keysRound = async (id, ok, key) => {
     const seen = new Set([(await rot()).f])
     for (let k = 0; k < 8; k++) {
@@ -1600,6 +1619,7 @@ async function checkHulls(page, say) {
       await sleep(150)
       const f = (await rot()).f
       if (!ok.includes(f)) fail(`${key} turned Howdah ${id}'s ghost to heading ${f}, which the match refuses there (it takes ${ok.join(', ')})`)
+      await arrowSays(id, f)
       seen.add(f)
     }
     if (seen.size !== ok.length) fail(`${key} pressed 8 times showed headings ${[...seen].join(', ')}, the match taking ${ok.join(', ')}`)
@@ -1698,6 +1718,10 @@ async function checkHulls(page, say) {
     await page.waitForFunction((n) => window.__ts.session.count > n, n0, { timeout: 60000 }).catch(() => fail(`${label}: ${verb === 'place' ? 'Enter' : 'a click on the flag'} sent nothing`))
     await idle()
     await sleep(500)
+    // ((F9b's review) the pin's line goes with the send, as a round unit's
+    // move tooltip goes with its click: the pointer has not moved since)
+    const tipAfter = await ev(() => (document.querySelector('#tooltip').style.display === 'block' ? document.querySelector('#tooltip').textContent : ''))
+    if (/facing/.test(tipAfter)) fail(`${label}: after ${verb === 'place' ? 'Enter' : 'the flag'} sent Howdah ${hulls[0]}, the tooltip still reads "${tipAfter}"`)
     u = await unit(hulls[0])
     if (u.pos.x !== cell.x || u.pos.z !== cell.z || u.f !== turned) fail(`${label}: Howdah ${hulls[0]} stands at (${u.pos.x}, ${u.pos.z}) facing ${u.f}, its ghost at (${cell.x}, ${cell.z}) facing ${turned}`)
     say(`hulls: in ${label} Howdah ${hulls[0]} alone: a ground click pinned its ghost and sent nothing, the bar showing ✓ and ✕; ] and [ each turned it through headings ${ok.join(', ')}, the ones the match takes there; a tap on its rotate handle and a drag of it turned it (the camera still); a left drag orbited the camera, the pin kept; ${verb === 'place' ? 'Enter' : 'its flag'} sent it, facing ${turned} where its ghost stood`)
@@ -2632,6 +2656,11 @@ const HULL_EDITS = {
   // the executor sending no heading: the hull lands as the match's
   // default has it, not as its ghost was turned
   'f-dropped': ['input/orders.js', '    const head = f !== undefined && f >= 0 ? { f } : {}\n', '    const head = {}\n'],
+  // (F9b's review) the bar's arrow from a fixed table (+z up), not the
+  // camera's view of the ghost
+  'arrow-fixed': ['input/group.js', 'arrow = this.arrowOf(m.cell, f)', "arrow = '↑↗→↘↓↙←↖'[f]"],
+  // (F9b's review) the pin's line left on screen after the send
+  'tip-stays': ['input/group.js', '    if (this.loneHull()) this.tooltip?.hide()\n', ''],
 }
 async function hullPage(browser, url, say) {
   const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage()

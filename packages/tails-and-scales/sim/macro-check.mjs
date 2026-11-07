@@ -37,6 +37,17 @@
 // the default rule as its move is sent, too; the board unsmashed, else
 // left out, as a wrecker's is above); and a March with a long hull (its
 // field its body disc's) counts among the march scenarios and their 80%.
+// (F9b's review) And through GroupInput itself (its page parts stood in
+// for): a pinned group of both Howdahs, in the deployment and in the
+// movement phase, one ghost turned (face(), as ] and the handle turn it)
+// to a heading beside which a member planned after it no longer fits
+// where its ghost stood: the ghosts planned again round it, the turned
+// one showing the heading turned to, and the group sent as the bar sends
+// it landing each hull on the cell and heading its ghost then showed; and
+// a lone Howdah engaged at its movement phase (both seats' AI playing on
+// until one is) is no group of one (loneHull, its
+// ground click not the group's), the one-unit move tool's fall back from
+// a click inside its red area taken.
 // A third of the point orders take a line formation (as an Alt-drag pins
 // one), and a third of the moves +D6 (each member advancing first: its
 // landing the roll's, so held only to acting once, and only in the group).
@@ -66,8 +77,8 @@ const { values: a } = parseArgs({ options: { probes: { type: 'string' }, seed: {
 
 async function load(dir) {
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
-  const [session, store, orders, exec, standing, book, sti, group, core, schema, mission] = await Promise.all([at('match/session.js'), at('match/store.js'), at('present/orders.js'), at('input/orders.js'), at('present/standing.js').catch(() => null), at('input/book.js').catch(() => null), at('input/standing.js').catch(() => null), at('input/group.js').catch(() => null), at('core/index.js'), at('data/schema.js'), at('data/mission.js')])
-  return { Session: session.Session, LocalStore: store.LocalStore, previewGroup: orders.previewGroup, slotsOf: orders.slotsOf, goalField: orders.goalField, runGroup: exec.runGroup, runOrders: standing && exec.runOrders, standing, OrderBook: book?.OrderBook, StandingInput: sti?.StandingInput, GroupInput: group?.GroupInput, army: core.army, RACES: schema.RACES, MISSIONS: mission.MISSIONS }
+  const [session, store, orders, exec, standing, book, sti, group, core, schema, mission, moveTool] = await Promise.all([at('match/session.js'), at('match/store.js'), at('present/orders.js'), at('input/orders.js'), at('present/standing.js').catch(() => null), at('input/book.js').catch(() => null), at('input/standing.js').catch(() => null), at('input/group.js').catch(() => null), at('core/index.js'), at('data/schema.js'), at('data/mission.js'), at('input/tools/move.js')])
+  return { Session: session.Session, LocalStore: store.LocalStore, previewGroup: orders.previewGroup, slotsOf: orders.slotsOf, goalField: orders.goalField, othersAt: orders.othersAt, placeFits: orders.placeFits, runGroup: exec.runGroup, runOrders: standing && exec.runOrders, standing, OrderBook: book?.OrderBook, StandingInput: sti?.StandingInput, GroupInput: group?.GroupInput, army: core.army, RACES: schema.RACES, MISSIONS: mission.MISSIONS, moveTool }
 }
 
 function stream(seed) {
@@ -610,6 +621,157 @@ async function hullScenario(L, board, out) {
   out.groups++
   return null
 }
+// (F9b's review) GroupInput over a Session (its page parts, the selection,
+// the pin and the bar stood in for, as ridersScenario's): `ids` picked by
+// `seat`, `rec` the seat's record
+function stubGroup(L, ses, seat, ids, rec) {
+  const group = Object.create(L.GroupInput.prototype)
+  const deploying = () => ses.G.pending?.k === 'deploy'
+  Object.assign(group, {
+    human: { get G() { return ses.G }, session: ses, ask: (fn) => ses.preview(fn), deploySeat: () => (deploying() && ses.decisionFor() === seat ? seat : -1), myTurn: () => !deploying() && ses.decisionFor() === seat, localSeat: () => seat, flow: { refreshUI() {} }, mouse: null },
+    view: { overlay: { formation() {} } },
+    selection: { of: () => rec, members: (G2) => ids.map((id) => G2.units.find((x) => x.id === id)).filter((u) => u && u.alive > 0), units: (G2, xs) => xs.map((id) => G2.units.find((x) => x.id === id)) },
+    busy: false,
+  })
+  return group
+}
+// A hull session at seat 0's deployment (hullSession's lists)
+function hullDeploySession(L, board) {
+  const race = L.RACES.serpent, k = race.roster.findIndex((key) => race.units[key].fp)
+  let army = null
+  for (let s = 1; s < 400 && !army; s++) {
+    const counts = L.army.autoList(race, L.MISSIONS.field.list, s + board)
+    if ((counts[k] ?? 0) >= 2) army = L.army.listText(counts)
+  }
+  if (!army) throw new Error(`board ${board}: no Field list of the Coil's holds two Howdahs`)
+  const setup = { board, dice: 7, mission: 'field', terrain: 'open', seats: [{ race: 'serpent', ctrl: 'human', army }, { race: 'squirrel', ctrl: 'human', army: RIDE_LIST }] }
+  const ses = new L.Session({ store: new L.LocalStore(), localSeats: [0, 1], dev: 'here' })
+  ses.start(seatDevices(setup, 'here'))
+  for (let n = 0; n < 4; n++) {
+    if (ses.G.pending?.k !== 'deploy') return null
+    if (ses.decisionFor() === 0) return ses
+    ses.submit(ses.decisionFor(), { t: 'deployed' })
+  }
+  return null
+}
+// (F9b's review) Both Howdahs pinned round points near the first (`verb`
+// 'place' in the deployment, 'move' in the movement phase), until one
+// member's ghost may turn (validHeads) to a heading beside which a member
+// planned after it no longer fits where its ghost stands (the match's own
+// test of it there: placeOk, validEnd, the members before it where they
+// show): turned there by face(), every ghost must then show a state the
+// match takes and the turned one its heading, and the group sent lands
+// each hull on its ghost's cell and heading. One turn a board; a board with
+// none is no verdict.
+async function hullTurnScenario(L, board, verb, out) {
+  const ses = verb === 'place' ? hullDeploySession(L, board) : hullSession(L, board)
+  if (!ses) return null
+  const seat = 0, hulls = ses.G.units.filter((u) => u.side === seat && u.alive > 0 && u.t.fp && !u.flags.moved)
+  if (hulls.length < 2) return null
+  const rec = { advance: false, note: '', pin: null, lead: hulls[0].id }
+  const group = stubGroup(L, ses, seat, hulls.map((u) => u.id), rec)
+  const c0 = { x: hulls[0].pos.x, z: hulls[0].pos.z }, edge = ses.G.seats[seat].edge
+  // does member b's ghost still fit with the members before it as `at` has them?
+  const fits = (b, at) => ses.preview((G2, q) => {
+    const u = G2.units.find((x) => x.id === b.u.id)
+    if (verb === 'place') return L.placeFits(G2, q, u, b.cell, b.f, L.othersAt(G2, q, u, at))
+    return q.validEnd(G2, q.movePlan(G2, u, u.flags.advanced ? u.flags.advRoll : 0), b.cell, at, b.f)
+  })
+  const atOf = (m, f = m.f) => ({ x: ses.G.nav.x(m.cell), z: ses.G.nav.z(m.cell), ...(f !== undefined ? { f } : {}) })
+  for (let dx = -6; dx <= 6; dx += 2) for (let dz = -8; dz <= 8; dz += 2) {
+    const target = { x: c0.x + dx - (verb === 'move' ? edge * 2 : 0), z: c0.z + dz }
+    group.pinAt(verb, target)
+    const pin = rec.pin, ms = pin?.preview.members ?? []
+    if (ms.filter((m) => m.u.t.fp && m.cell >= 0 && m.f !== undefined).length < 2) continue
+    for (let i = 0; i < ms.length; i++) {
+      const a = ms[i]
+      if (!a.u.t.fp || a.cell < 0 || a.f === undefined) continue
+      const bits = group.validHeads(pin, a)
+      for (let h = 0; h < 8; h++) {
+        if (!(bits & (1 << h)) || h === a.f) continue
+        // a member after it whose ghost no longer fits beside it turned
+        const hit = ms.slice(i + 1).find((b, j) => {
+          if (b.cell < 0) return false
+          const at = new Map()
+          for (const o of ms.slice(0, i + 1 + j)) if (o.cell >= 0) at.set(o.u.id, o === a ? atOf(a, h) : atOf(o))
+          return !fits(b, at)
+        })
+        if (!hit) continue
+        group.face(pin, a, h)
+        const shown = rec.pin.preview.members
+        const a2 = shown.find((m) => m.u.id === a.u.id)
+        if (a2.cell !== a.cell || a2.f !== h) return `board ${board}, ${verb}: Howdah ${a.u.id} turned to ${h} on cell ${a.cell} shows ${a2.f} on cell ${a2.cell}`
+        for (let k = 0; k < shown.length; k++) {
+          const b = shown[k]
+          if (b.cell < 0) continue
+          const at = new Map()
+          for (const o of shown.slice(0, k)) if (o.cell >= 0) at.set(o.u.id, atOf(o))
+          if (!fits(b, at)) return `board ${board}, ${verb}: Howdah ${a.u.id} turned to ${h}, ${b.u.t.short} ${b.u.id}'s ghost (cell ${b.cell}, heading ${b.f}) is one the match refuses beside the members before it (a stale ghost)`
+        }
+        const want = shown.filter((m) => m.cell >= 0).map((m) => ({ id: m.u.id, cell: m.cell, f: m.f }))
+        const n0 = ses.count, rejected = ses.folder.rejected.length, epoch = ses.G.nav.epoch
+        const why = group.commit()
+        if (why) return `board ${board}, ${verb}: the turned pin sent nothing (${why})`
+        await group.running
+        if (ses.folder.rejected.length !== rejected) return `board ${board}, ${verb}: the turned pin's entries were rejected (${ses.folder.rejected.length - rejected})`
+        if (ses.count === n0) return `board ${board}, ${verb}: the turned pin sent nothing`
+        if (ses.G.nav.epoch !== epoch) {
+          out.smashed++
+          return null
+        }
+        for (const w of want) {
+          const u = ses.G.units.find((x) => x.id === w.id), c = ses.G.nav.index(u.pos.x, u.pos.z)
+          if (c !== w.cell || (w.f !== undefined && u.facing !== w.f)) return `board ${board}, ${verb}: Howdah ${a.u.id} turned to ${h}, ${u.t.short} ${u.id} stands on cell ${c} facing ${u.facing}, its ghost on cell ${w.cell} facing ${w.f}`
+        }
+        out.turned[verb]++
+        return null
+      }
+    }
+  }
+  return null
+}
+// (F9b's review) A lone Howdah engaged at the Coil's movement phase (both
+// seats' AI playing the battle on until one is; the boards are ones where
+// that comes, by round 6): no group of one, its ground click left to the
+// one-unit tools, whose fall back from a click inside its red area the
+// match takes
+async function hullEngagedScenario(L, board, out) {
+  const ses = hullSession(L, board)
+  if (!ses) return null
+  const seat = 0
+  let u = null
+  for (let n = 0; n < 400 && ses.G.turn.stage !== 'over'; n++) {
+    const P = ses.G.pending, who = ses.decisionFor()
+    if (!P || who < 0) return null
+    if (who === seat && P.k === 'phase' && P.phase === 'move') {
+      u = ses.preview((G2, q) => G2.units.find((x) => x.side === seat && x.alive > 0 && x.t.fp && !x.flags.moved && q.canAct(G2, x) && q.isEngaged(G2, x)) ?? null)
+      if (u) break
+    }
+    ses.submit(who, P.k === 'chargeEnd' ? { t: 'chargeEnd', c: -1 } : P.k === 'roundLimit' ? { t: 'vote', more: false } : { t: 'auto' })
+  }
+  if (!u) return null
+  const rec = { advance: false, note: '', pin: null, lead: u.id }
+  const group = stubGroup(L, ses, seat, [u.id], rec)
+  if (group.loneHull()) return `board ${board}: Howdah ${u.id}, engaged at its movement phase, is a group of one (loneHull): its ground click pins a ghost the planner leaves in combat, and nothing falls back`
+  const plan = L.moveTool.planOf((fn) => ses.preview(fn), u)
+  if (!plan.fallback) return `board ${board}: Howdah ${u.id} is engaged but its move's plan is no fall back`
+  const end = ses.preview((G2, q) => {
+    for (let i = 0; i < G2.nav.N; i++) if (q.validEnd(G2, plan, i)) return i
+    return -1
+  })
+  if (end < 0) return null
+  const ground = { x: ses.G.nav.x(end), y: 0, z: ses.G.nav.z(end) }
+  if (group.click({ unit: null, ground }, null)) return `board ${board}: a ground click with engaged Howdah ${u.id} alone was taken by the group's tools`
+  const c = L.moveTool.cellAt((fn) => ses.preview(fn), plan, ground)
+  if (c < 0) return `board ${board}: no fall-back cell for engaged Howdah ${u.id} at a click on its valid end ${end}`
+  const body = L.moveTool.moveTo(u, c), why = ses.legal(seat, body)
+  if (why) return `board ${board}: engaged Howdah ${u.id}'s fall back to cell ${c} refused: ${why}`
+  ses.submit(seat, body)
+  const v = ses.G.units.find((x) => x.id === u.id)
+  if (ses.G.nav.index(v.pos.x, v.pos.z) !== c || !v.flags.moved) return `board ${board}: engaged Howdah ${u.id}'s fall back to cell ${c} left it on cell ${ses.G.nav.index(v.pos.x, v.pos.z)}`
+  out.engaged++
+  return null
+}
 // A March with a long hull: a Howdah of the Coil's, a slot between one and
 // three moves away by its body disc's field, the march its only order, as
 // marchScenario's; counted into the same marches
@@ -708,13 +870,26 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
   }
   // (F9b) the long hulls' rows, on code with the Howdah: the group Moves,
   // and the marches (counted with the others, so before the 80% is judged)
-  const longs = L.RACES.serpent.roster.some((k) => L.RACES.serpent.units[k].fp) ? { groups: 0, headings: 0, smashed: 0 } : null
+  const longs = L.RACES.serpent.roster.some((k) => L.RACES.serpent.units[k].fp) ? { groups: 0, headings: 0, smashed: 0, turned: { place: 0, move: 0 }, engaged: 0 } : null
   if (longs) {
     for (const board of [4242, 31, 808, 52, 77, 19]) {
       const why = await hullScenario(L, board, longs).catch((e) => `board ${board}: threw: ${e.stack}`)
       if (why && out.bad.length < 8) out.bad.push(`long hulls: ${why}`)
     }
     if (!longs.headings) out.bad.push(`long hulls: no group Move held a long hull's heading to its preview's (${longs.groups} held, ${longs.smashed} left out for a smash)`)
+    // ((F9b's review) a turned ghost in a group pin, and an engaged lone hull)
+    if (L.GroupInput) {
+      for (const verb of ['place', 'move']) for (const board of [4242, 31, 808, 52]) {
+        const why = await hullTurnScenario(L, board, verb, longs).catch((e) => `board ${board}, ${verb}: threw: ${e.stack}`)
+        if (why && out.bad.length < 8) out.bad.push(`long hulls: ${why}`)
+      }
+      if (!longs.turned.place || !longs.turned.move) out.bad.push(`long hulls: a turned ghost beside a member planned after it was met ${longs.turned.place} times in the deployment and ${longs.turned.move} in the movement phase (each must be met at least once)`)
+      for (const board of [52, 2, 4, 13, 17]) {
+        const why = await hullEngagedScenario(L, board, longs).catch((e) => `board ${board}: threw: ${e.stack}`)
+        if (why && out.bad.length < 8) out.bad.push(`long hulls: ${why}`)
+      }
+      if (!longs.engaged) out.bad.push('long hulls: no Howdah was met engaged at its movement phase, so its fall back went unasked')
+    }
     if (L.runOrders) {
       for (const board of [4242, 31, 808, 52]) await hullMarch(L, board, out).catch((e) => out.bad.length < 8 && out.bad.push(`a long hull's march threw: ${e.message}`))
       if (!out.march.hulls) out.bad.push('long hulls: no march with a long hull was counted')
@@ -733,7 +908,7 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
   const arrive = M.n ? M.arrived / M.n : 0
   if (L.runOrders && M.n >= 10 && arrive < 0.8) out.bad.push(`a march arrived in ${M.arrived} of ${M.n} scenarios (${Math.round(arrive * 100)}%, under 80%)`)
   const ok = !out.bad.length && Object.keys(out.kinds).length >= 5 && out.lines > 0 && out.advances > 0 && (!L.runOrders || (O.runs >= probes / 2 && O.acted > 0 && (O.held ?? 0) > 0 && M.n >= 10))
-  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen${O.freed ? `, ${O.freed} more freed by an earlier order` : ''}), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${rides ? `; (F9a) ${rides.groups} group Moves with a hull, ${rides.carried} riders riding along (sent nothing, where their hull went), ${rides.orders} riders' standing orders "with the hull"` : ''}${longs ? `; (F9b) ${longs.groups} group Moves with Howdahs (${longs.smashed} more left out for a smash), ${longs.headings} long hulls on their previewed cell and heading; ${M.hullsArrived ?? 0} of ${M.hulls ?? 0} marches with a long hull arrived (among the marches above)` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
+  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen${O.freed ? `, ${O.freed} more freed by an earlier order` : ''}), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${rides ? `; (F9a) ${rides.groups} group Moves with a hull, ${rides.carried} riders riding along (sent nothing, where their hull went), ${rides.orders} riders' standing orders "with the hull"` : ''}${longs ? `; (F9b) ${longs.groups} group Moves with Howdahs (${longs.smashed} more left out for a smash), ${longs.headings} long hulls on their previewed cell and heading; ${M.hullsArrived ?? 0} of ${M.hulls ?? 0} marches with a long hull arrived (among the marches above); (F9b's review) a turned ghost planned round in ${longs.turned.place} pinned placements and ${longs.turned.move} pinned moves, every hull landing on its ghost; ${longs.engaged} engaged lone Howdahs no group of one, each falling back by the move tool` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
   return ok ? 0 : 1
 }
 
@@ -741,7 +916,7 @@ const MUTANTS = [
   ['preview-alone', 'present/orders.js', '      if (leg.cell >= 0) at.set(u.id, atOf(G, leg.cell, leg.f))\n', ''],
   ['slots-lost', 'input/orders.js', 'target, first.slots, opts)', 'target, null, opts)'],
   ['engaged-falls-back', 'present/orders.js', ": q.isEngaged(G, u) ? 'in combat' : ''", ": ''", 2],
-  ['line-lost', 'input/orders.js', '  const opts = { line, advance }\n', '  const opts = { line: null, advance }\n'],
+  ['line-lost', 'input/orders.js', '  const opts = { line, advance, heads: facings }\n', '  const opts = { line: null, advance, heads: facings }\n'],
   // a group's Fire stops after its first member's shot (the anchor follows
   // the send as V3c's spell bar left it, a4bac3e, naming the spell the
   // member's plan picked: the edit is what it was, a break after that send)
@@ -766,6 +941,12 @@ const MUTANTS = [
   ['planner-sends-riders', 'present/orders.js', "const stuck = u.aboard ? 'with the hull' : ", 'const stuck = ', 2],
   // the preview never says the riders ride along
   ['riders-unsaid', 'input/group.js', "? ' · riders ride along' : ''", "? '' : ''"],
+  // (F9b's review) a turned ghost not planned again: the members after it
+  // keep their ghosts, which the executor then moves elsewhere
+  ['turn-stale', 'input/group.js', '    pin.preview = this.preview(pin.verb, pin.target, pin.line, pin.rot, heads)\n', '    m.f = h\n'],
+  // (F9b's review) an engaged lone hull a group of one: its pin plans
+  // nothing ("in combat"), so no click falls it back
+  ['engaged-pins', 'input/group.js', 'q.canAct(G, u) && !q.isEngaged(G, u)', 'q.canAct(G, u)'],
 ]
 
 if (a['self-test']) {

@@ -34,6 +34,12 @@
 //              `roomy` those that ended where the hull could pivot at least
 //              one way (G.nav.hullRoom on its terrain, the memo's bits: the
 //              AI's room term's own test, in its plans' mode)
+//   standing   ((F9b's review) the baseline `roomy` is read against: the
+//              states (cell, heading) the battle's first long hull could
+//              stand in on the board as the battle began, in its mode,
+//              and `standRoomy` those with room to pivot (an AI with no
+//              room term at all would end about that share of its moves
+//              with room)
 //   charges    hull walks of a charge (a unit.move in a charge phase or a
 //              charge's end), `chargeRoomy` as `roomy`
 //   pivots, reverses   the pivots and the backing segments of every hull
@@ -52,7 +58,7 @@
 //              reverses, room } (`entry` the log entry it answers, −1 the
 //              start's: an AI battle's every walk), for corpus-add's needs
 export function hullProbe(q) {
-  const r = { hulls: 0, phases: 0, moved: 0, engaged: 0, moves: 0, roomy: 0, charges: 0, chargeRoomy: 0, pivots: 0, reverses: 0, tight: 0, steps: 0, bailed: 0, down: 0, downLoaded: 0, walks: [] }
+  const r = { hulls: 0, phases: 0, moved: 0, engaged: 0, moves: 0, roomy: 0, standing: 0, standRoomy: 0, charges: 0, chargeRoomy: 0, pivots: 0, reverses: 0, tight: 0, steps: 0, bailed: 0, down: 0, downLoaded: 0, walks: [] }
   const loaded = new Set()
   const DIRS = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]
   let first = true, seen = 0, takes = 0, phase = null, open = null
@@ -124,6 +130,16 @@ export function hullProbe(q) {
     if (!first) return
     first = false
     r.hulls = G.units.filter((u) => u.t.fp).length
+    // ((F9b's review) the board's baseline: every state its first long
+    // hull stands in, and those with room)
+    const u = G.units.find((x) => x.t.fp)
+    if (!u) return
+    const nav = G.nav, mode = modeOf(u)
+    for (let c = 0; c < nav.N; c++) for (let h = 0; h < 8; h++) {
+      if (!nav.hullStands(c, h, u.t.fp, mode)) continue
+      r.standing++
+      if (nav.hullRoom(c, h, u.t.fp, mode)) r.standRoomy++
+    }
   }
   // the hulls as this line finds them, for the next movement phase's start
   const stand = (G) => {
