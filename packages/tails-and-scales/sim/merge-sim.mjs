@@ -84,7 +84,13 @@
 // seated peers slipping in boardings and steps off the rules refuse
 // (badride: a hull onto a hull, a unit onto the enemy's hull, a step off
 // by a unit riding nothing or onto its hull's own cell, a rider boarding
-// again, a stray field), each refused alike on every peer.
+// again, a stray field), each refused alike on every peer. (F9c) Its
+// shooting phases open with the riders' shots from their hulls' decks,
+// each rider that may at its first target before Auto (the Elder, boarded
+// by the script where there is room, a third unit on a War-Cart's two
+// slots), and a seated peer that sees a rider whose hull's slots are
+// spent slips in that rider's shot (badride's spent-slot body, the first
+// time it sees one), refused alike on every peer.
 //
 // (F9b) And, on code with the Howdah, hulls (two seeds): the same, its twin
 // with long hulls: the Coil, two Howdahs in its list, against the Bushtails
@@ -544,6 +550,17 @@ const ALLOWED = {
 }
 const PRIMARY = { junk: 'envelope', dup: 'envelope', stray: 'illegal', stale: 'stale', offturn: 'turn', device: 'device', spoof: 'device' }
 
+// (F9c) A rider of seat `mine` that peer p sees aboard a hull whose deck
+// has spent its slots this shooting phase (it not among them), while p
+// slipped none such yet and an enemy stands to aim at; else null
+function spentRider(p, mine = p.seats.find((s) => p.G.pending?.seats.includes(s))) {
+  const G = p.G, q = p.M.core.q
+  if (!p.rides || p.deckSlips || mine === undefined || G.pending?.k !== 'phase' || G.pending.phase !== 'shoot') return null
+  if (!G.units.some((u) => u.side !== mine && u.alive > 0 && !u.aboard)) return null
+  const hull = (u) => G.units.find((v) => v.id === u.aboard)
+  return G.units.find((u) => u.side === mine && u.alive > 0 && u.aboard && !u.flags.shot && q.ridersShot(G, hull(u)) >= q.fireSlots(hull(u))) ?? null
+}
+
 // Slip something in from peer p, if its view allows one; returns its kind.
 function slip(p, rand, n) {
   const { E, core } = p.M
@@ -559,7 +576,11 @@ function slip(p, rand, n) {
   // ((F9b) the hulls scenario's: a refused heading, half of those, and
   // always the first time its seat decides)
   const first = p.hulls && !p.hullSlips
-  const kind = p.rides && mine !== undefined && (first || rand() < 0.6) ? (p.hulls && (first || rand() < 0.5) ? 'badhull' : 'badride') : kinds[Math.floor(rand() * kinds.length)]
+  // ((F9c) a rider of the seat's whose hull's deck has spent its slots
+  // this shooting phase, and an enemy to aim at: its shot slipped in, the
+  // first time the peer sees one)
+  const spent = spentRider(p, mine), enemy = spent && G.units.find((u) => u.side !== mine && u.alive > 0 && !u.aboard)
+  const kind = spent ? 'badride' : p.rides && mine !== undefined && (first || rand() < 0.6) ? (p.hulls && (first || rand() < 0.5) ? 'badhull' : 'badride') : kinds[Math.floor(rand() * kinds.length)]
   const id = () => E.newEntryId(p.dev, ses.store.entries().length, `x${n}`)
   const one = G.pending && !p.M.F.SIMULTANEOUS.includes(G.pending.k)
   const cmd = (s, extra = {}) => E.envelope(p.next(s), { id: id(), s, d: p.dev, p: ses.folder.head(s), h: one ? core.stateHash(G) : undefined, ...extra })
@@ -590,7 +611,8 @@ function slip(p, rand, n) {
       rider && { t: 'embark', u: rider.id, v: rider.aboard },
       free && hulls.length && { t: 'embark', u: free.id, v: hulls[0].id, c: 3 },
     ].filter(Boolean)
-    const body = bodies[Math.floor(rand() * bodies.length)] ?? { t: 'disembark', u: us[0].id, c: -1 }
+    const body = spent ? { t: 'shoot', u: spent.id, tg: enemy.id } : bodies[Math.floor(rand() * bodies.length)] ?? { t: 'disembark', u: us[0].id, c: -1 }
+    if (spent) p.deckSlips = 1
     p.put(E.envelope(body, { id: id(), s: mine, d: p.dev, p: ses.folder.head(mine), h: one ? core.stateHash(G) : undefined }), kind)
   } else if (kind === 'badhull') {
     // (F9b) a heading the rules refuse, for the decision the seat holds: a
@@ -666,6 +688,10 @@ function play(net, rand, { cap = 400000, deliver = 3 } = {}) {
       }
       p.receive(batch)
     } else if (m[1] === 'act') {
+      // ((F9c) a seated peer of the vehicles scenario that sees a deck's
+      // slots spent slips that rider's shot in first, once: the window is
+      // one entry wide, from the deck's last slot to the script's Auto)
+      if (spentRider(p)) slip(p, rand, net.ops.length)
       p.session.submit(m[3].s, m[3].body)
       p.mark(p.fork ? 'fork' : 'honest')
       // (F10c, burst) a seat's orders at End: up to 25 of its commands
@@ -1001,7 +1027,7 @@ function vehiclesLog(M, seed, hulls = false) {
   const races = hulls ? ['serpent', 'squirrel'] : ['squirrel', 'squirrel']
   const setup = { board: 1 + Math.floor(rand() * 99999), dice: 1 + Math.floor(rand() * 999999), mission: 'field', terrain: 'open', rounds: hulls ? 5 : 2, seats: races.map((race) => ({ race, ctrl: 'human', army: listOf(M.RACES[race]) })) }
   const G = core.createMatch(setup, { out: null })
-  const entries = []
+  const entries = [], deck = { shots: 0, spent: 0 }
   const send = (s, body) => {
     const why = core.legal(G, s, body)
     if (why) throw new Error(`the ${hulls ? 'hulls' : 'vehicles'} script's ${JSON.stringify(body)} for seat ${s} is refused: ${why}`)
@@ -1018,6 +1044,17 @@ function vehiclesLog(M, seed, hulls = false) {
     send(s, { t: 'place', u: p.id, c: G.nav.index(spot.x, spot.z) })
     send(s, { t: 'embark', u: p.id, v: v.id })
     for (const h of hulls) for (const u of mine) if (!u.aboard && !u.t.vehicle && core.legal(G, s, { t: 'embark', u: u.id, v: h.id }) === null) send(s, { t: 'embark', u: u.id, v: h.id })
+    // ((F9c) the last hull with three units aboard where the list allows:
+    // its riders but the first placed off, then the seat's smallest units
+    // boarded while they fit, so its deck has more riders than slots)
+    const last = hulls.at(-1)
+    if (!hulls[0].t.fp && q.riders(G, last).length < 3) {
+      for (const r of q.riders(G, last).slice(1)) {
+        const at = q.freeSpot(G, r, last.pos.x, last.pos.z + 6, s, G.units.filter((o) => o !== r))
+        if (at) send(s, { t: 'place', u: r.id, c: G.nav.index(at.x, at.z) })
+      }
+      for (const u of mine.filter((x) => !x.aboard && !x.t.vehicle).sort((a, b) => a.alive - b.alive || a.id - b.id)) if (core.legal(G, s, { t: 'embark', u: u.id, v: last.id }) === null) send(s, { t: 'embark', u: u.id, v: last.id })
+    }
     // ((F9b) a long hull placed where it stands at a heading of the
     // script's, the other without one)
     hulls.filter((h) => h.t.fp).forEach((h, j) => {
@@ -1053,20 +1090,42 @@ function vehiclesLog(M, seed, hulls = false) {
         const f = j === 0 ? turned(h, (x) => q.validEnd(G, plan, c, null, x)) : undefined
         send(s, f === undefined ? { t: 'move', u: h.id, c } : { t: 'move', u: h.id, c, f })
       })
-      const p = mine.find((u) => u.aboard && !u.flags.moved)
+      // ((F9c) a deck with more riders than slots keeps them all: none of
+      // its riders steps off, by the script or (left out of the pilot's
+      // units) the AI)
+      const full = mine.find((v) => v.t.transport && q.riders(G, v).length > q.fireSlots(v))
+      const p = mine.find((u) => u.aboard && !u.flags.moved && u.aboard !== full?.id)
       const cells = p ? q.landing(G, p, unitOf(p.aboard)) : []
       if (cells.length) send(s, { t: 'disembark', u: p.id, c: cells[0] })
-      const pair = mine.filter((v) => v.t.transport).flatMap((v) => mine.map((u) => [u, v])).find(([u, v]) => !u.aboard && core.legal(G, s, { t: 'embark', u: u.id, v: v.id }) === null)
+      const pair = mine.filter((v) => v.t.transport && v !== full).flatMap((v) => mine.map((u) => [u, v])).find(([u, v]) => !u.aboard && core.legal(G, s, { t: 'embark', u: u.id, v: v.id }) === null)
       if (pair) send(s, { t: 'embark', u: pair[0].id, v: pair[1].id })
-      send(s, { t: 'auto' })
+      if (!full) send(s, { t: 'auto' })
+      else {
+        const ids = G.units.filter((u) => u.side === s && u.alive > 0 && u.aboard !== full.id).map((u) => u.id), m = q.maskOf(G, s, ids)
+        if (core.legal(G, s, { t: 'pilot', m }) === null) send(s, { t: 'pilot', m })
+        send(s, { t: 'end' })
+      }
+    } else if (P.k === 'phase' && P.phase === 'shoot') {
+      // ((F9c) the riders first, from their hulls' decks: each that may,
+      // at its first target; then a deck whose slots its riders spent
+      // with one of them left counted, and Auto)
+      const still = () => G.pending?.k === 'phase' && G.pending.phase === 'shoot' && G.pending.seats[0] === s
+      for (const p of G.units.filter((u) => u.side === s && u.alive > 0 && u.aboard)) {
+        const tg = still() && q.canShoot(G, p) ? q.shootTargets(G, p)[0] : null
+        if (!tg) continue
+        send(s, { t: 'shoot', u: p.id, tg: tg.id })
+        deck.shots++
+      }
+      if (G.units.some((u) => u.side === s && u.alive > 0 && u.aboard && !u.flags.shot && q.ridersShot(G, unitOf(u.aboard)) >= q.fireSlots(unitOf(u.aboard)))) deck.spent++
+      if (still()) send(s, { t: 'auto' })
     } else if (P.k === 'chargeEnd') send(s, { t: 'chargeEnd', c: -1 })
     else if (P.k === 'roundLimit') send(s, { t: 'vote', more: false })
     else send(s, { t: 'auto' })
   }
-  return { it: { id: `${hulls ? 'hulls' : 'vehicles'}-${seed}`, job: { setup, entries } }, trace: G.journal.trace.slice() }
+  return { it: { id: `${hulls ? 'hulls' : 'vehicles'}-${seed}`, job: { setup, entries } }, trace: G.journal.trace.slice(), deck }
 }
 function vehiclesScenario(M, seed, hulls = false) {
-  const { it, trace } = vehiclesLog(M, seed, hulls)
+  const { it, trace, deck } = vehiclesLog(M, seed, hulls)
   const rand = mulberry32(seed * 7919 + 13)
   const where = `${it.id} (${hulls ? 'hulls' : 'vehicles'})`
   const net = new Net()
@@ -1105,6 +1164,11 @@ function vehiclesScenario(M, seed, hulls = false) {
   const seats = dep.map((e) => e.s)
   const mixed = seats.some((x, i) => seats.slice(0, i).includes(1 - x) && seats.slice(i + 1).includes(1 - x))
   if (!met['badride:illegal']) throw new Error(`${where}: no boarding or step off the rules refuse was refused as illegal (${JSON.stringify(Object.fromEntries(Object.entries(met).filter(([k]) => k.startsWith('badride'))))})`)
+  // ((F9c) the script's riders shot from their decks, and a peer that saw
+  // a deck's slots spent slipped in a rider's shot past them)
+  if (deck && !deck.shots) throw new Error(`${where}: the script's riders never shot from a deck`)
+  const deckSlips = net.peers.reduce((n, p) => n + (p.deckSlips ?? 0), 0)
+  if (deck?.spent && !deckSlips) throw new Error(`${where}: the script spent a deck's slots with a rider aboard left, but no seated peer slipped in that rider's shot`)
   // ((F9b) the script's headings, each kind with and without, and the
   // refused ones met)
   const heads = hulls ? Object.fromEntries(['place', 'move', 'chargeEnd'].map((t) => [t, [it.job.entries.filter((e) => e.t === t && e.f !== undefined).length, it.job.entries.filter((e) => e.t === t && e.f === undefined).length]])) : null
@@ -1117,6 +1181,7 @@ function vehiclesScenario(M, seed, hulls = false) {
     where, steps, peers: net.peers.length, entries: ref.accepted.length + ref.rejected.length, accepted: ref.accepted.length, rejected: ref.rejected.length,
     resets: net.peers.reduce((n, p) => n + p.resets, 0), refolds: net.peers.reduce((n, p) => n + p.insertsBefore, 0), met, embarks, mixed,
     rides: it.job.entries.filter((e) => e.t === 'embark' || e.t === 'disembark').length, badrides: Object.entries(met).filter(([k]) => k.startsWith('badride')).reduce((n, [, x]) => n + x, 0),
+    deckShots: deck?.shots ?? 0, deckSpent: deck?.spent ?? 0, deckSlips,
   }
 }
 
@@ -2255,7 +2320,7 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
         : t.kind === 'cap' ? `ok   both peers full at entry ${x.full} (${x.entries} entries)`
         : t.kind === 'lists' ? `ok   3 peers fold the start's lists (${x.armies.join(' v ')}, ${x.units} units) alike, and refuse ${x.refusedStarts} starts with illegal lists alike, each with its reason`
         : t.kind === 'hulls' ? `ok   3 peers agree: ${x.accepted} accepted (the script's headings, with/without: place ${x.heads.place.join('/')}, move ${x.heads.move.join('/')}, chargeEnd ${x.heads.chargeEnd.join('/')}), ${x.rejected} refused (${x.badhulls} headings and ${x.badrides} boardings and steps off the rules refuse); the script's battle traced`
-        : t.kind === 'vehicles' ? `ok   3 peers agree: ${x.accepted} accepted (${x.rides} embarks and steps off in the script; the deployments' embarks ${x.embarks.join(' and ')} by seat, ${x.mixed ? 'the seats interleaved' : 'one seat after the other'}), ${x.rejected} refused (${x.badrides} boardings and steps off the rules refuse); the script's battle traced`
+        : t.kind === 'vehicles' ? `ok   3 peers agree: ${x.accepted} accepted (${x.rides} embarks and steps off in the script; the deployments' embarks ${x.embarks.join(' and ')} by seat, ${x.mixed ? 'the seats interleaved' : 'one seat after the other'}), ${x.rejected} refused (${x.badrides} boardings and steps off the rules refuse${x.deckSlips ? `, ${x.deckSlips} a rider's shot past its deck's spent slots` : ''}); (F9c) ${x.deckShots} riders' shots from a deck in the script; the script's battle traced`
           : t.kind === 'votes' ? `ok   ${x.checks.length} checks: both seats' say at once, in either order, every way (more, end), on to overtime or the end; a second say and another device's refused`
           : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, the single flight (queued, dropped, written in turn; from a reset; an autopilot in settled), push and sync not reentrant, (N2) a final past the cap said once, a concession racing a move, (N3) kept entries held across a reload (honest, gone, replaced, out of order, rejected then gone)`
           : t.kind === 'forks' ? `ok   ${x.checks.length} checks: each seat forked in the deployment, the loser's world answering first, stale everywhere, live`

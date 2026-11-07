@@ -195,6 +195,17 @@
 //    P-pilot's F9a row (a mask naming a rider without its hull in the
 //    movement phase refused); and P-army's deployment at the caps with two
 //    War-Carts a side (80 boards: Field 40, Grand 20, the Powder Field 20).
+//    (F9c) And the firing deck: a hull's riders that shot this turn within
+//    its `fire` at every trace line and entry; every shot or spell from a
+//    deck legal() takes held to spellRules (the slots, the hull not
+//    engaged nor fallen back, assault weapons only once it advanced, the
+//    reach from the hull's edge, a lob's from its floor); the AI battles'
+//    deck shots counted (at least one over the run); and three scenes (a
+//    War-Cart's riders in their shooting phase: the range from its edge,
+//    its combat, fall back, advance and a spell on it, a volley and a
+//    template from the deck and its third rider refused; the deck's eye
+//    over a wall; a Howdah's riders at all 8 headings, a diagonal among
+//    them, and the Elder boarded by hand casting from a War-Cart's deck).
 //
 // 15. (V3c) P-spell, on code whose casters have several spells (bestCast):
 //    on scenes of its own (spellTask below says what each holds): every
@@ -567,10 +578,16 @@ function probe(core, G, seat, rand, where) {
 // seat's own (the caster too) within the spell's range, every other spell
 // and shot on a standing enemy within its range (a spell never lobs); no
 // snared unit moves or advances (its fall back included), and no snared or
-// mesmerized one charges. (F9a, at the V3 merge) And no shot or spell
-// whose shooter or target is aboard a vehicle: a rider neither shoots nor
-// casts, and is no one's target, a friend's spell's included (DESIGN
-// §4.2.5). Returns how many spells it held.
+// mesmerized one charges. (F9a, at the V3 merge) And no shot or spell at a
+// unit aboard a vehicle: a rider is no one's target, a friend's spell's
+// included (DESIGN §4.2.5). (F9c, DESIGN §4.2.5's firing deck) A rider
+// shoots, or casts, from its hull's deck only within its hull's slots (its
+// hull's riders that shot this turn fewer than its `fire`), never with its
+// hull engaged or fallen back, with no assault weapon never once it or
+// its hull advanced, and within its weapon's reach of the hull's nearest
+// edge (the least gap of the hull's discs, from its tables: never the
+// rider's own base), a lob's reach from the hull's floor (the deck's height
+// adding nothing). Returns how many spells it held.
 function spellRules(core, G, seat, ok, where) {
   if (!core.q.weaponOf) return 0
   const unit = (id) => G.units.find((u) => u.id === id)
@@ -581,15 +598,34 @@ function spellRules(core, G, seat, ok, where) {
     if (b.t === 'charge' && (u.snared || u.mesmerized)) throw new Error(`${where}: legal() lets the ${u.snared ? 'snared' : 'mesmerized'} ${u.t.short} charge: ${JSON.stringify(b)}`)
     if (b.t !== 'shoot') continue
     const tg = unit(b.tg)
-    if (u.aboard || tg?.aboard) throw new Error(`${where}: legal() lets ${u.t.short}${u.aboard ? `, aboard unit ${u.aboard},` : ''} ${b.sp === undefined ? 'shoot' : `cast spell ${b.sp}`} at ${tg ? tg.t.short : `unit ${b.tg}`}${tg?.aboard ? `, aboard unit ${tg.aboard}` : ''}: a rider neither shoots nor casts, and is no target: ${JSON.stringify(b)}`)
+    if (tg?.aboard) throw new Error(`${where}: legal() lets ${u.t.short} ${b.sp === undefined ? 'shoot' : `cast spell ${b.sp}`} at ${tg.t.short}, aboard unit ${tg.aboard}: a rider is no target: ${JSON.stringify(b)}`)
+    // ((F9c) a rider: from its hull's deck, within the deck's slots)
+    const v = u.aboard ? unit(u.aboard) : null
+    if (v) {
+      const fire = v.t.transport.fire, spent = G.units.filter((p) => p.aboard === v.id && core.q.alive(p) && p.flags.shot).length
+      const said = `${u.t.short}, aboard unit ${v.id} (${v.t.short}),`
+      if (spent >= fire) throw new Error(`${where}: legal() lets ${said} shoot from a deck whose ${fire} slots its riders have spent (${spent} shot this turn): ${JSON.stringify(b)}`)
+      if (core.q.isEngaged(G, v)) throw new Error(`${where}: legal() lets ${said} shoot while its hull is in combat: ${JSON.stringify(b)}`)
+      if (v.flags.fellBack) throw new Error(`${where}: legal() lets ${said} shoot after its hull fell back: ${JSON.stringify(b)}`)
+      if ((u.flags.advanced || v.flags.advanced) && !u.t.ranged?.assault) throw new Error(`${where}: legal() lets ${said} shoot after its hull advanced, with no assault weapon: ${JSON.stringify(b)}`)
+    }
     if (b.sp !== undefined && !u.t.spells) throw new Error(`${where}: legal() takes spell ${b.sp} of ${u.t.short}, which casts none`)
     const w = b.sp === undefined ? u.t.ranged : u.t.spells[b.sp]
     if (!w) throw new Error(`${where}: legal() takes spell ${b.sp} of ${u.t.short}, which has ${u.t.spells.length}`)
     if (u.flags.shot) throw new Error(`${where}: legal() lets ${u.t.short} ${w.spell ? `cast ${w.name}` : 'shoot'} again this phase`)
     const ally = !!(w.ward || w.resolve)
     if (!tg || !core.q.alive(tg) || (tg.side === seat) !== ally) throw new Error(`${where}: legal() takes ${u.t.short}'s ${w.name} at ${tg ? `${tg.t.short}, ${tg.side === seat ? 'a friend' : 'an enemy'}${core.q.alive(tg) ? '' : ', destroyed'}` : `no unit ${b.tg}`}`)
-    const gap = tg === u ? 0 : Math.hypot(tg.pos.x - u.pos.x, tg.pos.z - u.pos.z) - u.r - tg.r
+    const gap = tg === u ? 0 : v ? (tg === v ? 0 : unitsApart(v, tg)) : Math.hypot(tg.pos.x - u.pos.x, tg.pos.z - u.pos.z) - u.r - tg.r
     if (w.spell && gap > w.range + 1e-9) throw new Error(`${where}: legal() takes ${u.t.short}'s ${w.name} at ${tg.t.short}, ${gap.toFixed(2)}" off, past its ${w.range}"`)
+    // ((F9c) a rider's every shot within its reach of the hull's edge: a
+    // lob's √(R² + 2hR) from the hull's floor with height, else the
+    // printed range)
+    if (v) {
+      const lob = G.nav.hasHeight && !w.spell && !!(w.blast || w.indirect), h = lob ? core.q.groundY(G, v) - core.q.groundY(G, tg) : 0
+      const reach = lob && h ? Math.sqrt(Math.max(0, w.range * w.range + 2 * h * w.range)) : w.range
+      if (gap > reach + 1e-9) throw new Error(`${where}: legal() takes ${u.t.short}'s ${w.name} from the deck of unit ${v.id} at ${tg.t.short}, ${gap.toFixed(2)}" from the hull's edge, past its reach of ${reach.toFixed(2)}"`)
+      DECK.judged++
+    }
     if (w.spell) n++
   }
   return n
@@ -648,6 +684,9 @@ function invariants(core, G, where, last) {
 // whose state is no valid end (counted in PHULL, reported by the run).
 let HULL_STEP = null
 const PHULL = { hulls: 0, round: 0, range: 0, state: 0, taken: 0, judged: 0 }
+// ((F9c, P-riders) the shots and spells from a deck legal() took that
+// spellRules judged; the hulls' spent slots held at trace lines and entries)
+const DECK = { judged: 0, slots: 0 }
 // a footprint unit's discs where it stands (or at (x, z) facing h), front
 // to back, from its tables
 function discsHere(u, x = u.pos.x, z = u.pos.z, h = u.facing) {
@@ -1637,8 +1676,11 @@ const V1_PINS = {
 // (built as 8 on 7), which stand on fortified boards alone: the pins as
 // under 12; 14, F7c's collapsing platforms, on fortified boards alone:
 // the pins as under 13; 15, F9b's long hulls: `facing` printed only on a
-// footprint unit, which no pinned match fields: the pins as under 14)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+// footprint unit, which no pinned match fields: the pins as under 14; 16,
+// F9c's firing decks, a rider's shot from its hull's deck: no new state
+// (the deck's spent slots read off its riders' `shot` flags), the format
+// unchanged, and no pinned match fields a rider: the pins as under 15)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 const PINS_UNDER = (v) => (v >= 12
   ? { ...V1_PINS, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
   : v >= 9 ? { ...V1_PINS, '64-89': { end: '1jmxq628imf' } } : V1_PINS)
@@ -4338,6 +4380,10 @@ function ridersState(core, mods, G, where) {
     if (!tr) continue
     const load = G.units.filter((p) => p.aboard === v.id).reduce((s, p) => s + p.alive, 0)
     if (load > tr.capacity) throw new Error(`${where}: unit ${v.id} (${v.t.short}) carries ${load} models, over its capacity of ${tr.capacity}`)
+    // ((F9c) its riders that shot this turn within its deck's slots)
+    const shot = G.units.filter((p) => p.aboard === v.id && p.flags.shot).length
+    if (shot > tr.fire) throw new Error(`${where}: ${shot} riders of unit ${v.id} (${v.t.short}) shot this turn, past its deck's ${tr.fire} slots`)
+    if (shot) DECK.slots++
   }
   // (P-height, F9a) a ground vehicle keeps to the ground
   if (G.nav.hasHeight) for (const v of G.units) {
@@ -4657,10 +4703,18 @@ function cartList(A, race, rules, rand, least = 1) {
 // at a sample of act lines), the bail-outs as they are emitted, the
 // mirror at every act (P-present: `aboard` among it) and P-prop's
 // invariants and result at its end. Returns what it played.
+//
+// ((F9c) and its deck shots, each counted as the shooter turns to its
+// target (unit.face) while it rides: `deckShots`, and `deckBlasts` the
+// templates thrown from a deck (blast.fire by a rider))
 function ridesBattle(core, mods, mirror, setup, where, rand) {
   const q = core.q
   const out = new Watched(), watch = bailWatch(core, mods), tap = mirrorTap(mirror)
-  out.watch = watch.event
+  const deck = { shots: 0, blasts: 0 }
+  out.watch = (e) => {
+    watch.event(e)
+    if ((e.t === 'unit.face' || e.t === 'blast.fire') && watch.G && unitById(watch.G, e.u)?.aboard) deck[e.t === 'unit.face' ? 'shots' : 'blasts']++
+  }
   watch.where = where
   const seen = { lines: 0, hidden: 0, autoload: -1 }
   const onTrace = (line, G) => {
@@ -4690,7 +4744,7 @@ function ridesBattle(core, mods, mirror, setup, where, rand) {
   const ends = result(G, where, -1)
   const bad = traceShape(G)
   if (bad) throw new Error(`${where}: ${bad}`)
-  const c = { battles: 1, ends, embarks: 0, steps: 0, stepped: 0, bailed: watch.counts.bailed, lost: watch.counts.lost, hullsDown: watch.counts.hullsDown, wrecks: 0, lines: seen.lines, hidden: seen.hidden, autoloaded: seen.autoload, acts: tap.counts().acts }
+  const c = { battles: 1, ends, embarks: 0, steps: 0, stepped: 0, bailed: watch.counts.bailed, lost: watch.counts.lost, hullsDown: watch.counts.hullsDown, wrecks: 0, lines: seen.lines, hidden: seen.hidden, autoloaded: seen.autoload, acts: tap.counts().acts, deckShots: deck.shots, deckBlasts: deck.blasts, decked: deck.shots ? 1 : 0 }
   for (const e of events) {
     if (e.t === 'unit.embark') c.embarks++
     else if (e.t === 'unit.disembark' && !e.forced) c.steps++
@@ -5160,6 +5214,228 @@ function ridesScenes(core, mods, mirror, RACES, MISSIONS) {
     c.longBailed = watch.counts.longs
     c.scenes++
   }
+
+  // (F9c, DESIGN §4.2.5's firing deck) the scenes below stand a hull and an
+  // enemy by hand in its seat's movement phase, everything else far off
+  // (each seat's at its own edge's corners, out of every rider's reach),
+  // then End: the shooting phase opens because its riders can act.
+  // `apart(G, v, e, d)`: v placed and e d" off its edge, in the first of
+  // 16 bearings from the first open spots out from the board's centre
+  // where every one of `who` (riders of v) takes e (shotInfo), or null
+  const farOff = (G, keep) => {
+    const { W, H } = G.nav
+    for (const u of G.units) if (!keep.includes(u) && u.alive > 0 && !u.aboard) mods.units.moveUnitTo(G, u, G.seats[u.side].edge * (W / 2 - 2), u.pos.z > 0 ? H / 2 - 2 : -(H / 2 - 2))
+  }
+  const apart = (G, v, e, d, who) => {
+    const { W, H } = G.nav
+    for (let r = 0; r < 14; r += 1) for (let k = 0; k < 16; k++) {
+      const x = r * Math.cos((k * Math.PI) / 8), z = r * Math.sin((k * Math.PI) / 8)
+      for (let b = 0; b < 16; b++) {
+        const R = v.r + e.r + d, ex = x + R * Math.cos((b * Math.PI) / 8), ez = z + R * Math.sin((b * Math.PI) / 8)
+        if (Math.abs(x) > W / 2 - 4 || Math.abs(ex) > W / 2 - 4 || Math.abs(z) > H / 2 - 4 || Math.abs(ez) > H / 2 - 4) continue
+        mods.units.moveUnitTo(G, v, x, z)
+        mods.units.moveUnitTo(G, e, ex, ez)
+        if (who.every((p) => q.shotInfo(G, p, e).ok)) return { x, z, ux: Math.cos((b * Math.PI) / 8), uz: Math.sin((b * Math.PI) / 8) }
+      }
+    }
+    return null
+  }
+  const ended = (G, s, where) => {
+    core.apply(G, s, { t: 'end' })
+    if (G.pending?.phase !== 'shoot' || G.pending.seats[0] !== s) throw new Error(`${where}: seat ${s}'s End led to ${JSON.stringify(G.pending)}, not its shooting phase (its riders with an enemy in reach act there)`)
+  }
+
+  // 10. (F9c) the firing deck: a War-Cart carrying a Nutkin squad, a
+  // Grenadiers squad and (by hand, five of another Nutkin squad fallen) a
+  // third unit, an enemy War-Cart 8" off its edge: in its seat's shooting
+  // phase the riders act (canAct), each shot's range the gap from the
+  // hull's edge, its reach the printed range; a target just inside the
+  // Grenadiers' 12" of the hull's edge and past it of their own base's
+  // taken; refused while the hull is in combat or fell back, the
+  // Grenadiers (no assault weapon) once it advanced while the Nutkin's
+  // slings may, nothing refused by a spell on the hull (Mesmerize); a
+  // volley and a template thrown from the deck, each a slot, the mirror the
+  // match's (P-present: a rider's volley and blast.*); and the third rider
+  // refused, the deck's 2 slots spent, legal() saying so
+  if (q.fireSlots) {
+    const where = 'scene: the firing deck'
+    const { G, look, snap } = sceneMatch(core, mods, mirror, { battle: true })
+    const s = G.pending.seats[0]
+    const v = hullsOf(G, s).find((h) => q.riders(G, h).some((p) => p.t.ranged?.blast))
+    const gun = v && q.riders(G, v).find((p) => p.t.ranged?.assault), lob = v && q.riders(G, v).find((p) => p.t.ranged?.blast)
+    const third = gun && G.units.find((u) => u.side === s && u.t.short === gun.t.short && u !== gun && u.alive > 1)
+    const e = hullsOf(G, 1 - s)[0], foe = G.units.find((u) => u.side !== s && u.alive > 0 && !u.aboard && !u.t.transport)
+    if (!v || !gun || !lob || !third || !e || !foe) throw new Error(`${where}: no War-Cart of seat ${s}'s carrying a Nutkin and a Grenadiers squad, no third squad, or no enemy hull and squad`)
+    for (const m of third.models.slice(1)) m.alive = false
+    third.alive = 1
+    mods.units.relayout(third)
+    third.aboard = v.id
+    mods.units.setUnitPos(third, v.pos.x, v.pos.z)
+    farOff(G, [v, e])
+    const at = apart(G, v, e, 8, [gun, lob])
+    if (!at) throw new Error(`${where}: no open ground where the War-Cart's riders see an enemy hull 8" off its edge`)
+    snap()
+    ridersState(core, mods, G, where)
+    ended(G, s, where)
+    look(`${where}, the shooting phase`)
+    for (const p of [gun, lob, third]) if (!q.canAct(G, p)) throw new Error(`${where}: rider unit ${p.id} (${p.t.short}) aboard can't act in its shooting phase with an enemy in reach: a rider shoots from the deck`)
+    const want = unitsApart(v, e), info = q.shotInfo(G, lob, e)
+    if (!info.ok || Math.abs(info.range - want) > 1e-9 || info.reach !== lob.t.ranged.range) throw new Error(`${where}: the Grenadiers' shot from the deck reads ${JSON.stringify({ ok: info.ok, range: info.range, reach: info.reach })}: want the range from the hull's edge, ${want}", its reach the printed ${lob.t.ranged.range}"`)
+    // the range from the hull's edge: the target 0.1" inside the
+    // Grenadiers' reach of it, past it of their own base
+    const put = (d) => {
+      const R = v.r + e.r + d
+      mods.units.moveUnitTo(G, e, at.x + at.ux * R, at.z + at.uz * R)
+      snap()
+    }
+    put(lob.t.ranged.range - 0.1)
+    const own = Math.hypot(e.pos.x - lob.pos.x, e.pos.z - lob.pos.z) - lob.r - e.r
+    if (!(own > lob.t.ranged.range)) throw new Error(`${where}: the target ${own.toFixed(2)}" off the Grenadiers' own base is within their reach too (the scene can't tell)`)
+    legalOk(G, s, { t: 'shoot', u: lob.id, tg: e.id }, `${where} (a target ${(lob.t.ranged.range - 0.1).toFixed(1)}" from the hull's edge, ${own.toFixed(2)}" from the squad's own base)`)
+    put(lob.t.ranged.range + 0.1)
+    refused(G, s, { t: 'shoot', u: lob.id, tg: e.id }, /out of range/, `${where} (a target ${(lob.t.ranged.range + 0.1).toFixed(1)}" from the hull's edge)`)
+    put(8)
+    // the hull in combat, fallen back, advanced, mesmerized
+    const fx = foe.pos.x, fz = foe.pos.z
+    mods.units.setUnitPos(foe, v.pos.x - at.ux * (v.r + foe.r + 0.5), v.pos.z - at.uz * (v.r + foe.r + 0.5))
+    if (!q.isEngaged(G, v)) throw new Error(`${where}: an enemy 0.5" from the War-Cart doesn't engage it`)
+    for (const p of [gun, lob]) refused(G, s, { t: 'shoot', u: p.id, tg: e.id }, /can't shoot now/, `${where} (the hull in combat)`)
+    mods.units.setUnitPos(foe, fx, fz)
+    for (const [flag, takes] of [['fellBack', []], ['advanced', [gun]]]) {
+      v.flags[flag] = true
+      for (const p of [gun, lob]) {
+        if (takes.includes(p)) legalOk(G, s, { t: 'shoot', u: p.id, tg: e.id }, `${where} (the hull ${flag}: ${p.t.short}'s ${p.t.ranged.name}, an assault weapon)`)
+        else refused(G, s, { t: 'shoot', u: p.id, tg: e.id }, /can't shoot now/, `${where} (the hull ${flag})`)
+      }
+      delete v.flags[flag]
+    }
+    v.mesmerized = true
+    for (const p of [gun, lob]) legalOk(G, s, { t: 'shoot', u: p.id, tg: e.id }, `${where} (the hull mesmerized: its riders' shots are their own)`)
+    v.mesmerized = false
+    snap()
+    // a volley and a template from the deck, a slot each
+    const fired = (p) => {
+      core.apply(G, s, { t: 'shoot', u: p.id, tg: e.id })
+      const evs = G.out.slice()
+      look(`${where}, ${p.t.short} fired from the deck`)
+      return evs
+    }
+    const a = fired(gun)
+    if (!a.some((x) => x.t === 'volley' && x.u === gun.id) || !a.some((x) => x.t === 'unit.face' && x.u === gun.id)) throw new Error(`${where}: the Nutkin's shot from the deck emitted no volley (or no unit.face) of theirs`)
+    if (q.ridersShot(G, v) !== 1 || !gun.aboard) throw new Error(`${where}: after one rider's shot the deck's spent slots read ${q.ridersShot(G, v)}, the squad aboard ${gun.aboard}`)
+    const b = fired(lob)
+    if (!b.some((x) => x.t === 'blast.fire' && x.u === lob.id) || !b.some((x) => x.t === 'blast.land')) throw new Error(`${where}: the Grenadiers' shot from the deck threw no template of theirs`)
+    c.deckBlasts = b.filter((x) => x.t === 'blast.fire').length
+    if (!q.alive(e)) throw new Error(`${where}: the target fell before the third rider's turn (the scene reaches no spent slot)`)
+    if (q.canShoot(G, third) || q.canAct(G, third)) throw new Error(`${where}: a third rider may shoot from a War-Cart whose 2 slots its riders have spent`)
+    refused(G, s, { t: 'shoot', u: third.id, tg: e.id }, /the War-Cart's deck has fired 2 of its 2/, where)
+    c.deckShots = 2
+    c.scenes++
+  }
+
+  // 11. (F9c) the deck's eye: a War-Cart a hand behind a wall it can't see
+  // past from the ground (a block chunk whose top stands between a
+  // rider's own eye and its eye on the deck), an enemy hull beyond it; the
+  // rider's eye the hull's floor + deckY + its own (deckEye), the sight
+  // from the deck point at it (seen) and from the same point at its own
+  // eye (not), and legal() taking the shot from the deck
+  if (q.fireSlots) {
+    const where = "scene: the deck's eye over a wall"
+    const { G, look, snap, setup } = sceneMatch(core, mods, mirror, { battle: true })
+    const s = G.pending.seats[0]
+    const v = hullsOf(G, s)[0], gun = q.riders(G, v).find((p) => p.t.ranged), e = hullsOf(G, 1 - s)[0]
+    farOff(G, [v, e])
+    const eye = q.deckEye(G, gun)
+    if (eye !== q.groundY(G, v) + v.t.transport.deckY + gun.t.eye) throw new Error(`${where}: the rider's deck eye reads ${eye}", not its hull's floor + its deck's ${v.t.transport.deckY}" + its own ${gun.t.eye}"`)
+    let found = null
+    for (const ch of G.terrain.chunks) {
+      const top = ch.shape.y + ch.shape.hy
+      if (found || ch.los !== 'block' || !ch.alive || !(top > gun.t.eye && top < eye)) continue
+      const ext = Math.hypot(ch.shape.hx, ch.shape.hz)
+      for (let k = 0; k < 8 && !found; k++) {
+        const ux = Math.cos((k * Math.PI) / 4), uz = Math.sin((k * Math.PI) / 4)
+        for (const near of [0.2, 0.6, 1.2]) {
+          const vx = ch.shape.x - ux * (ext + v.r + near), vz = ch.shape.z - uz * (ext + v.r + near), ex = ch.shape.x + ux * (ext + e.r + 4), ez = ch.shape.z + uz * (ext + e.r + 4)
+          if (Math.abs(vx) > G.nav.W / 2 - 2 || Math.abs(ex) > G.nav.W / 2 - 2 || Math.abs(vz) > G.nav.H / 2 - 2 || Math.abs(ez) > G.nav.H / 2 - 2) continue
+          mods.units.moveUnitTo(G, v, vx, vz)
+          mods.units.moveUnitTo(G, e, ex, ez)
+          const at = q.deckPoint(v)
+          if (q.sight(G, gun, e, at, undefined, q.deckEye(G, gun)).visible && !q.sight(G, gun, e, at).visible) {
+            found = { chunk: ch.id, top }
+            break
+          }
+        }
+      }
+    }
+    if (!found) throw new Error(`${where}: no wall on board ${setup.board} between a rider's own eye (${gun.t.eye}") and its deck eye (${eye}") hides an enemy hull from the ground`)
+    snap()
+    ended(G, s, where)
+    look(`${where}, the shooting phase`)
+    legalOk(G, s, { t: 'shoot', u: gun.id, tg: e.id }, `${where} (over chunk ${found.chunk}, its top ${found.top.toFixed(2)}")`)
+    c.deckEye = found.top
+    c.scenes++
+  }
+
+  // 12. (F9c) a long hull's deck, and a caster's spell from a deck: the
+  // Coil's Howdah with its riders at each of the 8 headings, an enemy hull
+  // 6" off its body's edge, each rider's shot taken at every one (no
+  // arcs: the facing turns the footprint only), its range the least gap of
+  // the Howdah's discs (from its tables), the diagonal among them; and the
+  // Bushtails' Elder boarded by hand in the deployment (its base within
+  // the hull's maxBase), his ward on his own hull at 0" and his Thornburst
+  // cast at an enemy hull from the deck, a slot of the cart's
+  if (q.fireSlots && RACES.serpent.roster.some((k) => RACES.serpent.units[k].fp)) {
+    const where = "scene: a long hull's deck, and a spell from a deck"
+    const list = cartList(A, RACES.serpent, MISSIONS.field.list, mulberry32(9), 1)
+    const { G, look, snap } = sceneMatch(core, mods, mirror, { other: 'serpent', otherArmy: list })
+    const elder = G.units.find((u) => u.side === 0 && u.t.spells), cart = hullsOf(G, 0).find((h) => q.room(G, h) >= elder.alive)
+    if (!elder || !cart) throw new Error(`${where}: no Elder, or no War-Cart with room for him`)
+    legalOk(G, 0, { t: 'embark', u: elder.id, v: cart.id }, `${where} (the Elder boards in the deployment)`)
+    core.apply(G, 0, { t: 'embark', u: elder.id, v: cart.id })
+    for (const x of [0, 1]) core.apply(G, x, { t: 'deployed' })
+    look(`${where}, the battle begun`)
+    const how = G.units.find((u) => u.side === 1 && u.t.fp && q.riders(G, u).length)
+    if (!how) throw new Error(`${where}: the Coil's Howdah carries nobody (its list ${list})`)
+    // the Howdah's riders at every heading, the cart 6" off its body
+    const who = q.riders(G, how).filter((p) => p.t.ranged), far = hullsOf(G, 0).find((h) => h !== cart)
+    farOff(G, [how, far])
+    const at = apart(G, how, far, 6, who)
+    if (!at) throw new Error(`${where}: no open ground where the Howdah's riders see a War-Cart 6" off`)
+    let taken = 0
+    for (let h = 0; h < 8; h++) {
+      how.facing = h
+      for (const p of who) {
+        const info = q.shotInfo(G, p, far), want = unitsApart(how, far)
+        if (!info.ok || Math.abs(info.range - want) > 1e-9) throw new Error(`${where}: facing ${h}, ${p.t.short}'s shot from the Howdah's deck reads ${JSON.stringify({ ok: info.ok, why: info.why, range: info.range })}: want it taken, its range the least gap of the hull's discs, ${want.toFixed(3)}" (no firing arcs)`)
+        taken++
+      }
+    }
+    how.facing = 1
+    c.longDeck = taken
+    // the Elder aboard the cart, an enemy hull 8" off
+    const tg = hullsOf(G, 1).find((h) => h !== how) ?? how
+    farOff(G, [cart, tg])
+    if (!apart(G, cart, tg, 8, [elder])) throw new Error(`${where}: no open ground where the Elder aboard the cart sees an enemy hull 8" off`)
+    snap()
+    // (to the Bushtails' movement phase: the Coil's phases ended)
+    while (G.pending?.k === 'phase' && G.pending.seats[0] !== 0) core.apply(G, G.pending.seats[0], { t: 'end' })
+    if (G.pending?.phase !== 'move') throw new Error(`${where}: the Coil's turn ended at ${JSON.stringify(G.pending)}, not the Bushtails' movement phase`)
+    snap()
+    ended(G, 0, where)
+    look(`${where}, the Bushtails' shooting phase`)
+    const ward = elder.t.spells.findIndex((w) => w.ward), burst = elder.t.spells.findIndex((w) => !q.allySpell(w) && w.blast && !w.snare)
+    const wi = q.shotInfo(G, elder, cart, ward)
+    if (!wi.ok || wi.range !== 0) throw new Error(`${where}: the Elder's ward on his own hull from its deck reads ${JSON.stringify(wi)}: want it taken at 0"`)
+    legalOk(G, 0, { t: 'shoot', u: elder.id, tg: cart.id, sp: ward }, `${where} (the ward on his hull)`)
+    legalOk(G, 0, { t: 'shoot', u: elder.id, tg: tg.id, sp: burst }, `${where} (${elder.t.spells[burst].name} from the deck)`)
+    core.apply(G, 0, { t: 'shoot', u: elder.id, tg: tg.id, sp: burst })
+    const evs = G.out.slice()
+    look(`${where}, the Elder cast from the deck`)
+    if (!evs.some((x) => x.t === 'tray.open') || !evs.some((x) => (x.t === 'spell.cast' || x.t === 'spell.fizzle') && x.u === elder.id)) throw new Error(`${where}: the Elder's cast from the deck made no cast roll of his`)
+    if (q.ridersShot(G, cart) !== 1 || !elder.aboard) throw new Error(`${where}: after the Elder's cast the cart's spent slots read ${q.ridersShot(G, cart)}, the Elder aboard ${elder.aboard}`)
+    c.deckSpell = 1
+    c.scenes++
+  }
   return c
 }
 // ── P-army: the deployment at the caps with hulls (F9a) ──────────────────────
@@ -5531,8 +5807,12 @@ if (a.child) {
   } catch (e) {
     out = { ok: false, error: String(e?.message ?? e) }
   }
-  // ((F9b) what P-hull held in this child, for the run's sums)
-  if (out?.ok && out.counts) out.counts.phull = PHULL
+  // ((F9b) what P-hull held in this child, for the run's sums; (F9c) and
+  // the deck shots spellRules judged)
+  if (out?.ok && out.counts) {
+    out.counts.phull = PHULL
+    out.counts.deck = DECK
+  }
   process.stdout.write(JSON.stringify(out))
   process.exit(0)
 }
@@ -5619,8 +5899,8 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     const what = !r.ok ? '' : t.kind === 'corpus' ? `${c.probes} decisions probed`
       : t.kind === 'army' ? `${c.fuzz.fuzzed} armies fuzzed (${c.fuzz.refused} refused, ${c.fuzz.both} with both seats fuzzed; ${c.fuzz.taken} taken, ${c.fuzz.roundTrips} seats round-tripped, ${c.fuzz.made} made into matches), ${c.sweep} autoLists legal, ${c.shadow} classic shadows held`
         : t.kind === 'armyGames' ? `${c.listGames} AI battles between lists of ${c.budgets[0]}-${c.budgets[1]} points (score ${c.ends.score}, wipe ${c.ends.wipe})${c.hulls ? `, ${c.hulls} hulls fielded, ${c.bailed} bail-outs held to P-riders` : ''}`
-          : t.kind === 'rides' ? `${c.battles} AI battles with War-Carts: ${c.lines} trace lines held to P-riders' state (${c.hidden} hidden-rider queries), ${c.autoloaded} riders autoloaded, riders stepping off ${c.steps} times (in ${c.stepped} battles), ${c.hullsDown} hulls destroyed with riders (${c.bailed} bailed out, ${c.lost} lost), ${c.wrecks} wrecks, the mirror held at ${c.acts} acts`
-            : t.kind === 'ridesScene' ? `${c.scenes} scenes: ${c.autoloaded} riders autoloaded, ${c.hidden} hidden-rider queries, ${c.bailed} bailed out by an enemy's 1", ${c.lost} lost with nowhere to stand, the AI's friendly fire swept at ${c.sweep} places`
+          : t.kind === 'rides' ? `${c.battles} AI battles with War-Carts: ${c.lines} trace lines held to P-riders' state (${c.hidden} hidden-rider queries), ${c.autoloaded} riders autoloaded, riders stepping off ${c.steps} times (in ${c.stepped} battles), ${c.hullsDown} hulls destroyed with riders (${c.bailed} bailed out, ${c.lost} lost), ${c.wrecks} wrecks, the mirror held at ${c.acts} acts${c.deckShots !== undefined ? `; (F9c) ${c.deckShots} shots from a deck (${c.deckBlasts} templates) in ${c.decked} battles` : ''}`
+            : t.kind === 'ridesScene' ? `${c.scenes} scenes: ${c.autoloaded} riders autoloaded, ${c.hidden} hidden-rider queries, ${c.bailed} bailed out by an enemy's 1", ${c.lost} lost with nowhere to stand, the AI's friendly fire swept at ${c.sweep} places${c.deckShots ? `; (F9c) a volley and ${c.deckBlasts} templates thrown from a War-Cart's deck, its third rider refused, a shot over a wall ${c.deckEye.toFixed(2)}" high from the deck, ${c.longDeck} shots from a Howdah's deck at its 8 headings, ${c.deckSpell} spell cast from a deck` : ''}`
               : t.kind === 'hullDeploy' ? `${c.boards} deployments at the caps (${Object.entries(c.sets).map(([k, n]) => `${k} ${n}`).join(', ')}): ${c.hulls} hulls (${c.longs ?? 0} long hulls on the state place {f} takes), ${c.units} units on the table where place takes them, ${c.riders} riders aboard as the autoload and embark have them`
                 : `${c.ended}, ${c.probes} decisions, ${Object.entries(c.commands).map(([k, n]) => `${k} ${n}`).join(', ')}${c.rides ? ` (P-riders: ${c.rides.autoloaded} autoloaded, ${c.rides.hidden} hidden-rider queries, embark ${c.rides.embarkDeploy} in the deployment and ${c.rides.embarkPhase} in a phase, ${c.rides.steps} steps off, ${c.rides.bailed} bailed out, ${c.rides.lost} lost)` : ''}`
     say(`  ${label.padEnd(24)} ${r.ok ? `ok   ${what}` : `FAIL ${r.error}`}`)
@@ -5713,7 +5993,9 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
   let ridesSaid = ''
   if (rides) {
     const of = (kind) => res.filter((r, i) => r.ok && tasks[i].kind === kind).map((r) => r.counts)
-    const ai = of('rides').reduce((s, c) => ({ battles: s.battles + c.battles, stepped: s.stepped + c.stepped, steps: s.steps + c.steps, bailed: s.bailed + c.bailed, lines: s.lines + c.lines }), { battles: 0, stepped: 0, steps: 0, bailed: 0, lines: 0 })
+    const ai = of('rides').reduce((s, c) => ({ battles: s.battles + c.battles, stepped: s.stepped + c.stepped, steps: s.steps + c.steps, bailed: s.bailed + c.bailed, lines: s.lines + c.lines, deck: s.deck + (c.deckShots ?? 0), deckBlasts: s.deckBlasts + (c.deckBlasts ?? 0), decked: s.decked + (c.decked ?? 0) }), { battles: 0, stepped: 0, steps: 0, bailed: 0, lines: 0, deck: 0, deckBlasts: 0, decked: 0 })
+    // ((F9c) the deck shots spellRules judged over the run)
+    const judged = res.reduce((n, r) => n + (r.counts?.deck?.judged ?? 0), 0), slotted = res.reduce((n, r) => n + (r.counts?.deck?.slots ?? 0), 0)
     const human = res.filter((r, i) => r.ok && tasks[i].rides).map((r) => r.counts.rides ?? {})
     const sum = (k) => human.reduce((n, c) => n + (c[k] ?? 0), 0)
     const scenes = of('ridesScene')[0], deploys = of('hullDeploy')
@@ -5721,9 +6003,11 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
       const wantAI = Object.values(army.ridesAI ?? {}).reduce((a, b) => a + b, 0)
       if (ai.battles !== wantAI) bad.push({ error: `P-riders ran short: ${ai.battles} of ${wantAI} AI battles with War-Carts` })
       else if (wantAI >= 2 && !ai.steps) bad.push({ error: `P-riders: in ${ai.battles} AI battles with War-Carts no rider ever stepped off (the AI's transports never reached)` })
+      // ((F9c) the firing deck: the AI's riders shoot from it)
+      else if (wantAI >= 2 && !ai.deck) bad.push({ error: `P-riders: in ${ai.battles} AI battles with War-Carts no rider ever shot from a deck (the firing deck never reached)` })
       if ((army.ridesHuman ?? 0) >= 4 && (!sum('embarkDeploy') + !sum('embarkPhase') + !sum('disembarks'))) bad.push({ error: `P-riders: the random games with a human seat never sent ${[!sum('embarkDeploy') && 'an embark in the deployment', !sum('embarkPhase') && 'an embark in a phase', !sum('disembarks') && 'a disembark'].filter(Boolean).join(', ')} (more games?)` })
     }
-    ridesSaid = `; (P-riders) ${ai.battles} AI battles with War-Carts (${ai.lines} trace lines held, riders stepping off ${ai.steps} times in ${ai.stepped} of them, ${ai.bailed} bail-outs) and ${human.length} random games with a human seat (embark ${sum('embarkDeploy')} in the deployment and ${sum('embarkPhase')} in a phase, disembark ${sum('disembarks')}, ${sum('hidden')} hidden-rider queries), ${scenes ? `${scenes.scenes} scenes` : 'no scenes'}; (P-army) ${deploys.reduce((n, c) => n + c.boards, 0)} deployments at the caps with hulls placed legally`
+    ridesSaid = `; (P-riders) ${ai.battles} AI battles with War-Carts (${ai.lines} trace lines held, riders stepping off ${ai.steps} times in ${ai.stepped} of them, ${ai.bailed} bail-outs; (F9c) ${ai.deck} shots from a deck in ${ai.decked} of them, ${ai.deckBlasts} templates among them; ${judged} deck shots legal() took judged by spellRules, ${slotted} hull-states with slots spent held to the deck's fire) and ${human.length} random games with a human seat (embark ${sum('embarkDeploy')} in the deployment and ${sum('embarkPhase')} in a phase, disembark ${sum('disembarks')}, ${sum('hidden')} hidden-rider queries), ${scenes ? `${scenes.scenes} scenes` : 'no scenes'}; (P-army) ${deploys.reduce((n, c) => n + c.boards, 0)} deployments at the caps with hulls placed legally`
   }
   // (F9b) P-hull: what it held over the run, and (with its games) what
   // they must have reached: each of legal()'s three refusals, and a
@@ -5821,7 +6105,9 @@ const MUTATIONS = {
   // the friend's rows before the target's, a tie struck on the last of two
   // alike, and an AI that weighs neither a volley's strays nor a template's
   // friends under it
-  'fight-barred': ['core/actions/shoot.js', "  const s = sight(G, u, target)\n  if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }\n", "  if (isEngaged(G, target) && !w.spell) return { ok: false, why: 'locked in combat' }\n  const s = sight(G, u, target)\n  if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }\n"],
+  // ((F9c) its anchor the sight's line as the firing deck left it, a
+  // rider's sight from the deck beside the table's)
+  'fight-barred': ['core/actions/shoot.js', "  const s = v ? sight(G, u, target, deckPoint(v), undefined, deckEye(G, u)) : sight(G, u, target)\n  if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }\n", "  if (isEngaged(G, target) && !w.spell) return { ok: false, why: 'locked in combat' }\n  const s = v ? sight(G, u, target, deckPoint(v), undefined, deckEye(G, u)) : sight(G, u, target)\n  if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }\n"],
   'stray-draws-clear': ['core/actions/shoot.js', '  if (fight) {\n    const share = fight.F / (fight.F + fight.T)\n', '  {\n    const share = fight ? fight.F / (fight.F + fight.T) : 0\n'],
   'stray-per-hit': ['core/actions/shoot.js', 'if (d < info.need && draw(G.rng) < share) stray++', 'if (d >= info.need && draw(G.rng) < share) stray++'],
   'stray-share-flipped': ['core/actions/shoot.js', '    const share = fight.F / (fight.F + fight.T)\n', '    const share = fight.T / (fight.F + fight.T)\n'],
@@ -6071,6 +6357,17 @@ const MUTATIONS = {
   ],
   // a snared unit boards a hull
   'snared-boards': ['core/actions/transport.js', '  if (u.snared) return `${u.t.short} is snared`\n', ''],
+  // (F9c, P-riders' scenes 10 and 11 and spellRules) the firing deck: a
+  // rider shooting past its hull's slots (a War-Cart's third), after its
+  // hull fell back, with no assault weapon after its hull advanced; its
+  // eye on the ground of the deck point (a wall it sees over from the
+  // deck hiding its target); its range from its own base, not the hull's
+  // edge (a target just inside its reach of the hull refused)
+  'slots-ignored': ['core/actions/shoot.js', '    if (isEngaged(G, v) || v.flags.fellBack || ridersShot(G, v) >= fireSlots(v)) return false\n', '    if (isEngaged(G, v) || v.flags.fellBack) return false\n'],
+  'hull-fallback-forgotten': ['core/actions/shoot.js', '    if (isEngaged(G, v) || v.flags.fellBack || ridersShot(G, v) >= fireSlots(v)) return false\n', '    if (isEngaged(G, v) || ridersShot(G, v) >= fireSlots(v)) return false\n'],
+  'hull-advance-forgotten': ['core/actions/shoot.js', '    if (v.flags.advanced && !w.assault) return false\n', ''],
+  'deck-eye-flat': ['core/actions/shoot.js', 'sight(G, u, target, deckPoint(v), undefined, deckEye(G, u))', 'sight(G, u, target, deckPoint(v))'],
+  'range-from-rider': ['core/actions/shoot.js', 'const range = v ? gap(v, target) : gap(u, target), reach', 'const range = gap(u, target), reach'],
   // the AI moves a snared hull
   'snared-hull-moves': ['core/ai/policy.js', '    if (!v.snared) yield* aiMoveOne(G, v, hullRole(G, v), claimed)\n', '    yield* aiMoveOne(G, v, hullRole(G, v), claimed)\n'],
   // (F9b) P-lattice, each run on its own workload (P-lattice alone): the

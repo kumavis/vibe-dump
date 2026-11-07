@@ -84,26 +84,32 @@ export default {
     // to 0.45: the Nutkin and the Grenadiers make 11), loaded at the
     // deployment by the autoload (core/actions/transport.js). Destroyed, it
     // leaves a burning wreck the size of its cup (`wreck`'s half-sizes), and
-    // its riders bail out. `fire` is the deck's two firing slots, F9c's:
-    // nothing reads it yet. None in a Skirmish, at most two a side in a
-    // Field or Grand battle (the Vehicle slot, data/mission.js).
+    // its riders bail out. (F9c) `fire` is the deck's two firing slots: two
+    // rider units a turn shoot from it (core/actions/transport.js
+    // fireSlots), from `deckY` 0.7" over its floor (where the figure's
+    // riders stand: its 0.09" lift and the deck's 0.62, view/models/
+    // warcart.js), their range from its edge; `deck` is the deck's radius,
+    // which the view packs them on. None in a Skirmish, at most two a side
+    // in a Field or Grand battle (the Vehicle slot, data/mission.js).
     warcart: {
       name: 'Acorn War-Cart', short: 'War-Cart', role: 'Vehicle', ai: 'transport', models: 1, base: 1.5, pts: 120,
       // (F9a, fitted at Field by sim/army-sim.mjs, §4.2.8.2: seeds 1111 and
       // 2222 at a trial 60, 46 ± 16 and 33 ± 13 points, so 40; judged on
       // 4444 at 40, both sets: 58 ± 12, inside its band, every unit in
-      // its own, the score 48.3% open and 52.9% fortified. Its riders step
-      // off to shoot once an enemy is in reach (core/ai/policy.js, with no
-      // firing deck before F9c: core/actions/transport.js fireSlots); kept
-      // aboard they fitted the cart about 0 and the Nutkin 20 under. Its
-      // price at Field; at Grand data/mission.js's `prices` say 150.)
+      // its own, the score 48.3% open and 52.9% fortified. Its riders
+      // stepped off to shoot once an enemy was in reach (core/ai/policy.js,
+      // with no firing deck before F9c); kept aboard they fitted the cart
+      // about 0 and the Nutkin 20 under. Its price at Field; at Grand
+      // data/mission.js's `prices` say 150. F9c's firing deck, its riders
+      // shooting from aboard, re-fits it.)
       cost: 40,
       stats: 'M8 WS5 BS4 S5 T7 W10 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
-      transport: { capacity: 12, maxBase: 0.45, fire: 2, deck: 1.4, wreck: { hx: 1.4, hy: 0.6, hz: 1.4 } },
+      transport: { capacity: 12, maxBase: 0.45, fire: 2, deck: 1.4, deckY: 0.7, wreck: { hx: 1.4, hy: 0.6, hz: 1.4 } },
       ranged: { name: 'Bolt thrower', range: 24, shots: 2, S: 6, AP: 2, D: 2, heavy: true, fx: 'bolt' },
       melee: { name: 'Spiked wheels', S: 5, AP: 1, D: 1 },
       abilities: [
         'Transport — carries two squads (12 models) on its deck; a unit boards or steps off it as its move.',
+        'Firing deck — up to two squads aboard shoot from its deck each turn, from the deck’s height (it sees over walls), their range from its edge; they count as having moved, or advanced, when it has.',
         'Riders — ride along, can’t be shot or charged, and hold no objectives.',
         'Spiked wheels — ploughs through anything breakable in its way.',
         'Heavy — −1 to hit after moving.',

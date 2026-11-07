@@ -192,14 +192,16 @@
 //    about half of a squad on average (40-60%).
 // 14. (F9a, DESIGN §4.2.5) Vehicles: the War-Cart's record as DESIGN's
 //    data block gives it (stats, flags, transport, weapons) and what the
-//    schema derives from it, its cost a whole multiple of 5 and its card
-//    promising no firing deck (F9c's); every other unit no vehicle with no
+//    schema derives from it, its cost a whole multiple of 5 and (F9c) its
+//    card promising its firing deck in the copy's words; every other unit no vehicle with no
 //    transport field; the transport record's rules (defineRace refuses each
 //    broken field, a transport on a non-vehicle, a vehicle of two models,
 //    not big, or climbing; takes the edges, a hull with no wreck or no
 //    transport, and copies the record); the Vehicle slot (0 / 2 / 2) and
 //    checkMission and checkList judging it; RULES_ID moving on every
-//    transport field, the cost and the slot, staying on the card text; and
+//    transport field ((F9c) deckY among them), the cost and the slot,
+//    staying on the card text; (F9c) deckY the figures' deck height (a
+//    number from 0) and fire at most the capacity; and
 //    the deck slots (present/deck.js deckSlots(t, capacity, 0.8) ≥ capacity
 //    for every transport, inside the deck, apart; DESIGN's slot table).
 //    (The keg mission, a Skirmish, has the Vehicle slot [0, 0] too; V3d's
@@ -224,7 +226,7 @@
 // 16. (F9b, DESIGN §4.2.5) Long hulls: the Howdah's record as DESIGN's data
 //    block gives it (stats, flags, footprint, transport with its deckAt,
 //    weapons), its fitted cost and its Grand and Powder prices, its card
-//    promising no firing deck, the roster's last entry and in no preset;
+//    promising (F9c) its firing deck, the roster's last entry and in no preset;
 //    t.fp on it alone, frozen; its tables derived afresh here from DESIGN's
 //    formulas (rule 24's exact constants, the snap, each sweep sample's need
 //    with its sub-cell error) and equal bit for bit, and exactly
@@ -1175,7 +1177,7 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   }
   const V9 = { ...V1, '64-89': { end: '1jmxq628imf' } }
   const V12 = { ...V1, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9, 12: V12, 13: V12, 14: V12, 15: V12 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9, 12: V12, 13: V12, 14: V12, 15: V12, 16: V12 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)
@@ -1624,13 +1626,15 @@ console.log("\n14. vehicles: the War-Cart's record, the transport rules, the Veh
   }
   const got = cart && Object.fromEntries(Object.keys(WANT).map((k) => [k, cart[k]]))
   check(!!cart && isDeepStrictEqual(got, WANT), "the War-Cart's record is DESIGN's: a Vehicle, the transport AI, one model on a 1.5\" base, M8 … T7 W10 … Sv3 OC0, big, a wrecker and a vehicle (so a brawler that wrecks as it moves, deployed in the front row, its eye 1.9\", no climber)", cart ? diffPath(got, WANT) : 'the Bushtails have no warcart')
-  check(isDeepStrictEqual(cart?.transport, { capacity: 12, maxBase: 0.45, fire: 2, deck: 1.4, wreck: { hx: 1.4, hy: 0.6, hz: 1.4 } }) && Object.isFrozen(cart.transport) && Object.isFrozen(cart.transport.wreck), "its transport is DESIGN's (capacity 12, maxBase 0.45\", fire 2, deck 1.4\", a wreck 2.8 × 1.2 × 2.8\"), copied and frozen", JSON.stringify(cart?.transport))
+  check(isDeepStrictEqual(cart?.transport, { capacity: 12, maxBase: 0.45, fire: 2, deck: 1.4, deckY: 0.7, wreck: { hx: 1.4, hy: 0.6, hz: 1.4 } }) && Object.isFrozen(cart.transport) && Object.isFrozen(cart.transport.wreck), "its transport is DESIGN's (capacity 12, maxBase 0.45\", fire 2, a deck of radius 1.4\" at (F9c) 0.7\" over its floor, a wreck 2.8 × 1.2 × 2.8\"), copied and frozen", JSON.stringify(cart?.transport))
   const w = cart?.ranged, m = cart?.melee
   check(w?.name === 'Bolt thrower' && w.range === 24 && w.shots === 2 && w.S === 6 && w.AP === 2 && w.D === 2 && w.heavy === true && w.fx === 'bolt' && m?.name === 'Spiked wheels' && m.S === 5 && m.AP === 1 && m.D === 1, "its weapons are DESIGN's: a Bolt thrower 24\", 2 shots, S6 AP2 D2, heavy, its look 'bolt'; Spiked wheels S5 AP1 D1", JSON.stringify({ ranged: w, melee: m }))
   check(Number.isInteger(cart?.cost) && cart.cost > 0 && cart.cost % 5 === 0, `its cost (${cart?.cost}) is a whole multiple of 5 above 0, as the builder's prices are (army-sim's fit sets it: DESIGN §4.2.5's data)`)
-  // (F9a's firing deck is F9c's: the card promises nothing it can't do yet)
+  // ((F9c) the firing deck fires: the card promises it, in the copy's
+  // words (DESIGN §4.2.5's card: the deck's height, the range from the
+  // hull's edge), and its two slots)
   const deckFire = (cart?.abilities ?? []).filter((x) => /fir(e|ing) (deck|from)|shoot(s)? from|from (the|its) deck/i.test(x))
-  check(cart?.abilities?.length > 0 && !deckFire.length, `its card text (${cart?.abilities?.length ?? 0} lines) promises no firing deck (F9c's)`, deckFire.join(' | '))
+  check(deckFire.length === 1 && /two squads/.test(deckFire[0]) && /height/.test(deckFire[0]) && /range from its edge/.test(deckFire[0]), `its card text (${cart?.abilities?.length ?? 0} lines) promises its firing deck, one line: two squads, from the deck's height, their range from its edge (F9c's)`, deckFire.join(' | ') || 'no line promises it')
   check(ROLES.at(-1) === 'Vehicle' && FLAGS.includes('vehicle') && AI_ROLES.includes('transport'), "the schema knows the Vehicle role (ROLES' last, so every earlier role keeps its index), the vehicle flag and the transport AI role", `${ROLES} / ${FLAGS} / ${AI_ROLES}`)
   // ((F9b) and the Howdah, section 16's)
   const others = ALL.filter((t) => t !== cart && t !== RACES.serpent.units.howdah)
@@ -1672,8 +1676,16 @@ console.log("\n14. vehicles: the War-Cart's record, the transport rules, the Veh
   refuse('a maxBase that is no number (NaN)', (u) => (u.transport.maxBase = NaN), /transport: maxBase .*not NaN/)
   refuse('a fire of -1', (u) => (u.transport.fire = -1), /transport: fire is the rider units that shoot from the deck, a whole number from 0, not -1/)
   refuse('a fire of 1.5', (u) => (u.transport.fire = 1.5), /transport: fire .*not 1\.5/)
-  refuse('a deck below 0', (u) => (u.transport.deck = -0.1), /transport: deck is the deck's height, a number from 0, not -0\.1/)
+  // ((F9c) a slot is a rider unit, at least a model each)
+  refuse('a fire past the capacity (13 slots on 12 models)', (u) => (u.transport.fire = 13), /transport: fire is the rider units that shoot from the deck, at most its capacity \(12\), not 13/)
+  refuse('a deck below 0', (u) => (u.transport.deck = -0.1), /transport: deck is the deck's radius, a number from 0, not -0\.1/)
   refuse('a deck of Infinity', (u) => (u.transport.deck = Infinity), /transport: deck .*not Infinity/)
+  // ((F9c) the deck's height, where the riders stand: a number from 0,
+  // and never left out)
+  refuse('a deckY below 0', (u) => (u.transport.deckY = -0.1), /transport: deckY is the deck's height over the hull's floor, where its riders stand, a number from 0, not -0\.1/)
+  refuse('a deckY of NaN', (u) => (u.transport.deckY = NaN), /transport: deckY .*not NaN/)
+  refuse('a deckY as text', (u) => (u.transport.deckY = '0.7'), /transport: deckY .*not 0\.7/)
+  refuse('no deckY at all', (u) => delete u.transport.deckY, /transport: deckY .*not undefined/)
   refuse('a wreck of true', (u) => (u.transport.wreck = true), /transport: wreck is false or the box it leaves, \{ hx, hy, hz \}, each a half-size above 0/)
   refuse('a wreck missing a half-size', (u) => delete u.transport.wreck.hz, /transport: wreck is false or the box/)
   refuse('a wreck with a half-size of 0', (u) => (u.transport.wreck.hy = 0), /transport: wreck is false or the box/)
@@ -1682,7 +1694,7 @@ console.log("\n14. vehicles: the War-Cart's record, the transport rules, the Veh
   refuse('siege as text', (u) => (u.transport.siege = 'yes'), /transport: siege must be true or false/)
   refuse('enclosed as a number', (u) => (u.transport.enclosed = 1), /transport: enclosed must be true or false/)
   refuse('a transport field it takes not', (u) => (u.transport.seats = 12), /transport: unknown field "seats"/)
-  refuse('a transport that is a number', (u) => (u.transport = 12), /transport: must be \{ capacity, maxBase, fire, deck, wreck \}/)
+  refuse('a transport that is a number', (u) => (u.transport = 12), /transport: must be \{ capacity, maxBase, fire, deck, deckY, wreck \}/)
   refuse('a transport that is a list', (u) => (u.transport = [12]), /transport: must be/)
   refuse('a transport of null', (u) => (u.transport = null), /transport: must be/)
   refuse('a transport on a unit that is no vehicle (the Nutkin)', (u, d) => (d.units.nutkin.transport = structuredClone(u.transport)), /unit nutkin: a transport is a vehicle \(vehicle: true\)/)
@@ -1692,7 +1704,8 @@ console.log("\n14. vehicles: the War-Cart's record, the transport rules, the Veh
   refuse('a vehicle flag that is no boolean', (u) => (u.vehicle = 'yes'), /unit warcart: vehicle must be true or false/)
   takes('a hull that leaves no wreck (wreck: false)', (u) => (u.transport.wreck = false), (t) => t.transport.wreck === false)
   takes('the optional siege and enclosed, true', (u) => Object.assign(u.transport, { siege: true, enclosed: true }), (t) => t.transport.siege === true && t.transport.enclosed === true)
-  takes('the edges: capacity 1 and 12, fire 0, deck 0', (u) => Object.assign(u.transport, { capacity: 1, fire: 0, deck: 0 }), (t) => t.transport.capacity === 1 && t.transport.fire === 0 && t.transport.deck === 0)
+  takes('the edges: capacity 1 and 12, fire 0, deck 0, deckY 0', (u) => Object.assign(u.transport, { capacity: 1, fire: 0, deck: 0, deckY: 0 }), (t) => t.transport.capacity === 1 && t.transport.fire === 0 && t.transport.deck === 0 && t.transport.deckY === 0)
+  takes('a fire equal to the capacity (12 of 12)', (u) => (u.transport.fire = 12), (t) => t.transport.fire === 12)
   takes('a vehicle that carries nobody (no transport)', (u) => delete u.transport, (t) => t.vehicle && !Object.hasOwn(t, 'transport') && !t.climb)
   takes('a vehicle saying climb: false itself', (u) => (u.climb = false), (t) => t.climb === false)
   {
@@ -1771,7 +1784,8 @@ console.log("\n14. vehicles: the War-Cart's record, the transport rules, the Veh
     ['the capacity (12 → 11)', () => cartId((u) => (u.transport.capacity = 11))],
     ['the largest base aboard (0.45 → 0.5)', () => cartId((u) => (u.transport.maxBase = 0.5))],
     ["the deck's fire slots (2 → 3)", () => cartId((u) => (u.transport.fire = 3))],
-    ["the deck's height (1.4 → 1.5)", () => cartId((u) => (u.transport.deck = 1.5))],
+    ["the deck's radius (1.4 → 1.5)", () => cartId((u) => (u.transport.deck = 1.5))],
+    ["(F9c) the deck's height, where its riders stand (0.7 → 0.8)", () => cartId((u) => (u.transport.deckY = 0.8))],
     ["the wreck's height (0.6 → 0.7)", () => cartId((u) => (u.transport.wreck.hy = 0.7))],
     ['no wreck (wreck: false)', () => cartId((u) => (u.transport.wreck = false))],
     ['siege added', () => cartId((u) => (u.transport.siege = true))],
@@ -1884,7 +1898,7 @@ console.log("\n16. long hulls: the Howdah's record, the footprint rules and thei
   }
   const got = how && Object.fromEntries(Object.keys(WANT).map((k) => [k, how[k]]))
   check(!!how && isDeepStrictEqual(got, WANT), "the Howdah's record is DESIGN's: a Vehicle, the transport AI, one model on its body disc's 1.25\" base, M6 … T8 W14 … Sv3 OC0, big, a wrecker and a vehicle (a brawler that wrecks as it moves, in the front row, its eye 1.9\", no climber)", how ? diffPath(got, WANT) : 'the Coil has no howdah')
-  check(isDeepStrictEqual(how?.transport, { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, wreck: { hx: 1.2, hy: 0.7, hz: 2.9 }, deckAt: [0, 0] }) && Object.isFrozen(how.transport.deckAt), "its transport is DESIGN's (capacity 12, maxBase 0.45\", fire 3, deck 1.6\" at deckAt [0, 0], a wreck 2.4 × 1.4 × 5.8\" along its facing), copied and frozen", JSON.stringify(how?.transport))
+  check(isDeepStrictEqual(how?.transport, { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, deckY: 1.65, wreck: { hx: 1.2, hy: 0.7, hz: 2.9 }, deckAt: [0, 0] }) && Object.isFrozen(how.transport.deckAt), "its transport is DESIGN's (capacity 12, maxBase 0.45\", fire 3, a deck of radius 1.6\" at deckAt [0, 0] and (F9c) 1.65\" over its floor, a wreck 2.4 × 1.4 × 5.8\" along its facing), copied and frozen", JSON.stringify(how?.transport))
   const w = how?.ranged, m = how?.melee
   check(w?.name === 'Venom lobber' && w.range === 18 && w.shots === 1 && w.blast === 1.6 && w.S === 5 && w.AP === 1 && w.D === 1 && w.fx === 'spit' && m?.name === 'Coil crush' && m.S === 6 && m.AP === 1 && m.D === 2, "its weapons are DESIGN's: a Venom lobber 18\", 1 shot, a 1.6\" blast, S5 AP1 D1, its look 'spit'; Coil crush S6 AP1 D2", JSON.stringify({ ranged: w, melee: m }))
   // ((F9b's sweep) 20, not the fit's floor of 5: at 5 the Coil's lists took
@@ -1893,8 +1907,10 @@ console.log("\n16. long hulls: the Howdah's record, the footprint rules and thei
   check(how?.cost === 20, `its cost is the 20 army-sim's Field gates gave it (${how?.cost}: its fitted worth −13 ± 8 pooled over seeds 1111-3333 at a trial 50, but at the floor, 5, the Field score gate failed on open, 44.9%; at 20 both score gates pass on 1111 and 4444, the Howdah fitted −13 ± 17 and −4 ± 15), a whole multiple of 5 (DESIGN §4.2.5's data)`)
   const grand = MISSIONS.grand.list.prices?.serpent?.howdah, powder = MISSIONS.powder.list.prices?.serpent?.howdah
   check(Number.isInteger(grand) && grand % 5 === 0 && grand === powder && grand === 5, `its Grand price (${grand}) is the floor, 5, below its Field cost (${how?.cost}): the War-Cart's test at Grand turned the other way (the floor: at the Field price it then had, 5, the Coil already scored under its band at Grand, and a higher one takes points from the units beside it), and the Powder Field's the same (${powder})`)
+  // ((F9c) its card promises the deck, as the War-Cart's: three squads,
+  // all round, from the shell's height, the range from its edge)
   const deckFire = (how?.abilities ?? []).filter((x) => /fir(e|ing) (deck|from)|shoot(s)? from|from (the|its) deck/i.test(x))
-  check(how?.abilities?.length > 0 && !deckFire.length, `its card text (${how?.abilities?.length ?? 0} lines) promises no firing deck (F9c's)`, deckFire.join(' | '))
+  check(deckFire.length === 1 && /three squads/.test(deckFire[0]) && /all round/.test(deckFire[0]) && /height/.test(deckFire[0]) && /range from its edge/.test(deckFire[0]), `its card text (${how?.abilities?.length ?? 0} lines) promises its firing deck, one line: three squads, all round, from the shell's height, their range from its edge (F9c's)`, deckFire.join(' | ') || 'no line promises it')
   check(RACES.serpent.roster.at(-1) === 'howdah' && Object.values(RACES).every((r) => Object.values(r.armies).every((list) => !(Number(list[r.roster.indexOf('howdah')] ?? 0) > 0))), "the Howdah is the Coil's roster's last entry, appended, and no preset fields one (so no corpus battle holds a Howdah: its lists are presets or recorded counts of today's units)")
   check(ALL.filter((t) => t.fp).length === 1 && !cart.fp && ALL.every((t) => (t === how) === Object.hasOwn(t, 'fp')), 'the Howdah alone carries t.fp: every other unit (the War-Cart, round, among them) has no such field at all', ALL.filter((t) => t !== how && Object.hasOwn(t, 'fp')).map((t) => t.key).join(', '))
   const fp = how.fp

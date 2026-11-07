@@ -130,5 +130,15 @@ export const RULES_ID = rulesId()
 // the enemies scored cut down there, so those two missions' battles play
 // otherwise and every other battle as it did; RULES_ID moves with the
 // Howdah (appended to the Coil's roster, its Grand and Powder prices), the
-// footprint field, the transport's `deckAt` and the missions' `ai`)
-export const CORE_VERSION = 15
+// footprint field, the transport's `deckAt` and the missions' `ai`); 16:
+// F9c's firing decks: a rider shoots from its hull's deck (canShoot: the
+// deck's `fire` slots a turn, its hull not in combat nor fallen back, an
+// assault weapon only once its hull advanced; shotInfo: its range from the
+// hull's nearest edge, its eye at the deck point and the deck's height,
+// the sight's eye-height override, a lob at its printed range), and the
+// AI keeping the first `fire` riders with a gun aboard, weighing their
+// shots from the deck and never advancing a hull with a gun aboard (rule
+// 10); each a branch only a rider (or a hull carrying one) reaches, so
+// only a battle fielding a hull plays otherwise; RULES_ID moves with the
+// transport's `deckY` (the deck's height, where its riders stand)
+export const CORE_VERSION = 16

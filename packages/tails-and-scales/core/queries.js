@@ -32,6 +32,15 @@
 // aura, cover (its discs' cells), sight (rays to each disc) and its eye as
 // a shooter (its deck point). Each a branch only a footprint unit reaches
 // (§4.1 rule 26): two round units keep the expression they always had.
+//
+// (F9c, DESIGN §4.2.5's "Firing decks") A rider shoots from its hull's
+// deck: sight, look and sightInfo take an eye-height override (`eyeH`, the
+// eye's height in the table's frame: core/actions/transport.js deckEye)
+// beside the point to look from (deckPoint), and never ask whether a unit
+// rides, so the shot (shotInfo) and the AI's weighing of it (bestShot,
+// spellValue) pass the deck explicitly, and the AI scoring a cell a rider
+// would step off to still looks from the ground there. With no override,
+// every expression is the one it always was.
 import { ENGAGE, AURA, OBJECTIVE_RANGE, PHASES } from './rules.js'
 import { hypot } from './dmath.js'
 import { STEP } from './nav.js'
@@ -50,6 +59,10 @@ export { canCharge, chargeTargets, chargePlan, chargeSpots } from './actions/cha
 export { freeSpot, placeOk, placeFacing } from './deploy.js'
 export { groundOnly } from './actions/move.js'
 export { hullOf, riders, room, mayBoard, embarkSpot, landing, isTransport } from './actions/transport.js'
+// ((F9c) the firing deck: its slots, those spent this turn, the point its
+// riders shoot from and a rider's eye there, for the view's rays, rings
+// and chips, the card and the group's fire)
+export { fireSlots, ridersShot, deckPoint, deckEye } from './actions/transport.js'
 // ((F9b) a footprint unit's discs where it stands, and the least edge gaps
 // to them: the view's outline and the tools measure a long hull as the
 // rules do)
@@ -106,8 +119,9 @@ export function floorAt(G, x, z) {
   const i = G.nav.index(x, z)
   return i < 0 ? 0 : G.nav.floor[i]
 }
-// The floor a unit stands on (a rider's is its hull's, where it stands: F9c's
-// firing deck adds the deck's height for its eye, not here).
+// The floor a unit stands on (a rider's is its hull's, where it stands:
+// (F9c) the firing deck adds the deck's height for its eye, not here, but
+// in transport.js deckEye).
 export const groundY = (G, u) => floorAt(G, u.pos.x, u.pos.z)
 
 // ── Line of sight, cover, control ───────────────────────────────────────────
@@ -143,7 +157,15 @@ export function inCover(G, u) {
 // (seen if any is; in cover if any ray is blocked or obscured, or it is in
 // cover), and a long hull shooter's eye stands on its deck point (deckAt
 // turned with its facing and snapped like a disc: transport.js deckFrom).
-export function sight(G, a, b, from = a.pos, bCover = undefined) {
+//
+// (F9c) `eyeH`, when given, is the eye's height in the table's frame (a
+// rider on its hull's deck: transport.js deckEye, `from` its deckPoint),
+// over the board's own rule for the eye; the rays and the target's points
+// are look's, as for any shooter. Given only by the shot from a deck
+// (shotInfo, the AI's bestShot and spellValue, the fog's rider eyes):
+// without it, every path below is the one it always was.
+export function sight(G, a, b, from = a.pos, bCover = undefined, eyeH = undefined) {
+  if (eyeH !== undefined) return look(G, a, b, from, bCover, null, eyeH)
   if (a.t.fp || b.t.fp) return look(G, a, b, a.t.fp ? deckFrom(a, from) : from, bCover, null)
   if (G.nav.hasHeight) return look(G, a, b, from, bCover, null)
   const eye = { x: from.x, y: eyeY(a), z: from.z }
@@ -173,9 +195,13 @@ export function sight(G, a, b, from = a.pos, bCover = undefined) {
 // are 2" off, past the 1.3" an obscurer is hugged at (Terrain.los), and a
 // ray down to the ground within some 20" would cross them below their top,
 // so without this a deck's own parapets gave its enemies cover.
-function look(G, a, b, from, bCover, why) {
+//
+// ((F9c) `eyeH`: sight's eye-height override, a rider's deck eye; the
+// parapets' level still the ground's under `from`, where its hull stands:
+// a ground hull never stands on a terrain deck)
+function look(G, a, b, from, bCover, why, eyeH = undefined) {
   const fy = G.nav.hasHeight ? floorAt(G, from.x, from.z) : 0
-  const eye = G.nav.hasHeight ? { x: from.x, y: fy + eyeY(a), z: from.z } : { x: from.x, y: eyeY(a), z: from.z }
+  const eye = eyeH !== undefined ? { x: from.x, y: eyeH, z: from.z } : G.nav.hasHeight ? { x: from.x, y: fy + eyeY(a), z: from.z } : { x: from.x, y: eyeY(a), z: from.z }
   const L = G.nav.hasHeight ? G.nav.levelAt(from.x, from.z) : 0, onLevel = G.nav.onLevel
   const over = L && onLevel?.size ? (c) => onLevel.get(c.id) === L && Math.abs(c.base - fy) <= STEP : null
   let seen = 0, obsc = 0, total = 0
@@ -216,10 +242,11 @@ function look(G, a, b, from, bCover, why) {
 // from raised ground). F7b's line of sight with its reasons reads it (the
 // view's tooltip: "Visible · target behind a parapet (cover)", "Blocked by
 // the keep", "High ground: sees over the hedge"). Under the lock, like
-// every query here.
-export function sightInfo(G, u, tg, from = u.pos) {
+// every query here. ((F9c) `eyeH` as sight's: a rider's deck eye, `from`
+// its hull's deck point, so the tooltip's reasons are the shot's own)
+export function sightInfo(G, u, tg, from = u.pos, eyeH = undefined) {
   const why = { block: null, obscure: [] }
-  const s = look(G, u, tg, u.t.fp ? deckFrom(u, from) : from, undefined, why)
+  const s = eyeH !== undefined ? look(G, u, tg, from, undefined, why, eyeH) : look(G, u, tg, u.t.fp ? deckFrom(u, from) : from, undefined, why)
   const high = G.nav.hasHeight && floorAt(G, from.x, from.z) - groundY(G, tg) > STEP
   return { ok: s.visible, block: why.block, obscure: why.obscure, cover: s.cover, high, seen: s.seen, total: s.total }
 }
@@ -489,10 +516,13 @@ export const phaseKey = (G) => PHASES[Math.min(G.turn.ph, PHASES.length - 1)].ke
 
 // Something left to do for `u` in the current phase of its own turn. (F9a)
 // A rider can still act in the movement phase while it hasn't moved (it may
-// disembark: `!moved`, as for any unit), and never in the shooting or the
-// charge phase while aboard (canShoot and canCharge refuse it). ((V3c) a
-// snared unit has no move to make; a caster has a spell to cast while it
-// may cast at all: hasTarget)
+// disembark: `!moved`, as for any unit), and never in the charge phase
+// while aboard (canCharge refuses it); (F9c) in the shooting phase it acts
+// as any shooter does, from its hull's deck while a slot is free (canShoot,
+// hasTarget), so a seat whose only units left to shoot ride is asked for
+// its shooting phase (core/engine.js skips only a phase nobody can act in).
+// ((V3c) a snared unit has no move to make; a caster has a spell to cast
+// while it may cast at all: hasTarget)
 export function canAct(G, u) {
   if (!alive(u) || u.side !== G.turn.active) return false
   switch (phaseKey(G)) {

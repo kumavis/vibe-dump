@@ -77,8 +77,13 @@ export default {
     // the long shell, carries two squads (12 models, bases up to 0.45),
     // loaded at the deployment by the autoload, its riders stepping off
     // within 3" of any of its discs (so at its head or tail, about 2"
-    // farther than off a War-Cart); `fire` is the deck's three firing
-    // slots, F9c's: nothing reads it yet. Destroyed, it leaves a burning
+    // farther than off a War-Cart). (F9c) `fire` is the deck's three
+    // firing slots: three rider units a turn shoot from it, all round (no
+    // arcs: its facing turns its footprint only), from `deckY` 1.65" over
+    // its floor at its deck point (deckAt, its body's centre: the figure's
+    // 0.09" lift and its shell's top, view/models/howdah.js), their range
+    // from its nearest disc; `deck` is the deck's radius, which the view
+    // packs them on. Destroyed, it leaves a burning
     // wreck along its facing. None in a Skirmish, at most two a side in a
     // Field or Grand battle (the Vehicle slot, data/mission.js).
     howdah: {
@@ -106,12 +111,13 @@ export default {
       cost: 20,
       stats: 'M6 WS4 BS4 S6 T8 W14 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
       footprint: { discs: [[0, 2, 0.95], [0, 0, 1.25], [0, -2, 0.95]], turn: 0.25, rev: 2 },
-      transport: { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, deckAt: [0, 0], wreck: { hx: 1.2, hy: 0.7, hz: 2.9 } },
+      transport: { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, deckY: 1.65, deckAt: [0, 0], wreck: { hx: 1.2, hy: 0.7, hz: 2.9 } },
       ranged: { name: 'Venom lobber', range: 18, shots: 1, blast: 1.6, S: 5, AP: 1, D: 1, fx: 'spit' },
       melee: { name: 'Coil crush', S: 6, AP: 1, D: 2 },
       abilities: [
         'Transport — carries two squads (12 models) under its shell; a unit boards or steps off it as its move.',
         'Riders — ride along, can’t be shot or charged, and hold no objectives; they step off at its head or tail.',
+        'Firing deck — up to three squads aboard shoot from its shell each turn, all round, from the shell’s height (it sees over walls), their range from its edge; they count as having moved, or advanced, when it has.',
         'Long hull — drives forward, backs up at half speed, and turns only where its whole body has room to swing.',
         'Coil crush — ploughs through anything breakable in its way.',
         'Burning wreck — destroyed, it leaves a wreck; each rider bails out, a 1 is a mortal wound.',

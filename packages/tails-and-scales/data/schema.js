@@ -30,9 +30,9 @@
 //   Weapon  = { name, range?, shots?, S, AP, D, assault?, heavy?, indirect?,
 //               blast?, scenery?, poison?, corrodes?, spell?, mesmerize?,
 //               ward?, snare?, resolve?, fx? }
-//   Transport = { capacity, maxBase, fire, deck, wreck: false | { hx, hy, hz },
+//   Transport = { capacity, maxBase, fire, deck, deckY, wreck: false | { hx, hy, hz },
 //                 siege?, enclosed?, deckAt?: [x, z] }      (F9a, DESIGN §4.2.5;
-//                                                            deckAt F9b's)
+//                                                            deckAt F9b's, deckY F9c's)
 //   Footprint = { discs: [[dx, dz, r]…], turn, rev }        (F9b, DESIGN §4.2.5)
 //
 // (V3c, DESIGN §2.8) A caster's spells: `spells`, one to nine weapons each
@@ -79,8 +79,13 @@
 // `transport` makes a vehicle carry riders: `capacity` the models it holds
 // (a whole number from 1 to 12: the War-Cart's two squads), `maxBase` the
 // largest base it takes aboard (> 0), `fire` the rider units that may shoot
-// from its deck (a whole number ≥ 0: F9c's firing decks; nothing reads it in
-// F9a), `deck` the deck's height over the hull's floor (≥ 0), `wreck` the
+// from its deck a turn (a whole number from 0 to `capacity`: F9c's firing
+// decks), `deck` the deck's radius, the disc the view packs its riders on
+// (≥ 0: present/deck.js, at deckAt), (F9c) `deckY` the deck's height over
+// the hull's floor, where its riders stand and see from (≥ 0: their eye is
+// the hull's floor + deckY + their own eye, core/actions/transport.js
+// deckEye; the figures' deck height, which sim/bake-check.mjs holds it
+// to), `wreck` the
 // box a destroyed hull leaves (half-sizes { hx, hy, hz }, each > 0) or false
 // for none, and `siege` and `enclosed` (F9d's towers, F5b's Beetle) optional
 // booleans. A transport is a vehicle. core/actions/transport.js is the one
@@ -133,7 +138,7 @@ const UNIT_KEYS = new Set(['name', 'short', 'role', 'ai', 'models', 'base', 'pts
   ...FLAGS, 'move', 'deployRow', 'eye', 'chest', 'swarm', 'swoop', 'transport', 'footprint'])
 // (F9a) a transport's fields: the numbers, then the optional booleans, and
 // (F9b) where its deck stands in the hull's frame
-const TRANSPORT_KEYS = new Set(['capacity', 'maxBase', 'fire', 'deck', 'wreck', 'siege', 'enclosed', 'deckAt'])
+const TRANSPORT_KEYS = new Set(['capacity', 'maxBase', 'fire', 'deck', 'deckY', 'wreck', 'siege', 'enclosed', 'deckAt'])
 // (F9b) a footprint's fields, and its rules' limits (DESIGN §4.2.5's table)
 const FOOTPRINT_KEYS = new Set(['discs', 'turn', 'rev'])
 const FP = Object.freeze({ snap: 0.15, pivot: 0.06, R: 3.5, rMin: 0.5, rMax: 1.6 })
@@ -197,25 +202,29 @@ function weapon(w, where, melee) {
 
 // (F9a, DESIGN §4.2.5) A transport record, checked: its fields and no
 // other, `capacity` a whole number from 1 to 12, `maxBase` a radius above 0,
-// `fire` a whole number from 0, `deck` a height from 0, `wreck` false or a
+// `fire` a whole number from 0 to `capacity` (a slot is a rider unit, and
+// a unit is a model at least), `deck` a radius from 0, (F9c) `deckY` a
+// height from 0, `wreck` false or a
 // box of three half-sizes above 0, `siege` and `enclosed` true or false
 // when given; (F9b) `deckAt`, when given, an [x, z] inside one of `shape`'s
 // discs (the footprint's, or a round hull's base). A copy, the wreck's box
 // and the deck's place its own.
 function transportOf(tr, where, shape) {
   const bad = (why) => new Error(`${where}, transport: ${why}`)
-  if (!tr || typeof tr !== 'object' || Array.isArray(tr)) throw bad('must be { capacity, maxBase, fire, deck, wreck }')
+  if (!tr || typeof tr !== 'object' || Array.isArray(tr)) throw bad('must be { capacity, maxBase, fire, deck, deckY, wreck }')
   for (const k of Object.keys(tr)) if (!TRANSPORT_KEYS.has(k)) throw bad(`unknown field "${k}"`)
   if (!Number.isInteger(tr.capacity) || tr.capacity < 1 || tr.capacity > 12) throw bad(`capacity is the models it carries, a whole number from 1 to 12, not ${tr.capacity}`)
   if (!(Number.isFinite(tr.maxBase) && tr.maxBase > 0)) throw bad(`maxBase is the largest base it takes aboard, a radius above 0, not ${tr.maxBase}`)
   if (!Number.isInteger(tr.fire) || tr.fire < 0) throw bad(`fire is the rider units that shoot from the deck, a whole number from 0, not ${tr.fire}`)
-  if (!(Number.isFinite(tr.deck) && tr.deck >= 0)) throw bad(`deck is the deck's height, a number from 0, not ${tr.deck}`)
+  if (tr.fire > tr.capacity) throw bad(`fire is the rider units that shoot from the deck, at most its capacity (${tr.capacity}), not ${tr.fire}`)
+  if (!(Number.isFinite(tr.deck) && tr.deck >= 0)) throw bad(`deck is the deck's radius, a number from 0, not ${tr.deck}`)
+  if (!(Number.isFinite(tr.deckY) && tr.deckY >= 0)) throw bad(`deckY is the deck's height over the hull's floor, where its riders stand, a number from 0, not ${tr.deckY}`)
   const w = tr.wreck
   if (w !== false && !(w && typeof w === 'object' && !Array.isArray(w) && Object.keys(w).length === 3 && ['hx', 'hy', 'hz'].every((k) => Number.isFinite(w[k]) && w[k] > 0))) throw bad('wreck is false or the box it leaves, { hx, hy, hz }, each a half-size above 0')
   for (const k of ['siege', 'enclosed']) if (tr[k] !== undefined && typeof tr[k] !== 'boolean') throw bad(`${k} must be true or false`)
   const at = tr.deckAt
   if (at !== undefined && !(Array.isArray(at) && at.length === 2 && at.every(Number.isFinite) && insideDiscs(shape, at[0], at[1]))) throw bad(`deckAt is where the deck stands in the hull's frame, [x, z] inside its ${shape.length > 1 ? 'footprint' : 'base'}, not ${JSON.stringify(at)}`)
-  const out = { capacity: tr.capacity, maxBase: tr.maxBase, fire: tr.fire, deck: tr.deck, wreck: w && { hx: w.hx, hy: w.hy, hz: w.hz } }
+  const out = { capacity: tr.capacity, maxBase: tr.maxBase, fire: tr.fire, deck: tr.deck, deckY: tr.deckY, wreck: w && { hx: w.hx, hy: w.hy, hz: w.hz } }
   for (const k of ['siege', 'enclosed']) if (tr[k] !== undefined) out[k] = tr[k]
   if (at !== undefined) out.deckAt = [at[0], at[1]]
   return out

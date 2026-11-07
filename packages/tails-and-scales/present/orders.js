@@ -343,13 +343,26 @@ export function* previewSteps(G, q, seat, verb, members, target, given = null, {
     return { members: out, summary: `Approach ${target.t.short} · ${go} move${out.some((m) => m.how === 'stay') ? ` · ${out.filter((m) => m.how === 'stay').length} already in range` : ''}` }
   }
   if (verb === 'fire') {
+    // ((F9c) the deck slots the members aboard fill as they fire in this
+    // order, by hull id: a rider past its hull's slots fires not, as the
+    // executor, planning each member again after the last one's shot,
+    // finds it)
+    const spent = new Map()
     for (const u of fireOrder(members)) {
       // ((V3c) a caster casts at it the spell the AI would (spellFor: of
       // those that take an enemy, the one it values most there), carried
       // as the member's `sp`)
       const sp = q.spellFor(G, u, target)
-      const can = q.canShoot(G, u) && (sp === undefined ? q.shootTargets(G, u).includes(target) : sp >= 0)
-      out.push({ u, cell: -1, how: can ? 'fire' : 'none', why: can ? '' : whyNot(G, q, u, target, 'shoot'), ...(can && sp !== undefined ? { sp } : {}) })
+      let can = q.canShoot(G, u) && (sp === undefined ? q.shootTargets(G, u).includes(target) : sp >= 0)
+      let why = can ? '' : whyNot(G, q, u, target, 'shoot')
+      if (can && u.aboard) {
+        const v = q.hullOf(G, u), n = spent.get(v.id) ?? q.ridersShot(G, v)
+        if (n >= q.fireSlots(v)) {
+          can = false
+          why = `the ${v.t.short}'s deck slots are spent`
+        } else spent.set(v.id, n + 1)
+      }
+      out.push({ u, cell: -1, how: can ? 'fire' : 'none', why, ...(can && sp !== undefined ? { sp } : {}) })
     }
     const firing = out.filter((m) => m.how === 'fire')
     // the models it may slay, on average (volleys: a blast's or a spell's
