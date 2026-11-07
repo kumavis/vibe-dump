@@ -12482,12 +12482,12 @@
    "island": "oahu",
    "at": {
     "lonlat": [
-     -157.8480801,
-     21.3033476
+     -157.847835,
+     21.302748
     ],
-    "precision": "inferred",
-    "source": "osm",
-    "key": "node/110584205"
+    "precision": "mapped",
+    "source": "wikipedia-nrhp-oahu",
+    "key": "Linekona School, Victoria and Beretania Sts."
    },
    "footprint": null,
    "from": 1907,
@@ -12498,9 +12498,13 @@
     {
      "id": "wikipedia-president-william-mckinley-high-school",
      "where": "history"
+    },
+    {
+     "id": "wikipedia-nrhp-oahu",
+     "where": "Linekona School"
     }
    ],
-   "note": "At the corner of Beretania and Victoria Streets from 1907, renamed for the president, until its King Street campus opened in 1923; the record read does not say which corner. Placed at the crossing."
+   "note": "At the corner of Beretania and Victoria Streets from 1907, renamed for the president, until its King Street campus opened in 1923. Placed at the listed school building on that corner."
   },
   {
    "id": "royal-school-emma-street",
@@ -12558,6 +12562,103 @@
     }
    ],
    "note": "Dedicated in 1912 by Queen Liliʻuokalani; the 1914 atlas draws its concrete building off Waiʻalae Avenue. It stands to the last year a report read shows it."
+  },
+  {
+   "id": "keanae-school",
+   "name": "Keʻanae School",
+   "alt": [
+    "Keʻanae Elementary School"
+   ],
+   "type": "public",
+   "island": "maui",
+   "at": {
+    "lonlat": [
+     -156.138043,
+     20.851613
+    ],
+    "precision": "mapped",
+    "source": "wikipedia-keanae-school",
+    "key": "coordinates"
+   },
+   "footprint": null,
+   "from": 1912,
+   "to": 2004,
+   "datePrecision": "year",
+   "sources": [
+    {
+     "id": "wikipedia-keanae-school",
+     "where": "infobox and history"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 1999–2000, its report"
+    }
+   ],
+   "note": "A one-room schoolhouse built in 1912; its last pupils went to Hāna School in 2005."
+  },
+  {
+   "id": "kaupo-school",
+   "name": "Kaupō School",
+   "type": "public",
+   "island": "maui",
+   "at": {
+    "lonlat": [
+     -156.1225,
+     20.63694444
+    ],
+    "precision": "mapped",
+    "source": "wikipedia-kaupo-school",
+    "key": "coordinates"
+   },
+   "footprint": null,
+   "from": 1923,
+   "to": 1963,
+   "datePrecision": "year",
+   "sources": [
+    {
+     "id": "wikipedia-kaupo-school",
+     "where": "history"
+    }
+   ],
+   "note": "Built in 1923, two rooms and a teacher’s cottage; closed in 1964, and open again for a while about 1982 when slides closed the road to Hāna."
+  },
+  {
+   "id": "puunene-school",
+   "name": "Puʻunene School",
+   "type": "public",
+   "island": "maui",
+   "at": {
+    "lonlat": [
+     -156.449167,
+     20.861389
+    ],
+    "precision": "mapped",
+    "source": "wikipedia-puunene-school",
+    "key": "coordinates"
+   },
+   "footprint": null,
+   "from": 1922,
+   "to": 1978,
+   "datePrecision": "year",
+   "pupils": {
+    "year": 1937,
+    "n": 1000,
+    "source": "wikipedia-puunene-school"
+   },
+   "sources": [
+    {
+     "id": "wikipedia-puunene-school",
+     "where": "history"
+    }
+   ],
+   "look": [
+    {
+     "kit": "block",
+     "variant": 1,
+     "from": 1922
+    }
+   ],
+   "note": "The plantation’s school, its two-storey concrete building of 1922 on land the company gave in 1913, an older wooden school beside it; an annex of the Department from 1979."
   }
  ],
  "unplaced": [
@@ -12766,20 +12867,6 @@
     }
    ],
    "note": "The first mission school open to common people, started at Lāhainā at the chiefs’ request."
-  },
-  {
-   "name": "Keʻanae Elementary School",
-   "type": "public",
-   "island": "maui",
-   "from": 1999,
-   "to": 1999,
-   "sources": [
-    {
-     "id": "hidoe-ssir",
-     "where": "SY 1999–2000; the Department lists the school closed"
-    }
-   ],
-   "note": "Known from its report of SY 1999–2000, with a rural route for its address."
   },
   {
    "name": "Niʻihau High & Elementary School",
@@ -14360,6 +14447,54 @@
    "read": "part",
    "note": "The reports of 1860 to 1880 in the University of Hawaiʻi’s eVols scans (handles 10524/68282 to 68300), read 2026-11-08 in their text layers for the earliest report that lists each school of the 1882 report; each citation names the report’s year and the line.",
    "wanted": "The reports of 1884 to 1896 (eVols, now behind a browser check) for the year each school was last listed."
+  },
+  {
+   "id": "wikipedia-keanae-school",
+   "title": "Keanae School",
+   "author": "Wikipedia",
+   "year": 2026,
+   "url": "https://en.wikipedia.org/wiki/Keanae_School",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "tertiary": true,
+   "note": "Read 2026-11-08 (revision of 2026-09-06): a one-room schoolhouse built in 1912, the Department’s Keʻanae Elementary until its last pupils went to Hāna in 2005; its coordinates."
+  },
+  {
+   "id": "wikipedia-kaupo-school",
+   "title": "Kaupo School",
+   "author": "Wikipedia",
+   "year": 2026,
+   "url": "https://en.wikipedia.org/wiki/Kaupo_School",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "tertiary": true,
+   "note": "Read 2026-11-08 (revision of 2026-09-06): built in 1923, two rooms and a teacher’s cottage, closed in 1964, reopened about 1982 while slides closed the road; its coordinates."
+  },
+  {
+   "id": "wikipedia-puunene-school",
+   "title": "Puunene School",
+   "author": "Wikipedia",
+   "year": 2026,
+   "url": "https://en.wikipedia.org/wiki/Puunene_School",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "tertiary": true,
+   "note": "Read 2026-11-08 (revision of 2026-08-31): the plantation’s school, its two-storey concrete building of 1922 on land the company gave in 1913, an annex of the Department from 1979; its coordinates."
+  },
+  {
+   "id": "wikipedia-nrhp-oahu",
+   "title": "National Register of Historic Places listings in Oʻahu",
+   "author": "Wikipedia",
+   "year": 2026,
+   "url": "https://en.wikipedia.org/wiki/National_Register_of_Historic_Places_listings_in_Oahu",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "tertiary": true,
+   "note": "Read 2026-11-08 (revision of 2026-05-27): the school buildings listed, with their coordinates: Linekona School at Victoria and Beretania streets among them."
   }
  ]
 }
