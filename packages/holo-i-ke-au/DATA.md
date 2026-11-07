@@ -1208,6 +1208,8 @@ the fetch date.
   half the pack's resolution with `size` stated. Where a county layer is
   unreachable the island's `now-zoning.png` is absent and the app falls back
   to density and value alone.
+- How many of the lots the zoning allows a tower on carry one in a year is
+  the towers' record's ("Towers, dated" below), not the zoning's.
 - The settlements use zoning only for the keyframes it applies to. Earlier
   eras keep density and value, and the 1900 cane and pineapple lands already
   baked into cultivation stand in for land use then.
@@ -1776,6 +1778,133 @@ sheet of 1887, Sanborn's maps and the mission's station reports would give
 the government and station schools of the 1840s–1890s and their sites; none
 was opened in this pass, and each is in the file's sources with its
 `wanted`.
+
+## Towers, dated
+
+The zoning says where a tower may stand (classes 3, 5 and 7: "Zoning, for
+the settlements"), the density and the value which lots raise one; this
+record says how many stand in a year. `public/data/towers.json`, written by
+`tools/bake-towers.mjs`, gives for each area today's count of buildings of
+ten storeys or 30 m and over and the share of them standing by each year,
+and for each island the share alone, for its towers outside the areas. The
+towers that the record names (the tallest, with their years and sites) are
+the historic buildings' to place as landmarks; this record is the count.
+
+```jsonc
+{ "about": "...", "rule": "how the counts and shares were made, written out",
+  "tower": { "storeys": 10, "metres": 30 },       // what is counted
+  "first": 1955,                                   // the record's first year: no tower before it
+  "areas": [ { "id": "waikiki", "name": "Waikīkī", "island": "oahu",
+               "ring": [[-157.8445, 21.288], ...],        // [lon, lat], one ring, unclosed
+               "count": 176,                              // today's towers in the ring
+               "counted": { "by": "cch-building-footprints", "fetched": "2026-11-07", "footprints": 173, "laterFromCtbuh": 3 },
+               "share": [[1955, 0], [1960, 0.028], [1970, 0.21], [1980, 0.717], ..., [2023, 1]],
+               "shareFrom": "survey and dated",           // survey | survey and dated | island
+               "units50": 9606, "dated": 43,              // what the share was read from
+               "sources": ["cch-building-footprints", "acs-2023-b25127", ...] } ],
+  "islands": { "oahu": { "share": [...], "units50": 20918, "tracts": 267, "sources": [...] } },
+  "sources": [...], "wanted": [...],               // ids in sources.json; wanted ones not opened
+  "baked": { "tool": "tools/bake-towers.mjs", "fetched": { ... } } }
+```
+
+- **A share** is `[year, share]` points, the years rising from `first`, the
+  shares never falling, from 0 at `first` to 1 at the last point; between
+  points it is linear, before the first 0, after the last 1. A year's
+  towers in an area are `count × share(year)`, rounded down.
+- **Areas** do not overlap (neighbours share edges); a point in no area
+  takes its island's share, with no count. An island with neither has no
+  record, and its towers stand as the zoning, the density and the value
+  give them.
+
+**What the app does with it** (features/settlements.js `rankTowers`,
+`towerKind`, for the district's scatter and every island's alike). In each
+area the lots that carry a tower in the timeline's last year, as the model
+has it, are ranked by how strongly they call for one: the value with the
+density. In a sample year the first `share(year before) × k × m` of the `m`
+ranked lots carry a tower, whatever the era's turn would have put there;
+any other lot the model would raise a tower on takes the walk-up, or
+downtown the mid-rise, that stood before the towers. `k` is 1, or where the
+scatter holds a whole area at once (the district) and the record counts
+it, `count / m` where the lots are more than the record's towers. So a year
+never holds more towers in an area than the record gives it, the lots
+worth most rise first, and an area with fewer lots that could carry one
+than the record has towers keeps the record's timing at the lots' scale.
+The share is read at the sample before (every four years), so a tower
+stands within four years of the record's year, never before it. An
+island's scatter ranks tile by tile with `k` of 1. Honolulu's areas lie
+inside the Nuʻuanu district's inner box, Salt Lake and Pearlridge wholly
+outside it, so no area is split between the two scatters.
+
+**What each part rests on.** Today's count on Oʻahu is the City's building
+footprints (HoLIS) of 30 m and over, the height the NGA lidar's of 2005
+and 2009 or, in the urban core, the City's own later one; footprints whose
+centres lie within 30 m of a taller one's are one building; to them are
+added the towers CTBUH lists as completed from 2010 on that no footprint
+stands within 40 m of. On the other islands it is OpenStreetMap's
+buildings tagged ten levels or 30 m and over, over boxes round each town,
+since the counties publish no heights. The share is the Census Bureau's
+ACS 2019–2023 five-year B25127: occupied units in structures of 50 or more
+by the year the structure was built, by tract (each tract in the area its
+internal point falls in, by the 2023 Gazetteer), the bands split into
+decades by the same tracts' B25034, linear within a decade. Where CTBUH
+dates fifteen or more of an area's towers (downtown, Waikīkī, Kakaʻako),
+the share is the mean of the survey's and the share of CTBUH's towers
+completed by the year: the survey counts homes and sees neither offices
+nor hotels, and the apartments of the boom came early; CTBUH lists the
+tallest, which came late. An area with fewer than a hundred such units
+(Kāʻanapali) takes its island's share; an island's is its county's tracts
+outside the areas.
+
+| area | today | 1960 | 1970 | 1978 | 1990 | 2000 | share from |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Downtown and Chinatown | 77 | 2 | 10 | 28 | 55 | 69 | survey and dated |
+| Kakaʻako and Ala Moana | 68 | 1 | 5 | 9 | 13 | 21 | survey and dated |
+| Waikīkī | 176 | 4 | 36 | 108 | 141 | 150 | survey and dated |
+| Makiki, Punchbowl and Pāwaʻa | 123 | 6 | 39 | 79 | 106 | 117 | survey |
+| McCully and Mōʻiliʻili | 43 | 2 | 15 | 29 | 39 | 41 | survey |
+| Salt Lake | 23 | 0 | 3 | 10 | 18 | 20 | survey |
+| ʻAiea and Pearlridge | 20 | 0 | 2 | 9 | 17 | 19 | survey |
+| Hilo | 3 | 0 | 1 | 2 | 2 | 2 | survey |
+| Kailua-Kona; Kahului and Wailuku; Kīhei and Wailea | 0 | | | | | | survey |
+| Kāʻanapali | 9 | 0 | 1 | 3 | 5 | 7 | island |
+
+What it cannot tell: the survey's units stand for towers, and a structure
+of 50 units may be a walk-up of five storeys; the vacant (much of
+Waikīkī's) are not in it; it counts what stands today, not what stood and
+was pulled down. The footprints have no year built, and CTBUH lists only
+the towers over about 40 m. OpenStreetMap's levels are tagged on one
+building in ten or fewer in the neighbour islands' towns. The City's
+permit records from 2005 (`honolulu-building-permits-2005`, `wanted`)
+would check the later towers; SkyscraperPage and the 1980 and 1990
+censuses would date the earlier ones (ACCESS.md).
+
+### How to bake the towers
+
+```bash
+node packages/holo-i-ke-au/tools/bake-towers.mjs --all         # download, bake, check, delete the downloads (a few minutes)
+```
+
+or `--download` (about 210 MB, nearly all of it the two ACS tables:
+the footprints of 30 m and over in pages of a thousand, CTBUH's Honolulu
+page, B25127 and B25034, the tract Gazetteer, and OpenStreetMap's map calls
+over each neighbour-island town, a call every 1.5 s), `--bake` (a few
+seconds; prints each area's count by year), `--check` (runs
+`tools/check-data.mjs`), `--clean`. `--downloads DIR` (or
+`$HOLO_TOWERS_DOWNLOADS`) moves the downloads from
+`<os tmpdir>/holo-i-ke-au-bake/towers-downloads`; keep them outside the
+repo. Node 22 and `curl`, as for the other bakes. The areas are drawn by
+hand in the bake's `AREAS`; it reads nothing of `public/data` and writes
+only `towers.json`. A re-bake from the same downloads is byte-identical;
+a fresh download moves the counts as the City, CTBUH and OpenStreetMap
+edit theirs.
+
+**What the check covers** (`tools/check-data.mjs`): the shape above; ids
+unique and kebab-case; names Hawaiian-checked; each ring over the islands
+and no two overlapping; `count` a whole number and `counted.by` an opened
+source among the area's own; every share as the contract says, beginning
+at `[first, 0]` and ending at 1; every source in `sources.json` and one of
+each list opened; `wanted` not opened. It prints today's towers and the
+record's 1978.
 
 ## Crops, on the era layers
 

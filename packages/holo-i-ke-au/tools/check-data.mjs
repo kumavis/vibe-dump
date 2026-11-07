@@ -20,6 +20,7 @@
 // “Landmarks, dated”); and, when geology/ exists, the prologue (DATA.md “Geology”): volcanoes.json, landslides.geojson
 // and chapters.json, with the bake's geology/manifest.json and its height images read back when they are there;
 // and, when schools.json exists, the schools (DATA.md “Schools, dated”), each on its island's land within its pack, its years in order, its sources its own or sources.json's.
+// and, when towers.json exists, the towers' record (DATA.md “Towers, dated”);
 // Pass another directory to check a copy (the default is public/data); a copy
 // without routes.json is checked without routes.
 // No dependencies beyond the PNG reader in tools/lib. Exits 1 with a list of
@@ -1835,6 +1836,110 @@ function worksSample(coords, step) {
 }
 
 // ---------------------------------------------------------------------------
+// towers.json: the towers' record (DATA.md "Towers, dated"), when it exists
+let towersCounts = null
+if (existsSync(join(DATA, 'towers.json'))) checkTowers()
+
+function checkTowers() {
+  const at0 = 'towers.json'
+  let T
+  try {
+    T = JSON.parse(readFileSync(join(DATA, 'towers.json'), 'utf8'))
+  } catch (e) {
+    bad(at0, `does not parse: ${e.message}`)
+    return
+  }
+  if (typeof T.about !== 'string' || !T.about) bad(at0, 'has no about')
+  if (typeof T.rule !== 'string' || !T.rule) bad(at0, 'has no rule')
+  if (!(Number.isInteger(T.tower?.storeys) && T.tower.storeys > 0 && Number.isFinite(T.tower?.metres) && T.tower.metres > 0)) bad(at0, 'tower must give the storeys and metres a tower is counted from')
+  if (!Number.isInteger(T.first) || T.first < 1900 || T.first > 2030) bad(at0, 'first must be the year the record begins (1900–2030)')
+  const opened = (id) => !!S.get(id)?.opened
+  const cites = (at, list) => {
+    if (!Array.isArray(list) || !list.length) return bad(at, 'cites no sources')
+    for (const id of list) useSource(at, id)
+    if (!list.some(opened)) bad(at, 'none of its sources has been opened')
+  }
+  // a share series: [[year, share], …], the years rising from `first`, the shares rising to 1
+  const checkShare = (at, sh) => {
+    if (!Array.isArray(sh) || sh.length < 2) return bad(at, 'share must be at least two [year, share] points')
+    let y0 = -Infinity
+    let s0 = -Infinity
+    for (const p of sh) {
+      if (!Array.isArray(p) || p.length !== 2 || !Number.isInteger(p[0]) || !Number.isFinite(p[1])) return bad(at, `share point ${JSON.stringify(p)} is not [year, share]`)
+      if (p[0] <= y0) bad(at, `share years must rise (${p[0]} after ${y0})`)
+      if (p[1] < s0) bad(at, `share must never fall (${p[1]} at ${p[0]} after ${s0})`)
+      if (p[1] < 0 || p[1] > 1) bad(at, `share ${p[1]} at ${p[0]} is outside 0–1`)
+      y0 = p[0]
+      s0 = p[1]
+    }
+    if (sh[0][0] !== T.first || sh[0][1] !== 0) bad(at, `share must begin at [${T.first}, 0], the record's first year`)
+    if (sh.at(-1)[1] !== 1) bad(at, 'share must end at 1 (today’s count)')
+  }
+  const inRing = (ring, [x, y]) => {
+    let c = false
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const [xi, yi] = ring[i]
+      const [xj, yj] = ring[j]
+      if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c
+    }
+    return c
+  }
+  const areas = Array.isArray(T.areas) ? T.areas : (bad(at0, 'areas must be a list'), [])
+  const ids = new Set()
+  for (const a of areas) {
+    const at = `${at0} area ${a.id}`
+    if (!ID.test(a.id || '')) bad(at, 'id is not kebab-case ASCII')
+    if (ids.has(a.id)) bad(at, 'id is not unique')
+    ids.add(a.id)
+    if (!a.name) bad(at, 'has no name')
+    checkHawaiian(`${at} name`, a.name)
+    if (!ISLANDS.has(a.island)) bad(at, `island “${a.island}” is not an island pack`)
+    if (!Array.isArray(a.ring) || a.ring.length < 3) bad(at, 'ring must be at least three [lon, lat] points')
+    else
+      for (const c of a.ring)
+        if (!Array.isArray(c) || !(c[0] >= BOX.west && c[0] <= BOX.east && c[1] >= BOX.south && c[1] <= BOX.north)) {
+          bad(at, `ring point ${JSON.stringify(c)} is not [lon, lat] over the islands`)
+          break
+        }
+    if (!Number.isInteger(a.count) || a.count < 0) bad(at, 'count must be today’s number of towers, a whole number')
+    if (!a.counted?.by) bad(at, 'counted.by must name the source today’s count was made from')
+    else if (!opened(a.counted.by)) bad(at, `counted.by “${a.counted.by}” is not an opened source`)
+    else if (!(a.sources || []).includes(a.counted.by)) bad(at, 'counted.by must be among its sources')
+    checkShare(at, a.share)
+    cites(at, a.sources)
+  }
+  // no two areas overlap (a tower is counted in one): no vertex of one inside another, off its edge (neighbours share edges)
+  const onEdge = (ring, [x, y]) =>
+    ring.some((p, i) => {
+      const q = ring[(i + 1) % ring.length]
+      const dx = q[0] - p[0]
+      const dy = q[1] - p[1]
+      const t = Math.max(0, Math.min(1, ((x - p[0]) * dx + (y - p[1]) * dy) / (dx * dx + dy * dy || 1)))
+      return Math.hypot(p[0] + t * dx - x, p[1] + t * dy - y) < 1e-6
+    })
+  for (const a of areas)
+    for (const b of areas)
+      if (a !== b && Array.isArray(a.ring) && Array.isArray(b.ring) && a.ring.some((c) => inRing(b.ring, c) && !onEdge(b.ring, c))) bad(`${at0} area ${a.id}`, `overlaps area ${b.id}`)
+  for (const [isl, o] of Object.entries(T.islands || {})) {
+    const at = `${at0} island ${isl}`
+    if (!ISLANDS.has(isl)) bad(at, 'is not an island pack')
+    checkShare(at, o.share)
+    cites(at, o.sources)
+  }
+  for (const id of T.sources || []) useSource(`${at0} sources`, id)
+  for (const id of T.wanted || []) {
+    useSource(`${at0} wanted`, id)
+    if (opened(id)) warn(`${at0} wanted`, `${id} is opened; drop it from wanted`)
+  }
+  const at = (sh, y) => {
+    if (y < sh[0][0]) return 0
+    for (let i = 1; i < sh.length; i++) if (y <= sh[i][0]) return sh[i - 1][1] + ((sh[i][1] - sh[i - 1][1]) * (y - sh[i - 1][0])) / (sh[i][0] - sh[i - 1][0])
+    return 1
+  }
+  towersCounts = { areas: areas.length, islands: Object.keys(T.islands || {}).length, now: areas.reduce((s, a) => s + (a.count || 0), 0), y1978: areas.reduce((s, a) => s + Math.floor((a.count || 0) * at(a.share || [[0, 0]], 1978)), 0) }
+}
+
+// ---------------------------------------------------------------------------
 // geology/: the prologue (DATA.md "Geology: the making of the islands"). The hand-written files
 // (volcanoes.json, landslides.geojson, chapters.json) are required once the directory exists; the bake's
 // manifest.json and its seafloor and stage images are checked when present and may be absent while it runs.
@@ -2322,6 +2427,7 @@ function finish() {
     console.log(`  schools   ${c.n} placed, ${(c.bytes / 1024).toFixed(0)} KB (${fmt(c.types)}); ${c.grounds} on their grounds, ${c.closed} closed or moved, ${c.by} dated by a record; ${c.unplaced} dated but not placed; ${c.sources} sources of its own`)
     console.log(`            ${fmt(c.islands)}`)
   }
+  if (towersCounts) console.log(`  towers    ${towersCounts.areas} areas and ${towersCounts.islands} islands; ${towersCounts.now} towers today, ${towersCounts.y1978} in 1978`)
   if (geoCounts) {
     const g = geoCounts
     console.log(`  geology   ${g.volcanoes} volcanoes, ${g.fields} fields (${g.blocks} blocks), ${g.chapters} chapters, ${g.steps} steps, ${g.stops} stops, ${g.tellings} tellings`)

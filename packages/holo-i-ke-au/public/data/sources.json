@@ -1415,6 +1415,87 @@
     "note": "Fetched 2026-10-23: the Kalaeloa district, drawn round the former air station at Barbers Point."
   },
   {
+    "id": "cch-building-footprints",
+    "title": "Building Footprints (CCH), Structures_Facilities FeatureServer layer 0",
+    "author": "City and County of Honolulu, Department of Planning and Permitting, Honolulu Land Information System (HoLIS)",
+    "year": 2026,
+    "url": "https://services.arcgis.com/tNJpAOha4mODLkXz/arcgis/rest/services/Structures_Facilities/FeatureServer/0",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Fetched 2026-11-07: the footprints of 30 m and over, with their centres, for today's count of Oʻahu's towers (towers.json). The layer's own description: footprints extracted from the NGA lidar of 2005 and 2009, with others from a 2004 aerial collection and 2010 Pictometry, kept up since by digitizing new building plans. Two heights: maxht_m, the lidar's, in metres; gis_height, the City's own, in feet, where the lidar's is empty (the urban core). A footprint has no year built.",
+    "wanted": "When gis_height was measured, and whether footprints digitized from plans after 2010 carry a height; the towers since then are taken from CTBUH where they lack one."
+  },
+  {
+    "id": "ctbuh-honolulu",
+    "title": "The Skyscraper Center: Honolulu",
+    "author": "Council on Tall Buildings and Urban Habitat",
+    "year": 2026,
+    "url": "https://www.skyscrapercenter.com/city/honolulu",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Fetched 2026-11-07: the city page's building records (name, coordinates, floors, height, status, completion year): 114 completed, the lowest about 41 m and 12 floors, so it lists the taller towers, not all of them. Their completion years date each area's share where it has fifteen or more (downtown, Waikīkī, Kakaʻako), and those completed from 2010 on that the City's footprints do not hold are added to today's count.",
+    "wanted": "The building pages' own sources for the completion years; whether the database's Honolulu list is complete above its floor."
+  },
+  {
+    "id": "acs-2023-b25127",
+    "title": "American Community Survey 2019–2023 5-year estimates, table B25127: Tenure by Year Structure Built by Units in Structure (table-based summary file)",
+    "author": "U.S. Census Bureau",
+    "year": 2024,
+    "url": "https://www2.census.gov/programs-surveys/acs/summary_file/2023/table-based-SF/data/5YRData/acsdt5y2023-b25127.dat",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Fetched 2026-11-07, the Hawaiʻi tract rows read (the line layout from the survey's table shells): occupied units in structures of 50 or more, by the year the structure was built, in the bands before 1940, 1940–59, 1960–79, 1980–99, 2000–19 and from 2020. Estimates with margins of error, of occupied homes only: the vacant (many of Waikīkī's) are not counted, hotels and offices not at all, and a structure of 50 units may be a walk-up. Read for the share of an area's towers standing by a year, not for a count."
+  },
+  {
+    "id": "acs-2023-b25034",
+    "title": "American Community Survey 2019–2023 5-year estimates, table B25034: Year Structure Built (table-based summary file)",
+    "author": "U.S. Census Bureau",
+    "year": 2024,
+    "url": "https://www2.census.gov/programs-surveys/acs/summary_file/2023/table-based-SF/data/5YRData/acsdt5y2023-b25034.dat",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Fetched 2026-11-07, the Hawaiʻi tract rows read: all housing units by the decade the structure was built, used only to split B25127's twenty-year bands into decades, area by area."
+  },
+  {
+    "id": "census-gazetteer-2023-tracts",
+    "title": "2023 Gazetteer Files: Census Tracts, Hawaii",
+    "author": "U.S. Census Bureau",
+    "year": 2023,
+    "url": "https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2023_Gazetteer/2023_gaz_tracts_15.txt",
+    "access": "open",
+    "opened": true,
+    "read": "full",
+    "note": "Fetched 2026-11-07: each tract's internal point, which places it in an area of towers.json or leaves it to its island."
+  },
+  {
+    "id": "osm-buildings-towns",
+    "title": "OpenStreetMap buildings (api.openstreetmap.org/api/0.6/map), over Hilo, Kailua-Kona, Kahului and Wailuku, Kīhei and Wailea, and Kāʻanapali",
+    "author": "OpenStreetMap contributors",
+    "year": 2026,
+    "url": "https://www.openstreetmap.org/copyright",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Fetched 2026-11-07 through the OSM API in boxes over each town; closed ways tagged building, those with building:levels of ten or more or a height of 30 m or more counted. Open Database License 1.0. Only a share of the towns' buildings carry levels at all (one in ten or fewer in Hilo and Kona), so a tower left untagged is missed; Hilo has three so tagged (the Grand Naniloa Hotel, Bayshore Towers, Hilo Lagoon Centre, whose start_date is 1971), Kāʻanapali nine, the others none.",
+    "wanted": "Each Hilo and Kāʻanapali tower's year, from the County's real property records or the hotels' histories, to date them rather than share them by the survey."
+  },
+  {
+    "id": "honolulu-building-permits-2005",
+    "title": "Building Permits – January 1, 2005 through June 30, 2025 (data.honolulu.gov 4vab-c87q)",
+    "author": "City and County of Honolulu, Department of Planning and Permitting",
+    "year": 2025,
+    "url": "https://data.honolulu.gov/d/4vab-c87q",
+    "access": "open",
+    "opened": false,
+    "read": "title",
+    "note": "The City's open permit records from 2005, with the tax map key, the proposed use, the new floor area and the storeys; only its catalogue entry and columns were seen.",
+    "wanted": "The new buildings of ten storeys and over by tax map key and completion date, Kakaʻako and Ala Moana above all, to check the towers since 2005 that the footprints and CTBUH give towers.json."
+  },
+  {
     "id": "state-gis-airports",
     "title": "Airports, Infrastructure MapServer layer 13",
     "author": "State of Hawaiʻi Statewide GIS Program; State DOT Airports Division",
