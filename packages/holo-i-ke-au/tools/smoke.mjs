@@ -2027,7 +2027,7 @@ if (nuuanuHere) {
     if (!(c.total >= 150 && c.by.hale > 20 && (c.by.frame || 0) + (c.by.adobe || 0) > 20)) throw new Error(`within 1.5 km: ${brief(c)}`)
     // (the modelled church of 1842, or a named one standing by 1842 in its place: landmarks.json)
     const named1842 = (st.named || []).filter((n) => { const m = n.match(/\(church\) (\d+)/); return m && +m[1] <= 1842 })
-    if (!all.by.church || !(st.landmarks.some((l) => /1842/.test(l)) || named1842.length)) throw new Error(`no church of 1842: ${st.landmarks}; named ${st.named}`)
+    if (!((all.by.church && st.landmarks.some((l) => /1842/.test(l))) || named1842.length)) throw new Error(`no church of 1842: ${st.landmarks}; named ${st.named}`)
     console.log(`      within 1.5 km: ${brief(c)}; landmarks ${st.landmarks.join(', ')}${named1842.length ? `; named by 1842 ${named1842.join(', ')}` : ''}`)
   })
   await check('settlements: stores and masonry blocks by 1896, the town on a grid of streets', async () => {
