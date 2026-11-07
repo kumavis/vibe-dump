@@ -2034,7 +2034,7 @@ the directory within its budget; the town's name Hawaiian-checked.
   sequence along the street, scaled by how much closer than the grid's the
   lots stand about it (within a half and a double), so the fill builds as
   many houses on an area as the grid would.
-- **The grid gives way.** A grid lot within 75 m of a street standing in a
+- **The grid gives way.** A grid lot within 85 m of a street standing in a
   year is gone in that year, so the grid holds only outside the network; the
   years a street comes or goes are breaks for the scatter, so a grid lot
   goes and a street's lot comes at the year itself and never fade across

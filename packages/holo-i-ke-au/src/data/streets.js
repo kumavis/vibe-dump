@@ -18,7 +18,8 @@
 //   streets holds the houses its density asks for, not more;
 // - where the network covers the ground (coverAt): within COVER of a street
 //   standing in the year, where the modelled grid gives way to the streets.
-//   COVER is a lot's depth and a grid lot's half diagonal beyond the strip,
+//   COVER is a lot's depth, the setback and a grid building's reach past its lot
+//   beyond the strip,
 //   so no grid lot ever stands on a street's lot, or on its strip.
 //
 // The years a street changes (`breaks`) are breaks for the scatter, so a
@@ -31,7 +32,7 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 
 // world units (100 m): a street's strip by its class (DATA.md), and how far the network covers
 export const STREET_WIDTH = { arterial: 0.14, street: 0.09 }
-export const COVER = 0.75
+export const COVER = 0.85
 // a street's lots come in over the years before its date (the sheet's year, a
 // year by which it stood: DATA.md), so that they stand whole in that year
 // rather than fading in after it; the grid goes over the same years
@@ -191,7 +192,11 @@ export class StreetNet {
           const z = cz + m[1] * off
           const box = { x, z, e, m, hx, hz }
           // (the strips kept clear of the lot and of the reach of a building's front beyond it)
-          if (this.onStrip({ ...box, hx: hx + 0.02, hz: hz + SETBACK - 0.012 }) || overlaps(box, taken)) continue
+          if (this.onStrip({ ...box, hx: hx + 0.02, hz: hz + SETBACK - 0.012 })) continue
+          // (and clear of the other lots with the reach of a building's front toward its street: a corner's two lots face two streets)
+          const reach = SETBACK - 0.012
+          const room = { x: x - (m[0] * reach) / 2, z: z - (m[1] * reach) / 2, e, m, hx, hz: hz + reach / 2 }
+          if (overlaps(room, taken)) continue
           // (the lot's own hashes, as the grid's lots carry them: settlements.js tileLots)
           const gu = 2 * k + (side > 0 ? 0 : 1)
           const h = (q) => ihash(gu, li, 7 * q + 3)
@@ -207,7 +212,7 @@ export class StreetNet {
           const key = `${Math.floor(x / CELL)},${Math.floor(z / CELL)}`
           let list = taken.get(key)
           if (!list) taken.set(key, (list = []))
-          list.push(box)
+          list.push(room)
         }
       }
     }
