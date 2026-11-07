@@ -3458,7 +3458,9 @@ const restoreByYear = async (pts) => {
         await run('app.settle(); app.settle()')
         return ui(`app.districts.metresAt(${p.x}, ${p.z})`)
       }
-      return ui(`(() => { const t = app.world.terrains.get('${p.pack}'); return t.slot >= 0 ? app.world.ownMetres(t, ${p.x}, ${p.z}) : NaN })()`)
+      // (the island's own ground as its slot draws it, once it has its slot)
+      await page.waitForFunction((id) => { const a = window.__app; a.settle(); return a.world.terrains.get(id).slot >= 0 }, p.pack, { timeout: 300000, polling: 2000 })
+      return ui(`(() => { const t = app.world.terrains.get('${p.pack}'); return app.world.ownMetres(t, ${p.x}, ${p.z}) })()`)
     }
     const before = await at(p.until - 1)
     const after = await at(p.until + 1)
