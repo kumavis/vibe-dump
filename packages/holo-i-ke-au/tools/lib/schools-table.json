@@ -13696,7 +13696,7 @@
    "name": "East Maui Female Seminary",
    "type": "mission",
    "island": "maui",
-   "from": 1874,
+   "from": 1869,
    "to": null,
    "datePrecision": "by",
    "sources": [
@@ -13707,6 +13707,10 @@
     {
      "id": "kingdom-board-of-education-reports-1860-1880",
      "where": "1874: East Maui Female Seminary, Makawao"
+    },
+    {
+     "id": "honolulu-directory-1869",
+     "where": "the boarding schools for girls: Makawao Female Seminary, J. P. Green"
     }
    ],
    "note": "An independent school aided by the government, listed in the Board’s reports from 1874; the record read does not give its site."
@@ -13769,19 +13773,31 @@
    "note": "An independent school in Kona aided by the government, listed in the Board’s reports from 1876; the record read does not give its site."
   },
   {
-   "name": "Hilo Boys’ Boarding School",
+   "name": "Hilo Boarding School",
    "type": "mission",
    "island": "hawaii",
-   "from": 1882,
-   "to": null,
-   "datePrecision": "by",
+   "from": 1836,
+   "to": 1945,
+   "datePrecision": "year",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the independent schools aided by the government"
+    },
+    {
+     "id": "honolulu-directory-1869",
+     "where": "chronology, 1836: “The High School of Mr. Lyman commenced at Hilo”; the schools: the Hilo Boarding School for Boys, D. B. Lyman"
+    },
+    {
+     "id": "sanborn-hilo-1914",
+     "where": "sheet 4"
+    },
+    {
+     "id": "wikipedia-university-of-hawaii-at-hilo",
+     "where": "history: the Hilo Center at Lyman Hall of the Hilo Boys School, 1945"
     }
    ],
-   "note": "An independent school at Hilo aided by the government, listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "Begun by D. B. Lyman in 1836 as a high school for boys; the 1914 atlas draws its classrooms, dormitories and shops east of Waiānuenue Avenue, and in 1945 the university’s Hilo Center opened in its Lyman Hall. The records read do not say when it closed; it stands to the last of them."
   },
   {
    "name": "Bishop’s College School",
@@ -13869,6 +13885,36 @@
     }
    ],
    "note": "An independent school in Honolulu aided by the government, listed in the Board’s report of 1882; the record read does not give its site."
+  },
+  {
+   "name": "Wailuku Female Seminary",
+   "type": "mission",
+   "island": "maui",
+   "from": 1836,
+   "to": null,
+   "datePrecision": "year",
+   "sources": [
+    {
+     "id": "honolulu-directory-1869",
+     "where": "chronology, 1836: “The Female Seminary at Wailuku, Maui, commenced”"
+    }
+   ],
+   "note": "The mission’s boarding school for girls at Wailuku, begun in 1836; the records read do not give its site or its closing."
+  },
+  {
+   "name": "Oʻahu Charity School",
+   "type": "mission",
+   "island": "oahu",
+   "from": 1832,
+   "to": null,
+   "datePrecision": "year",
+   "sources": [
+    {
+     "id": "honolulu-directory-1869",
+     "where": "chronology, 1832: “The Oahu Charity School was commenced”"
+    }
+   ],
+   "note": "Begun at Honolulu in 1832; the records read do not give its site or its closing."
   }
  ],
  "sources": [
@@ -14495,6 +14541,30 @@
    "read": "part",
    "tertiary": true,
    "note": "Read 2026-11-08 (revision of 2026-05-27): the school buildings listed, with their coordinates: Linekona School at Victoria and Beretania streets among them."
+  },
+  {
+   "id": "honolulu-directory-1869",
+   "title": "Honolulu Directory, and Historical Sketch of the Hawaiian or Sandwich Islands",
+   "author": "Honolulu directory (1869)",
+   "year": 1869,
+   "url": "https://archive.org/details/bub_gb_2R1AAAAAYAAJ",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "note": "Read 2026-11-08 in the Internet Archive’s text: the chronology (the years the mission’s schools commenced) and the account of the schools of 1868–69 with their teachers and scholars. It gives no school’s site.",
+   "wanted": "The later Honolulu directories (Bowser 1880, Husted from 1890), which list the schools by street."
+  },
+  {
+   "id": "sanborn-hilo-1914",
+   "title": "Insurance Maps of Hilo, Hawaii (1914)",
+   "author": "Sanborn Map Company",
+   "year": 1914,
+   "url": "https://www.loc.gov/item/sanborn01535_001/",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "note": "Read 2026-11-08 in the Library of Congress’s scans: the index of specials and sheet 4, the Hilo Boarding School for boys with its classrooms, dormitories and manual-training shop east of Waiānuenue Avenue, St. Mary’s School for boys below it.",
+   "wanted": "Sheet 4 registered on Waiānuenue Avenue (the old Hilo Hospital across the road), for the boarding school’s site."
   }
  ]
 }
