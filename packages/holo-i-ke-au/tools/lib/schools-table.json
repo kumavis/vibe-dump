@@ -2926,9 +2926,9 @@
     "key": 97
    },
    "footprint": "way/388634106",
-   "from": 1999,
+   "from": 1997,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "6–8",
    "sources": [
     {
@@ -2938,9 +2938,12 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.kapaamiddleschool.org/"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 607,
@@ -3836,9 +3839,9 @@
     "key": 127
    },
    "footprint": "way/949210905",
-   "from": 1999,
+   "from": 1964,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "7–8",
    "sources": [
     {
@@ -3848,9 +3851,12 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.king.k12.hi.us/home/about-us"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 641,
@@ -7896,9 +7902,9 @@
     "key": 261
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -7912,9 +7918,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.haaspcs.org/"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "The year the school opened, as its own page gives it."
   },
   {
    "id": "innovations-public-charter",
@@ -8427,9 +8437,9 @@
     "key": 279
    },
    "footprint": "way/239951594",
-   "from": 1999,
+   "from": 1964,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–6",
    "sources": [
     {
@@ -8443,9 +8453,12 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://lanikaischool.com/"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 1999,
     "n": 312,
@@ -8577,9 +8590,9 @@
     "key": 284
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2013,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "6–8",
    "sources": [
     {
@@ -8593,9 +8606,12 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.seeqs.org/"
     }
-   ],
-   "by": "hawaii-gis-public-schools"
+   ]
   },
   {
    "id": "university-laboratory",
@@ -8693,9 +8709,9 @@
     "key": 288
    },
    "footprint": null,
-   "from": 1999,
+   "from": 1928,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–5",
    "sources": [
     {
@@ -8709,9 +8725,12 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.waialae.edu/about"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2014,
     "n": 499,
@@ -8763,9 +8782,9 @@
     "key": 290
    },
    "footprint": null,
-   "from": 2024,
+   "from": 1994,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "6–12",
    "sources": [
     {
@@ -8779,9 +8798,12 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.whea.net/about"
     }
-   ],
-   "by": "hawaii-gis-public-schools"
+   ]
   },
   {
    "id": "honouliuli-middle",
@@ -9008,17 +9030,20 @@
     "key": 7
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1928,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "Toddler thru Kindergarten",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 7"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.centralunionpreschool.org"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 172,
@@ -9035,17 +9060,20 @@
     "key": 8
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1981,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "P3-12",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 8"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.capatriots.org/about/"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 222,
@@ -9122,22 +9150,26 @@
     "key": 11
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1956,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PreSchool thru 12th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 11"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.doristoddchristian.org/about"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 186,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "Started in 1956 in the founder’s home; the record read does not say since when it has stood here."
   },
   {
    "id": "friendship-christian-schools",
@@ -9203,17 +9235,20 @@
     "key": 14
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1972,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "Early Childhood thru 12th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 14"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.waldorfmaui.org/36/about-hws"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 226,
@@ -9230,17 +9265,20 @@
     "key": 15
    },
    "footprint": "way/488552102",
-   "from": 2021,
+   "from": 1918,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "Preschool - 6",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 15"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.hanahauoli.org/history"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 212,
@@ -9489,17 +9527,20 @@
     "key": 24
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1956,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PK-8",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 24"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.hfcahawaii.org/about-us"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 314,
@@ -9573,17 +9614,20 @@
     "key": 27
    },
    "footprint": "way/875926489",
-   "from": 2021,
+   "from": 1961,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PreSchool thru 8th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 27"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.honoluluwaldorf.org"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 144,
@@ -9948,17 +9992,20 @@
     "key": 40
    },
    "footprint": "way/285099505",
-   "from": 2021,
+   "from": 1975,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "Early Childhood thru 6th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 40"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.kawaiahaoschool.org"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 110,
@@ -9975,17 +10022,20 @@
     "key": 41
    },
    "footprint": null,
-   "from": 2021,
+   "from": 2016,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K-5",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 41"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.kekulaopiilani.com"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 53,
@@ -10110,17 +10160,20 @@
     "key": 46
    },
    "footprint": "way/1317069721",
-   "from": 2021,
+   "from": 1969,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K3-12th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 46"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://lbswarriors.com/about-us/"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 123,
@@ -10137,22 +10190,26 @@
     "key": 47
    },
    "footprint": "way/541606833",
-   "from": 2021,
+   "from": 1961,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "Preschool-Grade 12",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 47"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.lejardinacademy.org"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 776,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "Founded in 1961; the record read does not say since when it has stood here."
   },
   {
    "id": "maili-bible-school",
@@ -10191,17 +10248,20 @@
     "key": 49
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1992,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PreSchool thru 12th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 49"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://makualani.com/about/"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 306,
@@ -10245,22 +10305,26 @@
     "key": 51
    },
    "footprint": "way/1322469700",
-   "from": 2021,
+   "from": 2004,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "Early Childhood thru Kindergarten",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 51"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://staroftheseaelc.org/about-us/elc-campus-security/"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 119,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "At this new site from January 2004."
   },
   {
    "id": "mary-star-of-the-sea-school",
@@ -10272,17 +10336,20 @@
     "key": 52
    },
    "footprint": "way/1322469700",
-   "from": 2021,
+   "from": 1946,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K-8",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 52"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.starofthesea.org"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 205,
@@ -10330,17 +10397,20 @@
     "key": 54
    },
    "footprint": null,
-   "from": 2021,
+   "from": 2005,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "Preschool-12th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 54"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.mauiprep.org"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 300,
@@ -10414,22 +10484,26 @@
     "key": 57
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1988,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "Two-Year-Olds & Preschool thru 6th grade",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 57"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.montessorihawaii.org/our-history"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 164,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "Founded in 1972; at its Nehoa Street campus from the spring of 1988."
   },
   {
    "id": "montessori-school-of-maui",
@@ -10441,17 +10515,20 @@
     "key": 58
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1978,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "Early Childhood thru 8th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 58"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.momi.org/about/history.cfm"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 234,
@@ -10495,17 +10572,20 @@
     "key": 60
    },
    "footprint": null,
-   "from": 2021,
+   "from": 2008,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "Early Childhood thru 8th grade",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 60"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.nhcshi.org/about-us"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 150,
@@ -10576,17 +10656,20 @@
     "key": 63
    },
    "footprint": null,
-   "from": 2021,
+   "from": 2003,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "9th thru 12th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 63"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.pacificbuddhistacademy.org/about-us"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 75,
@@ -10724,22 +10807,26 @@
     "key": 68
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1862,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K-12",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 68"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.shsmaui.org"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 202,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "Established in 1862 at Lāhainā; the record read does not say since when it has stood at this site."
   },
   {
    "id": "saint-louis-school",
@@ -10783,17 +10870,20 @@
     "key": 70
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1956,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PK3 thru 8th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 70"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.smls-hawaii.org/about-us/history/"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 218,
@@ -11087,17 +11177,20 @@
     "key": 81
    },
    "footprint": "way/1086866826",
-   "from": 2021,
+   "from": 1964,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PK-8",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 81"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.steliz-hi.org/Our-School/History"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 141,
@@ -11141,17 +11234,20 @@
     "key": 83
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1979,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PK-K",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 83"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.stjohnmililani.org/admissions"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 24,
@@ -11168,22 +11264,26 @@
     "key": 84
    },
    "footprint": "way/1340187605",
-   "from": 2021,
+   "from": 1946,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PK-8",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 84"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.stjosephwaipahu.org/about/history.cfm"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 293,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "Established in 1946 in an abandoned Japanese language school."
   },
   {
    "id": "st-joseph-school",
@@ -11280,17 +11380,20 @@
     "key": 88
    },
    "footprint": "way/229951157",
-   "from": 2021,
+   "from": 1946,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PK-8",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 88"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.sttheresakauai.com/about"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 140,
@@ -11334,17 +11437,20 @@
     "key": 90
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1981,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PreSchool thru 12th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 90"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "http://www.TCSKailua.net"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 274,
@@ -11361,17 +11467,20 @@
     "key": 91
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1953,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PS-8",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 91"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.tls-hawaii.org/our-story"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 165,
@@ -11442,17 +11551,20 @@
     "key": 94
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1967,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PreSchool thru 8th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 94"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://www.wjns.org/about"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 229,
@@ -12826,6 +12938,18 @@
    "read": "part",
    "tertiary": true,
    "note": "Read 2026-11-06 (revision of 2026-10-10): classes began in September 1955 as the Church College of Hawaiʻi, in Lāʻie."
+  },
+  {
+   "id": "schools-own-pages",
+   "title": "The schools’ own pages (about, history)",
+   "author": "each school",
+   "year": 2026,
+   "url": "https://www.hawaiipublicschools.org/",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "note": "Each school’s home page and its about and history pages, from the website the State’s school layers give, fetched 2026-11-07; read for the year the school says it was founded, established or opened, and where it says it moved. Each citation’s where names the page read.",
+   "wanted": "For the schools whose pages give no year: the school’s own printed history, or the Department’s directories of the territory."
   }
  ]
 }
