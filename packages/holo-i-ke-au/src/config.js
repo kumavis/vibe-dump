@@ -46,6 +46,8 @@ export const SLOTS = 5
 // can (its raise patches, and the groups its lower patches fall into)
 export const PATCHES = 32
 export const DIST_PATCHES = 16
+// restore patches (render/restores.js) the shaders hold weights for, a multiple of 4
+export const RESTORES = 96
 // a patch's weight eases at this rate (1/s) as the year crosses its until:
 // most of the way in a couple of seconds
 export const PATCH_EASE = 1.6

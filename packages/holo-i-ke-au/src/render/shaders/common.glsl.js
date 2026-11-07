@@ -10,7 +10,8 @@
 // one whose edge is further away. render/world.js keeps a CPU copy of all of
 // this (metresAt), line for line, for the camera, picking and pins.
 
-import { NEAR_EXAG, NORMAL_EXAG, SLOTS, PATCHES, DIST_PATCHES } from '../../config.js'
+import { NEAR_EXAG, NORMAL_EXAG, SLOTS, PATCHES, DIST_PATCHES, RESTORES } from '../../config.js'
+import { RESTORE_TILE } from '../restores.js'
 
 const f = (v) => (Number.isInteger(v) ? v.toFixed(1) : String(v))
 
@@ -32,6 +33,8 @@ export const constants = /* glsl */ `
 #define SLOTS ${SLOTS}
 #define PATCHES ${PATCHES}
 #define DIST_PATCHES ${DIST_PATCHES}
+#define RESTORES ${RESTORES}
+#define RESTORE_TILE ${RESTORE_TILE}
 #define DIST_POND ${DIST_INDEX.pond}
 #define DIST_OTHER ${DIST_INDEX.other}
 #define DIST_FILL ${f(DIST_FILL)}
@@ -190,6 +193,64 @@ float patchMask(int i, vec2 xz) {
   vec4 u = uPatchUv[i];
   return textureLod(uPatchMap, mix(u.xy, u.zw, (xz - b.xy) / (b.zw - b.xy)), 0.0).r;
 }
+// The restore patches (render/restores.js): the ground a road was cut into
+// and raised on, laid back for the years before it. Per texel of a pack, the
+// change from today's height times its weight (r) and the patch it belongs
+// to (g), in squares of RESTORE_TILE texels kept in one atlas; an index
+// (one texel a square, the slots' and the district's packs one under
+// another) says which square of the atlas holds each square of a pack.
+uniform sampler2D uRestAtlas;           // RG32F, nearest
+uniform sampler2D uRestIdx;             // R32F, nearest: atlas square + 1, 0 none
+uniform vec4 uRestK[RESTORES / 4];      // each patch's weight in the year
+uniform vec4 uRestSlot[SLOTS];          // a slot's pack: x its first row in the index, y, z its squares across and down, w 1 while it has any
+uniform vec2 uRestSlotGrid[SLOTS];      // ... its texels across and down
+uniform vec4 uRestSlotBox[SLOTS];       // ... the box its patches reach (texels: i0, j0, i1, j1)
+uniform vec4 uRestDist;                 // the district's, the same
+uniform vec4 uRestDistBox;
+float restoreK(float n) { int i = int(n + 0.5); return uRestK[i >> 2][i & 3]; }
+// the change at texel p of a region (r: its place in the index), by the weights of the year
+float restoreAt(vec4 r, ivec2 p) {
+  ivec2 sq = p / RESTORE_TILE;
+  if (p.x < 0 || p.y < 0 || sq.x >= int(r.y) || sq.y >= int(r.z)) return 0.0;
+  float a = texelFetch(uRestIdx, ivec2(sq.x, int(r.x) + sq.y), 0).r;
+  if (a < 0.5) return 0.0;
+  int k = int(a + 0.5) - 1;
+  int row = textureSize(uRestAtlas, 0).x / RESTORE_TILE;
+  vec2 t = texelFetch(uRestAtlas, ivec2(k % row, k / row) * RESTORE_TILE + (p - sq * RESTORE_TILE), 0).rg;
+  return t.r * restoreK(t.g);
+}
+// slot s's change at xz, bilinear on its pack's grid as rectMetres reads the
+// heights, and (out) its slope, metres per metre, for the normals
+float restoreSlotG(int s, vec2 xz, out vec2 grad) {
+  grad = vec2(0.0);
+  vec4 r = uRestSlot[s];
+  if (r.w < 0.5) return 0.0;
+  vec2 size = uRestSlotGrid[s];
+  vec2 p = clamp(rectUv(uSlotRect[s], xz) * size - 0.5, vec2(0.0), size - 1.001);
+  vec4 b = uRestSlotBox[s];
+  if (p.x < b.x || p.y < b.y || p.x > b.z || p.y > b.w) return 0.0;
+  vec2 fl = floor(p);
+  vec2 fr = p - fl;
+  ivec2 i = ivec2(fl);
+  float d00 = restoreAt(r, i);
+  float d10 = restoreAt(r, i + ivec2(1, 0));
+  float d01 = restoreAt(r, i + ivec2(0, 1));
+  float d11 = restoreAt(r, i + ivec2(1, 1));
+  vec2 texel = (uSlotRect[s].zw - uSlotRect[s].xy) / size * 100.0;
+  grad = vec2(mix(d10 - d00, d11 - d01, fr.y) / texel.x, mix(d01 - d00, d11 - d10, fr.x) / texel.y);
+  return mix(mix(d00, d10, fr.x), mix(d01, d11, fr.x), fr.y);
+}
+float restoreSlot(int s, vec2 xz) {
+  vec2 g;
+  return restoreSlotG(s, xz, g);
+}
+// the district's change at its texel p
+float distRestore(ivec2 p) {
+  if (uRestDist.w < 0.5) return 0.0;
+  vec4 b = uRestDistBox;
+  if (float(p.x) < b.x || float(p.y) < b.y || float(p.x) >= b.z || float(p.y) >= b.w) return 0.0;
+  return restoreAt(uRestDist, p);
+}
 // how much of the ground the last patchedMetres was asked about is a patch's
 // reef flat in the year (0..1): the sea reads it after the depth, rather
 // than walk the patches again (patchReef)
@@ -197,6 +258,8 @@ float gPatchReef = 0.0;
 // slot s's heights h at xz, as the year has them
 float patchedMetres(int s, vec2 xz, float h) {
   gPatchReef = 0.0;
+  // (the ground under the roads first: restoreSlot)
+  h += restoreSlot(s, xz);
   if (!inPatchBox(s, xz)) return h;
   int a = int(uSlotPatch[s].x);
   int n = int(uSlotPatch[s].y);
@@ -289,7 +352,8 @@ float distPatched(ivec2 p, float h, float r) {
   return h;
 }
 float distTexel(ivec2 p) {
-  float h = texelFetch(uDistH, p, 0).r;
+  // (the ground under the roads first: distRestore)
+  float h = texelFetch(uDistH, p, 0).r + distRestore(p);
   vec4 a = texelFetch(uDistAux, p, 0);
   h = distPatched(p, h, a.r * 255.0);
   int f = int(a.a * 255.0 + 0.5);

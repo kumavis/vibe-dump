@@ -37,7 +37,7 @@ import { Labels } from './labels.js'
 import { Settlements } from './settlements.js'
 import { Vessels } from './vessels.js'
 import { holds } from '../data/district.js'
-import { patchLevel, fromHalf } from '../data/district-decode.js'
+import { patchLevel, fromHalf, TREE_STRIDE } from '../data/district-decode.js'
 
 // the village's houses and canoes, a little larger again than the trees
 const HALE_S = S * 1.4
@@ -148,6 +148,8 @@ export class DistrictFeatures {
     this.group.add(this.structures)
 
     // --- trees -------------------------------------------------------------------
+    // (where a road has filled the ground since, on the ground as it was: render/restores.js sinkTrees)
+    app.restores?.sinkTrees(rec.d, rec.data.trees, TREE_STRIDE)
     this.forest = new Forest(rec.data.trees, rec.d.rect, shared, this.own)
     this.group.add(this.forest.group)
 
@@ -201,7 +203,8 @@ export class DistrictFeatures {
     const i = Math.max(0, Math.min(d.W - 1, Math.floor(((x - r.x0) / (r.x1 - r.x0)) * d.W)))
     const j = Math.max(0, Math.min(d.H - 1, Math.floor(((z - r.z0) / (r.z1 - r.z0)) * d.H)))
     const c = j * d.W + i
-    return patchLevel(h, this.rec.aux[c * 4], 1, fromHalf(this.rec.carve[c * 2]))
+    // (and the ground under the roads as it was before them, render/restores.js)
+    return patchLevel(h + (this.app.restores?.texel(d.id, i, j, true) ?? 0), this.rec.aux[c * 4], 1, fromHalf(this.rec.carve[c * 2]))
   }
 
   /**

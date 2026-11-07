@@ -634,7 +634,8 @@ export class Districts {
     const rec = this.cur
     const W = rec.d.W
     const c = j * W + i
-    let h = rec.metres[c]
+    // (the ground under the roads first, as the shader lays it: render/restores.js)
+    let h = rec.metres[c] + (this.app.restores?.texel(rec.d.id, i, j) ?? 0)
     const a = rec.aux
     const q = this.patchAt(i, j)
     if (q && q[1] + q[3] > 0) {

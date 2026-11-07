@@ -53,6 +53,7 @@ async function start() {
       app.patches.resolveReady([])
     })
     app.districts.load().catch((err) => warn(`districts: ${err.message}`))
+    app.restores.load().catch((err) => warn(`restores: ${err.message}`))
   }
   requestAnimationFrame(reveal)
 }

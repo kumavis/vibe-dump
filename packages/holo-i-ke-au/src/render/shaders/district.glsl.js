@@ -154,6 +154,8 @@ Year yearAt(vec2 xz) {
   vec4 a3 = texelFetch(uDistAux, i0 + ivec2(1, 1), 0);
   float any = max(max(a0.r + a0.a, a1.r + a1.a), max(a2.r + a2.a, a3.r + a3.a));
   if (any <= 0.0 && vMetres < uDistRaiseTop + 0.5) any = distPatchAt(i0).g + distPatchAt(i0 + ivec2(1, 0)).g + distPatchAt(i0 + ivec2(0, 1)).g + distPatchAt(i0 + ivec2(1, 1)).g;
+  // (and the ground under a road laid back, render/restores.js)
+  if (any <= 0.0) any = abs(distRestore(i0)) + abs(distRestore(i0 + ivec2(1, 0))) + abs(distRestore(i0 + ivec2(0, 1))) + abs(distRestore(i0 + ivec2(1, 1)));
   if (any <= 0.0) return y;
   vec2 texel = (uDistRect.zw - uDistRect.xy) / vec2(textureSize(uDistH, 0)) * 100.0; // metres
   float d[4];

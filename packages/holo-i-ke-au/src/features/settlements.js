@@ -1055,6 +1055,8 @@ export class Scatter {
  */
 export function islandMetres(app, t, x, z, year) {
   let h = t.metresAt(x, z)
+  // (the ground under the roads first, as it was before them: render/restores.js)
+  if (app.restores) h = app.restores.apply(t.pack.id, x, z, h, year)
   const list = app.patches?.byPack?.get(t.pack.id)
   if (!list) return h
   for (const r of list) {
@@ -1247,7 +1249,7 @@ export class Settlements extends Scatter {
       })
       if (!gk[g] && first >= 0) gd[g] = rec.lower[first].depth
     }
-    return { raise, gk, gd }
+    return { raise, gk, gd, year }
   }
 
   /** One texel's ground in a patch state: Districts.texel without the features. */
@@ -1255,7 +1257,8 @@ export class Settlements extends Scatter {
     const rec = this.rec
     const W = rec.d.W
     const c = j * W + i
-    let h = rec.metres[c]
+    // (the ground under the roads first, as it was in the state's year: render/restores.js)
+    let h = rec.metres[c] + (st.year !== undefined ? (this.app.restores?.texel(rec.d.id, i, j, st.year) ?? 0) : 0)
     const q = this.districts.patchAt(i, j)
     if (q && q[1] + q[3] > 0) {
       const ra = st.raise[q[2] & 15]
@@ -1331,7 +1334,7 @@ export class Settlements extends Scatter {
       }
       if (p >= 9) continue
       if (this.streamNear(px, pz)) return null
-      if (aux[c * 4] || this.districts.patchAt(i, j)) this.dep = true
+      if (aux[c * 4] || this.districts.patchAt(i, j) || this.app.restores?.texel(rec.d.id, i, j, true)) this.dep = true
       let g = this.groundAt(i, j, ep.state)
       if (g < 0.6) return null
       const raw = rec.metres[c]
@@ -1455,6 +1458,8 @@ export class Settlements extends Scatter {
     const rec = this.rec
     const breaks = new Set()
     for (const p of [...rec.raise, ...rec.lower]) breaks.add(p.until)
+    // (and where the ground under a road changes, render/restores.js)
+    for (const r of this.app.restores?.all || []) if (r.pack === rec.d.id) breaks.add(r.until)
     for (const ms of rec.d.members.values()) {
       for (const p of ms) {
         const [a, b] = spanOf(p)

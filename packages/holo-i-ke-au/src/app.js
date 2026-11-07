@@ -25,6 +25,7 @@ import * as THREE from 'three'
 import { World } from './render/world.js'
 import { Districts } from './render/district.js'
 import { Patches } from './render/patches.js'
+import { Restores } from './render/restores.js'
 import { Ocean } from './render/ocean.js'
 import { Sky } from './render/sky.js'
 import { Pipeline } from './render/pipeline.js'
@@ -108,6 +109,8 @@ export class App {
     this.world.uniforms = this.shared.uniforms
     // the patches (render/patches.js): read behind the first frame (main.js)
     this.patches = new Patches(this)
+    // and the ground under the roads before them (render/restores.js), read beside them
+    this.restores = new Restores(this)
     this.timeline = new Timeline(data.eras)
     // the prologue's clock, in Ma, where the data has a geology
     const G = data.geology
@@ -328,6 +331,7 @@ export class App {
     this.crops.update(0)
     this.crops.settle()
     this.districts?.settle(this.camera, g.distance)
+    this.restores?.settle()
     this.towns?.settle()
     this.works?.settle()
     this.cropTrees?.settle()

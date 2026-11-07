@@ -22,6 +22,7 @@ import * as THREE from 'three'
 import { SLOTS, DIST_PATCHES, exaggeration } from '../config.js'
 import { PackTerrain, heightTexture } from './pack.js'
 import { patchUniforms } from './patches.js'
+import { restoreUniforms } from './restores.js'
 
 const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
@@ -74,6 +75,8 @@ export class World {
       uFeatCrop: { value: vecs(16) },
       // and the islands' patches (render/patches.js)
       ...patchUniforms(),
+      // and the ground under the roads before them (render/restores.js)
+      ...restoreUniforms(),
     }
     this.district = null
     for (let s = 0; s < SLOTS; s++) this.uniforms[`uSlotH${s}`] = { value: dummy }
@@ -175,6 +178,8 @@ export class World {
     for (const t of isl) t.update(camera, t.slot >= 0)
     // and under its island, the district
     this.district?.update(camera, distance, dt)
+    // (the restores of the packs in the slots and of the district now down, and their weights in the year)
+    this.app.restores?.update(dt)
     // cast shadows follow the sun, the exaggeration and each island's weight
     const r = this.app.renderer
     const sun = this.app.light.sunDir
@@ -202,6 +207,7 @@ export class World {
       t.k = t.want
     }
     this.app.patches?.settle()
+    this.app.restores?.settle()
   }
 
   /** What is being drawn, for the tools. */
@@ -261,7 +267,8 @@ export class World {
 
   /** An island pack's own heights at (x, z) with its patches of the year: slotMetres. */
   ownMetres(t, x, z) {
-    const h = t.metresAt(x, z)
+    let h = t.metresAt(x, z)
+    if (this.app.restores) h = this.app.restores.apply(t.pack.id, x, z, h)
     return this.app.patches ? this.app.patches.apply(t.pack.id, x, z, h) : h
   }
 

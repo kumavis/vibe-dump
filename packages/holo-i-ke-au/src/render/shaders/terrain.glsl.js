@@ -302,6 +302,13 @@ void main() {
   // forest doesn't turn to cliff as the camera pulls back.
   vec3 n0 = nt.xyz * 2.0 - 1.0;
   vec2 grad = -n0.xz / (max(n0.y, 0.03) * NORMAL_E);
+  // (the normal map is today's ground: where a road's cut or fill is laid
+  // back in the year, its change to the slope, render/restores.js)
+  if (uSelf >= 0) {
+    vec2 rg;
+    restoreSlotG(uSelf, xz, rg);
+    grad += rg * kSelf;
+  }
   vec3 n = normalize(vec3(-grad.x * uExag, 1.0, -grad.y * uExag));
   vec3 nC = normalize(vec3(-grad.x * NEAR_E, 1.0, -grad.y * NEAR_E));
   float slope = 1.0 - nC.y;

@@ -63,12 +63,44 @@ export async function loadPatchManifest(base, warn = console.warn) {
   }
   const out = []
   for (const p of man?.patches || []) {
+    // (a restore patch carries a surface, not a depth: render/restores.js reads those)
+    if (p?.kind === 'restore') continue
     if (!p?.pack) {
       warn(`patch ${p?.id ?? '?'}: no pack; not drawn`)
       continue
     }
     const d = describePatch(p, abs, warn)
     if (d) out.push(d)
+  }
+  return out
+}
+
+/**
+ * The restore patches of patches/manifest.json under `base` (DATA.md,
+ * "Accepted extensions (restore)"): { id, pack, until, url, box, delta },
+ * each the change from today's ground over a box of its pack's texels; []
+ * when there are none.
+ */
+export async function loadRestoreManifest(base, warn = console.warn) {
+  const root = new URL(base, location.href)
+  const abs = (f) => new URL(f, root).href
+  let man
+  try {
+    man = await getJSON(abs('patches/manifest.json'))
+  } catch {
+    return []
+  }
+  const out = []
+  for (const p of man?.patches || []) {
+    if (p?.kind !== 'restore') continue
+    const id = p.id || p.file || '?'
+    const box = Array.isArray(p.box) && p.box.length === 4 && p.box.every((v) => Number.isInteger(v)) && p.box[2] > 0 && p.box[3] > 0 ? p.box : null
+    const delta = Number.isFinite(p.delta?.scale) && Number.isFinite(p.delta?.offset) ? p.delta : null
+    if (!p.pack || !Number.isFinite(p.until) || !p.file || !box || !delta) {
+      warn(`restore ${id}: no pack, until, file, box or delta; not drawn`)
+      continue
+    }
+    out.push({ id: String(id), pack: p.pack, until: p.until, url: abs(p.file), box, delta: { scale: p.delta.scale, offset: p.delta.offset }, note: p.note || '' })
   }
   return out
 }
