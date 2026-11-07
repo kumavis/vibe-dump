@@ -1948,6 +1948,100 @@ function checkTowers() {
   towersCounts = { areas: areas.length, islands: Object.keys(T.islands || {}).length, now: areas.reduce((s, a) => s + (a.count || 0), 0), y1978: areas.reduce((s, a) => s + Math.floor((a.count || 0) * at(a.share || [[0, 0]], 1978)), 0) }
 }
 // streets/: the towns' streets, dated (DATA.md "Streets, dated")
+let streetCounts = null
+if (existsSync(join(DATA, 'streets', 'manifest.json'))) checkStreets()
+
+function checkStreets() {
+  const CLASSES = new Set(['arterial', 'street'])
+  const BUDGET = 5e6 // bytes, the whole of streets/
+  const YEARS = [1778, 2026]
+  const man = load('streets/manifest.json')
+  if (!man) return
+  const packs = new Map()
+  try { for (const p of JSON.parse(readFileSync(join(DATA, 'manifest.json'), 'utf8')).packs || []) if (p.kind === 'island') packs.set(p.id, p.bounds) } catch { warn('streets', 'no manifest.json, so the towns are not held to their packs') }
+  if (!Array.isArray(man.towns) || !man.towns.length) { bad('streets/manifest.json', 'lists no towns'); return }
+  for (const k of ['about', 'rule']) if (!man[k]) bad('streets/manifest.json', `has no ${k}`)
+  checkCopy('streets/manifest.json about', man.about)
+  for (const [island, c] of Object.entries(man.centrelines || {})) {
+    for (const k of ['id', 'url', 'licence', 'fetched']) if (!c[k]) bad(`streets/manifest.json centrelines ${island}`, `has no ${k}`)
+    if (c.id) useSource(`streets/manifest.json centrelines ${island}`, c.id)
+  }
+  const ids = new Set()
+  const counts = { towns: 0, n: 0, km: {}, bytes: 0, byYear: {} }
+  const listed = new Set()
+  const boxes = []
+  for (const t of man.towns) {
+    const at = `streets/manifest.json ${t.id}`
+    if (!ID.test(t.id || '')) bad(at, 'id must be kebab-case ASCII')
+    checkHawaiian(`${at} name`, t.name)
+    if (!ISLANDS.has(t.island)) bad(at, `island “${t.island}” is not an island pack`)
+    const b = t.bounds
+    if (!(Array.isArray(b) && b.length === 4 && b[0] < b[2] && b[1] < b[3])) { bad(at, 'bounds must be [west, south, east, north]'); continue }
+    const pb = packs.get(t.island)
+    if (pb && (b[0] < pb[0] || b[1] < pb[1] || b[2] > pb[2] || b[3] > pb[3])) bad(at, `bounds lie outside the ${t.island} pack`)
+    for (const q of boxes) if (b[0] < q.b[2] && q.b[0] < b[2] && b[1] < q.b[3] && q.b[1] < b[3]) bad(at, `its box overlaps ${q.id}'s`)
+    boxes.push({ id: t.id, b })
+    if (!Array.isArray(t.sheets) || !t.sheets.length) { bad(at, 'names no sheets'); continue }
+    let last = -Infinity
+    for (const s of t.sheets) {
+      if (!(Number.isInteger(s.year) && s.year > last)) bad(at, 'its sheets must be in order of year')
+      last = s.year
+      useSource(`${at} sheet ${s.year}`, s.source)
+      if (S.get(s.source) && !S.get(s.source).opened) bad(`${at} sheet ${s.year}`, `source “${s.source}” was not opened`)
+      if (!(Array.isArray(s.shift) && s.shift.length === 2)) bad(`${at} sheet ${s.year}`, 'has no shift')
+    }
+    const file = join(DATA, 'streets', t.file || '')
+    listed.add(t.file)
+    if (!t.file || !existsSync(file)) { bad(at, `file ${t.file} is missing`); continue }
+    counts.towns++
+    const fc = load(`streets/${t.file}`)
+    if (fc?.type !== 'FeatureCollection' || !Array.isArray(fc.features)) { bad(`streets/${t.file}`, 'is not a FeatureCollection'); continue }
+    const sheetSources = new Set(t.sheets.map((s) => s.source))
+    const years = new Set(t.sheets.map((s) => s.year))
+    const kmBy = {}
+    let n = 0
+    for (const f of fc.features) {
+      const p = f.properties || {}
+      const fat = `streets/${t.file} ${p.id}`
+      if (!ID.test(p.id || '')) bad(fat, 'id must be kebab-case ASCII')
+      else if (ids.has(p.id)) bad(fat, 'id is not unique')
+      ids.add(p.id)
+      if (p.town !== t.id) bad(fat, `town “${p.town}” is not ${t.id}`)
+      if (!CLASSES.has(p.class)) bad(fat, `class “${p.class}” is not ${[...CLASSES].join(' | ')}`)
+      if (typeof p.layerName !== 'string' || !p.layerName) bad(fat, 'has no layerName')
+      if (!(Number.isInteger(p.from) && p.from >= YEARS[0] && p.from <= YEARS[1])) bad(fat, `from ${p.from} is not a year from ${YEARS[0]} to ${YEARS[1]}`)
+      if (p.to !== null && !(Number.isInteger(p.to) && p.to >= p.from)) bad(fat, 'to must be null or a year not before from')
+      if (p.datePrecision !== 'by') bad(fat, 'a street is dated “by” the sheet that first shows it')
+      if (!p.by || !(p.sources || []).includes(p.by)) bad(fat, `by “${p.by}” is not among its sources`)
+      else if (!S.get(p.by)?.opened) bad(fat, `by “${p.by}” names a source not opened`)
+      if (p.after !== null && !(sheetSources.has(p.after) && (p.sources || []).includes(p.after))) bad(fat, `after “${p.after}” is not one of the town's sheets among its sources`)
+      if (sheetSources.has(p.by) && !years.has(p.from)) bad(fat, `from ${p.from} is not the year of the sheet ${p.by}`)
+      if (!(Array.isArray(p.seen) && p.seen.length === t.sheets.length && p.seen.every((v) => v === null || (v >= 0 && v <= 1)))) bad(fat, 'seen must give a share (or null) for each of the town sheets')
+      for (const s of p.sources || []) useSource(fat, s)
+      const g = f.geometry
+      if (g?.type !== 'LineString' || !Array.isArray(g.coordinates) || new Set(g.coordinates.map((c) => c.join(','))).size < 2) { bad(fat, 'must be a LineString of two distinct points or more'); continue }
+      // (it meets its town's box: the bake keeps a segment whose middle point lies in it, and joins segments end to end)
+      const m = 0.0005
+      const xs = g.coordinates.map((c) => c[0])
+      const ys = g.coordinates.map((c) => c[1])
+      if (Math.max(...xs) < b[0] - m || Math.min(...xs) > b[2] + m || Math.max(...ys) < b[1] - m || Math.min(...ys) > b[3] + m) bad(fat, 'lies outside its town’s box')
+      let km = 0
+      for (let i = 1; i < g.coordinates.length; i++) km += kmBetween(g.coordinates[i - 1], g.coordinates[i])
+      kmBy[p.from] = (kmBy[p.from] || 0) + km
+      counts.byYear[p.from] = (counts.byYear[p.from] || 0) + km
+      n++
+    }
+    counts.n += n
+    if (t.stats?.segments !== n) bad(at, `stats.segments ${t.stats?.segments}, but the file has ${n}`)
+    counts.km[t.id] = Object.entries(kmBy).sort((a, c) => a[0] - c[0]).map(([y, k]) => `${y} ${k.toFixed(1)}`).join(', ')
+  }
+  for (const f of readdirSync(join(DATA, 'streets'))) {
+    counts.bytes += readFileSync(join(DATA, 'streets', f)).length
+    if (f !== 'manifest.json' && !listed.has(f)) bad(`streets/${f}`, 'is not listed in streets/manifest.json')
+  }
+  if (counts.bytes > BUDGET) bad('streets/', `${(counts.bytes / 1e6).toFixed(2)} MB, over the ${BUDGET / 1e6} MB budget`)
+  streetCounts = counts
+}
 // ---------------------------------------------------------------------------
 // geology/: the prologue (DATA.md "Geology: the making of the islands"). The hand-written files
 // (volcanoes.json, landslides.geojson, chapters.json) are required once the directory exists; the bake's

@@ -3431,5 +3431,29 @@
     "read": "title",
     "note": "Not opened: listed by the National Map’s products service on 2026-11-06 (the Honolulu quadrangle in those editions, as GeoPDF and GeoTIFF), not downloaded or read.",
     "wanted": "Each edition’s GeoTIFF over Honolulu, Kailua and Kāneʻohe (and their neighbouring quadrangles), read as the streets bake reads the State’s sheets, to date the streets built between the 1943 sheet and the sheet of about 2000, which the bake now dates by the latter."
-  }
+  },
+  {
+      "id": "cobb-1905",
+      "title": "The Commercial Fisheries of the Hawaiian Islands (Bulletin of the United States Fish Commission 23, for 1903)",
+      "author": "John N. Cobb",
+      "year": 1905,
+      "url": "https://archive.org/details/cu31924003261801",
+      "access": "open",
+      "opened": true,
+      "read": "part",
+      "note": "Read in the Internet Archive's scan of Cornell's copy on 2026-11-06: the fish ponds (pp. 745–748): how the sea ponds and the interior ponds are built, and the list of the ponds still in use or in traces about 1900, by island, with their acreage. The fieldwork is of 1900–01.",
+      "wanted": "the rest of the report for Koʻolaupoko: who worked the Kailua and Kāneʻohe ponds about 1900 and what they took"
+    },
+  {
+      "id": "wikipedia-royal-hawaiian-hotel",
+      "title": "Royal Hawaiian Hotel",
+      "author": "Wikipedia",
+      "year": 2026,
+      "url": "https://en.wikipedia.org/wiki/Royal_Hawaiian_Hotel",
+      "access": "open",
+      "opened": true,
+      "read": "part",
+      "tertiary": true,
+      "note": "Read on 2026-11-06 as a finding aid: opened on 1 February 1927."
+    }
 ]
