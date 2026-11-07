@@ -1984,7 +1984,7 @@ function checkStreets() {
     if (!Array.isArray(t.sheets) || !t.sheets.length) { bad(at, 'names no sheets'); continue }
     let last = -Infinity
     for (const s of t.sheets) {
-      if (!(Number.isInteger(s.year) && s.year > last)) bad(at, 'its sheets must be in order of year')
+      if (!(Number.isInteger(s.year) && s.year >= last)) bad(at, 'its sheets must be in order of year')
       last = s.year
       useSource(`${at} sheet ${s.year}`, s.source)
       if (S.get(s.source) && !S.get(s.source).opened) bad(`${at} sheet ${s.year}`, `source “${s.source}” was not opened`)

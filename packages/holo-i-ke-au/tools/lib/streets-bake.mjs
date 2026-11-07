@@ -43,6 +43,7 @@ import { inflateSync } from 'node:zlib'
 import { writePNG } from './png.mjs'
 import { CENTRELINES, SHEET_PIXEL, TOWNS, centrelineSource, sheetGrid, townPaths, townSheets } from './streets-sources.mjs'
 import { placeMap, registeredPaths, warpTile } from './streets-registered.mjs'
+import { DIRECTORIES, directoryFor } from './streets-directories.mjs'
 
 const PIECE = 80
 // (dark enough that the contours, printed brown, are not ink: a subdivision on a
@@ -512,7 +513,7 @@ function simplify(line, lat, tol) {
  * no third run of that kind meets them there; their `seen` summed.
  */
 function joinRuns(runs) {
-  const keyOf = (r) => `${r.name}|${r.arterial}|${r.from}|${r.by}|${r.after}`
+  const keyOf = (r) => `${r.name}|${r.arterial}|${r.from}|${r.by}|${r.after}|${r.shownBy}`
   const pt = (c) => `${c[0].toFixed(6)},${c[1].toFixed(6)}`
   const groups = new Map()
   for (const r of runs) {
@@ -675,12 +676,16 @@ async function bakeTown(dir, town, ledger, log, draw = null) {
       }
     }
     const by = dated ? sheets[k].source : L.id
-    runs.push({ name: g.name, arterial: g.arterial, from, by, after, seen, lonlat: g.lonlat, len: g.len })
-    byYear[from] = round((byYear[from] || 0) + g.len / 1000, 2)
+    // (a stretch a map shows within a directory's reach, of a street the directory lists: by the directory: streets-directories.mjs)
+    const dir = dated ? directoryFor(town, g.name, from) : null
+    if (dir) runs.push({ name: g.name, arterial: g.arterial, from: dir.year, by: dir.source, after: null, shownBy: by, seen, lonlat: g.lonlat, len: g.len })
+    else runs.push({ name: g.name, arterial: g.arterial, from, by, after, seen, lonlat: g.lonlat, len: g.len })
+    const y = runs[runs.length - 1].from
+    byYear[y] = round((byYear[y] || 0) + g.len / 1000, 2)
   }
   // a street's segments of one date joined end to end where nothing else of that street and date meets them
   for (const r of joinRuns(runs)) {
-    const sources = [...new Set([L.id, r.by, ...(r.after ? [r.after] : [])])]
+    const sources = [...new Set([L.id, r.by, ...(r.after ? [r.after] : []), ...(r.shownBy ? [r.shownBy] : [])])]
     features.push({
       type: 'Feature',
       properties: {
@@ -693,6 +698,7 @@ async function bakeTown(dir, town, ledger, log, draw = null) {
         datePrecision: 'by',
         by: r.by,
         after: r.after,
+        ...(r.shownBy ? { shownBy: r.shownBy } : {}),
         seen: r.seen.map((q) => (q.cov > 0 ? round(q.len / q.cov, 2) : null)),
         sources,
       },
@@ -745,6 +751,7 @@ export async function bakeStreets({ dir, out, towns, ledger, log, draw = null })
     baked: new Date().toISOString().slice(0, 10),
     tool: 'tools/bake-streets.mjs',
     centrelines,
+    directories: DIRECTORIES.map((d) => ({ source: d.source, town: d.town, year: d.year, within: d.within, streets: d.streets, lost: d.lost })),
     towns: TOWNS.filter((t) => entries.has(t.id)).map((t) => entries.get(t.id)),
   }
   writeFileSync(mPath, JSON.stringify(m, null, 2) + '\n')
