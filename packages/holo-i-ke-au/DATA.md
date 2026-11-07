@@ -449,6 +449,46 @@ years) if the eras move. The coda stands at `now` whole: the timeline runs
 on past the coda's own year to the present ("District packs" below), and
 the layers hold at `now` all the way.
 
+**Before 1450.** The eras before contact use `contact` itself; the app thins
+it for the years before 1450 by a population curve (`EARLY` in
+`src/config.js`, read by the land overlay's shader and by the settlements),
+after Dye, "Population Trends in Hawai'i Before 1778", *Hawaiian Journal of
+History* 28 (1994), opened and read in full at
+<http://www.pelagicos.net/BIOL3010/readings/Dye_1994.pdf>, whose fig. 1 is
+Dye and Komori's curve (*New Zealand Journal of Archaeology* 14, 1992; wanted:
+the eVols copy sits behind a browser check) from 599 radiocarbon dates: about
+20,000 people in 1150, a Growth Phase to a prehistoric maximum of 140,000–
+200,000 by 1450, and an Equilibrium Phase to 1778, ending at 110,000–150,000.
+So from 1150 to 1450 the settlement grows exponentially, a straight line in
+its log bytes, from 20,000 / 130,000 of the 1778 layer (130,000 the middle of
+Dye's 1778 range; 0.185 of 255 bytes taken off at 1150) to the whole of it,
+the leeward dryland fields growing in over the same years; from 1450 the
+1778 layers stand whole, so 1480 (Māʻilikūkahi's era) holds the share 1.0 of
+1778, as Dye's curve has it at its maximum. Dye's curve rests on the long
+chronology of settlement from about 400; with settlement now put about
+1000–1200, the growth may have run later, and Kirch's "Like Shoals of Fish"
+(in Kirch and Rallu, eds., *The Growth and Collapse of Pacific Island
+Societies*, 2007) is wanted for a curve on the short chronology. Two local
+records point the same way: Kahikinui's dryland settlement began about 1400
+and peaked in 1700–1800 (Kirch and others, PNAS 2004, the abstract), and
+Kōloa's irrigated field system was begun about 1450 and in place by the
+mid-1500s (Hammatt, as P. T. Young gives it).
+
+**Counts by ahupuaʻa.** Where the earliest counts are by land, they set how
+many each ahupuaʻa holds in `contact`, and the rule only where within it
+(`AHUPUAA_COUNTS` in `tools/lib/layers-model.mjs`; the manifest repeats it as
+`methods.contact.settlement.countsByAhupuaa`). Kauaʻi: the 23 lands Ke Kumu
+Hawaii counted in 1835 (23 Dec. 1835 p. 204, Kona from Nuʻuolo to Hanapēpē;
+14 Oct. 1835 p. 164, Keālia to Kalalau; read in the nupepa-hawaii.com
+transcriptions) each take their count's share of the island's 1778 people,
+and every land the lists leave out (the plain from Kapaʻa to Kōloa, east
+Kona, three Nāpali lands) takes together what the 1836 total of 8,934
+(Thrum) leaves: 37%. The 324 people of listed names no boundary has
+(Kekupua, Homaikawaʻa, Betelehema) are shared over all. A land name must be
+in `boundaries/ahupuaa.geojson`, or the bake stops. Niʻihau is one ahupuaʻa
+there and its counts are of the whole island, so the rule alone places its
+people. The shares are of 1835, after half a century of uneven decline.
+
 ### `layers/manifest.json`
 
 ```jsonc
@@ -486,7 +526,7 @@ the layers hold at `now` all the way.
 
 | keyframe | cultivation | settlement | forest |
 | --- | --- | --- | --- |
-| contact 1778 | modelled: the Kurashima–Kirch traditional agriculture zones, a valley-floor loʻi rule read from the pack, the 1848–1855 kuleana parcels, a fishpond-shore rule | modelled: fields, shore and kuleana, and a floor that thins inland, scaled per island to King's 1779 estimate (Niʻihau and Kahoʻolawe back-cast from 1832) | modelled: rain, elevation and lava age, cleared below 460–760 m after Kirch, never less than the native forest standing now |
+| contact 1778 | modelled: the Kurashima–Kirch traditional agriculture zones, a valley-floor loʻi rule read from the pack, the 1848–1855 kuleana parcels, a fishpond-shore rule | modelled: fields, shore and kuleana, and a floor that thins inland, scaled per island to King's 1779 estimate (Niʻihau and Kahoʻolawe back-cast from 1832); on Kauaʻi each ahupuaʻa's share from the 1835 counts | modelled: rain, elevation and lava age, cleared below 460–760 m after Kirch, never less than the native forest standing now |
 | mahele 1853 | mixed: kuleana parcels mapped, the contact zones kept at reduced weight | mixed: the 1853 census by island, spread by kuleana parcels and the contact weights | none (interpolate) |
 | kingdom 1896 | mixed: 1900 cane and pineapple mapped, loʻi kept at 0.3–0.7 | mixed: the 1896 census by district, towns, cane camps, kuleana | mixed: between the contact forest less cane and new lava, and the forest standing now; forest reserves keep more |
 | now 2020 | mapped: 2020 agricultural baseline crops | mapped: 2020 census block groups spread over CAH developed land | mapped: CAH native forest classes |

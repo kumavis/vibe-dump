@@ -559,12 +559,15 @@ Hawaiʻi 3,857, 2,690, 1,991 km²; Kauaʻi 446, 333, 210; Maui 567, 414, 263; O�
   length of coast (vol. III, p. 127), which favours long dry coasts. Niʻihau is now
   back-cast from its 1,047 of 1832 as Kahoʻolawe is (3,210); Lānaʻi and Molokaʻi
   (6.0 times) keep King's.
-- **The 1778 pattern stands for every era before it.** The eras from Māʻilikūkahi
-  (1480) to Kalaniʻōpuʻu use the contact keyframe whole; the app thins it only before
-  1450. Kōloa's irrigated field system was begun about 1450 and in place by the
-  mid-1500s (Hammatt, as Young gives it), and Kahikinui's dryland settlement began
-  about 1400 and peaked in 1700–1800 (Kirch and others 2004), so 1480 is drawn
-  fuller than it was.
+- **The 1778 pattern stands for every era from 1450.** The app thins the contact
+  keyframe before 1450 by Dye's curve (1994, read in full; after Dye and Komori
+  1992): about 20,000 people in 1150, growth to the prehistoric maximum by 1450, an
+  equilibrium to 1778 (DATA.md, "Before 1450"). By that curve 1480 holds the whole
+  of 1778. The local records lean later: Kōloa's irrigated field system was begun
+  about 1450 and in place by the mid-1500s (Hammatt, as Young gives it), and
+  Kahikinui's dryland settlement began about 1400 and peaked in 1700–1800 (Kirch
+  and others 2004); Dye's curve rests on the long chronology, and Kirch's 2007
+  curve on the short one is wanted.
 - **Kauaʻi against its 1835 counts** (issue 3, 2026-11-06). Ke Kumu Hawaii printed
   the 1835 count by ahupuaʻa for Kona from Nuʻuolo to Hanapēpē with Niʻihau (23 Dec.,
   p. 204) and for Keālia to Kalalau (14 Oct., p. 164), read in the nupepa-hawaii.com
@@ -579,7 +582,10 @@ Hawaiʻi 3,857, 2,690, 1,991 km²; Kauaʻi 446, 333, 210; Maui 567, 414, 263; O�
   10 people a km² from 79% of the island to 46%, on Niʻihau from 98% to 44%. What still misses: Kalalau,
   Hanakoa and Hāʻena (the floors too narrow for a 54 m pack) and Hanapēpē, which the
   model gives a third of its 1835 share. Kauaʻi's 54,000 is 4.9 times its 1832
-  count, between Hawaiʻi Island's 3.3 and Molokaʻi's 6.0, and kept.
+  count, between Hawaiʻi Island's 3.3 and Molokaʻi's 6.0, and kept. Since then the
+  counts set each counted land's share outright and the rule places people within
+  it (DATA.md, "Counts by ahupuaʻa"): every land within a tenth of its 1835 share,
+  the plain at 38%.
 - **East Hawaiʻi and windward East Maui are thin in 1778** for the reason above. The
   published zones show nothing there and the awards are thinly digitised on Hawaiʻi
   Island.
