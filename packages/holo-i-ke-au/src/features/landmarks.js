@@ -355,7 +355,7 @@ function hall(rand, look, storeys) {
   if (look === 'barracks') {
     for (let k = -5; k <= 5; k++) B.box((k * L) / 11.5, 1 + h, W / 2 - 0.6, 2.4, 1.4, 1.4, wall, MAT.masonry)
     B.box(0, 1 + h, 0, L - 1, 0.4, W - 3, roofC.map((v) => v * 0.9), MAT.masonry)
-    B.box(0, 0.95, W / 2 - 3, 10, h + 4.1, 7, wall, MAT.masonry)
+    B.box(0, 0.95, W / 2 - 2.9, 10, h + 4.1, 7.2, wall, MAT.masonry)
     for (const sx of [-1, 1]) B.box(sx * 4.2, 1 + h + 4, W / 2 - 3, 1.5, 1.6, 6.4, wall, MAT.masonry)
     return B
   }
@@ -370,7 +370,8 @@ function hall(rand, look, storeys) {
   }
   // the tower over the front's middle
   const th = look === 'mission' ? h + 14 : look === 'stone' ? h + 4 : h + 11
-  B.box(0, 0.9, W / 2 - 4, 9, th + 0.1, 9, wall, MAT.masonry)
+  // (its front a step proud of the plinth's, never in its plane)
+  B.box(0, 0.9, W / 2 - 3.9, 9, th + 0.1, 9.2, wall, MAT.masonry)
   if (look === 'mission') hip(B, 9, 9, 1 + th, 4, 0.6, roofC, { z: W / 2 - 4 })
   else if (look === 'stone') pyramid(B, 9.4, 1 + th, 6, roofC, 0, W / 2 - 4)
   else {
