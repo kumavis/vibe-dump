@@ -2025,8 +2025,10 @@ if (nuuanuHere) {
     const all = await census(1853, Infinity)
     const st = await ui('app.districts.cur.features.settlements.stats()')
     if (!(c.total >= 150 && c.by.hale > 20 && (c.by.frame || 0) + (c.by.adobe || 0) > 20)) throw new Error(`within 1.5 km: ${brief(c)}`)
-    if (!all.by.church || !st.landmarks.some((l) => /1842/.test(l))) throw new Error(`no church of 1842: ${st.landmarks}`)
-    console.log(`      within 1.5 km: ${brief(c)}; landmarks ${st.landmarks.join(', ')}`)
+    // (the modelled church of 1842, or a named one standing by 1842 in its place: landmarks.json)
+    const named1842 = (st.named || []).filter((n) => { const m = n.match(/\(church\) (\d+)/); return m && +m[1] <= 1842 })
+    if (!all.by.church || !(st.landmarks.some((l) => /1842/.test(l)) || named1842.length)) throw new Error(`no church of 1842: ${st.landmarks}; named ${st.named}`)
+    console.log(`      within 1.5 km: ${brief(c)}; landmarks ${st.landmarks.join(', ')}${named1842.length ? `; named by 1842 ${named1842.join(', ')}` : ''}`)
   })
   await check('settlements: stores and masonry blocks by 1896, the town on a grid of streets', async () => {
     await atHarbour(1896)
@@ -2317,7 +2319,7 @@ if (nuuanuHere) {
     }
     console.log(`      footprints checked pair by pair: ${out.join(', ')}`)
   })
-  await check('settlements: no ground carries two buildings drawn at once, whole or fading, of the district’s, the island’s or the works’, and a view at rest catches none fading', async () => {
+  await check('settlements: no ground carries two buildings drawn at once, whole or fading, of the district’s, the island’s, the works’ or the named, and a view at rest catches none fading', async () => {
     // (ISSUES.md 9: two placements on one ground, or the one going and the
     // one coming on a lot dithered into each other, read as a stipple. Each
     // view rests at a year four tenths past a whole one: the buildings rest
@@ -2336,14 +2338,50 @@ if (nuuanuHere) {
     }
     console.log(`      drawn within 1.4 km, pair by pair: ${out.join('; ')}`)
   })
+  await check('settlements: the named buildings at their footprints in their years, the modelled ones giving way', async () => {
+    // (landmarks.json, DATA.md "Landmarks, dated": each one the district's
+    // box holds is drawn, whole in its years and gone outside them)
+    const want = await ui(`(async () => { const fc = await (await fetch(app.data.abs('landmarks.json'))).json().catch(() => null); return (fc?.features || []).map((f) => [f.properties.id, f.properties.from, f.properties.to, f.properties.type]) })()`)
+    if (!want.length) return console.log('      no landmarks.json')
+    const first = want.reduce((m, w) => Math.min(m, w[1]), Infinity)
+    await atHarbour(first)
+    const r = await ui(`(() => {
+      const S = app.districts.cur.features.settlements
+      const named = S.named.map((n) => [n.id, n.from, Number.isFinite(n.to) ? n.to : null, +n.e.toFixed(2), +(n.ax * 200).toFixed(0), +(n.az * 200).toFixed(0)])
+      const meshes = S.group.children.filter((m) => m.name.startsWith('named ')).reduce((k, m) => k + m.count, 0)
+      return { named, meshes, landmarks: S.stats().landmarks }
+    })()`)
+    if (!r.named.length) throw new Error('the district draws none of them')
+    if (r.meshes !== r.named.length) throw new Error(`${r.named.length} named, ${r.meshes} drawn`)
+    // (each one's fade as its mesh carries it: none the whole year before its from, whole in its from and its to, none the year after)
+    const wrong = await ui(`(() => {
+      const S = app.districts.cur.features.settlements, out = []
+      const sm = (a, b, x) => { const t = Math.max(0, Math.min(1, (x - a) / (b - a))); return t * t * (3 - 2 * t) }
+      for (const m of S.group.children.filter((q) => q.name.startsWith('named '))) {
+        const a = m.geometry.attributes.aSpan.array
+        for (let i = 0; i < m.count; i++) {
+          const s = a.slice(i * 4, i * 4 + 4), from = Math.round(s[1] + 0.1), to = s[2] > 9e4 ? null : Math.round(s[2] - 0.1)
+          const w = (y) => sm(s[0], s[1], y) * (1 - sm(s[2], s[3], y))
+          for (const [y, want] of [[from - 1, 0], [from, 1], ...(to === null ? [] : [[to, 1], [to + 1, 0]])]) if (Math.abs(w(y) - want) > 1e-6) out.push(m.name + ' #' + i + ' at ' + y + ': ' + w(y).toFixed(2))
+        }
+      }
+      return out
+    })()`)
+    if (wrong.length) throw new Error(wrong.slice(0, 4).join('; '))
+    // a named church of 1842 stands for the modelled one, a named tower of 1926 for the modelled clock
+    if (r.named.some((n) => want.find((w) => w[0] === n[0])?.[3] === 'church' && n[1] <= 1842) && r.landmarks.some((l) => / 1842$/.test(l))) throw new Error(`the modelled church of 1842 stands as well: ${r.landmarks}`)
+    console.log(`      ${r.named.length} of ${want.length} drawn by the district (id, from, to, ×life, metres drawn): ${r.named.map((n) => n.join(' ')).join('; ')}`)
+  })
   await check('settlements: no two faces of a kit in one plane where they overlap', async () => {
     // every pair of triangles in a kit that face the same way in one plane
     // (within 2 cm) and overlap by area: the faces that would fight over the
     // depth buffer whatever the camera did
     const r = await ui(`(() => {
       const S = app.districts.cur?.features?.settlements
-      const kits = S?.kits || [...app.towns.islands.values()].find((i) => i.ready)?.kits
-      if (!kits) return null
+      const own = S?.kits || [...app.towns.islands.values()].find((i) => i.ready)?.kits
+      if (!own) return null
+      // (and the named buildings' kits: features/landmarks.js)
+      const kits = { ...own, ...(S?.namedKits?.size ? { named: [...S.namedKits.values()] } : {}) }
       const area2 = (q) => { let a = 0; for (let i = 0; i < q.length; i++) { const p = q[i], n = q[(i + 1) % q.length]; a += p[0] * n[1] - n[0] * p[1] } return a / 2 }
       const clip = (sub, cl) => { let out = sub; const sg = Math.sign(area2(cl)) || 1
         for (let i = 0; i < cl.length && out.length; i++) { const a = cl[i], b = cl[(i + 1) % cl.length], ins = (p) => sg * ((b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])) >= -1e-9, inp = out; out = []

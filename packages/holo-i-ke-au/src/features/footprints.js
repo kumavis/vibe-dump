@@ -9,6 +9,8 @@
 // (local x to (cos a, −sin a) and local z to (sin a, cos a), as THREE turns
 // about y): `box` its extents [x0, x1, z0, z1] in world units about (x, z).
 
+import { namedWeight } from './landmarks.js'
+
 /** How far a fade (x in, y in; z out, w out) has a building in at year y. */
 const weight = (s, y, k = 0) => smooth(s[k], s[k + 1], y) * (1 - smooth(s[k + 2], s[k + 3], y))
 const smooth = (a, b, x) => {
@@ -19,7 +21,7 @@ const smooth = (a, b, x) => {
 /**
  * What is drawn in `year` within `radius` world units of (x, z), as drawn
  * now: the district's (while it is down), the island's (less those the
- * district's yield takes over) and the works' blocks,
+ * district's yield takes over), the works' blocks and the named buildings,
  * each faded in at least `min` (0.999: standing whole; 0.02: drawn at all,
  * a building caught fading too).
  */
@@ -32,6 +34,10 @@ export function standing(app, year, x, z, radius, min = 0.999) {
       if (!near(S.ix[i], S.iz[i]) || S.weightAt(i, year) < min) continue
       const kit = S.variants[S.vOf[i]].kit
       out.push({ src: S.iland[i] ? 'landmark' : 'district', id: `${S.variants[S.vOf[i]].name}#${i}`, x: S.ix[i], z: S.iz[i], a: S.ia[i], box: kit.box.map((v) => v * S.ish[i]) })
+    }
+    for (const n of S.named ?? []) {
+      if (!near(n.x, n.z) || namedWeight(n, year) < min) continue
+      out.push({ src: 'named', id: n.id, x: n.x, z: n.z, a: n.a, box: [-n.ax, n.ax, -n.az, n.az] })
     }
   }
   const yu = app.towns?.yieldU

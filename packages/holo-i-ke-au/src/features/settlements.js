@@ -19,7 +19,10 @@
 // gazetteer has their place or the density peaks: the church of 1842 (at
 // `kawaiahao` in the district that holds it, or where the town is densest
 // if the gazetteer has no such place), a clock tower at the harbour from
-// 1926 (only if the gazetteer has `aloha-tower`); no other building is named.
+// 1926 (only if the gazetteer has `aloha-tower`); and the named buildings of
+// landmarks.json (features/landmarks.js), each at its surveyed footprint in
+// its years, whose ground the lots and those landmarks keep off (a named
+// church of 1842 or clock tower of 1926 stands for the modelled one).
 //
 // How it is worked out:
 //
@@ -109,6 +112,7 @@ import { EARLY } from '../overlay/land.js'
 import { geometryPoint } from '../geo.js'
 import { DISTRICT } from '../config.js'
 import { TREELESS, keptWeight } from '../data/works.js'
+import { loadLandmarks, namedFor, namedTest, namedBreaks, namedStands, namedMeshes, namedWeight } from './landmarks.js'
 
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 export const smooth = (a, b, x) => {
@@ -1348,6 +1352,12 @@ export class Settlements extends Scatter {
       this.dep = true
       if (ep.year >= L.from) return null
     }
+    // (and off the named buildings' ground in their years: landmarks.js)
+    if (this.named?.length) {
+      const t = namedTest(this.named, x, z, ax, az, a, ep.year)
+      if (t) this.dep = true
+      if (t === 2) return null
+    }
     return top
   }
 
@@ -1453,6 +1463,7 @@ export class Settlements extends Scatter {
       }
     }
     for (const L of this.landmarks) breaks.add(L.from)
+    for (const y of namedBreaks(this.named || [])) breaks.add(y)
     for (const y of this.works?.breaks || []) breaks.add(y)
     this.years(breaks)
     // the epochs: the stretches between breaks, each with its patches and features
@@ -1551,6 +1562,9 @@ export class Settlements extends Scatter {
     lap('lots')
     // the landmarks first (the scatter keeps clear of them), then the years
     this.landmarks = []
+    // (and the named buildings, whose ground the lots and the landmarks keep off: landmarks.js)
+    this.named = namedFor(this.app, await loadLandmarks(this.app), (x, z) => this.edgeAt(x, z), PART + PART_GAP)
+    if (this.disposed) return false
     this.epochYears()
     this.placeLandmarks(lots)
     if (this.landmarks.length) this.epochYears()
@@ -1564,6 +1578,32 @@ export class Settlements extends Scatter {
     this.instances = null
     this.clearing()
     return true
+  }
+
+  /**
+   * The ground a named building stands on (metres, landmarks.js): the highest
+   * under its footprint in its first year, eased into the island's toward the
+   * district's edge as allows() reads a lot's, and never under the shore's.
+   */
+  namedGround(n) {
+    const ep = this.epochs[this.epochOfYear(n.from)]
+    const c = Math.cos(n.a)
+    const s = Math.sin(n.a)
+    const parent = this.rec.parent
+    let top = -Infinity
+    for (const [u, v] of [[0, 0], [-1, -1], [1, -1], [1, 1], [-1, 1], [0, -1], [1, 0], [0, 1], [-1, 0]]) {
+      const px = n.x + u * n.ax * c + v * n.az * s
+      const pz = n.z - u * n.ax * s + v * n.az * c
+      const [i, j] = this.texelOf(px, pz)
+      let g = this.groundAt(i, j, ep.state)
+      const edge = this.edgeAt(px, pz)
+      if (parent && edge < DISTRICT.margin) {
+        const w = smooth(DISTRICT.band, DISTRICT.margin, edge)
+        g = Math.max(g, islandMetres(this.app, parent, px, pz, ep.year) * (1 - w) + g * w)
+      }
+      top = Math.max(top, g)
+    }
+    return Math.max(top, 0.6)
   }
 
   /**
@@ -1582,6 +1622,7 @@ export class Settlements extends Scatter {
       const kd = KINDS[kind]
       const e = this.epochOfYear(from)
       if (this.edgeAt(x, z) < PART + PART_GAP) return false
+      if (this.named?.length && namedTest(this.named, x, z, kit.hx * kd.sh, kit.hz * kd.sh, face, -Infinity)) return false
       const top = this.allows(x, z, kit.hx * kd.sh, kit.hz * kd.sh, face, kd.relief + 2, e)
       if (top === null) return false
       this.landmarks.push({ kind, name, x, z, face, from, r: Math.hypot(kit.hx, kit.hz) * kd.sh, ax: kit.hx * kd.sh, az: kit.hz * kd.sh, top })
@@ -1610,8 +1651,8 @@ export class Settlements extends Scatter {
     const xz = pc ? proj.toWorld(geometryPoint(pc.geometry)) : null
     const here = xz && this.edgeAt(xz[0], xz[1]) >= 0
     const name = here ? 'Kawaiahaʻo' : null
-    let placed = !!pc && !here
-    if (here) {
+    let placed = (!!pc && !here) || namedStands(this.named || [], 'church', 1842)
+    if (here && !placed) {
       const l = lotNear(xz[0], xz[1])
       placed = add('church', xz[0], xz[1], l ? l.face : 0, 1842, name)
     }
@@ -1654,7 +1695,7 @@ export class Settlements extends Scatter {
       if (add(from < 1860 ? 'church' : 'spire', l.x, l.z, l.face, from, null)) n++
     }
     const pt = places.get('aloha-tower')
-    if (pt) {
+    if (pt && !namedStands(this.named || [], 'tower', 1926)) {
       const [x, z] = proj.toWorld(geometryPoint(pt.geometry))
       const l = lotNear(x, z)
       add('clock', x, z, l ? l.face : 0, 1926, pt.name)
@@ -1820,6 +1861,10 @@ export class Settlements extends Scatter {
     // together, the first of them deciding for the rest)
     this.always = []
     for (let i = 0; i < N; i++) if (this.iland[i]) this.always.push(i)
+    // the named buildings (landmarks.js), each its own instance, drawn whatever the thinning
+    const nm = namedMeshes(this.named || [], this.material, (n) => this.namedGround(n), mulberry32(1882), LIFT)
+    this.namedKits = nm.kits
+    for (const m of nm.meshes) this.group.add(m)
     this.frustum = new THREE.Frustum()
     this.pv = new THREE.Matrix4()
     this.box = new THREE.Box3()
@@ -2062,6 +2107,10 @@ export class Settlements extends Scatter {
       this.stamp(this.ix[k], this.iz[k], this.ia[k], this.irx[k], this.irz[k], Math.round(255 * w))
     }
     this.app.towns?.stampInto(this.rec.d.rect, y, (x, z, a, rx, rz, v) => this.stamp(x, z, a, rx, rz, v))
+    for (const n of this.named || []) {
+      const w = namedWeight(n, y)
+      if (w >= 0.02) this.stamp(n.x, n.z, n.a, n.ax * 0.95, n.az * 0.95, Math.round(255 * w))
+    }
     // (and the works no tree stands on, by their weight in the year: their texels found once)
     this.worksClear ??= this.works ? this.works.raster(this.rec.d.rect, this.clearN, TREELESS) : []
     const D = this.clearData
@@ -2145,6 +2194,7 @@ export class Settlements extends Scatter {
       by: c.by,
       hale: c.hale,
       landmarks: this.landmarks.map((L) => `${L.name || L.kind} ${L.from}`),
+      named: (this.named || []).map((n) => `${n.id} (${n.type}) ${n.from}–${Number.isFinite(n.to) ? n.to : ''} ×${n.e.toFixed(2)}`),
       towns: this.townTerms,
       zoning: { zoning: this.zoning.zoning ? `${this.zoning.zoning.W}×${this.zoning.zoning.H}` : null, lud: this.zoning.lud ? `${this.zoning.lud.W}×${this.zoning.lud.H}` : null },
       value: this.values ? 'mask' : 'modelled',
@@ -2164,6 +2214,7 @@ export class Settlements extends Scatter {
       vr.mesh.dispose()
       vr.kit.geometry.dispose()
     }
+    for (const k of this.namedKits?.values() || []) k.geometry.dispose()
     this.material?.dispose()
     this.clearTex?.dispose()
     this.own.uTownClear.value = null

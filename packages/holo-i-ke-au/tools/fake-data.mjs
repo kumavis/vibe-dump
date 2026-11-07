@@ -39,6 +39,9 @@
 // (test-data/real/works/: a runway at Mōkapu, roads through Nuʻuanu), for
 // the smoke to lay on the lidar. Shapes, not a record of any of them.
 //
+// And one test named building (DATA.md "Landmarks, dated"; test-data/landmarks.json)
+// on the test Nuʻuanu's flat, standing from 1845.
+//
 // And a test geology (DATA.md "Geology"; test-data/geology/): a seafloor
 // pack over a box wider than the test archipelago, four stages with their
 // ages over a toy model of the made-up shields (grown in over their shield
@@ -646,6 +649,7 @@ testZoning()
 testDistricts(spots)
 testLayers(spots, g.eras)
 testWorks(spots)
+testLandmarks(spots)
 console.log(`wrote ${out} in ${((Date.now() - t0) / 1000).toFixed(1)} s${flatSea ? ' (flat sea)' : ''}`)
 
 // --- test patches --------------------------------------------------------------------------
@@ -889,7 +893,30 @@ function districtSpots() {
   s.villageNuuanu = find(-157.86, 21.285, N, lowFlat, 0.8)
   // (the loʻi that names rice: Waikalua's, on the bay's south shore)
   s.loiWaikalua = find(-157.79, 21.405, K, lowFlat)
+  // (a named building on the test Nuʻuanu's flat, apart from the village: landmarks.json)
+  s.landmark = find(-157.855, 21.295, N, lowFlat, 0.8)
   return s
+}
+
+/** One test named building (DATA.md "Landmarks, dated") on the test Nuʻuanu's flat, standing from 1845. */
+function testLandmarks(spots) {
+  const fetched = new Date().toISOString().slice(0, 10)
+  const fc = {
+    about: 'test named building (tools/fake-data.mjs)',
+    baked: fetched,
+    types: ['palace', 'hall', 'church', 'house', 'villa', 'statue', 'hotel', 'tower', 'block'],
+    sources: [{ id: 'synthetic', title: 'Test landmarks (tools/fake-data.mjs)', url: 'about:blank', licence: 'test data, not for release', fetched }],
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        geometry: rectRing(spots.landmark, 0.045, 0.032, 20),
+        properties: { id: 'test-palace', name: 'Test Hale', type: 'palace', island: 'oahu', from: 1845, to: null, datePrecision: 'year', precision: 'exact', storeys: 2, layer: { source: 'synthetic', key: 'test' }, listed: 'test-source-a', sources: ['test-source-a'], note: 'A test building, a shape for trying the named-building path.' },
+      },
+    ],
+  }
+  writeFileSync(join(out, 'landmarks.json'), JSON.stringify(fc, null, 1))
+  console.log('  test landmarks: 1')
 }
 
 /** A rectangle w × h km about [lon, lat], turned `rot` degrees anticlockwise: a closed ring, anticlockwise. */
