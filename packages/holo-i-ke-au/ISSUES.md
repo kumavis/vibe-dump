@@ -52,11 +52,15 @@ fix has landed in `dist/` and been looked at again.
   km² falls from 79% to 46% of Kauaʻi and from 98% to 44% of Niʻihau, whose
   people now sit in a ring along the shore. The same rule runs on every
   island. Sources in `methods.contact.settlement` and RESEARCH.md §9.
-- **Still to do:** the Kapaʻa–Kōloa plain holds about half the island's
-  people where the 1835–36 counts by ahupuaʻa give it a third; 1480 is drawn
-  as fully as 1778 though Kōloa's fields were only being laid out around
-  1450; and short orange dashes on Niʻihau at the close zoom come from the
-  ground drawing, not the settlement layer, and want identifying.
+- **Then:** Kauaʻi's 1778 people are shared by its ahupuaʻa in the
+  proportions of the 1835–36 counts (Ke Kumu Hawaii, Thrum), the rule
+  placing people within each; the years before 1450 thin by Dye's population
+  curve (1994, after Dye and Komori 1992: about 20,000 people in 1150,
+  tenfold growth to a maximum by 1450, an equilibrium to 1778), so 1480 holds
+  the whole of 1778 on the long chronology, with Kirch's short chronology
+  recorded as wanted. The short orange dashes on Niʻihau at the close zoom
+  are the ground drawing, not houses.
+- **Status:** landed on the branch.
 
 ### 4. Modern harbour works show around Honolulu before contact
 
@@ -115,9 +119,27 @@ fix has landed in `dist/` and been looked at again.
 
 - **Reported:** "kailua ponds in 1690–1730 have bugged looking walls. Not
   sure if these would even historically have walls".
-- **Open:** what the pond-wall feature draws at Kawainui and Kaʻelepulu in
-  the Koʻolaupoko district in those years, and what the record says each
-  pond was: a kuapā of stone, an earthen bank, or an open lagoon.
+- **Seen:** a stacked-stone wall ran round the whole site outline of every
+  fishpond whatever its kind, stepping with the ground; at Kaʻelepulu the
+  outline ran up the ridge to the west, and the district cut the hillside
+  down to the pond's water level, a stepped cliff that read as a sawtooth
+  wall; both ponds' floors were drawn as the sea's sand and reef, a pale
+  flat under a hand's depth of water.
+- **Record:** both were loko wai, inland fresh-water ponds behind the
+  Kailua sand barrier with natural banks and no seawall (Kikuchi 1973, C23
+  and C67: Type III; Cobb 1905, "dirt sides generally"; Drigot 1982 after
+  Summers 1964), the one built wall a dividing wall with a mākāhā between
+  the two whose place no opened source gives.
+- **Fix:** only a loko kuapā is walled (`pond` set to `kuapa`, `puuone`
+  or `wai` in the district data; a pond without the field counts as kuapā);
+  a pond's floor is dark silt; Kaʻelepulu's outline is clipped to the ground
+  at or below 6 m; the c. 1700 Kawainui stop no longer says "low stone
+  wall". Heʻeia keeps its wall. Sources in sources.json, RESEARCH.md §13.
+- **Open:** where the dividing wall stood; Kawainui's outline is the
+  marsh's 277 ha against the 400–450 acres the sources give the pond;
+  Kikuchi's types for the Kāneʻohe and Mōkapu ponds (Kaluapuhi a puʻuone)
+  not yet applied.
+- **Status:** landed on the branch.
 
 ### 7. Towns from the late 1800s on should follow their real streets
 
