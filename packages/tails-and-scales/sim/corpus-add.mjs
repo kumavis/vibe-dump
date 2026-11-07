@@ -20,7 +20,8 @@
 //   node sim/corpus-add.mjs --set scale --mission field --mode hotseat --policy aggressive --tag field --auto-armies 90 --dry --ref WORKTREE
 //   node sim/corpus-add.mjs --set vehicle --mission field --mode watch --tag carts --races squirrel,serpent --auto-armies 90 --carts 1 --count 3
 //   node sim/corpus-add.mjs --set vehicle --mission field --mode hotseat --policy ride --tag ride --races squirrel,squirrel --auto-armies 90 --carts 2 --need embark,disembark,rearranged
-//   node sim/corpus-add.mjs --set vehicle --mission field --mode bushtail --policy aggressive --tag bail --auto-armies 90 --carts 2 --need bailout
+//   node sim/corpus-add.mjs --set vehicle --mission field --mode bushtail --policy random --tag bail --auto-armies 90 --carts 2 --need bailout,deckfire
+//   node sim/corpus-add.mjs --set hull --mission field --mode hotseat --policy hull --tag bail --auto-armies 90 --carts 2 --need hullbail,hullcharge,deckfire
 //   node sim/corpus-add.mjs --set hull --mission field --terrain fortified --mode watch --tag hulls --races serpent,squirrel --auto-armies 90 --carts 2
 //   node sim/corpus-add.mjs --set hull --mission field --terrain fortified --mode serpent --policy hull --tag hull --auto-armies 90 --carts 2 --need hullpivot,reverse,hullcharge
 //   node sim/corpus-add.mjs --regen bushtail-random-6,hotseat-late-5 [--need …] [--dry]

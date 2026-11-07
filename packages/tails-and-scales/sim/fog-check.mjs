@@ -243,12 +243,14 @@ section('3. the events marked: lines, trays, rows, templates and the scenery')
 section('4. the sight pass on corpus battles: the core\'s own sight, entry by entry')
 {
   // ((F9a) and a Field battle with War-Carts, a hull wrecked with riders
-  // aboard: a rider is seen exactly when its hull is; (F9c) and it is an
+  // aboard (F9c's bushtail-random-bail-1, in place of F9a's bail-3, whose
+  // bail-out F9c's rules no longer play): a rider is seen exactly when its
+  // hull is; (F9c) and it is an
   // eye from its hull's deck: the deck point at its deck eye, the core's
   // sight with its eye-height override, as its shots see)
   // ((F7c) and fort/'s collapse log: two platforms shot out, a unit falling
   // with each, its fall's D3 row among the events marked)
-  const logs = ['sim/baselines/human/bushtail-random-6.json', 'sim/baselines/fort/hotseat-aggressive-climb-5.json', 'sim/baselines/fort/hotseat-collapse-platform-8.json', 'sim/baselines/scale/hotseat-aggressive-field-1.json', 'sim/baselines/scale/hotseat-pilot-grand-1.json', 'sim/baselines/vehicle/bushtail-random-bail-3.json']
+  const logs = ['sim/baselines/human/bushtail-random-6.json', 'sim/baselines/fort/hotseat-aggressive-climb-5.json', 'sim/baselines/fort/hotseat-collapse-platform-8.json', 'sim/baselines/scale/hotseat-aggressive-field-1.json', 'sim/baselines/scale/hotseat-pilot-grand-1.json', 'sim/baselines/vehicle/bushtail-random-bail-1.json']
   for (const file of logs) {
     const log = JSON.parse(readFileSync(join(PKG, file), 'utf8'))
     const G = core.createMatch(log.setup, { out: [] })
