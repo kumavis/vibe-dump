@@ -170,6 +170,15 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       // before the Howdah, 316 at 5), and the Bushtails score 79.0% open
       // and 80.4% fortified, the Howdah −53 ± 40. Reported, not judged, as
       // all of Grand: the Grand rebalance's.)
+      // ((F9c) Both kept, the riders now shooting from their decks: the
+      // Field prices re-fitted to 15 and 5 (data/races/), and Grand played
+      // at its own (sim/army-sim.mjs --check --mission grand, seed 1111),
+      // the Bushtails 48.5% open and 52.8% fortified (inside the band of 6,
+      // reported, not judged), the cart −9 ± 27 and the Howdah −132 ± 54,
+      // the points binding 612 of 1,000 Bushtail lists and 316 of 1,000
+      // Coil ones, as at F9b. A lower cart price would unbind the Bushtails'
+      // lists, and no Howdah price above the floor answers its fit, so by
+      // the War-Cart's precedent neither moves: the Grand rebalance's.)
       prices: {
         squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15, warcart: 150 },
         serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15, howdah: 5 },
@@ -239,7 +248,8 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
   // walk sets a keg off as any wrecker's (F19a), and a hull never climbs a
   // wreck's deck (no vehicle climbs). The ×3 presets field none, so the
   // powder/ corpus, preset against preset, is the same battle either way.
-  // (F9b) The same for the Howdah, at Grand's price, 5, its Field 20.)
+  // (F9b) The same for the Howdah, at Grand's price, 5, its Field 20
+  // ((F9c) 5 since the re-fit, the War-Cart's Field 15).)
   powder: {
     board: { W: 80, H: 56 },
     deploy: 14,

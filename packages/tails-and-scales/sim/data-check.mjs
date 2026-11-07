@@ -1903,10 +1903,14 @@ console.log("\n16. long hulls: the Howdah's record, the footprint rules and thei
   check(w?.name === 'Venom lobber' && w.range === 18 && w.shots === 1 && w.blast === 1.6 && w.S === 5 && w.AP === 1 && w.D === 1 && w.fx === 'spit' && m?.name === 'Coil crush' && m.S === 6 && m.AP === 1 && m.D === 2, "its weapons are DESIGN's: a Venom lobber 18\", 1 shot, a 1.6\" blast, S5 AP1 D1, its look 'spit'; Coil crush S6 AP1 D2", JSON.stringify({ ranged: w, melee: m }))
   // ((F9b's sweep) 20, not the fit's floor of 5: at 5 the Coil's lists took
   // it all but free and Field's score gate failed, 44.9% on open; at 20 both
-  // score gates pass on seeds 1111 and 4444, the Howdah inside its band)
-  check(how?.cost === 20, `its cost is the 20 army-sim's Field gates gave it (${how?.cost}: its fitted worth −13 ± 8 pooled over seeds 1111-3333 at a trial 50, but at the floor, 5, the Field score gate failed on open, 44.9%; at 20 both score gates pass on 1111 and 4444, the Howdah fitted −13 ± 17 and −4 ± 15), a whole multiple of 5 (DESIGN §4.2.5's data)`)
+  // score gates pass on seeds 1111 and 4444, the Howdah inside its band.
+  // (F9c) Re-fitted with its riders shooting from the deck, the floor
+  // again: −52 ± 11 pooled; at 5, the War-Cart at 15, both score gates pass
+  // on both seeds, the Howdah inside its band on each, where at 20 it
+  // misses its band on both)
+  check(how?.cost === 5, `its cost is the floor, 5, F9c's re-fit gave it (${how?.cost}: its fitted worth −52 ± 11 pooled over seeds 1111-3333 at 20, its riders shooting from the deck; at 5, the War-Cart at 15, both Field score gates pass on 1111 and 4444, 54.4% and 54.4%, 54.5% and 54.2%, the Howdah fitted −21 ± 29 and −55 ± 30, inside its bands; at 20 it fits −24 ± 15 and −43 ± 19, outside them), a whole multiple of 5 (DESIGN §4.2.5's data)`)
   const grand = MISSIONS.grand.list.prices?.serpent?.howdah, powder = MISSIONS.powder.list.prices?.serpent?.howdah
-  check(Number.isInteger(grand) && grand % 5 === 0 && grand === powder && grand === 5, `its Grand price (${grand}) is the floor, 5, below its Field cost (${how?.cost}): the War-Cart's test at Grand turned the other way (the floor: at the Field price it then had, 5, the Coil already scored under its band at Grand, and a higher one takes points from the units beside it), and the Powder Field's the same (${powder})`)
+  check(Number.isInteger(grand) && grand % 5 === 0 && grand === powder && grand === 5, `its Grand price (${grand}) is the floor, 5 (its Field cost ${how?.cost}, (F9c) the floor too): the War-Cart's test at Grand turned the other way (the floor: at the Field price it then had, 5, the Coil already scored under its band at Grand, and a higher one takes points from the units beside it), and the Powder Field's the same (${powder})`)
   // ((F9c) its card promises the deck, as the War-Cart's: three squads,
   // all round, from the shell's height, the range from its edge)
   const deckFire = (how?.abilities ?? []).filter((x) => /fir(e|ing) (deck|from)|shoot(s)? from|from (the|its) deck/i.test(x))
@@ -2094,7 +2098,7 @@ console.log("\n16. long hulls: the Howdah's record, the footprint rules and thei
     ["the head disc's r (0.95 → 1.0)", () => howId((u) => (u.footprint.discs[0][2] = 1))],
     ["the tail disc's r (0.95 → 0.9)", () => howId((u) => (u.footprint.discs[2][2] = 0.9))],
     ["the deck's place (deckAt [0, 0] → [0, 0.5])", () => howId((u) => (u.transport.deckAt = [0, 0.5]))],
-    ["the Howdah's cost (20 → 25)", () => howId((u) => (u.cost = 25))],
+    ["the Howdah's cost (5 → 10)", () => howId((u) => (u.cost = 10))],
     ["the Howdah's Grand price (5 → 10)", () => rulesId({ missions: { ...MISSIONS, grand: { ...MISSIONS.grand, list: { ...MISSIONS.grand.list, prices: { ...MISSIONS.grand.list.prices, serpent: { ...MISSIONS.grand.list.prices.serpent, howdah: 10 } } } } } })],
   ]) check(id() !== RULES_ID, `RULES_ID moves on ${what}`)
   check(howId((u) => (u.abilities = ['A howdah.'])) === RULES_ID && howId((u) => (u.name = 'Shell Howdah')) === RULES_ID && howId(() => {}) === RULES_ID, "RULES_ID stays on the Howdah's card text, its name, and an unchanged copy (the control)")

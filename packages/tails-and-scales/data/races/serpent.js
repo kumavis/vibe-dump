@@ -108,7 +108,23 @@ export default {
       // data/mission.js's `prices` keep it at 5 (the War-Cart's test there
       // turned the other way). F9c's firing deck re-fits it, as it does
       // the War-Cart.)
-      cost: 20,
+      // ((F9c) Re-fitted with its riders shooting from the deck (seeds
+      // 1111, 2222 and 3333 pooled at 20, N 2,700): −52 ± 11, so the floor,
+      // 5, again. Its riders' guns are short (Javelins 8", Venom spit 12")
+      // and the AI keeps a gunned rider aboard and the hull back (rule 10),
+      // so it shoots from its deck little. At 20 it now misses its band on
+      // both seeds (−24 ± 15 on 1111, −43 ± 19 on 4444, the War-Cart at
+      // 40); at 5, with the War-Cart at its 15 (data/races/squirrel.js),
+      // both Field score gates pass on both seeds (54.4% and 54.4% on
+      // 1111, 54.5% and 54.2% on 4444) and it lies inside its band on each
+      // (−21 ± 29, −55 ± 30). F9b priced it 20 to bind the Coil's lists and
+      // the score gate with them; here the score gates pass at the floor
+      // and a higher price, the cart at 15, only moves them further toward
+      // the Bushtails (at 20, the cart at 40, the Bushtails gain 3 points on
+      // 4444 over the floor). **Departs** as F9b's floor did from "points
+      // must be what binds": they bind 676 of 1,000 Coil lists at 5 (834
+      // at 20). Grand and the Powder Field keep 5.)
+      cost: 5,
       stats: 'M6 WS4 BS4 S6 T8 W14 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
       footprint: { discs: [[0, 2, 0.95], [0, 0, 1.25], [0, -2, 0.95]], turn: 0.25, rev: 2 },
       transport: { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, deckY: 1.65, deckAt: [0, 0], wreck: { hx: 1.2, hy: 0.7, hz: 2.9 } },

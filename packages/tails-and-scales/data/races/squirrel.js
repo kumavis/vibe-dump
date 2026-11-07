@@ -102,7 +102,21 @@ export default {
       // about 0 and the Nutkin 20 under. Its price at Field; at Grand
       // data/mission.js's `prices` say 150. F9c's firing deck, its riders
       // shooting from aboard, re-fits it.)
-      cost: 40,
+      // ((F9c) Re-fitted with its riders shooting from the deck (seeds
+      // 1111, 2222 and 3333 pooled at 40, N 2,700): 4 ± 9, so the fit's 5;
+      // the Howdah beside it −52 ± 11, the floor. But at 5 (the Howdah 5)
+      // the Bushtails won the Field score gate away on both seeds, 55.2%
+      // open and 60.0% fortified on 1111, 56.1% fortified on 4444 (band 5),
+      // and at 10 still 57.7% fortified on 1111. At 15 both score gates
+      // pass on both seeds (54.4% and 54.4% on 1111, 54.5% and 54.2% on
+      // 4444) with the cart inside its band on each (30 ± 21 and −8 ± 18)
+      // and the Howdah in its own; at 20 the scores sit nearer even (51.9%
+      // and 52.9%, 54.1% and 53.2%) but the cart misses its band on 4444
+      // (−17 ± 18, band 36) and the Howdah on 1111; kept at 40 (the Howdah
+      // 20) they pass too, but both hulls miss their bands. So 15, the
+      // lowest price the score gates take, nearest the fit. The points bind
+      // 876 of 1,000 Bushtail lists at 15 (993 at 40). Grand keeps its 150.)
+      cost: 15,
       stats: 'M8 WS5 BS4 S5 T7 W10 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
       transport: { capacity: 12, maxBase: 0.45, fire: 2, deck: 1.4, deckY: 0.7, wreck: { hx: 1.4, hy: 0.6, hz: 1.4 } },
       ranged: { name: 'Bolt thrower', range: 24, shots: 2, S: 6, AP: 2, D: 2, heavy: true, fx: 'bolt' },
