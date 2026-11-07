@@ -1043,11 +1043,13 @@ if (districtCount && nuuanuHere) {
   })
   await check('a channel dug since (the Ala Wai) is land in 1795, and water in 2020', async () => {
     // the patch byte from 128 up: a texel of today's water filled back in
+    // (and under no loʻi or fishpond of the year: a channel dug through a pond
+    // of 1795, as the harbour's were at Kapālama, is that pond's water then)
     const pt = await ui(`(() => {
       const rec = app.districts.cur, d = rec.d, r = d.rect
       let n = 0
       const deep = []
-      for (let c = 0; c < d.W * d.H; c++) if (rec.aux[c * 4] === 255) { n++; if (rec.metres[c] < -0.5) deep.push(c) }
+      for (let c = 0; c < d.W * d.H; c++) if (rec.aux[c * 4] === 255) { n++; if (rec.metres[c] < -0.5 && rec.aux[c * 4 + 3] === 0) deep.push(c) }
       if (!deep.length) return null
       const c = deep[deep.length >> 1], i = c % d.W, j = (c - i) / d.W
       return [r.x0 + (i + 0.5) * (r.x1 - r.x0) / d.W, r.z0 + (j + 0.5) * (r.z1 - r.z0) / d.H, rec.metres[c], n]
