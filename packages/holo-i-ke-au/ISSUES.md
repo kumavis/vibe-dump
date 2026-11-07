@@ -275,3 +275,18 @@ fix has landed in `dist/` and been looked at again.
   do when wandering (`render/geology.js pairAt`). A smoke check scrubs the
   slider itself.
 - **Status:** fixed; to be published.
+
+### After the merge: what the full suites found
+
+- A figure of a battle's forces set down in the water of its year (a
+  column's head on the reef flat the harbour work gave back to Waikīkī, or in
+  a fishpond there) had stood while it faded; it is not drawn at all now.
+- The scatter asked the works at an epoch's year, and a school's ground kept
+  off from a year that is no epoch's break carried buildings until the next
+  break; it asks at each sample's own year now.
+- The schools' names shared the works' label layer; they have their own.
+- The filled-channel check sampled a texel the rebaked harbour had moved into
+  a fishpond of 1795; it samples one under no pond now.
+- **Status:** published in version 22; the synthetic suite passes whole (94
+  checks); the real-data suite's first half passed apart from these, and its
+  second half was run on the fixed build.
