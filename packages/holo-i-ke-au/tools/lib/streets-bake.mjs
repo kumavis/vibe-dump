@@ -442,6 +442,14 @@ function simplify(line, lat, tol) {
   const keep = new Uint8Array(P.length)
   keep[0] = keep[P.length - 1] = 1
   const stack = [[0, P.length - 1]]
+  // (a loop, its ends one point: cut at its farthest point from them, and each half simplified)
+  if (P.length > 2 && Math.hypot(P[0][0] - P.at(-1)[0], P[0][1] - P.at(-1)[1]) < tol) {
+    let far = 1
+    for (let i = 1; i < P.length - 1; i++) if (Math.hypot(P[i][0] - P[0][0], P[i][1] - P[0][1]) > Math.hypot(P[far][0] - P[0][0], P[far][1] - P[0][1])) far = i
+    keep[far] = 1
+    stack.length = 0
+    stack.push([0, far], [far, P.length - 1])
+  }
   while (stack.length) {
     const [a, b] = stack.pop()
     let dm = 0
