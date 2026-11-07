@@ -87,6 +87,7 @@ strike it here.
 | Osorio, *Dismembering Lāhui* (2002); Beamer, *No Mākou ka Mana* (2014) | Osorio: the constitutions of 1840, 1852 and 1887 and who sat in each legislature, for the kingdom-era cards; Beamer: the kingdom's land and governance as a native system, and his maps of moku and ahupuaʻa as the kingdom's own units, to check the boundary file's reading of the 1850s (DESIGN §7.2) |
 | Best, *Railroads of Hawaii* (1978) | the routes, maps and opening years of the Hilo Railroad's branches, the Hawaii Railway in Kohala, the Kahului Railroad's branches and the Kauaʻi lines, which the works do not trace yet (`best-1978-railroads-of-hawaii`) |
 | The Territorial Superintendent of Public Works' reports, or Thrum's *Annual* summaries of them | the opening years of the belt roads and the Farrington, Kalanianaʻole, Kūhiō and Kaumualiʻi highways, which the works date only by their oldest bridge |
+| Summers, *Hawaiian Fishponds* (Bishop Museum Special Publication 52, 1964); Kelly and Clark, *Kawainui Marsh, Oahu: Historical and Archaeological Studies* (Bishop Museum Departmental Report 80-3, 1980) | Kawainui and Kaʻelepulu before 1800: the outline of each pond and its marsh, where the ditch between them ran and where the wall with its mākāhā that Kikuchi records between the two stood (`kikuchi-1973`, pp. 238, 242), and whether any other bank of either was built; Summers's fig. 14 is the map Drigot redraws (`drigot-1982`, fig. 1.11) |
 
 ## Data
 

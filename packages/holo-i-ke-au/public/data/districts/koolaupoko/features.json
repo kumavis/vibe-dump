@@ -3655,6 +3655,7 @@
     "from": null,
     "to": 1827,
     "precision": "mapped",
+    "pond": "wai",
     "site": "50-80-11-00370",
     "place": "kawainui",
     "sources": [
@@ -3662,9 +3663,11 @@
      "kamakau-ruling-chiefs",
      "nps-1992-ka-iwi",
      "dlnr-ulupo",
-     "usgs-topo-1927-oahu"
+     "usgs-topo-1927-oahu",
+     "kikuchi-1973",
+     "drigot-1982"
     ],
-    "note": "The great inland pond of Kailua, behind the beach, divided from Kaʻelepulu by a low stone wall. The outline is the State site record’s, which is the marsh the pond became; the 1927 sheet writes Kawainui Swamp across the same ground. Kamakau has Kamehameha working at its ponds in his years on Oʻahu, and by the late 1820s bulrushes had overgrown most of it, so the end year is the late 1820s of that account.",
+    "note": "The great inland pond of Kailua, a loko wai: an old bay closed off by the sand barrier Kailua stands on, its water fresh from Maunawili and the springs, its banks the marsh and the foot of the hills. A ditch about a mile long took its water south-east into the drainage of Kaʻelepulu, and the inventory of the ponds records a wall between the two with one mākāhā, built, the tradition says, by the menehune. The outline is the State site record’s, which is the marsh the pond became; the 1927 sheet writes Kawainui Swamp across the same ground. Kamakau has Kamehameha working at its ponds in his years on Oʻahu, and by the late 1820s bulrushes had overgrown most of it, so the end year is the late 1820s of that account.",
     "tellings": [
      {
       "source": "dlnr-ulupo",
@@ -3673,6 +3676,14 @@
      {
       "source": "nps-1992-ka-iwi",
       "says": "The freshwater pond may have been in use as early as the late seventeenth century; by the late 1820s the main part of the wetland was dominated by bulrushes (p. 35)."
+     },
+     {
+      "source": "kikuchi-1973",
+      "says": "Kikuchi’s inventory lists Kawainui as a loko wai of 450 acres: a wall separating Kawainui from Kaʻelepulu, built by the menehune; one mākāhā; its moʻo was Hauwahine (p. 242)."
+     },
+     {
+      "source": "drigot-1982",
+      "says": "A 450-acre loko wai, separated from the sea by an expanding barrier beach and drained by a mile-long canal into the drainage of Kaʻelepulu; while the lagoon was still open to the sea it may have been walled as a loko kuapā (pp. 13–15)."
      }
     ]
    },
@@ -4461,6 +4472,7 @@
     "from": null,
     "to": 1943,
     "precision": "mapped",
+    "pond": "wai",
     "site": "50-80-11-00377",
     "place": "kaelepulu",
     "sources": [
@@ -4469,9 +4481,22 @@
      "usgs-topo-1927-oahu",
      "state-gis-oahu-1943",
      "kamakau-ruling-chiefs",
-     "nps-1992-ka-iwi"
+     "nps-1992-ka-iwi",
+     "kikuchi-1973",
+     "cobb-1905",
+     "drigot-1982"
     ],
-    "note": "The second inland pond of Kailua, between Kawainui and the sea, outlined in the State site record with the marsh around it. The 1881 sheet writes Kaeleoulu Loko, the 1927 sheet Kaelepulu Pond, and the 1943 map still fills the pond in its marsh. From the mid-1960s the houses of Enchanted Lake were built around it, so the end year is the 1943 map’s."
+    "note": "The second inland pond of Kailua, a loko wai behind the beach at the south end of Kailua Bay: fresh water in a marsh, its banks the marsh’s and the foot of the ridges, its stream running out to the bay north of Alāla Point. The inventory of the ponds records a stone wall with one mākāhā between it and Kawainui, and a koʻa. The outline is the State site record’s, the pond with the marsh around it. The 1881 sheet writes Kaeleoulu Loko, the 1927 sheet Kaelepulu Pond, and the 1943 map still fills the pond in its marsh. From the mid-1960s the houses of Enchanted Lake were built around it, so the end year is the 1943 map’s.",
+    "tellings": [
+     {
+      "source": "kikuchi-1973",
+      "says": "Kikuchi lists Kaʻelepulu as a loko wai of 190 acres: a stone wall separates the pond from Kawainui, with one mākāhā; one koʻa; a konohiki named Ahiki under the chief Olomana, and a kiaʻi named Pakuʻi (p. 238)."
+     },
+     {
+      "source": "cobb-1905",
+      "says": "Cobb’s list of the ponds about 1900 has “Kaelepula, fresh-water pond, in Kailua”, 216 acres; the interior ponds, he writes, “have dirt sides generally, although a few have rock walls covered with dirt” (pp. 746–748)."
+     }
+    ]
    },
    "geometry": {
     "type": "Polygon",

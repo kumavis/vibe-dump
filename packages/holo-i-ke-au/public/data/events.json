@@ -719,7 +719,7 @@
         }
       },
       {
-        "text": "Behind the beach lies Kawainui, a great inland fishpond divided from Kaʻelepulu by a low stone wall, its edges planted in loʻi watered from Maunawili and in dry fields above. The heiau Ulupō stands at its eastern edge.",
+        "text": "Behind the beach lies Kawainui, a great inland fishpond of fresh water held in by the sand the town stands on, its water led off by a ditch toward Kaʻelepulu, with a wall and a mākāhā between the two. Its edges are planted in loʻi watered from Maunawili and in dry fields above. The heiau Ulupō stands at its eastern edge.",
         "place": "kawainui",
         "zoom": "near",
         "year": 1700,
@@ -780,6 +780,14 @@
       {
         "id": "oha-kipuka-sites",
         "where": "the pond outlines and the site of Ulupō"
+      },
+      {
+        "id": "kikuchi-1973",
+        "where": "pp. 238, 242 (Kaʻelepulu and Kawainui, loko wai)"
+      },
+      {
+        "id": "drigot-1982",
+        "where": "pp. 12–16 (Kawainui as a loko wai behind the barrier beach)"
       },
       {
         "id": "usgs-topo-1927-oahu",

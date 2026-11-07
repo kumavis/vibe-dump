@@ -1697,6 +1697,13 @@ shows it, as in §10.
   | Kaʻelepulu | 123.3 ha | site | 1943 | the 1943 map fills it; Enchanted Lake from the mid-1960s |
   | Pāhonu | 0.3 ha | schematic | — | rebuilt today |
 
+  Kawainui and Kaʻelepulu are loko wai (`pond: "wai"`, DATA.md "District packs"), inland fresh-water ponds behind
+  the sand barrier with natural banks and no seawall: Kikuchi's inventory (1973, pp. 238, 242) types both so, Drigot
+  (1982, pp. 12–16, after Summers 1964, fig. 14) has Kawainui a 450-acre loko wai drained by a ditch of about a mile
+  into Kaʻelepulu's water, Cobb (pp. 746–748) lists Kaʻelepulu about 1900 as a fresh-water pond of 216 acres and the
+  interior ponds as generally earth-sided, and the 1881, 1927 and 1943 sheets draw both with marsh margins and no wall.
+  Kikuchi records one wall with one mākāhā between the two ponds (by tradition the menehune's); where it stood is in
+  no source read, so it has no feature.
   No pond's building date is in any source read, so every `from` is null. Lyons (1874) gives three acreages and Jackson
   (1882) the Mōkapu names; they are tellings on the ponds. The burial and heiau outlines in the same layer were not copied.
 
