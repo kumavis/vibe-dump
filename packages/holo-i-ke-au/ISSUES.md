@@ -290,3 +290,19 @@ fix has landed in `dist/` and been looked at again.
 - **Status:** published in version 22; the synthetic suite passes whole (94
   checks); the real-data suite's first half passed apart from these, and its
   second half was run on the fixed build.
+
+### 13. The frame got three times dearer in this wave
+
+- **Seen:** the suite's perf measure on the real data, under the software
+  renderer (its numbers only compare with each other): the chain in the
+  chiefdoms view 537 → 2278 ms a frame, Oʻahu 1316 → 3915, the land view's
+  chain 531 → 1420, the near view 2894 → 9971; the JS heap 20 → 50 MB. The
+  Kawaihae shore check's screenshots now time out for it.
+- **Suspects:** the restore patches' atlas fetch and slope in the island and
+  district shaders (every fragment, every island); the reef level's carve
+  fetch in the district's lowers; the schools and the landmarks drawn on
+  every island at the far zoom; the streets' lots and their drawing; the
+  towers' record; the settlement curve before 1450.
+- **Open:** measure each in turn (the perf check with one feature held off
+  at a time), and bring the far views back to within a third of what they
+  cost before, on a real GPU as well as the software one.
