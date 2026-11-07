@@ -2520,7 +2520,7 @@ if (await ui('!!app.schools')) {
   await check('schools: each stands only within its dates, and the lots keep off it', async () => {
     await run('app.schools.load()')
     await page.waitForFunction(() => window.__app.schools.byIsland !== null, null, { timeout: 120000 })
-    const want = ['test-schoolhouse', 'test-school', 'chiefs-childrens-school', 'saint-francis-school', 'st-louis-college-kamakela', 'kamehameha-school-for-boys', 'lahainaluna-high']
+    const want = ['test-schoolhouse', 'test-school', 'chiefs-childrens-school', 'saint-francis-school', 'st-louis-college-kamakela', 'kamehameha-school-for-boys', 'fort-street-school-keoua-hale', 'lahainaluna-high']
     const list = (await ui(`${JSON.stringify(want)}.map((id) => app.schools.school(id)).filter(Boolean).map((s) => ({ id: s.id, island: s.island, from: s.from, to: s.to, x: s.x, z: s.z, eras: s.eras.map((e) => [e.kit, e.from, e.to, e.x, e.z, e.dir, e.hx, e.hz]) }))`)) || []
     if (!list.length) throw new Error('none of the schools looked for is in the data')
     const out = []
