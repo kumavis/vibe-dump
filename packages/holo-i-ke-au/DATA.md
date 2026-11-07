@@ -1722,6 +1722,38 @@ under 1.2 MB.
   "unplaced": [ { "name": "...", "type": "mission", "island": "oahu", "from": 1864, "to": 1907, "sources": [ ... ], "note": "..." } ],
   "stats": { "oahu": { "schools": 263, "grounds": 175, "standing": 255, "by": 97, "types": { ... } } },
   "features": [ { "type": "Feature", "geometry": { "type": "Polygon", ... }, "properties": { ... } } ] }
+
+## Streets, dated
+
+The towns' streets as they ran in a year, so the settlements lay their lots
+along real streets from the time a street is known, and the modelled grid
+(DESIGN.md §5.4) holds only outside them. Under `public/data/streets/`: a
+`manifest.json` and one GeoJSON per town, `streets/<town>.geojson`, in
+lon/lat (WGS84), simplified to 2 m, the whole directory under 5 MB.
+
+The streets are today's: each county's own centrelines as the State GIS
+serves them, cut to the town's box (a segment whose middle point lies in
+it). Each segment (a stretch between crossings, as the county draws it) is
+dated by the oldest georeferenced sheet over the town that draws it, found
+on the sheet by its line (the bake, below); a street's segments of one date
+are then joined end to end where no third of them meets the joint, so a
+feature is a run of one street of one date. A street known only from today's layer is dated by the
+layer's year. So every date is a `by`: the street was there by then, and
+the sheet before it (`after`) does not draw it. A street that was closed or
+built over before today is not in today's layer and not here; `to` is in
+the contract for it, and stays null in this bake.
+
+```jsonc
+// streets/manifest.json
+{ "about": "...", "rule": "the finding and dating rule written out", "baked": "2026-11-06", "tool": "tools/bake-streets.mjs",
+  "centrelines": { "oahu": { "id": "state-gis-oahu-roads", "url": "...", "fields": "...", "asOf": 2024, "licence": "...", "fetched": "...", "note": "..." } },
+  "towns": [ { "id": "honolulu", "name": "Honolulu", "island": "oahu", "bounds": [west, south, east, north],
+               "file": "honolulu.geojson", "centrelines": "state-gis-oahu-roads",
+               "sheets": [ { "year": 1881, "source": "hgs-1881-oahu", "service": "...", "old": true,
+                             "shift": [east, north],              // metres the sheet was moved over the town
+                             "cells": [ { "cell": [i, j], "shift": [east, north] } ], "cellsOwn": 79, "cellMetres": 1200,
+                             "found": 0.12 } ],                   // share of the town's pieces the sheet draws
+               "stats": { "segments": 7411, "km": 1043.2, "kmBy": { "1881": 40.1, … } } } ] }
 ```
 
 Every feature's `properties`:
@@ -1966,6 +1998,144 @@ source among the area's own; every share as the contract says, beginning
 at `[first, 0]` and ending at 1; every source in `sources.json` and one of
 each list opened; `wanted` not opened. It prints today's towers and the
 record's 1978.
+
+| `id` | kebab-case ASCII, unique across the towns (`honolulu-412`) |
+| `town` | the town's id in the manifest |
+| `layerName` | the county layer's own name for the street, verbatim (`NUUANU AVE`); read by nothing in the app, kept for tracing |
+| `class` | `arterial` (the county's highways and main roads) · `street` |
+| `from` | the year of the sheet that first draws it, or the layer's year |
+| `to` | `null` while it stands; a year where a street was closed or built over |
+| `datePrecision` | `by`, always |
+| `by` | the id in `sources.json` of that sheet (or of the layer); opened |
+| `after` | the id of the last sheet before `by` that covers the street and does not draw it; `null` where none does |
+| `seen` | per sheet of the town, in the manifest's order: the share of the street's length the sheet draws, or `null` where the sheet does not cover it |
+| `sources` | the layer, `by` and `after` |
+
+Rules, enforced by `tools/check-data.mjs`: ids unique and kebab-case;
+`town` the town's; `class` from the two; `from` a year from 1778 to the
+bake, the year of its `by` sheet where `by` is a sheet; `to` null or not
+before `from`; `datePrecision` `by`, `by` among the sources and opened,
+`after` one of the town's sheets; `seen` one share per sheet; each street a
+LineString meeting its town's box; the towns' boxes inside
+their island packs and overlapping no other; each sheet's source in
+`sources.json` and opened, the sheets in order of year; every file listed;
+the directory within its budget; the town's name Hawaiian-checked.
+
+**What the app does with them** (`src/data/streets.js`,
+`src/features/streets.js`, `src/features/settlements.js` `lotsOf`):
+
+- **The lots.** Along both sides of every street a lot of the grid's size
+  (36 m along the street, 40 m deep), its front 7 m back from the street's
+  strip (as far as a building's front may reach past its lot on the grid), laid oldest street first so an older street keeps its
+  corners; none on another street's strip or over another lot, in any year.
+  A lot stands in its street's years (`from` to `to`); its rank is a golden
+  sequence along the street, scaled by how much closer than the grid's the
+  lots stand about it (within a half and a double), so the fill builds as
+  many houses on an area as the grid would.
+- **The grid gives way.** A grid lot within 75 m of a street standing in a
+  year is gone in that year, so the grid holds only outside the network; the
+  years a street comes or goes are breaks for the scatter, so a grid lot
+  goes and a street's lot comes at the year itself and never fade across
+  each other. The district's scatter and every island's (towns.js) both do
+  this, from the same network; the grid's own streets are not drawn where
+  the network covers the ground.
+- **The streets drawn.** Each street a ribbon on the ground of the moment
+  (ribbons.js), 9 m wide (an arterial 14 m), packed earth until 1910, a
+  macadam grey to 1950, asphalt after, crossfading at the turns; it comes in
+  over the year before its `from`. Drawn near in only (from about 16 km of
+  camera distance in), on an island in its slot.
+- A data set without `streets/manifest.json` has no streets, and its towns
+  keep the grid everywhere.
+
+### How to bake the streets
+
+```bash
+node packages/holo-i-ke-au/tools/bake-streets.mjs --all                   # download, bake, check, delete the downloads
+node packages/holo-i-ke-au/tools/bake-streets.mjs --sheets /tmp/streets   # bake, drawing each town over each sheet: found green, not found red, not covered blue
+```
+
+or `--download` (about 400 MB: the centrelines over each town and each
+sheet exported over its box at 2.5 m a pixel, in tiles), `--bake`,
+`--check` (prints what each sheet found and runs `check-data.mjs`),
+`--clean`; `--town ID` (repeatable) bakes only those towns and keeps the
+others' entries. `--downloads DIR` (or `$HOLO_STREETS_DOWNLOADS`) moves the
+downloads from `<os tmpdir>/holo-i-ke-au-bake/streets-downloads`; keep them
+outside the repo. Node 22 and `curl`, as for the other bakes. The bake is
+slow on Honolulu (each sheet is searched for its shift over the whole town,
+a few minutes a sheet on a quiet machine); a re-bake from the same downloads
+is byte-identical but for the `baked` date.
+
+**Where things live.** `tools/lib/streets-sources.mjs` holds the towns and
+their boxes, the centreline layers (which segments are streets: named ones,
+not the freeways and their ramps, which the works draw) and the sheets of
+each island; `tools/lib/streets-bake.mjs` reads the sheets, registers them,
+finds and dates the streets and writes; `tools/lib/streets-check.mjs` prints
+what each sheet found.
+
+**How a street is found on a sheet.** A pixel darker than 0.65 of the
+sheet's paper (its 80th percentile of brightness over the export tile) is
+ink: dark enough that the contours, printed brown, are not, for a
+subdivision on a hillside follows them; Oʻahu's quadrangles of 1927, a grey
+scan whose contours are a lighter grey than its streets, take 0.45, and
+the quadrangles of 1910 to 1924 on the other islands, scanned light, 0.8 (a
+sheet's `ink` in the manifest). Lahaina lies across the neat line of the
+Mala and Launiupoko sheets of 1924, and Wailuku and Kahului across the
+Wailuku and Pāʻia sheets', where the State's mosaic lays one sheet's margin
+over the next: those are read sheet by sheet, each inside its own neat line
+(a sheet's `quads`).
+Each segment is cut into pieces of about 80 m, sampled every 2.5 m, 7 m
+short of its ends (where a drawn street's lines break for the one across).
+A piece is found where, at some offset within 15 m of it, at least 62% of
+its samples are ink or within a pixel of ink (the street's casing, band or
+line, whatever the sheet's symbol), and at some offset within 10 m, at
+least 60% are paper (the street's own open ground): open paper fails the
+first, a block of buildings, hachures or lettering one or the other. On the
+Government Survey's island maps (1881 to 1903, at about 1:60,000, their
+streets small among hachures, stippled reefs and lettering) the line must be
+75% ink without the pixel's grace and the ground 65% paper, and where two or
+more of them cover a street, a second must find it too.
+
+**How a sheet is registered.** The State georeferenced each sheet whole;
+over a town an old one stands off by up to a few hundred metres. Each sheet
+is moved over the town by the shift that finds the most pieces (within 300
+m for the Government Survey's island maps, 80 m for the quadrangles, by 20
+m, then 5 m, then a pixel), then over each 1.2 km cell with at least 40
+pieces by its own shift within 75 m (20 m) of that. A move costs a little,
+with its square (at the edge of a search, as many pieces as 5% of those
+searched), so a sheet stays where the State placed it unless the streets
+say otherwise. The manifest keeps the shifts.
+
+**How a street is dated.** A piece is dated by the oldest sheet that finds
+it, provided at least half the later sheets that cover it find it too; a
+segment by the year by which half its dated length is dated, where at least
+30% of its length is dated at all (a piece under a label or a symbol is found
+on no sheet, and says nothing either way); any other segment by the layer's
+year.
+
+**The sheets read** (the State GIS image services; each in `sources.json`):
+
+| island | sheets |
+| --- | --- |
+| Oʻahu | Government Survey 1881 and 1899 (`Historic_Maps/Oahu_1881`, `Oahu_1899`), Donn's of 1902 (`islands_1900s`, raster 8); the USGS quadrangles of 1927 (`SoH_Maps/oahu_topo_1927`), the 1938 sheet (`Historic_Maps/Oahu_1938`), the 1943 sheet (`SoH_Maps/Oahu_1943`), the quadrangles of about 2000 (`USGS_topos_2000`) |
+| Maui | Donn's of 1903 (raster 5); the 1924 quadrangles; about 2000 |
+| Molokaʻi | Dodge's of 1897 (raster 6); the 1922 quadrangles; about 2000 |
+| Hawaiʻi | Donn's of 1901 (raster 1); the quadrangle over the town (Waiākea 1912 for Hilo, Kalaoa 1924 for Kailua); about 2000 |
+| Kauaʻi | Donn's of 1903 (raster 3); the 1910 and 1963 quadrangles; about 2000 |
+
+**What it cannot do.** The island maps of 1881 to 1903 are at about
+1:60,000 and draw a town's streets small and generalized; few of their
+streets are found, and those are often the main roads, so a town is on its
+streets from the first quadrangle (1910 to 1927) far more than before it,
+and before the earliest sheet it is on the grid. Between the 1940s and
+about 2000 Oʻahu has no sheet read here, nor any island between its
+quadrangle and about 2000 but Kauaʻi (1963), so a street built in those
+years is dated by the next sheet. Streets closed or built over (Chinatown's
+lanes, Kakaʻako's before the fill, what the freeways took) are not in
+today's layer. The sheets that would close those gaps are in
+`sources.json` as wanted: the Sanborn fire insurance maps of Honolulu
+(1899, 1906, 1914, 1927), Hilo, Lahaina and Wailuku; the Government
+Survey's registered maps of Honolulu; and the USGS 1:24,000 quadrangles of
+Honolulu of 1953, 1959, 1969 and 1983.
 
 ## Crops, on the era layers
 

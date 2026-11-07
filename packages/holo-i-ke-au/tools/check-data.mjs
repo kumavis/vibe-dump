@@ -21,6 +21,8 @@
 // and chapters.json, with the bake's geology/manifest.json and its height images read back when they are there;
 // and, when schools.json exists, the schools (DATA.md “Schools, dated”), each on its island's land within its pack, its years in order, its sources its own or sources.json's.
 // and, when towers.json exists, the towers' record (DATA.md “Towers, dated”);
+// manifest.json; and, when streets/manifest.json exists, the towns' dated streets
+// (DATA.md, “Streets, dated”), held to their towns' boxes and sheets; and, when geology/ exists, the prologue (DATA.md “Geology”): volcanoes.json, landslides.geojson
 // Pass another directory to check a copy (the default is public/data); a copy
 // without routes.json is checked without routes.
 // No dependencies beyond the PNG reader in tools/lib. Exits 1 with a list of
@@ -1945,7 +1947,7 @@ function checkTowers() {
   }
   towersCounts = { areas: areas.length, islands: Object.keys(T.islands || {}).length, now: areas.reduce((s, a) => s + (a.count || 0), 0), y1978: areas.reduce((s, a) => s + Math.floor((a.count || 0) * at(a.share || [[0, 0]], 1978)), 0) }
 }
-
+// streets/: the towns' streets, dated (DATA.md "Streets, dated")
 // ---------------------------------------------------------------------------
 // geology/: the prologue (DATA.md "Geology: the making of the islands"). The hand-written files
 // (volcanoes.json, landslides.geojson, chapters.json) are required once the directory exists; the bake's
@@ -2435,6 +2437,10 @@ function finish() {
     console.log(`            ${fmt(c.islands)}`)
   }
   if (towersCounts) console.log(`  towers    ${towersCounts.areas} areas and ${towersCounts.islands} islands; ${towersCounts.now} towers today, ${towersCounts.y1978} in 1978`)
+  if (streetCounts) {
+    console.log(`  streets   ${streetCounts.n} segments in ${streetCounts.towns} towns, ${(streetCounts.bytes / 1024).toFixed(0)} KB; km by the year they are dated by:`)
+    for (const [t, k] of Object.entries(streetCounts.km)) console.log(`            ${t}: ${k}`)
+  }
   if (geoCounts) {
     const g = geoCounts
     console.log(`  geology   ${g.volcanoes} volcanoes, ${g.fields} fields (${g.blocks} blocks), ${g.chapters} chapters, ${g.steps} steps, ${g.stops} stops, ${g.tellings} tellings`)
