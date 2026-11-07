@@ -10,7 +10,7 @@
 // one whose edge is further away. render/world.js keeps a CPU copy of all of
 // this (metresAt), line for line, for the camera, picking and pins.
 
-import { NEAR_EXAG, NORMAL_EXAG, SLOTS, PATCHES, DIST_PATCHES, RESTORES } from '../../config.js'
+import { NEAR_EXAG, NORMAL_EXAG, SLOTS, PATCHES, DIST_PATCHES, RESTORES, EARLY_THIN } from '../../config.js'
 import { RESTORE_TILE } from '../restores.js'
 
 const f = (v) => (Number.isInteger(v) ? v.toFixed(1) : String(v))
@@ -513,7 +513,7 @@ uniform sampler2D uArchLandA; // over the archipelago, the keyframe before: r cu
 uniform sampler2D uArchLandB; // and after
 uniform float uLandT;         // between them
 uniform float uLandK;         // overall strength: the land view, faded close in and as the layers arrive
-uniform float uLandEarly;     // 0 before about 1100 .. 1 by 1450: the 1778 layers whole
+uniform float uLandEarly;     // 0 at 1150 .. 1 by 1450, linear: the 1778 layers whole (config.js EARLY)
 
 // Settlement as specks: a dot in some cells of a grid about five pixels
 // across at any zoom (the power-of-two cell nearest that, the two nearest
@@ -544,7 +544,7 @@ vec3 applyLand(vec3 col, vec3 m, float rain, vec2 xz, float px, float metres) {
   // before the leeward field systems: the 1778 cultivation with its dry
   // fields faded and its people thinned (the contact keyframe's note)
   float cult = m.r * mix(0.12 + 0.88 * smoothstep(0.24, 0.46, rain), 1.0, uLandEarly);
-  float sv = max(0.0, m.g - 0.1 * (1.0 - uLandEarly));
+  float sv = max(0.0, m.g - ${EARLY_THIN.toFixed(4)} * (1.0 - uLandEarly));
   float forest = m.b;
   float lum = dot(col, vec3(0.2126, 0.7152, 0.0722));
   vec3 c = mix(col, vec3(lum) * vec3(1.10, 1.0, 0.84) * 1.08, 0.6);

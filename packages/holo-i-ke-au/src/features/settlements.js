@@ -32,7 +32,7 @@
 //   hamlets and gaps rather than a square of even scatter. The year is placed
 //   on the keyframes as the land overlay places it (overlay/land.js: by the
 //   manifest's eras, linearly in the bytes, which is geometric in people),
-//   and thinned before 1450 as the overlay thins it. The Māhele keyframe has
+//   and thinned before 1450 as the overlay thins it (config.js EARLY). The Māhele keyframe has
 //   no town in it, so the towns of 1853 are put back (townTerm).
 // - The lots. The land is laid with lots on a street grid aligned to the
 //   shore: a tile of 500 m takes the direction away from the sea, so the grid
@@ -116,7 +116,7 @@ import { decodeGrey, settlementCodec } from '../data/layers.js'
 import { holding, spanOf } from '../data/district.js'
 import { patchLevel, fromHalf, ihash } from '../data/district-decode.js'
 import { distanceTransform, blur } from '../data/decode.js'
-import { EARLY } from '../overlay/land.js'
+import { EARLY_THIN, earlyGrowth } from '../config.js'
 import { geometryPoint } from '../geo.js'
 import { DISTRICT } from '../config.js'
 import { TREELESS, keptWeight } from '../data/works.js'
@@ -208,7 +208,7 @@ export const ZONE_FLOOR = { [ZONE.downtown]: 9000, [ZONE.resort]: 8000, [ZONE.co
 // the years: sampled every STEP from contact, sparsely before it (only the
 // thinning before 1450 changes anything there)
 const STEP = 4
-const PRE = [1100, 1200, 1300, 1400, 1450, 1600, 1700]
+const PRE = [1150, 1200, 1250, 1300, 1350, 1400, 1450, 1600, 1700]
 // A lot's change of kind or density falls at a moment of its own between two
 // samples, on a half year, and one at a break (where the ground or a feature
 // changes) at the half year before the break: the building going fades out
@@ -605,7 +605,7 @@ export class Scatter {
       // (each era's weight, eased over twenty years about its turn)
       const turns = [1820, 1860, 1900, 1960].map((t) => smooth(t - 10, t + 10, y))
       const w = [1 - turns[0], turns[0] - turns[1], turns[1] - turns[2], turns[2] - turns[3], turns[3]]
-      return { y, a, t: kp - a, early: 25.5 * (1 - smooth(EARLY[0], EARLY[1], y)), w }
+      return { y, a, t: kp - a, early: 255 * EARLY_THIN * (1 - earlyGrowth(y)), w }
     })
   }
 

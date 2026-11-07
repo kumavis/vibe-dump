@@ -89,3 +89,19 @@ export function dataBase() {
   const base = q || './data/'
   return base.endsWith('/') ? base : `${base}/`
 }
+
+// Before contact: how much of the 1778 layers a year before 1450 holds.
+// Dye (1994, Hawaiian Journal of History 28, after Dye and Komori 1992, from
+// 599 radiocarbon dates) puts the islands at about 20,000 people in 1150, a
+// Growth Phase of roughly tenfold to the prehistoric maximum by 1450, and an
+// Equilibrium Phase from 1450 to 1778 ending at 110,000–150,000, never far
+// from that maximum. So the layers stand whole from 1450 (1480 is drawn as
+// 1778), and before it the people fall back exponentially, a straight line
+// in the settlement's log bytes, to 20,000 / 130,000 of the 1778 figure at
+// 1150 (130,000 the middle of Dye's 1778 range). The leeward dryland fields
+// fade over the same years.
+export const EARLY = { from: 1150, to: 1450, share: 20000 / 130000 }
+/** 0 at EARLY.from .. 1 at EARLY.to: the growth's progress, linear in the log of the people. */
+export const earlyGrowth = (year) => Math.max(0, Math.min(1, (year - EARLY.from) / (EARLY.to - EARLY.from)))
+/** The settlement bytes taken off at EARLY.from, as a share of 255, in the layers' log encoding (d0 2, dMax 50,000). */
+export const EARLY_THIN = Math.log(1 / EARLY.share) / Math.log(1 + 50000 / 2)

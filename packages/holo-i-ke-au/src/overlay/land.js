@@ -28,12 +28,13 @@
 import * as THREE from 'three'
 import { decodeImage } from '../data/image.js'
 import { bakeKeyframe, decodeGrey, settlementCodec, thinFactor } from '../data/layers.js'
+import { EARLY as EARLY_CURVE, earlyGrowth } from '../config.js'
 
 export const LAYERS = ['cultivation', 'settlement', 'forest']
 export const LAYER_NAMES = { cultivation: 'Cultivation', settlement: 'Settlement', forest: 'Native forest' }
-// the year by which the 1778 layers stand whole; before it they are thinned
-// (the contact keyframe's note: the leeward field systems spread after about 1400)
-export const EARLY = [1100, 1450]
+// the years over which the 1778 layers grow whole; before them they are thinned
+// by the population curve in config.js (EARLY: after Dye 1994)
+export const EARLY = [EARLY_CURVE.from, EARLY_CURVE.to]
 
 const KEEP = 3 // keyframes resident at most (the pair on screen, and one arriving)
 const AT = 0.002 // a keyframe position this close to a keyframe is that keyframe alone
@@ -371,7 +372,7 @@ export class LandOverlay {
   /** Every frame. k: the strength the view and the zoom ask for (0..1, eased by the app). */
   update(dt, k) {
     const u = this.uniforms
-    u.uLandEarly.value = smooth(EARLY[0], EARLY[1], this.app.timeline.year)
+    u.uLandEarly.value = earlyGrowth(this.app.timeline.year)
     if (!this.available) {
       u.uLandK.value = 0
       return
@@ -434,7 +435,7 @@ export class LandOverlay {
     this.swapTo = null
     if (this.bound) this.kpShown = this.clampTo(this.bound, kp)
     this.fade = this.fadeGoal = this.bound ? 1 : 0
-    this.uniforms.uLandEarly.value = smooth(EARLY[0], EARLY[1], this.app.timeline.year)
+    this.uniforms.uLandEarly.value = earlyGrowth(this.app.timeline.year)
     this.apply(k)
   }
 
