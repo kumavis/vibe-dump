@@ -149,9 +149,25 @@ fix has landed in `dist/` and been looked at again.
 - **Seen:** the settlements lay lots on a modelled grid aligned to the shore
   (features/settlements.js); no town's streets are surveyed ones except the
   Pali road of 1898 among the works.
-- **Open:** dated street networks for Honolulu and the other centres (Hilo,
-  Lahaina, Wailuku, Kailua-Kona, Līhuʻe …) from the surveys and maps of each
-  period, and lots laid along them where they are known.
+- **Fix:** `public/data/streets/` (DATA.md "Streets, dated"): today's
+  street centrelines from the counties' layers, cut to twelve towns
+  (Honolulu, Kailua, Kāneʻohe, Hilo, Kailua-Kona, Lahaina, Wailuku–Kahului,
+  Kaunakakai, Līhuʻe, Kōloa, Hanapēpē, Waimea), each street dated "by" the
+  oldest georeferenced sheet that draws it (the 1881 and 1899 survey sheets,
+  Donn's 1901–03 island maps, Dodge's 1897 Molokaʻi, the 1910–27, 1938, 1943
+  and 1963 quadrangles, the sheets of about 2000), 9,899 segments; the
+  settlements lay their lots along a town's streets from a street's year and
+  the modelled grid gives way within 85 m of one; the streets themselves are
+  drawn as packed earth, macadam, then asphalt.
+- **Limits:** the 1881–1903 island maps are about 1:60,000, so few streets
+  are found on them and a town before about 1910–27 is mostly still on the
+  modelled grid; the about-2000 sheets find 56–80% of today's streets, the
+  rest dated by the layer's own year; no sheet between 1943 and 2000 on
+  Oʻahu; hillside contours give a few false finds; no closed street has a
+  `to` year yet (the Sanborn maps and the registered Honolulu surveys are
+  recorded as wanted).
+- **Status:** landed on the branch; the settlements' real-data checks on the
+  merged build still to pass.
 
 ### 8. More of the historic buildings, the palace first
 
