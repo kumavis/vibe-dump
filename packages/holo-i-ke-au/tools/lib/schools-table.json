@@ -7782,9 +7782,9 @@
     "key": 257
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2000,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -7794,9 +7794,13 @@
     {
      "id": "hawaii-gis-public-schools",
      "where": "sch_code 396"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "hakipuu-academy",
@@ -7808,9 +7812,9 @@
     "key": 258
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "4–12",
    "sources": [
     {
@@ -7824,9 +7828,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "halau-ku-mana-new-century-public-charter",
@@ -7867,9 +7875,9 @@
     "key": 260
    },
    "footprint": null,
-   "from": 2018,
+   "from": 2008,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -7883,14 +7891,18 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 1197,
     "source": "hidoe-ssir"
-   }
+   },
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "hawaii-academy-of-arts-science-public-charter",
@@ -7936,9 +7948,9 @@
     "key": 262
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "1–8",
    "sources": [
     {
@@ -7952,9 +7964,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "ka-umeke-kaeo",
@@ -7966,9 +7982,9 @@
     "key": 263
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PreK–8",
    "sources": [
     {
@@ -7982,9 +7998,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "ka-waihona-o-ka-naauao-public-charter",
@@ -7996,9 +8016,9 @@
     "key": 264
    },
    "footprint": "way/1322802842",
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–8",
    "sources": [
     {
@@ -8012,9 +8032,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "kamaile-academy-public-charter",
@@ -8060,9 +8084,9 @@
     "key": 266
    },
    "footprint": "way/231785071",
-   "from": 2024,
+   "from": 2000,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -8076,9 +8100,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "kanuikapono-public-charter",
@@ -8090,9 +8118,9 @@
     "key": 267
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -8106,9 +8134,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "kau-learning-academy",
@@ -8146,9 +8178,9 @@
     "key": 269
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2008,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -8158,9 +8190,13 @@
     {
      "id": "hawaii-gis-public-schools",
      "where": "sch_code 565"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "ke-ana-laahana-public-charter",
@@ -8172,9 +8208,9 @@
     "key": 270
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "7–12",
    "sources": [
     {
@@ -8188,9 +8224,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "ke-kula-o-nawahiokalaniopuu-iki",
@@ -8202,9 +8242,9 @@
     "key": 271
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PreK–8",
    "sources": [
     {
@@ -8218,9 +8258,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "ke-kula-o-samuel-m-kamakau",
@@ -8232,9 +8276,9 @@
     "key": 272
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -8248,9 +8292,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "ke-kula-niihau-o-kekaha-learning-center",
@@ -8262,9 +8310,9 @@
     "key": 273
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -8278,9 +8326,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "kihei-charter",
@@ -8342,9 +8394,9 @@
     "key": 276
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -8358,9 +8410,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "kualapuu",
@@ -8407,9 +8463,9 @@
     "key": 278
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -8423,9 +8479,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "lanikai-elementary-public-charter",
@@ -8509,9 +8569,9 @@
     "key": 281
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2012,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–4",
    "sources": [
     {
@@ -8525,9 +8585,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "myron-b-thompson-academy",
@@ -8564,9 +8628,9 @@
     "key": 283
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2000,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "PreK–6",
    "sources": [
     {
@@ -8576,9 +8640,13 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 2024–25: the first report read that has the school"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hidoe-ssir"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "seeqs-the-for-examining-essential-questions-of-sustainability",
@@ -8623,9 +8691,9 @@
     "key": 285
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–12",
    "sources": [
     {
@@ -8635,9 +8703,13 @@
     {
      "id": "hawaii-gis-public-schools",
      "where": "sch_code 543"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "volcano-of-arts-sciences",
@@ -8649,9 +8721,9 @@
     "key": 286
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2001,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–8",
    "sources": [
     {
@@ -8665,9 +8737,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "voyager-a-public-charter",
@@ -8679,9 +8755,9 @@
     "key": 287
    },
    "footprint": null,
-   "from": 2024,
+   "from": 2000,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–7",
    "sources": [
     {
@@ -8695,9 +8771,13 @@
     {
      "id": "hawaii-spcsc",
      "where": "the school’s name"
+    },
+    {
+     "id": "hawaii-spcsc-annual-report-2025",
+     "where": "the school’s profile"
     }
    ],
-   "by": "hawaii-gis-public-schools"
+   "note": "Established as a charter school in this year, as the Commission’s report gives it; the record read does not say since when it has stood at this site."
   },
   {
    "id": "waialae-elementary-public-charter",
@@ -13893,6 +13973,18 @@
    "read": "part",
    "note": "Read 2026-11-07 in the University of Hawaiʻi’s eVols scan (its text layer): the summary of the select and independent schools, the list of the government common schools having 25 or more pupils by island and district, and the aided boarding and day schools. It gives each school’s place by village and district, its teacher and its pupils, not its site.",
    "wanted": "The lists of the reports before and after (1856–1896, all in eVols) for each school’s first and last year; a Government Survey sheet that marks the schoolhouses, for their sites."
+  },
+  {
+   "id": "hawaii-spcsc-annual-report-2025",
+   "title": "Annual Report 2024–25",
+   "author": "Hawaiʻi State Public Charter School Commission",
+   "year": 2025,
+   "url": "https://www.chartercommission.hawaii.gov/images/Reports/24-25-Annual-Report-Final-reduced.pdf",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "note": "Read 2026-11-07: each charter school’s profile, its address and the year it was established as a charter school. For a start-up that is its opening; for a school converted to a charter it is the year of the conversion, and those are not dated by it.",
+   "wanted": "For the converted schools: the year each school itself opened."
   }
  ]
 }
