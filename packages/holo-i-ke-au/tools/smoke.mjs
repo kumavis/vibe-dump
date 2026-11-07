@@ -4776,6 +4776,28 @@ if (!geoHere) {
     console.log(`      ${seen.length + 1} cards forward to chapter 1, ${back} back`)
   })
 
+  // (ISSUES.md 16: the walk went back from 0.5 Ma to 1.9 between chapters)
+  await check('the prologue runs one way: Next never takes the clock back, nor the stage it is drawn on', async () => {
+    await run(`app.tour.goTo(${-P}, -1, { jump: true }); app.settle()`)
+    await page.focus('#scene')
+    const stageAge = await ui('Object.fromEntries(app.data.geology.stages.map((s) => [s.id, s.age]))')
+    let last = await ui('app.geoClock.age')
+    let lastStage = Infinity
+    const walk = [`${last}`]
+    for (let i = 0; i < 80; i++) {
+      await press('ArrowRight')
+      const [c, s, stop, id, age, stage] = await ui("[app.tour.chapter, app.tour.step, app.tour.stop, app.tour.event?.id ?? app.tour.current?.era.id, app.geoClock.age, app.tour.event?.stage ?? null]")
+      if (c >= 0) break
+      const at = `${id}${stop >= 0 ? ` stop ${stop + 1}` : ''}`
+      if (age > last + 1e-9) throw new Error(`back in time at ${at}: ${last} → ${age} Ma (walk ${walk.join(' → ')})`)
+      if (stage && stageAge[stage] > lastStage + 1e-9) throw new Error(`back to an older stage at ${at}: ${stage} (${stageAge[stage]} Ma) after one of ${lastStage} Ma`)
+      if (stage) lastStage = Math.min(lastStage, stageAge[stage])
+      if (age < last - 1e-9 || s < 0) walk.push(`${s < 0 ? `[${id}] ` : ''}${+age.toFixed(5)}`)
+      last = age
+    }
+    console.log(`      ${walk.join(' → ')}`)
+  })
+
   await check('the clock in Ma: a log track from the oldest stage to now, the age in words, and the years again in chapter 1', async () => {
     await run(`app.tour.goTo(${-P}, 0, { jump: true }); app.settle()`)
     const t = await ui(`(() => { const ticks = [...document.querySelectorAll('.tl-tick')]; return { labels: ticks.map((e) => e.textContent.trim()), lefts: ticks.map((e) => parseFloat(e.style.left)), max: document.querySelector('.tl-input').max, year: document.querySelector('.tl-year').textContent, era: document.querySelector('.tl-era').textContent } })()`)
