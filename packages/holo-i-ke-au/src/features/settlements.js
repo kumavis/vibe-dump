@@ -71,7 +71,8 @@
 //   Hilo …) the lots that carry a tower in the last year are ranked by their
 //   value and density, and a year raises towers on as many of the first of
 //   them as the record's share of the year gives, never more than its count
-//   (rankTowers, towerKind); the rest of an island goes by its island's
+//   (an island's tiles share the count out as seats: rankTowers,
+//   towerSeats, towerKind); the rest of an island goes by its island's
 //   share. The others take the walk-up or the mid-rise of before.
 // - The years. Each lot is asked, year by sampled year (every four years from
 //   contact, and at every date a patch or a feature changes), whether a
@@ -824,13 +825,12 @@ export class Scatter {
    * The record's ramp over a batch of lots (the district's all at once, an
    * island's tile by tile): in each area, the m lots that carry a tower in
    * the last year ranked by how strongly they call for one, so that in a
-   * year the first share × `cap` of them stand (towerKind) and no others do.
-   * `cap` is m, or where the record counts the area the fewer of m and the
-   * batch's quota of the count: the whole count for a batch that holds the
-   * whole area (`tile` null), and for an island's tile (`tile` its corner)
-   * the count's part that the tile's share of the area's tower ground gives
-   * it (towerQuota). The quotas sum to the count, so no year ever holds more
-   * towers in an area than the record gives it.
+   * year the first n of them stand (towerKind) and no others do. Where the
+   * batch holds the whole area (`tile` null), n is share × the fewer of m
+   * and the record's count; for an island's tile (`tile` its corner), the
+   * tile's seats among the year's count × share (towerSeats), and m where
+   * the record gives a share alone. The seats of a year sum to its count, so
+   * no year ever holds more towers in an area than the record gives it.
    */
   rankTowers(lots, cap, tile = null) {
     if (!this.towerRec) return
@@ -840,7 +840,7 @@ export class Scatter {
       const a = this.towerAreaAt(l.x, l.z)
       if (!a) continue
       let g = groups.get(a)
-      if (!g) groups.set(a, (g = { area: a, lots: [], m: 0, cap: 0 }))
+      if (!g) groups.set(a, (g = { area: a, lots: [], m: 0, cap: 0, seats: null }))
       l.tG = g
       l.tI = -1
       const p = this.towerCall(l, cap)
@@ -852,28 +852,32 @@ export class Scatter {
       g.lots.forEach(([, l], i) => (l.tI = i))
       g.m = g.lots.length
       g.lots = null
-      g.cap = g.area.count === null ? g.m : Math.min(g.m, tile ? this.towerQuota(g.area, tile) : g.area.count)
-      const t = this.towerGroups.get(g.area.id) || { count: g.area.count, lots: 0, cap: 0 }
+      const a = g.area
+      g.cap = a.count === null ? g.m : Math.min(g.m, a.count)
+      if (tile && a.count !== null) g.seats = this.towerSeats(a).get(this.tileKey(tile[0] + GRID_TILE / 2, tile[1] + GRID_TILE / 2)) || []
+      const t = this.towerGroups.get(a.id) || { count: a.count, lots: 0 }
       t.lots += g.m
-      t.cap = +(t.cap + g.cap).toFixed(2)
-      this.towerGroups.set(g.area.id, t)
+      if (g.seats) t.seats = (t.seats || 0) + g.seats.length
+      this.towerGroups.set(a.id, t)
     }
   }
 
-  /** An island tile's quota of an area's count (`tile` its corner): the count × the tile's share of the area's tower ground. */
-  towerQuota(a, [x0, z0]) {
-    a.weight ??= this.towerGround(a, a.box)
-    if (!a.weight) return 0
-    return (a.count * this.towerGround(a, [x0, z0, x0 + GRID_TILE, z0 + GRID_TILE])) / a.weight
+  /** The island grid tile a point falls in (towns.js lays its tiles from the pack's corner). */
+  tileKey(x, z) {
+    return `${Math.floor((x - this.rect.x0) / GRID_TILE)},${Math.floor((z - this.rect.z0) / GRID_TILE)}`
   }
 
   /**
-   * An area's ground within a box that may carry a tower: the zoning
-   * raster's texels of classes 3, 5 and 7 whose middles lie in both, or
-   * where the island has no zoning, every texel of the settlement grid
-   * whose middle does.
+   * An area's seats on the island's tiles, once: its count shared out one
+   * seat at a time to the tile with the most tower ground per seat it holds
+   * (the highest average, so a tile's seats among the first n never fall as
+   * n rises). Tower ground is the zoning raster's texels of classes 3, 5 and
+   * 7 whose middles lie in the area, or where the island has no zoning,
+   * every texel of the settlement grid that does. tile key → the indices of
+   * its seats, rising.
    */
-  towerGround(a, [bx0, bz0, bx1, bz1]) {
+  towerSeats(a) {
+    if (a.seats) return a.seats
     const img = this.zoning?.zoning
     const r = this.zoning?.rect
     const W = img ? img.W : this.crop.w
@@ -882,20 +886,42 @@ export class Scatter {
     const z0 = img ? r.z0 : this.crop.z0
     const sx = img ? (r.x1 - r.x0) / W : this.crop.sx
     const sz = img ? (r.z1 - r.z0) / H : this.crop.sz
-    const lo = [Math.max(bx0, a.box[0]), Math.max(bz0, a.box[1])]
-    const hi = [Math.min(bx1, a.box[2]), Math.min(bz1, a.box[3])]
-    if (lo[0] >= hi[0] || lo[1] >= hi[1]) return 0
-    let w = 0
-    for (let j = Math.max(0, Math.floor((lo[1] - z0) / sz)); j <= Math.min(H - 1, Math.floor((hi[1] - z0) / sz)); j++) {
+    const w = new Map()
+    for (let j = Math.max(0, Math.floor((a.box[1] - z0) / sz)); j <= Math.min(H - 1, Math.floor((a.box[3] - z0) / sz)); j++) {
       const z = z0 + (j + 0.5) * sz
-      if (z < lo[1] || z >= hi[1]) continue
-      for (let i = Math.max(0, Math.floor((lo[0] - x0) / sx)); i <= Math.min(W - 1, Math.floor((hi[0] - x0) / sx)); i++) {
+      for (let i = Math.max(0, Math.floor((a.box[0] - x0) / sx)); i <= Math.min(W - 1, Math.floor((a.box[2] - x0) / sx)); i++) {
         const x = x0 + (i + 0.5) * sx
-        if (x < lo[0] || x >= hi[0] || !inside(a.ring, x, z)) continue
-        if (!img || TOWER_ZONES.has(img.px[j * W + i])) w++
+        if (!inside(a.ring, x, z) || (img && !TOWER_ZONES.has(img.px[j * W + i]))) continue
+        const k = this.tileKey(x, z)
+        w.set(k, (w.get(k) || 0) + 1)
       }
     }
-    return w
+    const tiles = [...w.entries()].sort((p, q) => q[1] - p[1] || (p[0] < q[0] ? -1 : 1))
+    const held = new Map(tiles.map(([k]) => [k, []]))
+    for (let n = 0; n < (tiles.length ? a.count : 0); n++) {
+      let best = null
+      let bv = -1
+      for (const [k, v] of tiles) {
+        const q = v / (held.get(k).length + 1)
+        if (q > bv) {
+          bv = q
+          best = k
+        }
+      }
+      held.get(best).push(n)
+    }
+    a.seats = held
+    return held
+  }
+
+  /** How many of a batch's ranked lots carry a tower in a year (rankTowers). */
+  towersStanding(g, y) {
+    const share = shareAt(g.area.share, y)
+    if (!g.seats) return Math.floor(share * g.cap + 1e-6)
+    const n = Math.floor(share * g.area.count + 1e-6)
+    let k = 0
+    while (k < g.seats.length && g.seats[k] < n) k++
+    return k
   }
 
   /**
@@ -911,7 +937,7 @@ export class Scatter {
     const name = KIND_NAMES[kind]
     if (kind === KIND.kauhale || LANDMARK.has(name)) return kind
     const y = this.Ys[Math.max(0, n - 1)]
-    if (l.tI >= 0 && l.tI < Math.floor(shareAt(g.area.share, y) * g.cap + 1e-6)) return KIND.tower
+    if (l.tI >= 0 && l.tI < this.towersStanding(g, y)) return KIND.tower
     if (kind !== KIND.tower) return kind
     return l.core || l.zone === ZONE.downtown || l.zone === ZONE.commercial ? KIND.midrise : KIND.walkup
   }

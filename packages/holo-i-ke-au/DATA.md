@@ -1817,25 +1817,33 @@ the historic buildings' to place as landmarks; this record is the count.
   give them.
 
 **What the app does with it** (features/settlements.js `rankTowers`,
-`towerKind`, for the district's scatter and every island's alike). In each
-area the `m` lots that carry a tower in the timeline's last year, as the
-model has it, are ranked by how strongly they call for one: the value with
-the density. In a sample year the first `share(year before) × cap` of them
-carry a tower, whatever the era's turn would have put there; any other lot
-the model would raise a tower on takes the walk-up, or downtown the
-mid-rise, that stood before the towers. `cap` is the fewer of `m` and the
-batch's quota of the count: the whole count where the scatter holds the
-whole area (the district), and an island tile's part of it by the tile's
-share of the area's ground in classes 3, 5 and 7 (every texel where the
-island has no zoning) otherwise; with no count (an island's share), `m`.
-The quotas sum to the count, so a year never holds more towers in an area
-than the record gives it; the lots worth most rise first; and an area with
-fewer lots that could carry one than the record has towers keeps the
-record's timing at the lots' scale. The share is read at the sample before
-(every four years), so a tower stands within four years of the record's
-year, never before it. Honolulu's areas lie inside the Nuʻuanu district's
-inner box, Salt Lake and Pearlridge wholly outside it, so no area is split
-between the two scatters.
+`towerSeats`, `towerKind`, for the district's scatter and every island's
+alike). In each area the `m` lots that carry a tower in the timeline's last
+year, as the model has it, are ranked by how strongly they call for one:
+the value with the density. In a sample year the first `n` of them carry a
+tower, whatever the era's turn would have put there, `n` read from the
+share of the sample before (every four years, so a tower stands within four
+years of the record's year and never before it); any other lot the model
+would raise a tower on takes the walk-up, or downtown the mid-rise, that
+stood before the towers.
+
+- Where the scatter holds the whole area (the district), `n` is the share ×
+  the fewer of `m` and the count, rounded down: an area with fewer lots that
+  could carry one than the record has towers keeps the record's timing at
+  the lots' scale.
+- An island's scatter works tile by tile and never holds a whole area, so
+  the area's count is shared out over its tiles as seats, one at a time to
+  the tile with the most ground in classes 3, 5 and 7 (every texel, where
+  the island has no zoning) per seat it already holds; a tile's `n` is its
+  seats among the year's first count × share, so a tile never loses a seat
+  as the years go on, and the seats of a year sum to the year's count. A
+  tile with fewer lots than seats leaves the rest empty.
+- With no count (an island's own share), `n` is the share × `m`.
+
+So a year never holds more towers in an area than the record gives it, and
+the lots worth most rise first. Honolulu's areas lie inside the Nuʻuanu
+district's inner box, Salt Lake and Pearlridge wholly outside it, so no
+area is split between the two scatters.
 
 **What each part rests on.** Today's count on Oʻahu is the City's building
 footprints (HoLIS) of 30 m and over, the height the NGA lidar's of 2005
