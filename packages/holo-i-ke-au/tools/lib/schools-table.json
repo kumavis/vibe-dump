@@ -2642,7 +2642,7 @@
     "key": 86
    },
    "footprint": "way/831441501",
-   "from": 1999,
+   "from": 1917,
    "to": null,
    "datePrecision": "by",
    "grades": "K–5",
@@ -2654,15 +2654,19 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "chronicling-america-hawaii",
+     "where": "Honolulu Star-Bulletin, 2 July 1917, p. 1: Kalihi Kai school in the list of Honolulu’s schools and their teachers"
     }
    ],
-   "by": "hidoe-ssir",
+   "by": "chronicling-america-hawaii",
    "pupils": {
     "year": 2018,
     "n": 547,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "kalihi-uka-elementary",
@@ -3351,7 +3355,7 @@
     "key": 109
    },
    "footprint": "way/1323295583",
-   "from": 1999,
+   "from": 1893,
    "to": null,
    "datePrecision": "by",
    "grades": "K–6",
@@ -3363,15 +3367,19 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "chronicling-america-hawaii",
+     "where": "The Hawaiian Star, 5 September 1893, p. 2: “the principal of the Kaunakakai School on Molokai”"
     }
    ],
-   "by": "hidoe-ssir",
+   "by": "chronicling-america-hawaii",
    "pupils": {
     "year": 2018,
     "n": 286,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "A Kaunakakai school stood by 1893; the record read does not say on this ground. No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "kawananakoa-middle",
@@ -5628,7 +5636,7 @@
     "key": 182
    },
    "footprint": "way/1323022130",
-   "from": 1999,
+   "from": 1900,
    "to": null,
    "datePrecision": "by",
    "grades": "K–5",
@@ -5640,15 +5648,19 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "chronicling-america-hawaii",
+     "where": "The Honolulu Republican, 16 November 1900, p. 1: the Board moves the Mountain View school to a building at the sixteen-and-three-quarter-mile point"
     }
    ],
-   "by": "hidoe-ssir",
+   "by": "chronicling-america-hawaii",
    "pupils": {
     "year": 2018,
     "n": 468,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "Moved in 1900 from the twenty-two-mile point to a building the Olaʻa plantation gave at the sixteen-and-three-quarter-mile point. No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "naalehu-elementary",
@@ -5964,7 +5976,7 @@
     "key": 194
    },
    "footprint": "way/253581535",
-   "from": 1999,
+   "from": 1893,
    "to": null,
    "datePrecision": "by",
    "grades": "K–9",
@@ -5976,15 +5988,19 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "chronicling-america-hawaii",
+     "where": "The Pacific Commercial Advertiser, 20 July 1893, p. 4: the Paʻauilo schools on the inspector’s round"
     }
    ],
-   "by": "hidoe-ssir",
+   "by": "chronicling-america-hawaii",
    "pupils": {
     "year": 2018,
     "n": 196,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "A school at Paʻauilo stood by 1893; the record read does not say on this ground. No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "pahoa-elementary",
@@ -6206,7 +6222,7 @@
     "key": 202
    },
    "footprint": "way/479829222",
-   "from": 1999,
+   "from": 1896,
    "to": null,
    "datePrecision": "by",
    "grades": "K–6",
@@ -6218,15 +6234,19 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "chronicling-america-hawaii",
+     "where": "The Hawaiian Star, 28 November 1896, p. 5: the Board securing a lot for the Pearl City school, “included in the present site”"
     }
    ],
-   "by": "hidoe-ssir",
+   "by": "chronicling-america-hawaii",
    "pupils": {
     "year": 2018,
     "n": 430,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "pearl-city-high",
@@ -14565,6 +14585,18 @@
    "read": "part",
    "note": "Read 2026-11-08 in the Library of Congress’s scans: the index of specials and sheet 4, the Hilo Boarding School for boys with its classrooms, dormitories and manual-training shop east of Waiānuenue Avenue, St. Mary’s School for boys below it.",
    "wanted": "Sheet 4 registered on Waiānuenue Avenue (the old Hilo Hospital across the road), for the boarding school’s site."
+  },
+  {
+   "id": "chronicling-america-hawaii",
+   "title": "Chronicling America: Hawaiʻi’s newspapers, 1834–1963",
+   "author": "Library of Congress and the University of Hawaiʻi (National Digital Newspaper Program)",
+   "year": 2026,
+   "url": "https://www.loc.gov/collections/chronicling-america/?fa=location_state:hawaii",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "note": "Searched 2026-11-08 for each school still dated by its first report, by its name with “school”, earliest first; a page counts only where its own text carries the name and the context shows this school. Each citation names the paper, the date and the page.",
+   "wanted": "The Hawaiian-language papers (Papakilo), and the English papers the search missed, for the schools without a dated mention."
   }
  ]
 }
