@@ -1174,9 +1174,9 @@ function testDistricts(spots) {
       // rice in an old loʻi for its own years, a second loʻi on the taro one's outline, the taro's years ending where the rice's begin (DATA.md "Crops, on the era layers")
       F('test-loi-waikalua-rice', 'loi', 'Test loʻi Waikalua', rectRing(spots.loiWaikalua, 0.3, 0.2, 35), { from: 1860, to: 1945, crop: 'rice' }),
       F('test-loi-waikalua', 'loi', 'Test loʻi Waikalua', rectRing(spots.loiWaikalua, 0.3, 0.2, 35), { to: 1859 }),
-      // the ponds on the shore: one filled in 1940, two that stay
+      // the ponds on the shore: one filled in 1940 (a loko puʻuone, on its own banks), two walled that stay
       F('test-pond-heeia', 'fishpond', 'Test pond Heʻeia', rectRing(spots.pondHeeia, 0.4, 0.28, seaward(spots.pondHeeia))),
-      F('test-pond-filled', 'fishpond', 'Test pond, filled', rectRing(spots.pondFilled, 0.32, 0.22, seaward(spots.pondFilled)), { to: 1939 }),
+      F('test-pond-filled', 'fishpond', 'Test pond, filled', rectRing(spots.pondFilled, 0.32, 0.22, seaward(spots.pondFilled)), { to: 1939, pond: 'puuone' }),
       F('test-pond-pahonu', 'fishpond', 'Test pond Pāhonu', rectRing(spots.pondPahonu, 0.22, 0.16, seaward(spots.pondPahonu))),
       F('test-village', 'village', 'Test village Kāneʻohe', rectRing(spots.village, 0.5, 0.35, 35), { to: 1850, tellings: households('forty') }),
       F('test-label-heeia', 'label', 'Heʻeia (test)', point(spots.pondHeeia)),

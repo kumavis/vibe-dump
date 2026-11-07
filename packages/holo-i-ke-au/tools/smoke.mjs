@@ -2858,6 +2858,16 @@ if (towersRec?.areas?.length) {
         console.log(`      ${y}: ${q.loi.length} loʻi${q.loi.length && q.loi.length <= 6 ? ` (${q.loi.join(' ')})` : ''}; ${ponds} ponds, ${village} village; patches ${q.patches.map((p) => `${p.id}:${p.k}`).join(' ') || 'none'}; ${brief(q)}; names ${q.names.join(', ')}`)
       }
     })
+    await check(`${yd}: each loko kuapā walled in stone round its outline, each inland pond (puʻuone, wai) on its own banks`, async () => {
+      const q = await ui(`(() => {
+        const rec = app.districts.cur, ponds = rec.d.rastered.filter((x) => x.f.properties.kind === 'fishpond').map((x) => x.f.properties)
+        const walled = ponds.filter((p) => !p.pond || p.pond === 'kuapa')
+        return { walls: rec.features.stats().pondWalls, walled: walled.map((p) => p.name), open: ponds.filter((p) => !walled.includes(p)).map((p) => \`\${p.name} (\${p.pond})\`) }
+      })()`)
+      if (q.walls !== q.walled.length) throw new Error(`${q.walls} walls for ${q.walled.length} walled ponds: ${JSON.stringify(q)}`)
+      if (!q.open.length) throw new Error(`no inland pond to try: ${JSON.stringify(q)}`)
+      console.log(`      ${q.walls} walled (${q.walled.join(', ')}); on their own banks: ${q.open.join(', ')}`)
+    })
     await check(`${yd} at now: no patch, the shore the pack's own, the buildings by the zoning, nothing of an earlier year`, async () => {
       const c = at[lastY] || (await yearOf(lastY))
       const bad = []

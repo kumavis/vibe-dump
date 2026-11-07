@@ -4,7 +4,9 @@
 // whitecaps in the trades. The set-wave breakers on the reef crest and the
 // stream-plume maps are left out: they belong to a 17 m heightmap, and the
 // islands' are 70 to 300 m. A district's fishponds (common.glsl.js
-// distPond) lie still and green behind their walls. Where a patch gives a
+// distPond) lie still and green, over a floor of silt and mud: a pond's bed is
+// not the sea's sand and coral heads, which through its shallow water read as
+// a dry, mottled flat. Where a patch gives a
 // year back its reef flat (common.glsl.js patchReef), the water over it is
 // drawn as the natural reef beside it is, sand and reef seen through its
 // depth, so the restored flat carries on the reef round it.
@@ -99,6 +101,8 @@ void main() {
   vec3 reefC = mix(vec3(0.30, 0.27, 0.20), vec3(0.42, 0.30, 0.34), fbm2F(xz * 4.0 + 7.0, px * 4.0));
   float reef = smoothstep(0.45, 0.62, fb) * (1.0 - smoothstep(4.0, 14.0, depth));
   vec3 bed = mix(sandC, reefC, clamp(reef, 0.0, 1.0));
+  // (a fishpond's floor: dark silt, faintly uneven)
+  bed = mix(bed, vec3(0.20, 0.18, 0.12) * (0.9 + 0.2 * fb), pond);
   // the reef flat of a patch's years is drawn as the reef beside it is: the
   // same bed, sand and reef by the same ground-fixed noise, seen through its
   // own depth, so it reads as that reef carried on and not as a surface of

@@ -159,6 +159,8 @@ const LOI_STEEP_FAIL = 0.1
 // what grows in a loʻi (DATA.md "Crops, on the era layers"): a loʻi may carry crop with its own years; none is taro.
 // Rice first appears at the mahele keyframe (1853), and the record has it in Koʻolaupoko's marsh by 1860.
 const CROPS = new Set(['taro', 'rice'])
+// a fishpond's type, after Kikuchi (1973): loko kuapā (walled from the sea), loko puʻuone (behind a sand berm), loko wai (inland, fresh)
+const POND_TYPES = new Set(['kuapa', 'puuone', 'wai'])
 const FIRST_RICE = 1850
 const COARSE = new Set(['ahupuaa', 'moku', 'island']) // what a heiau may be held at
 const HEIAU_CENTROID_KM = 0.3 // a heiau at ahupuaʻa precision stands at its ahupuaʻa's centroid, within this
@@ -999,6 +1001,11 @@ function checkDistrict(d) {
       else { useSource(`${at} telling`, t.source); checkHawaiian(`${at} telling`, t.says) }
     }
     if (p.kind === 'village' && !(p.tellings || []).length) bad(at, 'a village carries its households in a telling (none here)')
+    // a fishpond's type: only on a fishpond, one of the three; unset is a loko kuapā
+    if (p.pond !== undefined) {
+      if (p.kind !== 'fishpond') bad(at, `pond is for a fishpond only (this is a ${p.kind})`)
+      else if (!POND_TYPES.has(p.pond)) bad(at, `pond “${p.pond}” is not ${[...POND_TYPES].join(' | ')}`)
+    }
     // a loʻi's crop: taro or rice, only on a loʻi; rice is dated
     if (p.crop !== undefined) {
       if (p.kind !== 'loi') bad(at, `crop is for a loi only (this is a ${p.kind})`)

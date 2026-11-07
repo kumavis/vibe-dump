@@ -693,6 +693,17 @@ Hōkūleʻa in 1976 (DESIGN.md §14).
   timeline's end no patch whose `until` has passed applies, the shore is the
   pack's own, and the settlements take their kinds from the zoning; the
   district layer assumes no year of its own.
+- **A fishpond's type.** A fishpond may carry `pond`, its kind in Kikuchi's
+  typology (1973, Appendix A): `kuapa`, a loko kuapā, the shore pond walled
+  in stone or coral on the side or sides facing the sea; `puuone`, a loko
+  puʻuone, a shore pond behind a barrier beach, joined to the sea by a
+  ditch; `wai`, a loko wai, an inland fresh-water pond, a natural lake or
+  marsh. Unset is `kuapa`. The app walls a loko kuapā in stacked stone along
+  its whole outline; a loko puʻuone or a loko wai keeps the banks its outline
+  gives it, the sand, the marsh or the foot of the hills, since a wall
+  somewhere on it (a dividing wall, a ditch's mākāhā) is not the outline.
+  Kawainui and Kaʻelepulu are `wai`, as Kikuchi lists them (pp. 238, 242),
+  and Cobb's "fresh-water pond" of about 1900 is Kaʻelepulu too.
 
 ### How to bake a district
 

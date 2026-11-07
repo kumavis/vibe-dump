@@ -3,8 +3,9 @@
 // (render/district.js) and shown as it takes over:
 //
 // - the loʻi and the fishponds' water are laid into the ground itself
-//   (common.glsl.js, district.glsl.js); here, each pond's wall of stacked
-//   stone round it;
+//   (common.glsl.js, district.glsl.js); here, round a loko kuapā, its wall
+//   of stacked stone (an inland pond, a loko puʻuone or a loko wai, keeps
+//   the banks its outline gives it: pondWalled);
 // - the village at Kou, a cluster of hale on their paepae, the houses
 //   scattered in kauhale of two to four (how many is a drawing choice: no
 //   source read counts them for 1795, and none is implied), and canoes drawn
@@ -46,6 +47,14 @@ const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
   return t * t * (3 - 2 * t)
 }
+
+/**
+ * Whether a fishpond is walled in stone round its outline: a loko kuapā, the
+ * shore pond walled off from the sea (a pond whose `pond` is unset is one).
+ * A loko puʻuone, behind a sand berm, and a loko wai, an inland lake or
+ * marsh, have the banks their outline gives them (DATA.md "District packs").
+ */
+export const pondWalled = (p) => !p?.pond || p.pond === 'kuapa'
 
 function mulberry32(seed) {
   let a = seed >>> 0
@@ -140,7 +149,7 @@ export class DistrictFeatures {
       const kind = f.properties?.kind
       const ring = f.geometry.coordinates[0].map((c) => proj.toWorld(c))
       if (kind === 'village') this.buildVillage(B, ring, index, rand)
-      else if (kind === 'fishpond') this.buildPond(B, ring, index, rand)
+      else if (kind === 'fishpond' && pondWalled(f.properties)) this.buildPond(B, ring, index, rand)
     }
     this.structMat = objectMaterial(shared, this.own, { fade: [70, 110] })
     this.structures = new THREE.Mesh(B.geometry(), this.structMat)
