@@ -3196,7 +3196,7 @@ try {
   const { url, close } = await startStaticServer(dist)
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
   try {
-    let lanes = true
+    let lanes = true, deckNext = false
     if (a.only !== 'tips' && !a.fort && !a.hulls) {
       const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 }, hasTouch: true })).newPage()
       page.setDefaultTimeout(IDLE_MS)
@@ -3221,9 +3221,7 @@ try {
           await page.click('[data-mode="hotseat"]')
           await page.click('#setupStart')
           await checkCarts(page, (l) => console.log(`  ok   ${l}`))
-          // ((F9c) the War-Carts' firing decks, on a page of their own)
-          console.log('\ninput-check (F9c): the War-Carts\' firing decks, by the mouse and the keys\n')
-          await deckPage(browser, url, (l) => console.log(`  ok   ${l}`), ['carts'])
+          deckNext = true
         }
         lanes = !errors.length
       } catch (e) {
@@ -3232,6 +3230,19 @@ try {
       if (errors.length) console.log(`  FAIL page errors:\n         ${errors.slice(0, 5).join('\n         ')}`)
       // ((V3a) its page closed: one left playing would hold up the next)
       await page.context().close()
+    }
+    // ((F9c) the War-Carts' firing decks, on a page of their own, opened
+    // once the carts' page is closed: (the sweep's) opened beside it, that
+    // page's battle still playing, the deck page's load timed out at 120 s
+    // in the default run on a loaded box, as snap-check's Howdah page had)
+    if (deckNext) {
+      console.log('\ninput-check (F9c): the War-Carts\' firing decks, by the mouse and the keys\n')
+      try {
+        await deckPage(browser, url, (l) => console.log(`  ok   ${l}`), ['carts'])
+      } catch (e) {
+        console.log(`  FAIL ${e.message}`)
+        lanes = false
+      }
     }
     // (V3a) the conditions' tips, by the mouse at 1280×800 and by real
     // touches on a 390×844 phone
