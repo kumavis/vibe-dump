@@ -1848,8 +1848,12 @@ lon/lat (WGS84), simplified to 2 m, the whole directory under 5 MB.
 The streets are today's: each county's own centrelines as the State GIS
 serves them, cut to the town's box (a segment whose middle point lies in
 it). Each segment (a stretch between crossings, as the county draws it) is
-dated by the oldest georeferenced sheet over the town that draws it, found
-on the sheet by its line (the bake, below); a street's segments of one date
+dated by the oldest sheet over the town that draws it, found on the sheet by
+its line (the bake, below): the sheets the State serves georeferenced, and
+the Government Survey's registered maps of the towns, placed here on
+today's streets. A street a dated directory lists by name is dated by the
+directory, on the stretches a map of its years shows (below, "How the
+directories date a street"). A street's segments of one date
 are then joined end to end where no third of them meets the joint, so a
 feature is a run of one street of one date. A street known only from today's layer is dated by the
 layer's year. So every date is a `by`: the street was there by then, and
@@ -1861,12 +1865,17 @@ the contract for it, and stays null in this bake.
 // streets/manifest.json
 { "about": "...", "rule": "the finding and dating rule written out", "baked": "2026-11-06", "tool": "tools/bake-streets.mjs",
   "centrelines": { "oahu": { "id": "state-gis-oahu-roads", "url": "...", "fields": "...", "asOf": 2024, "licence": "...", "fetched": "...", "note": "..." } },
+  "directories": [ { "source": "bennett-1869-honolulu-directory", "town": "honolulu", "year": 1869, "within": 20,
+                     "streets": { "Nuuanu Street": ["NUUANU AVE"], … }, "lost": ["Emma Street", …] } ],
   "towns": [ { "id": "honolulu", "name": "Honolulu", "island": "oahu", "bounds": [west, south, east, north],
                "file": "honolulu.geojson", "centrelines": "state-gis-oahu-roads",
                "sheets": [ { "year": 1881, "source": "hgs-1881-oahu", "service": "...", "old": true,
                              "shift": [east, north],              // metres the sheet was moved over the town
                              "cells": [ { "cell": [i, j], "shift": [east, north] } ], "cellsOwn": 79, "cellMetres": 1200,
-                             "found": 0.12 } ],                   // share of the town's pieces the sheet draws
+                             "found": 0.12 },                     // share of the town's pieces the sheet draws
+                           { "year": 1881, "key": "rm867", "source": "hgs-rm-867", "service": "https://kipukadatabase.com/…",
+                             "placed": { "registeredMap": 867, "scale": 6000, "transform": [a, b, c, d, e, f],   // map pixel (u, v) → grid pixel: (a u + b v + c, d u + e v + f)
+                                         "turn": 0.04, "metresPerPixel": 0.972, "printed": 1.003, "score": 0.36, "mask": [] }, … } ],
                "stats": { "segments": 7411, "km": 1043.2, "kmBy": { "1881": 40.1, … } } } ] }
 ```
 
@@ -1884,7 +1893,8 @@ Every feature's `properties`:
 | `by` | the id in `sources.json` of that sheet (or of the layer); opened |
 | `after` | the id of the last sheet before `by` that covers the street and does not draw it; `null` where none does |
 | `seen` | per sheet of the town, in the manifest's order: the share of the street's length the sheet draws, or `null` where the sheet does not cover it |
-| `sources` | the layer, `by` and `after` |
+| `shownBy` | where `by` is a directory: the sheet that shows the stretch (its date pushed back to the directory's) |
+| `sources` | the layer, `by`, `after` and `shownBy` |
 
 Rules, enforced by `tools/check-data.mjs`: ids unique and kebab-case;
 `town` the town's; `class` from the two; `from` a year from 1778 to the
@@ -1983,8 +1993,41 @@ with its square (at the edge of a search, as many pieces as 5% of those
 searched), so a sheet stays where the State placed it unless the streets
 say otherwise. The manifest keeps the shifts.
 
+**The registered maps.** The Government Survey's maps of a town, as the
+Office of Hawaiian Affairs' Kīpuka database serves them (a 1-bit scan at
+400 dpi in a PDF), are fetched and rendered with pdftoppm at about a metre
+a pixel (never under 100 dpi), and placed on the town's grid by an affine
+transform. A map starts either from a few street corners read off it by
+hand (`seed` in `tools/lib/streets-registered.mjs`: the map pixel, the
+corner's name and today's lon and lat) or from a search over its turn (12°
+either way) and scale (8% either way of its printed scale) whose shift comes
+from a cross-correlation by FFT of its lines with today's centrelines at 16
+m a pixel (its textures left out: a cell's ink less the mean about it,
+nothing where that mean passes 8%). Either way it is then refined on a
+distance map of today's centrelines at 4 m, by turns of shift and of turn and
+scale, finer each round, scoring a sample of its ink by its nearness to a
+street. The bake then warps it onto the town's grid (each grid pixel the
+darkest of the map's pixels under it, so a fine line is kept), reads a patch
+of it whose ink passes a share (`texture`; 22% unless the map says, none on
+a map without hachures) as no sheet, and finds and dates the streets on it
+as on any sheet, its shifts and cells included. The manifest keeps each
+map's `placed` transform.
+
+**How the directories date a street.** A directory gives a street's name in
+a year, not its stretch: today's King Street runs to Kaimukī, the King
+Street of 1869 did not. So a directory (`tools/lib/streets-directories.mjs`:
+its year, the names it prints with today's for each, read off its pages)
+dates a run of a street it lists only where a map drawn within `within`
+years after it already shows that run: the run's date moves back to the
+directory's, `by` the directory, with the map kept as `shownBy`. A stretch
+first shown later keeps the later map's date. A name the directory prints
+that today's layer lacks, or has under a name no source read resolves, is
+listed as `lost`, a candidate for a street closed or renamed.
+
 **How a street is dated.** A piece is dated by the oldest sheet that finds
-it, provided at least half the later sheets that cover it find it too; a
+it, provided at least half the later sheets that cover it find it too
+(counting, after a larger sheet, only the larger later ones: an island map
+at 1:60,000 that does not draw a street says little); a
 segment by the year by which half its dated length is dated, where at least
 30% of its length is dated at all (a piece under a label or a symbol is found
 on no sheet, and says nothing either way); any other segment by the layer's
@@ -1994,17 +2037,26 @@ year.
 
 | island | sheets |
 | --- | --- |
-| Oʻahu | Government Survey 1881 and 1899 (`Historic_Maps/Oahu_1881`, `Oahu_1899`), Donn's of 1902 (`islands_1900s`, raster 8); the USGS quadrangles of 1927 (`SoH_Maps/oahu_topo_1927`), the 1938 sheet (`Historic_Maps/Oahu_1938`), the 1943 sheet (`SoH_Maps/Oahu_1943`), the quadrangles of about 2000 (`USGS_topos_2000`) |
-| Maui | Donn's of 1903 (raster 5); the 1924 quadrangles; about 2000 |
+| Oʻahu | Government Survey 1881 and 1899 (`Historic_Maps/Oahu_1881`, `Oahu_1899`), Donn's of 1902 (`islands_1900s`, raster 8); the USGS quadrangles of 1927 (`SoH_Maps/oahu_topo_1927`), the 1938 sheet (`Historic_Maps/Oahu_1938`), the 1943 sheet (`SoH_Maps/Oahu_1943`), the quadrangles of about 2000 (`USGS_topos_2000`); over Honolulu, the Survey's registered maps 867 (J. F. Brown, 1881, 1:6,000) and 1397 (F. S. Dodge, 1888, 1:1,200), each placed from four street corners, and Bennett's directory of 1869 |
+| Maui | Donn's of 1903 (raster 5); the 1924 quadrangles; about 2000; over Lahaina, the Survey's registered map 1137 (S. E. Bishop, 1883, 1:6,000), placed by its search alone |
 | Molokaʻi | Dodge's of 1897 (raster 6); the 1922 quadrangles; about 2000 |
 | Hawaiʻi | Donn's of 1901 (raster 1); the quadrangle over the town (Waiākea 1912 for Hilo, Kalaoa 1924 for Kailua); about 2000 |
 | Kauaʻi | Donn's of 1903 (raster 3); the 1910 and 1963 quadrangles; about 2000 |
 
 **What it cannot do.** The island maps of 1881 to 1903 are at about
 1:60,000 and draw a town's streets small and generalized; few of their
-streets are found, and those are often the main roads, so a town is on its
-streets from the first quadrangle (1910 to 1927) far more than before it,
-and before the earliest sheet it is on the grid. Between the 1940s and
+streets are found, and those are often the main roads, so a town no
+registered map is read for is on its streets from the first quadrangle
+(1910 to 1927) far more than before it, and before the earliest sheet it is
+on the grid. Of the towns' registered maps, Honolulu's of 1881 and 1888 and
+Lahaina's of 1883 are read; Monsarrat's Honolulu of 1897 (RM 1910) and
+Baldwin's Hilo of 1891 (RM 1561) were opened but neither the search nor any
+corners read so far place them (their lot lines, lettering and hachures
+outweigh their streets in the search, and Hilo's streets bear names today's
+layer has changed), so Hilo in the 1890s and Honolulu beyond the 1888 map's
+downtown in the 1890s stand on the sheets of 1881 and of 1899 to 1912. Of the
+directories, only Bennett's of 1869 was found with its text; Bowser's of
+1880 and Husted's from 1890 were not, and are wanted. Between the 1940s and
 about 2000 Oʻahu has no sheet read here, nor any island between its
 quadrangle and about 2000 but Kauaʻi (1963), so a street built in those
 years is dated by the next sheet. Streets closed or built over (Chinatown's

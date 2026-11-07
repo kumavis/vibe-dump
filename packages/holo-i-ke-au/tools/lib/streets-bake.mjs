@@ -723,14 +723,17 @@ async function bakeTown(dir, town, ledger, log, draw = null) {
 
 const ABOUT =
   'Today’s street centrelines of each town, each segment dated by the oldest georeferenced sheet over the town that draws it ' +
-  '(the Government Survey’s maps of the islands from 1881 to 1903, the U.S. Geological Survey’s quadrangles from 1910 to 1963 and of about 2000), ' +
-  'found on each sheet by its line, and borne out by the later sheets. Every date is a date by which the street was there.'
+  '(the Government Survey’s maps of the islands from 1881 to 1903 and its registered maps of the towns, placed on today’s streets, the U.S. Geological Survey’s quadrangles from 1910 to 1963 and of about 2000), ' +
+  'found on each sheet by its line, and borne out by the later sheets; a stretch a map shows within a directory’s reach, of a street the directory lists, by the directory. Every date is a date by which the street was there.'
 const RULE =
   `Each segment is cut into pieces of about ${PIECE} m, sampled every ${SHEET_PIXEL} m along it, ${END_TRIM} m short of its ends. ` +
   `A sheet pixel is ink where it is darker than ${INK} of the sheet's paper (the 80th percentile of brightness over the export tile), or the share the sheet's own \`ink\` gives. ` +
   `A piece is found on a sheet where, at some offset within ${OFFSET} m of it, at least ${LINE * 100}% of its samples are ink or within a pixel of ink, and at some offset within ${OPEN} m, at least ${CLEAR * 100}% are paper. ` +
   `Each sheet is first moved over the town by the shift that finds the most pieces (searched within ${SEARCH.old} m for the Government Survey's island maps, ${SEARCH.new} m for the quadrangles, by 20 m, then by 5 m and by a pixel), then over each ${CELL} m cell holding at least ${MIN_CELL} pieces by its own shift within ${REFINE.old} or ${REFINE.new} m of that; each move costs as many pieces as ${MOVE * 100}% of those searched at the edge of its search, less nearer in, so a sheet stays where the State placed it unless the streets say otherwise. ` +
-  `A piece is found on one of the Government Survey's island maps only where at least ${OLD.line * 100}% of its samples are ink, without the pixel's grace, and ${OLD.clear * 100}% paper; it is dated by the oldest sheet that finds it, if at least half the later sheets that cover it find it too and, for an island map, another island map finds it too where two or more cover it; a segment by the year by which half its dated length is dated, where at least ${DATED * 100}% of its length is dated at all; any other segment by the centreline layer’s own year.`
+  `A piece is found on one of the Government Survey's island maps only where at least ${OLD.line * 100}% of its samples are ink, without the pixel's grace, and ${OLD.clear * 100}% paper; it is dated by the oldest sheet that finds it, if at least half the later sheets that cover it find it too and, for an island map, another island map finds it too where two or more cover it; a segment by the year by which half its dated length is dated, where at least ${DATED * 100}% of its length is dated at all; any other segment by the centreline layer’s own year. ` +
+  `A registered map is placed on today’s centrelines by an affine transform, from street corners read off it where it has them, else from a search of its turn and scale whose shift comes from a cross-correlation of its lines with the streets, refined on a distance map of the streets; a patch of it denser in ink than its texture share is read as no sheet. ` +
+  `A run of a street a directory lists, first shown on a sheet within the directory’s reach after it, is dated by the directory (the sheet kept as shownBy). ` +
+  `Of the later sheets that bear a date out, after a larger sheet only the larger later ones count.`
 
 export async function bakeStreets({ dir, out, towns, ledger, log, draw = null }) {
   if (draw) mkdirSync(draw, { recursive: true })
