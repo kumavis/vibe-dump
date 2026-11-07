@@ -31,6 +31,7 @@
 import * as THREE from 'three'
 import { Builder, MAT, col, indexed, Y } from './kit.js'
 import { geometryPoint } from '../geo.js'
+import { OFF } from '../config.js'
 
 // a footprint drawn this much over life (the town's church is drawn at about
 // twice its size), and never under life
@@ -46,6 +47,8 @@ const KEEP = 0.02
 const cache = new Map()
 export function loadLandmarks(app) {
   const url = app.data.abs('landmarks.json')
+  // (held off for a measure: config.js OFF)
+  if (OFF.has('landmarks')) return Promise.resolve(null)
   if (!cache.has(url)) {
     cache.set(
       url,

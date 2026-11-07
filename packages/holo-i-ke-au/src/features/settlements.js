@@ -120,7 +120,7 @@ import { decodeGrey, settlementCodec } from '../data/layers.js'
 import { holding, spanOf } from '../data/district.js'
 import { patchLevel, fromHalf, ihash } from '../data/district-decode.js'
 import { distanceTransform, blur } from '../data/decode.js'
-import { EARLY_THIN, earlyGrowth } from '../config.js'
+import { EARLY_THIN, earlyGrowth, OFF } from '../config.js'
 import { geometryPoint } from '../geo.js'
 import { DISTRICT } from '../config.js'
 import { TREELESS, keptWeight } from '../data/works.js'
@@ -374,6 +374,8 @@ export function classAt(img, r, x, z) {
 
 /** towers.json, once per app (null where the data has none, or it cannot be read). */
 export function loadTowers(app) {
+  // (held off for a measure: config.js OFF)
+  if (OFF.has('towers')) return (app.towersRecord ??= Promise.resolve(null))
   app.towersRecord ??= fetch(app.data.abs('towers.json'))
     .then((r) => (r.ok ? r.json() : null))
     .catch((err) => {

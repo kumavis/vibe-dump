@@ -31,6 +31,7 @@ import { schoolKits } from './buildings.js'
 import { mulberry32, LIFT } from './settlements.js'
 import { Labels } from './labels.js'
 import { decodeSchools, eraWeight, KIT_BOX, KIT_NAMES } from '../data/schools.js'
+import { OFF } from '../config.js'
 
 // how long an island's schools are kept after it gave its slot up (s)
 const LINGER = 30
@@ -73,6 +74,12 @@ export class Schools {
   load() {
     this._load ??= (async () => {
       const url = this.url()
+      // (held off for a measure: config.js OFF)
+      if (OFF.has('schools')) {
+        this.byIsland = new Map()
+        this.available = false
+        return this.byIsland
+      }
       try {
         const res = await fetch(url)
         if (!res.ok) throw new Error(`HTTP ${res.status}`)

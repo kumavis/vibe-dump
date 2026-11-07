@@ -18,6 +18,7 @@ import * as THREE from 'three'
 import { Ribbons } from './ribbons.js'
 import { TOWN_PALETTE } from './buildings.js'
 import { StreetNet } from '../data/streets.js'
+import { OFF } from '../config.js'
 
 const LINGER = 30
 // the camera's distance over which the streets come in (as the towns' buildings do, a little further out)
@@ -53,6 +54,8 @@ export class Streets {
 
   /** streets/manifest.json, once; null where there is none. */
   manifest() {
+    // (held off for a measure: config.js OFF)
+    if (OFF.has('streets')) return (this._manifest ??= Promise.resolve(null))
     this._manifest ??= fetch(this.app.data.abs('streets/manifest.json'))
       .then((r) => (r.ok ? r.json() : null))
       .catch(() => null)

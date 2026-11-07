@@ -10,7 +10,7 @@
 // one whose edge is further away. render/world.js keeps a CPU copy of all of
 // this (metresAt), line for line, for the camera, picking and pins.
 
-import { NEAR_EXAG, NORMAL_EXAG, SLOTS, PATCHES, DIST_PATCHES, RESTORES, RESTORE_ISLANDS, EARLY_THIN } from '../../config.js'
+import { NEAR_EXAG, NORMAL_EXAG, SLOTS, PATCHES, DIST_PATCHES, RESTORES, RESTORE_ISLANDS, EARLY_THIN, OFF } from '../../config.js'
 import { RESTORE_TILE } from '../restores.js'
 
 const f = (v) => (Number.isInteger(v) ? v.toFixed(1) : String(v))
@@ -353,7 +353,7 @@ float distPatched(ivec2 p, float h, float r) {
     vec4 L = uDistLower[int(q.r * 255.0 + 0.5)];
     // (toward the reef round the patch where that is deeper than its own
     // depth: the carve keeps it there, district-decode.js reefLevel)
-    if (r < 127.5) h = mix(h, L.y < 0.0 ? min(L.y, texelFetch(uDistCarve, p, 0).r) : L.y, r / 127.0 * L.x);
+${OFF.has('reef') ? '    if (r < 127.5) h = mix(h, L.y, r / 127.0 * L.x);' : '    if (r < 127.5) h = mix(h, L.y < 0.0 ? min(L.y, texelFetch(uDistCarve, p, 0).r) : L.y, r / 127.0 * L.x);'}
     else h = mix(h, max(DIST_FILL, texelFetch(uDistCarve, p, 0).r), (r - 128.0) / 127.0 * L.x);
   }
   return h;

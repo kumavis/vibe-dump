@@ -112,3 +112,17 @@ export const EARLY = { from: 1150, to: 1450, share: 20000 / 130000 }
 export const earlyGrowth = (year) => Math.max(0, Math.min(1, (year - EARLY.from) / (EARLY.to - EARLY.from)))
 /** The settlement bytes taken off at EARLY.from, as a share of 255, in the layers' log encoding (d0 2, dMax 50,000). */
 export const EARLY_THIN = Math.log(1 / EARLY.share) / Math.log(1 + 50000 / 2)
+
+// Dev-only, for measuring what a feature costs a frame (ISSUES.md 13): the
+// page's `?off=` names features to hold off, comma-separated: `restores`
+// (the restore patches not read), `reef` (a district's lowers at their own
+// depth, without the carve's reef level), `schools`, `landmarks` (the named
+// buildings), `streets` (the towns' dated streets, so the grid alone lays
+// the lots), `towers` (the towers' record, so the zoning, density and value
+// raise them). Nothing in the app sets it; empty, everything is drawn.
+export const OFF = new Set(
+  (globalThis.location?.search ? new URLSearchParams(globalThis.location.search).get('off') || '' : '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean),
+)

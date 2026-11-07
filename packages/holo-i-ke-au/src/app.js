@@ -44,6 +44,7 @@ import { overlapReport } from './features/footprints.js'
 import { Schools } from './features/schools.js'
 import { Streets } from './features/streets.js'
 import { CropTrees } from './features/crops.js'
+import { OFF } from './config.js'
 
 const smooth = (a, b, x) => {
   const t = Math.max(0, Math.min(1, (x - a) / (b - a)))
@@ -65,6 +66,8 @@ export class App {
     this.data = data
     this.warn = warn
     this.params = new URLSearchParams(location.search)
+    // (dev-only: what ?off= holds off for a measure, each feature reading it where it is made; config.js OFF)
+    this.off = OFF
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' })
     renderer.setClearColor(0x000000, 1)
     renderer.info.autoReset = false // (counted over the whole frame, every pass)

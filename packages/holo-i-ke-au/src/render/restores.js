@@ -19,7 +19,7 @@
 // texel() are the CPU copies, for world.metresAt and the district's.
 
 import * as THREE from 'three'
-import { PATCH_EASE, SLOTS, RESTORES , RESTORE_ISLANDS } from '../config.js'
+import { PATCH_EASE, SLOTS, RESTORES, RESTORE_ISLANDS, OFF } from '../config.js'
 import { decodeImage } from '../data/image.js'
 import { loadRestoreManifest } from '../data/patches.js'
 
@@ -65,7 +65,8 @@ export class Restores {
   /** The restore entries of patches/manifest.json under `base`, into their atlas; called again, it replaces what it had. */
   async load(base = this.app.params.get('patches') || this.app.data.base) {
     const warn = this.app.warn
-    const list = await loadRestoreManifest(base, warn)
+    // (held off for a measure: config.js OFF)
+    const list = OFF.has('restores') ? [] : await loadRestoreManifest(base, warn)
     // the grids: the island packs', and the districts' (from their manifest: they stream later)
     const grids = new Map(this.world.islandPacks.map((p) => [p.id, { W: p.W, H: p.H }]))
     try {
