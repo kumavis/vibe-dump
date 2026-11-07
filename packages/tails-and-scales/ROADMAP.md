@@ -222,7 +222,30 @@ the commit, and add whatever the work turned up.
   styles, and the `hull/` set in every check that reads the corpus
   (parity's 97 battles); and in Chromium input-check's long-hull row
   (`--hulls`; its `--self-test`'s nine edits) and snap-check's Howdah row
-  (`--only howdah`; its three edits). A step
+  (`--only howdah`; its three edits); and from F9c P-riders' deck rows
+  (a hull's riders that shot within its `fire` at every trace line and
+  entry, every shot and spell from a deck held to the slots, the hull's
+  combat, fall back and advance and the range from its edge, the AI
+  battles' deck shots, scenes 10-12: the firing deck, the deck's eye over
+  a wall, a Howdah's riders at every heading with a spell cast from its
+  deck; five self-test mutants), data-check's `deckY` (its refusals, its
+  `RULES_ID` row, `fire` within the capacity, both cards promising the
+  deck; `PINNED` and P-prop's `PINNED_UNDER` 16), merge-sim's
+  three-rider War-Cart (its spent slots and a peer's slipped shot refused
+  alike), macro-check's deck groups ("N of M fire" what is sent),
+  present-check's deck battle `riders-deck-7` (volleys and templates from
+  a deck in the mirror's order), fog-check's deck eyes, hud-check's deck
+  log, play-report's F9c row (`--row f9c`, per shape over the `vehicle/`
+  and `hull/` AI pairs, `sim/rider-probe.mjs`'s `hullDeckShots`, and a
+  seeded sweep from 9800), corpus-add's `deckfire`, bake-check's deck
+  heights (each hull's figure within 0.05" of its `deckY`, both styles),
+  and the `vehicle/` and `hull/` sets as recorded again (parity's 97
+  battles); and in Chromium input-check's carts page firing from a deck
+  (`--carts`: the glow, the chips, the hint, the ring, the rays, R's
+  group, the third rider refused, the turn and its turning back) and its
+  hulls page's deck shot (`--hulls`; ten self-test edits), snap-check's
+  riders' turns on its cart and Howdah rows (two edits) and ui-check's
+  fire slots at phone width (two edits). A step
   that touches `view/`, `ui/`, `input/`, `app/` (main.js's handlers until
   R7b) or the `?debug` block also runs these in Chromium (`CHROMIUM_PATH`
   set),
@@ -1102,7 +1125,7 @@ follows N3.
 - [ ] **Later (F11b's):** the result screen's totals for both armies
   (§4.2.8.1; `ui/screens/result.js`); figure thumbnails on the Muster
   screen's rows (a cheap still of each figure, not the diorama's window);
-  the Howdah's fire-slots tip, with F9c's firing decks; points in the group
+  the Howdah's fire-slots tip, with F9c's firing decks (done at F9c); points in the group
   bar's own count; the lobby's army line held to 44 px buttons at phone
   width, and the panel's (its preset ▾, Build… and Random 33 px at 360 px,
   F11b's review); `verifyStart` holding a start to the latest record each
@@ -1711,7 +1734,8 @@ follows N3.
   `cellBest`'s isn't a valid end (`endFacing`'s, a rules change);
   playback-check's `scale/` Grand row over its 200 s on `hull/`'s
   `watch-hulls-grand-1` (202.3 s as watched; main's class, beside the
-  Grand fixture's 203.9 s above: a pacing or budget call); checks for
+  Grand fixture's 203.9 s above: a pacing or budget call; gone at F9c,
+  the battle recorded again: the row's longest 192 s); checks for
   the long hull's tooltip breakdown, "no room to turn here", the hatched
   reach and the minimap's capsule; `--record` refreshing a battle's
   `why` (the corpus keeps each recording's first description, the
@@ -1723,16 +1747,102 @@ follows N3.
   beside the wall; the Brood Beetle's data against rule 24's half rule
   (F5b's: its discs at ±1.5" put 16 sweep samples on an exact half cell);
   F9c's eye height (Q1) and its re-fit of the Howdah with its riders
-  shooting; the rest of snap-check's whole `--self-test` on F9b's code
+  shooting (both done at F9c: `deckY`, the Howdah's 5); the rest of snap-check's whole `--self-test` on F9b's code
   (seven edits in files F9b leaves as they were; its three Howdah edits
   and the eight in `view/units.js` and `view/terrain.js` caught).
-- [ ] **F9c** Firing decks on every hull: riders shoot from the deck.
+- [x] **F9c** Firing decks on every hull: riders shoot from the deck.
   F9a left it: `fireSlots` (core/actions/transport.js) returns 0, so the
   AI steps every rider with a gun off once an enemy is in its reach; F9c
   makes it the record's `fire`, lets `canShoot` take a rider (the hull's
   slots), and re-fits the War-Cart (its 40 and Grand's 150 are prices for
   riders who must step off to shoot); the card's "firing decks come
   later" and the label's chips are where the deck's fire shows.
+  (2f3264f, 08f46d1, 64a6a2d, 494ce08, the corpus 658dd6d and b1601cb,
+  the sweep's fixes 38ac751 and dce8682; `CORE_VERSION` 16, `RULES_ID` 1rx0d67ozvb (xlq4cbbsxo with `deckY`, then
+  the prices); every battle without a hull byte-identical (81 of 81),
+  `stateHash` as under 15 (a deck's spent slots are its riders' `shot`
+  flags, derived: `PINNED` and P-prop's `PINNED_UNDER` take 16). The
+  transport's `deckY`, the deck's height (the War-Cart's 0.7", the
+  Howdah's 1.65": the figures' own, bake-check within 0.05"; `deck` stays
+  the radius the view packs), `fire` within the capacity; `fireSlots`,
+  `ridersShot`, `deckPoint` and `deckEye` on queries.js's door;
+  `canShoot` taking a rider while its deck has a slot and its hull is
+  neither in combat nor fallen back (assault weapons only once it
+  advanced; a spell on the hull bars none of its riders); `shotInfo`'s
+  range from the hull's edge, its sight from the deck point at the deck's
+  eye (`sight`, `look` and `sightInfo` taking an eye-height override, no
+  `aboard` test), a lob at its printed range; a volley, template or spell
+  from a deck, one slot each; the refusal naming the spent deck; the
+  phase skip kept, so a seat with riders able is asked for its shooting
+  phase. The AI weighing a rider's shot from the deck (`riderShot`), the
+  slots to the first riders with a gun, a hull with a gun aboard never
+  advancing (rule 10). End's readiness counting riders in the shooting
+  phase, the deck hint, the Aboard tip, group Fire counting slots, the
+  courtesy fog's deck eyes. The deck's glow and lit chips, the riders'
+  figures placed by their slots and turning to their targets, volleys
+  from the slot; R's group in the shooting phase, the rider's ring at its
+  hull, the tooltip's rays from the deck eye; the card's "Fire deck: 2
+  slots · 2 squads aboard · 11/12 models" and its copy, the Muster's
+  "⛭ deck fires N" and F11b's fire-slots tip; the help's deck row. The
+  re-fit: the War-Cart 40 → 15 and the Howdah 20 → 5 at Field (the fit
+  4 ± 9 and −52 ± 11 pooled on 1111, 2222 and 3333; 15 the lowest cart
+  price whose score gates pass on 4444 and 1111, 54.2-54.5%), Grand's 150
+  and 5 unmoved (48.5% and 52.8% at 1111, reported); the Grenadiers' and
+  the Venom Spitters' Field misses closed (42 ± 10 against 45, 49 ± 9
+  against 50), the Scaleguard's (both seeds) and the Constrictor Brute's
+  (1111) new, not retuned. scale-bench's cap rows inside `BUDGET` on
+  every run (331, 325 and 318 ms open; ba4e38a's 457, 440 and 480):
+  riders stay aboard. P-riders' deck rows and scenes 10-12, five mutants;
+  data-check's `deckY`; merge-sim's three-rider deck, macro-check's deck
+  groups, present-check's deck battle, fog-check's deck eyes, hud-check's
+  deck log; input-check's deck rows (ten edits), snap-check's riders'
+  turns (two), bake-check's deck heights, ui-check's fire slots (two);
+  play-report's F9c row (the War-Cart's deck fires in 10 of 10 battles,
+  the Howdah's in 3 of 4), corpus-add's `deckfire`, the human-bot's
+  riders shooting. `vehicle/` and `hull/` recorded again on the PIN
+  494ce08: the 10 AI pairs, four human logs played again by their bots,
+  `bushtail-random-bail-3` and `hotseat-hull-bail-7` replaced by
+  `bushtail-random-bail-1` and `hotseat-hull-bail-1`, the corpus 97
+  battles. The sweep's fixes: macro-check's engaged-Howdah boards moved
+  to 40, 76, 82, 111 and 134, the prices having moved the Coil's lists
+  off the Rules phase's (38ac751); input-check's War-Carts' deck page
+  opened once the carts page is closed, its load having timed out beside
+  that page's battle on a loaded box (dce8682). The known misses move: army-sim's Field per-unit gate
+  misses on the Scaleguard (26 ± 11 against 65 at 4444, 24 ± 11 at 1111)
+  and the Constrictor Brute (184 ± 23 against 135 at 1111), the
+  Grenadiers' and the Spitters' gone; playback-check's scale/ Grand row
+  passes, `hull/`'s Grand pairs recorded again (the row's longest AI pair
+  192 s as watched against 200, its average 171 s; F9b's 202.3 s on
+  `watch-hulls-grand-1` gone). DESIGN's F9c notes,
+  the firing deck's rule and section, the Data and schema rules, the AI's
+  paragraph, the View's riders, card and deck fire, and F9a's, F9b's and
+  F11b's Not here items corrected or closed in place.)
+- [ ] **Later (F9c's):** army-sim's Field per-unit gate at the shipped
+  prices, the Scaleguard outside its band on both seeds (26 ± 11 against
+  65 at 4444, 24 ± 11 at 1111) and the Constrictor Brute at 1111 (184 ±
+  23 against 135), new under F9c's rules at every price tried and not
+  retuned (the hulls alone were in scope; the Scaleguard is the Troop the
+  autoload puts aboard a Howdah first, and its javelins' 8" rarely reach
+  from a hull the AI keeps back while a gun rides it, perhaps the cause,
+  not shown); the Field score's lean at 15 / 5 (the Bushtails 54.2-54.5% on
+  every set, inside the band of 5 and near its edge); the points binding
+  876 of 1,000 Bushtail and 676 of 1,000 Coil Field lists; the Howdah's
+  deck rate (3 of 4 of `hull/`'s AI pairs, 8 of 16 on play-report's sweep,
+  on the line: valuing a hull's cell by its riders' deck shots, Q8's
+  option c, a rules change); the spent-slot refusal never met in AI play
+  (no AI hull carries more riders with a gun than its slots: P-riders'
+  scene 10, merge-sim and macro-check meet it by hand); hud-check's deck
+  log holding one frame where riders alone can act (ordering riders last
+  in the human-bot's shooting phase means playing the logs again);
+  `vehicle/bushtail-ride-disembark-21` without a deck shot; input-check's
+  deck lanes finding their states late in their battles (rounds 4 and 6);
+  a screenshot of the tooltip's rays over a wall and play-check's `cart`
+  lane firing a rider by the DOM; a lit chip coloured by the ring's look
+  (gold when picked up); an enclosed hull's lit chips and deck-point
+  volleys, untested until F5b's Beetle; F5b's Beetle and Basket each
+  taking a `deckY` of its figure's; the sweep's runs still going as F9c's
+  notes were committed (property's and present-check's self-tests and
+  the Chromium lane's last runs: DESIGN's F9c Run line).
 - [ ] **F5a** New races: insectoids (burrow, swarm) and bird-people (fly,
   swoop), each priced for the army builder against the other races, with
   their Field and Grand presets. (Moved behind F9c after F8a, the user's
