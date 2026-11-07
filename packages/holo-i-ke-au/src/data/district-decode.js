@@ -632,15 +632,99 @@ export const PATCH_FILL = 0.5
 // how far (texels) a lower patch's texels reach the beach before its old
 // shore, so the beach of its years goes with its own until
 const BEACH = 16
+// the deepest the reef round a lower patch is carried over it (reefLevel)
+const REEF_DEEPEST = -6
 
 /**
  * A texel's height in a year, from today's and its lower patches' byte (aux
- * r): under 128 a weight toward the reef flat at `depth`, from 128 a weight
- * toward the fill, at `level` (the carve's first channel there); k the
- * patches' weight in the year (1 before their until). As distPatched.
+ * r): under 128 a weight toward the reef flat at `depth`, or the reef round
+ * the patch where that is deeper (the carve's first channel there,
+ * reefLevel; 0 where none was laid), from 128 a weight toward the fill, at
+ * `level` (the carve's first channel there); k the patches' weight in the
+ * year (1 before their until). As distPatched.
  */
 export function patchLevel(h, r, k, level = PATCH_FILL, depth = PATCH_REEF) {
-  return r < 128 ? h + (depth - h) * (r / 127) * k : h + (Math.max(PATCH_FILL, level) - h) * ((r - 128) / 127) * k
+  if (r < 128) return h + ((depth < 0 ? Math.min(depth, level) : depth) - h) * (r / 127) * k
+  return h + (Math.max(PATCH_FILL, level) - h) * ((r - 128) / 127) * k
+}
+
+/**
+ * The reef a lower patch's texels go back to, carried over them from the sea
+ * of the patched years round them (`m`, raises laid back) by push-pull: each
+ * level of a pyramid holds the mean of the reef under it, and a texel takes
+ * its own level's mean where it has the reef to make one, the coarser one's
+ * (bilinear) where it hasn't. The rim is the sea outside the patch, between
+ * REEF_DEEPEST and the tide; returns the level for every texel in the box
+ * (Float32Array over it, row by row).
+ */
+function reefLevel(m, patchMask, W, { x0, y0, x1, y1 }) {
+  const bw = x1 - x0 + 1
+  const bh = y1 - y0 + 1
+  const levels = []
+  let w = bw
+  let h = bh
+  let mean = new Float32Array(bw * bh)
+  let conf = new Float32Array(bw * bh)
+  for (let j = 0; j < bh; j++) {
+    for (let i = 0; i < bw; i++) {
+      const c = (y0 + j) * W + x0 + i
+      const v = m[c]
+      if (patchMask[c] || !(v <= 0 && v > REEF_DEEPEST)) continue
+      mean[j * bw + i] = v
+      conf[j * bw + i] = 1
+    }
+  }
+  levels.push({ mean, conf, w, h })
+  while (w > 1 || h > 1) {
+    const w2 = Math.ceil(w / 2)
+    const h2 = Math.ceil(h / 2)
+    const m2 = new Float32Array(w2 * h2)
+    const c2 = new Float32Array(w2 * h2)
+    for (let j = 0; j < h; j++) {
+      for (let i = 0; i < w; i++) {
+        const a = conf[j * w + i]
+        if (!a) continue
+        const q = (j >> 1) * w2 + (i >> 1)
+        m2[q] += mean[j * w + i] * a
+        c2[q] += a
+      }
+    }
+    for (let q = 0; q < w2 * h2; q++) {
+      if (c2[q] > 0) m2[q] /= c2[q]
+      c2[q] = Math.min(1, c2[q])
+    }
+    mean = m2
+    conf = c2
+    w = w2
+    h = h2
+    levels.push({ mean, conf, w, h })
+  }
+  // (with no reef round it at all, the patch keeps its own depth)
+  let est = levels[levels.length - 1].conf[0] > 0 ? Float32Array.of(levels[levels.length - 1].mean[0]) : Float32Array.of(0)
+  for (let k = levels.length - 2; k >= 0; k--) {
+    const L = levels[k]
+    const P = levels[k + 1]
+    const out = new Float32Array(L.w * L.h)
+    for (let j = 0; j < L.h; j++) {
+      const fy = Math.min(P.h - 1, Math.max(0, (j + 0.5) / 2 - 0.5))
+      const ya = Math.floor(fy)
+      const yb = Math.min(P.h - 1, ya + 1)
+      const ty = fy - ya
+      for (let i = 0; i < L.w; i++) {
+        const fx = Math.min(P.w - 1, Math.max(0, (i + 0.5) / 2 - 0.5))
+        const xa = Math.floor(fx)
+        const xb = Math.min(P.w - 1, xa + 1)
+        const tx = fx - xa
+        const top = est[ya * P.w + xa] + (est[ya * P.w + xb] - est[ya * P.w + xa]) * tx
+        const bot = est[yb * P.w + xa] + (est[yb * P.w + xb] - est[yb * P.w + xa]) * tx
+        const up = top + (bot - top) * ty
+        const q = j * L.w + i
+        out[q] = L.conf[q] * L.mean[q] + (1 - L.conf[q]) * up
+      }
+    }
+    est = out
+  }
+  return est
 }
 
 /**
@@ -826,7 +910,14 @@ export function deriveDistrict({ heightPx, rainPx, masks = [], lower = [], raise
   const raiseAny = new Uint8Array(N)
   for (const m of raises) for (let c = 0; c < N; c++) if (m[c] > raiseAny[c]) raiseAny[c] = m[c]
   const patchMask = new Uint8Array(N)
-  for (const px of lowerMasks) for (let c = 0; c < N; c++) if (px[c] >= 128) patchMask[c] = 1
+  // (by the masks' sum: where two works' feathered edges meet, each under
+  // half, the texel is still the fill's, and no rim of today's land is left
+  // standing between them)
+  {
+    const sum = new Uint16Array(N)
+    for (const px of lowerMasks) for (let c = 0; c < N; c++) sum[c] += px[c]
+    for (let c = 0; c < N; c++) if (sum[c] >= 128) patchMask[c] = 1
+  }
   // (the fill outlines stop a few metres short of today's piers and seawalls,
   // which would stand out of the reef as rims: low land that close to both
   // the patch and today's water goes with the patch)
@@ -903,6 +994,7 @@ export function deriveDistrict({ heightPx, rainPx, masks = [], lower = [], raise
   })
   let pbox = null
   let islets = null
+  let reefAt = null
   {
     let x0 = W
     let y0 = H
@@ -928,12 +1020,17 @@ export function deriveDistrict({ heightPx, rainPx, masks = [], lower = [], raise
       const bh = y1 - y0 + 1
       const at = (c) => (y0 + Math.floor(c / bw)) * W + x0 + (c % bw)
       const toOldLand = distanceTransform(bw, bh, (c) => !patchMask[at(c)] && m[at(c)] > 0, mx, mz)
+      // the reef round the patch, carried over it: a fill goes back to the
+      // reef beside it where that is deeper than the patch's own depth, so
+      // the restored flat meets the reef round it without a step at the
+      // fill's straight edges (the carve's first channel keeps it, below)
+      reefAt = reefLevel(m1795, patchMask, W, pbox)
       for (let c = 0; c < bw * bh; c++) {
         const g = at(c)
         if (!patchMask[g]) continue
         const w = smooth(0, 45, toOldLand[c])
         aux[g * 4] = Math.round(127 * w)
-        m1795[g] += (PATCH_REEF - m1795[g]) * w
+        m1795[g] += (Math.min(PATCH_REEF, reefAt[c]) - m1795[g]) * w
       }
     }
   }
@@ -1102,6 +1199,18 @@ export function deriveDistrict({ heightPx, rainPx, masks = [], lower = [], raise
     }
   }
   if (islets) for (const c of islets) carve[c * 2 + 1] = toHalf(PATCH_REEF - m[c])
+  // (and on a lower patch's reef, off the fill and the loʻi, the reef round it: patchLevel)
+  if (reefAt) {
+    const { x0, y0, x1, y1 } = pbox
+    const bw = x1 - x0 + 1
+    for (let j = y0; j <= y1; j++) {
+      for (let i = x0; i <= x1; i++) {
+        const c = j * W + i
+        const r = aux[c * 4]
+        if (patchMask[c] && !fill[c] && r > 0 && r < 128) carve[c * 2] = toHalf(Math.min(0, reefAt[(j - y0) * bw + i - x0]))
+      }
+    }
+  }
   const counts = {}
   const clearIdx = new Uint8Array(N)
   {

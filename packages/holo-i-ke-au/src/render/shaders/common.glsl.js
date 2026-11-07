@@ -281,7 +281,9 @@ float distPatched(ivec2 p, float h, float r) {
   }
   if (r > 0.5) {
     vec4 L = uDistLower[int(q.r * 255.0 + 0.5)];
-    if (r < 127.5) h = mix(h, L.y, r / 127.0 * L.x);
+    // (toward the reef round the patch where that is deeper than its own
+    // depth: the carve keeps it there, district-decode.js reefLevel)
+    if (r < 127.5) h = mix(h, L.y < 0.0 ? min(L.y, texelFetch(uDistCarve, p, 0).r) : L.y, r / 127.0 * L.x);
     else h = mix(h, max(DIST_FILL, texelFetch(uDistCarve, p, 0).r), (r - 128.0) / 127.0 * L.x);
   }
   return h;

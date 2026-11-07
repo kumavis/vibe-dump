@@ -3234,6 +3234,8 @@ const districtPatchPoints = () =>
     const D = app.districts, rec = D.cur, out = []
     if (!rec?.pmap) return out
     const d = rec.d, r = d.rect, pm = rec.pmap
+    // (a lower patch's reef texel goes to the reef round it where that is deeper than its depth: the carve's first channel, a half float)
+    const half = (b) => { const s = b & 0x8000 ? -1 : 1, e = (b >> 10) & 31, f = b & 1023; return e === 0 ? s * f * 2 ** -24 : s * (1 + f / 1024) * 2 ** (e - 15) }
     rec.raise.forEach((p, ri) => {
       let best = null
       for (let k = 0; k < pm.w * pm.h; k++) {
@@ -3255,7 +3257,8 @@ const districtPatchPoints = () =>
         const i = pm.x0 + (k % pm.w), j = pm.y0 + Math.floor(k / pm.w), c = j * d.W + i
         if (rec.aux[c * 4] !== 127 || rec.aux[c * 4 + 3] || pm.data[k * 4 + 1]) continue
         const h = rec.metres[c], gap = h - p.depth
-        if (gap > 1.5 && (!best || gap > best.gap)) best = { i, j, h, gap, others: rec.lower.filter((o, oi) => bits & (1 << oi)).map((o) => o.depth) }
+        const reef = half(rec.carve[c * 2])
+        if (gap > 1.5 && (!best || gap > best.gap)) best = { i, j, h, gap, others: rec.lower.filter((o, oi) => bits & (1 << oi)).map((o) => (o.depth < 0 ? Math.min(o.depth, reef) : o.depth)) }
       }
       if (best) out.push({ where: 'district', id: p.id, kind: 'lower', depth: p.depth, until: p.until, ...best })
     })

@@ -1223,7 +1223,8 @@ export class Settlements extends Scatter {
       rec.lower.forEach((p, i) => {
         if (!(bits & (1 << i))) return
         if (first < 0) first = i
-        if (year < p.until && gk[g] < 1) {
+        // (of those in force, the deepest, as Districts.yearWeights)
+        if (year < p.until && (gk[g] < 1 || p.depth < gd[g])) {
           gk[g] = 1
           gd[g] = p.depth
         }

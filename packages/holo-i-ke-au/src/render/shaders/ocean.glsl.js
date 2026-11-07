@@ -6,8 +6,8 @@
 // islands' are 70 to 300 m. A district's fishponds (common.glsl.js
 // distPond) lie still and green behind their walls. Where a patch gives a
 // year back its reef flat (common.glsl.js patchReef), the water over it is
-// shallow reef, coral and rubble mottled over sand at a size that reads at
-// any zoom, not one even sheet of blue.
+// drawn as the natural reef beside it is, sand and reef seen through its
+// depth, so the restored flat carries on the reef round it.
 //
 // The water meets the land where the heights read per pixel do, the land
 // drawing where they are land and the water where they are sea
@@ -42,19 +42,6 @@ uniform int uDebug;
 in vec3 vWorld;
 
 float seaDepth(vec2 xz) { return -groundMetres(xz); }
-
-// a mottle fixed to the ground, about eight pixels to a patch at any zoom
-// (the two power-of-two cells nearest that, crossfaded), so a reef flat
-// seen across an island and one seen from a stop both read as reef
-float mottle(vec2 xz, float px) {
-  float lv = log2(max(px, 1e-4) * 8.0);
-  float l0 = floor(lv);
-  vec2 a = xz / exp2(l0);
-  vec2 b = xz / exp2(l0 + 1.0);
-  float m0 = 0.62 * vnoise(a + 3.1) + 0.38 * vnoise(a * 2.07 + 11.3);
-  float m1 = 0.62 * vnoise(b + 7.7) + 0.38 * vnoise(b * 2.07 + 5.9);
-  return mix(m0, m1, lv - l0);
-}
 
 vec2 noiseGrad(vec2 p) {
   const float e = 0.25;
@@ -112,21 +99,16 @@ void main() {
   vec3 reefC = mix(vec3(0.30, 0.27, 0.20), vec3(0.42, 0.30, 0.34), fbm2F(xz * 4.0 + 7.0, px * 4.0));
   float reef = smoothstep(0.45, 0.62, fb) * (1.0 - smoothstep(4.0, 14.0, depth));
   vec3 bed = mix(sandC, reefC, clamp(reef, 0.0, 1.0));
-  // the reef flat of a patch's years: heads of coral and rubble in the reef's
-  // own colours, mottled at a size that reads at any zoom and standing nearer
-  // the surface than the flat round them, so the patch is reef and not one
-  // even depth of blue, and meets the reef beyond its edge without a seam
-  // (a patch's reef flat is a few metres down at most: deeper water never asks)
+  // the reef flat of a patch's years is drawn as the reef beside it is: the
+  // same bed, sand and reef by the same ground-fixed noise, seen through its
+  // own depth, so it reads as that reef carried on and not as a surface of
+  // its own (a mottle of coral heads at a screen-fixed size once marked it,
+  // and read as dredged rubble). Its weight is kept only to hold the swash
+  // to the real shore (a patch's reef flat is a few metres down at most:
+  // deeper water never asks)
   float rf = 0.0;
   if (depth < 12.0) rf = patchReef(xz);
   float dU = depth;
-  if (rf > 0.002) {
-    float mt = mottle(xz, px);
-    float head = smoothstep(0.42, 0.66, mt) * rf;
-    vec3 coral = mix(vec3(0.30, 0.27, 0.20), vec3(0.42, 0.30, 0.34), smoothstep(0.3, 0.7, mottle(xz * 1.9 + 17.0, px)));
-    bed = mix(bed, coral, head * 0.85);
-    dU = depth * (1.0 - 0.5 * head);
-  }
   vec3 absorb = vec3(0.46, 0.105, 0.055);
   float vis = sunVisibility(vec3(vWorld.x, 0.0, vWorld.z));
   vec3 light = uSunColor * max(uSunDir.y, 0.0) * vis + uSkyColor * 0.8 + uMoonColor * 0.3;

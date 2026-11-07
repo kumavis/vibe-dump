@@ -466,7 +466,8 @@ export class Districts {
         let depth = -1
         const bits = groups[g] || 0
         rec.lower.forEach((p, i) => {
-          if (bits & (1 << i) && pw[nR + i] > k) {
+          // (of patches as strong, the deepest: a pier in the harbour goes to its floor, not to the reef the fill round it goes to)
+          if (bits & (1 << i) && (pw[nR + i] > k || (k > 0 && pw[nR + i] === k && p.depth < depth))) {
             k = pw[nR + i]
             depth = p.depth
           }
