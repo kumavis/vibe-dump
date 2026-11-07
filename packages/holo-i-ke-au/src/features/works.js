@@ -305,12 +305,21 @@ export class Works {
     return e
   }
 
-  /** What island `id`'s settlements keep off (data/works.js WorksExclusion), or null where it has no works: they wait for it. */
+  /**
+   * What island `id`'s settlements keep off (data/works.js WorksExclusion),
+   * or null where it has neither works nor schools: they wait for it. The
+   * schools' buildings and grounds (features/schools.js) are joined to the
+   * works' here, so every reader of the works' ground keeps off them too.
+   */
   async exclusion(id) {
     const e = this.entry(id)
-    const out = await e.promise
-    if (!out) return null
-    e.excl ??= new WorksExclusion(out.excl)
+    const [out, schools] = await Promise.all([e.promise, this.app.schools?.exclusion(id).catch(() => null) ?? null])
+    if (!out && !schools) return null
+    if (!e.excl) {
+      e.excl = new WorksExclusion(schools ? { polys: [...(out?.excl.polys ?? []), ...schools.polys], lines: out?.excl.lines ?? [] } : out.excl)
+      // (the works' own dates are the settlements' sampled years; the schools' are kept off with a slack instead: data/schools.js KEEP_SLACK)
+      if (schools) e.excl.breaks = out ? new WorksExclusion(out.excl).breaks : new Set()
+    }
     return e.excl
   }
 

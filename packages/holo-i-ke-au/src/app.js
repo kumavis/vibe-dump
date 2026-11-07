@@ -41,6 +41,7 @@ import { Geology } from './render/geology.js'
 import { Towns } from './features/towns.js'
 import { Works } from './features/works.js'
 import { overlapReport } from './features/footprints.js'
+import { Schools } from './features/schools.js'
 import { CropTrees } from './features/crops.js'
 
 const smooth = (a, b, x) => {
@@ -159,6 +160,8 @@ export class App {
     this.works = new Works(this)
     // (for the tools: the buildings standing in a year near a point, and those that share their ground: features/footprints.js)
     this.footprints = (year, x, z, radius) => overlapReport(this, year, x, z, radius)
+    // the schools, each from the year it opened to the year it closed (features/schools.js); the settlements keep off them through the works' exclusion
+    this.schools = new Schools(this)
     // and the trees of the year's pastures, orchards and lawns (features/crops.js)
     this.cropTrees = new CropTrees(this)
     this.ocean = new Ocean(this.shared, this.shared.uniforms)
@@ -334,6 +337,7 @@ export class App {
     this.restores?.settle()
     this.towns?.settle()
     this.works?.settle()
+    this.schools?.settle()
     this.cropTrees?.settle()
     this.rig.jump({ x: g.target.x, z: g.target.z })
     const fv = this.farView

@@ -729,3 +729,178 @@ export function buildKits(rand, pads = {}) {
   add('clock', [clockTower(rand)])
   return out
 }
+
+// --- the schools' buildings (features/schools.js) -------------------------------------
+//
+// A school drawn where schools.json places one, in the kit of its era
+// (data/schools.js schoolEras): the kingdom's and the plantations' frame
+// schoolhouse of one room, a porch and a bell; the larger school of the
+// kingdom, a schoolhouse of two rooms, and the mission's two-storey hall of
+// coral and plaster under a hipped roof with its verandahs; the territory's
+// two-storey block of tall windows before a yard of beaten earth; and the
+// campus since the 1950s, low wings of one storey under shallow roofs with
+// covered walks between and a playing field. Each in model metres as the
+// town's kinds are, its front toward +z, drawn at the town's scale and fitted
+// to the school's grounds where the file gives them. The yards and fields
+// are slabs on a footing, as the plinths are, a hand's breadth over the
+// ground, never in its plane, and none lies under a building.
+
+const EARTH = '#a8956f'
+const LAWN = '#7f9a62'
+
+/** A frame schoolhouse: one room (v 0) or two (v 1), a porch at the door, a bell in a little tower on the ridge. */
+function schoolhouse(rand, v) {
+  const B = new Builder()
+  const wall = col([P.limewash, P.cream][v], 0.05, rand)
+  const roof = col([P.shingle, P.ironRed][v], 0.08, rand)
+  const post = col(P.post, 0.1, rand)
+  const L = v ? 17 : 10
+  const W = v ? 8 : 7
+  plinth(B, L + 0.4, W + 0.4, 0.7, col(P.plinth, 0.1, rand))
+  B.box(0, 0.7, 0, L, 3.4, W, wall, MAT.clap)
+  gable(B, L, W, 4.1, 2.6, 0.5, roof, wall, { wallMat: MAT.clap })
+  // the porch over the door, its roof under the eaves
+  const px = v ? 0 : -L / 4
+  lanai(B, v ? 6 : 3.4, W, 2.0, 0.7, 3.8, 3.2, roof, post, { x: px, from: W / 2 + 0.2 })
+  door(B, W, 1.2, 2.3, 0.7, px)
+  // the bell's little tower astride the ridge, its foot inside the roof
+  const bx = v ? 0 : L / 2 - 1.6
+  B.box(bx, 5.4, 0, 1.6, 2.2, 1.6, wall, MAT.clap)
+  pyramid(B, 2.0, 7.6, 1.6, roof, bx, 0)
+  // a yard of beaten earth before the larger one, clear of its porch
+  if (v) B.box(0, -FOOT, W / 2 + 2.6 + 4.5, L, FOOT + 0.15, 9, col(EARTH, 0.08, rand), MAT.sand)
+  return B
+}
+
+/** The mission's hall of two storeys, coral and plaster under a hipped roof, its verandahs along the front, a lower range behind. */
+function missionHall(rand) {
+  const B = new Builder()
+  const wall = col(P.coral, 0.05, rand)
+  const roof = col(P.shingle, 0.08, rand)
+  const post = col(P.post, 0.1, rand)
+  const L = 24
+  const W = 10
+  plinth(B, L + 0.4, W + 0.4, 0.5, col(P.plinth, 0.1, rand))
+  B.box(0, 0.5, 0, L, 6.6, W, wall, MAT.masonry)
+  hip(B, L, W, 7.1, 2.4, 0.5, roof)
+  lanai(B, L, W, 2.4, 3.8, 6.6, 6.2, roof, post, { posts: 5 })
+  lanai(B, L, W, 2.4, 0.5, 3.8, 3.4, roof, post, { posts: 5, from: W / 2 + 0.2 })
+  // the lower range behind (the scholars' rooms), set back and apart, on its own footing
+  const zb = -W / 2 - 6.5
+  B.box(0, -FOOT, zb, L - 6, FOOT + 3.8, 7, wall.map((c) => c * 0.95), MAT.masonry)
+  gable(B, L - 6, 7, 3.8, 2.0, 0.4, roof, wall, { wallMat: MAT.masonry, z: zb })
+  B.box(0, -FOOT, W / 2 + 2.8 + 5, L, FOOT + 0.15, 9, col(EARTH, 0.08, rand), MAT.sand)
+  return B
+}
+
+/** A hipped roof whose ridge runs along z, over a W (x) × L (z) box whose walls stop at y, centred at (x, z). */
+function hipAlongZ(B, W, L, y, rise, o, roofC, x, z) {
+  const s = rise / (W / 2)
+  const ye = y - s * o
+  const X = W / 2 + o
+  const Z = L / 2 + o
+  const rz = Math.max(0, (L - W) / 2)
+  const E = (sx, sz) => [x + sx * X, ye, z + sz * Z]
+  const R = (sz) => [x, y + rise, z + sz * rz]
+  B.quad(E(-1, 1), R(1), R(-1), E(-1, -1), roofC, MAT.roof)
+  B.quad(E(1, -1), R(-1), R(1), E(1, 1), roofC.map((c) => c * 0.84), MAT.roof)
+  B.tri(E(-1, -1), R(-1), E(1, -1), roofC.map((c) => c * 0.92), MAT.roof)
+  B.tri(E(1, 1), R(1), E(-1, 1), roofC.map((c) => c * 0.92), MAT.roof)
+}
+
+/** The territory's school: a two-storey block of tall windows under a hipped roof (v 1: two, in an L), a yard of beaten earth before it. */
+function schoolBlock(rand, v) {
+  const B = new Builder()
+  const wall = col([P.concreteWarm, P.cream][v], 0.05, rand)
+  const roof = col([P.ironRed, P.ironGreen][v], 0.08, rand)
+  const L = 26
+  const W = 9
+  const h = 2 * 3.9
+  plinth(B, L + 0.4, W + 0.4, 0.6, col(P.plinth, 0.08, rand))
+  B.box(0, 0.6, 0, L, h, W, wall, MAT.windows)
+  hip(B, L, W, 0.6 + h, 2.2, 0.7, roof)
+  // the entrance: a porch of a storey and a half at the middle of the front
+  B.box(0, 0.6, W / 2 + 1.3, 6, 0.5 + h * 0.55, 2.4, wall.map((c) => c * 0.92), MAT.masonry)
+  if (v) {
+    // the second block across one end, a step apart, its own roof
+    const x = -L / 2 - 1.4 - W / 2
+    const z = 6
+    plinth(B, W + 0.4, 20.4, 0.6, col(P.plinth, 0.08, rand), x, z)
+    B.box(x, 0.6, z, W, h, 20, wall, MAT.windows)
+    hipAlongZ(B, W, 20, 0.6 + h, 2.0, 0.7, roof, x, z)
+  }
+  // the yard, clear of the porch
+  B.box(v ? 2 : 0, -FOOT, W / 2 + 2.9 + 6, v ? 20 : L, FOOT + 0.15, 12, col(EARTH, 0.08, rand), MAT.sand)
+  return B
+}
+
+/**
+ * The campus since the 1950s: wings of one storey, each a row of classrooms
+ * under a shallow roof, with covered walks between them and a playing field;
+ * v 0 three wings, v 1 four and a hall across their ends, v 2 (a high
+ * school, a college) six, a hall, a two-storey block and a gymnasium.
+ */
+function campus(rand, v) {
+  const B = new Builder()
+  const walls = [P.concrete, P.concreteWarm, P.limewash, P.cream]
+  const roofs = [P.ironGreen, P.iron, P.concreteWarm, P.ironRed]
+  const wing = (x, z, l, w, k, storeys = 1) => {
+    const wall = col(walls[k % walls.length], 0.05, rand)
+    const roof = col(roofs[(k + v) % roofs.length], 0.08, rand)
+    const h = storeys * 3.6
+    plinth(B, l + 0.4, w + 0.4, 0.5, col(P.plinth, 0.08, rand), x, z)
+    B.box(x, 0.5, z, l, h, w, wall, storeys > 1 ? MAT.windows : MAT.clap)
+    gable(B, l, w, 0.5 + h, 1.1, 0.9, roof, wall, { x, z, wallMat: storeys > 1 ? MAT.plain : MAT.clap })
+  }
+  // a covered walk across the gap between two wings: a flat roof on posts, along z
+  const walk = (x, z, l) => {
+    const c = col(P.concrete, 0.04, rand).map((q) => q * 0.9)
+    B.box(x, 3.0, z, 2.6, 0.25, l, c, MAT.plain)
+    for (const dz of [-l / 2 + 0.6, 0, l / 2 - 0.6]) B.box(x, 0.2, z + dz, 0.25, 2.8, 0.25, c, MAT.plain)
+  }
+  const n = [3, 4, 6][v]
+  const L = 24
+  const W = 7
+  const gap = 5
+  const span = (n - 1) * (W + gap) + W
+  const z0 = -span / 2 + W / 2
+  for (let k = 0; k < n; k++) wing(0, z0 + k * (W + gap), L, W, k)
+  for (let k = 0; k + 1 < n; k++) walk(L / 2 - 3, z0 + k * (W + gap) + W / 2 + gap / 2, gap - 1.2)
+  // the hall, across the wings' ends
+  if (v >= 1) wing(-L / 2 - 2 - 5, 0, 10, Math.round(span * 0.6), n, 1)
+  if (v === 2) {
+    wing(L / 2 + 2 + 6, -span / 4, 12, span / 2 - 2, n + 1, 2)
+    // the gymnasium, a broad low box under a shallow roof
+    const gx = L / 2 + 2 + 10
+    const gz = span / 4 + 2
+    const wall = col(P.concrete, 0.04, rand)
+    plinth(B, 20.4, 16.4, 0.4, col(P.plinth, 0.08, rand), gx, gz)
+    B.box(gx, 0.4, gz, 20, 7, 16, wall, MAT.plain)
+    gable(B, 20, 16, 7.4, 1.6, 0.5, col(P.iron, 0.06, rand), wall, { x: gx, z: gz })
+  }
+  // the field before the wings (a high school's with room for a track)
+  const fw = [16, 20, 30][v]
+  B.box(v === 2 ? 8 : 0, -FOOT, span / 2 + 2.5 + fw / 2, v === 2 ? 50 : L + 4, FOOT + 0.12, fw, col(LAWN, 0.08, rand), MAT.plain)
+  return B
+}
+
+/**
+ * The schools' kits, by kind, each a list of variants: `schoolhouse` (one
+ * room, two rooms, the mission's hall), `block` (one, an L of two),
+ * `campus` (small, middling, large). Each as worksKits gives one: geometry,
+ * half extents, extents and top, and `foot`, how far its footing reaches
+ * under its floor (metres).
+ */
+export function schoolKits(rand) {
+  const kit = (B) => {
+    const g = indexed(B.geometry())
+    g.computeBoundingBox()
+    const ob = g.boundingBox
+    return { geometry: g, hx: Math.max(-ob.min.x, ob.max.x), hz: Math.max(-ob.min.z, ob.max.z), box: [ob.min.x, ob.max.x, ob.min.z, ob.max.z], top: ob.max.y, tris: g.index.count / 3, foot: FOOT }
+  }
+  return {
+    schoolhouse: [kit(schoolhouse(rand, 0)), kit(schoolhouse(rand, 1)), kit(missionHall(rand))],
+    block: [kit(schoolBlock(rand, 0)), kit(schoolBlock(rand, 1))],
+    campus: [0, 1, 2].map((v) => kit(campus(rand, v))),
+  }
+}
