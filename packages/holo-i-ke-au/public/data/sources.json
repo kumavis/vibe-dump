@@ -572,7 +572,7 @@
     "opened": true,
     "read": "part",
     "tertiary": true,
-    "note": "Coordinates only."
+    "note": "Coordinates; and, read on 2026-11-06 as a finding aid, its sections on Hale Aliʻi (the first palace, bought by Kamehameha III from Kamāmalu in 1845) and on the building of the present palace (its cornerstone laid on 31 December 1879, finished in November 1882)."
   },
   {
     "id": "wikipedia-thomas-square",
@@ -3027,5 +3027,172 @@
     "read": "title",
     "note": "Not read: newspapers.com refused the request (403) and no other copy was found open. The reports of the departure, with photographs.",
     "wanted": "The reports of the departure and the days before it: how many people came to Honolua, where they stood, the ceremony, the time the canoe cleared the bay, the escort, and the photographs’ captions."
+  },
+  {
+    "id": "nrhp-hawaii-capital-historic-district",
+    "title": "Hawaii Capital Historic District, National Register of Historic Places inventory–nomination form",
+    "author": "National Park Service; State of Hawaii",
+    "year": 1978,
+    "url": "https://npgallery.nps.gov/AssetDetail/NRIS/78001020",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Read on 2026-11-06 in the text of the 31-page form (NPGallery asset 2b7b6cbd-f467-44e6-9389-d1ef6000da19): the inventory of the twenty contributing buildings and objects, the district’s bounds, and the history (item 8): the first palace of 1845 on the grounds of the present one, the courthouse of 1852 on Queen Street, the mission houses of 1821, 1823 and 1831, the adobe schoolhouse of 1835, Kawaiahaʻo of 1842, Washington Place of 1846, the barracks of 1871 and their move in 1965, Aliʻiōlani Hale of 1874, St. Andrew’s begun in 1867 and completed to its plan in 1902, the palace of 1882 and its bandstand of 1883, Honolulu Hale of 1929. The photographs and maps (the second asset) were not read.",
+    "wanted": "The district map and the photographs (NPGallery asset 9e19a572-88ed-4082-b897-2486fb22adf3), for where the barracks stood before 1965 and the outline of the first palace."
+  },
+  {
+    "id": "osm-landmark-footprints",
+    "title": "OpenStreetMap building outlines of named buildings, by element id",
+    "author": "OpenStreetMap contributors",
+    "year": 2026,
+    "url": "https://www.openstreetmap.org/copyright",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Fetched on 2026-11-06 through the OSM API by element id (tools/bake-landmarks.mjs): the outlines of the buildings standing today, as mapped; the Mission Houses are mapped unnamed, tagged historic. Licensed ODbL."
+  },
+  {
+    "id": "wikipedia-aliiolani-hale",
+    "title": "Aliʻiōlani Hale",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Ali%CA%BBi%C5%8Dlani_Hale",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: the cornerstone laid on 19 February 1872, the building dedicated in 1874, its later use by the judiciary."
+  },
+  {
+    "id": "wikipedia-kawaiahao-church",
+    "title": "Kawaiahaʻo Church",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Kawaiaha%CA%BBo_Church",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: built 1836–1842 of coral slabs cut from the reef, on the ground of four thatched churches."
+  },
+  {
+    "id": "wikipedia-hawaiian-mission-houses",
+    "title": "Hawaiian Mission Houses Historic Site and Archives",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Hawaiian_Mission_Houses_Historic_Site_and_Archives",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: the frame house of 1821 (its timber from Boston), the Chamberlain house of 1831 in coral block, and the coral room of 1841 that became the print house."
+  },
+  {
+    "id": "wikipedia-washington-place",
+    "title": "Washington Place",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Washington_Place",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: built 1847 for John Dominis."
+  },
+  {
+    "id": "wikipedia-iolani-barracks",
+    "title": "ʻIolani Barracks",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/%CA%BBIolani_Barracks",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: built in 1870 to Theodore Heuck’s design, moved stone by stone in 1965 for the State Capitol."
+  },
+  {
+    "id": "wikipedia-honolulu-hale",
+    "title": "Honolulu Hale",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Honolulu_Hale",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: the introduction and the start of its history."
+  },
+  {
+    "id": "wikipedia-kamehameha-v-post-office",
+    "title": "Kamehameha V Post Office",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Kamehameha_V_Post_Office",
+    "access": "open",
+    "opened": true,
+    "read": "full",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: built by J. G. Osborne in 1871 of precast concrete blocks, a post office until 1922, listed on the National Register in 1972."
+  },
+  {
+    "id": "wikipedia-aloha-tower",
+    "title": "Aloha Tower",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Aloha_Tower",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: opened on 11 September 1926 at Pier 9."
+  },
+  {
+    "id": "wikipedia-hawaii-theatre",
+    "title": "Hawaii Theatre",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Hawaii_Theatre",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: opened on 6 September 1922 on Bethel Street, reopened in 1996."
+  },
+  {
+    "id": "wikipedia-bishop-museum",
+    "title": "Bishop Museum",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Bishop_Museum",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: founded in 1889 on the first campus of the Kamehameha Schools, Hawaiian Hall and Polynesian Hall built in 1898, opened to the public in 1891."
+  },
+  {
+    "id": "wikipedia-moana-hotel",
+    "title": "Moana Hotel",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Moana_Hotel",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: opened on 11 March 1901; two floors and the concrete wings added in 1918."
+  },
+  {
+    "id": "wikipedia-royal-hawaiian-hotel",
+    "title": "Royal Hawaiian Hotel",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Royal_Hawaiian_Hotel",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: opened on 1 February 1927."
   }
 ]

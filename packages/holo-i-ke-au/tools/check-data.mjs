@@ -16,7 +16,8 @@
 // class raster read back against its pack's height image and stats, and the
 // crops' historical sources held to sources.json); and, when works/manifest.json
 // exists, the works (DATA.md, “Works, dated”), held to their island packs in
-// manifest.json; and, when geology/ exists, the prologue (DATA.md “Geology”): volcanoes.json, landslides.geojson
+// manifest.json; and, when landmarks.json exists, the named buildings (DATA.md
+// “Landmarks, dated”); and, when geology/ exists, the prologue (DATA.md “Geology”): volcanoes.json, landslides.geojson
 // and chapters.json, with the bake's geology/manifest.json and its height images read back when they are there.
 // Pass another directory to check a copy (the default is public/data); a copy
 // without routes.json is checked without routes.
@@ -1982,6 +1983,124 @@ function checkGeoHeight(at, file, stats, grid) {
   return 1
 }
 // ---------------------------------------------------------------------------
+// landmarks.json: named buildings, dated, at their footprints (DATA.md "Landmarks, dated")
+let landmarkCounts = null
+if (existsSync(join(DATA, 'landmarks.json'))) checkLandmarks()
+
+function checkLandmarks() {
+  const at0 = 'landmarks.json'
+  const fc = load('landmarks.json')
+  if (!fc) return
+  const DATES = new Set(['year', 'decade', 'by'])
+  const PRECISION = new Set(['exact', 'mapped', 'inferred'])
+  const YEARS = [1778, 2026]
+  const BUDGET = 200e3 // bytes
+  const bytes = readFileSync(join(DATA, 'landmarks.json')).length
+  if (bytes > BUDGET) bad(at0, `is ${(bytes / 1e3).toFixed(0)} KB, over the ${BUDGET / 1e3} KB budget`)
+  if (fc.type !== 'FeatureCollection' || !Array.isArray(fc.features)) { bad(at0, 'must be a GeoJSON FeatureCollection'); return }
+  const types = new Set(Array.isArray(fc.types) ? fc.types : [])
+  if (!types.size) bad(at0, 'names no types')
+  const own = new Map((fc.sources || []).map((s) => [s.id, s]))
+  for (const s of fc.sources || []) for (const k of ['id', 'title', 'url', 'licence', 'fetched']) if (!s[k]) bad(`${at0} source ${s.id}`, `has no ${k}`)
+  const packs = new Map()
+  try { for (const p of JSON.parse(readFileSync(join(DATA, 'manifest.json'), 'utf8')).packs || []) if (p.kind === 'island') packs.set(p.id, p.bounds) } catch { warn(at0, 'no manifest.json, so the buildings are not held to their packs') }
+  const placeIds = new Set(places.map((p) => p.id))
+  const ids = new Set()
+  const counts = { n: 0, types: {}, precision: {}, standing: 0 }
+  const shapes = [] // [id, from, to, rings in metres]
+  for (const [i, f] of fc.features.entries()) {
+    const p = f?.properties || {}
+    const at = `${at0} ${p.id ?? `#${i}`}`
+    counts.n++
+    if (typeof p.id !== 'string' || !ID.test(p.id)) bad(at, 'id is not kebab-case ASCII')
+    else if (ids.has(p.id)) bad(at, 'id is not unique')
+    ids.add(p.id)
+    if (!types.has(p.type)) bad(at, `type “${p.type}” is not one of the file's types (${[...types].join(' | ')})`)
+    counts.types[p.type] = (counts.types[p.type] || 0) + 1
+    if (p.group !== undefined && !(typeof p.group === 'string' && ID.test(p.group))) bad(at, 'group must be a kebab-case id')
+    if (!p.name) bad(at, 'has no name')
+    if (p.alt !== undefined && !Array.isArray(p.alt)) bad(at, 'alt must be a list')
+    for (const [k, v] of [['name', p.name], ...(p.alt || []).map((a) => ['alt', a])]) {
+      checkHawaiian(`${at} ${k}`, v)
+      checkCopy(`${at} ${k}`, v)
+      if (typeof v === 'string' && NONSTANDARD.test(v)) bad(`${at} ${k}`, `“${v}” is not the standard spelling (ʻokina U+02BB, kahakō as a macron)`)
+    }
+    if (packs.size && !packs.has(p.island)) bad(at, `island “${p.island}” is not an island pack`)
+    if (p.place !== undefined) {
+      if (!placeIds.has(p.place)) bad(at, `place “${p.place}” is not in places.json`)
+      else usedPlaces.add(p.place)
+    }
+    // dates
+    if (!Number.isInteger(p.from)) bad(at, 'from must be a year')
+    if (!(p.to === null || Number.isInteger(p.to))) bad(at, 'to must be a year, or null while it stands')
+    if (p.to === null) counts.standing++
+    for (const y of [p.from, p.to, ...(p.built || [])]) if (Number.isInteger(y) && (y < YEARS[0] || y > YEARS[1])) bad(at, `year ${y} is outside ${YEARS[0]}–${YEARS[1]}`)
+    if (Number.isInteger(p.from) && Number.isInteger(p.to) && p.from > p.to) bad(at, `from ${p.from} is after to ${p.to}`)
+    if (p.built !== undefined && !(Array.isArray(p.built) && p.built.length === 2 && p.built.every(Number.isInteger) && p.built[0] <= p.built[1] && p.built[1] <= p.from)) bad(at, 'built must be [start, end], two years in order, ending by from')
+    if (!DATES.has(p.datePrecision)) bad(at, `datePrecision “${p.datePrecision}” is not ${[...DATES].join(' | ')}`)
+    if (p.datePrecision === 'by') {
+      if (!(p.sources || []).includes(p.by)) bad(at, `by “${p.by}” is not among its sources`)
+      else if (!S.get(p.by)?.opened) bad(at, `by “${p.by}” names a source not opened`)
+    } else if (p.by !== undefined) bad(at, 'by belongs only to a date given “by”')
+    if (!PRECISION.has(p.precision)) bad(at, `precision “${p.precision}” is not ${[...PRECISION].join(' | ')}`)
+    counts.precision[p.precision] = (counts.precision[p.precision] || 0) + 1
+    if (p.storeys !== undefined && !(Number.isInteger(p.storeys) && p.storeys > 0)) bad(at, 'storeys must be a whole number')
+    // where the footprint came from
+    const layer = p.layer || {}
+    if (layer.source === 'inferred') {
+      if (p.precision !== 'inferred') bad(at, 'a footprint drawn from another entry’s is precision “inferred”')
+      if (!fc.features.some((g) => g?.properties?.id === layer.from)) bad(at, `layer.from “${layer.from}” is not an entry`)
+    } else if (!own.has(layer.source)) bad(at, `layer.source “${layer.source}” is not among the file's sources, nor “inferred”`)
+    else if (!layer.key) bad(at, 'layer has no key')
+    // sources: at least one opened, and one that shows the site is a listed public one (DATA.md §4, the landmark rule)
+    if (!Array.isArray(p.sources) || !p.sources.length) bad(at, 'cites no source')
+    for (const s of p.sources || []) useSource(at, s)
+    if ((p.sources || []).length && !p.sources.some((s) => S.get(s)?.opened)) bad(at, 'none of its sources has been opened')
+    if (!p.listed) bad(at, 'has no listed: the source showing it, or the ground it stood on, is a listed public site')
+    else {
+      useSource(`${at} listed`, p.listed)
+      if (!S.get(p.listed)?.opened) bad(at, `listed “${p.listed}” names a source not opened`)
+    }
+    if (!p.note) bad(at, 'has no note')
+    checkHawaiian(`${at} note`, p.note)
+    checkCopy(`${at} note`, p.note)
+    // geometry: closed rings in the island's pack, and no two buildings of the same years on one ground
+    const g = f.geometry
+    const rings = g?.type === 'Polygon' ? [g.coordinates[0]] : g?.type === 'MultiPolygon' ? g.coordinates.map((q) => q[0]) : null
+    if (!rings) { bad(at, 'geometry must be a Polygon or MultiPolygon'); continue }
+    const box = packs.get(p.island)
+    for (const r of rings) {
+      if (!Array.isArray(r) || r.length < 4) { bad(at, 'a ring has under four positions'); continue }
+      if (r[0][0] !== r.at(-1)[0] || r[0][1] !== r.at(-1)[1]) bad(at, 'a ring is not closed')
+      if (box && r.some(([x, y]) => x < box[0] || x > box[2] || y < box[1] || y > box[3])) bad(at, 'lies outside its island pack')
+    }
+    if (!rings.every((r) => Array.isArray(r) && r.every((c) => Array.isArray(c) && c.length >= 2 && c.every(Number.isFinite)))) { bad(at, 'a ring holds a position that is not [lon, lat]'); continue }
+    const lat0 = rings[0][0][1]
+    const kx = 111320 * Math.cos((lat0 * Math.PI) / 180)
+    shapes.push([p.id, p.from, Number.isInteger(p.to) ? p.to : Infinity, rings.map((r) => r.map(([x, y]) => [x * kx, y * 110574]))])
+  }
+  // (polygons meet where an edge crosses another's, or one holds a corner of the other)
+  const inside = (ring, [x, y]) => {
+    let c = false
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) if (ring[i][1] > y !== ring[j][1] > y && x < ((ring[j][0] - ring[i][0]) * (y - ring[i][1])) / (ring[j][1] - ring[i][1]) + ring[i][0]) c = !c
+    return c
+  }
+  const cross = (a, b, c, d) => {
+    const o = (p, q, r) => Math.sign((q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0]))
+    return o(a, b, c) * o(a, b, d) < 0 && o(c, d, a) * o(c, d, b) < 0
+  }
+  const meet = (A, B) => A.some((ra) => B.some((rb) => ra.some((pt) => inside(rb, pt)) || rb.some((pt) => inside(ra, pt)) || ra.some((pa, i) => i > 0 && rb.some((pb, j) => j > 0 && cross(ra[i - 1], pa, rb[j - 1], pb)))))
+  for (let i = 0; i < shapes.length; i++) {
+    for (let j = i + 1; j < shapes.length; j++) {
+      const [ia, fa, ta, A] = shapes[i]
+      const [ib, fb, tb, B] = shapes[j]
+      if (fa > tb || fb > ta) continue
+      if (meet(A, B)) bad(`${at0} ${ia}`, `stands on ${ib}’s ground in the same years`)
+    }
+  }
+  landmarkCounts = { ...counts, bytes }
+}
+// ---------------------------------------------------------------------------
 // Unused entries (warnings)
 for (const p of places) if (!usedPlaces.has(p.id)) warn(`places.json ${p.id}`, 'is not used by any event')
 for (const s of sources) if (!usedSources.has(s.id)) warn(`sources.json ${s.id}`, 'is not cited anywhere')
@@ -2024,6 +2143,10 @@ function finish() {
   if (worksCounts) {
     console.log(`  works     ${worksCounts.n} features, ${(worksCounts.bytes / 1024).toFixed(0)} KB (${fmt(worksCounts.kinds)}); dated by a sheet or record: ${worksCounts.by.length}`)
     console.log(`            ${Object.entries(worksCounts.islands).map(([i, t]) => `${i} ${Object.values(t).reduce((a, b) => a + b, 0)}`).join(', ')}`)
+  }
+  if (landmarkCounts) {
+    const l = landmarkCounts
+    console.log(`  landmarks ${l.n} named buildings, ${l.standing} standing, ${(l.bytes / 1024).toFixed(0)} KB (${fmt(l.types)}; ${fmt(l.precision)}); none on another's ground in its years`)
   }
   if (geoCounts) {
     const g = geoCounts

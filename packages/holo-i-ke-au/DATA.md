@@ -1402,6 +1402,123 @@ told apart from their reservations by any layer read, so they stay `land`.
 The State's commercial-harbours layer is downloaded for the harbours' names
 and extents, which set the boxes; no feature takes its geometry from it.
 
+## Landmarks, dated: named buildings at their footprints
+
+The buildings the town is known by, each drawn at its own footprint from the
+year it stood finished to the year it went, so ʻIolani Palace stands on its
+ground from 1882 and the first palace stood there before it, and the town's
+modelled lots (DESIGN.md §5.4) yield to them as they yield to a loʻi. One
+file, `public/data/landmarks.json`, a GeoJSON FeatureCollection in lon/lat:
+
+```jsonc
+{ "about": "...", "baked": "2026-11-06",
+  "types": ["palace", "hall", "church", "house", "villa", "statue", "hotel", "tower", "block"],
+  "sources": [ { "id": "osm-landmark-footprints", "title": "...", "url": "...", "licence": "...", "fetched": "..." } ],
+  "type": "FeatureCollection",
+  "features": [ { "type": "Feature", "geometry": { "type": "Polygon", "coordinates": [...] }, "properties": {
+    "id": "iolani-palace", "name": "ʻIolani Palace", "type": "palace", "group": "iolani-palace", "place": "iolani-palace",
+    "island": "oahu", "from": 1882, "to": null, "built": [1879, 1882], "datePrecision": "year",
+    "precision": "exact", "storeys": 2, "layer": { "source": "osm-landmark-footprints", "key": "way/67136074" },
+    "listed": "nrhp-hawaii-capital-historic-district",
+    "sources": ["nrhp-hawaii-capital-historic-district", "osm-landmark-footprints", "wikipedia-iolani-palace"],
+    "note": "..." } } ] }
+```
+
+| field | values |
+| --- | --- |
+| `id` | kebab-case ASCII, unique |
+| `name`, `alt` | with the standard ʻokina and kahakō, no other apostrophe (the Cathedral of St. Andrew) |
+| `type` | the kit it is drawn with, one of the file's `types`; `look` a kit's variant (a hall `italianate`, `mission`, `stone` or `barracks`; a church `coral` or `gothic`; a house `lanai` or `mission`; a hotel `colonial` or `moorish`; a block `theatre`) |
+| `group` | the building, where it has several forms (the first palace and the second; the Moana before and after its wings) |
+| `place` | optional: its id in places.json |
+| `island` | its island pack |
+| `from`, `to` | the years it stands whole; `to` null while it stands; `built: [start, end]` optional, the years of building, ending by `from` |
+| `datePrecision` | `year` · `decade` · `by` (with `by`, the opened source that first shows it) |
+| `precision` | `exact` (a mapped outline) · `mapped` (a mapped point, its `size` drawn) · `inferred` (another entry's ground, at a size or share its note gives) |
+| `layer` | where the footprint came from: `{ source, key }` (a source of the file's own and the element) or `{ source: "inferred", from }` (the entry whose ground it takes) |
+| `storeys` | whole storeys above the ground |
+| `listed` | a source among its own, opened, showing the building, or the ground it stood on, is a listed public site (a National Register nomination, a State register entry): the gazetteer's landmark rule (§4) |
+| `sources` | ids in sources.json, at least one opened |
+| `note` | what it is and what the sources could not settle |
+
+Any other kind of building with a place and dates (a school, a mill) goes in
+the same file with a `type` of its own: the app draws a type it has no kit
+for as a hall of its `storeys`, and a kit of that name in
+`src/features/landmarks.js` is all it takes to give it its own form.
+
+**What the app draws.** The district's scatter (`features/settlements.js`,
+`features/landmarks.js`) draws each building whose footprint lies inside its
+own lots, whole from `from` through `to` (fading in over the half year
+before and out over the half year after), on the highest ground under it in
+its first year. Its
+footprint is turned and boxed to its outline's tightest rectangle and drawn
+at 1.9 times life, as the town's buildings are drawn larger than life,
+unless that would reach another named building standing in the same years,
+when both are drawn smaller, down to life. Each type is a kit in the house's
+low-polygon manner (a palace with its lanai and towers, a hall with its
+tower, a coral or a stone church, a house with a lanai or a small mission
+house, a villa with colonnades, a statue on its pedestal, a hotel with its
+verandas or its pink towers, the harbour's clock tower, a block), fitted to
+the footprint's length and width and as tall as its length's scale allows.
+The lots keep off its drawn footprint from `from` until the year after `to`,
+and across a gap of up to ten years between two forms of one `group` on the
+same ground, as at any break in their years (a lot's building fades out
+before the half year ahead of the break and the next fades in after it), so
+a lot's building is gone before a named one fades in and comes back only
+after it has gone; the scatter's own
+modelled landmarks keep off the ground of every named building in any year,
+and a named church standing in 1842 (Kawaiahaʻo) and a named tower in 1926
+(Aloha Tower) stand for the modelled ones. The trees stand back from them
+as from the town. Nothing names them on the screen yet: a card that does
+will cite what its `sources` say was read.
+
+**Accepted.** The rules `tools/check-data.mjs` enforces: the vocabularies
+above; `from` ≤ `to` and both within 1778–2026; `built` in order and ending
+by `from`; a `by` date naming an opened source among its own; an inferred
+footprint naming an entry that exists; every ring closed and inside its
+island pack; `listed` present and opened; names and notes Hawaiian-checked
+and held to the copy rule; the file under 200 KB; and no two buildings
+standing in the same years on one ground (their outlines, at life, neither
+crossing nor holding a corner of the other).
+
+### How to bake the landmarks
+
+The table is hand-written in `tools/lib/landmarks-table.mjs` (its header
+lists the `geom` forms: an OSM way, relation or point, several ways built
+wall to wall, or another entry's ground); the bake fetches each footprint
+from the OSM API by element id and writes only `public/data/landmarks.json`.
+
+```bash
+node packages/holo-i-ke-au/tools/bake-landmarks.mjs --all        # download, bake, check, delete the downloads (under a minute)
+```
+
+or `--download` (a call every 1.5 s, a few KB each), `--bake`, `--check`
+(runs `tools/check-data.mjs`), `--clean`. `--downloads DIR` (or
+`$HOLO_LANDMARKS_DOWNLOADS`) moves the downloads from
+`<os tmpdir>/holo-i-ke-au-bake/landmarks-downloads`; keep them outside the
+repo. Node 22 and `curl`. A re-bake from the same downloads is
+byte-identical but for `baked`; OSM's outlines move as they are edited.
+
+**What it rests on.** The buildings of the Hawaiʻi Capital Historic District
+(the palace and the first palace, Aliʻiōlani Hale, Kawaiahaʻo and the Mission
+Houses, Washington Place, the Cathedral of St. Andrew, the statue, ʻIolani
+Barracks, Honolulu Hale) are dated and listed by the district's National
+Register nomination of 1978, read in its text (the inventory and the
+history); the others (the Post Office, Aloha Tower, the Hawaiʻi Theatre,
+Hawaiian Hall, the Moana and the Royal Hawaiian) by their encyclopaedia
+pages, read as finding aids and marked tertiary. The outlines of the
+buildings standing are OpenStreetMap's; the first palace stands on the
+present palace's ground at a size no source read gives, and the Moana of
+1901 is drawn as the middle of today's H, both `inferred`. Not yet here, for
+want of an outline or a date read: the Fort (Kekuanohu, 1816–1857), the
+courthouse of 1852 on Queen Street, the barracks' first site, Kaumakapili
+(1888–1900 at Smith and Beretania; 1911 at Pālama), the Hawaiian Hotel of
+1872 on Hotel Street, Queen's Hospital's building of 1860, the Oʻahu Railway
+terminal of 1925, the Seamen's Bethel and the Customs House, the bandstands
+of the palace and Kapiʻolani Park; the Sanborn sheets of 1914 and 1927
+(Library of Congress) and the Government Survey's town sheets would place
+most of them. The Royal Mausoleum is a burial ground and is not placed (§4).
+
 ## Crops, on the era layers
 
 The cultivation mask says how much of a texel is cultivated; the crop class
