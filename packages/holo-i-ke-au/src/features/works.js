@@ -54,6 +54,8 @@ import { decodeWorks, workWeight, WorksExclusion, LOOKS, USES, BLOCK_STRIDE, BLO
 
 // how long an island's works are kept after it gave its slot up (s)
 const LINGER = 30
+// the schools' keep-off years before this are the settlements' sampled years too (exclusion)
+const SCHOOL_BREAKS_UNTIL = 1900
 // the camera's distance over which the blocks come in (as the towns' do,
 // a little further out, being larger), and their own fade by their distance
 const BLOCK_RIG = [150, 230]
@@ -317,8 +319,13 @@ export class Works {
     if (!out && !schools) return null
     if (!e.excl) {
       e.excl = new WorksExclusion(schools ? { polys: [...(out?.excl.polys ?? []), ...schools.polys], lines: out?.excl.lines ?? [] } : out.excl)
-      // (the works' own dates are the settlements' sampled years; the schools' are kept off with a slack instead: data/schools.js KEEP_SLACK)
-      if (schools) e.excl.breaks = out ? new WorksExclusion(out.excl).breaks : new Set()
+      // (the works' own dates are the settlements' sampled years; the schools' are kept off with a slack
+      // instead, data/schools.js KEEP_SLACK, but for those before 1900: few, and where the town's landmarks
+      // are placed by the year they stand, so a church never lands on a school's ground between two samples)
+      if (schools) {
+        e.excl.breaks = out ? new WorksExclusion(out.excl).breaks : new Set()
+        for (const q of schools.polys) for (const y of [q.start, q.end]) if (Number.isFinite(y) && y < SCHOOL_BREAKS_UNTIL) e.excl.breaks.add(y)
+      }
     }
     return e.excl
   }

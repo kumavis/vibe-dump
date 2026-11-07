@@ -1731,7 +1731,7 @@ stands. The settlements (the district's and every island's) keep their lots
 off the building drawn in its years, and from the campus on off the whole of
 its grounds; the trees keep off the building: features/works.js joins the
 schools' polys to the works' exclusion, so every reader of the works' ground
-reads them. The schools' years are not among the settlements' sampled years (the works' are): a school keeps the lots off from four years before it opens to four after it closes (data/schools.js KEEP_SLACK), so the lot is refused at the last sample before it and comes back at the first after. A data set without `schools.json` has no schools; `?schools=<base>`
+reads them. The schools' years after 1899 are not among the settlements' sampled years (the works' are, and the schools' before 1900, few, where the town's landmarks are placed by their year): a school keeps the lots off from four years before it opens to four after it closes (data/schools.js KEEP_SLACK), so the lot is refused at the last sample before it and comes back at the first after. A data set without `schools.json` has no schools; `?schools=<base>`
 reads them from another base.
 
 ### How to bake the schools
