@@ -3437,6 +3437,8 @@ const restorePoints = () =>
       if (!rect) continue
       const x = rect.x0 + ((best.i + 0.5) / reg.W) * (rect.x1 - rect.x0)
       const z = rect.z0 + ((best.j + 0.5) / reg.H) * (rect.z1 - rect.z0)
+      // (a district's only where it is the one drawn while it is down: two districts' boxes overlap)
+      if (d && app.districts.districtAt(x, z)?.id !== d.id) continue
       out.push({ id: r.id, pack: r.pack, where: t ? 'island' : 'district', until: r.until, x, z, d: best.d })
     }
     return out
