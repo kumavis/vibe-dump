@@ -2634,7 +2634,8 @@ if (streetTown) {
     await frames(2)
     return ui('[app.rig.state.target.x, app.rig.state.target.z]')
   }
-  const years = [streetTown.sheets[0].year - 1, ...streetTown.sheets.map((s) => s.year + 1), lastYear].filter((y, i, a) => y <= lastYear && a.indexOf(y) === i)
+  // (the network's lots come in over the three years before a sheet's year: data/streets.js LEAD)
+  const years = [streetTown.sheets[0].year - 4, ...streetTown.sheets.map((s) => s.year), lastYear].filter((y, i, a) => y <= lastYear && a.indexOf(y) === i)
   await check('streets: the lots follow the town’s streets in their years, none on a street, the grid beyond them', async () => {
     const rows = []
     const bad = []
@@ -2660,8 +2661,8 @@ if (streetTown) {
       })()`)
       if (r.far.length) bad.push(`${y}: ${r.far.length} of ${r.covered} covered not on a street (${r.far.slice(0, 3).join('; ')})`)
       if (r.onStrip.length) bad.push(`${y}: ${r.onStrip.length} on a street's strip (${r.onStrip.slice(0, 3).join('; ')})`)
-      if (y < streetTown.sheets[0].year && r.covered) bad.push(`${y}: ${r.covered} covered before the first sheet`)
-      if (y > streetTown.sheets[0].year && r.streets.standing && !(r.streets.drawn || []).some((d) => +d.split(':')[2] > 0)) bad.push(`${y}: no street drawn (${r.streets.drawn})`)
+      if (y < streetTown.sheets[0].year - 3 && r.covered) bad.push(`${y}: ${r.covered} covered before the first sheet`)
+      if (y >= streetTown.sheets[0].year && r.streets.standing && !(r.streets.drawn || []).some((d) => +d.split(':')[2] > 0)) bad.push(`${y}: no street drawn (${r.streets.drawn})`)
       rows.push(`${y}: ${r.n} buildings, ${r.covered} on the network, ${r.fronting} fronting a street; ${r.streets.standing} streets standing (${r.streets.km} km)`)
     }
     const st = await ui(`app.streets.stats()['${streetTown.island}']`)
@@ -2672,7 +2673,7 @@ if (streetTown) {
   await check('streets: a street lot stands only from its street’s year, a grid lot only outside the network', async () => {
     const r = await ui(`(() => {
       const net = app.streets.nets.get('${streetTown.island}').net
-      const first = Math.min(...net.lines.map((L) => L.from))
+      const first = Math.min(...net.lines.map((L) => L.lotFrom))
       const before = net.lots.filter((l) => l.span[0] < first).length
       const S = app.districts.cur?.features?.settlements
       return { lots: net.lots.length, before, first, district: S?.ready ? S.stats().streetLots : null }

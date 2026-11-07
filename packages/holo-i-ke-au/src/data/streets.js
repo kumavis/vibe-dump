@@ -32,6 +32,10 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 // world units (100 m): a street's strip by its class (DATA.md), and how far the network covers
 export const STREET_WIDTH = { arterial: 0.14, street: 0.09 }
 export const COVER = 0.75
+// a street's lots come in over the years before its date (the sheet's year, a
+// year by which it stood: DATA.md), so that they stand whole in that year
+// rather than fading in after it; the grid goes over the same years
+export const LEAD = 3
 // a lot's front stands this far back from its street's strip: half the grid's
 // street, which a building's front may reach into (settlements.js FRONT)
 const SETBACK = 0.07
@@ -57,7 +61,7 @@ export class StreetNet {
         const pts = c.map((q) => proj.toWorld(q))
         let len = 0
         for (let i = 1; i < pts.length; i++) len += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1])
-        this.lines.push({ id: p.id, town: p.town, pts, len, from: p.from, to: Number.isFinite(p.to) ? p.to : null, cls: p.class === 'arterial' ? 'arterial' : 'street', width: STREET_WIDTH[p.class] ?? STREET_WIDTH.street })
+        this.lines.push({ id: p.id, town: p.town, pts, len, from: p.from, lotFrom: p.from - LEAD, to: Number.isFinite(p.to) ? p.to : null, cls: p.class === 'arterial' ? 'arterial' : 'street', width: STREET_WIDTH[p.class] ?? STREET_WIDTH.street })
       }
     }
     // the segments, hashed by cell, for the lots and the cover
@@ -65,7 +69,7 @@ export class StreetNet {
     this.hash = new Map()
     this.lines.forEach((L, li) => {
       for (let i = 1; i < L.pts.length; i++) {
-        const s = { a: L.pts[i - 1], b: L.pts[i], li, w: L.width, from: L.from, to: L.to }
+        const s = { a: L.pts[i - 1], b: L.pts[i], li, w: L.width, from: L.lotFrom, to: L.to }
         const k = this.segs.length
         this.segs.push(s)
         this.cells(Math.min(s.a[0], s.b[0]) - COVER, Math.min(s.a[1], s.b[1]) - COVER, Math.max(s.a[0], s.b[0]) + COVER, Math.max(s.a[1], s.b[1]) + COVER, (key) => {
@@ -75,7 +79,7 @@ export class StreetNet {
         })
       }
     })
-    this.breaks = [...new Set(this.lines.flatMap((L) => (L.to !== null ? [L.from, L.to + 1] : [L.from])))].sort((a, b) => a - b)
+    this.breaks = [...new Set(this.lines.flatMap((L) => (L.to !== null ? [L.lotFrom, L.to + 1] : [L.lotFrom])))].sort((a, b) => a - b)
     this.lots = this.layLots()
     this.lotHash = new Map()
     this.lots.forEach((l, k) => {
@@ -197,7 +201,7 @@ export class StreetNet {
             rank: (0.5 + k * GOLD + (side > 0 ? 0 : 0.5) + seed) % 1,
             tile: 1000000 + li, bu: k, bv: side, u: d, v: side,
             lag: 25 * h(2), r2: h(3), r3: h(4), r4: h(5), r5: h(6), r6: h(7), r7: h(8), r8: h(9),
-            span: [L.from, L.to ?? Infinity], street: L.id,
+            span: [L.lotFrom, L.to ?? Infinity], street: L.id,
           }
           lots.push(l)
           const key = `${Math.floor(x / CELL)},${Math.floor(z / CELL)}`

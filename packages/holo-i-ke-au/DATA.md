@@ -2028,7 +2028,9 @@ the directory within its budget; the town's name Hawaiian-checked.
   (36 m along the street, 40 m deep), its front 7 m back from the street's
   strip (as far as a building's front may reach past its lot on the grid), laid oldest street first so an older street keeps its
   corners; none on another street's strip or over another lot, in any year.
-  A lot stands in its street's years (`from` to `to`); its rank is a golden
+  A lot stands in its street's years (`from` to `to`), coming in over the
+  three years before `from` so that it stands whole in the sheet's year
+  (the street was there by then); its rank is a golden
   sequence along the street, scaled by how much closer than the grid's the
   lots stand about it (within a half and a double), so the fill builds as
   many houses on an area as the grid would.
