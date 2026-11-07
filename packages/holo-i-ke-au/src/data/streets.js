@@ -112,15 +112,29 @@ export class StreetNet {
       if (segDist(x, z, s.a, s.b) > COVER) continue
       spans.push([s.from, s.to ?? Infinity])
     }
-    if (!spans.length) return null
-    spans.sort((a, b) => a[0] - b[0])
-    const out = [spans[0].slice()]
-    for (const [a, b] of spans.slice(1)) {
-      const last = out[out.length - 1]
-      if (a <= last[1] + 1) last[1] = Math.max(last[1], b)
-      else out.push([a, b])
-    }
-    return out
+    return mergeSpans(spans)
+  }
+
+  /**
+   * The years in which the network covers any of a turned box (centre x, z,
+   * axes e and m, half extents hx and hz): as coverAt, but of the whole of a
+   * grid lot and the reach of a building on it, not its middle, so no
+   * building of the grid stands within COVER of a street of its year.
+   */
+  coverBoxAt(b) {
+    const spans = []
+    const seen = new Set()
+    const R = Math.hypot(b.hx, b.hz)
+    this.cells(b.x - R, b.z - R, b.x + R, b.z + R, (key) => {
+      for (const k of this.hash.get(key) || []) {
+        if (seen.has(k)) continue
+        seen.add(k)
+        const s = this.segs[k]
+        if (boxSegDist(b, s.a, s.b) > COVER) continue
+        spans.push([s.from, s.to ?? Infinity])
+      }
+    })
+    return mergeSpans(spans)
   }
 
   /** Whether the network covers (x, z) in year y. */
@@ -272,6 +286,19 @@ function boxSegDist(b, a, c) {
   let best = Math.min(toBox(A), toBox(C))
   for (const [u, v] of [[-b.hx, -b.hz], [b.hx, -b.hz], [b.hx, b.hz], [-b.hx, b.hz]]) best = Math.min(best, segDist(u, v, A, C))
   return best
+}
+
+/** Spans of years merged where they meet or overlap; null for none. */
+function mergeSpans(spans) {
+  if (!spans.length) return null
+  spans.sort((a, b) => a[0] - b[0])
+  const out = [spans[0].slice()]
+  for (const [a, b] of spans.slice(1)) {
+    const last = out[out.length - 1]
+    if (a <= last[1] + 1) last[1] = Math.max(last[1], b)
+    else out.push([a, b])
+  }
+  return out
 }
 
 /** Distance from (x, z) to the segment a–b. */

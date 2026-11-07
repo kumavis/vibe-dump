@@ -164,6 +164,9 @@ const FRONT = LV / 2 + GV / 2 - GAP
 // in, while it is down. Between them a strip no lot of either stands on.
 export const PART = 3.5
 export const PART_GAP = 0.8
+// how far past its lot a building of the grid may stand: an early town's lot
+// moved off its place (pose: 0.03 either way) and a front into its street (FRONT)
+const GRID_REACH = 0.1
 
 // the kinds: scale on the ground (sh) and up (sv), world units per metre;
 // the fall a footprint may take (metres); the era's grid or a loose scatter;
@@ -1297,7 +1300,9 @@ export class Scatter {
     const grid = this.tileLots(x0, z0, th, seed, pads, keep)
     const net = this.streetNet
     if (!net) return grid
-    for (const l of grid) l.gone = net.coverAt(l.x, l.z)
+    // (gone wherever the network comes within its cover of any of the lot, with
+    // the most a building moves on it and reaches past it: GRID_REACH)
+    for (const l of grid) l.gone = net.coverBoxAt({ x: l.x, z: l.z, e: l.e, m: l.m, hx: LU / 2 + GRID_REACH, hz: LV / 2 + GRID_REACH })
     for (const l of net.lotsIn(x0, z0, x0 + GRID_TILE, z0 + GRID_TILE)) if (keep(l.x, l.z)) grid.push(l)
     return grid
   }
@@ -1535,6 +1540,34 @@ export class Settlements extends Scatter {
     return h
   }
 
+  /**
+   * The ground at (x, z) in a patch state as the district draws it, between
+   * the four texels' middles (render/district.js metresAt), and whether any
+   * of them lies under a patch.
+   */
+  groundLerp(x, z, st) {
+    const d = this.rec.d
+    const r = d.rect
+    const fx = clamp(((x - r.x0) / (r.x1 - r.x0)) * d.W - 0.5, 0, d.W - 1.001)
+    const fz = clamp(((z - r.z0) / (r.z1 - r.z0)) * d.H - 0.5, 0, d.H - 1.001)
+    const i = fx | 0
+    const j = fz | 0
+    const tx = fx - i
+    const tz = fz - j
+    let patched = false
+    const at = (a, b) => {
+      if (this.rec.aux[(b * d.W + a) * 4] || this.districts.patchAt(a, b)) patched = true
+      return this.groundAt(a, b, st)
+    }
+    const g00 = at(i, j)
+    const g10 = at(i + 1, j)
+    const g01 = at(i, j + 1)
+    const g11 = at(i + 1, j + 1)
+    const top = g00 + (g10 - g00) * tx
+    const bot = g01 + (g11 - g01) * tx
+    return { h: top + (bot - top) * tz, patched }
+  }
+
   texelOf(x, z) {
     const d = this.rec.d
     const r = d.rect
@@ -1578,6 +1611,7 @@ export class Settlements extends Scatter {
     }
     const parent = rec.parent
     const margin = DISTRICT.margin
+    let patchedNear = false
     for (let p = 0; p < 13; p++) {
       // the centre, the corners and the sides' middles, and the corners again a margin out
       const fu = p === 0 ? 0 : p < 5 ? [-1, 1, 1, -1][p - 1] : p < 9 ? [0, 1, 0, -1][p - 5] : [-1, 1, 1, -1][p - 9]
@@ -1598,6 +1632,12 @@ export class Settlements extends Scatter {
       if (aux[c * 4] || this.districts.patchAt(i, j) || this.app.restores?.texel(rec.d.id, i, j, true)) this.dep = true
       let g = this.groundAt(i, j, ep.state)
       if (g < 0.6) return null
+      // (and the ground as it is drawn there, between the texels' middles: a
+      // corner on a texel of land beside one still under a patch's water
+      // stands in the water drawn between them)
+      const lerp = this.groundLerp(px, pz, ep.state)
+      if (lerp.patched) patchedNear = true
+      if (lerp.h < 0.6) return null
       const raw = rec.metres[c]
       lo = Math.min(lo, raw)
       hi = Math.max(hi, raw)
@@ -1610,6 +1650,19 @@ export class Settlements extends Scatter {
       top = Math.max(top, g)
     }
     if (hi - lo > relief) return null
+    // (where a patch reaches the footprint, the drawn ground under it closer
+    // than the nine points: a slip of water between two piers is narrower
+    // than a building)
+    if (patchedNear) {
+      this.dep = true
+      for (let a = -4; a <= 4; a++) {
+        for (let b = -4; b <= 4; b++) {
+          const px = x + (ux[0] * (a / 4) * ax + uz[0] * (b / 4) * az)
+          const pz = z + (ux[1] * (a / 4) * ax + uz[1] * (b / 4) * az)
+          if (this.groundLerp(px, pz, ep.state).h < 0.6) return null
+        }
+      }
+    }
     // (and clear of the landmarks standing then)
     for (const L of this.landmarks) {
       if (Math.hypot(x - L.x, z - L.z) >= L.r + Math.max(ax, az) + GAP) continue
