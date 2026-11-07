@@ -222,6 +222,8 @@ class IslandSchools {
     }
     this.meshes = []
     for (const [key, list] of byKit) {
+      // (in the order they come in, so a year draws only the run of them in by then: update)
+      list.sort((a, b) => a.span[0] - b.span[0])
       const kit = list[0].kit
       const g = kit.geometry
       const mesh = new THREE.InstancedMesh(g, this.material, list.length)
@@ -238,6 +240,7 @@ class IslandSchools {
         it.mesh = mesh
         it.index = i
       })
+      mesh.starts = Float32Array.from(list, (it) => it.span[0])
       this.meshes.push(mesh)
       this.group.add(mesh)
     }
@@ -297,7 +300,19 @@ class IslandSchools {
     this.group.visible = k > 0.001
     const bs = k * (1 - smooth(RIG[0], RIG[1], d))
     this.own.uShow.value = bs
-    for (const m of this.meshes) m.visible = bs > 0.001
+    // (each kit's instances in by the eased year, and none of a kit with none in yet)
+    const y = this.owner.yearNow
+    for (const m of this.meshes) {
+      let lo = 0
+      let hi = m.starts.length
+      while (lo < hi) {
+        const mid = (lo + hi) >> 1
+        if (m.starts[mid] < y) lo = mid + 1
+        else hi = mid
+      }
+      m.count = lo
+      m.visible = bs > 0.001 && lo > 0
+    }
     if (bs > 0.001) {
       // (the ground under them moves as the district comes and goes, and with the patches of the year)
       const D = app.districts
