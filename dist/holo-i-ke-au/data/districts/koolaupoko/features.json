@@ -3655,6 +3655,7 @@
     "from": null,
     "to": 1827,
     "precision": "mapped",
+    "pond": "wai",
     "site": "50-80-11-00370",
     "place": "kawainui",
     "sources": [
@@ -3662,9 +3663,11 @@
      "kamakau-ruling-chiefs",
      "nps-1992-ka-iwi",
      "dlnr-ulupo",
-     "usgs-topo-1927-oahu"
+     "usgs-topo-1927-oahu",
+     "kikuchi-1973",
+     "drigot-1982"
     ],
-    "note": "The great inland pond of Kailua, behind the beach, divided from Kaʻelepulu by a low stone wall. The outline is the State site record’s, which is the marsh the pond became; the 1927 sheet writes Kawainui Swamp across the same ground. Kamakau has Kamehameha working at its ponds in his years on Oʻahu, and by the late 1820s bulrushes had overgrown most of it, so the end year is the late 1820s of that account.",
+    "note": "The great inland pond of Kailua, a loko wai: an old bay closed off by the sand barrier Kailua stands on, its water fresh from Maunawili and the springs, its banks the marsh and the foot of the hills. A ditch about a mile long took its water south-east into the drainage of Kaʻelepulu, and the inventory of the ponds records a wall between the two with one mākāhā, built, the tradition says, by the menehune. The outline is the State site record’s, which is the marsh the pond became; the 1927 sheet writes Kawainui Swamp across the same ground. Kamakau has Kamehameha working at its ponds in his years on Oʻahu, and by the late 1820s bulrushes had overgrown most of it, so the end year is the late 1820s of that account.",
     "tellings": [
      {
       "source": "dlnr-ulupo",
@@ -3673,6 +3676,14 @@
      {
       "source": "nps-1992-ka-iwi",
       "says": "The freshwater pond may have been in use as early as the late seventeenth century; by the late 1820s the main part of the wetland was dominated by bulrushes (p. 35)."
+     },
+     {
+      "source": "kikuchi-1973",
+      "says": "Kikuchi’s inventory lists Kawainui as a loko wai of 450 acres: a wall separating Kawainui from Kaʻelepulu, built by the menehune; one mākāhā; its moʻo was Hauwahine (p. 242)."
+     },
+     {
+      "source": "drigot-1982",
+      "says": "A 450-acre loko wai, separated from the sea by an expanding barrier beach and drained by a mile-long canal into the drainage of Kaʻelepulu; while the lagoon was still open to the sea it may have been walled as a loko kuapā (pp. 13–15)."
      }
     ]
    },
@@ -4461,6 +4472,7 @@
     "from": null,
     "to": 1943,
     "precision": "mapped",
+    "pond": "wai",
     "site": "50-80-11-00377",
     "place": "kaelepulu",
     "sources": [
@@ -4469,413 +4481,562 @@
      "usgs-topo-1927-oahu",
      "state-gis-oahu-1943",
      "kamakau-ruling-chiefs",
-     "nps-1992-ka-iwi"
+     "nps-1992-ka-iwi",
+     "kikuchi-1973",
+     "cobb-1905",
+     "drigot-1982"
     ],
-    "note": "The second inland pond of Kailua, between Kawainui and the sea, outlined in the State site record with the marsh around it. The 1881 sheet writes Kaeleoulu Loko, the 1927 sheet Kaelepulu Pond, and the 1943 map still fills the pond in its marsh. From the mid-1960s the houses of Enchanted Lake were built around it, so the end year is the 1943 map’s."
+    "note": "The second inland pond of Kailua, a loko wai behind the beach at the south end of Kailua Bay: fresh water in a marsh, its banks the marsh’s and the foot of the ridges, its stream running out to the bay north of Alāla Point. The inventory of the ponds records a stone wall with one mākāhā between it and Kawainui, and a koʻa. The outline is the State site record’s, the pond with the marsh around it, held to the low ground: west of the pond the record’s line ran up the flank of the ridge, and there it follows the foot of the slope instead. The 1881 sheet writes Kaeleoulu Loko, the 1927 sheet Kaelepulu Pond, and the 1943 map still fills the pond in its marsh. From the mid-1960s the houses of Enchanted Lake were built around it, so the end year is the 1943 map’s.",
+    "tellings": [
+     {
+      "source": "kikuchi-1973",
+      "says": "Kikuchi lists Kaʻelepulu as a loko wai of 190 acres: a stone wall separates the pond from Kawainui, with one mākāhā; one koʻa; a konohiki named Ahiki under the chief Olomana, and a kiaʻi named Pakuʻi (p. 238)."
+     },
+     {
+      "source": "cobb-1905",
+      "says": "Cobb’s list of the ponds about 1900 has “Kaelepula, fresh-water pond, in Kailua”, 216 acres; the interior ponds, he writes, “have dirt sides generally, although a few have rock walls covered with dirt” (pp. 746–748)."
+     }
+    ]
    },
    "geometry": {
     "type": "Polygon",
     "coordinates": [
      [
       [
-       -157.742758,
-       21.384109
+       -157.742609,
+       21.382545
       ],
       [
-       -157.742838,
-       21.38395
+       -157.742485,
+       21.381723
       ],
       [
-       -157.742826,
-       21.383067
+       -157.74236,
+       21.381723
       ],
       [
-       -157.742794,
-       21.3827
+       -157.74236,
+       21.381371
       ],
       [
-       -157.742716,
-       21.382305
+       -157.742236,
+       21.381371
       ],
       [
-       -157.742746,
-       21.381616
+       -157.742236,
+       21.380901
       ],
       [
-       -157.742869,
-       21.381269
+       -157.741987,
+       21.380666
       ],
       [
-       -157.742908,
-       21.380732
+       -157.741489,
+       21.380549
       ],
       [
-       -157.742895,
-       21.380443
+       -157.741489,
+       21.380314
       ],
       [
-       -157.742752,
-       21.380205
+       -157.741738,
+       21.380079
       ],
       [
-       -157.742398,
-       21.379951
+       -157.741613,
+       21.380079
       ],
       [
-       -157.742143,
-       21.379701
+       -157.741613,
+       21.379727
       ],
       [
-       -157.741788,
-       21.379102
+       -157.741489,
+       21.379727
       ],
       [
-       -157.741629,
-       21.378633
+       -157.741364,
+       21.379375
       ],
       [
-       -157.741403,
-       21.378451
+       -157.741738,
+       21.379023
       ],
       [
-       -157.740863,
-       21.378158
+       -157.741738,
+       21.37867
       ],
       [
-       -157.740444,
-       21.378044
+       -157.741489,
+       21.378436
       ],
       [
-       -157.739752,
-       21.378077
+       -157.74124,
+       21.378436
       ],
       [
-       -157.739339,
-       21.37818
+       -157.741115,
+       21.378201
       ],
       [
-       -157.739165,
-       21.378332
+       -157.740866,
+       21.378201
       ],
       [
-       -157.739031,
-       21.378925
+       -157.740866,
+       21.378083
       ],
       [
-       -157.738767,
-       21.379061
+       -157.739746,
+       21.377966
       ],
       [
-       -157.738489,
-       21.378967
+       -157.739746,
+       21.378083
       ],
       [
-       -157.738261,
-       21.378723
+       -157.739372,
+       21.378083
       ],
       [
-       -157.738072,
-       21.378419
+       -157.739123,
+       21.378318
       ],
       [
-       -157.737844,
-       21.378149
+       -157.738999,
+       21.379023
       ],
       [
-       -157.737323,
-       21.377973
+       -157.7385,
+       21.379023
       ],
       [
-       -157.73705,
-       21.377806
+       -157.738251,
+       21.378436
       ],
       [
-       -157.736804,
-       21.377752
+       -157.737878,
+       21.378083
       ],
       [
-       -157.736347,
-       21.377963
+       -157.73738,
+       21.378083
       ],
       [
-       -157.736088,
-       21.377989
+       -157.737131,
+       21.377731
       ],
       [
-       -157.735891,
-       21.377942
+       -157.73601,
+       21.377966
       ],
       [
-       -157.735841,
-       21.377756
+       -157.735886,
+       21.377731
       ],
       [
-       -157.736444,
-       21.376765
+       -157.73601,
+       21.377731
       ],
       [
-       -157.73649,
-       21.376503
+       -157.73601,
+       21.377496
       ],
       [
-       -157.736579,
-       21.376258
+       -157.736135,
+       21.377496
       ],
       [
-       -157.736452,
-       21.375938
+       -157.736135,
+       21.377261
       ],
       [
-       -157.735863,
-       21.375652
+       -157.736259,
+       21.377261
       ],
       [
-       -157.735265,
-       21.375534
+       -157.736259,
+       21.377027
       ],
       [
-       -157.734643,
-       21.375604
+       -157.736508,
+       21.376792
       ],
       [
-       -157.734068,
-       21.375808
+       -157.736633,
+       21.376087
       ],
       [
-       -157.733755,
-       21.376092
+       -157.736384,
+       21.375853
       ],
       [
-       -157.733408,
-       21.376546
+       -157.736135,
+       21.375853
       ],
       [
-       -157.733217,
-       21.376896
+       -157.735886,
+       21.375618
       ],
       [
-       -157.732882,
-       21.377384
+       -157.735388,
+       21.375618
       ],
       [
-       -157.732347,
-       21.377511
+       -157.735388,
+       21.3755
       ],
       [
-       -157.731857,
-       21.377934
+       -157.734641,
+       21.3755
       ],
       [
-       -157.731583,
-       21.378472
+       -157.734392,
+       21.375735
       ],
       [
-       -157.731589,
-       21.378996
+       -157.734018,
+       21.375735
       ],
       [
-       -157.731722,
-       21.379625
+       -157.73352,
+       21.376205
       ],
       [
-       -157.731552,
-       21.379777
+       -157.733271,
+       21.376792
       ],
       [
-       -157.731152,
-       21.379898
+       -157.733022,
+       21.376909
       ],
       [
-       -157.73063,
-       21.379946
+       -157.732897,
+       21.377379
       ],
       [
-       -157.730154,
-       21.380105
+       -157.732773,
+       21.377496
       ],
       [
-       -157.729912,
-       21.380318
-      ],
-      [
-       -157.729795,
-       21.380613
-      ],
-      [
-       -157.729827,
-       21.380778
-      ],
-      [
-       -157.729993,
-       21.381055
-      ],
-      [
-       -157.729983,
-       21.381509
-      ],
-      [
-       -157.729772,
-       21.381945
-      ],
-      [
-       -157.73021,
-       21.382506
-      ],
-      [
-       -157.730199,
-       21.382743
-      ],
-      [
-       -157.731142,
-       21.383055
+       -157.732275,
+       21.377496
       ],
       [
        -157.73215,
-       21.383628
+       21.377731
       ],
       [
-       -157.732921,
-       21.384277
+       -157.731777,
+       21.377849
       ],
       [
-       -157.733531,
-       21.384939
+       -157.731777,
+       21.378083
       ],
       [
-       -157.733655,
-       21.38541
+       -157.731528,
+       21.378318
       ],
       [
-       -157.733598,
-       21.385664
+       -157.731652,
+       21.379727
       ],
       [
-       -157.73333,
-       21.386198
+       -157.731528,
+       21.379845
       ],
       [
-       -157.733292,
-       21.386495
+       -157.730532,
+       21.379845
       ],
       [
-       -157.733418,
-       21.386876
+       -157.730532,
+       21.379962
       ],
       [
-       -157.733603,
-       21.387241
+       -157.730283,
+       21.379962
       ],
       [
-       -157.73362,
-       21.387611
+       -157.729909,
+       21.380314
       ],
       [
-       -157.733406,
-       21.388061
+       -157.729909,
+       21.380549
       ],
       [
-       -157.733331,
-       21.388327
+       -157.729785,
+       21.380549
       ],
       [
-       -157.73335,
-       21.388578
+       -157.729909,
+       21.381606
       ],
       [
-       -157.733662,
-       21.388915
+       -157.72966,
+       21.381841
       ],
       [
-       -157.734085,
-       21.388977
+       -157.730407,
+       21.382897
       ],
       [
-       -157.734387,
-       21.388879
+       -157.730781,
+       21.382897
       ],
       [
-       -157.734745,
-       21.38857
+       -157.730781,
+       21.383015
       ],
       [
-       -157.735011,
-       21.388509
+       -157.731279,
+       21.383132
       ],
       [
-       -157.735302,
-       21.388552
+       -157.731403,
+       21.383367
       ],
       [
-       -157.735585,
-       21.388654
+       -157.731652,
+       21.383367
       ],
       [
-       -157.736085,
-       21.388863
+       -157.731777,
+       21.383602
       ],
       [
-       -157.736364,
-       21.389046
+       -157.732026,
+       21.383602
       ],
       [
-       -157.736567,
-       21.389052
+       -157.73215,
+       21.383837
       ],
       [
-       -157.736908,
-       21.388765
+       -157.732773,
+       21.384071
       ],
       [
-       -157.737269,
-       21.38863
+       -157.733271,
+       21.384541
       ],
       [
-       -157.737984,
-       21.38827
+       -157.733271,
+       21.384776
       ],
       [
-       -157.738437,
-       21.388108
+       -157.73352,
+       21.384893
       ],
       [
-       -157.739247,
-       21.387931
+       -157.733645,
+       21.385598
       ],
       [
-       -157.739414,
-       21.387635
+       -157.73352,
+       21.385598
       ],
       [
-       -157.739396,
-       21.387503
+       -157.73352,
+       21.385833
       ],
       [
-       -157.739676,
-       21.386582
+       -157.733271,
+       21.386067
       ],
       [
-       -157.740346,
-       21.385604
+       -157.733271,
+       21.386655
       ],
       [
-       -157.740744,
-       21.385233
+       -157.733396,
+       21.386655
       ],
       [
-       -157.74118,
-       21.38501
+       -157.733396,
+       21.387007
       ],
       [
-       -157.742185,
-       21.384584
+       -157.73352,
+       21.387007
       ],
       [
-       -157.742519,
-       21.384363
+       -157.73352,
+       21.387829
       ],
       [
-       -157.742758,
-       21.384109
+       -157.733396,
+       21.387829
+      ],
+      [
+       -157.733396,
+       21.388181
+      ],
+      [
+       -157.733271,
+       21.388181
+      ],
+      [
+       -157.733271,
+       21.388651
+      ],
+      [
+       -157.733645,
+       21.389003
+      ],
+      [
+       -157.734143,
+       21.389003
+      ],
+      [
+       -157.734143,
+       21.388885
+      ],
+      [
+       -157.734392,
+       21.388885
+      ],
+      [
+       -157.734765,
+       21.388533
+      ],
+      [
+       -157.735263,
+       21.388533
+      ],
+      [
+       -157.735512,
+       21.388768
+      ],
+      [
+       -157.73601,
+       21.388768
+      ],
+      [
+       -157.736259,
+       21.38912
+      ],
+      [
+       -157.736633,
+       21.38912
+      ],
+      [
+       -157.737006,
+       21.388651
+      ],
+      [
+       -157.73738,
+       21.388651
+      ],
+      [
+       -157.73738,
+       21.388533
+      ],
+      [
+       -157.737629,
+       21.388533
+      ],
+      [
+       -157.738002,
+       21.388181
+      ],
+      [
+       -157.7385,
+       21.388181
+      ],
+      [
+       -157.7385,
+       21.388064
+      ],
+      [
+       -157.739248,
+       21.387946
+      ],
+      [
+       -157.739497,
+       21.387711
+      ],
+      [
+       -157.739621,
+       21.386537
+      ],
+      [
+       -157.739372,
+       21.386302
+      ],
+      [
+       -157.73875,
+       21.386302
+      ],
+      [
+       -157.7385,
+       21.385598
+      ],
+      [
+       -157.738999,
+       21.385246
+      ],
+      [
+       -157.738999,
+       21.385011
+      ],
+      [
+       -157.739248,
+       21.384776
+      ],
+      [
+       -157.739497,
+       21.384776
+      ],
+      [
+       -157.739746,
+       21.384424
+      ],
+      [
+       -157.740244,
+       21.384424
+      ],
+      [
+       -157.740493,
+       21.384189
+      ],
+      [
+       -157.740866,
+       21.38325
+      ],
+      [
+       -157.74124,
+       21.383484
+      ],
+      [
+       -157.74124,
+       21.383367
+      ],
+      [
+       -157.741613,
+       21.38325
+      ],
+      [
+       -157.741489,
+       21.383132
+      ],
+      [
+       -157.741613,
+       21.382897
+      ],
+      [
+       -157.742111,
+       21.383015
+      ],
+      [
+       -157.742609,
+       21.382545
+      ],
+      [
+       -157.742609,
+       21.382545
       ]
      ]
     ]

@@ -718,7 +718,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1881), exported over the district on 2026-10-20 and checked against GNIS points (Punchbowl, Queen Emma’s summer house, the Pali). Writes land names (Laimi, Luakaha, Kuwili, Apili, Pahounui, Mokauea, Waolani, Puunui) and Land Commission Award numbers; its notes define stations, acres, grants, awards and patents but not the ruled hatching it puts on valley floors and shore flats, which is read here as wet land. Read again over Koʻolaupoko on 2026-10-22: Loko at Heʻeia, Kaeleoulu Loko at Kailua, the Old Mission Res. & Church and a mill at Kāneʻohe, the roads below the pali, and Crown 8000 A. and J. Cummings at Waimānalo. Over Koʻolaupoko its lines fall west and south of the award layer and today's shore by a few hundred metres (Kailua's shore about 300 m inland of today's; the Kāneʻohe church about 500 m west of its grant in the award layer), so places there are taken from the awards and GNIS rather than from the sheet."
+    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1881), exported over the district on 2026-10-20 and checked against GNIS points (Punchbowl, Queen Emma’s summer house, the Pali). Writes land names (Laimi, Luakaha, Kuwili, Apili, Pahounui, Mokauea, Waolani, Puunui) and Land Commission Award numbers; its notes define stations, acres, grants, awards and patents but not the ruled hatching it puts on valley floors and shore flats, which is read here as wet land. Read again over Koʻolaupoko on 2026-10-22: Loko at Heʻeia, Kaeleoulu Loko at Kailua, the Old Mission Res. & Church and a mill at Kāneʻohe, the roads below the pali, and Crown 8000 A. and J. Cummings at Waimānalo. Over Koʻolaupoko its lines fall west and south of the award layer and today's shore by a few hundred metres (Kailua's shore about 300 m inland of today's; the Kāneʻohe church about 500 m west of its grant in the award layer), so places there are taken from the awards and GNIS rather than from the sheet. Read again on 2026-11-06 for the towns’ streets (DATA.md “Streets, dated”), exported over Honolulu, Kailua and Kāneʻohe at 2.5 m a pixel: downtown Honolulu is drawn as hatched blocks between streets, King and Beretania streets run east as lines toward Kaʻakopua and Waikīkī, Kakaʻako is reef and stipple; elsewhere roads only. At this scale few of today’s streets are found on it."
   },
   {
     "id": "hgs-1899-oahu",
@@ -729,7 +729,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1899), exported over the district on 2026-10-20. Writes PUIWA on the Nuʻuanu valley floor, Kuwili by the railway depot, and ponds and rice at Kālia and Mōʻiliʻili. Its georeferencing is a few hundred metres looser than the 1881 sheet’s. Read again over Kāneʻohe: it writes Heeia Agricultural Co. across Heʻeia, with a mill, churches, and salt works on Mōkapu."
+    "note": "Read as the State GIS georeferenced image service (Historic_Maps/Oahu_1899), exported over the district on 2026-10-20. Writes PUIWA on the Nuʻuanu valley floor, Kuwili by the railway depot, and ponds and rice at Kālia and Mōʻiliʻili. Its georeferencing is a few hundred metres looser than the 1881 sheet’s. Read again over Kāneʻohe: it writes Heeia Agricultural Co. across Heʻeia, with a mill, churches, and salt works on Mōkapu. Read again on 2026-11-06 for the towns’ streets over Honolulu, Kailua and Kāneʻohe: Honolulu’s streets drawn as double lines over the plain from Pālama to Makiki and Kaimukī, small and generalized, the georeferencing over the city about a hundred metres off today’s."
   },
   {
     "id": "usgs-topo-1927-oahu",
@@ -740,7 +740,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported over Kalihi Kai and Kālia on 2026-10-20. Names and outlines Apili, Pahou, Pahouiki, Auiki and Ananoho ponds on the Kalihi shore; shows Kālia and Iwilei already filled. Exported again on 2026-10-22 over Koʻolaupoko, where it names and outlines the ponds of Kāneʻohe Bay and Mōkapu, writes Kawainui Swamp and Kaelepulu Pond, and marks ruins at Kualoa and Waimanalo Landing."
+    "note": "Exported over Kalihi Kai and Kālia on 2026-10-20. Names and outlines Apili, Pahou, Pahouiki, Auiki and Ananoho ponds on the Kalihi shore; shows Kālia and Iwilei already filled. Exported again on 2026-10-22 over Koʻolaupoko, where it names and outlines the ponds of Kāneʻohe Bay and Mōkapu, writes Kawainui Swamp and Kaelepulu Pond, and marks ruins at Kualoa and Waimanalo Landing. Read again on 2026-11-06 for the towns’ streets over Honolulu (the Honolulu, Koko Head and Kāneʻohe quadrangles), Kailua and Kāneʻohe: every street drawn as two lines with its buildings in black, downtown’s blocks solid; Kailua’s beach lots laid out in streets behind the shore; contours a lighter grey."
   },
   {
     "id": "oha-kipuka-sites",
@@ -1033,7 +1033,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported over the Kāneʻohe shore and Kailua on 2026-10-22. It fills ponds and marsh in blue, which is how the ponds of the Kāneʻohe shore were traced and dated; it carries a military grid and route shields."
+    "note": "Exported over the Kāneʻohe shore and Kailua on 2026-10-22. It fills ponds and marsh in blue, which is how the ponds of the Kāneʻohe shore were traced and dated; it carries a military grid and route shields. Read again on 2026-11-06 for the towns’ streets over Honolulu, Kailua and Kāneʻohe: streets as two lines, buildings in black, contours brown."
   },
   {
     "id": "usgs-topo-2000-oahu",
@@ -1044,7 +1044,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported over Kāneʻohe Bay and Kailua on 2026-10-22, to see which ponds still stand: Heʻeia, Halekou and Nuʻupia, Kaʻelepulu and the fishpond at Waikalua; it marks Ulupō Heiau State Monument."
+    "note": "Exported over Kāneʻohe Bay and Kailua on 2026-10-22, to see which ponds still stand: Heʻeia, Halekou and Nuʻupia, Kaʻelepulu and the fishpond at Waikalua; it marks Ulupō Heiau State Monument. Read again on 2026-11-06 for the towns’ streets over Honolulu, Kailua and Kāneʻohe: streets white between black casings on the built-up tint, the main roads red."
   },
   {
     "id": "noaa-cudem-hawaii",
@@ -1150,7 +1150,7 @@
     "opened": false,
     "read": "title",
     "note": "On the Internet Archive for lending only (the Kraus reprint of 1971); not read (ACCESS.md).",
-    "wanted": "the Koʻolaupoko sites: the heiau of Kailua, Kāneʻohe and Waimānalo (Ulupō, Pahukini, Holomakani, Alala, Kawaewae, Olohana, Pueo) and the fishponds of Kāneʻohe Bay, Kailua and Waimānalo as he found them, and whether the State site numbers the Kīpuka layer gives them repeat his"
+    "wanted": "the Koʻolaupoko sites: the heiau of Kailua, Kāneʻohe and Waimānalo (Ulupō, Pahukini, Holomakani, Alala, Kawaewae, Olohana, Pueo) and the fishponds of Kāneʻohe Bay, Kailua and Waimānalo as he found them, and whether the State site numbers the Kīpuka layer gives them repeat his; for Kawainui (his site 370) and Kaʻelepulu, their banks and where the wall with its mākāhā between the two stood"
   },
   {
     "id": "sterling-summers-1978",
@@ -1161,7 +1161,7 @@
     "opened": false,
     "read": "title",
     "note": "Print (Bishop Museum); not found on the Internet Archive.",
-    "wanted": "the Koʻolaupoko chapters: the heiau, ponds, springs and place-name lore of Waimānalo, Kailua, Kāneʻohe, Heʻeia and Kualoa, and where Alele, Pamoa, Naonealaʻa and Kukui were"
+    "wanted": "the Koʻolaupoko chapters: the heiau, ponds, springs and place-name lore of Waimānalo, Kailua, Kāneʻohe, Heʻeia and Kualoa, and where Alele, Pamoa, Naonealaʻa and Kukui were; for Kawainui and Kaʻelepulu, where the wall with its mākāhā between the two stood, and the ponds' banks"
   },
   {
     "id": "devaney-1976-kaneohe",
@@ -1332,7 +1332,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported over Hanalei on 2026-10-23, to look for rice: the sheet marks no crops at all on the valley floor (contours, the river, the town, the road), and the mosaic’s neighbouring sheets do not join there. No use for the crop classes beyond showing that this edition carries no land-use symbols. Exported again on 2026-10-23 over Nāwiliwili and Hanapēpē bays, both open water where the breakwaters now stand."
+    "note": "Exported over Hanalei on 2026-10-23, to look for rice: the sheet marks no crops at all on the valley floor (contours, the river, the town, the road), and the mosaic’s neighbouring sheets do not join there. No use for the crop classes beyond showing that this edition carries no land-use symbols. Exported again on 2026-10-23 over Nāwiliwili and Hanapēpē bays, both open water where the breakwaters now stand. Read again on 2026-11-06 for the towns’ streets: the Līhuʻe and Hanapēpē quadrangles over Līhuʻe, Kōloa, Hanapēpē and Waimea, their streets as two lines."
   },
   {
     "id": "coulter-chun-1937-rice",
@@ -1526,7 +1526,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Fetched 2026-10-23 for Nuʻuanu Pali Drive and Old Pali Road only."
+    "note": "Fetched 2026-10-23 for Nuʻuanu Pali Drive and Old Pali Road only. Read again on 2026-11-06: every named segment over Honolulu, Kailua and Kāneʻohe for the towns’ streets, freeways and their ramps left to the works."
   },
   {
     "id": "state-gis-nbi",
@@ -1570,7 +1570,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported on 2026-10-23 along the whole of the Oahu Railway and Land Company's main line, which the works trace from it, and over Honolulu harbour and the airport."
+    "note": "Exported on 2026-10-23 along the whole of the Oahu Railway and Land Company's main line, which the works trace from it, and over Honolulu harbour and the airport. Read again on 2026-11-06 for the towns’ streets over Honolulu, Kailua and Kāneʻohe: the streets drawn as filled bands, generalized, the buildings as dots and blocks."
   },
   {
     "id": "usgs-topo-1911-hawaii",
@@ -1581,7 +1581,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported on 2026-10-23 over Hilo, Waiākea and the road and railway to Olaʻa, which the works trace from it. It answers only fine exports (about 5 m a pixel or finer); coarser ones come back blank."
+    "note": "Exported on 2026-10-23 over Hilo, Waiākea and the road and railway to Olaʻa, which the works trace from it. It answers only fine exports (about 5 m a pixel or finer); coarser ones come back blank. Read again on 2026-11-06 for the towns’ streets: the Waiākea quadrangle (1912) over Hilo, its streets as two lines from the bayfront mauka and Waiākea’s mill camp, and the Kalaoa quadrangle (1924) over Kailua, its few roads."
   },
   {
     "id": "usgs-topo-1924-maui",
@@ -1592,7 +1592,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported on 2026-10-23 over Kahului, Spreckelsville, Pāʻia and Haʻikū: the Kahului Railroad, which the works trace from it, and the breakwaters of Kahului harbour. Its sheets do not all meet cleanly at their edges."
+    "note": "Exported on 2026-10-23 over Kahului, Spreckelsville, Pāʻia and Haʻikū: the Kahului Railroad, which the works trace from it, and the breakwaters of Kahului harbour. Its sheets do not all meet cleanly at their edges. Read again on 2026-11-06 for the towns’ streets: the Mala quadrangle over Lahaina (Front Street and the streets behind it, the mill camps), the Wailuku and Pāʻia quadrangles over Wailuku and Kahului."
   },
   {
     "id": "usgs-topo-1922-molokai",
@@ -1603,7 +1603,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported on 2026-10-23 over Kaunakakai: a wharf, shorter than today's, at the landing."
+    "note": "Exported on 2026-10-23 over Kaunakakai: a wharf, shorter than today's, at the landing. Read again on 2026-11-06 for the towns’ streets: the Kualapuʻu quadrangle over Kaunakakai, its few streets and the road along the shore."
   },
   {
     "id": "usgs-topo-1963-kauai",
@@ -1614,7 +1614,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported on 2026-10-23 over Nāwiliwili, Port Allen and Barking Sands: both breakwaters and the runway at Mana."
+    "note": "Exported on 2026-10-23 over Nāwiliwili, Port Allen and Barking Sands: both breakwaters and the runway at Mana. Read again on 2026-11-06 for the towns’ streets: the Līhuʻe, Kōloa, Hanapēpē and Kekaha quadrangles over the four towns, Līhuʻe’s subdivisions drawn."
   },
   {
     "id": "usgs-topo-2000-islands",
@@ -1625,7 +1625,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "The same mosaic as usgs-topo-2000-oahu, exported on 2026-10-23 over the other islands: the old Kona airport at Kailua, Pōhakuloa's western boundary, the harbours of Māʻalaea and Kaunakakai."
+    "note": "The same mosaic as usgs-topo-2000-oahu, exported on 2026-10-23 over the other islands: the old Kona airport at Kailua, Pōhakuloa's western boundary, the harbours of Māʻalaea and Kaunakakai. Read again on 2026-11-06 for the towns’ streets over Hilo, Kailua (Kona), Lahaina, Wailuku and Kahului, Kaunakakai, Līhuʻe, Kōloa, Hanapēpē and Waimea (Kauaʻi): streets white between black casings, main roads red."
   },
   {
     "id": "hdot-aviation-barbers-point",
@@ -3274,6 +3274,186 @@
     "opened": true,
     "read": "part",
     "tertiary": true,
-    "note": "Read on 2026-11-06 as a finding aid: opened on 1 February 1927."
-  }
+    "note": "Read on 2026-11-06 as a finding aid: opened on 1 February 1927.",
+    "id": "kikuchi-1973",
+    "title": "Hawaiian Aquacultural System (PhD dissertation, Department of Anthropology, University of Arizona)",
+    "author": "William Kenji Kikuchi",
+    "year": 1973,
+    "url": "http://hdl.handle.net/10150/565277",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Read in the scan the Kikuchi Center (Kauaʻi Community College) serves in its Kikuchi Collection (kikuchi.omeka.net, item 386), on 2026-11-06: the six kinds of pond and trap (p. 10), the typology of Appendix A (pp. 227–229: type I loko kuapā, walled in stone or coral on the side or sides facing the sea; type II loko puʻuone, an isolated shore pond behind a barrier beach; type III loko wai, an inland fresh-water pond, usually a natural lake or swamp) and the inventory of Appendix B for Kailua (C23 Kaʻelepulu, p. 238; C67 Kawainui, p. 242). The inventory gives no source per entry.",
+    "wanted": "the rest of Appendix B for Koʻolaupoko (Halekou, Nuʻupia, Kaluapuhi and the Kāneʻohe ponds, by type) and the chapter on construction, for the kuapā drawn in the district; where the wall between Kawainui and Kaʻelepulu stood, if the text places it"
+  },
+  {
+    "id": "drigot-1982",
+    "title": "Hoʻonaʻauao no Kawai Nui (Educating about Kawai Nui): A Multi-Media Educational Guide (Environmental Center Special Report)",
+    "author": "Diane C. Drigot",
+    "year": 1982,
+    "url": "https://hdl.handle.net/10125/18201",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "University of Hawaiʻi Environmental Center; read in ScholarSpace's PDF on 2026-11-06: the making of the pond (pp. 12–16, with Figure 1.11, after Summers 1964, fig. 14: Kawainui and Kaʻelepulu behind the sand barrier and their connecting drainage before European influence), the moʻo Hauwahine (p. 84), the pond types (p. 113) and the flood works of 1950–66 (the Oneawa channel and the levee). It summarizes Kelly and Clark (1980) and other studies, which were not read.",
+    "wanted": "its bibliography's Kawainui reports (Kelly and Clark 1980; the Army Corps' survey of 1978) for the extent of the pond before 1800 and where its ditch and the wall toward Kaʻelepulu ran"
+  },
+  {
+    "id": "cobb-1905",
+    "title": "The Commercial Fisheries of the Hawaiian Islands (Bulletin of the United States Fish Commission 23, for 1903)",
+    "author": "John N. Cobb",
+    "year": 1905,
+    "url": "https://archive.org/details/cu31924003261801",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Read in the Internet Archive's scan of Cornell's copy on 2026-11-06: the fish ponds (pp. 745–748): how the sea ponds and the interior ponds are built, and the list of the ponds still in use or in traces about 1900, by island, with their acreage. The fieldwork is of 1900–01.",
+    "wanted": "the rest of the report for Koʻolaupoko: who worked the Kailua and Kāneʻohe ponds about 1900 and what they took",
+    "id": "hgs-1902-oahu-donn",
+    "title": "Map of Oʻahu (Hawaiian Government Survey), 1902, as georeferenced by the State GIS (Historic_Maps/islands_1900s, raster oa_1902_drg_Donn)",
+    "author": "John M. Donn, Hawaiian Government Survey",
+    "year": 1902,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/islands_1900s/ImageServer",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Exported on 2026-11-06 over Honolulu, Kailua and Kāneʻohe for the towns’ streets: Honolulu’s streets as double lines, downtown, Pālama, Makiki and toward Waikīkī, schematic at this scale; Kailua and Kāneʻohe roads only."
+  },
+  {
+    "id": "hgs-1903-maui-donn",
+    "title": "Map of Maui (Hawaiian Government Survey), 1903, as georeferenced by the State GIS (Historic_Maps/islands_1900s, raster ma_1903_drg_Donn)",
+    "author": "John M. Donn, Hawaiian Government Survey",
+    "year": 1903,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/islands_1900s/ImageServer",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Exported on 2026-11-06 over Lahaina and Wailuku–Kahului for the towns’ streets: Lahaina’s streets drawn behind the shore, Wailuku’s as a few lines; small and schematic at this scale."
+  },
+  {
+    "id": "hgs-1897-molokai-dodge",
+    "title": "Map of Molokaʻi (Hawaiian Government Survey), 1897, as georeferenced by the State GIS (Historic_Maps/islands_1900s, raster mo_1897_drg_Dodge)",
+    "author": "F. S. Dodge, Hawaiian Government Survey",
+    "year": 1897,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/islands_1900s/ImageServer",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Exported on 2026-11-06 over Kaunakakai for the towns’ streets: the landing and the road along the shore only."
+  },
+  {
+    "id": "hgs-1901-hawaii-donn",
+    "title": "Map of Hawaiʻi island (Hawaiian Government Survey), 1901, as georeferenced by the State GIS (Historic_Maps/islands_1900s, raster ha_1901_drg_Donn)",
+    "author": "John M. Donn, Hawaiian Government Survey",
+    "year": 1901,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/islands_1900s/ImageServer",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Exported on 2026-11-06 over Hilo and Kailua (Kona) for the towns’ streets: Hilo’s streets drawn about the bay and Waiākea, the river and the railway; Kailua a few lines; small and schematic at this scale."
+  },
+  {
+    "id": "hgs-1903-kauai-donn",
+    "title": "Map of Kauaʻi (Hawaiian Government Survey), 1903, as georeferenced by the State GIS (Historic_Maps/islands_1900s, raster ka_1903_drg_Donn)",
+    "author": "John M. Donn, Hawaiian Government Survey",
+    "year": 1903,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/islands_1900s/ImageServer",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Exported on 2026-11-06 over Līhuʻe, Kōloa, Hanapēpē and Waimea for the towns’ streets: roads and a few streets, small at this scale."
+  },
+  {
+    "id": "state-gis-kauai-roads",
+    "title": "Kauai Roads, Transportation MapServer layer 4 (road centrelines of the County of Kauaʻi, November 2023)",
+    "author": "State of Hawaiʻi Statewide GIS Program; County of Kauaʻi",
+    "year": 2023,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/4",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Fetched on 2026-11-06 over Līhuʻe, Kōloa, Hanapēpē and Waimea for the towns’ streets (every named segment)."
+  },
+  {
+    "id": "state-gis-maui-roads",
+    "title": "Maui Roads, Transportation MapServer layer 5 (road centrelines of the County of Maui, April 2025)",
+    "author": "State of Hawaiʻi Statewide GIS Program; County of Maui",
+    "year": 2025,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/5",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Fetched on 2026-11-06 over Lahaina, Wailuku–Kahului and Kaunakakai for the towns’ streets (every named segment but ramps, service drives and parking aisles)."
+  },
+  {
+    "id": "state-gis-hawaii-roads",
+    "title": "Hawaii County Roads, Transportation MapServer layer 6 (centrelines of the County of Hawaiʻi, February 2024)",
+    "author": "State of Hawaiʻi Statewide GIS Program; County of Hawaiʻi Planning Department",
+    "year": 2024,
+    "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/6",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Fetched on 2026-11-06 over Hilo and Kailua (Kona) for the towns’ streets (every named segment)."
+  },
+  {
+    "id": "sanborn-hawaii",
+    "title": "Sanborn fire insurance maps of Honolulu, Hilo, Lahaina and Wailuku",
+    "author": "Sanborn Map Company",
+    "year": 1914,
+    "url": "https://www.loc.gov/collections/sanborn-maps/",
+    "access": "open",
+    "opened": false,
+    "read": "title",
+    "note": "Not opened: the Library of Congress’s Sanborn collection answered with a server error (HTTP 520) on 2026-11-06. Believed to hold sheets of Honolulu of about 1899, 1906, 1914 and 1927, and of Hilo, Lahaina and Wailuku, block by block, with the streets named and the buildings drawn by their materials.",
+    "wanted": "For each town and edition: the streets drawn, by name, georeferenced on the sheets’ street corners, to date the streets of streets/<town>.geojson between the Government Survey’s island maps (1881–1903) and the first quadrangles (1910–1927), which the streets bake cannot separate; the lanes and streets closed or built over since (Chinatown’s lanes, Kakaʻako’s before the fill), which today’s centrelines lack and would need a `to`; and the blocks’ buildings, for the settlements’ kinds downtown."
+  },
+  {
+    "id": "hgs-registered-honolulu",
+    "title": "Hawaiian Government Survey, registered maps of Honolulu (the city’s street surveys of the 1880s and 1890s)",
+    "author": "Hawaiian Government Survey",
+    "year": 1890,
+    "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/RegisteredMaps/FeatureServer/0",
+    "access": "open",
+    "opened": false,
+    "read": "title",
+    "note": "Not opened for the streets. OHA’s Kīpuka database serves the registered maps as scans with an index layer; the district bake reads Jackson’s bay surveys from it. Which numbers are Honolulu’s street surveys was not looked up.",
+    "wanted": "The registered maps of Honolulu’s streets between about 1880 and 1900 (find them in the index by place and date), each georeferenced on its street corners: the streets each shows, by name, to date downtown’s, Chinatown’s and Kakaʻako’s streets in the 1880s and 1890s where the island maps of 1881 and 1899 are too small to read."
+  },
+  {
+    "id": "usgs-24k-honolulu",
+    "title": "USGS 1:24,000 quadrangles of Honolulu, 1953, 1959, 1969, 1978, 1983 and 1998 (topoView historical topographic maps)",
+    "author": "U.S. Geological Survey",
+    "year": 1953,
+    "url": "https://tnmaccess.nationalmap.gov/api/v1/products?datasets=Historical%20Topographic%20Maps",
+    "access": "open",
+    "opened": false,
+    "read": "title",
+    "note": "Not opened: listed by the National Map’s products service on 2026-11-06 (the Honolulu quadrangle in those editions, as GeoPDF and GeoTIFF), not downloaded or read.",
+    "wanted": "Each edition’s GeoTIFF over Honolulu, Kailua and Kāneʻohe (and their neighbouring quadrangles), read as the streets bake reads the State’s sheets, to date the streets built between the 1943 sheet and the sheet of about 2000, which the bake now dates by the latter."
+  },
+  {
+      "id": "cobb-1905",
+      "title": "The Commercial Fisheries of the Hawaiian Islands (Bulletin of the United States Fish Commission 23, for 1903)",
+      "author": "John N. Cobb",
+      "year": 1905,
+      "url": "https://archive.org/details/cu31924003261801",
+      "access": "open",
+      "opened": true,
+      "read": "part",
+      "note": "Read in the Internet Archive's scan of Cornell's copy on 2026-11-06: the fish ponds (pp. 745–748): how the sea ponds and the interior ponds are built, and the list of the ponds still in use or in traces about 1900, by island, with their acreage. The fieldwork is of 1900–01.",
+      "wanted": "the rest of the report for Koʻolaupoko: who worked the Kailua and Kāneʻohe ponds about 1900 and what they took"
+    },
+  {
+      "id": "wikipedia-royal-hawaiian-hotel",
+      "title": "Royal Hawaiian Hotel",
+      "author": "Wikipedia",
+      "year": 2026,
+      "url": "https://en.wikipedia.org/wiki/Royal_Hawaiian_Hotel",
+      "access": "open",
+      "opened": true,
+      "read": "part",
+      "tertiary": true,
+      "note": "Read on 2026-11-06 as a finding aid: opened on 1 February 1927."
+    }
 ]
