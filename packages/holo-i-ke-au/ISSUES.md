@@ -174,17 +174,41 @@ fix has landed in `dist/` and been looked at again.
 - **Reported:** "i think there are too many high rises in 1978 honolulu".
 - **Seen:** towers come from today's zoning classes from 1960 on, scaled by
   density and value, not from the record of when the towers rose.
-- **Open:** a dated count of Honolulu's high-rises by area (Waikīkī, downtown,
-  Makiki–Punchbowl, Salt Lake, Kakaʻako) and a ramp that follows it.
+- **Fix:** `public/data/towers.json` (DATA.md "Towers, dated"): twelve areas,
+  each with today's count of towers of ten storeys or 30 m from the City's
+  building footprints with lidar heights (OpenStreetMap on the neighbour
+  islands) and the share standing by each year from the Census Bureau's
+  year-built tables, averaged with the Council on Tall Buildings' completion
+  years where it dates enough of an area; nothing before 1955. A year raises
+  towers on the best-ranked lots up to the record's share, never past its
+  count, in the district and tile by tile on the islands. In 1978 Honolulu's
+  core drew 387 towers against a record of 253; it now draws 130, Waikīkī
+  well ahead of Kakaʻako, and Kona, Kīhei and Kahului none.
+- **Known looks:** Waikīkī and Makiki draw below the record because the model
+  has fewer lots that can carry a tower than the record has towers; the
+  survey counts homes, not hotels or offices; the area outlines are drawn by
+  hand.
+- **Status:** landed on the branch.
 
 ### 11. The schools, at the times they existed
 
 - **Reported:** "since students may look at this, lets try to get all the
   schools in at the various times they existed".
-- **Open:** every school as a dated, placed landmark: the public schools of
-  today with their opening years, the private and mission schools from
-  Lahainaluna (1831) on, the government schools of the kingdom and the
-  territory where their places are known, with sources.
+- **Fix:** `public/data/schools.json` (DATA.md "Schools, dated"), 409
+  placements on six islands (258 public, 101 private, 34 charter, 8 colleges,
+  7 university campuses, 1 mission), 263 on their mapped grounds, 10 closed
+  or moved (the Chiefs' Children's School 1839–50, St. Louis at Kamakela,
+  Kamehameha at Kalihi 1887–1931, Maui High at Hāmākuapoko …), drawn by a
+  renderer of their own on every island in the kit of each era: a
+  schoolhouse, a mission hall, the territory's block, the campus. Dates from
+  the Department of Education's school reports, the State's school layers,
+  the schools' own histories.
+- **Still to do:** 161 schools are dated only by the first record that shows
+  them (from 1999, 2021 or 2024), decades late for many; the kingdom's Board
+  of Education schools, the mission station schools and the plantation
+  schools that no longer stand are recorded as wanted, not placed; 17
+  schools are dated but not placed.
+- **Status:** landed on the branch.
 
 ### 12. Scrubbing the prologue's clock does not move the land
 

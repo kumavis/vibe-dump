@@ -1,0 +1,1457 @@
+{
+ "about": "When the towers rose: for each area, today’s count of buildings of ten storeys or 30 m and over and the share of them standing by each year; for each island the share alone, for its towers outside the areas. The settlements let a year hold that share of the lots the zoning, the density and the value would raise a tower on, and never more than the count (DATA.md “Towers, dated”).",
+ "tower": {
+  "storeys": 10,
+  "metres": 30
+ },
+ "rule": "count: on Oʻahu the City’s footprints of 30 m and over (lidar of 2005 and 2009, or the City’s later heights), one building to footprints whose centres lie within 30 m, with the towers CTBUH lists as completed from 2010 on that none of them stands within 40 m of; elsewhere OpenStreetMap’s buildings of ten levels or 30 m and over. share: the ACS 2019–2023 units in structures of 50 or more by the year built (B25127), the bands split into decades by the same tracts’ units by decade built (B25034), linear within a decade; where CTBUH dates fifteen or more of an area’s towers, the mean of that and the share of them completed by the year; none before 1955; the island’s own where an area has fewer than a hundred such units.",
+ "first": 1955,
+ "areas": [
+  {
+   "id": "downtown",
+   "name": "Downtown and Chinatown",
+   "island": "oahu",
+   "ring": [
+    [
+     -157.8715,
+     21.312
+    ],
+    [
+     -157.8665,
+     21.3195
+    ],
+    [
+     -157.86,
+     21.3175
+    ],
+    [
+     -157.8545,
+     21.3125
+    ],
+    [
+     -157.853,
+     21.3065
+    ],
+    [
+     -157.859,
+     21.301
+    ],
+    [
+     -157.866,
+     21.304
+    ],
+    [
+     -157.869,
+     21.3075
+    ]
+   ],
+   "count": 77,
+   "counted": {
+    "by": "cch-building-footprints",
+    "fetched": "2026-11-07",
+    "footprints": 77,
+    "laterFromCtbuh": 0
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.029
+    ],
+    [
+     1970,
+     0.138
+    ],
+    [
+     1980,
+     0.431
+    ],
+    [
+     1990,
+     0.724
+    ],
+    [
+     2000,
+     0.902
+    ],
+    [
+     2010,
+     0.994
+    ],
+    [
+     2020,
+     0.997
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey and dated",
+   "units50": 5766,
+   "dated": 18,
+   "sources": [
+    "cch-building-footprints",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts",
+    "ctbuh-honolulu"
+   ]
+  },
+  {
+   "id": "kakaako",
+   "name": "Kakaʻako and Ala Moana",
+   "island": "oahu",
+   "ring": [
+    [
+     -157.859,
+     21.301
+    ],
+    [
+     -157.853,
+     21.3065
+    ],
+    [
+     -157.847,
+     21.301
+    ],
+    [
+     -157.84,
+     21.2955
+    ],
+    [
+     -157.836,
+     21.2915
+    ],
+    [
+     -157.84,
+     21.2895
+    ],
+    [
+     -157.8445,
+     21.288
+    ],
+    [
+     -157.852,
+     21.2905
+    ],
+    [
+     -157.86,
+     21.296
+    ]
+   ],
+   "count": 68,
+   "counted": {
+    "by": "cch-building-footprints",
+    "fetched": "2026-11-07",
+    "footprints": 50,
+    "laterFromCtbuh": 18
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.024
+    ],
+    [
+     1970,
+     0.084
+    ],
+    [
+     1980,
+     0.147
+    ],
+    [
+     1990,
+     0.195
+    ],
+    [
+     2000,
+     0.321
+    ],
+    [
+     2010,
+     0.527
+    ],
+    [
+     2020,
+     0.877
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey and dated",
+   "units50": 6101,
+   "dated": 32,
+   "sources": [
+    "cch-building-footprints",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts",
+    "ctbuh-honolulu"
+   ]
+  },
+  {
+   "id": "waikiki",
+   "name": "Waikīkī",
+   "island": "oahu",
+   "ring": [
+    [
+     -157.8445,
+     21.288
+    ],
+    [
+     -157.84,
+     21.2895
+    ],
+    [
+     -157.836,
+     21.289
+    ],
+    [
+     -157.83,
+     21.2875
+    ],
+    [
+     -157.824,
+     21.2855
+    ],
+    [
+     -157.819,
+     21.281
+    ],
+    [
+     -157.816,
+     21.276
+    ],
+    [
+     -157.8175,
+     21.2728
+    ],
+    [
+     -157.8235,
+     21.2728
+    ],
+    [
+     -157.83,
+     21.2745
+    ],
+    [
+     -157.838,
+     21.279
+    ],
+    [
+     -157.844,
+     21.283
+    ]
+   ],
+   "count": 176,
+   "counted": {
+    "by": "cch-building-footprints",
+    "fetched": "2026-11-07",
+    "footprints": 173,
+    "laterFromCtbuh": 3
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.028
+    ],
+    [
+     1970,
+     0.21
+    ],
+    [
+     1980,
+     0.717
+    ],
+    [
+     1990,
+     0.805
+    ],
+    [
+     2000,
+     0.855
+    ],
+    [
+     2010,
+     0.943
+    ],
+    [
+     2020,
+     0.997
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey and dated",
+   "units50": 9606,
+   "dated": 43,
+   "sources": [
+    "cch-building-footprints",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts",
+    "ctbuh-honolulu"
+   ]
+  },
+  {
+   "id": "makiki",
+   "name": "Makiki, Punchbowl and Pāwaʻa",
+   "island": "oahu",
+   "ring": [
+    [
+     -157.8545,
+     21.3125
+    ],
+    [
+     -157.853,
+     21.318
+    ],
+    [
+     -157.846,
+     21.317
+    ],
+    [
+     -157.838,
+     21.311
+    ],
+    [
+     -157.832,
+     21.302
+    ],
+    [
+     -157.83,
+     21.295
+    ],
+    [
+     -157.836,
+     21.2915
+    ],
+    [
+     -157.84,
+     21.2955
+    ],
+    [
+     -157.847,
+     21.301
+    ],
+    [
+     -157.853,
+     21.3065
+    ]
+   ],
+   "count": 123,
+   "counted": {
+    "by": "cch-building-footprints",
+    "fetched": "2026-11-07",
+    "footprints": 120,
+    "laterFromCtbuh": 3
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.054
+    ],
+    [
+     1970,
+     0.323
+    ],
+    [
+     1980,
+     0.731
+    ],
+    [
+     1990,
+     0.869
+    ],
+    [
+     2000,
+     0.955
+    ],
+    [
+     2010,
+     0.979
+    ],
+    [
+     2020,
+     1
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey",
+   "units50": 8095,
+   "dated": 6,
+   "sources": [
+    "cch-building-footprints",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts",
+    "ctbuh-honolulu"
+   ]
+  },
+  {
+   "id": "moiliili",
+   "name": "McCully and Mōʻiliʻili",
+   "island": "oahu",
+   "ring": [
+    [
+     -157.836,
+     21.289
+    ],
+    [
+     -157.836,
+     21.2915
+    ],
+    [
+     -157.83,
+     21.295
+    ],
+    [
+     -157.823,
+     21.299
+    ],
+    [
+     -157.815,
+     21.2955
+    ],
+    [
+     -157.812,
+     21.287
+    ],
+    [
+     -157.816,
+     21.28
+    ],
+    [
+     -157.819,
+     21.281
+    ],
+    [
+     -157.824,
+     21.2855
+    ],
+    [
+     -157.83,
+     21.2875
+    ]
+   ],
+   "count": 43,
+   "counted": {
+    "by": "cch-building-footprints",
+    "fetched": "2026-11-07",
+    "footprints": 43,
+    "laterFromCtbuh": 0
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.055
+    ],
+    [
+     1970,
+     0.352
+    ],
+    [
+     1980,
+     0.775
+    ],
+    [
+     1990,
+     0.907
+    ],
+    [
+     2000,
+     0.973
+    ],
+    [
+     2010,
+     0.988
+    ],
+    [
+     2020,
+     1
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey",
+   "units50": 3040,
+   "dated": 7,
+   "sources": [
+    "cch-building-footprints",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts",
+    "ctbuh-honolulu"
+   ]
+  },
+  {
+   "id": "salt-lake",
+   "name": "Salt Lake",
+   "island": "oahu",
+   "ring": [
+    [
+     -157.93,
+     21.348
+    ],
+    [
+     -157.923,
+     21.364
+    ],
+    [
+     -157.905,
+     21.362
+    ],
+    [
+     -157.9,
+     21.348
+    ],
+    [
+     -157.915,
+     21.342
+    ]
+   ],
+   "count": 23,
+   "counted": {
+    "by": "cch-building-footprints",
+    "fetched": "2026-11-07",
+    "footprints": 23,
+    "laterFromCtbuh": 0
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.012
+    ],
+    [
+     1970,
+     0.134
+    ],
+    [
+     1980,
+     0.547
+    ],
+    [
+     1990,
+     0.788
+    ],
+    [
+     2000,
+     0.912
+    ],
+    [
+     2010,
+     0.964
+    ],
+    [
+     2020,
+     1
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey",
+   "units50": 3376,
+   "dated": 1,
+   "sources": [
+    "cch-building-footprints",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts",
+    "ctbuh-honolulu"
+   ]
+  },
+  {
+   "id": "pearlridge",
+   "name": "ʻAiea and Pearlridge",
+   "island": "oahu",
+   "ring": [
+    [
+     -157.95,
+     21.373
+    ],
+    [
+     -157.944,
+     21.393
+    ],
+    [
+     -157.922,
+     21.393
+    ],
+    [
+     -157.92,
+     21.376
+    ],
+    [
+     -157.935,
+     21.37
+    ]
+   ],
+   "count": 20,
+   "counted": {
+    "by": "cch-building-footprints",
+    "fetched": "2026-11-07",
+    "footprints": 20,
+    "laterFromCtbuh": 0
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0
+    ],
+    [
+     1970,
+     0.114
+    ],
+    [
+     1980,
+     0.554
+    ],
+    [
+     1990,
+     0.889
+    ],
+    [
+     2000,
+     0.962
+    ],
+    [
+     2010,
+     0.993
+    ],
+    [
+     2020,
+     1
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey",
+   "units50": 1921,
+   "sources": [
+    "cch-building-footprints",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  {
+   "id": "hilo",
+   "name": "Hilo",
+   "island": "hawaii",
+   "ring": [
+    [
+     -155.105,
+     19.705
+    ],
+    [
+     -155.105,
+     19.74
+    ],
+    [
+     -155.05,
+     19.74
+    ],
+    [
+     -155.05,
+     19.705
+    ]
+   ],
+   "count": 3,
+   "counted": {
+    "by": "osm-buildings-towns",
+    "fetched": "2026-11-07",
+    "named": [
+     "Bayshore Towers",
+     "Hilo Lagoon Centre (1971)",
+     "Grand Naniloa Hotel"
+    ]
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.102
+    ],
+    [
+     1970,
+     0.425
+    ],
+    [
+     1980,
+     0.971
+    ],
+    [
+     1990,
+     0.971
+    ],
+    [
+     2000,
+     0.971
+    ],
+    [
+     2010,
+     0.991
+    ],
+    [
+     2020,
+     1
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey",
+   "units50": 452,
+   "sources": [
+    "osm-buildings-towns",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  {
+   "id": "kailua-kona",
+   "name": "Kailua-Kona",
+   "island": "hawaii",
+   "ring": [
+    [
+     -156.01,
+     19.6
+    ],
+    [
+     -156.01,
+     19.66
+    ],
+    [
+     -155.965,
+     19.66
+    ],
+    [
+     -155.965,
+     19.6
+    ]
+   ],
+   "count": 0,
+   "counted": {
+    "by": "osm-buildings-towns",
+    "fetched": "2026-11-07",
+    "named": []
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.044
+    ],
+    [
+     1970,
+     0.159
+    ],
+    [
+     1980,
+     0.618
+    ],
+    [
+     1990,
+     0.792
+    ],
+    [
+     2000,
+     0.918
+    ],
+    [
+     2010,
+     0.986
+    ],
+    [
+     2020,
+     1
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey",
+   "units50": 476,
+   "sources": [
+    "osm-buildings-towns",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  {
+   "id": "kahului",
+   "name": "Kahului and Wailuku",
+   "island": "maui",
+   "ring": [
+    [
+     -156.525,
+     20.87
+    ],
+    [
+     -156.525,
+     20.905
+    ],
+    [
+     -156.44,
+     20.905
+    ],
+    [
+     -156.44,
+     20.87
+    ]
+   ],
+   "count": 0,
+   "counted": {
+    "by": "osm-buildings-towns",
+    "fetched": "2026-11-07",
+    "named": []
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.012
+    ],
+    [
+     1970,
+     0.319
+    ],
+    [
+     1980,
+     0.649
+    ],
+    [
+     1990,
+     0.751
+    ],
+    [
+     2000,
+     0.857
+    ],
+    [
+     2010,
+     0.957
+    ],
+    [
+     2020,
+     1
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey",
+   "units50": 754,
+   "sources": [
+    "osm-buildings-towns",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  {
+   "id": "kihei",
+   "name": "Kīhei and Wailea",
+   "island": "maui",
+   "ring": [
+    [
+     -156.48,
+     20.67
+    ],
+    [
+     -156.48,
+     20.79
+    ],
+    [
+     -156.42,
+     20.79
+    ],
+    [
+     -156.42,
+     20.67
+    ]
+   ],
+   "count": 0,
+   "counted": {
+    "by": "osm-buildings-towns",
+    "fetched": "2026-11-07",
+    "named": []
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0
+    ],
+    [
+     1970,
+     0.013
+    ],
+    [
+     1980,
+     0.389
+    ],
+    [
+     1990,
+     0.67
+    ],
+    [
+     2000,
+     0.908
+    ],
+    [
+     2010,
+     0.962
+    ],
+    [
+     2020,
+     0.981
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "survey",
+   "units50": 987,
+   "sources": [
+    "osm-buildings-towns",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  {
+   "id": "kaanapali",
+   "name": "Kāʻanapali",
+   "island": "maui",
+   "ring": [
+    [
+     -156.7,
+     20.905
+    ],
+    [
+     -156.7,
+     20.945
+    ],
+    [
+     -156.675,
+     20.945
+    ],
+    [
+     -156.675,
+     20.905
+    ]
+   ],
+   "count": 9,
+   "counted": {
+    "by": "osm-buildings-towns",
+    "fetched": "2026-11-07",
+    "named": [
+     "Hyatt Residence Club Maui, Kāʻanapali Beach"
+    ]
+   },
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.021
+    ],
+    [
+     1970,
+     0.12
+    ],
+    [
+     1980,
+     0.401
+    ],
+    [
+     1990,
+     0.64
+    ],
+    [
+     2000,
+     0.819
+    ],
+    [
+     2010,
+     0.918
+    ],
+    [
+     2020,
+     0.974
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "shareFrom": "island",
+   "units50": 0,
+   "sources": [
+    "osm-buildings-towns",
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  }
+ ],
+ "islands": {
+  "hawaii": {
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.001
+    ],
+    [
+     1970,
+     0.198
+    ],
+    [
+     1980,
+     0.835
+    ],
+    [
+     1990,
+     0.85
+    ],
+    [
+     2000,
+     0.866
+    ],
+    [
+     2010,
+     0.967
+    ],
+    [
+     2020,
+     1
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "units50": 752,
+   "tracts": 54,
+   "sources": [
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  "oahu": {
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.056
+    ],
+    [
+     1970,
+     0.254
+    ],
+    [
+     1980,
+     0.5
+    ],
+    [
+     1990,
+     0.605
+    ],
+    [
+     2000,
+     0.708
+    ],
+    [
+     2010,
+     0.866
+    ],
+    [
+     2020,
+     0.989
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "units50": 20918,
+   "tracts": 267,
+   "sources": [
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  "molokai": {
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.021
+    ],
+    [
+     1970,
+     0.12
+    ],
+    [
+     1980,
+     0.401
+    ],
+    [
+     1990,
+     0.64
+    ],
+    [
+     2000,
+     0.819
+    ],
+    [
+     2010,
+     0.918
+    ],
+    [
+     2020,
+     0.974
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "units50": 818,
+   "tracts": 35,
+   "sources": [
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  "kauai": {
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.037
+    ],
+    [
+     1970,
+     0.126
+    ],
+    [
+     1980,
+     0.436
+    ],
+    [
+     1990,
+     0.663
+    ],
+    [
+     2000,
+     0.851
+    ],
+    [
+     2010,
+     0.952
+    ],
+    [
+     2020,
+     1
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "units50": 376,
+   "tracts": 21,
+   "sources": [
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  "niihau": {
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.037
+    ],
+    [
+     1970,
+     0.126
+    ],
+    [
+     1980,
+     0.436
+    ],
+    [
+     1990,
+     0.663
+    ],
+    [
+     2000,
+     0.851
+    ],
+    [
+     2010,
+     0.952
+    ],
+    [
+     2020,
+     1
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "units50": 376,
+   "tracts": 21,
+   "sources": [
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  "maui": {
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.021
+    ],
+    [
+     1970,
+     0.12
+    ],
+    [
+     1980,
+     0.401
+    ],
+    [
+     1990,
+     0.64
+    ],
+    [
+     2000,
+     0.819
+    ],
+    [
+     2010,
+     0.918
+    ],
+    [
+     2020,
+     0.974
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "units50": 818,
+   "tracts": 33,
+   "sources": [
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  "lanai": {
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.021
+    ],
+    [
+     1970,
+     0.12
+    ],
+    [
+     1980,
+     0.401
+    ],
+    [
+     1990,
+     0.64
+    ],
+    [
+     2000,
+     0.819
+    ],
+    [
+     2010,
+     0.918
+    ],
+    [
+     2020,
+     0.974
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "units50": 818,
+   "tracts": 33,
+   "sources": [
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  },
+  "kahoolawe": {
+   "share": [
+    [
+     1955,
+     0
+    ],
+    [
+     1960,
+     0.021
+    ],
+    [
+     1970,
+     0.12
+    ],
+    [
+     1980,
+     0.401
+    ],
+    [
+     1990,
+     0.64
+    ],
+    [
+     2000,
+     0.819
+    ],
+    [
+     2010,
+     0.918
+    ],
+    [
+     2020,
+     0.974
+    ],
+    [
+     2023,
+     1
+    ]
+   ],
+   "units50": 818,
+   "tracts": 33,
+   "sources": [
+    "acs-2023-b25127",
+    "acs-2023-b25034",
+    "census-gazetteer-2023-tracts"
+   ]
+  }
+ },
+ "sources": [
+  "cch-building-footprints",
+  "ctbuh-honolulu",
+  "acs-2023-b25127",
+  "acs-2023-b25034",
+  "census-gazetteer-2023-tracts",
+  "osm-buildings-towns"
+ ],
+ "wanted": [
+  "honolulu-building-permits-2005"
+ ],
+ "baked": {
+  "tool": "tools/bake-towers.mjs",
+  "fetched": {
+   "footprints": "2026-11-07",
+   "ctbuh": "2026-11-07",
+   "acs": "2026-11-07"
+  }
+ }
+}
