@@ -667,6 +667,9 @@ export async function bakePatches({ dir, data, log }) {
   }
   writeFileSync(join(outDir, 'passages.geojson'), JSON.stringify(passages) + '\n')
 
+  // the restore patches (tools/bake-roads.mjs) stay as they were, at the end of the list
+  const mOld = join(outDir, 'manifest.json')
+  const restores = existsSync(mOld) ? (JSON.parse(readFileSync(mOld, 'utf8')).patches || []).filter((e) => e.kind === 'restore') : []
   const order = (a, b) => (a.pack === b.pack ? a.until - b.until || (a.id < b.id ? -1 : 1) : a.pack === 'oahu' ? -1 : b.pack === 'oahu' ? 1 : a.pack < b.pack ? -1 : 1)
   // (works marked `appended` are listed after all the others, in the same order among themselves, where they were added)
   const late = new Set(LOWER_WORKS.filter((L) => L.appended).flatMap((L) => packs.map((pk) => `${pk.id}-${L.id}`)))
@@ -678,8 +681,8 @@ export async function bakePatches({ dir, data, log }) {
       'A raise mask’s weights carry the reef’s relief: under the app’s mix h + (depth − h)·w, each texel goes to the reef that rims the cut, which ' +
       'is never shallower than `depth`. Natural passages are in passages.geojson and no raise touches them',
     passages: { file: 'patches/passages.geojson', note: 'the passages kept open (Polygons) and, under `bars`, the bars held at their surveyed depth; lon/lat' },
-    patches: entries,
-    baked: { tool: 'tools/bake-patches.mjs', works: 'tools/lib/patch-works.mjs' },
+    patches: [...entries, ...restores],
+    baked: { tool: 'tools/bake-patches.mjs', works: 'tools/lib/patch-works.mjs', ...(restores.length ? { roads: 'tools/bake-roads.mjs' } : {}) },
   }
   // a cross-check against today's charted channels, for the log
   if (existsSync(p.enc)) encCheck(p.enc, entries, data, log)

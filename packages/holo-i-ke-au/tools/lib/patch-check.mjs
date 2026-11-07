@@ -80,6 +80,8 @@ export function checkPatches({ data, log }) {
     return false
   }
   const manifest = JSON.parse(readFileSync(mPath, 'utf8'))
+  // (the restore patches are the road bake's, and its check's: tools/bake-roads.mjs)
+  manifest.patches = manifest.patches.filter((e) => e.kind !== 'restore')
   const passages = JSON.parse(readFileSync(join(data, manifest.passages.file), 'utf8'))
   ok(passages.features?.length > 0, 'passages.geojson has no passages')
   for (const f of passages.features) ok(f.geometry?.type === 'Polygon' && f.properties.id && f.properties.source && f.properties.note, `passage ${f.properties?.id}: lacks geometry, id, source or note`)
@@ -286,6 +288,7 @@ function outline(rgb, W, H, cover, colour) {
 export function previewPatches({ data, out, log }) {
   mkdirSync(out, { recursive: true })
   const manifest = JSON.parse(readFileSync(join(data, 'patches', 'manifest.json'), 'utf8'))
+  manifest.patches = manifest.patches.filter((e) => e.kind !== 'restore')
   const passages = JSON.parse(readFileSync(join(data, manifest.passages.file), 'utf8'))
   for (const pk of patchPacks(data)) {
     const mine = manifest.patches.filter((e) => e.pack === pk.id)

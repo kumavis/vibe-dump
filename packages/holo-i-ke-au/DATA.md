@@ -1024,6 +1024,137 @@ weights of one kind on one pack never over one; every patch with a note and sour
 source with its URL, date and licence; and `public/data/patches/` under 1 MB.
 It prints, per raise patch, the median depth of its ground today and in 1795.
 
+### Accepted extensions (restore)
+
+A raise or a lower lays its texels at one depth, which is right for a reef
+flat and wrong for a hillside: the ground a highway was cut into, and the
+fill it was raised on, has to go back to a surface that runs with the valley's
+sides. So a third kind, `restore`, carries the surface itself. It lives in the
+same `patches/manifest.json`, its entries together at the end of the list
+(`bake-patches.mjs` keeps them there when it writes the rest).
+
+```jsonc
+{ "id": "nuuanu-road-pali-highway", "pack": "nuuanu",   // an island pack id or a district id
+  "kind": "restore",
+  "until": 1952,                                       // the patch applies to years before this
+  "file": "patches/roads/nuuanu-road-pali-highway.png",
+  "box": [691, 279, 1076, 976],                        // i0, j0, width, height: the texels of the pack the image covers
+  "delta": { "scale": 0.01, "offset": -327.68 },       // change metres = (R·256 + G)·scale + offset
+  "works": "pali-highway",                             // the works' road section it undoes
+  "name": "...", "note": "...", "sources": [ ... ], "stats": { ... } }
+```
+
+- **The image.** An 8-bit RGB PNG over `box`, registered on the pack's grid
+  as the pack's heights are. R and G carry the change from today's height to
+  the ground as it was, split as the heights are (DATA.md §2, so it decodes
+  exactly); B is the weight, 0 outside the patch, 255 in it. The laid-back
+  height is `h + change · B/255 · k`, `k` the patch's weight in the year (1
+  before `until`, eased over a couple of seconds as the year crosses it, as
+  the other kinds are). A cut is a positive change (ground taken away comes
+  back), a fill a negative one. The change, not the surface, is stored, so
+  the app needs no heights to lay it and a centimetre is kept; the surface is
+  today's height plus it. Like every mask it is made against its pack's bake:
+  a re-baked pack needs its restores baked again.
+- **Order.** Restores first, on today's heights, then the raises and the
+  lowers, as before.
+- **One per texel.** On one pack no texel is in two restores, so the app
+  keeps one change and one patch index per texel. Where two roads meet, a
+  texel goes to the nearer.
+- **Where they lie.** Only on today's land, never laid back below the sea,
+  never under a harbour patch of the same pack, and not over a tunnel away
+  from its portals: the ground over a tunnel is untouched, only its portals
+  were cut.
+- **The app.** `render/restores.js` reads the restore entries (and
+  `data/patches.js` leaves them out of the others' list), cuts every pack's
+  grid into 16-texel squares and keeps only those a restore reaches, in one
+  float atlas with an index per pack; the island slots and the district read
+  their own squares (`common.glsl.js` `restoreSlot`, `distRestore`). The
+  normal maps are today's ground, so the island shader adds the change's own
+  slope to them (`restoreSlotG`), and the district's takes it from its texels
+  as it does a patch's beach. `world.metresAt` and the district's `metresAt`
+  carry the same on the CPU. Up to 96 restores (`config.js RESTORES`).
+
+### How to bake the restores
+
+`tools/bake-roads.mjs --bake` (about a minute; nothing to download) writes
+`patches/roads/` and the restore entries; `--check` reads them back; `--all`
+does both. It reads the packs' heights and the works' highways
+(`works/oahu.geojson`), and bakes onto the `oahu` island pack and every Oʻahu
+district (`nuuanu`, `koolaupoko`). Run it after the pack, district, patch and
+works bakes. The code is `tools/lib/roads-bake.mjs` and `roads-check.mjs`.
+
+The rule, per pack:
+
+1. **The roads.** Every highway `road` of the works, its line and its drawn
+   width (DATA.md "Works", Widths). Tunnels are not roads here: the works cut
+   the road at the portals, so the ground over a tunnel is never in a road's
+   reach. An *interchange* is where an end of one road lies within 60 m of
+   another (not at a tunnel's portal); within 320 m of one, the ramps the works
+   do not draw widen the search.
+2. **How wide the ground was disturbed**, from the terrain itself. Each road
+   is cut into stretches of about 200 m, and each side of each stretch is
+   read on its own: the mean of the ground's curvature (|∇²h|) at each
+   distance from the road's edge, in texel-wide bins out to 90 m (200 m at an
+   interchange), against its mean over the 50 m beyond. The breaks of slope at
+   the top of a cut and the toe of a fill run along the road, so they stand
+   out of the mean at their distance; gullies and spurs crossing the road
+   average out. The disturbed width on that side is the last bin whose mean
+   passes 1.5 times the ground's own and 0.004 /m, before three quiet bins in
+   a row; a stretch takes the median of its own and its neighbours' widths.
+   At least the road's own strip and 8 m of shoulder. On the island pack
+   (68 m texels, a road narrower than one) the strip alone, at least
+   three-quarters of a texel's diagonal from the line.
+3. **Kept off** today's sea and 15 m of shore (two texels at the least), so
+   the sea floor never pulls on the surface, and off the pack's harbour
+   patches.
+4. **The surface.** A thin plate (∇⁴u = 0) over the disturbed texels, held to
+   today's ground round them, solved by conjugate gradients from a membrane's
+   guess (∇²u = 0): it carries the valley sides' slope and curvature in across
+   the corridor and meets today's ground at the edge with no step. Where the
+   plate would leave the range of the undisturbed ground within 150 m (a sag
+   below the lowest of it or a bulge above the highest), the membrane, which
+   cannot, is taken there. On the island pack the membrane alone: at 68 m a
+   plate carries a valley's V below its floor.
+5. **By road.** Each texel goes to the nearest road; a road's texels on a
+   pack are its patch. A texel laid at the shore (0.5 m or lower), and a patch
+   under 2,500 m² or nowhere changing the ground by 3 m, go back to today's
+   ground, and the surface is laid again without them, so no kept texel leans
+   on one that is not laid back.
+6. **The date.** Each patch's `until` is its road section's own in the works:
+   the start of its `built` where the works give one earlier than `from`
+   (the grading began then; the road itself is drawn in across those years
+   from that start), else `from`. So the Pali Highway's patches end in 1952
+   (opened 1957, finished 1961), H-1's Lunalilo Freeway in 1953 (opened
+   1969), Hālawa–Kahauiki in 1971 (finished 1986), H-2 in 1971 (opened 1974–77);
+   H-3's Hālawa and windward sections in 1997, its Kāneʻohe section in 1987
+   and the Mōkapu piece in 1977, because the works record no start of their
+   building (H-3's grading began about a decade before it opened; the works
+   would have to say so first). Likelike 1960, Kahekili 1972, the
+   Nuʻuanu Pali Road of 1898, Kamehameha Highway 1921, Kalanianaʻole Highway
+   1924–1931 and Farrington Highway 1934–1937, each `by` or `year` as the works
+   date it.
+7. **The entry**: `box`, `delta`, `works`, a note saying how the patch was
+   found, its road's own sources from `sources.json` and the pack's height
+   source, and `stats` (`texels`, `km2`, `meanWidthMetres`, the cut and fill
+   texels and their mean and greatest change).
+
+The check (`--check`) holds the entries whole and sourced, each `until` to its
+works section's; each image an RGB PNG of its `box` inside its pack; on each
+pack no texel in two restores, none on today's sea, laid back below it, or
+under a harbour patch, and nothing laid back over a tunnel more than 120 m
+from its portals; no texel laid back outside the range of the undisturbed
+ground within 150 m of it; the restore entries together at the end of the
+list; and `patches/roads/` under 768 kB (with the harbours, `patches/` stays
+under 1 MB). It prints how many texels at a restore's edge climb more than
+2 m past the slope of the ground beyond them, which is where the edge meets a
+pali's foot or brow, and each patch's size and greatest cut and fill.
+
+Not done: the Moanalua Freeway (H-201) has no road in the works, so its cuts
+and its interchange with H-1 at Hālawa stand at every date until the works
+carry it; and the works give a road as one line, so where its two
+carriageways part farther than the search reaches, the cut of the one the
+line does not follow stays.
+
 ## The Māhele, by ahupuaʻa
 
 `public/data/mahele.json`: the class of every State ahupuaʻa unit after the
