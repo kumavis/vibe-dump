@@ -2030,14 +2030,16 @@ if (nuuanuHere) {
     if (!((all.by.church && st.landmarks.some((l) => /1842/.test(l))) || named1842.length)) throw new Error(`no church of 1842: ${st.landmarks}; named ${st.named}`)
     console.log(`      within 1.5 km: ${brief(c)}; landmarks ${st.landmarks.join(', ')}${named1842.length ? `; named by 1842 ${named1842.join(', ')}` : ''}`)
   })
-  await check('settlements: stores and masonry blocks by 1896, the town on a grid of streets', async () => {
+  await check('settlements: stores and masonry blocks by 1896, the town on streets', async () => {
     await atHarbour(1896)
     const c = await census(1896)
     const st = await ui('app.districts.cur.features.settlements.stats()')
     if (!((c.by.store || 0) + (c.by.block || 0) >= 30 && (c.by.cottage || 0) >= 50)) throw new Error(`within 1.5 km: ${brief(c)}`)
+    // (the grid's streets where the town's own are not known, and the town's own where they are: features/streets.js)
     const streets = st.streets.find((s) => s.startsWith('1900:'))
-    if (!streets || +streets.split(':')[1].split('/')[0] < 100) throw new Error(`streets ${st.streets}`)
-    console.log(`      within 1.5 km: ${brief(c)}; streets ${st.streets.join(' ')}`)
+    const own = (await ui("app.streets.stats().oahu?.standing")) || 0
+    if (!streets || +streets.split(':')[1].split('/')[0] + own < 100) throw new Error(`streets ${st.streets}, the town's own ${own}`)
+    console.log(`      within 1.5 km: ${brief(c)}; streets ${st.streets.join(' ')}; the town's own ${own}`)
   })
   await check(`settlements: towers by ${lastYear}, their height following the density`, async () => {
     await atHarbour(lastYear)
@@ -2604,6 +2606,80 @@ if (towersRec?.areas?.length) {
     }
     console.log(`      drawn/record: ${rows.join(' · ')}`)
     if (bad.length) throw new Error(bad.slice(0, 6).join('; '))
+  })
+}
+// The towns' dated streets (DATA.md "Streets, dated"; data/streets.js,
+// features/streets.js), where the data has any (the test data's town about
+// its village; Honolulu in the real): low over the town at the year before
+// its first sheet and after each, every building standing where the network
+// covers the ground fronts a street of its year (its middle a lot's depth
+// from the street at most) and none stands on a street's strip, anywhere;
+// the lots along streets are there only from their street's year; and the
+// streets are drawn, by their years, while the camera is low.
+const streetTown = await ui("fetch(app.data.abs('streets/manifest.json')).then((r) => (r.ok ? r.json() : null)).then((m) => m?.towns?.[0] ?? null).catch(() => null)")
+if (streetTown) {
+  // (off the prologue, whose view keeps the island packs out of their slots)
+  if (await ui('app.prologue')) await run('app.tour.goTo(0, -1, { jump: true }); app.settle()')
+  const lastYear = await ui('app.timeline.yearAt(app.timeline.max)')
+  const b = streetTown.bounds
+  const centre = streetTown.id === 'honolulu' ? [-157.8605, 21.3105] : [(b[0] + b[2]) / 2, (b[1] + b[3]) / 2]
+  const lowAt = async (year) => {
+    await run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${year}); app.ui.timeline.finish(); const v = app.tour.cameraView({ geometry: { type: 'Point', coordinates: ${JSON.stringify(centre)} } }, { bearing: 30, pitch: 0.45, distance: 24 }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()`)
+    for (let k = 0; k < 600; k++) {
+      const ok = await ui(`(() => { app.settle(); const t = app.rig.state.target, D = app.districts, d = D.districtAt(t.x, t.z); return app.towns.idle && !!app.streets.nets.get('${streetTown.island}')?.net && (!d || (D.cur?.d === d && D.cur.state === 'ready' && !!D.cur.features?.settlements.ready)) })()`)
+      if (ok) break
+      await frames(1)
+    }
+    await run('app.settle()')
+    await frames(2)
+    return ui('[app.rig.state.target.x, app.rig.state.target.z]')
+  }
+  const years = [streetTown.sheets[0].year - 1, ...streetTown.sheets.map((s) => s.year + 1), lastYear].filter((y, i, a) => y <= lastYear && a.indexOf(y) === i)
+  await check('streets: the lots follow the town’s streets in their years, none on a street, the grid beyond them', async () => {
+    const rows = []
+    const bad = []
+    for (const y of years) {
+      const xz = await lowAt(y)
+      const r = await ui(`(() => {
+        const net = app.streets.nets.get('${streetTown.island}').net
+        const S = app.districts.cur?.features?.settlements
+        const list = [...(S?.ready ? S.alive(${y}).filter((a) => Math.hypot(a.x - ${xz[0]}, a.z - ${xz[1]}) < 12) : []), ...app.towns.alive(${y}, ${xz[0]}, ${xz[1]}, 12)].filter((a) => !a.landmark)
+        let covered = 0, fronting = 0
+        const far = [], onStrip = []
+        for (const a of list) {
+          const c = Math.cos(a.a), s = Math.sin(a.a), [x0, x1, z0, z1] = a.box
+          // (the footprint a little in from its edges, as THREE turns it)
+          const pts = [[0, 0], [x0, z0], [x1, z0], [x1, z1], [x0, z1]].map(([u, v]) => [a.x + 0.9 * (u * c + v * s), a.z + 0.9 * (-u * s + v * c)])
+          if (pts.some(([x, z]) => net.distAt(x, z, ${y}) < 0)) onStrip.push(a.kind + ' at ' + a.x.toFixed(2) + ',' + a.z.toFixed(2))
+          if (!net.covers(a.x, a.z, ${y})) continue
+          covered++
+          if (net.distAt(a.x, a.z, ${y}) <= 0.45) fronting++
+          else far.push(a.kind + ' at ' + a.x.toFixed(2) + ',' + a.z.toFixed(2) + ' (' + net.distAt(a.x, a.z, ${y}).toFixed(2) + ')')
+        }
+        return { n: list.length, covered, fronting, far, onStrip, streets: app.streets.stats()['${streetTown.island}'] }
+      })()`)
+      if (r.far.length) bad.push(`${y}: ${r.far.length} of ${r.covered} covered not on a street (${r.far.slice(0, 3).join('; ')})`)
+      if (r.onStrip.length) bad.push(`${y}: ${r.onStrip.length} on a street's strip (${r.onStrip.slice(0, 3).join('; ')})`)
+      if (y < streetTown.sheets[0].year && r.covered) bad.push(`${y}: ${r.covered} covered before the first sheet`)
+      if (y > streetTown.sheets[0].year && r.streets.standing && !(r.streets.drawn || []).some((d) => +d.split(':')[2] > 0)) bad.push(`${y}: no street drawn (${r.streets.drawn})`)
+      rows.push(`${y}: ${r.n} buildings, ${r.covered} on the network, ${r.fronting} fronting a street; ${r.streets.standing} streets standing (${r.streets.km} km)`)
+    }
+    const st = await ui(`app.streets.stats()['${streetTown.island}']`)
+    console.log(`      ${streetTown.id}: ${st.lines} streets, ${st.lots} lots along them, breaks ${st.breaks.join(' ')}, decoded in ${st.ms} ms`)
+    for (const row of rows) console.log(`      ${row}`)
+    if (bad.length) throw new Error(bad.join('; '))
+  })
+  await check('streets: a street lot stands only from its street’s year, a grid lot only outside the network', async () => {
+    const r = await ui(`(() => {
+      const net = app.streets.nets.get('${streetTown.island}').net
+      const first = Math.min(...net.lines.map((L) => L.from))
+      const before = net.lots.filter((l) => l.span[0] < first).length
+      const S = app.districts.cur?.features?.settlements
+      return { lots: net.lots.length, before, first, district: S?.ready ? S.stats().streetLots : null }
+    })()`)
+    if (!r.lots) throw new Error('no lots along the streets')
+    if (r.before) throw new Error(`${r.before} lots stand before ${r.first}`)
+    console.log(`      ${r.lots} lots along the streets, from ${r.first}; the district's scatter holds ${r.district ?? 'none'} of them`)
   })
 }
 // ==== [settlements] end =======================================================

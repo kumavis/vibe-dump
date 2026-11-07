@@ -39,6 +39,9 @@ const outDir = process.argv[2] || join(root, 'tools/shots')
 // and now, Kailua-Kona in 1820 and 1896, Hilo now, a Kohala hamlet in 1778.
 // `place` is a gazetteer id or [lon, lat]. The first leaves the prologue the app
 // opens on (where the data has a geology) for the years.
+//   node tools/shoot.mjs <outdir> streets
+// The towns on their dated streets (features/streets.js): below, after the
+// settlements' list.
 const nearShot = (name, place, year, [bearing, pitch, distance], first = false) => ({
   name,
   year,
@@ -85,6 +88,27 @@ const PRESETS = {
     nearShot('kona-1896', 'kailua-kona', 1896, [80, 0.3, 16]),
     nearShot('hilo-now', 'hilo', 2020, [300, 0.3, 22]),
     nearShot('kohala-1778', [-155.815, 20.245], 1778, [30, 0.3, 12]),
+  ],
+  // the towns on their dated streets (DATA.md "Streets, dated"): Honolulu's
+  // downtown, Chinatown, Waikīkī and Kalihi in 1887, 1906, 1927 and 1955, and
+  // the other towns the streets are dated for in 1906, 1927 and 1955
+  streets: [
+    ...[1887, 1906, 1927, 1955].flatMap((y, k) => [
+      nearShot(`downtown-${y}`, 'honolulu', y, [40, 0.5, 16], k === 0),
+      nearShot(`chinatown-${y}`, [-157.8625, 21.3125], y, [60, 0.45, 12]),
+      nearShot(`waikiki-${y}`, 'waikiki', y, [20, 0.45, 20]),
+      nearShot(`kalihi-${y}`, [-157.872, 21.33], y, [30, 0.45, 16]),
+    ]),
+    ...[1906, 1927, 1955].flatMap((y) => [
+      nearShot(`hilo-${y}`, 'hilo', y, [300, 0.4, 18]),
+      nearShot(`lahaina-${y}`, 'lahaina', y, [60, 0.4, 14]),
+      nearShot(`wailuku-${y}`, [-156.503, 20.888], y, [80, 0.4, 14]),
+      nearShot(`kahului-${y}`, [-156.473, 20.886], y, [20, 0.4, 16]),
+      nearShot(`kona-${y}`, 'kailua-kona', y, [80, 0.4, 12]),
+      nearShot(`lihue-${y}`, [-159.369, 21.975], y, [40, 0.4, 14]),
+      nearShot(`kailua-oahu-${y}`, 'kailua-oahu', y, [40, 0.4, 18]),
+      nearShot(`kaneohe-${y}`, 'kaneohe', y, [40, 0.4, 16]),
+    ]),
   ],
   koolaupoko: [],
 }

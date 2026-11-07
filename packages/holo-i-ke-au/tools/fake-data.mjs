@@ -44,6 +44,11 @@
 // And two test schools (DATA.md "Schools, dated"; test-data/schools.json)
 // on the plain of the test Nuʻuanu district: a schoolhouse of 1850–1905 on
 // a point, and a school from 1890 on its grounds.
+// And a test street network (DATA.md "Streets, dated"; test-data/streets/):
+// a small town of streets turned off the axes about the test village, its
+// middle by the first test sheet, the rest by the second, and a lane closed
+// in 1935, so the settlements lay their lots along streets of two dates and
+// lose one. Shapes, not a record of any town.
 //
 // And a test geology (DATA.md "Geology"; test-data/geology/): a seafloor
 // pack over a box wider than the test archipelago, four stages with their
@@ -654,6 +659,7 @@ testLayers(spots, g.eras)
 testWorks(spots)
 testLandmarks(spots)
 testSchools()
+testStreets(spots)
 console.log(`wrote ${out} in ${((Date.now() - t0) / 1000).toFixed(1)} s${flatSea ? ' (flat sea)' : ''}`)
 
 // --- test patches --------------------------------------------------------------------------
@@ -2032,3 +2038,54 @@ function testSchools() {
   console.log(`  test schools in ${join(out, 'schools.json')}: ${features.map((f) => `${f.properties.id} ${f.properties.from}–${f.properties.to ?? ''} at ${f.properties.at}`).join('; ')}`)
 }
 // ==== test schools end ==================================================================
+// ==== test streets =====================================================================
+/** A street network about the test village (DATA.md "Streets, dated"), under out/streets/. */
+function testStreets(spots) {
+  const [cx, cz] = [xkm(spots.village[0]), zkm(spots.village[1])]
+  const rot = 20 * DEG
+  const at = (u, v) => [cx + u * Math.cos(rot) - v * Math.sin(rot), cz + u * Math.sin(rot) + v * Math.cos(rot)]
+  const ll = ([x, z]) => [r7(lonOf(x)), r7(latOf(z))]
+  const feats = []
+  let n = 0
+  /** A street from (u0, v0) to (u1, v1) km, cut where the ground leaves the land: each run on land its own segment. */
+  const street = (u0, v0, u1, v1, from, to = null, cls = 'street') => {
+    const steps = Math.ceil(Math.hypot(u1 - u0, v1 - v0) / 0.05)
+    let run = []
+    const flush = () => {
+      if (run.length >= 3) {
+        const old = from < 1900
+        feats.push({ type: 'Feature', properties: { id: `test-town-${++n}`, town: 'test-town', layerName: `TEST ST ${n}`, class: cls, from, to, datePrecision: 'by', by: 'test-source-a', after: old ? null : 'test-source-a', seen: old ? [1, 1] : [0, 1], sources: ['test-source-a'] }, geometry: { type: 'LineString', coordinates: run.map(ll) } })
+      }
+      run = []
+    }
+    for (let k = 0; k <= steps; k++) {
+      const p = at(u0 + ((u1 - u0) * k) / steps, v0 + ((v1 - v0) * k) / steps)
+      if (heightAt(p[0], p[1]) > 1.2) run.push(p)
+      else flush()
+    }
+    flush()
+  }
+  // the old middle: two streets each way, 1881; the rest of the grid, 1927; a lane across, closed in 1935
+  for (const v of [-0.12, 0.12]) street(-0.5, v, 0.5, v, 1881, null, v < 0 ? 'arterial' : 'street')
+  for (const u of [-0.15, 0.15]) street(u, -0.5, u, 0.5, 1881)
+  for (const v of [-0.4, 0.36]) street(-0.6, v, 0.6, v, 1927)
+  for (const u of [-0.45, 0.45]) street(u, -0.6, u, 0.6, 1927)
+  street(-0.15, -0.12, 0.15, 0.12, 1881, 1935)
+  const bounds = feats.flatMap((f) => f.geometry.coordinates).reduce((b, [lon, lat]) => [Math.min(b[0], lon), Math.min(b[1], lat), Math.max(b[2], lon), Math.max(b[3], lat)], [Infinity, Infinity, -Infinity, -Infinity])
+  const pad = 0.002
+  const dir = join(out, 'streets')
+  mkdirSync(dir, { recursive: true })
+  writeFileSync(join(dir, 'test-town.geojson'), JSON.stringify({ type: 'FeatureCollection', town: 'test-town', features: feats }))
+  const fetched = new Date().toISOString().slice(0, 10)
+  const sheet = (year) => ({ year, source: 'test-source-a', service: 'about:blank', old: false, shift: [0, 0], cells: [], cellsOwn: 0, cellMetres: 1200, found: 1 })
+  const manifest = {
+    about: 'test streets (tools/fake-data.mjs): shapes about the test village, not a record',
+    rule: 'drawn by hand in the tool',
+    baked: fetched,
+    tool: 'tools/fake-data.mjs',
+    centrelines: { oahu: { id: 'test-source-a', url: 'about:blank', licence: 'test data, not for release', fetched } },
+    towns: [{ id: 'test-town', name: 'Test town', island: 'oahu', bounds: [bounds[0] - pad, bounds[1] - pad, bounds[2] + pad, bounds[3] + pad], file: 'test-town.geojson', centrelines: 'test-source-a', sheets: [sheet(1881), sheet(1927)], stats: { segments: feats.length } }],
+  }
+  writeFileSync(join(dir, 'manifest.json'), JSON.stringify(manifest, null, 2))
+  console.log(`  test streets in ${dir}: ${feats.length} segments about the test village`)
+}
