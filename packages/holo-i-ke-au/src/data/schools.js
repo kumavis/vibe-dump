@@ -101,6 +101,8 @@ export function schoolEras(p, area = 0) {
   if (Array.isArray(p.look) && p.look.length) list = p.look.map((l) => ({ kit: l.kit, variant: l.variant ?? 0, at: l.from }))
   else if (p.type === 'university' || p.type === 'college') list = [{ ...block, at: from }, { ...camp, at: Math.max(from, 1946) }]
   else list = [{ ...house, at: from }, { ...block, at: Math.max(from, tAt) }, { ...camp, at: Math.max(from, cAt) }]
+  // (of eras that would begin in one year, the later in the list: a school opened in the territory starts as a block)
+  list = list.filter((l, i) => !list.slice(i + 1).some((m) => Math.max(from, m.at) <= Math.max(from, l.at)))
   // (one era per kit, in order, each to the year before the next, clipped to the school's years)
   const out = []
   for (let i = 0; i < list.length; i++) {
