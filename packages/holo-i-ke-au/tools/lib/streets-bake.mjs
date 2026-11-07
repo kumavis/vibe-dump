@@ -42,6 +42,7 @@ import { join } from 'node:path'
 import { inflateSync } from 'node:zlib'
 import { writePNG } from './png.mjs'
 import { CENTRELINES, SHEET_PIXEL, TOWNS, centrelineSource, sheetGrid, townPaths, townSheets } from './streets-sources.mjs'
+import { placeMap, registeredPaths, warpTile } from './streets-registered.mjs'
 
 const PIECE = 80
 // (dark enough that the contours, printed brown, are not ink: a subdivision on a
@@ -58,6 +59,9 @@ const CLEAR = 0.6
 // unbroken without the pixel's grace, and (where two or more of them cover
 // it) on another of them too
 const OLD = { line: 0.75, clear: 0.65 }
+// a registered map's texture: ink over this share of a patch TEXTURE_R pixels either way (untexture)
+const TEXTURE = 0.22
+const TEXTURE_R = 20
 // a segment is dated by its sheets when at least this share of its length is found on one
 const DATED = 0.3
 const SEARCH = { old: 300, new: 80 }
@@ -194,7 +198,7 @@ function readSheet(dir, town, sheet, grid) {
   const ink = new Uint8Array(grid.W * grid.H)
   const lum = new Uint8Array(grid.W * grid.H)
   grid.tiles.forEach((t, k) => {
-    const img = sheet.quads ? readQuads(p, sheet, t, k) : readAnyPNG(p.sheet(sheet.year, k))
+    const img = sheet.registered ? warpTile(sheet.scan, sheet.registered, sheet.place, t) : sheet.quads ? readQuads(p, sheet, t, k) : readAnyPNG(p.sheet(sheet.year, k))
     if (img.width !== t.w || img.height !== t.h) throw new Error(`${town.id} ${sheet.year} tile ${k}: ${img.width}×${img.height}, wanted ${t.w}×${t.h}`)
     const n = t.w * t.h
     const L = new Uint8Array(n)
@@ -229,6 +233,8 @@ function readSheet(dir, town, sheet, grid) {
       }
     }
   })
+  // (a registered map's textures, hachured slopes above all, read as no sheet: a street up a slope runs with its hachures)
+  if (sheet.registered) untexture(ink, grid)
   // ink within a pixel (a cross), for the line test: a drawn line a pixel off the piece's own line still counts
   // (not on an old sheet, whose own line is the test)
   const th = sheet.old ? OLD : { line: LINE, clear: CLEAR }
@@ -246,10 +252,39 @@ function readSheet(dir, town, sheet, grid) {
   return { ink, lum, near, th }
 }
 
+/**
+ * Where a sheet's ink is denser than TEXTURE over a patch TEXTURE_R pixels
+ * either way, the sheet is read as not there (0): a street's two lines, or
+ * a block's buildings, are well under it, hachures and stipple over it.
+ */
+function untexture(ink, grid) {
+  const { W, H } = grid
+  const R = TEXTURE_R
+  const sat = new Float64Array((W + 1) * (H + 1))
+  for (let y = 0; y < H; y++) {
+    let row = 0
+    for (let x = 0; x < W; x++) {
+      row += ink[y * W + x] === 2 ? 1 : 0
+      sat[(y + 1) * (W + 1) + x + 1] = sat[y * (W + 1) + x + 1] + row
+    }
+  }
+  for (let y = 0; y < H; y++) {
+    const y0 = Math.max(0, y - R)
+    const y1 = Math.min(H, y + R + 1)
+    for (let x = 0; x < W; x++) {
+      if (!ink[y * W + x]) continue
+      const x0 = Math.max(0, x - R)
+      const x1 = Math.min(W, x + R + 1)
+      const n = sat[y1 * (W + 1) + x1] - sat[y0 * (W + 1) + x1] - sat[y1 * (W + 1) + x0] + sat[y0 * (W + 1) + x0]
+      if (n / ((x1 - x0) * (y1 - y0)) > TEXTURE) ink[y * W + x] = 0
+    }
+  }
+}
+
 // --- the streets ---------------------------------------------------------------------
 
 /** Today's segments in the town (their middle in its box), in sheet pixels, with their pieces. */
-function readSegments(dir, town, grid) {
+export function readSegments(dir, town, grid) {
   const L = CENTRELINES[town.island]
   const p = townPaths(dir, town)
   const [w, s, e, n] = town.bounds
@@ -550,7 +585,8 @@ function pieceYear(flags, sheets) {
     let later = 0
     let yes = 0
     for (let q = k + 1; q < sheets.length; q++) {
-      if (flags[q] === null) continue
+      // (an island map at 1:60,000 that does not draw a street says little either way: the later sheets that bear a date out are the larger ones)
+      if (flags[q] === null || (sheets[q].old && !sheets[k].old)) continue
       later++
       if (flags[q] === 1) yes++
     }
@@ -569,7 +605,16 @@ async function bakeTown(dir, town, ledger, log, draw = null) {
   const regs = []
   for (const g of segs) for (const pc of g.pieces) pc.flags = []
   for (const sheet of sheets) {
+    // (a registered map placed on today's streets first: streets-registered.mjs)
+    if (sheet.registered) {
+      const img = readAnyPNG(registeredPaths.png(dir, sheet.registered))
+      const grey = new Uint8Array(img.width * img.height)
+      for (let i = 0; i < grey.length; i++) grey[i] = img.rgba[i * 4]
+      sheet.scan = { width: img.width, height: img.height, grey }
+      sheet.place = placeMap(sheet.scan, sheet.registered, segs, grid, SHEET_PIXEL, log)
+    }
     const sh = readSheet(dir, town, sheet, grid)
+    sheet.scan = null
     const reg = register(segs, sh, sheet, grid, log)
     let nf = 0
     let nc = 0
@@ -664,7 +709,7 @@ async function bakeTown(dir, town, ledger, log, draw = null) {
       bounds: town.bounds,
       file: `${town.id}.geojson`,
       centrelines: L.id,
-      sheets: sheets.map((s, q) => ({ year: s.year, source: s.source, service: s.service, ...(s.lock ? { raster: s.lock } : {}), ...(s.quads ? { quads: s.quads.map((q) => ({ raster: q.lock, neat: q.neat })) } : {}), old: !!s.old, ink: s.ink ?? INK, ...regs[q] })),
+      sheets: sheets.map((s, q) => ({ year: s.year, ...(s.key ? { key: s.key } : {}), source: s.source, service: s.service, ...(s.place ? { placed: { registeredMap: s.registered.rm, scale: s.registered.scale, transform: [s.place.a, s.place.b, s.place.c, s.place.d, s.place.e, s.place.f].map((v) => round(v, 6)), turn: s.place.turn, metresPerPixel: s.place.metres, printed: s.place.printed, score: s.place.score, mask: s.registered.mask || [] } } : {}), ...(s.lock ? { raster: s.lock } : {}), ...(s.quads ? { quads: s.quads.map((q) => ({ raster: q.lock, neat: q.neat })) } : {}), old: !!s.old, ink: s.ink ?? INK, ...regs[q] })),
       stats: { segments: features.length, km: round(segs.reduce((s, g) => s + g.len, 0) / 1000, 1), kmBy: byYear },
     },
   }
@@ -729,7 +774,7 @@ function drawSheet(into, town, sheet, segs, sh, grid, log) {
       }
     }
   }
-  const f = join(into, `${town.id}-${sheet.year}.png`)
+  const f = join(into, `${town.id}-${sheet.key ?? sheet.year}.png`)
   writePNG(f, W, H, rgb)
   log(`    ${f}`)
 }

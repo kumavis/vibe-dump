@@ -27,6 +27,7 @@ import { fileURLToPath } from 'node:url'
 import { spawnSync } from 'node:child_process'
 import { Ledger } from './lib/fetch.mjs'
 import { TOWNS, downloadCentrelines, downloadSheets } from './lib/streets-sources.mjs'
+import { downloadRegistered } from './lib/streets-registered.mjs'
 import { bakeStreets } from './lib/streets-bake.mjs'
 import { checkStreets } from './lib/streets-check.mjs'
 
@@ -64,6 +65,7 @@ async function main() {
     for (const t of towns) {
       downloadCentrelines(ledger, a.downloads, t, log)
       downloadSheets(ledger, a.downloads, t, log)
+      downloadRegistered(ledger, a.downloads, t, log)
     }
   }
   // (--sheets DIR bakes too, drawing each sheet as it is read)

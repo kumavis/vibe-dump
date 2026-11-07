@@ -14,6 +14,7 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { fetchTo } from './fetch.mjs'
+import { registeredFor } from './streets-registered.mjs'
 
 const TRANSPORT = 'https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer'
 const STATE_TERMS = 'State of Hawaiʻi Statewide GIS Program open data (no restrictions stated; credit the Statewide GIS Program and the county)'
@@ -134,10 +135,14 @@ export const TOWNS = [
 
 /** A town's sheets, oldest first, with their years settled (a Hawaiʻi town's quadrangle by its own year). */
 export function townSheets(town) {
-  return SHEETS[town.island].map((s) => {
+  const own = SHEETS[town.island].map((s) => {
     if (s.year !== null) return town.quads?.[s.year] ? { ...s, quads: town.quads[s.year] } : s
     return { ...s, year: town.quad.year, lock: town.quad.lock }
   })
+  // (and the Survey's registered maps of the town, placed by the bake: streets-registered.mjs)
+  const reg = registeredFor(town).map((r) => ({ year: r.year, key: r.key, source: r.source, service: `https://kipukadatabase.com/Docs/RegMaps/${r.file}`, registered: r }))
+  // (oldest first; of one year, an island map before a registered map)
+  return [...own, ...reg].sort((a, b) => a.year - b.year || (a.registered ? 1 : 0) - (b.registered ? 1 : 0))
 }
 
 // the sheets are exported at this many metres a pixel, over the box and this margin (metres)
@@ -203,6 +208,8 @@ export function downloadSheets(ledger, dir, town, log) {
   const g = sheetGrid(town)
   const p = townPaths(dir, town)
   for (const s of townSheets(town)) {
+    // (a registered map is fetched whole and placed by the bake: streets-registered.mjs)
+    if (s.registered) continue
     g.tiles.forEach((t, k) => {
       // (a sheet read quadrangle by quadrangle: each locked, a file each)
       for (const lock of s.quads ? s.quads.map((q) => q.lock) : [null]) {
