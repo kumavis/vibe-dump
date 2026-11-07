@@ -370,7 +370,8 @@ export function boot(location) {
   const pinAt = human.group.pinAt.bind(human.group)
   human.group.pinAt = (...args) => {
     pinAt(...args)
-    ui.toast.tip('pin')
+    // ((F9b's review) a lone long hull's pin its own tip: one, and turned)
+    ui.toast.tip(human.group.loneHull() ? 'pinHull' : 'pin')
   }
   const give = human.standing.give.bind(human.standing)
   human.standing.give = (seat, ids, order, ...rest) => {
@@ -1199,13 +1200,15 @@ export function boot(location) {
           return broke
         },
       },
-      validEnd: (plan, i) => asked((g) => validEnd(g, plan, i)),
+      // ((F9b) and a long hull's end state, heading f: absent, any heading)
+      validEnd: (plan, i, f) => asked((g) => validEnd(g, plan, i, null, f)),
       get phaseResolve() {
         return human.myTurn() || null
       },
+      // ((F9b) and the roll, which a long hull's plan.spotOk asks of a state)
       get chargePick() {
         const pk = human.picking()
-        return pk && { u: pk.u, plan: pk.plan, ok: pk.ok }
+        return pk && { u: pk.u, plan: pk.plan, ok: pk.ok, rolled: pk.rolled }
       },
       // (F4) the seats played here still to vote at the round limit, while
       // the player is idle; null otherwise
@@ -1214,8 +1217,10 @@ export function boot(location) {
       },
       start: (mode) => flow.start(mode),
       select: (u) => human.select(u),
-      doMove: (u, c) => {
-        must(human.moveTo(u, c), 'doMove')
+      // ((F9b) a long hull's to heading f, when given: the pinned ghost's
+      // turned heading, sent as the commit sends it)
+      doMove: (u, c, f) => {
+        must(human.moveTo(u, c, f), 'doMove')
         return settle()
       },
       doAdvance: (u) => {
@@ -1235,8 +1240,9 @@ export function boot(location) {
         const s = flow.session
         return settle(() => s !== flow.session || s.G.pending?.k !== 'chargeEnd')
       },
-      placeCharge: (c) => {
-        must(human.placeCharge(c), 'placeCharge')
+      // ((F9b) a long hull's at spot heading f, when given)
+      placeCharge: (c, f) => {
+        must(human.placeCharge(c, f), 'placeCharge')
         return settle()
       },
       // (F9a) a unit boarding hull v (its ⤒ badge's click; in the deployment

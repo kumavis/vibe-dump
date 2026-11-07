@@ -59,10 +59,13 @@ const flagsOf = (f) => Object.keys(f).filter((k) => f[k] !== undefined).sort().m
 // The unit fields features add beyond the classic ones, each with its
 // default: (F9a) `aboard`, the carrying vehicle's id, 0 on the table, so
 // `aboard=<id>` prints only for a rider and a match without riders hashes
-// as before (F9b's `f`, a long hull's facing, joins it); (V3c) the spells'
-// marks, Root Snare's `snared`, Barkskin's `warded` and Cold Blood's
-// `resolute` (core/units.js), each false until a spell sets it.
-export const UNIT_EXTRAS = Object.freeze({ aboard: 0, resolute: false, snared: false, warded: false })
+// as before; (V3c) the spells' marks, Root Snare's `snared`, Barkskin's
+// `warded` and Cold Blood's `resolute` (core/units.js), each false until a
+// spell sets it; (F9b) a footprint unit's `facing` (0-7), whose default is
+// undefined: no round unit holds the field, so it prints for no round unit,
+// and a long hull prints `facing=<h>` at every heading, 0 among them (a
+// default of 0 would hide a hull facing +z).
+export const UNIT_EXTRAS = Object.freeze({ aboard: 0, facing: undefined, resolute: false, snared: false, warded: false })
 
 // A unit's extras as shadowState prints them: `key=value` in sorted keys,
 // each only where the unit holds a value other than its default (a field

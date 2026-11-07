@@ -198,9 +198,11 @@ if (args['self-test']) {
   // seeds 7-9, boards with no tower ring at the centre, which pass without
   // the control: seeds 1-3 all stand one on `fortified`, which fails a row
   // by itself)
-  for (const [control, want] of [['wall', /reaches no cell of seat/], ['ring', /controls no cell within/]]) {
-    const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', '7-9', '--ops', '0', '--max', '1'], { env: { ...process.env, CONNECT_MUTATE: control }, encoding: 'utf8' })
-    const caught = r.status === 1 && /MISMATCH: connectivity/.test(r.stdout) && want.test(r.stdout)
+  // ((F9b) the wall fails the long hulls' lattice row too, on code with it)
+  const lattice = /hullReach\(/.test(readFileSync(fileURLToPath(new URL('../core/nav.js', import.meta.url)), 'utf8'))
+  for (const [control, ...want] of [['wall', /reaches no cell of seat/, ...(lattice ? [/a long hull \(.*\) on its lattice from seat \d's zone .* reaches no state of seat/] : [])], ['ring', /controls no cell within/]]) {
+    const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), '--seeds', '7-9', '--ops', '0', '--max', '20'], { env: { ...process.env, CONNECT_MUTATE: control }, encoding: 'utf8' })
+    const caught = r.status === 1 && /MISMATCH: connectivity/.test(r.stdout) && want.every((w) => w.test(r.stdout))
     if (!caught) missed++
     const first = r.stdout.split('\n').find((l) => l.startsWith('  connectivity')) ?? (r.stderr.trim().split('\n')[0] || `exit ${r.status}`)
     console.log(`  ${caught ? 'caught' : 'MISSED'} ${`connect-${control}`.padEnd(17)} ${first.trim().slice(0, 150)}`)
@@ -1798,11 +1800,25 @@ Math.random = realRandom
 // size's chunk counts (§4.2.3 expects 250-300 at Grand). Its controls
 // (--self-test, below) plant a wall of cells across the centre line, and a
 // ring of them round one objective, into the grid: each must fail a row.
-// (F9b, F5b add a row per footprint: the hull on its lattice.)
+// (F9b, F5b) And a row per footprint (every unit type with one: the
+// Howdah's, from F9b): the long hull on its lattice (core/nav.js hullReach,
+// walk mode, unbounded) crosses from each seat's zone to the other's,
+// starting at the cell nearest the zone's middle where it could pivot
+// freely (clearance, and with height the cliff, ≥ its bounding R, its
+// floor on the ground, and every heading standing), facing the enemy (the
+// edge rule's heading: h = 2 from the edge at −x, 6 from +x), and counting
+// a board crossed when any state it reaches has its body's cell in the
+// other zone; each disc keeps to the ground by the lattice's own rule. It
+// is judged on every set a mission with a Vehicle slot offers (Field,
+// Grand, the Powder Field) and reported only on the others (the
+// Skirmish's, its slot [0, 0]), its crossings counted per mission and set.
 // (NavGrid: imported for P-climb, above)
 const { OBJECTIVE_RANGE } = await imp(PKG, 'core/rules.js')
 const { HIGH } = await imp(PKG, 'core/queries.js')
 const HULL_R = 1.5, SQUAD_R = 1.18
+// ((F9b) the footprints, one row each, on code with the lattice)
+const FOOTPRINTS = NavGrid.prototype.hullReach ? Object.values((await imp(PKG, 'data/schema.js')).RACES).flatMap((r) => Object.values(r.units).filter((t) => t.fp).map((t) => t.fp)) : []
+const lattice = {}
 const CONTROL = process.env.CONNECT_MUTATE ?? null
 // ((F19a) the Skirmish-sized missions, classic and keg, each reported apart)
 const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, byCentre: {}, small: {} }
@@ -1863,6 +1879,28 @@ function connectBoard(name, m, set, seed) {
         if (!held) why.push(`an r ${r} squad from seat ${seat}'s zone controls no cell within ${OBJECTIVE_RANGE + r}" of the objective at (${o.x}, ${o.z})${oy ? ` and within ${HIGH}" of its floor (${oy}")` : ''}${round}`)
       }
     }
+    // ((F9b) each footprint on its lattice, from where it could pivot
+    // freely, facing the enemy)
+    for (const fp of FOOTPRINTS) {
+      let start = -1, bd = Infinity
+      for (let i = 0; i < nav.N; i++) {
+        if (!(sgn * nav.x(i) > edge) || !(nav.clearAll[i] >= fp.R) || (raised && (raised[i] || !(nav.cliff[i] >= fp.R)))) continue
+        const d = hypot(nav.x(i) - mid, nav.z(i))
+        if (!(d < bd)) continue
+        let all = true
+        for (let h = 0; h < 8 && all; h++) all = nav.hullStands(i, h, fp, 'walk')
+        if (all) [bd, start] = [d, i]
+      }
+      if (start < 0) {
+        why.push(`seat ${seat}'s zone has no open spot a long hull (${fp.id}) could pivot freely on`)
+        continue
+      }
+      const h0 = seat ? 6 : 2
+      const res = nav.hullReach(nav.x(start), nav.z(start), h0, fp, { max: Infinity, mode: 'walk' })
+      conn.reaches++
+      const crossed = res.touched.some((s) => -sgn * nav.x(s >> 3) > edge)
+      if (!crossed) why.push(`a long hull (${fp.id}) on its lattice from seat ${seat}'s zone (${nav.x(start)}, ${nav.z(start)}) facing ${h0} reaches no state of seat ${1 - seat}'s`)
+    }
   }
   return { why, chunks: T.chunks.length, centre }
 }
@@ -1880,6 +1918,13 @@ for (const [name, m] of Object.entries(MISSIONS)) {
         r = { why: [`threw: ${e.stack.split('\n').slice(0, 3).join(' / ')}`], chunks: 0 }
       }
       counts.push(r.chunks)
+      // ((F9b) the lattice rows' crossings, per mission and set: judged where
+      // the mission's Vehicle slot lets a hull in, else reported)
+      for (const fp of FOOTPRINTS) {
+        const L = (lattice[`${fp.id} ${key}`] ??= { boards: 0, crossed: 0, judged: (m.list?.roles?.Vehicle?.[1] ?? 0) > 0 })
+        L.boards++
+        if (!r.why.some((w) => w.includes(`long hull (${fp.id})`))) L.crossed++
+      }
       // ((F19a) a mission on classic's table, the keg's too, is a Skirmish)
       if (m.board.W * m.board.H <= W * H) {
         // (reported, never judged: the Skirmish's lanes are its frozen draws'
@@ -1905,6 +1950,9 @@ for (const [name, m] of Object.entries(MISSIONS)) {
 console.log(`\nconnectivity (F8b): ${conn.boards} Field and Grand boards, seeds ${lo}-${hi} (the Powder Field's ${plo}-${phi}) (${((Date.now() - tn0) / 1000).toFixed(1)} s, ${conn.reaches} reaches): from each seat's zone a round hull (r ${HULL_R}, ground only) and a squad (r ${SQUAD_R}, up stairs) cross to the other zone, and the squad controls every objective (within OBJECTIVE_RANGE + r, ${OBJECTIVE_RANGE + SQUAD_R}", and with height within HIGH, ${HIGH}", of its floor)${CONTROL ? ` [control: ${CONTROL}]` : ''}`)
 for (const [key, c] of Object.entries(conn.chunks)) console.log(`  ${key}: chunks ${c}`)
 for (const [name, C] of Object.entries(conn.small)) console.log(`  (reported, not judged) ${name}: the hull crosses on ${C.hull} of ${C.boards} boards, the squad on ${C.squad}, and controls every objective on ${C.objectives}`)
+// ((F9b) each footprint's lattice row, crossing zone to zone: both seats'
+// starts on a board crossing count it crossed)
+for (const [key, L] of Object.entries(lattice)) console.log(`  (F9b) the long hull ${key}${L.judged ? '' : ' (reported, not judged: no Vehicle slot)'}: crosses zone to zone on its lattice on ${L.crossed} of ${L.boards} boards (${(100 * L.crossed / L.boards).toFixed(0)}%)`)
 if (conn.failed) {
   console.log(`MISMATCH: connectivity failed on ${conn.failed} of ${conn.boards} board(s) (by what stands round the centre objective: ${Object.entries(conn.byCentre).map(([k, v]) => `${k} ${v}`).join(', ')}):`)
   for (const s of connShown) console.log(`  ${s}`)

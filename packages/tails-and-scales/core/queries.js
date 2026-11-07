@@ -25,11 +25,20 @@
 // objective (its hull's own OC counts: 0 for every vehicle so far). Each
 // test is reached only where a unit is aboard: with nobody riding, every
 // filter keeps what it always kept, in the same order.
+//
+// (F9b, DESIGN §4.2.5's "Every rule site") Long hulls. A unit with a
+// footprint (t.fp) is measured by its nearest disc wherever a rule
+// measures it: the gap (range, engagement, charge range), the leadership
+// aura, cover (its discs' cells), sight (rays to each disc) and its eye as
+// a shooter (its deck point). Each a branch only a footprint unit reaches
+// (§4.1 rule 26): two round units keep the expression they always had.
 import { ENGAGE, AURA, OBJECTIVE_RANGE, PHASES } from './rules.js'
 import { hypot } from './dmath.js'
 import { STEP } from './nav.js'
 import { canShoot, hasTarget } from './actions/shoot.js'
 import { canCharge, chargeTargets } from './actions/charge.js'
+import { discsOf, clearOf, fpGap } from './footprint.js'
+import { deckFrom } from './actions/transport.js'
 
 export { moveMode, climbs, forbidMask, movePlan, validEnd, nearestValid } from './actions/move.js'
 export { canShoot, shotInfo, shootTargets, rangeOf, lobbed, weaponOf, allySpell, hasTarget } from './actions/shoot.js'
@@ -38,9 +47,13 @@ export { canShoot, shotInfo, shootTargets, rangeOf, lobbed, weaponOf, allySpell,
 // appraisal, no draw)
 export { bestSpell, spellFor } from './ai/policy.js'
 export { canCharge, chargeTargets, chargePlan, chargeSpots } from './actions/charge.js'
-export { freeSpot } from './deploy.js'
+export { freeSpot, placeOk, placeFacing } from './deploy.js'
 export { groundOnly } from './actions/move.js'
 export { hullOf, riders, room, mayBoard, embarkSpot, landing, isTransport } from './actions/transport.js'
+// ((F9b) a footprint unit's discs where it stands, and the least edge gaps
+// to them: the view's outline and the tools measure a long hull as the
+// rules do)
+export { discsOf, clearOf, fpGap } from './footprint.js'
 export { rngState } from './rng.js'
 
 export const alive = (u) => u.alive > 0
@@ -48,7 +61,9 @@ export const alive = (u) => u.alive > 0
 export const enemiesOf = (G, u) => G.units.filter((e) => e.side !== u.side && alive(e) && !e.aboard)
 export const friendsOf = (G, u) => G.units.filter((e) => e.side === u.side && alive(e) && e !== u && !e.aboard)
 export const dist = (a, b) => hypot(a.pos.x - b.pos.x, a.pos.z - b.pos.z)
-export const gap = (a, b) => dist(a, b) - a.r - b.r
+// ((F9b) the least edge gap between the two units' discs when either is a
+// long hull: core/footprint.js fpGap)
+export const gap = (a, b) => (a.t.fp || b.t.fp ? fpGap(a, b) : dist(a, b) - a.r - b.r)
 // (F7a) with height, an enemy within 1" engages only within HIGH of the floor
 // it stands on: a unit at the foot of a 2" wall can't fight the defenders on
 // top. (F9a) A rider engages nobody: [] while it is aboard.
@@ -99,7 +114,14 @@ export const groundY = (G, u) => floorAt(G, u.pos.x, u.pos.z)
 export const eyeY = (u) => u.t.eye
 export const chestY = (u) => u.t.chest
 
+// ((F9b) a long hull's discs' cells, half or more)
 export function inCover(G, u) {
+  if (u.t.fp) {
+    const ds = discsOf(u)
+    let n = 0
+    for (const d of ds) if (G.nav.cover[G.nav.index(d.x, d.z)]) n++
+    return n * 2 >= ds.length && n > 0
+  }
   const live = u.models.filter((m) => m.alive)
   if (u.t.fly) return false
   let n = 0
@@ -116,7 +138,13 @@ export function inCover(G, u) {
 // planner's approach, see from that cell) and each target model's chest on
 // its own floor; the terrain's segment test is 3D already, so a deck's solid
 // body blocks a ray that dips into it (the dead ground at a wall's foot).
+//
+// (F9b) A long hull target's points are its discs' centres at its chest
+// (seen if any is; in cover if any ray is blocked or obscured, or it is in
+// cover), and a long hull shooter's eye stands on its deck point (deckAt
+// turned with its facing and snapped like a disc: transport.js deckFrom).
 export function sight(G, a, b, from = a.pos, bCover = undefined) {
+  if (a.t.fp || b.t.fp) return look(G, a, b, a.t.fp ? deckFrom(a, from) : from, bCover, null)
   if (G.nav.hasHeight) return look(G, a, b, from, bCover, null)
   const eye = { x: from.x, y: eyeY(a), z: from.z }
   let seen = 0, obsc = 0, total = 0
@@ -152,10 +180,12 @@ function look(G, a, b, from, bCover, why) {
   const over = L && onLevel?.size ? (c) => onLevel.get(c.id) === L && Math.abs(c.base - fy) <= STEP : null
   let seen = 0, obsc = 0, total = 0
   const ray = why && { block: null, obscure: [] }
-  for (const m of b.models) {
+  // ((F9b) a long hull's points are its discs', its one model standing)
+  const points = b.t.fp ? discsOf(b).map((d) => ({ alive: true, x: d.x, z: d.z })) : b.models
+  for (const m of points) {
     if (!m.alive) continue
     total++
-    const x = mx(b, m), z = mz(b, m)
+    const x = b.t.fp ? m.x : mx(b, m), z = b.t.fp ? m.z : mz(b, m)
     const y = G.nav.hasHeight ? floorAt(G, x, z) + chestY(b) : chestY(b)
     if (ray) {
       ray.block = null
@@ -189,14 +219,15 @@ function look(G, a, b, from, bCover, why) {
 // every query here.
 export function sightInfo(G, u, tg, from = u.pos) {
   const why = { block: null, obscure: [] }
-  const s = look(G, u, tg, from, undefined, why)
+  const s = look(G, u, tg, u.t.fp ? deckFrom(u, from) : from, undefined, why)
   const high = G.nav.hasHeight && floorAt(G, from.x, from.z) - groundY(G, tg) > STEP
   return { ok: s.visible, block: why.block, obscure: why.obscure, cover: s.cover, high, seen: s.seen, total: s.total }
 }
 
 export function leadership(G, u) {
   let ld = u.t.Ld
-  for (const f of friendsOf(G, u)) if (f.t.hero && dist(u, f) <= AURA + u.r) ld = Math.max(ld, f.t.Ld)
+  // ((F9b) a long hull within the aura by its nearest disc)
+  for (const f of friendsOf(G, u)) if (f.t.hero && (u.t.fp ? clearOf(u, f.pos.x, f.pos.z, 0) <= AURA : dist(u, f) <= AURA + u.r)) ld = Math.max(ld, f.t.Ld)
   return ld
 }
 

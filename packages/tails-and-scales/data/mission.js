@@ -112,6 +112,28 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
     deploy: 14,
     rounds: 7,
     army: 'grand',
+    // ((F9b) DESIGN §4.2.2's AI count budget, rules data and never a clock
+    // (core/ai/score.js budgetOf): the AI's move scan samples its plan on a
+    // lattice of `lattice` cells at least (1.5", not 1"), scores only the
+    // `targets` nearest enemies (by gap, ties in G.units order), and a long
+    // hull weighs only its nearest chargeable target. Its trigger was met
+    // at F9b: on scale-bench's cap lists with two hulls a side (the Coil's
+    // two Howdahs) a battle took 617-792 ms on open and 535-574 fortified
+    // (1.53-2.26× its 350 ms), a movement phase's p90 57-64 ms on open and
+    // 41-56 fortified (1.18-1.83× its 35), past the bench's 1.5× line (three
+    // runs each, at a load under 1.2 on 4 CPUs); with the budget 442-466 ms
+    // and 407-457, the p90 35-51 and 32-38, every row inside it (1.45× at
+    // the most), and the ×3 presets' battles 255-275 ms against 333-395
+    // without. ((F9b's sweep) Those rows were taken before the long hull's
+    // anti-bunching tuning; on F9b's final code, six runs at a load of
+    // 0.1-1.4, the open cap battles took 466-722 ms, three runs over 1.5×
+    // (546, 530 and 722, the last with the box slow), the fortified
+    // 412-497, the p90 41-50 and 37-40: still over BUDGET, a ROADMAP
+    // item.) A lattice of 3 cells, the fast units' own: at 4 (2") the
+    // rows came no lower within the noise (468-521 and 367-522 ms), and the
+    // Howdahs moved in 88% of their movement phases, under the play-report's
+    // F9b row (91% at 3, on the same 64 battles).)
+    ai: { lattice: 3, targets: 6 },
     // 1,500 points, one to three heroes, at least 3 Troops units, at most 7
     // of any one unit (the ×3 presets cost 1,350 and 1,485 at its prices);
     // (F9a) at most two vehicles
@@ -134,9 +156,23 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
       // 1111) and the fit put it at 103 ± 39; at 150 the points bind their
       // lists again (612 of 1,000), open is 47.2%, fortified 57.2%, and
       // every unit sits inside its band, the cart 112 ± 30.)
+      // ((F9b) The Howdah at 5 here (its Field cost 5 when this was played;
+      // 20 since F9b's sweep, data/races/serpent.js), by the cart's own test
+      // turned the other way: played at its Field price (sim/army-sim.mjs
+      // --check, seed 1111) the Coil scored 40.3% open and 35.4% fortified
+      // (the Bushtails 59.7% and 64.6%; 47.4% and 52.0% before the Howdah)
+      // and the fit put the Howdah at −116 ± 44, so no price above the
+      // floor answers it. A Random list fields it however it is priced
+      // (1.9 a Coil list at 5, 1.5 at 190: one unit and one model while the
+      // slots have room), so a higher price only takes points from the
+      // units beside it: at the provisional 190 (its trial Field 50 times
+      // the cart's 150 to 40) the points bind 984 of 1,000 Coil lists (900
+      // before the Howdah, 316 at 5), and the Bushtails score 79.0% open
+      // and 80.4% fortified, the Howdah −53 ± 40. Reported, not judged, as
+      // all of Grand: the Grand rebalance's.)
       prices: {
         squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15, warcart: 150 },
-        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15 },
+        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15, howdah: 5 },
       },
     },
     // (F7a) and `fortified`, as every mission's
@@ -202,18 +238,28 @@ export const MISSIONS = deepFreeze(Object.assign(Object.create(null), {
   // destroyed bails them out mid-blast (§4.1 rule 16), a cart's wrecking
   // walk sets a keg off as any wrecker's (F19a), and a hull never climbs a
   // wreck's deck (no vehicle climbs). The ×3 presets field none, so the
-  // powder/ corpus, preset against preset, is the same battle either way.)
+  // powder/ corpus, preset against preset, is the same battle either way.
+  // (F9b) The same for the Howdah, at Grand's price, 5, its Field 20.)
   powder: {
     board: { W: 80, H: 56 },
     deploy: 14,
     rounds: 7,
     army: 'grand',
+    // ((F9b) and Grand's AI count budget: its cap lists with two Howdahs
+    // took 644 ms a battle, a movement phase's p90 64 ms (1.84× each; the
+    // base commit's, with no Howdah, 505 and 54), and with the budget 509
+    // and 48 (1.45× and 1.36×; scale-bench's row run on this mission, one
+    // run, a load under 1.2); (F9b's review) run again three times each
+    // way on a quiet, faster box, a copy with this line taken out: without
+    // it 529, 492 and 482 ms, p90 52, 42 and 58 (two of the three over
+    // 1.5×), with it 370, 358 and 350, p90 30, 33 and 31)
+    ai: { lattice: 3, targets: 6 },
     list: {
       size: 'Grand', points: 1500, units: 24, models: 90, perKind: 7,
       roles: { Hero: [1, 3], Troops: [3, 14], Elite: [0, 4], Fast: [0, 4], Monster: [0, 3], Artillery: [0, 3], Vehicle: [0, 2] },
       prices: {
         squirrel: { elder: 75, oakguard: 130, nutkin: 70, grenadier: 35, trebuchet: 15, warcart: 150 },
-        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15 },
+        serpent: { hierophant: 10, brute: 170, scaleguard: 85, spitter: 50, sidewinder: 80, engine: 15, howdah: 5 },
       },
     },
     // (the Powder Field's own set alone)
@@ -249,6 +295,14 @@ export function checkMission(name, m) {
   if (!Array.isArray(m.sets) || !m.sets.length || !m.sets.every((s) => typeof s === 'string' && s in SETS)) bad(`its sets ${JSON.stringify(m.sets)} aren't terrain sets (there are ${Object.keys(SETS).join(', ')})`)
   if (typeof m.army !== 'string' || !m.army) bad('its army has no name')
   checkListRules(m.list, bad)
+  // ((F9b) the AI count budget, when given (DESIGN §4.2.2): the move scan's
+  // lattice in cells, 1-8, and the enemies scored, whole numbers from 1)
+  if (m.ai !== undefined) {
+    const ai = m.ai, whole = (n, lo, hi) => Number.isInteger(n) && n >= lo && n <= hi
+    if (!record(ai) || Object.keys(ai).sort().join() !== 'lattice,targets') bad(`its AI count budget is ${JSON.stringify(ai)}, not { lattice, targets }`)
+    if (!whole(ai.lattice, 1, 8)) bad(`its AI count budget's lattice is ${JSON.stringify(ai.lattice)}, not a whole number of cells from 1 to 8`)
+    if (!whole(ai.targets, 1, Infinity)) bad(`its AI count budget's targets is ${JSON.stringify(ai.targets)}, not a whole number above 0`)
+  }
   if (!Array.isArray(m.objectives) || !m.objectives.length) bad('it has no objectives')
   for (const o of m.objectives) {
     const at = `the objective at (${o.x}, ${o.z})`

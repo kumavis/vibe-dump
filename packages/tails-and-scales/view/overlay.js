@@ -22,8 +22,20 @@
 // hard red edge (rims()), and the line of sight: the rays a shot is judged
 // by, eye to chest, in the verdict's colour (los()).
 //
+// (F9b, DESIGN §4.2.5 "View, input, UI") A long hull's: its reach shades
+// the cells it may end on at some heading, hatched where only some of the
+// eight fit (the input works out which: a byte per cell, a bit per
+// heading); its ghost is its outline at the heading it would end on
+// (ghostHull: view/hull.js's shape, turned), never a ring; its path drives
+// straight and pivots, a tick at each pivot pointing the new way; a
+// group's formation draws a long hull member as its outline at its end
+// heading, and the pinned ghost of each long hull carries its rotate
+// handle (a knob ahead of its head, with a turning arrow). Made as first
+// shown, so a table with no long hull makes none of it.
+//
 // R7 moved it out of main.js unchanged.
 import * as THREE from 'three'
+import { hullShapes } from './hull.js'
 
 // (F7b) the cliff rims' red, and the drop that makes a ledge (core/nav.js's
 // STEP: a neighbour more than this below)
@@ -31,6 +43,12 @@ const RIM_COLOR = '#ff2a1c'
 const RIM_STEP = 0.4
 // (F7b) scratch for the LOS beams
 const tmpA = new THREE.Vector3(), tmpB = new THREE.Vector3(), UP = new THREE.Vector3(0, 1, 0)
+// (F9b) a pivot tick's length, and how far ahead of a long hull's ghost its
+// rotate handle stands (past its front disc's edge)
+const TICK = 0.95
+const ROT_AHEAD = 1.1
+// (F9b) a heading's way across the table (h = 0 +z, h = 2 +x)
+const dirOf = (f) => [Math.sin((f * Math.PI) / 4), Math.cos((f * Math.PI) / 4)]
 
 // the floor at (x, z) of a match's nav grid (F7a's height layer: 0 on the
 // ground, and on a board with no height, every board before F7a's)
@@ -196,8 +214,19 @@ export class Overlay {
   // The shaded area is everywhere the unit could stand; spots overlapping a
   // friend are still shaded (a click there snaps to the nearest legal spot),
   // so the region reads as one shape instead of a sieve.
-  reach(plan, nav) {
+  // ((F9b) A long hull's plan (plan.fp) shades by `heads`, a byte per
+  // cell, a bit per heading its move may end on there (input/tools/
+  // move.js's headsOf): every cell with one, hatched where some don't; it
+  // never climbs, so no ladder glows, and it stands on the ground, so no
+  // rim is a ledge for it.)
+  reach(plan, nav, heads = null) {
     const adv = plan.u.flags.advanced
+    if (plan.fp) {
+      const ok = new Uint8Array(nav.N)
+      for (let i = 0; i < nav.N; i++) if (heads?.[i]) ok[i] = 1
+      this.mask(ok, plan.fallback ? [255, 120, 90] : adv ? [255, 190, 70] : [90, 180, 255], nav, 110, (i) => heads[i] !== 255)
+      return
+    }
     const { u, res, mode, endForbid } = plan
     const ok = new Uint8Array(nav.N)
     for (let i = 0; i < nav.N; i++) if (isFinite(res.dist[i]) && nav.standable(i, u.r, mode === 'wreck' ? 'wreck' : 'walk', endForbid)) ok[i] = 1
@@ -284,8 +313,10 @@ export class Overlay {
     return out
   }
 
-  // Shade the cells `ok` marks in colour `col`, their rim strong.
-  mask(ok, col, nav, fill = 80) {
+  // Shade the cells `ok` marks in colour `col`, their rim strong. ((F9b)
+  // `hatch(i)`: a cell shaded in diagonal stripes, every other pair of
+  // texels lighter: a long hull's cells where only some headings fit.)
+  mask(ok, col, nav, fill = 80, hatch = null) {
     const ovData = this.data
     ovData.fill(0)
     // ((F7b) a plan's rims are drawn after it: reach())
@@ -299,7 +330,7 @@ export class Overlay {
       ovData[o] = col[0]
       ovData[o + 1] = col[1]
       ovData[o + 2] = col[2]
-      ovData[o + 3] = edge ? 210 : nav.diff[i] ? Math.round(fill * 0.7) : fill
+      ovData[o + 3] = edge ? 210 : hatch?.(i) && (ix + iz) & 2 ? Math.round(fill * 0.3) : nav.diff[i] ? Math.round(fill * 0.7) : fill
     }
     this.tex.needsUpdate = true
     this.mesh.visible = true
@@ -313,6 +344,7 @@ export class Overlay {
   clear() {
     this.mesh.visible = false
     this.pathLine.visible = false
+    if (this.pathTicks) this.pathTicks.visible = false
     this.rangeRing.visible = false
     this.los(null)
     if (this.rimMesh) this.rimMesh.visible = false
@@ -333,9 +365,61 @@ export class Overlay {
 
   // the path a move would take, drawn just over the table
   // ((F7a) at the height of each point: its own, or the floor under it)
+  // ((F9b) a long hull's, its points carrying their f: its pivots ticked,
+  // ticks())
   path(pts) {
     this.pathLine.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.08 + (p.y ?? floorOf(this.nav, p.x, p.z)), p.z)))
     this.pathLine.visible = true
+    this.pathTicks = this.ticks(this.pathTicks, pts, 0.95)
+  }
+  // (F9b) The pivots on a long hull's path (a point repeated with its new
+  // f: core/nav.js hullPath's) ticked: a small arrowhead at each, pointing
+  // the way the hull faces once it has turned (several at one point, a
+  // fan: a turn of more than 45° there); `mesh` the one mesh drawing them
+  // (made as first needed: none for a round unit's path, nor a path
+  // without a pivot), returned.
+  ticks(mesh, pts, opacity) {
+    const tri = []
+    for (let i = 1; i < pts.length; i++) {
+      const a = pts[i - 1], b = pts[i]
+      if (b.f === undefined || a.x !== b.x || a.z !== b.z) continue
+      const [dx, dz] = dirOf(b.f), y = 0.09 + (b.y ?? floorOf(this.nav, b.x, b.z)), w = 0.22
+      tri.push(b.x + dx * TICK, y, b.z + dz * TICK, b.x + dx * 0.3 + dz * w, y, b.z + dz * 0.3 - dx * w, b.x + dx * 0.3 - dz * w, y, b.z + dz * 0.3 + dx * w)
+    }
+    if (!tri.length) {
+      if (mesh) mesh.visible = false
+      return mesh
+    }
+    if (!mesh) {
+      mesh = new THREE.Mesh(new THREE.BufferGeometry(), new THREE.MeshBasicMaterial({ color: '#ffe27a', transparent: true, opacity, depthWrite: false, side: THREE.DoubleSide, toneMapped: false }))
+      mesh.renderOrder = 4
+      this.scene.add(mesh)
+    }
+    mesh.geometry.dispose()
+    mesh.geometry = new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(tri, 3))
+    mesh.visible = true
+    return mesh
+  }
+
+  // (F9b) A long hull's ghost: its outline (view/hull.js) on nav cell i at
+  // heading f, the single unit's own (input/human.js: a charge's end);
+  // null for i takes it away. Made as first shown.
+  ghostHull(nav, i, f, fp) {
+    if (!nav || !(i >= 0)) {
+      if (this.hullGhost) this.hullGhost.visible = false
+      return
+    }
+    this.nav = nav
+    if (!this.hullGhost) {
+      this.hullGhost = new THREE.Mesh(hullShapes(fp).ghost, new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.8, depthWrite: false, toneMapped: false }))
+      this.hullGhost.renderOrder = 4
+      this.scene.add(this.hullGhost)
+    }
+    const g = this.hullGhost
+    g.geometry = hullShapes(fp).ghost
+    g.position.set(nav.x(i), 0.05 + (nav.hasHeight ? nav.floor[i] : 0), nav.z(i))
+    g.rotation.y = (f * Math.PI) / 4
+    g.visible = true
   }
 
   // (N2) Another player's pick: `at` { x, z, r } the disc of the unit they
@@ -381,6 +465,10 @@ export class Overlay {
   // makes no more three.js objects, nor their ids' Math.random draws).
   // ((F10c) `paths`: each member's way there, faint, as point lists;
   // `handles`: the pin's { move, turn, line } knobs, drawn round their spots)
+  // ((F9b) A long hull member, { fp, f }, is its outline at heading f, not
+  // a ring; its path's pivots ticked; `handles.rot`, [{ x, z, f }], each
+  // pinned long hull's rotate handle; `solo`, a lone hull's pin: its path
+  // drawn as strong as a single unit's.)
   formation(f) {
     if (!f) {
       if (this.rings) {
@@ -389,6 +477,13 @@ export class Overlay {
       }
       for (const l of this.fPaths ?? []) l.visible = false
       for (const k of Object.values(this.knobs ?? {})) k.visible = false
+      for (const g of this.hullRings ?? []) g.visible = false
+      // ((F9b's sweep) a path with no pivot leaves its slot empty, ticks()
+      // making no mesh for it, so the slots are tested: input-check's group
+      // lane threw here, "Cannot set properties of undefined", and the
+      // group never finished sending)
+      for (const t of this.fTicks ?? []) if (t) t.visible = false
+      for (const k of this.rotKnobs ?? []) k.visible = false
       return
     }
     if (!this.rings) {
@@ -406,7 +501,27 @@ export class Overlay {
       this.scene.add(this.flag)
     }
     const geo = this.ghost.geometry
+    this.hullRings ??= []
+    let hk = 0
     f.members.forEach((m, k) => {
+      if (m.fp) {
+        // ((F9b) its outline, turned to its end heading)
+        let g = this.hullRings[hk]
+        if (!g) {
+          g = new THREE.Mesh(hullShapes(m.fp).ghost, new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.85, depthWrite: false, toneMapped: false }))
+          g.renderOrder = 4
+          this.scene.add(g)
+          this.hullRings.push(g)
+        }
+        hk++
+        g.geometry = hullShapes(m.fp).ghost
+        g.position.set(m.x, 0.05, m.z)
+        g.rotation.y = (m.f * Math.PI) / 4
+        g.material.color.set(m.short ? '#ffb347' : '#ffffff')
+        g.visible = true
+        if (this.rings[k]) this.rings[k].visible = false
+        return
+      }
       let ring = this.rings[k]
       if (!ring) {
         ring = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.85, depthWrite: false, toneMapped: false }))
@@ -422,6 +537,7 @@ export class Overlay {
       ring.visible = true
     })
     for (let k = f.members.length; k < this.rings.length; k++) this.rings[k].visible = false
+    for (let k = hk; k < this.hullRings.length; k++) this.hullRings[k].visible = false
     this.flag.visible = !!f.anchor
     if (f.anchor) {
       this.flag.position.set(f.anchor.x, 0, f.anchor.z)
@@ -438,10 +554,16 @@ export class Overlay {
         this.scene.add(line)
         this.fPaths.push(line)
       }
+      // ((F9b) a lone long hull's path as strong as a single unit's)
+      line.material.opacity = f.solo ? 0.9 : 0.3
       line.geometry.setFromPoints(pts.map((p) => new THREE.Vector3(p.x, 0.07, p.z)))
       line.visible = true
     })
     for (let k = paths.length; k < this.fPaths.length; k++) this.fPaths[k].visible = false
+    // ((F9b) a long hull's pivots ticked on its path)
+    this.fTicks ??= []
+    paths.forEach((pts, k) => (this.fTicks[k] = this.ticks(this.fTicks[k], pts, 0.8)))
+    for (let k = paths.length; k < this.fTicks.length; k++) if (this.fTicks[k]) this.fTicks[k].visible = false
     // (F10c) the pin's knobs: a cyan one turns it, a gold one stretches it
     // into a line (the flag moves it)
     const hs = f.handles
@@ -459,6 +581,29 @@ export class Overlay {
       m.visible = !!hs?.[k]
       if (hs?.[k]) m.position.set(hs[k].x, 0.06, hs[k].z)
     }
+    // ((F9b) each pinned long hull's rotate handle: a knob ahead of its
+    // ghost, a turning arrow round it, a stem back to the ghost's front)
+    const rot = hs?.rot ?? []
+    this.rotKnobs ??= []
+    rot.forEach((h, k) => {
+      let g = this.rotKnobs[k]
+      if (!g) {
+        const mat = new THREE.MeshBasicMaterial({ color: '#7dffcf', transparent: true, opacity: 0.95, depthWrite: false, toneMapped: false, side: THREE.DoubleSide })
+        g = new THREE.Group()
+        g.add(new THREE.Mesh(new THREE.CircleGeometry(0.28, 20).rotateX(-Math.PI / 2), mat))
+        g.add(new THREE.Mesh(new THREE.RingGeometry(0.42, 0.56, 28, 1, 0.35, Math.PI * 1.55).rotateX(-Math.PI / 2), mat))
+        const head = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0.3, 0, 0.1), new THREE.Vector3(0.68, 0, 0.1), new THREE.Vector3(0.49, 0, -0.22)])
+        g.add(new THREE.Mesh(head, mat))
+        g.add(new THREE.Mesh(new THREE.PlaneGeometry(0.08, ROT_AHEAD - 0.6).rotateX(-Math.PI / 2).translate(0, 0, -(ROT_AHEAD - 0.6) / 2 - 0.55), mat))
+        for (const c of g.children) c.renderOrder = 5
+        this.scene.add(g)
+        this.rotKnobs.push(g)
+      }
+      g.position.set(h.x, 0.07, h.z)
+      g.rotation.y = (h.f * Math.PI) / 4
+      g.visible = true
+    })
+    for (let k = rot.length; k < this.rotKnobs.length; k++) this.rotKnobs[k].visible = false
   }
 
   // (F10a) The rest of another player's group: a dashed ring round each

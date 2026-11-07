@@ -221,6 +221,26 @@
 //    on it, its floor the deck's height; a magazine's kegs round it, none
 //    nearer than 2.3"), its point mirror on the other of the pair, and the
 //    farmstead's floor holds the centre.
+// 16. (F9b, DESIGN §4.2.5) Long hulls: the Howdah's record as DESIGN's data
+//    block gives it (stats, flags, footprint, transport with its deckAt,
+//    weapons), its fitted cost and its Grand and Powder prices, its card
+//    promising no firing deck, the roster's last entry and in no preset;
+//    t.fp on it alone, frozen; its tables derived afresh here from DESIGN's
+//    formulas (rule 24's exact constants, the snap, each sweep sample's need
+//    with its sub-cell error) and equal bit for bit, and exactly
+//    point-symmetric; the figures DESIGN quotes, measured and printed (each
+//    offset's snap error, each disc's pivot gap by DESIGN's formula, the
+//    connected gaps on the axes and diagonals, R, span); the footprint rules
+//    (defineRace refuses each one broken: the discs' count, shape, radii and
+//    order, the body disc, a half cell, the snap, the connection, the pivot
+//    gap, R, the costs, a field it takes not, a footprint on no vehicle, on
+//    an OC1 unit or a flier, a deckAt outside the footprint or a round
+//    hull's base; and takes the edges); DESIGN's Brood Beetle's figures
+//    (F5b's) and the half-cell rule its 30° sweep samples meet as written,
+//    reported; RULES_ID moving on the footprint, deckAt, the cost and the
+//    Grand price, staying on the card text; the Howdah's deck counts at
+//    the three scales pinned (open question 2's correction of DESIGN's
+//    slot table); two Howdahs a Field or Grand list, none in a Skirmish.
 //
 //   node sim/data-check.mjs
 //
@@ -325,9 +345,9 @@ function expected(key, L) {
   }
 }
 // (the units a step has added since R0, each appended to its race's roster:
-// F9a's War-Cart. They have no legacy record to be held to; their own rows
-// are the step's)
-const ADDED = ['warcart']
+// F9a's War-Cart, F9b's Howdah. They have no legacy record to be held to;
+// their own rows are the step's: sections 14 and 16)
+const ADDED = ['warcart', 'howdah']
 const legacyKeys = Object.keys(legacy.TYPES).sort(), keys = Object.keys(TYPES).filter((k) => !ADDED.includes(k)).sort()
 check(new Set(ALL.map((t) => t.key)).size === ALL.length, 'no two races share a unit key', 'look their types up by race')
 check(isDeepStrictEqual(keys, legacyKeys), `the same ${legacyKeys.length} unit keys`, `got ${keys.join(',')}`)
@@ -551,6 +571,10 @@ const moves = [
   ['the grand board (80×56 → 80×54)', () => rulesId({ missions: { ...MISSIONS, grand: { ...structuredClone(MISSIONS.grand), board: { W: 80, H: 54 } } } })],
   ["the field mission's points (1,000 → 1,005)", () => rulesId({ missions: { ...MISSIONS, field: (({ list, ...m }) => ({ ...m, list: { ...list, points: 1005 } }))(structuredClone(MISSIONS.field)) } })],
   ['the field mission dropped', () => rulesId({ missions: (({ field, ...m }) => m)(MISSIONS) })],
+  // ((F9b) the AI count budget is rules data)
+  ["the grand mission's AI count budget lattice (3 → 4)", () => rulesId({ missions: { ...MISSIONS, grand: { ...structuredClone(MISSIONS.grand), ai: { lattice: 4, targets: 6 } } } })],
+  ["the grand mission's AI count budget targets (6 → 7)", () => rulesId({ missions: { ...MISSIONS, grand: { ...structuredClone(MISSIONS.grand), ai: { lattice: 3, targets: 7 } } } })],
+  ["the powder mission's AI count budget dropped", () => rulesId({ missions: { ...MISSIONS, powder: (({ ai, ...m }) => m)(structuredClone(MISSIONS.powder)) } })],
 ]
 for (const [what, id] of moves) check(id() !== RULES_ID, `moves on ${what}`)
 check(rulesData().sets === SETS, 'hashes the terrain sets (core/terrain/sets.js)')
@@ -848,12 +872,26 @@ const brokenMissions = [
   ['a set named by an Object.prototype member', /aren't terrain sets/, (m) => (m.sets = ['toString'])],
   ['no sets', /aren't terrain sets/, (m) => (m.sets = [])],
   ['no army', /army has no name/, (m) => delete m.army],
+  // ((F9b) the AI count budget, DESIGN §4.2.2's `ai`)
+  ['an AI count budget that is a number', /AI count budget is 4, not \{ lattice, targets \}/, (m) => (m.ai = 4)],
+  ['an AI count budget with a field it takes not', /AI count budget is .*, not \{ lattice, targets \}/, (m) => (m.ai = { lattice: 4, targets: 6, clock: 50 })],
+  ['an AI count budget missing its targets', /AI count budget is .*, not \{ lattice, targets \}/, (m) => (m.ai = { lattice: 4 })],
+  ['an AI count budget lattice of 0 cells', /lattice is 0, not a whole number of cells from 1 to 8/, (m) => (m.ai = { lattice: 0, targets: 6 })],
+  ['an AI count budget lattice of 2.5 cells', /lattice is 2.5, not a whole number/, (m) => (m.ai = { lattice: 2.5, targets: 6 })],
+  ['an AI count budget lattice of 9 cells', /lattice is 9, not a whole number/, (m) => (m.ai = { lattice: 9, targets: 6 })],
+  ['an AI count budget of no targets', /targets is 0, not a whole number above 0/, (m) => (m.ai = { lattice: 4, targets: 0 })],
 ]
 for (const [what, want, edit] of brokenMissions) {
   const m = structuredClone(MISSIONS.classic)
   edit(m)
   const err = missionError(m)
   check(err && want.test(err), `checkMission refuses ${what}`, err ?? 'accepted')
+}
+// ((F9b) the AI count budget as shipped: on Grand and the Powder Field
+// alone, its trigger met by the long hulls there, DESIGN §4.2.2)
+{
+  const budgets = Object.fromEntries(Object.entries(MISSIONS).filter(([, m]) => m.ai !== undefined).map(([k, m]) => [k, m.ai]))
+  check(isDeepStrictEqual(budgets, { grand: { lattice: 3, targets: 6 }, powder: { lattice: 3, targets: 6 } }), "the AI count budget is Grand's and the Powder Field's alone, a lattice of 3 cells (1.5\") and the 6 nearest enemies (F9b: its trigger met by two Howdahs a side on scale-bench's cap lists)", JSON.stringify(budgets))
 }
 
 // ── 8. each module loads alone ──────────────────────────────────────────────
@@ -1125,7 +1163,11 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // pin as under 12; 14, F7c: a platform's posts at hp 3, a deck falling
   // and settle, on fortified boards only (a post's hp is printed as every
   // chunk's always was, a fallen deck's planks a chunk like a wall's
-  // rubble): every pin as under 13)
+  // rubble): every pin as under 13; 15, F9b: the long hulls, a footprint
+  // unit's facing printed among its extras and only on a unit with a
+  // footprint (UNIT_EXTRAS), which no pinned match fields (no list holds
+  // a Howdah), and every branch a footprint reaches its own: every pin as
+  // under 14)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
@@ -1133,7 +1175,7 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   }
   const V9 = { ...V1, '64-89': { end: '1jmxq628imf' } }
   const V12 = { ...V1, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9, 12: V12, 13: V12, 14: V12 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9, 12: V12, 13: V12, 14: V12, 15: V12 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)
@@ -1157,9 +1199,12 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // the extras
   // ((F9a) the first: `aboard`, 0 for a unit on the table; (V3c) the
   // spells' marks, each false until a spell sets it, and so on every unit
-  // core/units.js makes)
-  const extrasWant = { aboard: 0, resolute: false, snared: false, warded: false }
-  check(Object.isFrozen(UNIT_EXTRAS) && isDeepStrictEqual({ ...UNIT_EXTRAS }, extrasWant), `UNIT_EXTRAS is frozen and names F9a's aboard, at 0, and V3c's spell marks, each false (${Object.entries(UNIT_EXTRAS).map(([k, v]) => `${k}: ${v}`).join(', ') || 'none'})`)
+  // core/units.js makes; (F9b) a footprint unit's `facing`, its default
+  // undefined: a round unit holds none, so it prints for no round unit and
+  // for a long hull at every heading, 0 among them)
+  const extrasWant = { aboard: 0, facing: undefined, resolute: false, snared: false, warded: false }
+  check(Object.isFrozen(UNIT_EXTRAS) && isDeepStrictEqual({ ...UNIT_EXTRAS }, extrasWant) && 'facing' in UNIT_EXTRAS, `UNIT_EXTRAS is frozen and names F9a's aboard, at 0, V3c's spell marks, each false, and F9b's facing, undefined (${Object.entries(UNIT_EXTRAS).map(([k, v]) => `${k}: ${v}`).join(', ') || 'none'})`)
+  check(unitExtras({ facing: 0 }) === 'facing=0' && unitExtras({ facing: 6, aboard: 0 }) === 'facing=6' && unitExtras({}) === '' && unitExtras({ facing: undefined }) === '', '(F9b) a long hull prints facing=<h> at every heading, 0 among them, and a unit holding no facing prints none')
   const extras = Object.freeze({ zeta: false, aboard: 0 })
   check(unitExtras({}, extras) === '' && unitExtras({ aboard: 0, zeta: false }, extras) === '' && unitExtras({ aboard: 3 }, extras) === 'aboard=3' && unitExtras({ zeta: true, aboard: -0 }, extras) === 'aboard=-0,zeta=true', 'a unit\'s extras print only where they aren\'t their default, in sorted key=value (-0 apart from 0)')
   {
@@ -1378,14 +1423,15 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
   breakIt('defineRace refuses a cost of 0', (d) => (d.units.spitter.cost = 0), /unit spitter: cost must be a whole multiple of 5 above 0/)
   breakIt('defineRace refuses a cost as text', (d) => (d.units.spitter.cost = '65'), /unit spitter: cost must be a whole multiple of 5/)
   breakIt('defineRace refuses no roster', (d) => delete d.roster, /needs a roster/)
-  breakIt('defineRace refuses a roster missing a unit', (d) => d.roster.pop(), /roster leaves out "engine"/)
+  // ((F9b) the roster's last entry is the Howdah's)
+  breakIt('defineRace refuses a roster missing a unit', (d) => d.roster.pop(), /roster leaves out "howdah"/)
   breakIt('defineRace refuses a roster listing a unit twice', (d) => d.roster.push('brute'), /roster lists "brute" twice/)
   breakIt('defineRace refuses a roster listing a unit the race lacks', (d) => d.roster.push('nutkin'), /roster lists "nutkin", which is not one of its units/)
   breakIt('defineRace refuses a roster listing an Object.prototype name', (d) => d.roster.push('constructor'), /roster lists "constructor", which is not one of its units/)
   breakIt('defineRace refuses an army out of roster order', (d) => d.army.reverse(), /army is not in roster order/)
   breakIt('defineRace refuses an army fielding 10 of one unit (a count is one digit)', (d) => (d.army = Array(10).fill('scaleguard')), /fields 10 "scaleguard": a list's count of one unit is one digit/)
   breakIt('defineRace refuses a preset with trailing zeros', (d) => (d.armies = { field: '2242220' }), /armies\.field is "2242220", not a list of counts/)
-  breakIt('defineRace refuses a preset longer than the roster', (d) => (d.armies = { field: '2242221' }), /armies\.field "2242221" counts 7 kinds of unit; the roster has 6/)
+  breakIt('defineRace refuses a preset longer than the roster', (d) => (d.armies = { field: '22422211' }), /armies\.field "22422211" counts 8 kinds of unit; the roster has 7/)
   breakIt('defineRace refuses a preset that is no string', (d) => (d.armies = { field: 224222 }), /armies\.field is 224222, not a list of counts/)
   breakIt('defineRace refuses a preset named by no key', (d) => (d.armies = { Field: '224222' }), /a preset's name "Field" must be lower-case/)
   breakIt('defineRace refuses a preset named __proto__', (d) => (d.armies = JSON.parse('{"__proto__": "1"}')), /a preset's name "__proto__" must be lower-case/)
@@ -1406,8 +1452,9 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
     }
     return out
   }
-  // ((F9a) and the vehicle/ one, its War-Cart lists among them)
-  for (const set of ['army', 'scale', 'vehicle']) {
+  // ((F9a) and the vehicle/ one, its War-Cart lists among them; (F9b) and
+  // hull/, its Howdah lists)
+  for (const set of ['army', 'scale', 'vehicle', 'hull']) {
     const ARMY = join(PKG, 'sim', 'baselines', set)
     const files = existsSync(ARMY) ? readdirSync(ARMY).filter((f) => f.endsWith('.json')).sort() : []
     let lists = 0
@@ -1585,8 +1632,9 @@ console.log("\n14. vehicles: the War-Cart's record, the transport rules, the Veh
   const deckFire = (cart?.abilities ?? []).filter((x) => /fir(e|ing) (deck|from)|shoot(s)? from|from (the|its) deck/i.test(x))
   check(cart?.abilities?.length > 0 && !deckFire.length, `its card text (${cart?.abilities?.length ?? 0} lines) promises no firing deck (F9c's)`, deckFire.join(' | '))
   check(ROLES.at(-1) === 'Vehicle' && FLAGS.includes('vehicle') && AI_ROLES.includes('transport'), "the schema knows the Vehicle role (ROLES' last, so every earlier role keeps its index), the vehicle flag and the transport AI role", `${ROLES} / ${FLAGS} / ${AI_ROLES}`)
-  const others = ALL.filter((t) => t !== cart)
-  check(others.every((t) => t.vehicle === false && !Object.hasOwn(t, 'transport')), `every other unit (${others.length}) is no vehicle and carries no transport field at all (its type as before but for vehicle: false)`, others.filter((t) => t.vehicle !== false || Object.hasOwn(t, 'transport')).map((t) => t.key).join(', '))
+  // ((F9b) and the Howdah, section 16's)
+  const others = ALL.filter((t) => t !== cart && t !== RACES.serpent.units.howdah)
+  check(others.every((t) => t.vehicle === false && !Object.hasOwn(t, 'transport')), `every other unit (${others.length}, the Howdah aside: section 16) is no vehicle and carries no transport field at all (its type as before but for vehicle: false)`, others.filter((t) => t.vehicle !== false || Object.hasOwn(t, 'transport')).map((t) => t.key).join(', '))
   check(ALL.filter((t) => t.transport).every((t) => t.vehicle && t.models === 1 && t.big && !t.climb), 'every transport is a vehicle: one big model that never climbs')
 
   // the transport record's rules (data/schema.js transportOf, defineRace),
@@ -1821,5 +1869,231 @@ console.log('\n15. the Powder Field: its set, its sites and its mission (V3d)')
   check(!bad.length, `on seeds 1-100 every site stands on its objective (a wreck's deck centred on it, the objective on its floor; a magazine's kegs round it, none nearer than 2.3"), its mirror on the other of its pair, and the farmstead's floor holds the centre`, bad.slice(0, 3).join('; '))
 }
 
-console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, (F11a) the army builder\'s prices, rosters, presets and list rules hold, (F8b) every mission, preset and set is inside the size envelope, (F19a) the powder keg, its set and its mission are as the rules have them, (F9a) the War-Cart, its transport and the Vehicle slot are as the rules have them, its riders fitting its deck, and (V3d) the Powder Field, its set, its sites and its mission are as the rules have them')
+// ── 16. Long hulls (F9b) ────────────────────────────────────────────────────
+console.log("\n16. long hulls: the Howdah's record, the footprint rules and their tables (F9b, DESIGN §4.2.5)")
+{
+  const A = await imp(PKG, 'core/army.js')
+  const { deriveFootprint } = await imp(PKG, 'core/footprint.js')
+  const how = RACES.serpent.units.howdah, cart = RACES.squirrel.units.warcart
+  // the record DESIGN §4.2.5's data block gives, field for field, and what
+  // the schema derives from it (as section 14's War-Cart)
+  const WANT = {
+    name: 'Shell-Back Howdah', short: 'Howdah', role: 'Vehicle', ai: 'transport', models: 1, base: 1.25, pts: 140,
+    M: 6, WS: 4, BS: 4, S: 6, T: 8, W: 14, A: 3, Ld: 8, Sv: 3, OC: 0,
+    big: true, wrecker: true, vehicle: true, fly: false, climb: false, hero: false, noCharge: false, brawler: true, move: 'wreck', deployRow: 'front', eye: 1.9,
+  }
+  const got = how && Object.fromEntries(Object.keys(WANT).map((k) => [k, how[k]]))
+  check(!!how && isDeepStrictEqual(got, WANT), "the Howdah's record is DESIGN's: a Vehicle, the transport AI, one model on its body disc's 1.25\" base, M6 … T8 W14 … Sv3 OC0, big, a wrecker and a vehicle (a brawler that wrecks as it moves, in the front row, its eye 1.9\", no climber)", how ? diffPath(got, WANT) : 'the Coil has no howdah')
+  check(isDeepStrictEqual(how?.transport, { capacity: 12, maxBase: 0.45, fire: 3, deck: 1.6, wreck: { hx: 1.2, hy: 0.7, hz: 2.9 }, deckAt: [0, 0] }) && Object.isFrozen(how.transport.deckAt), "its transport is DESIGN's (capacity 12, maxBase 0.45\", fire 3, deck 1.6\" at deckAt [0, 0], a wreck 2.4 × 1.4 × 5.8\" along its facing), copied and frozen", JSON.stringify(how?.transport))
+  const w = how?.ranged, m = how?.melee
+  check(w?.name === 'Venom lobber' && w.range === 18 && w.shots === 1 && w.blast === 1.6 && w.S === 5 && w.AP === 1 && w.D === 1 && w.fx === 'spit' && m?.name === 'Coil crush' && m.S === 6 && m.AP === 1 && m.D === 2, "its weapons are DESIGN's: a Venom lobber 18\", 1 shot, a 1.6\" blast, S5 AP1 D1, its look 'spit'; Coil crush S6 AP1 D2", JSON.stringify({ ranged: w, melee: m }))
+  // ((F9b's sweep) 20, not the fit's floor of 5: at 5 the Coil's lists took
+  // it all but free and Field's score gate failed, 44.9% on open; at 20 both
+  // score gates pass on seeds 1111 and 4444, the Howdah inside its band)
+  check(how?.cost === 20, `its cost is the 20 army-sim's Field gates gave it (${how?.cost}: its fitted worth −13 ± 8 pooled over seeds 1111-3333 at a trial 50, but at the floor, 5, the Field score gate failed on open, 44.9%; at 20 both score gates pass on 1111 and 4444, the Howdah fitted −13 ± 17 and −4 ± 15), a whole multiple of 5 (DESIGN §4.2.5's data)`)
+  const grand = MISSIONS.grand.list.prices?.serpent?.howdah, powder = MISSIONS.powder.list.prices?.serpent?.howdah
+  check(Number.isInteger(grand) && grand % 5 === 0 && grand === powder && grand === 5, `its Grand price (${grand}) is the floor, 5, below its Field cost (${how?.cost}): the War-Cart's test at Grand turned the other way (the floor: at the Field price it then had, 5, the Coil already scored under its band at Grand, and a higher one takes points from the units beside it), and the Powder Field's the same (${powder})`)
+  const deckFire = (how?.abilities ?? []).filter((x) => /fir(e|ing) (deck|from)|shoot(s)? from|from (the|its) deck/i.test(x))
+  check(how?.abilities?.length > 0 && !deckFire.length, `its card text (${how?.abilities?.length ?? 0} lines) promises no firing deck (F9c's)`, deckFire.join(' | '))
+  check(RACES.serpent.roster.at(-1) === 'howdah' && Object.values(RACES).every((r) => Object.values(r.armies).every((list) => !(Number(list[r.roster.indexOf('howdah')] ?? 0) > 0))), "the Howdah is the Coil's roster's last entry, appended, and no preset fields one (so no corpus battle holds a Howdah: its lists are presets or recorded counts of today's units)")
+  check(ALL.filter((t) => t.fp).length === 1 && !cart.fp && ALL.every((t) => (t === how) === Object.hasOwn(t, 'fp')), 'the Howdah alone carries t.fp: every other unit (the War-Cart, round, among them) has no such field at all', ALL.filter((t) => t !== how && Object.hasOwn(t, 'fp')).map((t) => t.key).join(', '))
+  const fp = how.fp
+  const deepFrozen = (v) => !v || typeof v !== 'object' || (Object.isFrozen(v) && Object.values(v).every(deepFrozen))
+  check(deepFrozen(fp), 't.fp is frozen through and through')
+
+  // the tables derived afresh here, from DESIGN's formulas (rule 24): each
+  // heading's offsets turned by the exact cos and sin of its angle (the axes
+  // 0 and ±1, the diagonals √½, the sub-steps (√6 ± √2)/4, √3/2 and ½, a
+  // quadrant's by its sign), x' = dx·cos + dz·sin, z' = −dx·sin + dz·cos
+  // (h = 0 faces +z, h = 2 +x), snapped by sign(v)·round(|v|/0.5); each
+  // sweep sample's need r − 0.06 + its snap error |p − centre(cell(p))|
+  const CS = { 0: 1, 15: (Math.sqrt(6) + Math.sqrt(2)) / 4, 30: Math.sqrt(3) / 2, 45: Math.SQRT1_2, 60: 0.5, 75: (Math.sqrt(6) - Math.sqrt(2)) / 4, 90: 0 }
+  const cosSin = (deg) => {
+    const a = deg % 360
+    if (a <= 90) return [CS[a], CS[90 - a]]
+    if (a <= 180) return [-CS[180 - a], CS[a - 90]]
+    if (a <= 270) return [-CS[a - 180], -CS[270 - a]]
+    return [CS[360 - a], -CS[a - 270]]
+  }
+  const snapOf = (v) => (v < 0 ? -1 : 1) * Math.round(Math.abs(v) / 0.5)
+  const at = (dx, dz, deg) => {
+    const [c, s] = cosSin(deg)
+    const x = dx * c + dz * s, z = -dx * s + dz * c
+    const ix = snapOf(x), iz = snapOf(z)
+    return { x, z, ix, iz, err: Math.sqrt((x - ix * 0.5) * (x - ix * 0.5) + (z - iz * 0.5) * (z - iz * 0.5)) }
+  }
+  const fresh = (discs) => {
+    const H = [], S = []
+    for (let h = 0; h < 8; h++) {
+      H.push(discs.map(([dx, dz, r]) => {
+        const p = at(dx, dz, 45 * h)
+        return { ix: p.ix + 0, iz: p.iz + 0, r }
+      }))
+      S.push(discs.flatMap(([dx, dz, r], q) => [15, 30].map((sub) => {
+        const p = at(dx, dz, 45 * h + sub)
+        return { ix: p.ix + 0, iz: p.iz + 0, need: r - 0.06 + p.err, q }
+      })))
+    }
+    return { H, S }
+  }
+  const mine = fresh(fp.discs)
+  check(isDeepStrictEqual(JSON.parse(JSON.stringify(fp.H)), mine.H) && isDeepStrictEqual(JSON.parse(JSON.stringify(fp.S)), mine.S), "the Howdah's tables are the ones derived afresh from DESIGN's formulas: every heading's offsets and every sweep sample's cell and need, bit for bit", diffPath(JSON.parse(JSON.stringify({ H: fp.H, S: fp.S })), mine))
+  // the tables' exact point symmetry: heading h + 4 the negation of h
+  const symmetric = (t) => [0, 1, 2, 3].every((h) => ['H', 'S'].every((k) => t[k][h].every((p, j) => {
+    const o = t[k][h + 4][j]
+    return o.ix === -p.ix && o.iz === -p.iz && Object.keys(p).every((f) => f === 'ix' || f === 'iz' || o[f] === p[f])
+  })))
+  check(symmetric(fp) && symmetric(mine), "the Howdah's tables are exactly point-symmetric: heading h + 4 is h negated, every sample's need its own")
+
+  // the figures DESIGN quotes, measured (rule by rule, from the exact
+  // constants): each offset's snap error, each disc's pivot gap by DESIGN's
+  // formula, the connected gaps on the axes and the diagonals, R and span
+  const figuresOf = (discs) => {
+    const snapAt = discs.map(([dx, dz]) => ({ axes: Math.max(...[0, 2, 4, 6].map((h) => at(dx, dz, 45 * h).err)), diagonals: Math.max(...[1, 3, 5, 7].map((h) => at(dx, dz, 45 * h).err)) }))
+    const c75 = Math.sqrt((1 + CS[15]) / 2)
+    const pivot = discs.map(([dx, dz, r]) => {
+      const d = Math.sqrt(dx * dx + dz * dz)
+      return Math.sqrt((d + r) * (d + r) + d * d - 2 * d * (d + r) * c75) - r
+    })
+    const gapAt = (h) => discs.slice(1).map(([dx, dz, r], q) => {
+      const a = at(discs[q][0], discs[q][1], 45 * h), b = at(dx, dz, 45 * h)
+      return Math.sqrt(((b.ix - a.ix) * 0.5) ** 2 + ((b.iz - a.iz) * 0.5) ** 2) - discs[q][2] - r
+    })
+    const connected = { axes: Math.max(...[0, 2, 4, 6].flatMap(gapAt)), diagonals: Math.max(...[1, 3, 5, 7].flatMap(gapAt)) }
+    let R = 0
+    for (let h = 0; h < 8; h++) for (const [dx, dz, r] of discs) {
+      const p = at(dx, dz, 45 * h)
+      R = Math.max(R, Math.sqrt((p.ix * 0.5) ** 2 + (p.iz * 0.5) ** 2) + r)
+    }
+    return { snapAt, pivot, connected, R }
+  }
+  const F = figuresOf(fp.discs)
+  const f3 = (x) => x.toFixed(3)
+  console.log(`  (the Howdah, measured: snap errors ${fp.discs.map(([dx, dz], q) => `disc ${q} at [${dx}, ${dz}] ${f3(F.snapAt[q].axes)}" on the axes, ${f3(F.snapAt[q].diagonals)}" on the diagonals`).join('; ')}; pivot gaps ${F.pivot.map((g, q) => `disc ${q} ${g.toFixed(4)}"`).join(', ')}; connected gaps ${f3(F.connected.axes)}" on the axes, ${f3(F.connected.diagonals)}" on the diagonals; R ${F.R.toFixed(4)}", span ${fp.span} cells)`)
+  check(Math.abs(F.pivot[0] - 0.052) < 0.0005 && F.pivot[0] === F.pivot[2] && F.pivot[1] === 0 && Math.abs(F.R - 3.07) < 0.005 && F.R === fp.R && Math.abs(F.connected.axes + 0.2) < 1e-9 && Math.abs(F.connected.diagonals + 0.08) < 0.005 && Math.max(...F.snapAt.map((x) => Math.max(x.axes, x.diagonals))) <= 0.15,
+    `the Howdah's figures are DESIGN's: its head and tail pivot gaps 0.052" (${F.pivot[0].toFixed(4)}), its body's 0; R 3.07 (${F.R.toFixed(4)}, t.fp's ${fp.R.toFixed(4)}); connected by −0.20 on the axes and −0.08 on the diagonals (${f3(F.connected.axes)}, ${f3(F.connected.diagonals)}); every snap within 0.15"`)
+  check(fp.n === 3 && isDeepStrictEqual([...fp.r], [0.95, 1.25, 0.95]) && isDeepStrictEqual([...fp.radii], [0.95, 1.25]) && isDeepStrictEqual([...fp.cls], [0, 1, 0]) && fp.body === 1 && fp.turn === 0.25 && fp.rev === 2 && fp.span === 4 && fp.cell === 0.5 && fp.id === 'serpent.howdah', `t.fp's own fields: 3 discs (r ${fp.r.join(', ')}), 2 radius classes (${fp.radii.join(', ')}; the discs' ${fp.cls.join(', ')}), the body disc 1, turn 0.25", rev 2, span 4 cells, on the 0.5" grid, its id serpent.howdah`, JSON.stringify({ n: fp.n, r: fp.r, radii: fp.radii, cls: fp.cls, body: fp.body, turn: fp.turn, rev: fp.rev, span: fp.span, id: fp.id }))
+
+  // the footprint rules (data/schema.js), each broken on a copy of the
+  // Howdah, and its edges taken
+  const howDef = (edit) => {
+    const def = structuredClone(raw.serpent)
+    edit(def.units.howdah, def)
+    return def
+  }
+  const refuse = (what, edit, want) => {
+    let err = null
+    try {
+      defineRace(howDef(edit))
+    } catch (e) {
+      err = e.message
+    }
+    check(err && want.test(err), `defineRace refuses ${what}`, err ? `wrong error: ${err}` : 'accepted')
+  }
+  const takes = (what, edit, test = () => true) => {
+    let r = null, err = null
+    try {
+      r = defineRace(howDef(edit))
+    } catch (e) {
+      err = e.message
+    }
+    check(!!r && test(r.units.howdah), `defineRace takes ${what}`, err ?? 'taken, but not as given')
+  }
+  const FPR = /unit howdah, footprint: /
+  const discs = (...d) => (u) => (u.footprint.discs = d)
+  refuse('a footprint of one disc', discs([0, 0, 1.25]), new RegExp(`${FPR.source}discs is 2 or 3 discs \\[dx, dz, r\\], listed front to back`))
+  refuse('a footprint of four discs', discs([0, 4, 0.95], [0, 2, 0.95], [0, 0, 1.25], [0, -2, 0.95]), /footprint: discs is 2 or 3 discs/)
+  refuse('discs that are no list', (u) => (u.footprint.discs = 'three'), /footprint: discs is 2 or 3 discs/)
+  refuse('a disc of two numbers', discs([0, 2], [0, 0, 1.25]), /footprint: disc 0 is \[0,2\], not \[dx, dz, r\], three numbers/)
+  refuse('a disc of r 0.4', discs([0, 2, 0.4], [0, 0, 1.25], [0, -2, 0.95]), /footprint: disc 0's r is 0\.4: a disc's radius is from 0\.5 to 1\.6/)
+  refuse('a disc of r 1.7', discs([0, 2, 0.95], [0, 0, 1.25], [0, -2, 1.7]), /footprint: disc 2's r is 1\.7/)
+  refuse('discs listed back to front', discs([0, -2, 0.95], [0, 0, 1.25], [0, 2, 0.95]), /footprint: disc 1 is not behind disc 0: the discs are listed front to back/)
+  refuse('no body disc at [0, 0]', discs([0, 2, 0.95], [0, 0.5, 1.25], [0, -2, 0.95]), /footprint: needs exactly one body disc at \[0, 0\], where the unit stands, not 0/)
+  refuse("a body disc whose r is not the unit's base", discs([0, 2, 0.95], [0, 0, 1.2], [0, -2, 0.95]), /footprint: the body disc's r is 1\.2, not the unit's base, 1\.25/)
+  refuse('an offset turning onto a half cell (a head 1.25" ahead: 2.5 cells)', discs([0, 1.25, 0.95], [0, 0, 1.25], [0, -2, 0.95]), /footprint: an offset turns onto a half cell \(disc 0 at 0°: z 1\.25\)/)
+  refuse('a snap error over 0.15" (a head 1" ahead: 0.293" off on the diagonals)', discs([0, 1, 0.95], [0, 0, 1.25], [0, -2, 0.95]), /footprint: disc 0 at heading 1 snaps 0\.293" from its exact place: at most 0\.15"/)
+  refuse('discs apart (a head of r 0.8: 0.071" off the body on the diagonals)', discs([0, 2, 0.8], [0, 0, 1.25], [0, -2, 0.95]), /footprint: discs 0 and 1 at heading 1 stand 0\.071" apart: consecutive discs overlap or touch/)
+  refuse('a pivot gap over 0.06" (a base of 1.6 with r 0.6 discs 2" out: 0.070")', (u) => ((u.base = 1.6), (u.footprint.discs = [[0, 2, 0.6], [0, 0, 1.6], [0, -2, 0.6]])), /footprint: disc 0's pivot gap is 0\.070": at most 0\.06"/)
+  refuse('a bounding R over 3.5" (a head of r 1.6: 3.721")', discs([0, 2, 1.6], [0, 0, 1.25], [0, -2, 0.95]), /footprint: its bounding R is 3\.721": at most 3\.5"/)
+  refuse('a turn below 0', (u) => (u.footprint.turn = -0.25), /footprint: turn is the inches a 45° pivot costs, a number from 0, not -0\.25/)
+  refuse('a turn that is no number', (u) => (u.footprint.turn = '0.25'), /footprint: turn is .*not 0\.25/)
+  refuse('a rev below 1', (u) => (u.footprint.rev = 0.5), /footprint: rev is what a step backing up costs per inch of a step forward, a number from 1, not 0\.5/)
+  refuse('a footprint field it takes not', (u) => (u.footprint.turns = 1), /footprint: unknown field "turns"/)
+  refuse('a footprint that is a number', (u) => (u.footprint = 3), /footprint: must be \{ discs, turn, rev \}/)
+  refuse('a footprint on a unit that is no vehicle (the Brute)', (u, d) => (d.units.brute.footprint = structuredClone(u.footprint)), /unit brute: a footprint is a vehicle's \(vehicle: true\)/)
+  refuse('a footprint unit holding objectives (OC1)', (u) => (u.stats = u.stats.replace('OC0', 'OC1')), /unit howdah: a footprint unit holds no objective \(OC0\), not OC1/)
+  refuse('a footprint unit that flies', (u) => (u.fly = true), /unit howdah: a footprint unit never flies/)
+  refuse('a deck outside the footprint (deckAt [0, 4])', (u) => (u.transport.deckAt = [0, 4]), /unit howdah, transport: deckAt is where the deck stands in the hull's frame, \[x, z\] inside its footprint, not \[0,4\]/)
+  refuse('a deckAt of one number', (u) => (u.transport.deckAt = [0]), /transport: deckAt is where the deck stands/)
+  refuse('a deckAt that is no list', (u) => (u.transport.deckAt = 0), /transport: deckAt is where the deck stands/)
+  takes("a deck in the footprint's head disc (deckAt [0, 2.5])", (u) => (u.transport.deckAt = [0, 2.5]), (t) => isDeepStrictEqual([...t.transport.deckAt], [0, 2.5]))
+  takes('the edges: a free pivot (turn 0) and rev 1', (u) => Object.assign(u.footprint, { turn: 0, rev: 1 }), (t) => t.fp.turn === 0 && t.fp.rev === 1)
+  takes('two discs (a head and the body)', discs([0, 2, 0.95], [0, 0, 1.25]), (t) => t.fp.n === 2 && t.fp.body === 1)
+  {
+    // DESIGN's Brood Beetle (F5b's data): its figures as DESIGN quotes
+    // them, and the one rule its data meets as written. Its front and rear
+    // discs 1.5" out turn, at a pivot's 30° sub-step, to 1.5·sin 30° =
+    // 0.75" across: a half cell exactly, which rule 24's half rule refuses
+    // for the sweep samples as for the offsets (an exact half rounds the
+    // same in every engine; the rule is there for one a hair off). F5b's to
+    // settle (move a disc, or have the rule spare exact halves): reported
+    // here, its refusal held, so the rule as built is the rule as written.
+    const beetle = [[0, 1.5, 1.35], [0, 0, 1.5], [0, -1.5, 1.35]]
+    const B = figuresOf(beetle), D = deriveFootprint({ discs: beetle, turn: 0, rev: 2 }, 'insect.beetle')
+    console.log(`  (DESIGN's Brood Beetle, measured: pivot gaps ${B.pivot.map((g) => `${g.toFixed(4)}"`).join(', ')}; connected ${f3(B.connected.axes)}" on the axes, ${f3(B.connected.diagonals)}" on the diagonals; R ${B.R.toFixed(4)}"; ${D.figures.halves.length} sweep samples on a half cell exactly, the first ${D.figures.halves[0]})`)
+    check(Math.abs(B.pivot[0] - 0.027) < 0.0005 && B.pivot[1] === 0 && Math.abs(D.fp.R - 2.85) < 1e-9 && Math.abs(B.R - 2.85) < 1e-9 && symmetric(D.fp) && isDeepStrictEqual(JSON.parse(JSON.stringify({ H: D.fp.H, S: D.fp.S })), fresh(beetle)), "DESIGN's Brood Beetle footprint derives to DESIGN's figures (its front and rear pivot gaps 0.027\", R 2.85\"), its tables the fresh derivation's and point-symmetric")
+    refuse("DESIGN's Brood Beetle footprint as written (base 1.5): its 30° sweep samples 0.75\" across, a half cell exactly (F5b's to settle)", (u) => ((u.base = 1.5), (u.footprint = { discs: beetle, turn: 0, rev: 2 })), /footprint: an offset turns onto a half cell \(disc 0 at 30°: x 0\.75\)/)
+  }
+  {
+    // a round hull's deckAt: inside its base, else refused
+    const cartDef = (at) => {
+      const def = structuredClone(raw.squirrel)
+      def.units.warcart.transport.deckAt = at
+      return def
+    }
+    let err = null, t = null
+    try {
+      t = defineRace(cartDef([0, 1])).units.warcart
+      defineRace(cartDef([0, 2]))
+    } catch (e) {
+      err = e.message
+    }
+    check(t && isDeepStrictEqual([...t.transport.deckAt], [0, 1]) && /unit warcart, transport: deckAt is where the deck stands in the hull's frame, \[x, z\] inside its base, not \[0,2\]/.test(err ?? ''), "a round hull's deckAt is taken inside its base ([0, 1]) and refused outside it ([0, 2])", err ?? 'both taken')
+  }
+  {
+    // the type's t.fp is the derivation's, not the def's: the def edited
+    // after leaves it be
+    const def = howDef(() => {})
+    const t = defineRace(def).units.howdah
+    def.units.howdah.footprint.discs[0][2] = 1.5
+    def.units.howdah.transport.deckAt[1] = 9
+    check(t.fp.discs[0][2] === 0.95 && t.transport.deckAt[1] === 0 && t.fp.discs !== def.units.howdah.footprint.discs, "the type's t.fp and deckAt are copies (the def changed after defineRace leaves the type as it was)")
+  }
+
+  // RULES_ID: the footprint and deckAt are rules; the card text is not
+  const howId = (edit) => variant('serpent', (d) => edit(d.units.howdah, d))
+  for (const [what, id] of [
+    ['the pivot cost (0.25 → 0.5)', () => howId((u) => (u.footprint.turn = 0.5))],
+    ['the backing cost (2 → 3)', () => howId((u) => (u.footprint.rev = 3))],
+    ["the head disc's r (0.95 → 1.0)", () => howId((u) => (u.footprint.discs[0][2] = 1))],
+    ["the tail disc's r (0.95 → 0.9)", () => howId((u) => (u.footprint.discs[2][2] = 0.9))],
+    ["the deck's place (deckAt [0, 0] → [0, 0.5])", () => howId((u) => (u.transport.deckAt = [0, 0.5]))],
+    ["the Howdah's cost (20 → 25)", () => howId((u) => (u.cost = 25))],
+    ["the Howdah's Grand price (5 → 10)", () => rulesId({ missions: { ...MISSIONS, grand: { ...MISSIONS.grand, list: { ...MISSIONS.grand.list, prices: { ...MISSIONS.grand.list.prices, serpent: { ...MISSIONS.grand.list.prices.serpent, howdah: 10 } } } } } })],
+  ]) check(id() !== RULES_ID, `RULES_ID moves on ${what}`)
+  check(howId((u) => (u.abilities = ['A howdah.'])) === RULES_ID && howId((u) => (u.name = 'Shell Howdah')) === RULES_ID && howId(() => {}) === RULES_ID, "RULES_ID stays on the Howdah's card text, its name, and an unchanged copy (the control)")
+
+  // the Howdah's deck (present/deck.js: the one disc at deckAt, DESIGN's
+  // slot table corrected to what deckSlots measures, open question 2's
+  // decision): its counts at the three scales, pinned
+  const deck = await imp(PKG, 'present/deck.js')
+  const counts = [1, 0.8, 0.7].map((s) => deck.deckCount(how, s))
+  check(isDeepStrictEqual(counts, [13, 19, 19]) && counts[1] >= how.transport.capacity, `the Howdah's deck, one disc of r 1.6 at deckAt, holds ${counts.join(', ')} riders at full scale, 0.8 and 0.7 (pinned: 13, 19, 19), its capacity of ${how.transport.capacity} at 0.8`)
+  // in a list: at most two a side where the Vehicle slot lets them, none
+  // in a Skirmish (checkList judges the Coil's as the Bushtails')
+  const r = RACES.serpent, list = (n) => r.roster.map((k) => (k === 'hierophant' ? 1 : k === 'scaleguard' ? 3 : k === 'howdah' ? n : 0))
+  check(A.checkList(r, MISSIONS.field.list, list(2)) === null && A.checkList(r, MISSIONS.grand.list, list(2)) === null && /^3 Vehicle units; at most 2 in a Field$/.test(A.checkList(r, { ...MISSIONS.field.list, points: 99999 }, list(3)) ?? '') && /none in a Skirmish$/.test(A.checkList(r, { ...MISSIONS.classic.list, points: 99999 }, list(1)) ?? ''), `checkList takes two Howdahs in a Field and a Grand list ('${A.listText(list(2))}': ${A.listCost(r, list(2), MISSIONS.field.list)} and ${A.listCost(r, list(2), MISSIONS.grand.list)} points), refuses a third, and refuses one in a Skirmish`)
+}
+
+console.log(failed ? `\ndata-check FAILED: ${failed} problem(s)` : '\ndata-check passed: the race data is the legacy data, RULES_ID tracks exactly the rules, the terrain sets are well formed, a start carries CORE_VERSION and RULES_ID, stateHash reads exactly the match in a format pinned under its CORE_VERSION, the seams allow what the large battles need, (F11a) the army builder\'s prices, rosters, presets and list rules hold, (F8b) every mission, preset and set is inside the size envelope, (F19a) the powder keg, its set and its mission are as the rules have them, (F9a) the War-Cart, its transport and the Vehicle slot are as the rules have them, its riders fitting its deck, (V3d) the Powder Field, its set, its sites and its mission are as the rules have them, and (F9b) the Howdah, its footprint and the tables derived from it are as the rules have them')
 process.exit(failed ? 1 : 0)

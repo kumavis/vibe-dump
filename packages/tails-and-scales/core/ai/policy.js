@@ -42,11 +42,12 @@ import { hypot } from '../dmath.js'
 import { emit } from '../journal.js'
 import {
   alive, enemiesOf, gap, isEngaged, engagedWith, movePlan, canShoot, shootTargets, shotInfo, canCharge, chargeTargets, chargePlan,
-  ownersOf, riders, landing,
+  ownersOf, riders, landing, fpGap, clearOf,
 } from '../queries.js'
 import { hold } from '../actions/move.js'
+import { chargeReach } from '../actions/charge.js'
 import { fireSlots, nearestCell } from '../actions/transport.js'
-import { worth, meleeValue, shotValue, spellValue, bestSpot, fallbackSpot, bestLanding } from './score.js'
+import { worth, meleeValue, shotValue, spellValue, bestSpot, fallbackSpot, bestLanding, budgetOf, nearestOf } from './score.js'
 
 // Each unit type names its AI role in the race data (`t.ai`); the roles act
 // in this order, brawlers first and the guns last. (F9a) The transports
@@ -161,7 +162,9 @@ function* aiTransport(G, v, mask, claimed) {
       if (!mask(p) || p.flags.moved || !p.t.brawler) continue
       let foe = null, fd = CHARGE_RANGE - 2
       for (const e of enemiesOf(G, v)) {
-        const g = hypot(e.pos.x - v.pos.x, e.pos.z - v.pos.z) - v.r - e.r
+        // ((F9b, rule 10) from a long hull's nearest disc, its head and
+        // tail among them: never its bounding R)
+        const g = v.t.fp ? fpGap(v, e) : hypot(e.pos.x - v.pos.x, e.pos.z - v.pos.z) - v.r - e.r
         if (g <= fd && (foe === null || g < fd)) {
           fd = g
           foe = e
@@ -183,7 +186,7 @@ function* aiTransport(G, v, mask, claimed) {
     let obj = null, od = OBJECTIVE_RANGE + 2
     for (const o of G.objectives) {
       if (owners[o.i] === v.side) continue
-      const d = hypot(o.x - v.pos.x, o.z - v.pos.z) - v.r
+      const d = v.t.fp ? clearOf(v, o.x, o.z, 0) : hypot(o.x - v.pos.x, o.z - v.pos.z) - v.r
       if (d <= od && (obj === null || d < od)) {
         od = d
         obj = o
@@ -306,7 +309,16 @@ export function spellFor(G, u, tg) {
 
 // ── Charges ─────────────────────────────────────────────────────────────────
 // (an AI's charge goes straight on to the shortest move: its runner says
-// so, `via` 'ai', and no spot is picked)
+// so, `via` 'ai', and no spot is picked; (F9b) a long hull's the shortest
+// spot state, ties to the lowest state index: core/actions/charge.js)
+//
+// ((F9b, rule 10) A long hull weighs a target only past the prefilter
+// (chargeReach: its body disc's reach, a lower bound on its lattice, finds
+// a cell near enough to it within 12"), its lattice planned only then: a
+// target it skips is one no roll could reach, which the odds below would
+// pass over anyway.) ((F9b, DESIGN §4.2.2's AI count budget) On a mission
+// with one, a long hull weighs only the nearest of the targets past its
+// prefilter, by gap: core/ai/score.js nearestOf.)
 function* aiCharge(G, side, mask) {
   const mine = G.units.filter((u) => u.side === side && canCharge(G, u) && mask(u))
   mine.sort((a, b) => ORDER.indexOf(a.t.ai) - ORDER.indexOf(b.t.ai))
@@ -315,7 +327,10 @@ function* aiCharge(G, side, mask) {
     // (F9a: a hull charges as the role its riders make it)
     const role = roleOf(G, u)
     let best = null, bs = 0
-    for (const e of chargeTargets(G, u)) {
+    const near = u.t.fp ? chargeReach(G, u) : null
+    const tgs = near && budgetOf(G) ? nearestOf(G, u, chargeTargets(G, u).filter((e) => near(e)), 1) : chargeTargets(G, u)
+    for (const e of tgs) {
+      if (near && !near(e)) continue
       const plan = chargePlan(G, u, e)
       if (!plan) continue
       // ((V3c, rule 10) a resolute unit rolls a miss again: 2p − p²)

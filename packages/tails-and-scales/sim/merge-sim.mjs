@@ -86,6 +86,17 @@
 // by a unit riding nothing or onto its hull's own cell, a rider boarding
 // again, a stray field), each refused alike on every peer.
 //
+// (F9b) And, on code with the Howdah, hulls (two seeds): the same, its twin
+// with long hulls: the Coil, two Howdahs in its list, against the Bushtails
+// with two War-Carts, five rounds; the script placing a Howdah at a
+// heading of its own (`place` with `f`) and the other without, moving one
+// with `f` and the other without in each movement phase, and charging with
+// a Howdah where it may, its end at a spot state of its own (`chargeEnd`
+// with `f`) or the shortest; the seated peers slipping in headings the
+// rules refuse as well (badhull: 8, -1 and 2.5, and one for a round unit,
+// on a place, a move or a chargeEnd as the decision allows), each refused
+// alike on every peer (2.5 by the envelope, the rest as illegal).
+//
 // Four more scenarios:
 //   cap    a spectator floods the log past the spec's cap (5,000 entries,
 //          §2.6; never the code's own MAX_ENTRIES): every peer freezes
@@ -263,8 +274,8 @@ class Net {
 // its own, which settles), and every entry its Session writes is vetted as
 // it is appended (vet, below).
 class Peer {
-  constructor(net, { name, actor, dev, seats = [], M, rand, script = null, fork = false, hold = false, fallback = false, nudged = false, reactive = false, pace = null, closing = false, burst = false, rides = false }) {
-    Object.assign(this, { net, name, actor, dev, seats, M, script, fork, hold, fallback, nudged, reactive, pace, burst, rides })
+  constructor(net, { name, actor, dev, seats = [], M, rand, script = null, fork = false, hold = false, fallback = false, nudged = false, reactive = false, pace = null, closing = false, burst = false, rides = false, hulls = false }) {
+    Object.assign(this, { net, name, actor, dev, seats, M, script, fork, hold, fallback, nudged, reactive, pace, burst, rides, hulls })
     // (reactive: the command its Session holds queued, and how many it
     // wrote, dropped, and sent from each callback)
     this.queued = null
@@ -527,6 +538,9 @@ const ALLOWED = {
   badstart: ['start'],
   // (F9a) an embark or disembark the rules refuse (the vehicles scenario)
   badride: ['illegal', 'stale', 'turn', 'inert'],
+  // (F9b) a heading the rules refuse (the hulls scenario): a fraction is no
+  // envelope at all
+  badhull: ['illegal', 'envelope', 'stale', 'turn', 'inert'],
 }
 const PRIMARY = { junk: 'envelope', dup: 'envelope', stray: 'illegal', stale: 'stale', offturn: 'turn', device: 'device', spoof: 'device' }
 
@@ -542,7 +556,10 @@ function slip(p, rand, n) {
   if (!p.seats.length) kinds.push('spoof')
   // ((F9a) a seated peer of the vehicles scenario, its seat deciding: a
   // refused boarding or step off, more often than not)
-  const kind = p.rides && mine !== undefined && rand() < 0.6 ? 'badride' : kinds[Math.floor(rand() * kinds.length)]
+  // ((F9b) the hulls scenario's: a refused heading, half of those, and
+  // always the first time its seat decides)
+  const first = p.hulls && !p.hullSlips
+  const kind = p.rides && mine !== undefined && (first || rand() < 0.6) ? (p.hulls && (first || rand() < 0.5) ? 'badhull' : 'badride') : kinds[Math.floor(rand() * kinds.length)]
   const id = () => E.newEntryId(p.dev, ses.store.entries().length, `x${n}`)
   const one = G.pending && !p.M.F.SIMULTANEOUS.includes(G.pending.k)
   const cmd = (s, extra = {}) => E.envelope(p.next(s), { id: id(), s, d: p.dev, p: ses.folder.head(s), h: one ? core.stateHash(G) : undefined, ...extra })
@@ -574,6 +591,25 @@ function slip(p, rand, n) {
       free && hulls.length && { t: 'embark', u: free.id, v: hulls[0].id, c: 3 },
     ].filter(Boolean)
     const body = bodies[Math.floor(rand() * bodies.length)] ?? { t: 'disembark', u: us[0].id, c: -1 }
+    p.put(E.envelope(body, { id: id(), s: mine, d: p.dev, p: ses.folder.head(mine), h: one ? core.stateHash(G) : undefined }), kind)
+  } else if (kind === 'badhull') {
+    // (F9b) a heading the rules refuse, for the decision the seat holds: a
+    // place or a move of a long hull at 8, -1 or 2.5, or of a round unit
+    // at a heading; a charge's end at one past 0-7
+    const us = G.units.filter((u) => u.side === mine && u.alive > 0 && !u.aboard)
+    const hull = us.find((u) => u.t.fp), round = us.find((u) => !u.t.fp)
+    const t = G.pending?.k === 'deploy' ? 'place' : 'move', at = (u) => G.nav.index(u.pos.x, u.pos.z)
+    const bodies = G.pending?.k === 'chargeEnd' ? [{ t: 'chargeEnd', c: -1, f: 9 }, { t: 'chargeEnd', c: 0, f: -1 }] : [
+      hull && { t, u: hull.id, c: at(hull), f: 8 },
+      hull && { t, u: hull.id, c: at(hull), f: -1 },
+      hull && { t, u: hull.id, c: at(hull), f: 2.5 },
+      round && { t, u: round.id, c: at(round), f: 2 },
+    ].filter(Boolean)
+    // (the first a seat slips a whole number the rules refuse, past 0-7 or a
+    // round unit's: an illegal entry, never only a bad envelope)
+    const was = p.hullSlips ?? 0
+    p.hullSlips = was + 1
+    const body = (was ? bodies[Math.floor(rand() * bodies.length)] : bodies.find((b) => Number.isInteger(b.f))) ?? { t, u: us[0].id, c: at(us[0]), f: 8 }
     p.put(E.envelope(body, { id: id(), s: mine, d: p.dev, p: ses.folder.head(mine), h: one ? core.stateHash(G) : undefined }), kind)
   } else {
     // a concession or a desync for a seat the spectator doesn't play
@@ -948,27 +984,33 @@ function listsScenario(M, it, seed) {
 // order they met, commute), each refused embark and disembark refused for
 // a reason its kind allows and at least one as illegal, and the run says
 // whether the two seats' deployments, embarks among them, interleaved.
-function vehiclesLog(M, seed) {
-  const core = M.core, q = core.q, A = core.army, R = M.RACES.squirrel
-  const rules = core.missionOf({ mission: 'field' }).list, k = R.roster.findIndex((key) => R.units[key].transport)
+// ((F9b) `hulls`: the hulls scenario's log, the Coil with two Howdahs in
+// seat 0, five rounds, and the headings above)
+function vehiclesLog(M, seed, hulls = false) {
+  const core = M.core, q = core.q, A = core.army
+  const rules = core.missionOf({ mission: 'field' }).list
   const rand = mulberry32(seed * 104729 + 9)
-  const listOf = () => {
-    for (let n = 0; n < 200; n++) {
+  const listOf = (R) => {
+    const k = R.roster.findIndex((key) => R.units[key].transport)
+    for (let n = 0; n < 400; n++) {
       const counts = A.autoList(R, rules, Math.floor(rand() * 2 ** 32))
       if (counts[k] >= 2) return A.listText(counts)
     }
-    throw new Error('no Field list with two War-Carts in 200 tries')
+    throw new Error(`no Field list of the ${R.name} with two hulls in 400 tries`)
   }
-  const setup = { board: 1 + Math.floor(rand() * 99999), dice: 1 + Math.floor(rand() * 999999), mission: 'field', terrain: 'open', rounds: 2, seats: [{ race: 'squirrel', ctrl: 'human', army: listOf() }, { race: 'squirrel', ctrl: 'human', army: listOf() }] }
+  const races = hulls ? ['serpent', 'squirrel'] : ['squirrel', 'squirrel']
+  const setup = { board: 1 + Math.floor(rand() * 99999), dice: 1 + Math.floor(rand() * 999999), mission: 'field', terrain: 'open', rounds: hulls ? 5 : 2, seats: races.map((race) => ({ race, ctrl: 'human', army: listOf(M.RACES[race]) })) }
   const G = core.createMatch(setup, { out: null })
   const entries = []
   const send = (s, body) => {
     const why = core.legal(G, s, body)
-    if (why) throw new Error(`the vehicles script's ${JSON.stringify(body)} for seat ${s} is refused: ${why}`)
+    if (why) throw new Error(`the ${hulls ? 'hulls' : 'vehicles'} script's ${JSON.stringify(body)} for seat ${s} is refused: ${why}`)
     core.apply(G, s, body)
     entries.push({ s, ...body })
   }
   const unitOf = (id) => G.units.find((u) => u.id === id)
+  // ((F9b) the first heading past a long hull's own that `ok` takes)
+  const turned = (u, ok) => [1, 2, 3, 4, 5, 6, 7].map((k) => (u.facing + k) & 7).find(ok)
   for (const s of [0, 1]) {
     const mine = G.units.filter((u) => u.side === s), hulls = mine.filter((u) => u.t.transport)
     const v = hulls[0], p = q.riders(G, v)[0]
@@ -976,13 +1018,41 @@ function vehiclesLog(M, seed) {
     send(s, { t: 'place', u: p.id, c: G.nav.index(spot.x, spot.z) })
     send(s, { t: 'embark', u: p.id, v: v.id })
     for (const h of hulls) for (const u of mine) if (!u.aboard && !u.t.vehicle && core.legal(G, s, { t: 'embark', u: u.id, v: h.id }) === null) send(s, { t: 'embark', u: u.id, v: h.id })
+    // ((F9b) a long hull placed where it stands at a heading of the
+    // script's, the other without one)
+    hulls.filter((h) => h.t.fp).forEach((h, j) => {
+      const c = G.nav.index(h.pos.x, h.pos.z), f = turned(h, (x) => core.legal(G, s, { t: 'place', u: h.id, c, f: x }) === null)
+      send(s, j === 0 && f !== undefined ? { t: 'place', u: h.id, c, f } : { t: 'place', u: h.id, c })
+    })
   }
   for (const s of [0, 1]) send(s, { t: 'deployed' })
   for (let n = 0; G.turn.stage !== 'over'; n++) {
     if (n > 2000) throw new Error('the vehicles script never ends')
     const P = G.pending, s = P.seats[0]
+    // ((F9b) a long hull's charge, a seat's: its end at the farthest spot
+    // state its roll reaches, at its heading)
+    if (hulls && P.k === 'phase' && P.phase === 'charge') {
+      const h = G.units.find((u) => u.side === s && u.alive > 0 && u.t.fp && q.canCharge(G, u) && q.chargeTargets(G, u).some((e) => q.chargePlan(G, u, e)))
+      if (h) {
+        const tg = q.chargeTargets(G, h).find((e) => q.chargePlan(G, h, e))
+        send(s, { t: 'charge', u: h.id, tg: tg.id })
+        if (G.pending?.k === 'chargeEnd') {
+          const plan = q.chargePlan(G, h, tg), far = plan.spots.filter((x) => x.d <= G.pending.rolled + 0.011).sort((a, b) => b.d - a.d)[0]
+          send(s, far ? { t: 'chargeEnd', c: far.i, f: far.f } : { t: 'chargeEnd', c: -1 })
+        }
+        continue
+      }
+    }
     if (P.k === 'phase' && P.phase === 'move') {
       const mine = G.units.filter((u) => u.side === s && u.alive > 0)
+      // ((F9b) the long hulls: one moved at a heading of the script's, the
+      // other without one, each 4" toward the enemy where it may)
+      mine.filter((u) => u.t.fp && !u.flags.moved && !q.isEngaged(G, u)).forEach((h, j) => {
+        const plan = q.movePlan(G, h, 0), c = q.nearestValid(G, plan, h.pos.x - G.seats[s].edge * 4, h.pos.z)
+        if (c < 0) return
+        const f = j === 0 ? turned(h, (x) => q.validEnd(G, plan, c, null, x)) : undefined
+        send(s, f === undefined ? { t: 'move', u: h.id, c } : { t: 'move', u: h.id, c, f })
+      })
       const p = mine.find((u) => u.aboard && !u.flags.moved)
       const cells = p ? q.landing(G, p, unitOf(p.aboard)) : []
       if (cells.length) send(s, { t: 'disembark', u: p.id, c: cells[0] })
@@ -993,12 +1063,12 @@ function vehiclesLog(M, seed) {
     else if (P.k === 'roundLimit') send(s, { t: 'vote', more: false })
     else send(s, { t: 'auto' })
   }
-  return { it: { id: `vehicles-${seed}`, job: { setup, entries } }, trace: G.journal.trace.slice() }
+  return { it: { id: `${hulls ? 'hulls' : 'vehicles'}-${seed}`, job: { setup, entries } }, trace: G.journal.trace.slice() }
 }
-function vehiclesScenario(M, seed) {
-  const { it, trace } = vehiclesLog(M, seed)
+function vehiclesScenario(M, seed, hulls = false) {
+  const { it, trace } = vehiclesLog(M, seed, hulls)
   const rand = mulberry32(seed * 7919 + 13)
-  const where = `${it.id} (vehicles)`
+  const where = `${it.id} (${hulls ? 'hulls' : 'vehicles'})`
   const net = new Net()
   const setup = it.job.setup
   const script = {}
@@ -1007,9 +1077,10 @@ function vehiclesScenario(M, seed) {
     const r = mulberry32(Math.floor(rand() * 2 ** 32))
     return new Peer(net, { actor: nameFrom(rand), M, script, rand: () => nameFrom(r, 3), closing: true, ...o })
   }
-  const seated = [0, 1].map((s) => peer({ name: `seat ${s}`, dev: `d${s}`, seats: [s], rides: true }))
+  const seated = [0, 1].map((s) => peer({ name: `seat ${s}`, dev: `d${s}`, seats: [s], rides: true, hulls }))
   peer({ name: 'spectator', dev: 'dS' })
-  for (const p of net.peers) p.budget = p.rides ? 14 + Math.floor(rand() * 6) : 3
+  // ((F9b) the hulls scenario's seats slip in more: its headings and boardings both)
+  for (const p of net.peers) p.budget = p.rides ? (hulls ? 24 : 14) + Math.floor(rand() * 6) : 3
   seated[0].session.start({ ...setup, seats: setup.seats.map((x, s) => ({ ...x, dev: `d${s}` })) })
   net.why.set(net.ops[0].key, { kind: 'start', peer: seated[0].name })
   // (the seats' deployments interleave more often with deliveries rarer)
@@ -1034,7 +1105,15 @@ function vehiclesScenario(M, seed) {
   const seats = dep.map((e) => e.s)
   const mixed = seats.some((x, i) => seats.slice(0, i).includes(1 - x) && seats.slice(i + 1).includes(1 - x))
   if (!met['badride:illegal']) throw new Error(`${where}: no boarding or step off the rules refuse was refused as illegal (${JSON.stringify(Object.fromEntries(Object.entries(met).filter(([k]) => k.startsWith('badride'))))})`)
+  // ((F9b) the script's headings, each kind with and without, and the
+  // refused ones met)
+  const heads = hulls ? Object.fromEntries(['place', 'move', 'chargeEnd'].map((t) => [t, [it.job.entries.filter((e) => e.t === t && e.f !== undefined).length, it.job.entries.filter((e) => e.t === t && e.f === undefined).length]])) : null
+  if (hulls) {
+    if (!heads.place[0] || !heads.move[0] || !heads.move[1]) throw new Error(`${where}: the script sent place ${heads.place.join('/')}, move ${heads.move.join('/')} with/without a heading: too few to hold`)
+    if (!met['badhull:illegal']) throw new Error(`${where}: no heading the rules refuse was refused as illegal (${JSON.stringify(met)})`)
+  }
   return {
+    heads, badhulls: Object.entries(met).filter(([k]) => k.startsWith('badhull')).reduce((n, [, x]) => n + x, 0),
     where, steps, peers: net.peers.length, entries: ref.accepted.length + ref.rejected.length, accepted: ref.accepted.length, rejected: ref.rejected.length,
     resets: net.peers.reduce((n, p) => n + p.resets, 0), refolds: net.peers.reduce((n, p) => n + p.insertsBefore, 0), met, embarks, mixed,
     rides: it.job.entries.filter((e) => e.t === 'embark' || e.t === 'disembark').length, badrides: Object.entries(met).filter(([k]) => k.startsWith('badride')).reduce((n, [, x]) => n + x, 0),
@@ -2074,6 +2153,7 @@ if (a.child) {
     else if (task.kind === 'ai') r = aiScenario(M, it, task.seed)
     else if (task.kind === 'lists') r = listsScenario(M, it, task.seed)
     else if (task.kind === 'vehicles') r = vehiclesScenario(M, task.seed)
+    else if (task.kind === 'hulls') r = vehiclesScenario(M, task.seed, true)
     else r = humanScenario(M, it, task.kind, task.seed)
     out = { ok: true, r }
   } catch (e) {
@@ -2138,6 +2218,8 @@ function tasks({ only, seeds, extras = only === undefined }) {
     // (F9a) the vehicles: War-Cart battles from both seats at once, on code
     // with transports
     if (existsSync(join(dir, 'core', 'actions', 'transport.js'))) for (let k = 1; k <= 3; k++) out.push({ kind: 'vehicles', id: `vehicles-${k}`, seed: k })
+    // ((F9b) on code with the lattice: the hulls scenario, two seeds)
+    if (/hullReach\(/.test(readFileSync(join(dir, 'core', 'nav.js'), 'utf8'))) for (let k = 1; k <= 2; k++) out.push({ kind: 'hulls', id: `hulls-${k}`, seed: k })
     // (F4) the round limit's vote from both seats at once, on a hotseat log
     // that ends on its rounds
     out.push({ kind: 'votes', id: 'hotseat-late-8' })
@@ -2172,6 +2254,7 @@ async function run(pkg, list, { quiet = false, store = null } = {}) {
         : t.kind === 'drill' ? `ok   all 3 peers froze at ${x.at}, found by ${x.found}, the spectator by ${x.watched}, reported${x.how === 'late' ? ' (its desync after the end)' : x.how === 'deaf' ? " (on seat " + x.odd + "'s entry past the others' end)" : ''} (${x.steps} steps)`
         : t.kind === 'cap' ? `ok   both peers full at entry ${x.full} (${x.entries} entries)`
         : t.kind === 'lists' ? `ok   3 peers fold the start's lists (${x.armies.join(' v ')}, ${x.units} units) alike, and refuse ${x.refusedStarts} starts with illegal lists alike, each with its reason`
+        : t.kind === 'hulls' ? `ok   3 peers agree: ${x.accepted} accepted (the script's headings, with/without: place ${x.heads.place.join('/')}, move ${x.heads.move.join('/')}, chargeEnd ${x.heads.chargeEnd.join('/')}), ${x.rejected} refused (${x.badhulls} headings and ${x.badrides} boardings and steps off the rules refuse); the script's battle traced`
         : t.kind === 'vehicles' ? `ok   3 peers agree: ${x.accepted} accepted (${x.rides} embarks and steps off in the script; the deployments' embarks ${x.embarks.join(' and ')} by seat, ${x.mixed ? 'the seats interleaved' : 'one seat after the other'}), ${x.rejected} refused (${x.badrides} boardings and steps off the rules refuse); the script's battle traced`
           : t.kind === 'votes' ? `ok   ${x.checks.length} checks: both seats' say at once, in either order, every way (more, end), on to overtime or the end; a second say and another device's refused`
           : t.kind === 'edges' ? `ok   ${x.checks.length} checks: skew (newer, older, rules), devices no entry names, open's device, a second start, tamper (gone, replaced, out of order), junk, the hash (before legal(), missing, after the end), a sink through a refold, starts never written, the single flight (queued, dropped, written in turn; from a reset; an autopilot in settled), push and sync not reentrant, (N2) a final past the cap said once, a concession racing a move, (N3) kept entries held across a reload (honest, gone, replaced, out of order, rejected then gone)`

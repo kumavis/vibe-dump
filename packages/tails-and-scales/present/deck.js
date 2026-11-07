@@ -29,10 +29,12 @@
 // table, built by events or snapped (sim/snap-check.mjs compares them).
 //
 // One disc for a round hull (its deck, at the hull's centre or (F9b's
-// long hulls) `deckAt`); F9b gives a long hull's deck its discs (the
-// footprint's, under the shell), each packed alike and the slots of all of
-// them pooled, without foreclosing anything here: the lattice and the
-// order are per disc, then merged by bearing.
+// long hulls) `deckAt`), and one for a long hull too ((F9b, its decision
+// Q2) `transport.deck` the radius packed, at `deckAt`: the Howdah's 1.6"
+// at [0, 0] holds 13, 19 and 19 at 1, 0.8 and 0.7, which data-check pins;
+// the footprint's own discs, packed, would hold 9, 9 and 27). Several
+// discs would each be packed alike and their slots pooled: the lattice and
+// the order are per disc, then merged by bearing.
 
 // the base a slot is packed for, before scaling (DESIGN's slot table)
 export const SLOT_BASE = 0.32

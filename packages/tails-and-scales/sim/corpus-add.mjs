@@ -21,6 +21,8 @@
 //   node sim/corpus-add.mjs --set vehicle --mission field --mode watch --tag carts --races squirrel,serpent --auto-armies 90 --carts 1 --count 3
 //   node sim/corpus-add.mjs --set vehicle --mission field --mode hotseat --policy ride --tag ride --races squirrel,squirrel --auto-armies 90 --carts 2 --need embark,disembark,rearranged
 //   node sim/corpus-add.mjs --set vehicle --mission field --mode bushtail --policy aggressive --tag bail --auto-armies 90 --carts 2 --need bailout
+//   node sim/corpus-add.mjs --set hull --mission field --terrain fortified --mode watch --tag hulls --races serpent,squirrel --auto-armies 90 --carts 2
+//   node sim/corpus-add.mjs --set hull --mission field --terrain fortified --mode serpent --policy hull --tag hull --auto-armies 90 --carts 2 --need hullpivot,reverse,hullcharge
 //   node sim/corpus-add.mjs --regen bushtail-random-6,hotseat-late-5 [--need …] [--dry]
 //   node sim/corpus-add.mjs --set keg --mission keg --mode watch --tag keg --need keg --count 2
 //   node sim/corpus-add.mjs --set powder --mission powder --mode watch --tag powder --need keg,climb --count 2
@@ -40,7 +42,7 @@
 // option: the log's own setup is the setup.
 //
 // --mode bushtail, serpent, hotseat or watch; --policy (not with watch)
-// random, late, aggressive, pilot, (F9a) ride or (F7c) collapse
+// random, late, aggressive, pilot, (F9a) ride, (F7c) collapse or (F9b) hull
 // (sim/oracle/human-bot.mjs);
 // --overtime
 // the setup's (F4: 'vote'); --races <seat 0>,<seat 1> the seats' races
@@ -48,7 +50,7 @@
 // Coil in seat 0); --set the log set it joins (lib.mjs LOG_SETS: human, the
 // default; pilot, F10b's; army, F11a's; fort, F7a's; scale, F8b's; keg,
 // F19a's: the keg mission's, --mission keg; vehicle, F9a's; powder, V3d's:
-// the Powder Field's, --mission powder).
+// the Powder Field's, --mission powder; hull, F9b's).
 //
 // The board (F8b): --mission <name> the setup's mission (the code's
 // data/mission.js; classic, the default, is named by none, so a classic
@@ -124,6 +126,20 @@
 // transport draws its list again (autoList on k + 1000·j, j = 1, 2, …)
 // until it holds n War-Carts at least: the vehicle/ corpus's lists
 // (DESIGN §4.2.9: War-Carts against the Coil, and Bushtail mirrors).
+// ((F9b) n transports at least, every roster entry with a `transport`
+// counted, so the Coil's lists hold n Howdahs: the hull/ corpus's, two
+// hulls a side.)
+//   (F9b, the hull/ corpus's human logs: the first and the second read off
+//   the log and the match as the log is folded again in Node on the PIN
+//   code, sim/hull-probe.mjs, the third off the log, the fourth off the
+//   match)
+//   hullpivot  a long hull's move among its entries naming its heading `f`
+//              whose walk pivots in a tight lane: where the hull's bounding
+//              disc can't stand (the cell's clearance under R − 0.06)
+//   reverse    a long hull's move among its entries whose walk backs up
+//   hullcharge a long hull's charge ended among its entries naming its
+//              heading (a chargeEnd with `f`)
+//   hullbail   a long hull destroyed with riders aboard who bailed out
 //   (F19a, read off the trace: the keg's line is a traced battle-log line)
 //   keg        a powder keg went off ("The powder keg goes up!")
 //   (F7c, read off the match's events as the log is folded again in Node on
@@ -147,6 +163,7 @@ import { foldJob, loadMatch } from './run.mjs'
 import { heightProbe } from './height-probe.mjs'
 import { riderProbe } from './rider-probe.mjs'
 import { collapseProbe } from './collapse-probe.mjs'
+import { hullProbe } from './hull-probe.mjs'
 
 // (each played result's `entries` is a list, an AI pair's empty: below)
 const NEEDS = {
@@ -177,10 +194,17 @@ const NEEDS = {
   // (F7c: the probe's, r.falls)
   collapse: (r) => r.falls.decks > 0,
   fall: (r) => r.falls.falls > 0,
+  // (F9b: the log's own, and the probe's, r.hulls; a walk's `entry` the
+  // entry it answers)
+  hullpivot: (r) => r.hulls.walks.some((w) => w.tight > 0 && r.entries?.[w.entry]?.t === 'move' && r.entries[w.entry].u === w.u && r.entries[w.entry].f !== undefined),
+  reverse: (r) => r.hulls.walks.some((w) => w.reverses > 0 && r.entries?.[w.entry]?.t === 'move' && r.entries[w.entry].u === w.u),
+  hullcharge: (r) => (r.entries ?? []).some((e) => e.t === 'chargeEnd' && e.f !== undefined),
+  hullbail: (r) => r.hulls.bailed > 0,
 }
 const HEIGHT_NEEDS = ['deck', 'climb', 'climbup', 'deckfight', 'works', 'keep', 'nokeep']
 const RIDE_NEEDS = ['bailout', 'rearranged']
 const FALL_NEEDS = ['collapse', 'fall']
+const HULL_NEEDS = ['hullpivot', 'reverse', 'hullbail']
 const { values: a } = parseArgs({
   options: {
     mode: { type: 'string' }, policy: { type: 'string' }, tag: { type: 'string' }, overtime: { type: 'string' }, need: { type: 'string' },
@@ -213,7 +237,7 @@ const bad = REGEN ? [
   !Object.keys(MODES).includes(a.mode) && `--mode takes ${Object.keys(MODES).join(', ')}`,
   watch && a.policy !== undefined && '--mode watch records an AI pair: no bot plays it, so it takes no --policy',
   watch && a.overtime !== undefined && '--mode watch has no human seat to vote, so it takes no --overtime',
-  !watch && !['random', 'late', 'aggressive', 'pilot', 'ride', 'collapse'].includes(a.policy) && '--policy takes random, late, aggressive, pilot, ride or collapse',
+  !watch && !['random', 'late', 'aggressive', 'pilot', 'ride', 'collapse', 'hull'].includes(a.policy) && '--policy takes random, late, aggressive, pilot, ride, collapse or hull',
   !LOG_SETS.includes(a.set ?? 'human') && `--set takes ${LOG_SETS.join(' or ')}`,
   !/^[a-z]+(-[a-z]+)*$/.test(a.tag ?? '') && '--tag takes lowercase words joined by hyphens (it names the logs)',
   need.some((n) => !NEEDS[n]) && `--need takes ${Object.keys(NEEDS).join(', ')}`,
@@ -223,7 +247,7 @@ const bad = REGEN ? [
   armies && armies.length !== 2 && '--armies takes two armies, <seat 0>,<seat 1>',
   armies && PCT !== null && '--armies and --auto-armies are one or the other',
   PCT !== null && !(Number.isInteger(PCT) && PCT > 0 && PCT <= 100) && '--auto-armies takes a whole percentage, 1-100',
-  a.carts !== undefined && !(Number.isInteger(CARTS) && CARTS >= 1 && CARTS <= 2) && '--carts takes 1 or 2 (War-Carts a Bushtail list holds at least)',
+  a.carts !== undefined && !(Number.isInteger(CARTS) && CARTS >= 1 && CARTS <= 2) && '--carts takes 1 or 2 (the transports a list holds at least)',
   a.carts !== undefined && PCT === null && '--carts draws the lists --auto-armies builds: give both',
   (a.ref !== undefined || a.dir !== undefined) && !a.dry && '--ref and --dir take another code than the PIN only with --dry (a corpus is recorded on the PIN)',
   a.ref !== undefined && a.dir !== undefined && '--ref and --dir are one or the other',
@@ -276,7 +300,7 @@ if (unknown.length) {
 // (F7a) the PIN code's own core and Folder, in this process, for the height
 // needs: each candidate's log folded again with sim/height-probe.mjs looking
 // on (its counts are the result's `height`)
-const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n) || RIDE_NEEDS.includes(n) || FALL_NEEDS.includes(n)) || a.terrain === 'fortified' || regenOf.some((it) => it.setup.terrain === 'fortified') ? await import(at('core/index.js')) : null
+const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n) || RIDE_NEEDS.includes(n) || FALL_NEEDS.includes(n) || HULL_NEEDS.includes(n)) || a.set === 'hull' || a.terrain === 'fortified' || regenOf.some((it) => it.setup.terrain === 'fortified') ? await import(at('core/index.js')) : null
 const pinMatch = pinCore ? await loadMatch(dir) : null
 const heightOf = (log) => {
   const probe = heightProbe(pinCore.q)
@@ -286,6 +310,13 @@ const heightOf = (log) => {
 // (F9a) the same for the transports: sim/rider-probe.mjs's counts
 const ridesOf = (log) => {
   const probe = riderProbe()
+  const r = foldJob(pinCore, log, { match: pinMatch, probe })
+  return r.error ? { error: r.error, ...probe.result() } : probe.result()
+}
+
+// (F9b) the same for the long hulls: sim/hull-probe.mjs's counts
+const hullsOf = (log) => {
+  const probe = hullProbe(pinCore.q)
   const r = foldJob(pinCore, log, { match: pinMatch, probe })
   return r.error ? { error: r.error, ...probe.result() } : probe.result()
 }
@@ -303,12 +334,14 @@ const listsOf = (setup, k) => {
   if (armies) return armies
   if (PCT === null) return null
   const rules = MISSIONS[setup.mission ?? 'classic'].list, at = { ...rules, points: Math.floor((PCT * rules.points) / 100) }
-  // ((F9a) --carts: drawn again until a transport race's list holds them)
+  // ((F9a) --carts: drawn again until a transport race's list holds them;
+  // (F9b) every transport of its roster counted)
   return races.map((race) => {
-    const R = RACES[race], cart = R.roster.findIndex((key) => R.units[key].transport)
+    const R = RACES[race], carts = R.roster.map((key, i) => (R.units[key].transport ? i : -1)).filter((i) => i >= 0)
+    const held = (counts) => carts.reduce((n, i) => n + (counts[i] ?? 0), 0)
     let counts = army.autoList(R, at, k)
-    for (let j = 1; CARTS && cart >= 0 && (counts[cart] ?? 0) < CARTS; j++) {
-      if (j > 200) throw new Error(`corpus-add: no ${race} list of ${at.points} points holds ${CARTS} War-Carts on seeds ${k} + 1000·j, j ≤ 200`)
+    for (let j = 1; CARTS && carts.length && held(counts) < CARTS; j++) {
+      if (j > 200) throw new Error(`corpus-add: no ${race} list of ${at.points} points holds ${CARTS} transports on seeds ${k} + 1000·j, j ≤ 200`)
       counts = army.autoList(R, at, k + 1000 * j)
     }
     return army.listText(counts)
@@ -349,10 +382,12 @@ const played = (await run(cands.map((c) => c.job))).map((r) => (r.error ? r : { 
 if (pinCore) played.forEach((r, i) => !r.error && (r.height = heightOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 // (F9a) and with its transports, where a need asks
 if (need.some((n) => RIDE_NEEDS.includes(n))) played.forEach((r, i) => !r.error && (r.rides = ridesOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
+// (F9b) and with its long hulls, where a need asks, or the set is hull/
+if (pinCore && (need.some((n) => HULL_NEEDS.includes(n)) || a.set === 'hull')) played.forEach((r, i) => !r.error && (r.hulls = hullsOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 // (F7c) and with its platforms, where a need asks or the board is fortified
 if (pinCore) played.forEach((r, i) => !r.error && (r.falls = fallsOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 const fits = cands.map((c, i) => ({ ...c, res: played[i] })).filter((c) => {
-  const miss = c.res.error ? `failed: ${c.res.error.split('\n')[0]}` : c.res.height?.error ? `failed folding again for the height needs: ${c.res.height.error.split('\n')[0]}` : c.res.rides?.error ? `failed folding again for the transports' needs: ${c.res.rides.error.split('\n')[0]}` : c.res.falls?.error ? `failed folding again for the platforms' needs: ${c.res.falls.error.split('\n')[0]}` : need.filter((n) => !NEEDS[n](c.res, c)).join(', ')
+  const miss = c.res.error ? `failed: ${c.res.error.split('\n')[0]}` : c.res.hulls?.error ? `failed folding again for the long hulls' needs: ${c.res.hulls.error.split('\n')[0]}` : c.res.height?.error ? `failed folding again for the height needs: ${c.res.height.error.split('\n')[0]}` : c.res.rides?.error ? `failed folding again for the transports' needs: ${c.res.rides.error.split('\n')[0]}` : c.res.falls?.error ? `failed folding again for the platforms' needs: ${c.res.falls.error.split('\n')[0]}` : need.filter((n) => !NEEDS[n](c.res, c)).join(', ')
   const end = c.res.error ? '' : c.res.over.wiped >= 0 ? `seat ${c.res.over.wiped} wiped out` : `${c.res.over.vp.join('-')} on the score`
   console.log(`  ${c.label.padEnd(30)} ${miss ? (c.res.error ? miss : `lacks ${miss}`) : 'fits'}${end ? `  (${end}${c.job.setup.seats.some((s) => s.army != null) ? `; ${c.job.setup.seats.map((s) => s.army ?? '-').join(' v ')}` : ''})` : ''}  [played in ${c.res.secs.toFixed(1)} s]`)
   return !miss
@@ -394,7 +429,12 @@ for (const c of chosen) {
   // ((F7c) what it did with its platforms: sim/collapse-probe.mjs's counts)
   const fl = c.res.falls
   const falls = fl && (fl.posts || fl.postsHit) && [`posts hit ${fl.postsHit + fl.posts} (${fl.posts} broken)`, fl.decks && `platforms fallen ${fl.decks}`, fl.falls && `units fallen ${fl.falls} (${fl.fallSlain} models slain${fl.crushed ? `, ${fl.crushed} crushed` : ''})`].filter(Boolean).join(', ')
-  const why = [lists.length && `lists ${lists.join(' v ')}`, votes && `votes ${votes}`, pilots && `pilots ${pilots}`, over && `overtime rounds ${over}`, c.res.over.wiped >= 0 ? `wipe ${c.res.over.wiped}` : `score ${c.res.over.vp.join('-')}`, high, rides, falls, describe(features(c.res.trace))].filter(Boolean).join(', ')
+  // ((F9b) what it did with its long hulls: sim/hull-probe.mjs's counts,
+  // and the headings its entries named)
+  const hl = c.res.hulls
+  const named = entries.filter((e) => e.f !== undefined)
+  const longs = hl && hl.hulls && [`long hulls ${hl.hulls}`, `walks ${hl.walks.length} (pivots ${hl.pivots}, ${hl.tight} tight; backing ${hl.reverses})`, `moves with room to pivot ${hl.roomy} of ${hl.moves}`, named.length && `headings named ${named.length} (${named.filter((e) => e.t === 'move').length} moves, ${named.filter((e) => e.t === 'chargeEnd').length} charge ends)`, hl.walks.some((w) => w.tight && entries[w.entry]?.f !== undefined && entries[w.entry]?.u === w.u) && `a tight pivot by a named heading`, hl.steps && `steps off a long hull ${hl.steps}`, hl.bailed && `bail-outs from a long hull ${hl.bailed}`].filter(Boolean).join(', ')
+  const why = [lists.length && `lists ${lists.join(' v ')}`, votes && `votes ${votes}`, pilots && `pilots ${pilots}`, over && `overtime rounds ${over}`, c.res.over.wiped >= 0 ? `wipe ${c.res.over.wiped}` : `score ${c.res.over.vp.join('-')}`, high, rides, falls, longs, describe(features(c.res.trace))].filter(Boolean).join(', ')
   console.log(`  ${c.label}: ${why}`)
   // ((F18) --regen writes all its logs or none: each over itself, in its set)
   if (!a.dry && !(REGEN && chosen.length < COUNT)) saveHuman(c.label, { setup: c.job.setup, bot: c.job.bot, why, n: c.res.trace.length, trace: hashLines(c.res.trace), shadow: hashLines(c.res.shadow), written: hashLines(c.res.written), entries }, c.set ?? a.set ?? 'human')

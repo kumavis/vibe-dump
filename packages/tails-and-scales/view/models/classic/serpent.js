@@ -2,9 +2,12 @@
 // R7): the naga body every one of them is built on, and the six unit types
 // (data/races/serpent.js's units, by key; the race's look.models names this
 // kit). userData.anim holds the bits the view wiggles: the swaying body, the
-// head and tongue, an engine's throwing arm and its glowing globe.
+// head and tongue, an engine's throwing arm and its glowing globe. (F9b)
+// And the Shell-Back Howdah, the Coil's transport: ../howdah.js's machine,
+// shared with the glossy style, drawn here in this kit's painted plastic.
 import * as THREE from 'three'
 import { M, glowMat, metal, G, part, rod, taperTube, spear, roundShield, hold, wheel } from '../kit.js'
+import { howdah } from '../howdah.js'
 
 // ── Serpent-folk ────────────────────────────────────────────────────────────
 function naga({ scale = '#3f8f4a', belly = '#d9cf86', hood = null, hoodSize = 1, long = false, thick = 1 } = {}) {
@@ -202,6 +205,16 @@ export const BUILDERS = {
     a.gem = staff.children[1]
     a.gem.userData.keep = true
     return m
+  },
+  // (F9b) The Shell-Back Howdah (../howdah.js, the machine both figure
+  // styles share), in this kit's faceted painted plastic: its horn and its
+  // hide flat-shaded as every classic part, its gold metal, its eyes aglow.
+  howdah() {
+    return howdah((kind, geo, hex) => {
+      const m = new THREE.Mesh(geo, kind === 'metal' ? metal(hex) : kind === 'eye' ? glowMat(hex) : kind === 'cloth' ? M(hex, { side: THREE.DoubleSide }) : kind === 'shell' ? M(hex, { roughness: 0.5 }) : M(hex))
+      m.castShadow = true
+      return m
+    })
   },
 }
 

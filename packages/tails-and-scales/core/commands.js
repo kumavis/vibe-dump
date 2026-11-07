@@ -37,6 +37,16 @@
 //                     off)
 //   disembark {u, c}  (F9a) move phase: rider u steps off its vehicle onto
 //                     cell c, as its move
+//   (F9b) `place`, `move` and `chargeEnd` take an optional heading `f`
+//   (0-7, core/nav.js DIRS) for a long hull (a unit with a footprint): the
+//   way it faces once there. Refused for a round unit ("a round unit has
+//   no facing"), and outside 0-7; without it the default heading (DESIGN
+//   §4.2.5), drawing nothing: a move's the valid end heading at c the plan
+//   reaches shortest (core/actions/move.js endFacing), a place's the
+//   unit's own facing if it fits at c, else the lowest that fits
+//   (core/deploy.js placeFacing), a charge's end the spot heading at c the
+//   roll reaches shortest (core/actions/charge.js chargeFacing), ties to
+//   the lowest index each. The AI and the macros send none.
 // (The AI's `hold` is its own, never a command: core/ai/policy.js.)
 //
 // (F9a) A kind's decision `k` may be a list: `embark` answers both the
@@ -63,11 +73,12 @@ import { deepFreeze } from './util.js'
 import { emit, log } from './journal.js'
 import { ctrl, seatName } from './match.js'
 import { moveUnitTo } from './units.js'
-import { placeOk } from './deploy.js'
+import { placeOk, placeFacing } from './deploy.js'
 import {
   alive, isEngaged, movePlan, validEnd, canShoot, shotInfo, chargeTargets, chargePlan, chargeSpots, phaseKey, canAct, maskUnits, groundY,
 } from './queries.js'
 import { doMove, doAdvance } from './actions/move.js'
+import { chargeFacing } from './actions/charge.js'
 import { mayBoard, doEmbark, mayLand, doDisembark } from './actions/transport.js'
 import { doShoot, kegsGoOff, weaponOf, allySpell } from './actions/shoot.js'
 import { declareCharge, finishCharge } from './actions/charge.js'
@@ -84,8 +95,11 @@ export const HANDLERS = Object.freeze({
   // classic place doesn't grow) (F9a: a rider placed steps off its hull, and
   // a hull placed takes its riders along: the mirror reads both off the
   // event, so it doesn't grow either)
-  place(G, seat, { u, c }) {
+  // ((F9b) a long hull's, placeHull: a round unit's unit.place doesn't
+  // grow)
+  place(G, seat, { u, c, f }) {
     const unit = unitOf(G, u)
+    if (unit.t.fp) return placeHull(G, unit, c, f)
     unit.aboard = 0
     moveUnitTo(G, unit, G.nav.x(c), G.nav.z(c))
     emit(G, 'unit.place', { u, x: unit.pos.x, z: unit.pos.z, ...(G.nav.hasHeight ? { y: groundY(G, unit) } : {}) })
@@ -98,9 +112,10 @@ export const HANDLERS = Object.freeze({
   advance(G, seat, { u }) {
     doAdvance(G, unitOf(G, u))
   },
-  move(G, seat, { u, c }) {
-    // (doMove makes the plan afresh from the unit's flags, as legal's)
-    const unit = unitOf(G, u), kegs = doMove(G, unit, c)
+  move(G, seat, { u, c, f }) {
+    // (doMove makes the plan afresh from the unit's flags, as legal's;
+    // (F9b) a long hull to the heading `f`, or the default)
+    const unit = unitOf(G, u), kegs = unit.t.fp ? doMove(G, unit, c, undefined, f ?? null) : doMove(G, unit, c)
     // ((F19a, DESIGN §4.1 rule 28) a powder keg a wrecker's walk smashed
     // goes off now, the walk ended: the walker set it off)
     if (kegs.length) kegsGoOff(G, unit, kegs)
@@ -114,17 +129,27 @@ export const HANDLERS = Object.freeze({
   // between the halves. A miss, or the AI's charge (which declareCharge
   // takes straight on to the shortest move), ends here; a seat's contact
   // asks it where, with what the pick needs (the roll, and the shortest
-  // move's cell for -1).
+  // move's cell for -1). ((F9b) A long hull's shortest move is a state:
+  // its heading rides as `f`, only a long hull's, so a round charger's
+  // pending is the one it always was.)
   charge(G, seat, { u, tg }, via) {
     const pick = declareCharge(G, unitOf(G, u), unitOf(G, tg), via)
     if (!pick) return finishAction(G)
-    G.pending = { k: 'chargeEnd', seats: [seat], u, tg, rolled: pick.rolled, cell: pick.plan.cell }
+    G.pending = pick.plan.fp
+      ? { k: 'chargeEnd', seats: [seat], u, tg, rolled: pick.rolled, cell: pick.plan.cell, f: pick.plan.f }
+      : { k: 'chargeEnd', seats: [seat], u, tg, rolled: pick.rolled, cell: pick.plan.cell }
   },
   // the charge's second half: the plan is made again from the unchanged
-  // match (finishCharge), and the seat gets its phase back
-  chargeEnd(G, seat, { c }) {
+  // match (finishCharge), and the seat gets its phase back. ((F9b) A long
+  // hull ends on the state its seat picked: -1 the shortest, else (c, f),
+  // f by default the spot heading at c the roll reaches shortest.)
+  chargeEnd(G, seat, { c, f }) {
     const P = G.pending
-    finishCharge(G, unitOf(G, P.u), unitOf(G, P.tg), c === -1 ? P.cell : c)
+    const unit = unitOf(G, P.u), target = unitOf(G, P.tg)
+    if (unit.t.fp) {
+      const plan = chargePlan(G, unit, target)
+      finishCharge(G, unit, target, c === -1 ? P.cell : c, plan, c === -1 ? P.f : f ?? chargeFacing(plan, c, P.rolled))
+    } else finishCharge(G, unitOf(G, P.u), unitOf(G, P.tg), c === -1 ? P.cell : c)
     G.pending = { k: 'phase', seats: P.seats, phase: phaseKey(G) }
     finishAction(G)
   },
@@ -184,6 +209,16 @@ export const HANDLERS = Object.freeze({
   },
 })
 
+// (F9b) A long hull placed on cell c, facing `f` or the default heading
+// (placeFacing: its own facing if it fits there, else the lowest that
+// does); its unit.place carries its heading, `f`
+function placeHull(G, unit, c, f) {
+  unit.facing = f ?? placeFacing(G, unit, c)
+  unit.aboard = 0
+  moveUnitTo(G, unit, G.nav.x(c), G.nav.z(c))
+  emit(G, 'unit.place', { u: unit.id, x: unit.pos.x, z: unit.pos.z, ...(G.nav.hasHeight ? { y: groundY(G, unit) } : {}), f: unit.facing })
+}
+
 // ── Whether a command is legal now ──────────────────────────────────────────
 // Each kind: the decision it answers (`k`; `phase`: the phase it belongs to;
 // none for concede, which comes out of band), its fields (`fields`, whole
@@ -192,13 +227,13 @@ export const HANDLERS = Object.freeze({
 // bear a name an envelope keeps for itself, and concede alone answers no
 // decision. KINDS below is its keys; nothing above the core reads it.)
 export const RULES = deepFreeze({
-  place: { k: 'deploy', fields: ['u', 'c'], ok: (G, seat, { u, c }) => mine(G, seat, u) ?? (placeOk(G, unitOf(G, u), c) ? null : `cell ${c} is no free spot in seat ${seat}'s zone for unit ${u}`) },
+  place: { k: 'deploy', fields: ['u', 'c'], opt: ['f'], ok: (G, seat, { u, c, f }) => mine(G, seat, u) ?? facingOk(unitOf(G, u), f) ?? (placeOk(G, unitOf(G, u), c, f) ? null : `cell ${c} is no free spot in seat ${seat}'s zone for unit ${u}${f === undefined ? '' : ` facing ${f}`}`) },
   deployed: { k: 'deploy', fields: [] },
   advance: { k: 'phase', phase: 'move', fields: ['u'], ok: (G, seat, { u }) => mine(G, seat, u) ?? mayAdvance(G, unitOf(G, u)) },
-  move: { k: 'phase', phase: 'move', fields: ['u', 'c'], ok: (G, seat, { u, c }) => mine(G, seat, u) ?? mayMove(G, unitOf(G, u), c) },
+  move: { k: 'phase', phase: 'move', fields: ['u', 'c'], opt: ['f'], ok: (G, seat, { u, c, f }) => mine(G, seat, u) ?? facingOk(unitOf(G, u), f) ?? mayMove(G, unitOf(G, u), c, f) },
   shoot: { k: 'phase', phase: 'shoot', fields: ['u', 'tg'], opt: ['sp'], ok: (G, seat, { u, tg, sp }) => mine(G, seat, u) ?? hasSpell(unitOf(G, u), sp) ?? (allySpell(weaponOf(unitOf(G, u), sp)) ? friend(G, seat, tg) : foe(G, seat, tg)) ?? mayShoot(G, unitOf(G, u), unitOf(G, tg), sp) },
   charge: { k: 'phase', phase: 'charge', fields: ['u', 'tg'], ok: (G, seat, { u, tg }) => mine(G, seat, u) ?? foe(G, seat, tg) ?? mayCharge(G, unitOf(G, u), unitOf(G, tg)) },
-  chargeEnd: { k: 'chargeEnd', fields: ['c'], ok: (G, seat, { c }, P) => mayEnd(G, P, c) },
+  chargeEnd: { k: 'chargeEnd', fields: ['c'], opt: ['f'], ok: (G, seat, { c, f }, P) => facingOk(unitOf(G, P.u), f) ?? mayEnd(G, P, c, f) },
   end: { k: 'phase', fields: [] },
   auto: { k: 'phase', fields: [] },
   pilot: { k: 'phase', fields: ['m'], ok: (G, seat, { m }, P) => mayPilot(G, seat, m, P) },
@@ -275,6 +310,13 @@ function friend(G, seat, id) {
   const u = unitOf(G, id)
   return mine(G, seat, id) ?? (u.aboard ? `${u.t.short} is inside a vehicle` : null)
 }
+// (F9b) a heading a command names: none, or 0-7 for a long hull (a unit
+// with a footprint); a round unit has none to take
+function facingOk(u, f) {
+  if (f === undefined) return null
+  if (!u.t.fp) return `${u.t.short}: a round unit has no facing`
+  return f >= 0 && f < 8 ? null : `${u.t.short} faces one of the headings 0-7, not ${f}`
+}
 // (F9a) a rider moves, advances and charges only once it has stepped off
 const aboard = (u) => (u.aboard ? `${u.t.short} is aboard a vehicle: disembark first` : null)
 const inGrid = (G, c) => c >= 0 && c < G.nav.N
@@ -298,11 +340,12 @@ function mayAdvance(G, u) {
 }
 // Its move this phase (an advance's move on its roll, a fall back when in
 // combat): ending on c, as the plan the move itself will make has it.
-function mayMove(G, u, c) {
+// ((F9b) a long hull's on the state (c, f), or on c at any heading)
+function mayMove(G, u, c, f) {
   if (u.aboard) return aboard(u)
   if (u.flags.moved) return `${u.t.short} has moved`
   if (u.snared) return `${u.t.short} is snared`
-  if (!inGrid(G, c) || !validEnd(G, movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0), c)) return `${u.t.short} can't end its move on cell ${c}`
+  if (!inGrid(G, c) || !validEnd(G, movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0), c, null, f)) return `${u.t.short} can't end its move on cell ${c}${f === undefined ? '' : ` facing ${f}`}`
   return null
 }
 // (V3c) the spell a shot names, when it names one: one of the unit's (a
@@ -339,9 +382,12 @@ function mayPilot(G, seat, m, P) {
   if (loose) return `unit ${loose.id} rides unit ${loose.aboard}: a rider moves only with its hull, so m names both`
   return units.some((u) => canAct(G, u)) ? null : `none of these units can act in the ${phaseKey(G)} phase`
 }
-// a spot the roll reaches around the target (chargeSpots), or -1
-function mayEnd(G, P, c) {
-  if (c === -1) return null
+// a spot the roll reaches around the target (chargeSpots), or -1. (F9b) A
+// long hull's: a spot state the roll reaches (plan.spotOk), at heading f or
+// at any; -1, the shortest move, is a state already, and takes no f.
+function mayEnd(G, P, c, f) {
+  if (c === -1) return f === undefined ? null : `the shortest move (-1) ends on its own heading: it takes no f`
   const plan = inGrid(G, c) && chargePlan(G, unitOf(G, P.u), unitOf(G, P.tg))
+  if (plan && plan.fp) return plan.spotOk(c, f, P.rolled) ? null : `the charge can't end on cell ${c}${f === undefined ? '' : ` facing ${f}`} (rolled ${P.rolled}")`
   return plan && chargeSpots(plan, P.rolled)[c] ? null : `the charge can't end on cell ${c} (rolled ${P.rolled}")`
 }

@@ -93,7 +93,14 @@
 //      one-reader fields (OWNED: the army builder's data read by
 //      core/army.js alone, pts by the AI's appraisal; (F9a) a hull's
 //      transport by core/actions/transport.js, the vehicle and climb flags
-//      by the plans' mode setup, enclosed by the view alone), the same way.
+//      by the plans' mode setup, enclosed by the view alone; (F9b) a long
+//      hull's footprint by core/footprint.js), the same way. (F9b)
+//      core/footprint.js, the footprints' tables and the helpers that
+//      measure a unit by its discs, is on no layer's surface: its helpers
+//      (discsOf, clearOf, fpGap) reach the view through queries.js's door,
+//      and it draws nothing, holds no module-level state and runs no
+//      approximated Math (its load-time constants are Math.sqrt's, §4.1
+//      rule 24), as every module of core/.
 // The top level is told by indentation (the code puts module-level
 // declarations at column 0, and everything nested deeper).
 //
@@ -165,6 +172,10 @@ const CROSS = {
     // pick of a spell (the shooting tool's default, a group's fire), which
     // values and draws nothing
     'weaponOf', 'allySpell', 'hasTarget', 'bestSpell', 'spellFor',
+    // (F9b) a unit's discs where it stands and the least edge gaps to them
+    // (core/footprint.js, which draws nothing: listed as the door's, for
+    // the view's outline, overlay and tools)
+    'discsOf', 'clearOf', 'fpGap',
   ],
   // (R8) KINDS: the command kinds, a frozen list of names, which
   // match/envelope.js decodes no other than
@@ -617,6 +628,18 @@ if (a['self-test']) {
     ['present/deck.js importing data/ (its unit type is handed in)', append('present/deck.js', "import { RACES } from '../data/schema.js'"), true, /present\/ may import only/],
     ['present/deck.js touching the DOM', append('present/deck.js', 'export const el = () => document.body'), true, /contains document/],
     ['a stale allow entry (shoot.js carrying its look one time fewer)', (m) => new Map(m).set('core/actions/shoot.js', m.get('core/actions/shoot.js').replace('fx: w.fx', 'fx: w.look')), true, /allow entry "fx: w\.fx" matches 4/],
+    // (F9b) core/footprint.js: its helpers on queries.js's door, itself on
+    // no surface, drawing nothing, with no cache at module level and no
+    // approximated Math (its constants Math.sqrt's)
+    ['the view taking discsOf, clearOf and fpGap through core/queries.js', append('view/overlay.js', "import { discsOf, clearOf, fpGap } from '../core/queries.js'"), false],
+    ['present/ taking discsOf through core/queries.js', append('present/deck.js', "import { discsOf } from '../core/queries.js'"), false],
+    ['the view importing core/footprint.js itself (no door)', append('view/overlay.js', "import { discsOf } from '../core/footprint.js'"), true, /imports core\/footprint\.js: the view \(view\/\) may import from core\/ only/],
+    ['present/ importing core/footprint.js itself (no door)', append('present/orders.js', "import { fpGap } from '../core/footprint.js'"), true, /imports core\/footprint\.js: present\/ may import from core\/ only/],
+    ['core/footprint.js turning its offsets by Math.cos', append('core/footprint.js', 'export const c15 = Math.cos(Math.PI / 12)'), true, /core\/footprint\.js:\d+ core\/ contains an approximated Math function/],
+    ['core/footprint.js measuring with Math.hypot', append('core/footprint.js', 'export const g = (x, z) => Math.hypot(x, z)'), true, /core\/footprint\.js:\d+ core\/ contains Math\.hypot/],
+    ['core/footprint.js caching tables in a module-level Map', append('core/footprint.js', 'const TABLES = new Map()'), true, /module-level Map or WeakMap/],
+    ['core/footprint.js importing the dice', append('core/footprint.js', "import { draw } from './rng.js'\nexport { draw }"), true, /re-exports draw from core\/rng\.js/],
+    ["core/ reading a hull's footprint record outside core/footprint.js", append('core/actions/move.js', 'export const turnOf = (u) => u.t.footprint.turn'), true, /footprint record read outside core\/footprint\.js .*\(flag-lint's ban\)/],
     ['the word in a comment (core/: "no Promise, no window")', append('core/rules.js', '// no Promise, no window, no Math.random, no Date'), false],
     ['a nested let (not module-level)', append('core/rules.js', 'export function f() {\n  let k = 0\n  return k\n}'), false],
   ]

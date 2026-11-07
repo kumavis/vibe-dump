@@ -8,7 +8,9 @@
 // (F10c) the standing orders (➜ March, 🎯 Attack: a click armed; ⚓ Hold,
 // ⟳ Autopilot, ⊘ none: at once), ⇥ the next ready unit, ✓ to send a pinned
 // formation and ✕ to drop it, and Clear. And the actions' Ready N whenever a seat played here decides:
-// every unit of it still to act. Drawn from input/group.js's model().
+// every unit of it still to act. Drawn from input/group.js's model(). (F9b) And for a long hull picked
+// up alone with its ghost pinned (a group of one, DESIGN §4.2.6): its name, ✓ to send it and ✕ to drop
+// the pin, and what it would do (its inches, its heading, no room to turn).
 const $ = (s) => document.querySelector(s)
 
 export class GroupBar {
@@ -50,6 +52,17 @@ export class GroupBar {
       if (cls) e.className = cls
       if (text !== undefined) e.textContent = text
       return e
+    }
+    // ((F9b) a pinned lone long hull: its name, ✓, ✕ and its line)
+    if (m.hull) {
+      const go = el('button', 'primary', '✓ Send')
+      go.title = `Send the ${m.name} where its ghost stands, facing as it does (Enter)`
+      go.onclick = () => this.on.commit()
+      const no = el('button', '', '✕')
+      no.title = 'Drop the pin (Esc)'
+      no.onclick = () => this.on.cancel()
+      this.root.replaceChildren(el('span', 'gcount', m.name), go, no, el('span', 'gnote', m.summary))
+      return
     }
     const parts = [el('span', 'gcount', `${m.count} selected · ${m.models} models`)]
     for (const c of m.chips) {

@@ -95,6 +95,22 @@
 // fall, or it proves nothing. It runs by default and with --only collapse;
 // the self-test's fall edits run on it.
 //
+// (F9b) And the Howdah row (`howdah`: DESIGN §4.2.5's long hulls, their
+// yaw and their decks): a hotseat Field battle whose Coil (seat 0) fields
+// two Howdahs, played through the page's own session without ?fast, so a
+// walk plays as a player sees it: the table held at the deployment (the
+// autoload's riders on their decks), after one Howdah is placed turned on
+// its spot, at the movement phase, snapped in place mid-pivot (a Howdah's
+// walk of two pivots or more caught with its figure turned off every
+// heading, the walk under way: the player's snap(G), as a rejoin's), after
+// the other's walk of two pivots or more has played out event by event,
+// and snapped in place at the end. At each, snapDiff (every rider's figure
+// on its deck slot the snap's, every ring and hit volume) and each long
+// hull's figure turned as the mirror's heading has it (f·π/4: a snap's
+// yaw). Its moves end on a heading neither the seat's edge's nor the
+// hull's own, so a yaw left at either shows. It runs by default and with
+// --only howdah; the self-test's yaw edits run on it.
+//
 // (V3d) And the Powder Field's row (`powder-row`): the same, a watched
 // battle of the powder mission in place of the grand one's, its table's
 // fires held too: at every Grand checkpoint some chunk burns (the
@@ -152,7 +168,9 @@ const CART_ROW = !a.only || only.includes('cart')
 const POWDER_ROW = !a.only || only.includes('powder-row')
 // ((F7c) and the collapse row's)
 const COLLAPSE_ROW = !a.only || only.includes('collapse')
-const ROWS = new Set(['grand', 'cart', 'powder-row', 'collapse'])
+// ((F9b) and the Howdah row's)
+const HOWDAH_ROW = !a.only || only.includes('howdah')
+const ROWS = new Set(['grand', 'cart', 'powder-row', 'collapse', 'howdah'])
 try {
   items = only.filter((x) => !ROWS.has(x)).length ? select(loadCorpus().items, only.filter((x) => !ROWS.has(x)).join(',')) : []
 } catch (e) {
@@ -231,6 +249,15 @@ const MUTATIONS = {
   // (F7c, on the collapse row) a fallen unit's ring, hit cylinder and
   // label left up on the deck it fell from
   'fall-ringless': ['view/units.js', "    this.disc(e.u)\n    this.label(e.u)\n    if (!hid) {\n      const top = this.top(e.u)\n", "    if (!hid) {\n      const top = this.top(e.u)\n", 'collapse'],
+  // (F9b, on the Howdah row) a long hull's view made again from the mirror
+  // facing the table's way, as a round unit's, not its heading
+  'hull-unturned': ['view/units.js', '      v.facing = v.fp ? yawOf(mu) : -edge * Math.PI / 2\n', '      v.facing = -edge * Math.PI / 2\n', 'howdah'],
+  // (F9b, on the Howdah row) a long hull placed turned left facing as it
+  // stood
+  'place-unturned': ['view/units.js', '    if (v.fp) v.facing = yawOf(this.shown(e.u))\n', '', 'howdah'],
+  // (F9b, on the Howdah row) a long hull's figure never turned to its
+  // facing: it walks on at the yaw it had
+  'yaw-frozen': ['view/units.js', '            m.yaw = v.facing\n            m.moving = v.moving\n', '            m.moving = v.moving\n', 'howdah'],
 }
 // (F9a) the cart row's battle: the Field mission, seat 0's Bushtails with
 // two War-Carts (950 points), seat 1 its preset
@@ -241,6 +268,9 @@ const CART_ARMIES = '1222112,field'
 // within the SETTLE frames a check waits: up to 0.05 s × speed a frame)
 const COLLAPSE_SEED = 8
 const COLLAPSE_SPEED = 12
+// (F9b) the Howdah row's battle: the Field mission, seat 0 the Coil with two
+// Howdahs (985 points), seat 1 the Bushtails' preset
+const HOWDAH_ARMIES = 'races=serpent,squirrel&armies=2232222,field'
 const SELF_TEST_ON = 'hotseat-aggressive-103'
 
 // In the page, before main.js: catch window.__ts, record (the shadow and
@@ -536,6 +566,150 @@ async function cartRow(browser, url) {
     await ctx.close()
   }
 }
+// (F9b) The Howdah row (above): a hotseat Field battle, the Coil's two
+// Howdahs placed, turned and walked through the page's own session, its
+// table held at rest, mid-pivot and after. Returns { checks, error, ... },
+// judged by judgeHowdah.
+async function howdahRow(browser, url) {
+  const ctx = await browser.newContext({ viewport: { width: 640, height: 400 } })
+  try {
+    const page = await ctx.newPage()
+    const errors = []
+    page.on('pageerror', (e) => errors.push(e.message))
+    page.setDefaultTimeout(IDLE_MS)
+    await page.addInitScript(`(${() => {
+      // the hulls' yaws as drawn against the mirror's headings (each long
+      // hull's standing figure, view/units.js's userData.hull): the
+      // differences, as snapDiff words its own
+      window.__hullYaw = () => {
+        const ts = window.__ts, M = ts.player.mirror, out = []
+        let n = 0
+        ts.scenery.scene.traverse((o) => {
+          const id = o.userData?.hull
+          if (id === undefined || !o.parent || !(M.units[id]?.alive > 0)) return
+          n++
+          const want = (M.units[id].f * Math.PI) / 4, d = Math.abs(((((o.rotation.y - want) % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI)) - Math.PI)
+          if (!(d <= 1e-6)) out.push(`yaw ${id}: ${o.rotation.y.toFixed(4)} | ${want.toFixed(4)} (f ${M.units[id].f})`)
+        })
+        return { diffs: out, hulls: n }
+      }
+    }})()`)
+    // ((the page drawn small: what the checks compare is the table's
+    // objects, not its pixels, and a walk plays in real time)
+    await page.goto(`${url}/?debug&lowfi&seed=4242&dice=1&mission=field&${HOWDAH_ARMIES}`)
+    await page.waitForSelector('#title:not(.hidden)')
+    const t0 = Date.now()
+    await page.click('[data-mode="hotseat"]')
+    await page.click('#setupStart')
+    await page.waitForFunction(() => window.__ts?.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })
+    const checks = []
+    // the table held (the figures settled), snapDiff's and the yaws
+    const hold = async (mark) => {
+      checks.push(await page.evaluate(({ settle, mark }) => new Promise((resolve) => {
+        let n = settle * 2
+        const f = () => {
+          if (--n > 0) return void requestAnimationFrame(f)
+          const d = window.__ts.view.snapDiff(), y = window.__hullYaw()
+          const M = window.__ts.player.mirror
+          resolve({ mark, n: d.n + y.diffs.length, diffs: [...y.diffs, ...d.diffs], hulls: y.hulls, riders: Object.values(M.units).filter((u) => u.aboard && u.alive > 0).length, at: performance.now() })
+        }
+        requestAnimationFrame(f)
+      }), { settle: SETTLE, mark }))
+    }
+    const send = (body) => page.evaluate((b) => {
+      const ts = window.__ts, seat = ts.session.decisionFor(), why = ts.session.legal(seat, b)
+      if (why) return why
+      ts.session.submit(seat, b)
+      return null
+    }, body)
+    const idle = () => page.waitForFunction(() => window.__ts.player.idle, null, { timeout: IDLE_MS })
+    // (seat 0's deployment: the Coil's)
+    for (let k = 0; k < 3 && (await page.evaluate(() => window.__ts.session.decisionFor())) !== 0; k++) await page.evaluate(() => window.__ts.endPhase())
+    const hulls = await page.evaluate(() => window.__ts.G.units.filter((u) => u.t.fp && u.side === 0).map((u) => u.id))
+    await hold('the deployment')
+    // a Howdah placed turned about where it stands: the first heading other
+    // than its own the match takes there
+    const turnPlace = await page.evaluate((id) => {
+      const ts = window.__ts, u = ts.G.units.find((x) => x.id === id), c = ts.nav.index(u.pos.x, u.pos.z), seat = ts.session.decisionFor()
+      for (let k = 1; k < 8; k++) {
+        const f = (u.facing + k) & 7
+        if (ts.session.legal(seat, { t: 'place', u: id, c, f }) === null) return { t: 'place', u: id, c, f }
+      }
+      return null
+    }, hulls[1])
+    if (turnPlace) {
+      const why = await send(turnPlace)
+      if (why) throw new Error(`the turned placement was refused: ${why}`)
+      await idle()
+      await hold(`Howdah ${hulls[1]} placed facing ${turnPlace.f}`)
+    }
+    // on to seat 0's movement phase
+    for (let k = 0; k < 40; k++) {
+      const P = await page.evaluate(() => ({ k: window.__ts.G.pending.k, phase: window.__ts.G.pending.phase, d: window.__ts.session.decisionFor(), idle: window.__ts.player.idle }))
+      if (P.k === 'phase' && P.phase === 'move' && P.d === 0 && P.idle) break
+      if (P.idle && P.d >= 0) await page.evaluate(() => window.__ts.endPhase()).catch(() => {})
+      await new Promise((r) => setTimeout(r, 500))
+    }
+    await hold('the movement phase, before a move')
+    // each Howdah's move: the reached state, of those whose path holds a
+    // run and two pivots at least, its plan reaches shortest (ties: the
+    // lowest state) that the match takes, at a heading neither its seat's
+    // edge's (2) nor its own, so a yaw left at either shows
+    const moveOf = (id) => page.evaluate((id) => {
+      const ts = window.__ts, u = ts.G.units.find((x) => x.id === id), plan = ts.q.movePlan(u, 0), seat = ts.session.decisionFor(), nav = ts.nav
+      const cands = []
+      for (let c = 0; c < nav.N; c++) {
+        if (!(plan.cells.dist[c] <= plan.max)) continue
+        for (let f = 0; f < 8; f++) {
+          const d = plan.res.dist[c * 8 + f]
+          if (f === 2 || f === u.facing || !(d <= plan.max)) continue
+          const pts = nav.hullPath(plan.res, c, f)
+          let piv = 0, runs = 0
+          for (let i = 1; i < pts.length; i++) (pts[i].x === pts[i - 1].x && pts[i].z === pts[i - 1].z ? piv++ : runs++)
+          if (piv >= 2 && runs >= 1) cands.push({ c, f, d, piv, runs })
+        }
+      }
+      cands.sort((p, q) => p.d - q.d || p.c * 8 + p.f - (q.c * 8 + q.f))
+      for (const m of cands) if (ts.session.legal(seat, { t: 'move', u: id, c: m.c, f: m.f }) === null) return { body: { t: 'move', u: id, c: m.c, f: m.f }, piv: m.piv, runs: m.runs }
+      return null
+    }, id)
+    const m0 = await moveOf(hulls[0])
+    if (!m0) throw new Error(`Howdah ${hulls[0]} has no move with two pivots`)
+    let why = await send(m0.body)
+    if (why) throw new Error(`the move was refused: ${why}`)
+    // mid-pivot: the hull's figure turned off every heading, the walk
+    // under way; then the table snapped in place there, as a rejoin snaps it
+    const caught = await page.waitForFunction((id) => {
+      let mid = false
+      window.__ts.scenery.scene.traverse((o) => {
+        if (o.userData?.hull !== id) return
+        const k = (o.rotation.y / (Math.PI / 4)) % 1, r = ((k % 1) + 1) % 1
+        if (r > 0.15 && r < 0.85) mid = true
+      })
+      return mid && !window.__ts.player.idle
+    }, hulls[0], { timeout: 60000, polling: 'raf' }).then(() => true, () => false)
+    // (a walk that never turned its figure is a table that differs: its
+    // check says so, and the row goes on)
+    if (!caught) checks.push({ mark: `Howdah ${hulls[0]}'s walk`, n: 1, diffs: [`yaw ${hulls[0]}: its walk of ${m0.piv} pivots never turned its figure off a heading`], hulls: 2, riders: 1, at: 0 })
+    await page.evaluate(() => window.__ts.player.snap(window.__ts.G))
+    await hold(`Howdah ${hulls[0]} snapped mid-pivot (${m0.piv} pivots, ${m0.runs} runs, to facing ${m0.body.f})`)
+    // the other's walked out to its end, the table built by its events
+    const m1 = await moveOf(hulls[1])
+    if (!m1) throw new Error(`Howdah ${hulls[1]} has no move with two pivots`)
+    why = await send(m1.body)
+    if (why) throw new Error(`the move was refused: ${why}`)
+    await idle()
+    await hold(`Howdah ${hulls[1]} walked (${m1.piv} pivots, ${m1.runs} runs, to facing ${m1.body.f})`)
+    // and the page's table snapped in place where it stands
+    await page.evaluate(() => window.__ts.player.snap(window.__ts.G))
+    await hold('snapped in place')
+    const r = { checks, error: errors.length ? errors.join('\n') : null, hulls: hulls.length }
+    r.secs = Math.round((Date.now() - t0) / 1000)
+    return r
+  } finally {
+    await ctx.close()
+  }
+}
 // (F7c) The collapse row (above): the battle made in Node on the code in
 // `dir`, then played in the page at COLLAPSE_SPEED. Returns { it, r }: the
 // battle as an item of the corpus (its hashes Node's), and run's result.
@@ -576,6 +750,20 @@ function judgeCart(r) {
 }
 
 // what the Grand row says is wrong ('' when nothing is)
+// (F9b) the Howdah row's verdict: two Howdahs, riders aboard, each hold
+// the same, the mid-pivot snap among them
+function judgeHowdah(r) {
+  if (r.error) return r.error.split('\n')[0]
+  const why = []
+  if (r.hulls !== 2) why.push(`board: ${r.hulls} Howdahs on seat 0 (two)`)
+  if (!r.checks.some((c) => c.riders > 0)) why.push('board: no check had a unit aboard a Howdah')
+  if (!r.checks.some((c) => /mid-pivot/.test(c.mark))) why.push('board: no snap mid-pivot')
+  if (r.checks.some((c) => c.hulls < 2)) why.push(`board: a check held ${Math.min(...r.checks.map((c) => c.hulls))} Howdah figures`)
+  const bad = r.checks.filter((c) => c.n)
+  if (bad.length) why.unshift(`${bad.length} of ${r.checks.length} checks differ; first at ${bad[0].mark} (${bad[0].n} differences): ${bad[0].diffs.slice(0, 4).join('; ')}`)
+  return why.join('; ')
+}
+
 function judgeGrand(r) {
   if (r.error) return r.error.split('\n')[0]
   const [title, grand, classic, again] = r.boards.map(([, b]) => b)
@@ -638,13 +826,13 @@ if (a['self-test']) {
         if (id === 'collapse') {
           fell = await collapseRow(browser, served.url, dir)
           r = fell.r
-        } else r = it ? await run(browser, served.url, it) : id === 'cart' ? await cartRow(browser, served.url) : await grandRow(browser, served.url, id === 'powder-row' ? 'powder' : undefined)
+        } else r = it ? await run(browser, served.url, it) : id === 'cart' ? await cartRow(browser, served.url) : id === 'howdah' ? await howdahRow(browser, served.url) : await grandRow(browser, served.url, id === 'powder-row' ? 'powder' : undefined)
       } catch (e) {
         r = { error: e.message, checks: [] }
       } finally {
         served.close()
       }
-      const why = fell ? judgeCollapse(fell.it, r) : id === 'collapse' ? (r.error ?? 'no run').split('\n')[0] : it ? judge(it, r) : id === 'cart' ? judgeCart(r) : judgeGrand(r)
+      const why = fell ? judgeCollapse(fell.it, r) : id === 'collapse' ? (r.error ?? 'no run').split('\n')[0] : it ? judge(it, r) : id === 'cart' ? judgeCart(r) : id === 'howdah' ? judgeHowdah(r) : judgeGrand(r)
       const ok = name === 'unedited' ? !why : /checks differ|^board: /.test(why)
       if (!ok) missed++
       console.log(`  ${ok ? (name === 'unedited' ? 'passes' : 'caught') : 'WRONG '} ${name.padEnd(16)} ${id.padEnd(23)} ${(why || `the same at ${r.checks.length} checks`).slice(0, 220)}`)
@@ -703,6 +891,18 @@ try {
     checks += r.checks.length
     console.log(`  cart  ${'Field, two War-Carts'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${r.checks.length - 1} checkpoints (riders aboard at ${r.checks.filter((c) => c.riders > 0).length}, up to ${Math.max(...r.checks.map((c) => c.riders))} units; a wreck standing at ${r.checks.filter((c) => c.wrecks > 0).length}), ${r.steps} step-offs and ${r.bails} bail-outs played, and snapped in place (${r.secs} s)`}`)
   }
+  if (HOWDAH_ROW) {
+    let r
+    try {
+      r = await howdahRow(browser, url)
+    } catch (e) {
+      r = { error: e.message, checks: [] }
+    }
+    const why = judgeHowdah(r)
+    if (why) failed++
+    checks += r.checks.length
+    console.log(`  hull  ${'Field, two Howdahs'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${r.checks.length} checks (${r.checks.map((c) => c.mark).join('; ')}), riders aboard at ${r.checks.filter((c) => c.riders > 0).length}, each Howdah's figure turned as its heading (${r.secs} s: the checks at ${r.checks.map((c) => Math.round(c.at / 1000)).join(', ')} s)`}`)
+  }
   if (COLLAPSE_ROW) {
     let it = null, r
     try {
@@ -734,5 +934,5 @@ try {
   close()
   rmSync(work, { recursive: true, force: true })
 }
-console.log(failed ? `\nsnap-check FAILED: ${failed} of ${items.length + (GRAND_ROW ? 1 : 0) + (CART_ROW ? 1 : 0) + (COLLAPSE_ROW ? 1 : 0) + (POWDER_ROW ? 1 : 0)} rows` : `\nsnap-check passed: ${checks} checks over ${items.length} battles${GRAND_ROW ? ' and the Grand row' : ''}${CART_ROW ? ' and the cart row' : ''}${COLLAPSE_ROW ? ' and the collapse row' : ''}${POWDER_ROW ? ' and the Powder Field\'s row' : ''}, the table as built is the table a snap builds every time the player drains, and at every checkpoint on the way, and each battle's table snapped in place at its end is a fresh snap's, with no fx mark left`)
+console.log(failed ? `\nsnap-check FAILED: ${failed} of ${items.length + (GRAND_ROW ? 1 : 0) + (CART_ROW ? 1 : 0) + (HOWDAH_ROW ? 1 : 0) + (COLLAPSE_ROW ? 1 : 0) + (POWDER_ROW ? 1 : 0)} rows` : `\nsnap-check passed: ${checks} checks over ${items.length} battles${GRAND_ROW ? ' and the Grand row' : ''}${CART_ROW ? ' and the cart row' : ''}${HOWDAH_ROW ? ' and the Howdah row' : ''}${COLLAPSE_ROW ? ' and the collapse row' : ''}${POWDER_ROW ? ' and the Powder Field\'s row' : ''}, the table as built is the table a snap builds every time the player drains, and at every checkpoint on the way, and each battle's table snapped in place at its end is a fresh snap's, with no fx mark left`)
 process.exit(failed ? 1 : 0)

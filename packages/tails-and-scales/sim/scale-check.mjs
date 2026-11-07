@@ -32,7 +32,12 @@
 //           (plans for random units, through the core's preview) between
 //           its entries traces, shadows, writes and hashes as it does
 //           without them; an apply that throws leaves G.nav.memo null, as
-//           every command boundary does.
+//           every command boundary does. (F9b) The key includes facing: on
+//           AI battles with Howdahs a long hull's plan read back is a fresh
+//           hull plan's equal (its lattice's dist and prev on every state,
+//           its plan by cell, its masks one per radius class), and turned
+//           to another heading inside the apply its plan is made afresh,
+//           a fresh plan's equal at that heading, never the memo's.
 //
 //   node sim/scale-check.mjs [--dir <code>] [--quick] [--self-test]
 //
@@ -70,6 +75,27 @@ const grandSetup = (board, dice, army = GRAND_ARMY, fortified = false) => ({
   seats: [{ race: 'squirrel', ctrl: 'ai', army }, { race: 'serpent', ctrl: 'ai', army }],
 })
 
+// (F9b) AI battles with Howdahs: Field and Grand, open and fortified, the
+// Coil's list (autoList on the check's own seeds) fielding two Howdahs,
+// against the Bushtails' with War-Carts where autoList gives one
+function hullSetups(C, n) {
+  const A = C.core.army, RACES = C.races, out = []
+  const listWith = (race, rules, seed, least) => {
+    const k = race.roster.findIndex((key) => race.units[key].transport)
+    for (let s = seed; s < seed + 400; s++) {
+      const counts = A.autoList(race, rules, s)
+      if ((counts[k] ?? 0) >= least) return A.listText(counts)
+    }
+    return A.listText(A.autoList(race, rules, seed))
+  }
+  for (let k = 0; k < n; k++) {
+    const mission = k % 2 ? 'grand' : 'field', rules = C.missions[mission].list
+    const seats = [{ race: 'serpent', ctrl: 'ai', army: listWith(RACES.serpent, rules, 100 * k + 1, 2) }, { race: 'squirrel', ctrl: 'ai', army: listWith(RACES.squirrel, rules, 100 * k + 51, 1) }]
+    out.push([`${mission} with Howdahs ${k}`, { board: 300 + k, dice: 17 + k, mission, terrain: k >= 2 ? 'fortified' : 'open', seats: k % 3 === 2 ? seats.reverse() : seats }])
+  }
+  return out
+}
+
 // the code under test: its core's entry and the modules the scans live in,
 // and the mission its P-los boards are scattered for (with its first set)
 async function coreOf(dir, name = 'classic') {
@@ -81,7 +107,7 @@ async function coreOf(dir, name = 'classic') {
   const M = { ...queries, ...move, ...deploy, ...score, draw: rng.draw, hypot: dmath.hypot, segmentHitsBox: geom.segmentHitsBox }
   const m = mission.MISSIONS[name]
   if (!m) throw new Error(`scale-check: ${dir} has no ${name} mission`)
-  return { core: index, M, Terrain: terrain.Terrain, NavGrid: nav.NavGrid, mission: m, missions: mission.MISSIONS, set: m.sets[0], rules: await at('core/rules.js') }
+  return { core: index, M, Terrain: terrain.Terrain, NavGrid: nav.NavGrid, mission: m, missions: mission.MISSIONS, set: m.sets[0], rules: await at('core/rules.js'), races: (await at('data/schema.js')).RACES }
 }
 
 // a small seeded stream of the check's own (never the match's)
@@ -134,7 +160,8 @@ function scanProbe(C, G, rand) {
     const dice = { ...G.rng }
     const got = M.bestSpot(G, u, plan, claimed), gotDice = { ...G.rng }
     Object.assign(G.rng, dice)
-    const want = ref.fullBestSpot(M, C.rules, G, u, plan, claimed), wantDice = { ...G.rng }
+    // ((F9b) the mission's AI count budget, as its data has it)
+    const want = ref.fullBestSpot(M, C.rules, G, u, plan, claimed, C.missions[G.setup.mission ?? 'classic']?.ai ?? null), wantDice = { ...G.rng }
     Object.assign(G.rng, dice)
     if (json(got) !== json(want)) return `bestSpot for ${u.t.short} (+${extra}): ${json(got)}, the whole board's ${json(want)}`
     if (json(gotDice) !== json(wantDice)) return `bestSpot for ${u.t.short} (+${extra}) left the dice at ${json(gotDice)}, the whole board's at ${json(wantDice)}`
@@ -155,6 +182,7 @@ function scanProbe(C, G, rand) {
 // equal, and asked again it is the same plan
 function planDiff(p, q) {
   if (p.max !== q.max || p.mode !== q.mode || p.fallback !== q.fallback) return `max/mode/fallback ${p.max}/${p.mode}/${p.fallback}, fresh ${q.max}/${q.mode}/${q.fallback}`
+  if (p.fp || q.fp) return hullDiff(p, q)
   if (p.res.start !== q.res.start || !Object.is(p.res.sx, q.res.sx) || !Object.is(p.res.sz, q.res.sz)) return 'its start'
   if (!sameArray(p.res.dist, q.res.dist)) return 'its reach (dist)'
   if (!sameArray(p.res.prev, q.res.prev)) return 'its routes (prev)'
@@ -162,6 +190,56 @@ function planDiff(p, q) {
     if (!sameArray(p[k], q[k])) return `its ${k} mask`
     if (json(p[k].discs) !== json(q[k].discs)) return `its ${k} discs`
   }
+  return null
+}
+// ((F9b) a long hull's plan: its lattice from the same state, dist and prev
+// on every state, the plan by cell (cellBest's dist, heading and chain),
+// and its masks, a list by radius class, each mask and its discs)
+function hullDiff(p, q) {
+  if (p.fp !== q.fp) return 'its footprint'
+  if (p.res.start !== q.res.start || p.res.h0 !== q.res.h0 || !Object.is(p.res.sx, q.res.sx) || !Object.is(p.res.sz, q.res.sz)) return 'its start state'
+  if (!sameArray(p.res.dist, q.res.dist)) return 'its lattice (dist)'
+  if (!sameArray(p.res.prev, q.res.prev)) return 'its lattice (prev)'
+  for (const k of ['dist', 'h', 'prev']) if (!sameArray(p.cells[k], q.cells[k])) return `its plan by cell (${k})`
+  for (const k of ['forbid', 'endForbid']) {
+    if (p[k].length !== q[k].length) return `its ${k} masks' classes`
+    for (let c = 0; c < p[k].length; c++) {
+      if (!sameArray(p[k][c], q[k][c])) return `its ${k} mask of class ${c}`
+      if (json(p[k][c].discs) !== json(q[k][c].discs)) return `its ${k} discs of class ${c}`
+    }
+  }
+  return null
+}
+// (F9b) the key includes facing: a long hull's plan made inside an apply
+// (memoised), then the hull turned to another heading, its plan again: made
+// afresh, a fresh plan's equal at the new heading; turned back, the same
+function facingProbe(C, G, rand, out) {
+  const memo = G.nav.memo
+  const hulls = G.units.filter((u) => C.M.alive(u) && u.t.fp && !u.aboard)
+  if (!memo || !hulls.length) return null
+  const u = rand.pick(hulls), was = u.facing
+  const p1 = C.M.movePlan(G, u, 0)
+  const fresh = () => {
+    G.nav.memo = null
+    try {
+      return C.M.movePlan(G, u, 0)
+    } finally {
+      G.nav.memo = memo
+    }
+  }
+  try {
+    u.facing = (was + 1 + rand.int(7)) & 7
+    const p2 = C.M.movePlan(G, u, 0)
+    if (p2 === p1) return `${u.t.short}'s plan turned from ${was} to ${u.facing} read back the memo's, made facing ${was}`
+    const why = planDiff(p2, fresh())
+    if (why) return `${u.t.short}'s plan turned to ${u.facing} inside the apply differs from a fresh one: ${why}`
+  } finally {
+    u.facing = was
+  }
+  const p3 = C.M.movePlan(G, u, 0)
+  const why = planDiff(p3, fresh())
+  if (why) return `${u.t.short}'s plan turned back to ${was} differs from a fresh one: ${why}`
+  out.facings = (out.facings ?? 0) + 1
   return null
 }
 function memoProbe(C, G, rand, out) {
@@ -184,6 +262,7 @@ function memoProbe(C, G, rand, out) {
     G.nav.memo = memo
   }
   const why = planDiff(p1, p2)
+  if (u.t.fp) out.hullPlans = (out.hullPlans ?? 0) + 1
   if (why) return `${u.t.short}'s plan (+${extra}) from the memo differs from a fresh one: ${why}`
   if (C.M.movePlan(G, u, extra) !== p1) return `${u.t.short}'s plan (+${extra}) asked again inside the apply is made afresh, not read back`
   return null
@@ -217,6 +296,7 @@ function foldHits(C, setups) {
             const fresh = C.M.movePlan(G, stored.u, stored.max - stored.u.t.M)
             const why = planDiff(stored, fresh)
             out.hits++
+            if (stored.fp) out.hullHits = (out.hullHits ?? 0) + 1
             if (why && out.bad.length < 8) out.bad.push(`${name}: ${stored.u.t.short}'s plan read back from the memo differs from a fresh one: ${why}`)
           } finally {
             G.nav.memo = m
@@ -447,6 +527,15 @@ async function run(dir, { quick = false, grand = true, only = null, say = consol
     report(!pf.bad.length, `P-memo, previews: ${pf.n} human logs folded with previews between their entries, as without (trace, shadow, writes, stateHash; no memo between entries)`, pf.bad)
     const th = throwingApply(C)
     report(!th.length, 'P-memo, a throw: an apply that throws leaves no memo', th)
+    // (F9b) the long hulls: AI battles with Howdahs, on code with the
+    // lattice
+    if (C.NavGrid.prototype.hullReach) {
+      const hs = hullSetups(C, quick ? 2 : 4)
+      const m3 = sample(C, hs, quick ? 12 : 5, [memoProbe, facingProbe], rand)
+      report(!m3.bad.length && m3.hullPlans > 0 && m3.facings > 0, `P-memo, long hulls: ${m3.memoProbes} plans inside applies on ${hs.length} battles with Howdahs (${m3.hullPlans ?? 0} a long hull's, each a fresh hull plan's equal), ${m3.facings ?? 0} long hulls turned inside an apply, each planned afresh at its new heading, never the memo's`, m3.bad)
+      const f3 = foldHits(C, hs)
+      report(!f3.bad.length && f3.hullHits > 0, `P-memo, the fold's own, long hulls: ${f3.hits} plans read back (${f3.hullHits ?? 0} a long hull's), each a fresh plan's equal`, f3.bad)
+    }
   }
   return failed
 }
@@ -466,8 +555,15 @@ const MUTANTS = [
   ['bins-short', 'los', 'core/terrain/terrain.js', 'this.binSpan(s.x - s.reach - PAD, s.x + s.reach + PAD, this.W, this.nbx)', 'this.binSpan(s.x - s.reach * 0.3, s.x + s.reach * 0.3, this.W, this.nbx)'],
   ['bins-order', 'los', 'core/terrain/terrain.js', 'while (j >= 0 && met[j] > v)', 'while (j >= 0 && met[j] < v)'],
   // ((F9a) the key's unit line names a rider's hull too)
-  ['memo-key', 'memo', 'core/actions/move.js', "  for (const o of G.units) if (alive(o)) k += `|${o.id}@${num(o.pos.x)},${num(o.pos.z)} r${num(o.r)}${o.aboard ? ` a${o.aboard}` : ''}`\n", ''],
+  ['memo-key', 'memo', 'core/actions/move.js', "  for (const o of G.units) if (alive(o)) k += `|${o.id}@${num(o.pos.x)},${num(o.pos.z)} r${num(o.r)}${faced(o)}${o.aboard ? ` a${o.aboard}` : ''}`\n", ''],
+  // ((F9b) a key that forgets a long hull's facing)
+  ['memo-key-facing', 'memo', 'core/actions/move.js', "const faced = (u) => (u.facing !== undefined ? ` f${u.facing}` : '')", "const faced = () => ''"],
   ['memo-leak', 'memo', 'core/index.js', '  try {\n    return fn()\n  } finally {\n    G.nav.memo = null\n  }', '  const r = fn()\n  G.nav.memo = null\n  return r'],
+  // ((F9b) the AI count budget's two cuts, each forgotten by the scan
+  // while the mission keeps it: on the grand mission's boards, where only
+  // a mission with `ai` shows them)
+  ['budget-targets', 'scan', 'core/ai/score.js', 'const enemies = B ? nearestOf(G, u, enemiesOf(G, u), B.targets) : enemiesOf(G, u)', 'const enemies = enemiesOf(G, u)', { grand: true }],
+  ['budget-lattice', 'scan', 'core/ai/score.js', 'const step = B ? Math.max(B.lattice, u.t.M > 8 ? 3 : 2) : u.t.M > 8 ? 3 : 2', 'const step = u.t.M > 8 ? 3 : 2', { grand: true }],
 ]
 
 async function selfTest() {
@@ -476,7 +572,7 @@ async function selfTest() {
   const clean = await run(PKG, { quick: true, grand: false, say: () => {} })
   console.log(`  ${clean ? 'FAIL' : 'ok  '} the working tree passes (quick, classic)`)
   if (clean) bad++
-  for (const [name, check, file, from, to] of MUTANTS) {
+  for (const [name, check, file, from, to, opts = {}] of MUTANTS) {
     const dir = mkdtempSync(join(tmpdir(), `scale-check-${name}-`))
     try {
       for (const d of ['core', 'data', 'match']) cpSync(join(PKG, d), join(dir, d), { recursive: true })
@@ -489,7 +585,7 @@ async function selfTest() {
       }
       writeFileSync(p, text.replace(from, () => to))
       const lines = []
-      const failed = await run(dir, { quick: true, grand: false, only: [check], say: (l) => lines.push(l) })
+      const failed = await run(dir, { quick: true, grand: !!opts.grand, only: [check], say: (l) => lines.push(l) })
       const caught = lines.filter((l) => l.includes('FAIL')).map((l) => l.trim().split('\n')[0].slice(5, 90))
       console.log(`  ${failed ? 'ok  ' : 'FAIL'} ${name.padEnd(15)} ${failed ? `caught: ${caught[0]}` : `not caught by ${check}`}`)
       if (!failed) bad++

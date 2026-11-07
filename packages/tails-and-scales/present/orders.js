@@ -46,6 +46,13 @@
 //                                    whose members advance first (+D6 each:
 //                                    the preview plans the plain move, the
 //                                    executor each member after its roll)
+//                                    ((F9b's review) and `heads`, pinned
+//                                    long hulls' headings, id → { cell, f }:
+//                                    a member's taken where it lands on that
+//                                    cell and the heading is valid there,
+//                                    else its default, the members after it
+//                                    planned round it; the pin's preview and
+//                                    the executor both give them)
 //   previewSteps(…the same…)          (F8b) the same preview as a generator:
 //                                    it yields after each member planned
 //                                    ({ members so far, slots, summary:
@@ -147,9 +154,13 @@ export function goalField(G, q, anchor, mode, r, climb = false) {
   return f
 }
 
+// ((F9b) a long hull's plan is read by cell, plan.cells (its lattice's
+// least distance at any heading), its end at any heading: the leg's `f`
+// is the default the move then takes there, endFacing, with `at`)
 export function legFor(G, q, u, slot, field, at) {
   const plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
   const nav = G.nav
+  const reach = plan.fp ? plan.cells : plan.res
   const i0 = nav.index(slot.x, slot.z)
   // the valid end nearest the slot, within NEAR
   let best = -1, bd = NEAR
@@ -166,25 +177,43 @@ export function legFor(G, q, u, slot, field, at) {
       }
     }
   }
-  if (best >= 0) return { cell: best, arrive: true, plan }
+  if (best >= 0) return { cell: best, arrive: true, plan, ...facingOf(G, q, plan, best, at) }
   // else the reachable valid end the field puts nearest the anchor (ties:
   // the lowest cell), if any is nearer than where it stands
   const here = nav.index(u.pos.x, u.pos.z)
   let bf = here >= 0 && Number.isFinite(field[here]) ? field[here] : Infinity
   for (let i = 0; i < nav.N; i++) {
-    if (!Number.isFinite(plan.res.dist[i]) || !(field[i] < bf)) continue
+    if (!Number.isFinite(reach.dist[i]) || !(field[i] < bf)) continue
     if (!q.validEnd(G, plan, i, at)) continue
     bf = field[i]
     best = i
   }
-  return { cell: best, arrive: false, plan }
+  return { cell: best, arrive: false, plan, ...facingOf(G, q, plan, best, at) }
+}
+// (F9b) a long hull's planned heading at `cell` ({ f }), the move's default
+// there (DESIGN §4.2.5: of the valid end headings, the one its plan reaches
+// shortest, ties to the lowest: core/actions/move.js endFacing, asked here
+// heading by heading through validEnd with `at`); nothing for a round unit
+// or no cell
+function facingOf(G, q, plan, cell, at) {
+  if (!plan.fp || cell < 0) return {}
+  let f = -1, bd = Infinity
+  for (let h = 0; h < 8; h++) {
+    const d = plan.res.dist[cell * 8 + h]
+    if (d < bd && q.validEnd(G, plan, cell, at, h)) {
+      bd = d
+      f = h
+    }
+  }
+  return { f }
 }
 
 export function approachFor(G, q, u, tg, at) {
   const plan = q.movePlan(G, u, u.flags.advanced ? u.flags.advRoll : 0)
   const nav = G.nav, w = u.t.ranged
   const ends = []
-  for (let i = 0; i < nav.N; i++) if (Number.isFinite(plan.res.dist[i])) ends.push(i)
+  const reach = plan.fp ? plan.cells : plan.res
+  for (let i = 0; i < nav.N; i++) if (Number.isFinite(reach.dist[i])) ends.push(i)
   const dist = (i) => Math.hypot(nav.x(i) - tg.pos.x, nav.z(i) - tg.pos.z)
   ends.sort((a, b) => dist(a) - dist(b) || a - b)
   if (w && u.t.ai !== 'melee') {
@@ -198,18 +227,43 @@ export function approachFor(G, q, u, tg, at) {
     let tried = 0
     for (const i of ends) {
       if (!q.validEnd(G, plan, i, at)) continue
-      if (can({ x: nav.x(i), z: nav.z(i) })) return { cell: i, plan }
+      if (can({ x: nav.x(i), z: nav.z(i) })) return { cell: i, plan, ...facingOf(G, q, plan, i, at) }
       if (++tried >= 16) break
     }
     return { cell: -1, plan }
   }
-  for (const i of ends) if (q.validEnd(G, plan, i, at)) return { cell: i, plan }
+  for (const i of ends) if (q.validEnd(G, plan, i, at)) return { cell: i, plan, ...facingOf(G, q, plan, i, at) }
   return { cell: -1, plan }
 }
 
+// ((F9b) a long hull's spot is a state: its cell, and its heading as
+// `placeAt` (freeSpot's, the edge rule's heading by default) reports it)
 export function placeFor(G, q, u, slot, others) {
+  return placeAt(G, q, u, slot, others).cell
+}
+export function placeAt(G, q, u, slot, others) {
   const p = q.freeSpot(G, u, slot.x, slot.z, u.side, others)
-  return p ? G.nav.index(p.x, p.z) : -1
+  return p ? { cell: G.nav.index(p.x, p.z), ...(p.f !== undefined ? { f: p.f } : {}) } : { cell: -1 }
+}
+// (F9b) the planner's `at` entry for a member planned onto `cell`: where
+// it will stand, and a long hull's heading there
+const atOf = (G, cell, f) => (f === undefined ? { x: G.nav.x(cell), z: G.nav.z(cell) } : { x: G.nav.x(cell), z: G.nav.z(cell), f })
+// A placement's others for member u: every other living unit where it
+// stands, or where `at` has it planned ((F9b) a planned long hull's copy
+// facing its planned heading)
+export function othersAt(G, q, u, at) {
+  return G.units.filter((o) => o !== u && q.alive(o)).map((o) => (at.has(o.id) ? (at.get(o.id).f !== undefined ? { ...o, pos: { x: at.get(o.id).x, z: at.get(o.id).z }, facing: at.get(o.id).f } : { ...o, pos: at.get(o.id) }) : o))
+}
+// (F9b's review) Whether long hull u fits on `cell` at heading f in its
+// deployment with `others` (othersAt's): the place command's own test,
+// q.placeOk, asked of the table with them standing there
+export const placeFits = (G, q, u, cell, f, others) => q.placeOk({ ...G, units: [u, ...others] }, u, cell, f)
+// (F9b's review) A pinned heading (`heads`'s, id → { cell, f }) for a long
+// hull planned onto `cell` with heading f: the pinned one where it was
+// pinned for this cell and `ok(h)` takes it, else f
+const pinnedHead = (heads, u, cell, f, ok) => {
+  const p = heads?.get(u.id)
+  return p && f !== undefined && cell >= 0 && p.cell === cell && p.f !== f && ok(p.f) ? p.f : f
 }
 
 // The order the members go in: nearest the point first, then by id.
@@ -226,7 +280,7 @@ export function previewGroup(G, q, seat, verb, members, target, given = null, op
 // (a member planned: the preview so far)
 const partial = (out, slots, of) => ({ members: out.slice(), slots, summary: `Planning ${out.length} of ${of}…`, of })
 
-export function* previewSteps(G, q, seat, verb, members, target, given = null, { line = null, advance = false } = {}) {
+export function* previewSteps(G, q, seat, verb, members, target, given = null, { line = null, advance = false, heads = null } = {}) {
   const out = []
   const at = new Map()
   if (verb === 'place') {
@@ -234,10 +288,12 @@ export function* previewSteps(G, q, seat, verb, members, target, given = null, {
     for (const u of byNearness(members, target)) {
       const slot = slots.get(u.id)
       // (the others where they stand, or where they were just planned)
-      const others = G.units.filter((o) => o !== u && q.alive(o)).map((o) => (at.has(o.id) ? { ...o, pos: at.get(o.id) } : o))
-      const cell = placeFor(G, q, u, slot, others)
-      if (cell >= 0) at.set(u.id, { x: G.nav.x(cell), z: G.nav.z(cell) })
-      out.push({ u, cell, slot, how: cell >= 0 ? 'arrive' : 'none', why: cell >= 0 ? '' : 'no room in the zone' })
+      // ((F9b) a planned long hull's copy faces its planned heading)
+      const others = othersAt(G, q, u, at)
+      const { cell, f: f0 } = placeAt(G, q, u, slot, others)
+      const f = pinnedHead(heads, u, cell, f0, (h) => placeFits(G, q, u, cell, h, others))
+      if (cell >= 0) at.set(u.id, atOf(G, cell, f))
+      out.push({ u, cell, slot, how: cell >= 0 ? 'arrive' : 'none', why: cell >= 0 ? '' : 'no room in the zone', ...(f !== undefined ? { f } : {}) })
       yield partial(out, slots, members.length)
     }
     const n = out.filter((m) => m.cell >= 0).length
@@ -255,13 +311,16 @@ export function* previewSteps(G, q, seat, verb, members, target, given = null, {
         continue
       }
       const slot = slots.get(u.id)
-      const field = goalField(G, q, target, q.moveMode(u), u.r, q.climbs(u))
+      // ((F9b) a long hull steers by its body disc's field: DESIGN §4.2.5's
+      // march guidance)
+      const field = goalField(G, q, target, q.moveMode(u), u.t.fp ? u.t.base : u.r, q.climbs(u))
       // ((F8b) a frame for the field, a whole-board walk when it is a new
       // one, and one for the leg)
       yield partial(out, slots, members.length)
       const leg = legFor(G, q, u, slot, field, at)
-      if (leg.cell >= 0) at.set(u.id, { x: G.nav.x(leg.cell), z: G.nav.z(leg.cell) })
-      out.push({ u, cell: leg.cell, slot, how: leg.cell < 0 ? 'none' : leg.arrive ? 'arrive' : 'short', why: leg.cell < 0 ? 'no way nearer' : '' })
+      leg.f = pinnedHead(heads, u, leg.cell, leg.f, (h) => q.validEnd(G, leg.plan, leg.cell, at, h))
+      if (leg.cell >= 0) at.set(u.id, atOf(G, leg.cell, leg.f))
+      out.push({ u, cell: leg.cell, slot, how: leg.cell < 0 ? 'none' : leg.arrive ? 'arrive' : 'short', why: leg.cell < 0 ? 'no way nearer' : '', ...(leg.f !== undefined ? { f: leg.f } : {}) })
       yield partial(out, slots, members.length)
     }
     const arrive = out.filter((m) => m.how === 'arrive').length, short = out.filter((m) => m.how === 'short').length
@@ -275,8 +334,9 @@ export function* previewSteps(G, q, seat, verb, members, target, given = null, {
         continue
       }
       const ap = approachFor(G, q, u, target, at)
-      if (ap.cell >= 0) at.set(u.id, { x: G.nav.x(ap.cell), z: G.nav.z(ap.cell) })
-      out.push({ u, cell: ap.cell, how: ap.cell === -2 ? 'stay' : ap.cell >= 0 ? 'arrive' : 'none', why: ap.cell === -1 ? 'no way in range' : '' })
+      ap.f = pinnedHead(heads, u, ap.cell, ap.f, (h) => q.validEnd(G, ap.plan, ap.cell, at, h))
+      if (ap.cell >= 0) at.set(u.id, atOf(G, ap.cell, ap.f))
+      out.push({ u, cell: ap.cell, how: ap.cell === -2 ? 'stay' : ap.cell >= 0 ? 'arrive' : 'none', why: ap.cell === -1 ? 'no way in range' : '', ...(ap.f !== undefined ? { f: ap.f } : {}) })
       yield partial(out, undefined, members.length)
     }
     const go = out.filter((m) => m.how === 'arrive').length

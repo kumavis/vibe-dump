@@ -41,10 +41,18 @@
 // ground places it, which takes it off its hull (`place`).
 // (F13) A finger aims as the mouse hovers (input/aim.js: a long press, or
 // 👆 Aim), and its lift is the click.
+// (F9b, DESIGN §4.2.5) A long hull picked up alone, in its deployment or
+// its movement phase, is a group of one (input/group.js's loneHull): a
+// ground click pins its ghost and sends nothing, its heading turned by the
+// ghost's rotate handle or [ / ], Enter, ✓ or the flag sending it, so its
+// hover and its click go to the group's tools here. Its reach is shaded by
+// heading (input/tools/move.js headsOf); its charge's end, picked here as
+// any unit's, ends on the spot heading the roll reaches shortest at the
+// clicked cell (sent as the body's f), its ghost its outline there.
 import { CHARGE_RANGE } from '../core/rules.js'
 import { phaseKey } from '../core/queries.js'
 import { sfx, unlock } from '../view/sfx.js'
-import { chargePick, nearestSpot, endAt, SHORTEST } from './tools/charge-end.js'
+import { chargePick, nearestSpot, endAt, SHORTEST, spotFacing } from './tools/charge-end.js'
 import { spotAt, placeAt } from './tools/deploy.js'
 import * as move from './tools/move.js'
 import * as shoot from './tools/shoot.js'
@@ -187,9 +195,10 @@ export class Human {
     this.flow.refreshUI()
     return null
   }
-  moveTo(u, c) {
+  // ((F9b) a long hull's to heading `f`, when given)
+  moveTo(u, c, f) {
     this.view.overlay.clear()
-    return this.send(this.localSeat(), move.moveTo(u, c))
+    return this.send(this.localSeat(), move.moveTo(u, c, f))
   }
   advance(u) {
     return this.send(this.localSeat(), move.advance(u))
@@ -218,11 +227,13 @@ export class Human {
   // End the charge on cell c, a spot the roll reaches (a click's,
   // nearestSpot's: its -1 for "no spot" is no command, though the wire's
   // Shortest move is -1 too, so that takes its own path, takeShortest).
-  placeCharge(c) {
+  // ((F9b) a long hull's at spot heading f, when given (the ?debug hook's);
+  // else the one its ghost showed)
+  placeCharge(c, f) {
     const pk = this.picking()
     if (!pk) return 'no charge to end'
     if (!(c >= 0 && pk.ok[c])) return `cell ${c} is no spot the roll reaches`
-    return this.endCharge(pk, c)
+    return this.endCharge(pk, c, f)
   }
   // End the charge with the shortest move (SHORTEST: the plan's own cell).
   takeShortest() {
@@ -230,13 +241,16 @@ export class Human {
     if (!pk) return 'no charge to end'
     return this.endCharge(pk, SHORTEST)
   }
-  endCharge(pk, c) {
+  // ((F9b) a long hull's at the spot heading its roll reaches shortest at
+  // c: the one its ghost showed)
+  endCharge(pk, c, f) {
     const overlay = this.view.overlay
     this.pickShown = null
     overlay.clear()
     overlay.ghost.visible = false
+    overlay.ghostHull(null)
     this.tooltip.hide()
-    return this.send(pk.seat, endAt(c))
+    return this.send(pk.seat, endAt(c, pk.plan.fp && c >= 0 ? f ?? spotFacing(pk.plan, c, pk.rolled) : undefined))
   }
 
   // ── The buttons' intents (ui/actions.js) ──────────────────────────────────
@@ -344,10 +358,17 @@ export class Human {
       // itself, filled strongly enough to see when it's only a cell or two
       overlay.rangeRing.visible = false
       overlay.mask(pk.ok, [255, 150, 60], this.G.nav, 150)
-      overlay.ghostAt(this.G.nav, pk.cell, pk.u.r)
+      this.shortGhost(pk)
     }
     // (F10c) Auto-End's countdown, if the orders leave the player nothing
     this.standing?.idled()
+  }
+
+  // Where "Shortest move" puts the charger: its ghost ((F9b) a long hull's
+  // outline at the pending state's heading)
+  shortGhost(pk) {
+    if (pk.plan.fp) this.view.overlay.ghostHull(this.G.nav, pk.cell, pk.f, pk.plan.fp)
+    else this.view.overlay.ghostAt(this.G.nav, pk.cell, pk.u.r)
   }
 
   // ── The pointer and the keys ──────────────────────────────────────────────
@@ -707,7 +728,9 @@ export class Human {
       if (G.turn.stage === 'battle' && ph === 'move' && !u.flags.moved && u.aboard) this.showLanding(u)
       else if (G.turn.stage === 'battle' && ph === 'move' && !u.flags.moved) {
         this.reach = move.planOf((fn) => this.ask(fn), u)
-        overlay.reach(this.reach, G.nav)
+        // ((F9b) a long hull's by heading: where every one fits, and
+        // hatched where only some do)
+        overlay.reach(this.reach, G.nav, this.reach.fp ? this.ask((G, q) => move.headsOf(G, q, this.reach)) : null)
         this.showBoards(u, true)
       } else if (G.turn.stage === 'deploy' && this.deploySeat() === u.side) this.showBoards(u, false)
       // ((V3c) a caster: the AI's pick of its spells to begin with (kept
@@ -739,7 +762,9 @@ export class Human {
     const overlay = this.view.overlay, G = this.G
     this.tooltip.hide()
     overlay.pathLine.visible = false
+    if (overlay.pathTicks) overlay.pathTicks.visible = false
     overlay.ghost.visible = false
+    overlay.ghostHull(null)
     // ((F7b) the LOS rays: drawn again below while an enemy is aimed at)
     overlay.los(null)
     const h = this.hoverPick
@@ -755,7 +780,7 @@ export class Human {
       }
       // off the board mid-pick: show where "Shortest move" would put the
       // unit
-      if (pk) overlay.ghostAt(G.nav, pk.cell, pk.u.r)
+      if (pk) this.shortGhost(pk)
       return
     }
     // ((F9a) as a click: a rider on a hull it may board is the hull)
@@ -763,17 +788,20 @@ export class Human {
     this.hover = h.unit
     let text = ''
     const sel = this.sel
-    // (F10a) a group's formation where a click would pin it
-    if (!pk && this.group?.isGroup()) {
+    // (F10a) a group's formation where a click would pin it ((F9b) and a
+    // lone long hull's ghost, a group of one's)
+    if (!pk && (this.group?.isGroup() || this.group?.loneHull())) {
       text = this.group.hover(h) ?? ''
       if (!text && h.unit) text = `${h.unit.t.name}`
       if (text && this.mouse) this.tooltip.show(text, this.mouse)
       return
     }
-    // a path, drawn with its end's ghost
-    const path = (pts, i, r) => {
+    // a path, drawn with its end's ghost ((F9b) a long hull's its outline
+    // at heading f)
+    const path = (pts, i, r, f) => {
       overlay.path(pts)
-      overlay.ghostAt(G.nav, i, r)
+      if (f !== undefined && sel?.t.fp) overlay.ghostHull(G.nav, i, f, sel.t.fp)
+      else overlay.ghostAt(G.nav, i, r)
     }
     // ((F9a) a vehicle the unit picked up may board, under the pointer: the
     // walk to its side; a rider's landing cell nearest the pointer)
@@ -789,7 +817,14 @@ export class Human {
       } else text = `✖ too far from the ${this.land.v.t.short}: pick a cell in the blue area`
     } else if (pk && h.ground) {
       const i = nearestSpot(G.nav, pk.ok, h.ground.x, h.ground.z)
-      if (i >= 0) {
+      if (i >= 0 && pk.plan.fp) {
+        // ((F9b) a long hull's: to the spot heading its roll reaches
+        // shortest there, its inches the lattice's, turning told)
+        const f = spotFacing(pk.plan, i, pk.rolled)
+        overlay.path(this.ask((G) => G.nav.hullPath(pk.plan.res, i, f)))
+        overlay.ghostHull(G.nav, i, f, pk.plan.fp)
+        text = `End charge here · ${this.ask((G) => move.hullText(G, pk.plan, i, f, pk.rolled))}`
+      } else if (i >= 0) {
         path(this.ask((G) => G.nav.path(pk.plan.res, i, pk.u.r, pk.plan.mode === 'fly' ? null : pk.plan.forbid)), i, pk.u.r)
         text = `End charge here · ${pk.plan.res.dist[i].toFixed(1)}" of ${pk.rolled}"`
       } else text = `✖ out of reach — pick a spot in the orange area`

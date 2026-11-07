@@ -71,6 +71,7 @@ import { STEP } from '../nav.js'
 import { alive, groundY, ownersOf, statusOf } from '../queries.js'
 import { moveMode, forbidMask } from './move.js'
 import { damage, killModel } from './damage.js'
+import { clearOf } from '../footprint.js'
 
 // how far from where it stood a falling unit may land beyond its own
 // radius (DESIGN: within u.r + 6")
@@ -129,11 +130,14 @@ function fall(G, u, d) {
 }
 
 // Whether `u` standing at (x, z) is clear of every other unit on the table
-// by o.r + u.r + 0.08 (validEnd's spacing; a rider stands in nobody's way)
+// by o.r + u.r + 0.08 (validEnd's spacing; a rider stands in nobody's way);
+// (F9b) of a long hull's nearest disc by 0.08 (clearOf)
 function clear(G, u, x, z) {
   for (const o of G.units) {
     if (o === u || !alive(o) || o.aboard) continue
-    if (hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08) return false
+    if (o.t.fp) {
+      if (clearOf(o, x, z, u.r) < 0.08) return false
+    } else if (hypot(o.pos.x - x, o.pos.z - z) < o.r + u.r + 0.08) return false
   }
   return true
 }

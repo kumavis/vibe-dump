@@ -26,12 +26,14 @@
 //               (V3c) spells?: [Spell…] in ranged's place,
 //               fly?, big?, hero?, wrecker?, burrow?, chargeAfterAdvance?,
 //               noCharge?, brawler?, climb?, vehicle?, swarm?: { min }, swoop?: { chargeS },
-//               transport?: Transport }
+//               transport?: Transport, (F9b) footprint?: Footprint }
 //   Weapon  = { name, range?, shots?, S, AP, D, assault?, heavy?, indirect?,
 //               blast?, scenery?, poison?, corrodes?, spell?, mesmerize?,
 //               ward?, snare?, resolve?, fx? }
 //   Transport = { capacity, maxBase, fire, deck, wreck: false | { hx, hy, hz },
-//                 siege?, enclosed? }      (F9a, DESIGN §4.2.5)
+//                 siege?, enclosed?, deckAt?: [x, z] }      (F9a, DESIGN §4.2.5;
+//                                                            deckAt F9b's)
+//   Footprint = { discs: [[dx, dz, r]…], turn, rev }        (F9b, DESIGN §4.2.5)
 //
 // (V3c, DESIGN §2.8) A caster's spells: `spells`, one to nine weapons each
 // with its cast value (`spell`, 2D6 ≥ it), given instead of `ranged`; the
@@ -85,9 +87,34 @@
 // rules reader of `transport` (sim/flag-lint.mjs's one-reader rows); the
 // normalised type carries it frozen only where the def gives it, so every
 // other unit's type is as it was but for its derived `vehicle: false`.
+//
+// (F9b, DESIGN §4.2.5) Long hulls. `footprint` gives a hull a shape of
+// several discs and a facing: `discs`, 2 or 3 of [dx, dz, r] in the hull's
+// own frame (+z its front), listed front to back (each dz below the last),
+// each r from 0.5 to 1.6, exactly one of them the body disc at [0, 0] with
+// r equal to `base` (the unit's pos is its centre, and every plan of the
+// body disc alone is a lower bound on the hull's); `turn`, the inches a 45°
+// pivot costs (≥ 0); `rev`, what a step backing up costs per inch of a step
+// forward (≥ 1). A footprint is a vehicle's (so one big model that never
+// climbs), holds no objective (OC0, so controlOf needs no footprint
+// branch), and never flies (a flying long hull would need footprint
+// landings). Its rules, measured on the tables core/footprint.js derives
+// from it at load (each refused with its figure): no turned offset within
+// 1e-9 of a half cell; each disc's snapped offset within 0.15" of its exact
+// place at every heading; consecutive discs overlapping or touching (gap ≤
+// 0) at every heading; each disc's pivot gap at most 0.06" (the worst point
+// the sweep's 15° samples leave uncovered); the bounding R at most 3.5". The
+// type keeps what the derivation returns, frozen, as `t.fp` (the record's
+// discs, the tables, R, turn, rev and span: core/footprint.js says what each
+// is), and nothing else of the record: core/footprint.js is the one reader
+// of `footprint` (sim/flag-lint.mjs), and the rules read `t.fp`. A
+// footprint's transport may place its deck, `deckAt`, an [x, z] of the
+// hull's frame inside one of its discs (a round hull's inside its base),
+// copied into `t.transport` (present/deck.js packs the riders round it).
 // ---------------------------------------------------------------------------
 
 import { deepFreeze } from '../core/util.js'
+import { deriveFootprint, insideDiscs } from '../core/footprint.js'
 import squirrel from './races/squirrel.js'
 import serpent from './races/serpent.js'
 
@@ -103,9 +130,13 @@ export const AI_ROLES = Object.freeze(['melee', 'raider', 'line', 'shooter', 'he
 export const FLAGS = Object.freeze(['fly', 'big', 'hero', 'wrecker', 'burrow', 'chargeAfterAdvance', 'noCharge', 'brawler', 'climb', 'vehicle'])
 
 const UNIT_KEYS = new Set(['name', 'short', 'role', 'ai', 'models', 'base', 'pts', 'cost', 'stats', 'ranged', 'spells', 'melee', 'abilities',
-  ...FLAGS, 'move', 'deployRow', 'eye', 'chest', 'swarm', 'swoop', 'transport'])
-// (F9a) a transport's fields: the numbers, then the optional booleans
-const TRANSPORT_KEYS = new Set(['capacity', 'maxBase', 'fire', 'deck', 'wreck', 'siege', 'enclosed'])
+  ...FLAGS, 'move', 'deployRow', 'eye', 'chest', 'swarm', 'swoop', 'transport', 'footprint'])
+// (F9a) a transport's fields: the numbers, then the optional booleans, and
+// (F9b) where its deck stands in the hull's frame
+const TRANSPORT_KEYS = new Set(['capacity', 'maxBase', 'fire', 'deck', 'wreck', 'siege', 'enclosed', 'deckAt'])
+// (F9b) a footprint's fields, and its rules' limits (DESIGN §4.2.5's table)
+const FOOTPRINT_KEYS = new Set(['discs', 'turn', 'rev'])
+const FP = Object.freeze({ snap: 0.15, pivot: 0.06, R: 3.5, rMin: 0.5, rMax: 1.6 })
 const WEAPON_NUMS = ['range', 'shots', 'S', 'AP', 'D', 'blast', 'scenery', 'poison', 'spell']
 const WEAPON_BOOLS = ['assault', 'heavy', 'indirect', 'corrodes', 'mesmerize', 'ward', 'snare', 'resolve']
 // (V3c) a spell's effects, each struck by its own rules (at most one a spell)
@@ -168,8 +199,10 @@ function weapon(w, where, melee) {
 // other, `capacity` a whole number from 1 to 12, `maxBase` a radius above 0,
 // `fire` a whole number from 0, `deck` a height from 0, `wreck` false or a
 // box of three half-sizes above 0, `siege` and `enclosed` true or false
-// when given. A copy, the wreck's box its own.
-function transportOf(tr, where) {
+// when given; (F9b) `deckAt`, when given, an [x, z] inside one of `shape`'s
+// discs (the footprint's, or a round hull's base). A copy, the wreck's box
+// and the deck's place its own.
+function transportOf(tr, where, shape) {
   const bad = (why) => new Error(`${where}, transport: ${why}`)
   if (!tr || typeof tr !== 'object' || Array.isArray(tr)) throw bad('must be { capacity, maxBase, fire, deck, wreck }')
   for (const k of Object.keys(tr)) if (!TRANSPORT_KEYS.has(k)) throw bad(`unknown field "${k}"`)
@@ -180,9 +213,50 @@ function transportOf(tr, where) {
   const w = tr.wreck
   if (w !== false && !(w && typeof w === 'object' && !Array.isArray(w) && Object.keys(w).length === 3 && ['hx', 'hy', 'hz'].every((k) => Number.isFinite(w[k]) && w[k] > 0))) throw bad('wreck is false or the box it leaves, { hx, hy, hz }, each a half-size above 0')
   for (const k of ['siege', 'enclosed']) if (tr[k] !== undefined && typeof tr[k] !== 'boolean') throw bad(`${k} must be true or false`)
+  const at = tr.deckAt
+  if (at !== undefined && !(Array.isArray(at) && at.length === 2 && at.every(Number.isFinite) && insideDiscs(shape, at[0], at[1]))) throw bad(`deckAt is where the deck stands in the hull's frame, [x, z] inside its ${shape.length > 1 ? 'footprint' : 'base'}, not ${JSON.stringify(at)}`)
   const out = { capacity: tr.capacity, maxBase: tr.maxBase, fire: tr.fire, deck: tr.deck, wreck: w && { hx: w.hx, hy: w.hy, hz: w.hz } }
   for (const k of ['siege', 'enclosed']) if (tr[k] !== undefined) out[k] = tr[k]
+  if (at !== undefined) out.deckAt = [at[0], at[1]]
   return out
+}
+
+// (F9b, DESIGN §4.2.5) A footprint record, checked for its shape and then
+// by its rules on the tables core/footprint.js derives from it (the
+// schema's header says each), in DESIGN's order: the discs, the body disc,
+// the snapping, the connection, the pivot gap, the size, the costs.
+// Returns the derived `t.fp`.
+function footprintOf(f, base, id, where) {
+  const bad = (why) => new Error(`${where}, footprint: ${why}`)
+  if (!f || typeof f !== 'object' || Array.isArray(f)) throw bad('must be { discs, turn, rev }')
+  for (const k of Object.keys(f)) if (!FOOTPRINT_KEYS.has(k)) throw bad(`unknown field "${k}"`)
+  const { discs } = f
+  if (!Array.isArray(discs) || discs.length < 2 || discs.length > 3) throw bad(`discs is 2 or 3 discs [dx, dz, r], listed front to back, not ${JSON.stringify(discs)}`)
+  discs.forEach((d, q) => {
+    if (!Array.isArray(d) || d.length !== 3 || !d.every(Number.isFinite)) throw bad(`disc ${q} is ${JSON.stringify(d)}, not [dx, dz, r], three numbers`)
+    if (!(d[2] >= FP.rMin && d[2] <= FP.rMax)) throw bad(`disc ${q}'s r is ${d[2]}: a disc's radius is from ${FP.rMin} to ${FP.rMax}`)
+    if (q && !(d[1] < discs[q - 1][1])) throw bad(`disc ${q} is not behind disc ${q - 1}: the discs are listed front to back, each dz below the last`)
+  })
+  const bodies = discs.filter(([dx, dz]) => dx === 0 && dz === 0)
+  if (bodies.length !== 1) throw bad(`needs exactly one body disc at [0, 0], where the unit stands, not ${bodies.length}`)
+  if (bodies[0][2] !== base) throw bad(`the body disc's r is ${bodies[0][2]}, not the unit's base, ${base}`)
+  const { fp, figures } = deriveFootprint({ discs, turn: f.turn, rev: f.rev }, id)
+  if (figures.halves.length) throw bad(`an offset turns onto a half cell (${figures.halves[0]}): within 1e-9 of a half, it would round either way`)
+  for (let h = 0; h < 8; h++) {
+    for (let q = 0; q < fp.n; q++) if (figures.snap[h][q] > FP.snap) throw bad(`disc ${q} at heading ${h} snaps ${figures.snap[h][q].toFixed(3)}" from its exact place: at most ${FP.snap}" at every heading`)
+  }
+  for (let h = 0; h < 8; h++) {
+    for (let q = 0; q < fp.n - 1; q++) if (figures.connected[h][q] > 0) throw bad(`discs ${q} and ${q + 1} at heading ${h} stand ${figures.connected[h][q].toFixed(3)}" apart: consecutive discs overlap or touch at every heading`)
+  }
+  figures.pivot.forEach((g, q) => {
+    if (g > FP.pivot) throw bad(`disc ${q}'s pivot gap is ${g.toFixed(3)}": at most ${FP.pivot}" (the point its pivot's 15° samples leave uncovered)`)
+  })
+  if (fp.R > FP.R) throw bad(`its bounding R is ${fp.R.toFixed(3)}": at most ${FP.R}"`)
+  if (!(Number.isFinite(f.turn) && f.turn >= 0)) throw bad(`turn is the inches a 45° pivot costs, a number from 0, not ${f.turn}`)
+  if (!(Number.isFinite(f.rev) && f.rev >= 1)) throw bad(`rev is what a step backing up costs per inch of a step forward, a number from 1, not ${f.rev}`)
+  // (the tables' exact point symmetry is the derivation's own, §4.1 rule 24)
+  if (!figures.symmetric) throw bad('its tables are not point-symmetric (heading h + 4 the negation of h)')
+  return fp
 }
 
 function unitType(race, key, def) {
@@ -234,7 +308,13 @@ function unitType(race, key, def) {
   if (vehicle && !big) throw bad('a vehicle is big (big: true)')
   if (vehicle && def.climb === true) throw bad('a vehicle never climbs (climb: true is refused)')
   if (def.transport !== undefined && !vehicle) throw bad('a transport is a vehicle (vehicle: true)')
-  const transport = def.transport === undefined ? undefined : transportOf(def.transport, where)
+  // (F9b) a long hull: a vehicle (one big model), OC0, no flier
+  const shaped = def.footprint !== undefined
+  if (shaped && !vehicle) throw bad('a footprint is a vehicle\'s (vehicle: true)')
+  if (shaped && stats.OC !== 0) throw bad(`a footprint unit holds no objective (OC0), not OC${stats.OC}`)
+  if (shaped && fly) throw bad('a footprint unit never flies (a flying long hull would need footprint landings)')
+  const fp = shaped ? footprintOf(def.footprint, def.base, `${race}.${key}`, where) : undefined
+  const transport = def.transport === undefined ? undefined : transportOf(def.transport, where, fp ? fp.discs : [[0, 0, def.base]])
   const t = {
     key, race, name: def.name, short: def.short, role: def.role, ai: def.ai, models: def.models, base: def.base, pts: def.pts, cost: def.cost,
     ...stats,
@@ -257,6 +337,7 @@ function unitType(race, key, def) {
   if (def.swarm) t.swarm = { min: def.swarm.min }
   if (def.swoop) t.swoop = { chargeS: def.swoop.chargeS }
   if (transport) t.transport = transport
+  if (fp) t.fp = fp
   return t
 }
 

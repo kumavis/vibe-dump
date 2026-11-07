@@ -29,6 +29,7 @@ import { relayout, moveUnitTo } from '../units.js'
 import { STEP } from '../nav.js'
 import { moveMode, groundOnly } from './move.js'
 import { hullDestroyed } from './transport.js'
+import { discsOf } from '../footprint.js'
 import { alive, dist, gap, engagedWith, isEngaged, mx, mz, ownersOf, statusOf, groundY } from '../queries.js'
 
 // Allocate `n` wounds of `D` damage to `u`, finishing off wounded models
@@ -81,14 +82,19 @@ export function damage(G, u, n, D, attacker, prefer = null, from = attacker.pos)
 // (F9a) A hull piling in carries its riders (moveUnitTo; the mirror carries
 // them on unit.formation), and a rider only re-forms: it engages nobody
 // (engagedWith is [] aboard), so it never piles in.
+//
+// (F9b) A long hull never piles in: it has one model, so it never re-forms
+// out of a fight. A unit piling in on one steps toward its nearest disc
+// (the gap is fpGap's: core/queries.js gap), to ENGAGE − 0.3 off its edge.
 export function closeRanks(G, u) {
   const foes = engagedWith(G, u)
   relayout(u)
-  if (foes.length && !isEngaged(G, u)) {
+  if (foes.length && !u.t.fp && !isEngaged(G, u)) {
     const f = foes.reduce((a, b) => (gap(u, a) < gap(u, b) ? a : b))
-    const d = dist(u, f)
+    const p = f.t.fp ? nearestDisc(u, f) : f.pos
+    const d = f.t.fp ? hypot(u.pos.x - p.x, u.pos.z - p.z) : dist(u, f)
     const step = gap(u, f) - (ENGAGE - 0.3)
-    const x = u.pos.x + ((f.pos.x - u.pos.x) / d) * step, z = u.pos.z + ((f.pos.z - u.pos.z) / d) * step
+    const x = u.pos.x + ((p.x - u.pos.x) / d) * step, z = u.pos.z + ((p.z - u.pos.z) / d) * step
     // (F7a) no pile-in where the new place isn't standable: off a wall's
     // top, or onto a ledge's band; (F9a) nor, for a ground vehicle, onto a
     // floor above STEP
@@ -99,6 +105,20 @@ export function closeRanks(G, u) {
     }
   }
   emit(G, 'unit.formation', { u: u.id, offs: u.models.map((m) => [m.ox, m.oz]), r: u.r, pos: { x: u.pos.x, z: u.pos.z, ...(G.nav.hasHeight ? { y: groundY(G, u) } : {}) } })
+}
+
+// (F9b) footprint unit f's disc nearest u's edge (the least clearOf of u's
+// disc to it; the first of equals, front to back)
+function nearestDisc(u, f) {
+  let best = null, g = Infinity
+  for (const d of discsOf(f)) {
+    const v = hypot(d.x - u.pos.x, d.z - u.pos.z) - d.r - u.r
+    if (v < g) {
+      g = v
+      best = d
+    }
+  }
+  return best
 }
 
 // Model `m` of `u` falls to `attacker` (dmg: the number its last wound shows).

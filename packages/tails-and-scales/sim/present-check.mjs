@@ -159,6 +159,12 @@
 // Such a battle must show riders aboard at some act and (the scripted ones)
 // an embark and a step off, or it held nothing. They run with every run,
 // and with --only only when it names `riders` (--only riders: them alone).
+// (F9b) On code with the Howdah the Coil's lists in them field it, and the
+// mirror holds a long hull's `f` (its heading) to project(G)'s as well:
+// set by a placement's `f` and a walk's `to.f`. The scripted seats place a
+// long hull at a heading of their choosing and move it with one, and over
+// the battles some Howdah must have turned on a walk, or `f` was held to
+// nothing that changed.
 //
 //
 // (F14) And, before the battles, in this process: the page's own player and
@@ -888,7 +894,24 @@ function eventOrder(unitOf, ladderMul = 2, hypot = Math.hypot) {
       const mv = moving
       // (F7a: with a climb, what the walk cost)
       const cost = e.path.some((p) => p.climb) ? e.path.reduce((L, p, i) => (i ? L + (p.climb ? ladderMul * Math.abs(p.y - e.path[i - 1].y) : hypot(p.x - e.path[i - 1].x, p.z - e.path[i - 1].z)) : 0), 0) : e.L
-      if (mv && (nameOf(e.u) !== mv.name || cost.toFixed(1) !== mv.len)) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, ${cost.toFixed(1)}"${cost !== e.L ? `, ${e.L.toFixed(1)}" over the ground` : ''})`
+      // ((F9b) a long hull's line prints its plan's cost, its turning and
+      // backing in (DESIGN §4.2.5's paths), and its walk's L is the path's
+      // inches plus 0.5" a pivot, the view's timing: so its line's inches lie
+      // between the path's cost on open ground (each run's inches, a backing
+      // run's times the footprint's rev, and turn a 45° pivot) and twice it,
+      // difficult ground or a plough doubling a step)
+      const fp = unitOf(e.u)?.t.fp
+      if (fp && e.path[0]?.f !== undefined) {
+        const D = [[0, 1], [1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1]]
+        let lo = 0
+        for (let i = 1; i < e.path.length; i++) {
+          const a = e.path[i - 1], b = e.path[i], d = hypot(b.x - a.x, b.z - a.z)
+          if (!d) lo += a.f !== b.f ? fp.turn : 0
+          else lo += (b.x - a.x) * D[b.f][0] + (b.z - a.z) * D[b.f][1] < 0 ? d * fp.rev : d
+        }
+        const len = Number(mv?.len)
+        if (mv && (nameOf(e.u) !== mv.name || !(len >= lo - 0.05 && len <= 2 * lo + 0.05))) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, its path's cost ${lo.toFixed(2)}" on open ground, ${e.L.toFixed(1)}" its timing)`
+      } else if (mv && (nameOf(e.u) !== mv.name || cost.toFixed(1) !== mv.len)) why ||= `the move line "${mv.text}" followed by another walk (${nameOf(e.u)}, ${cost.toFixed(1)}"${cost !== e.L ? `, ${e.L.toFixed(1)}" over the ground` : ''})`
       const stomp = !!mv && !!unitOf(e.u)?.t.wrecker && e.L > 0.1
       if (mv && e.stomp !== stomp) why ||= `${nameOf(e.u)}'s walk of ${e.L.toFixed(2)}" (a move) has stomp ${e.stomp}, not ${stomp}`
       // flying exactly when its unit flies; a move's pace, or a charge's
@@ -976,7 +999,7 @@ async function ridersChild(dir) {
   const [id, spec, scripted] = JSON.parse(readFileSync(0, 'utf8'))
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
   const [core, mirror, { RACES }, { MISSIONS }] = await Promise.all([at('core/index.js'), at('present/mirror.js'), at('data/schema.js'), at('data/mission.js')])
-  const out = { id, acts: 0, stops: 0, events: 0, kinds: {}, aboard: 0, mismatch: null, error: null }
+  const out = { id, acts: 0, stops: 0, events: 0, kinds: {}, aboard: 0, turns: 0, longs: 0, mismatch: null, error: null }
   const miss = (why) => (out.mismatch ??= why)
   try {
     const A = core.army, rules = MISSIONS[spec.mission].list
@@ -1004,10 +1027,14 @@ async function ridersChild(dir) {
         mirror.applyEvent(M, e)
         out.events++
         out.kinds[e.t] = (out.kinds[e.t] ?? 0) + 1
+        // ((F9b) a long hull's walk that turned it: a heading on its path
+        // other than the one it set out on)
+        if (e.t === 'unit.move' && e.path[0]?.f !== undefined && e.path.some((p) => p.f !== e.path[0].f)) out.turns++
         if (e.t !== 'act') continue
         const proj = projs.shift()
         out.acts++
         if (Object.values(proj.units).some((u) => u.aboard)) out.aboard++
+        if (Object.values(proj.units).some((u) => u.f !== undefined)) out.longs++
         const d = differ(M, proj)
         if (d) return miss(`act ${out.acts} (${where}): the mirror folded from the events differs from the match: ${d}`)
       }
@@ -1043,6 +1070,13 @@ async function ridersChild(dir) {
           }
           const to = q.freeSpot(G, v, v.pos.x, v.pos.z - 6, s, G.units.filter((o) => o !== v))
           if (to) send({ t: 'place', u: v.id, c: G.nav.index(to.x, to.z) })
+          // ((F9b) a long hull placed at a heading of the script's: where it
+          // stands, the first other heading place takes)
+          for (const w of hulls.filter((x) => x.t.fp)) {
+            const c = G.nav.index(w.pos.x, w.pos.z)
+            const f = [1, 2, 3, 4, 5, 6, 7].map((k) => (w.facing + k) & 7).find((h) => core.legal(G, s, { t: 'place', u: w.id, c, f: h }) === null)
+            if (f !== undefined) send({ t: 'place', u: w.id, c, f })
+          }
         }
         send({ t: 'deployed' })
         continue
@@ -1061,7 +1095,10 @@ async function ridersChild(dir) {
         const v = mine.find((x) => x.t.transport && !x.flags.moved && q.riders(G, x).length && !q.isEngaged(G, x))
         if (v) {
           const plan = q.movePlan(G, v, 0), c = q.nearestValid(G, plan, v.pos.x - G.seats[s].edge * 3, v.pos.z)
-          if (c >= 0) send({ t: 'move', u: v.id, c })
+          // ((F9b) a long hull's at a heading of the script's: the first
+          // valid one past its own)
+          const f = v.t.fp && c >= 0 ? [1, 2, 3, 4, 5, 6, 7].map((k) => (v.facing + k) & 7).find((h) => q.validEnd(G, plan, c, null, h)) : undefined
+          if (c >= 0) send(f === undefined ? { t: 'move', u: v.id, c } : { t: 'move', u: v.id, c, f })
         }
         if (G.pending?.k === 'phase') send({ t: 'auto' })
         continue
@@ -1433,7 +1470,7 @@ async function parent({ env = process.env, quiet = false } = {}) {
   })
   // (F9a) the riders, in Node (their battles' lines read as the corpus's do)
   if (rides) {
-    const held = { acts: 0, stops: 0, aboard: 0, embarks: 0, steps: 0 }
+    const held = { acts: 0, stops: 0, aboard: 0, embarks: 0, steps: 0, turns: 0, longs: 0 }
     await pool(RIDES, CPUS, async (job) => {
       const r = await child(dir, job, env, '--riders')
       const why = r.error ?? r.mismatch
@@ -1443,9 +1480,16 @@ async function parent({ env = process.env, quiet = false } = {}) {
       held.aboard += r.aboard ?? 0
       held.embarks += r.kinds?.['unit.embark'] ?? 0
       held.steps += r.kinds?.['unit.disembark'] ?? 0
+      held.turns += r.turns ?? 0
+      held.longs += r.longs ?? 0
       say(`  ${(job[2] ? 'human' : 'ai').padEnd(5)} ${job[0].padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 300)}` : `${String(r.acts).padStart(3)} acts, ${String(r.stops).padStart(3)} stops, ${String(r.events).padStart(5)} events: the mirror is the match, riders aboard at ${r.aboard} acts`}`)
     })
-    say(`  (F9a) the riders: ${RIDES.length} battles with War-Carts in Node, the mirror held at ${held.acts} acts and ${held.stops} stops (riders aboard at ${held.aboard} acts; ${held.embarks} embarks, ${held.steps} steps off and bail-outs)`)
+    say(`  (F9a) the riders: ${RIDES.length} battles with War-Carts in Node, the mirror held at ${held.acts} acts and ${held.stops} stops (riders aboard at ${held.aboard} acts; ${held.embarks} embarks, ${held.steps} steps off and bail-outs)${held.longs ? `; (F9b) a long hull's f held at ${held.longs} acts, ${held.turns} of its walks turning it` : ''}`)
+    // ((F9b) on code with the lattice, some Howdah turned on a walk)
+    if (/hullReach\(/.test(readFileSync(join(dir, 'core', 'nav.js'), 'utf8')) && !failed && !held.turns) {
+      failed++
+      say('  FAIL (F9b) no long hull turned on a walk in the battles with Howdahs: the mirror\'s f held nothing that changed')
+    }
   }
   // (F7c) the falls, in Node
   if (falls) {

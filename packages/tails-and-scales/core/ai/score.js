@@ -13,10 +13,12 @@ import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount, saveNeed
 import { draw } from '../rng.js'
 import { hypot, hypot3 } from '../dmath.js'
 import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf, gap, isEngaged, canCharge } from '../queries.js'
-import { climbs, moveMode } from '../actions/move.js'
+import { climbs, moveMode, latticeMode } from '../actions/move.js'
+import { clearOf } from '../footprint.js'
 import { friendsUnder } from '../actions/shoot.js'
 import { inFootprint } from '../actions/settle.js'
 import { HAZARDS } from '../../data/hazards.js'
+import { MISSIONS } from '../../data/mission.js'
 
 // a unit's points still standing
 export const worth = (u) => (u.t.pts * u.alive) / u.t.models
@@ -260,9 +262,18 @@ export const KEG_FEAR = 0.12, KEG_SMASH = 0.3
 // (V3c; rule 10: it bumps with V3c) `w`: the weapon, a caster's spell that
 // strikes as one (an eruption, the gaze: spellValue's), its ranged weapon
 // by default; `pre` is only ever its ranged weapon's.
+// (F9b) shotValue's gap when either is a long hull: from `from`, the
+// shooter's body disc (a long hull's base) to the target's nearest disc
+function hullGap(u, e, from) {
+  const r = u.t.fp ? u.t.base : u.r
+  return e.t.fp ? clearOf(e, from.x, from.z, r) : hypot(e.pos.x - from.x, e.pos.z - from.z) - r - e.r
+}
 export function shotValue(G, u, e, from, moved, pre = null, w = u.t.ranged) {
   if (!w) return 0
-  const g = hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
+  // ((F9b, rule 10) a long hull shooting measures from its body disc, never
+  // its bounding R (which would claim shots the rules refuse); a long hull
+  // target from its nearest disc)
+  const g = u.t.fp || e.t.fp ? hullGap(u, e, from) : hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
   if (g > (w === u.t.ranged ? rangeOf(G, u, e, from) : w.range)) return 0
   const s = sight(G, u, e, from, pre?.cover)
   if (!s.visible && !w.indirect && !w.mesmerize) return 0
@@ -403,14 +414,31 @@ export function scanBox(nav, x, z, reach) {
 // (core/ai/policy.js hullRole: a raider while brawlers ride it, else a line
 // unit). (Friends never count riders: friendsOf leaves them out, so a hull
 // isn't pushed off by its own.)
+//
+// (F9b, DESIGN §4.2.5's AI; rule 10: it bumps with F9b) A long hull scans
+// its lattice by cell (plan.cells, the least distance at any heading), a
+// cell passing when it has a valid end at some heading (validEnd's null
+// heading), each such cell its one tie-break draw (§4.1 rule 25), scored
+// at the body's centre. The room term: a long hull ending, or staying,
+// where it could pivot neither way (nav.hullRoom on its terrain alone:
+// the memo's bits) scores ROOM less, at the cell's best heading (cellBest's,
+// the move's default where it is a valid end) or, staying put, where it
+// stands and faces, so it keeps out of the pockets it couldn't leave.
+//
+// (F9b, DESIGN §4.2.2's AI count budget; rule 10: it bumps with F9b) On a
+// mission with `ai` (Grand and the Powder Field), the lattice's step is
+// its `lattice` cells at least, the unit's own step where that is coarser.
+export const ROOM = 1.5
 export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
   const { nav } = G
   const ctx = scoring(G, u, claimed, role)
+  const fp = plan.fp, roomOf = fp ? (c, h) => (nav.hullRoom(c, h, fp, latticeMode(plan.mode)) ? 0 : -ROOM) : null
   // stay put is always an option
-  let best = { cell: -1, score: score(G, u, u.pos.x, u.pos.z, ctx, false), dist: 0, ...ctx.last }
-  const step = u.t.M > 8 ? 3 : 2 // sample on a 1" or 1.5" lattice
-  const res = plan.res
-  const box = scanBox(nav, res.sx, res.sz, plan.max)
+  let best = { cell: -1, score: score(G, u, u.pos.x, u.pos.z, ctx, false) + (fp ? roomOf(nav.index(u.pos.x, u.pos.z), u.facing) : 0), dist: 0, ...ctx.last }
+  const B = budgetOf(G)
+  const step = B ? Math.max(B.lattice, u.t.M > 8 ? 3 : 2) : u.t.M > 8 ? 3 : 2 // sample on a 1" or 1.5" lattice
+  const res = fp ? plan.cells : plan.res
+  const box = scanBox(nav, plan.res.sx, plan.res.sz, plan.max)
   for (let iz = Math.ceil(box.z0 / step) * step; iz <= box.z1; iz += step) {
     const off = (iz / step) % 2 ? 1 : 0
     for (let ix = off + Math.max(0, Math.ceil((box.x0 - off) / step)) * step; ix <= box.x1; ix += step) {
@@ -418,7 +446,7 @@ export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
       if (!isFinite(res.dist[i])) continue
       if (!validEnd(G, plan, i)) continue
       const x = nav.x(i), z = nav.z(i)
-      const sc = score(G, u, x, z, ctx, true) + draw(G.rng) * 0.05
+      const sc = fp ? score(G, u, x, z, ctx, true) + roomOf(i, res.h[i]) + draw(G.rng) * 0.05 : score(G, u, x, z, ctx, true) + draw(G.rng) * 0.05
       if (sc > best.score) best = { cell: i, score: sc, dist: hypot(x - u.pos.x, z - u.pos.z), ...ctx.last }
     }
   }
@@ -439,8 +467,11 @@ export function bestSpot(G, u, plan, claimed, role = u.t.ai) {
 // what a template on each would do to the manned platforms (fallGain).
 // (F9a) `role`
 // is the role the unit plays as (bestSpot's: a hull's by its riders).
+// ((F9b) On a mission with an AI count budget, only its `targets` nearest
+// enemies: nearestOf.)
 function scoring(G, u, claimed, role) {
-  const enemies = enemiesOf(G, u)
+  const B = budgetOf(G)
+  const enemies = B ? nearestOf(G, u, enemiesOf(G, u), B.targets) : enemiesOf(G, u)
   const friends = friendsOf(G, u)
   const owners = G.objectives.map((o) => controlOf(G, o))
   const w = u.t.ranged, shoots = !!w && role !== 'melee'
@@ -453,6 +484,22 @@ function scoring(G, u, claimed, role) {
     fall: plats.length ? fallGain(G, u, e, w, plats) : 0,
   }]))
   return { enemies, friends, owners, claimed, role, pre, kegs, kegDanger: kegs.length > 0 && kegDanger(G, u.side) }
+}
+
+// (F9b) A mission's AI count budget (DESIGN §4.2.2: `ai`, { lattice,
+// targets }, rules data that RULES_ID hashes with the mission), or null
+export const budgetOf = (G) => MISSIONS[G.setup.mission ?? 'classic']?.ai ?? null
+
+// (F9b) The `k` of `enemies` nearest `u` by gap (the rules' edge gap: a
+// long hull's nearest disc, fpGap), ties to the earlier in the list (G.units
+// order, as enemiesOf gives them), kept in the list's order; the list
+// itself when it holds k or fewer. No draw.
+export function nearestOf(G, u, enemies, k) {
+  if (enemies.length <= k) return enemies
+  const by = enemies.map((e, i) => ({ g: gap(u, e), i }))
+  by.sort((a, b) => a.g - b.g || a.i - b.i)
+  const keep = new Set(by.slice(0, k).map((x) => x.i))
+  return enemies.filter((e, i) => keep.has(i))
 }
 
 // (F9a) Where rider `u` steps off to, of `cells` (its landing cells, in
@@ -631,8 +678,16 @@ export function score(G, u, x, z, ctx, moving) {
     if (front < 8) s -= (8 - front) * 0.6
   }
   // don't bunch up for the blast templates
+  // ((F9b, rule 10: the play-report's tuning) a long hull measures its own
+  // side of the gap by its body disc, t.base, as its range terms do (Q13),
+  // never its bounding R: read by R, every cell within 4.5" of a friend's
+  // centre cost it (its 2.5"-wide body taken for a 6" disc), and the
+  // Howdahs stayed behind their own lines, moving in 87-91% of their
+  // movement phases (play-report's F9b row: 41 of 47 on four Field and
+  // Grand AI pairs, 706 of 774 on its 64-battle sweep), where DESIGN
+  // §4.2.9 asks 90%; by the body disc 94% on that sweep (713 of 760))
   for (const f of friends) {
-    const g = hypot(f.pos.x - x, f.pos.z - z) - f.r - u.r
+    const g = t.fp ? hypot(f.pos.x - x, f.pos.z - z) - f.r - t.base : hypot(f.pos.x - x, f.pos.z - z) - f.r - u.r
     if (g < 1.5) s -= (1.5 - g) * 0.6
   }
   // (F19a) a powder keg's blast, and a wrecker's walk through a keg

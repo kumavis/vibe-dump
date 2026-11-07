@@ -116,5 +116,19 @@ export const RULES_ID = rulesId()
 // wounds, §4.1 rule 17), and the AI's templates weighing the fall of a
 // manned platform they would help bring down (core/ai/score.js fallGain,
 // rule 10): recipe, rules and AI code, no rules data, so RULES_ID stays,
-// and only a fortified board standing a platform changes)
-export const CORE_VERSION = 14
+// and only a fortified board standing a platform changes; 15: F9b's long
+// hulls: a unit type's `footprint` (2 or 3 discs turned with a facing,
+// its tables derived at load from exact constants: core/footprint.js), a
+// footprint unit's `facing` (stateHash's UNIT_EXTRAS) and the optional
+// heading `f` of place, move and chargeEnd, the lattice (core/nav.js
+// hullReach: forward, reverse and pivots where the sweep is clear) and
+// every rule measuring a footprint unit by its nearest disc, and the AI's
+// room term and charge prefilter (rule 10); each a branch only a footprint
+// unit (or a unit beside one) reaches; and the AI count budget (DESIGN
+// §4.2.2: a mission's `ai`, { lattice, targets }, on Grand and the Powder
+// Field, its trigger met by the long hulls), the move scan's lattice and
+// the enemies scored cut down there, so those two missions' battles play
+// otherwise and every other battle as it did; RULES_ID moves with the
+// Howdah (appended to the Coil's roster, its Grand and Powder prices), the
+// footprint field, the transport's `deckAt` and the missions' `ai`)
+export const CORE_VERSION = 15
