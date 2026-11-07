@@ -12924,31 +12924,39 @@
    "name": "Hōnaunau government school",
    "type": "government",
    "island": "hawaii",
-   "from": 1882,
+   "from": 1880,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "list of the government common schools having 25 or more pupils"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1880: Hōnaunau, H. Manase, teacher"
     }
    ],
-   "note": "A government common school at Hōnaunau, South Kona, listed in the Board’s report of 1882; the record read gives its village, not its site."
+   "note": "A government common school at Hōnaunau, South Kona, listed in the Board’s reports from 1880; the record read gives its village, not its site."
   },
   {
    "name": "Hoʻokena government school",
    "type": "government",
    "island": "hawaii",
-   "from": 1882,
+   "from": 1880,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "list of the government common schools having 25 or more pupils"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1880: Hoʻokena, D. H. Nahinu, teacher"
     }
    ],
-   "note": "A government common school at Hoʻokena, South Kona, listed in the Board’s report of 1882; the record read gives its village, not its site."
+   "note": "A government common school at Hoʻokena, South Kona, listed in the Board’s reports from 1880; the record read gives its village, not its site."
   },
   {
    "name": "Alae government school",
@@ -13104,16 +13112,20 @@
    "name": "Honokōhau government school",
    "type": "government",
    "island": "maui",
-   "from": 1882,
+   "from": 1880,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "list of the government common schools having 25 or more pupils"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1880: Honokōhau, Maui, A. Wahinehookae, teacher (the teacher of 1882)"
     }
    ],
-   "note": "A government common school at Honokōhau, Lāhainā, listed in the Board’s report of 1882; the record read gives its village, not its site."
+   "note": "A government common school at Honokōhau, Lāhainā, listed in the Board’s reports from 1880; the record read gives its village, not its site."
   },
   {
    "name": "Union School, Wailuku",
@@ -13284,16 +13296,20 @@
    "name": "Kaumakapili government school",
    "type": "government",
    "island": "oahu",
-   "from": 1882,
+   "from": 1868,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "list of the government common schools having 25 or more pupils"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1868: “Mr. J. Kiha’s School, Kaumakapili”"
     }
    ],
-   "note": "A government common school at Kaumakapili, Honolulu, listed in the Board’s report of 1882; the record read gives its village, not its site."
+   "note": "A government common school at Kaumakapili, Honolulu, listed in the Board’s reports from 1868; the record read gives its village, not its site."
   },
   {
    "name": "Pauoa government school",
@@ -13404,16 +13420,20 @@
    "name": "Hakipuʻu government school",
    "type": "government",
    "island": "oahu",
-   "from": 1882,
+   "from": 1880,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "list of the government common schools having 25 or more pupils"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1880: Hakipuʻu, Mrs. K. Paikule, teacher"
     }
    ],
-   "note": "A government common school at Hakipuʻu, Koʻolaupoko, listed in the Board’s report of 1882; the record read gives its village, not its site."
+   "note": "A government common school at Hakipuʻu, Koʻolaupoko, listed in the Board’s reports from 1880; the record read gives its village, not its site."
   },
   {
    "name": "Hanapēpē government school",
@@ -13464,16 +13484,20 @@
    "name": "Anahola government school",
    "type": "government",
    "island": "kauai",
-   "from": 1882,
+   "from": 1870,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "list of the government common schools having 25 or more pupils"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1870: “At Anahola, Rev. E. K. Halekunihi’s School”"
     }
    ],
-   "note": "A government common school at Anahola, Hanalei, listed in the Board’s report of 1882; the record read gives its village, not its site."
+   "note": "A government common school at Anahola, Hanalei, listed in the Board’s reports from 1870; the record read gives its village, not its site."
   },
   {
    "name": "Kīlauea government school",
@@ -13494,16 +13518,20 @@
    "name": "Niʻihau government school",
    "type": "government",
    "island": "niihau",
-   "from": 1882,
+   "from": 1876,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "list of the government common schools having 25 or more pupils"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1876: Niʻihau, with its teacher and pupils"
     }
    ],
-   "note": "A government common school at Niʻihau, listed in the Board’s report of 1882; the record read gives its village, not its site."
+   "note": "A government common school at Niʻihau, listed in the Board’s reports from 1876; the record read gives its village, not its site."
   },
   {
    "name": "Pohukaina Girls’ School",
@@ -13524,106 +13552,134 @@
    "name": "Reformatory School",
    "type": "government",
    "island": "oahu",
-   "from": 1882,
+   "from": 1866,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the government select schools"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1866: “The Reformatory School — has been established as directed”"
     }
    ],
-   "note": "A free boarding school for boys at Honolulu. Listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "A free boarding school for boys at Honolulu. Listed in the Board’s reports from 1866; the record read does not give its site."
   },
   {
    "name": "Kohala English School",
    "type": "government",
    "island": "hawaii",
-   "from": 1882,
+   "from": 1878,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the government select schools"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1878: Kohala English School"
     }
    ],
-   "note": "A government select school in Kohala. Listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "A government select school in Kohala. Listed in the Board’s reports from 1878; the record read does not give its site."
   },
   {
    "name": "Waialua Female Seminary",
    "type": "mission",
    "island": "oahu",
-   "from": 1882,
+   "from": 1868,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the independent schools aided by the government"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1868: Waialua Female Seminary among the boarding schools"
     }
    ],
-   "note": "An independent school aided by the government, listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "An independent school aided by the government, listed in the Board’s reports from 1868; the record read does not give its site."
   },
   {
    "name": "East Maui Female Seminary",
    "type": "mission",
    "island": "maui",
-   "from": 1882,
+   "from": 1874,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the independent schools aided by the government"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1874: East Maui Female Seminary, Makawao"
     }
    ],
-   "note": "An independent school aided by the government, listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "An independent school aided by the government, listed in the Board’s reports from 1874; the record read does not give its site."
   },
   {
    "name": "St. Cross Seminary",
    "type": "private",
    "island": "maui",
-   "from": 1882,
+   "from": 1876,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the independent schools aided by the government"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1876: St. Cross Seminary, Lahaina"
     }
    ],
-   "note": "An independent school at Lāhainā aided by the government, listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "An independent school at Lāhainā aided by the government, listed in the Board’s reports from 1876; the record read does not give its site."
   },
   {
    "name": "Kohala Female Seminary",
    "type": "mission",
    "island": "hawaii",
-   "from": 1882,
+   "from": 1880,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the independent schools aided by the government"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1880: Kohala Female Seminary"
     }
    ],
-   "note": "An independent school aided by the government, listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "An independent school aided by the government, listed in the Board’s reports from 1880; the record read does not give its site."
   },
   {
    "name": "Christ Church School",
    "type": "private",
    "island": "hawaii",
-   "from": 1882,
+   "from": 1876,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the independent schools aided by the government"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1876: Christ Church School, South Kona"
     }
    ],
-   "note": "An independent school in Kona aided by the government, listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "An independent school in Kona aided by the government, listed in the Board’s reports from 1876; the record read does not give its site."
   },
   {
    "name": "Hilo Boys’ Boarding School",
@@ -13659,46 +13715,58 @@
    "name": "Bethel Chinese School",
    "type": "mission",
    "island": "oahu",
-   "from": 1882,
+   "from": 1876,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the independent schools aided by the government"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1876: the Bethel Chinese School’s annual grant"
     }
    ],
-   "note": "An independent school in Honolulu aided by the government, listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "An independent school in Honolulu aided by the government, listed in the Board’s reports from 1876; the record read does not give its site."
   },
   {
    "name": "Hilo Foreign School",
    "type": "private",
    "island": "hawaii",
-   "from": 1882,
+   "from": 1874,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the independent schools aided by the government"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1874: “Hilo Foreign School (formerly Miss H. F. Coan’s School)”"
     }
    ],
-   "note": "An independent school at Hilo aided by the government, listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "An independent school at Hilo aided by the government, listed in the Board’s reports from 1874; the record read does not give its site."
   },
   {
    "name": "Lahaina Catholic Mission School",
    "type": "private",
    "island": "maui",
-   "from": 1882,
+   "from": 1880,
    "to": null,
    "datePrecision": "by",
    "sources": [
     {
      "id": "kingdom-board-of-education-report-1882",
      "where": "the independent schools aided by the government"
+    },
+    {
+     "id": "kingdom-board-of-education-reports-1860-1880",
+     "where": "1880: Lahaina Catholic Mission School"
     }
    ],
-   "note": "An independent school at Lāhainā aided by the government, listed in the Board’s report of 1882; the record read does not give its site."
+   "note": "An independent school at Lāhainā aided by the government, listed in the Board’s reports from 1880; the record read does not give its site."
   },
   {
    "name": "Chinese Mission School",
@@ -14027,8 +14095,8 @@
    "access": "open",
    "opened": false,
    "read": "title",
-   "note": "The kingdom’s reports to the legislature, 1856–1896; the University of Hawaiʻi’s eVols holds them. The report of 1882 was read (its own entry); the others not yet.",
-   "wanted": "For each report year, the schools by district with teachers and pupils; with a survey sheet that marks the schoolhouses, the site, the opening and the closing of each, for schools.json.",
+   "note": "The kingdom’s reports to the legislature, 1856–1896, in the University of Hawaiʻi’s eVols. Those of 1860–1882 were read (their own entries); those of 1884–1896 could not be fetched, the repository now asking for a browser check.",
+   "wanted": "The reports of 1884 to 1896, for the last year each school of 1882 is listed, and so its closing.",
    "url": "https://evols.library.manoa.hawaii.edu/"
   },
   {
@@ -14280,6 +14348,18 @@
    "read": "part",
    "note": "Read 2026-11-08 in the Library of Congress’s scans: the index of specials (the public schools and their sheets) and sheets 50 (the Royal Public School), 74 (Pohukaina), 82 (Kaʻahumanu) and 114 (Liliʻuokalani), each school drawn with its buildings in its block between named streets.",
    "wanted": "The other schools’ sheets (Kaʻiulani 15, Kalihi-waena 4 and 6, Kauluwela 27 and 30, Mōʻiliʻili 102, Waikīkī 120, Central Grammar 49 and 51, the Normal School 62), and the 1927 atlas, for their sites and the years between."
+  },
+  {
+   "id": "kingdom-board-of-education-reports-1860-1880",
+   "title": "Reports of the President of the Board of Education, 1860–1880",
+   "author": "Kingdom of Hawaiʻi, Board of Education",
+   "year": 1880,
+   "url": "https://evols.library.manoa.hawaii.edu/",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "note": "The reports of 1860 to 1880 in the University of Hawaiʻi’s eVols scans (handles 10524/68282 to 68300), read 2026-11-08 in their text layers for the earliest report that lists each school of the 1882 report; each citation names the report’s year and the line.",
+   "wanted": "The reports of 1884 to 1896 (eVols, now behind a browser check) for the year each school was last listed."
   }
  ]
 }
