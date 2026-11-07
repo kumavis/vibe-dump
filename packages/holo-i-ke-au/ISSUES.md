@@ -41,9 +41,22 @@ fix has landed in `dist/` and been looked at again.
 - **Seen (1480, land view):** settlement dots spread over the whole south
   and east lowlands of Kauaʻi, the Kōloa–Līhuʻe plain included, with little
   weight on the valleys; Niʻihau needs a closer shot.
-- **Open:** whether the settlement keyframe for the era puts people where the
-  record does (the windward and southern valleys, the shore), and what
-  Niʻihau should carry.
+- **Cause:** the era draws the 1778 keyframe whole, and that keyframe's bake
+  gave every habitable texel a floor weighted by rain, which carried a third
+  of Kauaʻi's people evenly over the wet Līhuʻe–Kapaʻa plateau, and gave
+  Niʻihau King's ten thousand, a figure he made from the length of its coast
+  rather than a count (the 1832 census found 1,047).
+- **Fix so far:** the floor fades inland from the sea, the shore weighs
+  twice what it did, agroforestry counts at half, and Niʻihau is back-cast
+  from the 1832 census as Kahoʻolawe already was. Land over 10 people per
+  km² falls from 79% to 46% of Kauaʻi and from 98% to 44% of Niʻihau, whose
+  people now sit in a ring along the shore. The same rule runs on every
+  island. Sources in `methods.contact.settlement` and RESEARCH.md §9.
+- **Still to do:** the Kapaʻa–Kōloa plain holds about half the island's
+  people where the 1835–36 counts by ahupuaʻa give it a third; 1480 is drawn
+  as fully as 1778 though Kōloa's fields were only being laid out around
+  1450; and short orange dashes on Niʻihau at the close zoom come from the
+  ground drawing, not the settlement layer, and want identifying.
 
 ### 4. Modern harbour works show around Honolulu before contact
 
