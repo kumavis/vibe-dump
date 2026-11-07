@@ -5082,7 +5082,7 @@
   },
   {
    "id": "mckinley-high",
-   "name": "McKinley High School",
+   "name": "President William McKinley High School",
    "type": "public",
    "island": "oahu",
    "at": {
@@ -5090,9 +5090,9 @@
     "key": 167
    },
    "footprint": "way/66833120",
-   "from": 1999,
+   "from": 1923,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "9–12",
    "sources": [
     {
@@ -5100,16 +5100,20 @@
      "where": "objectid 167"
     },
     {
-     "id": "hidoe-ssir",
-     "where": "SY 1999–00: the first report read that has the school"
+     "id": "wikipedia-president-william-mckinley-high-school",
+     "where": "history"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 1592,
     "source": "hidoe-ssir"
-   }
+   },
+   "alt": [
+    "McKinley High School"
+   ],
+   "group": "mckinley-high-school",
+   "note": "Founded as the Fort Street English Day School in 1865; at its King Street campus from 1923."
   },
   {
    "id": "mililani-high",
@@ -11577,22 +11581,26 @@
     "key": 92
    },
    "footprint": null,
-   "from": 2021,
+   "from": 1961,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K thru 12th",
    "sources": [
     {
      "id": "hawaii-gis-private-schools",
      "where": "objectid 92"
+    },
+    {
+     "id": "schools-own-pages",
+     "where": "https://varietyschool.org/history/"
     }
    ],
-   "by": "hawaii-gis-private-schools",
    "pupils": {
     "year": 2021,
     "n": 41,
     "source": "hawaii-gis-private-schools"
-   }
+   },
+   "note": "Founded in 1961 as Honolulu Day School at the Church of the Crossroads; the record read does not say since when it has stood here."
   },
   {
    "id": "waimea-country-school",
@@ -12283,6 +12291,66 @@
     }
    ],
    "note": "Hawaiʻi Loa College’s windward campus, Hawaiʻi Pacific University’s after the merger of 1992."
+  },
+  {
+   "id": "fort-street-school-keoua-hale",
+   "name": "Fort Street School",
+   "alt": [
+    "Fort Street English Day School"
+   ],
+   "type": "government",
+   "island": "oahu",
+   "at": {
+    "layer": "public",
+    "key": 17
+   },
+   "footprint": null,
+   "from": 1869,
+   "to": 1906,
+   "datePrecision": "year",
+   "group": "mckinley-high-school",
+   "sources": [
+    {
+     "id": "wikipedia-president-william-mckinley-high-school",
+     "where": "history"
+    },
+    {
+     "id": "kingdom-board-of-education-report-1882",
+     "where": "the government select schools: Fort Street School"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "Central Middle School, SY 2004–05 and 2009–10: the site of Keōua Hale"
+    }
+   ],
+   "note": "The Fort Street English Day School at Keōua Hale, Ruth Keʻelikōlani’s palace, from November 1869 as the article has it (the school on the site now dates the palace from 1878), until it moved in 1907. Placed at the site’s school of today."
+  },
+  {
+   "id": "mckinley-high-beretania-victoria",
+   "name": "President William McKinley High School",
+   "type": "public",
+   "island": "oahu",
+   "at": {
+    "lonlat": [
+     -157.8480801,
+     21.3033476
+    ],
+    "precision": "inferred",
+    "source": "osm",
+    "key": "node/110584205"
+   },
+   "footprint": null,
+   "from": 1907,
+   "to": 1922,
+   "datePrecision": "year",
+   "group": "mckinley-high-school",
+   "sources": [
+    {
+     "id": "wikipedia-president-william-mckinley-high-school",
+     "where": "history"
+    }
+   ],
+   "note": "At the corner of Beretania and Victoria Streets from 1907, renamed for the president, until its King Street campus opened in 1923; the record read does not say which corner. Placed at the crossing."
   }
  ],
  "unplaced": [
@@ -13245,21 +13313,6 @@
    "note": "A government common school at Niʻihau, listed in the Board’s report of 1882; the record read gives its village, not its site."
   },
   {
-   "name": "Fort Street School",
-   "type": "government",
-   "island": "oahu",
-   "from": 1882,
-   "to": null,
-   "datePrecision": "by",
-   "sources": [
-    {
-     "id": "kingdom-board-of-education-report-1882",
-     "where": "the government select schools"
-    }
-   ],
-   "note": "A government select school in Honolulu, with an upper department. Listed in the Board’s report of 1882; the record read does not give its site."
-  },
-  {
    "name": "Pohukaina Girls’ School",
    "type": "government",
    "island": "oahu",
@@ -13985,6 +14038,19 @@
    "read": "part",
    "note": "Read 2026-11-07: each charter school’s profile, its address and the year it was established as a charter school. For a start-up that is its opening; for a school converted to a charter it is the year of the conversion, and those are not dated by it.",
    "wanted": "For the converted schools: the year each school itself opened."
+  },
+  {
+   "id": "wikipedia-president-william-mckinley-high-school",
+   "title": "President William McKinley High School",
+   "author": "Wikipedia",
+   "year": 2026,
+   "url": "https://en.wikipedia.org/wiki/President_William_McKinley_High_School",
+   "access": "open",
+   "opened": true,
+   "read": "part",
+   "tertiary": true,
+   "note": "Read 2026-11-07 (revision of 2026-08-24): founded as the Fort Street English Day School in 1865; moved to Keōua Hale, the former palace of Ruth Keʻelikōlani, in November 1869; to the corner of Beretania and Victoria Streets in 1907 and renamed; to its King Street campus in 1923.",
+   "wanted": "The school’s site from 1865 to 1869 on Fort Street, and which corner of Beretania and Victoria it stood on."
   }
  ]
 }
