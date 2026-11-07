@@ -1324,7 +1324,7 @@ export class Scatter {
 export function islandMetres(app, t, x, z, year) {
   let h = t.metresAt(x, z)
   // (the ground under the roads first, as it was before them: render/restores.js)
-  if (app.restores) h = app.restores.apply(t.pack.id, x, z, h, year)
+  if (app.restores?.islandsOn) h = app.restores.apply(t.pack.id, x, z, h, year)
   const list = app.patches?.byPack?.get(t.pack.id)
   if (!list) return h
   for (const r of list) {

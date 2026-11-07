@@ -329,3 +329,30 @@ fix has landed in `dist/` and been looked at again.
   Husted's from 1890, Thrum's lists and the 1887 map's printed index, and
   by the registered maps and Sanborn sheets where their corners can be
   matched to today's centrelines.
+
+### 16. The prologue walks backward in time between its chapters
+
+- **Reported:** "walking through the geological history it seems we move
+  forward and backward in time. Let's keep it linear."
+- **Seen:** chapter II ends with the Honolulu volcanics at 0.5 Ma and
+  chapter III opens with Molokaʻi rising at 1.9; within II the pali (1.8)
+  comes after Nuʻuanu (1.95) but Molokaʻi (1.9) falls between them.
+- **Open:** every step and stop in one descending order of age, the chapters
+  regrouped or their steps moved so no card goes back, and a check that
+  holds it.
+
+### 17. The Big Island white and Maui gone at some zooms
+
+- **Reported:** "1480 chapter 2 title card: Big Island is white and geology is
+  missing. It appears and disappears when I scroll in and out. Maui also
+  disappeared when I zoomed in. No errors in console."
+- **Cause:** the island program, with an island's crop map bound, had
+  eighteen active samplers after the restores' atlas and index joined it:
+  two over the sixteen texture units common GPUs give a fragment shader
+  (the suites' software renderer gives thirty-two, so they never saw it).
+  The program fails to link on such a GPU, and the island draws white or not
+  at all while its crop map is in, which comes and goes with the zoom.
+- **Fix:** the islands' restores are not laid (`RESTORE_ISLANDS` off: the
+  district's are), which takes the two samplers out of the island programs;
+  sixteen with the crop map now.
+- **Status:** fixed; to be looked at on a real GPU.

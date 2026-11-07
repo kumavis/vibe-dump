@@ -19,7 +19,7 @@
 // texel() are the CPU copies, for world.metresAt and the district's.
 
 import * as THREE from 'three'
-import { PATCH_EASE, SLOTS, RESTORES } from '../config.js'
+import { PATCH_EASE, SLOTS, RESTORES , RESTORE_ISLANDS } from '../config.js'
 import { decodeImage } from '../data/image.js'
 import { loadRestoreManifest } from '../data/patches.js'
 
@@ -295,6 +295,11 @@ export class Restores {
   }
 
   /** What is loaded and how each restore stands, for the tools. */
+  /** Whether the islands' restores are laid (config.js RESTORE_ISLANDS); the district's always are. */
+  get islandsOn() {
+    return RESTORE_ISLANDS
+  }
+
   stats() {
     return {
       loaded: this.loaded,

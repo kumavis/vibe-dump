@@ -48,6 +48,13 @@ export const PATCHES = 32
 export const DIST_PATCHES = 16
 // restore patches (render/restores.js) the shaders hold weights for, a multiple of 4
 export const RESTORES = 96
+// Whether the restores are laid on the island packs as well as in a district.
+// Off: an island program with its crop map bound eighteen samplers with them,
+// two over the sixteen texture units common GPUs give a fragment shader, and
+// the island went white or vanished as the crop map came and went; and at 68 m
+// a texel the restores read as little more than texture. The district, at 6 m,
+// keeps them (render/restores.js, shaders/common.glsl.js).
+export const RESTORE_ISLANDS = false
 // a patch's weight eases at this rate (1/s) as the year crosses its until:
 // most of the way in a couple of seconds
 export const PATCH_EASE = 1.6

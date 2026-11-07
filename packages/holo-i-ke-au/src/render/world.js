@@ -268,7 +268,7 @@ export class World {
   /** An island pack's own heights at (x, z) with its patches of the year: slotMetres. */
   ownMetres(t, x, z) {
     let h = t.metresAt(x, z)
-    if (this.app.restores) h = this.app.restores.apply(t.pack.id, x, z, h)
+    if (this.app.restores?.islandsOn) h = this.app.restores.apply(t.pack.id, x, z, h)
     return this.app.patches ? this.app.patches.apply(t.pack.id, x, z, h) : h
   }
 

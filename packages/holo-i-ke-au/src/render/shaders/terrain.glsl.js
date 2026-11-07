@@ -305,8 +305,10 @@ void main() {
   // (the normal map is today's ground: where a road's cut or fill is laid
   // back in the year, its change to the slope, render/restores.js)
   if (uSelf >= 0) {
-    vec2 rg;
+    vec2 rg = vec2(0.0);
+#if RESTORE_ISLANDS
     restoreSlotG(uSelf, xz, rg);
+#endif
     grad += rg * kSelf;
   }
   vec3 n = normalize(vec3(-grad.x * uExag, 1.0, -grad.y * uExag));

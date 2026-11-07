@@ -10,7 +10,7 @@
 // one whose edge is further away. render/world.js keeps a CPU copy of all of
 // this (metresAt), line for line, for the camera, picking and pins.
 
-import { NEAR_EXAG, NORMAL_EXAG, SLOTS, PATCHES, DIST_PATCHES, RESTORES, EARLY_THIN } from '../../config.js'
+import { NEAR_EXAG, NORMAL_EXAG, SLOTS, PATCHES, DIST_PATCHES, RESTORES, RESTORE_ISLANDS, EARLY_THIN } from '../../config.js'
 import { RESTORE_TILE } from '../restores.js'
 
 const f = (v) => (Number.isInteger(v) ? v.toFixed(1) : String(v))
@@ -35,6 +35,7 @@ export const constants = /* glsl */ `
 #define DIST_PATCHES ${DIST_PATCHES}
 #define RESTORES ${RESTORES}
 #define RESTORE_TILE ${RESTORE_TILE}
+#define RESTORE_ISLANDS ${RESTORE_ISLANDS ? 1 : 0}
 #define DIST_POND ${DIST_INDEX.pond}
 #define DIST_OTHER ${DIST_INDEX.other}
 #define DIST_FILL ${f(DIST_FILL)}
@@ -223,6 +224,10 @@ float restoreAt(vec4 r, ivec2 p) {
 // heights, and (out) its slope, metres per metre, for the normals
 float restoreSlotG(int s, vec2 xz, out vec2 grad) {
   grad = vec2(0.0);
+#if RESTORE_ISLANDS == 0
+  // (the islands' restores are not laid: config.js RESTORE_ISLANDS; the samplers above stay unbound here)
+  return 0.0;
+#endif
   vec4 r = uRestSlot[s];
   if (r.w < 0.5) return 0.0;
   vec2 size = uRestSlotGrid[s];
@@ -258,8 +263,10 @@ float gPatchReef = 0.0;
 // slot s's heights h at xz, as the year has them
 float patchedMetres(int s, vec2 xz, float h) {
   gPatchReef = 0.0;
-  // (the ground under the roads first: restoreSlot)
+  // (the ground under the roads first: restoreSlot, where the islands' restores are laid)
+#if RESTORE_ISLANDS
   h += restoreSlot(s, xz);
+#endif
   if (!inPatchBox(s, xz)) return h;
   int a = int(uSlotPatch[s].x);
   int n = int(uSlotPatch[s].y);

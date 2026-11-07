@@ -3662,8 +3662,9 @@ const restoreCheck = async (label) => {
   const pts = await restorePoints()
   const listed = await ui('app.restores.all.length')
   if (!pts.length) throw new Error(`${label}: ${listed} restores listed, none with a point to try`)
-  // one on an island and one in a district, where there are both
-  const pick = [pts.find((p) => p.where === 'island'), pts.find((p) => p.where === 'district')].filter(Boolean)
+  // one on an island (where the islands' restores are laid: config.js RESTORE_ISLANDS) and one in a district, where there are both
+  const islandsOn = await ui('!!app.restores?.islandsOn')
+  const pick = [islandsOn ? pts.find((p) => p.where === 'island') : null, pts.find((p) => p.where === 'district')].filter(Boolean)
   console.log(`      ${listed} restores listed; ${pts.length} with a texel to try, ${pick.length} tried`)
   const rows = await restoreByYear(pick)
   for (const r of rows) console.log(`      ${r}`)

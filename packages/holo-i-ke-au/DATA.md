@@ -1077,6 +1077,13 @@ It prints, per raise patch, the median depth of its ground today and in 1795.
 
 ### Accepted extensions (restore)
 
+The island packs' restores are baked and listed but not laid: with them the
+island programs bound eighteen samplers once an island's crop map was in,
+two over the sixteen texture units common GPUs give a fragment shader, and
+the island went white or vanished as the map came and went; at 68 m a texel
+they read as little more than texture anyway. The district's, at 6 m, are
+laid (`RESTORE_ISLANDS` in `config.js`).
+
 A raise or a lower lays its texels at one depth, which is right for a reef
 flat and wrong for a hillside: the ground a highway was cut into, and the
 fill it was raised on, has to go back to a surface that runs with the valley's
