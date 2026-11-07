@@ -228,13 +228,15 @@ class IslandTowns extends Scatter {
     const files = this.layerFiles(entry)
     if (this.keyframes.length < 2 || files.some((f) => !f.settlement)) throw new Error('the settlement layer lacks a keyframe')
     const grey = (f) => decodeGrey(decodeImage, app.data.abs(`layers/${f}`))
-    const [imgs, vals, zoning, patchList, works] = await Promise.all([
+    const [imgs, vals, zoning, patchList, works, streetNet] = await Promise.all([
       Promise.all(files.map((f) => grey(f.settlement))),
       files.every((f) => f.value) ? Promise.all(files.map((f) => grey(f.value))).catch(() => null) : null,
       loadZoning(app, m, this.id),
       app.patches?.ready ?? [],
       // (the island's works: military land, fields, runways and roads keep the lots off their ground in their years)
       app.works?.exclusion(this.id) ?? null,
+      // (the towns' dated streets: the lots follow them in their years)
+      app.streets?.net(this.id) ?? null,
     ])
     if (this.disposed) return
     const t = this.t
@@ -249,6 +251,7 @@ class IslandTowns extends Scatter {
     this.zoning = { ...zoning, rect: r }
     this.places = valuePlaces(app, m)
     this.works = works
+    this.streetNet = streetNet
     this.townTerm(m, this.id, 'district')
     this.towerRec = towerAreas(await loadTowers(app), this.id, app.data.proj)
     // (the patches of this island must be decoded before its ground is asked of)
@@ -280,6 +283,7 @@ class IslandTowns extends Scatter {
       if (Number.isFinite(b)) breaks.add(b + 1)
     }
     for (const y of this.works?.breaks || []) breaks.add(y)
+    for (const y of this.streetNet?.breaks || []) breaks.add(y)
     this.years(breaks)
     const y0 = app.timeline.yearAt(0)
     this.epochYear = [y0, ...this.edges]
@@ -489,7 +493,7 @@ class IslandTowns extends Scatter {
     const Z = this.zoning
     const keep = (x, z) => this.owns(x, z) && this.t.metresAt(x, z) > 0.3
     const list = []
-    for (const l of this.tileLots(x0, z0, th, seed, pads, keep)) {
+    for (const l of this.lotsOf(x0, z0, th, seed, pads, keep)) {
       this.bytesAt(l.x, l.z, kb)
       let vmaxB = 0
       for (const v of kb) vmaxB = Math.max(vmaxB, v)

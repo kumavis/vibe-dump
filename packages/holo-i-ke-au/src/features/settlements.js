@@ -41,7 +41,11 @@
 //   (Bayer), so the lots that fill at any density are evenly spread, and the
 //   same lots fill again whenever the density comes back to the same value:
 //   the same place and year always give the same town. A kauhale takes four
-//   lots, a yard of its own, ranked on a dither of its own.
+//   lots, a yard of its own, ranked on a dither of its own. Where a town's
+//   streets are known (DATA.md "Streets, dated"; data/streets.js), the grid
+//   gives way to them in the years they cover the ground: the lots stand
+//   along the streets the sheets show by then, fronting them, and the grid
+//   holds only outside the network (lotsOf).
 // - The weight of the ground. Flat ground near the coast and the streams
 //   draws more than slopes away from both; a lot is refused where the ground
 //   of the year is water (the patches lower the made land and raise the
@@ -121,6 +125,7 @@ import { geometryPoint } from '../geo.js'
 import { DISTRICT } from '../config.js'
 import { TREELESS, keptWeight } from '../data/works.js'
 import { loadLandmarks, namedFor, namedTest, namedBreaks, namedStands, namedMeshes, namedWeight } from './landmarks.js'
+import { lotStands } from '../data/streets.js'
 
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v))
 export const smooth = (a, b, x) => {
@@ -989,7 +994,7 @@ export class Scatter {
       if (core) v = Math.max(v, CORE_BYTE + 14 * l.r6)
       const vf = this.fillByte(l, s, v)
       const held = l.host?.yard?.[n]
-      if (vf > 0 && !held) {
+      if (vf > 0 && !held && lotStands(l, s.y)) {
         const d = this.people(v)
         const [F, fk] = this.fill(s, this.people(vf))
         const c = cap(n)
@@ -1280,6 +1285,22 @@ export class Scatter {
     }
     return out
   }
+
+  /**
+   * The lots of one grid tile where the towns' streets are known (DATA.md
+   * "Streets, dated"; data/streets.js): the grid's lots, each gone in the
+   * years the street network covers its ground, and the lots along the
+   * streets whose middles lie in the tile, each standing in its street's
+   * years. Without a network (`streetNet`), the grid's alone.
+   */
+  lotsOf(x0, z0, th, seed, pads, keep) {
+    const grid = this.tileLots(x0, z0, th, seed, pads, keep)
+    const net = this.streetNet
+    if (!net) return grid
+    for (const l of grid) l.gone = net.coverAt(l.x, l.z)
+    for (const l of net.lotsIn(x0, z0, x0 + GRID_TILE, z0 + GRID_TILE)) if (keep(l.x, l.z)) grid.push(l)
+    return grid
+  }
 }
 
 // --- the ground the scatters stand on ------------------------------------------------
@@ -1413,14 +1434,17 @@ export class Settlements extends Scatter {
     const files = this.layerFiles(entry)
     if (this.keyframes.length < 2 || files.some((f) => !f.settlement)) throw new Error('the settlement layer lacks a keyframe')
     const grey = (f) => decodeGrey(decodeImage, data.abs(`layers/${f}`))
-    const [imgs, vals, zoning, works] = await Promise.all([
+    const [imgs, vals, zoning, works, streetNet] = await Promise.all([
       Promise.all(files.map((f) => grey(f.settlement))),
       files.every((f) => f.value) ? Promise.all(files.map((f) => grey(f.value))).catch(() => null) : null,
       loadZoning(this.app, m, d.parent),
       this.app.works?.exclusion(d.parent) ?? null,
+      // (the towns' dated streets, where the island has any: the lots follow them in their years)
+      this.app.streets?.net(d.parent) ?? null,
     ])
     if (this.disposed) return
     this.works = works
+    this.streetNet = streetNet
     for (const [k, img] of [...imgs, ...(vals || [])].entries()) if (img.W !== pack.W || img.H !== pack.H) throw new Error(`a layer of ${d.parent} is ${img.W}×${img.H} (${k}), the pack ${pack.W}×${pack.H}`)
     // the district's box on the island's grid, a texel or two beyond it
     const r = pack.rect
@@ -1707,6 +1731,7 @@ export class Settlements extends Scatter {
     for (const L of this.landmarks) breaks.add(L.from)
     for (const y of namedBreaks(this.named || [])) breaks.add(y)
     for (const y of this.works?.breaks || []) breaks.add(y)
+    for (const y of this.streetNet?.breaks || []) breaks.add(y)
     this.years(breaks)
     // the epochs: the stretches between breaks, each with its patches and features
     const tl = this.app.timeline
@@ -1772,7 +1797,7 @@ export class Settlements extends Scatter {
         const pads = [thAt(ti - 1, tj) !== th, thAt(ti + 1, tj) !== th, thAt(ti, tj - 1) !== th, thAt(ti, tj + 1) !== th]
         const seed = tj * nx + ti
         const keep = (x, z) => this.edgeAt(x, z) >= inner
-        for (const l of this.tileLots(tx0, tz0, th, seed, pads, keep)) {
+        for (const l of this.lotsOf(tx0, tz0, th, seed, pads, keep)) {
           // (no lot that could never fill: its most generous fill at its densest keyframe)
           this.bytesAt(l.x, l.z, kb)
           let vmaxB = 0
@@ -1799,6 +1824,7 @@ export class Settlements extends Scatter {
       }
     }
     this.lotCount = lots.length
+    this.streetLots = lots.filter((l) => l.span).length
     this.gridTiles = { nx, nz }
     this.ths = ths
     lap('lots')
@@ -1956,7 +1982,7 @@ export class Settlements extends Scatter {
       for (let n = 0; n < NS; n++) {
         const s = S_[n]
         const v = this.fillByte(l, s, this.byteAt(l, s))
-        if (v <= 0) continue
+        if (v <= 0 || !lotStands(l, s.y)) continue
         const [F, fk] = this.fill(s, this.people(v))
         if (l.rank < F * l.w || (l.anchor && l.rankY < 4 * fk * l.w)) count[n]++
       }
@@ -2224,6 +2250,8 @@ export class Settlements extends Scatter {
       for (let i = 0; i < this.N; i++) {
         const kd = KINDS[KIND_NAMES[this.ikind[i]]]
         if (kd.loose || this.iland[i] || this.weightAt(i, y) < 0.5) continue
+        // (where the towns' streets cover the ground, they are drawn as they ran: features/streets.js)
+        if (this.streetNet?.covers(this.ix[i], this.iz[i], y)) continue
         const it = { x: this.ix[i], z: this.iz[i] }
         const tx = clamp(Math.floor((it.x - R.x0) / GRID_TILE), 0, nx - 1)
         const tz = clamp(Math.floor((it.z - R.z0) / GRID_TILE), 0, nz - 1)
@@ -2431,6 +2459,7 @@ export class Settlements extends Scatter {
       ready: true,
       year: +this.yearNow.toFixed(1),
       lots: this.lotCount,
+      streetLots: this.streetLots,
       instances: this.N,
       placed: c.total,
       drawn: this.drawn,

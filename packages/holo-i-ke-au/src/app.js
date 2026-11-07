@@ -42,6 +42,7 @@ import { Towns } from './features/towns.js'
 import { Works } from './features/works.js'
 import { overlapReport } from './features/footprints.js'
 import { Schools } from './features/schools.js'
+import { Streets } from './features/streets.js'
 import { CropTrees } from './features/crops.js'
 
 const smooth = (a, b, x) => {
@@ -154,6 +155,8 @@ export class App {
     // manifest is read behind the first frame (main.js)
     this.districts = new Districts(this)
     this.world.district = this.districts
+    // the towns' dated streets, which the settlements lay their lots along (features/streets.js)
+    this.streets = new Streets(this)
     // and the settlements of every island, where the camera comes down (features/towns.js)
     this.towns = new Towns(this)
     // the works of the last century and a half, by their dates, on the islands in their slots (features/works.js)
@@ -338,6 +341,7 @@ export class App {
     this.towns?.settle()
     this.works?.settle()
     this.schools?.settle()
+    this.streets?.settle()
     this.cropTrees?.settle()
     this.rig.jump({ x: g.target.x, z: g.target.z })
     const fv = this.farView

@@ -298,6 +298,11 @@ close and how large; the era sets what. How many towers stand in a year,
 area by area, is the record's (DATA.md "Towers, dated"): Waikīkī's went up
 before Kakaʻako's. Where the record gives a town's extent (the 1881 and 1899
 survey sheets for Honolulu) it bounds the placement.
+Where a town's streets are known by a year (DATA.md "Streets, dated": today's
+streets, each dated by the oldest sheet that draws it), the lots front those
+streets in that year and the modelled grid holds only beyond them; the
+streets are drawn as the grid's are, packed earth, then macadam, then
+asphalt, from the year their sheet shows them.
 
 **Crops by class.** At the island zooms and in a district the ground shows
 what grew in the year (DATA.md "Crops, on the era layers"), from the
