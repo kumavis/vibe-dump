@@ -241,11 +241,17 @@ fix has landed in `dist/` and been looked at again.
   schoolhouse, a mission hall, the territory's block, the campus. Dates from
   the Department of Education's school reports, the State's school layers,
   the schools' own histories.
-- **Still to do:** 161 schools are dated only by the first record that shows
-  them (from 1999, 2021 or 2024), decades late for many; the kingdom's Board
-  of Education schools, the mission station schools and the plantation
-  schools that no longer stand are recorded as wanted, not placed; 17
-  schools are dated but not placed.
+- **Then:** 59 of the 161 dated by year from the schools' own pages, the
+  Charter School Commission's report and the articles read; the kingdom's
+  government, select and aided schools of the Board of Education's 1882
+  report (62) dated by it but not placed, since the report gives each a
+  village and the open maps mark no schoolhouses; the Fort Street English
+  Day School at Keōua Hale (1869–1906) and McKinley at its three sites newly
+  placed. Now 411 placed, 78 dated but not placed, 102 still dated only by a
+  first record.
+- **Open:** the 102 still stand only from 1999, 2021 or 2024; the 1882
+  schools' sites (the registered maps of the 1880s) and closing years (the
+  later reports); six schools dated from their move to their present site.
 - **Status:** landed on the branch.
 
 ### 12. Scrubbing the prologue's clock does not move the land
