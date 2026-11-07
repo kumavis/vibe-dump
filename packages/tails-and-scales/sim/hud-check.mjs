@@ -64,9 +64,10 @@
 // false.
 //
 // (F9c, DESIGN §4.2.5's firing deck) And the riders' part in it, on a
-// hotseat log whose War-Carts and Howdahs carry riders (DECK_LOG, hull/'s,
-// among the default battles; vehicle/'s rearranged log's riders able to
-// shoot are casters alone, whose hint is their spell's): at each such frame in the
+// hotseat log whose War-Carts carry riders (DECK_LOG, vehicle/'s embark
+// log since F9c's corpus, among the default battles; vehicle/'s rearranged
+// log's riders able to shoot are casters alone, whose hint is their
+// spell's): at each such frame in the
 // seat's shooting phase, its riders
 // that can shoot from a deck are counted, and the frames where nothing but
 // riders can act (`only`: End held unready by them alone, decision Q14's
@@ -138,9 +139,15 @@ try {
   console.error(`hud-check: ${e.message}\nusage: node sim/hud-check.mjs [--only <kinds, modes or ids>] [--dist <dir>] | --self-test`)
   process.exit(2)
 }
-// ((F9c) a hotseat hull/ log, riders aboard its War-Carts and Howdahs in
-// shooting phases: the firing deck's readiness and hint)
-const DECK_LOG = 'hotseat-hull-pivot-1'
+// ((F9c) a hotseat log, riders aboard its War-Carts in shooting phases:
+// the firing deck's readiness and hint. It was hull/'s
+// hotseat-hull-pivot-1 until the Corpus phase played it again with the
+// human-bot's riders shooting: its bot now shoots every rider it can
+// before it ends, so no frame there has only riders able (the `hull`
+// policy takes the seat's first ready unit); vehicle/'s
+// hotseat-ride-embark-1, played by the `ride` bot, which passes over a
+// unit now and then, leaves riders the only units able at least once)
+const DECK_LOG = 'hotseat-ride-embark-1'
 const DEFAULT = `64-89,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,hotseat-late-vote-1,${DECK_LOG}`
 let items
 try {
