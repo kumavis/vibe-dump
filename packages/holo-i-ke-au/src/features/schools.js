@@ -246,7 +246,7 @@ class IslandSchools {
       items: data.schools.filter((s) => s.label).map((s) => ({ name: s.label, x: s.x, z: s.z, cls: 'dlabel wlabel wl-school', from: s.from, to: s.to })),
       alive: (it, y) => y >= it.from - 0.5 && (it.to === null || y < it.to + 0.5),
       zoom: (d) => 1 - smooth(LABEL_RIG[0], LABEL_RIG[1], d),
-      layer: 'wlabels slabels',
+      layer: 'slabels',
       avoid: '.pin.show, .cluster.show',
       lang: '',
     })

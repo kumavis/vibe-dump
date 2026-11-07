@@ -1366,7 +1366,9 @@ export class Soldiers {
         if (on) wanted++
         let vis = f.vis[i]
         vis = on ? Math.min(1, vis + fade) : Math.max(0, vis - fade)
-        if (w <= 0.002 || under) vis = 0
+        // (one standing in the water of its year is not drawn at all: a column's head set down on a
+        // reef flat or in a fishpond; one walking toward water still dissolves on the way)
+        if (w <= 0.002 || under || (f.wet[i] === 1 && !air)) vis = 0
         f.vis[i] = vis
         const k = tB < 0.5 ? kA : kA + 1
         f.k[i] = vis > 0 ? k : 0

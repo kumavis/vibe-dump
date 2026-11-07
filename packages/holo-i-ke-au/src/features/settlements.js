@@ -1016,19 +1016,23 @@ export class Scatter {
           const variant = this.variantOf(l, kind, nv)
           const e = this.epochAt[n]
           const key = kind * 16 + variant
-          // (an answer that no epoch changes is kept for all of them)
+          // (an answer that no epoch changes is kept for all of them; one the works decide is the sample's own,
+          // since a work's years need not be an epoch's: keyed from 128 up, the epochs below)
           let top = cache.get(key * 256 + 255)
+          if (top === undefined) top = cache.get(key * 256 + 128 + n)
           if (top === undefined) top = cache.get(key * 256 + e)
           if (top === undefined) {
             const p = this.pose(l, kind, variant)
             const relief = KINDS[KIND_NAMES[kind]].relief
             let dep = false
+            let depWorks = false
             if (p.parts) {
               // (each hale of a kauhale on its own ground)
               top = []
               for (const q of p.parts) {
-                const t = allows(q, relief, e)
+                const t = allows(q, relief, e, s.y)
                 dep ||= this.dep
+                depWorks ||= this.depWorks
                 if (t === null) {
                   top = null
                   break
@@ -1036,10 +1040,11 @@ export class Scatter {
                 top.push(t)
               }
             } else {
-              top = allows(p, relief, e)
+              top = allows(p, relief, e, s.y)
               dep = this.dep
+              depWorks = this.depWorks
             }
-            cache.set(key * 256 + (dep ? e : 255), top)
+            cache.set(key * 256 + (dep ? (depWorks ? 128 + n : e) : 255), top)
           }
           if (top !== null) {
             state = { key, kind, variant, top, d }
@@ -1589,7 +1594,7 @@ export class Settlements extends Scatter {
    * and the footing stands on the higher of the two as they are drawn there,
    * so nothing there is sunk into the island's slope.
    */
-  allows(x, z, ax, az, a, relief, e) {
+  allows(x, z, ax, az, a, relief, e, year = this.epochs[e].year) {
     const ep = this.epochs[e]
     const rec = this.rec
     const aux = rec.aux
@@ -1603,10 +1608,16 @@ export class Settlements extends Scatter {
     let hi = -Infinity
     let top = -Infinity
     this.dep = false
-    // the works standing in the year: military land, a field, a runway, a road (data/works.js)
+    this.depWorks = false
+    // the works standing in the year: military land, a field, a runway, a road, a school's ground
+    // (data/works.js), asked at the sample's own year, since their years need not be the epochs'
+    // (a school's keep-off after 1900 is no break of its own)
     if (this.works) {
-      const w = this.works.test(x, z, ax, az, a, ep.year)
-      if (w) this.dep = true
+      const w = this.works.test(x, z, ax, az, a, year)
+      if (w) {
+        this.dep = true
+        this.depWorks = true
+      }
       if (w === 2) return null
     }
     const parent = rec.parent
@@ -2042,7 +2053,7 @@ export class Settlements extends Scatter {
     }
     this.cap = Array.from(count, (c) => Math.min(1, MAX_PLACED / Math.max(1, c)))
     const inst = []
-    const allows = (q, relief, e) => this.allows(q.x, q.z, q.ax, q.az, q.a, relief, e)
+    const allows = (q, relief, e, year) => this.allows(q.x, q.z, q.ax, q.az, q.a, relief, e, year)
     const cap = (n) => this.cap[n]
     const emit = (it) => inst.push(it)
     this.rankTowers(lots, cap)

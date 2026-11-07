@@ -203,7 +203,7 @@ button { font: inherit; color: inherit; }
 }
 
 /* --- the works' names (features/works.js), at the island zoom --- */
-.wlabels { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.wlabels, .slabels { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
 .dlabel.wlabel { font-family: var(--sans); font-style: normal; font-size: 11px; letter-spacing: 0.05em; color: rgba(246, 222, 206, 0.92); }
 .dlabel.wl-road { font-size: 10.5px; color: rgba(236, 232, 222, 0.86); }
 
