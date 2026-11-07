@@ -315,7 +315,7 @@
     "key": 11
    },
    "footprint": "way/1044332268",
-   "from": 1999,
+   "from": 1928,
    "to": null,
    "datePrecision": "by",
    "grades": "K–5",
@@ -327,6 +327,10 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 2018–19, school description: “over 90 years of continued service”"
     }
    ],
    "by": "hidoe-ssir",
@@ -335,7 +339,7 @@
     "n": 226,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "ke-kula-kaiapuni-o-anuenue",
@@ -535,7 +539,7 @@
     "key": 18
    },
    "footprint": null,
-   "from": 1999,
+   "from": 1959,
    "to": null,
    "datePrecision": "by",
    "grades": "K–6",
@@ -547,6 +551,10 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 1999–2000, school description: “the 40 years since the school was built”"
     }
    ],
    "by": "hidoe-ssir",
@@ -555,7 +563,7 @@
     "n": 451,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "dole-middle",
@@ -874,7 +882,7 @@
     "key": 29
    },
    "footprint": "way/820361307",
-   "from": 1999,
+   "from": 1918,
    "to": null,
    "datePrecision": "by",
    "grades": "K–5",
@@ -886,6 +894,10 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 2018–19, school description: “for over 100 years”"
     }
    ],
    "by": "hidoe-ssir",
@@ -894,7 +906,7 @@
     "n": 452,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "haleiwa-elementary",
@@ -1606,9 +1618,9 @@
     "key": 53
    },
    "footprint": "way/1411363715",
-   "from": 1999,
+   "from": 1969,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "7–8",
    "sources": [
     {
@@ -1618,15 +1630,18 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 2004–05, school description"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 875,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "Its own school from 1969."
   },
   {
    "id": "daniel-k-inouye-elementary",
@@ -2279,7 +2294,7 @@
     "key": 75
    },
    "footprint": "way/841572301",
-   "from": 1999,
+   "from": 1955,
    "to": null,
    "datePrecision": "by",
    "grades": "K–6",
@@ -2291,6 +2306,10 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 2004–05, school description: its fiftieth anniversary that year"
     }
    ],
    "by": "hidoe-ssir",
@@ -2299,7 +2318,7 @@
     "n": 419,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "henry-j-kaiser-high",
@@ -2371,7 +2390,7 @@
     "key": 78
    },
    "footprint": "way/379296817",
-   "from": 1999,
+   "from": 1924,
    "to": null,
    "datePrecision": "by",
    "grades": "K–5",
@@ -2383,6 +2402,10 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 1999–2000, school description: most of its buildings over 75 years old"
     }
    ],
    "by": "hidoe-ssir",
@@ -2391,7 +2414,7 @@
     "n": 410,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "kalaheo-high",
@@ -3939,9 +3962,9 @@
     "key": 129
    },
    "footprint": "way/281784590",
-   "from": 1999,
+   "from": 1996,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–5",
    "sources": [
     {
@@ -3951,15 +3974,18 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 1999–2000, school description"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 328,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "An elementary school of its own from 1996, part of the whole Kohala School before."
   },
   {
    "id": "kohala-high",
@@ -4338,9 +4364,9 @@
     "key": 141
    },
    "footprint": "way/209503964",
-   "from": 1999,
+   "from": 1896,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–6",
    "sources": [
     {
@@ -4350,15 +4376,18 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 1999–2000, school description"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 633,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "A school of the Church of Jesus Christ of Latter-day Saints until it became a public school in 1896."
   },
   {
    "id": "lanai-high-and-elementary",
@@ -5837,9 +5866,9 @@
     "key": 191
    },
    "footprint": "way/345407988",
-   "from": 1999,
+   "from": 1962,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "K–5",
    "sources": [
     {
@@ -5849,15 +5878,17 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 1999–2000 to 2018–19, school description: a one-building school in 1962"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 440,
     "source": "hidoe-ssir"
-   },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   }
   },
   {
    "id": "nuuanu-elementary",
@@ -6476,7 +6507,7 @@
     "key": 212
    },
    "footprint": "way/726948523",
-   "from": 1999,
+   "from": 1968,
    "to": null,
    "datePrecision": "by",
    "grades": "K–6",
@@ -6488,6 +6519,10 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 2018–19, school description: “for more than 50 years”"
     }
    ],
    "by": "hidoe-ssir",
@@ -6496,7 +6531,7 @@
     "n": 247,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "No record opened gives the year it opened: it stands from the earliest record read that shows it, and stood before."
   },
   {
    "id": "puu-kukui-elementary",
@@ -7476,9 +7511,9 @@
     "key": 245
    },
    "footprint": "way/845564518",
-   "from": 1999,
+   "from": 1972,
    "to": null,
-   "datePrecision": "by",
+   "datePrecision": "year",
    "grades": "6–8",
    "sources": [
     {
@@ -7488,15 +7523,18 @@
     {
      "id": "hidoe-ssir",
      "where": "SY 1999–00: the first report read that has the school"
+    },
+    {
+     "id": "hidoe-ssir",
+     "where": "SY 2004–05, school description"
     }
    ],
-   "by": "hidoe-ssir",
    "pupils": {
     "year": 2018,
     "n": 501,
     "source": "hidoe-ssir"
    },
-   "note": "No record opened gives the year it opened: it stands from the first record read that shows it, and stood before."
+   "note": "The elementary school was built in 1972 and the middle school added in 1977."
   },
   {
    "id": "waimea-elementary",
