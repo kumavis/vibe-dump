@@ -2617,3 +2617,108 @@ The launching: one near stop at `kualoa`, 250°, 0.3, 8, on the beach at the par
   conches is therefore not in the features; `dress: "1970s"` is the contract's own.
 - The film *Hokuleʻa: The Voyage of Rediscovery*'s notes; the American Cinematographer article of February 1977 on the
   filming (open on the Internet Archive as `1977-02`, found but not read).
+
+## 19. Honolulu's shore before the harbour
+
+ISSUES.md item 4, November 2026: at 1480 the patches took the harbour, Kapālama, Keʻehi's
+runways, Sand Island and the Reef Runway back to reef flat, but the flat read as dredged coral,
+the pier slips stayed as inlets in the shore at Kou, a fill and an islet stood in Keʻehi lagoon,
+and the straight edges of the runways and channels showed. What was wrong, what the record says
+of the shore, and what was changed.
+
+### Why the restored flat read as dredged coral
+
+- **The sea drew it apart.** `ocean.glsl.js` gave every texel a patch made reef its own bed:
+  "coral heads" at 85 % strength in a grey-brown noise sized to about eight pixels at any zoom,
+  and the water over them half as deep. The natural reef beside it is drawn by its depth alone,
+  sand and reef by a noise fixed to the ground. The patched flat was a different material, at a
+  screen-fixed grain, and over the uniform shallow it lay on the sand showed nearly white between
+  the heads: the white-and-grey mottle. The sea now draws the patched flat as it draws the
+  natural reef; the patch's weight is kept only to hold the swash to the real shore.
+- **The flat was a step off the reef round it.** The lower patches went to a flat −1 m, and on
+  the island pack (68 m texels, GMRT bathymetry) the natural reef round Sand Island, Keʻehi and
+  the Reef Runway stands at −2.5 to −4 m: the fills' outlines showed as pale, straight-edged
+  shelves. The raises were held on their rim to the CUDEM's reef (−1 to −2 m) beside a pack
+  whose own reef there is deeper: the runways' and channels' outlines showed the same way. Now
+  the island's lowers are laid at the reef round them (the weights carry the relief), and its
+  raises are held to the pack's own reef on the rim. In the district (6 m, the 2022–23 lidar
+  and the CUDEM) the reef round the fills is nearer −1 m, but deepens to −3 to −5 m toward the
+  reef's edge south of Sand Island; the district now carries the reef round a lower patch over
+  it at decode (`reefLevel`), so a fill meets the reef without a step.
+- **Neither the masks' weights nor the pack's resolution were the cause.** The raise masks'
+  weights carry the reef's relief by design and are smooth (Laplace from the rim); the lower
+  masks were whole with feathered edges. The island pack's own texels under the patches are
+  coarse but smooth.
+
+### What was read
+
+| source | read | what it gives |
+| --- | --- | --- |
+| `malden-1825` (Malden, "A Plan of the Harbour of Honoruru", 1825; the University of Hawaiʻi Library's scan, eVols, 7729 × 6739 px) | full | The earliest survey. The harbour a basin off the town, 3 to 5½ fathoms with "mud", between "The West Spit" and a reef along the town front; the town's shore from the fort and wharf at the "Freshwater Stream" south past the fort to "Fishermen's Pt"; west of the basin a reef "covered at half flood; at low water it is dry, and is then generally crowded with the lower orders of the Natives, who get from it a considerable part of their daily subsistence"; inside it along the Kalihi shore water "never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs"; at the reef's west edge, by a channel sounded 5 fathoms, "Sandy I." with huts and a smaller "Hut Island"; fishponds on the Kalihi and Kapālama shore and one west of the stream mouth. No islet where Quarantine Island later stood. |
+| `hawaii-gis-oahu-1881` (the State's 1881 sheet, already cited) | part, again | Exported over Kou, Kapālama and Keʻehi at 0.00003–0.00005° a pixel with a labelled grid: the dotted channel "Kalihi Entrance" from the Kalihi stream mouth between Mokuʻoeo and Mokauea to the reef's edge, traced as a passage; the wharves already built out from the town; Quarantine Island about 18 ha. |
+| `hawaii-gis-oahu-topo-1927` (already cited) | part | Exported over Keʻehi and the harbour: the Kalihi Channel open between the Keʻehi and Mokauea reefs before its dredging; the Kalihi ponds (Apili, Pahou, Pahouiki, Auiki, Ananoho); Quarantine Island with Sand Island's first fill east of it. |
+| `hawaii-gis-oahu-1943` | part | Over Keʻehi: the seaplane runways drawn dredged, the reef between them hatched; no islet, dike or fill in the lagoon east of the airport. |
+| `usgs-topo-2000` | part | Over Keʻehi: the islets in the old runways, the dike with its light, Keʻehi Lagoon Park, the small-boat harbour's piers; "Kahakaʻaulana Island" named beside Mokauea, not at Sand Island. |
+| `iooh-esplanade` (Images of Old Hawaiʻi, "Esplanade") | full | "What is now known as Queen Street was actually the water's edge"; the Waikahalulu reef; the Esplanade filled "from 1856 to 1860", about 22 acres, behind the fort's walls reused as a 2,000-foot wall; the first piers dated 1896, 1901, 1907. |
+| `hdot-harbors-history` (HDOT Harbors, "History", already in `sources.json`) | full, again | "a small, reefed basin created by the natural flow of freshwater from the streams of Nuʻuanu Valley"; "The main channel ... was flanked to the west by shallower outlets. Between these outflows, rose occasional spots of earth and coral, the beginnings of Sand Island"; the first wharf of 1825, a hulk "near Nuʻuanu Avenue". |
+| `iooh-anuenue` (Images of Old Hawaiʻi, "Anuenue") | full | Sand Island made on the reef platform Kahololoa, "cut by stream channels on the west and east", the later Kalihi and harbour channels; "several islands or dryland areas on the off shore reef flats" in the 1840s; "a small reef island, Kamokuʻākulikuli" leased in early 1869 for the quarantine station. |
+| `wikipedia-sand-island` | part | "once a small islet surrounded by the Kaholaloa fishing grounds, a shallow reef and sandbank"; granted to William Sumner in 1840; leased by the Board of Health in 1869. |
+| `hbgn-mauliola-2026` (the Board on Geographic Names' papers for Mauliola) | part | The City Council's resolution ("this small tidal island grew in size with the dredging and infilling of Honolulu Harbor"), and a compilation of notices: The Polynesian, 30 July 1853, a smallpox case "placed on a small island called Kahakaaulana"; *Place Names of Hawaii*'s "Koholaloa ... Lit., long reef". Read to the notices of 1895; the rest not. |
+| OpenStreetMap (api.openstreetmap.org, the streets of downtown) | part | Queen Street's line, from Nuʻuanu Avenue to Punchbowl Street, for the old shore. |
+
+### What the record says of the shore
+
+- **The harbour** was the basin the Nuʻuanu stream kept open in the reef, sounded 3 to 5½
+  fathoms by Malden and 3½ to 5½ in 1881, with its passage south to the bar; both stay open
+  (`mamala-honolulu-1881`).
+- **The town's shore** ran along today's Queen Street; between it and the harbour lay a reef
+  (Malden draws it; Waikahalulu's), which the wharves from 1825 and the Esplanade of 1856–60
+  filled. The 1881 shore, which the patches were cut with, already includes that fill.
+- **West of the harbour** the reef flat Kahololoa (Koholaloa, "long reef") lay dry at low
+  water, with a lagoon behind it along the Kalihi shore that canoes passed at high water,
+  fishponds on that shore, and a channel at its west edge, the Kalihi entrance, which the 1881
+  and 1927 sheets draw open and Malden sounds at 5 fathoms. It is now a passage
+  (`kalihi-entrance-1881`): the Kalihi Channel and Keʻehi runway patches no longer lay reef in it.
+- **Sand Island's core.** Malden draws "Sandy I." with huts and "Hut Island" at the reef's west
+  edge, by the channel (Mokauea and the islet by it, which the 2000 sheet names Kahakaʻaulana),
+  and nothing where Quarantine Island stood. By 1840 there was "a small islet" there; "a small
+  island" in 1853 by one reading of the notices (the 1853 name, Kahakaaulana, the 2000 sheet
+  gives to the islet by Mokauea); "a small reef island, Kamokuʻākulikuli" leased in 1869, which
+  then grew with the harbour's spoil. HDOT: "occasional spots of earth and coral" between the
+  outflows. The 1881 islet, 18 ha, is that islet after a dozen years of the station. So for
+  1480 the record allows a sand cay on the reef but not the 1881 island: Quarantine Island is
+  now lowered to the reef before 1869 round a cay of about 2 ha at its middle
+  (`kamokuakulikuli-growth`). The cay's size and place are inferred; Malden's silence leaves
+  open whether there was one at all before 1825.
+- **Keʻehi** was reef flat and lagoon with Mokuʻoeo and Mokauea standing in it; the islets in
+  the old runways, the dike and the Kalihi-side fills are not on the 1943 sheet.
+
+### What was changed
+
+| file | change |
+| --- | --- |
+| `src/render/shaders/ocean.glsl.js` | the patch's coral mottle removed; the patched flat drawn as the natural reef is |
+| `src/data/district-decode.js`, `src/render/shaders/common.glsl.js`, `src/render/district.js`, `src/features/settlements.js` | a lower patch's texels laid at the reef round them where it is deeper than the patch's depth (`reefLevel`, kept in the carve); of two lowers in force on one texel, the deeper depth |
+| `tools/lib/patch-works.mjs` | the Kalihi passage; Quarantine Island and its cay, the harbour and the reef before the Esplanade as shapes; `OLD_LAND`; five lower works (`kou-esplanade` 1856, `kou-harbour-piers` 1896, `harbour-reef-piers` 1900, `keehi-lagoon-fills` 1944, `kamokuakulikuli-growth` 1869) with their sources |
+| `tools/lib/patch-bake.mjs` | the island's raises held to the pack's own reef; water cut into the old land laid back as land; the island's reef lowers laid at the reef round them; the appended works listed last |
+| `public/data/patches/` | re-baked: 63 patches (was 48), 15 new, listed last |
+
+### What could not be reached, or was not read
+
+- The Wilkes expedition's chart of the harbour (1840) and Duperrey's (1819): not found open in
+  a form that could be read here. `wanted`: the shore of Kou and the islets on Kahololoa in
+  1819 and 1840, to date Quarantine Island's cay and the wharves north of Fort Street.
+- Pacific Worlds' page on the reef (pacificworlds.com, 503) and raremaps.com's notes on the
+  Malden and Wilkes charts (403).
+- The Army Corps' annual reports for the harbour (the Honolulu District's pages refused this
+  session before, `usace-honolulu-district-harbors`): the dates of the Kapālama piers and of
+  the Keʻehi islets and dike are given by the works they stand in, not by their own record.
+
+### Left in doubt
+
+- Whether a cay stood at Quarantine Island's place before 1825, and its size.
+- The wharves north of Fort Street (from 1825) are given the Esplanade's date, 1856.
+- The Keʻehi islets, dike, park and small-boat harbour are given the runways' date, 1944;
+  the park and harbour are probably later.
+- Queen Street's line stands for the old shore within perhaps 30 m; the 1881 trace's own
+  registration is 25–50 m.

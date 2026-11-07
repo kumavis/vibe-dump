@@ -9,7 +9,7 @@
       "id": "oahu-honolulu-bar-cut",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -5.5,
+      "depth": -7.92,
       "until": 1892,
       "file": "patches/oahu-honolulu-bar-cut.png",
       "size": [
@@ -23,7 +23,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -31,7 +31,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -39,7 +39,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
@@ -53,16 +53,16 @@
         }
       ],
       "stats": {
-        "texels": 18,
-        "km2": 0.084,
-        "meanRaiseMetres": 5.23
+        "texels": 15,
+        "km2": 0.07,
+        "meanRaiseMetres": 1.79
       }
     },
     {
       "id": "oahu-honolulu-waterfront",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -1,
+      "depth": -2.15,
       "until": 1900,
       "file": "patches/oahu-honolulu-waterfront.png",
       "size": [
@@ -77,7 +77,7 @@
           "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
           "query": "name = 'Fill'",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
           "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
           "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
@@ -86,7 +86,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -94,22 +94,22 @@
           "id": "hawaii-gis-oahu-1899",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
           "note": "the same waterfront as the 1881 sheet, within its registration: the filling came after it"
         }
       ],
       "stats": {
-        "texels": 836,
-        "km2": 3.898,
-        "meanLowerMetres": 0.88
+        "texels": 638,
+        "km2": 2.975,
+        "meanLowerMetres": 0.91
       }
     },
     {
       "id": "oahu-honolulu-harbour",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -1.5,
+      "depth": 0.5,
       "until": 1908,
       "file": "patches/oahu-honolulu-harbour.png",
       "size": [
@@ -123,7 +123,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -131,7 +131,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -139,7 +139,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
@@ -161,16 +161,16 @@
         }
       ],
       "stats": {
-        "texels": 67,
-        "km2": 0.312,
-        "meanRaiseMetres": 16.29
+        "texels": 65,
+        "km2": 0.303,
+        "meanRaiseMetres": 15.95
       }
     },
     {
       "id": "oahu-sand-island-early",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -1,
+      "depth": -3.33,
       "until": 1908,
       "file": "patches/oahu-sand-island-early.png",
       "size": [
@@ -184,7 +184,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -192,7 +192,7 @@
           "id": "hawaii-gis-oahu-1938",
           "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
           "note": "Sand Island as the 1938 map draws it, traced by hand"
         },
@@ -214,16 +214,16 @@
         }
       ],
       "stats": {
-        "texels": 271,
-        "km2": 1.264,
-        "meanLowerMetres": 1.57
+        "texels": 261,
+        "km2": 1.217,
+        "meanLowerMetres": 1.91
       }
     },
     {
       "id": "oahu-pearl-channel",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -0.99,
+      "depth": -1.03,
       "until": 1911,
       "file": "patches/oahu-pearl-channel.png",
       "size": [
@@ -237,7 +237,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -245,7 +245,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -253,7 +253,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
@@ -261,7 +261,7 @@
           "id": "hawaii-gis-oahu-1899",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
           "note": "the soundings on the bar"
         },
@@ -283,16 +283,16 @@
         }
       ],
       "stats": {
-        "texels": 158,
-        "km2": 0.737,
-        "meanRaiseMetres": 5.83
+        "texels": 154,
+        "km2": 0.718,
+        "meanRaiseMetres": 5.92
       }
     },
     {
       "id": "oahu-kewalo",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -1,
+      "depth": 0.5,
       "until": 1926,
       "file": "patches/oahu-kewalo.png",
       "size": [
@@ -306,7 +306,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -314,7 +314,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "reef flat or lagoon where the cut now runs"
         },
@@ -328,9 +328,9 @@
         }
       ],
       "stats": {
-        "texels": 33,
-        "km2": 0.154,
-        "meanRaiseMetres": 3.17
+        "texels": 35,
+        "km2": 0.163,
+        "meanRaiseMetres": 3.38
       }
     },
     {
@@ -351,7 +351,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -359,7 +359,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -367,7 +367,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "reef flat or lagoon where the cut now runs"
         },
@@ -383,7 +383,7 @@
       "stats": {
         "texels": 41,
         "km2": 0.191,
-        "meanRaiseMetres": 1.84
+        "meanRaiseMetres": 1.75
       }
     },
     {
@@ -405,7 +405,7 @@
           "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
           "query": "name = 'Fill'",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
           "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
           "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
@@ -414,7 +414,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -437,7 +437,7 @@
       "id": "oahu-ala-moana-park",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -1,
+      "depth": -1.95,
       "until": 1934,
       "file": "patches/oahu-ala-moana-park.png",
       "size": [
@@ -452,7 +452,7 @@
           "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
           "query": "name = 'Fill'",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
           "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
           "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
@@ -461,7 +461,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -477,14 +477,14 @@
       "stats": {
         "texels": 98,
         "km2": 0.457,
-        "meanLowerMetres": 0.55
+        "meanLowerMetres": 0.62
       }
     },
     {
       "id": "oahu-ala-wai-harbour",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -1.12,
+      "depth": 0.5,
       "until": 1935,
       "file": "patches/oahu-ala-wai-harbour.png",
       "size": [
@@ -498,7 +498,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -506,7 +506,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -514,7 +514,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "reef flat or lagoon where the cut now runs"
         },
@@ -530,7 +530,7 @@
           "id": "hawaii-gis-oahu-1938",
           "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
           "note": "the works it shows, which date the patch no later than 1938"
         }
@@ -538,14 +538,14 @@
       "stats": {
         "texels": 30,
         "km2": 0.14,
-        "meanRaiseMetres": 2.42
+        "meanRaiseMetres": 2.49
       }
     },
     {
       "id": "oahu-kapalama",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -1.5,
+      "depth": 0.5,
       "until": 1935,
       "file": "patches/oahu-kapalama.png",
       "size": [
@@ -559,7 +559,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -567,7 +567,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -575,7 +575,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
@@ -597,9 +597,9 @@
         }
       ],
       "stats": {
-        "texels": 73,
-        "km2": 0.34,
-        "meanRaiseMetres": 15.8
+        "texels": 76,
+        "km2": 0.354,
+        "meanRaiseMetres": 15.46
       }
     },
     {
@@ -666,7 +666,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -781,7 +781,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -869,7 +869,7 @@
       "id": "oahu-kalihi-channel",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -1,
+      "depth": -1.1,
       "until": 1944,
       "file": "patches/oahu-kalihi-channel.png",
       "size": [
@@ -883,7 +883,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -891,7 +891,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -899,9 +899,9 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
-          "note": "reef flat or lagoon where the cut now runs"
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
         {
           "id": "usn-building-bases-1947",
@@ -921,16 +921,16 @@
         }
       ],
       "stats": {
-        "texels": 266,
-        "km2": 1.24,
-        "meanRaiseMetres": 3.46
+        "texels": 228,
+        "km2": 1.063,
+        "meanRaiseMetres": 3.39
       }
     },
     {
       "id": "oahu-keehi-airport-fill",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -1,
+      "depth": -2.51,
       "until": 1944,
       "file": "patches/oahu-keehi-airport-fill.png",
       "size": [
@@ -945,7 +945,7 @@
           "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
           "query": "name = 'Fill'",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
           "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
           "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
@@ -954,7 +954,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -976,16 +976,16 @@
         }
       ],
       "stats": {
-        "texels": 622,
-        "km2": 2.9,
-        "meanLowerMetres": 2.09
+        "texels": 613,
+        "km2": 2.858,
+        "meanLowerMetres": 2.16
       }
     },
     {
       "id": "oahu-keehi-seaplane",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -1,
+      "depth": 0.5,
       "until": 1944,
       "file": "patches/oahu-keehi-seaplane.png",
       "size": [
@@ -999,7 +999,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -1007,7 +1007,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -1015,9 +1015,9 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
-          "note": "reef flat or lagoon where the cut now runs"
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
         {
           "id": "usn-building-bases-1947",
@@ -1037,16 +1037,16 @@
         }
       ],
       "stats": {
-        "texels": 841,
-        "km2": 3.921,
-        "meanRaiseMetres": 2.58
+        "texels": 778,
+        "km2": 3.628,
+        "meanRaiseMetres": 2.44
       }
     },
     {
       "id": "oahu-sand-island-later",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -1,
+      "depth": -2.02,
       "until": 1944,
       "file": "patches/oahu-sand-island-later.png",
       "size": [
@@ -1060,7 +1060,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -1068,7 +1068,7 @@
           "id": "hawaii-gis-oahu-1938",
           "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
           "note": "Sand Island as the 1938 map draws it, traced by hand"
         },
@@ -1090,9 +1090,9 @@
         }
       ],
       "stats": {
-        "texels": 519,
-        "km2": 2.42,
-        "meanLowerMetres": 2.04
+        "texels": 516,
+        "km2": 2.406,
+        "meanLowerMetres": 2.36
       }
     },
     {
@@ -1191,7 +1191,7 @@
       "id": "oahu-ala-wai-entrance",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -1.16,
+      "depth": -1.1,
       "until": 1951,
       "file": "patches/oahu-ala-wai-entrance.png",
       "size": [
@@ -1205,7 +1205,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -1213,7 +1213,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -1221,7 +1221,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "reef flat or lagoon where the cut now runs"
         },
@@ -1237,14 +1237,14 @@
       "stats": {
         "texels": 25,
         "km2": 0.117,
-        "meanRaiseMetres": 2.93
+        "meanRaiseMetres": 2.99
       }
     },
     {
       "id": "oahu-magic-island",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -1,
+      "depth": -2.06,
       "until": 1964,
       "file": "patches/oahu-magic-island.png",
       "size": [
@@ -1259,7 +1259,7 @@
           "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
           "query": "name = 'Fill'",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
           "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
           "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
@@ -1268,7 +1268,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -1282,16 +1282,16 @@
         }
       ],
       "stats": {
-        "texels": 63,
-        "km2": 0.294,
-        "meanLowerMetres": 1.28
+        "texels": 62,
+        "km2": 0.289,
+        "meanLowerMetres": 1.58
       }
     },
     {
       "id": "oahu-reef-runway",
       "pack": "oahu",
       "kind": "lower",
-      "depth": -1,
+      "depth": -4.17,
       "until": 1977,
       "file": "patches/oahu-reef-runway.png",
       "size": [
@@ -1305,7 +1305,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "reef or water where the fill now stands"
         },
@@ -1319,16 +1319,16 @@
         }
       ],
       "stats": {
-        "texels": 812,
-        "km2": 3.786,
-        "meanLowerMetres": 2.51
+        "texels": 805,
+        "km2": 3.754,
+        "meanLowerMetres": 3.31
       }
     },
     {
       "id": "oahu-reef-runway-cuts",
       "pack": "oahu",
       "kind": "raise",
-      "depth": -1.01,
+      "depth": -1.02,
       "until": 1977,
       "file": "patches/oahu-reef-runway-cuts.png",
       "size": [
@@ -1342,7 +1342,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -1350,7 +1350,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -1358,7 +1358,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "reef flat or lagoon where the cut now runs"
         },
@@ -1372,9 +1372,9 @@
         }
       ],
       "stats": {
-        "texels": 438,
-        "km2": 2.042,
-        "meanRaiseMetres": 1.88
+        "texels": 453,
+        "km2": 2.112,
+        "meanRaiseMetres": 1.85
       }
     },
     {
@@ -1396,7 +1396,7 @@
           "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
           "query": "name = 'Fill'",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
           "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
           "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
@@ -1405,7 +1405,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -1413,22 +1413,22 @@
           "id": "hawaii-gis-oahu-1899",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
           "note": "the same waterfront as the 1881 sheet, within its registration: the filling came after it"
         }
       ],
       "stats": {
-        "texels": 3537,
-        "km2": 0.596,
-        "meanLowerMetres": 1.26
+        "texels": 1556,
+        "km2": 0.262,
+        "meanLowerMetres": 0.3
       }
     },
     {
       "id": "koolaupoko-honolulu-harbour",
       "pack": "koolaupoko",
       "kind": "raise",
-      "depth": -1.5,
+      "depth": 0.5,
       "until": 1908,
       "file": "districts/koolaupoko/patch-honolulu-harbour.png",
       "size": [
@@ -1442,7 +1442,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -1450,7 +1450,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -1458,7 +1458,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
@@ -1480,9 +1480,9 @@
         }
       ],
       "stats": {
-        "texels": 1689,
+        "texels": 1693,
         "km2": 0.285,
-        "meanRaiseMetres": 8.39
+        "meanRaiseMetres": 8.55
       }
     },
     {
@@ -1503,7 +1503,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -1511,7 +1511,7 @@
           "id": "hawaii-gis-oahu-1938",
           "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
           "note": "Sand Island as the 1938 map draws it, traced by hand"
         },
@@ -1542,7 +1542,7 @@
       "id": "koolaupoko-kapalama",
       "pack": "koolaupoko",
       "kind": "raise",
-      "depth": -1.35,
+      "depth": 0.5,
       "until": 1935,
       "file": "districts/koolaupoko/patch-kapalama.png",
       "size": [
@@ -1556,7 +1556,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -1564,7 +1564,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -1572,7 +1572,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
@@ -1594,9 +1594,9 @@
         }
       ],
       "stats": {
-        "texels": 2718,
-        "km2": 0.458,
-        "meanRaiseMetres": 8.94
+        "texels": 2769,
+        "km2": 0.467,
+        "meanRaiseMetres": 9.19
       }
     },
     {
@@ -1617,7 +1617,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -1625,7 +1625,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -1633,9 +1633,9 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
-          "note": "reef flat or lagoon where the cut now runs"
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
         {
           "id": "usn-building-bases-1947",
@@ -1655,8 +1655,8 @@
         }
       ],
       "stats": {
-        "texels": 1854,
-        "km2": 0.313,
+        "texels": 1809,
+        "km2": 0.305,
         "meanRaiseMetres": 5.08
       }
     },
@@ -1664,7 +1664,7 @@
       "id": "koolaupoko-keehi-seaplane",
       "pack": "koolaupoko",
       "kind": "raise",
-      "depth": -1,
+      "depth": 0.5,
       "until": 1944,
       "file": "districts/koolaupoko/patch-keehi-seaplane.png",
       "size": [
@@ -1678,7 +1678,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -1686,7 +1686,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -1694,9 +1694,9 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
-          "note": "reef flat or lagoon where the cut now runs"
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
         {
           "id": "usn-building-bases-1947",
@@ -1716,9 +1716,9 @@
         }
       ],
       "stats": {
-        "texels": 9625,
-        "km2": 1.622,
-        "meanRaiseMetres": 4.07
+        "texels": 8263,
+        "km2": 1.393,
+        "meanRaiseMetres": 4.04
       }
     },
     {
@@ -1739,7 +1739,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -1747,7 +1747,7 @@
           "id": "hawaii-gis-oahu-1938",
           "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
           "note": "Sand Island as the 1938 map draws it, traced by hand"
         },
@@ -1792,7 +1792,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -1800,7 +1800,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -1808,7 +1808,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
@@ -1831,7 +1831,7 @@
       "id": "nuuanu-honolulu-harbour",
       "pack": "nuuanu",
       "kind": "raise",
-      "depth": -1.03,
+      "depth": 0.5,
       "until": 1908,
       "file": "districts/nuuanu/patch-honolulu-harbour.png",
       "size": [
@@ -1845,7 +1845,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -1853,7 +1853,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -1861,7 +1861,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
@@ -1883,9 +1883,9 @@
         }
       ],
       "stats": {
-        "texels": 11084,
-        "km2": 0.405,
-        "meanRaiseMetres": 8.3
+        "texels": 11093,
+        "km2": 0.406,
+        "meanRaiseMetres": 8.39
       }
     },
     {
@@ -1906,7 +1906,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -1914,7 +1914,7 @@
           "id": "hawaii-gis-oahu-1938",
           "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
           "note": "Sand Island as the 1938 map draws it, traced by hand"
         },
@@ -1945,7 +1945,7 @@
       "id": "nuuanu-kewalo",
       "pack": "nuuanu",
       "kind": "raise",
-      "depth": -0.99,
+      "depth": 0.5,
       "until": 1926,
       "file": "districts/nuuanu/patch-kewalo.png",
       "size": [
@@ -1959,7 +1959,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -1967,7 +1967,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "reef flat or lagoon where the cut now runs"
         },
@@ -1981,9 +1981,9 @@
         }
       ],
       "stats": {
-        "texels": 3739,
-        "km2": 0.137,
-        "meanRaiseMetres": 4.07
+        "texels": 3785,
+        "km2": 0.138,
+        "meanRaiseMetres": 4.79
       }
     },
     {
@@ -2004,7 +2004,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -2012,7 +2012,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -2020,7 +2020,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "reef flat or lagoon where the cut now runs"
         },
@@ -2057,7 +2057,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the Waikīkī wetland the canal was dug through"
         },
@@ -2095,7 +2095,7 @@
           "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
           "query": "name = 'Fill'",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
           "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
           "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
@@ -2104,7 +2104,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -2142,7 +2142,7 @@
           "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
           "query": "name = 'Fill'",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
           "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
           "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
@@ -2151,7 +2151,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -2174,7 +2174,7 @@
       "id": "nuuanu-ala-wai-harbour",
       "pack": "nuuanu",
       "kind": "raise",
-      "depth": -1,
+      "depth": 0.5,
       "until": 1935,
       "file": "districts/nuuanu/patch-ala-wai-harbour.png",
       "size": [
@@ -2188,7 +2188,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -2196,7 +2196,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -2204,7 +2204,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "reef flat or lagoon where the cut now runs"
         },
@@ -2220,22 +2220,22 @@
           "id": "hawaii-gis-oahu-1938",
           "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
           "note": "the works it shows, which date the patch no later than 1938"
         }
       ],
       "stats": {
-        "texels": 3021,
-        "km2": 0.11,
-        "meanRaiseMetres": 1.85
+        "texels": 3049,
+        "km2": 0.111,
+        "meanRaiseMetres": 1.92
       }
     },
     {
       "id": "nuuanu-kapalama",
       "pack": "nuuanu",
       "kind": "raise",
-      "depth": -1,
+      "depth": 0.5,
       "until": 1935,
       "file": "districts/nuuanu/patch-kapalama.png",
       "size": [
@@ -2249,7 +2249,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -2257,7 +2257,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -2265,7 +2265,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
@@ -2287,9 +2287,9 @@
         }
       ],
       "stats": {
-        "texels": 12466,
-        "km2": 0.456,
-        "meanRaiseMetres": 9.57
+        "texels": 12603,
+        "km2": 0.461,
+        "meanRaiseMetres": 9.76
       }
     },
     {
@@ -2310,7 +2310,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -2318,7 +2318,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -2326,9 +2326,9 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
-          "note": "reef flat or lagoon where the cut now runs"
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
         {
           "id": "usn-building-bases-1947",
@@ -2348,16 +2348,16 @@
         }
       ],
       "stats": {
-        "texels": 15846,
-        "km2": 0.579,
-        "meanRaiseMetres": 4.6
+        "texels": 15056,
+        "km2": 0.551,
+        "meanRaiseMetres": 4.79
       }
     },
     {
       "id": "nuuanu-keehi-seaplane",
       "pack": "nuuanu",
       "kind": "raise",
-      "depth": -1,
+      "depth": 0.5,
       "until": 1944,
       "file": "districts/nuuanu/patch-keehi-seaplane.png",
       "size": [
@@ -2371,7 +2371,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -2379,7 +2379,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -2387,9 +2387,9 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
-          "note": "reef flat or lagoon where the cut now runs"
+          "note": "the passages kept open and the bars, traced by hand (passages.geojson); reef flat where the cut now runs"
         },
         {
           "id": "usn-building-bases-1947",
@@ -2409,9 +2409,9 @@
         }
       ],
       "stats": {
-        "texels": 38175,
-        "km2": 1.396,
-        "meanRaiseMetres": 4.31
+        "texels": 32118,
+        "km2": 1.174,
+        "meanRaiseMetres": 4.36
       }
     },
     {
@@ -2432,7 +2432,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -2440,7 +2440,7 @@
           "id": "hawaii-gis-oahu-1938",
           "title": "Map of Oʻahu, 1938 (a U.S. Geological Survey topographic sheet), as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1938 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1938/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain federal survey",
           "note": "Sand Island as the 1938 map draws it, traced by hand"
         },
@@ -2485,7 +2485,7 @@
           "id": "noaa-ncei-cudem-ninth-hawaii",
           "title": "NOAA NCEI Continuously Updated DEM (CUDEM), 1/9 arc-second topobathymetric tiles, Hawaiʻi (Digital Coast 9428), WGS 84, mean sea level",
           "url": "https://noaa-nos-coastal-lidar-pds.s3.amazonaws.com/dem/NCEI_ninth_Topobathy_Hawaii_9428/index.html",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA National Centers for Environmental Information); cite Amante, C.J., Love, M., Carignan, K., Sutherland, M.G., MacFerrin, M. and Lim, E. (2023), Continuously Updated Digital Elevation Models (CUDEMs) to Support Coastal Inundation Modeling, Remote Sensing 15(6), 1702, doi:10.3390/rs15061702",
           "note": "ncei19_n21x50_w158x00_2021v1: the sea floor the cut ground is found on, at its 1/9″ cells; the reef surface is spread from the pack’s own heights"
         },
@@ -2493,7 +2493,7 @@
           "id": "noaa-enc-direct-dredged-areas",
           "title": "NOAA Office of Coast Survey, ENC Direct to GIS, harbour-scale Dredged_Area (DRGARE) polygons over Oʻahu",
           "url": "https://encdirect.noaa.gov/arcgis/rest/services/encdirect/enc_harbour/MapServer/228",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "public domain (NOAA); not for navigation",
           "note": "today’s charted dredged areas here, counted as cut wherever they lie"
         },
@@ -2501,7 +2501,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "reef flat or lagoon where the cut now runs"
         },
@@ -2539,7 +2539,7 @@
           "title": "State of Hawaiʻi GIS, Geologic Units (Terrestrial MapServer layer 28), after Sherrod and others (USGS 2007): the fill unit (Qf) on Oʻahu",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Terrestrial/MapServer/28",
           "query": "name = 'Fill'",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; no warranty of positional or thematic accuracy",
           "metadata": "https://files.hawaii.gov/dbedt/op/gis/data/Geologic_Units.pdf",
           "note": "35 polygons on Oʻahu; artificial fill, mapped by Sherrod and others (2007) from the earlier Oʻahu geologic maps: the made ground of the waterfront, Sand Island, Kakaʻako, Waikīkī and the Ala Wai, and the fill over ponds and marsh behind them. It does not say when, or what lay beneath"
@@ -2548,7 +2548,7 @@
           "id": "hawaii-gis-oahu-1881",
           "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
           "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
-          "fetched": "2026-10-22",
+          "fetched": "2026-11-06",
           "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
           "note": "the 1881 shore the fill is cut with, traced by hand"
         },
@@ -2565,6 +2565,801 @@
         "texels": 4072,
         "km2": 0.149,
         "meanLowerMetres": 2.97
+      }
+    },
+    {
+      "id": "oahu-kou-esplanade",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1.44,
+      "until": 1856,
+      "file": "patches/oahu-kou-esplanade.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the Esplanade and the wharves at Kou",
+      "note": "the waterfront between Queen Street, “the water’s edge”, and the 1881 shore, from the Nuʻuanu stream mouth to below Alakea Street: the reef in front of the town on Malden’s chart of 1825, filled behind the 2,000-foot wall of the Esplanade “from 1856 to 1860” (about 22 acres). The wharves north of Fort Street stood on the same reef, from a hulk sunk “near Nuʻuanu Avenue” in 1825; the filling behind them is not dated in the sources read, and goes with the Esplanade’s",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-esplanade",
+          "title": "Images of Old Hawaiʻi, “Esplanade” (Peter T. Young, 2019)",
+          "url": "https://imagesofoldhawaii.com/esplanade",
+          "fetched": "2026-11-06",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“What is now known as Queen Street was actually the water’s edge”; the reef of Waikahalulu on the south side of the harbour; after Fort Kekuanohu was pulled down in 1857 “its walls became the 2,000-foot retaining wall used to extend the land out onto the shallow reef in the harbor”, and “from 1856 to 1860” about 22 acres of reef were filled “between Fort Street and Alakea Street”; piers at the foot of Richards Street (1896), Piers 17 and 18 (1901), Piers 7 and 12 (1907); the harbour “originally was a deep embayment formed by the outflow of Nuʻuanu Stream”"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        },
+        {
+          "id": "hdot-harbors-history",
+          "title": "Hawaiʻi Department of Transportation, Harbors Division, “History”",
+          "url": "https://hidot.hawaii.gov/harbors/history/",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "“Honolulu Harbor was originally a small, reefed basin created by the natural flow of freshwater from the streams of Nuʻuanu Valley”; “The main channel, which was the deepest, was flanked to the west by shallower outlets. Between these outflows, rose occasional spots of earth and coral, the beginnings of Sand Island”; the first wharf of 1825 a hulk “near Nuʻuanu Avenue”; dredge spoil filled the tidelands and built Sand Island"
+        }
+      ],
+      "stats": {
+        "texels": 100,
+        "km2": 0.466,
+        "meanLowerMetres": 0.97
+      }
+    },
+    {
+      "id": "oahu-kamokuakulikuli-growth",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1869,
+      "file": "patches/oahu-kamokuakulikuli-growth.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "Quarantine Island grown round its cay",
+      "note": "the islet the 1881 sheet draws (about 18 ha) back to the reef flat Koholaloa, “long reef”, round a cay of about 2 ha: the record has “a small islet” granted in 1840 and “a small reef island, Kamokuʻākulikuli” leased for the quarantine station in 1869, which then “grew in size with the dredging and infilling of Honolulu Harbor”. Its growth before 1881 is not dated in the sources read; given the station’s lease. The cay’s size and place are inferred, and Malden draws no islet there in 1825",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "wikipedia-sand-island",
+          "title": "Wikipedia, “Sand Island (Hawaii)”",
+          "url": "https://en.wikipedia.org/wiki/Sand_Island_(Hawaii)",
+          "fetched": "2026-11-06",
+          "licence": "CC BY-SA 4.0, quoted for its dates",
+          "note": "“once a small islet surrounded by the Kaholaloa fishing grounds, a shallow reef and sandbank”, granted to William Sumner in 1840; leased by the Board of Health in 1869 for a quarantine station"
+        },
+        {
+          "id": "iooh-anuenue",
+          "title": "Images of Old Hawaiʻi, “Anuenue” (Sand Island)",
+          "url": "https://imagesofoldhawaii.com/anuenue/",
+          "fetched": "2026-11-06",
+          "licence": "quoted for its dates; text © its author",
+          "note": "Sand Island “was created by the filling of the reef flats during incremental dredging of Honolulu harbor and Keʻehi lagoon”, on the reef platform Kahololoa, “cut by stream channels on the west and east”, which became the Kalihi channel and the harbour channel; “several islands or dryland areas on the off shore reef flats” in the 1840s; early in 1869 the government leased “a small reef island, Kamokuʻākulikuli” for a quarantine station; the enlarged island called Quarantine Island by 1888"
+        },
+        {
+          "id": "hbgn-mauliola-2026",
+          "title": "Hawaiʻi State Board on Geographic Names, meeting of 13 February 2026, item 5, Mauliola: Honolulu City Council resolution 25-63 and a compilation of notices from the Hawaiian and English press",
+          "url": "https://files.hawaii.gov/dbedt/op/gis/bgn/HBGN_Meeting_20260213_05-Mauliola.pdf",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi and City and County of Honolulu publication, quoted for its dates",
+          "note": "the resolution: “this small tidal island grew in size with the dredging and infilling of Honolulu Harbor”, “from the mid-1800s through the mid-1900s”; the compilation quotes The Polynesian of 30 July 1853 (a smallpox case “placed on a small island called Kahakaaulana”) and Place Names of Hawaii (“Koholaloa is an old name for Sand Island. Lit., long reef”)"
+        },
+        {
+          "id": "hdot-harbors-history",
+          "title": "Hawaiʻi Department of Transportation, Harbors Division, “History”",
+          "url": "https://hidot.hawaii.gov/harbors/history/",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "“Honolulu Harbor was originally a small, reefed basin created by the natural flow of freshwater from the streams of Nuʻuanu Valley”; “The main channel, which was the deepest, was flanked to the west by shallower outlets. Between these outflows, rose occasional spots of earth and coral, the beginnings of Sand Island”; the first wharf of 1825 a hulk “near Nuʻuanu Avenue”; dredge spoil filled the tidelands and built Sand Island"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        }
+      ],
+      "stats": {
+        "texels": 31,
+        "km2": 0.145,
+        "meanLowerMetres": 2.02
+      }
+    },
+    {
+      "id": "oahu-kou-harbour-piers",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -6,
+      "until": 1896,
+      "file": "patches/oahu-kou-harbour-piers.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the piers in the harbour at Kou",
+      "note": "the piers built out into the harbour off the 1881 waterfront, back to the harbour’s floor: Malden sounds 3 to 4½ fathoms by the wharf in 1825, the 1881 sheet 3½ to 5½. The first pier the sources read date is at the foot of Richards Street, 1896; Piers 17 and 18 followed in 1901 and 7 and 12 in 1907",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-esplanade",
+          "title": "Images of Old Hawaiʻi, “Esplanade” (Peter T. Young, 2019)",
+          "url": "https://imagesofoldhawaii.com/esplanade",
+          "fetched": "2026-11-06",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“What is now known as Queen Street was actually the water’s edge”; the reef of Waikahalulu on the south side of the harbour; after Fort Kekuanohu was pulled down in 1857 “its walls became the 2,000-foot retaining wall used to extend the land out onto the shallow reef in the harbor”, and “from 1856 to 1860” about 22 acres of reef were filled “between Fort Street and Alakea Street”; piers at the foot of Richards Street (1896), Piers 17 and 18 (1901), Piers 7 and 12 (1907); the harbour “originally was a deep embayment formed by the outflow of Nuʻuanu Stream”"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        }
+      ],
+      "stats": {
+        "texels": 76,
+        "km2": 0.354,
+        "meanLowerMetres": 0.91
+      }
+    },
+    {
+      "id": "oahu-harbour-reef-piers",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1.72,
+      "until": 1900,
+      "file": "patches/oahu-harbour-reef-piers.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the piers and wharves on the reef of Iwilei and Kapālama",
+      "note": "today’s land on the reef west of the harbour, seaward of the 1881 shore, that the fill unit and the dated works leave: the piers and wharves of Iwilei and Kapālama. Given the waterfront’s date: the 1899 sheet shows the 1881 shore here, and Kapālama’s basin and its piers came after 1914",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1899",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
+          "note": "the same waterfront as the 1881 sheet, within its registration: the filling came after it"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        }
+      ],
+      "stats": {
+        "texels": 244,
+        "km2": 1.138,
+        "meanLowerMetres": 0.77
+      }
+    },
+    {
+      "id": "oahu-keehi-lagoon-fills",
+      "pack": "oahu",
+      "kind": "lower",
+      "depth": -1.6,
+      "until": 1944,
+      "file": "patches/oahu-keehi-lagoon-fills.png",
+      "size": [
+        1024,
+        801
+      ],
+      "name": "the islets, dike and fills in Keʻehi lagoon",
+      "note": "today’s land in Keʻehi lagoon seaward of the 1881 shore that the dated works leave: the islets standing in the old seaplane runways, the dike with its light, the park and the small-boat harbour on the Kalihi side. The 1943 map shows none of them; their own dates are not in the sources read, and they are given the runways’ dredging, whose spoil “raised the land” (1943–44). Mokuʻoeo and Mokauea, islets on the 1881 sheet, stay",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1943",
+          "title": "Map of Oʻahu, 1943, as the State of Hawaiʻi GIS serves it (SoH_Maps/Oahu_1943 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/Oahu_1943/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "public domain (U.S. Government map), served by the State of Hawaiʻi",
+          "note": "read over Keʻehi lagoon: the seaplane runways drawn as dredged and the reef flat between them hatched, with no islet, dike or fill in the lagoon east of the airport"
+        },
+        {
+          "id": "usgs-topo-2000",
+          "title": "U.S. Geological Survey topographic quadrangles, 2000 editions, as the State of Hawaiʻi GIS serves them (SoH_Maps/USGS_topos_2000 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "public domain (U.S. Government map), served by the State of Hawaiʻi",
+          "note": "read over Keʻehi lagoon: islets in the old runways, the dike with its light, Keʻehi Lagoon Park and the small-boat harbour’s piers; Kahakaʻaulana Island named beside Mokauea"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        }
+      ],
+      "stats": {
+        "texels": 342,
+        "km2": 1.595,
+        "meanLowerMetres": 0.61
+      }
+    },
+    {
+      "id": "koolaupoko-kou-esplanade",
+      "pack": "koolaupoko",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1856,
+      "file": "districts/koolaupoko/patch-kou-esplanade.png",
+      "size": [
+        2048,
+        2010
+      ],
+      "name": "the Esplanade and the wharves at Kou",
+      "note": "the waterfront between Queen Street, “the water’s edge”, and the 1881 shore, from the Nuʻuanu stream mouth to below Alakea Street: the reef in front of the town on Malden’s chart of 1825, filled behind the 2,000-foot wall of the Esplanade “from 1856 to 1860” (about 22 acres). The wharves north of Fort Street stood on the same reef, from a hulk sunk “near Nuʻuanu Avenue” in 1825; the filling behind them is not dated in the sources read, and goes with the Esplanade’s",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-esplanade",
+          "title": "Images of Old Hawaiʻi, “Esplanade” (Peter T. Young, 2019)",
+          "url": "https://imagesofoldhawaii.com/esplanade",
+          "fetched": "2026-11-06",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“What is now known as Queen Street was actually the water’s edge”; the reef of Waikahalulu on the south side of the harbour; after Fort Kekuanohu was pulled down in 1857 “its walls became the 2,000-foot retaining wall used to extend the land out onto the shallow reef in the harbor”, and “from 1856 to 1860” about 22 acres of reef were filled “between Fort Street and Alakea Street”; piers at the foot of Richards Street (1896), Piers 17 and 18 (1901), Piers 7 and 12 (1907); the harbour “originally was a deep embayment formed by the outflow of Nuʻuanu Stream”"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        },
+        {
+          "id": "hdot-harbors-history",
+          "title": "Hawaiʻi Department of Transportation, Harbors Division, “History”",
+          "url": "https://hidot.hawaii.gov/harbors/history/",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "“Honolulu Harbor was originally a small, reefed basin created by the natural flow of freshwater from the streams of Nuʻuanu Valley”; “The main channel, which was the deepest, was flanked to the west by shallower outlets. Between these outflows, rose occasional spots of earth and coral, the beginnings of Sand Island”; the first wharf of 1825 a hulk “near Nuʻuanu Avenue”; dredge spoil filled the tidelands and built Sand Island"
+        }
+      ],
+      "stats": {
+        "texels": 1262,
+        "km2": 0.213,
+        "meanLowerMetres": 1.58
+      }
+    },
+    {
+      "id": "koolaupoko-kamokuakulikuli-growth",
+      "pack": "koolaupoko",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1869,
+      "file": "districts/koolaupoko/patch-kamokuakulikuli-growth.png",
+      "size": [
+        2048,
+        2010
+      ],
+      "name": "Quarantine Island grown round its cay",
+      "note": "the islet the 1881 sheet draws (about 18 ha) back to the reef flat Koholaloa, “long reef”, round a cay of about 2 ha: the record has “a small islet” granted in 1840 and “a small reef island, Kamokuʻākulikuli” leased for the quarantine station in 1869, which then “grew in size with the dredging and infilling of Honolulu Harbor”. Its growth before 1881 is not dated in the sources read; given the station’s lease. The cay’s size and place are inferred, and Malden draws no islet there in 1825",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "wikipedia-sand-island",
+          "title": "Wikipedia, “Sand Island (Hawaii)”",
+          "url": "https://en.wikipedia.org/wiki/Sand_Island_(Hawaii)",
+          "fetched": "2026-11-06",
+          "licence": "CC BY-SA 4.0, quoted for its dates",
+          "note": "“once a small islet surrounded by the Kaholaloa fishing grounds, a shallow reef and sandbank”, granted to William Sumner in 1840; leased by the Board of Health in 1869 for a quarantine station"
+        },
+        {
+          "id": "iooh-anuenue",
+          "title": "Images of Old Hawaiʻi, “Anuenue” (Sand Island)",
+          "url": "https://imagesofoldhawaii.com/anuenue/",
+          "fetched": "2026-11-06",
+          "licence": "quoted for its dates; text © its author",
+          "note": "Sand Island “was created by the filling of the reef flats during incremental dredging of Honolulu harbor and Keʻehi lagoon”, on the reef platform Kahololoa, “cut by stream channels on the west and east”, which became the Kalihi channel and the harbour channel; “several islands or dryland areas on the off shore reef flats” in the 1840s; early in 1869 the government leased “a small reef island, Kamokuʻākulikuli” for a quarantine station; the enlarged island called Quarantine Island by 1888"
+        },
+        {
+          "id": "hbgn-mauliola-2026",
+          "title": "Hawaiʻi State Board on Geographic Names, meeting of 13 February 2026, item 5, Mauliola: Honolulu City Council resolution 25-63 and a compilation of notices from the Hawaiian and English press",
+          "url": "https://files.hawaii.gov/dbedt/op/gis/bgn/HBGN_Meeting_20260213_05-Mauliola.pdf",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi and City and County of Honolulu publication, quoted for its dates",
+          "note": "the resolution: “this small tidal island grew in size with the dredging and infilling of Honolulu Harbor”, “from the mid-1800s through the mid-1900s”; the compilation quotes The Polynesian of 30 July 1853 (a smallpox case “placed on a small island called Kahakaaulana”) and Place Names of Hawaii (“Koholaloa is an old name for Sand Island. Lit., long reef”)"
+        },
+        {
+          "id": "hdot-harbors-history",
+          "title": "Hawaiʻi Department of Transportation, Harbors Division, “History”",
+          "url": "https://hidot.hawaii.gov/harbors/history/",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "“Honolulu Harbor was originally a small, reefed basin created by the natural flow of freshwater from the streams of Nuʻuanu Valley”; “The main channel, which was the deepest, was flanked to the west by shallower outlets. Between these outflows, rose occasional spots of earth and coral, the beginnings of Sand Island”; the first wharf of 1825 a hulk “near Nuʻuanu Avenue”; dredge spoil filled the tidelands and built Sand Island"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        }
+      ],
+      "stats": {
+        "texels": 1032,
+        "km2": 0.174,
+        "meanLowerMetres": 2.52
+      }
+    },
+    {
+      "id": "koolaupoko-kou-harbour-piers",
+      "pack": "koolaupoko",
+      "kind": "lower",
+      "depth": -6,
+      "until": 1896,
+      "file": "districts/koolaupoko/patch-kou-harbour-piers.png",
+      "size": [
+        2048,
+        2010
+      ],
+      "name": "the piers in the harbour at Kou",
+      "note": "the piers built out into the harbour off the 1881 waterfront, back to the harbour’s floor: Malden sounds 3 to 4½ fathoms by the wharf in 1825, the 1881 sheet 3½ to 5½. The first pier the sources read date is at the foot of Richards Street, 1896; Piers 17 and 18 followed in 1901 and 7 and 12 in 1907",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-esplanade",
+          "title": "Images of Old Hawaiʻi, “Esplanade” (Peter T. Young, 2019)",
+          "url": "https://imagesofoldhawaii.com/esplanade",
+          "fetched": "2026-11-06",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“What is now known as Queen Street was actually the water’s edge”; the reef of Waikahalulu on the south side of the harbour; after Fort Kekuanohu was pulled down in 1857 “its walls became the 2,000-foot retaining wall used to extend the land out onto the shallow reef in the harbor”, and “from 1856 to 1860” about 22 acres of reef were filled “between Fort Street and Alakea Street”; piers at the foot of Richards Street (1896), Piers 17 and 18 (1901), Piers 7 and 12 (1907); the harbour “originally was a deep embayment formed by the outflow of Nuʻuanu Stream”"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        }
+      ],
+      "stats": {
+        "texels": 511,
+        "km2": 0.086,
+        "meanLowerMetres": 3.51
+      }
+    },
+    {
+      "id": "koolaupoko-harbour-reef-piers",
+      "pack": "koolaupoko",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1900,
+      "file": "districts/koolaupoko/patch-harbour-reef-piers.png",
+      "size": [
+        2048,
+        2010
+      ],
+      "name": "the piers and wharves on the reef of Iwilei and Kapālama",
+      "note": "today’s land on the reef west of the harbour, seaward of the 1881 shore, that the fill unit and the dated works leave: the piers and wharves of Iwilei and Kapālama. Given the waterfront’s date: the 1899 sheet shows the 1881 shore here, and Kapālama’s basin and its piers came after 1914",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1899",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
+          "note": "the same waterfront as the 1881 sheet, within its registration: the filling came after it"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        }
+      ],
+      "stats": {
+        "texels": 3187,
+        "km2": 0.537,
+        "meanLowerMetres": 1.37
+      }
+    },
+    {
+      "id": "koolaupoko-keehi-lagoon-fills",
+      "pack": "koolaupoko",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1944,
+      "file": "districts/koolaupoko/patch-keehi-lagoon-fills.png",
+      "size": [
+        2048,
+        2010
+      ],
+      "name": "the islets, dike and fills in Keʻehi lagoon",
+      "note": "today’s land in Keʻehi lagoon seaward of the 1881 shore that the dated works leave: the islets standing in the old seaplane runways, the dike with its light, the park and the small-boat harbour on the Kalihi side. The 1943 map shows none of them; their own dates are not in the sources read, and they are given the runways’ dredging, whose spoil “raised the land” (1943–44). Mokuʻoeo and Mokauea, islets on the 1881 sheet, stay",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1943",
+          "title": "Map of Oʻahu, 1943, as the State of Hawaiʻi GIS serves it (SoH_Maps/Oahu_1943 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/Oahu_1943/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "public domain (U.S. Government map), served by the State of Hawaiʻi",
+          "note": "read over Keʻehi lagoon: the seaplane runways drawn as dredged and the reef flat between them hatched, with no islet, dike or fill in the lagoon east of the airport"
+        },
+        {
+          "id": "usgs-topo-2000",
+          "title": "U.S. Geological Survey topographic quadrangles, 2000 editions, as the State of Hawaiʻi GIS serves them (SoH_Maps/USGS_topos_2000 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "public domain (U.S. Government map), served by the State of Hawaiʻi",
+          "note": "read over Keʻehi lagoon: islets in the old runways, the dike with its light, Keʻehi Lagoon Park and the small-boat harbour’s piers; Kahakaʻaulana Island named beside Mokauea"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        }
+      ],
+      "stats": {
+        "texels": 694,
+        "km2": 0.117,
+        "meanLowerMetres": 0.81
+      }
+    },
+    {
+      "id": "nuuanu-kou-esplanade",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1856,
+      "file": "districts/nuuanu/patch-kou-esplanade.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the Esplanade and the wharves at Kou",
+      "note": "the waterfront between Queen Street, “the water’s edge”, and the 1881 shore, from the Nuʻuanu stream mouth to below Alakea Street: the reef in front of the town on Malden’s chart of 1825, filled behind the 2,000-foot wall of the Esplanade “from 1856 to 1860” (about 22 acres). The wharves north of Fort Street stood on the same reef, from a hulk sunk “near Nuʻuanu Avenue” in 1825; the filling behind them is not dated in the sources read, and goes with the Esplanade’s",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-esplanade",
+          "title": "Images of Old Hawaiʻi, “Esplanade” (Peter T. Young, 2019)",
+          "url": "https://imagesofoldhawaii.com/esplanade",
+          "fetched": "2026-11-06",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“What is now known as Queen Street was actually the water’s edge”; the reef of Waikahalulu on the south side of the harbour; after Fort Kekuanohu was pulled down in 1857 “its walls became the 2,000-foot retaining wall used to extend the land out onto the shallow reef in the harbor”, and “from 1856 to 1860” about 22 acres of reef were filled “between Fort Street and Alakea Street”; piers at the foot of Richards Street (1896), Piers 17 and 18 (1901), Piers 7 and 12 (1907); the harbour “originally was a deep embayment formed by the outflow of Nuʻuanu Stream”"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        },
+        {
+          "id": "hdot-harbors-history",
+          "title": "Hawaiʻi Department of Transportation, Harbors Division, “History”",
+          "url": "https://hidot.hawaii.gov/harbors/history/",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "“Honolulu Harbor was originally a small, reefed basin created by the natural flow of freshwater from the streams of Nuʻuanu Valley”; “The main channel, which was the deepest, was flanked to the west by shallower outlets. Between these outflows, rose occasional spots of earth and coral, the beginnings of Sand Island”; the first wharf of 1825 a hulk “near Nuʻuanu Avenue”; dredge spoil filled the tidelands and built Sand Island"
+        }
+      ],
+      "stats": {
+        "texels": 4239,
+        "km2": 0.155,
+        "meanLowerMetres": 2.03
+      }
+    },
+    {
+      "id": "nuuanu-kamokuakulikuli-growth",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1869,
+      "file": "districts/nuuanu/patch-kamokuakulikuli-growth.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "Quarantine Island grown round its cay",
+      "note": "the islet the 1881 sheet draws (about 18 ha) back to the reef flat Koholaloa, “long reef”, round a cay of about 2 ha: the record has “a small islet” granted in 1840 and “a small reef island, Kamokuʻākulikuli” leased for the quarantine station in 1869, which then “grew in size with the dredging and infilling of Honolulu Harbor”. Its growth before 1881 is not dated in the sources read; given the station’s lease. The cay’s size and place are inferred, and Malden draws no islet there in 1825",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "wikipedia-sand-island",
+          "title": "Wikipedia, “Sand Island (Hawaii)”",
+          "url": "https://en.wikipedia.org/wiki/Sand_Island_(Hawaii)",
+          "fetched": "2026-11-06",
+          "licence": "CC BY-SA 4.0, quoted for its dates",
+          "note": "“once a small islet surrounded by the Kaholaloa fishing grounds, a shallow reef and sandbank”, granted to William Sumner in 1840; leased by the Board of Health in 1869 for a quarantine station"
+        },
+        {
+          "id": "iooh-anuenue",
+          "title": "Images of Old Hawaiʻi, “Anuenue” (Sand Island)",
+          "url": "https://imagesofoldhawaii.com/anuenue/",
+          "fetched": "2026-11-06",
+          "licence": "quoted for its dates; text © its author",
+          "note": "Sand Island “was created by the filling of the reef flats during incremental dredging of Honolulu harbor and Keʻehi lagoon”, on the reef platform Kahololoa, “cut by stream channels on the west and east”, which became the Kalihi channel and the harbour channel; “several islands or dryland areas on the off shore reef flats” in the 1840s; early in 1869 the government leased “a small reef island, Kamokuʻākulikuli” for a quarantine station; the enlarged island called Quarantine Island by 1888"
+        },
+        {
+          "id": "hbgn-mauliola-2026",
+          "title": "Hawaiʻi State Board on Geographic Names, meeting of 13 February 2026, item 5, Mauliola: Honolulu City Council resolution 25-63 and a compilation of notices from the Hawaiian and English press",
+          "url": "https://files.hawaii.gov/dbedt/op/gis/bgn/HBGN_Meeting_20260213_05-Mauliola.pdf",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi and City and County of Honolulu publication, quoted for its dates",
+          "note": "the resolution: “this small tidal island grew in size with the dredging and infilling of Honolulu Harbor”, “from the mid-1800s through the mid-1900s”; the compilation quotes The Polynesian of 30 July 1853 (a smallpox case “placed on a small island called Kahakaaulana”) and Place Names of Hawaii (“Koholaloa is an old name for Sand Island. Lit., long reef”)"
+        },
+        {
+          "id": "hdot-harbors-history",
+          "title": "Hawaiʻi Department of Transportation, Harbors Division, “History”",
+          "url": "https://hidot.hawaii.gov/harbors/history/",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi publication, quoted for its dates",
+          "note": "“Honolulu Harbor was originally a small, reefed basin created by the natural flow of freshwater from the streams of Nuʻuanu Valley”; “The main channel, which was the deepest, was flanked to the west by shallower outlets. Between these outflows, rose occasional spots of earth and coral, the beginnings of Sand Island”; the first wharf of 1825 a hulk “near Nuʻuanu Avenue”; dredge spoil filled the tidelands and built Sand Island"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        }
+      ],
+      "stats": {
+        "texels": 4701,
+        "km2": 0.172,
+        "meanLowerMetres": 2.84
+      }
+    },
+    {
+      "id": "nuuanu-kou-harbour-piers",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": -6,
+      "until": 1896,
+      "file": "districts/nuuanu/patch-kou-harbour-piers.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the piers in the harbour at Kou",
+      "note": "the piers built out into the harbour off the 1881 waterfront, back to the harbour’s floor: Malden sounds 3 to 4½ fathoms by the wharf in 1825, the 1881 sheet 3½ to 5½. The first pier the sources read date is at the foot of Richards Street, 1896; Piers 17 and 18 followed in 1901 and 7 and 12 in 1907",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "iooh-esplanade",
+          "title": "Images of Old Hawaiʻi, “Esplanade” (Peter T. Young, 2019)",
+          "url": "https://imagesofoldhawaii.com/esplanade",
+          "fetched": "2026-11-06",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“What is now known as Queen Street was actually the water’s edge”; the reef of Waikahalulu on the south side of the harbour; after Fort Kekuanohu was pulled down in 1857 “its walls became the 2,000-foot retaining wall used to extend the land out onto the shallow reef in the harbor”, and “from 1856 to 1860” about 22 acres of reef were filled “between Fort Street and Alakea Street”; piers at the foot of Richards Street (1896), Piers 17 and 18 (1901), Piers 7 and 12 (1907); the harbour “originally was a deep embayment formed by the outflow of Nuʻuanu Stream”"
+        },
+        {
+          "id": "malden-1825",
+          "title": "C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)",
+          "url": "http://hdl.handle.net/10524/59518",
+          "fetched": "2026-11-06",
+          "licence": "public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library",
+          "note": "the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore"
+        }
+      ],
+      "stats": {
+        "texels": 1748,
+        "km2": 0.064,
+        "meanLowerMetres": 4.69
+      }
+    },
+    {
+      "id": "nuuanu-harbour-reef-piers",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1900,
+      "file": "districts/nuuanu/patch-harbour-reef-piers.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the piers and wharves on the reef of Iwilei and Kapālama",
+      "note": "today’s land on the reef west of the harbour, seaward of the 1881 shore, that the fill unit and the dated works leave: the piers and wharves of Iwilei and Kapālama. Given the waterfront’s date: the 1899 sheet shows the 1881 shore here, and Kapālama’s basin and its piers came after 1914",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1899",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1899, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1899 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1899/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1899",
+          "note": "the same waterfront as the 1881 sheet, within its registration: the filling came after it"
+        },
+        {
+          "id": "iooh-honolulu-harbor",
+          "title": "Images of Old Hawaiʻi, “Evolution of Honolulu Harbor”",
+          "url": "https://imagesofoldhawaii.com/evolution-of-honolulu-harbor/",
+          "fetched": "2026-10-21",
+          "licence": "quoted for its dates; text © its author",
+          "note": "“In 1890-92, a channel 200-feet wide by 30-feet deep was dredged for about 1,000-feet through the sand bar”, which had limited the depth to as little as 18 feet; after annexation the harbour was dredged with federal funds and the spoil built Sand Island; after 1914 the Reserved Channel to Kapālama Basin was dredged; Pier 35 in Kapālama Basin was built in 1931"
+        }
+      ],
+      "stats": {
+        "texels": 10344,
+        "km2": 0.378,
+        "meanLowerMetres": 1.81
+      }
+    },
+    {
+      "id": "nuuanu-keehi-lagoon-fills",
+      "pack": "nuuanu",
+      "kind": "lower",
+      "depth": -1,
+      "until": 1944,
+      "file": "districts/nuuanu/patch-keehi-lagoon-fills.png",
+      "size": [
+        2035,
+        2048
+      ],
+      "name": "the islets, dike and fills in Keʻehi lagoon",
+      "note": "today’s land in Keʻehi lagoon seaward of the 1881 shore that the dated works leave: the islets standing in the old seaplane runways, the dike with its light, the park and the small-boat harbour on the Kalihi side. The 1943 map shows none of them; their own dates are not in the sources read, and they are given the runways’ dredging, whose spoil “raised the land” (1943–44). Mokuʻoeo and Mokauea, islets on the 1881 sheet, stay",
+      "sources": [
+        {
+          "id": "hawaii-gis-oahu-1881",
+          "title": "Hawaiian Government Survey, map of Oʻahu, 1881, as georeferenced by the State of Hawaiʻi GIS (Historic_Maps/Oahu_1881 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Historic_Maps/Oahu_1881/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "State of Hawaiʻi Statewide GIS Program open data; the map itself is a public-domain government survey of 1881",
+          "note": "the 1881 shore the fill is cut with, traced by hand"
+        },
+        {
+          "id": "hawaii-gis-oahu-1943",
+          "title": "Map of Oʻahu, 1943, as the State of Hawaiʻi GIS serves it (SoH_Maps/Oahu_1943 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/Oahu_1943/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "public domain (U.S. Government map), served by the State of Hawaiʻi",
+          "note": "read over Keʻehi lagoon: the seaplane runways drawn as dredged and the reef flat between them hatched, with no islet, dike or fill in the lagoon east of the airport"
+        },
+        {
+          "id": "usgs-topo-2000",
+          "title": "U.S. Geological Survey topographic quadrangles, 2000 editions, as the State of Hawaiʻi GIS serves them (SoH_Maps/USGS_topos_2000 ImageServer)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "2026-11-06",
+          "licence": "public domain (U.S. Government map), served by the State of Hawaiʻi",
+          "note": "read over Keʻehi lagoon: islets in the old runways, the dike with its light, Keʻehi Lagoon Park and the small-boat harbour’s piers; Kahakaʻaulana Island named beside Mokauea"
+        },
+        {
+          "id": "usn-building-bases-1947",
+          "title": "Building the Navy’s Bases in World War II, vol. II, ch. XXII, Hawaiian Area (Bureau of Yards and Docks, 1947; HyperWar transcription)",
+          "url": "https://www.ibiblio.org/hyperwar/USN/Building_Bases/bases-22.html",
+          "fetched": "2026-10-21",
+          "licence": "public domain (U.S. Navy)",
+          "note": "Pearl Harbor: dredging for a turning channel round Ford Island from May 1940, the lochs deepened for moorings, Kuahua extended with the spoil from 47 acres to a 116-acre peninsula, Ford Island enlarged by seven acres for its T-wharves. Keʻehi: a dredge brought into the lagoon in February 1943 for three seaplane runways “1,000 feet wide by three miles long”, the spoil raising the land to ten feet. Kāneʻohe Bay: from September 1939, three years of dredging for the seaplane runways (11,000,000 cubic yards)"
+        }
+      ],
+      "stats": {
+        "texels": 1799,
+        "km2": 0.066,
+        "meanLowerMetres": 1.14
       }
     }
   ],

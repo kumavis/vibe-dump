@@ -109,8 +109,84 @@ export const HISTORIES = {
     licence: 'CC BY-SA 4.0, quoted for its dates',
     note: 'about 334 acres when surveyed in 1825; the Navy enlarged it during the 1930s to about 441 acres with fill dredged from Pearl Harbor',
   },
+  // read for the shore before the harbour (RESEARCH.md, "Honolulu's shore before the harbour")
+  'malden-1825': {
+    title: 'C. R. Malden, “A Plan of the Harbour of Honoruru in the Island of Oahu” (1825), the University of Hawaiʻi at Mānoa Library’s scan (eVols)',
+    url: 'http://hdl.handle.net/10524/59518',
+    licence: 'public domain (1825); scan served by the University of Hawaiʻi at Mānoa Library',
+    fetched: '2026-11-06',
+    note:
+      'the earliest survey of the harbour: the basin off the town sounded 3 to 5½ fathoms, with “mud”, between “The West Spit” and a reef along the town ' +
+      'front, the town’s shore running from the fort and wharf at the “Freshwater Stream” to “Fishermen’s Pt”; west of the basin a reef “covered at half ' +
+      'flood; at low water it is dry”, and inside it, along the Kalihi shore, water that “is never left quite dry; At high water the canoes pass along shore, ' +
+      'as far as the Pearl Lochs, inside the reefs”; at the reef’s west edge, by a channel sounded 5 fathoms, “Sandy I.” with huts and a smaller “Hut ' +
+      'Island”; nothing drawn where Quarantine Island later stood; fishponds on the Kalihi and Kapālama shore',
+  },
+  'iooh-esplanade': {
+    title: 'Images of Old Hawaiʻi, “Esplanade” (Peter T. Young, 2019)',
+    url: 'https://imagesofoldhawaii.com/esplanade',
+    licence: 'quoted for its dates; text © its author',
+    fetched: '2026-11-06',
+    note:
+      '“What is now known as Queen Street was actually the water’s edge”; the reef of Waikahalulu on the south side of the harbour; after Fort Kekuanohu ' +
+      'was pulled down in 1857 “its walls became the 2,000-foot retaining wall used to extend the land out onto the shallow reef in the harbor”, and “from ' +
+      '1856 to 1860” about 22 acres of reef were filled “between Fort Street and Alakea Street”; piers at the foot of Richards Street (1896), Piers 17 and 18 ' +
+      '(1901), Piers 7 and 12 (1907); the harbour “originally was a deep embayment formed by the outflow of Nuʻuanu Stream”',
+  },
+  'hdot-harbors-history': {
+    title: 'Hawaiʻi Department of Transportation, Harbors Division, “History”',
+    url: 'https://hidot.hawaii.gov/harbors/history/',
+    licence: 'State of Hawaiʻi publication, quoted for its dates',
+    fetched: '2026-11-06',
+    note:
+      '“Honolulu Harbor was originally a small, reefed basin created by the natural flow of freshwater from the streams of Nuʻuanu Valley”; “The main ' +
+      'channel, which was the deepest, was flanked to the west by shallower outlets. Between these outflows, rose occasional spots of earth and coral, the ' +
+      'beginnings of Sand Island”; the first wharf of 1825 a hulk “near Nuʻuanu Avenue”; dredge spoil filled the tidelands and built Sand Island',
+  },
+  'iooh-anuenue': {
+    title: 'Images of Old Hawaiʻi, “Anuenue” (Sand Island)',
+    url: 'https://imagesofoldhawaii.com/anuenue/',
+    licence: 'quoted for its dates; text © its author',
+    fetched: '2026-11-06',
+    note:
+      'Sand Island “was created by the filling of the reef flats during incremental dredging of Honolulu harbor and Keʻehi lagoon”, on the reef platform ' +
+      'Kahololoa, “cut by stream channels on the west and east”, which became the Kalihi channel and the harbour channel; “several islands or dryland areas ' +
+      'on the off shore reef flats” in the 1840s; early in 1869 the government leased “a small reef island, Kamokuʻākulikuli” for a quarantine station; the ' +
+      'enlarged island called Quarantine Island by 1888',
+  },
+  'wikipedia-sand-island': {
+    title: 'Wikipedia, “Sand Island (Hawaii)”',
+    url: 'https://en.wikipedia.org/wiki/Sand_Island_(Hawaii)',
+    licence: 'CC BY-SA 4.0, quoted for its dates',
+    fetched: '2026-11-06',
+    note: '“once a small islet surrounded by the Kaholaloa fishing grounds, a shallow reef and sandbank”, granted to William Sumner in 1840; leased by the Board of Health in 1869 for a quarantine station',
+  },
+  'hbgn-mauliola-2026': {
+    title: 'Hawaiʻi State Board on Geographic Names, meeting of 13 February 2026, item 5, Mauliola: Honolulu City Council resolution 25-63 and a compilation of notices from the Hawaiian and English press',
+    url: 'https://files.hawaii.gov/dbedt/op/gis/bgn/HBGN_Meeting_20260213_05-Mauliola.pdf',
+    licence: 'State of Hawaiʻi and City and County of Honolulu publication, quoted for its dates',
+    fetched: '2026-11-06',
+    note:
+      'the resolution: “this small tidal island grew in size with the dredging and infilling of Honolulu Harbor”, “from the mid-1800s through the mid-1900s”; ' +
+      'the compilation quotes The Polynesian of 30 July 1853 (a smallpox case “placed on a small island called Kahakaaulana”) and Place Names of Hawaii ' +
+      '(“Koholaloa is an old name for Sand Island. Lit., long reef”)',
+  },
+  'hawaii-gis-oahu-1943': {
+    title: 'Map of Oʻahu, 1943, as the State of Hawaiʻi GIS serves it (SoH_Maps/Oahu_1943 ImageServer)',
+    url: 'https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/Oahu_1943/ImageServer',
+    licence: 'public domain (U.S. Government map), served by the State of Hawaiʻi',
+    fetched: '2026-11-06',
+    note: 'read over Keʻehi lagoon: the seaplane runways drawn as dredged and the reef flat between them hatched, with no islet, dike or fill in the lagoon east of the airport',
+  },
+  'usgs-topo-2000': {
+    title: 'U.S. Geological Survey topographic quadrangles, 2000 editions, as the State of Hawaiʻi GIS serves them (SoH_Maps/USGS_topos_2000 ImageServer)',
+    url: 'https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer',
+    licence: 'public domain (U.S. Government map), served by the State of Hawaiʻi',
+    fetched: '2026-11-06',
+    note: 'read over Keʻehi lagoon: islets in the old runways, the dike with its light, Keʻehi Lagoon Park and the small-boat harbour’s piers; Kahakaʻaulana Island named beside Mokauea',
+  },
 }
-for (const s of Object.values(HISTORIES)) s.fetched = READ
+for (const s of Object.values(HISTORIES)) s.fetched ||= READ
 
 // ---------------------------------------------------------------------------
 // Geometry helpers
@@ -168,6 +244,17 @@ export const PASSAGES = [
     geometry: polygon([[-157.869, 21.313], [-157.8666, 21.31345], [-157.8651, 21.313], [-157.8648, 21.3106], [-157.8654, 21.3082], [-157.8657, 21.3052], [-157.8651, 21.3028], [-157.8657, 21.301], [-157.86645, 21.2986], [-157.86735, 21.2965], [-157.8681, 21.2947], [-157.8687, 21.2935], [-157.8693, 21.2932], [-157.8714, 21.29335], [-157.8708, 21.2956], [-157.8699, 21.298], [-157.86945, 21.301], [-157.8699, 21.3034], [-157.8702, 21.3058], [-157.87005, 21.3079], [-157.8696, 21.31], [-157.8693, 21.3118]]),
     source: 'hawaii-gis-oahu-1881',
     note: 'the harbour off the 1881 town and the channel through the reef to the bar, between the reef stipple each side; traced at 0.00003° a pixel',
+  },
+  {
+    id: 'kalihi-entrance-1881',
+    name: 'the Kalihi entrance, the passage between Keʻehi and Kahololoa',
+    // The channel the 1881 sheet bounds with two dotted lines from the Kalihi
+    // stream mouth south between Mokuʻoeo and Mokauea to the reef's edge,
+    // where it writes “Kalihi Entrance”; Malden (1825) sounds 5 fathoms in it
+    // beside “Sandy I.”. Kalihi Channel was later dredged along it.
+    geometry: polygon([[-157.896, 21.3228], [-157.8952, 21.318], [-157.8948, 21.314], [-157.8943, 21.31], [-157.8947, 21.305], [-157.8949, 21.3], [-157.8951, 21.2985], [-157.8937, 21.2985], [-157.894, 21.3], [-157.8939, 21.306], [-157.8935, 21.311], [-157.8935, 21.315], [-157.8939, 21.32], [-157.8944, 21.3228]]),
+    source: 'hawaii-gis-oahu-1881',
+    note: 'the dotted channel of the 1881 sheet from the Kalihi stream mouth to the reef’s edge (“Kalihi Entrance”), between Mokuʻoeo and Mokauea; traced at 0.00005° a pixel',
   },
 ]
 
@@ -228,11 +315,56 @@ const SAND_ISLAND_1938 = [[-157.8828, 21.3087], [-157.8822, 21.30945], [-157.881
 const FORD_ISLAND_1881 = [[-157.9662, 21.35532], [-157.964, 21.35512], [-157.962, 21.35572], [-157.96048, 21.35652], [-157.96072, 21.3578], [-157.9602, 21.3592], [-157.95912, 21.36072], [-157.958, 21.36172], [-157.9568, 21.36228], [-157.95568, 21.36212], [-157.9546, 21.36236], [-157.9532, 21.3626], [-157.9522, 21.36308], [-157.9514, 21.364], [-157.9514, 21.3668], [-157.9524, 21.36708], [-157.9534, 21.3668], [-157.9544, 21.36648], [-157.9556, 21.36708], [-157.9568, 21.36768], [-157.958, 21.368], [-157.9594, 21.36768], [-157.9606, 21.36732], [-157.9624, 21.36628], [-157.9646, 21.3648], [-157.9666, 21.363], [-157.96752, 21.3606], [-157.9674, 21.3582], [-157.96688, 21.3564]]
 const KUAHUA_1881 = [[-157.9474, 21.3572], [-157.9468, 21.359], [-157.9452, 21.3602], [-157.9436, 21.3612], [-157.942, 21.3616], [-157.9404, 21.3612], [-157.9384, 21.3606], [-157.936, 21.3598], [-157.9352, 21.3582], [-157.9364, 21.357], [-157.9388, 21.357], [-157.9412, 21.3562], [-157.9424, 21.355], [-157.9436, 21.3538], [-157.9444, 21.3526], [-157.946, 21.3532], [-157.947, 21.355]]
 
+// Quarantine Island as the 1881 sheet draws it (an islet of the district's
+// trace), and the cay the record allows before the quarantine station: “a
+// small islet” (1840), “a small reef island, Kamokuʻākulikuli” leased in
+// 1869, “occasional spots of earth and coral” between the stream outlets
+// (HDOT). No source read gives its size or shape,
+// and Malden (1825) draws none there: it is drawn as a cay of about two
+// hectares at the middle of the 1881 islet, along the islet's long axis.
+const QUARANTINE_1881 = toLL(nuuanuShore.islands['Quarantine Island'])
+function ellipse([lon, lat], a, b, deg, n = 20) {
+  const c = Math.cos((deg * Math.PI) / 180)
+  const sn = Math.sin((deg * Math.PI) / 180)
+  return Array.from({ length: n }, (_, k) => {
+    const t = (2 * Math.PI * k) / n
+    const x = a * Math.cos(t)
+    const z = b * Math.sin(t)
+    return [r6(lon + (x * c - z * sn) / KX), r6(lat + (x * sn + z * c) / KZ)]
+  })
+}
+const KAMOKUAKULIKULI = ellipse([-157.8803, 21.3064], 120, 55, 10)
+
+// The reef along the town before the Esplanade: Queen Street, “the water's
+// edge”, from the Nuʻuanu stream mouth past Fort Street to Alakea Street,
+// then back to the 1881 waterfront where its 2,000-foot wall ends, and the
+// 1881 harbour beyond. Queen Street's line is today's (OpenStreetMap); the
+// land between it and the 1881 shore comes to about 22 acres, as the record
+// has the Esplanade.
+const ESPLANADE_REEF = [[-157.8668, 21.3128], [-157.8652, 21.3126], [-157.8644, 21.3108], [-157.864, 21.3095], [-157.8638, 21.3087], [-157.8632, 21.308], [-157.8622, 21.3069], [-157.8638, 21.3056], [-157.8652, 21.3043], [-157.8668, 21.3043]]
+
 export const OLD_SHORES = {
   sea1881: { geometry: sea1881(), source: 'hawaii-gis-oahu-1881', note: 'the 1881 sea from Keʻehi to Waikīkī: the district bake’s traced coast (shoreline-1881.geojson) carried west along Keʻehi lagoon’s west shore' },
   sandIsland1938: { geometry: polygon(SAND_ISLAND_1938), source: 'hawaii-gis-oahu-1938', note: 'Sand Island on the 1938 map' },
   fordIsland1881: { geometry: polygon(FORD_ISLAND_1881), source: 'hawaii-gis-oahu-1881', note: 'Mokuʻumeʻume (Ford Island) on the 1881 sheet' },
   kuahua1881: { geometry: polygon(KUAHUA_1881), source: 'hawaii-gis-oahu-1881', note: 'Kuahua Island on the 1881 sheet' },
+  quarantine1881: { geometry: polygon(QUARANTINE_1881), source: 'hawaii-gis-oahu-1881', note: 'Quarantine Island on the 1881 sheet (the district’s trace)' },
+  kamokuakulikuli: { geometry: polygon(KAMOKUAKULIKULI), source: 'malden-1825', note: 'the cay before the quarantine station, its size and shape inferred' },
+  mamala1881: { geometry: PASSAGES.find((p) => p.id === 'mamala-honolulu-1881').geometry, source: 'hawaii-gis-oahu-1881', note: 'the harbour and its passage on the 1881 sheet' },
+  esplanadeReef: { geometry: polygon(ESPLANADE_REEF), source: 'malden-1825', note: 'the reef along the town before the Esplanade, Queen Street its shore' },
+}
+
+/**
+ * Where a raise lays dredged water back at the land: water cut into the
+ * shore since, inside the 1881 shore and off the reef the Esplanade was
+ * made on, goes back to the low shore it was dug through (`level`, as the
+ * Ala Wai does), not to an inlet of reef in the land. Only where the 1881
+ * shore is traced (`region`: east of Keʻehi lagoon's west shore).
+ */
+export const OLD_LAND = {
+  level: 0.5,
+  sea: ['sea1881', 'esplanadeReef'],
+  region: polygon([...KEEHI_WEST_1881, [-157.9132, 21.34], [-157.8, 21.34], [-157.8, 21.25], [-157.921, 21.25]]),
 }
 
 // ---------------------------------------------------------------------------
@@ -554,6 +686,8 @@ export const LOWER_WORKS = [
   },
   {
     id: 'ford-island',
+    // (in the lochs, whose deep water is no reef to carry over the fill: laid at its level)
+    flat: true,
     name: 'Ford Island’s edges',
     until: 1940,
     level: -1,
@@ -565,6 +699,7 @@ export const LOWER_WORKS = [
   },
   {
     id: 'kuahua',
+    flat: true,
     name: 'Kuahua peninsula',
     until: 1943,
     level: -1,
@@ -573,6 +708,85 @@ export const LOWER_WORKS = [
     region: polygon([[-157.9494, 21.359], [-157.9476, 21.3614], [-157.9444, 21.3638], [-157.9408, 21.3662], [-157.9388, 21.3656], [-157.9412, 21.3618], [-157.9444, 21.3598], [-157.9464, 21.3574], [-157.9476, 21.355], [-157.9492, 21.3562]]),
     sources: ['usn-building-bases-1947'],
     note: 'Kuahua Island extended into the loch with the spoil of the wartime dredging, from 47 acres to a 116-acre peninsula; the contract ran to December 1943',
+  },
+  // The shore before the harbour (RESEARCH.md, "Honolulu's shore before the
+  // harbour"): what the works above leave of the made ground round Kou,
+  // Kapālama and Keʻehi, and the islet the quarantine station grew.
+  {
+    id: 'kou-esplanade',
+    appended: true,
+    name: 'the Esplanade and the wharves at Kou',
+    until: 1856,
+    level: -1,
+    within: ['esplanadeReef'],
+    outside: [sea],
+    region: polygon([[-157.8668, 21.3128], [-157.862, 21.3128], [-157.862, 21.3043], [-157.8668, 21.3043]]),
+    sources: ['iooh-esplanade', 'malden-1825', 'hdot-harbors-history'],
+    note:
+      'the waterfront between Queen Street, “the water’s edge”, and the 1881 shore, from the Nuʻuanu stream mouth to below Alakea Street: the reef in front ' +
+      'of the town on Malden’s chart of 1825, filled behind the 2,000-foot wall of the Esplanade “from 1856 to 1860” (about 22 acres). The wharves north of ' +
+      'Fort Street stood on the same reef, from a hulk sunk “near Nuʻuanu Avenue” in 1825; the filling behind them is not dated in the sources read, and ' +
+      'goes with the Esplanade’s',
+  },
+  {
+    id: 'kou-harbour-piers',
+    appended: true,
+    name: 'the piers in the harbour at Kou',
+    until: 1896,
+    level: -6,
+    // (laid at the harbour's floor, not spread from a reef: they stand in the passage)
+    flat: true,
+    within: [sea, 'mamala1881'],
+    region: polygon([[-157.8705, 21.3135], [-157.8645, 21.3135], [-157.8645, 21.3], [-157.8705, 21.3]]),
+    sources: ['iooh-esplanade', 'malden-1825'],
+    note:
+      'the piers built out into the harbour off the 1881 waterfront, back to the harbour’s floor: Malden sounds 3 to 4½ fathoms by the wharf in 1825, the ' +
+      '1881 sheet 3½ to 5½. The first pier the sources read date is at the foot of Richards Street, 1896; Piers 17 and 18 followed in 1901 and 7 and 12 in 1907',
+  },
+  {
+    id: 'harbour-reef-piers',
+    appended: true,
+    name: 'the piers and wharves on the reef of Iwilei and Kapālama',
+    until: 1900,
+    level: -1,
+    within: [sea],
+    outside: ['mamala1881'],
+    region: polygon([[-157.8925, 21.3185], [-157.8655, 21.3185], [-157.8655, 21.305], [-157.8925, 21.305]]),
+    sheets: [1899],
+    sources: ['iooh-honolulu-harbor'],
+    note:
+      'today’s land on the reef west of the harbour, seaward of the 1881 shore, that the fill unit and the dated works leave: the piers and wharves of Iwilei ' +
+      'and Kapālama. Given the waterfront’s date: the 1899 sheet shows the 1881 shore here, and Kapālama’s basin and its piers came after 1914',
+  },
+  {
+    id: 'keehi-lagoon-fills',
+    appended: true,
+    name: 'the islets, dike and fills in Keʻehi lagoon',
+    until: 1944,
+    level: -1,
+    within: [sea],
+    region: polygon([[-157.922, 21.335], [-157.8915, 21.335], [-157.8915, 21.3115], [-157.922, 21.3115]]),
+    sources: ['hawaii-gis-oahu-1943', 'usgs-topo-2000', 'usn-building-bases-1947'],
+    note:
+      'today’s land in Keʻehi lagoon seaward of the 1881 shore that the dated works leave: the islets standing in the old seaplane runways, the dike with its ' +
+      'light, the park and the small-boat harbour on the Kalihi side. The 1943 map shows none of them; their own dates are not in the sources read, and they ' +
+      'are given the runways’ dredging, whose spoil “raised the land” (1943–44). Mokuʻoeo and Mokauea, islets on the 1881 sheet, stay',
+  },
+  {
+    id: 'kamokuakulikuli-growth',
+    appended: true,
+    name: 'Quarantine Island grown round its cay',
+    until: 1869,
+    level: -1,
+    within: ['quarantine1881'],
+    outside: ['kamokuakulikuli'],
+    region: polygon([[-157.8838, 21.3089], [-157.877, 21.3089], [-157.877, 21.304], [-157.8838, 21.304]]),
+    sources: ['wikipedia-sand-island', 'iooh-anuenue', 'hbgn-mauliola-2026', 'hdot-harbors-history', 'malden-1825'],
+    note:
+      'the islet the 1881 sheet draws (about 18 ha) back to the reef flat Koholaloa, “long reef”, round a cay of about 2 ha: the record has “a small islet” ' +
+      'granted in 1840 and “a small reef island, Kamokuʻākulikuli” leased for the quarantine station in 1869, which then “grew in ' +
+      'size with the dredging and infilling of Honolulu Harbor”. Its growth before 1881 is not dated in the sources read; given the station’s lease. The ' +
+      'cay’s size and place are inferred, and Malden draws no islet there in 1825',
   },
 ]
 

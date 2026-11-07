@@ -830,9 +830,10 @@ app reads both.
 - A `raise` patch marks water that was reef flat, lagoon or shore before it
   was dredged: harbour channels and basins, seaplane runways, boat harbours,
   the Ala Wai. A `lower` patch marks land that was water or reef before it
-  was filled. Natural channels through the reef (Māmala, the Pearl Harbor
-  entrance as it was before 1900, the Kāneʻohe Bay channels) stay open: a
-  patch must not invent a reef where the old surveys show a passage.
+  was filled. Natural channels through the reef (Māmala, the Kalihi
+  entrance, the Pearl Harbor entrance as it was before 1900, the Kāneʻohe
+  Bay channels) stay open: a patch must not invent a reef where the old
+  surveys show a passage.
 - The mask carries the shape; the manifest carries the date and the
   provenance. A mask value is the weight the app blends with: the patched
   height is `mix(h, depth, w)`, toward `max(h, depth)` for a raise and
@@ -843,6 +844,28 @@ app reads both.
 - Districts: the district's `patches` entries gain the same `kind` and
   `depth` fields (`kind` defaults to `lower`, `depth` to -1 for the entries
   already baked).
+- **Accepted extensions (the shore before the harbour, ISSUES.md 4).**
+  - A lower mask's weights may carry relief as a raise's do: `depth` is then
+    the *deepest* point of the surface, and each texel's weight what takes
+    today's height to its own point of it under the same mix. The island
+    pack's lowers are baked so, at the reef round them; a district reads
+    its lower masks as whole or nothing (≥ 128) and lays the reef itself
+    (below), so a district's lower masks keep 255 over their whole.
+  - A raise's surface may stand above the sea where the water was cut into
+    the land since (a slip, the head of a basin): `depth` is then that
+    land's height, and the weights of the texels that go back to reef are
+    under one.
+  - A district lays a lower patch's texels at the reef round them where
+    that is deeper than the patch's `depth` (reef only: a `depth` at or
+    above 0 is laid as given): the sea of the patched years outside the
+    patch, between −6 m and the tide, carried over it (district-decode.js
+    `reefLevel`), so a fill's straight edges leave no step in the reef.
+  - Of two lower patches on one district texel, both in force, the deeper
+    `depth` holds (a pier in the harbour goes to its floor though the fill
+    beside it goes to the reef).
+  - The sea draws a patch's reef flat as it draws the natural reef beside
+    it, by its depth alone (ocean.glsl.js); `patchReef` only keeps the swash
+    to the real shore.
 
 ### How to bake patches
 
@@ -872,8 +895,9 @@ What the patches rest on:
 | sea floor | NOAA CUDEM 1/9″, tile `ncei19_n21x50_w158x00` (the district bake's) | where the ground is cut: flat floors and straight walls below the reef flat |
 | charted channels | NOAA ENC Direct, harbour-scale `Dredged_Area` over Oʻahu | ground inside them counts as cut; the bake reports how much of them the patches cover |
 | made ground | State geologic map, fill unit (`Qf`) over Oʻahu | where the fill lies |
-| the old shore, passages, bars | the State's georeferenced 1881 Government Survey sheet; the 1899 sheet for the Pearl Harbor bar | traced by hand: the 1881 sea from Keʻehi to Waikīkī (the district's `shoreline-1881.geojson` carried west along Keʻehi lagoon), Ford Island and Kuahua, the Māmala and Pearl Harbor passages and their bars |
+| the old shore, passages, bars | the State's georeferenced 1881 Government Survey sheet; the 1899 sheet for the Pearl Harbor bar | traced by hand: the 1881 sea from Keʻehi to Waikīkī (the district's `shoreline-1881.geojson` carried west along Keʻehi lagoon), Ford Island and Kuahua, Quarantine Island, the Māmala, Kalihi and Pearl Harbor passages and their bars |
 | Sand Island in 1938 | the State's georeferenced 1938 topographic map | traced by hand: the island before its wartime fill |
+| the shore before the harbour | Malden's plan of the harbour (1825, the University of Hawaiʻi's scan); Queen Street (OpenStreetMap) as “the water's edge”; the 1943 and 2000 sheets over Keʻehi | the reef in front of the town before the Esplanade (1856–60); the cay Quarantine Island grew round; what stood in Keʻehi lagoon before its dredging (RESEARCH.md, “Honolulu's shore before the harbour”) |
 | dates | the harbours' own histories, each named in its patch's `sources` with what it says | `until`, and the note |
 
 How a mask is made:
@@ -885,9 +909,13 @@ How a mask is made:
   keeps it dredged. On each pack the texels it touches, grown by about 20 m
   (two texels on the island pack, where GMRT smooths a channel into its
   sides), make the footprint; it is laid back at the reef that rims it, a
-  smooth surface held at the CUDEM's reef depth on the rim and free where it
-  meets land, a passage or deep natural water, so the old reef edge stays
-  sharp against a passage. Over a bar it is never shallower than the bar's
+  smooth surface held at the reef's depth on the rim (the CUDEM's on a
+  district; on the island pack the pack's own, which is what is drawn
+  beside it) and free where it meets land, a passage or deep natural water,
+  so the old reef edge stays sharp against a passage. Water cut into the
+  land since, inside the 1881 shore and off the reef the Esplanade was made
+  on (`OLD_LAND`), goes back to land at +0.5 m, as the Ala Wai does, not to
+  an inlet of reef. Over a bar it is never shallower than the bar's
   surveyed depth, and the fore-reef beside the bar holds it down too, so the
   passage runs out over its bar onto the fore-reef rather than ending at a
   wall. The manifest's `depth` is the shallowest of that surface,
@@ -899,10 +927,18 @@ How a mask is made:
   island's outline, the fill unit, the work's region), with the low land
   between it and today's water that the fill polygons stop short of, and a
   feathered edge of a texel or two; only where today's ground stands above
-  `depth`.
+  `depth`. On the island pack a reef lower (`level` under 0, not `flat`) is
+  laid at the reef round it: the year's sea beside the footprint (today's,
+  the raises laid back), between −6 m and the work's level, spread over it
+  as a raise's rim is; `depth` is the deepest of that surface and the
+  weights carry its relief. A district's lower masks stay whole, at the
+  work's level; the district lays the reef round them itself. `flat` works
+  keep their level: the piers in the harbour at Kou, laid at its floor
+  (−6 m), and Ford Island and Kuahua, in the lochs' deep water.
 - Within one pack no texel's raise weights, nor its lower weights, add up to
-  more than one: groups and works claim their texels in turn, and
-  `honolulu-waterfront` takes only what the dated works leave.
+  more than one: groups and works claim their texels in turn (a lower by its
+  share before the relief), and `honolulu-waterfront` takes only what the
+  dated works leave.
 
 What the app can rely on beyond the contract:
 
@@ -943,6 +979,15 @@ south-west corner holds Honolulu's harbour, the shared works that lie in its
 box: raise the harbour (1908), Kapālama (1935), Kalihi Channel and the Keʻehi
 seaplane runways (1944); lower Sand Island's first fill (1908) and its later
 fill (1944).
+
+The shore before the harbour (RESEARCH.md, "Honolulu's shore before the
+harbour"), on every pack where the work lies, listed after the others in
+the manifest (`appended` in `patch-works.mjs`): lower the Esplanade and the
+wharves at Kou to the reef along the town, Queen Street its shore (1856);
+the piers in the harbour at Kou to its floor (1896); the piers and wharves on
+the reef of Iwilei and Kapālama that the fill unit misses (1900); the islets,
+dike and fills in Keʻehi lagoon (1944); and Quarantine Island, as the 1881
+sheet draws it, to the reef round a cay of about two hectares (1869).
 
 Carried from `koolaupoko` onto `oahu` (`CARRIED_WORKS` in `patch-works.mjs`):
 the district reads Kāneʻohe Bay's works at its own scale and from its own

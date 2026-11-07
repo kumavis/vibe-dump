@@ -56,7 +56,7 @@ import { distanceTo, readPack } from './layers-raster.mjs'
 import { readPNG, writeGreyPNG } from './png.mjs'
 import { resampleGrid } from './raster.mjs'
 import { CUDEM, ENC, FILL, MAPS, cudemTiles, patchPaths, raiseBox } from './patch-sources.mjs'
-import { BARS, CARRIED_WORKS, HISTORIES, LOWER_WORKS, OLD_SHORES, PASSAGES, RAISE_GROUPS, feature } from './patch-works.mjs'
+import { BARS, CARRIED_WORKS, HISTORIES, LOWER_WORKS, OLD_LAND, OLD_SHORES, PASSAGES, RAISE_GROUPS, feature } from './patch-works.mjs'
 import { boxBlur, components, cudemMosaic, dilate, erode, gridOfRaster, packWindow, polygonCover, reduceMask, sampleMask, spreadFromRim } from './patch-raster.mjs'
 
 const GROW_METRES = 20 // the footprint is grown this far round the cut cells (at least a texel; two on the island pack)
@@ -68,6 +68,7 @@ const EDGE_METRES = 30 // a group's raise fades in over this from the outer edge
 const TOUCH = 0.02 // a texel is touched by a cut when this share of it is cut
 const SEAWALL_METRES = 15 // low land this close to both a lower patch and today's water goes with it
 const SEAWALL_BELOW = 5 // ... if it stands lower than this
+const REEF_DEEPEST = -6 // the deepest a lower patch's reef is spread from the sea round it (island pack)
 const round = (v, d) => Math.round(v * 10 ** d) / 10 ** d
 
 /** The packs patches go on: the oahu island pack and the districts on it. */
@@ -207,10 +208,13 @@ function raiseWeights(g, P, fp, passageCover, taken) {
     for (let o = 0; o < N; o++) {
       const p = at(o)
       if (F[o] || taken[p] || passageCover[p] || P.metres[p] > 0) continue
-      // the rim's depth from the CUDEM where it has sea there: on the island
-      // pack GMRT smooths the cut into the reef beside it, and the reef the
-      // cut goes back to is the reef the fine survey sees
-      const v = fp.rimDepth && fp.rimDepth[o] === fp.rimDepth[o] ? Math.min(-1, fp.rimDepth[o]) : P.metres[p]
+      // the rim's depth from the CUDEM where it has sea there, on a district;
+      // on the island pack the pack's own, which is what is drawn beside the
+      // patch (GMRT smooths a cut into the reef a texel or two either side,
+      // and the footprint is grown by as much): a rim read off the fine
+      // survey there left the laid-back reef a metre or two shallower than
+      // the reef round it, and its straight edges showed
+      const v = P.kind === 'island' ? Math.min(-1, P.metres[p]) : fp.rimDepth && fp.rimDepth[o] === fp.rimDepth[o] ? Math.min(-1, fp.rimDepth[o]) : P.metres[p]
       // natural water deeper than the cut (the fore-reef past a channel's
       // mouth) is no reef to lay it back at: the edge there stays free, but
       // on a bar, whose seaward face it is, it holds the surface down
@@ -222,6 +226,11 @@ function raiseWeights(g, P, fp, passageCover, taken) {
     // over a bar, never shallower than the bar's surveyed depth (and where
     // the sea floor beside it is deeper, as off the reef edge, that depth)
     for (const b of bars) for (let o = 0; o < N; o++) if (F[o] && b.cover[o] >= 0.5) t[o] = Math.min(t[o], b.depth)
+    // water cut into the land since (a slip, a basin's head) goes back to
+    // the low shore it was dug through, not to an inlet of reef
+    const oldSea = polygonCover(OLD_LAND.sea.map((k) => OLD_SHORES[k].geometry), grid, 4)
+    const traced = polygonCover([OLD_LAND.region], grid, 4)
+    for (let o = 0; o < N; o++) if (F[o] && traced[o] >= 0.5 && oldSea[o] < 0.5) t[o] = OLD_LAND.level
   }
   // a soft edge where the zones end across open water (a channel's mouth on
   // the fore-reef), so the laid-back ground meets today's in a ramp of a few
@@ -263,7 +272,7 @@ function raiseWeights(g, P, fp, passageCover, taken) {
 // ---------------------------------------------------------------------------
 // Lower
 
-function lowerWeights(L, P, shapes, fill, used) {
+function lowerWeights(L, P, shapes, fill, used, yr, passageCover) {
   const geoms = [...(L.region ? [L.region] : []), ...L.within.map((k) => shapes[k].geometry)]
   const box = L.region ? boxOfGeoms([L.region]) : boxOfGeoms(L.within.map((k) => shapes[k].geometry))
   const win = packWindow(P.grid, box, 3)
@@ -314,18 +323,53 @@ function lowerWeights(L, P, shapes, fill, used) {
     // what an earlier work already holds is not given twice
     w[o] = Math.max(0, Math.min(w[o], Math.round((1 - used[at(o)]) * 255) / 255))
   }
+  for (let o = 0; o < N; o++) if (w[o] < 1 / 255) w[o] = 0
+  // On the island pack a reef the fill goes back to is the reef round it:
+  // the year's sea beside the footprint (today's, with the raises laid back),
+  // spread over it as the raises are, never shallower than the work's level
+  // nor deeper than REEF_DEEPEST. The manifest's depth is then the deepest of
+  // that surface and the weights carry its relief (DATA.md, "Patches, on any
+  // pack"). A district's lower masks are read as whole or nothing, and the
+  // district lays its own reef round them (district-decode.js reefLevel).
+  // `claim` is each texel's share of the work before the relief, which is
+  // what an earlier work holds of it.
+  const claim = Float32Array.from(w)
+  let t = null
+  let depth = L.level
+  if (P.kind === 'island' && L.level < 0 && !L.flat && yr) {
+    const F = new Uint8Array(N)
+    const isFixed = new Uint8Array(N)
+    const fixed = new Float32Array(N)
+    for (let o = 0; o < N; o++) {
+      const p = at(o)
+      if (w[o] > 0) F[o] = 1
+      else if (yr[p] <= 0 && yr[p] > REEF_DEEPEST && !passageCover[p]) (isFixed[o] = 1), (fixed[o] = Math.min(L.level, yr[p]))
+    }
+    t = spreadFromRim(F, isFixed, fixed, W, H, L.level)
+    for (let o = 0; o < N; o++) {
+      if (!F[o]) continue
+      t[o] = Math.max(REEF_DEEPEST, Math.min(L.level, t[o]))
+      depth = Math.min(depth, t[o])
+    }
+    depth = Math.floor(depth * 100) / 100
+  }
   let on = 0
   let lower = 0
   for (let o = 0; o < N; o++) {
+    if (!w[o]) continue
+    const h = P.metres[at(o)]
+    // (the height this texel goes to, and its weight toward the manifest's depth)
+    const target = h + ((t ? t[o] : L.level) - h) * w[o]
+    w[o] = Math.min(1, (h - target) / (h - depth))
     if (w[o] < 1 / 255) {
       w[o] = 0
       continue
     }
     on++
-    lower += w[o] * (P.metres[at(o)] - L.level)
+    lower += h - target
   }
   if (!on) return null
-  return { win, w, at, on, meanLower: lower / on }
+  return { win, w, claim, at, on, depth, meanLower: lower / on }
 }
 
 // ---------------------------------------------------------------------------
@@ -462,11 +506,15 @@ export async function bakePatches({ dir, data, log }) {
       for (let o = 0; o < fp.F.length; o++) if (fp.F[o]) claimed[fp.at(o)] = 1
       fps.push({ g, fp })
     }
+    // the ground of the patched years, raises laid back (for the reef the lowers go back to)
+    const yr = Float32Array.from(P.metres)
     for (const { g, fp } of fps) {
       for (const r of raiseWeights(g, P, fp, passageCover, claimed)) {
         const z = r.zone
         const file = pk.file(z.id)
-        writeGreyPNG(join(data, file), P.W, P.H, toBytes(fp.win, r.w, fp.at, P.W, P.H))
+        const bytes = toBytes(fp.win, r.w, fp.at, P.W, P.H)
+        for (let o = 0; o < PN; o++) if (bytes[o]) yr[o] += (Math.max(yr[o], r.depth) - yr[o]) * (bytes[o] / 255)
+        writeGreyPNG(join(data, file), P.W, P.H, bytes)
         written.add(file)
         const km2 = (r.on * P.texelKm2)
         const sources = [
@@ -508,10 +556,12 @@ export async function bakePatches({ dir, data, log }) {
       if ((L.islandOnly && pk.kind !== 'island') || L.notOn?.includes(pk.id)) continue
       const box = L.region ? boxOfGeoms([L.region]) : boxOfGeoms(L.within.map((k) => shapes[k].geometry))
       if (!meets(box, P.grid.bounds)) continue
-      const r = lowerWeights(L, P, shapes, fill, used)
+      const r = lowerWeights(L, P, shapes, fill, used, yr, passageCover)
       if (!r) continue
       const bytes = toBytes(r.win, r.w, r.at, P.W, P.H)
-      for (let o = 0; o < PN; o++) used[o] += bytes[o] / 255
+      // (what the work holds of each texel is its share before the relief)
+      const held = toBytes(r.win, r.claim, r.at, P.W, P.H)
+      for (let o = 0; o < PN; o++) used[o] += held[o] / 255
       const file = pk.file(L.id)
       writeGreyPNG(join(data, file), P.W, P.H, bytes)
       written.add(file)
@@ -528,7 +578,7 @@ export async function bakePatches({ dir, data, log }) {
         id: `${pk.id}-${L.id}`,
         pack: pk.id,
         kind: 'lower',
-        depth: L.level,
+        depth: r.depth,
         until: L.until,
         file,
         size: [P.W, P.H],
@@ -537,7 +587,7 @@ export async function bakePatches({ dir, data, log }) {
         sources,
         stats: { texels: r.on, km2: round(km2, 3), meanLowerMetres: round(r.meanLower, 2) },
       })
-      log(`  lower ${L.id} (until ${L.until}): ${r.on} texels, ${km2.toFixed(3)} km², to ${L.level} m, mean lower ${r.meanLower.toFixed(1)} m`)
+      log(`  lower ${L.id} (until ${L.until}): ${r.on} texels, ${km2.toFixed(3)} km², to ${r.depth} m, mean lower ${r.meanLower.toFixed(1)} m`)
     }
 
     // --- carried from a district, on the island pack, after every work above
@@ -608,7 +658,10 @@ export async function bakePatches({ dir, data, log }) {
   }
   writeFileSync(join(outDir, 'passages.geojson'), JSON.stringify(passages) + '\n')
 
-  entries.sort((a, b) => (a.pack === b.pack ? a.until - b.until || (a.id < b.id ? -1 : 1) : a.pack === 'oahu' ? -1 : b.pack === 'oahu' ? 1 : a.pack < b.pack ? -1 : 1))
+  const order = (a, b) => (a.pack === b.pack ? a.until - b.until || (a.id < b.id ? -1 : 1) : a.pack === 'oahu' ? -1 : b.pack === 'oahu' ? 1 : a.pack < b.pack ? -1 : 1)
+  // (works marked `appended` are listed after all the others, in the same order among themselves, where they were added)
+  const late = new Set(LOWER_WORKS.filter((L) => L.appended).flatMap((L) => packs.map((pk) => `${pk.id}-${L.id}`)))
+  entries.sort((a, b) => late.has(a.id) - late.has(b.id) || order(a, b))
   const manifest = {
     about:
       'Patches that put the shore back where it was before each harbour work (DATA.md, “Patches, on any pack”): raise patches lay dredged ground back ' +
