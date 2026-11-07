@@ -78,10 +78,23 @@ fix has landed in `dist/` and been looked at again.
 - **Seen:** today's terrain carries the freeways' cuts and embankments at
   every date; the works feature removes the road surface before its date but
   not the ground it was cut into.
-- **Open:** dated terrain patches that restore the ground across the
-  corridors (an interpolated surface, not a flat), on the Oʻahu pack and the
-  district packs; the Pali, Likelike, H-2 and Moanalua corridors likely the
-  same.
+- **Fix:** a new patch kind, `restore` (DATA.md "Patches", "Accepted
+  extensions (restore)"): an RGB image over a box of a pack's texels carrying
+  the change from today's height and a weight, applied before the road's
+  date, kept in its own atlas apart from the 32 island patch slots. Baked by
+  `tools/bake-roads.mjs` from the works' highway lines: the disturbed width
+  found from the ground's curvature either side of the road, the surface a
+  thin plate held to the undisturbed ground (a membrane where the plate
+  would sag), tunnels left alone, the sea and the harbour patches kept off.
+  65 patches on the Oʻahu, Nuʻuanu and Koʻolaupoko packs for H-1, H-2, H-3,
+  the Pali, Likelike, Kahekili, Kailua, Kamehameha, Kalanianaʻole,
+  Farrington and Nimitz highways and the Pali road of 1898, each ending at
+  its section's building or opening date in the works.
+- **Known looks:** the Moanalua Freeway is not in the works, so its cuts stay;
+  a second carriageway or a ramp beyond the works' single line leaves a
+  faint line (the Pali Highway, H-1 below Puʻowaina); H-3 is mostly viaduct,
+  which the bare-earth terrain never carried, so its corridor changes little.
+- **Status:** landed on the branch.
 
 ### 6. The Kailua pond walls in 1690–1730 look wrong, and may not belong
 

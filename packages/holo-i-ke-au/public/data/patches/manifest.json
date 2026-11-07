@@ -3451,10 +3451,3857 @@
         "km2": 0.066,
         "meanLowerMetres": 1.14
       }
+    },
+    {
+      "id": "oahu-road-kamehameha-highway-north-shore",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1921,
+      "file": "patches/roads/oahu-road-kamehameha-highway-north-shore.png",
+      "box": [
+        305,
+        52,
+        402,
+        391
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kamehameha Highway (kamehameha-highway-north-shore)",
+      "works": "kamehameha-highway-north-shore",
+      "note": "The cuts and fills of Kamehameha Highway, works section `kamehameha-highway-north-shore`, laid back to the ground round them for the years before 1921, when it opened in 1921 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 663 texels (3.091 km², about 56 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 436 cut (to 30.1 m) and 227 filled (to 6.6 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-2",
+          "title": "Interstate H-2",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-2",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 663,
+        "km2": 3.091,
+        "meanWidthMetres": 56,
+        "cutTexels": 436,
+        "fillTexels": 227,
+        "meanCutMetres": 2,
+        "meanFillMetres": 0.4,
+        "maxCutMetres": 30.1,
+        "maxFillMetres": 6.6
+      }
+    },
+    {
+      "id": "oahu-road-joseph-p-leong-highway",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1996,
+      "file": "patches/roads/oahu-road-joseph-p-leong-highway.png",
+      "box": [
+        300,
+        209,
+        7,
+        43
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Joseph P. Leong Highway (joseph-p-leong-highway)",
+      "works": "joseph-p-leong-highway",
+      "note": "The cuts and fills of Joseph P. Leong Highway, works section `joseph-p-leong-highway`, laid back to the ground round them for the years before 1996, when it opened in 1996 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 90 texels (0.42 km², about 140 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 52 cut (to 3.5 m) and 38 filled (to 10.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 90,
+        "km2": 0.42,
+        "meanWidthMetres": 140,
+        "cutTexels": 52,
+        "fillTexels": 38,
+        "meanCutMetres": 0.8,
+        "meanFillMetres": 1.1,
+        "maxCutMetres": 3.5,
+        "maxFillMetres": 10.2
+      }
+    },
+    {
+      "id": "oahu-road-farrington-highway-waialua",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1934,
+      "file": "patches/roads/oahu-road-farrington-highway-waialua.png",
+      "box": [
+        134,
+        242,
+        168,
+        33
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Farrington Highway (farrington-highway-waialua)",
+      "works": "farrington-highway-waialua",
+      "note": "The cuts and fills of Farrington Highway, works section `farrington-highway-waialua`, laid back to the ground round them for the years before 1934, when it opened in 1934 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 304 texels (1.418 km², about 110 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 150 cut (to 3.5 m) and 154 filled (to 10.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 304,
+        "km2": 1.418,
+        "meanWidthMetres": 110,
+        "cutTexels": 150,
+        "fillTexels": 154,
+        "meanCutMetres": 0.7,
+        "meanFillMetres": 0.6,
+        "maxCutMetres": 3.5,
+        "maxFillMetres": 10.2
+      }
+    },
+    {
+      "id": "oahu-road-kamehameha-highway-haleiwa",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1921,
+      "file": "patches/roads/oahu-road-kamehameha-highway-haleiwa.png",
+      "box": [
+        302,
+        252,
+        99,
+        99
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kamehameha Highway (kamehameha-highway-haleiwa)",
+      "works": "kamehameha-highway-haleiwa",
+      "note": "The cuts and fills of Kamehameha Highway, works section `kamehameha-highway-haleiwa`, laid back to the ground round them for the years before 1921, when it opened in 1921 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 330 texels (1.539 km², about 147 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 132 cut (to 14.6 m) and 198 filled (to 10.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-2",
+          "title": "Interstate H-2",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-2",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 330,
+        "km2": 1.539,
+        "meanWidthMetres": 147,
+        "cutTexels": 132,
+        "fillTexels": 198,
+        "meanCutMetres": 1.4,
+        "meanFillMetres": 1.4,
+        "maxCutMetres": 14.6,
+        "maxFillMetres": 10.2
+      }
+    },
+    {
+      "id": "oahu-road-farrington-highway-waianae",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1937,
+      "file": "patches/roads/oahu-road-farrington-highway-waianae.png",
+      "box": [
+        107,
+        314,
+        213,
+        333
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Farrington Highway (farrington-highway-waianae)",
+      "works": "farrington-highway-waianae",
+      "note": "The cuts and fills of Farrington Highway, works section `farrington-highway-waianae`, laid back to the ground round them for the years before 1937, when it opened in 1937 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 395 texels (1.842 km², about 59 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 257 cut (to 20 m) and 138 filled (to 1.8 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 395,
+        "km2": 1.842,
+        "meanWidthMetres": 59,
+        "cutTexels": 257,
+        "fillTexels": 138,
+        "meanCutMetres": 2.1,
+        "meanFillMetres": 0.3,
+        "maxCutMetres": 20,
+        "maxFillMetres": 1.8
+      }
+    },
+    {
+      "id": "oahu-road-h-2",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1971,
+      "file": "patches/roads/oahu-road-h-2.png",
+      "box": [
+        406,
+        389,
+        77,
+        153
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-2 (h-2)",
+      "works": "h-2",
+      "note": "The cuts and fills of Interstate H-2, works section `h-2`, laid back to the ground round them for the years before 1971, when its building began in 1971 (it opened in 1977; the works' `built`). Found on the pack's own heights: 455 texels (2.122 km², about 159 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 174 cut (to 14.4 m) and 281 filled (to 17.5 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-2",
+          "title": "Interstate H-2",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-2",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 455,
+        "km2": 2.122,
+        "meanWidthMetres": 159,
+        "cutTexels": 174,
+        "fillTexels": 281,
+        "meanCutMetres": 3.2,
+        "meanFillMetres": 5,
+        "maxCutMetres": 14.4,
+        "maxFillMetres": 17.5
+      }
+    },
+    {
+      "id": "oahu-road-kamehameha-highway-central",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1921,
+      "file": "patches/roads/oahu-road-kamehameha-highway-central.png",
+      "box": [
+        414,
+        392,
+        149,
+        240
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kamehameha Highway (kamehameha-highway-central)",
+      "works": "kamehameha-highway-central",
+      "note": "The cuts and fills of Kamehameha Highway, works section `kamehameha-highway-central`, laid back to the ground round them for the years before 1921, when it opened in 1921 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 659 texels (3.073 km², about 137 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 342 cut (to 21.3 m) and 317 filled (to 12.6 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-2",
+          "title": "Interstate H-2",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-2",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 659,
+        "km2": 3.073,
+        "meanWidthMetres": 137,
+        "cutTexels": 342,
+        "fillTexels": 317,
+        "meanCutMetres": 2.7,
+        "meanFillMetres": 1.4,
+        "maxCutMetres": 21.3,
+        "maxFillMetres": 12.6
+      }
+    },
+    {
+      "id": "oahu-road-kahekili-highway",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1972,
+      "file": "patches/roads/oahu-road-kahekili-highway.png",
+      "box": [
+        704,
+        442,
+        50,
+        89
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kahekili Highway (kahekili-highway)",
+      "works": "kahekili-highway",
+      "note": "The cuts and fills of Kahekili Highway, works section `kahekili-highway`, laid back to the ground round them for the years before 1972, when it opened in 1972 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 223 texels (1.04 km², about 146 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 168 cut (to 15.9 m) and 55 filled (to 5.4 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 223,
+        "km2": 1.04,
+        "meanWidthMetres": 146,
+        "cutTexels": 168,
+        "fillTexels": 55,
+        "meanCutMetres": 5,
+        "meanFillMetres": 1.4,
+        "maxCutMetres": 15.9,
+        "maxFillMetres": 5.4
+      }
+    },
+    {
+      "id": "oahu-road-h-3-mokapu",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1977,
+      "file": "patches/roads/oahu-road-h-3-mokapu.png",
+      "box": [
+        821,
+        488,
+        5,
+        12
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-3 (h-3-mokapu)",
+      "works": "h-3-mokapu",
+      "note": "The cuts and fills of Interstate H-3, works section `h-3-mokapu`, laid back to the ground round them for the years before 1977, when it opened in 1977 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 24 texels (0.112 km², about 69 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 17 cut (to 8 m) and 7 filled (to 2.4 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 24,
+        "km2": 0.112,
+        "meanWidthMetres": 69,
+        "cutTexels": 17,
+        "fillTexels": 7,
+        "meanCutMetres": 2.9,
+        "meanFillMetres": 1.5,
+        "maxCutMetres": 8,
+        "maxFillMetres": 2.4
+      }
+    },
+    {
+      "id": "oahu-road-h-3-kaneohe",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1987,
+      "file": "patches/roads/oahu-road-h-3-kaneohe.png",
+      "box": [
+        773,
+        500,
+        50,
+        65
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-3 (h-3-kaneohe)",
+      "works": "h-3-kaneohe",
+      "note": "The cuts and fills of Interstate H-3, works section `h-3-kaneohe`, laid back to the ground round them for the years before 1987, when it opened in 1987 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 203 texels (0.947 km², about 155 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 161 cut (to 22 m) and 42 filled (to 10.5 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 203,
+        "km2": 0.947,
+        "meanWidthMetres": 155,
+        "cutTexels": 161,
+        "fillTexels": 42,
+        "meanCutMetres": 7.5,
+        "meanFillMetres": 3.2,
+        "maxCutMetres": 22,
+        "maxFillMetres": 10.5
+      }
+    },
+    {
+      "id": "oahu-road-h-3",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1997,
+      "file": "patches/roads/oahu-road-h-3.png",
+      "box": [
+        580,
+        525,
+        108,
+        61
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-3 (h-3)",
+      "works": "h-3",
+      "note": "The cuts and fills of Interstate H-3, works section `h-3`, laid back to the ground round them for the years before 1997, when it opened in 1997 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 288 texels (1.343 km², about 153 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 263 cut (to 36.9 m) and 25 filled (to 8.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-3",
+          "title": "Interstate H-3",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 288,
+        "km2": 1.343,
+        "meanWidthMetres": 153,
+        "cutTexels": 263,
+        "fillTexels": 25,
+        "meanCutMetres": 13.9,
+        "meanFillMetres": 1.6,
+        "maxCutMetres": 36.9,
+        "maxFillMetres": 8.2
+      }
+    },
+    {
+      "id": "oahu-road-h-3-2",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1997,
+      "file": "patches/roads/oahu-road-h-3-2.png",
+      "box": [
+        708,
+        527,
+        66,
+        45
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-3 (h-3-2)",
+      "works": "h-3-2",
+      "note": "The cuts and fills of Interstate H-3, works section `h-3-2`, laid back to the ground round them for the years before 1997, when it opened in 1997 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 212 texels (0.989 km², about 151 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 159 cut (to 40.7 m) and 53 filled (to 19.5 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-3",
+          "title": "Interstate H-3",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 212,
+        "km2": 0.989,
+        "meanWidthMetres": 151,
+        "cutTexels": 159,
+        "fillTexels": 53,
+        "meanCutMetres": 5.5,
+        "meanFillMetres": 3.1,
+        "maxCutMetres": 40.7,
+        "maxFillMetres": 19.5
+      }
+    },
+    {
+      "id": "oahu-road-kamehameha-highway-kaneohe",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1921,
+      "file": "patches/roads/oahu-road-kamehameha-highway-kaneohe.png",
+      "box": [
+        762,
+        530,
+        31,
+        47
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kamehameha Highway (kamehameha-highway-kaneohe)",
+      "works": "kamehameha-highway-kaneohe",
+      "note": "The cuts and fills of Kamehameha Highway, works section `kamehameha-highway-kaneohe`, laid back to the ground round them for the years before 1921, when it opened in 1921 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 123 texels (0.574 km², about 151 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 38 cut (to 6.6 m) and 85 filled (to 9.4 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-2",
+          "title": "Interstate H-2",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-2",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 123,
+        "km2": 0.574,
+        "meanWidthMetres": 151,
+        "cutTexels": 38,
+        "fillTexels": 85,
+        "meanCutMetres": 1.9,
+        "meanFillMetres": 2.6,
+        "maxCutMetres": 6.6,
+        "maxFillMetres": 9.4
+      }
+    },
+    {
+      "id": "oahu-road-likelike-highway-2",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1960,
+      "file": "patches/roads/oahu-road-likelike-highway-2.png",
+      "box": [
+        737,
+        531,
+        17,
+        39
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Likelike Highway (likelike-highway-2)",
+      "works": "likelike-highway-2",
+      "note": "The cuts and fills of Likelike Highway, works section `likelike-highway-2`, laid back to the ground round them for the years before 1960, when it opened in 1960 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 107 texels (0.499 km², about 156 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 96 cut (to 21.7 m) and 11 filled (to 3.6 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 107,
+        "km2": 0.499,
+        "meanWidthMetres": 156,
+        "cutTexels": 96,
+        "fillTexels": 11,
+        "meanCutMetres": 6,
+        "meanFillMetres": 1.7,
+        "maxCutMetres": 21.7,
+        "maxFillMetres": 3.6
+      }
+    },
+    {
+      "id": "oahu-road-h-1-kunia-waiawa",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1969,
+      "file": "patches/roads/oahu-road-h-1-kunia-waiawa.png",
+      "box": [
+        400,
+        536,
+        67,
+        33
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-1 (h-1-kunia-waiawa)",
+      "works": "h-1-kunia-waiawa",
+      "note": "The cuts and fills of Interstate H-1, works section `h-1-kunia-waiawa`, laid back to the ground round them for the years before 1969, when it opened in 1969 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 184 texels (0.858 km², about 169 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 100 cut (to 12.1 m) and 84 filled (to 5.8 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-1",
+          "title": "Interstate H-1",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-1",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 184,
+        "km2": 0.858,
+        "meanWidthMetres": 169,
+        "cutTexels": 100,
+        "fillTexels": 84,
+        "meanCutMetres": 2.1,
+        "meanFillMetres": 1.5,
+        "maxCutMetres": 12.1,
+        "maxFillMetres": 5.8
+      }
+    },
+    {
+      "id": "oahu-road-h-1-waiawa-halawa",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1971,
+      "file": "patches/roads/oahu-road-h-1-waiawa-halawa.png",
+      "box": [
+        466,
+        538,
+        103,
+        34
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-1 (h-1-waiawa-halawa)",
+      "works": "h-1-waiawa-halawa",
+      "note": "The cuts and fills of Interstate H-1, works section `h-1-waiawa-halawa`, laid back to the ground round them for the years before 1971, when it opened in 1971 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 268 texels (1.25 km², about 162 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 166 cut (to 8 m) and 102 filled (to 8.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 268,
+        "km2": 1.25,
+        "meanWidthMetres": 162,
+        "cutTexels": 166,
+        "fillTexels": 102,
+        "meanCutMetres": 1.5,
+        "meanFillMetres": 2,
+        "maxCutMetres": 8,
+        "maxFillMetres": 8.2
+      }
+    },
+    {
+      "id": "oahu-road-kailua-road",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1940,
+      "file": "patches/roads/oahu-road-kailua-road.png",
+      "box": [
+        830,
+        546,
+        18,
+        21
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kailua Road (kailua-road)",
+      "works": "kailua-road",
+      "note": "The cuts and fills of Kailua Road, works section `kailua-road`, laid back to the ground round them for the years before 1940, when it opened in 1940 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 58 texels (0.27 km², about 155 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 24 cut (to 11.4 m) and 34 filled (to 7.9 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 58,
+        "km2": 0.27,
+        "meanWidthMetres": 155,
+        "cutTexels": 24,
+        "fillTexels": 34,
+        "meanCutMetres": 4.6,
+        "meanFillMetres": 1.5,
+        "maxCutMetres": 11.4,
+        "maxFillMetres": 7.9
+      }
+    },
+    {
+      "id": "oahu-road-h-1-makakilo-kunia",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1966,
+      "file": "patches/roads/oahu-road-h-1-makakilo-kunia.png",
+      "box": [
+        319,
+        567,
+        82,
+        80
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-1 (h-1-makakilo-kunia)",
+      "works": "h-1-makakilo-kunia",
+      "note": "The cuts and fills of Interstate H-1, works section `h-1-makakilo-kunia`, laid back to the ground round them for the years before 1966, when it opened in 1966 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 288 texels (1.343 km², about 167 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 168 cut (to 9.4 m) and 120 filled (to 5.4 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-1",
+          "title": "Interstate H-1",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-1",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 288,
+        "km2": 1.343,
+        "meanWidthMetres": 167,
+        "cutTexels": 168,
+        "fillTexels": 120,
+        "meanCutMetres": 2,
+        "meanFillMetres": 1.3,
+        "maxCutMetres": 9.4,
+        "maxFillMetres": 5.4
+      }
+    },
+    {
+      "id": "oahu-road-kailua-highway",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1951,
+      "file": "patches/roads/oahu-road-kailua-highway.png",
+      "box": [
+        793,
+        567,
+        38,
+        10
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kalanianaʻole Highway (kailua-highway)",
+      "works": "kailua-highway",
+      "note": "The cuts and fills of Kalanianaʻole Highway, works section `kailua-highway`, laid back to the ground round them for the years before 1951, when it opened in 1951 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 95 texels (0.443 km², about 151 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 48 cut (to 11.1 m) and 47 filled (to 17.6 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 95,
+        "km2": 0.443,
+        "meanWidthMetres": 151,
+        "cutTexels": 48,
+        "fillTexels": 47,
+        "meanCutMetres": 3.3,
+        "meanFillMetres": 3.7,
+        "maxCutMetres": 11.1,
+        "maxFillMetres": 17.6
+      }
+    },
+    {
+      "id": "oahu-road-kalanianaole-highway-waimanalo",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1924,
+      "file": "patches/roads/oahu-road-kalanianaole-highway-waimanalo.png",
+      "box": [
+        831,
+        567,
+        144,
+        113
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kalanianaʻole Highway (kalanianaole-highway-waimanalo)",
+      "works": "kalanianaole-highway-waimanalo",
+      "note": "The cuts and fills of Kalanianaʻole Highway, works section `kalanianaole-highway-waimanalo`, laid back to the ground round them for the years before 1924, when it opened in 1924 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 285 texels (1.329 km², about 97 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 164 cut (to 11.6 m) and 121 filled (to 7.7 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 285,
+        "km2": 1.329,
+        "meanWidthMetres": 97,
+        "cutTexels": 164,
+        "fillTexels": 121,
+        "meanCutMetres": 1.6,
+        "meanFillMetres": 1.2,
+        "maxCutMetres": 11.6,
+        "maxFillMetres": 7.7
+      }
+    },
+    {
+      "id": "oahu-road-h-1-halawa-kahauiki",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1971,
+      "file": "patches/roads/oahu-road-h-1-halawa-kahauiki.png",
+      "box": [
+        559,
+        571,
+        78,
+        73
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-1 (h-1-halawa-kahauiki)",
+      "works": "h-1-halawa-kahauiki",
+      "note": "The cuts and fills of Interstate H-1, works section `h-1-halawa-kahauiki`, laid back to the ground round them for the years before 1971, when its building began in 1971 (it opened in 1986; the works' `built`). Found on the pack's own heights: 258 texels (1.203 km², about 125 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 162 cut (to 6.8 m) and 96 filled (to 9.3 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 258,
+        "km2": 1.203,
+        "meanWidthMetres": 125,
+        "cutTexels": 162,
+        "fillTexels": 96,
+        "meanCutMetres": 1.6,
+        "meanFillMetres": 1.1,
+        "maxCutMetres": 6.8,
+        "maxFillMetres": 9.3
+      }
+    },
+    {
+      "id": "oahu-road-likelike-highway",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1960,
+      "file": "patches/roads/oahu-road-likelike-highway.png",
+      "box": [
+        656,
+        574,
+        81,
+        66
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Likelike Highway (likelike-highway)",
+      "works": "likelike-highway",
+      "note": "The cuts and fills of Likelike Highway, works section `likelike-highway`, laid back to the ground round them for the years before 1960, when it opened in 1960 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 252 texels (1.175 km², about 158 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 203 cut (to 20.6 m) and 49 filled (to 10.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 252,
+        "km2": 1.175,
+        "meanWidthMetres": 158,
+        "cutTexels": 203,
+        "fillTexels": 49,
+        "meanCutMetres": 4.2,
+        "meanFillMetres": 1.7,
+        "maxCutMetres": 20.6,
+        "maxFillMetres": 10.2
+      }
+    },
+    {
+      "id": "oahu-road-pali-highway-3",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1952,
+      "file": "patches/roads/oahu-road-pali-highway-3.png",
+      "box": [
+        778,
+        577,
+        17,
+        18
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Pali Highway (pali-highway-3)",
+      "works": "pali-highway-3",
+      "note": "The cuts and fills of Pali Highway, works section `pali-highway-3`, laid back to the ground round them for the years before 1952, when its building began in 1952 (it opened in 1957; the works' `built`). Found on the pack's own heights: 87 texels (0.406 km², about 154 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 53 cut (to 21.2 m) and 34 filled (to 20.5 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 87,
+        "km2": 0.406,
+        "meanWidthMetres": 154,
+        "cutTexels": 53,
+        "fillTexels": 34,
+        "meanCutMetres": 8.6,
+        "meanFillMetres": 5.7,
+        "maxCutMetres": 21.2,
+        "maxFillMetres": 20.5
+      }
+    },
+    {
+      "id": "oahu-road-pali-highway-2",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1952,
+      "file": "patches/roads/oahu-road-pali-highway-2.png",
+      "box": [
+        774,
+        587,
+        4,
+        3
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Pali Highway (pali-highway-2)",
+      "works": "pali-highway-2",
+      "note": "The cuts and fills of Pali Highway, works section `pali-highway-2`, laid back to the ground round them for the years before 1952, when its building began in 1952 (it opened in 1957; the works' `built`). Found on the pack's own heights: 8 texels (0.037 km², about 300 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 6 cut (to 45.3 m) and 2 filled (to 13.3 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 8,
+        "km2": 0.037,
+        "meanWidthMetres": 300,
+        "cutTexels": 6,
+        "fillTexels": 2,
+        "meanCutMetres": 23.2,
+        "meanFillMetres": 13.2,
+        "maxCutMetres": 45.3,
+        "maxFillMetres": 13.3
+      }
+    },
+    {
+      "id": "oahu-road-nuuanu-pali-road-2",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/oahu-road-nuuanu-pali-road-2.png",
+      "box": [
+        750,
+        590,
+        23,
+        17
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road-2)",
+      "works": "nuuanu-pali-road-2",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road-2`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 56 texels (0.261 km², about 132 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 50 cut (to 22.7 m) and 6 filled (to 12 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 56,
+        "km2": 0.261,
+        "meanWidthMetres": 132,
+        "cutTexels": 50,
+        "fillTexels": 6,
+        "meanCutMetres": 7.4,
+        "meanFillMetres": 6.8,
+        "maxCutMetres": 22.7,
+        "maxFillMetres": 12
+      }
+    },
+    {
+      "id": "oahu-road-pali-highway",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1952,
+      "file": "patches/roads/oahu-road-pali-highway.png",
+      "box": [
+        676,
+        591,
+        97,
+        87
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Pali Highway (pali-highway)",
+      "works": "pali-highway",
+      "note": "The cuts and fills of Pali Highway, works section `pali-highway`, laid back to the ground round them for the years before 1952, when its building began in 1952 (it opened in 1957; the works' `built`). Found on the pack's own heights: 281 texels (1.31 km², about 143 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 170 cut (to 23.8 m) and 111 filled (to 11.7 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 281,
+        "km2": 1.31,
+        "meanWidthMetres": 143,
+        "cutTexels": 170,
+        "fillTexels": 111,
+        "meanCutMetres": 4.7,
+        "meanFillMetres": 1.9,
+        "maxCutMetres": 23.8,
+        "maxFillMetres": 11.7
+      }
+    },
+    {
+      "id": "oahu-road-nuuanu-pali-road-4",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/oahu-road-nuuanu-pali-road-4.png",
+      "box": [
+        765,
+        593,
+        6,
+        4
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road-4)",
+      "works": "nuuanu-pali-road-4",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road-4`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 10 texels (0.047 km², about 77 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 10 cut (to 20.8 m) and 0 filled (to 0 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 10,
+        "km2": 0.047,
+        "meanWidthMetres": 77,
+        "cutTexels": 10,
+        "fillTexels": 0,
+        "meanCutMetres": 11.7,
+        "meanFillMetres": 0,
+        "maxCutMetres": 20.8,
+        "maxFillMetres": 0
+      }
+    },
+    {
+      "id": "oahu-road-nuuanu-pali-road",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/oahu-road-nuuanu-pali-road.png",
+      "box": [
+        719,
+        609,
+        28,
+        19
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road)",
+      "works": "nuuanu-pali-road",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 67 texels (0.312 km², about 128 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 44 cut (to 13.5 m) and 23 filled (to 2.5 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 67,
+        "km2": 0.312,
+        "meanWidthMetres": 128,
+        "cutTexels": 44,
+        "fillTexels": 23,
+        "meanCutMetres": 5.3,
+        "meanFillMetres": 0.7,
+        "maxCutMetres": 13.5,
+        "maxFillMetres": 2.5
+      }
+    },
+    {
+      "id": "oahu-road-nuuanu-pali-road-3",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/oahu-road-nuuanu-pali-road-3.png",
+      "box": [
+        714,
+        618,
+        16,
+        12
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road-3)",
+      "works": "nuuanu-pali-road-3",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road-3`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 32 texels (0.149 km², about 111 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 24 cut (to 5.8 m) and 8 filled (to 1.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 32,
+        "km2": 0.149,
+        "meanWidthMetres": 111,
+        "cutTexels": 24,
+        "fillTexels": 8,
+        "meanCutMetres": 2.6,
+        "meanFillMetres": 0.7,
+        "maxCutMetres": 5.8,
+        "maxFillMetres": 1.2
+      }
+    },
+    {
+      "id": "oahu-road-nimitz-highway",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1940,
+      "file": "patches/roads/oahu-road-nimitz-highway.png",
+      "box": [
+        543,
+        621,
+        101,
+        43
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nimitz Highway (nimitz-highway)",
+      "works": "nimitz-highway",
+      "note": "The cuts and fills of Nimitz Highway, works section `nimitz-highway`, laid back to the ground round them for the years before 1940, when it opened in 1940 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 169 texels (0.788 km², about 75 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 79 cut (to 1.2 m) and 90 filled (to 5.3 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-route-92",
+          "title": "Hawaii Route 92 (Nimitz Highway)",
+          "url": "https://en.wikipedia.org/wiki/Hawaii_Route_92",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "hdot-harbors-history",
+          "title": "Harbors Division: History",
+          "url": "https://hidot.hawaii.gov/harbors/history/",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 169,
+        "km2": 0.788,
+        "meanWidthMetres": 75,
+        "cutTexels": 79,
+        "fillTexels": 90,
+        "meanCutMetres": 0.2,
+        "meanFillMetres": 0.5,
+        "maxCutMetres": 1.2,
+        "maxFillMetres": 5.3
+      }
+    },
+    {
+      "id": "oahu-road-h-1-lunalilo-freeway",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1953,
+      "file": "patches/roads/oahu-road-h-1-lunalilo-freeway.png",
+      "box": [
+        636,
+        637,
+        159,
+        98
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Lunalilo Freeway (h-1-lunalilo-freeway)",
+      "works": "h-1-lunalilo-freeway",
+      "note": "The cuts and fills of Lunalilo Freeway, works section `h-1-lunalilo-freeway`, laid back to the ground round them for the years before 1953, when its building began in 1953 (it opened in 1969; the works' `built`). Found on the pack's own heights: 476 texels (2.22 km², about 167 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 331 cut (to 6.9 m) and 145 filled (to 4.3 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "wikipedia-interstate-h-1",
+          "title": "Interstate H-1",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-1",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 476,
+        "km2": 2.22,
+        "meanWidthMetres": 167,
+        "cutTexels": 331,
+        "fillTexels": 145,
+        "meanCutMetres": 1.3,
+        "meanFillMetres": 0.9,
+        "maxCutMetres": 6.9,
+        "maxFillMetres": 4.3
+      }
+    },
+    {
+      "id": "oahu-road-kalanianaole-highway-makapuu",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1931,
+      "file": "patches/roads/oahu-road-kalanianaole-highway-makapuu.png",
+      "box": [
+        910,
+        684,
+        74,
+        59
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kalanianaʻole Highway (kalanianaole-highway-makapuu)",
+      "works": "kalanianaole-highway-makapuu",
+      "note": "The cuts and fills of Kalanianaʻole Highway, works section `kalanianaole-highway-makapuu`, laid back to the ground round them for the years before 1931, when it opened in 1931 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 134 texels (0.625 km², about 82 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 82 cut (to 19.6 m) and 52 filled (to 20.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 134,
+        "km2": 0.625,
+        "meanWidthMetres": 82,
+        "cutTexels": 82,
+        "fillTexels": 52,
+        "meanCutMetres": 6.8,
+        "meanFillMetres": 6.5,
+        "maxCutMetres": 19.6,
+        "maxFillMetres": 20.2
+      }
+    },
+    {
+      "id": "oahu-road-kalanianaole-highway-maunalua",
+      "pack": "oahu",
+      "kind": "restore",
+      "until": 1930,
+      "file": "patches/roads/oahu-road-kalanianaole-highway-maunalua.png",
+      "box": [
+        794,
+        719,
+        116,
+        20
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kalanianaʻole Highway (kalanianaole-highway-maunalua)",
+      "works": "kalanianaole-highway-maunalua",
+      "note": "The cuts and fills of Kalanianaʻole Highway, works section `kalanianaole-highway-maunalua`, laid back to the ground round them for the years before 1930, when it opened in 1930 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 143 texels (0.667 km², about 79 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 114 cut (to 12.2 m) and 29 filled (to 1.1 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-1as",
+          "title": "USGS 3D Elevation Program (3DEP) 1 arc-second DEM, 1x1 degree tiles",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/TIFF/current/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey)"
+        }
+      ],
+      "stats": {
+        "texels": 143,
+        "km2": 0.667,
+        "meanWidthMetres": 79,
+        "cutTexels": 114,
+        "fillTexels": 29,
+        "meanCutMetres": 2.4,
+        "meanFillMetres": 0.3,
+        "maxCutMetres": 12.2,
+        "maxFillMetres": 1.1
+      }
+    },
+    {
+      "id": "nuuanu-road-kamehameha-highway-kaneohe",
+      "pack": "nuuanu",
+      "kind": "restore",
+      "until": 1921,
+      "file": "patches/roads/nuuanu-road-kamehameha-highway-kaneohe.png",
+      "box": [
+        1894,
+        2,
+        110,
+        112
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kamehameha Highway (kamehameha-highway-kaneohe)",
+      "works": "kamehameha-highway-kaneohe",
+      "note": "The cuts and fills of Kamehameha Highway, works section `kamehameha-highway-kaneohe`, laid back to the ground round them for the years before 1921, when it opened in 1921 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 1512 texels (0.055 km², about ? m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 555 cut (to 3.8 m) and 957 filled (to 7.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-2",
+          "title": "Interstate H-2",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-2",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 1512,
+        "km2": 0.055,
+        "meanWidthMetres": null,
+        "cutTexels": 555,
+        "fillTexels": 957,
+        "meanCutMetres": 0.9,
+        "meanFillMetres": 1.3,
+        "maxCutMetres": 3.8,
+        "maxFillMetres": 7.2
+      }
+    },
+    {
+      "id": "nuuanu-road-kailua-highway",
+      "pack": "nuuanu",
+      "kind": "restore",
+      "until": 1951,
+      "file": "patches/roads/nuuanu-road-kailua-highway.png",
+      "box": [
+        2005,
+        75,
+        28,
+        34
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kalanianaʻole Highway (kailua-highway)",
+      "works": "kailua-highway",
+      "note": "The cuts and fills of Kalanianaʻole Highway, works section `kailua-highway`, laid back to the ground round them for the years before 1951, when it opened in 1951 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 208 texels (0.008 km², about 15 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 32 cut (to 2.1 m) and 176 filled (to 3.7 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 208,
+        "km2": 0.008,
+        "meanWidthMetres": 15,
+        "cutTexels": 32,
+        "fillTexels": 176,
+        "meanCutMetres": 1,
+        "meanFillMetres": 1.3,
+        "maxCutMetres": 2.1,
+        "maxFillMetres": 3.7
+      }
+    },
+    {
+      "id": "nuuanu-road-likelike-highway",
+      "pack": "nuuanu",
+      "kind": "restore",
+      "until": 1960,
+      "file": "patches/roads/nuuanu-road-likelike-highway.png",
+      "box": [
+        468,
+        92,
+        895,
+        732
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Likelike Highway (likelike-highway)",
+      "works": "likelike-highway",
+      "note": "The cuts and fills of Likelike Highway, works section `likelike-highway`, laid back to the ground round them for the years before 1960, when it opened in 1960 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 8549 texels (0.313 km², about 42 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 3657 cut (to 7 m) and 4892 filled (to 8.6 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 8549,
+        "km2": 0.313,
+        "meanWidthMetres": 42,
+        "cutTexels": 3657,
+        "fillTexels": 4892,
+        "meanCutMetres": 1.3,
+        "meanFillMetres": 1.4,
+        "maxCutMetres": 7,
+        "maxFillMetres": 8.6
+      }
+    },
+    {
+      "id": "nuuanu-road-pali-highway-3",
+      "pack": "nuuanu",
+      "kind": "restore",
+      "until": 1952,
+      "file": "patches/roads/nuuanu-road-pali-highway-3.png",
+      "box": [
+        1839,
+        106,
+        184,
+        199
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Pali Highway (pali-highway-3)",
+      "works": "pali-highway-3",
+      "note": "The cuts and fills of Pali Highway, works section `pali-highway-3`, laid back to the ground round them for the years before 1952, when its building began in 1952 (it opened in 1957; the works' `built`). Found on the pack's own heights: 3864 texels (0.141 km², about 54 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 1532 cut (to 10.9 m) and 2332 filled (to 13.9 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 3864,
+        "km2": 0.141,
+        "meanWidthMetres": 54,
+        "cutTexels": 1532,
+        "fillTexels": 2332,
+        "meanCutMetres": 1.5,
+        "meanFillMetres": 2.2,
+        "maxCutMetres": 10.9,
+        "maxFillMetres": 13.9
+      }
+    },
+    {
+      "id": "nuuanu-road-pali-highway",
+      "pack": "nuuanu",
+      "kind": "restore",
+      "until": 1952,
+      "file": "patches/roads/nuuanu-road-pali-highway.png",
+      "box": [
+        691,
+        279,
+        1076,
+        976
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Pali Highway (pali-highway)",
+      "works": "pali-highway",
+      "note": "The cuts and fills of Pali Highway, works section `pali-highway`, laid back to the ground round them for the years before 1952, when its building began in 1952 (it opened in 1957; the works' `built`). Found on the pack's own heights: 14669 texels (0.536 km², about 59 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 6520 cut (to 21.2 m) and 8149 filled (to 23.9 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 14669,
+        "km2": 0.536,
+        "meanWidthMetres": 59,
+        "cutTexels": 6520,
+        "fillTexels": 8149,
+        "meanCutMetres": 1.4,
+        "meanFillMetres": 2.4,
+        "maxCutMetres": 21.2,
+        "maxFillMetres": 23.9
+      }
+    },
+    {
+      "id": "nuuanu-road-nuuanu-pali-road-4",
+      "pack": "nuuanu",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/nuuanu-road-nuuanu-pali-road-4.png",
+      "box": [
+        1683,
+        280,
+        74,
+        51
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road-4)",
+      "works": "nuuanu-pali-road-4",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road-4`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 307 texels (0.011 km², about 19 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 175 cut (to 1.2 m) and 132 filled (to 5.5 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 307,
+        "km2": 0.011,
+        "meanWidthMetres": 19,
+        "cutTexels": 175,
+        "fillTexels": 132,
+        "meanCutMetres": 0.3,
+        "meanFillMetres": 0.8,
+        "maxCutMetres": 1.2,
+        "maxFillMetres": 5.5
+      }
+    },
+    {
+      "id": "nuuanu-road-nuuanu-pali-road",
+      "pack": "nuuanu",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/nuuanu-road-nuuanu-pali-road.png",
+      "box": [
+        1174,
+        489,
+        308,
+        198
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road)",
+      "works": "nuuanu-pali-road",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 2402 texels (0.088 km², about 36 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 1317 cut (to 12.1 m) and 1085 filled (to 7.5 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 2402,
+        "km2": 0.088,
+        "meanWidthMetres": 36,
+        "cutTexels": 1317,
+        "fillTexels": 1085,
+        "meanCutMetres": 2.1,
+        "meanFillMetres": 1.2,
+        "maxCutMetres": 12.1,
+        "maxFillMetres": 7.5
+      }
+    },
+    {
+      "id": "nuuanu-road-nuuanu-pali-road-3",
+      "pack": "nuuanu",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/nuuanu-road-nuuanu-pali-road-3.png",
+      "box": [
+        1112,
+        582,
+        176,
+        130
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road-3)",
+      "works": "nuuanu-pali-road-3",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road-3`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 900 texels (0.033 km², about 25 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 538 cut (to 4.2 m) and 362 filled (to 2.8 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 900,
+        "km2": 0.033,
+        "meanWidthMetres": 25,
+        "cutTexels": 538,
+        "fillTexels": 362,
+        "meanCutMetres": 0.6,
+        "meanFillMetres": 0.4,
+        "maxCutMetres": 4.2,
+        "maxFillMetres": 2.8
+      }
+    },
+    {
+      "id": "nuuanu-road-h-1-halawa-kahauiki",
+      "pack": "nuuanu",
+      "kind": "restore",
+      "until": 1971,
+      "file": "patches/roads/nuuanu-road-h-1-halawa-kahauiki.png",
+      "box": [
+        2,
+        775,
+        248,
+        89
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-1 (h-1-halawa-kahauiki)",
+      "works": "h-1-halawa-kahauiki",
+      "note": "The cuts and fills of Interstate H-1, works section `h-1-halawa-kahauiki`, laid back to the ground round them for the years before 1971, when its building began in 1971 (it opened in 1986; the works' `built`). Found on the pack's own heights: 3342 texels (0.122 km², about 71 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 1346 cut (to 10.5 m) and 1996 filled (to 7.4 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 3342,
+        "km2": 0.122,
+        "meanWidthMetres": 71,
+        "cutTexels": 1346,
+        "fillTexels": 1996,
+        "meanCutMetres": 2,
+        "meanFillMetres": 1.2,
+        "maxCutMetres": 10.5,
+        "maxFillMetres": 7.4
+      }
+    },
+    {
+      "id": "nuuanu-road-h-1-lunalilo-freeway",
+      "pack": "nuuanu",
+      "kind": "restore",
+      "until": 1953,
+      "file": "patches/roads/nuuanu-road-h-1-lunalilo-freeway.png",
+      "box": [
+        240,
+        797,
+        1788,
+        1103
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Lunalilo Freeway (h-1-lunalilo-freeway)",
+      "works": "h-1-lunalilo-freeway",
+      "note": "The cuts and fills of Lunalilo Freeway, works section `h-1-lunalilo-freeway`, laid back to the ground round them for the years before 1953, when its building began in 1953 (it opened in 1969; the works' `built`). Found on the pack's own heights: 25695 texels (0.94 km², about 71 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 14163 cut (to 13.1 m) and 11532 filled (to 8 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "wikipedia-interstate-h-1",
+          "title": "Interstate H-1",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-1",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-20",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 25695,
+        "km2": 0.94,
+        "meanWidthMetres": 71,
+        "cutTexels": 14163,
+        "fillTexels": 11532,
+        "meanCutMetres": 2.5,
+        "meanFillMetres": 1.4,
+        "maxCutMetres": 13.1,
+        "maxFillMetres": 8
+      }
+    },
+    {
+      "id": "koolaupoko-road-kamehameha-highway-north-shore",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1921,
+      "file": "patches/roads/koolaupoko-road-kamehameha-highway-north-shore.png",
+      "box": [
+        336,
+        2,
+        172,
+        682
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kamehameha Highway (kamehameha-highway-north-shore)",
+      "works": "kamehameha-highway-north-shore",
+      "note": "The cuts and fills of Kamehameha Highway, works section `kamehameha-highway-north-shore`, laid back to the ground round them for the years before 1921, when it opened in 1921 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 1967 texels (0.332 km², about 30 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 922 cut (to 3.9 m) and 1045 filled (to 3.9 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-2",
+          "title": "Interstate H-2",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-2",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 1967,
+        "km2": 0.332,
+        "meanWidthMetres": 30,
+        "cutTexels": 922,
+        "fillTexels": 1045,
+        "meanCutMetres": 0.5,
+        "meanFillMetres": 0.4,
+        "maxCutMetres": 3.9,
+        "maxFillMetres": 3.9
+      }
+    },
+    {
+      "id": "koolaupoko-road-kahekili-highway",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1972,
+      "file": "patches/roads/koolaupoko-road-kahekili-highway.png",
+      "box": [
+        476,
+        683,
+        259,
+        466
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kahekili Highway (kahekili-highway)",
+      "works": "kahekili-highway",
+      "note": "The cuts and fills of Kahekili Highway, works section `kahekili-highway`, laid back to the ground round them for the years before 1972, when it opened in 1972 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 2269 texels (0.382 km², about 54 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 1069 cut (to 10.2 m) and 1200 filled (to 14.4 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 2269,
+        "km2": 0.382,
+        "meanWidthMetres": 54,
+        "cutTexels": 1069,
+        "fillTexels": 1200,
+        "meanCutMetres": 1.5,
+        "meanFillMetres": 1.9,
+        "maxCutMetres": 10.2,
+        "maxFillMetres": 14.4
+      }
+    },
+    {
+      "id": "koolaupoko-road-h-3-mokapu",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1977,
+      "file": "patches/roads/koolaupoko-road-h-3-mokapu.png",
+      "box": [
+        1090,
+        878,
+        41,
+        106
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-3 (h-3-mokapu)",
+      "works": "h-3-mokapu",
+      "note": "The cuts and fills of Interstate H-3, works section `h-3-mokapu`, laid back to the ground round them for the years before 1977, when it opened in 1977 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 267 texels (0.045 km², about 28 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 69 cut (to 4.5 m) and 198 filled (to 7.1 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 267,
+        "km2": 0.045,
+        "meanWidthMetres": 28,
+        "cutTexels": 69,
+        "fillTexels": 198,
+        "meanCutMetres": 1,
+        "meanFillMetres": 2.4,
+        "maxCutMetres": 4.5,
+        "maxFillMetres": 7.1
+      }
+    },
+    {
+      "id": "koolaupoko-road-h-3-kaneohe",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1987,
+      "file": "patches/roads/koolaupoko-road-h-3-kaneohe.png",
+      "box": [
+        837,
+        984,
+        260,
+        342
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-3 (h-3-kaneohe)",
+      "works": "h-3-kaneohe",
+      "note": "The cuts and fills of Interstate H-3, works section `h-3-kaneohe`, laid back to the ground round them for the years before 1987, when it opened in 1987 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 1812 texels (0.305 km², about 50 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 613 cut (to 8.6 m) and 1199 filled (to 10.1 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 1812,
+        "km2": 0.305,
+        "meanWidthMetres": 50,
+        "cutTexels": 613,
+        "fillTexels": 1199,
+        "meanCutMetres": 1.2,
+        "meanFillMetres": 1.7,
+        "maxCutMetres": 8.6,
+        "maxFillMetres": 10.1
+      }
+    },
+    {
+      "id": "koolaupoko-road-h-3",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1997,
+      "file": "patches/roads/koolaupoko-road-h-3.png",
+      "box": [
+        2,
+        1118,
+        382,
+        179
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-3 (h-3)",
+      "works": "h-3",
+      "note": "The cuts and fills of Interstate H-3, works section `h-3`, laid back to the ground round them for the years before 1997, when it opened in 1997 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 1502 texels (0.253 km², about 44 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 692 cut (to 12.4 m) and 810 filled (to 7.3 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-3",
+          "title": "Interstate H-3",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 1502,
+        "km2": 0.253,
+        "meanWidthMetres": 44,
+        "cutTexels": 692,
+        "fillTexels": 810,
+        "meanCutMetres": 1.9,
+        "meanFillMetres": 1.6,
+        "maxCutMetres": 12.4,
+        "maxFillMetres": 7.3
+      }
+    },
+    {
+      "id": "koolaupoko-road-h-3-2",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1997,
+      "file": "patches/roads/koolaupoko-road-h-3-2.png",
+      "box": [
+        500,
+        1130,
+        340,
+        229
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-3 (h-3-2)",
+      "works": "h-3-2",
+      "note": "The cuts and fills of Interstate H-3, works section `h-3-2`, laid back to the ground round them for the years before 1997, when it opened in 1997 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 1687 texels (0.284 km², about 43 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 858 cut (to 8.7 m) and 829 filled (to 21.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-3",
+          "title": "Interstate H-3",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 1687,
+        "km2": 0.284,
+        "meanWidthMetres": 43,
+        "cutTexels": 858,
+        "fillTexels": 829,
+        "meanCutMetres": 0.8,
+        "meanFillMetres": 0.8,
+        "maxCutMetres": 8.7,
+        "maxFillMetres": 21.2
+      }
+    },
+    {
+      "id": "koolaupoko-road-kamehameha-highway-kaneohe",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1921,
+      "file": "patches/roads/koolaupoko-road-kamehameha-highway-kaneohe.png",
+      "box": [
+        782,
+        1145,
+        159,
+        244
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kamehameha Highway (kamehameha-highway-kaneohe)",
+      "works": "kamehameha-highway-kaneohe",
+      "note": "The cuts and fills of Kamehameha Highway, works section `kamehameha-highway-kaneohe`, laid back to the ground round them for the years before 1921, when it opened in 1921 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 1223 texels (0.206 km², about 54 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 701 cut (to 8 m) and 522 filled (to 3.7 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "wikipedia-interstate-h-2",
+          "title": "Interstate H-2",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-2",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 1223,
+        "km2": 0.206,
+        "meanWidthMetres": 54,
+        "cutTexels": 701,
+        "fillTexels": 522,
+        "meanCutMetres": 1.1,
+        "meanFillMetres": 0.5,
+        "maxCutMetres": 8,
+        "maxFillMetres": 3.7
+      }
+    },
+    {
+      "id": "koolaupoko-road-likelike-highway-2",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1960,
+      "file": "patches/roads/koolaupoko-road-likelike-highway-2.png",
+      "box": [
+        650,
+        1148,
+        82,
+        203
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Likelike Highway (likelike-highway-2)",
+      "works": "likelike-highway-2",
+      "note": "The cuts and fills of Likelike Highway, works section `likelike-highway-2`, laid back to the ground round them for the years before 1960, when it opened in 1960 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 951 texels (0.16 km², about 50 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 468 cut (to 7.1 m) and 483 filled (to 10.9 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 951,
+        "km2": 0.16,
+        "meanWidthMetres": 50,
+        "cutTexels": 468,
+        "fillTexels": 483,
+        "meanCutMetres": 0.9,
+        "meanFillMetres": 1.1,
+        "maxCutMetres": 7.1,
+        "maxFillMetres": 10.9
+      }
+    },
+    {
+      "id": "koolaupoko-road-kailua-road",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1940,
+      "file": "patches/roads/koolaupoko-road-kailua-road.png",
+      "box": [
+        1140,
+        1228,
+        90,
+        110
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kailua Road (kailua-road)",
+      "works": "kailua-road",
+      "note": "The cuts and fills of Kailua Road, works section `kailua-road`, laid back to the ground round them for the years before 1940, when it opened in 1940 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 693 texels (0.117 km², about 67 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 393 cut (to 13.1 m) and 300 filled (to 3.7 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 693,
+        "km2": 0.117,
+        "meanWidthMetres": 67,
+        "cutTexels": 393,
+        "fillTexels": 300,
+        "meanCutMetres": 2.1,
+        "meanFillMetres": 0.8,
+        "maxCutMetres": 13.1,
+        "maxFillMetres": 3.7
+      }
+    },
+    {
+      "id": "koolaupoko-road-kailua-highway",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1951,
+      "file": "patches/roads/koolaupoko-road-kailua-highway.png",
+      "box": [
+        942,
+        1333,
+        200,
+        55
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kalanianaʻole Highway (kailua-highway)",
+      "works": "kailua-highway",
+      "note": "The cuts and fills of Kalanianaʻole Highway, works section `kailua-highway`, laid back to the ground round them for the years before 1951, when it opened in 1951 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 1490 texels (0.251 km², about 86 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 720 cut (to 15.1 m) and 770 filled (to 10.3 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 1490,
+        "km2": 0.251,
+        "meanWidthMetres": 86,
+        "cutTexels": 720,
+        "fillTexels": 770,
+        "meanCutMetres": 2.2,
+        "meanFillMetres": 1.9,
+        "maxCutMetres": 15.1,
+        "maxFillMetres": 10.3
+      }
+    },
+    {
+      "id": "koolaupoko-road-kalanianaole-highway-waimanalo",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1924,
+      "file": "patches/roads/koolaupoko-road-kalanianaole-highway-waimanalo.png",
+      "box": [
+        1138,
+        1337,
+        759,
+        577
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kalanianaʻole Highway (kalanianaole-highway-waimanalo)",
+      "works": "kalanianaole-highway-waimanalo",
+      "note": "The cuts and fills of Kalanianaʻole Highway, works section `kalanianaole-highway-waimanalo`, laid back to the ground round them for the years before 1924, when it opened in 1924 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 3139 texels (0.529 km², about 39 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 1559 cut (to 10.9 m) and 1580 filled (to 11.3 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 3139,
+        "km2": 0.529,
+        "meanWidthMetres": 39,
+        "cutTexels": 1559,
+        "fillTexels": 1580,
+        "meanCutMetres": 1.3,
+        "meanFillMetres": 1.5,
+        "maxCutMetres": 10.9,
+        "maxFillMetres": 11.3
+      }
+    },
+    {
+      "id": "koolaupoko-road-likelike-highway",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1960,
+      "file": "patches/roads/koolaupoko-road-likelike-highway.png",
+      "box": [
+        226,
+        1380,
+        416,
+        340
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Likelike Highway (likelike-highway)",
+      "works": "likelike-highway",
+      "note": "The cuts and fills of Likelike Highway, works section `likelike-highway`, laid back to the ground round them for the years before 1960, when it opened in 1960 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 2261 texels (0.381 km², about 51 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 968 cut (to 8.2 m) and 1293 filled (to 9.2 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 2261,
+        "km2": 0.381,
+        "meanWidthMetres": 51,
+        "cutTexels": 968,
+        "fillTexels": 1293,
+        "meanCutMetres": 1.5,
+        "meanFillMetres": 2,
+        "maxCutMetres": 8.2,
+        "maxFillMetres": 9.2
+      }
+    },
+    {
+      "id": "koolaupoko-road-pali-highway-3",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1952,
+      "file": "patches/roads/koolaupoko-road-pali-highway-3.png",
+      "box": [
+        864,
+        1386,
+        87,
+        94
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Pali Highway (pali-highway-3)",
+      "works": "pali-highway-3",
+      "note": "The cuts and fills of Pali Highway, works section `pali-highway-3`, laid back to the ground round them for the years before 1952, when its building began in 1952 (it opened in 1957; the works' `built`). Found on the pack's own heights: 1000 texels (0.169 km², about 64 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 562 cut (to 19 m) and 438 filled (to 11.3 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 1000,
+        "km2": 0.169,
+        "meanWidthMetres": 64,
+        "cutTexels": 562,
+        "fillTexels": 438,
+        "meanCutMetres": 2.7,
+        "meanFillMetres": 2.5,
+        "maxCutMetres": 19,
+        "maxFillMetres": 11.3
+      }
+    },
+    {
+      "id": "koolaupoko-road-pali-highway-2",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1952,
+      "file": "patches/roads/koolaupoko-road-pali-highway-2.png",
+      "box": [
+        844,
+        1448,
+        20,
+        14
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Pali Highway (pali-highway-2)",
+      "works": "pali-highway-2",
+      "note": "The cuts and fills of Pali Highway, works section `pali-highway-2`, laid back to the ground round them for the years before 1952, when its building began in 1952 (it opened in 1957; the works' `built`). Found on the pack's own heights: 147 texels (0.025 km², about 199 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 109 cut (to 31.9 m) and 38 filled (to 7.9 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 147,
+        "km2": 0.025,
+        "meanWidthMetres": 199,
+        "cutTexels": 109,
+        "fillTexels": 38,
+        "meanCutMetres": 11.8,
+        "meanFillMetres": 3.5,
+        "maxCutMetres": 31.9,
+        "maxFillMetres": 7.9
+      }
+    },
+    {
+      "id": "koolaupoko-road-nuuanu-pali-road-2",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/koolaupoko-road-nuuanu-pali-road-2.png",
+      "box": [
+        717,
+        1461,
+        115,
+        87
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road-2)",
+      "works": "nuuanu-pali-road-2",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road-2`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 448 texels (0.076 km², about 38 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 272 cut (to 8.2 m) and 176 filled (to 2.1 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 448,
+        "km2": 0.076,
+        "meanWidthMetres": 38,
+        "cutTexels": 272,
+        "fillTexels": 176,
+        "meanCutMetres": 1.2,
+        "meanFillMetres": 0.4,
+        "maxCutMetres": 8.2,
+        "maxFillMetres": 2.1
+      }
+    },
+    {
+      "id": "koolaupoko-road-nuuanu-pali-road-4",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/koolaupoko-road-nuuanu-pali-road-4.png",
+      "box": [
+        792,
+        1467,
+        34,
+        25
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road-4)",
+      "works": "nuuanu-pali-road-4",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road-4`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 92 texels (0.016 km², about 26 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 43 cut (to 1.7 m) and 49 filled (to 4.5 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 92,
+        "km2": 0.016,
+        "meanWidthMetres": 26,
+        "cutTexels": 43,
+        "fillTexels": 49,
+        "meanCutMetres": 0.5,
+        "meanFillMetres": 1.3,
+        "maxCutMetres": 1.7,
+        "maxFillMetres": 4.5
+      }
+    },
+    {
+      "id": "koolaupoko-road-pali-highway",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1952,
+      "file": "patches/roads/koolaupoko-road-pali-highway.png",
+      "box": [
+        330,
+        1467,
+        501,
+        456
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Pali Highway (pali-highway)",
+      "works": "pali-highway",
+      "note": "The cuts and fills of Pali Highway, works section `pali-highway`, laid back to the ground round them for the years before 1952, when its building began in 1952 (it opened in 1957; the works' `built`). Found on the pack's own heights: 3284 texels (0.554 km², about 61 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 1581 cut (to 15.5 m) and 1703 filled (to 22 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-topo-2000-oahu",
+          "title": "USGS topographic quadrangles of Oʻahu, about 2000 (State GIS mosaic USGS_topos_2000)",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/SoH_Maps/USGS_topos_2000/ImageServer",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 3284,
+        "km2": 0.554,
+        "meanWidthMetres": 61,
+        "cutTexels": 1581,
+        "fillTexels": 1703,
+        "meanCutMetres": 1.3,
+        "meanFillMetres": 2.4,
+        "maxCutMetres": 15.5,
+        "maxFillMetres": 22
+      }
+    },
+    {
+      "id": "koolaupoko-road-nuuanu-pali-road",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/koolaupoko-road-nuuanu-pali-road.png",
+      "box": [
+        555,
+        1565,
+        143,
+        92
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road)",
+      "works": "nuuanu-pali-road",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 581 texels (0.098 km², about 40 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 314 cut (to 11.1 m) and 267 filled (to 4.8 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 581,
+        "km2": 0.098,
+        "meanWidthMetres": 40,
+        "cutTexels": 314,
+        "fillTexels": 267,
+        "meanCutMetres": 2.6,
+        "meanFillMetres": 1,
+        "maxCutMetres": 11.1,
+        "maxFillMetres": 4.8
+      }
+    },
+    {
+      "id": "koolaupoko-road-nuuanu-pali-road-3",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1898,
+      "file": "patches/roads/koolaupoko-road-nuuanu-pali-road-3.png",
+      "box": [
+        526,
+        1606,
+        87,
+        75
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Nuʻuanu Pali Road (nuuanu-pali-road-3)",
+      "works": "nuuanu-pali-road-3",
+      "note": "The cuts and fills of Nuʻuanu Pali Road, works section `nuuanu-pali-road-3`, laid back to the ground round them for the years before 1898, when it opened in 1898 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 499 texels (0.084 km², about 63 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 240 cut (to 7.6 m) and 259 filled (to 6.9 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "shbie-2024",
+          "title": "State Historic Bridge Inventory and Evaluation, 2024 Update",
+          "url": "https://hidot.hawaii.gov/highways/files/2025/02/SHBIE-2024-Update-Report-20241224.pdf",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; a State of Hawaiʻi Department of Transportation report"
+        },
+        {
+          "id": "state-gis-oahu-roads",
+          "title": "Oahu Roads, Transportation MapServer layer 3",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/3",
+          "fetched": "part",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 499,
+        "km2": 0.084,
+        "meanWidthMetres": 63,
+        "cutTexels": 240,
+        "fillTexels": 259,
+        "meanCutMetres": 1.2,
+        "meanFillMetres": 1.4,
+        "maxCutMetres": 7.6,
+        "maxFillMetres": 6.9
+      }
+    },
+    {
+      "id": "koolaupoko-road-h-1-halawa-kahauiki",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1971,
+      "file": "patches/roads/koolaupoko-road-h-1-halawa-kahauiki.png",
+      "box": [
+        2,
+        1696,
+        123,
+        44
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Interstate H-1 (h-1-halawa-kahauiki)",
+      "works": "h-1-halawa-kahauiki",
+      "note": "The cuts and fills of Interstate H-1, works section `h-1-halawa-kahauiki`, laid back to the ground round them for the years before 1971, when its building began in 1971 (it opened in 1986; the works' `built`). Found on the pack's own heights: 736 texels (0.124 km², about 72 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 348 cut (to 11.5 m) and 388 filled (to 7.4 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 736,
+        "km2": 0.124,
+        "meanWidthMetres": 72,
+        "cutTexels": 348,
+        "fillTexels": 388,
+        "meanCutMetres": 2.1,
+        "meanFillMetres": 1,
+        "maxCutMetres": 11.5,
+        "maxFillMetres": 7.4
+      }
+    },
+    {
+      "id": "koolaupoko-road-h-1-lunalilo-freeway",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1953,
+      "file": "patches/roads/koolaupoko-road-h-1-lunalilo-freeway.png",
+      "box": [
+        119,
+        1708,
+        377,
+        300
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Lunalilo Freeway (h-1-lunalilo-freeway)",
+      "works": "h-1-lunalilo-freeway",
+      "note": "The cuts and fills of Lunalilo Freeway, works section `h-1-lunalilo-freeway`, laid back to the ground round them for the years before 1953, when its building began in 1953 (it opened in 1969; the works' `built`). Found on the pack's own heights: 3245 texels (0.547 km², about 83 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 2032 cut (to 12.3 m) and 1213 filled (to 6.4 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "hawaiihighways-oahu",
+          "title": "Hawaii Highways: Oʻahu route list",
+          "url": "http://www.hawaiihighways.com/oahu.htm",
+          "fetched": "2026-10-23",
+          "licence": "quoted for its dates; text © its compilers"
+        },
+        {
+          "id": "wikipedia-interstate-h-1",
+          "title": "Interstate H-1",
+          "url": "https://en.wikipedia.org/wiki/Interstate_H-1",
+          "fetched": "part",
+          "licence": "quoted for its dates; text CC BY-SA 4.0 (Wikipedia; a tertiary source)"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 3245,
+        "km2": 0.547,
+        "meanWidthMetres": 83,
+        "cutTexels": 2032,
+        "fillTexels": 1213,
+        "meanCutMetres": 2.6,
+        "meanFillMetres": 1.1,
+        "maxCutMetres": 12.3,
+        "maxFillMetres": 6.4
+      }
+    },
+    {
+      "id": "koolaupoko-road-kalanianaole-highway-makapuu",
+      "pack": "koolaupoko",
+      "kind": "restore",
+      "until": 1931,
+      "file": "patches/roads/koolaupoko-road-kalanianaole-highway-makapuu.png",
+      "box": [
+        1932,
+        1955,
+        10,
+        53
+      ],
+      "delta": {
+        "scale": 0.01,
+        "offset": -327.68
+      },
+      "name": "the ground under Kalanianaʻole Highway (kalanianaole-highway-makapuu)",
+      "works": "kalanianaole-highway-makapuu",
+      "note": "The cuts and fills of Kalanianaʻole Highway, works section `kalanianaole-highway-makapuu`, laid back to the ground round them for the years before 1931, when it opened in 1931 (the works' `from`; they record no earlier start of its building). Found on the pack's own heights: 174 texels (0.029 km², about 40 m across on average) lie within the width either side of the road where the ground's curvature, averaged along each 200 m of it, stands above the ground's own further out, 116 cut (to 3.6 m) and 58 filled (to 1.3 m); laid back by a thin plate from the undisturbed ground round them",
+      "sources": [
+        {
+          "id": "state-gis-nbi",
+          "title": "National Bridge Inventory, Infrastructure MapServer layer 9",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Infrastructure/MapServer/9",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "state-gis-hpms",
+          "title": "Highway Performance Monitoring System roads, 2024, Transportation MapServer layer 12",
+          "url": "https://geodata.hawaii.gov/arcgis/rest/services/Transportation/MapServer/12",
+          "fetched": "full",
+          "licence": "quoted for its dates; text © its authors"
+        },
+        {
+          "id": "usgs-3dep-opr-hi-noaamauioahu-2020-b20",
+          "title": "USGS 3D Elevation Program lidar HI_NOAAMauiOahu_2020_B20, bare-earth DEM at its original 0.5 m, 500 m GeoTIFF tiles (NAD83(PA11) / UTM zone 4N)",
+          "url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/OPR/Projects/HI_NOAAMauiOahu_2020_B20/",
+          "fetched": "2026-10-22",
+          "licence": "public domain (U.S. Geological Survey, 3D Elevation Program); collected for NOAA"
+        }
+      ],
+      "stats": {
+        "texels": 174,
+        "km2": 0.029,
+        "meanWidthMetres": 40,
+        "cutTexels": 116,
+        "fillTexels": 58,
+        "meanCutMetres": 1,
+        "meanFillMetres": 0.4,
+        "maxCutMetres": 3.6,
+        "maxFillMetres": 1.3
+      }
     }
   ],
   "baked": {
     "tool": "tools/bake-patches.mjs",
-    "works": "tools/lib/patch-works.mjs"
+    "works": "tools/lib/patch-works.mjs",
+    "roads": "tools/bake-roads.mjs"
   }
 }
