@@ -2554,6 +2554,58 @@ if (await ui('!!app.schools')) {
     console.log(`      ${st.schools} schools; ${JSON.stringify(st.islands.filter((i) => i.drawn).map((i) => ({ id: i.id, standing: i.standing, kits: i.kits, calls: i.calls })))}`)
   })
 }
+// The towers' record (DATA.md "Towers, dated"), on either data: over each area
+// towers.json counts, from its first year to the last, never more towers
+// standing (the district's and the island's that show) than its count × the
+// share of the year, rounded down.
+const towersRec = await ui("fetch(app.data.abs('towers.json')).then((r) => (r.ok ? r.json() : null)).catch(() => null)")
+if (towersRec?.areas?.length) {
+  await check('settlements: no year holds more towers in an area than the towers’ record gives it', async () => {
+    const lastY = await ui('app.timeline.yearAt(app.timeline.max)')
+    const years = [...new Set([towersRec.first, 1960, 1965, 1970, 1975, 1978, 1980, 1985, 1990, 2000, 2010, lastY])].filter((y) => y >= towersRec.first && y <= lastY)
+    const shareAt = (sh, y) => {
+      if (y < sh[0][0]) return 0
+      for (let i = 1; i < sh.length; i++) if (y <= sh[i][0]) return sh[i - 1][1] + ((sh[i][1] - sh[i - 1][1]) * (y - sh[i - 1][0])) / (sh[i][0] - sh[i - 1][0])
+      return sh.at(-1)[1]
+    }
+    const packs = await ui('app.world.islandPacks.map((p) => p.id)')
+    const bad = []
+    const rows = []
+    for (const a of towersRec.areas) {
+      if (!packs.includes(a.island)) continue
+      const c = [a.ring.reduce((s, p) => s + p[0], 0) / a.ring.length, a.ring.reduce((s, p) => s + p[1], 0) / a.ring.length]
+      await run(`app.tour.setPrologue?.(false); app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${lastY}); app.ui.timeline.finish(); const v = app.tour.cameraView({ geometry: { type: 'Point', coordinates: ${JSON.stringify(c)} } }, { bearing: 20, pitch: 0.5, distance: 14 }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch }); app.settle()`)
+      for (let k = 0; k < 600; k++) {
+        const ok = await ui(`(() => { app.settle(); const t = app.rig.state.target, D = app.districts, d = D?.districtAt(t.x, t.z), s = app.towns.stats(); return app.towns.idle && s.islands.length > 0 && s.islands.every((i) => i.ready && !i.pending) && (!d || (D.cur?.d === d && D.cur.state === 'ready' && !!D.cur.features?.settlements.ready)) })()`)
+        if (ok) break
+        await frames(1)
+      }
+      const got = await ui(`(() => {
+        const P = app.data.proj, W = ${JSON.stringify(a.ring)}.map((q) => P.toWorld(q)), out = {}
+        const inside = (x, z) => { let c = false; for (let i = 0, j = W.length - 1; i < W.length; j = i++) { const [xi, zi] = W[i], [xj, zj] = W[j]; if ((zi > z) !== (zj > z) && x < ((xj - xi) * (z - zi)) / (zj - zi) + xi) c = !c } return c }
+        const S = app.districts?.cur?.features?.settlements, R = app.districts?.cur?.d?.rect
+        const inner = (x, z) => S?.ready && R && x > R.x0 + 3.5 && x < R.x1 - 3.5 && z > R.z0 + 3.5 && z < R.z1 - 3.5
+        for (const y of ${JSON.stringify(years)}) {
+          const sites = new Set()
+          let n = 0
+          for (const q of S?.ready ? S.alive(y) : []) if (q.kind === 'tower' && inside(q.x, q.z) && !sites.has('d' + q.site)) { sites.add('d' + q.site); n++ }
+          for (const q of app.towns.alive(y)) if (q.kind === 'tower' && !inner(q.x, q.z) && inside(q.x, q.z) && !sites.has('t' + q.site)) { sites.add('t' + q.site); n++ }
+          out[y] = n
+        }
+        return out
+      })()`)
+      const cells = []
+      for (const y of years) {
+        const allowed = Math.floor(a.count * shareAt(a.share, y) + 1e-6)
+        if (got[y] > allowed) bad.push(`${a.id} ${y}: ${got[y]} towers, the record ${allowed}`)
+        cells.push(`${y} ${got[y]}/${allowed}`)
+      }
+      rows.push(`${a.id}: ${cells.join(', ')}`)
+    }
+    console.log(`      drawn/record: ${rows.join(' · ')}`)
+    if (bad.length) throw new Error(bad.slice(0, 6).join('; '))
+  })
+}
 // ==== [settlements] end =======================================================
 
 // ==== two districts, one across the years it is drawn at, and the coda ========= [koolaupoko]

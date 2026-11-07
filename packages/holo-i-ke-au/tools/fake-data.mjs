@@ -1255,6 +1255,7 @@ function testLayers(spots, eras) {
   const islands = {}
   const cropIslands = {}
   let zoningEntry = null
+  const towerSpot = [spots.villageNuuanu[0] + 1.2 / KX, spots.villageNuuanu[1]]
   // (Oʻahu's alone: the districts are over it, and every other island's towns
   // would only weigh on the frames of checks that have nothing to do with them)
   for (const p of packs) {
@@ -1280,6 +1281,8 @@ function testLayers(spots, eras) {
         const district = oahu && (inBox(lon, lat, B.koolaupoko) || inBox(lon, lat, B.nuuanu))
         const military = oahu && h < 40 && km(lon, lat, spots.military) < 1.3
         const town = oahu && km(lon, lat, spots.village) < 2.5
+        // (a high-rise quarter in the test Nuʻuanu, for the towers' record: towers.json)
+        const towers = oahu && h < 60 && km(lon, lat, towerSpot) < 0.6
         // cultivation: the wet lowland farmed, less by the Māhele, cane by 1896, little now
         const cult = low ? (r > 0.45 ? 0.7 : 0.4) : h < 400 ? 0.15 : 0
         masks.contact.cultivation[c] = Math.round(255 * cult)
@@ -1298,12 +1301,12 @@ function testLayers(spots, eras) {
         masks.contact.settlement[c] = byte(people)
         masks.mahele.settlement[c] = byte(people * 0.35)
         masks.kingdom.settlement[c] = byte((coast ? 50 : low ? 15 : h < 400 ? 2 : 0) + (town ? 300 : 0))
-        masks.now.settlement[c] = byte(military ? 150 : district ? (h < 60 ? 2600 : h < 200 ? 300 : 0) : coast ? 300 : low ? 40 : 0)
+        masks.now.settlement[c] = byte(military ? 150 : towers ? 15000 : district ? (h < 60 ? 2600 : h < 200 ? 300 : 0) : coast ? 300 : low ? 40 : 0)
         if (zoning) {
           // houses on the plain, a business core in the town, the military shore, farms above, forest reserve higher
-          const z = military ? 10 : town && h < 60 && km(lon, lat, spots.village) < 0.4 ? 4 : h < 60 ? 1 : h < 300 ? 8 : 9
+          const z = military ? 10 : towers ? 3 : town && h < 60 && km(lon, lat, spots.village) < 0.4 ? 4 : h < 60 ? 1 : h < 300 ? 8 : 9
           zoning[c] = z
-          lud[c] = { 1: 1, 4: 1, 10: 1, 8: 3, 9: 4 }[z]
+          lud[c] = { 1: 1, 3: 1, 4: 1, 10: 1, 8: 3, 9: 4 }[z]
         }
       }
     }
@@ -1374,7 +1377,30 @@ function testLayers(spots, eras) {
     },
   }
   writeFileSync(join(dir, 'manifest.json'), JSON.stringify(manifest, null, 2))
+  testTowers(towerSpot)
   console.log(`test layers for ${Object.keys(islands).join(', ')}; zoning for ${zoningEntry ? zoningEntry.pack : 'none'}; crops ${Object.entries(cropIslands).map(([id, e]) => `${id} ${KF.map((k) => `${k.id} ${Object.keys(e.layers[k.id].stats.texels).join('')}`).join(', ')}`).join('; ')}`)
+}
+
+/**
+ * A test towers' record (DATA.md "Towers, dated"; test-data/towers.json):
+ * an area of 1.6 km square over the high-rise quarter, counted at a dozen
+ * towers rising from 1955, fewer than its lots could carry, so the ramp
+ * thins them; and the island's share for the rest. A record of nothing.
+ */
+function testTowers([lon, lat]) {
+  const d = 0.8
+  const ring = [[-d, -d], [d, -d], [d, d], [-d, d]].map(([e, n]) => [r7(lon + e / KX), r7(lat + n / KZ)])
+  const share = [[1955, 0], [1965, 0.1], [1975, 0.45], [1990, 0.8], [2010, 0.95], [2023, 1]]
+  const doc = {
+    about: 'test towers (tools/fake-data.mjs): a count and a share on the made-up Oʻahu, not a record',
+    rule: 'test rule: a dozen towers, rising from 1955',
+    tower: { storeys: 10, metres: 30 },
+    first: 1955,
+    areas: [{ id: 'test-towers', name: 'Test towers Nuʻuanu', island: 'oahu', ring, count: 12, counted: { by: 'test-source-a' }, share, sources: ['test-source-a'] }],
+    islands: { oahu: { share: [[1955, 0], [1980, 0.5], [2023, 1]], sources: ['test-source-a'] } },
+    sources: ['test-source-a'],
+  }
+  writeFileSync(join(out, 'towers.json'), JSON.stringify(doc, null, 2))
 }
 // ==== end of the test districts and layers ==========================================
 
