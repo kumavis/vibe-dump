@@ -2062,8 +2062,9 @@ others' entries. `--downloads DIR` (or `$HOLO_STREETS_DOWNLOADS`) moves the
 downloads from `<os tmpdir>/holo-i-ke-au-bake/streets-downloads`; keep them
 outside the repo. Node 22 and `curl`, as for the other bakes. The bake is
 slow on Honolulu (each sheet is searched for its shift over the whole town,
-a few minutes a sheet on a quiet machine); a re-bake from the same downloads
-is byte-identical but for the `baked` date.
+a few minutes a sheet on a quiet machine); nothing in it is random, so a
+re-bake from the same downloads gives the same files but for the `baked`
+date.
 
 **Where things live.** `tools/lib/streets-sources.mjs` holds the towns and
 their boxes, the centreline layers (which segments are streets: named ones,
