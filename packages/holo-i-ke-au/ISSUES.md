@@ -306,3 +306,26 @@ fix has landed in `dist/` and been looked at again.
 - **Open:** measure each in turn (the perf check with one feature held off
   at a time), and bring the far views back to within a third of what they
   cost before, on a real GPU as well as the software one.
+
+### 14. The 102 schools dated only by a first record, and the 1882 schools' sites
+
+- **Carried from item 11.** 102 schools stand only from the first record that
+  shows them (1999, 2021 or 2024), a century late for some; the Board of
+  Education's 1882 report dates 62 government, select and aided schools that
+  no open map places.
+- **Open:** each of the 102 dated from its own history, the directories, the
+  newspapers or a register form; the 1882 schools placed from the registered
+  maps, the directories' street listings, the Sanborn sheets and today's
+  successors on the same ground, with their closing years from the later
+  reports.
+
+### 15. The early towns stand on the modelled grid before the 1910s sheets
+
+- **Carried from item 7.** The 1881–1903 island maps at 1:60,000 find few
+  streets, so Honolulu, Hilo, Lahaina and Wailuku keep the modelled grid until
+  the 1910–27 quadrangles, though Honolulu's street plan was surveyed by
+  1887.
+- **Open:** the streets dated by name from Bowser's directory of 1880–81,
+  Husted's from 1890, Thrum's lists and the 1887 map's printed index, and
+  by the registered maps and Sanborn sheets where their corners can be
+  matched to today's centrelines.
