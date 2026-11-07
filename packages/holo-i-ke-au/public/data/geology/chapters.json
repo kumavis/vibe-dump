@@ -291,7 +291,7 @@
       "age": 2.1,
       "ageSpan": [
         3,
-        0.1
+        1.6
       ],
       "note": "Koʻolau grown whole against Waiʻanae, its north-east flank into the sea as the Nuʻuanu avalanche, and what the streams made of the rest.",
       "sources": [
@@ -546,63 +546,13 @@
             "place": "firm",
             "numbers": "firm"
           }
-        },
-        {
-          "id": "honolulu-volcanics",
-          "title": "The late vents of Koʻolau",
-          "gloss": "Lēʻahi, Puowaina and their kin",
-          "kind": "eruption",
-          "age": 0.5,
-          "agePrecision": 0.4,
-          "stage": "maui-nui-parting",
-          "places": [
-            "leahi",
-            "puowaina",
-            "koolau-volcano"
-          ],
-          "landslides": [],
-          "summary": "Long after its shield had died and its flank had gone, small vents broke out again across the south-east end of the Koʻolau: Lēʻahi, Puowaina, Salt Lake and Koko Head among them, and last of all the vents of Tantalus and Koko. Claims of eruptions there in human times rest on misread dates.",
-          "tellings": [
-            {
-              "source": "sherrod-2007-geologic-map",
-              "says": "The Honolulu Volcanics have K–Ar ages from about 0.80 to somewhat younger than 0.1 Ma; the Tantalus–Sugar Loaf and Koko vents are chiefly about 0.1 Ma, perhaps as young as 0.04 Ma; reports of ages younger than 30,000 years “probably arise from misinterpretations of the data” (pp. 23–24)."
-            }
-          ],
-          "stops": [
-            {
-              "text": "The south-east end of the Koʻolau, where the late vents broke out.",
-              "place": "leahi",
-              "zoom": "far",
-              "age": 0.5,
-              "camera": {
-                "bearing": 20,
-                "pitch": 0.45,
-                "distance": 300,
-                "target": [
-                  -157.78,
-                  21.3
-                ]
-              }
-            }
-          ],
-          "sources": [
-            {
-              "id": "sherrod-2007-geologic-map",
-              "where": "pp. 23–24"
-            }
-          ],
-          "confidence": {
-            "date": "firm",
-            "place": "firm",
-            "numbers": "firm"
-          }
         }
       ]
     },
     {
       "id": "maui-nui",
       "label": "Maui Nui",
-      "age": 1.9,
+      "age": 1.75,
       "ageSpan": [
         2.5,
         0.3
@@ -620,8 +570,8 @@
           "title": "Molokaʻi",
           "gloss": "two shields, and a bank between them and Oʻahu",
           "kind": "birth",
-          "age": 1.9,
-          "agePrecision": 0.2,
+          "age": 1.75,
+          "agePrecision": 0.14,
           "stage": "koolau-after-nuuanu",
           "places": [
             "penguin-bank",
@@ -645,7 +595,7 @@
               "text": "Molokaʻi’s two shields rising beside Oʻahu, Penguin Bank between.",
               "place": "east-molokai-volcano",
               "zoom": "far",
-              "age": 1.9,
+              "age": 1.75,
               "camera": {
                 "bearing": 300,
                 "pitch": 0.4,
@@ -937,13 +887,13 @@
     },
     {
       "id": "hawaii-island",
-      "label": "Hawaiʻi rising and sinking",
+      "label": "Hawaiʻi rising and sinking, and the old islands’ last vents",
       "age": 0.6,
       "ageSpan": [
         1.2,
         0
       ],
-      "note": "The youngest island grows, slides and sinks; the older islands wait in their own long decline.",
+      "note": "The youngest island grows, slides and sinks; the older islands wait in their own long decline, the last small vents of Oʻahu and Kauaʻi breaking out on them.",
       "sources": [
         "moore-clague-1992-hawaii",
         "sherrod-2007-geologic-map",
@@ -1018,6 +968,56 @@
             "date": "soft",
             "place": "firm",
             "numbers": "soft"
+          }
+        },
+        {
+          "id": "honolulu-volcanics",
+          "title": "The late vents of Koʻolau",
+          "gloss": "Lēʻahi, Puowaina and their kin",
+          "kind": "eruption",
+          "age": 0.5,
+          "agePrecision": 0.4,
+          "stage": "hawaii-rising",
+          "places": [
+            "leahi",
+            "puowaina",
+            "koolau-volcano"
+          ],
+          "landslides": [],
+          "summary": "Long after its shield had died and its flank had gone, small vents broke out again across the south-east end of the Koʻolau: Lēʻahi, Puowaina, Salt Lake and Koko Head among them, and last of all the vents of Tantalus and Koko. Claims of eruptions there in human times rest on misread dates.",
+          "tellings": [
+            {
+              "source": "sherrod-2007-geologic-map",
+              "says": "The Honolulu Volcanics have K–Ar ages from about 0.80 to somewhat younger than 0.1 Ma; the Tantalus–Sugar Loaf and Koko vents are chiefly about 0.1 Ma, perhaps as young as 0.04 Ma; reports of ages younger than 30,000 years “probably arise from misinterpretations of the data” (pp. 23–24)."
+            }
+          ],
+          "stops": [
+            {
+              "text": "The south-east end of the Koʻolau, where the late vents broke out.",
+              "place": "leahi",
+              "zoom": "far",
+              "age": 0.5,
+              "camera": {
+                "bearing": 20,
+                "pitch": 0.45,
+                "distance": 300,
+                "target": [
+                  -157.78,
+                  21.3
+                ]
+              }
+            }
+          ],
+          "sources": [
+            {
+              "id": "sherrod-2007-geologic-map",
+              "where": "pp. 23–24"
+            }
+          ],
+          "confidence": {
+            "date": "firm",
+            "place": "firm",
+            "numbers": "firm"
           }
         },
         {
