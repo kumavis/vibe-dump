@@ -66,6 +66,13 @@
 //   keeps conservation land empty and the rural and agricultural sparse.
 //   Density and value still set how many and how fine; where the raster is
 //   absent, they set it all.
+// - The towers' record, from 1955 (DATA.md "Towers, dated", towers.json):
+//   in each of its areas (Waikīkī, downtown, Kakaʻako, Makiki, Salt Lake,
+//   Hilo …) the lots that carry a tower in the last year are ranked by their
+//   value and density, and a year raises towers on as many of the first of
+//   them as the record's share of the year gives, never more than its count
+//   (rankTowers, towerKind); the rest of an island goes by its island's
+//   share. The others take the walk-up or the mid-rise of before.
 // - The years. Each lot is asked, year by sampled year (every four years from
 //   contact, and at every date a patch or a feature changes), whether a
 //   building stands on it and of which kind; the answers become instances,
@@ -185,6 +192,8 @@ const LANDMARK = new Set(['church', 'spire', 'clock'])
 // Land Use Districts.
 export const ZONE = { none: 0, houses: 1, lowrise: 2, highrise: 3, commercial: 4, downtown: 5, industrial: 6, resort: 7, agricultural: 8, conservation: 9, military: 10, institutional: 11, parks: 12 }
 export const LUD = { urban: 1, rural: 2, agricultural: 3, conservation: 4 }
+// the classes a tower may stand in (DATA.md: high-rise, downtown, resort)
+const TOWER_ZONES = new Set([ZONE.highrise, ZONE.downtown, ZONE.resort])
 // the zoning applies to the modern era's kinds (after 1960), the Land Use
 // Districts from 1964 (DATA.md)
 const ZONING_FROM = 1960
@@ -343,6 +352,60 @@ export function classAt(img, r, x, z) {
   const j = Math.floor(((z - r.z0) / (r.z1 - r.z0)) * img.H)
   if (i < 0 || j < 0 || i >= img.W || j >= img.H) return 0
   return img.px[j * img.W + i]
+}
+
+// --- the towers' record -------------------------------------------------------------
+
+// The record of when the towers rose (DATA.md "Towers, dated", towers.json):
+// for each area, today's count of buildings of ten storeys or 30 m and over
+// and the share of them standing by each year, and for each island the share
+// alone, for its towers outside the areas. The zoning, the density and the
+// value say which lots could carry a tower; the record says how many of them
+// do in a year (Scatter.rankTowers, towerKind).
+
+/** towers.json, once per app (null where the data has none, or it cannot be read). */
+export function loadTowers(app) {
+  app.towersRecord ??= fetch(app.data.abs('towers.json'))
+    .then((r) => (r.ok ? r.json() : null))
+    .catch((err) => {
+      app.warn(`towers.json: ${err.message} (towers stand as the zoning, density and value give them)`)
+      return null
+    })
+  return app.towersRecord
+}
+
+/** A share series ([[year, share], …], rising) at a year: 0 before its first year, linear between, its last after. */
+export function shareAt(series, y) {
+  if (!series?.length || y < series[0][0]) return 0
+  for (let i = 1; i < series.length; i++) {
+    const [y1, s1] = series[i]
+    if (y <= y1) {
+      const [y0, s0] = series[i - 1]
+      return s0 + ((s1 - s0) * (y - y0)) / Math.max(1e-9, y1 - y0)
+    }
+  }
+  return series.at(-1)[1]
+}
+
+/**
+ * The record for one island, in world units: its areas (ring, box, count,
+ * share) and the island's own share for the rest of it, or null where the
+ * record has neither.
+ */
+export function towerAreas(rec, island, proj) {
+  if (!rec) return null
+  const areas = (rec.areas || [])
+    .filter((a) => a.island === island && Array.isArray(a.ring) && a.ring.length >= 3 && a.share?.length)
+    .map((a) => {
+      const ring = a.ring.map((c) => proj.toWorld(c))
+      const xs = ring.map((p) => p[0])
+      const zs = ring.map((p) => p[1])
+      return { id: a.id, ring, box: [Math.min(...xs), Math.min(...zs), Math.max(...xs), Math.max(...zs)], count: Number.isFinite(a.count) ? a.count : null, share: a.share }
+    })
+  const own = rec.islands?.[island]
+  const rest = own?.share?.length ? { id: `${island}-rest`, count: null, share: own.share } : null
+  if (!areas.length && !rest) return null
+  return { areas, rest, from: Math.min(...[...areas, ...(rest ? [rest] : [])].map((a) => a.share[0][0])) }
 }
 
 // --- the rules every scatter shares -------------------------------------------------
@@ -708,6 +771,151 @@ export class Scatter {
     return 35 + 115 * smooth(4.0, 4.7, Math.log10(Math.max(1, d)))
   }
 
+  /** The record's area a lot stands in, else its island's rest, else null. */
+  towerAreaAt(x, z) {
+    const T = this.towerRec
+    if (!T) return null
+    for (const a of T.areas) if (x >= a.box[0] && x <= a.box[2] && z >= a.box[1] && z <= a.box[3] && inside(a.ring, x, z)) return a
+    return T.rest
+  }
+
+  /**
+   * Whether a lot carries a tower in the timeline's last year as the model
+   * has it (the zoning, the density and the value, as scatterLot asks them),
+   * and if so how strongly it calls for one: its value with its density, so
+   * the record's first towers go up where the lots are worth most and the
+   * people are most (−1 if it carries none). The old downtown's lots are
+   * taken as scatterLot will find them: those its mid-rise stood on before
+   * the war, the ground aside.
+   */
+  towerCall(l, cap) {
+    const NS = this.Ys.length
+    const S_ = this.samples
+    let core = false
+    for (let n = 0; n < NS && S_[n].y <= CORE_UNTIL && !core; n++) {
+      const s = S_[n]
+      if (s.y < 1900) continue
+      const v = this.byteAt(l, s)
+      const vf = this.fillByte(l, s, v)
+      if (vf <= 0) continue
+      const d = this.people(v)
+      const [F] = this.fill(s, this.people(vf))
+      if (l.rank < F * l.w * cap(n) && this.kindAt(s.y, d, this.valueAt(l, s, d), l, false) === KIND.midrise) core = true
+    }
+    const n = NS - 1
+    const s = S_[n]
+    let v = this.byteAt(l, s)
+    const c = core && s.y >= 1960 && (l.zoned ? l.zone === ZONE.downtown || l.zone === ZONE.highrise : true)
+    if (c) v = Math.max(v, CORE_BYTE + 14 * l.r6)
+    const vf = this.fillByte(l, s, v)
+    if (vf <= 0) return -1
+    const d = this.people(v)
+    const [F] = this.fill(s, this.people(vf))
+    if (!(c || l.rank < F * l.w * cap(n))) return -1
+    const was = l.core
+    l.core = c
+    const val = this.valueAt(l, s, d)
+    const k = this.kindAt(s.y, d, val, l, false)
+    l.core = was
+    return k === KIND.tower ? val + 0.3 * smooth(3.5, 4.7, Math.log10(Math.max(1, d))) + 0.02 * l.r7 : -1
+  }
+
+  /**
+   * The record's ramp over a batch of lots (the district's all at once, an
+   * island's tile by tile): in each area, the m lots that carry a tower in
+   * the last year ranked by how strongly they call for one, so that in a
+   * year the first share × `cap` of them stand (towerKind) and no others do.
+   * `cap` is m, or where the record counts the area the fewer of m and the
+   * batch's quota of the count: the whole count for a batch that holds the
+   * whole area (`tile` null), and for an island's tile (`tile` its corner)
+   * the count's part that the tile's share of the area's tower ground gives
+   * it (towerQuota). The quotas sum to the count, so no year ever holds more
+   * towers in an area than the record gives it.
+   */
+  rankTowers(lots, cap, tile = null) {
+    if (!this.towerRec) return
+    const groups = new Map()
+    for (const l of lots) {
+      l.tG = null
+      const a = this.towerAreaAt(l.x, l.z)
+      if (!a) continue
+      let g = groups.get(a)
+      if (!g) groups.set(a, (g = { area: a, lots: [], m: 0, cap: 0 }))
+      l.tG = g
+      l.tI = -1
+      const p = this.towerCall(l, cap)
+      if (p >= 0) g.lots.push([p, l])
+    }
+    this.towerGroups ??= new Map()
+    for (const g of groups.values()) {
+      g.lots.sort((a, b) => b[0] - a[0])
+      g.lots.forEach(([, l], i) => (l.tI = i))
+      g.m = g.lots.length
+      g.lots = null
+      g.cap = g.area.count === null ? g.m : Math.min(g.m, tile ? this.towerQuota(g.area, tile) : g.area.count)
+      const t = this.towerGroups.get(g.area.id) || { count: g.area.count, lots: 0, cap: 0 }
+      t.lots += g.m
+      t.cap = +(t.cap + g.cap).toFixed(2)
+      this.towerGroups.set(g.area.id, t)
+    }
+  }
+
+  /** An island tile's quota of an area's count (`tile` its corner): the count × the tile's share of the area's tower ground. */
+  towerQuota(a, [x0, z0]) {
+    a.weight ??= this.towerGround(a, a.box)
+    if (!a.weight) return 0
+    return (a.count * this.towerGround(a, [x0, z0, x0 + GRID_TILE, z0 + GRID_TILE])) / a.weight
+  }
+
+  /**
+   * An area's ground within a box that may carry a tower: the zoning
+   * raster's texels of classes 3, 5 and 7 whose middles lie in both, or
+   * where the island has no zoning, every texel of the settlement grid
+   * whose middle does.
+   */
+  towerGround(a, [bx0, bz0, bx1, bz1]) {
+    const img = this.zoning?.zoning
+    const r = this.zoning?.rect
+    const W = img ? img.W : this.crop.w
+    const H = img ? img.H : this.crop.h
+    const x0 = img ? r.x0 : this.crop.x0
+    const z0 = img ? r.z0 : this.crop.z0
+    const sx = img ? (r.x1 - r.x0) / W : this.crop.sx
+    const sz = img ? (r.z1 - r.z0) / H : this.crop.sz
+    const lo = [Math.max(bx0, a.box[0]), Math.max(bz0, a.box[1])]
+    const hi = [Math.min(bx1, a.box[2]), Math.min(bz1, a.box[3])]
+    if (lo[0] >= hi[0] || lo[1] >= hi[1]) return 0
+    let w = 0
+    for (let j = Math.max(0, Math.floor((lo[1] - z0) / sz)); j <= Math.min(H - 1, Math.floor((hi[1] - z0) / sz)); j++) {
+      const z = z0 + (j + 0.5) * sz
+      if (z < lo[1] || z >= hi[1]) continue
+      for (let i = Math.max(0, Math.floor((lo[0] - x0) / sx)); i <= Math.min(W - 1, Math.floor((hi[0] - x0) / sx)); i++) {
+        const x = x0 + (i + 0.5) * sx
+        if (x < lo[0] || x >= hi[0] || !inside(a.ring, x, z)) continue
+        if (!img || TOWER_ZONES.has(img.px[j * W + i])) w++
+      }
+    }
+    return w
+  }
+
+  /**
+   * A lot's kind in sample n after the record (rankTowers): a tower where it
+   * is among the first of its area's ranked lots the share of the year
+   * before allows (so a year never holds more than the record gives it),
+   * whatever the era's turn would have put up there; where it is not, the
+   * walk-up or, downtown, the mid-rise that stood before the towers.
+   */
+  towerKind(l, n, kind) {
+    const g = l.tG
+    if (!g || kind < 0) return kind
+    const name = KIND_NAMES[kind]
+    if (kind === KIND.kauhale || LANDMARK.has(name)) return kind
+    const y = this.Ys[Math.max(0, n - 1)]
+    if (l.tI >= 0 && l.tI < Math.floor(shareAt(g.area.share, y) * g.cap + 1e-6)) return KIND.tower
+    if (kind !== KIND.tower) return kind
+    return l.core || l.zone === ZONE.downtown || l.zone === ZONE.commercial ? KIND.midrise : KIND.walkup
+  }
+
   /** A lot's density in a sample, as a byte: the people who live there. */
   byteAt(l, s) {
     return l.b[s.a] + (l.b[s.a + 1] - l.b[s.a]) * s.t - s.early
@@ -767,6 +975,8 @@ export class Scatter {
         // (a kauhale only on its yard's lot; a lot that filled by its yard's dither alone stands empty once the kauhale has gone)
         if (kind === KIND.kauhale && !K) kind = KIND.hale
         if (kind >= 0 && kind !== KIND.kauhale && !(core || l.rank < F * l.w * c)) kind = -1
+        // (as many towers as the record gives the year: towerKind)
+        if (l.tG && s.y >= this.towerRec.from) kind = this.towerKind(l, n, kind)
         if (kind >= 0) {
           const nv = kind === KIND.kauhale ? KAUHALE.length : this.kits[KIND_NAMES[kind]].length
           const variant = this.variantOf(l, kind, nv)
@@ -1209,6 +1419,7 @@ export class Settlements extends Scatter {
     this.zoning = { ...zoning, rect: r }
     this.places = valuePlaces(this.app, m)
     this.townTerm(m, d.parent, 'island')
+    this.towerRec = towerAreas(await loadTowers(this.app), d.parent, this.app.data.proj)
     this.loadMs = Math.round(performance.now() - t0)
     // the rest, a second or two of work in all, in slices a frame apart
     const t1 = performance.now()
@@ -1729,6 +1940,7 @@ export class Settlements extends Scatter {
     const allows = (q, relief, e) => this.allows(q.x, q.z, q.ax, q.az, q.a, relief, e)
     const cap = (n) => this.cap[n]
     const emit = (it) => inst.push(it)
+    this.rankTowers(lots, cap)
     for (let li = 0; li < lots.length; li++) {
       if (li % 256 === 0 && !(await breathe())) return false
       this.scatterLot(lots[li], allows, cap, emit)
@@ -2201,6 +2413,7 @@ export class Settlements extends Scatter {
       landmarks: this.landmarks.map((L) => `${L.name || L.kind} ${L.from}`),
       named: (this.named || []).map((n) => `${n.id} (${n.type}) ${n.from}–${Number.isFinite(n.to) ? n.to : ''} ×${n.e.toFixed(2)}`),
       towns: this.townTerms,
+      towers: this.towerGroups ? Object.fromEntries(this.towerGroups) : null,
       zoning: { zoning: this.zoning.zoning ? `${this.zoning.zoning.W}×${this.zoning.zoning.H}` : null, lud: this.zoning.lud ? `${this.zoning.lud.W}×${this.zoning.lud.H}` : null },
       value: this.values ? 'mask' : 'modelled',
       cap: +(this.cap[Math.max(0, n)] ?? 1).toFixed(2),

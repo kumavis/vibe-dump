@@ -294,8 +294,10 @@ paepae before contact; thatch beside frame houses, adobe and coral block,
 with churches, in the early kingdom; wood-frame houses, stores, masonry
 blocks downtown, plantation camps and mills by the 1890s; bungalows and
 plantation towns in the territory; towers and suburbs now. Density sets how
-close and how large; the era sets what. Where the record gives a town's
-extent (the 1881 and 1899 survey sheets for Honolulu) it bounds the placement.
+close and how large; the era sets what. How many towers stand in a year,
+area by area, is the record's (DATA.md "Towers, dated"): Waikīkī's went up
+before Kakaʻako's. Where the record gives a town's extent (the 1881 and 1899
+survey sheets for Honolulu) it bounds the placement.
 
 **Crops by class.** At the island zooms and in a district the ground shows
 what grew in the year (DATA.md "Crops, on the era layers"), from the

@@ -45,7 +45,7 @@ import { decodeImage } from '../data/image.js'
 import { decodeGrey } from '../data/layers.js'
 import { holds, spanOf } from '../data/district.js'
 import { distanceTransform, blur, drainageArea } from '../data/decode.js'
-import { Scatter, KIND_NAMES, KIND, PADS, GRID_TILE, PART, ZONE_FLOOR, LIFT, clamp, smooth, mulberry32, vnoise, inside, loadZoning, classAt, islandMetres, valuePlaces, placeTerms, reachFor, censusOf } from './settlements.js'
+import { Scatter, KIND_NAMES, KIND, PADS, GRID_TILE, PART, ZONE_FLOOR, LIFT, clamp, smooth, mulberry32, vnoise, inside, loadZoning, classAt, islandMetres, valuePlaces, placeTerms, reachFor, censusOf, loadTowers, towerAreas } from './settlements.js'
 
 // the camera's distance over which the island's buildings come in (as a
 // district's do: config.js DISTRICT.rig)
@@ -250,6 +250,7 @@ class IslandTowns extends Scatter {
     this.places = valuePlaces(app, m)
     this.works = works
     this.townTerm(m, this.id, 'district')
+    this.towerRec = towerAreas(await loadTowers(app), this.id, app.data.proj)
     // (the patches of this island must be decoded before its ground is asked of)
     this.needPatches = (patchList || []).some((p) => p.pack === this.id)
     // the features of the districts over this island: loʻi, fishponds, the village
@@ -514,6 +515,7 @@ class IslandTowns extends Scatter {
     const allows = (q, relief, e) => this.allows(q, relief, e)
     const cap = () => 1
     const emit = (it) => inst.push(it)
+    this.rankTowers(list, cap, [x0, z0])
     for (const l of list) this.scatterLot(l, allows, cap, emit)
     // packed, in an order of its own (the first of them a fair thinning)
     const N = inst.length
@@ -866,6 +868,7 @@ class IslandTowns extends Scatter {
       zoning: this.zoning ? { zoning: this.zoning.zoning ? `${this.zoning.zoning.W}×${this.zoning.zoning.H}` : null, lud: this.zoning.lud ? `${this.zoning.lud.W}×${this.zoning.lud.H}` : null } : null,
       value: this.values ? 'mask' : 'modelled',
       towns: this.townTerms ?? null,
+      towers: this.towerGroups ? Object.fromEntries(this.towerGroups) : null,
       loadMs: this.loadMs ?? null,
       buildMs: Math.round(this.times.build),
       msPerTile: this.times.tiles ? +(this.times.build / this.times.tiles).toFixed(2) : null,
