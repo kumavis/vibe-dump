@@ -166,8 +166,16 @@ fix has landed in `dist/` and been looked at again.
   Oʻahu; hillside contours give a few false finds; no closed street has a
   `to` year yet (the Sanborn maps and the registered Honolulu surveys are
   recorded as wanted).
-- **Status:** landed on the branch; the settlements' real-data checks on the
-  merged build still to pass.
+- **Then:** on the merged build two grid lots at the Honolulu harbour front
+  failed the checks: a block of 1896 on the drawn water of a slip between
+  two piers (the scatter had tested the nearest texel, a pier, where the
+  drawn ground interpolates to water), and a frame house of 1899 inside a
+  street's cover by its building's reach beyond its lot. The scatter now
+  reads the ground as it is drawn and refuses water under any part of a
+  footprint, and a grid lot gives way to a street within its cover by the
+  whole of its lot.
+- **Status:** published in version 21; the streets' and the water checks
+  pass on real data.
 
 ### 8. More of the historic buildings, the palace first
 
