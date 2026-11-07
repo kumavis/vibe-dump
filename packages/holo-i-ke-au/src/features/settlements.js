@@ -1017,10 +1017,11 @@ export class Scatter {
           const e = this.epochAt[n]
           const key = kind * 16 + variant
           // (an answer that no epoch changes is kept for all of them; one the works decide is the sample's own,
-          // since a work's years need not be an epoch's: keyed from 128 up, the epochs below)
-          let top = cache.get(key * 256 + 255)
-          if (top === undefined) top = cache.get(key * 256 + 128 + n)
-          if (top === undefined) top = cache.get(key * 256 + e)
+          // since a work's years need not be an epoch's: keyed from 512 up, the epochs below, in a key's
+          // own thousand, so a district of many sample years never reads another kind's answer)
+          let top = cache.get(key * 1024 + 1023)
+          if (top === undefined) top = cache.get(key * 1024 + 512 + n)
+          if (top === undefined) top = cache.get(key * 1024 + e)
           if (top === undefined) {
             const p = this.pose(l, kind, variant)
             const relief = KINDS[KIND_NAMES[kind]].relief
@@ -1044,7 +1045,7 @@ export class Scatter {
               dep = this.dep
               depWorks = this.depWorks
             }
-            cache.set(key * 256 + (dep ? (depWorks ? 128 + n : e) : 255), top)
+            cache.set(key * 1024 + (dep ? (depWorks ? 512 + n : e) : 1023), top)
           }
           if (top !== null) {
             state = { key, kind, variant, top, d }
