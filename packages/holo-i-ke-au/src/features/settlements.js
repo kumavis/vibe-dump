@@ -67,10 +67,12 @@
 //   contact, and at every date a patch or a feature changes), whether a
 //   building stands on it and of which kind; the answers become instances,
 //   each with the span of years it stands, which the shader fades by an
-//   eased year (kit.js aSpan): density changes ease, kinds crossfade at their
-//   boundaries (the one going and the one coming dithered over complementary
-//   pixels, never both on one), and a change forced by the ground (a loʻi
-//   laid, a reef filled) is never crossed fading.
+//   eased year (kit.js aSpan): each lot changes at a half year of its own
+//   between two samples (a yard's lots at their host's), a change forced by
+//   the ground (a loʻi laid, a reef filled) at the half year before it, the
+//   building going faded out before the one coming fades in, never the two
+//   at once; and the year eased to is the timeline's whole year, so a view
+//   at rest shows every lot with one building, whole, or none (ISSUES.md 9).
 //
 // The kinds by era (buildings.js), each lot moving on at its own time, the
 // densest first: kauhale before about 1820, each hale on its own ground;
@@ -193,12 +195,16 @@ export const ZONE_FLOOR = { [ZONE.downtown]: 9000, [ZONE.resort]: 8000, [ZONE.co
 // thinning before 1450 changes anything there)
 const STEP = 4
 const PRE = [1100, 1200, 1300, 1400, 1450, 1600, 1700]
-// the crossfade between kinds or densities (years either side of a moment
-// each lot draws for itself between two samples, so a year shows few lots
-// caught half-faded), and a fade forced by the ground (inside the years the
-// ground allows)
-const SOFT = 0.6
-const HARD = 2.5
+// A lot's change of kind or density falls at a moment of its own between two
+// samples, on a half year, and one at a break (where the ground or a feature
+// changes) at the half year before the break: the building going fades out
+// over the FADE before the moment and the one coming in over the FADE after
+// it, never both at once on one ground, and every fade lies within a half
+// year of its moment, so at a whole year (where the buildings rest: the
+// year they ease to is the timeline's rounded, as its label reads) no lot is
+// caught fading and none shows two buildings dithered into each other.
+const FADE = 0.4
+const GAP_T = 0.03
 // far ends of a span that never closes
 const NEVER = 1e5
 
@@ -906,32 +912,38 @@ export class Scatter {
     const kd = KINDS[name]
     const p = l.landmark ? { x: l.x, z: l.z, a: l.face, f: 1 } : this.pose(l, run.kind, run.variant)
     const span = new Float32Array(4)
-    // A soft change between samples n − 1 and n falls at the lot's own
-    // moment between them, the same for what goes and what comes, over the
-    // same window (inside the two samples where they allow it): so the fade
-    // in and the fade out it replaces are one curve, and the shader dithers
-    // them over complementary pixels (kit.js), never both on one.
-    const soft = (n) => {
+    // A change at sample n falls at a moment the same for what goes and what
+    // comes (a yard's lots take their host's, so a kauhale and the houses
+    // after it on its yard change together): a soft one at a half year of the
+    // lot's own between samples n − 1 and n, one at a break at the half year
+    // before it. What goes fades out before the moment and what comes fades
+    // in after it, one after the other, never over each other.
+    const key = l.host ?? l
+    const moment = (n) => {
       const a = Ys[n - 1]
       const b = Ys[n]
-      const h = Math.min(SOFT, (b - a) / 2)
-      const t = a + h + ihash(l.tile ?? 0, n, Math.floor((l.rank ?? 0) * 1e6)) * (b - a - 2 * h)
-      return [t - h, t + h]
+      if (this.isBreak[n] || l.landmark) return b - 0.5
+      const k = Math.floor(b - a)
+      if (k < 1) return (a + b) / 2
+      return Math.floor(a) + 0.5 + Math.min(k - 1, Math.floor(ihash(key.tile ?? 0, n, Math.floor((key.rank ?? 0) * 1e6)) * k))
     }
+    const w = (n) => Math.min(FADE, Math.max(0.05, (Ys[n] - Ys[n - 1]) / 2 - GAP_T))
     if (run.n0 === 0) {
       span[0] = -NEVER
       span[1] = -NEVER + 1
-    } else if (this.isBreak[run.n0] || l.landmark) {
-      span[0] = Ys[run.n0]
-      span[1] = Ys[run.n0] + HARD
-    } else [span[0], span[1]] = soft(run.n0)
+    } else {
+      const t = moment(run.n0)
+      span[0] = t + GAP_T
+      span[1] = t + w(run.n0)
+    }
     if (end >= NS) {
       span[2] = NEVER
       span[3] = NEVER + 1
-    } else if (this.isBreak[end]) {
-      span[2] = Ys[end] - HARD
-      span[3] = Ys[end] - 0.01
-    } else [span[2], span[3]] = soft(end)
+    } else {
+      const t = moment(end)
+      span[2] = t - w(end)
+      span[3] = t - GAP_T
+    }
     const stretch = name === 'tower' ? this.towerHeight(run.d) / TOWER_H : 1
     const jit = 0.94 + 0.12 * (l.r5 ?? 0.5)
     const one = (q, variant, top) => {
@@ -1696,7 +1708,8 @@ export class Settlements extends Scatter {
 
   meshes() {
     const rect = this.rec.d.rect
-    this.material = objectMaterial(this.app.shared, this.own, { fade: [50, 70], grow: true })
+    // (switched in whole once the district's weight passes half, as the island's yield theirs: kit.js)
+    this.material = objectMaterial(this.app.shared, this.own, { fade: [50, 70], grow: true, switch: true })
     // the variants, each its own instanced mesh
     this.variants = []
     const byKey = new Map()
@@ -2066,7 +2079,8 @@ export class Settlements extends Scatter {
   // --- every frame -----------------------------------------------------------------
 
   update(dt, show, distance) {
-    const target = this.app.timeline.year
+    // (to the whole year the timeline's label reads, where no lot is caught fading)
+    const target = Math.round(this.app.timeline.year)
     // the year eases, so a jump grows the town through the years between
     if (dt > 0) {
       this.yearNow += (target - this.yearNow) * (1 - Math.exp(-dt * 2.2))

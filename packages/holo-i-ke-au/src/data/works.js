@@ -20,7 +20,8 @@
 //   stretch through a `tunnel` of its own work is left out, and a work with
 //   `built` grows along its length over those years.
 // - the blocks: one building each, at a point or fitted to a footprint
-//   (the polygon's principal axes), with its storeys, its use and its
+//   (the tightest box about it; two standing in the same years never on one
+//   ground: apart), with its storeys, its use and its
 //   years (BLOCK_STRIDE floats each); across a `built` span each comes up
 //   in a year of its own.
 // - the names: the military land's, an airfield's and each named road's,
@@ -315,7 +316,12 @@ function boxRing(x, z, dir, hx, hz, start, end) {
   return { rings: [Float32Array.from(ring.flat())], box: boxOf([ring]), start, end, part: 'block' }
 }
 
-/** A footprint's principal axes: centre, turn, length and width (world units), from a ring. */
+/**
+ * A footprint's box: centre, turn, length and width (world units), from a
+ * ring: the tightest rectangle about it, to a degree (its own walls; the
+ * spread of its corners turned the box of a crooked or an L-shaped one off
+ * its walls and onto its neighbours).
+ */
 function footprint(ring) {
   let cx = 0
   let cz = 0
@@ -323,31 +329,110 @@ function footprint(ring) {
     cx += x / ring.length
     cz += z / ring.length
   }
-  let sxx = 0
-  let szz = 0
-  let sxz = 0
-  for (const [x, z] of ring) {
-    sxx += (x - cx) ** 2
-    szz += (z - cz) ** 2
-    sxz += (x - cx) * (z - cz)
+  let best = null
+  for (let d = 0; d < 90; d++) {
+    const t = (d * Math.PI) / 180
+    const c = Math.cos(t)
+    const sn = Math.sin(t)
+    let a0 = Infinity
+    let a1 = -Infinity
+    let b0 = Infinity
+    let b1 = -Infinity
+    for (const [x, z] of ring) {
+      const u = (x - cx) * c + (z - cz) * sn
+      const v = -(x - cx) * sn + (z - cz) * c
+      a0 = Math.min(a0, u)
+      a1 = Math.max(a1, u)
+      b0 = Math.min(b0, v)
+      b1 = Math.max(b1, v)
+    }
+    const area = (a1 - a0) * (b1 - b0)
+    if (!best || area < best.area) best = { area, t, a0, a1, b0, b1 }
   }
-  const th = 0.5 * Math.atan2(2 * sxz, sxx - szz)
+  // (its length along x of the box: the longer side)
+  let { t: th, a0: u0, a1: u1, b0: v0, b1: v1 } = best
+  if (v1 - v0 > u1 - u0) {
+    ;[u0, u1, v0, v1] = [v0, v1, -u1, -u0]
+    th += Math.PI / 2
+  }
   const ux = [Math.cos(th), Math.sin(th)]
-  let u0 = Infinity
-  let u1 = -Infinity
-  let v0 = Infinity
-  let v1 = -Infinity
-  for (const [x, z] of ring) {
-    const u = (x - cx) * ux[0] + (z - cz) * ux[1]
-    const v = -(x - cx) * ux[1] + (z - cz) * ux[0]
-    u0 = Math.min(u0, u)
-    u1 = Math.max(u1, u)
-    v0 = Math.min(v0, v)
-    v1 = Math.max(v1, v)
-  }
   const mu = (u0 + u1) / 2
   const mv = (v0 + v1) / 2
   return { x: cx + mu * ux[0] - mv * ux[1], z: cz + mu * ux[1] + mv * ux[0], dir: th, L: u1 - u0, W: v1 - v0 }
+}
+
+/** Whether two blocks' boxes (x, z, dir, L, W) come within `gap` of each other (separating axes). */
+function boxesMeet(a, b, gap) {
+  const corners = (q, m) => {
+    const c = Math.cos(q.dir)
+    const sn = Math.sin(q.dir)
+    return [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => [q.x + u * (q.L / 2 + m) * c - v * (q.W / 2 + m) * sn, q.z + u * (q.L / 2 + m) * sn + v * (q.W / 2 + m) * c])
+  }
+  const A = corners(a, gap)
+  const B = corners(b, 0)
+  for (const P of [A, B]) {
+    for (let i = 0; i < 2; i++) {
+      const nx = -(P[i + 1][1] - P[i][1])
+      const nz = P[i + 1][0] - P[i][0]
+      let a0 = Infinity
+      let a1 = -Infinity
+      let b0 = Infinity
+      let b1 = -Infinity
+      for (const [x, z] of A) {
+        const d = x * nx + z * nz
+        a0 = Math.min(a0, d)
+        a1 = Math.max(a1, d)
+      }
+      for (const [x, z] of B) {
+        const d = x * nx + z * nz
+        b0 = Math.min(b0, d)
+        b1 = Math.max(b1, d)
+      }
+      if (a1 <= b0 || b1 <= a0) return false
+    }
+  }
+  return true
+}
+
+/**
+ * Two blocks with footprints standing in some year together whose boxes
+ * meet (with a metre and a half between, for the eaves a kit carries past
+ * its walls) are drawn smaller about their middles, a little at a time, to
+ * no less than 0.7 of their boxes; a pair still meeting then loses its
+ * smaller block. In place; the order of `blocks` is kept.
+ */
+function apart(blocks, gap = 0.015) {
+  const fp = blocks.filter((b) => b.L > 0 && b.W > 0)
+  for (const b of fp) b.k = 1
+  const together = (a, b) => a.keep[0] <= b.keep[1] && b.keep[0] <= a.keep[1]
+  const R = (b) => Math.hypot(b.L, b.W) / 2
+  for (let pass = 0; pass < 8; pass++) {
+    let moved = false
+    for (let i = 0; i < fp.length; i++) {
+      for (let j = i + 1; j < fp.length; j++) {
+        const a = fp[i]
+        const b = fp[j]
+        if (a.gone || b.gone || Math.hypot(a.x - b.x, a.z - b.z) > R(a) + R(b) + gap || !together(a, b) || !boxesMeet(a, b, gap)) continue
+        for (const q of [a, b]) {
+          if (q.k <= 0.7) continue
+          q.k *= 0.95
+          q.L *= 0.95
+          q.W *= 0.95
+          moved = true
+        }
+      }
+    }
+    if (!moved) break
+  }
+  for (let i = 0; i < fp.length; i++) {
+    for (let j = i + 1; j < fp.length; j++) {
+      const a = fp[i]
+      const b = fp[j]
+      if (!a.gone && !b.gone && together(a, b) && boxesMeet(a, b, gap)) (a.L * a.W < b.L * b.W ? a : b).gone = true
+    }
+  }
+  for (let i = blocks.length - 1; i >= 0; i--) if (blocks[i].gone) blocks.splice(i, 1)
+  for (const b of fp) delete b.k
 }
 
 function hash(i, s = 0) {
@@ -549,8 +634,6 @@ export function decodeWorks(fc, { lat0 = 20.5, lon0 = -157.5 } = {}) {
         if (ring.length < 3) continue
         const fp = footprint(ring)
         put(fp.x, fp.z, fp.dir, fp.L, fp.W)
-        // (the ground kept is the building drawn, its footprint's box, which holds the footprint: no tree in an L's corner stands through its roof)
-        excl.polys.push(boxRing(fp.x, fp.z, fp.dir, fp.L / 2, fp.W / 2, start, end))
       }
       for (const c of pointsOf(f.geometry)) {
         const [x, z] = proj.toWorld(c)
@@ -560,6 +643,12 @@ export function decodeWorks(fc, { lat0 = 20.5, lon0 = -157.5 } = {}) {
     // (a tunnel is not drawn: the road comes out beyond it)
     feats.push(meta)
   }
+  // no two blocks standing in the same years on one ground (ISSUES.md 9): the
+  // box an L-shaped or a crooked footprint is drawn in can reach over its
+  // neighbour's, and two buildings in one place fight for the same pixels
+  apart(blocks)
+  // (the ground kept is the building drawn, its footprint's box, which holds the footprint: no tree in an L's corner stands through its roof)
+  for (const b of blocks) if (b.L > 0 && b.W > 0) excl.polys.push(boxRing(b.x, b.z, b.dir, b.L / 2, b.W / 2, b.keep[0], b.keep[1]))
   // a block with no footprint of its own lines up with the nearest runway of its work, if one is near
   for (const b of blocks) {
     if (b.dir !== null) continue

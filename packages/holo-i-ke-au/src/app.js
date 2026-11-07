@@ -39,6 +39,7 @@ import { Timeline, GeoClock } from './time.js'
 import { Geology } from './render/geology.js'
 import { Towns } from './features/towns.js'
 import { Works } from './features/works.js'
+import { overlapReport } from './features/footprints.js'
 import { CropTrees } from './features/crops.js'
 
 const smooth = (a, b, x) => {
@@ -153,6 +154,8 @@ export class App {
     this.towns = new Towns(this)
     // the works of the last century and a half, by their dates, on the islands in their slots (features/works.js)
     this.works = new Works(this)
+    // (for the tools: the buildings standing in a year near a point, and those that share their ground: features/footprints.js)
+    this.footprints = (year, x, z, radius) => overlapReport(this, year, x, z, radius)
     // and the trees of the year's pastures, orchards and lawns (features/crops.js)
     this.cropTrees = new CropTrees(this)
     this.ocean = new Ocean(this.shared, this.shared.uniforms)

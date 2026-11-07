@@ -358,20 +358,25 @@ void main() {
   #else
   float dist = distance(cameraPosition, wp.xyz);
   #endif
+  #ifdef USE_SWITCH
+  // (a district's buildings come in whole as its weight passes half, as the island's go: towns.js)
+  float fade = step(0.5, uShow) * (1.0 - smoothstep(uFadeNear, uFadeFar, dist));
+  #else
   float fade = uShow * (1.0 - smoothstep(uFadeNear, uFadeFar, dist));
+  #endif
   int f = int(aFeat + 0.5);
   if (f > 0) fade *= featV(uFeatK, f);
   #ifdef USE_INSTANCING
   #ifdef USE_GROW
-  // In by the year, and out by it. A building fading out keeps the pixels
-  // above its curve and the one fading in on its lot takes those below the
-  // same curve (settlements.js gives the two one window), so they never draw
-  // over each other; and an island's building inside a district that is down
-  // gives the district's own the pixels it takes, the same way.
+  // In by the year, and out by it: the one going on a lot fades out before
+  // the one coming fades in (settlements.js), so the two never draw over
+  // each other; and an island's building inside a district that is down goes
+  // whole as the district's weight passes half, when the district's come in
+  // whole (USE_SWITCH).
   fade *= smoothstep(aSpan.x, aSpan.y, uYearNow);
   float gone = smoothstep(aSpan.z, aSpan.w, uYearNow);
   #ifdef USE_YIELD
-  if (edgeDist(uYieldRect, origin.xz) > 0.0) gone = max(gone, uYield);
+  if (edgeDist(uYieldRect, origin.xz) > 0.0) gone = max(gone, step(0.5, uYield));
   #endif
   vFadeOut = gone;
   if (gone >= 0.999) fade = 0.0;
@@ -474,7 +479,9 @@ void main() {
  * (world units) to dither out over; `opts.doubleSide` for single sheets
  * (palm fronds, hala straps); `opts.grow` for the town's buildings, whose
  * instances carry their years (aSpan, aStretch); `opts.yield` for an island's
- * (towns.js), which give way to a district's inside it (uYieldRect, uYield).
+ * (towns.js), which give way to a district's inside it (uYieldRect, uYield);
+ * `opts.switch` for a district's, which come in whole as its weight (uShow)
+ * passes half rather than dithering in by it.
  * `shared` is the app's bag of uniforms, `own` the district features' (uShow,
  * uFeatSeen, uDistS, uYearNow, uTownClear), or an island's with its shadows
  * (uShadeS, uShadeRect).
@@ -486,7 +493,7 @@ export function objectMaterial(shared, own, opts = {}) {
     fragmentShader: objectFragment,
     vertexColors: true,
     side: opts.doubleSide ? THREE.DoubleSide : THREE.FrontSide,
-    defines: { ...(opts.grow ? { USE_GROW: '' } : {}), ...(opts.yield ? { USE_YIELD: '' } : {}) },
+    defines: { ...(opts.grow ? { USE_GROW: '' } : {}), ...(opts.yield ? { USE_YIELD: '' } : {}), ...(opts.switch ? { USE_SWITCH: '' } : {}) },
     uniforms: {
       ...shared.uniforms,
       uYearNow: { value: 0 },

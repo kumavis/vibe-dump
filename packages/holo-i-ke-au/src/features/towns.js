@@ -25,9 +25,11 @@
 //
 // Where a district lies over the island (render/district.js), it places its
 // own: inside its bounds by PART the island's buildings yield to the
-// district's while it is down, dithered out over exactly the pixels the
-// district's are dithered in over (kit.js uYield), and the district keeps its
-// lots PART_GAP further in, so no building of one ever stands on another's.
+// district's while it is down, all at once as its weight passes half, when
+// the district's come in whole (kit.js uYield, USE_SWITCH): one town or the
+// other there, never the two dithered into each other; and the district
+// keeps its lots PART_GAP further in, so no building of one ever stands on
+// another's.
 // A hand-placed village (Kou) always wins: the island's lots refuse its
 // outline while it stands, whether the district is down or not.
 //
@@ -106,7 +108,8 @@ export class Towns {
 
   update(dt, budget = clamp((this.app.frameAvg ?? 16) * 0.25, BUDGET[0], BUDGET[1])) {
     const app = this.app
-    const target = app.timeline.year
+    // (to the whole year the timeline's label reads, as the district's: settlements.js)
+    const target = Math.round(app.timeline.year)
     if (dt > 0) {
       this.yearNow += (target - this.yearNow) * (1 - Math.exp(-dt * 2.2))
       if (Math.abs(target - this.yearNow) < 0.05) this.yearNow = target
@@ -577,7 +580,7 @@ class IslandTowns extends Scatter {
     // (a tile wholly inside a district that is down waits until it is not: the district draws its own there)
     const yu = this.towns.yieldU
     const yr = yu.uYieldRect.value
-    const yielded = yu.uYield.value >= 0.999
+    const yielded = yu.uYield.value >= 0.5
     for (let j = j0; j <= j1; j++) {
       for (let i = i0; i <= i1; i++) {
         if (this.tiles.has(`${i},${j}`)) continue
@@ -702,7 +705,7 @@ class IslandTowns extends Scatter {
     const tiles = []
     const yu = this.towns.yieldU
     const yr = yu.uYieldRect.value
-    const yielded = yu.uYield.value >= 0.999
+    const yielded = yu.uYield.value >= 0.5
     let keyS = ''
     for (const tile of this.tiles.values()) {
       if (!tile.n) continue

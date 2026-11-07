@@ -43,7 +43,7 @@ const nearShot = (name, place, year, [bearing, pitch, distance], first = false) 
   year,
   eval: `${first ? 'app.ui.card.close(); app.ui.onScrub(); ' : ''}const v = app.tour.cameraView(${typeof place === 'string' ? `app.tour.places.get('${place}')` : `{ geometry: { type: 'Point', coordinates: ${JSON.stringify(place)} } }`}, { bearing: ${bearing}, pitch: ${pitch}, distance: ${distance} }); app.rig.jump({ x: v.target.x, z: v.target.z, distance: v.distance, yaw: v.yaw, pitch: v.pitch })`,
   until: "(() => { app.settle(); const t = app.rig.state.target, D = app.districts, d = D.districtAt(t.x, t.z); return app.towns.idle && (!d || (D.cur?.d === d && D.cur.state === 'ready' && !!D.cur.features?.settlements.ready)) })()",
-  report: "{ district: app.districts.cur?.features?.settlements.stats() ?? null, towns: app.towns.stats() }",
+  report: "{ district: app.districts.cur?.features?.settlements.stats() ?? null, towns: app.towns.stats(), overlaps: app.footprints?.(app.timeline.year, app.rig.state.target.x, app.rig.state.target.z, 40) ?? null }",
 })
 // ==== chain: the whole chain and the routes that follow the story ==============
 //   node tools/shoot.mjs <outdir> chain          (and VIEWPORT=390x844 for a phone)

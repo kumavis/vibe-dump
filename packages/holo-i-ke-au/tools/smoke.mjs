@@ -2162,7 +2162,7 @@ if (nuuanuHere) {
   }
   const islandCensus = (year, xz, r) => ui(`app.towns.census(${year}, ${xz[0]}, ${xz[1]}, ${r})`)
   // (the island's buildings a district that is down hides, inside its inner box, are not drawn: left out where they are counted with the district's)
-  const shown = "((q) => { const u = app.towns.yieldU, r = u.uYieldRect.value; return !(u.uYield.value >= 0.999 && q.x > r.x && q.z > r.y && q.x < r.z && q.z < r.w) })"
+  const shown = "((q) => { const u = app.towns.yieldU, r = u.uYieldRect.value; return !(u.uYield.value >= 0.5 && q.x > r.x && q.z > r.y && q.x < r.z && q.z < r.w) })"
   const townRows = {}
   await check('towns: buildings low over Lahaina, Kailua-Kona and Hilo in 1778, 1896 and now, more now than then', async () => {
     const bad = []
@@ -2291,7 +2291,7 @@ if (nuuanuHere) {
       const own = S.alive(1795).filter((a) => ins(a.x, a.z)).length
       return { k: +D.k.toFixed(2), yield: +y.toFixed(2), near, inner, onKou, nearKou, own }
     })()`)
-    if (r.near || r.onKou || r.own || (r.yield >= 0.999 && r.inner)) throw new Error(JSON.stringify(r))
+    if (r.near || r.onKou || r.own || (r.yield >= 0.5 && r.inner)) throw new Error(JSON.stringify(r))
     console.log(`      district at ${r.k}, the island yielding ${r.yield}: ${r.inner} of its drawn inside the district’s inner box, ${r.near} of the district’s within 380 m of its edge, ${r.onKou} of the island’s (of ${r.nearKou} within 800 m) and ${r.own} of the district’s on Kou`)
   })
   await check('towns: no two buildings on one footprint, a gap between lots', async () => {
@@ -2316,6 +2316,25 @@ if (nuuanuHere) {
       out.push(`${typeof place === 'string' ? place : 'Kalihi'} ${y}: ${r.n}`)
     }
     console.log(`      footprints checked pair by pair: ${out.join(', ')}`)
+  })
+  await check('settlements: no ground carries two buildings drawn at once, whole or fading, of the district’s, the island’s or the works’, and a view at rest catches none fading', async () => {
+    // (ISSUES.md 9: two placements on one ground, or the one going and the
+    // one coming on a lot dithered into each other, read as a stipple. Each
+    // view rests at a year four tenths past a whole one: the buildings rest
+    // on the whole year the timeline's label reads)
+    const out = []
+    const hickam = [-157.946, 21.335]
+    for (const [place, y] of [['kou', 1795], ['kou', 1853], ['kou', 1896], ['kou', 1930], ['kou', lastYear], ['iolani-palace', 1850], ['iolani-palace', 1885], ['waikiki', 1930], [hickam, 1950]]) {
+      if (typeof place === 'string' && !(await ui(`app.tour.places.has('${place}')`))) continue
+      const xz = await lowOver(place, Math.min(y + 0.4, lastYear), [45, 0.4, 24])
+      const year = Math.min(y, Math.round(lastYear))
+      for (let k = 0; k < 300 && !(await ui("!!app.works?.islands.get('oahu')?.view || !app.works?.files?.()?.length")); k++) await frames(1)
+      const r = await ui(`(() => { const S = app.districts.cur?.features?.settlements; return { at: [S?.ready && app.districts.on ? S.yearNow : null, app.towns.yearNow], fp: app.footprints(${year}, ${xz[0]}, ${xz[1]}, 14) } })()`)
+      if (r.at.some((a) => a !== null && a !== year)) throw new Error(`${place} ${y + 0.4}: the buildings rest at ${r.at}, not the whole year ${year}`)
+      if (r.fp.overlaps || r.fp.fading) throw new Error(`${place} ${year}: ${r.fp.overlaps} pairs on one ground (${JSON.stringify(r.fp.by)}), ${r.fp.fading} fading: ${JSON.stringify(r.fp.first.slice(0, 3))}`)
+      out.push(`${typeof place === 'string' ? place : 'Hickam'} ${year}: ${Object.entries(r.fp.drawn).map(([k, v]) => `${v} ${k}`).join(', ') || 'none'}`)
+    }
+    console.log(`      drawn within 1.4 km, pair by pair: ${out.join('; ')}`)
   })
   await check('settlements: no two faces of a kit in one plane where they overlap', async () => {
     // every pair of triangles in a kit that face the same way in one plane
