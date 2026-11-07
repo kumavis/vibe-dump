@@ -234,7 +234,7 @@ function readSheet(dir, town, sheet, grid) {
     }
   })
   // (a registered map's textures, hachured slopes above all, read as no sheet: a street up a slope runs with its hachures)
-  if (sheet.registered) untexture(ink, grid)
+  if (sheet.registered && sheet.registered.texture !== false) untexture(ink, grid, sheet.registered.texture ?? TEXTURE)
   // ink within a pixel (a cross), for the line test: a drawn line a pixel off the piece's own line still counts
   // (not on an old sheet, whose own line is the test)
   const th = sheet.old ? OLD : { line: LINE, clear: CLEAR }
@@ -253,11 +253,11 @@ function readSheet(dir, town, sheet, grid) {
 }
 
 /**
- * Where a sheet's ink is denser than TEXTURE over a patch TEXTURE_R pixels
+ * Where a sheet's ink is denser than TEXTURE (or a map's own `texture`) over a patch TEXTURE_R pixels
  * either way, the sheet is read as not there (0): a street's two lines, or
  * a block's buildings, are well under it, hachures and stipple over it.
  */
-function untexture(ink, grid) {
+function untexture(ink, grid, limit) {
   const { W, H } = grid
   const R = TEXTURE_R
   const sat = new Float64Array((W + 1) * (H + 1))
@@ -276,7 +276,7 @@ function untexture(ink, grid) {
       const x0 = Math.max(0, x - R)
       const x1 = Math.min(W, x + R + 1)
       const n = sat[y1 * (W + 1) + x1] - sat[y0 * (W + 1) + x1] - sat[y1 * (W + 1) + x0] + sat[y0 * (W + 1) + x0]
-      if (n / ((x1 - x0) * (y1 - y0)) > TEXTURE) ink[y * W + x] = 0
+      if (n / ((x1 - x0) * (y1 - y0)) > limit) ink[y * W + x] = 0
     }
   }
 }

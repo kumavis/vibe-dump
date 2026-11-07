@@ -34,7 +34,7 @@ export const REGISTERED_LICENCE =
 // metres a pixel of the scan as rendered (finer than the bake's 2.5 m, so a
 // thin line survives into it), of the coarse search, of the fine one's shifts
 const RENDER = 1.0
-const COARSE = 16
+const COARSE_M = 16
 const FINE = 4
 const TURN = 12
 const SCALE = 0.08
@@ -51,18 +51,40 @@ const INK = 160
  * degrees the map's top stands clockwise of north, to start from; `mask`:
  * parts of the sheet (fractions of its width and height, [x0, y0, x1, y1])
  * that are not the town (insets, a title, a legend), left out of the search
- * and of the reading.
+ * and of the reading; `texture`: the share of ink over which a patch is read
+ * as a texture, not streets (streets-bake.mjs untexture; false for a map with
+ * no hachures, whose dense blocks are streets and buildings); `seed`: places
+ * read off the map (render pixels, the place, its lon and lat) that the
+ * search starts from, in place of its coarse search.
  */
 export const REGISTERED = [
-  { key: 'rm867', town: 'honolulu', year: 1881, rm: 867, file: '0867.pdf', scale: 6000, turn: 0, source: 'hgs-rm-867', mask: [[0.55, 0, 1, 0.3]] },
-  { key: 'rm1397', town: 'honolulu', year: 1888, rm: 1397, file: '1397WIDE.pdf', scale: 1200, turn: 0, source: 'hgs-rm-1397', mask: [[0.72, 0.7, 1, 1]] },
-  { key: 'rm1910', town: 'honolulu', year: 1897, rm: 1910, file: '1910.pdf', scale: 12000, turn: 0, source: 'hgs-rm-1910', mask: [[0, 0.64, 0.33, 1], [0.28, 0.75, 0.75, 1]] },
-  { key: 'rm1561', town: 'hilo', year: 1891, rm: 1561, file: '1561WIDEencaps.pdf', scale: 2400, turn: 0, source: 'hgs-rm-1561', mask: [[0.76, 0.55, 1, 1]] },
+  {
+    key: 'rm867', town: 'honolulu', year: 1881, rm: 867, file: '0867.pdf', scale: 6000, turn: 0, source: 'hgs-rm-867', mask: [[0.55, 0, 1, 0.3]], texture: 0.35,
+    // (read off the map at 152 dpi, to tens of metres; the search then finds the place)
+    seed: [
+      [1770, 2460, 'King St and Fort St', -157.862095, 21.309194],
+      [2050, 2255, 'Beretania St and Fort St (Fort Street Church)', -157.859314, 21.311268],
+      [3168, 3300, 'King St and Victoria St', -157.848821, 21.301509],
+      [3775, 3290, 'Beretania St and Piikoi St', -157.843237, 21.301577],
+    ],
+  },
+  {
+    key: 'rm1397', town: 'honolulu', year: 1888, rm: 1397, file: '1397WIDE.pdf', scale: 1200, turn: 0, source: 'hgs-rm-1397', mask: [[0.72, 0.7, 1, 1]], texture: false,
+    seed: [
+      [1835, 1800, 'King St and Fort St', -157.862095, 21.309194],
+      [1840, 2095, 'Merchant St and Fort St', -157.862818, 21.308806],
+      [3845, 1610, 'King St and Punchbowl St', -157.858085, 21.305073],
+      [3770, 2225, 'Queen St and Punchbowl St', -157.859793, 21.304202],
+    ],
+  },
+  // (the next two are read but not yet placed: the search alone does not find them, and no seed has been read off them)
+  { skip: true, key: 'rm1910', town: 'honolulu', year: 1897, rm: 1910, file: '1910.pdf', scale: 12000, turn: 0, source: 'hgs-rm-1910', mask: [[0, 0.64, 0.33, 1], [0.28, 0.75, 0.75, 1]] },
+  { skip: true, key: 'rm1561', town: 'hilo', year: 1891, rm: 1561, file: '1561WIDEencaps.pdf', scale: 2400, turn: 0, coarse: 8, source: 'hgs-rm-1561', mask: [[0.76, 0.55, 1, 1]] },
   { key: 'rm1137', town: 'lahaina', year: 1883, rm: 1137, file: '1137WIDE.pdf', scale: 6000, turn: 0, source: 'hgs-rm-1137', mask: [[0.65, 0.7, 1, 1]] },
 ]
 
 export function registeredFor(town) {
-  return REGISTERED.filter((r) => r.town === town.id)
+  return REGISTERED.filter((r) => r.town === town.id && !r.skip)
 }
 
 const pdfPath = (dir, r) => join(dir, 'registered', r.file)
@@ -274,7 +296,9 @@ export function placeMap(img, r, segs, grid, pxM, log) {
   const t0 = Date.now()
   // (metres a map pixel, by the printed scale and the render)
   const m0 = (r.scale * 0.0254) / dpiOf(r)
+  if (r.seed) return refine(img, r, segs, grid, pxM, log, seedTransform(r.seed, grid, pxM), m0, t0, { score: null })
   // the map's ink in cells of about COARSE metres
+  const COARSE = r.coarse ?? COARSE_M
   const cellPx = Math.max(1, Math.round(COARSE / m0))
   const ink = lineCells(inkCells(img, cellPx, r.mask || []))
   const S = streetRaster(segs, grid, COARSE, pxM)
@@ -364,6 +388,11 @@ export function placeMap(img, r, segs, grid, pxM, log) {
   }
   let T = coarse(best)
   log(`    RM ${r.rm}: coarse turn ${(best.th * 180 / Math.PI).toFixed(1)}°, scale ×${(1 + best.ds).toFixed(2)}, score ${best.score.toFixed(3)} (${Math.round((Date.now() - t0) / 1000)} s)`)
+  return refine(img, r, segs, grid, pxM, log, T, m0, t0, best)
+}
+
+/** The search near a first placement (from the coarse search or the seeds), on a distance map at FINE metres. */
+function refine(img, r, segs, grid, pxM, log, T, m0, t0, best) {
   // the fine search: near the coarse, by a sample of the map's ink through a distance map at FINE metres
   const F = streetRaster(segs, grid, FINE, pxM)
   const dist = distanceMap(F, FINE)
@@ -432,7 +461,43 @@ export function placeMap(img, r, segs, grid, pxM, log) {
   const turn = (Math.atan2(T.d, T.a) * 180) / Math.PI
   const metres = Math.hypot(T.a, T.d) * pxM
   log(`    RM ${r.rm}: placed at turn ${turn.toFixed(2)}°, ${metres.toFixed(3)} m a map pixel (printed ${m0.toFixed(3)}), fine score ${bestF.s.toFixed(3)} (${Math.round((Date.now() - t0) / 1000)} s)`)
-  return { ...T, turn: +turn.toFixed(3), metres: +metres.toFixed(4), printed: +m0.toFixed(4), score: +bestF.s.toFixed(4), coarse: +best.score.toFixed(4) }
+  return { ...T, turn: +turn.toFixed(3), metres: +metres.toFixed(4), printed: +m0.toFixed(4), score: +bestF.s.toFixed(4), coarse: best.score === null ? null : +best.score.toFixed(4), seeded: !!r.seed }
+}
+
+/** The affine transform, map pixels to grid pixels, closest to the seeds (least squares). */
+function seedTransform(seed, grid, pxM) {
+  const KX = Math.cos((grid.lat * Math.PI) / 180) * 111320
+  const KY = 110574
+  const rows = seed.map(([u, v, , lon, lat]) => [u, v, ((lon - grid.bounds[0]) * KX) / pxM, ((grid.bounds[3] - lat) * KY) / pxM])
+  // normal equations for [a b c] (gx) and [d e f] (gy) over [u v 1]
+  const A = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
+  const bx = [0, 0, 0]
+  const by = [0, 0, 0]
+  for (const [u, v, gx, gy] of rows) {
+    const q = [u, v, 1]
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) A[i][j] += q[i] * q[j]
+      bx[i] += q[i] * gx
+      by[i] += q[i] * gy
+    }
+  }
+  const solve = (M, b) => {
+    const m = M.map((row, i) => [...row, b[i]])
+    for (let c = 0; c < 3; c++) {
+      let p = c
+      for (let r = c + 1; r < 3; r++) if (Math.abs(m[r][c]) > Math.abs(m[p][c])) p = r
+      ;[m[c], m[p]] = [m[p], m[c]]
+      for (let r = 0; r < 3; r++) {
+        if (r === c) continue
+        const f = m[r][c] / m[c][c]
+        for (let k = c; k < 4; k++) m[r][k] -= f * m[c][k]
+      }
+    }
+    return [0, 1, 2].map((i) => m[i][3] / m[i][i])
+  }
+  const [a, b, c] = solve(A, bx)
+  const [d, e, f] = solve(A, by)
+  return { a, b, c, d, e, f }
 }
 
 /**
