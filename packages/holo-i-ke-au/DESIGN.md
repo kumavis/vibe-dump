@@ -676,7 +676,11 @@ zooms are not used in the prologue.
 
 **As drawn.** The tour opens on Prologue I, the chain over the hotspot;
 Next walks the prologue and crosses into chapter 1, and Back from chapter
-1's card walks into the prologue's last step. The
+1's card walks into the prologue's last step. The walk is
+one way in time: from the first card to chapter 1 the clock never goes back,
+nor the stage the land is drawn on, so a chapter holds the steps whose ages
+fall in its stretch of the walk (Oʻahu's late vents among Hawaiʻi's rising,
+Molokaʻi's shields after the Koʻolau pali), and a smoke check walks it. The
 prologue's chapters are numbered "Prologue I … V" on their cards and in the
 pill. While the tour is in them the timeline is their clock: a log track in
 Ma ticked at 5, 2, 1, 0.5, 0.2, 0.1 and now, its label "about 2.1 million

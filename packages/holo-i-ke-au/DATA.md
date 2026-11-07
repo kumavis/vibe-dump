@@ -2495,6 +2495,17 @@ geology/chapters.json             the prologue's chapters and their steps (its e
   (ids to light), `tellings` with sources, and `stops` with `zoom: "far"` and
   a `camera`. Copy follows §4's rules: numbers only in tellings; the copy
   rule of DESIGN §7.4.
+- **One order of age**: the chapters in the file's order, each chapter's
+  `age` and then its steps and their stops, read as one walk, never go
+  back in age (a later card at the same age or younger), and the stages
+  the steps are drawn on never go back to an older one. A step belongs to
+  the chapter whose stretch of the walk its age falls in, even where its
+  subject is another chapter's island (Oʻahu's late vents, about 0.8 to
+  0.04 Ma, stand among Hawaiʻi's rising); where a step's own span reaches
+  across a neighbour's, its `age` is the dated moment it shows, with that
+  date's own precision (Molokaʻi's two shields at East Molokaʻi's oldest
+  age, 1.75 ± 0.14 Ma, after the Koʻolau pali's 1.8). A chapter's `ageSpan`
+  is what it covers and may reach back before its first card.
 - **Time**: the prologue's timeline runs in millions of years on a log
   scale from the oldest stage to now (and on into the future for
   Kamaʻehuakanaloa, if a step says so); `age` is the only clock. The main
@@ -2530,7 +2541,7 @@ the list above, and how it reads what the list leaves open:
 - **Chapters**: `short` (optional) names a chapter in the pill as an era's
   does; `ageSpan` is `[oldest, youngest]` and may overlap the next chapter's
   (the clock names the chapter with a step nearest the age). Steps keep their
-  file order, oldest first; a step's `sources` (else its chapter's) are its
+  file order, which is the walk's (one order of age, above); a step's `sources` (else its chapter's) are its
   card's Sources, and its `confidence` its chips, with the stage's
   `confidence` as `shape`.
 - **Far stops**: `camera` `{ target: [lon, lat] today, distance, bearing,
