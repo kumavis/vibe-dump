@@ -964,10 +964,12 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
       }
       if (!longs.turned.place || !longs.turned.move) out.bad.push(`long hulls: a turned ghost beside a member planned after it was met ${longs.turned.place} times in the deployment and ${longs.turned.move} in the movement phase (each must be met at least once)`)
       // ((F9c) the boards where that comes under F9c's AI, whose hulls keep
-      // their gunned riders' slots and never advance with them: the first
-      // five of boards 1-400 to meet it, F9b's 52, 2, 4, 13 and 17 meeting
-      // it no more)
-      for (const board of [5, 22, 61, 67, 73]) {
+      // their gunned riders' slots and never advance with them, and its
+      // prices, the Howdah's 5 drawing other Coil lists (hullSession's
+      // autoList): the first five of boards 1-400 to meet it on the final
+      // code, F9b's 52, 2, 4, 13 and 17 and those chosen before the prices,
+      // 5, 22, 61, 67 and 73, meeting it no more)
+      for (const board of [40, 76, 82, 111, 134]) {
         const why = await hullEngagedScenario(L, board, longs).catch((e) => `board ${board}: threw: ${e.stack}`)
         if (why && out.bad.length < 8) out.bad.push(`long hulls: ${why}`)
       }
