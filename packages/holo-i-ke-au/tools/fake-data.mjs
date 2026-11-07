@@ -696,10 +696,62 @@ function realHeights(dir, entry) {
   }
 }
 
+/**
+ * A test restore patch (DATA.md "Accepted extensions (restore)") over an
+ * ellipse as ellipseMask's: per texel of the pack, the change `change(u)`
+ * metres (u 0 at the centre, 1 at the edge) where `keep` says the ground
+ * qualifies, weight 255 easing over the outer third, cropped to its box: an
+ * RGB image, the change in R·256 + G at `DELTA`, the weight in B.
+ */
+function restoreStrip(bounds, W, H, { lon, lat, a, b, rot = 0 }, change, keep) {
+  const DELTA = { scale: 0.01, offset: -327.68 }
+  const [w0, s0, e0, n0] = bounds
+  const c = Math.cos(rot * DEG)
+  const s = Math.sin(rot * DEG)
+  const x0 = xkm(lon)
+  const z0 = zkm(lat)
+  const cells = []
+  for (let j = 0; j < H; j++) {
+    const la = n0 - ((j + 0.5) / H) * (n0 - s0)
+    const dz = zkm(la) - z0
+    for (let i = 0; i < W; i++) {
+      const lo = w0 + ((i + 0.5) / W) * (e0 - w0)
+      const dx = xkm(lo) - x0
+      const u = Math.hypot((dx * c - dz * s) / a, (dx * s + dz * c) / b)
+      if (u >= 1 || !keep(lo, la)) continue
+      const wt = Math.round(255 * (1 - smooth(0.66, 1, u)))
+      if (wt) cells.push([i, j, change(u), wt])
+    }
+  }
+  const i0 = Math.min(...cells.map((q) => q[0]))
+  const j0 = Math.min(...cells.map((q) => q[1]))
+  const w = Math.max(...cells.map((q) => q[0])) - i0 + 1
+  const h = Math.max(...cells.map((q) => q[1])) - j0 + 1
+  const rgb = new Uint8Array(w * h * 3)
+  const zero = Math.round(-DELTA.offset / DELTA.scale)
+  for (let k = 0; k < w * h; k++) (rgb[k * 3] = zero >> 8), (rgb[k * 3 + 1] = zero & 255)
+  for (const [i, j, d, wt] of cells) {
+    const k = ((j - j0) * w + (i - i0)) * 3
+    const v = Math.round((d - DELTA.offset) / DELTA.scale)
+    rgb[k] = v >> 8
+    rgb[k + 1] = v & 255
+    rgb[k + 2] = wt
+  }
+  return { kind: 'restore', box: [i0, j0, w, h], delta: DELTA, rgb, n: cells.length }
+}
+
 function writePatches(dir, list) {
   mkdirSync(join(dir, 'patches'), { recursive: true })
   const patches = []
   for (const p of list) {
+    if (p.kind === 'restore') {
+      // (a restore's image is RGB over its box, and its entries go at the end of the list)
+      writePNG(join(dir, 'patches', `${p.id}.png`), p.box[2], p.box[3], p.rgb, 3)
+      const { rgb, n, ...entry } = p
+      patches.push({ ...entry, file: `patches/${p.id}.png`, note: `test restore (tools/fake-data.mjs), ${n} texels changed; not a record`, sources: [{ id: 'synthetic', title: 'Test restore (tools/fake-data.mjs)', url: 'about:blank', fetched: new Date().toISOString().slice(0, 10), licence: 'test data, not for release' }] })
+      console.log(`  restore ${p.id}: before ${p.until}, ${p.box[2]}×${p.box[3]} at ${p.box[0]},${p.box[1]}, ${n} texels`)
+      continue
+    }
     writePNG(join(dir, 'patches', `${p.id}.png`), p.size[0], p.size[1], p.grey, 1)
     const { grey, n, ...entry } = p
     patches.push({ ...entry, file: `patches/${p.id}.png`, note: `test mask (tools/fake-data.mjs), ${n} texels marked; not a record`, sources: [{ id: 'synthetic', title: 'Test mask (tools/fake-data.mjs)', url: 'about:blank', fetched: new Date().toISOString().slice(0, 10), licence: 'test data, not for release' }] })
@@ -727,6 +779,8 @@ function testPatches() {
   writePatches(out, [
     { id: 'test-west-channel', pack: 'oahu', kind: 'raise', depth: -1.5, until: 1800, size: half, ...ellipseMask(pack.bounds, ...half, { lon: coast.lon, lat: latOf(z + 0.9), a: 2.6, b: 0.8 }, sea) },
     { id: 'test-west-shore', pack: 'oahu', kind: 'lower', depth: -1, until: 1830, size: [W, H], ...ellipseMask(pack.bounds, W, H, { lon: coast.lon, lat: coast.lat, a: 1.8, b: 0.9 }, land) },
+    // a road's cut across the summit's southern slope, filled back up to 9 m before 1820
+    { id: 'test-west-cut', pack: 'oahu', until: 1820, ...restoreStrip(pack.bounds, W, H, { lon: lonOf(top.x), lat: latOf((top.z + z) / 2), a: 2.4, b: 0.5 }, (u) => 9 * (1 - u * u), (lo, la) => heightAt(xkm(lo), zkm(la)) > 20) },
   ])
 
   // the real Oʻahu pack and the Nuʻuanu district, when the bake is here
@@ -750,6 +804,9 @@ function testPatches() {
     { id: 'test-nuuanu-basin', pack: 'nuuanu', kind: 'raise', depth: -1.2, until: 1920, size: [Math.ceil(NW / 2), Math.ceil(NH / 2)], ...ellipseMask(nuuanu.bounds, Math.ceil(NW / 2), Math.ceil(NH / 2), { lon: -157.874, lat: 21.3125, a: 1.1, b: 0.5, rot: 35 }, (lo, la) => hn(lo, la) < -3) },
     // Magic Island and the Ala Moana shore, sunk before 1955 (later than the district's own fill patches)
     { id: 'test-nuuanu-point', pack: 'nuuanu', kind: 'lower', depth: -1.3, until: 1955, size: [NW, NH], ...ellipseMask(nuuanu.bounds, NW, NH, { lon: -157.849, lat: 21.2865, a: 0.75, b: 0.4, rot: 20 }, (lo, la) => hn(lo, la) > 0) },
+    // the ground under a road: on the island, Mānoa's mouth raised 12 m before 1960; in the district, Pauoa's lowered 8 m before 1958
+    { id: 'test-oahu-road', pack: 'oahu', until: 1960, ...restoreStrip(oahu.bounds, OW, OH, { lon: -157.815, lat: 21.305, a: 1.6, b: 0.6, rot: 30 }, (u) => 12 * (1 - u * u), (lo, la) => ho(lo, la) > 5) },
+    { id: 'test-nuuanu-road', pack: 'nuuanu', until: 1958, ...restoreStrip(nuuanu.bounds, NW, NH, { lon: -157.842, lat: 21.322, a: 0.5, b: 0.12, rot: 60 }, (u) => -8 * (1 - u * u), (lo, la) => hn(lo, la) > 15) },
   ])
 }
 

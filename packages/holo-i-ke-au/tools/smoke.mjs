@@ -3406,6 +3406,107 @@ if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) 
   })
 } else if (testBase) console.log('  - no test masks (node tools/fake-data.mjs writes them): that check skipped')
 
+// Restore patches (DATA.md "Accepted extensions (restore)"; render/restores.js):
+// each lays its change on today's ground in the years before its until, and
+// not after, easing as the year crosses it; on an island pack and in a
+// district, for the data's own and for the test restores tools/fake-data.mjs
+// writes. Where a restore changes the ground most, at a texel's centre (so
+// the bilinear ground there is the texel's own), the ground the year before
+// its until less the ground the year after is the change it carries.
+/** For each restore, its texel that changes the ground most, in the world, with the change. */
+const restorePoints = () =>
+  ui(`(() => {
+    const R = app.restores, out = []
+    const districts = new Map((app.districts?.list || []).map((d) => [d.id, d]))
+    for (const r of R.all) {
+      const reg = R.regions.get(r.pack)
+      if (!reg) continue
+      const [i0, j0, w, h] = r.box
+      let best = null
+      for (let j = j0 + 1; j < j0 + h - 1; j++) for (let i = i0 + 1; i < i0 + w - 1; i++) {
+        const T = 16, a = reg.map[Math.floor(j / T) * reg.tw + Math.floor(i / T)]
+        if (!a) continue
+        const t = R.tiles[a - 1], c = ((j % T) * T + (i % T)) * 2
+        if (t[c + 1] !== r.n) continue
+        if (!best || Math.abs(t[c]) > Math.abs(best.d)) best = { i, j, d: t[c] }
+      }
+      if (!best || Math.abs(best.d) < 1) continue
+      const t = app.world.terrains.get(r.pack)
+      const d = districts.get(r.pack)
+      const rect = t ? t.pack.rect : d?.rect
+      if (!rect) continue
+      const x = rect.x0 + ((best.i + 0.5) / reg.W) * (rect.x1 - rect.x0)
+      const z = rect.z0 + ((best.j + 0.5) / reg.H) * (rect.z1 - rect.z0)
+      out.push({ id: r.id, pack: r.pack, where: t ? 'island' : 'district', until: r.until, x, z, d: best.d })
+    }
+    return out
+  })()`)
+const restoreByYear = async (pts) => {
+  const rows = []
+  const [y0, y1] = await ui('[app.timeline.eras[0].year, app.timeline.eras.at(-1).year]')
+  for (const p of pts) {
+    if (p.until - 1 < y0 || p.until + 1 > y1) {
+      rows.push(`${p.where} ${p.id}: its until, ${p.until}, is off the timeline (${y0}–${y1}); not tried`)
+      continue
+    }
+    const at = async (y) => {
+      await run(`app.ui.card.close(); app.ui.onScrub(); app.timeline.setYear(${y}); app.ui.timeline.finish(); app.rig.jump({ x: ${p.x}, z: ${p.z}, distance: 25, yaw: 0, pitch: 0.9 }); app.settle(); app.settle()`)
+      if (p.where === 'district') {
+        await page.waitForFunction((id) => { const D = window.__app.districts; return D.cur?.d.id === id && D.cur.state === 'ready' }, p.pack, { timeout: 300000 })
+        await run('app.settle(); app.settle()')
+        return ui(`app.districts.metresAt(${p.x}, ${p.z})`)
+      }
+      return ui(`(() => { const t = app.world.terrains.get('${p.pack}'); return t.slot >= 0 ? app.world.ownMetres(t, ${p.x}, ${p.z}) : NaN })()`)
+    }
+    const before = await at(p.until - 1)
+    const after = await at(p.until + 1)
+    rows.push(`${p.where} ${p.id} (before ${p.until}): ${after.toFixed(2)} m after, ${before.toFixed(2)} m before, a change of ${(before - after).toFixed(2)} m where it carries ${p.d.toFixed(2)} m`)
+    if (!(Math.abs(before - after - p.d) < 0.05)) throw new Error(rows.at(-1))
+  }
+  return rows
+}
+const restoreCheck = async (label) => {
+  await page.waitForFunction(() => window.__app.restores?.loaded, null, { timeout: 300000 })
+  const pts = await restorePoints()
+  const listed = await ui('app.restores.all.length')
+  if (!pts.length) throw new Error(`${label}: ${listed} restores listed, none with a point to try`)
+  // one on an island and one in a district, where there are both
+  const pick = [pts.find((p) => p.where === 'island'), pts.find((p) => p.where === 'district')].filter(Boolean)
+  console.log(`      ${listed} restores listed; ${pts.length} with a texel to try, ${pick.length} tried`)
+  const rows = await restoreByYear(pick)
+  for (const r of rows) console.log(`      ${r}`)
+  const [y0, y1] = await ui('[app.timeline.eras[0].year, app.timeline.eras.at(-1).year]')
+  const p = pick.find((q) => q.until - 1 >= y0 && q.until + 1 <= y1)
+  if (p) {
+    // the year crosses the until: a frame or two later the weight is on its way, not there
+    await run(`app.timeline.setYear(${p.until - 1}); app.ui.timeline.finish(); app.settle()`)
+    await run(`app.timeline.setYear(${p.until + 1}); app.ui.timeline.finish()`)
+    await frames(2)
+    const k = await ui(`app.restores.all.find((r) => r.id === '${p.id}').k`)
+    if (!(k > 0 && k < 1)) throw new Error(`${p.id}: two frames after the year crossed ${p.until}, its weight is ${k}`)
+    console.log(`      two frames after the year crossed, the weight stood at ${k.toFixed(2)}`)
+  }
+  const s = await ui('app.restores.stats()')
+  console.log(`      an atlas of ${s.atlas ? s.atlas.join('×') : 'none'} (${s.squares} squares, ${s.kB} kB) over ${s.regions.map((r) => `${r.id} ${r.squares}`).join(', ')}`)
+}
+const ownRestores = await page.evaluate(async () => {
+  const R = window.__app.restores
+  for (let i = 0; i < 600 && !R.loaded; i++) await new Promise((r) => setTimeout(r, 500))
+  return R.all.length
+})
+if (ownRestores) await check(`the data’s own restores lay the ground under the roads back by year (${ownRestores})`, () => restoreCheck('the data’s own'))
+else console.log('  - no restore patches in the data: its own restore check skipped')
+if (testBase && existsSync(join(root, 'test-data/real/patches/manifest.json'))) {
+  await check('the test restores lay the ground back by year, on Oʻahu and in Nuʻuanu', async () => {
+    await page.evaluate((b) => window.__app.restores.load(b), testBase)
+    try {
+      await restoreCheck('the test restores')
+    } finally {
+      await page.evaluate(() => window.__app.restores.load())
+    }
+  })
+}
+
 // ==== the works (features/works.js, data/works.js) =================================== [works]
 // The works (DATA.md "Works, dated"): read with Oʻahu as it takes its slot,
 // decoded off the main thread, and nothing at the whole chain; a base in its
