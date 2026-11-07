@@ -1703,7 +1703,11 @@ shows it, as in §10.
   into Kaʻelepulu's water, Cobb (pp. 746–748) lists Kaʻelepulu about 1900 as a fresh-water pond of 216 acres and the
   interior ponds as generally earth-sided, and the 1881, 1927 and 1943 sheets draw both with marsh margins and no wall.
   Kikuchi records one wall with one mākāhā between the two ponds (by tradition the menehune's); where it stood is in
-  no source read, so it has no feature.
+  no source read, so it has no feature. Kaʻelepulu's site outline ran up the ridge west of the pond (4.6% of its
+  texels over 10 m, to 70 m), where lowering the ground to the pond's water cut a stepped cliff into the hillside; it
+  is clipped to today's ground at or below 6 m on the district grid (closed and opened by a texel, the largest piece,
+  traced along texel edges, simplified at 10 m), which keeps the filled house lots round the lake (3–6 m) and 91% of
+  the outline. Kawainui's outline lies on the marsh (none of it over 6 m but a few texels at its edges) and stays.
   No pond's building date is in any source read, so every `from` is null. Lyons (1874) gives three acreages and Jackson
   (1882) the Mōkapu names; they are tellings on the ponds. The burial and heiau outlines in the same layer were not copied.
 
