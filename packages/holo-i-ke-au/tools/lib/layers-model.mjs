@@ -180,6 +180,72 @@ export const ISLAND_POP = {
 export const BACKCAST_1832 = { counts: { kahoolawe: 80, niihau: 1047 }, total1832: 130313, king: 400000, kingSays: { niihau: 10000 } }
 
 /**
+ * The earliest counts by ahupuaʻa, which set each land's share of its
+ * island's 1778 people; the rule (contactWeight) places them within the
+ * land. Kauaʻi: Ke Kumu Hawaii's 1835 counts of Kona from Nuʻuolo to
+ * Hanapēpē (23 Dec. 1835, p. 204) and of Keālia to Kalalau (14 Oct. 1835,
+ * p. 164), with the island's 1836 total from Thrum; `rest` is every land the
+ * two lists leave out (Puna south of Keālia, Kōloa, east Kona, Hanakāpīʻai,
+ * Honopū and Pōhakuao), holding the 1836 total less the lists. The 324
+ * people of the listed names no polygon has (Kekupua 179, Homaikawaʻa 70,
+ * Betelehema 75) are `unplaced`: the shares are of the rest, so they go to
+ * every land in proportion. `lands` are the names of
+ * boundaries/ahupuaa.geojson that make up a counted land: Waimea's polygon
+ * runs from Kekaha round to Nuʻuolo, so it holds the fifteen small lands of
+ * Mānā and the western cliffs (510), Kekaha (185) and Waimea (664).
+ * Niʻihau is one ahupuaʻa in the boundaries and its counts are of the whole
+ * island, so it takes no split.
+ */
+export const AHUPUAA_COUNTS = {
+  kauai: {
+    year: 1835,
+    total: 8934,
+    unplaced: 179 + 70 + 75,
+    sources: ['kumu-hawaii-1835-kona', 'kumu-hawaii-1835-waioli', 'thrum-1890-annual'],
+    lands: [
+      { name: 'Waimea', people: 510 + 185 + 664 },
+      { name: 'Makaweli', people: 480 },
+      { name: 'Hanapēpē', people: 598 },
+      { name: 'Keālia', people: 283 },
+      { name: 'Anahola', people: 323 },
+      { name: 'Papaʻa', people: 45 },
+      { name: 'Moloaʻa', people: 115 },
+      { name: 'Lepeuli', people: 85 },
+      { name: 'Waipake', people: 78 },
+      { name: 'Pīlaʻa', people: 126 },
+      { name: 'Waiakalua', lands: ['Waiakalua', 'East Waiakalua', 'West Waiakalua'], people: 101 },
+      { name: 'Kāhili', people: 91 },
+      { name: 'Kīlauea', people: 117 },
+      { name: 'Kalihiwai', people: 190 },
+      { name: 'Kalihikai', people: 99 },
+      { name: 'Hanalei', people: 522 },
+      { name: 'Waiʻoli', people: 83 },
+      { name: 'Waipā', people: 85 },
+      { name: 'Lumahaʻi', people: 119 },
+      { name: 'Wainiha', people: 216 },
+      { name: 'Hāʻena', people: 116 },
+      { name: 'Hanakoa', people: 48 },
+      { name: 'Kalalau', people: 131 },
+    ],
+  },
+}
+
+/** For an island with counts: each texel's group (a land's index, or the rest) by its ahupuaʻa's name, and each group's share. */
+export function countGroups(island) {
+  const C = AHUPUAA_COUNTS[island]
+  if (!C) return null
+  const byName = new Map()
+  C.lands.forEach((l, i) => {
+    for (const n of l.lands || [l.name]) byName.set(n, i)
+  })
+  const listed = C.lands.reduce((a, l) => a + l.people, 0)
+  const placed = C.total - (C.unplaced || 0)
+  const rest = C.lands.length
+  const share = [...C.lands.map((l) => l.people / placed), (placed - listed) / placed]
+  return { groupOf: (name) => (byName.has(name) ? byName.get(name) : rest), share, n: rest + 1, rest: placed - listed }
+}
+
+/**
  * The 1896 census districts, joined to the moku of boundaries/moku.geojson.
  * The join is exact for Oʻahu and Hawaiʻi Island (the judicial districts
  * follow the moku; the census splits Kona and Kohala in two, which are
@@ -350,7 +416,13 @@ function membership(P, ahupuaa, moku) {
   fillThroughMask(mokuCode, land, W, H, 4000)
   const mokuKey = new Array(N)
   for (let o = 0; o < N; o++) mokuKey[o] = land[o] && mokuCode[o] === mokuCode[o] ? moku.features[mokuCode[o]].properties.mokuKey : null
-  return { island, mokuKey }
+  // the ahupuaʻa's name, filled through the land as the moku is (for the counts by land, AHUPUAA_COUNTS)
+  const ahuCode = new Float32Array(N).fill(NaN)
+  for (let o = 0; o < N; o++) if (land[o] && ahuIdx[o] >= 0) ahuCode[o] = ahuIdx[o]
+  fillThroughMask(ahuCode, land, W, H, 4000)
+  const ahupuaaName = new Array(N)
+  for (let o = 0; o < N; o++) ahupuaaName[o] = land[o] && ahuCode[o] === ahuCode[o] ? ahupuaa.features[ahuCode[o]].properties.name : null
+  return { island, mokuKey, ahupuaaName }
 }
 
 /**
@@ -372,7 +444,7 @@ export function fieldInputs(P, src) {
     for (let o = 0; o < N; o++) if (land[o]) rain[o] = src.rainFallbackMm
     rainNote = `no rain image; every land texel is taken as ${src.rainFallbackMm} mm a year (dry), so no closed forest is modelled`
   }
-  const { island, mokuKey } = membership(P, src.ahupuaa, src.moku)
+  const { island, mokuKey, ahupuaaName } = membership(P, src.ahupuaa, src.moku)
 
   // traditional agriculture zones
   const tradAg = (type) => coverage(src.tradAg.features, grid, s, (f) => f.properties.AG_TYPE_HAWN === type)
@@ -434,6 +506,7 @@ export function fieldInputs(P, src) {
     slope,
     island,
     mokuKey,
+    ahupuaaName,
     wetGround,
     loi,
     loiZone,

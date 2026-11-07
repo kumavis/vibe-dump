@@ -295,7 +295,7 @@
       },
       "settlement": {
         "method": "modelled",
-        "rule": "A weight per texel, 0.5 × the fields blurred at 400 m (people lived among their fields: the cultivation’s terms, with agroforestry at 0.5 of its own weight, since houses stood by the loʻi and the shore rather than in the groves above them) + 0.7 × a coastal band exp(−distance to sea / 600 m), fading out between 60 and 150 m elevation, times 0.4–1.0 by rain (500–1500 mm) + 0.15 × the kuleana parcels + 0.03 × exp(−distance to sea / 3000 m) (people lived thinly on the rest of the land, more thinly inland); times habitability (none on slopes steeper than about 35°, fading out between 800 and 1,600 m) and 0.3 on lava younger than 50–200 years. Each island’s weights are scaled so that the island holds King’s figure. Kahoʻolawe, which King leaves out, and Niʻihau are back-cast from the 1832 census (80 and 1,047 people) by the ratio of King’s 400,000 to the 1832 total of 130,313: 250 and 3210 people. King gives Niʻihau 10,000 from the houses he counted at Kealakekua applied to its length of coast; that is 9.6 times its 1832 count where the chain is 3.1 times, and Kahikinui’s peak density (Kirch and others 2004) laid over the whole of a dry island with no running stream. Lānaʻi (12.8 times) and Molokaʻi (6.0 times) keep King’s figures. Checked on Kauaʻi against the 1835 counts by ahupuaʻa (Ke Kumu Hawaii), the earliest by land, as shares of the island: the 23 lands counted, the valleys and coves from Keālia round by Haleleʻa and Nāpali to Waimea and Hanapēpē, hold about 63% of its people in 1835–36, the plain from Kapaʻa to Kōloa the other 37%. The rule gives the plain 51% (the median land 1.38 times off its 1835 share, the mean 1.54 times; the rule before this one, which spread 30% of the people over all habitable land by rain alone, gave the plain 52%, 1.49 and 1.66). Its misses are the small valleys under the cliffs (Kalalau, Hanakoa, Hāʻena), whose floors are too narrow for the pack, and Hanapēpē.",
+        "rule": "A weight per texel, 0.5 × the fields blurred at 400 m (people lived among their fields: the cultivation’s terms, with agroforestry at 0.5 of its own weight, since houses stood by the loʻi and the shore rather than in the groves above them) + 0.7 × a coastal band exp(−distance to sea / 600 m), fading out between 60 and 150 m elevation, times 0.4–1.0 by rain (500–1500 mm) + 0.15 × the kuleana parcels + 0.03 × exp(−distance to sea / 3000 m) (people lived thinly on the rest of the land, more thinly inland); times habitability (none on slopes steeper than about 35°, fading out between 800 and 1,600 m) and 0.3 on lava younger than 50–200 years. Each island’s weights are scaled so that the island holds King’s figure. Kahoʻolawe, which King leaves out, and Niʻihau are back-cast from the 1832 census (80 and 1,047 people) by the ratio of King’s 400,000 to the 1832 total of 130,313: 250 and 3210 people. King gives Niʻihau 10,000 from the houses he counted at Kealakekua applied to its length of coast; that is 9.6 times its 1832 count where the chain is 3.1 times, and Kahikinui’s peak density (Kirch and others 2004) laid over the whole of a dry island with no running stream. Lānaʻi (12.8 times) and Molokaʻi (6.0 times) keep King’s figures. On Kauaʻi the earliest counts by ahupuaʻa set how many each land holds and the rule only where within it: each of the 23 lands Ke Kumu Hawaii counted in 1835, Keālia round by Haleleʻa and Nāpali to Waimea and Hanapēpē, takes its 1835 count’s share of the island’s 1778 people, and every land the lists leave out (the plain from Kapaʻa to Kōloa, east Kona, the uncounted Nāpali lands) takes together what the 1836 total leaves (37%; the 324 people of three listed names no boundary has, Kekupua, Homaikawaʻa and Betelehema, are shared over all). The shares are of 1835, after half a century of decline that did not fall evenly (Waimea held 1,978 in 1831, when the chiefs lived there, and 664 in 1835), so they place the people of 1778 by the pattern of 1835. Niʻihau is one ahupuaʻa and its counts are of the whole island, so the rule alone places its people.",
         "populations": {
           "hawaii": 150000,
           "maui": 65400,
@@ -305,6 +305,117 @@
           "lanai": 20400,
           "niihau": 3210,
           "kahoolawe": 250
+        },
+        "countsByAhupuaa": {
+          "kauai": {
+            "year": 1835,
+            "total": 8934,
+            "unplaced": 324,
+            "sources": [
+              "kumu-hawaii-1835-kona",
+              "kumu-hawaii-1835-waioli",
+              "thrum-1890-annual"
+            ],
+            "lands": [
+              {
+                "name": "Waimea",
+                "people": 1359
+              },
+              {
+                "name": "Makaweli",
+                "people": 480
+              },
+              {
+                "name": "Hanapēpē",
+                "people": 598
+              },
+              {
+                "name": "Keālia",
+                "people": 283
+              },
+              {
+                "name": "Anahola",
+                "people": 323
+              },
+              {
+                "name": "Papaʻa",
+                "people": 45
+              },
+              {
+                "name": "Moloaʻa",
+                "people": 115
+              },
+              {
+                "name": "Lepeuli",
+                "people": 85
+              },
+              {
+                "name": "Waipake",
+                "people": 78
+              },
+              {
+                "name": "Pīlaʻa",
+                "people": 126
+              },
+              {
+                "name": "Waiakalua",
+                "lands": [
+                  "Waiakalua",
+                  "East Waiakalua",
+                  "West Waiakalua"
+                ],
+                "people": 101
+              },
+              {
+                "name": "Kāhili",
+                "people": 91
+              },
+              {
+                "name": "Kīlauea",
+                "people": 117
+              },
+              {
+                "name": "Kalihiwai",
+                "people": 190
+              },
+              {
+                "name": "Kalihikai",
+                "people": 99
+              },
+              {
+                "name": "Hanalei",
+                "people": 522
+              },
+              {
+                "name": "Waiʻoli",
+                "people": 83
+              },
+              {
+                "name": "Waipā",
+                "people": 85
+              },
+              {
+                "name": "Lumahaʻi",
+                "people": 119
+              },
+              {
+                "name": "Wainiha",
+                "people": 216
+              },
+              {
+                "name": "Hāʻena",
+                "people": 116
+              },
+              {
+                "name": "Hanakoa",
+                "people": 48
+              },
+              {
+                "name": "Kalalau",
+                "people": 131
+              }
+            ]
+          }
         },
         "sources": [
           {
@@ -1752,10 +1863,10 @@
             "file": "kauai/contact-settlement.png",
             "method": "modelled",
             "stats": {
-              "landFraction": 0.167,
-              "people": 54021,
-              "peakPerKm2": 632,
-              "over10PerKm2": 0.4059
+              "landFraction": 0.1679,
+              "people": 54020,
+              "peakPerKm2": 1641,
+              "over10PerKm2": 0.414
             }
           },
           "forest": {
@@ -1981,7 +2092,7 @@
   },
   "stats": {
     "files": 88,
-    "bytes": 4851393
+    "bytes": 4856765
   },
   "baked": {
     "tool": "tools/bake-layers.mjs",

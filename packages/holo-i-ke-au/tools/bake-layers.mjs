@@ -28,6 +28,7 @@ import { ISLANDS } from './lib/geo.mjs'
 import { readPNG, writeGreyPNG, writePNG } from './lib/png.mjs'
 import { readPack } from './lib/layers-raster.mjs'
 import {
+  AHUPUAA_COUNTS,
   BACKCAST_1832,
   CAH_FOREST,
   DISTRICTS_1896,
@@ -39,6 +40,7 @@ import {
   TOWNS_1896,
   caneWeight,
   contactWeight,
+  countGroups,
   cultivation,
   eruptionYear,
   forest,
@@ -143,14 +145,16 @@ function methods(ledger, dir, pop1778) {
           'length of coast; that is 9.6 times its 1832 count where the chain is 3.1 times, and Kahikinui’s peak density ' +
           '(Kirch and others 2004) laid over the whole of a dry island with no running stream. Lānaʻi (12.8 times) and ' +
           'Molokaʻi (6.0 times) keep King’s figures. ' +
-          'Checked on Kauaʻi against the 1835 counts by ahupuaʻa (Ke Kumu Hawaii), the earliest by land, as shares of ' +
-          'the island: the 23 lands counted, the valleys and coves from Keālia round by Haleleʻa and Nāpali to Waimea and ' +
-          'Hanapēpē, hold about 63% of its people in 1835–36, the plain from Kapaʻa to Kōloa the other 37%. The rule gives ' +
-          'the plain 51% (the median land 1.38 times off its 1835 share, the mean 1.54 times; the rule before this one, ' +
-          'which spread 30% of the people over all habitable land by rain alone, gave the plain 52%, 1.49 and 1.66). Its ' +
-          'misses are the small valleys under the cliffs (Kalalau, Hanakoa, Hāʻena), whose floors are too narrow for the ' +
-          'pack, and Hanapēpē.',
+          'On Kauaʻi the earliest counts by ahupuaʻa set how many each land holds and the rule only where within it: ' +
+          'each of the 23 lands Ke Kumu Hawaii counted in 1835, Keālia round by Haleleʻa and Nāpali to Waimea and Hanapēpē, ' +
+          'takes its 1835 count’s share of the island’s 1778 people, and every land the lists leave out (the plain from ' +
+          'Kapaʻa to Kōloa, east Kona, the uncounted Nāpali lands) takes together what the 1836 total leaves (37%; the 324 ' +
+          'people of three listed names no boundary has, Kekupua, Homaikawaʻa and Betelehema, are shared over all). The ' +
+          'shares are of 1835, after half a century of decline that did not fall evenly (Waimea held 1,978 in 1831, when the ' +
+          'chiefs lived there, and 664 in 1835), so they place the people of 1778 by the pattern of 1835. Niʻihau is one ' +
+          'ahupuaʻa and its counts are of the whole island, so the rule alone places its people.',
         populations: pop1778,
+        countsByAhupuaa: AHUPUAA_COUNTS,
         sources: [
           pop('king-1784-v3'),
           pop('thrum-1890-annual', {
@@ -401,6 +405,14 @@ async function bake(dir) {
   const state = []
   const sum = { contact: {}, maheleK: {}, maheleC: {}, district: DISTRICTS_1896.map(() => ({ K: 0, C: 0, cane: 0 })), towns: TOWNS_1896.map(() => 0), bg: new Float64Array(bgPop.length), bgN: new Float64Array(bgPop.length) }
   const islandStats = {}
+  // the islands whose 1778 people are shared out by the earliest counts by ahupuaʻa
+  const groups = {}
+  for (const isl of Object.keys(AHUPUAA_COUNTS)) {
+    const G = countGroups(isl)
+    const names = new Set(ahupuaa.features.filter((f) => f.properties.islandId === isl).map((f) => f.properties.name))
+    for (const l of AHUPUAA_COUNTS[isl].lands) for (const n of l.lands || [l.name]) if (!names.has(n)) throw new Error(`${isl}: counted land ${n} is not in ahupuaa.geojson`)
+    groups[isl] = { ...G, sum: new Float64Array(G.n) }
+  }
   for (const pack of packs) {
     log(`${pack.id}: ${pack.size.join('x')} at ${pack.metresPerTexel[0]} m`)
     const P = readPack(DATA, pack)
@@ -435,6 +447,8 @@ async function bake(dir) {
       if (!P.land[o] || I.island[o] !== pack.id) continue
       const isl = I.island[o]
       sum.contact[isl] = (sum.contact[isl] || 0) + wC[o] * A
+      const G = groups[isl]
+      if (G) G.sum[G.groupOf(I.ahupuaaName[o])] += wC[o] * A
       sum.maheleK[isl] = (sum.maheleK[isl] || 0) + wK[o] * A
       sum.maheleC[isl] = (sum.maheleC[isl] || 0) + wC[o] * A
       const d = districtOf.get(I.mokuKey[o])
@@ -451,7 +465,7 @@ async function bake(dir) {
         sum.bgN[b] += A
       }
     }
-    state.push({ pack, P: { W: P.W, H: P.H, N: P.N, land: P.land, texelKm2: P.texelKm2 }, island: I.island, mokuKey: I.mokuKey, bg: I.bg, dev: I.cah.dev, wC, wK, wCane, townW, entry })
+    state.push({ pack, P: { W: P.W, H: P.H, N: P.N, land: P.land, texelKm2: P.texelKm2 }, island: I.island, mokuKey: I.mokuKey, ahupuaaName: I.ahupuaaName, bg: I.bg, dev: I.cah.dev, wC, wK, wCane, townW, entry })
     islandStats[pack.id] = calibration(I)
     log(`    cultivation and forest written (${((Date.now() - t0) / 1000).toFixed(0)} s so far)`)
   }
@@ -472,7 +486,11 @@ async function bake(dir) {
       if (!P.land[o]) continue
       const isl = s.island[o]
       // contact
-      dens.contact[o] = sum.contact[isl] > 0 ? (pop1778[isl] * s.wC[o]) / sum.contact[isl] : 0
+      const G = groups[isl]
+      if (G) {
+        const g = G.groupOf(s.ahupuaaName[o])
+        dens.contact[o] = G.sum[g] > 0 ? (pop1778[isl] * G.share[g] * s.wC[o]) / G.sum[g] : 0
+      } else dens.contact[o] = sum.contact[isl] > 0 ? (pop1778[isl] * s.wC[o]) / sum.contact[isl] : 0
       // mahele
       const pm = ISLAND_POP.mahele[isl]
       const sk = sum.maheleK[isl]
