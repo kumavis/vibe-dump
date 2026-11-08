@@ -358,9 +358,22 @@ fix has landed in `dist/` and been looked at again.
 - **Seen:** chapter II ends with the Honolulu volcanics at 0.5 Ma and
   chapter III opens with Molokaʻi rising at 1.9; within II the pali (1.8)
   comes after Nuʻuanu (1.95) but Molokaʻi (1.9) falls between them.
-- **Open:** every step and stop in one descending order of age, the chapters
-  regrouped or their steps moved so no card goes back, and a check that
-  holds it.
+- **Fix:** the Honolulu volcanics (0.5 ± 0.4 Ma, Sherrod et al. 2007) move
+  from chapter II into IV between Hawaiʻi's shields at 0.6 and "old island
+  and young" at 0.4, drawn on IV's stage; Molokaʻi's rise takes East
+  Molokaʻi's oldest dated age, 1.75 ± 0.14 (Sherrod et al. 2007), so it
+  follows the pali's 1.8; each chapter's span is its own stretch of the walk
+  (I 5.1–3.06, II 2.1–1.8, III 1.75–0.6, IV 0.6–0.001, V "now"); and a
+  step's stage is held over the whole stretch the clock eases across, where
+  before the land fell back toward the stages' own ages between two steps
+  on one stage (the slider still frees it). A smoke check walks the prologue
+  with Next and fails if the clock, a stage, the land drawn or a card's span
+  ever goes back: 5.1 → 4.5 → 3.5 → 3.06 → 2.1 → 1.95 → 1.8 → 1.75 → 1.4 →
+  1.3 → 1.2 → 0.6 → 0.6 → 0.5 → 0.4 → 0.3 → 0.125 → 0.1 → 0.013 → 0.001 →
+  0.00003 → 0.
+- **Known looks:** Molokaʻi and the pali both read "about 1.8 million years
+  ago"; chapter IV's title runs long on its card.
+- **Status:** landed; published in version 25.
 
 ### 17. The Big Island white and Maui gone at some zooms
 
