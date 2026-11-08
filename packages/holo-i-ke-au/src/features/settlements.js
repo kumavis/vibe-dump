@@ -2200,7 +2200,17 @@ export class Settlements extends Scatter {
     // the named buildings (landmarks.js), each its own instance, drawn whatever the thinning
     const nm = namedMeshes(this.named || [], this.material, (n) => this.namedGround(n), mulberry32(1882), LIFT)
     this.namedKits = nm.kits
-    for (const m of nm.meshes) this.group.add(m)
+    for (const m of nm.meshes) {
+      // (the years any of its instances shows in, so a kit with none standing is not drawn: update)
+      const a = m.geometry.attributes.aSpan.array
+      m.years = [Infinity, -Infinity]
+      for (let i = 0; i < m.count; i++) {
+        m.years[0] = Math.min(m.years[0], a[i * 4])
+        m.years[1] = Math.max(m.years[1], a[i * 4 + 3])
+      }
+      this.group.add(m)
+    }
+    this.namedMeshes = nm.meshes
     this.frustum = new THREE.Frustum()
     this.pv = new THREE.Matrix4()
     this.box = new THREE.Box3()
@@ -2489,6 +2499,7 @@ export class Settlements extends Scatter {
     this.material.uniforms.uFadeFar.value = R
     const maxY = (this.rec.data?.hi ?? 1000) * this.app.world.uniforms.uVert.value + 3
     this.refresh(this.app.camera, R, maxY)
+    for (const m of this.namedMeshes || []) m.visible = this.yearNow > m.years[0] && this.yearNow < m.years[1]
     if (!(Math.abs(this.yearNow - this.yearCleared) < 0.5) || (this.app.towns?.version ?? 0) !== this.townsCleared) this.stampClearing(this.yearNow)
   }
 
