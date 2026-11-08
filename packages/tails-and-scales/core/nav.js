@@ -10,6 +10,17 @@ import { hypot, sin, cos } from './dmath.js'
 // through anything destructible: `clearAll` counts every obstacle, `clearHard`
 // only the ones nothing can break (rocks).
 //
+// (F5a, DESIGN §4.2.12) The burrow mode reads `clearHard` too: a burrower
+// (the Hive's Delvers and Deepguard) tunnels under soft and difficult
+// scenery (walls, hedges, trees, crates, kegs; rough ground) at a walker's
+// pace, ×1, its pulled path free of the rough-ground test the search never
+// paid, and ends on a cell standable on foot (`standable` reads 'all' for
+// every mode but 'wreck'). With height it keeps to floors at or under STEP,
+// the cliff field keeping its disc off a deck's ledge as a walker's, so a
+// deck's footprint is hard to it with no third array. Each is a branch only
+// `mode === 'burrow'` reaches (§4.1 rule 30): walk, wreck and fly read what
+// they always read.
+//
 // (F7a, DESIGN §4.2.4) Height. A board with fortifications (an alive chunk
 // with a `surface` or a `link`: recipes.js's decks, stairs and ladders) also
 // builds a height layer, derived from the chunks like the clearance fields
@@ -209,8 +220,9 @@ export class NavGrid {
     }
   }
 
+  // (F5a) the burrow field is the hard one: what nothing breaks stops it
   clearance(i, mode) {
-    return mode === 'wreck' ? this.clearHard[i] : this.clearAll[i]
+    return mode === 'wreck' || mode === 'burrow' ? this.clearHard[i] : this.clearAll[i]
   }
 
   // Can a disc of radius r stand on cell i?
@@ -257,7 +269,9 @@ export class NavGrid {
     const { nx, nz, cell } = this
     // A unit that starts somewhere cramped (squeezed by a collapse, or after
     // the Brute ploughed in) may wriggle out through its own footprint.
-    const escape = this.clearance(start, mode === 'wreck' ? 'wreck' : 'all') < r - 0.06 ? r * 1.5 : 0
+    // ((F5a) a burrower measures the burrow field, and tunnels at ×1.)
+    const burrow = mode === 'burrow', fm = mode === 'wreck' ? 'wreck' : burrow ? 'burrow' : 'all'
+    const escape = this.clearance(start, fm) < r - 0.06 ? r * 1.5 : 0
     while (heap.size) {
       const [i, d] = heap.pop()
       if (d > dist[i]) continue
@@ -269,9 +283,9 @@ export class NavGrid {
           if (jx < 0 || jz < 0 || jx >= nx || jz >= nz) continue
           const j = jz * nx + jx
           if (forbid && forbid[j]) continue
-          const cl = this.clearance(j, mode === 'wreck' ? 'wreck' : 'all')
+          const cl = this.clearance(j, fm)
           if (cl < r - 0.06 && !(escape && cl > 0.05 && hypot(this.x(j) - sx, this.z(j) - sz) < escape)) continue
-          let mul = this.diff[j] ? 2 : 1
+          let mul = burrow ? 1 : this.diff[j] ? 2 : 1
           if (mode === 'wreck' && this.clearAll[j] < r - 0.06) mul = 2
           const nd = d + (ox && oz ? SQRT2 : 1) * cell * mul
           if (nd <= max && nd < dist[j]) {
@@ -324,9 +338,11 @@ export class NavGrid {
       const i = this.index(a.x + (b.x - a.x) * t, a.z + (b.z - a.z) * t)
       if (i < 0) return false
       if (forbid && forbid[i]) return false
-      if (this.clearance(i, mode === 'wreck' ? 'wreck' : 'all') < r - 0.06) return false
-      // don't let string-pulling shortcut across rough ground the search paid for
-      if (this.diff[i] !== d0) return false
+      if (this.clearance(i, mode === 'wreck' ? 'wreck' : mode === 'burrow' ? 'burrow' : 'all') < r - 0.06) return false
+      // don't let string-pulling shortcut across rough ground the search paid
+      // for ((F5a) a burrower paid nothing for it, so its pull keeps the
+      // tunnel the search found)
+      if (mode !== 'burrow' && this.diff[i] !== d0) return false
       if (mode === 'wreck' && this.clearAll[i] < r - 0.06) return false
     }
     // the raster only samples cell centres; test the enemy discs exactly so a
@@ -594,13 +610,16 @@ export class NavGrid {
     }
   }
 
-  // reach (walk and wreck modes) with height: a neighbour step needs the
-  // floors within STEP of each other and its end standable (the cliff
+  // reach (walk, wreck and burrow modes) with height: a neighbour step needs
+  // the floors within STEP of each other and its end standable (the cliff
   // included); a climber may also take a link at its cost, onto a standable
   // end. Stairs cost their length: a step up one costs what it does on the
-  // flat. (Burrowing, F5a's insectoids: no unit burrows yet, and the mode
-  // walks; a deck's footprint is hard to it, so a burrower keeps to the
-  // ground and takes no ladder, until F5a's burrow field replaces this.)
+  // flat. (F5a, DESIGN §4.2.12) A burrower reads the burrow field (the hard
+  // one, so it passes under soft and difficult scenery at ×1) and keeps to
+  // the ground: a deck's footprint is hard to it (D:2926), so it never
+  // steps onto a floor above STEP (no stair top, no deck), takes no ladder
+  // (its climb is false, and `climbs` refuses it anyway), and keeps its
+  // disc clear of every ledge by the cliff test, as a walker's.
   reachHeight(res, { r, max, mode, forbid, climb }) {
     const { dist, prev, start, sx, sz } = res
     const { nx, nz, cell, floor, cliff, link, linkCost } = this
@@ -608,9 +627,9 @@ export class NavGrid {
     dist[start] = d0
     const heap = new Heap()
     heap.push(start, d0)
-    const clMode = mode === 'wreck' ? 'wreck' : 'all'
+    const clMode = mode === 'wreck' ? 'wreck' : mode === 'burrow' ? 'burrow' : 'all'
     const burrow = mode === 'burrow'
-    const climbs = climb && !burrow
+    const climbs = climb && !burrow   // (Q4 makes climb false for it anyway)
     // a unit that starts somewhere cramped may wriggle out through its own
     // footprint, as on the flat; a ledge squeezes it as an obstacle does (it
     // still never steps more than STEP up or down)
@@ -634,10 +653,10 @@ export class NavGrid {
           const j = jz * nx + jx
           if (forbid && forbid[j]) continue
           if (Math.abs(floor[j] - fi) > STEP) continue
-          if (burrow && floor[j] > STEP) continue
+          if (burrow && floor[j] > STEP) continue   // a deck's footprint is hard (D:2926)
           const cl = this.clearance(j, clMode), cf = cliff[j]
           if ((cl < r - 0.06 || cf < r - 0.06) && !(escape && cl > 0.05 && cf > 0.05 && hypot(this.x(j) - sx, this.z(j) - sz) < escape)) continue
-          let mul = this.diff[j] ? 2 : 1
+          let mul = burrow ? 1 : this.diff[j] ? 2 : 1
           if (mode === 'wreck' && this.clearAll[j] < r - 0.06) mul = 2
           relax(i, j, d + (ox && oz ? SQRT2 : 1) * cell * mul)
         }
@@ -693,7 +712,9 @@ export class NavGrid {
   // walkable with height: also refuses a sample on a ledge's band (cliff
   // under r − 0.06) or more than STEP above or below the sample before it,
   // and an enemy's disc only where the segment passes it at its level
-  // (within 1.2" of its floor: core/actions/move.js forbidMask)
+  // (within 1.2" of its floor: core/actions/move.js forbidMask). (F5a) A
+  // burrower's pull reads its field, skips the rough-ground test as on the
+  // flat, and never crosses a sample above STEP.
   walkableHeight(a, b, r, mode, forbid) {
     const len = hypot(b.x - a.x, b.z - a.z)
     const steps = Math.ceil(len / (this.cell * 0.5))
@@ -705,10 +726,11 @@ export class NavGrid {
       const i = this.index(a.x + (b.x - a.x) * t, a.z + (b.z - a.z) * t)
       if (i < 0) return false
       if (forbid && forbid[i]) return false
-      if (this.clearance(i, mode === 'wreck' ? 'wreck' : 'all') < r - 0.06) return false
+      if (this.clearance(i, mode === 'wreck' ? 'wreck' : mode === 'burrow' ? 'burrow' : 'all') < r - 0.06) return false
       if (this.cliff[i] < r - 0.06 || Math.abs(this.floor[i] - f) > STEP) return false
+      if (mode === 'burrow' && this.floor[i] > STEP) return false
       f = this.floor[i]
-      if (this.diff[i] !== d0) return false
+      if (mode !== 'burrow' && this.diff[i] !== d0) return false
       if (mode === 'wreck' && this.clearAll[i] < r - 0.06) return false
     }
     if (forbid?.discs) {
@@ -889,6 +911,8 @@ export class NavGrid {
   // result reads the new plan from then on).
   hullReach(sx, sz, h0, fp, { max, mode = 'walk', forbid = null, into = null } = {}) {
     if (mode === 'fly') throw new Error('hullReach: a flier is round and never uses the lattice')
+    // (F5a) a guard: no burrowing hull in v1 (D:4199), so no lattice mode
+    if (mode === 'burrow') throw new Error('hullReach: no hull burrows (no burrowing hull in v1)')
     if (fp.cell !== this.cell) throw new Error(`hullReach: the footprint's offsets are in ${fp.cell}" cells, the grid's ${this.cell}"`)
     if (!(Number.isInteger(h0) && h0 >= 0 && h0 < 8)) throw new Error(`hullReach: a heading is 0-7, not ${h0}`)
     hullMasks(forbid)

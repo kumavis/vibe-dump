@@ -32,6 +32,12 @@
 //
 //   node sim/army-sim.mjs --self-test [--terrain <set>] [--jobs 2]
 //
+// (F5a, DESIGN §4.2.12 Q12) --races <a>,<b> keeps the pairs that hold a
+// named race (a key of RACES), with --check or --fit: the new races' fits
+// run on their five pairs alone. The streams are named by pair, so a
+// filtered run's battles are the whole run's for those pairs; the judgment
+// always runs on every pair (no --races).
+//
 // (F11a's review) --n, --fit-n and --jobs are each a whole number above 0.
 // Exit 2 on a bad command line (an unknown option, a count that is no
 // whole number, (F7a's merge) a set a mission run doesn't offer).
@@ -182,7 +188,7 @@ try {
     options: {
       check: { type: 'boolean' }, fit: { type: 'boolean' }, worker: { type: 'boolean' }, 'self-test': { type: 'boolean' },
       mission: { type: 'string' }, terrain: { type: 'string' }, n: { type: 'string' }, 'fit-n': { type: 'string' },
-      jobs: { type: 'string', default: '2' }, seed: { type: 'string', default: '1111' }, dir: { type: 'string' },
+      jobs: { type: 'string', default: '2' }, seed: { type: 'string', default: '1111' }, dir: { type: 'string' }, races: { type: 'string' },
     },
   }))
 } catch (e) {
@@ -440,11 +446,14 @@ const BAND = { Skirmish: 4, Field: 5, Grand: 6 }
 const REPORTED = { Grand: 'reported, not judged: the Grand rebalance is a ROADMAP item (DESIGN\'s F8b notes)' }
 
 // The races' pairs: every two distinct races, in RACES order (the first's
-// score is the one reported)
+// score is the one reported); (F5a) with --races, those holding a race it
+// names
+const only = a.races === undefined ? null : a.races.split(',').map((x) => x.trim()).filter(Boolean)
+if (only && (!only.length || only.some((r) => !Object.hasOwn(RACES, r)))) usage(`--races names races of RACES (${Object.keys(RACES).join(', ')}), not ${JSON.stringify(a.races)}`)
 const pairs = () => {
   const keys = Object.keys(RACES), out = []
   keys.forEach((r, i) => keys.slice(i + 1).forEach((s) => out.push([r, s])))
-  return out
+  return only ? out.filter((p) => p.some((r) => only.includes(r))) : out
 }
 
 function printFit(pair, fit, { gate = false, report = false } = {}) {

@@ -140,5 +140,19 @@ export const RULES_ID = rulesId()
 // shots from the deck and never advancing a hull with a gun aboard (rule
 // 10); each a branch only a rider (or a hull carrying one) reaches, so
 // only a battle fielding a hull plays otherwise; RULES_ID moves with the
-// transport's `deckY` (the deck's height, where its riders stand)
-export const CORE_VERSION = 16
+// transport's `deckY` (the deck's height, where its riders stand); 17:
+// F5a's insectoids and bird-people: the nav's burrow mode (its field the
+// hard one, a burrower passing under soft and difficult scenery at a
+// walker's pace, never onto a floor above STEP nor up a stair or ladder,
+// ending where a walker could stand, its pulled path without the
+// rough-ground test), swarm's re-roll of the fight's wound rolls of 1
+// while `min` of the unit stand (the only new draws, inside its branch),
+// swoop's +chargeS Strength in the fight of the turn the unit charged
+// (`flags.charged` on its own seat's turn), and the AI's appraisal of the
+// two in meleeValue and its straight-line measure of a burrower with
+// height (rule 10); each a branch only a unit with the flag reaches, so
+// only a battle seating a new race plays otherwise; RULES_ID moves with
+// the two races (data/races/insect.js and bird.js: a burrower's derived
+// climb false), the flags' tightened records and any Field prices the fit
+// gives them)
+export const CORE_VERSION = 17

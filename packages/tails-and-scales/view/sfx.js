@@ -85,6 +85,14 @@ const VOICES = {
   hiss() {
     burst({ dur: 0.35, freq: 5000, type: 'highpass', peak: 0.18 })
   },
+  // (F5a, DESIGN §4.2.12) the Hive's chitter, three short high-passed
+  // bursts 0.05 s apart, and the Aerie's screech, a falling sawtooth
+  chitter() {
+    for (let i = 0; i < 3; i++) burst({ dur: 0.04, freq: 7000, type: 'highpass', peak: 0.16, delay: i * 0.05 })
+  },
+  screech() {
+    tone({ f0: 2200, f1: 900, dur: 0.25, type: 'sawtooth', peak: 0.08 })
+  },
 }
 
 const S = {

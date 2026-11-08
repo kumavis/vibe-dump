@@ -146,7 +146,8 @@ export function goalField(G, q, anchor, mode, r, climb = false) {
   let f = byG.get(key)
   if (f) byG.delete(key)
   else {
-    const m = mode === 'fly' ? 'fly' : mode === 'wreck' ? 'wreck' : 'walk'
+    // ((F5a) a burrower's March field is its own: under walls and hedges)
+    const m = mode === 'fly' ? 'fly' : mode === 'wreck' ? 'wreck' : mode === 'burrow' ? 'burrow' : 'walk'
     f = G.nav.reach(G.nav.x(cell), G.nav.z(cell), { r: Math.ceil(r * 10) / 10, max: Infinity, mode: m, climb }).dist
     if (byG.size >= FIELDS) byG.delete(byG.keys().next().value)
   }

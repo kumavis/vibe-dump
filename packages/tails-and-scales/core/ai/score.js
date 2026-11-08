@@ -23,10 +23,26 @@ import { MISSIONS } from '../../data/mission.js'
 // a unit's points still standing
 export const worth = (u) => (u.t.pts * u.alive) / u.t.models
 
-export function meleeValue(a, d) {
+// What `a`'s blow is worth against `d` in a fight. (F5a, DESIGN §4.2.12,
+// rule 10) `charging`: `a` is the charger the AI is weighing (aiCharge's
+// gain alone passes it; every other reader weighs a fight the unit didn't
+// choose). A unit with neither flag takes today's expression, literally;
+// for a swarm, its re-rolled 1s wound p/6 more while `min` of it stand, so
+// its wounds ×7/6 (expected is linear in its attacks before its cap at the
+// target's models); a swooper charging strikes at S + chargeS (the dive).
+export function meleeValue(a, d, charging = false) {
   if (!a.t.melee) return 0
-  return expected(a.alive * a.t.A, hitNeed(a.t.WS, a.mesmerized ? 1 : 0), a.t.melee, d, false).value
+  const n = a.alive * a.t.A
+  if (!a.t.swarm && !a.t.swoop) return expected(n, hitNeed(a.t.WS, a.mesmerized ? 1 : 0), a.t.melee, d, false).value
+  const w = charging && a.t.swoop ? { ...a.t.melee, S: a.t.melee.S + a.t.swoop.chargeS } : a.t.melee
+  const k = a.t.swarm && a.alive >= a.t.swarm.min ? 7 / 6 : 1
+  return expected(n * k, hitNeed(a.t.WS, a.mesmerized ? 1 : 0), w, d, false).value
 }
+
+// (F5a, Q26) Whose way the height terms measure by the straight line: a
+// flier's (its move a circle over everything) and a burrower's (it passes
+// under what a walker goes round and takes no stair or ladder)
+const straight = (u) => moveMode(u) === 'fly' || moveMode(u) === 'burrow'
 
 // (F18, rule 10: it bumps with F18) What a shot at `e` costs `u`'s own
 // side, the shot's friendly fire, for shotValue. `fight` is fightOf(G, u, e)
@@ -605,8 +621,8 @@ export function score(G, u, x, z, ctx, moving) {
   const from = { x, z }
   // (the review) the way up is a walker's: a flier's move is a circle that
   // ignores the terrain (nav.reach's fly mode), so it measures the straight
-  // line, as on the flat
-  const high = G.nav.hasHeight, climb = high && climbs(u), walks = high && moveMode(u) !== 'fly'
+  // line, as on the flat; (F5a) and so does a burrower's
+  const high = G.nav.hasHeight, climb = high && climbs(u), walks = high && !straight(u)
   const moved = moving && hypot(x - u.pos.x, z - u.pos.z) > 0.3
   let s = 0
   let onObjective = false, obj = -1
@@ -679,8 +695,8 @@ export function score(G, u, x, z, ctx, moving) {
     // its top as the stairs (or, climbing, a ladder) make it (only a
     // brawler the straight line, less levelSlack, leaves within reach is
     // measured: the rest add nothing either way)
-    if (high && !(e.t.brawler && hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r - (moveMode(e) !== 'fly' ? levelSlack(G, climbs(e)) : 0) < e.t.M + 7)) continue
-    const g = (high && moveMode(e) !== 'fly' ? levelDist(G, e.pos, from, climbs(e)) : hypot(e.pos.x - x, e.pos.z - z)) - u.r - e.r
+    if (high && !(e.t.brawler && hypot(e.pos.x - x, e.pos.z - z) - u.r - e.r - (!straight(e) ? levelSlack(G, climbs(e)) : 0) < e.t.M + 7)) continue
+    const g = (high && !straight(e) ? levelDist(G, e.pos, from, climbs(e)) : hypot(e.pos.x - x, e.pos.z - z)) - u.r - e.r
     if (e.t.brawler && g < e.t.M + 7) s -= pre.get(e).back * (fragile ? 0.16 : 0.05) * (1 - g / (e.t.M + 7))
   }
   // cover and staying put

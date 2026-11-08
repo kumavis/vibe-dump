@@ -27,6 +27,8 @@
 //   node sim/corpus-add.mjs --regen bushtail-random-6,hotseat-late-5 [--need …] [--dry]
 //   node sim/corpus-add.mjs --set keg --mission keg --mode watch --tag keg --need keg --count 2
 //   node sim/corpus-add.mjs --set powder --mission powder --mode watch --tag powder --need keg,climb --count 2
+//   node sim/corpus-add.mjs --set races --mode watch --races insect,squirrel --tag insect-squirrel --count 1
+//   node sim/corpus-add.mjs --set races --mode hotseat --policy aggressive --races insect,serpent --tag hive --need burrowed,swarmed
 //
 // --regen <id>[,<id>…] (F18) plays again each named human-bot log of the
 // corpus, by the bot that made it (its own setup and its `bot`, the policy
@@ -51,7 +53,8 @@
 // Coil in seat 0); --set the log set it joins (lib.mjs LOG_SETS: human, the
 // default; pilot, F10b's; army, F11a's; fort, F7a's; scale, F8b's; keg,
 // F19a's: the keg mission's, --mission keg; vehicle, F9a's; powder, V3d's:
-// the Powder Field's, --mission powder; hull, F9b's).
+// the Powder Field's, --mission powder; hull, F9b's; races, F5a's: the new
+// races' battles, --races naming one).
 //
 // The board (F8b): --mission <name> the setup's mission (the code's
 // data/mission.js; classic, the default, is named by none, so a classic
@@ -152,6 +155,15 @@
 //   collapse   a timber platform shot out: a deck fell (its posts broken
 //              by a template, or smashed by a wrecker)
 //   fall       a unit fell with one (and took its D3, or was crushed)
+//   (F5a, the races/ corpus's: read off the match as the log is folded
+//   again in Node on the PIN code, sim/race-probe.mjs, as the height needs
+//   are; --races seats the new races, e.g. --races insect,squirrel)
+//   burrowed   a burrower's walk tunnelled: its path crossed a cell a
+//              walker's disc can't stand on, or rough ground it paid ×1 for
+//   swarmed    a swarm re-rolled its wound rolls of 1 (a "Re-roll 1s
+//              (swarm)" row)
+//   swooped    a swooper dived: it fought on its own charge turn (its Wound
+//              row's dive label)
 // --from <k> the first candidate seed (default 1): candidate k plays board
 // and dice drawn from mulberry32(9000 + k), and the bot's policy seed k.
 // Logs are named <mode>-<policy>-<tag>-<k> (watch: watch-<tag>-<k>); an
@@ -169,6 +181,7 @@ import { heightProbe } from './height-probe.mjs'
 import { riderProbe } from './rider-probe.mjs'
 import { collapseProbe } from './collapse-probe.mjs'
 import { hullProbe } from './hull-probe.mjs'
+import { raceProbe } from './race-probe.mjs'
 
 // (each played result's `entries` is a list, an AI pair's empty: below)
 const NEEDS = {
@@ -207,11 +220,16 @@ const NEEDS = {
   reverse: (r) => r.hulls.walks.some((w) => w.reverses > 0 && r.entries?.[w.entry]?.t === 'move' && r.entries[w.entry].u === w.u),
   hullcharge: (r) => (r.entries ?? []).some((e) => e.t === 'chargeEnd' && e.f !== undefined),
   hullbail: (r) => r.hulls.bailed > 0,
+  // (F5a: the probe's, r.races)
+  burrowed: (r) => r.races.tunnelled > 0,
+  swarmed: (r) => r.races.rerolls > 0,
+  swooped: (r) => r.races.dives > 0,
 }
 const HEIGHT_NEEDS = ['deck', 'climb', 'climbup', 'deckfight', 'works', 'keep', 'nokeep']
 const RIDE_NEEDS = ['bailout', 'rearranged', 'deckfire']
 const FALL_NEEDS = ['collapse', 'fall']
 const HULL_NEEDS = ['hullpivot', 'reverse', 'hullbail']
+const RACE_NEEDS = ['burrowed', 'swarmed', 'swooped']
 const { values: a } = parseArgs({
   options: {
     mode: { type: 'string' }, policy: { type: 'string' }, tag: { type: 'string' }, overtime: { type: 'string' }, need: { type: 'string' },
@@ -307,7 +325,7 @@ if (unknown.length) {
 // (F7a) the PIN code's own core and Folder, in this process, for the height
 // needs: each candidate's log folded again with sim/height-probe.mjs looking
 // on (its counts are the result's `height`)
-const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n) || RIDE_NEEDS.includes(n) || FALL_NEEDS.includes(n) || HULL_NEEDS.includes(n)) || a.set === 'hull' || a.terrain === 'fortified' || regenOf.some((it) => it.setup.terrain === 'fortified') ? await import(at('core/index.js')) : null
+const pinCore = need.some((n) => HEIGHT_NEEDS.includes(n) || RIDE_NEEDS.includes(n) || FALL_NEEDS.includes(n) || HULL_NEEDS.includes(n) || RACE_NEEDS.includes(n)) || a.set === 'hull' || a.terrain === 'fortified' || regenOf.some((it) => it.setup.terrain === 'fortified') ? await import(at('core/index.js')) : null
 const pinMatch = pinCore ? await loadMatch(dir) : null
 const heightOf = (log) => {
   const probe = heightProbe(pinCore.q)
@@ -324,6 +342,15 @@ const ridesOf = (log) => {
 // (F9b) the same for the long hulls: sim/hull-probe.mjs's counts
 const hullsOf = (log) => {
   const probe = hullProbe(pinCore.q)
+  const r = foldJob(pinCore, log, { match: pinMatch, probe })
+  return r.error ? { error: r.error, ...probe.result() } : probe.result()
+}
+
+// (F5a) the same for the new races' flags: sim/race-probe.mjs's counts,
+// against the PIN code's own STEP
+const pinStep = pinCore ? (await import(at('core/nav.js'))).STEP : null
+const racesOf = (log) => {
+  const probe = raceProbe(pinStep)
   const r = foldJob(pinCore, log, { match: pinMatch, probe })
   return r.error ? { error: r.error, ...probe.result() } : probe.result()
 }
@@ -391,10 +418,12 @@ if (pinCore) played.forEach((r, i) => !r.error && (r.height = heightOf({ setup: 
 if (need.some((n) => RIDE_NEEDS.includes(n))) played.forEach((r, i) => !r.error && (r.rides = ridesOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 // (F9b) and with its long hulls, where a need asks, or the set is hull/
 if (pinCore && (need.some((n) => HULL_NEEDS.includes(n)) || a.set === 'hull')) played.forEach((r, i) => !r.error && (r.hulls = hullsOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
+// (F5a) and with the new races' flags, where a need asks
+if (need.some((n) => RACE_NEEDS.includes(n))) played.forEach((r, i) => !r.error && (r.races = racesOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 // (F7c) and with its platforms, where a need asks or the board is fortified
 if (pinCore) played.forEach((r, i) => !r.error && (r.falls = fallsOf({ setup: cands[i].job.setup, entries: r.entries ?? [] })))
 const fits = cands.map((c, i) => ({ ...c, res: played[i] })).filter((c) => {
-  const miss = c.res.error ? `failed: ${c.res.error.split('\n')[0]}` : c.res.hulls?.error ? `failed folding again for the long hulls' needs: ${c.res.hulls.error.split('\n')[0]}` : c.res.height?.error ? `failed folding again for the height needs: ${c.res.height.error.split('\n')[0]}` : c.res.rides?.error ? `failed folding again for the transports' needs: ${c.res.rides.error.split('\n')[0]}` : c.res.falls?.error ? `failed folding again for the platforms' needs: ${c.res.falls.error.split('\n')[0]}` : need.filter((n) => !NEEDS[n](c.res, c)).join(', ')
+  const miss = c.res.error ? `failed: ${c.res.error.split('\n')[0]}` : c.res.hulls?.error ? `failed folding again for the long hulls' needs: ${c.res.hulls.error.split('\n')[0]}` : c.res.height?.error ? `failed folding again for the height needs: ${c.res.height.error.split('\n')[0]}` : c.res.rides?.error ? `failed folding again for the transports' needs: ${c.res.rides.error.split('\n')[0]}` : c.res.falls?.error ? `failed folding again for the platforms' needs: ${c.res.falls.error.split('\n')[0]}` : c.res.races?.error ? `failed folding again for the races' needs: ${c.res.races.error.split('\n')[0]}` : need.filter((n) => !NEEDS[n](c.res, c)).join(', ')
   const end = c.res.error ? '' : c.res.over.wiped >= 0 ? `seat ${c.res.over.wiped} wiped out` : `${c.res.over.vp.join('-')} on the score`
   console.log(`  ${c.label.padEnd(30)} ${miss ? (c.res.error ? miss : `lacks ${miss}`) : 'fits'}${end ? `  (${end}${c.job.setup.seats.some((s) => s.army != null) ? `; ${c.job.setup.seats.map((s) => s.army ?? '-').join(' v ')}` : ''})` : ''}  [played in ${c.res.secs.toFixed(1)} s]`)
   return !miss

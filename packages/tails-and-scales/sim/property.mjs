@@ -234,6 +234,21 @@
 //    plan by cell (cellBest), the body disc's reach as its lower bound, its
 //    paths and the rules' stand, sweep and room questions held with it.
 //    `--only lattice` runs it alone.
+// 17. (F5a) P-races, on code with the burrow mode and the Hive (racesTask
+//    below says what each scene holds): the burrowers' plans on hand-built
+//    boards, flat and with height (under a wall a walker goes round, never
+//    under a rock, every end on foot, onto no floor above STEP on a fort's
+//    stair, under a keg it leaves intact, kept out of an enemy's bubble,
+//    the pulled paths on the burrow field and straight under rough ground,
+//    a charge through a wall's foot, a fall back through the bubble and
+//    under the wall); the swarm's re-roll held die for die (once, straight
+//    after the wound roll, before the save roll; no draw below min or with
+//    no 1); the dive on the unit's own charge turn alone, on the wound roll
+//    alone, the Glider's need unchanged. `--only races` runs it alone, as
+//    `--only spell` and `--only fight` run P-spell and P-fight (so
+//    property's --only never selects the races/ set by its name: name its
+//    battles by id). P-spell's scenes seat the new casters too, and
+//    P-fight's every two races in both seats.
 //
 //   node sim/property.mjs [--games N] [--seed S] [--only <kinds, modes or ids>] [--dir <packageDir> | --ref <ref>]
 //   node sim/property.mjs --self-test     each broken copy of the core in
@@ -246,7 +261,8 @@
 //
 // --games (default 32) random games from --seed (default 1); --only picks
 // the corpus battles (default all 40; `none` for none), or (F9b)
-// `lattice` runs P-lattice alone. One child process
+// `lattice` runs P-lattice alone ((F5a) `races`, `spell` and `fight`
+// P-races, P-spell and P-fight). One child process
 // per battle or game, up to one per CPU. Exit 0 when every property holds
 // (the self-test: when every mutation is caught), 1 otherwise, 2 on bad
 // arguments.
@@ -1084,7 +1100,14 @@ const MIXES = [['ai', 'ai'], ['human', 'ai'], ['ai', 'human'], ['human', 'human'
 function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
   const rand = mulberry32(seed * 2654435761)
   const pick = (arr) => arr[Math.floor(rand() * arr.length)]
-  const ctrl = lists ? MIXES[1 + (seed % 3)] : seed < 4 ? MIXES[seed] : pick(MIXES)
+  // ((F5a) every fourth plain game from seed 15 on is a hotseat of the Hive
+  // against the Aerie, the seats turned by seed (its draws a plain game's):
+  // the run's human seats must cast every spell of every caster, and the
+  // new casters sat a human seat too seldom otherwise; seeds below 12, the
+  // self-test's ten games among them, play as they did)
+  const f5 = !lists && seed % 4 === 3 && seed >= 12 && races.includes('insect') && races.includes('bird')
+  const mix = lists ? MIXES[1 + (seed % 3)] : seed < 4 ? MIXES[seed] : pick(MIXES)
+  const ctrl = f5 ? MIXES[3] : mix
   const aggressive = seed % 2 === 0
   const r = rand()
   const setup = {
@@ -1092,6 +1115,7 @@ function randomTask(core, rng, mirror, races, seed, hud, lists = null) {
     rounds: r < 0.2 ? 1 + Math.floor(rand() * 3) : r < 0.5 ? 6 + Math.floor(rand() * 5) : 5,
     seats: [0, 1].map((s) => ({ race: rand() < 0.7 ? ['squirrel', 'serpent'][s] : pick(races), ctrl: ctrl[s] })),
   }
+  if (f5) setup.seats.forEach((x, i) => (x.race = (i + (seed >> 2)) % 2 ? 'bird' : 'insect'))
   // (F4) half the games with a human seat vote at their round limit
   if (ctrl.includes('human') && rand() < 0.5) setup.overtime = 'vote'
   if (lists) {
@@ -1679,8 +1703,12 @@ const V1_PINS = {
 // footprint unit, which no pinned match fields: the pins as under 14; 16,
 // F9c's firing decks, a rider's shot from its hull's deck: no new state
 // (the deck's spent slots read off its riders' `shot` flags), the format
-// unchanged, and no pinned match fields a rider: the pins as under 15)
-const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+// unchanged, and no pinned match fields a rider: the pins as under 15;
+// 17, F5a's burrow, swarm and swoop: no new state (burrow a mode of move
+// and charge, swarm's re-roll dice in a fight, swoop reading flags.charged
+// and G.turn.active), the format unchanged, and no pinned match seats a
+// new race: the pins as under 16)
+const PINNED_UNDER = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
 const PINS_UNDER = (v) => (v >= 12
   ? { ...V1_PINS, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
   : v >= 9 ? { ...V1_PINS, '64-89': { end: '1jmxq628imf' } } : V1_PINS)
@@ -2894,6 +2922,7 @@ function heightTask(core, mods) {
 // field the P-riders scenes' list, the Coil its Field preset; (F9b) on
 // code with the Howdah, the Coil's Field preset and a Howdah, HULL_LIST.)
 const FIGHT_BOARDS = 6
+const CLASSIC_PAIR = (race) => race === 'squirrel' || race === 'serpent'
 function fightTask(core, mods) {
   const q = core.q
   const counts = { legal: 0, volleys: 0, clear: 0, templates: 0, misses: 0, strays: 0, ties: 0, values: 0, brute: 0, bruteDeclined: 0 }
@@ -3015,13 +3044,18 @@ function fightTask(core, mods) {
     counts.strays += stray
     return { rows, logs, stray }
   }
+  // ((F5a) every two races, in both seats: the classic pair first, its
+  // streams as they were, then the pairs with a new race)
+  const RACE_KEYS = Object.keys(RACES_F)
+  const PAIRS = [['squirrel', 'serpent'], ['serpent', 'squirrel'], ...RACE_KEYS.flatMap((a) => RACE_KEYS.map((b) => [a, b])).filter(([a, b]) => a !== b && !(CLASSIC_PAIR(a) && CLASSIC_PAIR(b)))]
   for (let board = 1; board <= FIGHT_BOARDS; board++) {
-    for (const races of [['squirrel', 'serpent'], ['serpent', 'squirrel']]) {
-      const rand = mulberry32(board * 104729 + (races[0] === 'squirrel' ? 0 : 1))
+    for (const [k, races] of PAIRS.entries()) {
+      const rand = mulberry32(board * 104729 + k)
       // ((F9a) and, on code with transports, a Field battle with War-Carts
       // for the hulls' own guns: the cart pass shoots with them alone, and
-      // nobody aboard is a shooter, a target or a friend in the fight)
-      for (const carts of HULLS ? [false, true] : [false]) {
+      // nobody aboard is a shooter, a target or a friend in the fight;
+      // (F5a) the classic pair's, whose lists those are)
+      for (const carts of HULLS && races.every(CLASSIC_PAIR) ? [false, true] : [false]) {
         const probe = fresh(board, races, carts)
         const shooters = probe.G.units.filter((u) => u.side === probe.s && u.t.ranged && !u.aboard && (!carts || u.t.transport)).map((u) => u.id)
         for (const uid of shooters) {
@@ -3110,10 +3144,10 @@ function fightTask(core, mods) {
   // what the scenes must have met
   const RANGED = (race) => Object.values(RACES_F[race].units).filter((t) => t.ranged).map((t) => t.key)
   const never = []
-  for (const race of ['squirrel', 'serpent']) {
+  for (const race of RACE_KEYS) {
     for (const key of RANGED(race)) for (const k of ['fight', 'clear']) if (!met[k].has(key)) never.push(`${race} ${key} ${k}`)
   }
-  if (met.tie.size < 2) never.push(`the tie in both armies (met ${[...met.tie].join(', ') || 'none'})`)
+  if (met.tie.size < RACE_KEYS.length) never.push(`the tie in every army (met ${[...met.tie].join(', ') || 'none'})`)
   if (!counts.strays) never.push('a stray')
   if (!counts.bruteDeclined) never.push('the Venom Engine declining to shell its own Brute')
   if (never.length) throw new Error(`P-fight never met: ${never.join('; ')} (on ${FIGHT_BOARDS} boards)`)
@@ -3944,6 +3978,455 @@ function kegTask(core, mods) {
   return counts
 }
 
+// ── P-races (F5a, DESIGN §4.2.12) ───────────────────────────────────────────
+// The Hive's burrowers and swarm and the Aerie's divers, on scenes of their
+// own (the random games meet them, but judge neither a tunnel's edges nor
+// the order of a swarm's dice). Each scene is a hotseat match after its
+// deployment, the board cleared and built by hand (a wall, a rock, a hedge,
+// a keg, as the scene needs), everyone gone but the scene's units, played
+// on both kinds of board: flat, and with height (the same scene with a
+// raised block in a far corner, so every plan goes by the height branch,
+// reachHeight and walkableHeight); and scene 4 on a hand-built fort (a
+// deck and its stair) and on RACES_FORTS fortified boards as the set
+// scatters them:
+//  burrow (the Delvers, r 1.011, M5; the walker beside it the same disc
+//  in walk mode):
+//  (1) a wall (soft) across the way: the Delvers' plan reaches the cell on
+//      its far side within M and may end there; a walker's plan does not;
+//  (2) a rock (hard) in the wall's place: its plan doesn't reach it;
+//  (3) every end its plan may take (validEnd) is standable on foot (its
+//      disc clear of the wall, clearAll ≥ r − 0.06), while the plan holds
+//      cells under the wall that no end may take;
+//  (4) on a fort: no cell of its plan (out to 30") above STEP, so no stair
+//      or ladder top, every cell's disc clear of the ledges (cliff ≥ r −
+//      0.06, but for the wriggle out of a cramped start), and every sample
+//      of every pulled path at or under STEP; while a walker of its disc
+//      (climbing nothing) from the same place goes up the stair;
+//  (5) a keg on the way: the Delvers move under it (a `move` through
+//      apply, the pulled path through the keg's own cells), the keg intact,
+//      no keg.fuse, nothing broken;
+//  (6) an enemy beyond the wall: its 1" bubble and base forbid the plan as
+//      a walker's (the plan's mask the walker's, forbidMask; no cell of the
+//      plan forbidden; cells reached with the enemy gone that its bubble
+//      takes away);
+//  (7) every sample of every pulled path (each valid end's) on the burrow
+//      field (clearHard ≥ r − 0.06), each path no longer than the reach's
+//      distance there; and under a hedge (rough ground) the tunnel costs
+//      ×1 (shorter than a walker's ×2) and pulls to one straight segment;
+//  (8) a charge through the wall's foot: the Delvers' charge plan reaches a
+//      spot against an enemy beyond it, a walker's none;
+//  (9) a fall back: engaged with an enemy, the Delvers' plan falls back in
+//      burrow mode through its bubble (cells inside it reached) but never
+//      its base, and under the wall behind them;
+//  swarm (the Delvers fighting an enemy squad, over SWARM_DICE dice seeds;
+//  every die held to a copy of the stream):
+//  (10) at alive ≥ min, the wound roll's 1s rolled once more, straight
+//      after the wound roll and before the save roll: the "Re-roll 1s
+//      (swarm)" row the stream's next `ones` dice, the save roll the merged
+//      wounds' dice, the log line's wounds the merged count, and nothing
+//      else drawn;
+//  (11) below min (3 of 8 standing) and with no 1 among the wound dice:
+//      no re-roll row and no draw;
+//  swoop (the Kestrels, chargeS 2, fighting a Scaleguard squad):
+//  (12) on their own charge turn (flags.charged, G.turn.active their seat):
+//      the Wound row's need woundNeed(S + 2, T) and its label "(dive, S5)",
+//      the hit row's need its WS's as ever;
+//  (13) the same Kestrels in the opponent's fight phase (flags.charged
+//      still set, as resetTurn leaves the other seat's flags): at S;
+//  (14) engaged without charging: at S;
+//  (15) the Glider Wing, a flier without the flag, charged on its own
+//      turn: its need unchanged.
+// Every scene must be met on both kinds of board, or the run says which it
+// never met and fails.
+const RACES_FORTS = 3, SWARM_DICE = 24
+function racesTask(core, mods) {
+  const q = core.q
+  const { STEP } = mods.nav
+  const counts = { scenes: 0, tunnels: 0, stopped: 0, ends: 0, under: 0, deckCells: 0, forts: 0, stairs: 0, kegs: 0, bubbles: 0, paths: 0, samples: 0, straight: 0, charges: 0, fallbacks: 0, rerolls: 0, rerollDice: 0, below: 0, noOnes: 0, dives: 0, opponent: 0, unCharged: 0, glider: 0 }
+  const met = new Set()
+  const d6 = (r) => 1 + Math.floor(mods.rng.draw(r) * 6)
+  const at = (u, x, z) => {
+    u.pos.x = x
+    u.pos.z = z
+  }
+  const keep = (G, units) => {
+    for (const u of G.units) if (!units.includes(u)) u.alive = 0
+  }
+  // a hotseat match after its deployment, its board cleared (and, `high`,
+  // a raised block in the far corner: the height branch for every plan)
+  const fresh = (races, dice, high) => {
+    const G = core.createMatch({ board: 1, dice, seats: races.map((race) => ({ race, ctrl: 'human' })) }, { out: [] })
+    core.apply(G, 0, { t: 'deployed' })
+    core.apply(G, 1, { t: 'deployed' })
+    if (G.pending?.k !== 'phase' || G.pending.phase !== 'move') throw new Error(`P-races, dice ${dice}: no movement phase after the deployment`)
+    G.terrain.clear()
+    if (high) G.terrain.add({ kind: 'scene', hp: Infinity, navKind: null, surface: { y: 2 }, shape: { x: -16, y: 1, z: -11, hx: 2, hy: 1, hz: 2, yaw: 0 } })
+    G.terrain.dirty = true
+    G.out.length = 0
+    return { G, s: G.pending.seats[0] }
+  }
+  const wall = (G, navKind, x = 0) => G.terrain.add({ kind: navKind === 'hard' ? 'rock' : 'block', hp: navKind === 'hard' ? Infinity : 4, navKind, los: 'block', cover: true, shape: { x, y: 0.6, z: 0, hx: 0.3, hy: 0.6, hz: 7, yaw: 0 } })
+  const nav = (G) => {
+    mods.match.refreshNav(G)
+    return G.nav
+  }
+  const unitOf = (G, key) => G.units.find((u) => u.t.key === key)
+  // a walker's reach of the burrower's disc from where it stands (the
+  // comparison every burrow scene draws)
+  const walker = (G, u, max, forbid = null) => nav(G).reach(u.pos.x, u.pos.z, { r: u.r, max, mode: 'walk', forbid, climb: false })
+  // the samples of a polyline at half a cell, as nav.walkable takes them
+  const samples = (G, pts) => {
+    const out = []
+    for (let k = 1; k < pts.length; k++) {
+      const a = pts[k - 1], b = pts[k], len = Math.hypot(b.x - a.x, b.z - a.z), n = Math.max(1, Math.ceil(len / (G.nav.cell * 0.5)))
+      for (let s = 0; s <= n; s++) out.push(G.nav.index(a.x + ((b.x - a.x) * s) / n, a.z + ((b.z - a.z) * s) / n))
+    }
+    return out
+  }
+  const length = (pts) => pts.reduce((L, p, k) => (k ? L + Math.hypot(p.x - pts[k - 1].x, p.z - pts[k - 1].z) : 0), 0)
+  for (const high of [false, true]) {
+    const kind = high ? 'with height' : 'flat'
+    const meet = (k) => met.add(`${k} ${kind}`)
+    // (1)-(3), (7): the wall
+    for (const navKind of ['soft', 'hard']) {
+      const { G } = fresh(['insect', 'serpent'], 11, high)
+      const u = unitOf(G, 'delver')
+      keep(G, [u])
+      wall(G, navKind)
+      at(u, -2.2, 0.1)
+      const where = `P-races (${kind}), the Delvers at a ${navKind === 'hard' ? 'rock' : 'wall'}`
+      if (u.t.move !== 'burrow' || q.moveMode(u) !== 'burrow') throw new Error(`${where}: the Delvers' move is ${q.moveMode(u)}, not burrow`)
+      const plan = q.movePlan(G, u), N = nav(G)
+      const far = N.index(2.2, 0.1)
+      if (navKind === 'hard') {
+        // (2) the rock stops it
+        if (isFinite(plan.res.dist[far])) throw new Error(`${where}: the plan reaches the rock's far side (${plan.res.dist[far].toFixed(2)}")`)
+        for (let i = 0; i < N.N; i++) if (isFinite(plan.res.dist[i]) && N.clearHard[i] < u.r - 0.06 && Math.hypot(N.x(i) - u.pos.x, N.z(i) - u.pos.z) >= u.r * 1.5) throw new Error(`${where}: the plan holds cell ${i} under the rock`)
+        counts.stopped++
+        meet('2 a rock stops it')
+        continue
+      }
+      // (1) the wall: reached and an end, a walker's plan short of it
+      if (!(plan.res.dist[far] <= u.t.M) || !q.validEnd(G, plan, far)) throw new Error(`${where}: the plan doesn't reach the wall's far side within M${u.t.M} (${plan.res.dist[far]}), or may not end there`)
+      if (isFinite(walker(G, u, u.t.M).dist[far])) throw new Error(`${where}: a walker of its disc reaches the far side too: the scene proves nothing`)
+      counts.tunnels++
+      meet('1 under a wall')
+      // (3) every end on foot, and cells under the wall in the plan
+      let under = 0
+      for (let i = 0; i < N.N; i++) {
+        if (!isFinite(plan.res.dist[i])) continue
+        if (N.clearAll[i] < u.r - 0.06) under++
+        if (!q.validEnd(G, plan, i)) continue
+        counts.ends++
+        if (!(N.clearAll[i] >= u.r - 0.06) || !N.standable(i, u.r, 'walk')) throw new Error(`${where}: an end at cell ${i} inside the wall (clearAll ${N.clearAll[i].toFixed(2)})`)
+      }
+      if (!under) throw new Error(`${where}: no cell of the plan lies under the wall`)
+      counts.under += under
+      meet('3 every end on foot')
+      // (7) every end's pulled path on the burrow field, no longer than the
+      // reach
+      let through = 0
+      for (let i = 0; i < N.N; i++) {
+        if (!isFinite(plan.res.dist[i]) || !q.validEnd(G, plan, i)) continue
+        const pts = N.path(plan.res, i, u.r, plan.forbid)
+        for (const c of samples(G, pts)) {
+          if (c < 0 || N.clearHard[c] < u.r - 0.06) throw new Error(`${where}: the path to cell ${i} samples cell ${c} off the burrow field (clearHard ${N.clearHard[c]})`)
+          if (N.clearAll[c] < u.r - 0.06) through++
+          counts.samples++
+        }
+        if (length(pts) > plan.res.dist[i] + 1e-6) throw new Error(`${where}: the path to cell ${i} is ${length(pts).toFixed(3)}", longer than the reach's ${plan.res.dist[i].toFixed(3)}"`)
+        counts.paths++
+      }
+      if (!through) throw new Error(`${where}: no pulled path passes under the wall`)
+      meet('7 the pulled paths on the burrow field')
+    }
+    // (7) under a hedge: ×1, and one straight segment
+    {
+      const { G } = fresh(['insect', 'serpent'], 11, high)
+      const u = unitOf(G, 'delver')
+      keep(G, [u])
+      G.terrain.add({ kind: 'hedge', hp: 1, navKind: 'diff', los: 'obscure', cover: true, shape: { x: 0, y: 0.4, z: 0, hx: 0.8, hy: 0.4, hz: 7, yaw: 0 } })
+      at(u, -2.2, 0.1)
+      const where = `P-races (${kind}), the Delvers at a hedge`
+      const plan = q.movePlan(G, u), N = nav(G), far = N.index(2.2, 0.1)
+      const w = walker(G, u, 40).dist[far]
+      if (!(plan.res.dist[far] <= u.t.M) || !(plan.res.dist[far] < w - 0.5)) throw new Error(`${where}: the tunnel costs ${plan.res.dist[far]}", a walker's ${w}": not ×1 under rough ground`)
+      const pts = N.path(plan.res, far, u.r, plan.forbid)
+      if (pts.length !== 2) throw new Error(`${where}: the pulled path under the hedge has ${pts.length} points, not one straight segment (${JSON.stringify(pts.map((p) => [+p.x.toFixed(2), +p.z.toFixed(2)]))})`)
+      counts.straight++
+      meet('7 straight under rough ground')
+    }
+    // (4) a fort by hand: a deck 1.5" up and its stair
+    {
+      const { G } = fresh(['insect', 'serpent'], 11, true)
+      const u = unitOf(G, 'delver')
+      keep(G, [u])
+      G.terrain.add({ kind: 'scene', hp: Infinity, navKind: null, surface: { y: 1.5 }, shape: { x: 7, y: 0.75, z: 0, hx: 3, hy: 0.75, hz: 4, yaw: 0 } })
+      G.terrain.add({ kind: 'scene', hp: Infinity, navKind: null, surface: { y: 1.5, ramp: { axis: 'x', y0: 0, y1: 1.5 } }, shape: { x: 1.5, y: 0.75, z: 0, hx: 2.5, hy: 0.75, hz: 2.5, yaw: 0 } })
+      at(u, -3.5, 0.1)
+      fortScene(G, u, `P-races (${kind}), the Delvers at a hand-built deck's stair`)
+      meet('4 a fort by hand')
+    }
+    // (5) a keg on the way, through apply
+    {
+      let S = null
+      for (let dice = 11; dice < 40 && !S; dice++) {
+        const f = fresh(['insect', 'serpent'], dice, high)
+        if (unitOf(f.G, 'delver').side === f.s) S = f
+      }
+      if (!S) throw new Error(`P-races (${kind}): no dice seed gave the Hive the first turn`)
+      const { G, s } = S, u = unitOf(G, 'delver')
+      keep(G, [u])
+      const keg = mods.recipes.powderKeg(G.terrain, 0, 0.1, 0, '#8a5a34')
+      G.terrain.dirty = true
+      at(u, -2.2, 0.1)
+      const where = `P-races (${kind}), the Delvers under a keg`
+      const plan = q.movePlan(G, u), N = nav(G), far = N.index(2.2, 0.1)
+      const pts = N.path(plan.res, far, u.r, plan.forbid)
+      if (!samples(G, pts).some((c) => c >= 0 && N.clearAll[c] < 0.3)) throw new Error(`${where}: the pulled path doesn't pass under the keg`)
+      const body = { t: 'move', u: u.id, c: far }
+      const why = core.legal(G, s, body)
+      if (why) throw new Error(`${where}: legal() refuses the move under the keg: ${why}`)
+      G.out.length = 0
+      core.apply(G, s, body)
+      if (!keg.alive || keg.hp !== keg.maxHp) throw new Error(`${where}: the keg is ${keg.alive ? `hurt (${keg.hp} of ${keg.maxHp})` : 'broken'}`)
+      if (G.out.some((e) => e.t === 'keg.fuse' || e.t === 'terrain.destroy' || e.t === 'terrain.hurt')) throw new Error(`${where}: the walk set something off: ${G.out.filter((e) => /^(keg|terrain)\./.test(e.t)).map((e) => e.t).join(', ')}`)
+      if (Math.hypot(u.pos.x - N.x(far), u.pos.z - N.z(far)) > 1e-9) throw new Error(`${where}: the Delvers stand at (${u.pos.x}, ${u.pos.z}), not the far side`)
+      counts.kegs++
+      meet('5 under a keg')
+    }
+    // (6) an enemy beyond the wall
+    {
+      const { G } = fresh(['insect', 'serpent'], 11, high)
+      const u = unitOf(G, 'delver'), e = unitOf(G, 'scaleguard')
+      keep(G, [u, e])
+      wall(G, 'soft')
+      at(u, -2.2, 0.1)
+      at(e, 3.4, 0.1)
+      const where = `P-races (${kind}), the Delvers at a wall with ${e.t.short} beyond it`
+      const plan = q.movePlan(G, u), N = nav(G)
+      const mask = q.forbidMask(G, u, mods.rules.ENGAGE + 0.05)
+      for (let i = 0; i < N.N; i++) {
+        if (plan.forbid[i] !== mask[i]) throw new Error(`${where}: the plan's mask isn't a walker's (forbidMask) at cell ${i}`)
+        if (isFinite(plan.res.dist[i]) && mask[i]) throw new Error(`${where}: the plan holds cell ${i}, inside ${e.t.short}'s bubble`)
+      }
+      e.alive = 0
+      const open = q.movePlan(G, u)
+      e.alive = e.models.filter((m) => m.alive).length
+      let taken = 0
+      for (let i = 0; i < N.N; i++) if (isFinite(open.res.dist[i]) && !isFinite(plan.res.dist[i]) && mask[i]) taken++
+      if (!taken) throw new Error(`${where}: the enemy's bubble takes nothing from the plan`)
+      counts.bubbles += taken
+      meet('6 the bubble forbids it')
+    }
+    // (8) a charge through the wall's foot
+    {
+      const { G } = fresh(['insect', 'serpent'], 11, high)
+      const u = unitOf(G, 'delver'), e = unitOf(G, 'scaleguard'), wk = unitOf(G, 'spinethrower')
+      keep(G, [u, e, wk])
+      wall(G, 'soft')
+      at(u, -2.4, 0.1)
+      at(e, 4.4, 0.1)
+      at(wk, -12, -11)
+      const where = `P-races (${kind}), the Delvers charging ${e.t.short} beyond a wall`
+      const plan = q.chargePlan(G, u, e)
+      if (!plan || plan.mode !== 'burrow' || !(plan.dist <= 12)) throw new Error(`${where}: no charge plan in burrow mode (${plan ? `${plan.mode}, ${plan.dist}"` : 'none'})`)
+      if (!(G.nav.x(plan.cell) > 0.3)) throw new Error(`${where}: the spot (${G.nav.x(plan.cell)}) isn't beyond the wall`)
+      // the walker's: the Spinethrowers from the same place
+      at(wk, u.pos.x, u.pos.z)
+      u.alive = 0
+      const wp = q.chargePlan(G, wk, e)
+      u.alive = u.models.filter((m) => m.alive).length
+      if (wp && wp.dist <= plan.dist + 1) throw new Error(`${where}: a walker's charge plan goes as near (${wp.dist}" against ${plan.dist}")`)
+      counts.charges++
+      meet('8 a charge through the wall')
+    }
+    // (9) a fall back under the wall behind it
+    {
+      const { G } = fresh(['insect', 'serpent'], 11, high)
+      const u = unitOf(G, 'delver'), e = unitOf(G, 'scaleguard')
+      keep(G, [u, e])
+      wall(G, 'soft')
+      at(u, 2.0, 0.1)
+      at(e, 2.0 + u.r + e.r + 0.5, 0.1)
+      const where = `P-races (${kind}), the Delvers falling back from ${e.t.short}`
+      if (!q.isEngaged(G, u)) throw new Error(`${where}: not engaged`)
+      const plan = q.movePlan(G, u), N = nav(G)
+      if (!plan.fallback || plan.mode !== 'burrow') throw new Error(`${where}: the plan is ${plan.fallback ? '' : 'no fall back, '}in ${plan.mode} mode`)
+      let inBubble = 0
+      for (let i = 0; i < N.N; i++) {
+        if (!isFinite(plan.res.dist[i])) continue
+        const d = Math.hypot(N.x(i) - e.pos.x, N.z(i) - e.pos.z)
+        if (d < e.r + u.r) throw new Error(`${where}: the plan holds cell ${i}, on ${e.t.short}'s base (${d.toFixed(2)}" from its centre)`)
+        if (d < e.r + u.r + mods.rules.ENGAGE && Math.hypot(N.x(i) - u.pos.x, N.z(i) - u.pos.z) > 0.5) inBubble++
+      }
+      const west = N.index(-2.2, 0.1)
+      if (!inBubble || !q.validEnd(G, plan, west)) throw new Error(`${where}: ${inBubble} cells in the bubble, and the far side of the wall ${q.validEnd(G, plan, west) ? 'taken' : 'not taken'}`)
+      counts.fallbacks++
+      meet('9 a fall back under the wall')
+    }
+    // (10), (11) swarm: the Delvers fight the Scaleguard
+    for (let dice = 1; dice <= SWARM_DICE; dice++) {
+      for (const few of [false, true]) {
+        const { G } = fresh(['insect', 'serpent'], dice, high)
+        const u = unitOf(G, 'delver'), e = unitOf(G, 'scaleguard')
+        keep(G, [u, e])
+        at(u, -1.6, 0.1)
+        at(e, -1.6 + u.r + e.r + 0.4, 0.1)
+        if (few) {
+          for (const m of u.models.slice(3)) {
+            m.alive = false
+            m.w = 0
+          }
+          u.alive = 3
+        }
+        nav(G)
+        const where = `P-races (${kind}), dice ${dice}, ${u.alive} Delvers fight ${e.t.short}`
+        if (!q.isEngaged(G, u)) throw new Error(`${where}: not engaged`)
+        const w = u.t.melee, r = { ...G.rng }
+        G.out.length = 0
+        mods.fight.fight(G, u)
+        const rows = G.out.filter((x) => x.t === 'dice'), logs = G.out.filter((x) => x.t === 'log').map((x) => x.html.replace(/<[^>]+>/g, ''))
+        // the oracle: hits, wounds, the 1s again (at alive ≥ min), saves
+        const n = mods.rules.attackCount(u, w, true), need = mods.rules.hitNeed(u.t.WS, 0)
+        const hits = Array.from({ length: n }, () => d6(r)), h = hits.filter((d) => d >= need).length
+        const wn = mods.rules.woundNeed(w.S, e.t.T, w.poison)
+        const wd = Array.from({ length: h }, () => d6(r))
+        const ones = wd.filter((d) => d === 1).length, swarms = u.alive >= u.t.swarm.min
+        const rr = swarms && ones ? Array.from({ length: ones }, () => d6(r)) : []
+        const wounds = wd.filter((d) => d >= wn).length + rr.filter((d) => d >= wn).length
+        const sv = Array.from({ length: wounds }, () => d6(r))
+        const sn = mods.rules.saveNeed(e.t.Sv, w.AP, false)
+        const want = [['Hit', hits], ...(h ? [['Wound', wd]] : []), ...(rr.length ? [['Re-roll 1s (swarm)', rr]] : []), ...(wounds ? [[sn > 6 ? 'No save' : 'Save', sn > 6 ? [] : sv]] : [])]
+        const got = rows.map((x) => [x.label, x.dice])
+        const same = got.length === want.length && want.every(([label, dice], k) => got[k][0].startsWith(label) && JSON.stringify(got[k][1]) === JSON.stringify(dice))
+        if (!same) throw new Error(`${where}: the rows ${JSON.stringify(got)} aren't the stream's ${JSON.stringify(want)}`)
+        if (rr.length && rows[2].need !== wn) throw new Error(`${where}: the re-roll row's need is ${rows[2].need}, not the wound need ${wn}`)
+        if (r.n !== G.rng.n || r.h !== G.rng.h || r.a !== G.rng.a) throw new Error(`${where}: the fight drew ${G.rng.n - r.n} more than the oracle's dice`)
+        if (!logs.some((l) => l.includes(` fight ${e.t.short}: ${h} hit, ${wounds} wound, `))) throw new Error(`${where}: the log ${JSON.stringify(logs)} doesn't count ${wounds} wounds (the re-rolls' with the rest)`)
+        if (swarms && ones) {
+          counts.rerolls++
+          counts.rerollDice += ones
+          meet('10 the re-roll after the wound roll')
+        } else if (!swarms && ones) {
+          counts.below++
+          meet('11 below min, no draw')
+        } else if (swarms && h && !ones) {
+          counts.noOnes++
+          meet('11 no 1, no draw')
+        }
+      }
+    }
+    // (12)-(15) swoop: the Kestrels (and the Glider) fight the Scaleguard
+    for (const [k, races, key, charged, own] of [
+      ['12 the dive on its own charge turn', ['bird', 'serpent'], 'kestrel', true, true],
+      ["13 at S in the opponent's fight phase", ['bird', 'serpent'], 'kestrel', true, false],
+      ['14 at S engaged without charging', ['bird', 'serpent'], 'kestrel', false, true],
+      ["15 the Glider's need unchanged", ['squirrel', 'serpent'], 'glider', true, true],
+    ]) {
+      // (the first dice seed whose hit roll lands a hit: a Wound row to read)
+      let G, u, e, rows, where
+      for (let dice = 11; dice < 40 && !rows?.some((x) => /^Wound /.test(x.label)); dice++) {
+        ({ G } = fresh(races, dice, high))
+        u = unitOf(G, key)
+        e = unitOf(G, 'scaleguard')
+        keep(G, [u, e])
+        at(u, -1.6, 0.1)
+        at(e, -1.6 + u.r + e.r + 0.4, 0.1)
+        nav(G)
+        if (charged) {
+          u.flags.charged = true
+          u.flags.chargeTarget = e.id
+        }
+        G.turn.active = own ? u.side : 1 - u.side
+        where = `P-races (${kind}), dice ${dice}, ${u.t.short} fighting ${e.t.short}${charged ? ', charged,' : ''} in ${own ? 'its own' : "the opponent's"} turn`
+        G.out.length = 0
+        mods.fight.fight(G, u)
+        rows = G.out.filter((x) => x.t === 'dice')
+      }
+      const w = u.t.melee
+      const dive = !!u.t.swoop && charged && own, S = w.S + (dive ? u.t.swoop.chargeS : 0)
+      const wn = mods.rules.woundNeed(S, e.t.T, w.poison), need = mods.rules.hitNeed(u.t.WS, 0)
+      if (rows[0]?.label !== `Hit ${need}+`) throw new Error(`${where}: the hit row is ${JSON.stringify(rows[0]?.label)}, not "Hit ${need}+" (the dive is the wound roll's alone)`)
+      const wrow = rows.find((x) => /^Wound /.test(x.label))
+      if (!wrow) throw new Error(`${where}: no hit in 29 dice seeds`)
+      const label = `Wound ${wn}+${dive ? ` (dive, S${S})` : ''}`
+      if (wrow.label !== label || wrow.need !== wn) throw new Error(`${where}: the wound row says ${JSON.stringify(wrow.label)} (need ${wrow.need}), not ${JSON.stringify(label)}`)
+      if (dive && !(wn < mods.rules.woundNeed(w.S, e.t.T, w.poison))) throw new Error(`${where}: the dive's need ${wn} is no better than S${w.S}'s`)
+      counts[k.startsWith('12') ? 'dives' : k.startsWith('13') ? 'opponent' : k.startsWith('14') ? 'unCharged' : 'glider']++
+      meet(k)
+    }
+    counts.scenes++
+  }
+  // (4) on the set's own fortified boards
+  for (let board = 1, found = 0; board <= 40 && found < RACES_FORTS; board++) {
+    const G = core.createMatch({ board, dice: board, terrain: 'fortified', seats: [{ race: 'insect', ctrl: 'human' }, { race: 'serpent', ctrl: 'human' }] }, { out: [] })
+    const u = unitOf(G, 'delver')
+    keep(G, [u])
+    const N = nav(G)
+    if (!N.hasHeight) continue
+    // a ground cell at the foot of a stair: standable, the stair's cells
+    // beside it rising
+    let start = -1
+    for (let i = 0; i < N.N && start < 0; i++) {
+      if (N.floor[i] > 0.05 || !N.standable(i, u.r, 'walk') || N.cliff[i] < u.r + 0.2) continue
+      for (let j = 0; j < N.N; j++) {
+        if (N.rampOf[j] < 0 || N.floor[j] > 0.3) continue
+        if (Math.hypot(N.x(i) - N.x(j), N.z(i) - N.z(j)) < 1.5) {
+          start = i
+          break
+        }
+      }
+    }
+    if (start < 0) continue
+    at(u, N.x(start), N.z(start))
+    if (fortScene(G, u, `P-races, fortified board ${board}, the Delvers at a stair's foot`, true)) found++
+  }
+  if (counts.forts < RACES_FORTS) throw new Error(`P-races: only ${counts.forts} of the first 40 fortified boards had a stair a walker of the Delvers' disc climbs (${RACES_FORTS} wanted)`)
+  const want = ['1 under a wall', '2 a rock stops it', '3 every end on foot', '4 a fort by hand', '5 under a keg', '6 the bubble forbids it', '7 the pulled paths on the burrow field', '7 straight under rough ground', '8 a charge through the wall', '9 a fall back under the wall', '10 the re-roll after the wound roll', '11 below min, no draw', '11 no 1, no draw', '12 the dive on its own charge turn', "13 at S in the opponent's fight phase", '14 at S engaged without charging', "15 the Glider's need unchanged"]
+  const never = want.flatMap((k) => ['flat', 'with height'].filter((b) => !met.has(`${k} ${b}`)).map((b) => `(${k}) ${b}`))
+  // ((4) a fort is a board with height: the flat board has none)
+  const missing = never.filter((k) => !/^\(4 [^)]*\) flat$/.test(k))
+  if (missing.length) throw new Error(`P-races never met: ${missing.join('; ')}`)
+  return counts
+
+  // (4): the Delvers' plan out to 30" from where they stand: every cell at
+  // or under STEP, its disc clear of the ledges (but the wriggle out of a
+  // cramped start), every pulled path's every sample at or under STEP;
+  // and a walker of its disc, climbing nothing, from the same place goes
+  // above STEP (the stair): false when the walker can't either (the board
+  // proves nothing)
+  function fortScene(G, u, where, optional = false) {
+    const N = nav(G)
+    const res = N.reach(u.pos.x, u.pos.z, { r: u.r, max: 30, mode: 'burrow', forbid: null, climb: false })
+    const w = N.reach(u.pos.x, u.pos.z, { r: u.r, max: 30, mode: 'walk', forbid: null, climb: false })
+    let up = 0
+    for (let i = 0; i < N.N; i++) if (isFinite(w.dist[i]) && N.floor[i] > STEP) up++
+    if (!up) {
+      if (optional) return false
+      throw new Error(`${where}: a walker of the Delvers' disc doesn't go up the stair: the scene proves nothing`)
+    }
+    let cells = 0
+    for (let i = 0; i < N.N; i++) {
+      if (!isFinite(res.dist[i])) continue
+      if (N.floor[i] > STEP) throw new Error(`${where}: the plan holds cell ${i} ${N.floor[i]}" up (STEP ${STEP})`)
+      if (N.cliff[i] < u.r - 0.06 && Math.hypot(N.x(i) - u.pos.x, N.z(i) - u.pos.z) >= u.r * 1.5) throw new Error(`${where}: the plan holds cell ${i}, its disc on a ledge's band (cliff ${N.cliff[i].toFixed(2)})`)
+      cells++
+    }
+    let paths = 0
+    for (let i = 0; i < N.N && paths < 60; i += 37) {
+      if (!isFinite(res.dist[i])) continue
+      for (const c of samples(G, N.path(res, i, u.r, null))) if (c >= 0 && N.floor[c] > STEP) throw new Error(`${where}: the path to cell ${i} crosses cell ${c}, ${N.floor[c]}" up`)
+      paths++
+    }
+    counts.deckCells += up
+    counts.paths += paths
+    counts.stairs++
+    if (optional) counts.forts++
+    return true
+  }
+}
+
 // ── P-spell (V3c, DESIGN §4.1 rule 29) ──────────────────────────────────────
 // The casters' spells, on scenes of their own: for each race's caster (the
 // Elder, the Hierophant) in either seat, on SPELL_BOARDS boards, a hotseat
@@ -4074,8 +4557,9 @@ function spellTask(core, mods) {
   const ally = (w) => !!(w.ward || w.resolve)
   const markOf = (w) => (w.ward ? 'warded' : w.resolve ? 'resolute' : w.snare ? 'snared' : w.mesmerize ? 'mesmerized' : null)
   for (let board = 1; board <= SPELL_BOARDS; board++) {
-    for (const races of [['squirrel', 'serpent'], ['serpent', 'squirrel']]) {
-      const seed = board * 7919 + (races[0] === 'squirrel' ? 0 : 1)
+    // ((F5a) and the new casters, the Hivemother's and the Skyseer's)
+    for (const [k, races] of [['squirrel', 'serpent'], ['serpent', 'squirrel'], ['insect', 'bird'], ['bird', 'insect']].entries()) {
+      const seed = board * 7919 + k
       const first = scene(board, races, mulberry32(seed))
       if (!first) continue
       const spells = first.c.t.spells
@@ -5822,6 +6306,11 @@ if (a.child) {
       const policy = await import(pathToFileURL(join(dir, 'core', 'ai', 'policy.js')).href)
       RACES_S = RACES
       out = { ok: true, counts: spellTask(core, { rng, policy }) }
+    } else if (task.kind === 'races') {
+      // (F5a: P-races' scenes)
+      const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
+      const [nav, matchMod, fight, rules, recipes] = await Promise.all([mod('core', 'nav.js'), mod('core', 'match.js'), mod('core', 'actions', 'fight.js'), mod('core', 'rules.js'), mod('core', 'terrain', 'recipes.js')])
+      out = { ok: true, counts: racesTask(core, { rng, nav, match: matchMod, fight, rules, recipes }) }
     } else if (task.kind === 'keg') {
       // (F19a: P-keg's scenes)
       const mod = (...p) => import(pathToFileURL(join(dir, ...p)).href)
@@ -5899,6 +6388,24 @@ function child(task, pkg) {
 // merge) the Powder Field among them: it takes War-Carts as Grand does)
 const ARMY = { fuzz: 100000, ai: 40, human: 10, ridesAI: { field: 6, grand: 2, powder: 2 }, ridesHuman: 6, hullDeploy: { field: 40, grand: 20, powder: 20 }, hullHuman: 6 }
 
+// (F5a) P-races' run, on code with the burrow mode (core/nav.js names it)
+// and the Hive: [] when it holds (or, unless it was asked
+// for alone, when the code has neither), else its failure
+const hasRaces = (pkg) => /mode === 'burrow'/.test(readFileSync(join(pkg, 'core', 'nav.js'), 'utf8')) && existsSync(join(pkg, 'data', 'races', 'insect.js'))
+// ((F5a) P-spell's or P-fight's scenes alone: --only spell, --only fight)
+async function sceneRun(pkg, say, kind) {
+  const r = await child({ kind }, pkg)
+  say(`  P-${kind}: ${r.ok ? `ok   ${Object.entries(r.counts).filter(([, n]) => typeof n === 'number').map(([k, n]) => `${k} ${n}`).join(', ')}` : `FAIL ${r.error}`}`)
+  return r.ok ? [] : [r]
+}
+async function racesRun(pkg, say, alone = false) {
+  if (!hasRaces(pkg)) return alone ? [{ error: 'P-races: the code has no burrow field (core/nav.js) or no Hive (data/races/insect.js)' }] : []
+  const r = await child({ kind: 'races' }, pkg)
+  const c = r.counts
+  say(`  P-races: ${r.ok ? `ok   ${c.scenes} boards (flat and with height): under ${c.tunnels} walls a walker goes round, stopped by ${c.stopped} rocks, ${c.ends} ends all on foot (${c.under} cells under the wall reached), ${c.paths} pulled paths on the burrow field (${c.samples} samples), ${c.straight} straight under a hedge at ×1, ${c.kegs} kegs passed under intact, ${c.bubbles} cells a bubble takes away, ${c.charges} charges through a wall's foot, ${c.fallbacks} falls back under a wall; ${c.stairs} forts (${c.forts} of the fortified set's) whose stairs a walker climbs and the Delvers never (${c.deckCells} cells above STEP the walker reached); the swarm's re-roll held die for die in ${c.rerolls} fights (${c.rerollDice} dice), no draw in ${c.below} below min and ${c.noOnes} with no 1; the dive in ${c.dives} fights, at S in ${c.opponent} in the opponent's phase and ${c.unCharged} uncharged, the Glider's need unchanged in ${c.glider}` : `FAIL ${r.error}`}`)
+  return r.ok ? [] : [r]
+}
+
 // (F9b) P-lattice's run, on code with the lattice (core/nav.js hullReach):
 // [] when it holds (or, unless it was asked for alone, when the code has
 // no lattice), else its failure
@@ -5912,8 +6419,11 @@ async function latticeRun(pkg, say, alone = false) {
 
 async function run(pkg, { games, seed, only, quiet = false, coverage = true, army = ARMY }) {
   const say = quiet ? () => {} : (s) => console.log(s)
-  // (F9b) --only lattice: P-lattice alone
+  // (F9b) --only lattice: P-lattice alone; (F5a) --only races, spell or
+  // fight: P-races, P-spell or P-fight alone
   if (only === 'lattice') return latticeRun(pkg, say, true)
+  if (only === 'races') return racesRun(pkg, say, true)
+  if (only === 'spell' || only === 'fight') return sceneRun(pkg, say, only)
   const { items: all } = loadCorpus()
   const items = only === 'none' ? [] : select(all, only)
   const tasks = [...items.map((it) => ({ kind: 'corpus', id: it.id })), ...Array.from({ length: games }, (_, i) => ({ kind: 'random', seed: seed + i }))]
@@ -6007,6 +6517,8 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
     say(`  P-spell: ${r.ok ? `ok   ${r.counts.legal} casts taken at their targets and ${r.counts.refused} refused (the other side, past the range, the dead), ${r.counts.made} made and ${r.counts.fizzled} fizzled, each die for die and none twice a phase; ${r.counts.ends} marks worn off when they must; ${r.counts.wards} wards saving one better; ${r.counts.rerolls} resolute charges rolled again and ${r.counts.morale} resolute squads untested; the AI's pick on a friend ${r.counts.ai} times, its default its pick in ${r.counts.defaults} scenes` : `FAIL ${r.error}`}`)
     if (!r.ok) bad.push(r)
   }
+  // (F5a) P-races, for code with the burrow field and the Hive
+  bad.push(...(await racesRun(pkg, say)))
   // (F9b) P-lattice, for code with the lattice
   bad.push(...(await latticeRun(pkg, say)))
   // what the random games reached, over the whole run
@@ -6444,6 +6956,27 @@ const MUTATIONS = {
   'hull-deploy-unstanding': ['core/deploy.js', "  if (!nav.hullStands(i, f, fp, 'walk')) return false\n", ''],
   'landing-long-centre': ['core/actions/transport.js', '    if (v.t.fp ? clearOf(v, x, z, u.r) > LAND_REACH : hypot(x - v.pos.x, z - v.pos.z) - v.r - u.r > LAND_REACH) continue', '    if (hypot(x - v.pos.x, z - v.pos.z) - v.r - u.r > LAND_REACH) continue'],
   'wreck-unturned': ['core/actions/transport.js', 'yaw: v.t.fp ? (v.facing * Math.PI) / 4 : 0,', 'yaw: 0,'],
+  // (F5a) P-races, each on P-races alone: a burrower on the walkers'
+  // field, onto a deck by its stair, its pull refusing the rough ground it
+  // tunnelled, a swarm re-rolling below min, its re-roll after the save
+  // roll, a dive in the opponent's fight phase too, and the dive on the
+  // hit roll instead of the wound roll
+  'burrow-walks': ['core/nav.js', "    return mode === 'wreck' || mode === 'burrow' ? this.clearHard[i] : this.clearAll[i]\n", "    return mode === 'wreck' ? this.clearHard[i] : this.clearAll[i]\n"],
+  'burrow-decks': ['core/nav.js', '          if (burrow && floor[j] > STEP) continue   // a deck\'s footprint is hard (D:2926)\n', ''],
+  'burrow-diff': [
+    ['core/nav.js', "      // tunnel the search found)\n      if (mode !== 'burrow' && this.diff[i] !== d0) return false\n", '      // tunnel the search found)\n      if (this.diff[i] !== d0) return false\n'],
+    ['core/nav.js', "      f = this.floor[i]\n      if (mode !== 'burrow' && this.diff[i] !== d0) return false\n", '      f = this.floor[i]\n      if (this.diff[i] !== d0) return false\n'],
+  ],
+  'swarm-always': ['core/actions/fight.js', '  if (u.t.swarm && u.alive >= u.t.swarm.min) {\n', '  if (u.t.swarm) {\n'],
+  'swarm-late': [
+    ['core/actions/fight.js', "  // ((F5a) the swarm's branch, its only draws: the wound rolls of 1 once more)\n  if (u.t.swarm && u.alive >= u.t.swarm.min) {\n    const ones = wd.filter((d) => d === 1).length\n    if (ones) {\n      const rr = roll(G, ones)\n      wounds += passes(rr, wn)\n      emit(G, 'dice', { label: 'Re-roll 1s (swarm)', dice: rr, need: wn })\n    }\n  }\n", ''],
+    ['core/actions/fight.js', '  const sv = roll(G, wounds)\n', "  const sv = roll(G, wounds)\n  if (u.t.swarm && u.alive >= u.t.swarm.min) {\n    const ones = wd.filter((d) => d === 1).length\n    if (ones) {\n      const rr = roll(G, ones)\n      wounds += passes(rr, wn)\n      emit(G, 'dice', { label: 'Re-roll 1s (swarm)', dice: rr, need: wn })\n    }\n  }\n"],
+  ],
+  'swoop-every-turn': ['core/actions/fight.js', '  if (u.t.swoop && u.flags.charged && u.side === G.turn.active) S += u.t.swoop.chargeS\n', '  if (u.t.swoop && u.flags.charged) S += u.t.swoop.chargeS\n'],
+  'swoop-hits': [
+    ['core/actions/fight.js', '  if (u.t.swoop && u.flags.charged && u.side === G.turn.active) S += u.t.swoop.chargeS\n', ''],
+    ['core/actions/fight.js', '  const need = hitNeed(u.t.WS, mod)\n', '  const need = hitNeed(u.t.WS, mod) - (u.t.swoop && u.flags.charged && u.side === G.turn.active ? u.t.swoop.chargeS : 0)\n'],
+  ],
   'lattice-ties-reordered': ['core/nav.js', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] <= key) break\n', '    let i = this.size++\n    while (i > 0) {\n      const p = (i - 1) >> 1\n      if (keys[p] < key) break\n'],
 }
 
@@ -6466,8 +6999,10 @@ if (a['self-test']) {
   // ((F9b) P-hull's mutations on the same workload with two hull games and
   // a Field AI pair with Howdahs added)
   const hullLoad = { ...load, army: { ...load.army, ridesAI: { field: 2 }, hullHuman: 2 } }
-  const loadOf = (name) => (name.startsWith('lattice-') ? lattice : name.startsWith('hull-') ? hullLoad : load)
-  for (const [w, what] of [[load, 'three corpus battles, ten games'], [hullLoad, 'the same, with two hull games and a Field pair with Howdahs'], [lattice, 'P-lattice alone']]) {
+  // ((F5a) P-races' mutations each on P-races alone)
+  const races = { only: 'races', quiet: true }
+  const loadOf = (name) => (name.startsWith('lattice-') ? lattice : name.startsWith('hull-') ? hullLoad : /^(burrow|swarm|swoop)-/.test(name) ? races : load)
+  for (const [w, what] of [[load, 'three corpus battles, ten games'], [hullLoad, 'the same, with two hull games and a Field pair with Howdahs'], [lattice, 'P-lattice alone'], [races, 'P-races alone']]) {
     if (!names.some((x) => loadOf(x) === w)) continue
     const clean = await run(copyCode(dir, join(work, 'unbroken')), w)
     if (clean.length) {
@@ -6506,6 +7041,12 @@ const bad = await run(dir, { games: GAMES, seed: SEED, only: a.only })
 for (const b of bad) if (!b.id) console.log(`  FAIL ${b.error}`)
 if (a.only === 'lattice') {
   console.log(bad.length ? `\nproperty FAILED: ${bad.length} problem(s)` : "\nproperty passed (P-lattice alone): the long hulls' lattice is the reference lattice's on every state of every plan, its memo cleared by every rebuild, the body disc's reach its lower bound")
+  process.exit(bad.length ? 1 : 0)
+}
+// ((F5a) P-races, P-spell or P-fight alone)
+if (['races', 'spell', 'fight'].includes(a.only)) {
+  const what = { races: 'P-races alone: the burrowers tunnel where the rules say and no farther, the swarm re-rolls its 1s where rule 30 puts the draw, the divers dive on their own charge turn alone', spell: "P-spell alone: every caster's every spell cast, made, fizzled and worn off as its rules say", fight: 'P-fight alone: shooting into a fight held die for die for every ranged unit of every race' }[a.only]
+  console.log(bad.length ? `\nproperty FAILED: ${bad.length} problem(s)` : `\nproperty passed (${what})`)
   process.exit(bad.length ? 1 : 0)
 }
 console.log(bad.length ? `\nproperty FAILED: ${bad.length} problem(s)` : '\nproperty passed: asking never rolls or changes the match, the AI never plays an illegal command, random legal play never throws, two matches never touch, a quiet fold plays the same battle, the events show the match, a setup the rules can\'t play is refused, and (F11a) a seat\'s army is refused for its own reason or played as its list says')

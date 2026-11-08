@@ -2549,6 +2549,8 @@ Each rule gets a comment at its new site. The parity gates (P-ai, P-human and P-
 
     The marks are unit fields hashed as `UNIT_EXTRAS` (printed only when set). The AI values each spell (`spellValue`: an eruption as a template, the gaze its D3, a snare the charge and move it denies, a ward or a resolve the friend's exposure) and casts its best (`bestCast`), drawing nothing (rule 10: it bumps with V3c).
 
+30. **Burrow, swarm and swoop** (F5a). Each is a branch only a unit with the flag reaches: `mode === 'burrow'` in the nav (its field `clearHard`, its step ×1, its pulled path without the rough-ground test), `u.t.swarm && u.alive >= u.t.swarm.min` after the fight's wound roll, `u.t.swoop && u.flags.charged && u.side === G.turn.active` at its Strength, and the AI's two terms (`meleeValue`'s, the burrower's straight line with height). **Swarm's re-roll is F5a's only new draw:** `roll(G, ones)` straight after the wound roll `roll(G, h)` and before the save roll, the 1s counted over the wound dice in order, nothing drawn when there is none. Burrow and swoop draw nothing. Walk, wreck and fly keep today's expressions literally (`clearance`'s two old readings, `reach`'s two cost lines), so every battle that seats no new race is byte-identical.
+
 Rule 10 ("AI code is rules code") covers F7's AI terms (`levelDist` and the height term bump with F7a) and F9b's (the room term and the charge prefilter bump with F9b), and (F19a) the keg terms (`kegFear`, `kegGain`, `kegWalk`: they bump with F19a). It does not cover `autoList`, whose output is recorded (rule 23).
 
 ### 4.2 Large battles (S0-S3, F7-F11, V1)

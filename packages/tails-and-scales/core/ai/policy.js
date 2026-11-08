@@ -347,7 +347,8 @@ function* aiCharge(G, side, mask) {
       if (!plan) continue
       // ((V3c, rule 10) a resolute unit rolls a miss again: 2p − p²)
       const p0 = p2D6(plan.need), p = u.resolute ? p0 + p0 * (1 - p0) : p0
-      const gain = meleeValue(u, e) + (e.t.role === 'Artillery' ? 12 : 0) + (e.alive <= 2 ? 6 : 0)
+      // ((F5a, Q28) the charger's dive is valued here alone)
+      const gain = meleeValue(u, e, true) + (e.t.role === 'Artillery' ? 12 : 0) + (e.alive <= 2 ? 6 : 0)
       const loss = meleeValue(e, u)
       const min = role === 'melee' ? 0.25 : role === 'line' ? 0.33 : role === 'raider' ? 0.4 : role === 'hero' ? 0.5 : 0.6
       if (p < min) continue

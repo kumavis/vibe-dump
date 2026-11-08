@@ -163,9 +163,28 @@
 // the corpus (before F19a's corpus commit) it sweeps 12 keg battles, seeded
 // as corpus-add's candidates are, the races swapping seats.
 //
+// F5a's row (DESIGN §4.2.12, §4.2.9's thresholds), over the `races/` AI
+// pairs (the new races' Skirmish seatings, the Field pair and the fortified
+// one), every battle folded with sim/race-probe.mjs looking on, each
+// threshold over the battles fielding the mechanic:
+//   - a burrower tunnels in ≥ 50% of the battles fielding one (a walk of
+//     its own whose path crossed a cell a walker's disc can't stand on, or
+//     rough ground it paid ×1 for);
+//   - a swarm re-rolls its wound rolls of 1 in ≥ 50% of the battles
+//     fielding one (a "Re-roll 1s (swarm)" row);
+//   - a swooper fights on its own charge turn in ≥ 50% of the battles
+//     fielding one (its Wound row's dive label);
+// beside them (reported) the share of the burrowers' moves that tunnel,
+// and the times a burrower stood above STEP (never, by the rules). Until
+// races/ holds an AI pair, or with --sweep, it sweeps Skirmish AI battles
+// (16 by default) in F9c's form from seed 9900 (mulberry32(seed + k): board
+// and dice; the five new pairings in both seat orders in turn, the first
+// ten on classic, the next ten on fortified, and so on). On code without
+// the burrow field (core/nav.js's burrow mode) it is not judged.
+//
 //   node sim/play-report.mjs                    every row, on the working tree's core
-//   node sim/play-report.mjs --row f10b         one row (f7a, f7b, f7c, f9a, f9b, f9c, f10b, f19a; comma-separated for more)
-//   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's, F7b's, (F7c) F7c's post row, F9a's, (F9b) F9b's and (F9c) F9c's rows: a seeded sweep of AI battles instead
+//   node sim/play-report.mjs --row f10b         one row (f7a, f7b, f7c, f9a, f9b, f9c, f10b, f19a, f5a; comma-separated for more)
+//   node sim/play-report.mjs --sweep 24 [--seed S]   F7a's, F7b's, (F7c) F7c's post row, F9a's, (F9b) F9b's, (F9c) F9c's and (F5a) F5a's rows: a seeded sweep of AI battles instead
 //   --pin | --ref <ref> | --dir <packageDir>    another copy of the code
 //
 // F7a's and F7b's rows: with no fort/ AI pair in the corpus (before F7a's
@@ -177,14 +196,14 @@
 // failed), 2 for a usage error.
 import { parseArgs } from 'node:util'
 import { join } from 'node:path'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { loadCorpus, runOracle, pool, CPUS } from './lib.mjs'
 import { foldJob, loadMatch } from './run.mjs'
 import { codeDir, readPin } from './oracle/pin.mjs'
 import { setupFor, mulberry32 } from './oracle/human-bot.mjs'
 
-const ROWS = ['f7a', 'f7b', 'f7c', 'f9a', 'f9b', 'f9c', 'f10b', 'f19a']
+const ROWS = ['f7a', 'f7b', 'f7c', 'f9a', 'f9b', 'f9c', 'f10b', 'f19a', 'f5a']
 const { values: a } = parseArgs({ options: { row: { type: 'string' }, sweep: { type: 'string' }, seed: { type: 'string' }, pin: { type: 'boolean' }, ref: { type: 'string' }, dir: { type: 'string' } } })
 const SWEEP = a.sweep === undefined ? null : Number(a.sweep)
 if (SWEEP !== null && !(Number.isInteger(SWEEP) && SWEEP > 0)) {
@@ -713,12 +732,60 @@ async function f19a() {
   return { checks, failed }
 }
 
+// ── F5a: the new races' flags played ────────────────────────────────────────
+// { checks, failed }, or null when the code has no burrow field
+async function f5a() {
+  if (!/mode === 'wreck' \|\| mode === 'burrow'/.test(readFileSync(join(dir, 'core', 'nav.js'), 'utf8'))) return null
+  const { raceProbe } = await import(pathToFileURL(fileURLToPath(new URL('./race-probe.mjs', import.meta.url))).href)
+  const { RACES } = await import(at('data/schema.js'))
+  const { STEP } = await import(at('core/nav.js'))
+  const match = await loadMatch(dir)
+  const pairs = loadCorpus().items.filter((it) => it.set === 'races' && it.kind === 'ai')
+  // the sweep: board and dice from the seed's stream; the pairings with a
+  // new race in RACES order, each in both seat orders, in turn; ten on
+  // classic, then ten on fortified
+  const OLD = ['squirrel', 'serpent'], keys = Object.keys(RACES)
+  const seatings = keys.flatMap((x, i) => keys.slice(i + 1).map((y) => [x, y])).filter((p) => p.some((r) => !OLD.includes(r))).flatMap((p) => [p, [p[1], p[0]]])
+  const sweep = (n) => Array.from({ length: n }, (_, i) => {
+    const r = mulberry32(Number(a.seed ?? 9900) + i + 1)
+    const board = 1 + Math.floor(r() * 99999), dice = 1 + Math.floor(r() * 999999)
+    const terrain = Math.floor(i / seatings.length) % 2 ? 'fortified' : 'classic'
+    const setup = { board, dice, terrain, rounds: 5, seats: seatings[i % seatings.length].map((race) => ({ race, ctrl: 'ai' })) }
+    return { id: `sweep-${i + 1}-${board}-${dice}`, job: { setup, entries: [] } }
+  })
+  const battles = SWEEP !== null || !pairs.length ? sweep(SWEEP ?? 16) : pairs
+  const what = SWEEP !== null || !pairs.length ? `a sweep of ${battles.length} Skirmish AI battles seating the new races (no races/ AI pair is in the corpus${SWEEP !== null ? ', or --sweep' : ''})` : `the ${battles.length} races/ AI pairs`
+  console.log(`\nF5a's row: ${what}`)
+  const rows = [], failed = []
+  for (const b of battles) {
+    const probe = raceProbe(STEP)
+    const res = foldJob(core, b.job, { match, probe })
+    const p = probe.result()
+    if (res.error) {
+      failed.push(`${b.id}: ${res.error.split('\n')[0]}`)
+      continue
+    }
+    rows.push({ id: b.id, ...p })
+    const seats = b.job.setup.seats.map((x) => RACES[x.race]?.short ?? x.race).join(' v ')
+    console.log(`  ${b.id.padEnd(26)} ${seats.padEnd(22)} ${`${b.job.setup.mission ?? 'classic'} ${b.job.setup.terrain}`.padEnd(18)} burrowers ${p.burrowers}: ${p.tunnelled} of ${p.moves} moves tunnelled${p.above ? `, ${p.above} above STEP` : ''}; swarms ${p.swarms}: ${p.rerolls} re-rolls (${p.rerollDice} dice) in ${p.swarmFights} fights; swoopers ${p.swoopers}: ${p.dives} dives in ${p.swooperFights} fights`)
+  }
+  for (const f of failed) console.log(`  FAILED ${f}`)
+  const sum = (k) => rows.reduce((t, x) => t + x[k], 0)
+  console.log(`\n  ${rows.length} battles: burrowers' moves tunnelling ${sum('tunnelled')} of ${sum('moves')} (${pct(sum('tunnelled'), sum('moves'))}), a burrower above STEP ${sum('above')} times; ${sum('rerolls')} swarm re-rolls (${sum('rerollDice')} dice) in ${sum('swarmFights')} swarm fights; ${sum('dives')} dives in ${sum('swooperFights')} swooper fights`)
+  const share = (name, field, k) => {
+    const in_ = rows.filter((x) => x[field] > 0), met = in_.filter((x) => x[k] > 0).length
+    return { name: `${name} (of the battles fielding one)`, ok: rows.length === battles.length && in_.length > 0 && met * 2 >= in_.length, got: in_.length ? `in ${met} of ${in_.length} battles (${pct(met, in_.length)})${rows.length < battles.length ? `, ${battles.length - rows.length} failed` : ''}` : 'no battle fielded one', want: '≥ 50%' }
+  }
+  const checks = [share('a burrower tunnels', 'burrowers', 'tunnelled'), share('a swarm re-rolls its 1s', 'swarms', 'rerolls'), share('a swooper fights on its own charge turn', 'swoopers', 'dives')]
+  return { checks, failed }
+}
+
 console.log(`play-report: ${rows.join(', ')}, on the core of ${codeName}`)
 let missed = 0, broke = 0, judged = 0
 for (const row of rows) {
-  const r = row === 'f7a' ? await f7a() : row === 'f7b' ? await f7b() : row === 'f7c' ? await f7c() : row === 'f9a' ? await f9a() : row === 'f9b' ? await f9b() : row === 'f9c' ? await f9c() : row === 'f19a' ? await f19a() : await f10b()
+  const r = row === 'f7a' ? await f7a() : row === 'f7b' ? await f7b() : row === 'f7c' ? await f7c() : row === 'f9a' ? await f9a() : row === 'f9b' ? await f9b() : row === 'f9c' ? await f9c() : row === 'f19a' ? await f19a() : row === 'f5a' ? await f5a() : await f10b()
   if (!r) {
-    console.log(`\n${row === 'f7c' ? "F7c's row: not judged: this code's platforms never fall (no core/actions/settle.js)" : row === 'f7a' || row === 'f7b' ? `${row === 'f7a' ? 'F7a' : 'F7b'}'s row: not judged: this code has no fortified set` : row === 'f9a' ? "F9a's row: not judged: this code has no transport (core/actions/transport.js)" : row === 'f9b' ? "F9b's row: not judged: this code has no long hull (core/footprint.js)" : row === 'f9c' ? "F9c's row: not judged: this code's riders never shoot from a deck (no ridersShot: code older than F9c)" : row === 'f19a' ? "F19a's row: not judged: this code has no keg mission" : "F10b's row: not judged: this code has no grand mission"}`)
+    console.log(`\n${row === 'f7c' ? "F7c's row: not judged: this code's platforms never fall (no core/actions/settle.js)" : row === 'f7a' || row === 'f7b' ? `${row === 'f7a' ? 'F7a' : 'F7b'}'s row: not judged: this code has no fortified set` : row === 'f9a' ? "F9a's row: not judged: this code has no transport (core/actions/transport.js)" : row === 'f9b' ? "F9b's row: not judged: this code has no long hull (core/footprint.js)" : row === 'f9c' ? "F9c's row: not judged: this code's riders never shoot from a deck (no ridersShot: code older than F9c)" : row === 'f19a' ? "F19a's row: not judged: this code has no keg mission" : row === 'f5a' ? "F5a's row: not judged: this code has no burrow field (core/nav.js's burrow mode: code older than F5a)" : "F10b's row: not judged: this code has no grand mission"}`)
     continue
   }
   judged++

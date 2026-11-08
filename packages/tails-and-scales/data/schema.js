@@ -52,12 +52,33 @@
 // Derived, unless the unit sets them itself:
 //   hero     = role is Hero                 noCharge = role is Artillery
 //   brawler  = !ranged || wrecker           (what the AI fears in melee)
-//   climb    = !big && !fly && !vehicle      (F7a: climbs ladders; F9a:
-//                                            no vehicle climbs)
+//   climb    = !big && !fly && !vehicle && !burrow
+//                                           (F7a: climbs ladders; F9a: no
+//                                            vehicle climbs; F5a: nor a
+//                                            burrower, which keeps to the
+//                                            ground of a fortified board)
 //   move     = fly ? 'fly' : wrecker ? 'wreck' : burrow ? 'burrow' : 'walk'
 //   deployRow = Artillery ? 'back' : hero ? 'mid' : 'front'
 //   eye      = big ? 1.9 : fly ? 1.5 : 0.95    (line-of-sight heights)
 //   chest    = big ? 1.0 : fly ? 1.0 : 0.55
+//
+// (F5a, DESIGN §4.2.12) The flags of the insectoids and the bird-people,
+// each with its one reader. `burrow`: the unit tunnels, its move the nav's
+// burrow mode (core/nav.js: the hard field, `clearHard`, so it passes under
+// soft and difficult scenery at a walker's pace, never under rock or onto
+// a floor above STEP, and ends where a walker could stand). It is read
+// here alone, deriving `move` and `climb`; the rules read `t.move`. A
+// burrower never flies and is never a vehicle (no burrowing hull in v1):
+// either is refused. `swarm: { min }`, exactly that, `min` a whole number
+// of models from 2 to the unit's `models`: in the fight, while `min` of it
+// still stand, its wound rolls of 1 are rolled once more. `swoop: {
+// chargeS }`, exactly that, a whole number from 1 to 3: in the fight of
+// the turn it charged (`flags.charged` on its own seat's turn), its melee
+// weapon wounds at S + chargeS (the card calls it Dive). Both are read by
+// core/actions/fight.js, and by core/ai/score.js's meleeValue under rule
+// 10 (the AI's appraisal is rules code); each is copied onto the type
+// only where the def gives it, so every other unit's type is as it was.
+// sim/flag-lint.mjs holds each to those readers.
 //
 // (F11a, DESIGN §4.2.8) The army builder's data. `cost` is what a unit costs
 // to field at full strength: a whole multiple of 5, with no default (the
@@ -122,6 +143,8 @@ import { deepFreeze } from '../core/util.js'
 import { deriveFootprint, insideDiscs } from '../core/footprint.js'
 import squirrel from './races/squirrel.js'
 import serpent from './races/serpent.js'
+import insect from './races/insect.js'
+import bird from './races/bird.js'
 
 export const STATS = Object.freeze(['M', 'WS', 'BS', 'S', 'T', 'W', 'A', 'Ld', 'Sv', 'OC'])
 // (F9a: and Vehicle, the hulls, the army builder's slot of its own: none in
@@ -285,8 +308,18 @@ function unitType(race, key, def) {
   if (def.move !== undefined && !MOVES.includes(def.move)) throw bad(`move must be one of ${MOVES.join(', ')}`)
   if (def.deployRow !== undefined && !ROWS.includes(def.deployRow)) throw bad(`deployRow must be one of ${ROWS.join(', ')}`)
   for (const k of ['eye', 'chest']) if (def[k] !== undefined && !(Number.isFinite(def[k]) && def[k] > 0)) throw bad(`${k} must be a height > 0`)
-  if (def.swarm !== undefined && !Number.isInteger(def.swarm?.min)) throw bad('swarm is { min }')
-  if (def.swoop !== undefined && !Number.isInteger(def.swoop?.chargeS)) throw bad('swoop is { chargeS }')
+  // (F5a, Q5) the flags' records, exactly: a typo in one plays a different
+  // game, so each is refused naming its field
+  const record = (v, k) => v !== null && typeof v === 'object' && !Array.isArray(v) && Object.keys(v).length === 1 && k in v
+  if (def.swarm !== undefined) {
+    const n = def.models
+    const got = record(def.swarm, 'min') ? JSON.stringify(def.swarm.min) : JSON.stringify(def.swarm)
+    if (!record(def.swarm, 'min') || !Number.isInteger(def.swarm.min) || def.swarm.min < 2 || def.swarm.min > n) throw bad(`swarm is { min }, a whole number of models from 2 to its ${n}, not ${got}`)
+  }
+  if (def.swoop !== undefined) {
+    const got = record(def.swoop, 'chargeS') ? JSON.stringify(def.swoop.chargeS) : JSON.stringify(def.swoop)
+    if (!record(def.swoop, 'chargeS') || !Number.isInteger(def.swoop.chargeS) || def.swoop.chargeS < 1 || def.swoop.chargeS > 3) throw bad(`swoop is { chargeS }, a whole number from 1 to 3, not ${got}`)
+  }
   let stats
   try {
     stats = parseStats(def.stats)
@@ -313,6 +346,9 @@ function unitType(race, key, def) {
   // (F9a) a vehicle is one big model that never climbs; a transport is a
   // vehicle
   const vehicle = flag('vehicle', false)
+  // ((F5a, Q5) a burrower walks: it never flies, and no hull burrows)
+  if (burrow && fly) throw bad('burrow: a burrower walks under the ground: not a flier')
+  if (burrow && vehicle) throw bad('burrow: a burrower walks under the ground: not a vehicle (no burrowing hull in v1)')
   if (vehicle && def.models !== 1) throw bad('a vehicle is one model (models: 1)')
   if (vehicle && !big) throw bad('a vehicle is big (big: true)')
   if (vehicle && def.climb === true) throw bad('a vehicle never climbs (climb: true is refused)')
@@ -333,9 +369,9 @@ function unitType(race, key, def) {
     noCharge: flag('noCharge', def.role === 'Artillery'),
     brawler: flag('brawler', !ranged || wrecker),
     // (F7a) infantry climb ladders: not big units or fliers, nor (F9a)
-    // vehicles; read only by the plans' mode setup (core/actions/move.js
-    // climbs)
-    climb: flag('climb', !big && !fly && !vehicle),
+    // vehicles, nor (F5a, Q4) burrowers, which keep to the ground; read
+    // only by the plans' mode setup (core/actions/move.js climbs)
+    climb: flag('climb', !big && !fly && !vehicle && !burrow),
     vehicle,
     move: def.move ?? (fly ? 'fly' : wrecker ? 'wreck' : burrow ? 'burrow' : 'walk'),
     deployRow: def.deployRow ?? (def.role === 'Artillery' ? 'back' : hero ? 'mid' : 'front'),
@@ -442,5 +478,8 @@ export function raceRegistry(defs) {
 }
 
 // Every playable race, by key. Seat races (G.seats[s].race) name one of
-// these; a new race file is added to this list.
-export const RACES = raceRegistry([squirrel, serpent])
+// these; a new race file is added to this list, after the ones before it
+// (F5a's two after the classic pair, so every loop over RACES, army-sim's
+// pairs among them, keeps the classic pair first and its streams as they
+// are).
+export const RACES = raceRegistry([squirrel, serpent, insect, bird])

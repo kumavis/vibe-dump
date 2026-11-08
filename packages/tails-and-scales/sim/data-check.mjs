@@ -8,7 +8,9 @@
 // 1. Every unit type the race data normalises (the TYPES view built below
 //    from RACES, in the legacy shape) deep-equals the legacy TYPES, minus
 //    `side`, plus its key, race and AI
-//    role and the derived fields. The expected flags are computed with the
+//    role and the derived fields ((F5a) the two R0 races' units alone: a
+//    race after R0 has no legacy record, and its units are its step's own
+//    rows; no two races of the four share a unit key). The expected flags are computed with the
 //    legacy code's own tests, each of which must still be in its source word
 //    for word: Sidewind ability text (charge after advancing), role Artillery
 //    (no charge), the AI's brawler key test, `fx === 'acid'` (corrodes),
@@ -17,11 +19,16 @@
 // 2. The races: names, shorts, icons, colours, the death voice and gore, and
 //    armies as the legacy SIDES, ARMIES and killModel had them (the classic
 //    matchup, data/mission.js's CLASSIC, seat by seat); every race's
-//    voice is a sound view/sfx.js can play (its VOICES); the AI roles are
+//    voice is a sound view/sfx.js can play (its VOICES); (F5a) every two
+//    races' team colours stand at least 110 apart in RGB and each team at
+//    least 100 from its own alt; the AI roles are
 //    the ones the AI orders by (core/ai/policy.js's ORDER since R6a, ai.js's
 //    before), in the legacy ai.js's order.
 // 3. defineRace refuses malformed race data (one broken field at a time),
-//    and the registry refuses two races with one key.
+//    and the registry refuses two races with one key. (F5a, Q5) It refuses
+//    a swarm that is not exactly { min } from 2 to its models, a swoop not
+//    exactly { chargeS } from 1 to 3, and a burrower that flies or is a
+//    vehicle, each naming its field; and takes the edges.
 // 4. Seats: makeSeats seats any race in either seat, gives the edge by seat
 //    and never by race, and refuses a race name that is only an
 //    Object.prototype member ('toString', '__proto__', …): seat races come
@@ -35,6 +42,8 @@
 //    a new mission) and stays put when only presentation does (names,
 //    shorts, icon, ability text, look, a weapon's name or fx). The classic
 //    mission's rounds and depth are the ruleset's ROUNDS and BOARD.deploy.
+//    (F5a) It moves on a swarm's min, a swoop's chargeS and burrow on a
+//    walker, and stays on a rename of the new races' units.
 // 6. Every table core/ and data/ export is deeply frozen: no module-level
 //    mutable state in consensus code (DESIGN §1.2, §4.1 rule 13). (A
 //    module namespace re-exported whole, core/index.js's `q`, counts as
@@ -268,7 +277,13 @@ const { MISSIONS, CLASSIC, checkMission } = await imp(PKG, 'data/mission.js')
 const { BOARD, ROUNDS } = await imp(PKG, 'core/rules.js')
 const { checkSet, FOOTPRINT, reachOf, FORTS } = await imp(PKG, 'core/terrain/recipes.js')
 const { makeSeats } = await imp(PKG, 'core/match.js')
-const raw = { squirrel: (await imp(PKG, 'data/races/squirrel.js')).default, serpent: (await imp(PKG, 'data/races/serpent.js')).default }
+const raw = {
+  squirrel: (await imp(PKG, 'data/races/squirrel.js')).default,
+  serpent: (await imp(PKG, 'data/races/serpent.js')).default,
+  // (F5a, DESIGN §4.2.12) the insectoids and the bird-people
+  insect: (await imp(PKG, 'data/races/insect.js')).default,
+  bird: (await imp(PKG, 'data/races/bird.js')).default,
+}
 
 // The legacy-shaped views of the race data, as the R0 rules.js had them:
 // every unit type by key (the keys are unique across races today: a race
@@ -350,7 +365,10 @@ function expected(key, L) {
 // F9a's War-Cart, F9b's Howdah. They have no legacy record to be held to;
 // their own rows are the step's: sections 14 and 16)
 const ADDED = ['warcart', 'howdah']
-const legacyKeys = Object.keys(legacy.TYPES).sort(), keys = Object.keys(TYPES).filter((k) => !ADDED.includes(k)).sort()
+// ((F5a) the comparison holds the two R0 races alone: every unit of a race
+// after R0 is its step's, held by its own rows (sections 3, 5 and 11))
+const R0 = ['squirrel', 'serpent']
+const legacyKeys = Object.keys(legacy.TYPES).sort(), keys = ALL.filter((t) => R0.includes(t.race) && !ADDED.includes(t.key)).map((t) => t.key).sort()
 check(new Set(ALL.map((t) => t.key)).size === ALL.length, 'no two races share a unit key', 'look their types up by race')
 check(isDeepStrictEqual(keys, legacyKeys), `the same ${legacyKeys.length} unit keys`, `got ${keys.join(',')}`)
 for (const key of legacyKeys) {
@@ -385,8 +403,11 @@ for (const key of legacyKeys) {
   const r = (t) => formation(t.models, t.base).reduce((m, [x, z]) => Math.max(m, hypot(x, z)), 0) + t.base
   const climbers = ALL.filter((t) => t.climb), over = climbers.filter((t) => !(r(t) <= CLIMB_R))
   check(!over.length, `every climber's disc is at most CLIMB_R ${CLIMB_R}: ${climbers.map((t) => `${t.key} ${r(t).toFixed(3)}`).join(', ')}`, over.map((t) => `${t.key}'s r ${r(t)}`).join(', '))
+  // ((F5a, Q4) a burrower keeps to the ground: its climb derives false)
   const others = ALL.filter((t) => !t.climb)
-  check(others.every((t) => t.big || t.fly), `the units that climb no ladder are big or fly: ${others.map((t) => `${t.key} (${t.big ? 'big' : 'fly'}, r ${r(t).toFixed(3)})`).join(', ')}`, others.filter((t) => !t.big && !t.fly).map((t) => t.key).join(', '))
+  check(others.every((t) => t.big || t.fly || t.burrow), `the units that climb no ladder are big, fly or burrow: ${others.map((t) => `${t.key} (${t.big ? 'big' : t.fly ? 'fly' : 'burrow'}, r ${r(t).toFixed(3)})`).join(', ')}`, others.filter((t) => !t.big && !t.fly && !t.burrow).map((t) => t.key).join(', '))
+  const burrowers = ALL.filter((t) => t.burrow)
+  check(burrowers.every((t) => !t.climb && t.move === 'burrow'), `every burrower climbs nothing and moves by the burrow mode: ${burrowers.map((t) => t.key).join(', ')}`, burrowers.filter((t) => t.climb || t.move !== 'burrow').map((t) => `${t.key} climb ${t.climb}, move ${t.move}`).join(', '))
 }
 
 // ── 2. races ────────────────────────────────────────────────────────────────
@@ -427,6 +448,18 @@ for (const race of Object.keys(RACES)) {
 const kit = [...(/^const VOICES = \{\n([\s\S]*?)^\}/m.exec(readFileSync(join(PKG, 'view', 'sfx.js'), 'utf8'))?.[1] ?? '').matchAll(/^ {2}(\w+)\(/gm)].map((m) => m[1])
 const mute = Object.values(RACES).filter((r) => !kit.includes(r.look.voice))
 check(kit.length && !mute.length, `every race's voice is one view/sfx.js plays (${Object.values(RACES).map((r) => `${r.key} ${r.look.voice}`).join(', ')})`, kit.length ? mute.map((r) => `${r.key}: no "${r.look.voice}" in ${kit.join(', ')}`).join('; ') : "no `const VOICES = {` in view/sfx.js")
+// (F5a, Q14) every seat colour comes from look.team, or look.alt for seat 1
+// of a mirror (ui/theme.js), so every two races' teams stand apart, and
+// each team apart from its own alt: at least 110 and 100 in RGB
+{
+  const rgb = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16))
+  const far = (a, b) => Math.sqrt(rgb(a).reduce((n, x, i) => n + (x - rgb(b)[i]) ** 2, 0))
+  const rs = Object.values(RACES), near = [], own = []
+  for (let i = 0; i < rs.length; i++) for (let j = i + 1; j < rs.length; j++) near.push([`${rs[i].key}-${rs[j].key}`, far(rs[i].look.team, rs[j].look.team)])
+  for (const r of rs) own.push([r.key, far(r.look.team, r.look.alt)])
+  check(near.every(([, d]) => d >= 110), `every two races' team colours stand at least 110 apart in RGB (${near.map(([k, d]) => `${k} ${d.toFixed(0)}`).join(', ')})`, near.filter(([, d]) => d < 110).map(([k, d]) => `${k} ${d.toFixed(1)}`).join(', '))
+  check(own.every(([, d]) => d >= 100), `each race's team stands at least 100 from its alt (${own.map(([k, d]) => `${k} ${d.toFixed(0)}`).join(', ')})`, own.filter(([, d]) => d < 100).map(([k, d]) => `${k} ${d.toFixed(1)}`).join(', '))
+}
 const { ORDER } = await imp(PKG, 'core/ai/policy.js')
 const order = [...ORDER]
 // ((F9a) the transports play first, every other role in the R0 order: each
@@ -436,8 +469,8 @@ check(isDeepStrictEqual([...AI_ROLES].sort(), [...order].sort()), 'the schema ac
 
 // ── 3. validation ───────────────────────────────────────────────────────────
 console.log('\n3. defineRace refuses malformed data')
-const breakIt = (what, edit, want) => {
-  const def = structuredClone(raw.serpent)
+const breakIt = (what, edit, want, race = 'serpent') => {
+  const def = structuredClone(raw[race])
   edit(def)
   let err = null
   try {
@@ -476,7 +509,47 @@ try {
   dupErr = e.message
 }
 check(dupErr && /two races use the key "serpent"/.test(dupErr), 'the registry refuses two races with one key', dupErr ?? 'accepted')
-check(isDeepStrictEqual(raceRegistry([raw.squirrel, raw.serpent]), RACES), 'the registry of the two race files is RACES')
+check(isDeepStrictEqual(raceRegistry([raw.squirrel, raw.serpent, raw.insect, raw.bird]), RACES), 'the registry of the four race files is RACES')
+// (F5a, Q5) the flags' records, exactly, each refusal naming its field:
+// the Delvers' swarm (8 models), the Kestrels' swoop, a burrower flying or
+// a vehicle
+for (const [what, v, want] of [
+  ['{ min: 0 }', { min: 0 }, /unit delver: swarm is \{ min \}, a whole number of models from 2 to its 8, not 0/],
+  ['{ min: 1 }', { min: 1 }, /swarm is \{ min \}.* not 1$/],
+  ['9 of 8', { min: 9 }, /swarm is \{ min \}, a whole number of models from 2 to its 8, not 9$/],
+  ['{ min: 4, x: 1 }', { min: 4, x: 1 }, /swarm is \{ min \}.* not \{"min":4,"x":1\}/],
+  ['null', null, /swarm is \{ min \}.* not null/],
+  ['true', true, /swarm is \{ min \}.* not true/],
+  ['{ min: 2.5 }', { min: 2.5 }, /swarm is \{ min \}.* not 2\.5/],
+]) breakIt(`a swarm of ${what}`, (d) => (d.units.delver.swarm = v), want, 'insect')
+for (const [what, v, want] of [
+  ['{ chargeS: 0 }', { chargeS: 0 }, /unit kestrel: swoop is \{ chargeS \}, a whole number from 1 to 3, not 0/],
+  ['{ chargeS: 4 }', { chargeS: 4 }, /swoop is \{ chargeS \}.* not 4/],
+  ['{ chargeS: 1.5 }', { chargeS: 1.5 }, /swoop is \{ chargeS \}.* not 1\.5/],
+  ['{ chargeS: 1, x: 1 }', { chargeS: 1, x: 1 }, /swoop is \{ chargeS \}.* not \{"chargeS":1,"x":1\}/],
+  ['null', null, /swoop is \{ chargeS \}.* not null/],
+]) breakIt(`a swoop of ${what}`, (d) => (d.units.kestrel.swoop = v), want, 'bird')
+breakIt('a burrower that flies', (d) => (d.units.deepguard.fly = true), /unit deepguard: burrow: a burrower walks under the ground: not a flier/, 'insect')
+breakIt('a burrower that is a vehicle', (d) => Object.assign(d.units.deepguard, { vehicle: true, big: true, models: 1 }), /unit deepguard: burrow: a burrower walks under the ground: not a vehicle \(no burrowing hull in v1\)/, 'insect')
+breakIt('a swarm on a one-model unit', (d) => (d.units.hivemother.swarm = { min: 1 }), /unit hivemother: swarm is \{ min \}, a whole number of models from 2 to its 1, not 1/, 'insect')
+// and the edges taken: min 2 and 8 of 8, chargeS 1 and 3
+const takesRace = (race, edit) => {
+  const def = structuredClone(raw[race])
+  edit(def)
+  try {
+    return defineRace(def)
+  } catch (e) {
+    return e.message
+  }
+}
+for (const min of [2, 8]) {
+  const r = takesRace('insect', (d) => (d.units.delver.swarm = { min }))
+  check(typeof r === 'object' && r.units.delver.swarm.min === min, `takes a swarm of { min: ${min} } on the Delvers' 8`, typeof r === 'string' ? r : 'not copied')
+}
+for (const chargeS of [1, 3]) {
+  const r = takesRace('bird', (d) => (d.units.kestrel.swoop = { chargeS }))
+  check(typeof r === 'object' && r.units.kestrel.swoop.chargeS === chargeS, `takes a swoop of { chargeS: ${chargeS} }`, typeof r === 'string' ? r : 'not copied')
+}
 
 // ── 4. seats ────────────────────────────────────────────────────────────────
 console.log('\n4. seats')
@@ -578,6 +651,13 @@ const moves = [
   ["the grand mission's AI count budget targets (6 → 7)", () => rulesId({ missions: { ...MISSIONS, grand: { ...structuredClone(MISSIONS.grand), ai: { lattice: 3, targets: 7 } } } })],
   ["the powder mission's AI count budget dropped", () => rulesId({ missions: { ...MISSIONS, powder: (({ ai, ...m }) => m)(structuredClone(MISSIONS.powder)) } })],
 ]
+// ((F5a) the new flags are rule-bearing: a swarm's min, a swoop's chargeS,
+// a burrower)
+moves.push(
+  ["a swarm's min (Delvers 4 → 5)", () => variant('insect', (d) => (d.units.delver.swarm = { min: 5 }))],
+  ["a swoop's chargeS (Kestrels 2 → 1)", () => variant('bird', (d) => (d.units.kestrel.swoop = { chargeS: 1 }))],
+  ['burrow on a walker (the Spinethrowers)', () => variant('insect', (d) => (d.units.spinethrower.burrow = true))],
+)
 for (const [what, id] of moves) check(id() !== RULES_ID, `moves on ${what}`)
 check(rulesData().sets === SETS, 'hashes the terrain sets (core/terrain/sets.js)')
 // (whole, every field the very value data/mission.js holds, but for (F11a)
@@ -619,6 +699,9 @@ const stays = [
   ['the look', () => variant('serpent', (d) => (d.look = { ...d.look, team: '#000000', voice: 'squeak' }))],
   ['a weapon name', () => variant('squirrel', (d) => (d.units.trebuchet.ranged = { ...d.units.trebuchet.ranged, name: 'Pinecone of doom' }))],
   ['a weapon fx', () => variant('serpent', (d) => (d.units.engine.ranged.fx = 'bomb'))],
+  // ((F5a) a rename of the new races' units, and their look)
+  ['a new unit name (Delver Swarm → Delver Horde)', () => variant('insect', (d) => (d.units.delver.name = 'Delver Horde'))],
+  ['a new unit short and card (Kestrels)', () => variant('bird', (d) => Object.assign(d.units.kestrel, { short: 'Falcons', abilities: ['Stoop.'] }))],
   // ((V3c) a spell's name and look)
   ['a spell name', () => variant('squirrel', (d) => (d.units.elder.spells[1].name = 'Oak Hide'))],
   ['a spell fx', () => variant('serpent', (d) => (d.units.hierophant.spells[1].fx = 'gaze'))],
@@ -1169,7 +1252,10 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   // unit's facing printed among its extras and only on a unit with a
   // footprint (UNIT_EXTRAS), which no pinned match fields (no list holds
   // a Howdah), and every branch a footprint reaches its own: every pin as
-  // under 14)
+  // under 14; 17, F5a: burrow a mode of move and charge, swarm's re-roll
+  // dice inside a fight, swoop reading flags.charged (printed already) and
+  // G.turn.active, so nothing shadowState prints changed its form, and no
+  // pinned match seats a new race: every pin as under 16)
   const V1 = {
     '64-89': { end: 'chz79qx8m5' },
     'hotseat-late-8': { 0: '24ujeexicjn', 20: 'xxpycs4cb', 60: '192m554xi18', end: '2dcycb5g9uv' },
@@ -1177,7 +1263,7 @@ console.log('\n10. the kinds and their fields, the envelope\'s names, the sizes,
   }
   const V9 = { ...V1, '64-89': { end: '1jmxq628imf' } }
   const V12 = { ...V1, '64-89': { end: '25j1j2sx16w' }, 'serpent-random-2': { 0: '23nc969d48c', 10: '1hdl5k2u5af', end: 'nftnqwgpp7' } }
-  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9, 12: V12, 13: V12, 14: V12, 15: V12, 16: V12 }
+  const PINNED = { 1: V1, 2: V1, 3: V1, 4: V1, 5: V1, 6: V1, 7: V1, 8: V1, 9: V9, 10: V9, 11: V9, 12: V12, 13: V12, 14: V12, 15: V12, 16: V12, 17: V12 }
   const pins = PINNED[core.CORE_VERSION]
   if (!check(!!pins, `stateHash has pinned hashes under CORE_VERSION ${core.CORE_VERSION}`, `pin today's hashes of ${Object.keys(PINNED[1]).join(', ')} under it (the format changed with the version)`)) {
     // (nothing to compare)
@@ -1269,6 +1355,10 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
   const ROSTER_PIN = {
     squirrel: ['elder', 'oakguard', 'nutkin', 'grenadier', 'glider', 'trebuchet'],
     serpent: ['hierophant', 'brute', 'scaleguard', 'spitter', 'sidewinder', 'engine'],
+    // (F5a, DESIGN §4.2.12, Q20) the new races' rosters as the design wrote
+    // them (no price moves a roster): F5b appends 'beetle' and 'basket'
+    insect: ['hivemother', 'deepguard', 'spinethrower', 'delver', 'hopper', 'boilback'],
+    bird: ['skyseer', 'stormtalon', 'longbill', 'finch', 'kestrel', 'roc'],
   }
   const rosterWhy = (key, roster) => {
     const pin = ROSTER_PIN[key]

@@ -131,7 +131,8 @@ export const CONDITIONS = Object.freeze({
   charged: {
     icon: '⚡', title: 'Charged', kind: 'deed',
     blocks: () => ['charge'],
-    tip: () => `It charged home this turn, and strikes first in the Fight phase.`,
+    // ((F5a) a swooper's dive, its card's Dive: S + chargeS this fight)
+    tip: (t) => `It charged home this turn, and strikes first in the Fight phase.${t?.swoop ? ` +${t.swoop.chargeS} Strength this fight (Dive).` : ''}`,
   },
   // (V3c) the spells' marks (DESIGN §4.1 rule 29): Root Snare's snare, which
   // keeps a unit from moving (core/commands.js) and charging (canCharge),

@@ -43,9 +43,14 @@ export function climbs(u) {
 // no stair onto a deck (P-height's rule). The plans' mode setup, with
 // climbs: its one rules reader, which the forbid mask (with height, the
 // raised cells forbidden to it: forbidHigh), the deployment (core/deploy.js
-// fits) and a pile-in ask. Read only with height.
+// fits) and a pile-in ask. Read only with height. (F5a, DESIGN §4.2.12) So
+// does a burrower (its move the burrow mode): a deck's footprint is hard
+// to it, so the deployment never puts it on the works' decks (where its
+// plans, which never step above STEP, would leave it stranded), a pile-in
+// never lifts it onto one, and its masks forbid the raised cells its
+// reach already refuses: a branch only a burrower reaches (§4.1 rule 30).
 export function groundOnly(u) {
-  return u.t.vehicle
+  return u.t.vehicle || u.t.move === 'burrow'
 }
 
 // Cells a unit may not enter: within 1" of an enemy (or just their bases when

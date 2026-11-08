@@ -62,6 +62,12 @@
 //                                         data/schema.js hands the record
 //                                         to: the rules read the tables it
 //                                         derives (t.fp), never the record
+//   (F5a) swarm, swoop                    core/actions/fight.js (the re-roll
+//                                         and the dive) and core/ai/score.js
+//                                         (meleeValue, rule 10) alone
+//   (F5a) burrow                          data/schema.js alone, deriving
+//                                         move and climb: the rules read
+//                                         t.move, the nav its mode
 // data/schema.js validating and copying them, data/mission.js checking a
 // mission's list and preset name, fullSetup filling in a seat's army and
 // core/version.js hashing a list without its size's name are listed in ALLOW, as the .fx and .abilities lines are, and so (F7a) are
@@ -160,6 +166,12 @@ export const OWNED = [
   // (F9b) a long hull's footprint record: core/footprint.js derives t.fp
   // from it, and every rule reads that
   [reads('footprint'), ['core/footprint.js'], "a long hull's footprint record read outside core/footprint.js (the rules read its derived t.fp)"],
+  // (F5a, DESIGN §4.2.12) swarm's re-roll and swoop's dive are the fight's
+  // (core/actions/fight.js), and the AI's appraisal of them meleeValue's
+  // (core/ai/score.js, rule 10); a burrower is the schema's alone, which
+  // derives its move and climb from it (the rules read t.move)
+  [reads('swarm|swoop'), ['core/actions/fight.js', 'core/ai/score.js'], 'a swarm or swoop record read outside core/actions/fight.js and core/ai/score.js\'s meleeValue'],
+  [reads('burrow'), ['data/schema.js'], 'the burrow flag read outside data/schema.js (the rules read the move it derives, t.move)'],
 ]
 // the patterns that apply to file `f`
 const rulesFor = (f) => [...BANNED, ...(/^(core|data)\//.test(f) ? OWNED.filter(([, owners]) => !owners.includes(f)).map(([re, , what]) => [re, what]) : [])]
@@ -237,6 +249,12 @@ export const ALLOW = [
   // through its check (footprintOf)
   ['data/schema.js', 'const shaped = def.footprint !== undefined', 1, 'tells a long hull by its footprint, to hold it to its rules (a vehicle, OC0, no flier)'],
   ['data/schema.js', 'footprintOf(def.footprint, def.base', 1, 'checks the footprint record and has core/footprint.js derive t.fp from it (footprintOf)'],
+  // (F5a, OWNED) the schema checking a swarm's and a swoop's record and
+  // copying it onto the type, only where the def gives one
+  ['data/schema.js', 'def.swarm', 4, "checks the swarm record (exactly { min }, 2 to its models) and copies it"],
+  ['data/schema.js', 't.swarm = ', 1, 'the normalised type carries the checked swarm record, only where the def gives one'],
+  ['data/schema.js', 'def.swoop', 4, "checks the swoop record (exactly { chargeS }, 1 to 3) and copies it"],
+  ['data/schema.js', 't.swoop = ', 1, 'the normalised type carries the checked swoop record, only where the def gives one'],
   // (N2) the online lobby's race picker: each race by its key, name and
   // icon, and a seat's race shown by its look
   // (F16) the courtesy fog reads a battle-log line or a tray that names no
@@ -441,6 +459,12 @@ if (main && args['self-test']) {
     ['core/actions/move.js', "const turn = u.t['footprint'].turn"],
     ['core/queries.js', 'const { footprint } = u.t'],
     ['data/mission.js', 'if (t.footprint) return'],
+    // (F5a, OWNED) swarm read in shooting, a dive read by the morale test,
+    // and burrow read by the nav (the rules read t.move), by every route
+    ['core/actions/shoot.js', 'if (u.t.swarm && u.alive >= u.t.swarm.min) reroll()'],
+    ['core/engine.js', "const dive = u.t['swoop']?.chargeS"],
+    ['core/nav.js', 'if (u.t.burrow) return this.clearHard[i]'],
+    ['core/ai/policy.js', 'const { burrow } = u.t'],
   ]
   // 3. lines that must not be: the registry lookup, the mirror check, and
   // reads of rule data that are the point of the flags
@@ -491,6 +515,13 @@ if (main && args['self-test']) {
     ['core/footprint.js', 'const fp = deriveFootprint(rec.footprint, id)'],
     ['core/actions/move.js', 'if (u.t.fp) return hullPlan(G, u)'],
     ['core/queries.js', 'const R = u.t.fp ? u.t.fp.R : u.r'],
+    // (F5a, OWNED) the two readers of swarm and swoop, the schema's of
+    // burrow, the nav's burrow mode by its name, and the view
+    ['core/actions/fight.js', 'if (u.t.swarm && u.alive >= u.t.swarm.min) {'],
+    ['core/ai/score.js', 'const w = charging && a.t.swoop ? { ...a.t.melee, S: a.t.melee.S + a.t.swoop.chargeS } : a.t.melee'],
+    ['data/schema.js', 'if (burrow && fly) throw bad(\'burrow: a burrower walks under the ground: not a flier\')'],
+    ['core/nav.js', "return mode === 'wreck' || mode === 'burrow' ? this.clearHard[i] : this.clearAll[i]"],
+    ['present/conditions.js', "const dive = t?.swoop ? ` +${t.swoop.chargeS} Strength` : ''"],
   ]
   console.log('2. lines that must be flagged')
   for (const [f, line] of FLAG) {
@@ -514,6 +545,6 @@ if (main && !args['self-test']) {
   for (const { a, n: k } of stale) console.log(`  FAIL allow-list entry for ${a[0]} "${a[1]}" matches ${k} line(s), not ${a[2]}: update or drop it`)
   for (const a of ALLOW) if (!stale.some((s) => s.a === a)) console.log(`  allowed ${a[0]}: ${a[1]}  (${a[3]})`)
   const bad = hits.length + stale.length
-  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, (F11a) the army builder\'s data and pts each have their one reader in core/ and data/, and (F9a) so do a hull\'s transport, the vehicle and climb flags and the enclosed deck, and (F9b) a long hull\'s footprint')
+  console.log(bad ? `\nflag-lint FAILED: ${bad} problem(s)` : '\nflag-lint passed: no rules code tests a unit or race key, a name, ability text or fx, (F11a) the army builder\'s data and pts each have their one reader in core/ and data/, and (F9a) so do a hull\'s transport, the vehicle and climb flags and the enclosed deck, and (F9b) a long hull\'s footprint, and (F5a) swarm and swoop (the fight and the AI\'s appraisal) and burrow (the schema)')
   process.exit(bad ? 1 : 0)
 }

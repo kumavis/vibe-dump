@@ -18,6 +18,21 @@
 //
 // Units go by id. It walks the units in G.units order, and the alternation
 // keeps its guard of 30 (§4.1 rule 6).
+//
+// (F5a, DESIGN §4.2.12, §4.1 rule 30) The one rules reader of two flags,
+// each a branch only a unit with it reaches. `swarm: { min }`: while `min`
+// of the unit's models still stand as it strikes, its wound rolls of 1 are
+// rolled once more, straight after the wound roll and before the save
+// roll (`roll(G, ones)`, the 1s counted over the wound dice in order, none
+// drawn when there is none: F5a's only new draw), the new dice standing;
+// the tray shows them as a row of their own, "Re-roll 1s (swarm)", and the
+// log line counts their wounds in its own form. `swoop: { chargeS }` (the
+// card's Dive): in the fight of the turn the unit charged, its melee weapon
+// wounds at S + chargeS. "That turn" is `u.flags.charged && u.side ===
+// G.turn.active`: resetTurn clears only the active seat's flags, so a
+// charger keeps its flag through the opponent's turn, and fights there at
+// S. The Wound row's label names it, "Wound 3+ (dive, S5)"; it draws
+// nothing. (core/ai/score.js meleeValue weighs both, under rule 10.)
 import { roll, passes, woundNeed, saveNeed, hitNeed, attackCount, svOf } from '../rules.js'
 import { emit, log } from '../journal.js'
 import { alive, engagedWith, isEngaged, statusOf } from '../queries.js'
@@ -42,10 +57,22 @@ export function fight(G, u) {
   // lunge! (the view's sparks wait for the hit row below)
   emit(G, 'melee', { u: u.id, tg: target.id, n, hits: h })
   emit(G, 'dice', { label: `Hit ${need}+${mod ? ' (mesmerized)' : ''}`, dice: hits, need })
-  const wn = woundNeed(w.S, target.t.T, w.poison)
+  // ((F5a) a swooper on its own charge turn dives: its Strength +chargeS)
+  let S = w.S
+  if (u.t.swoop && u.flags.charged && u.side === G.turn.active) S += u.t.swoop.chargeS
+  const wn = woundNeed(S, target.t.T, w.poison)
   const wd = roll(G, h)
-  const wounds = passes(wd, wn)
-  if (h) emit(G, 'dice', { label: `Wound ${wn}+`, dice: wd, need: wn })
+  let wounds = passes(wd, wn)
+  if (h) emit(G, 'dice', { label: `Wound ${wn}+${S > w.S ? ` (dive, S${S})` : ''}`, dice: wd, need: wn })
+  // ((F5a) the swarm's branch, its only draws: the wound rolls of 1 once more)
+  if (u.t.swarm && u.alive >= u.t.swarm.min) {
+    const ones = wd.filter((d) => d === 1).length
+    if (ones) {
+      const rr = roll(G, ones)
+      wounds += passes(rr, wn)
+      emit(G, 'dice', { label: 'Re-roll 1s (swarm)', dice: rr, need: wn })
+    }
+  }
   // ((V3c) the target's own save: one better while warded, rules.js svOf)
   const sn = saveNeed(svOf(target), w.AP, false)
   // (the dice roll even when there is no save to make: §4.1 rule 5)
