@@ -2618,7 +2618,8 @@ if (towersRec?.areas?.length) {
 // from the street at most) and none stands on a street's strip, anywhere;
 // the lots along streets are there only from their street's year; and the
 // streets are drawn, by their years, while the camera is low.
-const streetTown = await ui("fetch(app.data.abs('streets/manifest.json')).then((r) => (r.ok ? r.json() : null)).then((m) => m?.towns?.[0] ?? null).catch(() => null)")
+// (the town, and its first date: its first sheet's year, or a directory's before it)
+const streetTown = await ui("fetch(app.data.abs('streets/manifest.json')).then((r) => (r.ok ? r.json() : null)).then((m) => (m?.towns?.[0] ? { ...m.towns[0], first: Math.min(m.towns[0].sheets[0].year, ...(m.directories || []).filter((d) => d.town === m.towns[0].id).map((d) => d.year)) } : null)).catch(() => null)")
 if (streetTown) {
   // (off the prologue, whose view keeps the island packs out of their slots)
   if (await ui('app.prologue')) await run('app.tour.goTo(0, -1, { jump: true }); app.settle()')
@@ -2637,7 +2638,7 @@ if (streetTown) {
     return ui('[app.rig.state.target.x, app.rig.state.target.z]')
   }
   // (the network's lots come in over the three years before a sheet's year: data/streets.js LEAD)
-  const years = [streetTown.sheets[0].year - 4, ...streetTown.sheets.map((s) => s.year), lastYear].filter((y, i, a) => y <= lastYear && a.indexOf(y) === i)
+  const years = [streetTown.first - 4, ...(streetTown.first < streetTown.sheets[0].year ? [streetTown.first] : []), ...streetTown.sheets.map((s) => s.year), lastYear].filter((y, i, a) => y <= lastYear && a.indexOf(y) === i)
   await check('streets: the lots follow the town’s streets in their years, none on a street, the grid beyond them', async () => {
     const rows = []
     const bad = []
@@ -2663,8 +2664,8 @@ if (streetTown) {
       })()`)
       if (r.far.length) bad.push(`${y}: ${r.far.length} of ${r.covered} covered not on a street (${r.far.slice(0, 3).join('; ')})`)
       if (r.onStrip.length) bad.push(`${y}: ${r.onStrip.length} on a street's strip (${r.onStrip.slice(0, 3).join('; ')})`)
-      if (y < streetTown.sheets[0].year - 3 && r.covered) bad.push(`${y}: ${r.covered} covered before the first sheet`)
-      if (y >= streetTown.sheets[0].year && r.streets.standing && !(r.streets.drawn || []).some((d) => +d.split(':')[2] > 0)) bad.push(`${y}: no street drawn (${r.streets.drawn})`)
+      if (y < streetTown.first - 3 && r.covered) bad.push(`${y}: ${r.covered} covered before the town's first date`)
+      if (y >= streetTown.first && r.streets.standing && !(r.streets.drawn || []).some((d) => +d.split(':')[2] > 0)) bad.push(`${y}: no street drawn (${r.streets.drawn})`)
       rows.push(`${y}: ${r.n} buildings, ${r.covered} on the network, ${r.fronting} fronting a street; ${r.streets.standing} streets standing (${r.streets.km} km)`)
     }
     const st = await ui(`app.streets.stats()['${streetTown.island}']`)
