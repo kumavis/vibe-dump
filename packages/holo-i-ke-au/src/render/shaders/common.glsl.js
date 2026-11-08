@@ -209,6 +209,18 @@ uniform vec4 uRestSlotBox[SLOTS];       // ... the box its patches reach (texels
 uniform vec4 uRestDist;                 // the district's, the same
 uniform vec4 uRestDistBox;
 float restoreK(float n) { int i = int(n + 0.5); return uRestK[i >> 2][i & 3]; }
+// whether square sq of a region holds any restore (its place in the atlas, 0 none)
+float restoreSquare(vec4 r, ivec2 sq) {
+  if (sq.x < 0 || sq.y < 0 || sq.x >= int(r.y) || sq.y >= int(r.z)) return 0.0;
+  return texelFetch(uRestIdx, ivec2(sq.x, int(r.x) + sq.y), 0).r;
+}
+// whether any of the four texels from p to p + (1, 1) can lie in a restore:
+// false where they share a square and it holds none (most of a region's box),
+// so the four are not looked up one by one
+bool restoreNear(vec4 r, ivec2 p) {
+  ivec2 sq = p / RESTORE_TILE;
+  return sq != (p + 1) / RESTORE_TILE || restoreSquare(r, sq) > 0.5;
+}
 // the change at texel p of a region (r: its place in the index), by the weights of the year
 float restoreAt(vec4 r, ivec2 p) {
   ivec2 sq = p / RESTORE_TILE;
