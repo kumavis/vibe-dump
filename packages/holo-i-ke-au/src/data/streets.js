@@ -49,6 +49,48 @@ const GRID_LOTS = 8 / ((4 * 0.36 + 0.14) * (2 * 0.4 + 0.14))
 const LU = 0.36
 const LV = 0.4
 const CELL = 1
+// a cell's key, (i, j) in one number
+const NONE = new Int32Array(0)
+const cellKey = (i, j) => (i + 32768) * 65536 + (j + 32768)
+
+/**
+ * A Map of cell key to a list of indices, packed once it is whole: the keys
+ * sorted in one array and the lists one after another in another, so an
+ * island's tens of thousands of cells are three arrays rather than as many
+ * objects. get(key) gives a cell's list (a view) or undefined, as the Map did.
+ */
+class CellIndex {
+  constructor(map) {
+    const keys = [...map.keys()].sort((a, b) => a - b)
+    this.keys = Float64Array.from(keys)
+    this.start = new Int32Array(keys.length + 1)
+    let n = 0
+    keys.forEach((k, i) => {
+      this.start[i] = n
+      n += map.get(k).length
+    })
+    this.start[keys.length] = n
+    this.items = new Int32Array(n)
+    keys.forEach((k, i) => this.items.set(map.get(k), this.start[i]))
+  }
+
+  get size() {
+    return this.keys.length
+  }
+
+  get(key) {
+    const K = this.keys
+    let lo = 0
+    let hi = K.length - 1
+    while (lo <= hi) {
+      const m = (lo + hi) >> 1
+      if (K[m] < key) lo = m + 1
+      else if (K[m] > key) hi = m - 1
+      else return this.items.subarray(this.start[m], this.start[m + 1])
+    }
+    return undefined
+  }
+}
 
 export class StreetNet {
   /** fcs: the island's town FeatureCollections; proj: the app's projection. */
@@ -81,23 +123,71 @@ export class StreetNet {
       }
     })
     this.breaks = [...new Set(this.lines.flatMap((L) => (L.to !== null ? [L.lotFrom, L.to + 1] : [L.lotFrom])))].sort((a, b) => a - b)
-    this.lots = this.layLots()
+    // (the lots kept as arrays, a few numbers each, and made whole again as
+    // they are asked for: an island's run to tens of thousands, which as
+    // objects held most of the heap; lotAt gives each back as it was laid)
+    const lots = this.layLots()
+    const n = lots.length
+    this.lotN = n
+    this.lotX = new Float64Array(n)
+    this.lotZ = new Float64Array(n)
+    this.lotE = new Float64Array(n * 2)
+    this.lotRank = new Float64Array(n)
+    this.lotU = new Float64Array(n)
+    this.lotLine = new Int32Array(n)
+    this.lotK = new Int32Array(n)
+    this.lotSide = new Int8Array(n)
     this.lotHash = new Map()
-    this.lots.forEach((l, k) => {
-      const key = `${Math.floor(l.x / CELL)},${Math.floor(l.z / CELL)}`
+    lots.forEach((l, k) => {
+      this.lotX[k] = l.x
+      this.lotZ[k] = l.z
+      this.lotE[k * 2] = l.e[0]
+      this.lotE[k * 2 + 1] = l.e[1]
+      this.lotRank[k] = l.rank
+      this.lotU[k] = l.u
+      this.lotLine[k] = l.tile - 1000000
+      this.lotK[k] = l.bu
+      this.lotSide[k] = l.bv
+      const key = cellKey(Math.floor(l.x / CELL), Math.floor(l.z / CELL))
       let list = this.lotHash.get(key)
       if (!list) this.lotHash.set(key, (list = []))
       list.push(k)
     })
+    this.lotHash = new CellIndex(this.lotHash)
+    this.hash = new CellIndex(this.hash)
+  }
+
+  /** Lot k, made whole as layLots laid it (a fresh object: the scatter writes to it). */
+  lotAt(k) {
+    const li = this.lotLine[k]
+    const L = this.lines[li]
+    const side = this.lotSide[k]
+    const e = [this.lotE[k * 2], this.lotE[k * 2 + 1]]
+    const m = [-e[1] * side, e[0] * side]
+    const f = [-m[0], -m[1]]
+    const gu = 2 * this.lotK[k] + (side > 0 ? 0 : 1)
+    const h = (q) => ihash(gu, li, 7 * q + 3)
+    return {
+      x: this.lotX[k], z: this.lotZ[k], e, m, face: Math.atan2(f[0], f[1]),
+      rank: this.lotRank[k],
+      tile: 1000000 + li, bu: this.lotK[k], bv: side, u: this.lotU[k], v: side,
+      lag: 25 * h(2), r2: h(3), r3: h(4), r4: h(5), r5: h(6), r6: h(7), r7: h(8), r8: h(9),
+      span: [L.lotFrom, L.to ?? Infinity], street: L.id,
+    }
+  }
+
+  /** Every street's lots, made whole (for the tools: the scatter asks lotsIn). */
+  get lots() {
+    return Array.from({ length: this.lotN }, (_, k) => this.lotAt(k))
   }
 
   cells(x0, z0, x1, z1, fn) {
-    for (let j = Math.floor(z0 / CELL); j <= Math.floor(z1 / CELL); j++) for (let i = Math.floor(x0 / CELL); i <= Math.floor(x1 / CELL); i++) fn(`${i},${j}`)
+    for (let j = Math.floor(z0 / CELL); j <= Math.floor(z1 / CELL); j++) for (let i = Math.floor(x0 / CELL); i <= Math.floor(x1 / CELL); i++) fn(cellKey(i, j))
   }
 
   /** The segments near (x, z) (within COVER, give or take a cell). */
   near(x, z) {
-    return this.hash.get(`${Math.floor(x / CELL)},${Math.floor(z / CELL)}`) || []
+    return this.hash.get(cellKey(Math.floor(x / CELL), Math.floor(z / CELL))) || NONE
   }
 
   /**
@@ -163,8 +253,9 @@ export class StreetNet {
     const out = []
     this.cells(x0, z0, x1 - 1e-9, z1 - 1e-9, (key) => {
       for (const k of this.lotHash.get(key) || []) {
-        const l = this.lots[k]
-        if (l.x >= x0 && l.x < x0 + (x1 - x0) && l.z >= z0 && l.z < z1) out.push({ ...l })
+        const x = this.lotX[k]
+        const z = this.lotZ[k]
+        if (x >= x0 && x < x0 + (x1 - x0) && z >= z0 && z < z1) out.push(this.lotAt(k))
       }
     })
     return out
