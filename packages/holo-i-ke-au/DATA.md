@@ -2505,7 +2505,8 @@ geology/chapters.json             the prologue's chapters and their steps (its e
   across a neighbour's, its `age` is the dated moment it shows, with that
   date's own precision (Molokaʻi's two shields at East Molokaʻi's oldest
   age, 1.75 ± 0.14 Ma, after the Koʻolau pali's 1.8). A chapter's `ageSpan`
-  is what it covers and may reach back before its first card.
+  is the stretch of the walk it holds, from its card's `age` to its last
+  step's or stop's, so no card reads back to an age the walk has passed.
 - **Time**: the prologue's timeline runs in millions of years on a log
   scale from the oldest stage to now (and on into the future for
   Kamaʻehuakanaloa, if a step says so); `age` is the only clock. The main
@@ -2539,8 +2540,9 @@ the list above, and how it reads what the list leaves open:
   `azimuth` the compass bearing the plate moves toward. The drift at age A
   is `A × speed × 10` km toward `azimuth + 180°`.
 - **Chapters**: `short` (optional) names a chapter in the pill as an era's
-  does; `ageSpan` is `[oldest, youngest]` and may overlap the next chapter's
-  (the clock names the chapter with a step nearest the age). Steps keep their
+  does; `ageSpan` is `[oldest, youngest]`, the chapter's stretch of the walk
+  (wandering off the tour, the clock names the chapter whose span holds the
+  age, else the one with a step nearest it). Steps keep their
   file order, which is the walk's (one order of age, above); a step's `sources` (else its chapter's) are its
   card's Sources, and its `confidence` its chips, with the stage's
   `confidence` as `shape`.

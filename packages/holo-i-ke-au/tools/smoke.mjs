@@ -4777,7 +4777,7 @@ if (!geoHere) {
   })
 
   // (ISSUES.md 16: the walk went back from 0.5 Ma to 1.9 between chapters)
-  await check('the prologue runs one way: Next never takes the clock back, nor the stage it is drawn on', async () => {
+  await check('the prologue runs one way: Next never takes the clock back, nor the stage it is drawn on, nor a chapter card’s span', async () => {
     await run(`app.tour.goTo(${-P}, -1, { jump: true }); app.settle()`)
     await page.focus('#scene')
     const stageAge = await ui('Object.fromEntries(app.data.geology.stages.map((s) => [s.id, s.age]))')
@@ -4792,6 +4792,9 @@ if (!geoHere) {
       if (age > last + 1e-9) throw new Error(`back in time at ${at}: ${last} → ${age} Ma (walk ${walk.join(' → ')})`)
       if (stage && stageAge[stage] > lastStage + 1e-9) throw new Error(`back to an older stage at ${at}: ${stage} (${stageAge[stage]} Ma) after one of ${lastStage} Ma`)
       if (stage) lastStage = Math.min(lastStage, stageAge[stage])
+      // (and a chapter's card reads its span from where the walk stands, not from further back)
+      const span = s < 0 ? await ui('app.tour.current.era.ageSpan ?? null') : null
+      if (span && Math.max(...span) > last + 1e-9) throw new Error(`${at}'s card reads back to ${Math.max(...span)} Ma after ${last}`)
       if (age < last - 1e-9 || s < 0) walk.push(`${s < 0 ? `[${id}] ` : ''}${+age.toFixed(5)}`)
       last = age
     }

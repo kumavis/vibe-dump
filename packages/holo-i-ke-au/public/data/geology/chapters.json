@@ -6,8 +6,8 @@
       "label": "over the hotspot",
       "age": 5.1,
       "ageSpan": [
-        6.3,
-        2.9
+        5.1,
+        3.06
       ],
       "note": "The oldest of the main islands and the first of Oʻahu’s two shields.",
       "sources": [
@@ -290,8 +290,8 @@
       "label": "the Koʻolau shield and its fall",
       "age": 2.1,
       "ageSpan": [
-        3,
-        1.6
+        2.1,
+        1.8
       ],
       "note": "Koʻolau grown whole against Waiʻanae, its north-east flank into the sea as the Nuʻuanu avalanche, and what the streams made of the rest.",
       "sources": [
@@ -554,8 +554,8 @@
       "label": "Maui Nui",
       "age": 1.75,
       "ageSpan": [
-        2.5,
-        0.3
+        1.75,
+        0.6
       ],
       "note": "The volcanoes between Oʻahu and Hawaiʻi Island, one island and then four.",
       "sources": [
@@ -890,8 +890,8 @@
       "label": "Hawaiʻi rising and sinking, and the old islands’ last vents",
       "age": 0.6,
       "ageSpan": [
-        1.2,
-        0
+        0.6,
+        0.001
       ],
       "note": "The youngest island grows, slides and sinks; the older islands wait in their own long decline, the last small vents of Oʻahu and Kauaʻi breaking out on them.",
       "sources": [
@@ -1372,7 +1372,7 @@
       "label": "Kamaʻehuakanaloa and after",
       "age": 0.00003,
       "ageSpan": [
-        0.4,
+        0.00003,
         0
       ],
       "note": "The volcano being born now, and the islands as they are.",
