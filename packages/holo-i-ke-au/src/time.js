@@ -285,7 +285,8 @@ export function formatAgeShort(A) {
 export function formatAgeSpan(span) {
   if (!Array.isArray(span) || span.length < 2 || !span.every(Number.isFinite)) return ''
   const [a, b] = span
-  if (Math.abs(b) < 0.0005) return `${formatAge(a)} to now`
+  // (a span that is all within the last few centuries is now, not "now to now")
+  if (Math.abs(b) < 0.0005) return formatAge(a) === 'now' ? 'now' : `${formatAge(a)} to now`
   if (a >= 1 && b >= 1) return `about ${millions(a)} to ${millions(b)} million years ago`
   if (a >= 1) return `about ${millions(a)} million to ${thousands(b)} years ago`
   return `about ${thousands(a)} to ${thousands(b)} years ago`

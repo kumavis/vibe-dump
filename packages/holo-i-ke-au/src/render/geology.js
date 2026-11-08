@@ -473,7 +473,9 @@ export class Geology {
     this.load(to)
     const ax = this.fieldAxis(this.geo.fields.get(id))
     this.slide = { id, from, to, t: -Math.max(0, delay), ax, step: step.id }
-    this.keys = { from: to, fromAge: step.age, to, toAge: step.age }
+    // (the step's own stage held from where the clock stands to the step's age, so a
+    // slide run as the clock eases there leaves its stage held, not wandering)
+    this.keys = { from: to, fromAge: this.app.geoClock.age, to, toAge: step.age }
     const u = this.uniforms
     u.uSlideAxis.value.set(ax.o[0], ax.o[1], ax.d[0], ax.d[1])
     u.uSlide.value.set(ax.len, ax.wide, 0, 0)
