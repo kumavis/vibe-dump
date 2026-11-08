@@ -1842,9 +1842,7 @@ follows N3.
   lane firing a rider by the DOM; a lit chip coloured by the ring's look
   (gold when picked up); an enclosed hull's lit chips and deck-point
   volleys, untested until F5b's Beetle; F5b's Beetle and Basket each
-  taking a `deckY` of its figure's; the sweep's runs still going as F9c's
-  notes were committed (property's and present-check's self-tests and
-  the Chromium lane's last runs: DESIGN's F9c Run line).
+  taking a `deckY` of its figure's.
 - [ ] **F5a** New races: insectoids (burrow, swarm) and bird-people (fly,
   swoop), each priced for the army builder against the other races, with
   their Field and Grand presets. (Moved behind F9c after F8a, the user's
