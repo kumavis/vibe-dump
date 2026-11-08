@@ -4777,18 +4777,30 @@ if (!geoHere) {
   })
 
   // (ISSUES.md 16: the walk went back from 0.5 Ma to 1.9 between chapters)
-  await check('the prologue runs one way: Next never takes the clock back, nor the stage it is drawn on, nor a chapter card’s span', async () => {
+  await check('the prologue runs one way: Next never takes the clock back, nor the land drawn on the way or at a card, nor a chapter card’s span', async () => {
     await run(`app.tour.goTo(${-P}, -1, { jump: true }); app.settle()`)
     await page.focus('#scene')
     const stageAge = await ui('Object.fromEntries(app.data.geology.stages.map((s) => [s.id, s.age]))')
     let last = await ui('app.geoClock.age')
     let lastStage = Infinity
     const walk = [`${last}`]
+    // the land drawn, as an age: its two stages' ages by the crossfade between them
+    const drawnAge = `(() => { app.geology.update(0); const d = app.geology.drawn, A = ${JSON.stringify(stageAge)}; return d ? A[d.a] + (A[d.b] - A[d.a]) * d.mix : null })()`
+    let lastLand = Infinity
     for (let i = 0; i < 80; i++) {
-      await press('ArrowRight')
+      // Next, the land caught halfway through the clock's easing, then landed
+      await page.keyboard.press('ArrowRight')
+      const mid = await ui(`(() => { const w = app.ui.timeline.tween; if (w?.ma) app.geoClock.setU((w.from + w.to) / 2); return app.prologue ? ${drawnAge} : null })()`)
+      await ui('(app.rig.finishFlight(), app.ui.timeline.finish(), app.settle(), 0)')
       const [c, s, stop, id, age, stage] = await ui("[app.tour.chapter, app.tour.step, app.tour.stop, app.tour.event?.id ?? app.tour.current?.era.id, app.geoClock.age, app.tour.event?.stage ?? null]")
       if (c >= 0) break
       const at = `${id}${stop >= 0 ? ` stop ${stop + 1}` : ''}`
+      const land = await ui(drawnAge)
+      for (const [when, v] of [['on the way to', mid], ['at', land]]) {
+        if (v === null) continue
+        if (v > lastLand + 1e-6) throw new Error(`the land went back ${when} ${at}: drawn as of ${v.toFixed(3)} Ma after ${lastLand.toFixed(3)}`)
+        lastLand = Math.min(lastLand, v)
+      }
       if (age > last + 1e-9) throw new Error(`back in time at ${at}: ${last} → ${age} Ma (walk ${walk.join(' → ')})`)
       if (stage && stageAge[stage] > lastStage + 1e-9) throw new Error(`back to an older stage at ${at}: ${stage} (${stageAge[stage]} Ma) after one of ${lastStage} Ma`)
       if (stage) lastStage = Math.min(lastStage, stageAge[stage])

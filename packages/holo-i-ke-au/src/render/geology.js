@@ -300,6 +300,11 @@ export class Geology {
     this.slide = null
   }
 
+  /** The viewer has taken the clock (ui.onScrubAge): the step's hold lets go, and the stages follow the age. */
+  free() {
+    if (!this.slide) this.keys = null
+  }
+
   /** The two stages at the clock's age and how far between (one, at either end of a crossfade). */
   pair(A) {
     const p = this.pairAt(A)
@@ -317,16 +322,19 @@ export class Geology {
     }
     const K = this.keys
     if (K) {
-      // (a step's stage held at its age; the clock scrubbed off it is wandering, by the stages' own ages)
-      if (K.from === K.to || Math.abs(K.toAge - K.fromAge) < 1e-9) {
-        if (Math.abs(A - K.toAge) < 1e-6) return { a: K.to, b: K.to, mix: 0 }
-        this.keys = null
-        return this.pairAt(A)
-      }
+      // the tour's stretch, from the age the step was opened at to its own:
+      // one stage held over it (a step on the stage already drawn), or the
+      // two crossfaded along it. A step's stage is held while the clock eases
+      // to it, so the land never goes by the stages' own ages between two
+      // steps on one stage (the Honolulu vents at 0.5 Ma on the stage of
+      // 0.3, between steps on that stage, once crossfaded back toward 0.6)
       const lo = Math.min(K.fromAge, K.toAge)
       const hi = Math.max(K.fromAge, K.toAge)
-      if (A >= lo - 1e-6 && A <= hi + 1e-6) return { a: K.from, b: K.to, mix: clamp((clk.uAt(A) - clk.uAt(K.fromAge)) / (clk.uAt(K.toAge) - clk.uAt(K.fromAge)), 0, 1) }
-      // (the clock has been taken off the tour's stretch: by the stages' own ages)
+      if (A >= lo - 1e-6 && A <= hi + 1e-6) {
+        if (K.from === K.to || hi - lo < 1e-9) return { a: K.to, b: K.to, mix: 0 }
+        return { a: K.from, b: K.to, mix: clamp((clk.uAt(A) - clk.uAt(K.fromAge)) / (clk.uAt(K.toAge) - clk.uAt(K.fromAge)), 0, 1) }
+      }
+      // (the clock taken off the tour's stretch is wandering: by the stages' own ages)
       this.keys = null
     }
     const S = this.geo.stages

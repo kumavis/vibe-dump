@@ -283,6 +283,7 @@ export class UI {
   onScrubAge(A = this.app.geoClock.age) {
     const tour = this.tour
     tour.leave()
+    this.app.geology?.free()
     if (this.card.mode === 'era' && this.card.chapter?.prologue && this.card.chapter !== tour.prologueAt(A)) this.card.close()
   }
 
