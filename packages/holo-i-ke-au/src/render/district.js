@@ -334,6 +334,8 @@ export class Districts {
       uParN: { value: parentT?.normalTex ?? null },
       uParL: { value: parentT?.landTex ?? null },
       uParS: { value: parentT?.shadow.texture ?? null },
+      // (its island's heights: the one slot the district's program reads, common.glsl.js DIST_PROGRAM)
+      uParH: { value: parentT?.heightTex ?? null },
       uParRect: { value: parentT ? parentT.rect : new THREE.Vector4(0, 0, 1, 1) },
       uParSlot: { value: -1 },
       uParRain: { value: parentT?.uniforms.uOwnRain.value ?? 1 },
@@ -343,6 +345,8 @@ export class Districts {
       fragmentShader: districtFragment,
       shadowFragment: districtShadowFragment,
       shadowSize: 512,
+      // (one slot's heights and none of the archipelago's textures: sixteen texture units at most)
+      defines: { DIST_PROGRAM: '' },
       uniforms: { ...rec.parUniforms, uDistN: { value: null }, uDistL: { value: null }, uDistS: { value: null } },
     })
     for (const g of [terrain.full, terrain.half]) {
@@ -581,6 +585,7 @@ export class Districts {
     pu.uParN.value = parent.normalTex
     pu.uParL.value = parent.landTex
     pu.uParS.value = parent.shadow.texture
+    pu.uParH.value = parent.heightTex
     // (its fields are its island's)
     this.app.crops?.bindDistrict(parent.pack.id)
     this.on = true

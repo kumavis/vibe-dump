@@ -5258,6 +5258,28 @@ if (!geoHere) {
 }
 // ==== [voyage] end ====
 
+// Every program compiled on the way here binds at most sixteen textures: the
+// units a fragment shader has on common GPUs (the software renderer gives
+// thirty-two, so nothing else here would see a program over that fail to
+// draw: an island program with its crop map, the district's with its
+// island's crop map).
+await check('every program compiled binds at most 16 textures', async () => {
+  const r = await ui(`(() => {
+    const gl = app.renderer.getContext()
+    const S = new Set([gl.SAMPLER_2D, gl.SAMPLER_3D, gl.SAMPLER_CUBE, gl.SAMPLER_2D_ARRAY, gl.SAMPLER_2D_SHADOW, gl.SAMPLER_CUBE_SHADOW, gl.SAMPLER_2D_ARRAY_SHADOW, gl.INT_SAMPLER_2D, gl.INT_SAMPLER_3D, gl.INT_SAMPLER_CUBE, gl.INT_SAMPLER_2D_ARRAY, gl.UNSIGNED_INT_SAMPLER_2D, gl.UNSIGNED_INT_SAMPLER_3D, gl.UNSIGNED_INT_SAMPLER_CUBE, gl.UNSIGNED_INT_SAMPLER_2D_ARRAY])
+    return app.renderer.info.programs.map((p) => {
+      const names = []
+      const n = gl.getProgramParameter(p.program, gl.ACTIVE_UNIFORMS)
+      for (let i = 0; i < n; i++) { const u = gl.getActiveUniform(p.program, i); if (S.has(u.type)) names.push(u.name) }
+      return { key: p.cacheKey.slice(0, 40), crops: p.cacheKey.includes('CROPS'), district: p.cacheKey.includes('DIST_PROGRAM'), names }
+    })
+  })()`)
+  const over = r.filter((p) => p.names.length > 16)
+  const most = r.reduce((m, p) => Math.max(m, p.names.length), 0)
+  if (over.length) throw new Error(over.map((p) => `${p.names.length} in ${p.district ? 'the district’s' : 'a'} program${p.crops ? ' with its crop map' : ''}: ${p.names.join(' ')}`).join('; '))
+  console.log(`      ${r.length} programs, the most ${most} textures`)
+})
+
 // What the page costs, for comparing builds: the JS heap after a collection,
 // and the frame time held still over the whole chain and over one island, in
 // each view of the far map the build has. (Under the software renderer the

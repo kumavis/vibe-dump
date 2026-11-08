@@ -56,7 +56,7 @@ export class PackTerrain {
    * base: for an island pack, the archipelago's PackTerrain (its heights are
    * folded into the node bounds, since an island at low weight shows them);
    * for a district, the list of what it can show under it.
-   * opts: { vertexShader, fragmentShader, uniforms, shadowFragment, shadowSize }
+   * opts: { vertexShader, fragmentShader, uniforms, defines, shadowFragment, shadowSize }
    * to draw with other shaders than the island packs' (the district's).
    */
   constructor(pack, world, base = null, opts = {}) {
@@ -118,6 +118,7 @@ export class PackTerrain {
         vertexShader: opts.vertexShader || terrainVertex,
         fragmentShader: opts.fragmentShader || terrainFragment,
         uniforms: { ...this.uniforms, uGrid: { value: grid.dim } },
+        defines: { ...opts.defines },
       })
       grid.mesh = new THREE.Mesh(grid.geometry, grid.material)
       grid.mesh.frustumCulled = false

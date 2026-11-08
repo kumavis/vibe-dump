@@ -11,7 +11,7 @@
 // this (metresAt), line for line, for the camera, picking and pins.
 
 import { NEAR_EXAG, NORMAL_EXAG, SLOTS, PATCHES, DIST_PATCHES, RESTORES, RESTORE_ISLANDS, EARLY_THIN, OFF } from '../../config.js'
-import { RESTORE_TILE } from '../restores.js'
+import { RESTORE_TILE, RESTORE_ROW } from '../restores.js'
 
 const f = (v) => (Number.isInteger(v) ? v.toFixed(1) : String(v))
 
@@ -102,7 +102,12 @@ vec3 voronoi(vec2 p) {
 export const world = /* glsl */ `
 uniform float uVert;           // world Y per metre: the exaggeration of the moment / 100
 uniform float uExag;           // the exaggeration itself
+// (the district's program, DIST_PROGRAM, eases to its island and never to
+// the archipelago, so it binds none of the archipelago's textures: a fragment
+// shader has sixteen texture units on common GPUs, and it needs the rest)
+#ifndef DIST_PROGRAM
 uniform sampler2D uArchH;      // archipelago heights, metres (R32F, nearest)
+#endif
 uniform vec4 uArchRect;        // its world rect: x0, z0, x1, z1
 uniform vec4 uSlotRect[SLOTS];
 uniform vec4 uSlotInfo[SLOTS]; // x detail weight k, y on (0/1), z edge margin (world units)
@@ -126,10 +131,12 @@ float rectMetres(sampler2D t, vec4 r, vec2 xz) {
   float h11 = texelFetch(t, i + ivec2(1, 1), 0).r;
   return mix(mix(h00, h10, fr.x), mix(h01, h11, fr.x), fr.y);
 }
+#ifndef DIST_PROGRAM
 // beyond the archipelago pack it is open ocean
 float archMetres(vec2 xz) {
   return edgeDist(uArchRect, xz) < 0.0 ? -4000.0 : rectMetres(uArchH, uArchRect, xz);
 }
+#endif
 // the island slot that draws xz, or -1 for the archipelago
 int ownerAt(vec2 xz) {
   int o = -1;
@@ -197,11 +204,14 @@ float patchMask(int i, vec2 xz) {
 // The restore patches (render/restores.js): the ground a road was cut into
 // and raised on, laid back for the years before it. Per texel of a pack, the
 // change from today's height times its weight (r) and the patch it belongs
-// to (g), in squares of RESTORE_TILE texels kept in one atlas; an index
-// (one texel a square, the slots' and the district's packs one under
-// another) says which square of the atlas holds each square of a pack.
-uniform sampler2D uRestAtlas;           // RG32F, nearest
-uniform sampler2D uRestIdx;             // R32F, nearest: atlas square + 1, 0 none
+// to (g), in squares of RESTORE_TILE texels kept in one atlas, RESTORE_ROW
+// squares a row; an index (one texel a square, the slots' and the district's
+// packs one under another) says which square of the atlas holds each square
+// of a pack. The index lies in the same texture, in r, from row uRestIdxRow
+// (one sampler, not two: a program has sixteen texture units on common GPUs).
+#define RESTORE_ROW ${RESTORE_ROW}
+uniform sampler2D uRestAtlas;           // RG32F, nearest: the squares, then the index (atlas square + 1, 0 none)
+uniform float uRestIdxRow;              // the row the index starts at
 uniform vec4 uRestK[RESTORES / 4];      // each patch's weight in the year
 uniform vec4 uRestSlot[SLOTS];          // a slot's pack: x its first row in the index, y, z its squares across and down, w 1 while it has any
 uniform vec2 uRestSlotGrid[SLOTS];      // ... its texels across and down
@@ -212,7 +222,7 @@ float restoreK(float n) { int i = int(n + 0.5); return uRestK[i >> 2][i & 3]; }
 // whether square sq of a region holds any restore (its place in the atlas, 0 none)
 float restoreSquare(vec4 r, ivec2 sq) {
   if (sq.x < 0 || sq.y < 0 || sq.x >= int(r.y) || sq.y >= int(r.z)) return 0.0;
-  return texelFetch(uRestIdx, ivec2(sq.x, int(r.x) + sq.y), 0).r;
+  return texelFetch(uRestAtlas, ivec2(sq.x, int(uRestIdxRow) + int(r.x) + sq.y), 0).r;
 }
 // whether any of the four texels from p to p + (1, 1) can lie in a restore:
 // false where they share a square and it holds none (most of a region's box),
@@ -224,12 +234,11 @@ bool restoreNear(vec4 r, ivec2 p) {
 // the change at texel p of a region (r: its place in the index), by the weights of the year
 float restoreAt(vec4 r, ivec2 p) {
   ivec2 sq = p / RESTORE_TILE;
-  if (p.x < 0 || p.y < 0 || sq.x >= int(r.y) || sq.y >= int(r.z)) return 0.0;
-  float a = texelFetch(uRestIdx, ivec2(sq.x, int(r.x) + sq.y), 0).r;
+  if (p.x < 0 || p.y < 0) return 0.0;
+  float a = restoreSquare(r, sq);
   if (a < 0.5) return 0.0;
   int k = int(a + 0.5) - 1;
-  int row = textureSize(uRestAtlas, 0).x / RESTORE_TILE;
-  vec2 t = texelFetch(uRestAtlas, ivec2(k % row, k / row) * RESTORE_TILE + (p - sq * RESTORE_TILE), 0).rg;
+  vec2 t = texelFetch(uRestAtlas, ivec2(k % RESTORE_ROW, k / RESTORE_ROW) * RESTORE_TILE + (p - sq * RESTORE_TILE), 0).rg;
   return t.r * restoreK(t.g);
 }
 // slot s's change at xz, bilinear on its pack's grid as rectMetres reads the
@@ -307,16 +316,34 @@ float patchedMetres(int s, vec2 xz, float h) {
 const slotIndices = Array.from({ length: SLOTS }, (_, i) => i)
 export const ground = /* glsl */ `
 ${patches}
+#ifdef DIST_PROGRAM
+// (the district's program reads one slot, its island's: its own entry, set
+// by render/district.js, not the shared slots' five)
+uniform sampler2D uParH;   // the island's heights
+uniform int uParSlot;      // the island's slot, or -1
+#else
 ${slotIndices.map((i) => `uniform sampler2D uSlotH${i};`).join('\n')}
+#endif
 float slotMetres(int s, vec2 xz) {
   // (samplers can only be picked by a constant index; the patches are laid
   // on whichever it was once, so the loop is compiled once, not per slot)
   float h = -4000.0;
+#ifdef DIST_PROGRAM
+  // (only ever asked of its island's slot: islandMetres)
+  h = rectMetres(uParH, uSlotRect[s], xz);
+#else
 ${slotIndices.map((i) => `  ${i ? 'else ' : ''}if (s == ${i}) h = rectMetres(uSlotH${i}, uSlotRect[${i}], xz);`).join('\n')}
+#endif
   return patchedMetres(s, xz, h);
 }
 // the archipelago and the islands, without the district
 float islandMetres(vec2 xz) {
+#ifdef DIST_PROGRAM
+  // (in the district's program, its island's ground alone: the district is
+  // drawn only while its island holds its slot, and eases to it, not to the
+  // archipelago, whose texture it does not bind)
+  return uParSlot < 0 ? -4000.0 : slotMetres(uParSlot, xz);
+#else
   float m = archMetres(xz);
   int o = ownerAt(xz);
   if (o >= 0) {
@@ -324,6 +351,7 @@ float islandMetres(vec2 xz) {
     if (w > 0.0) m = mix(m, slotMetres(o, xz), w);
   }
   return m;
+#endif
 }
 
 uniform sampler2D uDistH;     // heights today, metres (R32F, nearest)

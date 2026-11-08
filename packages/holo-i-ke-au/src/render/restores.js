@@ -9,9 +9,11 @@
 // restore entries only. Every pack's patches go into one sparse atlas
 // (RG32F, nearest): the pack's grid is cut into TILE × TILE squares, and only
 // the squares a patch reaches are kept, each holding per texel the change
-// times its weight (r) and the patch's index (g). A small index texture
-// (R32F) says, per square of each pack, which square of the atlas holds it
-// (0 none). Patches of one pack never share a texel (the bake gives each
+// times its weight (r) and the patch's index (g). A small index says, per
+// square of each pack, which square of the atlas holds it (0 none); it lies
+// in the atlas texture too, in r, in the rows under the squares, so the
+// shaders bind one texture for both (a program has sixteen texture units on
+// common GPUs). Patches of one pack never share a texel (the bake gives each
 // texel to the road nearest it), so one index per texel is enough. What the
 // shaders get (common.glsl.js restoreSlot, distRestore) is the two textures,
 // each slot's and the district's place in the index, and each patch's weight
@@ -24,7 +26,9 @@ import { decodeImage } from '../data/image.js'
 import { loadRestoreManifest } from '../data/patches.js'
 
 export const RESTORE_TILE = 16
-const ROW = 64 // atlas squares a row
+// atlas squares a row
+export const RESTORE_ROW = 64
+const ROW = RESTORE_ROW
 
 /** The uniforms the shaders read the restores from (world.js puts them in the shared bag). */
 export function restoreUniforms() {
@@ -35,7 +39,7 @@ export function restoreUniforms() {
   }
   return {
     uRestAtlas: { value: none(THREE.RGFormat) },
-    uRestIdx: { value: none(THREE.RedFormat) },
+    uRestIdxRow: { value: 0 },
     uRestK: { value: Array.from({ length: RESTORES / 4 }, () => new THREE.Vector4(0, 0, 0, 0)) },
     // per slot: x the first row of its pack's squares in the index, y, z its squares across and down, w 1 while it has any;
     // and its pack's texels across and down, then the box (texels) its patches reach
@@ -59,7 +63,6 @@ export class Restores {
     this.loaded = false
     this.warned = false
     this.atlas = null
-    this.index = null
   }
 
   /** The restore entries of patches/manifest.json under `base`, into their atlas; called again, it replaces what it had. */
@@ -140,30 +143,18 @@ export class Restores {
   /** The two textures: the atlas of squares, and every region's index one under another. */
   build(tiles) {
     this.atlas?.dispose()
-    this.index?.dispose()
-    this.atlas = this.index = null
+    this.atlas = null
     this.tiles = tiles
     const u = this.u
     const fresh = restoreUniforms()
     if (!tiles.length) {
       u.uRestAtlas.value = fresh.uRestAtlas.value
-      u.uRestIdx.value = fresh.uRestIdx.value
+      u.uRestIdxRow.value = 0
       return
     }
     const T = RESTORE_TILE
     const rows = Math.ceil(tiles.length / ROW)
-    const AW = Math.min(tiles.length, ROW) * T
-    const AH = rows * T
-    const a = new Float32Array(AW * AH * 2)
-    tiles.forEach((t, k) => {
-      const ox = (k % ROW) * T
-      const oy = Math.floor(k / ROW) * T
-      for (let j = 0; j < T; j++) a.set(t.subarray(j * T * 2, (j + 1) * T * 2), ((oy + j) * AW + ox) * 2)
-    })
-    const at = new THREE.DataTexture(a, AW, AH, THREE.RGFormat, THREE.FloatType)
-    at.minFilter = at.magFilter = THREE.NearestFilter
-    at.generateMipmaps = false
-    at.needsUpdate = true
+    // the index's rows, every region's one under another
     let IW = 1
     let IH = 0
     for (const R of this.regions.values()) {
@@ -171,17 +162,24 @@ export class Restores {
       IH += R.th
       IW = Math.max(IW, R.tw)
     }
-    const idx = new Float32Array(IW * IH)
-    for (const R of this.regions.values()) for (let j = 0; j < R.th; j++) for (let i = 0; i < R.tw; i++) idx[(R.row + j) * IW + i] = R.map[j * R.tw + i]
-    const it = new THREE.DataTexture(idx, IW, IH, THREE.RedFormat, THREE.FloatType)
-    it.minFilter = it.magFilter = THREE.NearestFilter
-    it.generateMipmaps = false
-    it.needsUpdate = true
+    // (the squares RESTORE_ROW to a row, as the shaders find them, and the index under them, in r)
+    const AW = Math.max(Math.min(tiles.length, ROW) * T, IW)
+    const AH = rows * T
+    const a = new Float32Array(AW * (AH + IH) * 2)
+    tiles.forEach((t, k) => {
+      const ox = (k % ROW) * T
+      const oy = Math.floor(k / ROW) * T
+      for (let j = 0; j < T; j++) a.set(t.subarray(j * T * 2, (j + 1) * T * 2), ((oy + j) * AW + ox) * 2)
+    })
+    for (const R of this.regions.values()) for (let j = 0; j < R.th; j++) for (let i = 0; i < R.tw; i++) a[((AH + R.row + j) * AW + i) * 2] = R.map[j * R.tw + i]
+    const at = new THREE.DataTexture(a, AW, AH + IH, THREE.RGFormat, THREE.FloatType)
+    at.minFilter = at.magFilter = THREE.NearestFilter
+    at.generateMipmaps = false
+    at.needsUpdate = true
     this.atlas = at
-    this.index = it
     u.uRestAtlas.value = at
-    u.uRestIdx.value = it
-    this.atlasSize = [AW, AH]
+    u.uRestIdxRow.value = AH
+    this.atlasSize = [AW, AH + IH]
   }
 
   /** A patch's weight wanted in the year: 1 before its until. */

@@ -113,13 +113,11 @@ uniform sampler2D uDistCrop;  // its island's crop map (overlay/crops.js), over 
 uniform vec4 uDistCropRect;
 uniform float uDistCropOn;
 #endif
-uniform sampler2D uArchN;
-uniform sampler2D uArchL;
+// (no archipelago maps: the district eases to its island alone, common.glsl.js DIST_PROGRAM)
 uniform sampler2D uParN;   // the island's maps, under the district (its slot's own)
 uniform sampler2D uParL;
 uniform sampler2D uParS;
 uniform vec4 uParRect;
-uniform int uParSlot;      // the island's slot, or -1
 uniform float uParRain;
 uniform sampler2D uDistN;  // the district's normals (today's ground) and occlusion
 uniform sampler2D uDistL;  // r rain, g today's beach, b riparian, a the beach of the patched years
@@ -203,15 +201,14 @@ void main() {
   vec2 xz = vWorld.xz;
   if (edgeDist(uDistRect, xz) < 0.0) discard;
   float w = distWeight(xz);
-  float kP = uParSlot >= 0 ? slotWeight(uParSlot, xz) : 0.0;
-  vec2 uvA = rectUv(uArchRect, xz);
   vec2 uvP = rectUv(uParRect, xz);
   vec2 uvD = rectUv(uDistRect, xz);
   // the island's maps as the island draws them, the district's over them by its weight
-  vec4 ntI = mix(texture(uArchN, uvA), texture(uParN, uvP), kP);
-  vec4 lA = texture(uArchL, uvA);
-  vec4 lI = mix(lA, texture(uParL, uvP), kP);
-  if (uParRain < 0.5) lI.r = lA.r;
+  // (its island's alone: the district is drawn only while the island holds
+  // its slot, and binds none of the archipelago's maps; an island without a
+  // rain image of its own keeps what its map has)
+  vec4 ntI = texture(uParN, uvP);
+  vec4 lI = texture(uParL, uvP);
   vec4 ntD = texture(uDistN, uvD);
   vec4 lD = texture(uDistL, uvD);
   // (the beach of the year: the lower patches' old shore while theirs, by the
