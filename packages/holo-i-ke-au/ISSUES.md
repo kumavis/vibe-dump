@@ -303,9 +303,25 @@ fix has landed in `dist/` and been looked at again.
   fetch in the district's lowers; the schools and the landmarks drawn on
   every island at the far zoom; the streets' lots and their drawing; the
   towers' record; the settlement curve before 1450.
-- **Open:** measure each in turn (the perf check with one feature held off
-  at a time), and bring the far views back to within a third of what they
-  cost before, on a real GPU as well as the software one.
+- **Measured:** most of the rise was the machine, not the code: the same
+  build measures two to three times dearer with eight agents' browsers on
+  the four cores. Held off one at a time (a dev-only `?off=` switch), the
+  wave's own cost was in the near view: the streets about 16 MB of heap and
+  194k triangles, the schools 95k triangles, the landmarks 17 draw calls;
+  the reef level, the district's restores and the towers nothing
+  measurable; the far views within noise of the build before the wave.
+- **Fix:** the streets and the schools draw only what has come in by the
+  year (segments batched per town and look, sorted by start year and
+  frustum-culled; school instances sorted per kit: nothing of either in
+  1795); the street network's lots and cells kept as typed arrays (Oʻahu's
+  network 19.8 → 5 MB); a district texel off a restore square looks up
+  once, not four times; a named building's kit not drawn in years none of
+  it stands. At a quiet moment the final build measures 689 / 1418 / 812 /
+  1627 / 3148 ms over the chain and Oʻahu in both views and the near view,
+  against 1176 / 1515 / 1117 / 1384 / 3302 before the wave; heap 24 MB
+  against 18; near view 48 calls and 655k triangles against 51 and 690k.
+- **Status:** landed; published in version 27. On a real GPU still to be
+  looked at.
 
 ### 14. The 102 schools dated only by a first record, and the 1882 schools' sites
 
