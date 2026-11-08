@@ -335,10 +335,21 @@ fix has landed in `dist/` and been looked at again.
   streets, so Honolulu, Hilo, Lahaina and Wailuku keep the modelled grid until
   the 1910–27 quadrangles, though Honolulu's street plan was surveyed by
   1887.
-- **Open:** the streets dated by name from Bowser's directory of 1880–81,
-  Husted's from 1890, Thrum's lists and the 1887 map's printed index, and
-  by the registered maps and Sanborn sheets where their corners can be
-  matched to today's centrelines.
+- **Then:** the bake reads the Hawaiian Government Survey's registered maps
+  from the Kīpuka index, places each on today's centrelines (from a few
+  street corners read by hand, or a search over turn and scale with a
+  cross-correlation against today's streets) and dates streets by it as by
+  any sheet; Bennett's 1869 Honolulu directory dates a street's stretch
+  that a map within twenty years after already shows. Honolulu's RM 867
+  (1881, 1:6,000) and RM 1397 (1888, 1:1,200) and Lahaina's RM 1137 (1883)
+  are placed: Honolulu by 1869 about 16 km of streets, by 1888 about 58 km
+  (was 20), Lahaina by 1883 about 21 km. Monsarrat's 1897 Honolulu and
+  Baldwin's 1891 Hilo were opened but not placed (Hilo's names have
+  changed); Bowser's and Husted's directories were not found open.
+- **Open:** Hilo and Wailuku in the 1890s; Honolulu beyond downtown in the
+  1890s; five directory names lost from today's layer (Emma, Kaʻahumanu and
+  Union streets, Garden Lane, Port Street) as candidates for a `to` year;
+  fewer buildings in 1869 than 1865 where the street lots come in.
 
 ### 16. The prologue walks backward in time between its chapters
 

@@ -1195,7 +1195,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Public domain; University of Michigan copy on the Internet Archive, read 2026-10-23. P. 42, “List of Principal Stock and Sheep Ranches throughout the Islands”, read on the page image (the text layer misses the table): thirty ranches with their character (stock, cattle, sheep), manager, location and agent, from Erehwon Station at Makawao to the Waiohinu Agricultural Co. in Kaʻū. Pp. 43–46, the history of H. Hackfeld & Co.: R. W. Wood’s Koloa and East Maui plantations in the house’s agency from its early years, and the Matanzas bringing “an outfit for the Koloa and Lihue plantations” in 1853. The crop classes’ 1896 ranches and 1853 plantations rest on these pages.",
+    "note": "Public domain; University of Michigan copy on the Internet Archive, read 2026-10-23. P. 42, “List of Principal Stock and Sheep Ranches throughout the Islands”, read on the page image (the text layer misses the table): thirty ranches with their character (stock, cattle, sheep), manager, location and agent, from Erehwon Station at Makawao to the Waiohinu Agricultural Co. in Kaʻū. Pp. 43–46, the history of H. Hackfeld & Co.: R. W. Wood’s Koloa and East Maui plantations in the house’s agency from its early years, and the Matanzas bringing “an outfit for the Koloa and Lihue plantations” in 1853. The crop classes’ 1896 ranches and 1853 plantations rest on these pages. Read again on 2026-11-07, with the Annuals for 1883 to 1906 in the University of Michigan’s copies on the Internet Archive (acp0143), for a list of Honolulu’s streets: they hold notes on the naming of the streets (1884) and on the streets of the early forties (1904), not a street index.",
     "wanted": "the list’s own date of compilation (it may lag the 1902 issue by a year or more), and whether Kauaʻi’s Makaweli, Kekaha and Princeville ranches were left out as not “principal” or missed"
   },
   {
@@ -3265,16 +3265,6 @@
     "note": "Read on 2026-11-06 as a finding aid: opened on 11 March 1901; two floors and the concrete wings added in 1918."
   },
   {
-    "id": "wikipedia-royal-hawaiian-hotel",
-    "title": "Royal Hawaiian Hotel",
-    "author": "Wikipedia",
-    "year": 2026,
-    "url": "https://en.wikipedia.org/wiki/Royal_Hawaiian_Hotel",
-    "access": "open",
-    "opened": true,
-    "read": "part",
-    "tertiary": true,
-    "note": "Read on 2026-11-06 as a finding aid: opened on 1 February 1927.",
     "id": "kikuchi-1973",
     "title": "Hawaiian Aquacultural System (PhD dissertation, Department of Anthropology, University of Arizona)",
     "author": "William Kenji Kikuchi",
@@ -3283,6 +3273,7 @@
     "access": "open",
     "opened": true,
     "read": "part",
+    "tertiary": true,
     "note": "Read in the scan the Kikuchi Center (Kauaʻi Community College) serves in its Kikuchi Collection (kikuchi.omeka.net, item 386), on 2026-11-06: the six kinds of pond and trap (p. 10), the typology of Appendix A (pp. 227–229: type I loko kuapā, walled in stone or coral on the side or sides facing the sea; type II loko puʻuone, an isolated shore pond behind a barrier beach; type III loko wai, an inland fresh-water pond, usually a natural lake or swamp) and the inventory of Appendix B for Kailua (C23 Kaʻelepulu, p. 238; C67 Kawainui, p. 242). The inventory gives no source per entry.",
     "wanted": "the rest of Appendix B for Koʻolaupoko (Halekou, Nuʻupia, Kaluapuhi and the Kāneʻohe ponds, by type) and the chapter on construction, for the kuapā drawn in the district; where the wall between Kawainui and Kaʻelepulu stood, if the text places it"
   },
@@ -3299,16 +3290,6 @@
     "wanted": "its bibliography's Kawainui reports (Kelly and Clark 1980; the Army Corps' survey of 1978) for the extent of the pond before 1800 and where its ditch and the wall toward Kaʻelepulu ran"
   },
   {
-    "id": "cobb-1905",
-    "title": "The Commercial Fisheries of the Hawaiian Islands (Bulletin of the United States Fish Commission 23, for 1903)",
-    "author": "John N. Cobb",
-    "year": 1905,
-    "url": "https://archive.org/details/cu31924003261801",
-    "access": "open",
-    "opened": true,
-    "read": "part",
-    "note": "Read in the Internet Archive's scan of Cornell's copy on 2026-11-06: the fish ponds (pp. 745–748): how the sea ponds and the interior ponds are built, and the list of the ponds still in use or in traces about 1900, by island, with their acreage. The fieldwork is of 1900–01.",
-    "wanted": "the rest of the report for Koʻolaupoko: who worked the Kailua and Kāneʻohe ponds about 1900 and what they took",
     "id": "hgs-1902-oahu-donn",
     "title": "Map of Oʻahu (Hawaiian Government Survey), 1902, as georeferenced by the State GIS (Historic_Maps/islands_1900s, raster oa_1902_drg_Donn)",
     "author": "John M. Donn, Hawaiian Government Survey",
@@ -3317,7 +3298,8 @@
     "access": "open",
     "opened": true,
     "read": "part",
-    "note": "Exported on 2026-11-06 over Honolulu, Kailua and Kāneʻohe for the towns’ streets: Honolulu’s streets as double lines, downtown, Pālama, Makiki and toward Waikīkī, schematic at this scale; Kailua and Kāneʻohe roads only."
+    "note": "Exported on 2026-11-06 over Honolulu, Kailua and Kāneʻohe for the towns’ streets: Honolulu’s streets as double lines, downtown, Pālama, Makiki and toward Waikīkī, schematic at this scale; Kailua and Kāneʻohe roads only.",
+    "wanted": "the rest of the report for Koʻolaupoko: who worked the Kailua and Kāneʻohe ponds about 1900 and what they took"
   },
   {
     "id": "hgs-1903-maui-donn",
@@ -3415,10 +3397,10 @@
     "year": 1890,
     "url": "https://services5.arcgis.com/7nEbFq9LrZLy9uXi/arcgis/rest/services/RegisteredMaps/FeatureServer/0",
     "access": "open",
-    "opened": false,
-    "read": "title",
-    "note": "Not opened for the streets. OHA’s Kīpuka database serves the registered maps as scans with an index layer; the district bake reads Jackson’s bay surveys from it. Which numbers are Honolulu’s street surveys was not looked up.",
-    "wanted": "The registered maps of Honolulu’s streets between about 1880 and 1900 (find them in the index by place and date), each georeferenced on its street corners: the streets each shows, by name, to date downtown’s, Chinatown’s and Kakaʻako’s streets in the 1880s and 1890s where the island maps of 1881 and 1899 are too small to read."
+    "opened": true,
+    "read": "part",
+    "note": "The registered maps’ index (OHA’s Kīpuka RegisteredMaps layer) read on 2026-11-07 for the maps of Honolulu, Hilo, Lahaina and Wailuku from 1871 to 1910; of those, Registered Maps 867, 1397 and 1910 of Honolulu, 1561 of Hilo and 1137 of Lahaina opened (each its own entry), and 903, 1119, 1390, 1637 and 1261 (Wailuku, M. D. Monsarrat, 1882) looked at.",
+    "wanted": "Registered Map 1637 (C. V. E. Dove’s map of Honolulu for Husted’s directory, 1892, 1:12,000) and 1261 (Wailuku, 1882) placed on today’s streets, and 1690 (Honolulu, W. A. Wall, 1893) and 2612 (Honolulu City showing buildings, H. E. Newton, 1904) opened, to date the streets of the 1890s and 1900s."
   },
   {
     "id": "usgs-24k-honolulu",
@@ -3433,27 +3415,120 @@
     "wanted": "Each edition’s GeoTIFF over Honolulu, Kailua and Kāneʻohe (and their neighbouring quadrangles), read as the streets bake reads the State’s sheets, to date the streets built between the 1943 sheet and the sheet of about 2000, which the bake now dates by the latter."
   },
   {
-      "id": "cobb-1905",
-      "title": "The Commercial Fisheries of the Hawaiian Islands (Bulletin of the United States Fish Commission 23, for 1903)",
-      "author": "John N. Cobb",
-      "year": 1905,
-      "url": "https://archive.org/details/cu31924003261801",
-      "access": "open",
-      "opened": true,
-      "read": "part",
-      "note": "Read in the Internet Archive's scan of Cornell's copy on 2026-11-06: the fish ponds (pp. 745–748): how the sea ponds and the interior ponds are built, and the list of the ponds still in use or in traces about 1900, by island, with their acreage. The fieldwork is of 1900–01.",
-      "wanted": "the rest of the report for Koʻolaupoko: who worked the Kailua and Kāneʻohe ponds about 1900 and what they took"
-    },
+    "id": "cobb-1905",
+    "title": "The Commercial Fisheries of the Hawaiian Islands (Bulletin of the United States Fish Commission 23, for 1903)",
+    "author": "John N. Cobb",
+    "year": 1905,
+    "url": "https://archive.org/details/cu31924003261801",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Read in the Internet Archive's scan of Cornell's copy on 2026-11-06: the fish ponds (pp. 745–748): how the sea ponds and the interior ponds are built, and the list of the ponds still in use or in traces about 1900, by island, with their acreage. The fieldwork is of 1900–01.",
+    "wanted": "the rest of the report for Koʻolaupoko: who worked the Kailua and Kāneʻohe ponds about 1900 and what they took"
+  },
   {
-      "id": "wikipedia-royal-hawaiian-hotel",
-      "title": "Royal Hawaiian Hotel",
-      "author": "Wikipedia",
-      "year": 2026,
-      "url": "https://en.wikipedia.org/wiki/Royal_Hawaiian_Hotel",
-      "access": "open",
-      "opened": true,
-      "read": "part",
-      "tertiary": true,
-      "note": "Read on 2026-11-06 as a finding aid: opened on 1 February 1927."
-    }
+    "id": "wikipedia-royal-hawaiian-hotel",
+    "title": "Royal Hawaiian Hotel",
+    "author": "Wikipedia",
+    "year": 2026,
+    "url": "https://en.wikipedia.org/wiki/Royal_Hawaiian_Hotel",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "tertiary": true,
+    "note": "Read on 2026-11-06 as a finding aid: opened on 1 February 1927."
+  },
+  {
+    "id": "hgs-rm-867",
+    "title": "Hawaiian Government Survey, Registered Map 867: “Honolulu”, compiled for the Honolulu Fire Department by J. F. Brown, August 1881, 1:6,000 (W. D. Alexander, Surveyor General)",
+    "author": "J. F. Brown, Hawaiian Government Survey",
+    "year": 1881,
+    "url": "https://kipukadatabase.com/Docs/RegMaps/0867.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Read on 2026-11-07 for the towns’ streets (DATA.md “Streets, dated”), as the scan OHA’s Kīpuka database serves, rendered and placed on today’s streets by the streets bake from four street corners read off it (King and Fort, Beretania and Fort, King and Victoria, Beretania and Piʻikoi). Draws the town from Pālama and Kapālama to Kulaokahua and Makiki: downtown’s blocks, Nuʻuanu Street up the valley, King, Beretania and Young streets toward Punahou, the hydrants and the fire districts numbered 1 to 13."
+  },
+  {
+    "id": "hgs-rm-1397",
+    "title": "Hawaiian Government Survey, Registered Map 1397: “Map of the Lower Part of the City of Honolulu and the Harbor Front”, compiled and drawn by Frank S. Dodge, 19 January 1888, 1:1,200",
+    "author": "Frank S. Dodge, Hawaiian Government Survey",
+    "year": 1888,
+    "url": "https://kipukadatabase.com/Docs/RegMaps/1397WIDE.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Read on 2026-11-07 for the towns’ streets (DATA.md “Streets, dated”), as the scan OHA’s Kīpuka database serves, rendered and placed on today’s streets by the streets bake from four street corners (King and Fort, Merchant and Fort, King and Punchbowl, Queen and Punchbowl); it lies turned some 55° on the sheet. Draws downtown and Chinatown block by block, from the Nuʻuanu Stream to South Street and from Beretania Street to the Esplanade, with the buildings’ outlines, the palace and Aliʻiōlani Hale."
+  },
+  {
+    "id": "hgs-rm-1137",
+    "title": "Hawaiian Government Survey, Registered Map 1137: “Lahaina, Maui: map shewing the town with adjacent country”, surveyed and drawn by S. E. Bishop, 1883, 1:6,000",
+    "author": "S. E. Bishop, Hawaiian Government Survey",
+    "year": 1883,
+    "url": "https://kipukadatabase.com/Docs/RegMaps/1137WIDE.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Read on 2026-11-07 for the towns’ streets (DATA.md “Streets, dated”), as the scan OHA’s Kīpuka database serves, rendered and placed on today’s streets by the streets bake by its search alone (turn, scale and shift by cross-correlation with today’s streets). Draws the town’s streets along the shore from Māla to Puamana, Front Street and the streets behind it, the mill and the valleys’ hachured slopes, whose patches the bake reads as no sheet."
+  },
+  {
+    "id": "hgs-rm-1910",
+    "title": "Honolulu, Hawaiian Islands, M. D. Monsarrat, Surveyor, 1897, scale 1,000 feet to the inch (Hawaiian Government Survey, Registered Map 1910)",
+    "author": "M. D. Monsarrat",
+    "year": 1897,
+    "url": "https://kipukadatabase.com/Docs/RegMaps/1910.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Opened on 2026-11-07 for the towns’ streets: the whole city from Kalihi to Kapahulu and Kapiʻolani Park, its streets, the tramway, Waikīkī’s lanes; not yet placed on today’s streets, so no street is dated by it.",
+    "wanted": "Street corners read off it (four or more, from Kalihi to Waikīkī, by the names it prints), so the streets bake can place it and date the streets of 1897 across the city, Waikīkī, Makiki and Kalihi above all."
+  },
+  {
+    "id": "hgs-rm-1561",
+    "title": "Hawaiian Government Survey, Registered Map 1561: “Hilo, Town and Vicinity”, map and survey by E. D. Baldwin, 1891, 1:2,400",
+    "author": "E. D. Baldwin, Hawaiian Government Survey",
+    "year": 1891,
+    "url": "https://kipukadatabase.com/Docs/RegMaps/1561WIDEencaps.pdf",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Opened on 2026-11-07 for the towns’ streets: Hilo from Puʻueo to Waiākea, Front, Bridge, King and Church streets, the wharf, the land claims and grants; not yet placed on today’s streets, so no street is dated by it. Its street names are not today’s (Front Street is Kamehameha Avenue).",
+    "wanted": "Street corners read off it whose names today’s layer still has, or the renamings (Front, King, Church, Bridge streets) from a directory of the 1890s, so the streets bake can place it and date Hilo’s streets of 1891."
+  },
+  {
+    "id": "bennett-1869-honolulu-directory",
+    "title": "Honolulu Directory, and Historical Sketch of the Hawaiian or Sandwich Islands",
+    "author": "C. C. Bennett",
+    "year": 1869,
+    "url": "https://archive.org/details/bub_gb_2R1AAAAAYAAJ",
+    "access": "open",
+    "opened": true,
+    "read": "part",
+    "note": "Read on 2026-11-07 in the Internet Archive’s OCR text for the street names its residents’ addresses give: Nuʻuanu, King, Fort, Beretania, Hotel, Queen, Merchant, School, Liliha, Emma, Alakea, Punchbowl, Kaʻahumanu, Richard(s), Union, Maunakea and Smith streets, and Garden, Adams and Chaplin lanes, among others printed once.",
+    "wanted": "The streets its addresses name only once, read off the page images rather than the OCR, and what became of Emma, Kaʻahumanu and Union streets, Garden Lane and Port Street (renamed, or closed: a `to` year)."
+  },
+  {
+    "id": "husted-hawaiian-directory",
+    "title": "Husted’s Directory of Honolulu and the Hawaiian Islands (from 1890; Polk-Husted after 1900)",
+    "author": "F. M. Husted",
+    "year": 1890,
+    "url": "https://catalog.hathitrust.org/",
+    "access": "open",
+    "opened": false,
+    "read": "title",
+    "note": "Not opened: the Internet Archive’s catalogue holds no copy under the titles searched on 2026-11-07, and HathiTrust’s full-text pages refused the request. Believed to carry a street index of Honolulu and sections for Hilo, Wailuku and Lahaina. The Survey’s Registered Map 1637 is C. V. E. Dove’s map of Honolulu prepared for it (1892).",
+    "wanted": "The street index of each edition from 1890 to 1906, Honolulu’s and Hilo’s, Wailuku’s and Lahaina’s: each named street, to date by name the stretches the maps show, and the renamings and closings it records."
+  },
+  {
+    "id": "bowser-1880-directory",
+    "title": "The Hawaiian Kingdom Statistical and Commercial Directory and Tourists’ Guide, 1880–1881",
+    "author": "George Bowser",
+    "year": 1880,
+    "url": "https://catalog.hathitrust.org/",
+    "access": "open",
+    "opened": false,
+    "read": "title",
+    "note": "Not opened: not found in the Internet Archive’s catalogue on 2026-11-07. Believed to carry a street-by-street directory of Honolulu.",
+    "wanted": "Its street directory of Honolulu, street by street, to date by name the streets of 1880 that the Survey’s map of 1881 draws, and those it does not."
+  }
 ]
