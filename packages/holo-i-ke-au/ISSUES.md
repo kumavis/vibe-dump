@@ -313,11 +313,21 @@ fix has landed in `dist/` and been looked at again.
   shows them (1999, 2021 or 2024), a century late for some; the Board of
   Education's 1882 report dates 62 government, select and aided schools that
   no open map places.
-- **Open:** each of the 102 dated from its own history, the directories, the
-  newspapers or a register form; the 1882 schools placed from the registered
-  maps, the directories' street listings, the Sanborn sheets and today's
-  successors on the same ground, with their closing years from the later
-  reports.
+- **Then:** 17 of the 102 dated earlier (5 by their opening year; 12 by an
+  earlier record: the Department's own age figures, the 1914 Sanborn atlas,
+  and Hawaiʻi's newspapers in Chronicling America for Kalihi Kai 1917,
+  Kaunakakai 1893, Paʻauilo 1893, Pearl City 1896 and Mountain View 1900);
+  85 still stand from 1999 or later with no earlier source in anything that
+  opened. Of the kingdom's schools, 17 dated earlier from the reports of
+  1860–80 and the mission's from the 1869 directory; the Royal School on Emma
+  Street, Liliʻuokalani, Keʻanae, Kaupō and Puʻunene schools placed from the
+  1914 Sanborn sheets and the register's listings; McKinley moved to the
+  listed Linekona building. None of the 62 village schools of 1882 has a
+  site: the registered-map index is a scan without text, and eVols serves a
+  browser check in place of the 1888 and 1896 reports, so the closing years
+  wait too. 416 placed, 78 dated but not placed.
+- **Open:** the 85; the village schools' sites (the registered maps read by
+  eye, sheet by sheet); the closing years once the later reports open.
 
 ### 15. The early towns stand on the modelled grid before the 1910s sheets
 
