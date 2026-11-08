@@ -1038,7 +1038,7 @@ Weapon  = { name, range?, shots?, S, AP, D, assault?, heavy?, indirect?, blast?,
 | `poison` | `woundNeed` (and so `expected`, the AI and the odds, all through the same function) |
 | `corrodes` | `blastLands` → `terrain.blast({acid})` (was `w.fx === 'acid'`, 814); (F19a) `kegGain`, the same `acid` |
 | `spell`, `mesmerize` | `doShoot`'s branch |
-| `burrow`, `swarm`, `swoop` (F5) | `moveMode`/nav, `fight` wound re-roll, `fight` strength bonus on the charge turn |
+| `burrow`, `swarm`, `swoop` (F5) | `moveMode`/nav, `fight` wound re-roll, `fight` strength bonus on the charge turn. ((F5a, §4.2.12) `burrow` is read by `data/schema.js` alone, which derives `move` and (false) `climb` from it; the nav reads the mode. `swarm` and `swoop` are read by `core/actions/fight.js` and, under rule 10, by `core/ai/score.js`'s `meleeValue`.) |
 
 ```js
 // data/races/squirrel.js: plain data; data/schema.js runs defineRace over each race file as it builds RACES
@@ -1169,7 +1169,7 @@ export const battleView = ({ localSeats, edges }) => localSeats.length === 1 ? P
 | **F2: AI vs AI viewed side-on** | Broadside with a portrait fit and per-preset maximum distance; zero local seats means broadside. (R7a's fixer, round 2) As F1, it changes `sim/camera-check.mjs`'s "battleView chooses by the screen's shape" checks (lines 95-96) on purpose. | none | ~30 |
 | **F3: Highlight End when nothing is left** | `hudModel.end.ready`; `ui/actions.js` toggles `.ready`. CSS: End becomes neutral by default, and `.ready` is today's `.primary` plus a pulse (today it is always primary, index.html 44). | none | ~25 |
 | **F4: Win screen with "keep playing"** | `engine.js` `score` step plus a `roundLimit` decision; the `vote` handler; `setup.overtime`; `ui/screens/result.js` (a provisional result with live votes, Keep playing / End battle; no continue after a wipe); `hudModel.round` shows "overtime"; `merge-sim` scenarios for concurrent votes | bump `CORE_VERSION`; baselines unaffected (`overtime` absent means `'never'`); add 2 human logs that vote | ~120 |
-| **F5: Insectoids and bird-people** | `data/races/insect.js`, `bird.js` (~6 units each, ~100 lines each, each added to `data/schema.js`'s `RACES` registry); flags: `burrow` (nav mode + clearance field ~40), `swarm {min}` (fight.js: re-roll wound 1s while ≥ min models alive; new draws only inside `if (t.swarm)`, ~15), `swoop {chargeS}` (fight.js: +S on the charge turn, ~10); `view/models/insect.js`, `bird.js` (~250 each, plus animators ~40 each); 4 projectile styles; 2 voices; AI needs only `ai:` roles. **Burrowing stays visible**, because a public doc can't hold hidden positions (open question 5). | bump; squirrel and serpent baselines unchanged (they carry no new flags); new matrix baselines for each new pairing, recorded once by `sim/run.mjs` | ~900, mostly data and art |
+| **F5: Insectoids and bird-people** | `data/races/insect.js`, `bird.js` (~6 units each, ~100 lines each, each added to `data/schema.js`'s `RACES` registry); flags: `burrow` (nav mode + clearance field ~40), `swarm {min}` (fight.js: re-roll wound 1s while ≥ min models alive; new draws only inside `if (t.swarm)`, ~15), `swoop {chargeS}` (fight.js: +S on the charge turn, ~10); `view/models/insect.js`, `bird.js` (~250 each, plus animators ~40 each); 4 projectile styles; 2 voices; AI needs only `ai:` roles. **Burrowing stays visible**, because a public doc can't hold hidden positions (open question 5). (Split into F5a and F5b, below. **F5a's design is §4.2.12**: the two race files in full, the burrow mode reading the hard field (`clearHard`) with the height branch's floor test keeping a deck hard, swarm's re-roll and swoop's "charge turn" exactly (rule 30), the AI's `meleeValue` and its straight-line measure of a burrower, the figures in both styles, the prices' fitting plan, the `races/` set and its decisions Q1-Q29.) | bump; squirrel and serpent baselines unchanged (they carry no new flags); new matrix baselines for each new pairing, recorded once by `sim/run.mjs` ((F5a, §4.2.12) as a corpus set since F11a: `races/`, 14 battles by corpus-add, `parity --record --only races`) | ~900, mostly data and art |
 | **F6: Race select with a mini 3D scene** | `view/diorama.js`: the same renderer with a scissor viewport in the panel's rect, figures laid out from `race.units` via the template cache, idle animators, hover → card. `ui/screens/races.js`, reused in lobby seat cards. Re-shoot and inspect `thumbnail.jpg` if the title changes; the title must still be on screen 1200 ms after load. | none | ~360 |
 | **F7: Climbable fortifications** (large battles: replaces the first sketch) | §4.2.4. **F7a**, decks, stairs, ladders and platforms. `core/terrain/recipes.js`: deck, stair, ladder, parapet and post pieces; rampart, bastion, watchtower, platform and keep; the works; the fort phase and `gatesOf` (~380). `SETS.fortified`. `terrain.js`: surfaces, `base`, links (~60). `nav.js`: floor, links, ledge, cliff, levels and gates, plus the height branches of `standable`, `reach`, `path` and `walkable`, and burrow's (F5a's insectoids: a deck is hard) (~220). `queries.js`: `floorAt`, `groundY`, `sightInfo`, and height in sight, engagement, forbid, charge, control, blast and smash (~90). AI: the height term and `levelDist` (~60). View: decks, stairs, ladders and posts from `look`; units at `y`; drop lines; the deck overlay; picking deck tops; climbing animation (~350). App: the terrain line on F6's panel, and `?terrain=` at boot for `sim/`'s browser runs of `fort/` (~30). **F7b:** parapets and level-aware cover; the LOS ray with its reasons, the climbing cost in the move tooltip, cliff rims, see-through occluders (~250). **F7c:** destructible posts, the collapse cascade, `settle` and `unit.fall` (~150). | a bump at each of F7a, F7b and F7c; `fort/` baselines. Classic and `open` never build a floor. | ~1,550 |
 | **S0-S3: Scale hygiene** | §4.2.2. Bounded scans (S0); an LOS broadphase (S0b); hoisted per-scan invariants (S1); one forbid mask per plan and a plan memo scoped to one `apply` (S3). Touches `core/ai/score.js`, `core/ai/policy.js`, `core/deploy.js`, `core/queries.js`, `core/terrain/terrain.js`, `core/actions/move.js` and `core/nav.js`. New: `sim/scale-bench.mjs`, P-scan, P-los, P-memo. | none: byte-identical, no bump | ~250 + checks |
@@ -1190,7 +1190,7 @@ export const battleView = ({ localSeats, edges }) => localSeats.length === 1 ? P
 - **F3:** From F10c, `end.ready` counts **manual** units only. Units whose standing order covers the phase count as handled, and so do riders in the movement phase, since disembarking is optional.
 - **F4:** `legal()`'s field schema gains `opt` (optional integers) and `bools` (booleans), §4.2.6; `vote {more}` is the first `bools` field, and F9b's heading `f` an `opt` field ((F9b, Q5) V3c's `shoot {sp}` was the first, `commands.js`' `opt: ['sp']`; `place`, `move` and `chargeEnd` take `f` after it). The result screen stops offering Keep playing at ≥ 80% of `MAX_ENTRIES`, read from the Folder's entry count (R8b's `count`). This is a UI rule: a vote past it is still legal, and the cap still freezes the match.
 - **F5:** Split in two (the designer's choice, open question 27).
-  - **F5a, the races**, after F9c (moved there after F8a, the user's call; first planned right after F11a): the insectoids (burrow, swarm) and the bird-people (fly, swoop). Each race brings its builder data (§4.2.8): a `roster`, a `cost` per unit fitted by `army-sim --fit` at Skirmish against both existing races, and its classic `army`. It must pass army-sim's gates for every race pair. Its Field and Grand presets come with F8b, which writes them for every race.
+  - **F5a, the races**, after F9c (moved there after F8a, the user's call; first planned right after F11a): the insectoids (burrow, swarm) and the bird-people (fly, swoop). Each race brings its builder data (§4.2.8): a `roster`, a `cost` per unit fitted by `army-sim --fit` at Skirmish against both existing races, and its classic `army`. It must pass army-sim's gates for every race pair. Its Field and Grand presets come with F8b, which writes them for every race. (F8b landed first, so the presets are F5a's own, the classic list ×2 and ×3. The design is **§4.2.12**, staged as Rules, View, Prices, Corpus, Sweep, Review and Fix.)
   - F7a lands after F5a. It makes `burrow` treat a deck's footprint as hard (no tunnelling under fortifications), and its data-check lists any unit with r above `CLIMB_R` (1.22, §4.2.4) as a non-climber.
   - **F5b, their vehicles**, after F9c (§4.2.5). The insectoids' Brood Beetle runs on F9b's footprint engine and is data only. The bird-people's Sky-Basket is a flying hull that may land on deck tops (~40 lines of rules, open question 24). Each has its `cost` fitted, and both must pass army-sim's gates.
 - **F6:** It stays right after N3, where this table has it. F6 introduces the **battle-setup panel** that a mode button opens: each seat's race in the picker, with defaults read from `?races=`. The panel gains a terrain line at F7a, a battle size at F8b and an army line at F11b. N2's lobby seat cards, built before F6, offer a plain race list until F6 gives them the picker.
@@ -1791,7 +1791,7 @@ Online play comes first (the user's answer 6). R8b has built the R8 fix and the 
 | **F10c Standing orders and autopilot** | §4.2.6; March by clicking the board (the minimap's March comes with F8b); badges in presence as `ords` | P-macro; hud-check; input-check; play-report. By hand: a march over 3 turns, an attack to the kill, autopilot with auto-End, and orders at End online. |
 | **F8a Missions select the board** | §4.2.3; only classic is offered; `SETUP_KEYS` and `SEAT_KEYS`; N2's lobby gains `mission`; the Grand fixture ported to patch `MISSIONS.classic` | classic byte-identical; P-mission; data-check; camera-check; snap-check; rematch-memory; terrain-check through the mission |
 | **F11a Army lists in the setup** | §4.2.8.2-§4.2.8.7: `cost`, `roster`, presets as count strings, `MISSIONS.classic.list`, `core/army.js`, `fullSetup` fills and checks `army`, `newState` from `armyOf`; only Skirmish | classic byte-identical (its setups name no army); data-check; flag-lint; boundaries; P-mission's refusals and `checkMission` cases; P-army; army-sim's Skirmish score gate and per-unit gate; merge-sim with lists in starts; `army/` (its own commit) |
-| **F5a New races** (split from F5) | as before: the insectoids (burrow, swarm) and the bird-people (fly, swoop). Additions: each race's `roster`, `cost` (fitted at Skirmish against both existing races) and classic `army` (§4.2.8) | as before; army-sim's Skirmish gates for every race pair; the new races' AI pairs, recorded with the bump |
+| **F5a New races** (split from F5) | as before: the insectoids (burrow, swarm) and the bird-people (fly, swoop). Additions: each race's `roster`, `cost` (fitted at Skirmish against both existing races) and classic `army` (§4.2.8); its Field and Grand presets. The design: §4.2.12 | as before; army-sim's Skirmish gates for every race pair; the new races' AI pairs, recorded with the bump |
 | **F11b The Muster screen** | §4.2.8.8-§4.2.8.9: the Muster screen, the army line on F6's panel (reset by a race change), the lobby's `army` field with un-ready on change, cleared on a race change, and courtesy sealing; saved lists; `?armies=` | ui-check; N2's lobby rig; by hand: a hotseat build in turn, an online build with Random for an AI seat |
 | **F7a Decks, stairs, ladders, platforms; the works** | §4.2.4; burrow treats decks as hard; the terrain line on F6's panel and `?terrain=` | classic parity; P-height; P-climb; P-level; terrain-check fortified; play-report; `fort/` (its own commit); scale-bench's fortified rows; army-sim's Skirmish gates on `fortified`. By hand: a squad up a rampart's ladder, a trebuchet up a rampart's stair (F7a's review: Skirmish fits no bastion, and the works' ramparts stand on every board), Hold on a rampart. |
 | **F7b Parapets, level cover, readability** | §4.2.4 | `fort/` re-recorded (its own commit); terrain-shots plus fortified boards; hud-check's tooltips; play-report; army-sim's Skirmish gates on `fortified` |
@@ -4041,6 +4041,584 @@ lobby: { …, mission: 'field', terrain: 'open',
 
 Revision 2 cited 431-446 ms here; that was an early run with one hero per army.
 
+#### 4.2.12 F5a: the insectoids and the bird-people
+
+(Numbered as written, after §4.2.11; it stands here, beside the builder whose prices it brings, before the checks of §4.2.9.)
+
+**What the player sees.** Two more peoples on the race picker, each with a hero, two kinds of Troops and three others, priced for the army builder against both older races, with their Skirmish, Field and Grand presets. The **Deepdelve Hive** comes up under your walls: its Delvers and Deepguard tunnel under hedges, walls, trees and rough ground (never rock, never a fortification) and surface where a walker could stand, and its Delver swarms re-roll their wound rolls of 1 while half of them still stand. The **Highwind Aerie** comes down on you: most of it flies, as the Glider Wing does, and its hunters dive, striking harder in the fight of the turn they charged. Nothing about either is hidden (open question 5): a burrower is drawn every inch of its tunnel, half sunk, its ring and label on the table.
+
+F5a is consensus: `CORE_VERSION` 17, the burrow mode and its field, swarm's re-roll, swoop's Strength and the AI's appraisal of the two (rule 10). Each is a branch only a unit with its flag reaches, so every battle that seats no new race is byte-identical (97 of 97, rule 30 below); the new races' battles are a new set, `races/`. The flags themselves are already in the schema (`data/schema.js:135`, `:137-138`, `:150`, `:340`, `:346-347`), so the two older races' types do not change, and `RULES_ID` moves with the two race files alone (and the Field prices the fit may give them). Line numbers below are 1178883's (main after F9c's merge), as the code-surface map found them.
+
+##### The two races
+
+| | Deepdelve Hive (`insect`) | Highwind Aerie (`bird`) |
+|---|---|---|
+| Character | many, patient, and always nearer than they looked | light-boned, sharp-eyed, and seldom on the ground |
+| Name / short / icon | Deepdelve Hive / Hivekin / 🐜 | Highwind Aerie / Windfolk / 🐦 |
+| Team / dark / alt | `#d23a9a` heather-carmine / `#5a1040` / `#e6c84a` gold | `#5a7cf0` cornflower / `#1c2a6e` / `#30c8a8` teal |
+| Gore | ichor `#8aa83a`, chitin chips `#d8d08a` | a fleck `#b84a3a`, down `#efe8d8` |
+| Voice / models / anim | `chitter` / `insect` / `insect` | `screech` / `bird` / `bird` |
+| Hero | Hivemother Kesh: Upwelling, Hive Hum, Resin Snare | Skyseer Varra (flies): Piercing Cry, Down Mantle, Gale |
+| Troops | Spinethrower Brood (6, shooter); Delver Swarm (8, burrow, swarm 4) | Longbill Pikes (6, line, walks); Finch Flock (6, flies, shooter) |
+| The rest | Deepguard (Elite, 4, burrow); Hopper Lancers (Fast, 4); Boilback Bombardier (Artillery, big) | Stormtalon Guard (Elite, 3, dive +1); Kestrel Divers (Fast, 4, dive +2); Greatwing Roc (Monster, big, dive +1) |
+| No | Monster, flier | Artillery, burrower |
+| Classic list (`'112111'`) | 7 units, 30 models, raw pts **476**, cost **485** | 7 units, 27 models, raw pts **510**, cost **495** |
+| Field `'224222'` / Grand `'336333'` | 970 / 1,455; 14 units, 60 models / 21, **90** | 990 / 1,485; 14 units, 54 models / 21, 81 |
+
+The classic lists sit by the older races' (raw 484 and 586, cost 485 and 495; §4.2.8.2's yardstick, "within about 10 points"). Every number above was computed from the files below, through `data/schema.js`'s own `defineRace` and `core/army.js`'s `listCost` and `checkList` against `data/mission.js`'s slot tables at the first-guess prices (the Design phase's scratch `check.mjs`): every preset legal at its mission (and the keg mission's and the Powder Field's, which take the classic and Grand presets), `autoList` legal on seeds 1-100 at Skirmish, Field and Grand, every unit key unique across the four races, `beetle` and `basket` unused. The Hive's Grand preset fields exactly the Grand cap of 90 models; that is why its classic list holds 30 and no more (§"Presets").
+
+**`data/races/insect.js`** (the spec: the Rules phase copies it; a cost is a first guess until the Prices phase fits it, and its comment then gains the fit as the War-Cart's does):
+
+```js
+// ── Deepdelve Hive: many, patient, and always nearer than they looked ──
+// Plain data, normalised and checked by defineRace (data/schema.js). Names,
+// shorts and weapon names appear in the battle log: change them only on
+// purpose.
+//
+// (F5a, DESIGN §4.2.12) The insectoids. Two of their units burrow (`burrow`:
+// their move is the nav's burrow mode, core/nav.js, which passes under walls,
+// hedges, trees, crates, kegs and rough ground, never under rock or a
+// fortification, and ends where a walker could stand), and the Delvers
+// swarm (`swarm`: in the fight, while `min` of them still stand, their
+// wound rolls of 1 are rolled again, core/actions/fight.js). Each `cost` is
+// a first guess, fitted at Skirmish against both older races by
+// sim/army-sim.mjs before the race is offered (§4.2.8.2).
+import { AURA } from '../../core/rules.js'
+
+const CLAWS = { name: 'Spur-claws', S: 3, AP: 0, D: 1 }
+
+export default {
+  key: 'insect', name: 'Deepdelve Hive', short: 'Hivekin', icon: '\u{1F41C}',
+  look: { team: '#d23a9a', dark: '#5a1040', alt: '#e6c84a', gore: ['#8aa83a', '#d8d08a'], voice: 'chitter', models: 'insect', anim: 'insect' },
+  army: ['hivemother', 'deepguard', 'spinethrower', 'spinethrower', 'delver', 'hopper', 'boilback'],
+  // (F11a) the army builder's order of the race's units, each once: a list
+  // of counts (core/army.js) carries one digit per entry, in this order, so
+  // the roster is append-only (a new unit goes at the end; data-check pins
+  // its start). `army` above, the classic list, is in roster order. (F5b
+  // appends the Brood Beetle; its two Spinethrower squads, 12 models, fill
+  // it, and the autoload takes them first, the Troops in roster order.)
+  roster: ['hivemother', 'deepguard', 'spinethrower', 'delver', 'hopper', 'boilback'],
+  // the presets of the larger battles, as counts in roster order: the
+  // classic list twice over for a Field battle, three times for a Grand one
+  // (data/mission.js names them; sim/data-check.mjs holds each legal there)
+  armies: { field: '224222', grand: '336333' },
+  units: {
+    spinethrower: {
+      name: 'Spinethrower Brood', short: 'Spinethrowers', role: 'Troops', ai: 'shooter', models: 6, base: 0.3, pts: 8, cost: 70,
+      stats: 'M6 WS4 BS4 S3 T3 W1 A1 Ld6 Sv5 OC2',
+      ranged: { name: 'Spine volleys', range: 15, shots: 2, S: 3, AP: 1, D: 1, fx: 'sting' },
+      melee: CLAWS,
+      abilities: ['Spine volleys — shorter than a slingshot, and they go through bark.'],
+    },
+    delver: {
+      // (swarm's `min`: half the squad. Eight at base 0.25 make a disc of r
+      // 1.011, inside the squads' 1.18 every lane is measured for.)
+      name: 'Delver Swarm', short: 'Delvers', role: 'Troops', ai: 'line', models: 8, base: 0.25, pts: 6, cost: 70, burrow: true, swarm: { min: 4 },
+      stats: 'M5 WS4 BS6 S3 T3 W1 A2 Ld6 Sv6 OC2',
+      ranged: null,
+      melee: { name: 'Digging claws', S: 3, AP: 0, D: 1 },
+      abilities: [
+        'Burrow — tunnels under walls, hedges, trees and rough ground (never rock, nor a fortification) and comes up where it can stand.',
+        'Swarm — in a fight, re-rolls wound rolls of 1 while 4 or more of it still stand.',
+      ],
+    },
+    deepguard: {
+      name: 'Deepguard', short: 'Deepguard', role: 'Elite', ai: 'melee', models: 4, base: 0.36, pts: 24, cost: 100, burrow: true,
+      stats: 'M5 WS3 BS5 S5 T5 W2 A2 Ld8 Sv3 OC1',
+      ranged: null,
+      melee: { name: 'Scythe forelegs', S: 5, AP: 2, D: 1 },
+      abilities: ['Burrow — tunnels under walls, hedges, trees and rough ground (never rock, nor a fortification) and comes up where it can stand.', 'Old chitin — the Hive’s doorstep, and it bites.'],
+    },
+    hopper: {
+      name: 'Hopper Lancers', short: 'Hoppers', role: 'Fast', ai: 'raider', models: 4, base: 0.3, pts: 14, cost: 55,
+      stats: 'M10 WS3 BS4 S4 T3 W1 A2 Ld7 Sv5 OC1',
+      ranged: { name: 'Barbed spines', range: 8, shots: 1, S: 4, AP: 1, D: 1, assault: true, fx: 'sting' },
+      melee: { name: 'Leg-spurs', S: 4, AP: 1, D: 1 },
+      abilities: ['Spring — may shoot after Advancing.'],
+    },
+    boilback: {
+      name: 'Boilback Bombardier', short: 'Boilback', role: 'Artillery', ai: 'artillery', models: 1, base: 1.0, pts: 95, cost: 60, big: true,
+      stats: 'M4 WS6 BS4 S3 T6 W7 A2 Ld7 Sv3 OC0',
+      ranged: { name: 'Boiling glob', range: 30, shots: 1, blast: 2.6, S: 5, AP: 2, D: 1, indirect: true, heavy: true, scenery: 2, fx: 'glob' },
+      melee: { name: 'Crushing legs', S: 4, AP: 0, D: 1 },
+      abilities: ['Indirect — fires without line of sight at −1 to hit.', 'Heavy — −1 to hit after moving.', 'Scalding — whatever it lands on, it lands on hot.'],
+    },
+    hivemother: {
+      name: 'Hivemother Kesh', short: 'Hivemother', role: 'Hero', ai: 'hero', models: 1, base: 0.45, pts: 85, cost: 60, hero: true,
+      stats: 'M5 WS3 BS3 S5 T5 W5 A3 Ld9 Sv4 OC1',
+      // (V3c) three spells, one cast a shooting phase, the player's pick:
+      // the first is her ranged weapon (data/schema.js)
+      spells: [
+        { name: 'Upwelling', spell: 6, range: 18, shots: 1, blast: 2.4, S: 4, AP: 1, D: 1, scenery: 2, fx: 'mandibles' },
+        { name: 'Hive Hum', spell: 5, range: 12, resolve: true, fx: 'hum' },
+        { name: 'Resin Snare', spell: 7, range: 18, snare: true, fx: 'resin' },
+      ],
+      melee: { name: 'Queenly mandibles', S: 5, AP: 2, D: 2 },
+      abilities: ['Spells — casts one of the three above a turn, each on 2D6 ≥ its number; Upwelling erupts under the target, no scatter.', `Hive-song — friends within ${AURA}" use her Ld 9.`],
+    },
+  },
+}
+```
+
+**`data/races/bird.js`:**
+
+```js
+// ── Highwind Aerie: light-boned, sharp-eyed, and seldom on the ground ──
+// Plain data, normalised and checked by defineRace (data/schema.js). Names,
+// shorts and weapon names appear in the battle log: change them only on
+// purpose.
+//
+// (F5a, DESIGN §4.2.12) The bird-people. Most of them fly (`fly`: the nav's
+// circle, over scenery and enemy units, landing where they can stand; no
+// cover where they land, core/queries.js inCover), and the hunters among
+// them dive (`swoop`: +chargeS to their melee weapon's Strength in the
+// fight of the turn they charged, core/actions/fight.js; the card calls it
+// Dive, since the Glider Wing's card already says Swoop of its darts). Each
+// `cost` is a first guess, fitted at Skirmish against both older races by
+// sim/army-sim.mjs before the race is offered (§4.2.8.2).
+import { AURA } from '../../core/rules.js'
+
+const FLY = 'Fly — moves over scenery and enemy units; never in cover.'
+
+export default {
+  key: 'bird', name: 'Highwind Aerie', short: 'Windfolk', icon: '\u{1F426}',
+  look: { team: '#5a7cf0', dark: '#1c2a6e', alt: '#30c8a8', gore: ['#b84a3a', '#efe8d8'], voice: 'screech', models: 'bird', anim: 'bird' },
+  army: ['skyseer', 'stormtalon', 'longbill', 'longbill', 'finch', 'kestrel', 'roc'],
+  // (F11a) the army builder's order of the race's units, each once: a list
+  // of counts (core/army.js) carries one digit per entry, in this order, so
+  // the roster is append-only (a new unit goes at the end; data-check pins
+  // its start). `army` above, the classic list, is in roster order. (F5b
+  // appends the Sky-Basket; one Longbill squad, 6 models, fills it.)
+  roster: ['skyseer', 'stormtalon', 'longbill', 'finch', 'kestrel', 'roc'],
+  // the presets of the larger battles, as counts in roster order: the
+  // classic list twice over for a Field battle, three times for a Grand one
+  // (data/mission.js names them; sim/data-check.mjs holds each legal there)
+  armies: { field: '224222', grand: '336333' },
+  units: {
+    longbill: {
+      name: 'Longbill Pikes', short: 'Longbills', role: 'Troops', ai: 'line', models: 6, base: 0.32, pts: 9, cost: 65,
+      stats: 'M6 WS3 BS4 S4 T3 W1 A1 Ld7 Sv4 OC2',
+      ranged: { name: 'Flung quills', range: 10, shots: 1, S: 3, AP: 1, D: 1, fx: 'quill' },
+      melee: { name: 'Long bills', S: 4, AP: 1, D: 1 },
+      abilities: ['Wading line — the Aerie’s feet on the ground, beaks forward.'],
+    },
+    finch: {
+      name: 'Finch Flock', short: 'Finches', role: 'Troops', ai: 'shooter', models: 6, base: 0.28, pts: 8, cost: 60, fly: true,
+      stats: 'M10 WS4 BS4 S2 T2 W1 A1 Ld6 Sv6 OC1',
+      ranged: { name: 'Pebble drops', range: 12, shots: 2, S: 3, AP: 0, D: 1, assault: true, fx: 'pebble' },
+      melee: { name: 'Tiny beaks', S: 2, AP: 0, D: 1 },
+      abilities: [FLY, 'Flit — may shoot after Advancing.'],
+    },
+    kestrel: {
+      name: 'Kestrel Divers', short: 'Kestrels', role: 'Fast', ai: 'melee', models: 4, base: 0.32, pts: 16, cost: 55, fly: true, swoop: { chargeS: 2 },
+      stats: 'M14 WS3 BS5 S3 T3 W1 A2 Ld7 Sv5 OC1',
+      ranged: null,
+      melee: { name: 'Hooked talons', S: 3, AP: 1, D: 1 },
+      abilities: [FLY, 'Dive — +2 Strength in the fight on the turn it charges.'],
+    },
+    stormtalon: {
+      name: 'Stormtalon Guard', short: 'Stormtalons', role: 'Elite', ai: 'melee', models: 3, base: 0.38, pts: 30, cost: 95, fly: true, swoop: { chargeS: 1 },
+      stats: 'M12 WS3 BS5 S4 T4 W2 A3 Ld8 Sv4 OC1',
+      ranged: null,
+      melee: { name: 'War-talons', S: 4, AP: 2, D: 1 },
+      abilities: [FLY, 'Dive — +1 Strength in the fight on the turn it charges.'],
+    },
+    roc: {
+      name: 'Greatwing Roc', short: 'Roc', role: 'Monster', ai: 'melee', models: 1, base: 0.9, pts: 120, cost: 95, big: true, fly: true, swoop: { chargeS: 1 },
+      stats: 'M12 WS3 BS6 S6 T6 W8 A4 Ld8 Sv4 OC3',
+      ranged: null,
+      melee: { name: 'Rending beak', S: 6, AP: 2, D: 2 },
+      abilities: [FLY, 'Dive — +1 Strength in the fight on the turn it charges.', 'Vast — a blast catches it for D3+1 hits.'],
+    },
+    skyseer: {
+      name: 'Skyseer Varra', short: 'Skyseer', role: 'Hero', ai: 'hero', models: 1, base: 0.42, pts: 80, cost: 60, hero: true, fly: true,
+      stats: 'M10 WS3 BS3 S4 T4 W5 A3 Ld9 Sv5 OC1',
+      // (V3c) three spells, one cast a shooting phase, the player's pick:
+      // the first is her ranged weapon (data/schema.js)
+      spells: [
+        { name: 'Piercing Cry', spell: 7, range: 18, mesmerize: true, fx: 'cry' },
+        { name: 'Down Mantle', spell: 5, range: 12, ward: true, fx: 'down' },
+        { name: 'Gale', spell: 6, range: 18, snare: true, fx: 'gale' },
+      ],
+      melee: { name: 'Talon staff', S: 4, AP: 1, D: 2 },
+      abilities: [FLY, 'Spells — casts one of the three above a turn, each on 2D6 ≥ its number; a target of the Cry can’t shoot or charge next turn and hits at −1 in melee.', `Far sight — friends within ${AURA}" use her Ld 9.`],
+    },
+  },
+}
+```
+
+`data/schema.js` registers them after the two older races, `RACES = raceRegistry([squirrel, serpent, insect, bird])` (`:446`), so every `Object.keys(RACES)` loop (army-sim's `pairs()`, the race picker, data-check's sections) keeps the classic pair first and its streams as they are.
+
+**The units as `defineRace` makes them** (derived fields from the schema's rules, with Q4's `climb`; r the squad's disc at full strength, `formation`'s; pts × models the AI's appraisal):
+
+| Unit | Role, `ai` | Models × base, r | pts (raw) | cost | move | eye / chest | brawler | climb |
+|---|---|---|---|---|---|---|---|---|
+| Hivemother Kesh | Hero, hero | 1 × 0.45, 0.450 | 85 (85) | 60 | walk | 0.95 / 0.55 | no | yes |
+| Deepguard | Elite, melee | 4 × 0.36, 0.982 | 24 (96) | 100 | **burrow** | 0.95 / 0.55 | yes | **no** (Q4) |
+| Spinethrower Brood | Troops, shooter | 6 × 0.3, 1.060 | 8 (48) | 70 | walk | 0.95 / 0.55 | no | yes |
+| Delver Swarm | Troops, line | 8 × 0.25, 1.011 | 6 (48) | 70 | **burrow** | 0.95 / 0.55 | yes | **no** (Q4) |
+| Hopper Lancers | Fast, raider | 4 × 0.3, 0.837 | 14 (56) | 55 | walk | 0.95 / 0.55 | no | yes |
+| Boilback Bombardier | Artillery, artillery | 1 × 1.0, 1.000 | 95 (95) | 60 | walk | 1.9 / 1.0 | no | no (big) |
+| Skyseer Varra | Hero, hero | 1 × 0.42, 0.420 | 80 (80) | 60 | fly | 1.5 / 1.0 | no | no (fly) |
+| Stormtalon Guard | Elite, melee | 3 × 0.38, 0.911 | 30 (90) | 95 | fly | 1.5 / 1.0 | yes | no (fly) |
+| Longbill Pikes | Troops, line | 6 × 0.32, 1.120 | 9 (54) | 65 | walk | 0.95 / 0.55 | no | yes |
+| Finch Flock | Troops, shooter | 6 × 0.28, 1.000 | 8 (48) | 60 | fly | 1.5 / 1.0 | no | no (fly) |
+| Kestrel Divers | Fast, melee | 4 × 0.32, 0.886 | 16 (64) | 55 | fly | 1.5 / 1.0 | yes | no (fly) |
+| Greatwing Roc | Monster, melee | 1 × 0.9, 0.900 | 120 (120) | 95 | fly | 1.9 / 1.0 | yes | no (big, fly) |
+
+- **Squads.** Every climber's r is under `CLIMB_R` 1.22 and every squad's under the 1.18 the lanes are measured for (terrain-check's connectivity squad): the Longbills' 1.120 is the widest. Eight Delvers at base 0.25 make 1.011; ten would make 1.215, which is why the swarm is eight.
+- **The heroes** are first in roster order (`autoList` takes the first Hero, `core/army.js:245`), one hero type a race (open question 22), at the older heroes' 60 (the race-level handicap the Skirmish fit sets, §4.2.8.2 step 3).
+- **Weapons.** Projectile styles, four new: `sting` (the Spinethrowers' and the Hoppers' spines), `glob` (the Boilback's lob), `quill` (the Longbills'), `pebble` (the Finches'). No new weapon reuses an older style; no older weapon changes. Spells' `fx` (`mandibles`, `hum`, `resin`, `cry`, `down`, `gale`) name looks of the five existing effects (§"View, input, UI").
+- **No new weapon field, no new effect.** Upwelling is an eruption as Thornburst is (`blast`, `S`, `AP`, `D`, `scenery`), Hive Hum a resolve (Cold Blood's), Resin Snare and Gale snares (Root Snare's), Piercing Cry a mesmerize (Mesmerize's), Down Mantle a ward (Barkskin's): each strikes by its effect's rules (§4.1 rule 29), so the casters need no rules of their own.
+- **For F5b** (Q20). The rosters are append-only from F5a's pins: F5b appends `beetle` to the Hive's and `basket` to the Aerie's. The autoload (`core/actions/transport.js`, §4.2.8.7) boards Troops in G.units order, whole units while they fit: the Hive's two Spinethrower squads come first in roster order and fill the Beetle's 12 exactly; one Longbill squad (6 models, base 0.32) fills the Basket's 6. No Troops is big or a wrecker, and every base is under `maxBase` 0.45.
+
+##### Burrow: a movement mode with its own field
+
+A burrower (`t.move === 'burrow'`, derived from `burrow` unless the unit flies or wrecks, which Q5 refuses outright) moves, advances, falls back and charges by the nav's burrow mode. **It tunnels under soft and difficult scenery** (walls, hedges, trees, crates, barricades, mushrooms, a keg; forests' and rubble's rough ground), **never under hard scenery** (rocks, the obelisk, the rock box), **never under a fortification** (a deck's footprint, D:2926: it keeps to floors at or under `STEP`), and never off the board's edge. **It ends on a cell standable on foot** (D:1131): `standable` with `'walk'`, as every end test already asks. Tunnelling costs what open ground does, ×1, under rough ground too (Q2): the burrower's price is in its M and its `cost`.
+
+```js
+// core/nav.js
+clearance(i, mode) {                          // (F5a) the burrow field is the hard one: what nothing breaks stops it
+  return mode === 'wreck' || mode === 'burrow' ? this.clearHard[i] : this.clearAll[i]
+}
+reach(sx, sz, { r, max, mode = 'walk', forbid = null, climb = false }) {
+  …                                             // fly's circle, then (height) reachHeight, as today
+  const burrow = mode === 'burrow', fm = mode === 'wreck' ? 'wreck' : burrow ? 'burrow' : 'all'
+  const escape = this.clearance(start, fm) < r - 0.06 ? r * 1.5 : 0
+  …   const cl = this.clearance(j, fm)
+      let mul = burrow ? 1 : this.diff[j] ? 2 : 1   // walk and wreck: today's two lines, as they are
+      if (mode === 'wreck' && this.clearAll[j] < r - 0.06) mul = 2
+}
+walkable(a, b, r, mode, forbid) {              // the string-pull: a burrower's field, and no rough-ground test
+  …   if (this.clearance(i, mode === 'wreck' ? 'wreck' : mode === 'burrow' ? 'burrow' : 'all') < r - 0.06) return false
+      if (mode !== 'burrow' && this.diff[i] !== d0) return false
+}
+reachHeight(res, { r, max, mode, forbid, climb }) {
+  const clMode = mode === 'wreck' ? 'wreck' : mode === 'burrow' ? 'burrow' : 'all'
+  const burrow = mode === 'burrow', climbs = climb && !burrow   // (Q4 makes climb false for it anyway)
+  …   if (Math.abs(floor[j] - fi) > STEP) continue
+      if (burrow && floor[j] > STEP) continue                    // a deck's footprint is hard (D:2926): kept
+      … the cliff test as today: a base never straddles a ledge
+      let mul = burrow ? 1 : this.diff[j] ? 2 : 1
+}
+walkableHeight(a, b, r, mode, forbid) {        // as walkable: its field, no diff test, and never a sample above STEP
+  …   if (mode === 'burrow' && this.floor[i] > STEP) return false
+}
+standable(i, r, mode, forbid)                  // unchanged: 'burrow' maps to 'all' (on foot), as every mode but 'wreck'
+hullReach(…)                                   // refuses 'burrow' beside 'fly': no burrowing hull in v1 (D:4199), a guard
+```
+
+**The field is `clearHard`, read under the burrow mode; no third array** (Q2). On a flat board the hard raster is exactly what a burrower can't pass under. With height, a deck has `navKind` null (`core/terrain/recipes.js:777-887`), so no raster holds it, and two tests the height branch already makes keep a burrower off it: a step onto a floor above `STEP` is refused (`:637`, the placeholder F7a left, which becomes the rule), and the cliff field keeps its disc r clear of the ledge round a deck's body (`:639`), as a walker's. A raster of the raised cells would add nothing either test misses, and a derived array more to keep equal (rule 21). The sentence D:1131 calls "its own clearance field" is the mode's own reading of the fields.
+
+**The edges** (Q3):
+- **Enemies.** Their 1" bubble and bases forbid a burrower as they forbid a walker (`forbidMask`, `move.js:64-127`, unchanged): it surfaces to pass a unit. A fall back walks through the bubble, never the bases, as a walker's.
+- **Kegs.** A keg is `soft`: a burrower passes under it and never sets it off (it smashes nothing: `resolveWalk` smashes for `t.wrecker` alone, `move.js:437`; `kegsIn(broke)` is empty).
+- **Charges** go in burrow mode (`chargePlan`, `charge.js:73`; its spots `standable(…, 'walk')`, `:96`; `finishCharge`'s walk, `:293-294`): a charge through a hedge's foot is the burrower's whole point. A failed charge moves nothing, as ever.
+- **Cover and sight** are a walker's at both ends: on the ground, in cover by `inCover` (`queries.js:132-145`, which tests fliers only), its eye at `groundY + t.eye`. There is no mid-move state: the rules move it at once, along a path the view draws (open question 5, R:2287: always visible).
+- **Height.** No ladder and no stair (Q4): a burrower keeps to the ground of a fortified board, taking a keep's ground, never its top.
+- **Boarding** (F5b's Beetle, by hand): the embark walk is a `doMove`'s (`transport.js:160-175`), in the rider's mode. A burrower is eligible Troops; it is no Beetle's first choice (Q20).
+- **The AI** reaches through `t.move` with no special case: `movePlan` passes the mode (`move.js:166`), `bestSpot` scans the plan's cells (rule 6), and the charge plan is the rules' own. Its one height term is §"The AI"'s.
+
+**Every rule site** (burrow; F5a; each a branch only `mode === 'burrow'` reaches, walk, wreck and fly keeping today's expressions literally, rule 30):
+
+| Site | Today | Burrow |
+|---|---|---|
+| `clearance(i, mode)` (nav.js:212-214) | `wreck` → `clearHard`, else `clearAll` | `burrow` → `clearHard` too |
+| `standable(i, r, mode, forbid)` (nav.js:217-226) | any mode but `wreck` reads `'all'` | **unchanged**: every end test passes `'walk'` (move.js:229 `validEnd`, charge.js:96, deploy.js:48, settle.js:110 and :151, damage.js:104), so a burrower ends on foot |
+| `reach` (nav.js:233-286): the escape (:260), each step's `cl` (:272), its cost (:274-275) | `'all'`, rough ground ×2 | the burrow field at :260 and :272; ×1 |
+| `walkable` (nav.js:317-337): :327, :329 | `'all'`; no shortcut across a change of `diff` | the burrow field; no `diff` test (the reach paid nothing for rough ground, so the pull must not refuse the tunnel it found) |
+| `reachHeight` (nav.js:597-656): the comment (:597-603), `clMode` (:611), `burrow`, `climbs` (:612-613), the floor test (:637), `mul` (:640-641) | the placeholder: a burrower walks, keeps to floors ≤ STEP, takes no ladder | `clMode` the burrow field; the floor test and the cliff test kept; ×1; the comment rewritten as the rule |
+| `walkableHeight` (nav.js:697-720) | `'all'`, the `diff` test | the burrow field; no `diff` test; a sample above `STEP` refused |
+| `hullReach` (nav.js:891) | refuses `fly` | refuses `burrow` too |
+| `movePlan` (move.js:153-171), `chargePlan` (charge.js:65-110), `finishCharge` (charge.js:285-300), `doMove` / `resolveWalk` (move.js:340-368, :426-468), the embark walk (transport.js:160-175), `landing` | the unit's mode through | automatic |
+| `forbidMask` / `forbidHigh` (move.js:64-127) | the bubble and bases | unchanged (Q3) |
+| `inCover` (queries.js:140), `sight` (:167), `sightInfo` (:247) | | unchanged |
+| `data/schema.js:338` `climb` | `!big && !fly && !vehicle` | `… && !burrow` (Q4) |
+| `present/orders.js:149` `goalField` (client, no bump) | `'burrow'` read as `'walk'` | `'burrow'`: a March's field is the burrower's own |
+
+##### Swarm: wound rolls of 1, rolled again
+
+`swarm: { min }` on a unit: **in the fight**, while the unit has at least `min` living models as it strikes, **its wound rolls of 1 are rolled once more**, the new dice standing. Melee only (the flag table D:1041 and D:1172: "`fight` wound re-roll"); a shot, a template, a spell and a keg roll as ever. A 1 always fails to wound (`woundNeed` is 2 at best), so a re-roll can only help: the chance to wound p becomes p + p/6.
+
+```js
+// core/actions/fight.js, fight(G, u): after the wound roll, before the save roll
+const wd = roll(G, h)
+let wounds = passes(wd, wn)                       // (today's `const`, the same value)
+if (h) emit(G, 'dice', { label: `Wound ${wn}+…`, dice: wd, need: wn })
+if (u.t.swarm && u.alive >= u.t.swarm.min) {      // (F5a, rule 30) the swarm's branch, its only draws
+  const ones = wd.filter((d) => d === 1).length
+  if (ones) {
+    const rr = roll(G, ones)
+    wounds += passes(rr, wn)
+    emit(G, 'dice', { label: `Re-roll 1s (swarm)`, dice: rr, need: wn })
+  }
+}
+const sn = saveNeed(svOf(target), w.AP, false)    // … as today: the save roll(G, wounds), damage, the log line
+```
+
+- **`min`** is half the squad: the Delvers' 4 of 8. Below it the branch is not taken and the fight draws as any unit's. `u.alive` is read at the strike, after whatever the enemy's strikes earlier in the phase took.
+- **The log line is unchanged in form** (it is traced): "Delvers fight Oak Guard: 9 hit, 4 wound, 3 unsaved", the 4 counting the re-rolls' wounds. The tray shows the re-roll as its own row under the Wound row; that event is presentation.
+- **`expected()` and `woundNeed` stay as they are** (`rules.js:56-64`, `:92-101`): they price shots, the AI's every term and the odds tooltip, and swarm reaches none of those. The AI's appraisal of a fight is §"The AI"'s, in `meleeValue` alone. The odds tooltip shows shooting only (`ui/tooltip.js`), so nothing a player reads mis-prices a swarm.
+
+##### Swoop: Strength on the charge
+
+`swoop: { chargeS }` on a unit: **in the fight of the turn it charged, its melee weapon strikes at `S + chargeS`** for the wound roll; AP, D and poison as ever. The card calls it **Dive** (Q10). Nothing else of a charge changes (`attackCount` and `hitNeed` have no charge term, `rules.js:83-88`; there is no other charge bonus to stack with).
+
+```js
+// core/actions/fight.js, fight(G, u)
+let S = w.S
+if (u.t.swoop && u.flags.charged && u.side === G.turn.active) S += u.t.swoop.chargeS   // (F5a, rule 30) draws nothing
+const wn = woundNeed(S, target.t.T, w.poison)
+// the Wound row's label: `Wound ${wn}+${S > w.S ? ` (dive, S${S})` : ''}`
+```
+
+- **"The turn it charged" is `u.flags.charged && u.side === G.turn.active`.** `resetTurn` (`core/engine.js:133-146`) clears only the active seat's flags (`:137-138`), so a unit that charged keeps `flags.charged` (and its `chargeTarget`, `fight.js:32`) through the opponent's whole turn, fighting in the opponent's fight phase with it still set: the flag alone would give the dive twice. `fight` runs only inside `fightPhase(G, T.active)` (`engine.js:69`), so `G.turn.active` is the phase's seat.
+- **A failed charge** never sets `flags.charged`, so it dives nothing; **a pile-in or a fight it was charged into** is no charge of its own.
+- **Poison** caps the need after the dive, as `woundNeed` does today.
+
+**Every rule site** (swarm and swoop; `core/actions/fight.js` is the one rules reader of both, the AI's appraisal beside it under rule 10):
+
+| Site | Today | F5a |
+|---|---|---|
+| `fight.js:1-20` header | the events | the re-roll row and the dive's label named |
+| `fight.js:45` `woundNeed(w.S, …)` | the weapon's S | `S`, `w.S` plus `chargeS` inside the swoop branch |
+| `fight.js:46-48` the wound roll, `wounds`, its row | `const wounds = passes(wd, wn)` | `let`; the swarm branch after the row |
+| `fight.js:48` the row's label | `Wound ${wn}+` | `(dive, S5)` when the dive applies |
+| `fight.js:52` the save roll | `roll(G, wounds)` | unchanged, after the re-roll (its count the merged wounds) |
+| `fight.js:56` the traced line | | unchanged in form |
+| `fightPhase` (fight.js:61-81) | chargers first by `active` | unchanged |
+| `rules.js:56-64` `woundNeed`, `:92-101` `expected` | | unchanged |
+| `core/ai/score.js:26-29` `meleeValue`; `core/ai/policy.js:350` | | §"The AI" |
+| `present/conditions.js:131-134` the Charged tip (client) | "It charged home this turn, and strikes first in the Fight phase." | a swooper's adds "+2 Strength this fight (Dive)."; the tips lane holds every type's to two sentences |
+| `core/hash.js:57`, `:68`, `:78-90` | `flags.charged` printed | nothing new |
+
+##### Rule 30, and the 97 battles
+
+§4.1 gains, when the Rules phase builds it:
+
+30. **Burrow, swarm and swoop** (F5a). Each is a branch only a unit with the flag reaches: `mode === 'burrow'` in the nav (its field `clearHard`, its step ×1, its pulled path without the rough-ground test), `u.t.swarm && u.alive >= u.t.swarm.min` after the fight's wound roll, `u.t.swoop && u.flags.charged && u.side === G.turn.active` at its Strength, and the AI's two terms (`meleeValue`'s, the burrower's straight line with height). **Swarm's re-roll is F5a's only new draw:** `roll(G, ones)` straight after the wound roll `roll(G, h)` and before the save roll, the 1s counted over the wound dice in order, nothing drawn when there is none. Burrow and swoop draw nothing. Walk, wreck and fly keep today's expressions literally (`clearance`'s two old readings, `reach`'s two cost lines), so every battle that seats no new race is byte-identical.
+
+**No battle of the 97 seats a new race** (`pairs.json`'s 24 have no setup and play `CLASSIC`; every log's seats are squirrel or serpent), so none reaches a branch: the parity runner stamps the new `CORE_VERSION` and `RULES_ID` into each start (`sim/run.mjs:261`), and parity passes 97 of 97 on F5a's code before anything new is recorded. The PIN moves only for the new set (§"Corpus").
+
+##### The AI (consensus; rule 10, inside `CORE_VERSION` 17)
+
+The new units need only their `ai` roles (D:1172): every one names a role of `AI_ROLES`, and `ORDER` plays them as it plays the older races' (`policy.js:58-69`). The plans already carry the mode (fly since R0, burrow by `movePlan`'s `mode`), so `aiMove`, `bestSpot` and `aiCharge` reach through `t.move` unchanged. Three terms see what the map showed a burrower or a swarm or a swooper needs, each behind its flag:
+
+```js
+// core/ai/score.js
+export function meleeValue(a, d, charging = false) {
+  if (!a.t.melee) return 0
+  const n = a.alive * a.t.A
+  if (!a.t.swarm && !a.t.swoop) return expected(n, hitNeed(a.t.WS, a.mesmerized ? 1 : 0), a.t.melee, d, false).value   // today's, literally
+  // (F5a) a swarm's re-rolled 1s wound p/6 more (so its wounds ×7/6, while min stand); a swooper charging strikes at S + chargeS
+  const w = charging && a.t.swoop ? { ...a.t.melee, S: a.t.melee.S + a.t.swoop.chargeS } : a.t.melee
+  const k = a.t.swarm && a.alive >= a.t.swarm.min ? 7 / 6 : 1
+  return expected(n * k, hitNeed(a.t.WS, a.mesmerized ? 1 : 0), w, d, false).value
+}
+// core/ai/policy.js aiCharge (:350): const gain = meleeValue(u, e, true) + …   (the loss, meleeValue(e, u), as today)
+// core/ai/score.js score(): a burrower is measured by the straight line with height, as a flier is
+const straight = (u) => moveMode(u) === 'fly' || moveMode(u) === 'burrow'
+const high = G.nav.hasHeight, climb = high && climbs(u), walks = high && !straight(u)      // :609
+… (high && !straight(e) ? levelDist(G, e.pos, from, climbs(e)) : hypot(…)) …               // :682-683, and its levelSlack
+```
+
+- **`meleeValue`** (Q9). `expected` scales linearly in its attacks before its cap at the target's models, so `n · 7/6` is the re-roll's wounds exactly. The swoop weapon is read only where the AI is the charger (`aiCharge`'s gain, `policy.js:350`); its other readers (the fall back, `policy.js:109-110`; the position terms, `score.js:378`, `:395`, `:501`) weigh fights the unit didn't choose, so they pass no `charging`, and the defender's `loss` is the defender's own blow. Draw-free.
+- **A burrower with height** (Q26). `levelDist` measures a walker's way up and down by stairs and ladders; a burrower takes neither and passes under what a walker goes round, so its way is nearer the straight line, as a flier's is. With Q4's `climb` false nothing else reads the gate graph for it. An objective on a deck pulls it to the deck's foot, where it can't hold it (it never stands above `STEP`): the cost of a race that takes a fort from below, which the play-report's row watches (§"Checks"). Flat boards never read either term (`high` is false), so classic and `open` boards change only by `meleeValue`.
+- **Fliers** need nothing: the Glider's mode is the birds' (the circle with no forbid, `move.js:166`; no cover; the straight line, `score.js:609`).
+- **The client's planner** (`present/orders.js:149`, rule 22, no bump) maps `'burrow'` to its own field, so a March steers a burrower under walls.
+
+##### View, input, UI
+
+**Figures** (Q16). One builder module a race, `view/models/insect.js` and `view/models/bird.js` (about 250 lines each, D:1172), built from `kit.js`'s parts as `warcart.js` and `howdah.js` are and painted through a style callback: the `classic` style the kit's flat-shaded `M`, the `new` style `gloss.js`'s physical material for chitin and a soft sheen for feathers (as the Howdah's paint callback, `gloss/serpents.js:763-768`). Each module exports `BUILDERS` (one per unit key) and `DRAWS`, joins **both** `STYLES` entries in `cache.js:135-138` under its `look.models` key (`insect`, `bird`), and **makes no three.js object as it loads** (every geometry inside a builder: the title is painted from `Math.random` as the page loads, and an object's uuid draws from it; bake-check §5 and title-shot hold it). A page on `?models=classic` draws the new races too, or `buildModel` throws (`cache.js:162`).
+
+- **The Hive's body**, `bug(opts)`: an upright ant-folk on four legs (rods), thorax `G.sph`, abdomen `G.ico` slung behind, head `G.ico0` with two antennae (thin rods, `antL`, `antR`) and a mandible pair (`G.cone`), two arms (`armL`, `armR`) to hold a weapon (`hold`). Its `anim`: `{ kind: 'insect', body, head, antL, antR, armL, armR, legs: [4] }`.
+  - **Hivemother Kesh**: the body ×1.3, a swollen abdomen trailing (`G.ico` 0.35), a crown of five gold cones (`metal`), a staff with a resin gem (`glowMat` amber, `a.gem`: the units animator spins it). Top about 1.25".
+  - **Deepguard**: broad and low, thorax plates (`G.box`), scythe forelegs (`taperTube` bone-curved, held forward), heavy mandibles; clods of earth at its feet (brown `G.cap`s), the burrower's mark. About 1.0".
+  - **Spinethrower Brood**: slender, a bristle of spines along the abdomen (six thin `G.cone`s), a spine-sling in its arms. About 1.0".
+  - **Delver Swarm**: small (0.6"), a flattened pair of digging claws (`G.oct`), round head, dusty colour, eight to a base; clods at their feet.
+  - **Hopper Lancers**: grasshopper-folk, long hind legs folded high (rod chains), a lance (`spear()`), long antennae. About 1.1".
+  - **Boilback Bombardier** (big, 0.09 lift): a beetle on six legs, a domed carapace (`G.cap`), a rear nozzle (`G.cyl` tapered) on a pivot that is its `throwArm` (with `rest`), so `artilleryFire` swings it as the Trebuchet's arm (`shots.js:154-182`). About 1.8".
+- **The Aerie's body**, `fowl(opts)`: an upright bird-folk, an egg body (`G.ico`), head `G.sph` with a beak (`G.cone`), wings of fanned feathers (thin `G.box`es on a wing group, `wingL`, `wingR`), legs (rods) with clawed feet, a tail fan. Fliers stand on a clear flight stand, as the Glider does (`classic/squirrel.js:146-172`: the body raised about 0.7, `a.lift`). Its `anim`: `{ kind: 'bird', body, head, wingL, wingR, tail, lift }`.
+  - **Skyseer Varra**: owl-folk on its stand, great round eyes (`G.sph` white, dark pupils), a staff in one wing's tip with a pale gem (`a.gem`). Top about 1.6".
+  - **Stormtalon Guard**: eagle-folk in a helm (`G.cap`, `metal`), wings raised wide, talons forward, on a stand 0.6. About 1.6".
+  - **Longbill Pikes** (walkers): heron-folk on long legs (rods 0.45), a long bill (`G.cone`, thin), a bundle of quills on the back. About 1.2", under the walkers' label height (1.3, `units.js:848`).
+  - **Finch Flock**: small round birds (`G.sph` 0.12) on stands 0.6, a pebble pouch. About 0.9".
+  - **Kestrel Divers**: falcons in a stoop, the body pitched down 0.6 rad, wings swept back, on a stand 0.8. About 1.5".
+  - **Greatwing Roc** (big): a 2" bird, wings spread over its base (span about 2.2"), a hooked beak, on a short stand. About 2.1".
+- **Heights.** Each figure's top sits near its eye (eye + 0.1, within 0.4": a walker's 0.95, a flier's 1.5, a big unit's 1.9), so the label (`units.js:848`, `:1017`, `:1188`: big 2.4, fly 1.8, else 1.3) clears it and what the rules' sight sees from is about where the figure looks from. bake-check gains the row (§"Checks"), judged on the new kits and reported for the older ones.
+
+**Animators** (`view/units.js:1151-1167`, by `anim.kind`; `view/diorama.js:145`'s idle for the race picker; about 40 lines each, D:1172):
+- **`insect`**: moving, the legs scuttle in two alternating sets (`rotation.x = sin(t·16 + i·π)·0.35`) and the body bobs (|sin(t·16)|·0.04); at rest the antennae twitch (`sin(t·3.1)·0.15`) and the breath scales the figure 1.5%.
+- **`bird`**: flying (the walk's `fly` arc, `units.js:1566`, `:1578`), the wings beat (`rotation.z = ±(0.4 + sin(t·18)·0.6)`); a flier at rest hovers on its stand (the body ±0.04 at 2.2 rad/s) with a slow wing breath; a walker's head bobs as it walks.
+- **A burrower's walk** (Q6): the view reads `t.move === 'burrow'` (the unit's type, no event field) and, along the walk, sinks the figure by up to 60% of its height (eased in and out by `sin(π·s/L)`), throwing brown dust motes every 0.3" from the base; it rises at the end. Its ring and label stay on the table and the figure never fully hides (open question 5). The rules' event is today's `unit.move`, so P-present and present-check read nothing new.
+- An unknown kind falls through every branch harmlessly, so the animators are polish, never a crash.
+
+**Projectiles** (`view/effects/shots.js:72-89` `projectileStyle`; four styles, D:1172). Each shape is made at its first shot (`projGeo.sting ??= …`, as the War-Cart's bolt, `:79-82`), never in `projShapes()`, which runs as the view is made and whose every object shifts the title's uuid draws (`:28-31`). An unknown style is a grey acorn (`:88`), so a missing one is ugly, not broken.
+- `sting`: a dark amber spine, a thin cone (0.025 × 0.32), flat and fast (arc 0.04, speed 36), no spin. The Spinethrowers' volleys, the Hoppers' barbs.
+- `glob`: a boiling glob, an icosahedron (0.2) in a hot glow (`#ffb84a`), lobbed (arc 0.5, speed 15), a trail of white steam (`fx.smoke`) and orange spatter motes. The Boilback's.
+- `quill`: a pale quill (`#e8e0c8`), a thin cylinder with a flat vane, arc 0.12, speed 26, no spin. The Longbills'.
+- `pebble`: a grey stone (`G.ico0`-like, 0.06), dropped in a steep arc (0.35), speed 18. The Finches'.
+
+**Spells' looks** (`shots.js:232-420`). The handlers are by effect; `fx` picks a variant only where a handler tests it, and each new `e.fx ===` test is a flag-lint ALLOW row (`sim/flag-lint.mjs:169-175`).
+- **Upwelling** (`mandibles`, an eruption) joins `blast.land`'s `erupted` test beside `thorns` and `mist` (`:192`; its ALLOW row's text changes): without it a made Upwelling would also explode and boom. Its spikes are the thorns' in chitin brown (a colour by `fx`, one more ALLOW row).
+- **Hive Hum** (`hum`, a resolve), **Piercing Cry** (`cry`, a mesmerize) and **Down Mantle** (`down`, a ward: the frost look, white as down, `:383`) take their effect's look; the ward's label names the spell by its `fx` already (`:402`).
+- **Resin Snare** (`resin`) and **Gale** (`gale`), snares, take the roots' look; amber strands for the resin and a ring of wind-blown motes for the gale are the View phase's polish, each one ALLOW row.
+
+**Voices** (`view/sfx.js:81-90`): `chitter`, three short high-passed bursts 0.05 s apart (`burst` at about 7 kHz); `screech`, a falling sawtooth (`tone` 2,200 → 900 Hz, 0.25 s). Each a method of the `VOICES` literal, since data-check parses the file for them (`sim/data-check.mjs:427-429`).
+
+**Colours** (Q14). Every seat colour comes from `look.team`, or `look.alt` for seat 1 of a mirror (`ui/theme.js:18-28`), and so do the minimap's dots (`view/minimap.js:63-72`), the zones (`view/table.js:288-300`), the rings, the labels and the result screen; nothing else needs one. The teams stand apart in every pairing (RGB distance: the Hive to the Bushtails 132, the nearest pair; the Aerie to the Coil 139; the Hive to the Aerie 162; the two older 189), and each team from its own alt (the Hive 164, the Aerie 113, the Coil's own 113). data-check holds those floors (§"Checks").
+
+**The shell, screen by screen** (Q1, Q15):
+- **The title** is unchanged: its tagline names the Bushtails and the Coil, its mode buttons are seats (`bushtail`: you play seat 0 against the AI; `serpent`: seat 1), and the battle-setup panel picks each seat's race (F6). `MODES` and `FOG_MODES` (`app/flow.js:87`, `:94`) keep their keys, which the harnesses and 13 corpus log names carry; the default seat races stay `CLASSIC` (`data/mission.js:389`). title-shot stays pixel-identical against 1178883 and the thumbnail is not re-shot. A race-free wording of the title is its own small step (Q1).
+- **The race picker** (`ui/screens/races.js:29-37`): one button per `RACES` entry, so four, in a wrapping row (`.raceRow`, `style.css:1411-1417`): two lines at 360 px, which ui-check's `phone` case judges (44 px buttons, no sideways scroll). Its diorama lays out any kit's figures (`view/diorama.js:69-88`) and idles the two new kinds.
+- **The battle-setup panel** (`ui/screens/setup.js:117`), **the lobby's seat cards** (`ui/screens/lobby.js:81-83`, `:188`; `net/lobby.js`), **the Muster** (`ui/screens/muster.js`), **the card** (`ui/card.js:47-75`: the abilities' copy, the cost), **the roster**, **the banner** and **the result screen** (`ui/screens/result.js:30-55`) read `RACES[race]`, the roster and the copy: nothing to change. The start's bytes don't grow (`insect` and `bird` are shorter than `squirrel`; six-entry rosters).
+- **The help** (`index.html:136-141`): the Spells list gains a row each for Hivemother Kesh and Skyseer Varra, every spell's name, value, range and effect, in the older rows' words. The abilities stay the card's.
+- **The fog** (`present/fog.js`, `view/fog.js:43`): a burrower is seen as any walker, at both ends of its move; a flier as the Glider. Nothing changes.
+- **The gallery** (Q21): `package.json`'s `gallery.description` names four peoples ("… squirrel clans, serpent-folk, a burrowing hive and the bird-folk of the high winds …"), rebuilt into `dist/` with the step (`npm run build`).
+
+##### Data and the schema
+
+- **The two files above**, appended to `RACES` (`data/schema.js:123-124`, `:446`).
+- **`climb`** derives `!big && !fly && !vehicle && !burrow` (`:338`; Q4). Only a burrower's type changes. data-check's row "the units that climb no ladder are big or fly" (`sim/data-check.mjs:389`) reads "big, fly or burrow".
+- **The flags' records, tightened** (Q5; `:288-289` accept today `{ min: 0 }`, a negative, stray fields, a falsy `swarm` silently dropped, a `min` over the squad, `chargeS` 0): `swarm` is exactly `{ min }`, a whole number from 2 to `models` ("swarm is { min }, a whole number of models from 2 to its 8, not 9"); `swoop` exactly `{ chargeS }`, a whole number from 1 to 3; `burrow` with `fly` or `vehicle` refused ("a burrower walks under the ground: not a flier"; "… not a vehicle (no burrowing hull in v1)"); `swarm` on a one-model unit refused by the range. Each refusal names its field, as the transport's do. Nothing shipped breaks any of them.
+- **The schema's header** (`:19-60`) says what each flag does and its one reader: `burrow` read by the schema alone (the rules read `t.move`, the nav its mode); `swarm` and `swoop` by `core/actions/fight.js`, and by `core/ai/score.js`'s `meleeValue` under rule 10. DESIGN's flag table (§2.8) says the same.
+- **No new field, command, event field or state.**
+
+##### The hash and the bump
+
+- **`CORE_VERSION` 17** (`core/version.js:144`), its history entry: "17: F5a's insectoids and bird-people: the nav's burrow mode (its field the hard one, a burrower passing under soft and difficult scenery at a walker's pace, never onto a floor above STEP nor up a stair or ladder, ending where a walker could stand, its pulled path without the rough-ground test), swarm's re-roll of the fight's wound rolls of 1 while `min` of the unit stand (the only new draws, inside its branch), swoop's +chargeS Strength in the fight of the turn the unit charged (`flags.charged` on its own seat's turn), and the AI's appraisal of the two in meleeValue and its straight-line measure of a burrower with height (rule 10); each a branch only a unit with the flag reaches, so only a battle seating a new race plays otherwise; RULES_ID moves with the two races (data/races/insect.js and bird.js: a burrower's derived climb false), the flags' tightened records and any Field prices the fit gives them".
+- **`stateHash`'s format is unchanged**: burrow is a mode of `move`, `charge` and `chargeEnd`; swarm's re-roll is dice inside a fight; swoop reads `flags.charged`, which `flagsOf` already prints (`core/hash.js:57`, `:84`), and `G.turn.active`. So data-check's `PINNED` gains **`17: V12`** (`sim/data-check.mjs:1180`) and P-prop's `PINNED_UNDER` gains **17** (`sim/property.mjs:1683`).
+- **`RULES_ID`** moves from `1rx0d67ozvb` with the two race strips (stats, weapons, flags, `move`, `climb`, eye and chest, `swarm`, `swoop`, `cost`, `roster`, `armies`) and with any `prices` entry the Field fit gives them (`MISSIONS` is hashed whole but for `size`, `core/version.js:56-61`). The two older races' strips are unchanged. The Prices phase records the final value in ROADMAP's F5a item; a peer on 16 opens an F5a match as `skew`.
+- **The 97 stay byte-identical** (rule 30); the PIN moves to F5a's last code commit only so the new set is recorded on it.
+
+##### Prices and presets
+
+**The first guesses** are the costs in the files: each unit near its role's older counterparts and the classic lists at the older races' 485 and 495 (the Hive 60 + 100 + 2 × 70 + 70 + 55 + 60; the Aerie 60 + 95 + 2 × 65 + 60 + 55 + 95). They are a starting point, not a table: §4.2.8.2's procedure fits them, at Skirmish against both older races (D:1193, D:1794), and its gates judge them, for every race pair (from F5a six: S–C, S–I, S–B, C–I, C–B, I–B; `pairs()`, `sim/army-sim.mjs:442-448`, in `RACES` order, each pair's score its first race's).
+
+**What a new race's prices must keep** (the schema, §4.2.8.2-5, and the checks):
+- every `cost` a whole multiple of 5 above 0;
+- the classic list ≤ 500 and within about 10 points of 485-495 (the yardstick);
+- the presets legal: Field `'224222'` ≤ 1,000 points, 18 units, 70 models; Grand `'336333'` ≤ 1,500, 24 units, 90 models (the Hive's at the 90 exactly, so a classic list of 30 models is the most it may ever hold), under each mission's prices; every classic digit ≤ 2 (×3 ≤ Grand's `perKind` 7);
+- the slot tables of every mission (Skirmish Troops 1-6, Elite and Fast 0-2, Monster and Artillery 0-1, Vehicle 0; Field and Grand theirs), held by data-check's capacity row (`:1486-1525`).
+
+**`--races` (Q12).** army-sim gains `--races <a>,<b>`, a filter on `pairs()` keeping the pairs that hold a named race (about 8 lines; the streams are named by pair, so a filtered run's battles are the full run's for those pairs). The fits run on the five new pairs; the judgment always runs on all six.
+
+**The order the Prices phase runs it** (compute from F9c's: one pair's full `--check` 1,128 s at `--jobs 2`; Skirmish about 7.5 battles a second; Field's check of one pair 335 s; the box's load under 8, two workers):
+
+| # | Run | Battles | Est. at `--jobs 2` |
+|---|---|---|---|
+| 1 | `--fit --mission classic --races insect,bird --seed 1111,2222,3333` | 5 pairs × 2,400 × 3 = 36,000 | about 80 min |
+| 2 | price each new unit from its fits: the inverse-variance mean of its two fits against the older races (each in its own pair's exchange rate), rounded to 5; the I–B fit a check on both; the heroes, which every Skirmish list holds once, from the pairs' intercepts, set so each classic list lands at 480-500 (§4.2.8.2 step 3) | – | – |
+| 3 | `--check --mission classic --seed 4444` (all six pairs; `classic` and `fortified`) | 6 × 5,400 = 32,400 | about 72 min |
+| 4 | the same on `--seed 1111` | 32,400 | about 72 min |
+| 5 | if a gate misses: re-run it once on `--seed 5555` (D:3751); a miss that repeats goes back to 1-2 with the miss's seed pooled, at most three rounds; the table is always judged on a seed its tuning never saw | – | – |
+| 6 | `--check --mission field --seed 4444`, then `--seed 1111` | 6 × 2,700 each | about 34 min each |
+| 7 | if a new race misses a Field gate at `cost`: `--fit --mission field --races insect,bird --seed 1111,2222,3333` (5 × 900 × 3 = 13,500) and a Field `prices` entry for that race (Q13), judged again by 6 | 13,500 | about 60 min |
+| 8 | the Sweep's full `--check` (every mission, six pairs, seed 1111) | about 90,000 | about 1 h 55 min |
+
+- **The gates** (§4.2.8.2's table, for each pair with a new race): Skirmish |score − 50%| ≤ 4 on `classic` and on `fortified` (N 1,500 each, SE 1.3), each unit's fit within max(2 SE, 20%) of its price (N 2,400; the heroes exempt), each classic list ≤ 500; Field ≤ 5 on `open` and `fortified` (N 900) and its per-unit gate (N 900). The keg mission (judged at Skirmish size) is judged for the new pairs too; a miss there that the classic pair already makes (its score and units, a known miss) is reported beside it, not tuned (the keg mission's own Later item).
+- **Grand and the Powder Field** stay reported, not judged (`REPORTED`, `sim/army-sim.mjs:476-478`; the Grand rebalance, R:1414). A new race plays them at `cost`, or, where Field took an entry, at Field's prices copied into Grand's and Powder's (data-check holds Powder's equal to Grand's), by the precedent of the larger battles' own tables; a Grand entry of its own is the rebalance's.
+- **The older races' prices don't move** in F5a: a new pair's miss is tuned on the new race's side. The classic pair's known misses (the Skirmish Trebuchet at 1111, the keg mission, the Field Scaleguard and Brute) stay as F9c left them.
+- **The pins**, once the prices are final: data-check's `CLASSIC_COST` (`:1248`) gains `insect` and `bird`, `PRESET_COST` (`:1257`) both presets at each mission's prices, `ROSTER_PIN` (`:1269-1272`) both rosters as they stand. The corpus is recorded after (a preset's legality is part of admission).
+- **The record**: each fitted unit's comment in its race file in the War-Cart's form (the seeds, N, the fit ± SE, the judgment), and the table's runs in the as-built notes.
+
+##### Checks and corpus
+
+**Rows the step adds** (each standing check keeps its own; the 97 battles judge everything else):
+
+| Check | F5a |
+|---|---|
+| **data-check** | `raw` takes four files (`:271`); "the registry of the race files is `RACES`" (`:479`); the legacy comparison (`:352-355`) holds the two R0 races only, every unit of a race after R0 being its step's (its own rows below), and "no two races share a unit key" over all four; the climbers' row (`:389`) "big, fly or burrow"; `VOICES` with `chitter` and `screech` (`:427-429`); the flags' refusals (Q5: `swarm` `{ min: 0 }`, `{ min: 1 }`, 9 of 8, `{ min: 4, x: 1 }`, `null`, `true`; `swoop` `{ chargeS: 0 }`, 4, 1.5, `{ chargeS: 1, x: 1 }`; `burrow` with `fly`, with `vehicle`; takes `min` 2 and 8 of 8, `chargeS` 1 and 3); `RULES_ID` rows (a swarm's `min` 4 → 5, a swoop's `chargeS` 2 → 1, `burrow` on a walker, each moving it; a rename not); `CLASSIC_COST`, `PRESET_COST`, `ROSTER_PIN` with the new races; the team colours' row (every two races' teams at least 110 apart in RGB, each team at least 100 from its alt); `PINNED` 17 (V12). |
+| **flag-lint** | OWNED: `reads('swarm\|swoop')` in `core/actions/fight.js` and `core/ai/score.js` alone; `reads('burrow')` in `data/schema.js` alone (the rules read `t.move`). ALLOW: each new `e.fx ===` test in `shots.js` (Upwelling in `erupted`, its spikes' colour, any snare variant), exact counts. A self-test edit per OWNED row (`swarm` read in shoot.js, `burrow` read in nav.js). |
+| **property** | P-prop's random games already draw a seat's race from every `RACES` key 30% of the time (`:1093`, `:1796`, `:1924`): burrowers, swarms and swoopers meet every invariant with no code change. `PINNED_UNDER` gains 17. P-spell's scene pairs (`:4077`) gain `['insect', 'bird']` and `['bird', 'insect']`, or it fails "never met" on the six new spells (`:4283-4285`); P-fight's (`:3019`, `:3113`) every race; P-army covers the new rosters as it stands. New, **P-races** (`--only races`), each a scene of its own on a hand-built board and both kinds of board (flat and fortified): **burrow** (1) a Delver reaches the far side of a wall within its M where a walker's plan does not; (2) a rock stops it; (3) no end inside soft or rough scenery (every end `standable(…, 'walk')`); (4) on a fortified board, never a cell above `STEP`, never a ladder or stair top, its disc clear of every ledge by r − 0.06; (5) under a keg, the keg intact and no `keg.fuse`; (6) an enemy's bubble forbids its path as a walker's; (7) every sample of its pulled path on the burrow field, and the pulled path's length at most the reach's; (8) a charge through a hedge's foot; (9) a fall back in burrow mode through the bubble, not the bases. **swarm** (10) at `alive ≥ min` exactly one `roll(G, ones)` straight after the wound roll and before the save roll (the `rngState` stepped as an oracle replaying the dice says), the merged wounds the save roll's count; (11) below `min`, and with no 1, no draw; (no Delver carries a gun, so that swarm never touches a shot is flag-lint's: `swarm` read in fight.js alone). **swoop** (12) a Kestrel's wound need from S + 2 on its own charge turn; (13) the same Kestrel fighting in the opponent's fight phase, its `flags.charged` still set, at S; (14) engaged without charging, at S; (15) the Glider's need unchanged. Mutants (`--self-test`): `burrow-walks` (its field `clearAll`), `burrow-decks` (the floor test dropped), `burrow-diff` (the pull's `diff` test kept), `swarm-always` (`min` ignored), `swarm-late` (the re-roll after the save roll), `swoop-every-turn` (the turn test dropped), `swoop-hits` (the dive on the hit roll). |
+| **army-sim** | `--races`; the six pairs (§"Prices"); `--self-test` unchanged (its anchors are the older race files). |
+| **corpus-add**, a new **`sim/race-probe.mjs`** (about 80 lines) | needs `burrowed` (a burrower's walk crossed a cell a walker's disc can't stand on, `clearAll < r − 0.06`, or rough ground it paid ×1 for), `swarmed` (a "Re-roll 1s (swarm)" row), `swooped` (a swooper fought on its own charge turn, its Wound row's dive label); `RACE_NEEDS` beside `HULL_NEEDS` (`:211-214`). |
+| **play-report** | `'f5a'` in `ROWS` (`:187`) and the dispatcher (`:719-721`), over `races/`'s AI pairs, each threshold over the battles fielding the mechanic: a burrower tunnels in ≥ 50%; a swarm re-rolls in ≥ 50%; a swooper fights on its own charge turn in ≥ 50%; beside them (reported) the share of burrowers' moves that tunnel, and that no burrower ever stands above `STEP`. `--sweep 16` in F9c's form from seed 9900. On code without the burrow field, "not judged". |
+| **bake-check** | §1 bakes each new classic kit (both builders join `STYLES.classic`; `:110` imports them); §5 the new modules draw nothing at load; rows for the `new` style's new figures (each `anim.kind` one of `insect` or `bird`, one shadow caster, the stand-in's height); the heights' row: each figure's top within 0.4" of its type's eye + 0.1 (the new kits judged, the older reported). |
+| **title-shot** | pixel-identical against 1178883 (the copy kept, nothing drawn at load). |
+| **snap-check** | one `races/` battle in its `DEFAULT` (`:178`): a burrower's walk and a flier's flight snapped mid-way, the figure at its end and at its height. |
+| **render-bench** | `--races <a>,<b>` (about 5 lines); a Grand ×3 run of the Hive against the Aerie (21 units a side, 90 and 81 models) inside the budgets (main calls ≤ 600, triangles ≤ 400 K). |
+| **ui-check** | its `phone` case with four race buttons (no sideways scroll, 44 px); the `race` case on a new race (its army line reset). |
+| **input-check** | the tips lane (`:2244-2252`) over every new type, the Charged tip's dive line among them (automatic: it walks every type of every race). |
+| **fog-check**, **present-check**, **replay-check**, **pilot-check** (P-auto), **peers**, **merge-sim**, **mutation**, **perturb**, **dmath-check** | over the corpus, the new set included: automatic. present-check holds the swarm's extra dice row and a burrower's `unit.move` in the mirror's order. |
+| **terrain-check** | a reported connectivity row: an r 1.011 disc on the burrow field (floors ≤ `STEP`, the cliff kept) crosses zone to zone on every set a mission offers. |
+| **lobby-rig** | a seat on a new race (its card, its army cleared on the change). |
+| **scale-bench** | reported only: a Grand ×3 row of the Hive against the Aerie (no budget is judged on the new races' lists). |
+
+**The corpus** (Q17). A new set, **`races/`**, recorded once on the PIN, in its own commit after the code (§4.2.9's practice), then frozen:
+- **10 Skirmish AI pairs**, one per seating of the five new pairings, both seat orders, on the classic board and the classic presets: `watch-insect-squirrel-1`, `watch-squirrel-insect-1`, `watch-insect-serpent-1`, `watch-serpent-insect-1`, `watch-bird-squirrel-1`, `watch-squirrel-bird-1`, `watch-bird-serpent-1`, `watch-serpent-bird-1`, `watch-insect-bird-1`, `watch-bird-insect-1` (`corpus-add --set races --mode watch --races <a>,<b> --tag <a>-<b> --count 1`; D:1794's "the new races' AI pairs");
+- **1 Field AI pair** on the `open` set, the Hive against the Aerie on their `field` presets (the presets played);
+- **1 Skirmish fortified AI pair**, the Hive against the Coil (burrowers meeting decks, D:2926);
+- **2 human-bot logs**: a hotseat with the Hive, `--need burrowed,swarmed`, and a vs-AI seat with the Aerie, `--need swooped`, so the corpus holds entries a burrower's `move` and a swooper's `charge` and `chargeEnd` answer, and P-browser plays them from the page.
+
+That is **14 battles, the corpus 97 → 111**. Seeds as corpus-add draws them, each candidate admitted twice more in Node and once in Chromium (`sim/corpus.mjs`). `pairs.json` is untouched (it carries no seat races). `sim/lib.mjs`'s `LOG_SETS` (`:255`) appends `races`. Mirrors (I–I, B–B) are P-prop's.
+
+**§4.2.9's tables gain** (written there with this section): a `races/` row in the corpora table; an F5a row in play-report's thresholds; F5a in the army-sim row's "Lands" (already there) and the new P-races row.
+
+##### Staging
+
+Each phase works on wt/f5a and commits its own; each gate runs on the phase's committed tree, Node v22 and (where it says) Chromium (`CHROMIUM_PATH`), a fresh `vite build` for the browser checks, `ORACLE_TIMEOUT_MS=900000`, `TMPDIR` under the phase's scratch, at most two Node processes of one's own and the 1-minute load under 8 (F9c's Run line is the form its as-built line takes).
+
+| Phase | Owns | Gate |
+|---|---|---|
+| **Rules** | The two race files as above (the first-guess costs); `data/schema.js` (the registry, Q4's `climb`, Q5's refusals, the header); `core/nav.js` (the burrow mode at every site of its table, the comment); `core/actions/fight.js` (swarm, swoop, the header); `core/ai/score.js` and `policy.js` (§"The AI"); `present/orders.js` and `present/conditions.js` (client); `core/version.js` 17 and its entry; §4.1's rule 30; data-check's, flag-lint's and property's rows (P-races and its mutants, P-spell's and P-fight's pairs, `PINNED_UNDER`); army-sim's `--races`; `sim/race-probe.mjs`, corpus-add's needs, play-report's row, `LOG_SETS`' `races` | parity 97 of 97 and `--page` 97 of 97 (no battle moved: rule 30); data-check (`PINNED` 17; the new races' rows, the pins but the prices' still open), flag-lint and its self-test, boundaries and its self-test; property `--only races`, `--only spell`, `--only fight` and the default games, and `--self-test` (each new mutant caught); mutation and `--core`; perturb `--fn hypot` (0 battles moved); merge-sim; present-check; a smoke of 48 Skirmish AI battles over the five new pairings, none throwing, every mechanic met (the probe's counts) |
+| **View** | `view/models/insect.js`, `bird.js` (both styles), `cache.js`' `STYLES` and `DRAWS`; the two animators (`units.js`, `diorama.js`) and the burrower's walk; the four projectile styles; the spells' variants (Upwelling's in `erupted`); the voices; the help's spell rows; the Charged tip's copy; the gallery's description; bake-check's, snap-check's, render-bench's, ui-check's and lobby-rig's rows; flag-lint's ALLOW rows | bake-check (§1 and §5 with the new kits, the heights' row); title-shot pixel-identical against 1178883; snap-check and its self-test; ui-check (the `phone` case, four races) and its self-test; input-check's tips lane; hud-check; render-bench (`--races insect,bird` at Grand inside the budgets); rematch-memory with `?races=insect,bird` (renderer.info flat over 5 rematches); play-check; a look at a battle of each new race in both styles (screenshots in the phase's scratch) |
+| **Prices** | §"Prices and presets" in its order: the fits, the costs (and any Field `prices`), each unit's fitted comment, data-check's `CLASSIC_COST`, `PRESET_COST` and `ROSTER_PIN`; the final `RULES_ID` in ROADMAP | army-sim's Skirmish gates for every pair with a new race on `classic` and `fortified` at 4444 and at 1111 (a miss re-run once on 5555 before it counts), every new unit inside its band (the heroes exempt), each classic list ≤ 500 within about 10 of 485-495; Field's gates for those pairs at 4444 and 1111; the keg mission's reported beside the classic pair's known miss; Grand and Powder reported; data-check with the pins; parity 97 of 97 still |
+| **Corpus** | the PIN to the last code commit (`sim/oracle/PIN`); `races/`'s 14 battles by corpus-add on it; `parity --record --only races` (Node v22.22.0); its own commit | parity 111 of 111, `--page` 111 of 111, `--pin` 111 of 111, `--browser` 111 of 111; play-report `--row f5a` (each threshold met over `races/`); fog-check, present-check, replay-check, pilot-check over the new set; data-check's corpus lists within 90% (none named: presets) |
+| **Sweep** | the standing sweep (ROADMAP's "Standing rules", the map's list of 43), each check exiting 0 but for named known misses; `npm run build` and `npm run verify` from the repo's root, `dist/` rebuilt | the Run line: every check's exit and time, the loads, the timing checks (fold-cost, scale-bench, render-bench) first and alone on a quiet box; army-sim's full `--check` (six pairs, about 2 h) |
+| **Review** | three reviewers on the swept tree, the rules' lens (the branches, rule 30, the burrow field's edges, the AI's terms), the view's (the figures, the styles, nothing drawn at load, the walk's look) and the checks', corpus' and prices' | each finding reproduced by a probe or confirmed in the code, with its verdict |
+| **Fix** | the findings' fixes (a consensus fix re-records nothing unless a `races/` battle moves; then `races/` alone is recorded again, on a PIN moved with the reason in the commit); DESIGN's F5a as-built notes after F9c's, in their form (consensus line, data, rules, AI, view, prices with their table, corpus, checks, decisions, Not here, the sweep's mends, Run); this section corrected in place where the build departs; ROADMAP's F5a item ticked with its commits and `RULES_ID`; the review's Run | the review's Run: parity, `--page`, `--pin` and `--browser` 111 of 111; data-check, flag-lint, boundaries, property `--only races` and its self-test, and every check a fix touched |
+
+The Prices phase's compute (about 5-7 hours over the runs above) needs only the Rules phase's commit and may start beside the View phase's work when the box allows it (two army-sim workers and one Chromium are about the load's line, so the View phase's Chromium gates wait for a run's gap).
+
+##### Not here
+
+- **F5b**: the Brood Beetle (data only, on F9b's footprint engine) and the Sky-Basket (a round flying hull that may land on deck tops, open question 24), each appended to its race's roster and its `cost` fitted at Field (D:3010-3011, §4.2.5's "Flying hulls"); P-height's flying hull on a falling deck (R:1877-1883).
+- **A burrowing hull** (the Sapper Grub, D:3022; open question 25) and any `'burrow'` lattice mode in `hullReach` (refused there, a guard).
+- **Hidden burrowing** (open question 5; §5's non-goals): a burrower is drawn throughout.
+- **Swarm in shooting**, a swarm's re-roll of hits or saves, and **swoop** outside the fight's wound roll (a dive's extra attacks, a charge range bonus): the flags do what their table says and no more.
+- **The title's wording** for four races, and a race pick on the title (Q1).
+- **A second hero type** and a `unique` flag (open question 22).
+- **Grand prices** for the new races beyond Field's copied (the Grand rebalance, R:1414); a retune of the older races' prices.
+- **New spell effects**: the six new spells are the five effects' (V3c).
+- **Bespoke `new`-style pipelines** (splat feathers, an SDF carapace): the kit-parts figures in both styles (Q16).
+- **A courtesy-fog rule** for burrowers: none is needed (they are seen as walkers).
+- **Mirrors in the corpus** (I–I, B–B) and a Grand `races/` pair.
+
+##### The decisions
+
+Each with its options, the choice and why. **(design signal)** marks what a human designer would want to see and may overrule; each is cheap to change before the Corpus phase records `races/`, dear after.
+
+- **Q1. The title, `MODES` and `FOG_MODES` with four races (design signal).** (a) Keep everything: the mode buttons are seats since F6, and the panel shows the races picked; (b) keep the keys, reword the tagline and buttons race-free ("A pocket-sized tabletop war among four peoples", "Hold the west edge · vs. the AI"); (c) a race pick on the title. (b) and (c) move title-shot's frame and the thumbnail, and (c) the flow every Chromium harness presses. **(a)**: the keys are in the harnesses and in 13 corpus log names, and the title's wording is its own small step, which re-shoots the thumbnail alone.
+- **Q2. The burrow field and its pace (design signal: the feel).** (a) A third array on every board; (b) `clearHard` on flat boards and a new raster of the raised cells with height; (c) `clearHard` everywhere, the height branch's floor test and cliff keeping a deck hard. Pace: (i) ×1 under everything it passes; (ii) ×2 under soft scenery, as the wrecker. **(c) and (i)**: the floor test (`nav.js:637`) refuses a raised cell outright and the cliff field keeps the disc off its ledge, so (b)'s raster would add nothing; (i) is D:1131's "passes under" read plainly, the price in M5 and `cost`.
+- **Q3. Burrow's edges (design signal).** Enemies: (a) their bubble forbids it, as a walker; (b) it passes under, as a flier over. Kegs: passed under, never set off. Charges and falls back: the same mode. Cover and sight: a walker's at both ends. **(a)**, and the rest as listed: it keeps "visible, on the ground" and needs no new mask; a burrower that ducked under enemies would be a flier that holds cover.
+- **Q4. Does a burrower climb? (design signal)** (a) No: `climb` derives false, and it keeps to floors ≤ `STEP` (no stairs either: the floor test); (b) it climbs as infantry and tunnels only on the ground, splitting its mode by level. **(a)**: F7a's placeholder and D:2926 already say so, and the AI's height measure then agrees with its reach (`score.js:609`, `:682-683`). The Hive takes a fort from its foot; its Hivemother, Spinethrowers and Hoppers climb.
+- **Q5. The flags' records.** (a) As they are (`schema.js:288-289` take zero, negatives, stray fields, a falsy `swarm`, a `min` over the squad; `burrow` with `fly` silently flies); (b) tightened: `swarm` exactly `{ min }`, 2 to `models`; `swoop` exactly `{ chargeS }`, 1-3; `burrow` with `fly` or `vehicle` refused. **(b)**: the first race to use a flag is when its record's typos start to play a different game, and refusals are data-check rows.
+- **Q6. A burrower's look (design signal).** (a) The view reads `t.move` and sinks the figure along its walk, dust behind it; (b) a `burrow` field on `unit.move`; (c) no look. **(a)**: view only, no event's shape changes for P-present and present-check, and the figure stays drawn (open question 5).
+- **Q7. Swarm's rule (design signal: the feel).** Melee only, or shooting too; `min` absolute or a share; re-roll once or until not a 1. **Melee only, `min` half the squad (4 of 8), once**: the flag table's letter; half strength is the point a swarm stops being one; a re-roll once is the one draw rule 30 names.
+- **Q8. Swoop's rule (design signal: the feel).** `chargeS` on S, on A, or on the hit roll; "the charge turn" by `flags.charged` alone or with the seat's turn. **S, with `u.side === G.turn.active`**: D:1172's "+S on the charge turn"; the flag alone would dive again in the opponent's fight phase (`resetTurn` clears only the active seat's flags). The Kestrels +2 (light divers, S3 → S5), the Stormtalons and the Roc +1.
+- **Q9. The AI's appraisal.** (a) `meleeValue` sees both, inside the flags' branch (a swarm ×7/6 while `min` stand; a swooper +S when the AI charges, `policy.js:350`); (b) blind. **(a)**: F5a bumps anyway (rule 10 costs nothing in the corpus), and an AI blind to the dive charges no sooner for it, which play-report's swoop row would feel. `expected()` and `woundNeed` stay: they price shots and the tooltip.
+- **Q10. The word "Swoop" (design signal: names).** The Glider Wing's card says "Swoop — may shoot after Advancing" (`squirrel.js:51`, legacy-pinned by data-check §1). (a) The flag stays `swoop`, the birds' card says **Dive**; (b) reword the Glider's card. **(a)**: no legacy row moves, and the two cards read apart.
+- **Q11. The heroes' spells (design signal).** (a) Three each from the five effects (§"The two races"); (b) a weapon each, no spells; (c) new effects. **(a)**: the races read as rich as the Elder's and the Hierophant's, with no new rule; P-spell's pairs grow. The Hive's: an eruption (Upwelling), a resolve (Hive Hum), a snare (Resin Snare). The Aerie's: a mesmerize (Piercing Cry), a ward (Down Mantle), a snare (Gale).
+- **Q12. army-sim's pairs.** (a) Every run on all six pairs; (b) `--races` for the fits, all six for the judgment. **(b)**: about 8 lines, the fits a sixth cheaper, the judgment whole, the classic pair's battles unchanged by construction.
+- **Q13. Field and Grand prices for a new race.** (a) `cost` everywhere, Field judged; (b) a Field `prices` entry where Field's gates miss at `cost`, fitted on pooled seeds, Grand and Powder at Field's prices copied (or `cost`), reported; (c) Field reported for the new pairs. **(b)**: §4.2.8.2's own fallback, data only; a step leaves every standing check passing but its named known misses, and Field is judged.
+- **Q14. Team colours (design signal).** Clear of the Bushtails' orange, the Coil's green and each other, each with an alt for its mirror. **The Hive heather-carmine `#d23a9a` (alt gold), the Aerie cornflower `#5a7cf0` (alt teal)**: the nearest teams 132 apart in RGB (the Hive and the Bushtails), each alt at least 113 from its team; data-check's row holds 110 and 100.
+- **Q15. The race picker for four.** (a) The wrapping row as is; (b) icons only under 700 px; (c) a 2×2 grid. **(a)**, judged by ui-check's `phone` case; (c) only if it fails.
+- **Q16. The figures' style.** (a) One kit-parts builder a race shared by both styles, the `new` style painting chitin and feathers through a callback; (b) bespoke `new` pipelines (splat feathers, SDF chitin); (c) classic only, the `new` style falling back. **(a)**: D:1172's 250 lines a race, both styles drawn, bake-check's §1 holding them.
+- **Q17. The corpus set.** `races/`: 10 Skirmish seatings, 1 Field pair, 1 fortified pair, 2 human-bot logs (14; the corpus 111); or the 10 seatings alone (107). **The 14**: without the human logs no entry carries a burrower's command, and P-browser never plays one from the page.
+- **Q18. play-report's row.** **`'f5a'`**, three thresholds at ≥ 50% over the battles fielding each mechanic, `--sweep` as F9c's: a mechanic the AI never plays is not done (§4.2.9).
+- **Q19. The presets' form.** **The classic list ×2 and ×3, `'224222'` and `'336333'`**, as every race's: every classic digit ≤ 2, the Hive's 30 models filling Grand's 90 exactly, the Aerie's 27 to 81. Presets carry no vehicles.
+- **Q20. What F5b needs reserved.** **Rosters append-only from F5a's pins (F5b appends `beetle` and `basket`); those keys unused; the Hive's two Spinethrower squads (6 + 6, first among its Troops in roster order) fill the Beetle's 12; one Longbill squad (6) the Basket's 6; no Troops big, a wrecker or over `maxBase` 0.45.**
+- **Q21. The gallery.** **The title and thumbnail kept (title-shot pixel-identical); the description names four peoples**, `dist/` rebuilt; a re-shoot only with Q1(b).
+- **Q22. Heroes.** **One hero type a race**, first among its Heroes in roster order, at 60 as the older two (open question 22's default).
+- **Q23. The bump and the pins.** **`CORE_VERSION` 17** with the entry above; `PINNED` `17: V12`, `PINNED_UNDER` 17 (no new state); `RULES_ID` recorded by the Prices phase; the PIN moved to the last code commit for the new set alone.
+- **Q24. The races' names (design signal: names).** The **Deepdelve Hive** (short **Hivekin**) and the **Highwind Aerie** (short **Windfolk**), their heroes **Hivemother Kesh** and **Skyseer Varra**: invented, in the older races' form ("Bushtail Clans" / "Bushtails", "Coil of Ssithra" / "Serpents"); the keys `insect` and `bird` are F5b's data's and property's already (`sim/property.mjs:5623`).
+- **Q25. The rosters' shapes (design signal).** The Hive: no Monster and no flier, its burrowers its reach and the Boilback its gun; the Aerie: no Artillery and no burrower, five fliers and one walking line, the Roc its Monster. The other choices weighed: a Hive Monster (a big burrowing grub, too near F5b's Sapper Grub) and Aerie artillery (a stone-dropping wing, which flying Finches already are in small). Each race has a hole the other three can find.
+- **Q26. The AI's measure of a burrower with height.** (a) A walker's `levelDist`; (b) the straight line, as a flier's; (c) `levelDist` with the decks infinitely far. **(b)**: it passes under what a walker goes round and takes no gate; (c) would need a new field of the gate graph. Flat boards don't read it.
+- **Q27. A flying hero (design signal).** The Skyseer flies (no cover, eye 1.5, the circle); the Hivemother walks. Options: both walk, both their race's way, or as chosen. **As chosen**: the Aerie's hero leads from the air as its race does, and a burrowing Hivemother would leave the Hive's caster under the ground of every fort with nothing to climb.
+- **Q28. Where the dive is valued.** **`aiCharge`'s gain alone**, never the position terms or a defender's loss (Q9): those weigh fights the unit didn't choose.
+- **Q29. The default seat races.** **`CLASSIC` stays squirrel against serpent** (`data/mission.js:389`): the title's backdrop, every harness and title-shot read it.
+
 #### 4.2.9 Checks, gates and corpora
 
 R8b built the re-entry check (merge-sim's `reenter` scenario and its no-guard mutant), the reserved-names lint, `sim/fold-cost.mjs` and the `stateHash` pin; the rows below are what the large battles add.
@@ -4074,6 +4652,7 @@ R8b built the re-entry check (merge-sim's `reenter` scenario and its no-guard mu
 | P-present | `y`, `aboard` and (F9b) `f` in the mirror equal `project(G)`. Its self-test drops `unit.embark`, a rider's carry and a pivot's `f`, and catches each. (As built at F9b: a place's `f` dropped too; the walk-order rule ported for a long hull's line.) | F7a, F9a, F9b |
 | P-prop (additions) | At every command boundary: nav clean, `terrain.dropped` empty, `G.nav.memo` null. A classic match's `shadowState` strings are unchanged across F9a, F9b and F11a. | F7c, F9a, F9b, F11a |
 | **P-army** (`sim/property.mjs`) | 100,000 fuzzed `army` values (numbers, arrays, objects, letters, unicode, leading and trailing zeros, over-long, `__proto__`) are refused with an `Error` and never crash anything else; every accepted list round-trips (`listText(armyOf(…).counts)`); `autoList` over seeds 1-1,000 × races × missions is always legal; the number of units equals the digit sum, in roster order; 50 random legal lists per mission play to the end under `strict`, with P-prop's invariants at every boundary (as built at F11a, on Skirmish: 40 AI-against-AI battles and 10 with a human seat). **Hull deployment** at Field and Grand, with random cap lists: every unit, riders included, placed where `place` would accept it. (F9a) Two War-Carts a side (Bushtail mirrors, and Bushtails against the Coil). (F9b) Two Howdahs on the Coil side as well (as built: placed with `f`, held to P-hull). (F5b) Every race's hulls. | F11a, F9a, F9b, F5b |
+| **P-races** (`sim/property.mjs --only races`) | (F5a, §4.2.12) Scenes on flat and fortified boards: a burrower tunnels under a wall a walker goes round, never under rock, never ends in soft or rough scenery, never stands above `STEP` or takes a link, passes under a keg leaving it whole, is forbidden enemies' bubbles, charges and falls back in its mode, its pulled path on its field; a swarm's one `roll(G, ones)` straight after the wound roll and before the save roll while `min` stand, none below `min` or with no 1; a swooper's dive on its own charge turn alone, not in the opponent's fight phase with `flags.charged` still set, nor engaged without charging. Seven mutants (`burrow-walks`, `burrow-decks`, `burrow-diff`, `swarm-always`, `swarm-late`, `swoop-every-turn`, `swoop-hits`). | F5a |
 | **army-sim** (`sim/army-sim.mjs`) | `--check`: the score gates and the per-unit gate of §4.2.8.2, for every race pair on every set the mission offers. `--fit`: the fitted price table (a report). `--jobs N`. (As built: `--self-test` too, the sound table and two broken ones at N 300 / 600; the fit's budgets drawn from 80-120% and played at most at the limit; the score gate on lists built at the limit.) | F11a, F5a, F7a, F7b, F7c, F8b, F9a, F9b, F5b, every price change |
 | merge-sim | Bursts of 25 macro entries from one seat with concurrent junk; `pilot` in every phase; `embark` in the deployment from both seats at once (they commute); (F11a) starts carrying two lists (as built: the `lists` scenario, two AI pairs, and seven illegal-list starts refused alike on every peer); (F9b) `move`, `place` and `chargeEnd` with and without `f`, junk `f` (8, −1, 2.5, on a round unit) refused alike on every peer (as built at F9b: the `hulls` scenario and `badhull` junk); the new corpora's human logs. (Concurrent lobby edits are N2's lobby rig's and `sim/peers.mjs`'s: merge-sim folds entry lists, and the lobby is an Automerge map.) | F10b, F9a, F11a, F9b |
 | P-peers | Re-run over the `pilot/` logs (F10b), and over a Grand log with macro bursts and `pilot` (F8b); N1 measured a synthetic 465-entry log's document bytes (est. 50-100 KB), F8b measures a real one. | F10b, F8b |
@@ -4099,6 +4678,7 @@ R8b built the re-entry check (merge-sim's `reenter` scenario and its no-guard mu
 | F9a | `vehicle/` AI pairs | Riders disembark in ≥ 50% of battles. |
 | F9b | `hull/` | Howdahs move in ≥ 90% of their movement phases; ≥ 90% of long-hull moves end where the hull can pivot at least one way; riders disembark from a long hull in ≥ 50% of battles. (As built: `--row f9b`, `sim/hull-probe.mjs`'s counts over `hull/`'s four AI pairs: 46 of 48 (96%), 46 of 46, 4 of 4; met after the anti-bunching tuning, F9b's notes.) |
 | F9c | `vehicle/` and `hull/`, each shape | A firing deck fires in ≥ 50% of battles. (As built: `--row f9c`, `sim/rider-probe.mjs`'s `hullDeckShots` over the 10 AI pairs, one check per hull fielded: the War-Cart's deck fires in 10 of 10, the Howdah's in 3 of 4 (75%); `--sweep 16` from 9800 reads 15 of 16 and 8 of 16, the Howdah on the line; F9c's notes.) |
+| F5a | `races/` AI pairs (§4.2.12) | Over the battles fielding each: a burrower tunnels (a walk crossing a cell a walker's disc can't stand on) in ≥ 50%; a swarm re-rolls its wound 1s in ≥ 50%; a swooper fights on its own charge turn in ≥ 50% (`sim/race-probe.mjs`'s counts; `--sweep 16` from 9900). |
 | F10b | 4 Grand battles with one army on `pilot` every phase (at F8b) | That army reaches melee by round 3 in ≥ 3 of 4. |
 | F19a | `keg/` AI pairs | The powder keg goes off in ≥ 50% of battles. (Built at F19a: a `keg.fuse` among the battle's events; with no `keg/` AI pair in the corpus, a sweep of 12 keg battles. Beside it, per battle, the round, who set it off and how, and whom its blast slew.) |
 | F10c | P-macro's March scenarios (one with a long hull, from F9b) | A march to a reachable slot within 3 turns' reach arrives in ≥ 80%. |
@@ -4123,6 +4703,7 @@ R8b built the re-entry check (merge-sim's `reenter` scenario and its no-guard mu
 | `vehicle/` | 6 AI pairs with War-Carts (against serpents, and Bushtail mirrors), plus 4 human logs (embark, disembark, a forced bail-out with deaths, the autoload re-arranged in the deployment). Re-recorded at F9c (deck fire); extended at F9d. (As built at F9c: the six AI pairs recorded again; `hotseat-ride-embark-1`, `hotseat-ride-rearranged-61` and `bushtail-ride-disembark-21` played again by their bots, the first two with a rider's deck shot (`deckfire`); `bushtail-random-bail-3` replaced by `bushtail-random-bail-1`, whose Coil fields two Howdahs; F9c's notes.) | F9a |
 | `hull/` | 4 AI pairs (Field and Grand, half fortified) with Howdahs, plus 2 human logs: a pivot in a tight lane with an explicit `f`, a reverse, a Howdah charge ending with `f`, and a bail-out from a long hull. Re-recorded at F9c; extended at F5b with the Beetle and the Sky-Basket. (As built: `watch-hulls-field-1`, `-field-fort-1`, `-grand-1`, `-grand-fort-1`, `hotseat-hull-pivot-1` and `hotseat-hull-bail-7`; F9b's notes. As built at F9c: the four AI pairs recorded again, `hotseat-hull-pivot-1` played again by its bot with `deckfire`, `hotseat-hull-bail-7` replaced by `hotseat-hull-bail-1` (`hullbail`, `hullcharge`, `deckfire`); F9c's notes.) | F9b |
 | `keg/` | 2 AI pairs on the keg mission (watch-keg-1, -4) and 1 human-bot hotseat log (hotseat-aggressive-keg-2), each seat its classic preset, each with the keg going off (`corpus-add --need keg`). | F19a |
+| `races/` | (F5a, §4.2.12) 10 Skirmish AI pairs, every seating of the five new pairings (the Hive and the Aerie against each other and each older race, both seat orders), on the classic presets; 1 Field AI pair (the Hive against the Aerie on their `field` presets, `open`); 1 Skirmish fortified AI pair (the Hive against the Coil); 2 human-bot logs (`--need burrowed,swarmed`; `--need swooped`). 14 battles, the corpus 97 → 111. | F5a |
 
 **The 40 classic battles stay byte-identical through every step**: their setups name no army, and no unit in them has a footprint or rides. A bump re-records only the corpora whose battles change.
 

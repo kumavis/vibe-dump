@@ -1873,7 +1873,25 @@ follows N3.
 - [ ] **F5a** New races: insectoids (burrow, swarm) and bird-people (fly,
   swoop), each priced for the army builder against the other races, with
   their Field and Grand presets. (Moved behind F9c after F8a, the user's
-  call: the big boards and vehicles come first.)
+  call: the big boards and vehicles come first.) Designed in DESIGN
+  §4.2.12: the Deepdelve Hive (`insect`: Hivemother Kesh, Deepguard,
+  Spinethrower Brood, Delver Swarm, Hopper Lancers, Boilback Bombardier)
+  and the Highwind Aerie (`bird`: Skyseer Varra, Stormtalon Guard,
+  Longbill Pikes, Finch Flock, Kestrel Divers, Greatwing Roc), each file
+  written out there in full; the burrow mode on the hard field
+  (`clearHard`, a deck kept hard by the height branch's floor test and
+  cliff), swarm's re-roll of the fight's wound 1s while `min` stand, and
+  swoop's "Dive", +`chargeS` Strength in the fight of the turn the unit
+  charged (`flags.charged` on its own seat's turn), each a branch only
+  its flag reaches (rule 30: the 97 battles byte-identical); the AI's
+  `meleeValue` and its straight-line measure of a burrower (rule 10);
+  `CORE_VERSION` 17, `PINNED` 17 as V12; the figures in both styles, four
+  projectile styles, two voices, the title kept; the prices fitted at
+  Skirmish against both older races (army-sim `--races`) and judged on
+  every race pair, Field's `prices` only where its gates ask; the
+  `races/` set, 14 battles (the corpus 111); decisions Q1-Q29, the design
+  signals marked. Phases: Rules, View, Prices, Corpus, Sweep, Review, Fix
+  (§4.2.12's staging table, each with its gate).
 - [ ] **F5b** The new races' vehicles: the insectoids' Brood Beetle and the
   bird-people's Sky-Basket (which may land on ramparts). (From F7c: a
   Basket landed on a timber platform falls with it as any unit does,
