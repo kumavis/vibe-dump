@@ -36,7 +36,12 @@
 //      dice never moved; and the whole pass over each entry folds the
 //      marked events to the match (project(G)) at every entry's end.
 //      (F9a) One of them a Field battle with War-Carts: a rider is no eye
-//      and is seen exactly when its hull is.
+//      and is seen exactly when its hull is. ((F9c) A rider is an eye from
+//      its hull's deck; (F9c's review) and hull/'s two human logs, a
+//      Howdah's ghost asked after at its heading as last seen);
+//   5. (F9c's review, Q15) a deck's eye over a wall: an enemy the seat sees
+//      from a Howdah's deck alone, the hull and the rider's ground eye
+//      blind to it.
 //
 //   node sim/fog-check.mjs
 //
@@ -250,13 +255,20 @@ section('4. the sight pass on corpus battles: the core\'s own sight, entry by en
   // sight with its eye-height override, as its shots see)
   // ((F7c) and fort/'s collapse log: two platforms shot out, a unit falling
   // with each, its fall's D3 row among the events marked)
-  const logs = ['sim/baselines/human/bushtail-random-6.json', 'sim/baselines/fort/hotseat-aggressive-climb-5.json', 'sim/baselines/fort/hotseat-collapse-platform-8.json', 'sim/baselines/scale/hotseat-aggressive-field-1.json', 'sim/baselines/scale/hotseat-pilot-grand-1.json', 'sim/baselines/vehicle/bushtail-random-bail-1.json']
+  // ((F9c's review) and hull/'s two human logs, Howdahs met, hidden and
+  // seen again: a long hull's ghost asked after at its heading as last seen
+  // (the fog's record had kept none, and sight threw at its stand-in);
+  // their riders eyes from the Howdah's deck too. Neither log, nor the
+  // War-Cart's, meets an enemy seen from a deck alone (a War-Cart rider's
+  // 0.7 + 0.95" eye sits under its cart's 1.9" at the same point), so the
+  // deck eye's rule is held by the scene after them)
+  const logs = ['sim/baselines/human/bushtail-random-6.json', 'sim/baselines/fort/hotseat-aggressive-climb-5.json', 'sim/baselines/fort/hotseat-collapse-platform-8.json', 'sim/baselines/scale/hotseat-aggressive-field-1.json', 'sim/baselines/scale/hotseat-pilot-grand-1.json', 'sim/baselines/vehicle/bushtail-random-bail-1.json', 'sim/baselines/hull/hotseat-hull-pivot-1.json', 'sim/baselines/hull/hotseat-hull-bail-1.json']
   for (const file of logs) {
     const log = JSON.parse(readFileSync(join(PKG, file), 'utf8'))
     const G = core.createMatch(log.setup, { out: [] })
     const cache = new Map()
     const Fs = [fogStart(0), fogStart(1)]
-    let entries = 0, pairs = 0, hiddenSeen = 0, wrong = null, standIn = null, cacheWrong = null, rngMoved = null, mirrorWrong = null, ghosts = 0, riders = 0, deckEyes = 0, deckOnly = 0
+    let entries = 0, pairs = 0, hiddenSeen = 0, wrong = null, standIn = null, cacheWrong = null, rngMoved = null, mirrorWrong = null, ghosts = 0, riders = 0, deckEyes = 0, deckOnly = 0, hullGhosts = 0
     const pass = (events) => {
       entries++
       const M = project(G)
@@ -265,6 +277,7 @@ section('4. the sight pass on corpus battles: the core\'s own sight, entry by en
         const F = Fs[seat]
         const rng = core.q.rngState(G.rng)
         const ask = { seat, ...fogAsks(F, M), lands: fogLands(events) }
+        for (const [id, rec] of ask.places) if (G.units.find((u) => u.id === id)?.t.fp && rec.f !== undefined) hullGhosts++
         const got = core.preview(G, (g, q) => fogSight(g, q, ask, seat === 0 ? cache : null))
         if (core.q.rngState(G.rng) !== rng) rngMoved ??= `entry ${entries}`
         // the brute force: every pair, the core's sight ((F9a) over the
@@ -285,7 +298,9 @@ section('4. the sight pass on corpus battles: the core\'s own sight, entry by en
         hiddenSeen += foes.length - want.size
         // a stand-in for each enemy where it stands, as a ghost's place is
         // asked: seen exactly when the unit is
-        const places = new Map(foes.map((e) => [e.id, { pos: { ...e.pos }, r: e.r, models: e.models.map((m) => ({ ...m })) }]))
+        // ((F9c's review) a long hull's at its heading, as the fog's
+        // record keeps it)
+        const places = new Map(foes.map((e) => [e.id, { pos: { ...e.pos }, r: e.r, ...(e.t.fp ? { f: e.facing } : {}), models: e.models.map((m) => ({ ...m })) }]))
         const probe = core.preview(G, (g, q) => fogSight(g, q, { seat, places }, null))
         for (const e of foes) if (!want.has(e.id) && probe.places.has(e.id)) standIn ??= `entry ${entries}: unit ${e.id} unseen, its stand-in seen`
         const unseen = core.preview(G, (g, q) => fogSight(g, q, { seat, places: new Map(foes.filter((e) => !want.has(e.id)).map((e) => [e.id, places.get(e.id)])) }, null))
@@ -320,10 +335,65 @@ section('4. the sight pass on corpus battles: the core\'s own sight, entry by en
     // rider rule went unchecked)
     if (file.includes('/vehicle/')) check(riders > 0, `${file}: riders were seen with their hulls (${riders} rider-entries)`, 'no rider was ever seen aboard a hull')
     // ((F9c) and its riders were eyes from their decks)
-    if (file.includes('/vehicle/')) check(deckEyes > 0, `${file}: the seats' riders were eyes from their decks (${deckEyes} rider-entries; ${deckOnly} enemy-entries seen from a deck alone)`, 'no rider was ever an eye aboard its hull')
+    if (file.includes('/vehicle/') || file.includes('/hull/')) check(deckEyes > 0, `${file}: the seats' riders were eyes from their decks (${deckEyes} rider-entries; ${deckOnly} enemy-entries seen from a deck alone)`, 'no rider was ever an eye aboard its hull')
+    // ((F9c's review) a Howdah's ghost asked after at its heading)
+    if (file.includes('/hull/')) check(hullGhosts > 0, `${file}: a long hull's last place asked after at its heading as last seen (${hullGhosts} asks)`, 'no Howdah was ever a ghost, so its stand-in went unasked')
     check(!standIn, `${file}: a stand-in for each unseen enemy where it stands is never seen (a ghost's place reads as the unit does)`, standIn)
     check(!rngMoved, `${file}: the dice never moved`, rngMoved)
     check(!mirrorWrong, `${file}: every entry's marked events fold the last entry's mirror to the match (project(G)); ghosts at most ${ghosts}`, mirrorWrong)
+  }
+}
+
+// ── 5. A deck's eye over a wall (F9c's review, Q15) ────────────────────────
+// The Coil's Howdah behind a wall, an enemy War-Cart beyond it, every other
+// unit of both seats on the table fallen and every other hull's riders
+// with them: the Howdah's own sight and its rider's eye on the ground of
+// the deck point blind to the cart, the rider's deck eye (its hull's floor
+// + deckY + its own, 1.65 + 0.95") over the wall. Under the fog the seat
+// sees the cart (and its riders with it): it is seen from the deck alone,
+// so a fog that dropped its deck eyes, or gave them the ground's or the
+// hull's eye, hides it.
+section("5. a deck's eye over a wall: an enemy the seat sees from a Howdah's deck alone")
+{
+  const U = await imp('core/units.js'), q = core.q
+  const setup = { board: 4242, dice: 99, mission: 'field', terrain: 'open', seats: [{ race: 'squirrel', ctrl: 'human', army: '2143112' }, { race: 'serpent', ctrl: 'human', army: '2145112' }] }
+  const G = core.createMatch(setup, { out: [] })
+  for (const s of [0, 1]) core.apply(G, s, { t: 'deployed' })
+  const how = G.units.find((u) => u.side === 1 && u.t.fp && q.riders(G, u).some((p) => p.t.ranged))
+  const gun = how && q.riders(G, how).find((p) => p.t.ranged), e = G.units.find((u) => u.side === 0 && u.t.transport && u.alive > 0)
+  let found = null
+  if (how && e) {
+    const eye = q.deckEye(G, gun)
+    for (const ch of G.terrain.chunks) {
+      if (found || ch.los !== 'block' || !ch.alive) continue
+      const ext = Math.hypot(ch.shape.hx, ch.shape.hz)
+      for (let k = 0; k < 8 && !found; k++) for (const near of [0.2, 0.6, 1.2, 2]) {
+        const ux = Math.cos((k * Math.PI) / 4), uz = Math.sin((k * Math.PI) / 4)
+        const vx = ch.shape.x - ux * (ext + how.r + near), vz = ch.shape.z - uz * (ext + how.r + near), ex = ch.shape.x + ux * (ext + e.r + 4), ez = ch.shape.z + uz * (ext + e.r + 4)
+        if (Math.abs(vx) > G.nav.W / 2 - 3 || Math.abs(ex) > G.nav.W / 2 - 2 || Math.abs(vz) > G.nav.H / 2 - 3 || Math.abs(ez) > G.nav.H / 2 - 2) continue
+        U.moveUnitTo(G, how, vx, vz)
+        U.moveUnitTo(G, e, ex, ez)
+        const at = q.deckPoint(how)
+        if (q.sight(G, gun, e, at, undefined, eye).visible && !q.sight(G, gun, e, at).visible && !q.sight(G, how, e).visible) {
+          found = { chunk: ch.id, top: ch.shape.y + ch.shape.hy, eye }
+          break
+        }
+      }
+    }
+  }
+  check(!!found, `board ${setup.board}: a wall hides an enemy War-Cart from a Howdah and from its rider's eye on the ground, not from the rider's deck eye${found ? ` (chunk ${found.chunk}, its top ${found.top.toFixed(2)}", the deck eye ${found.eye.toFixed(2)}")` : ''}`, `no such wall, or no Howdah with a gunned rider and no War-Cart, on board ${setup.board}`)
+  if (found) {
+    for (const u of G.units) if (u !== how && u !== e && !(u.aboard && (u.aboard === how.id || u.aboard === e.id))) u.alive = 0
+    const rng = q.rngState(G.rng)
+    const got = core.preview(G, (g, qq) => fogSight(g, qq, { seat: 1 }, null))
+    const cartRiders = q.riders(G, e).map((p) => p.id)
+    check(got.units.has(e.id) && cartRiders.every((id) => got.units.has(id)), `the seat sees the War-Cart (and its ${cartRiders.length} riders) from the Howdah's deck alone`, `fogSight's units: ${[...got.units].join(', ') || 'none'}; want ${[e.id, ...cartRiders].join(', ')}`)
+    // and the other way: the cart's seat, its riders' eye under the cart's,
+    // never sees the Howdah through the wall it can't see past
+    const back = core.preview(G, (g, qq) => fogSight(g, qq, { seat: 0 }, null))
+    const want = q.sight(G, e, how).visible || q.riders(G, e).some((p) => q.sight(G, p, how, q.deckPoint(e), undefined, q.deckEye(G, p)).visible)
+    check(back.units.has(how.id) === want, `the War-Cart's seat sees the Howdah exactly when the cart or a deck eye of its does (${want})`, `fogSight says ${back.units.has(how.id)}`)
+    check(q.rngState(G.rng) === rng, 'the dice never moved')
   }
 }
 

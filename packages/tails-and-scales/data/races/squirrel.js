@@ -113,9 +113,10 @@ export default {
       // and the Howdah in its own; at 20 the scores sit nearer even (51.9%
       // and 52.9%, 54.1% and 53.2%) but the cart misses its band on 4444
       // (−17 ± 18, band 36) and the Howdah on 1111; kept at 40 (the Howdah
-      // 20) they pass too, but both hulls miss their bands. So 15, the
-      // lowest price the score gates take, nearest the fit. The points bind
-      // 876 of 1,000 Bushtail lists at 15 (993 at 40). Grand keeps its 150.)
+      // 20) they pass too, but both hulls miss their bands on 4444 and the
+      // Howdah on 1111. So 15, the lowest price the score gates take,
+      // nearest the fit. The points bind 876 of 1,000 Bushtail lists at 15
+      // (993 at 40). Grand keeps its 150.)
       cost: 15,
       stats: 'M8 WS5 BS4 S5 T7 W10 A3 Ld8 Sv3 OC0', big: true, wrecker: true, vehicle: true,
       transport: { capacity: 12, maxBase: 0.45, fire: 2, deck: 1.4, deckY: 0.7, wreck: { hx: 1.4, hy: 0.6, hz: 1.4 } },

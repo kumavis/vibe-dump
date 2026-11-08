@@ -5436,6 +5436,55 @@ function ridesScenes(core, mods, mirror, RACES, MISSIONS) {
     c.deckSpell = 1
     c.scenes++
   }
+
+  // 13. (F9c's review, Q5) a lob from the deck on a board with height: the
+  // Grenadiers aboard a War-Cart on the ground, an enemy squad on a raised
+  // deck (a fortified board: scene 10's open one has no height, where
+  // rangeOf is the printed range whatever it does); the lob's reach
+  // √(R² + 2hR), h the floor under the hull's deck point less the target's
+  // (the deck's height adding nothing), legal() taking the target 0.1"
+  // inside it from the hull's edge and refusing it 0.1" past
+  if (q.fireSlots) {
+    const where = 'scene: a lob from the deck at a raised target'
+    const { G, look, snap } = sceneMatch(core, mods, mirror, { battle: true, terrain: 'fortified' })
+    const s = G.pending.seats[0], nav = G.nav
+    const v = hullsOf(G, s).find((h) => q.riders(G, h).some((p) => p.t.ranged?.blast))
+    const lob = v && q.riders(G, v).find((p) => p.t.ranged?.blast)
+    const tg = G.units.find((u) => u.side !== s && u.alive > 0 && !u.aboard && !u.t.transport)
+    if (!v || !lob || !tg || !nav.hasHeight) throw new Error(`${where}: no War-Cart of seat ${s}'s carrying a Grenadiers squad, no enemy squad, or no height on the fortified board`)
+    farOff(G, [v, tg])
+    const R = lob.t.ranged.range, deckY = v.t.transport.deckY
+    let found = null
+    for (let i = 0; i < nav.N && !found; i++) {
+      if (!(nav.floor[i] >= 1) || !nav.standable(i, tg.r, 'walk')) continue
+      const tx = nav.x(i), tz = nav.z(i)
+      mods.units.moveUnitTo(G, tg, tx, tz)
+      const h = -q.groundY(G, tg), want = Math.sqrt(R * R + 2 * h * R)
+      if (!(want > 1)) continue
+      for (let b = 0; b < 16 && !found; b++) {
+        const ux = Math.cos((b * Math.PI) / 8), uz = Math.sin((b * Math.PI) / 8)
+        const at = (d) => ({ x: tx - ux * (v.r + tg.r + d), z: tz - uz * (v.r + tg.r + d) })
+        const ins = at(want - 0.1), out = at(want + 0.1)
+        if ([ins, out].some((p) => Math.abs(p.x) > nav.W / 2 - 2 || Math.abs(p.z) > nav.H / 2 - 2 || q.floorAt(G, p.x, p.z) !== 0 || !nav.standable(nav.index(p.x, p.z), v.r, 'walk'))) continue
+        mods.units.moveUnitTo(G, v, ins.x, ins.z)
+        const info = q.shotInfo(G, lob, tg)
+        if (!info.ok) continue
+        found = { i, ins, out, h, want, info }
+      }
+    }
+    if (!found) throw new Error(`${where}: no raised cell on the fortified board with open ground ${R}" or so below it from which a War-Cart's Grenadiers see a squad on it`)
+    const { ins, out, h, want, info } = found
+    if (!(Math.abs(info.reach - want) < 1e-9) || !(Math.abs(info.range - (want - 0.1)) < 1e-6)) throw new Error(`${where}: the Grenadiers' lob from the deck at a target ${(-h).toFixed(2)}" up reads ${JSON.stringify({ range: info.range, reach: info.reach })}: want its reach √(R² + 2hR) = ${want.toFixed(3)}" with h the hull's floor less the target's (the deck's ${deckY}" adding nothing: ${Math.sqrt(R * R + 2 * (h + deckY) * R).toFixed(3)}" with it), the range ${(want - 0.1).toFixed(3)}" from the hull's edge`)
+    snap()
+    ended(G, s, where)
+    look(`${where}, the shooting phase`)
+    legalOk(G, s, { t: 'shoot', u: lob.id, tg: tg.id }, `${where} (the target ${(want - 0.1).toFixed(2)}" from the hull's edge, its reach ${want.toFixed(2)}")`)
+    mods.units.moveUnitTo(G, v, out.x, out.z)
+    snap()
+    refused(G, s, { t: 'shoot', u: lob.id, tg: tg.id }, /out of range/, `${where} (the target ${(want + 0.1).toFixed(2)}" from the hull's edge, its reach ${want.toFixed(2)}")`)
+    c.deckLob = -h
+    c.scenes++
+  }
   return c
 }
 // ── P-army: the deployment at the caps with hulls (F9a) ──────────────────────
@@ -5900,7 +5949,7 @@ async function run(pkg, { games, seed, only, quiet = false, coverage = true, arm
       : t.kind === 'army' ? `${c.fuzz.fuzzed} armies fuzzed (${c.fuzz.refused} refused, ${c.fuzz.both} with both seats fuzzed; ${c.fuzz.taken} taken, ${c.fuzz.roundTrips} seats round-tripped, ${c.fuzz.made} made into matches), ${c.sweep} autoLists legal, ${c.shadow} classic shadows held`
         : t.kind === 'armyGames' ? `${c.listGames} AI battles between lists of ${c.budgets[0]}-${c.budgets[1]} points (score ${c.ends.score}, wipe ${c.ends.wipe})${c.hulls ? `, ${c.hulls} hulls fielded, ${c.bailed} bail-outs held to P-riders` : ''}`
           : t.kind === 'rides' ? `${c.battles} AI battles with War-Carts: ${c.lines} trace lines held to P-riders' state (${c.hidden} hidden-rider queries), ${c.autoloaded} riders autoloaded, riders stepping off ${c.steps} times (in ${c.stepped} battles), ${c.hullsDown} hulls destroyed with riders (${c.bailed} bailed out, ${c.lost} lost), ${c.wrecks} wrecks, the mirror held at ${c.acts} acts${c.deckShots !== undefined ? `; (F9c) ${c.deckShots} shots from a deck (${c.deckBlasts} templates) in ${c.decked} battles` : ''}`
-            : t.kind === 'ridesScene' ? `${c.scenes} scenes: ${c.autoloaded} riders autoloaded, ${c.hidden} hidden-rider queries, ${c.bailed} bailed out by an enemy's 1", ${c.lost} lost with nowhere to stand, the AI's friendly fire swept at ${c.sweep} places${c.deckShots ? `; (F9c) a volley and ${c.deckBlasts} templates thrown from a War-Cart's deck, its third rider refused, a shot over a wall ${c.deckEye.toFixed(2)}" high from the deck, ${c.longDeck} shots from a Howdah's deck at its 8 headings, ${c.deckSpell} spell cast from a deck` : ''}`
+            : t.kind === 'ridesScene' ? `${c.scenes} scenes: ${c.autoloaded} riders autoloaded, ${c.hidden} hidden-rider queries, ${c.bailed} bailed out by an enemy's 1", ${c.lost} lost with nowhere to stand, the AI's friendly fire swept at ${c.sweep} places${c.deckShots ? `; (F9c) a volley and ${c.deckBlasts} templates thrown from a War-Cart's deck, its third rider refused, a shot over a wall ${c.deckEye.toFixed(2)}" high from the deck, ${c.longDeck} shots from a Howdah's deck at its 8 headings, ${c.deckSpell} spell cast from a deck${c.deckLob ? `, a lob from a deck at a target ${c.deckLob.toFixed(2)}" up` : ''}` : ''}`
               : t.kind === 'hullDeploy' ? `${c.boards} deployments at the caps (${Object.entries(c.sets).map(([k, n]) => `${k} ${n}`).join(', ')}): ${c.hulls} hulls (${c.longs ?? 0} long hulls on the state place {f} takes), ${c.units} units on the table where place takes them, ${c.riders} riders aboard as the autoload and embark have them`
                 : `${c.ended}, ${c.probes} decisions, ${Object.entries(c.commands).map(([k, n]) => `${k} ${n}`).join(', ')}${c.rides ? ` (P-riders: ${c.rides.autoloaded} autoloaded, ${c.rides.hidden} hidden-rider queries, embark ${c.rides.embarkDeploy} in the deployment and ${c.rides.embarkPhase} in a phase, ${c.rides.steps} steps off, ${c.rides.bailed} bailed out, ${c.rides.lost} lost)` : ''}`
     say(`  ${label.padEnd(24)} ${r.ok ? `ok   ${what}` : `FAIL ${r.error}`}`)
@@ -6368,6 +6417,9 @@ const MUTATIONS = {
   'hull-advance-forgotten': ['core/actions/shoot.js', '    if (v.flags.advanced && !w.assault) return false\n', ''],
   'deck-eye-flat': ['core/actions/shoot.js', 'sight(G, u, target, deckPoint(v), undefined, deckEye(G, u))', 'sight(G, u, target, deckPoint(v))'],
   'range-from-rider': ['core/actions/shoot.js', 'const range = v ? gap(v, target) : gap(u, target), reach', 'const range = gap(u, target), reach'],
+  // ((F9c's review, scene 13) a lob from a deck reaching farther by the
+  // deck's height: Q5 has it reach its printed range, h from the floor)
+  'deck-lob-raised': ['core/actions/shoot.js', '  const R = w.range, h = floorAt(G, from.x, from.z) - (tg ? groundY(G, tg) : 0)\n', '  const R = w.range, h = floorAt(G, from.x, from.z) + (u.aboard ? 0.7 : 0) - (tg ? groundY(G, tg) : 0)\n'],
   // the AI moves a snared hull
   'snared-hull-moves': ['core/ai/policy.js', '    if (!v.snared) yield* aiMoveOne(G, v, hullRole(G, v), claimed)\n', '    yield* aiMoveOne(G, v, hullRole(G, v), claimed)\n'],
   // (F9b) P-lattice, each run on its own workload (P-lattice alone): the

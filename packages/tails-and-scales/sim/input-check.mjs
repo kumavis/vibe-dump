@@ -2867,6 +2867,30 @@ async function checkDeck(page, say) {
     return out
   }, { id: rider, tg: tg.id })
   if (!turned.length || turned.some((d) => d > 0.15)) fail(`unit ${rider}'s figures on the deck after its shot face ${JSON.stringify(turned)} rad off its target`)
+  // ((F9c's review, Q19) the place each rider figure's volleys leave from,
+  // the view's x and z, is its slot's place in the world, the off-centre
+  // slots among them, not its hull's)
+  const figs = await ev(() => window.__ts.view.deckFigures())
+  const slotOff = figs.filter((f) => Math.hypot(f.x - f.wx, f.z - f.wz) > 1e-3)
+  const offCentre = figs.filter((f) => f.hull === hull.id && Math.hypot(f.wx - hull.x, f.wz - hull.z) > 0.05)
+  if (!figs.length || slotOff.length || !offCentre.length) fail(`the rider figures on the decks: ${figs.length}, ${slotOff.length} whose volleys would leave from elsewhere than their slot (${JSON.stringify(slotOff[0] ?? null)}), ${offCentre.length} on the War-Cart's off-centre slots`)
+  // ((F9c's review) a snap of the table as it stands, as a peer's reload
+  // or catch-up draws it: the turned rider seated facing its hull's front,
+  // as a fresh table seats it and as the snap turns every table figure back
+  // to its unit's facing, and the table a fresh one's (snapDiff))
+  const snapped = await ev(async (id) => {
+    const ts = window.__ts
+    ts.player.snap(ts.G)
+    await new Promise((r) => setTimeout(r, 600))
+    const out = []
+    ts.scenery.scene.traverse((o) => {
+      if (o.userData?.rider !== id || o.userData.glow || o.parent?.userData?.deck === undefined) return
+      out.push(+Math.abs(((((o.rotation.y % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI)) - Math.PI)).toFixed(4))
+    })
+    return { yaws: out, diff: ts.view.snapDiff() }
+  }, rider)
+  if (!snapped.yaws.length || snapped.yaws.some((d) => d > 0.02) || snapped.diff.n) fail(`after a snap unit ${rider}'s figures on the deck face ${JSON.stringify(snapped.yaws)} rad off their hull's front (a fresh table's 0), the table ${snapped.diff.n} off a fresh one's: ${snapped.diff.diffs.slice(0, 2).join('; ')}`)
+  say(`deck: each rider figure's volleys leave from its slot (${figs.length} figures, ${offCentre.length} of the War-Cart's off its centre); a snap seated unit ${rider}'s ${snapped.yaws.length} figures facing the hull's front, as a fresh table does`)
   if (a.shots) await page.screenshot({ path: join(a.shots, 'deck-turned.png') })
   say(`deck: unit ${rider}'s chip picked it up ("${hint.slice(0, 40)}…"), its range ring round the War-Cart (${hull.r} + ${tg.reach}"), the tooltip the rules' ${want}, hit ${tg.need}+, "From the War-Cart's deck", ${beams.length} rays from the deck's eye at ${tg.eye.toFixed(2)}"; a click fired it, its ${turned.length} figures turned to the target`)
 
@@ -2875,6 +2899,33 @@ async function checkDeck(page, say) {
     const v = window.__ts.G.units.find((u) => u.id === id)
     return { id, x: v.pos.x, z: v.pos.z }
   }, B)
+  // ((F9c's review, Q17) the cards and the rules screen: a rider's card
+  // says it shoots from its hull's deck; the hull's its fire deck's line,
+  // the record's slots, its squads and models aboard of its capacity, and
+  // the copy; the rules screen's controls row and paragraph)
+  await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), found.b[0])
+  await page.waitForFunction(() => document.querySelector('#card.show .card-ride'), null, { timeout: 10000 }).catch(() => {})
+  const rideLine = await ev(() => document.querySelector('#card.show .card-ride')?.textContent ?? '')
+  if (!/Aboard the War-Cart · steps off as its move · shoots from its deck/.test(rideLine)) fail(`unit ${found.b[0]}'s card, a rider, reads "${rideLine}": not "Aboard the War-Cart · steps off as its move · shoots from its deck"`)
+  await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), B)
+  await page.waitForFunction(() => document.querySelector('#card.show .card-riders'), null, { timeout: 10000 }).catch(() => {})
+  const cargo = await ev((id) => {
+    const G = window.__ts.G, v = G.units.find((u) => u.id === id), rs = G.units.filter((u) => u.aboard === id && u.alive > 0)
+    return { line: document.querySelector('#card.show .card-riders')?.textContent ?? '', fire: v.t.transport.fire, capacity: v.t.transport.capacity, squads: rs.length, models: rs.reduce((n, u) => n + u.alive, 0) }
+  }, B)
+  const cargoWant = `Fire deck: ${cargo.fire} slots · ${cargo.squads} squads aboard · ${cargo.models}/${cargo.capacity} models`
+  if (!cargo.line.includes(cargoWant) || !cargo.line.includes("Riders shoot from the deck's height (sees over walls) and measure range from the hull's edge.")) fail(`the second War-Cart's card reads "${cargo.line}": not "${cargoWant}" and the deck's copy`)
+  await page.click('#helpBtn')
+  await page.waitForSelector('#help:not(.hidden)', { timeout: 10000 }).catch(() => {})
+  const rules = await ev(() => {
+    const h = document.querySelector('#help:not(.hidden)')
+    const row = [...(h?.querySelectorAll('tr') ?? [])].find((r) => r.querySelector('th')?.textContent === 'Fire from a deck')
+    return { row: row?.textContent ?? '', para: [...(h?.querySelectorAll('p') ?? [])].map((p) => p.textContent).find((t) => /fire deck/.test(t)) ?? '' }
+  })
+  await page.click('#helpClose')
+  await sleep(300)
+  if (!/pick up the vehicle, R, then click an enemy/.test(rules.row) || !/shoot from its deck/.test(rules.para) || !/see over walls/.test(rules.para)) fail(`the rules screen's "Fire from a deck" row reads "${rules.row.slice(0, 80)}" and its fire deck paragraph "${rules.para.slice(0, 80)}"`)
+  say(`deck: a rider's card "${rideLine.trim()}"; the second War-Cart's "${cargoWant}" with the deck's copy; the rules screen's "Fire from a deck" row and paragraph`)
   await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), B)
   await sleep(400)
   await page.keyboard.press('KeyR')
@@ -2908,6 +2959,12 @@ async function checkDeck(page, say) {
   const third = found.b.find((id) => !after.shot.includes(id)), why = after.why[found.b.indexOf(third)]
   if (!/the War-Cart's deck has fired 2 of its 2/.test(why ?? '')) fail(`the third rider, unit ${third}, refused with "${why}", not the deck's slots`)
   say(`deck: R with the second War-Cart picked up picked its 3 riders, the hover read "${gtip.slice(0, 32)}…", one click fired 2 of them; unit ${third} refused: "${why}"`)
+  // ((F9c's review) a template thrown from the deck winds up no lunge on
+  // it: ride() never plays one, so a lunge left there lurched the rider
+  // toward its last throw as it stepped off)
+  const thrown = await ev((ids) => ids.filter((id) => window.__ts.G.units.find((u) => u.id === id).t.ranged?.blast), after.shot)
+  const lunged = (await ev(() => window.__ts.view.deckFigures())).filter((f) => f.lunge > 0)
+  if (!thrown.length || lunged.length) fail(`the deck's group threw ${thrown.length} templates (one at least), and ${lunged.length} rider figures on a deck hold a lunge (${JSON.stringify(lunged[0] ?? null)})`)
   // the third unlit, and its chip picks nothing up
   st = await decks()
   const t3 = st.find((r) => r.id === third)
@@ -3112,6 +3169,18 @@ const DECK_EDITS = {
   'turn-kept': ['view/units.js', '    if (v.u.t.transport) for (const r of this.views.values()) for (const f of r.models) if (f.deck === e.u) f.deckLook = undefined\n', ''],
   // the look yaw the target's bearing in the table's frame, not the hull's
   'look-world': ['view/units.js', '      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z) - hm.rotation.y)\n', '      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z))\n'],
+  // ((F9c's review, Q19) a rider's place, its volleys', its hull's (F9a's),
+  // not its slot's
+  'volley-from-hull': ['view/units.js', '      const tr = hv.u.t.transport, shut = !!tr?.enclosed, at = shut ? hv.deck : m.mesh\n', '      const tr = hv.u.t.transport, shut = !!tr?.enclosed, at = shut ? hv.deck : h.mesh\n'],
+  // (F9c's review) a grenadier's wind-up set on a deck, where nothing plays it
+  // ((F9c's review) a snap keeping a rider's turn on its deck, where a fresh
+  // table seats it facing the front
+  'snap-keeps-turn': ['view/units.js', '        const seated = hop && f.mesh.parent === deck && f.deck === hullId\n', '        const seated = f.mesh.parent === deck && f.deck === hullId\n'],
+  // ((F9c's review) the hull's card counting its capacity as its slots, and
+  // the rules screen's deck row gone
+  'card-miscounted': ['ui/card.js', '<b>Fire deck:</b> ${tr.fire} slot${tr.fire === 1', '<b>Fire deck:</b> ${tr.capacity} slot${tr.fire === 1'],
+  'rules-row-gone': ['index.html', "          <tr><th>Fire from a deck</th>", "          <tr><th>Firing</th>"],
+  'deck-lunge': ['view/effects/shots.js', '    } else if (!src.deck) {\n', '    } else {\n'],
 }
 // every --self-test edit, with the row that must catch it
 const EDITS = { ...Object.fromEntries(Object.entries(HULL_EDITS).map(([k, e]) => [k, [...e, 'hulls']])), ...Object.fromEntries(Object.entries(DECK_EDITS).map(([k, e]) => [k, [...e, 'deck']])) }

@@ -1325,6 +1325,15 @@ export function boot(location) {
       },
       view: {
         snapDiff,
+        // ((F9c's review, not promised) every rider figure on a deck, as the
+        // view keeps it: its unit, the place its volleys leave from (the
+        // figure's x and z, ride()'s), its mesh's place in the world (its
+        // slot, through the deck group's matrix) and its lunge (a deck plays
+        // none): sim/input-check.mjs's deck row holds them)
+        deckFigures: () => [...view.units.views.values()].flatMap((v) => v.models.filter((f) => f.deck != null && f.mesh?.parent).map((f) => {
+          const w = f.mesh.getWorldPosition(new THREE.Vector3())
+          return { rider: v.id, hull: f.deck, x: f.x, z: f.z, wx: w.x, wz: w.z, lunge: f.lunge ?? 0 }
+        })),
         // ((V3a, not promised) the conditions' tips (sim/input-check.mjs's
         // tips lane): unit `id` shown under conditions forced on the table
         // as shown (`mu`: fields of its mirror record, `f`: of its facts in

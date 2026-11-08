@@ -71,7 +71,8 @@
 // bearing from where it stood as it faced, less its hull's yaw then, once
 // it has had TURN_SETTLE frames more to turn; one whose hull has since
 // turned to a target of its own is turned with it, unchecked; one that
-// faced nothing since, its hull's front), with some checkpoint after a
+// faced nothing since, or (F9c's review) rode through a snap, its hull's
+// front), with some checkpoint after a
 // shot holding a turned figure (the figures a hull's move turns back to
 // its front are counted, `resets`: neither watched battle has one, so
 // input-check's deck row holds that turn); no rider's glow lit (a watched battle lights no ring); and the
@@ -583,9 +584,10 @@ async function cartRow(browser, url, q = `mission=field&armies=${CART_ARMIES}`, 
                 }
                 const at = deck.looks.get(o), wrap = (x) => Math.abs(((((x % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI)) - Math.PI))
                 // (one whose hull turned to a target of its own since it
-                // faced, or riding through a snap: turned as its hull,
-                // unchecked)
-                if (at === null || deck.stale.has(r)) return
+                // faced: turned as its hull, unchecked; (F9c's review) one
+                // riding through a snap faces its hull's front, as on a
+                // fresh table)
+                if (at === null) return
                 // (none faced since its hull last moved: its hull's front)
                 if (at === undefined) {
                   if (!(wrap(o.rotation.y) <= TOL)) turn.push(`unit ${r}'s figure on the deck ${wrap(o.rotation.y).toFixed(3)} rad off its hull's front, no target faced since its hull moved`)
@@ -612,11 +614,10 @@ async function cartRow(browser, url, q = `mission=field&armies=${CART_ARMIES}`, 
         // it, { r, want }, as the view's face() takes it (from where the
         // figure stands as the event plays, less its hull's yaw), or null
         // once its hull has turned to a target of its own; none since its
-        // hull moved: its front. `stale`: riders aboard through a snap, their
-        // turns unknown until their hull moves.)
+        // hull moved, or since a snap seated it: its front.)
         // (`resets`: figures turned to a target whose hull then moved, so
         // must face its front again)
-        const deck = (sim.deck = { shots: 0, looks: new Map(), stale: new Set(), moved: false, resets: 0 })
+        const deck = (sim.deck = { shots: 0, looks: new Map(), moved: false, resets: 0 })
         const figures = (id) => {
           const out = []
           window.__ts.scenery.scene.traverse((o) => o.userData?.rider === id && !o.userData.glow && o.parent?.userData?.deck !== undefined && out.push(o))
@@ -635,7 +636,6 @@ async function cartRow(browser, url, q = `mission=field&armies=${CART_ARMIES}`, 
               const w = o.getWorldPosition(o.position.clone())
               deck.looks.set(o, { r: ev.u, want: Math.atan2(T.x - w.x, T.z - w.z) - o.parent.parent.rotation.y })
             }
-            deck.stale.delete(ev.u)
             deck.moved = true
           }
           // (a hull turning to a target of its own turns its riders with it)
@@ -644,15 +644,13 @@ async function cartRow(browser, url, q = `mission=field&armies=${CART_ARMIES}`, 
           if (ev.t === 'unit.move' && Object.values(M.units).some((x) => x.aboard === ev.u && x.alive > 0)) {
             for (const l of deck.looks.values()) if (l && M.units[l.r]?.aboard === ev.u) deck.resets++
             forget((r) => M.units[r]?.aboard === ev.u)
-            for (const r of [...deck.stale]) if (M.units[r]?.aboard === ev.u) deck.stale.delete(r)
             deck.moved = true
           }
           if (ev.t === 'unit.disembark' || ev.t === 'unit.embark') {
             forget((r) => r === ev.u)
-            deck.stale.delete(ev.u)
           }
         }
-        window.__ts.present.listen({ ...obs, event: (ev, M) => (ev.t === 'unit.disembark' && (sim[ev.forced ? 'bails' : 'steps'] = (sim[ev.forced ? 'bails' : 'steps'] ?? 0) + 1), onDeck(ev, M), obs?.event?.(ev, M)), reset: (M) => (deck.looks.clear(), Object.values(M.units).forEach((x) => x.aboard && x.alive > 0 && deck.stale.add(x.id)), obs?.reset?.(M)) })
+        window.__ts.present.listen({ ...obs, event: (ev, M) => (ev.t === 'unit.disembark' && (sim[ev.forced ? 'bails' : 'steps'] = (sim[ev.forced ? 'bails' : 'steps'] ?? 0) + 1), onDeck(ev, M), obs?.event?.(ev, M)), reset: (M) => (deck.looks.clear(), (deck.moved = true), obs?.reset?.(M)) })
       }
       hook()
     }})(${SETTLE}, ${TURN_TOL}, ${TURN_SETTLE})`)

@@ -86,8 +86,10 @@
 export const fogStart = (seat) => ({ seat, over: false, foes: [], seen: new Set(), fell: new Set(), last: new Map(), known: new Map(), table: null })
 
 // a mirror unit, as a record (models copied: the mirror folds in place)
-// ((V3c) its spell marks too, as last seen)
-const recOf = (mu) => ({ pos: { x: mu.pos.x, z: mu.pos.z }, y: mu.y ?? 0, r: mu.r, models: mu.models.map((m) => ({ w: m.w, alive: m.alive, ox: m.ox, oz: m.oz })), alive: mu.alive, mesmerized: !!mu.mesmerized, engaged: !!mu.engaged, snared: !!mu.snared, warded: !!mu.warded, resolute: !!mu.resolute })
+// ((V3c) its spell marks too, as last seen; (F9c's review) and a long
+// hull's heading, `f`, as last seen: its stand-in's discs stand at it, and
+// without it sight's discsOf read no heading and threw)
+const recOf = (mu) => ({ pos: { x: mu.pos.x, z: mu.pos.z }, y: mu.y ?? 0, r: mu.r, ...(mu.f !== undefined ? { f: mu.f } : {}), models: mu.models.map((m) => ({ w: m.w, alive: m.alive, ox: m.ox, oz: m.oz })), alive: mu.alive, mesmerized: !!mu.mesmerized, engaged: !!mu.engaged, snared: !!mu.snared, warded: !!mu.warded, resolute: !!mu.resolute })
 const chunkRec = (c) => ({ alive: c.alive, y: c.y })
 const sameChunk = (a, b) => !!a && !!b && a.alive === b.alive && a.y === b.y
 
@@ -156,7 +158,9 @@ export function fogSight(G, q, { seat, places = new Map(), chunks = [], lands = 
   for (const [id, rec] of places) {
     const u = byId.get(id)
     if (!u || units.has(id) || !rec.models.some((m) => m.alive)) continue
-    if (probe({ id, side: u.side, t: u.t, pos: rec.pos, r: rec.r, models: rec.models })) placesSeen.add(id)
+    // ((F9c's review) a long hull's stand-in at its heading as last seen,
+    // the unit's own where a record keeps none)
+    if (probe({ id, side: u.side, t: u.t, pos: rec.pos, r: rec.r, ...(u.t.fp ? { facing: rec.f ?? u.facing } : {}), models: rec.models })) placesSeen.add(id)
   }
   const chunkOf = new Map(G.terrain.chunks.map((c) => [c.id, c]))
   const chunksSeen = new Set()

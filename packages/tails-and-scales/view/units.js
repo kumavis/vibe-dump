@@ -572,7 +572,10 @@ export class UnitViews {
   // standing models in turn) on its deck's slots (present/deck.js). A figure
   // not on this deck yet hops on from where it stands (`hop`; a snap seats
   // it at once). An enclosed hull (F5b) shows none of them: its pips and
-  // label say who rides.
+  // label say who rides. ((F9c's review) A snap, `hop` false, seats every
+  // rider facing its hull's front, as a fresh table does and as the snap
+  // turns every table figure back to its unit's facing: a peer that
+  // reloads draws the riders as the others' tables do after the snap.)
   layDeck(hullId, hop = true) {
     const M = this.mirror(), hv = this.views.get(hullId), deck = this.deckOf(hv)
     if (!deck) return
@@ -589,8 +592,9 @@ export class UnitViews {
         // capacity)
         const s = slots[Math.min(k++, slots.length - 1)] ?? { x: 0, z: 0 }
         // ((F9c) one seated again on the deck it stands on keeps the turn
-        // it took there to its target; one new to it faces the hull's front)
-        const seated = f.mesh.parent === deck && f.deck === hullId
+        // it took there to its target; one new to it, or seated by a snap,
+        // faces the hull's front)
+        const seated = hop && f.mesh.parent === deck && f.deck === hullId
         if (f.mesh.parent !== deck) {
           if (hop && f.mesh.parent) {
             f.mesh.updateWorldMatrix(true, false)
@@ -672,11 +676,13 @@ export class UnitViews {
     }
     f.deck = null
     f.slot = null
-    // ((F9c) its glow and its look on the deck go with it)
+    // ((F9c) its glow and its look on the deck go with it; (F9c's review)
+    // and any lunge, which a deck never plays)
     f.glow?.removeFromParent()
     f.glow = null
     f.deckLook = undefined
     f.deckYaw = 0
+    f.lunge = 0
     // ((F16) one the fog veils stays veiled off the deck)
     f.mesh.visible = !(f.mesh.userData.rider !== undefined && this.hid(f.mesh.userData.rider))
     if (f.mesh.userData.base) f.mesh.userData.base.visible = true

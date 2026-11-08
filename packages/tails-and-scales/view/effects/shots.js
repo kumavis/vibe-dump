@@ -165,8 +165,10 @@ export class Shots {
       if (anim.globe) anim.globe.visible = false
       await wait(0.15)
       if (gone()) return
-    } else {
-      // a grenadier winds up
+    } else if (!src.deck) {
+      // a grenadier winds up ((F9c's review) on the table: ride() plays no
+      // lunge on a deck, and one set there was played as the rider stepped
+      // off, a lurch toward its last throw)
       src.lunge = 1
       src.lungeDir = Math.atan2(land.x - src.x, land.z - src.z)
     }
