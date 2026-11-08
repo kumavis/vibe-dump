@@ -132,13 +132,34 @@
 //               standing where its ghost stood, facing as it did; the other
 //               Howdah's double click on the ground sends it at once at
 //               the default heading (checkHulls)
+//   (F9c) deck  the firing decks (DESIGN §4.2.5's deck fire), each on a
+//               page of its own driven to the shooting phase it needs
+//               (deckDrive): with the carts, two War-Carts, the second
+//               carrying the Elder boarded by hand as a third squad for its
+//               two slots: the riders that can shoot glow on their decks
+//               and light their chips, and no other; a rider picked up by
+//               its chip names its deck and slots in the hint, its range
+//               ring round its cart, the tooltip's inches, reach and hit
+//               roll the rules' shotInfo, "From the War-Cart's deck", the
+//               LOS rays from the deck's eye, a click fires it and its
+//               figures turn on the deck to the target; R with the second
+//               cart picked up picks its three riders, "2 of 3 fire", one
+//               click fires two, and the third is refused with the slots'
+//               words, unlit, its chip picking nothing up; in the next turn
+//               the first cart driven on, its rider's figures facing its
+//               front again (checkDeck); with
+//               the hulls, a Howdah's rider on a diagonal heading picked up
+//               by its chip fires at a click, the tooltip the rules' and its
+//               rays from the deck's eye (checkHullDeck)
 // and no page error throughout.
 //
 //   node sim/input-check.mjs [--dist <dir>] [--shots <dir>] [--only aim|tips | --carts | --fort | --hulls]
 //   node sim/input-check.mjs --self-test [--mutations <names>]   (F9b) each
 //               edit of HULL_EDITS (the long hulls' input broken one way at
 //               a time, in a copy) must fail the hulls row, which the
-//               unedited code passes
+//               unedited code passes; (F9c) and each of DECK_EDITS (the
+//               firing deck's glow, chips, ring, rays, R and the riders'
+//               turn) the deck row, both its pages
 //
 // 1280×800, seed 4242, dice 1. --shots writes a screenshot at each step;
 // (F13) --only aim plays the touch aim's cases alone; (V3a) --only tips the
@@ -2632,6 +2653,467 @@ async function fortified(browser, url, say) {
   }
 }
 
+// (F9c, DESIGN §4.2.5's "Deck fire", §4.2.9's input-check row) The firing
+// deck's input, on pages of their own. A battle is driven to the shooting
+// phase it needs through the session (each of seat 0's hulls driven at the
+// nearest enemy each movement phase, to a cell at least 6" off it, every
+// other decision ended: deckDrive), then played by the mouse and the keys.
+// The War-Carts' (`deck`, with --carts): a hotseat Field battle whose
+// Bushtails field two War-Carts (DECK_ARMIES), the Elder boarded onto the
+// second by hand in the deployment, so its deck carries three squads for
+// its two slots; in seat 0's shooting phase, once a rider of the first
+// cart and all three of the second's can shoot:
+//   - every rider aboard that can shoot glows on its deck (a halo about
+//     each of its figures standing there, view/units.js's deckGlow) and
+//     lights its chip on its hull's label, and no other does;
+//   - the first cart's rider picked up by its chip: the hint names the
+//     deck and its slots left, the range ring stands round the cart (its
+//     position the cart's, its radius the cart's r and the rules' reach
+//     from the deck, rangeOf at the deck point); hovering an enemy, the
+//     tooltip's inches, reach and hit roll are the rules' shotInfo for the
+//     rider, it says the shot goes from the deck, and the LOS rays leave
+//     the deck's eye (the deck point at deckY + the rider's eye); a click
+//     fires it (the rider's shot, nobody else's), its figures turning on
+//     the deck to the target;
+//   - the second cart picked up alone, R picks up its three riders
+//     together (no other unit), the hover over an enemy says "2 of 3
+//     fire", and one click fires the deck: two shots, its slots spent;
+//   - the third rider then can't shoot: the match refuses it with the
+//     slots' words ("the War-Cart's deck has fired 2 of its 2"), its chip
+//     unlit and its glow out, and a click on its chip picks nothing up;
+//   - in seat 0's next movement phase the first cart driven on: the
+//     figures of the rider that shot from it face its front again (the
+//     turn held until the hull's next move, decision Q19).
+// The Howdah's (`howdah deck`, with --hulls): a hotseat Field battle whose
+// Coil fields two Howdahs (HULL_ARMIES), driven to a diagonal facing; in
+// seat 0's shooting phase a rider of a Howdah standing on a diagonal heading
+// picked up by its chip fires at an enemy by a click, the tooltip's inches
+// the rules' and its rays from the deck's eye.
+const DECK_ARMIES = 'mission=field&armies=1222112,field'
+async function deckDrive(page, move, ready, fail) {
+  for (let k = 0; k < 200; k++) {
+    await page.waitForFunction(() => window.__ts.player.idle && !window.__ts.group.busy(), null, { timeout: IDLE_MS })
+    const st = await page.evaluate(() => {
+      const ts = window.__ts, P = ts.G.pending
+      return { k: P?.k ?? null, phase: P?.phase ?? null, d: ts.session.decisionFor(), stage: ts.G.turn.stage, round: ts.G.turn.round }
+    })
+    if (st.stage === 'over') fail(`the battle ended (round ${st.round}) before seat 0's shooting phase had what the lane needs`)
+    if (st.d === 0 && st.k === 'phase' && st.phase === 'move') {
+      const sent = await page.evaluate(move)
+      if (sent) continue
+    }
+    if (st.d === 0 && st.k === 'phase' && st.phase === 'shoot') {
+      const r = await page.evaluate(ready)
+      if (r) return r
+    }
+    if (st.d >= 0) await page.evaluate(() => window.__ts.endPhase())
+    else await sleep(300)
+  }
+  fail("200 decisions played and seat 0's shooting phase never had what the lane needs")
+}
+// (in the page) seat 0's next hull to drive, sent: a War-Cart to the
+// reachable cell nearest its nearest enemy at least 6" off it; a Howdah the
+// same on a diagonal heading (odd f) alone
+function driveHulls() {
+  const ts = window.__ts, G = ts.G, nav = ts.nav
+  for (const v of G.units) {
+    if (v.side !== 0 || !v.t.transport || !(v.alive > 0) || v.flags.moved) continue
+    const foes = G.units.filter((e) => e.side === 1 && e.alive > 0 && !e.aboard)
+    if (!foes.length) return null
+    const d = (e) => Math.hypot(e.pos.x - v.pos.x, e.pos.z - v.pos.z)
+    const near = foes.reduce((a, b) => (d(b) < d(a) ? b : a))
+    const plan = ts.q.movePlan(v, 0), cand = []
+    for (let c = 0; c < nav.N; c++) {
+      const g = Math.hypot(nav.x(c) - near.pos.x, nav.z(c) - near.pos.z) - v.r - near.r
+      if (g < 6) continue
+      if (!v.t.fp) {
+        if (plan.res.dist[c] <= plan.max) cand.push([g, c, undefined])
+      } else for (let f = 1; f < 8; f += 2) if (plan.res.dist[c * 8 + f] <= plan.max) cand.push([g, c, f])
+    }
+    cand.sort((a, b) => a[0] - b[0] || a[1] - b[1] || a[2] - b[2])
+    for (const [, c, f] of cand.slice(0, 400)) {
+      const b = f === undefined ? { t: 'move', u: v.id, c } : { t: 'move', u: v.id, c, f }
+      if (ts.session.legal(0, b) === null) {
+        ts.session.submit(0, b)
+        return b
+      }
+    }
+  }
+  return null
+}
+async function checkDeck(page, say) {
+  const ev = (fn, arg) => page.evaluate(fn, arg)
+  const fail = (m) => {
+    throw new Error(`deck: ${m}`)
+  }
+  const count = () => ev(() => window.__ts.session.count)
+  const picked = () => ev(() => window.__ts.group.picked())
+  const idle = () => page.waitForFunction(() => window.__ts.player.idle && !window.__ts.group.busy(), null, { timeout: IDLE_MS })
+  const tipText = () => ev(() => (document.querySelector('#tooltip').style.display === 'block' ? document.querySelector('#tooltip').textContent : ''))
+  await page.waitForFunction(() => window.__ts?.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })
+  for (let k = 0; k < 3 && (await ev(() => window.__ts.session.decisionFor())) !== 0; k++) await ev(() => window.__ts.endPhase())
+  // the Elder boarded onto the second War-Cart (two Grenadiers aboard): a
+  // third squad for its two slots
+  const setup = await ev(() => {
+    const ts = window.__ts, G = ts.G
+    const carts = G.units.filter((u) => u.key === 'warcart' && u.side === 0).map((u) => u.id), elder = G.units.find((u) => u.side === 0 && u.key === 'elder')
+    const b = { t: 'embark', u: elder.id, v: carts[1] }, why = ts.session.legal(0, b)
+    if (!why) ts.session.submit(0, b)
+    return { carts, elder: elder.id, why }
+  })
+  if (setup.why || setup.carts.length !== 2) fail(`the Elder can't board the second War-Cart in the deployment (${setup.why ?? `${setup.carts.length} carts`})`)
+  await idle()
+  const found = await deckDrive(page, driveHulls, () => {
+    const ts = window.__ts, G = ts.G, carts = G.units.filter((u) => u.key === 'warcart' && u.side === 0)
+    const able = (v) => G.units.filter((u) => u.aboard === v.id && u.alive > 0 && ts.q.canAct(u) && ts.q.shootTargets(u).length).map((u) => u.id)
+    const a = able(carts[0]), b = able(carts[1]), all = G.units.filter((u) => u.aboard === carts[1].id && u.alive > 0).length
+    return a.length && b.length === 3 && all === 3 ? { a, b, round: G.turn.round } : null
+  }, fail)
+  await idle()
+  await sleep(600)
+  const [A, B] = setup.carts
+  // the state of the decks, as the page shows it and as the rules have it:
+  // each rider's chip lit, its figures' halos lit, and whether it can act
+  // (a halo's own visibility: a far hull's stand-in hides its whole deck)
+  const decks = () => ev((carts) => {
+    const ts = window.__ts, G = ts.G, out = []
+    const halos = new Map()
+    ts.scenery.scene.traverse((o) => {
+      if (o.userData?.glow && o.parent && o.visible) halos.set(o.userData.rider, (halos.get(o.userData.rider) ?? 0) + 1)
+    })
+    for (const u of G.units) {
+      if (!carts.includes(u.aboard) || !(u.alive > 0)) continue
+      const chip = document.querySelector(`.ulabel .rd [data-rider="${u.id}"]`)
+      out.push({ id: u.id, hull: u.aboard, can: ts.q.canAct(u), lit: !!chip?.classList.contains('lit'), halos: halos.get(u.id) ?? 0, models: u.models.filter((m) => m.alive).length })
+    }
+    return out
+  }, setup.carts)
+  const glowing = (st) => st.filter((r) => r.lit !== r.can || r.halos !== (r.can ? r.models : 0))
+  let st = await decks()
+  if (glowing(st).length) fail(`in seat 0's shooting phase (round ${found.round}) the decks' glow and chips are not the riders that can shoot: ${JSON.stringify(glowing(st))}`)
+  say(`deck: round ${found.round}'s shooting phase, the ${st.filter((r) => r.can).length} riders that can shoot glow on their decks (${st.reduce((n, r) => n + r.halos, 0)} halos) and light their chips, no other`)
+
+  // ── a rider picked up by its chip, the tooltip, the ring and the shot ──
+  const rider = found.a[0]
+  const hull = await ev((id) => {
+    const v = window.__ts.G.units.find((u) => u.id === id)
+    return { id, x: v.pos.x, z: v.pos.z, r: v.r }
+  }, A)
+  const chipAt = (id) => ev((id) => {
+    const r = document.querySelector(`.ulabel .rd [data-rider="${id}"]`)?.getBoundingClientRect()
+    return r?.width ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : null
+  }, id)
+  // (the target: the nearest the rider can shoot, the camera over the two)
+  const tg = await ev((id) => {
+    const ts = window.__ts, u = ts.G.units.find((x) => x.id === id), v = ts.G.units.find((x) => x.id === u.aboard)
+    const t = ts.q.shootTargets(u).sort((a, b) => Math.hypot(a.pos.x - v.pos.x, a.pos.z - v.pos.z) - Math.hypot(b.pos.x - v.pos.x, b.pos.z - v.pos.z))[0]
+    const info = ts.q.shotInfo(u, t), nav = ts.G.nav
+    const floor = nav.hasHeight ? (nav.index(v.pos.x, v.pos.z) < 0 ? 0 : nav.floor[nav.index(v.pos.x, v.pos.z)]) : 0
+    return { id: t.id, x: t.pos.x, z: t.pos.z, range: info.range, reach: info.reach ?? u.t.ranged.range, need: info.need, ok: info.ok, eye: floor + v.t.transport.deckY + u.t.eye, deckY: v.t.transport.deckY }
+  }, rider)
+  if (!tg.ok) fail(`unit ${rider}'s rules shot at unit ${tg.id} is refused`)
+  await deckLook(page, (hull.x + tg.x) / 2, (hull.z + tg.z) / 2, Math.max(14, Math.hypot(hull.x - tg.x, hull.z - tg.z) * 0.9))
+  let c = await chipAt(rider)
+  if (!c) fail(`unit ${rider} has no chip on its War-Cart's label`)
+  await page.mouse.click(c.x, c.y)
+  await sleep(500)
+  let p = await picked()
+  if (p.length !== 1 || p[0] !== rider) fail(`a click on unit ${rider}'s chip picked up ${JSON.stringify(p)}`)
+  const hint = await ev(() => document.querySelector('#hint').textContent)
+  if (!/^From the War-Cart's deck \(2 of 2 slots left\)/.test(hint)) fail(`unit ${rider} picked up on its deck, the hint reads "${hint}"`)
+  const ring = await ev(() => {
+    let r = null
+    window.__ts.scenery.scene.traverse((o) => o.isMesh && o.visible && o.geometry?.parameters?.innerRadius === 0.985 && o.geometry.parameters.thetaSegments === 96 && (r = { x: o.position.x, z: o.position.z, s: o.scale.x }))
+    return r
+  })
+  if (!ring || Math.abs(ring.x - hull.x) > 1e-6 || Math.abs(ring.z - hull.z) > 1e-6 || Math.abs(ring.s - (hull.r + tg.reach)) > 1e-6) fail(`unit ${rider}'s range ring ${JSON.stringify(ring)}: not round its War-Cart at (${hull.x}, ${hull.z}), ${hull.r} + ${tg.reach}`)
+  let q = await ev(({ x, z }) => window.__ts.screen(x, 0.5, z), tg)
+  const hit = await ev(([x, y]) => window.__ts.group.pick(x, y), q)
+  if (hit.unit !== tg.id) fail(`the pointer at unit ${tg.id}'s centre finds ${hit.unit}`)
+  await page.mouse.move(q[0] - 3, q[1])
+  await page.mouse.move(q[0], q[1])
+  await sleep(500)
+  const tip = await tipText()
+  const want = `${tg.range.toFixed(1)}" / ${tg.reach === Math.round(tg.reach) ? tg.reach : tg.reach.toFixed(1)}"`
+  if (!tip.includes(want) || !tip.includes(`hit ${tg.need}+`) || !tip.includes("From the War-Cart's deck")) fail(`hovering unit ${tg.id} with unit ${rider} picked up reads "${tip}": not the rules' ${want}, hit ${tg.need}+, from the War-Cart's deck`)
+  const beams = await ev(() => {
+    const out = []
+    window.__ts.scenery.scene.traverse((o) => o.userData?.losRay && o.visible && out.push({ x: o.position.x, y: o.position.y, z: o.position.z }))
+    return out
+  })
+  const off = beams.filter((b) => Math.hypot(b.x - hull.x, b.z - hull.z) > 1e-6 || Math.abs(b.y - tg.eye) > 1e-6)
+  if (!beams.length || off.length) fail(`hovering unit ${tg.id}: ${beams.length} LOS rays, ${off.length} not from the deck's eye (${hull.x}, ${tg.eye.toFixed(2)}, ${hull.z}): ${JSON.stringify(off[0] ?? null)}`)
+  if (a.shots) await page.screenshot({ path: join(a.shots, 'deck-tooltip.png') })
+  let n0 = await count()
+  await page.mouse.click(q[0], q[1])
+  await page.waitForFunction((n) => window.__ts.session.count > n, n0, { timeout: 60000 }).catch(() => {})
+  await idle()
+  await sleep(1200)
+  const shot = await ev((id) => window.__ts.G.units.filter((u) => u.side === 0 && u.flags.shot).map((u) => u.id), rider)
+  if ((await count()) !== n0 + 1 || shot.length !== 1 || shot[0] !== rider) fail(`a click on unit ${tg.id} sent ${(await count()) - n0} commands, units ${JSON.stringify(shot)} shot (unit ${rider} alone, once)`)
+  // its figures turned on the deck to the target, each from its slot
+  // (the figure's yaw relative to the hull's, eased: within 0.15 rad)
+  const turned = await ev(({ id, tg }) => {
+    const ts = window.__ts, out = []
+    const T = ts.G.units.find((u) => u.id === tg).pos
+    ts.scenery.scene.traverse((o) => {
+      if (o.userData?.rider !== id || o.userData.glow || !o.parent?.userData || o.parent.userData.deck === undefined) return
+      const hullFig = o.parent.parent
+      const w = o.getWorldPosition(new o.position.constructor())
+      const want = Math.atan2(T.x - w.x, T.z - w.z) - hullFig.rotation.y
+      const d = Math.abs(((((o.rotation.y - want) % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI)) - Math.PI)
+      out.push(+d.toFixed(3))
+    })
+    return out
+  }, { id: rider, tg: tg.id })
+  if (!turned.length || turned.some((d) => d > 0.15)) fail(`unit ${rider}'s figures on the deck after its shot face ${JSON.stringify(turned)} rad off its target`)
+  // ((F9c's review, Q19) the place each rider figure's volleys leave from,
+  // the view's x and z, is its slot's place in the world, the off-centre
+  // slots among them, not its hull's)
+  const figs = await ev(() => window.__ts.view.deckFigures())
+  const slotOff = figs.filter((f) => Math.hypot(f.x - f.wx, f.z - f.wz) > 1e-3)
+  const offCentre = figs.filter((f) => f.hull === hull.id && Math.hypot(f.wx - hull.x, f.wz - hull.z) > 0.05)
+  if (!figs.length || slotOff.length || !offCentre.length) fail(`the rider figures on the decks: ${figs.length}, ${slotOff.length} whose volleys would leave from elsewhere than their slot (${JSON.stringify(slotOff[0] ?? null)}), ${offCentre.length} on the War-Cart's off-centre slots`)
+  // ((F9c's review) a snap of the table as it stands, as a peer's reload
+  // or catch-up draws it: the turned rider seated facing its hull's front,
+  // as a fresh table seats it and as the snap turns every table figure back
+  // to its unit's facing, and the table a fresh one's (snapDiff))
+  const snapped = await ev(async (id) => {
+    const ts = window.__ts
+    ts.player.snap(ts.G)
+    await new Promise((r) => setTimeout(r, 600))
+    const out = []
+    ts.scenery.scene.traverse((o) => {
+      if (o.userData?.rider !== id || o.userData.glow || o.parent?.userData?.deck === undefined) return
+      out.push(+Math.abs(((((o.rotation.y % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI)) - Math.PI)).toFixed(4))
+    })
+    return { yaws: out, diff: ts.view.snapDiff() }
+  }, rider)
+  if (!snapped.yaws.length || snapped.yaws.some((d) => d > 0.02) || snapped.diff.n) fail(`after a snap unit ${rider}'s figures on the deck face ${JSON.stringify(snapped.yaws)} rad off their hull's front (a fresh table's 0), the table ${snapped.diff.n} off a fresh one's: ${snapped.diff.diffs.slice(0, 2).join('; ')}`)
+  say(`deck: each rider figure's volleys leave from its slot (${figs.length} figures, ${offCentre.length} of the War-Cart's off its centre); a snap seated unit ${rider}'s ${snapped.yaws.length} figures facing the hull's front, as a fresh table does`)
+  if (a.shots) await page.screenshot({ path: join(a.shots, 'deck-turned.png') })
+  say(`deck: unit ${rider}'s chip picked it up ("${hint.slice(0, 40)}…"), its range ring round the War-Cart (${hull.r} + ${tg.reach}"), the tooltip the rules' ${want}, hit ${tg.need}+, "From the War-Cart's deck", ${beams.length} rays from the deck's eye at ${tg.eye.toFixed(2)}"; a click fired it, its ${turned.length} figures turned to the target`)
+
+  // ── R on the second cart: its three riders, one click fires the deck ──
+  const hullB = await ev((id) => {
+    const v = window.__ts.G.units.find((u) => u.id === id)
+    return { id, x: v.pos.x, z: v.pos.z }
+  }, B)
+  // ((F9c's review, Q17) the cards and the rules screen: a rider's card
+  // says it shoots from its hull's deck; the hull's its fire deck's line,
+  // the record's slots, its squads and models aboard of its capacity, and
+  // the copy; the rules screen's controls row and paragraph)
+  await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), found.b[0])
+  await page.waitForFunction(() => document.querySelector('#card.show .card-ride'), null, { timeout: 10000 }).catch(() => {})
+  const rideLine = await ev(() => document.querySelector('#card.show .card-ride')?.textContent ?? '')
+  if (!/Aboard the War-Cart · steps off as its move · shoots from its deck/.test(rideLine)) fail(`unit ${found.b[0]}'s card, a rider, reads "${rideLine}": not "Aboard the War-Cart · steps off as its move · shoots from its deck"`)
+  await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), B)
+  await page.waitForFunction(() => document.querySelector('#card.show .card-riders'), null, { timeout: 10000 }).catch(() => {})
+  const cargo = await ev((id) => {
+    const G = window.__ts.G, v = G.units.find((u) => u.id === id), rs = G.units.filter((u) => u.aboard === id && u.alive > 0)
+    return { line: document.querySelector('#card.show .card-riders')?.textContent ?? '', fire: v.t.transport.fire, capacity: v.t.transport.capacity, squads: rs.length, models: rs.reduce((n, u) => n + u.alive, 0) }
+  }, B)
+  const cargoWant = `Fire deck: ${cargo.fire} slots · ${cargo.squads} squads aboard · ${cargo.models}/${cargo.capacity} models`
+  if (!cargo.line.includes(cargoWant) || !cargo.line.includes("Riders shoot from the deck's height (sees over walls) and measure range from the hull's edge.")) fail(`the second War-Cart's card reads "${cargo.line}": not "${cargoWant}" and the deck's copy`)
+  await page.click('#helpBtn')
+  await page.waitForSelector('#help:not(.hidden)', { timeout: 10000 }).catch(() => {})
+  const rules = await ev(() => {
+    const h = document.querySelector('#help:not(.hidden)')
+    const row = [...(h?.querySelectorAll('tr') ?? [])].find((r) => r.querySelector('th')?.textContent === 'Fire from a deck')
+    return { row: row?.textContent ?? '', para: [...(h?.querySelectorAll('p') ?? [])].map((p) => p.textContent).find((t) => /fire deck/.test(t)) ?? '' }
+  })
+  await page.click('#helpClose')
+  await sleep(300)
+  if (!/pick up the vehicle, R, then click an enemy/.test(rules.row) || !/shoot from its deck/.test(rules.para) || !/see over walls/.test(rules.para)) fail(`the rules screen's "Fire from a deck" row reads "${rules.row.slice(0, 80)}" and its fire deck paragraph "${rules.para.slice(0, 80)}"`)
+  say(`deck: a rider's card "${rideLine.trim()}"; the second War-Cart's "${cargoWant}" with the deck's copy; the rules screen's "Fire from a deck" row and paragraph`)
+  await ev((id) => window.__ts.select(window.__ts.G.units.find((u) => u.id === id)), B)
+  await sleep(400)
+  await page.keyboard.press('KeyR')
+  await sleep(500)
+  const g = (await ev(() => window.__ts.group.ids())).slice().sort((x, y) => x - y)
+  if (JSON.stringify(g) !== JSON.stringify(found.b.slice().sort((x, y) => x - y))) fail(`R with the second War-Cart picked up picked ${JSON.stringify(g)}, not its three riders ${JSON.stringify(found.b)}`)
+  // (a target all three can shoot: the nearest)
+  const tgB = await ev((ids) => {
+    const ts = window.__ts, us = ids.map((id) => ts.G.units.find((u) => u.id === id))
+    const all = ts.q.shootTargets(us[0]).filter((t) => us.every((u) => ts.q.shotInfo(u, t).ok))
+    const v = ts.G.units.find((x) => x.id === us[0].aboard)
+    const t = all.sort((a, b) => Math.hypot(a.pos.x - v.pos.x, a.pos.z - v.pos.z) - Math.hypot(b.pos.x - v.pos.x, b.pos.z - v.pos.z))[0]
+    return t && { id: t.id, x: t.pos.x, z: t.pos.z }
+  }, found.b)
+  if (!tgB) fail(`no enemy all three of the second War-Cart's riders ${JSON.stringify(found.b)} can shoot`)
+  await deckLook(page, (hullB.x + tgB.x) / 2, (hullB.z + tgB.z) / 2, Math.max(14, Math.hypot(hullB.x - tgB.x, hullB.z - tgB.z) * 0.9))
+  q = await ev(({ x, z }) => window.__ts.screen(x, 0.5, z), tgB)
+  await page.mouse.move(q[0] - 3, q[1])
+  await page.mouse.move(q[0], q[1])
+  await page.waitForFunction(() => /of 3 fire/.test(document.querySelector('#tooltip').textContent), null, { timeout: 30000 }).catch(() => {})
+  const gtip = await tipText()
+  if (!/2 of 3 fire/.test(gtip)) fail(`the riders' group hovering unit ${tgB.id} reads "${gtip}", not "2 of 3 fire"`)
+  if (a.shots) await page.screenshot({ path: join(a.shots, 'deck-group.png') })
+  n0 = await count()
+  await page.mouse.click(q[0], q[1])
+  await page.waitForFunction((n) => window.__ts.session.count >= n + 2 && window.__ts.player.idle && !window.__ts.group.busy(), n0, { timeout: 120000 }).catch(() => {})
+  await idle()
+  await sleep(800)
+  const after = await ev(({ ids, B }) => ({ shot: ids.filter((id) => window.__ts.G.units.find((u) => u.id === id).flags.shot), why: ids.map((id) => window.__ts.session.legal(0, { t: 'shoot', u: id, tg: window.__ts.G.units.find((u) => u.side === 1 && u.alive > 0 && !u.aboard).id })) }), { ids: found.b, B })
+  if ((await count()) !== n0 + 2 || after.shot.length !== 2) fail(`one click with the riders' group sent ${(await count()) - n0} commands, ${after.shot.length} of them shot (two: the deck's slots)`)
+  const third = found.b.find((id) => !after.shot.includes(id)), why = after.why[found.b.indexOf(third)]
+  if (!/the War-Cart's deck has fired 2 of its 2/.test(why ?? '')) fail(`the third rider, unit ${third}, refused with "${why}", not the deck's slots`)
+  say(`deck: R with the second War-Cart picked up picked its 3 riders, the hover read "${gtip.slice(0, 32)}…", one click fired 2 of them; unit ${third} refused: "${why}"`)
+  // ((F9c's review) a template thrown from the deck winds up no lunge on
+  // it: ride() never plays one, so a lunge left there lurched the rider
+  // toward its last throw as it stepped off)
+  const thrown = await ev((ids) => ids.filter((id) => window.__ts.G.units.find((u) => u.id === id).t.ranged?.blast), after.shot)
+  const lunged = (await ev(() => window.__ts.view.deckFigures())).filter((f) => f.lunge > 0)
+  if (!thrown.length || lunged.length) fail(`the deck's group threw ${thrown.length} templates (one at least), and ${lunged.length} rider figures on a deck hold a lunge (${JSON.stringify(lunged[0] ?? null)})`)
+  // the third unlit, and its chip picks nothing up
+  st = await decks()
+  const t3 = st.find((r) => r.id === third)
+  if (!t3 || t3.can || t3.lit || t3.halos || glowing(st).length) fail(`after the deck's slots were spent, unit ${third} ${JSON.stringify(t3)} (no act, no chip lit, no halo), and the decks ${JSON.stringify(glowing(st))}`)
+  await ev(() => window.__ts.select(null))
+  await sleep(300)
+  c = await chipAt(third)
+  if (c) {
+    await page.mouse.click(c.x, c.y)
+    await sleep(400)
+    p = await picked()
+    if (p.includes(third)) fail(`a click on the spent rider ${third}'s chip picked it up`)
+  }
+  say(`deck: unit ${third}'s chip unlit, its halos out, and a click on it picked nothing up`)
+
+  // ── the next turn: the first cart driven on, its riders facing its front ──
+  // (the phases ended to seat 0's next movement phase, the cart sent to the
+  // first cell of its move 2" or more off, its walk played out: every figure
+  // of the rider that shot from it turned back to the hull's front, its
+  // yaw on the deck within 0.02 rad of 0)
+  for (let k = 0; ; k++) {
+    if (k > 40) fail("40 decisions played and seat 0's next movement phase never came")
+    await idle()
+    const at = await ev(() => {
+      const ts = window.__ts, P = ts.G.pending
+      return { k: P?.k ?? null, phase: P?.phase ?? null, d: ts.session.decisionFor(), stage: ts.G.turn.stage, round: ts.G.turn.round }
+    })
+    if (at.stage === 'over') fail(`the battle ended (round ${at.round}) before the first War-Cart could move again`)
+    if (at.d === 0 && at.k === 'phase' && at.phase === 'move' && at.round > found.round) break
+    if (at.d >= 0) await ev(() => window.__ts.endPhase())
+    else await sleep(300)
+  }
+  const drove = await ev(({ A, rider }) => {
+    const ts = window.__ts, G = ts.G, nav = ts.nav, v = G.units.find((u) => u.id === A)
+    if (!(v.alive > 0) || G.units.find((u) => u.id === rider)?.aboard !== A) return null
+    const plan = ts.q.movePlan(v, 0)
+    for (let c = 0; c < nav.N; c++) {
+      if (!(plan.res.dist[c] <= plan.max) || Math.hypot(nav.x(c) - v.pos.x, nav.z(c) - v.pos.z) < 2) continue
+      const b = { t: 'move', u: v.id, c }
+      if (ts.session.legal(0, b) === null) {
+        ts.session.submit(0, b)
+        return b
+      }
+    }
+    return null
+  }, { A, rider })
+  if (!drove) fail(`the first War-Cart (unit ${A}), unit ${rider} aboard, has no move 2" or more in seat 0's next movement phase`)
+  await idle()
+  await sleep(1500)
+  const front = await ev((id) => {
+    const out = []
+    window.__ts.scenery.scene.traverse((o) => {
+      if (o.userData?.rider !== id || o.userData.glow || o.parent?.userData?.deck === undefined) return
+      out.push(+Math.abs(((((o.rotation.y % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI)) - Math.PI)).toFixed(4))
+    })
+    return out
+  }, rider)
+  if (!front.length || front.some((d) => d > 0.02)) fail(`the first War-Cart driven on in the next turn, unit ${rider}'s figures on its deck face ${JSON.stringify(front)} rad off its front (each within 0.02)`)
+  say(`deck: in the next turn the first War-Cart driven on, unit ${rider}'s ${front.length} figures faced its front again`)
+}
+// the camera over (x, z), `d` back, held there a moment
+async function deckLook(page, x, z, d) {
+  await page.evaluate(({ x, z, d }) => {
+    const ts = window.__ts
+    ts.controls.target.set(x, 0, z)
+    ts.camera.position.set(x - d * 0.45, d * 0.85, z + d * 0.7)
+    ts.controls.update()
+  }, { x, z, d })
+  await sleep(900)
+}
+// The Howdah's deck (above): a rider of a Howdah on a diagonal heading fires
+// at a click, the tooltip the rules'.
+async function checkHullDeck(page, say) {
+  const ev = (fn, arg) => page.evaluate(fn, arg)
+  const fail = (m) => {
+    throw new Error(`deck: howdah: ${m}`)
+  }
+  const idle = () => page.waitForFunction(() => window.__ts.player.idle && !window.__ts.group.busy(), null, { timeout: IDLE_MS })
+  await page.waitForFunction(() => window.__ts?.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })
+  const found = await deckDrive(page, driveHulls, () => {
+    const ts = window.__ts, G = ts.G
+    for (const v of G.units) {
+      if (v.side !== 0 || !v.t.fp || !(v.alive > 0) || v.facing % 2 !== 1) continue
+      const r = G.units.find((u) => u.aboard === v.id && u.alive > 0 && ts.q.canAct(u) && ts.q.shootTargets(u).length)
+      if (r) return { v: v.id, f: v.facing, rider: r.id, x: v.pos.x, z: v.pos.z, round: G.turn.round }
+    }
+    return null
+  }, fail)
+  await idle()
+  await sleep(600)
+  const tg = await ev((id) => {
+    const ts = window.__ts, u = ts.G.units.find((x) => x.id === id), v = ts.G.units.find((x) => x.id === u.aboard)
+    const t = ts.q.shootTargets(u).sort((a, b) => Math.hypot(a.pos.x - v.pos.x, a.pos.z - v.pos.z) - Math.hypot(b.pos.x - v.pos.x, b.pos.z - v.pos.z))[0]
+    const info = ts.q.shotInfo(u, t), w = u.t.ranged
+    const nav = ts.G.nav, floor = nav.hasHeight ? (nav.index(v.pos.x, v.pos.z) < 0 ? 0 : nav.floor[nav.index(v.pos.x, v.pos.z)]) : 0
+    return { id: t.id, x: t.pos.x, z: t.pos.z, range: info.range, reach: info.reach ?? w.range, need: info.need, eye: floor + v.t.transport.deckY + u.t.eye }
+  }, found.rider)
+  await deckLook(page, (found.x + tg.x) / 2, (found.z + tg.z) / 2, Math.max(14, Math.hypot(found.x - tg.x, found.z - tg.z) * 0.9))
+  const c = await ev((id) => {
+    const r = document.querySelector(`.ulabel .rd [data-rider="${id}"]`)?.getBoundingClientRect()
+    return r?.width ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : null
+  }, found.rider)
+  if (!c) fail(`unit ${found.rider} has no lit chip on its Howdah's label`)
+  await page.mouse.click(c.x, c.y)
+  await sleep(500)
+  const p = await ev(() => window.__ts.group.picked())
+  if (p.length !== 1 || p[0] !== found.rider) fail(`a click on unit ${found.rider}'s chip picked up ${JSON.stringify(p)}`)
+  const q = await ev(({ x, z }) => window.__ts.screen(x, 0.5, z), tg)
+  await page.mouse.move(q[0] - 3, q[1])
+  await page.mouse.move(q[0], q[1])
+  await sleep(500)
+  const tip = await ev(() => document.querySelector('#tooltip').textContent)
+  const want = `${tg.range.toFixed(1)}" / ${tg.reach === Math.round(tg.reach) ? tg.reach : tg.reach.toFixed(1)}"`
+  if (!tip.includes(want) || !tip.includes(`hit ${tg.need}+`) || !tip.includes("From the Howdah's deck")) fail(`hovering unit ${tg.id} reads "${tip}": not the rules' ${want}, hit ${tg.need}+, from the Howdah's deck`)
+  const beams = await ev(() => {
+    const out = []
+    window.__ts.scenery.scene.traverse((o) => o.userData?.losRay && o.visible && out.push({ x: o.position.x, y: o.position.y, z: o.position.z }))
+    return out
+  })
+  if (!beams.length || beams.some((b) => Math.hypot(b.x - found.x, b.z - found.z) > 1e-6 || Math.abs(b.y - tg.eye) > 1e-6)) fail(`the LOS rays ${JSON.stringify(beams.slice(0, 2))}: not from the Howdah's deck eye (${found.x}, ${tg.eye}, ${found.z})`)
+  const n0 = await ev(() => window.__ts.session.count)
+  await page.mouse.click(q[0], q[1])
+  await page.waitForFunction((n) => window.__ts.session.count > n, n0, { timeout: 60000 }).catch(() => {})
+  await idle()
+  const shot = await ev((id) => !!window.__ts.G.units.find((u) => u.id === id).flags.shot, found.rider)
+  if (!shot || (await ev(() => window.__ts.session.count)) !== n0 + 1) fail(`a click on unit ${tg.id} with unit ${found.rider} picked up never fired it`)
+  if (a.shots) await page.screenshot({ path: join(a.shots, 'deck-howdah.png') })
+  say(`deck: howdah: round ${found.round}, Howdah ${found.v} on heading ${found.f}: unit ${found.rider} picked up by its chip, the tooltip the rules' ${want}, hit ${tg.need}+, from the Howdah's deck, ${beams.length} rays from its eye at ${tg.eye.toFixed(2)}"; a click fired it`)
+}
+async function deckPage(browser, url, say, which = ['carts', 'howdah']) {
+  for (const w of which) {
+    const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage()
+    page.setDefaultTimeout(IDLE_MS)
+    const errors = []
+    page.on('pageerror', (e) => errors.push(e.message))
+    page.on('console', (m) => m.type() === 'error' && errors.push(`console: ${m.text()}`))
+    try {
+      await page.goto(`${url}/?debug&lowfi&seed=4242&dice=1&${w === 'carts' ? DECK_ARMIES : `mission=field&${HULL_ARMIES}`}`)
+      await page.waitForSelector('#title:not(.hidden)')
+      await page.click('[data-mode="hotseat"]')
+      await page.click('#setupStart')
+      await (w === 'carts' ? checkDeck : checkHullDeck)(page, say)
+      if (errors.length) throw new Error(`deck: page errors: ${errors.slice(0, 3).join('; ')}`)
+    } finally {
+      await page.context().close()
+    }
+  }
+}
+
 // (F9b) --self-test's edits: [file, text, replacement], each a way the long
 // hulls' input could break, which the hulls row must catch
 const HULL_EDITS = {
@@ -2662,6 +3144,46 @@ const HULL_EDITS = {
   // (F9b's review) the pin's line left on screen after the send
   'tip-stays': ['input/group.js', '    if (this.loneHull()) this.tooltip?.hide()\n', ''],
 }
+// (F9c) --self-test's edits of the firing deck's view and input, each a way
+// it could break, which the deck row (deckPage: the War-Carts' page and the
+// Howdah's) must catch: [file, text, replacement]
+const DECK_EDITS = {
+  // no rider ever lit: no halo on the deck, no chip lit
+  'glow-never': ['view/units.js', '      const lit = mu.aboard && shoot && op > 0.15 ? col : null\n', '      const lit = null\n'],
+  // the halos lit, the label's chips never
+  'chips-unlit': ['view/units.js', '(this.views.get(r.id)?.deckLit ? `<i data-rider', '(false ? `<i data-rider'],
+  // a rider lit once stays lit: a spent deck's third rider still glowing
+  'glow-stale': ['view/units.js', '      if ((v.deckLit ?? null) !== lit) {\n', '      if (!v.deckLit && lit) {\n'],
+  // a rider's range ring round its own squad's disc, not its hull's
+  'ring-at-rider': ['input/human.js', '    this.view.overlay.range(v ? v.pos : u.pos, v ? (v.t.fp ? v.t.base : v.r) : u.r, range,', '    this.view.overlay.range(u.pos, u.r, range,'],
+  // a rider's LOS rays from the ground under its hull, not the deck's eye
+  'rays-from-ground': ['input/tools/shoot.js', '  const eye = v ? { x: from.x, y: eyeH, z: from.z } :', '  const eye = v ? { x: from.x, y: q.floorAt(G, from.x, from.z) + q.eyeY(u), z: from.z } :'],
+  // a rider's reasons asked from the ground, the deck unsaid
+  'deck-unsaid': ['input/tools/shoot.js', '  const s = v ? { ...q.sightInfo(G, u, tg, from, eyeH), high: true } : q.sightInfo(G, u, tg)\n', '  const s = q.sightInfo(G, u, tg)\n'],
+  // R on a hull in the shooting phase cycling its riders as in the
+  // movement phase: no group
+  'r-cycles': ['input/human.js', "    if (!u.aboard && u.t.transport && this.deploySeat() < 0 && phaseKey(this.G) === 'shoot') {\n", '    if (false) {\n'],
+  // a rider's figures never turning on the deck to their target
+  'riders-unturned': ['view/units.js', '      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z) - hm.rotation.y)\n', '      f.deckLook = undefined\n'],
+  // riders left turned to their last target as their hull drives on
+  'turn-kept': ['view/units.js', '    if (v.u.t.transport) for (const r of this.views.values()) for (const f of r.models) if (f.deck === e.u) f.deckLook = undefined\n', ''],
+  // the look yaw the target's bearing in the table's frame, not the hull's
+  'look-world': ['view/units.js', '      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z) - hm.rotation.y)\n', '      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z))\n'],
+  // ((F9c's review, Q19) a rider's place, its volleys', its hull's (F9a's),
+  // not its slot's
+  'volley-from-hull': ['view/units.js', '      const tr = hv.u.t.transport, shut = !!tr?.enclosed, at = shut ? hv.deck : m.mesh\n', '      const tr = hv.u.t.transport, shut = !!tr?.enclosed, at = shut ? hv.deck : h.mesh\n'],
+  // (F9c's review) a grenadier's wind-up set on a deck, where nothing plays it
+  // ((F9c's review) a snap keeping a rider's turn on its deck, where a fresh
+  // table seats it facing the front
+  'snap-keeps-turn': ['view/units.js', '        const seated = hop && f.mesh.parent === deck && f.deck === hullId\n', '        const seated = f.mesh.parent === deck && f.deck === hullId\n'],
+  // ((F9c's review) the hull's card counting its capacity as its slots, and
+  // the rules screen's deck row gone
+  'card-miscounted': ['ui/card.js', '<b>Fire deck:</b> ${tr.fire} slot${tr.fire === 1', '<b>Fire deck:</b> ${tr.capacity} slot${tr.fire === 1'],
+  'rules-row-gone': ['index.html', "          <tr><th>Fire from a deck</th>", "          <tr><th>Firing</th>"],
+  'deck-lunge': ['view/effects/shots.js', '    } else if (!src.deck) {\n', '    } else {\n'],
+}
+// every --self-test edit, with the row that must catch it
+const EDITS = { ...Object.fromEntries(Object.entries(HULL_EDITS).map(([k, e]) => [k, [...e, 'hulls']])), ...Object.fromEntries(Object.entries(DECK_EDITS).map(([k, e]) => [k, [...e, 'deck']])) }
 async function hullPage(browser, url, say) {
   const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 } })).newPage()
   page.setDefaultTimeout(IDLE_MS)
@@ -2681,20 +3203,22 @@ async function hullPage(browser, url, say) {
 }
 if (a['self-test']) {
   const work = mkdtempSync(join(tmpdir(), 'input-check-self-'))
-  const names = a.mutations ? a.mutations.split(',').map((x) => x.trim()) : Object.keys(HULL_EDITS)
-  const unknown = names.filter((x) => !HULL_EDITS[x])
+  const names = a.mutations ? a.mutations.split(',').map((x) => x.trim()) : Object.keys(EDITS)
+  const unknown = names.filter((x) => !EDITS[x])
   if (unknown.length) {
-    console.error(`input-check: no edit ${unknown.join(', ')} (${Object.keys(HULL_EDITS).join(', ')})`)
+    console.error(`input-check: no edit ${unknown.join(', ')} (${Object.keys(EDITS).join(', ')})`)
     process.exit(2)
   }
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
   let wrong = 0
-  console.log(`input-check self-test: ${names.length} edits of the long hulls' input, each must fail the hulls row, after the unedited code passes it`)
+  // ((F9c) the rows the edits name: the unedited code must pass each)
+  const rows = [...new Set(names.map((n) => EDITS[n][3]))]
+  console.log(`input-check self-test: ${names.length} edits of the long hulls' and (F9c) the firing deck's input, each must fail its row (${rows.join(', ')}), after the unedited code passes it`)
   try {
     for (const [k, name] of ['unedited', ...names].entries()) {
       const dir = copyCode(PKG, join(work, `${k}`))
       if (name !== 'unedited') {
-        const [f, from, to] = HULL_EDITS[name]
+        const [f, from, to] = EDITS[name]
         const src = readFileSync(join(dir, f), 'utf8')
         if (src.split(from).length !== 2) throw new Error(`input-check self-test: ${name} finds no single "${from.trim().slice(0, 60)}" in ${f}`)
         writeFileSync(join(dir, f), src.replace(from, to))
@@ -2702,13 +3226,16 @@ if (a['self-test']) {
       const served = await startStaticServer(await buildApp(dir, join(work, `${k}-dist`)))
       let why = ''
       try {
-        await hullPage(browser, served.url, () => {})
+        for (const row of name === 'unedited' ? rows : [EDITS[name][3]]) {
+          if (row === 'hulls') await hullPage(browser, served.url, () => {})
+          else await deckPage(browser, served.url, () => {})
+        }
       } catch (e) {
         why = e.message.split('\n')[0]
       } finally {
         served.close()
       }
-      const ok = name === 'unedited' ? !why : /^hulls: /.test(why)
+      const ok = name === 'unedited' ? !why : new RegExp(`^${EDITS[name][3]}: `).test(why)
       if (!ok) wrong++
       console.log(`  ${ok ? (name === 'unedited' ? 'passes' : 'caught') : 'WRONG '} ${name.padEnd(12)} ${(why || 'the row held').slice(0, 220)}`)
       if (name === 'unedited' && !ok) break
@@ -2717,7 +3244,7 @@ if (a['self-test']) {
     await browser.close()
     rmSync(work, { recursive: true, force: true })
   }
-  console.log(wrong ? `\ninput-check self-test FAILED: ${wrong} wrong verdict(s)` : '\ninput-check self-test passed: the unedited code passes the hulls row, and every edit is caught')
+  console.log(wrong ? `\ninput-check self-test FAILED: ${wrong} wrong verdict(s)` : `\ninput-check self-test passed: the unedited code passes the ${rows.join(' and ')} row${rows.length > 1 ? 's' : ''}, and every edit is caught`)
   process.exit(wrong ? 1 : 0)
 }
 
@@ -2738,7 +3265,7 @@ try {
   const { url, close } = await startStaticServer(dist)
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
   try {
-    let lanes = true
+    let lanes = true, deckNext = false
     if (a.only !== 'tips' && !a.fort && !a.hulls) {
       const page = await (await browser.newContext({ viewport: { width: 1280, height: 800 }, hasTouch: true })).newPage()
       page.setDefaultTimeout(IDLE_MS)
@@ -2763,6 +3290,7 @@ try {
           await page.click('[data-mode="hotseat"]')
           await page.click('#setupStart')
           await checkCarts(page, (l) => console.log(`  ok   ${l}`))
+          deckNext = true
         }
         lanes = !errors.length
       } catch (e) {
@@ -2771,6 +3299,19 @@ try {
       if (errors.length) console.log(`  FAIL page errors:\n         ${errors.slice(0, 5).join('\n         ')}`)
       // ((V3a) its page closed: one left playing would hold up the next)
       await page.context().close()
+    }
+    // ((F9c) the War-Carts' firing decks, on a page of their own, opened
+    // once the carts' page is closed: (the sweep's) opened beside it, that
+    // page's battle still playing, the deck page's load timed out at 120 s
+    // in the default run on a loaded box, as snap-check's Howdah page had)
+    if (deckNext) {
+      console.log('\ninput-check (F9c): the War-Carts\' firing decks, by the mouse and the keys\n')
+      try {
+        await deckPage(browser, url, (l) => console.log(`  ok   ${l}`), ['carts'])
+      } catch (e) {
+        console.log(`  FAIL ${e.message}`)
+        lanes = false
+      }
     }
     // (V3a) the conditions' tips, by the mouse at 1280×800 and by real
     // touches on a 390×844 phone
@@ -2802,6 +3343,10 @@ try {
       console.log('\ninput-check (F9b): a lone long hull pinned, turned and sent, by the mouse and the keys\n')
       try {
         await hullPage(browser, url, (l) => console.log(`  ok   ${l}`))
+        // ((F9c) a Howdah's riders firing from its deck, on a diagonal
+        // heading, on a page of their own)
+        console.log('\ninput-check (F9c): a Howdah\'s riders firing from its deck on a diagonal heading\n')
+        await deckPage(browser, url, (l) => console.log(`  ok   ${l}`), ['howdah'])
       } catch (e) {
         console.log(`  FAIL ${e.message}`)
         lanes = false
@@ -2815,6 +3360,6 @@ try {
 } finally {
   rmSync(work, { recursive: true, force: true })
 }
-const what = a.fort ? '(F7b) Alt and a picked-up unit seeing through the walls, its ring drawn through, the LOS ray on hover leaking nothing' : a.only === 'aim' ? '(F13) the touch aim' : a.hulls ? '(F9b) a lone long hull pinned and sending nothing, turned through only the headings the match takes by ] [ and its rotate handle, sent by Enter, its flag or a double click, left drag still orbiting' : [!a.carts && a.only !== 'tips' && 'box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers', a.only !== 'tips' && "(F9a) the War-Carts' tools: R, chips and Tab to pick riders, placing, boarding and stepping off by click, the box and R with a group", !a.carts && '(V3a) every condition an icon and a tip, shown on a hover and a tap, inside the screen', !a.carts && a.only === undefined && '(F7b) the see-through walls, the rings through them and the LOS ray', !a.carts && a.only === undefined && '(F9b) a lone long hull pinned, turned through its valid headings and sent'].filter(Boolean).join('; ')
+const what = a.fort ? '(F7b) Alt and a picked-up unit seeing through the walls, its ring drawn through, the LOS ray on hover leaking nothing' : a.only === 'aim' ? '(F13) the touch aim' : a.hulls ? "(F9b) a lone long hull pinned and sending nothing, turned through only the headings the match takes by ] [ and its rotate handle, sent by Enter, its flag or a double click, left drag still orbiting; (F9c) a Howdah's rider firing from its deck on a diagonal heading" : [!a.carts && a.only !== 'tips' && 'box, Shift-click, pin and send, Esc, Tab, the touch fallback, Select mode and the bar, (F13) the touch aim, by mouse, keys and fingers', a.only !== 'tips' && "(F9a) the War-Carts' tools: R, chips and Tab to pick riders, placing, boarding and stepping off by click, the box and R with a group; (F9c) their decks' glow and lit chips, a rider's chip, ring, tooltip and rays from the deck, R firing a deck by one click, the spent slot refused", !a.carts && '(V3a) every condition an icon and a tip, shown on a hover and a tap, inside the screen', !a.carts && a.only === undefined && '(F7b) the see-through walls, the rings through them and the LOS ray', !a.carts && a.only === undefined && "(F9b) a lone long hull pinned, turned through its valid headings and sent; (F9c) a Howdah's rider firing from its deck on a diagonal heading"].filter(Boolean).join('; ')
 console.log(ok ? `\ninput-check passed: ${what}` : '\ninput-check FAILED')
 process.exit(ok ? 0 : 1)

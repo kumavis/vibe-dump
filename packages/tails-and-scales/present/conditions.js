@@ -151,11 +151,14 @@ export const CONDITIONS = Object.freeze({
     blocks: () => [],
     tip: (t) => `A spell steadies it: it takes no morale test${t && !t.noCharge ? ', and a failed charge roll is rolled again' : ''}. It wears off as its side's next turn begins.`,
   },
-  // (F9a) a rider: aboard its hull, and stepped off one that moved
+  // (F9a) a rider: aboard its hull, and stepped off one that moved; (F9c)
+  // it shoots from the deck while a slot is free, so `shoot` stays among
+  // what the condition blocks (canShoot refuses by it: the deck's slots,
+  // its hull in combat), told when
   aboard: {
     icon: '▣', title: 'Aboard', kind: 'state',
     blocks: () => ['shoot', 'charge'],
-    tip: () => `It rides inside a vehicle: it can't move, shoot or charge until it steps off, which is its move for the turn. Its hull's guns fire for it.`,
+    tip: () => `It rides inside a vehicle: it can't move or charge until it steps off, which is its move for the turn. It shoots from the deck while a slot is free and its hull isn't in combat, its range from the hull's edge.`,
   },
   rode: {
     icon: '⤓', title: 'Stepped off', kind: 'deed',

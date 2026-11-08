@@ -177,7 +177,7 @@ export class Human {
     if (!u?.t.spells || !this.myTurn() || phaseKey(this.G) !== 'shoot') return 'no caster picked up in its shooting phase'
     if (!(Number.isInteger(sp) && sp >= 0 && sp < u.t.spells.length)) return `${u.t.short} has no spell ${sp}`
     this.spell = { u: u.id, sp, at: `${this.G.turn.round}:${this.G.turn.active}:shoot` }
-    this.showRange(u, this.ask((G, q) => q.rangeOf(G, u, null, u.pos, sp)))
+    this.showRange(u, this.ask((G, q) => q.rangeOf(G, u, null, shoot.shotFrom(G, q, u), sp)))
     this.pointed()
     this.flow.refreshUI()
     return null
@@ -524,7 +524,11 @@ export class Human {
   // R: with a group, the riders of its hulls join it; with a transport
   // picked up, its first rider (in G.units order); with a rider, the next
   // of its hull's, then the hull again. False when it did nothing (R is
-  // then the roster's).
+  // then the roster's). ((F9c, DESIGN §4.2.5's deck fire) In the seat's
+  // shooting phase, R on a transport picked up alone picks up its riders
+  // that can shoot from its deck together (one alone: that one), so a click
+  // on an enemy fires the deck, the group's Fire counting its slots
+  // (present/orders.js); a deck with none able to shoot cycles as ever.)
   ridersKey() {
     const seat = this.deploySeat() >= 0 ? this.deploySeat() : this.myTurn() ? this.localSeat() : -1
     if (seat < 0 || !this.G) return false
@@ -538,6 +542,18 @@ export class Human {
     }
     const u = this.sel
     if (!u || u.side !== seat) return false
+    if (!u.aboard && u.t.transport && this.deploySeat() < 0 && phaseKey(this.G) === 'shoot') {
+      const able = this.ask((G, q) => G.units.filter((r) => r.alive > 0 && r.aboard === u.id && q.canAct(G, r)).map((r) => r.id))
+      if (able.length > 1 && this.group) {
+        this.group.setGroup(able)
+        sfx.click()
+        return true
+      }
+      if (able.length) {
+        this.pickRider(able[0])
+        return true
+      }
+    }
     const hull = u.aboard || u.id
     const list = this.G.units.filter((r) => r.alive > 0 && r.aboard === hull).map((r) => r.id)
     if (!list.length) return false
@@ -738,7 +754,7 @@ export class Human {
       // range the ring's)
       const at = `${G.turn.round}:${G.turn.active}:${ph}`
       if (ph === 'shoot' && u.t.spells && (this.spell?.u !== u.id || this.spell.at !== at)) this.spell = { u: u.id, sp: this.ask((G, q) => q.bestSpell(G, u)), at }
-      if (ph === 'shoot' && u.t.ranged) this.showRange(u, this.ask((G, q) => q.rangeOf(G, u, null, u.pos, this.spellOf(u))))
+      if (ph === 'shoot' && u.t.ranged) this.showRange(u, this.ask((G, q) => q.rangeOf(G, u, null, shoot.shotFrom(G, q, u), this.spellOf(u))))
       if (ph === 'charge') this.showRange(u, CHARGE_RANGE)
     }
     this.card.show(u)
@@ -746,10 +762,16 @@ export class Human {
   }
 
   // The range ring of a shot or a charge, around the unit picked up ((V3c)
-  // a spell cast on a friend's in green).
+  // a spell cast on a friend's in green). ((F9c, DESIGN §4.2.5's firing
+  // deck) A rider's round its hull, whose edge its range is measured from:
+  // a round hull's own disc, a long hull's body disc (t.base), which
+  // understates the reach off its head and tail, the stadium round its
+  // discs the rules measure (fpGap), as F9b's heuristics do; the reach the
+  // rules' own from the deck, rangeOf at its deck point.)
   showRange(u, range) {
     const sp = this.spellOf(u), ally = sp !== undefined && !!(u.t.spells[sp].ward || u.t.spells[sp].resolve)
-    this.view.overlay.range(u.pos, u.r, range, phaseKey(this.G) === 'charge' ? '#ffb070' : ally ? '#7dff9a' : '#ffffff')
+    const v = u.aboard ? this.ask((G, q) => q.hullOf(G, u)) : null
+    this.view.overlay.range(v ? v.pos : u.pos, v ? (v.t.fp ? v.t.base : v.r) : u.r, range, phaseKey(this.G) === 'charge' ? '#ffb070' : ally ? '#7dff9a' : '#ffffff')
   }
 
   // What the pointer is over: a unit's line, or on a seat's own turn what

@@ -13,7 +13,19 @@
 // passes, what high ground sees over. ((at the F7b merge) A spell at an
 // enemy is judged by the same sight, so it has them too; a spell cast on a
 // friend asks none (shotInfo's), so it has neither.)
+//
+// (F9c, DESIGN §4.2.5's firing deck) A rider shoots from its hull's deck:
+// its rays leave its deck eye (the deck point, transport.js deckPoint, at
+// deckEye's height) and its reasons are the rules' own from there
+// (sightInfo with the same stand and eye shotInfo judges by), so the
+// tooltip and the shot agree; its reasons say it fires from the deck, and
+// what its height sees over.
 import { oddsText, losText, LOS_COLORS } from '../../ui/tooltip.js'
+
+// (F9c) where unit `u` shoots from: a rider from its hull's deck point,
+// any other unit from where it stands (the reach's rangeOf and the range
+// ring's stand: input/human.js)
+export const shotFrom = (G, q, u) => (u.aboard ? q.deckPoint(q.hullOf(G, u)) : u.pos)
 
 // Inside the caller's preview: what unit `sel` shooting (or casting spell
 // `sp` on) `target` would do.
@@ -22,7 +34,8 @@ export function preview(G, q, sel, target, sp, ray = null) {
   if (q.allySpell(q.weaponOf(sel, sp))) return info.ok ? oddsText(sel, target, info, sp) : `✖ ${info.why}`
   const los = sightOf(G, q, sel, target)
   ray?.(los.rays, LOS_COLORS[los.verdict])
-  const why = losText(los)
+  // ((F9c) a rider's height is its deck's, said so where high ground is)
+  const why = los.deck ? losText(los).replace('High ground', `From the ${los.deck}'s deck`) : losText(los)
   // (refused: why, and below it what the rays meet: what stops them when
   // it is the sight, what they would pass when it is the range)
   return info.ok ? `${oddsText(sel, target, info, sp)}${why}` : `✖ ${info.why}${why}`
@@ -40,9 +53,13 @@ export function preview(G, q, sel, target, sp, ray = null) {
 // obscurers), so height looks over it: a hedge below a deck, or the
 // shooter's own deck's parapets, which it fires over. (The chunks the
 // shooter or a target stands on are no part of the way.)
+// ((F9c) A rider's from its hull's deck: the rules' stand and eye there, its
+// rays from that eye, and what the deck's height sees over named as high
+// ground's is, `deck` its hull's short name.)
 export function sightOf(G, q, u, tg) {
-  const s = q.sightInfo(G, u, tg)
-  const eye = { x: u.pos.x, y: q.floorAt(G, u.pos.x, u.pos.z) + q.eyeY(u), z: u.pos.z }
+  const v = u.aboard ? q.hullOf(G, u) : null, from = v ? q.deckPoint(v) : null, eyeH = v ? q.deckEye(G, u) : undefined
+  const s = v ? { ...q.sightInfo(G, u, tg, from, eyeH), high: true } : q.sightInfo(G, u, tg)
+  const eye = v ? { x: from.x, y: eyeH, z: from.z } : { x: u.pos.x, y: q.floorAt(G, u.pos.x, u.pos.z) + q.eyeY(u), z: u.pos.z }
   const rays = []
   for (const m of tg.models) {
     if (!m.alive) continue
@@ -60,7 +77,7 @@ export function sightOf(G, q, u, tg) {
     }
   }
   const name = (id) => nameOf(byId.get(id))
-  return { ...s, rays, verdict, over, name }
+  return { ...s, rays, verdict, over, name, deck: v ? v.t.short : null }
 }
 
 // what a chunk is called in the reasons ((at the F7b merge) and the pieces

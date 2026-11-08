@@ -5,7 +5,8 @@
 // battle's). sim/play-report.mjs judges its counts against DESIGN §4.2.9's
 // F9a threshold (riders disembark in ≥ 50% of the vehicle/ battles), and
 // sim/corpus-add.mjs's needs (`embark`, `disembark`, `bailout`,
-// `rearranged`) read them. It reads only the events and G's units, so it
+// `rearranged`, (F9c) `deckfire`) read them, and (F9c) play-report's
+// firing-deck row judges its deck shots by hull. It reads only the events and G's units, so it
 // runs on any code (older code has no rider, and counts nothing).
 //
 //   riderProbe() → { trace(line, G), events(G, events), result() }
@@ -31,19 +32,37 @@
 //   rearranged  the deployment's autoload re-arranged: a rider placed off
 //               its hull (a unit.place of a unit that rode), or a unit
 //               boarding in the deployment
+//   (F9c, the firing decks)
+//   hullKeys    the hulls fielded by their unit key ({ warcart: 2,
+//               howdah: 2 }), both seats', as the battle began
+//   hullDeckShots  the attacks made from a deck, by the key of the hull
+//               the attacker rode as it made them ({ warcart: 5 }): each
+//               volley, blast.fire (one a template) and spell.cast whose
+//               `u` is aboard as the events have it. Named apart from
+//               sim/height-probe.mjs's deckShots, which are F7b's shots
+//               from a terrain deck (the shooter's floor above STEP).
+//   deckSeats   the same attacks by the attacker's seat ([seat 0's,
+//               seat 1's])
 export function riderProbe() {
-  const r = { hulls: 0, autoloaded: 0, embarks: 0, embarkDeploy: 0, embarkPhase: 0, steps: 0, stepRounds: [], bailed: 0, bailOnes: 0, lost: 0, bailDeaths: 0, wrecks: 0, hullsDown: 0, rearranged: 0 }
+  const r = { hulls: 0, autoloaded: 0, embarks: 0, embarkDeploy: 0, embarkPhase: 0, steps: 0, stepRounds: [], bailed: 0, bailOnes: 0, lost: 0, bailDeaths: 0, wrecks: 0, hullsDown: 0, rearranged: 0, hullKeys: {}, hullDeckShots: {}, deckSeats: [0, 0] }
   // each unit's hull as the events have it (id → hull id), from the match
   // as first seen; the stage and round as the events tell them; the hulls
   // destroyed with riders, and who of those bailed out
   let first = true, stage = 'deploy', round = 1
   const aboard = new Map(), size = new Map(), down = new Map()
+  // ((F9c) each unit's key and seat, by id, as the match fielded them)
+  const keys = new Map(), seats = new Map()
   const start = (G) => {
     if (!first) return
     first = false
     for (const u of G.units) {
       size.set(u.id, u.alive)
-      if (u.t.transport) r.hulls++
+      keys.set(u.id, u.key)
+      seats.set(u.id, u.side)
+      if (u.t.transport) {
+        r.hulls++
+        r.hullKeys[u.key] = (r.hullKeys[u.key] ?? 0) + 1
+      }
       if (u.aboard) {
         aboard.set(u.id, u.aboard)
         r.autoloaded++
@@ -81,6 +100,11 @@ export function riderProbe() {
           const ones = e.dice.filter((x) => x === 1).length
           r.bailOnes += ones
           r.bailDeaths += ones
+        } else if ((e.t === 'volley' || e.t === 'blast.fire' || e.t === 'spell.cast') && aboard.has(e.u)) {
+          // ((F9c) an attack from a deck, by its hull's key)
+          const k = keys.get(aboard.get(e.u)) ?? '?'
+          r.hullDeckShots[k] = (r.hullDeckShots[k] ?? 0) + 1
+          r.deckSeats[seats.get(e.u)]++
         } else if (e.t === 'terrain.add' && e.def?.kind === 'wreck') r.wrecks++
         else if (e.t === 'unit.destroyed') {
           const riders = [...aboard].filter(([, v]) => v === e.u).map(([u]) => u)
@@ -101,6 +125,6 @@ export function riderProbe() {
         down.delete(v)
       }
     },
-    result: () => ({ ...r, stepRounds: [...r.stepRounds].sort((a, b) => a - b) }),
+    result: () => ({ ...r, stepRounds: [...r.stepRounds].sort((a, b) => a - b), hullKeys: { ...r.hullKeys }, hullDeckShots: { ...r.hullDeckShots }, deckSeats: [...r.deckSeats] }),
   }
 }

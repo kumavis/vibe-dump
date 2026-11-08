@@ -135,9 +135,11 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     busy: !idle,
     // nothing left to do in the seat's phase but what its orders will do
     // (asked only once the table has caught up); (F9a, DESIGN §4.2.5's
-    // canAct note) a rider left out: it may step off, but riding on is a
-    // choice, not something left undone
-    ready: mine && idle ? !ask((G, q) => G.units.some((u) => u.side === P.seats[0] && !u.aboard && !covered.has(u.id) && q.canAct(G, u))) : false,
+    // canAct note) a rider left out in the movement phase: it may step
+    // off, but riding on is a choice, not something left undone; (F9c) in
+    // the shooting phase a rider that can shoot from its deck is a shooter
+    // with a target, and counts
+    ready: mine && idle ? !ask((G, q) => G.units.some((u) => u.side === P.seats[0] && (P.phase === 'shoot' || !u.aboard) && !covered.has(u.id) && q.canAct(G, u))) : false,
     badge,
     // (F10c) Auto-End counting down on it
     counting: mine && counting,
@@ -188,7 +190,8 @@ export function hudModel({ G, mirror: M, session, input, hud }) {
     hint = {
       // ((F9a) a rider picked up steps off)
       move: sel ? sel.aboard ? `Click inside the blue area beside the ${ask((G, q) => q.hullOf(G, sel)).t.short} to step off: that is its move.` : (ask((G, q) => q.isEngaged(G, sel)) ? 'Engaged — click inside the red area to fall back (no shooting or charging after).' : 'Click inside the shaded area to move. Difficult ground costs double.') : 'Movement — pick a unit with a white ring to move it.',
-      shoot: casting ?? (sel ? 'Click an enemy unit to shoot it. Hover for odds.' : 'Shooting — pick a unit with a white ring to fire.'),
+      // ((F9c) a rider shoots from its hull's deck: the slots it has left)
+      shoot: casting ?? (sel ? sel.aboard ? deckHint(ask((G, q) => ({ v: q.hullOf(G, sel), n: q.ridersShot(G, q.hullOf(G, sel)), k: q.fireSlots(q.hullOf(G, sel)) }))) : 'Click an enemy unit to shoot it. Hover for odds.' : 'Shooting — pick a unit with a white ring to fire.'),
       charge: sel ? 'Click an enemy within 12" to declare a charge, then roll 2D6.' : 'Charge — pick a unit to charge with.',
     }[P.phase] || ''
   } else if (!mine) hint = ''
@@ -268,6 +271,11 @@ export function undoable(session) {
   const e = f.pushed[f.placed[k]]
   return UNDOABLE.includes(e.t) && e.s === seat && e.d === session.dev && f.dice[k] === f.dice[k - 1] ? k : -1
 }
+
+// (F9c) A rider's shooting hint: it fires from its hull `v`'s deck, whose
+// `k` slots its riders have spent `n` of this turn (one of them its own
+// once it has shot).
+const deckHint = ({ v, n, k }) => `From the ${v.t.short}'s deck (${k - n} of ${k} slot${k === 1 ? '' : 's'} left): click an enemy unit to shoot it. Range is from the hull's edge. Hover for odds.`
 
 // (F13) What a finger's aim does where it lifts: the click's verb there.
 function aimVerb(pk, deploying, group, P) {

@@ -15,7 +15,9 @@
 // seat's living units sees (the core's own `sight`, any friendly unit to
 // any of its models) has no live figure, label, chip, minimap dot, card,
 // tooltip or pick, and the log lines and dice rows that name it go. (F9a)
-// A rider is off the table: it is no eye (its hull sees for it), it is
+// A rider is off the table: ((F9c) it is an eye from its hull's deck, as
+// its shots are: the deck point at its deck eye, so none of the seat's
+// riders shoots what its seat is not shown) it is
 // seen exactly when its hull is (its figures stand on the hull's deck),
 // and while it rides it leaves no ghost of its own (the hull's ghost is
 // where it was last seen; one seen on the table before it boarded keeps
@@ -84,8 +86,10 @@
 export const fogStart = (seat) => ({ seat, over: false, foes: [], seen: new Set(), fell: new Set(), last: new Map(), known: new Map(), table: null })
 
 // a mirror unit, as a record (models copied: the mirror folds in place)
-// ((V3c) its spell marks too, as last seen)
-const recOf = (mu) => ({ pos: { x: mu.pos.x, z: mu.pos.z }, y: mu.y ?? 0, r: mu.r, models: mu.models.map((m) => ({ w: m.w, alive: m.alive, ox: m.ox, oz: m.oz })), alive: mu.alive, mesmerized: !!mu.mesmerized, engaged: !!mu.engaged, snared: !!mu.snared, warded: !!mu.warded, resolute: !!mu.resolute })
+// ((V3c) its spell marks too, as last seen; (F9c's review) and a long
+// hull's heading, `f`, as last seen: its stand-in's discs stand at it, and
+// without it sight's discsOf read no heading and threw)
+const recOf = (mu) => ({ pos: { x: mu.pos.x, z: mu.pos.z }, y: mu.y ?? 0, r: mu.r, ...(mu.f !== undefined ? { f: mu.f } : {}), models: mu.models.map((m) => ({ w: m.w, alive: m.alive, ox: m.ox, oz: m.oz })), alive: mu.alive, mesmerized: !!mu.mesmerized, engaged: !!mu.engaged, snared: !!mu.snared, warded: !!mu.warded, resolute: !!mu.resolute })
 const chunkRec = (c) => ({ alive: c.alive, y: c.y })
 const sameChunk = (a, b) => !!a && !!b && a.alive === b.alive && a.y === b.y
 
@@ -107,9 +111,18 @@ export const fogLands = (events) => events.filter((e) => e.t === 'blast.land' ||
 // a Map the caller keeps (answers by pair, let go when the scenery changes)
 // or null. Returns { units: Set, places: Set, chunks: Set, lands: [bool] }.
 export function fogSight(G, q, { seat, places = new Map(), chunks = [], lands = [] }, cache = null) {
-  const mine = [], foes = []
-  // ((F9a) riders aside: off the table, seen with their hulls below)
-  for (const u of G.units) if (q.alive(u) && !u.aboard) (u.side === seat ? mine : foes).push(u)
+  const mine = [], foes = [], decks = []
+  // ((F9a) riders aside: off the table, seen with their hulls below;
+  // (F9c) the seat's own riders eyes from their decks)
+  for (const u of G.units) {
+    if (!q.alive(u)) continue
+    if (!u.aboard) (u.side === seat ? mine : foes).push(u)
+    else if (u.side === seat) decks.push(u)
+  }
+  // ((F9c) what an eye sees of `b`: a rider from its hull's deck point at
+  // its deck eye, the core's own sight with its eye-height override)
+  const sees = (f, b, bCover) => (f.aboard ? q.sight(G, f, b, q.deckPoint(q.hullOf(G, f)), bCover, q.deckEye(G, f)) : q.sight(G, f, b, f.pos, bCover))
+  const eyes = decks.length ? [...mine, ...decks] : mine
   if (cache) {
     const tk = terrainKey(G)
     if (cache.get('terrain') !== tk) {
@@ -118,32 +131,36 @@ export function fogSight(G, q, { seat, places = new Map(), chunks = [], lands = 
     }
   }
   const keys = new Map()
+  // ((F9c) a rider's by its hull's place and facing too, which its deck
+  // point turns with)
   const keyOf = (u) => {
     let k = keys.get(u)
-    if (k === undefined) keys.set(u, (k = unitKey(u)))
+    if (k === undefined) keys.set(u, (k = u.aboard ? `${unitKey(u)}|${q.hullOf(G, u).facing}` : unitKey(u)))
     return k
   }
   const pair = (f, e) => {
-    if (!cache) return q.sight(G, f, e).visible
+    if (!cache) return f.aboard ? sees(f, e).visible : q.sight(G, f, e).visible
     const id = `${f.id}|${e.id}`, sig = `${keyOf(f)}|${keyOf(e)}`, hit = cache.get(id)
     if (hit && hit.sig === sig) return hit.v
-    const v = q.sight(G, f, e).visible
+    const v = f.aboard ? sees(f, e).visible : q.sight(G, f, e).visible
     cache.set(id, { sig, v })
     return v
   }
   const units = new Set()
-  for (const e of foes) if (mine.some((f) => pair(f, e))) units.add(e.id)
+  for (const e of foes) if (eyes.some((f) => pair(f, e))) units.add(e.id)
   // ((F9a) an enemy rider is seen exactly when its hull is)
   for (const u of G.units) if (q.alive(u) && u.aboard && u.side !== seat && units.has(u.aboard)) units.add(u.id)
   // a stand-in seen by any friendly unit (its cover never asked: false)
-  const probe = (b) => mine.some((f) => q.sight(G, f, b, f.pos, false).visible)
+  const probe = (b) => eyes.some((f) => sees(f, b, false).visible)
   const point = (x, z, y) => ({ id: -1, side: -1, t: { chest: y - q.floorAt(G, x, z), eye: 0, models: 1 }, pos: { x, z }, r: 0, models: [{ alive: true, w: 1, ox: 0, oz: 0 }] })
   const byId = new Map(G.units.map((u) => [u.id, u]))
   const placesSeen = new Set()
   for (const [id, rec] of places) {
     const u = byId.get(id)
     if (!u || units.has(id) || !rec.models.some((m) => m.alive)) continue
-    if (probe({ id, side: u.side, t: u.t, pos: rec.pos, r: rec.r, models: rec.models })) placesSeen.add(id)
+    // ((F9c's review) a long hull's stand-in at its heading as last seen,
+    // the unit's own where a record keeps none)
+    if (probe({ id, side: u.side, t: u.t, pos: rec.pos, r: rec.r, ...(u.t.fp ? { facing: rec.f ?? u.facing } : {}), models: rec.models })) placesSeen.add(id)
   }
   const chunkOf = new Map(G.terrain.chunks.map((c) => [c.id, c]))
   const chunksSeen = new Set()

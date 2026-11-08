@@ -26,17 +26,23 @@
 // edge steps off toward that enemy; the hull then moves as a 'raider' while
 // brawlers ride it, else as a 'line' unit; after it moves, each other rider
 // steps off toward an objective its seat doesn't hold within
-// OBJECTIVE_RANGE + 2 of the hull's edge, and the riders past the deck's
-// firing slots step off once an enemy is within their weapon's range + 3,
-// each where it scores best (no slot before F9c's firing deck, so every
-// rider with a gun: core/actions/transport.js fireSlots). Every pick is draw-free (the nearest or best
-// cell, ties to the lowest index); the hull's own move takes bestSpot's
-// tie-break draws, as any unit's, inside the transport branch. Riders are
-// skipped by the movement loop (they move only with their hull, and step
-// off only if `only` names them) and by the charges (canCharge refuses
-// them); the shots reach them through canShoot, which refuses them too
-// until F9c's firing deck. The AI never boards a hull after the deployment
-// (the autoload fills them, core/actions/transport.js).
+// OBJECTIVE_RANGE + 2 of the hull's edge, and the riders with a gun past
+// the deck's firing slots step off once an enemy is within their weapon's
+// range + 3, each where it scores best. Every pick is draw-free (the
+// nearest or best cell, ties to the lowest index); the hull's own move
+// takes bestSpot's tie-break draws, as any unit's, inside the transport
+// branch. Riders are skipped by the movement loop (they move only with
+// their hull, and step off only if `only` names them) and by the charges
+// (canCharge refuses them). The AI never boards a hull after the
+// deployment (the autoload fills them, core/actions/transport.js).
+//
+// (F9c, DESIGN §4.2.5's firing deck; rule 10: it bumps with F9c) The deck
+// fires. The first `fire` riders with a gun (core/actions/transport.js
+// fireSlots, in G.units order among them) keep their slots aboard; a hull
+// with a gun aboard never advances (its riders would be left their
+// assault weapons only); and the shots reach the riders through canShoot
+// (aiShoot's re-check before each shot fills the slots in its role order),
+// each weighed from the deck (core/ai/score.js riderShot).
 import { p2D6, CHARGE_RANGE, OBJECTIVE_RANGE } from '../rules.js'
 import { hypot } from '../dmath.js'
 import { emit } from '../journal.js'
@@ -47,7 +53,7 @@ import {
 import { hold } from '../actions/move.js'
 import { chargeReach } from '../actions/charge.js'
 import { fireSlots, nearestCell } from '../actions/transport.js'
-import { worth, meleeValue, shotValue, spellValue, bestSpot, fallbackSpot, bestLanding, budgetOf, nearestOf } from './score.js'
+import { worth, meleeValue, shotValue, riderShot, spellValue, bestSpot, fallbackSpot, bestLanding, budgetOf, nearestOf } from './score.js'
 
 // Each unit type names its AI role in the race data (`t.ai`); the roles act
 // in this order, brawlers first and the guns last. (F9a) The transports
@@ -123,6 +129,9 @@ function* aiMoveOne(G, u, role, claimed) {
   } else if (role === 'shooter') {
     advance = !pick.canShoot && !pick.onObjective && (u.t.ranged.assault || nearest > u.t.ranged.range + u.t.M + 3)
   }
+  // ((F9c, rule 10) a hull with a gun aboard never advances: its riders
+  // would shoot only their assault weapons, DESIGN §4.2.5's firing deck)
+  if (advance && u.t.ai === 'transport' && riders(G, u).some((p) => p.t.ranged)) advance = false
   if (advance && !u.flags.advanced) {
     emit(G, 'focus', { x: u.pos.x, z: u.pos.z })
     yield { t: 'advance', u: u.id }
@@ -152,8 +161,8 @@ function* aiMoveOne(G, u, role, claimed) {
 // order that isn't a brawler steps off onto the landing cell nearest the
 // nearest objective its seat doesn't hold within OBJECTIVE_RANGE + 2 of
 // the hull's edge (the objectives as they stand when it does); then the
-// riders still aboard past the deck's firing slots (fireSlots: none until
-// F9c, so every rider still aboard; in G.units order) step
+// riders with a gun still aboard past the deck's firing slots (fireSlots:
+// (F9c) the first `fire` of them in G.units order keep theirs) step
 // off where they score best (bestLanding) once an enemy is within their
 // weapon's range + 3. No draws but the hull's own move's.
 function* aiTransport(G, v, mask, claimed) {
@@ -199,10 +208,11 @@ function* aiTransport(G, v, mask, claimed) {
     emit(G, 'focus', { x: v.pos.x, z: v.pos.z })
     yield { t: 'disembark', u: p.id, c }
   }
-  const aboard = riders(G, v)
-  for (let k = fireSlots(v); k < aboard.length; k++) {
-    const p = aboard[k], w = p.t.ranged
-    if (!mask(p) || p.flags.moved || !w) continue
+  // ((F9c) the slots go to the riders with a gun, the first `fire` of them)
+  const gunned = riders(G, v).filter((p) => p.t.ranged)
+  for (let k = fireSlots(v); k < gunned.length; k++) {
+    const p = gunned[k], w = p.t.ranged
+    if (!mask(p) || p.flags.moved) continue
     if (!enemiesOf(G, p).some((e) => gap(p, e) <= w.range + 3)) continue
     const c = bestLanding(G, p, landing(G, p, v), claimed)
     if (c < 0) continue
@@ -253,10 +263,12 @@ function weighed(G, u, w, e, v) {
 // is among the targets, valued net of the shot's friendly fire (shotValue:
 // a volley's strays into the fight, a template's friends under it), so one
 // that costs more of ours than it takes of theirs is never picked.
+//
+// ((F9c) a rider weighs each shot from its hull's deck: riderShot)
 function bestShot(G, u) {
   let best = null, bv = 0.4
   for (const e of shootTargets(G, u)) {
-    const v = weighed(G, u, u.t.ranged, e, shotValue(G, u, e, u.pos, u.flags.moved))
+    const v = weighed(G, u, u.t.ranged, e, u.aboard ? riderShot(G, u, e) : shotValue(G, u, e, u.pos, u.flags.moved))
     if (v > bv) {
       bv = v
       best = { e, v }

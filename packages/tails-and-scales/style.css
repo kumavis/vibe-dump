@@ -2749,3 +2749,19 @@ body:has(#lobby:not(.hidden)) #muster {
 body:has(#muster:not(.hidden)) #tooltip {
   z-index: 40;
 }
+
+/* F9c */
+/* firing decks (view/units.js, ui/screens/muster.js): a rider that can
+   shoot from its hull's deck (or is picked up there, in the shooting
+   phase) lights its chip on the hull's label, as its figures glow on the
+   deck; a vehicle row's fire slots, their tip on a hover or a tap */
+.ulabel .rd i.lit {
+  background: rgba(255, 255, 255, 0.86);
+  color: #1d160c;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.85);
+}
+.muster .mFire {
+  color: #fff1c4;
+  white-space: nowrap;
+  cursor: help;
+}

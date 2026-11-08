@@ -52,9 +52,11 @@
 // (F9a) A kind's decision `k` may be a list: `embark` answers both the
 // deployment and a phase (the movement phase: `phase` applies when the
 // decision is a phase's). A rider (u.aboard, DESIGN §4.2.5) can't move,
-// advance or charge ("aboard a vehicle: disembark first"), nor shoot (the
-// firing deck is F9c's), and is never a target ("inside a vehicle"); `place`
-// takes it off its hull, and placing a hull carries its riders.
+// advance or charge ("aboard a vehicle: disembark first"), and is never a
+// target ("inside a vehicle"); (F9c) it shoots from its hull's deck as
+// canShoot judges (the deck's slots, its hull not in combat), a refusal
+// naming the deck once its slots are spent; `place` takes it off its hull,
+// and placing a hull carries its riders.
 //
 // legal(G, seat, body) answers null, or why not: the body carries its kind's
 // fields and nothing else (`fields` whole numbers, every one; `opt` whole
@@ -79,7 +81,7 @@ import {
 } from './queries.js'
 import { doMove, doAdvance } from './actions/move.js'
 import { chargeFacing } from './actions/charge.js'
-import { mayBoard, doEmbark, mayLand, doDisembark } from './actions/transport.js'
+import { mayBoard, doEmbark, mayLand, doDisembark, hullOf, fireSlots, ridersShot } from './actions/transport.js'
 import { doShoot, kegsGoOff, weaponOf, allySpell } from './actions/shoot.js'
 import { declareCharge, finishCharge } from './actions/charge.js'
 import { finishAction, gameOver, runAI } from './engine.js'
@@ -354,10 +356,16 @@ function hasSpell(u, sp) {
   if (sp === undefined) return null
   return u.t.spells && sp >= 0 && sp < u.t.spells.length ? null : `${u.t.short} has no spell ${sp}`
 }
+// (F9c) why rider `u` can't shoot when its hull's deck has fired all its
+// slots this turn (and it was not among them), or null
+function deckSpent(G, u) {
+  if (!u.aboard || u.flags.shot) return null
+  const v = hullOf(G, u), n = ridersShot(G, v), k = fireSlots(v)
+  return n >= k ? `${u.t.short} can't shoot now: the ${v.t.short}'s deck has fired ${n} of its ${k}` : null
+}
 function mayShoot(G, u, tg, sp) {
-  // (F9a: riders don't shoot, nor cast, until the firing deck, F9c)
-  if (u.aboard) return `${u.t.short} is aboard a vehicle: riders can't shoot`
-  if (!canShoot(G, u)) return `${u.t.short} can't shoot now`
+  // ((F9c) a rider shoots from its hull's deck while canShoot takes it)
+  if (!canShoot(G, u)) return deckSpent(G, u) ?? `${u.t.short} can't shoot now`
   const info = shotInfo(G, u, tg, sp)
   return info.ok ? null : `${u.t.short} can't ${sp === undefined ? 'shoot' : `cast ${weaponOf(u, sp).name} on`} ${tg.t.short}: ${info.why}`
 }

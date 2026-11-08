@@ -1,10 +1,12 @@
 // Transports (DESIGN §4.2.5, F9a): units riding a vehicle, boarding it and
 // stepping off it, the deployment's autoload, and a hull destroyed with its
-// riders aboard (its wreck and the bail-out).
+// riders aboard (its wreck and the bail-out), and (F9c) the firing deck's
+// slots, stand and eye, which the shot reads (core/actions/shoot.js).
 //
 // This is the one rules module that reads a unit type's `transport` record
-// (data/schema.js: capacity, maxBase, fire, deck, wreck; sim/flag-lint.mjs's
-// one-reader rows), and the legality's reader of `vehicle`. A rider is a
+// (data/schema.js: capacity, maxBase, fire, deck, deckY, wreck;
+// sim/flag-lint.mjs's one-reader rows), and the legality's reader of
+// `vehicle`. A rider is a
 // unit whose `aboard` names its hull's id (core/units.js): it stands at its
 // hull's place (moveUnitTo carries it), and is off the table for every
 // spatial rule (core/queries.js's enemiesOf and friendsOf, and each site
@@ -62,16 +64,44 @@ export function room(G, v) {
   for (const p of riders(G, v)) n -= p.alive
   return n
 }
-// How many rider units may shoot from `v`'s deck now: the AI keeps that
-// many aboard while it has no other reason to step them off (DESIGN
-// §4.2.5's AI: the riders past the deck's slots step off once an enemy is
-// in reach of their guns). None before F9c's firing deck: canShoot refuses
-// every rider, so a rider kept aboard for a slot would carry its gun out of
-// the battle (F9a's integration: the play-report and army-sim's fit, with
-// the record's `fire` 2, kept both War-Cart squads aboard until the hull
-// reached an objective, and the cart fitted about 0). F9c makes this the
-// record's `fire` (v.t.transport.fire), once riders shoot from the deck.
-export const fireSlots = () => 0
+// ── The firing deck (F9c, DESIGN §4.2.5's "Firing decks") ───────────────────
+// How many rider units may shoot from `v`'s deck a turn: its record's `fire`
+// (the War-Cart's 2, the Howdah's 3). canShoot refuses a rider once its
+// hull's riders that shot this turn fill them (ridersShot), and the AI
+// keeps that many of its riders with a gun aboard (core/ai/policy.js
+// aiTransport: those past the slots step off once an enemy is in reach of
+// their guns). (F9a had none: a rider kept aboard for a slot carried its
+// gun out of the battle, and the cart fitted about 0.)
+export const fireSlots = (v) => v.t.transport.fire
+// The slots of `v`'s deck spent this turn: its riders whose `shot` flag is
+// up (DESIGN's ridersShot), derived at each query from the flags the hash
+// already prints and the turn's reset clears, so the deck keeps no state
+// of its own. A rider that shot and then fell would free its slot, but
+// nothing reaches a rider in the shooting phase (a template or a stray
+// strikes its hull, and a hull destroyed bails its riders out: no hull, no
+// slots), so it never does.
+export const ridersShot = (G, v) => riders(G, v).filter((p) => p.flags.shot).length
+// Where hull `v`'s riders shoot from: its deck point (DESIGN's deckPoint).
+// A long hull's is deckFrom's (its deckAt turned by its facing and
+// snapped, from its place: the Howdah's [0, 0] its body's centre); a round
+// hull's is its place, a deckAt or not: it has no facing to turn one by,
+// and its riders' range is measured from its edge, which no point inside
+// its base moves (no round hull has a deckAt yet; F5b's Basket gives
+// none).
+export const deckPoint = (v) => (v.t.fp ? deckFrom(v, v.pos) : v.pos)
+// Rider `u`'s eye on its hull's deck, a height in the table's frame: its
+// hull's floor, the deck's height over it (the record's `deckY`, where the
+// figures stand: the War-Cart's 0.7", the Howdah's 1.65") and its own eye
+// over its feet, groundY(hull) + deckY + u.t.eye (on a flat board the
+// floor is 0: the War-Cart's Nutkin see from 1.65", the Howdah's
+// Scaleguard from 2.6", over its own 1.9"). The shot's sight takes it as
+// its eye-height override (core/queries.js sight), never by asking whether
+// a unit rides, so a cell a rider would step off to is still scored from
+// the ground (core/ai/score.js bestLanding).
+export function deckEye(G, u) {
+  const v = hullOf(G, u)
+  return groundY(G, v) + v.t.transport.deckY + u.t.eye
+}
 
 // ── Boarding ────────────────────────────────────────────────────────────────
 // Why `u` may not board `v` now, or null (core/commands.js's `embark`,
@@ -272,6 +302,9 @@ export function autoload(G) {
 // round(|v| / cell), never −0), from `from`; `from` itself where deckAt
 // is the body's centre (the Howdah's [0, 0]) or there is none. The axes
 // turn by 0 and ±1, the diagonals by Math.SQRT1_2 (§4.1 rule 24): no trig.
+// A long hull's alone (it reads t.fp's cell and the facing): the hull's own
+// eye (core/queries.js sight, sightInfo) and (F9c) its riders' stand
+// (deckPoint, which keeps a round hull at its place).
 const R2 = Math.SQRT1_2
 const COS8 = [1, R2, 0, 0 - R2, -1, 0 - R2, 0, R2], SIN8 = [0, R2, 1, R2, 0, 0 - R2, -1, 0 - R2]
 const snapCell = (x, cell) => {

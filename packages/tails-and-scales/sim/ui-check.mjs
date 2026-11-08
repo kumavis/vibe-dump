@@ -45,7 +45,10 @@
 //             points bar and Ready stay put while the rows scroll to their
 //             end, − and + and Ready, the units' names (a tap: the card),
 //             Save list… and the tools at least 44 px, a tap on a disabled
-//             + pins its why
+//             + pins its why; (F9c) a War-Cart's row ends with its deck's
+//             fire slots ("⛭ deck fires 2"), inside the screen, and a tap
+//             pins how many squads aboard shoot against how many units the
+//             autoload fits aboard (the rule mirrored from the record)
 //   pass      hotseat: player 1's Ready shows the pass screen, which holds
 //             nothing of player 1's list (the Muster screen's rows gone
 //             from the page, no unit of the list named outside the rules'
@@ -476,6 +479,38 @@ const CHECKS = {
       const tip = await page.evaluate(() => ({ shown: document.querySelector('#tooltip').style.display === 'block', text: document.querySelector('#tooltip').textContent }))
       if (!tip.shown || tip.text !== 'Hero: 2 of 2') out.why.push(`a tap on the Elder's +: the tooltip ${tip.shown ? `"${tip.text}"` : 'not shown'}`)
       else out.rows.push('a tap pins "Hero: 2 of 2"')
+      // ((F9c, F11b's Departs) a War-Cart's row: its deck's fire slots on
+      // its line, inside the screen, and a tap pins the tip of how many of
+      // its squads aboard shoot against how many units the autoload fits
+      // aboard (the rule mirrored here from the record: Troops in roster
+      // order, within maxBase, neither big nor a wrecker, while they fit))
+      {
+        const c = counts('squirrel', { elder: 1, nutkin: 2, grenadier: 2, warcart: 1 })
+        await setTo(page, c)
+        const r = RACES.squirrel, tr = r.units.warcart.transport
+        let left = tr.capacity, n = 0
+        r.roster.forEach((k, i) => {
+          const t = r.units[k]
+          for (let j = 0; j < c[i]; j++) {
+            if (t.role !== 'Troops' || t.base > tr.maxBase || t.big || t.wrecker || t.models > left) continue
+            left -= t.models
+            n++
+          }
+        })
+        const want = `The War-Cart's deck fires ${tr.fire} a turn; ${n} unit${n === 1 ? ' fits' : 's fit'} aboard`
+        const w = await wide()
+        const fire = await page.evaluate(() => {
+          const e = document.querySelector('.mRow[data-unit="warcart"] .mFire'), b = e?.getBoundingClientRect()
+          return e && { text: e.textContent, left: b.left, right: b.right, W: document.documentElement.clientWidth }
+        })
+        if (!fire || fire.text !== `⛭ deck fires ${tr.fire}` || fire.left < 0 || fire.right > fire.W + 0.5 || w.n) out.why.push(`the War-Cart's row at 360 px: its fire slots ${fire ? `"${fire.text}" at ${Math.round(fire.left)}-${Math.round(fire.right)}` : 'missing'}${w.n ? `, ${w.n} boxes outside (${w.bad.join(', ')})` : ''}`)
+        else {
+          await page.locator('.mRow[data-unit="warcart"] .mFire').tap()
+          const ft = await page.evaluate(() => ({ shown: document.querySelector('#tooltip').style.display === 'block', text: document.querySelector('#tooltip').textContent }))
+          if (!ft.shown || ft.text !== want) out.why.push(`a tap on the War-Cart's fire slots: the tooltip ${ft.shown ? `"${ft.text}"` : 'not shown'}, not "${want}"`)
+          else out.rows.push(`the War-Cart's row "${fire.text}", a tap pins "${ft.text}"`)
+        }
+      }
       if (errors.length) out.why.push(`page errors: ${errors.join(' | ')}`)
     } finally {
       await ctx.close()
@@ -711,6 +746,11 @@ const MUTATIONS = {
   // a Random AI seat's race changed: its Random let go for the default,
   // never rerolled
   'reroll-dropped': ['app/boot.js', '      picking.armies[s] = picking.armies[s].random ? { counts: randomOf(s, race, picking.mission), random: true } : armyDefault(s, race,', '      picking.armies[s] = armyDefault(s, race,', ['race']],
+  // (F9c) a vehicle row without its deck's fire slots
+  'fire-untold': ['ui/screens/muster.js', "        line.append(' · ', this.fireTip(t, hulls))\n", '', ['phone']],
+  // (F9c) the fire slots' tip counting the hull's capacity in models for
+  // the units that fit
+  'fire-miscounted': ['ui/screens/muster.js', '    const ns = [...new Set(hulls.map((h) => h.riders.length))]\n', '    const ns = [...new Set(hulls.map((h) => h.models))]\n', ['phone']],
   // a finger lifted on a marked element pins nothing (a hover's tip alone)
   'tap-unpinned': ['ui/tooltip.js', '      if (m) this.tip(m, { x: e.clientX, y: e.clientY }, true)\n', '', ['phone']],
 }

@@ -53,13 +53,30 @@
 // model last put on the page): after each snap in a phase, and wherever the
 // player is idle on a seat played here holding its phase decision, it must
 // be exactly "no unit of the seat can act" (the core's canAct over the
-// seat's units, asked with the dice locked; (F9a) riders left out, as
-// DESIGN §4.2.5 has it: a rider may step off, but riding on leaves nothing
-// undone), and (F3) the page must show it: End lit (its
+// seat's units, asked with the dice locked; (F9a) riders left out of the
+// movement phase, as DESIGN §4.2.5 has it: a rider may step off, but
+// riding on leaves nothing undone; (F9c) counted in the shooting phase,
+// where a rider that can shoot from its deck has something left to do),
+// and (F3) the page must show it: End lit (its
 // `.ready` class) exactly then, and Begin battle lit wherever it shows in
 // the deployment. Over the default battles it must have been true somewhere
 // (a seat with nothing left to do in its phase, before its End) as well as
 // false.
+//
+// (F9c, DESIGN §4.2.5's firing deck) And the riders' part in it, on a
+// hotseat log whose War-Carts carry riders (DECK_LOG, vehicle/'s embark
+// log since F9c's corpus, among the default battles; vehicle/'s rearranged
+// log's riders able to shoot are casters alone, whose hint is their
+// spell's): at each such frame in the
+// seat's shooting phase, its riders
+// that can shoot from a deck are counted, and the frames where nothing but
+// riders can act (`only`: End held unready by them alone, decision Q14's
+// rule, which F9a's leaving every rider out would light), and over the
+// default battles there must be some; and at the first few frames with a
+// rider able (no caster: a caster's hint is its spell's), that rider picked
+// up, the hint must name its hull's deck and the slots it has left as the
+// rules count them ("From the War-Cart's deck (1 of 2 slots left): …",
+// fireSlots less ridersShot), the selection put back after.
 //
 //   node sim/hud-check.mjs [--only <kinds, modes or ids>] [--dist <dir>] [--tips]
 //                                          (--tips: (F7b) the tooltips alone,
@@ -122,7 +139,16 @@ try {
   console.error(`hud-check: ${e.message}\nusage: node sim/hud-check.mjs [--only <kinds, modes or ids>] [--dist <dir>] | --self-test`)
   process.exit(2)
 }
-const DEFAULT = '64-89,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,hotseat-late-vote-1'
+// ((F9c) a hotseat log, riders aboard its War-Carts in shooting phases:
+// the firing deck's readiness and hint. It was hull/'s
+// hotseat-hull-pivot-1 until the Corpus phase played it again with the
+// human-bot's riders shooting: its bot now shoots every rider it can
+// before it ends, so no frame there has only riders able (the `hull`
+// policy takes the seat's first ready unit); vehicle/'s
+// hotseat-ride-embark-1, played by the `ride` bot, which passes over a
+// unit now and then, leaves riders the only units able at least once)
+const DECK_LOG = 'hotseat-ride-embark-1'
+const DEFAULT = `64-89,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,hotseat-late-vote-1,${DECK_LOG}`
 let items
 try {
   items = select(loadCorpus().items, a.only ?? DEFAULT)
@@ -143,7 +169,15 @@ const MUTATIONS = {
   // (until its next phase.start plays)
   'phase-unshown': ['present/hud-model.js', "export const afterSnap = (M) => ({ phaseShown: M.stage === 'battle', buttonsUp: false })", 'export const afterSnap = () => ({ phaseShown: false, buttonsUp: false })'],
   // End never ready, whatever is left to do (F3's End never lit)
-  'ready-never': ['present/hud-model.js', '    ready: mine && idle ? !ask((G, q) => G.units.some((u) => u.side === P.seats[0] && !u.aboard && !covered.has(u.id) && q.canAct(G, u))) : false,', '    ready: false,'],
+  // ((F9c) its anchor the ready line as the firing deck left it: a rider
+  // counted in the shooting phase)
+  'ready-never': ['present/hud-model.js', "    ready: mine && idle ? !ask((G, q) => G.units.some((u) => u.side === P.seats[0] && (P.phase === 'shoot' || !u.aboard) && !covered.has(u.id) && q.canAct(G, u))) : false,", '    ready: false,'],
+  // (F9c, decision Q14; on DECK_LOG) F9a's readiness: every rider left
+  // out, so End lights in a shooting phase whose riders can still shoot
+  'ready-riders-out': ['present/hud-model.js', "u.side === P.seats[0] && (P.phase === 'shoot' || !u.aboard) && !covered.has(u.id)", 'u.side === P.seats[0] && !u.aboard && !covered.has(u.id)', DECK_LOG],
+  // (F9c; on DECK_LOG) a rider picked up in the shooting phase hinted as
+  // any shooter: its deck and slots unsaid
+  'deck-unhinted': ['present/hud-model.js', '      shoot: casting ?? (sel ? sel.aboard ? deckHint(', '      shoot: casting ?? (sel ? false ? deckHint(', DECK_LOG],
   // (F3) the model right, but End never lit on the page
   'lit-never': ['ui/actions.js', "    end.classList.toggle('ready', m.end.lit)", "    end.classList.toggle('ready', false)"],
   // (F3) End lit only when ready: Begin battle neutral in the deployment
@@ -297,7 +331,10 @@ function pageHarness(job, mode, settle, names) {
   // (`ready`: end.ready held to the match at each frame the player is idle
   // on a local seat's phase: how often, how often true, the first time
   // wrong)
-  const sim = (window.__sim = { error: null, driver: null, snaps: [], done: false, ready: { checked: 0, ready: 0, wrong: null } })
+  // ((F9c) `ready.deck`: the frames in a shooting phase with a rider of the
+  // seat able to shoot from a deck, those where only riders can act, and
+  // the hints read with one picked up)
+  const sim = (window.__sim = { error: null, driver: null, snaps: [], done: false, ready: { checked: 0, ready: 0, wrong: null, deck: { able: 0, only: 0, hints: 0 } } })
   let ts = null
   addEventListener('error', (e) => (sim.error ??= String(e.error?.stack ?? e.message)))
   addEventListener('unhandledrejection', (e) => (sim.error ??= String(e.reason?.stack ?? e.reason)))
@@ -366,8 +403,34 @@ function pageHarness(job, mode, settle, names) {
   // nothing left for the seat whose phase decision the match holds to do
   // (what end.ready must say)
   // ((F9a) a rider left out, as the HUD model leaves it: riding on is no
-  // action left undone)
-  const done = (g) => !ts.session.preview((G, q) => G.units.some((u) => u.side === g.pending.seats[0] && !u.aboard && q.canAct(G, u)))
+  // action left undone; (F9c) but in the shooting phase a rider that can
+  // shoot from its deck is a shooter with a target)
+  const done = (g) => !ts.session.preview((G, q) => G.units.some((u) => u.side === g.pending.seats[0] && (g.pending.phase === 'shoot' || !u.aboard) && q.canAct(G, u)))
+  // (F9c) A frame idle on a seat's shooting phase: its riders that can
+  // shoot from a deck counted (and whether nothing else can act); at the
+  // first few with one (no caster), at a trace line not yet asked, that
+  // rider picked up and the hint read, then what was picked up put back.
+  const deckAsked = new Set()
+  const deckFrame = (g) => {
+    const seat = g.pending.seats[0]
+    const d = ts.session.preview((G, q) => {
+      const able = G.units.filter((u) => u.side === seat && q.canAct(G, u)), rs = able.filter((u) => u.aboard)
+      const r = rs.find((u) => !u.t.spells), v = r ? q.hullOf(G, r) : null
+      return { riders: rs.length, others: able.length - rs.length, rider: r?.id ?? null, hull: v?.t.short ?? null, k: v ? q.fireSlots(v) : 0, n: v ? q.ridersShot(G, v) : 0 }
+    })
+    const D = sim.ready.deck
+    if (!d.riders) return
+    D.able++
+    if (!d.others) D.only++
+    if (d.rider === null || D.hints >= 3 || deckAsked.has(ts.trace.length)) return
+    deckAsked.add(ts.trace.length)
+    const before = ts.group.picked(), find = (id) => ts.G.units.find((u) => u.id === id)
+    ts.select(find(d.rider))
+    const hint = read().hint, want = `From the ${d.hull}'s deck (${d.k - d.n} of ${d.k} slot${d.k === 1 ? '' : 's'} left): click an enemy unit to shoot it.`
+    ts.select(before.length === 1 ? find(before[0]) ?? null : null)
+    D.hints++
+    if (!hint.startsWith(want)) sim.ready.wrong ??= `deck: unit ${d.rider} riding a ${d.hull} picked up in seat ${seat}'s shooting phase (trace line ${ts.trace.length}): the hint "${hint}", not "${want} …"`
+  }
   const read = () => ({
     end: shown('#endPhase'), auto: shown('#autoPhase'), shortest: shown('#closestSpot'), ready: ts.hud?.end.ready ?? null, zones: ts.hud?.zones ?? null, shading: shading(),
     hint: getComputedStyle(document.querySelector('#hint')).display === 'none' ? '' : document.querySelector('#hint').textContent,
@@ -443,6 +506,8 @@ function pageHarness(job, mode, settle, names) {
         if (got !== want) sim.ready.wrong ??= `End's readiness ${got} at trace line ${ts.trace.length} (seat ${g.pending.seats[0]}'s ${g.pending.phase}), not ${want}`
         // (F3) and the page shows it: End lit exactly then
         else if (lit() !== want) sim.ready.wrong ??= `End ${lit() ? 'lit' : 'not lit'} at trace line ${ts.trace.length} (seat ${g.pending.seats[0]}'s ${g.pending.phase}), where its readiness is ${want}`
+        // ((F9c) the firing deck's riders in the seat's shooting phase)
+        if (g.pending.phase === 'shoot') deckFrame(g)
       }
       // (F3) Begin battle lit wherever it shows in the deployment
       if (g && ts.player.idle && g.pending?.k === 'deploy' && shown('#endPhase') && !lit()) sim.ready.wrong ??= `Begin battle not lit in the deployment (trace line ${ts.trace.length})`
@@ -563,7 +628,9 @@ function judge(item, r) {
 
 // a snap as the page showed it, in brief
 const brief = (s) => `${s.what} (trace line ${s.at}: ${s.what === 'past the end' ? `"${s.got.over.title}", "${s.got.over.why}"` : s.what === 'at the round limit' ? `"${s.got.over.title}"` : s.what.endsWith("at a charge's end") ? `Shortest move, "${s.got.hint.slice(0, 22)}…", spots shaded` : `"${s.got.end.text}"${s.got.auto.show ? ', Auto' : ''}`})`
-const say = (it, r, why) => `${why ? `FAIL: ${why.slice(0, 400)}` : `right after ${r.snaps.length} snap${r.snaps.length === 1 ? '' : 's'}: ${r.snaps.map(brief).join(', ')}${r.ready?.checked ? `; End's readiness right at ${r.ready.checked} frames idle on a local seat's phase (${r.ready.ready} ready)` : ''}`}`
+// ((F9c) and the firing deck's frames, where it had riders able)
+const deckSaid = (d) => (d?.able ? `; (F9c) ${d.able} frames of the shooting phase with a rider able to shoot from a deck (${d.only} with nothing else able), its hint right ${d.hints} times` : '')
+const say = (it, r, why) => `${why ? `FAIL: ${why.slice(0, 400)}` : `right after ${r.snaps.length} snap${r.snaps.length === 1 ? '' : 's'}: ${r.snaps.map(brief).join(', ')}${r.ready?.checked ? `; End's readiness right at ${r.ready.checked} frames idle on a local seat's phase (${r.ready.ready} ready)` : ''}${deckSaid(r.ready?.deck)}`}`
 
 const work = mkdtempSync(join(tmpdir(), 'tails-and-scales-hud-'))
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] })
@@ -571,7 +638,11 @@ let failed = 0
 try {
   if (a['self-test']) {
     const on = select(loadCorpus().items, SELF_TEST_ON)
-    console.log(a.tips ? `hud-check self-test: (F7b) the tooltips' ${Object.keys(TIP_MUTATIONS).length} edits, after the unedited code passes them` : `hud-check self-test: ${Object.keys(MUTATIONS).length} edits, each on ${on.map((x) => x.id).join(' and ')}, after the unedited code passes there; then the tooltips' ${Object.keys(TIP_MUTATIONS).length}`)
+    // ((F9c) an edit naming the battles it must fail on (its fourth
+    // field: DECK_LOG's) runs there alone; the unedited code runs on them
+    // too)
+    const onOf = (name) => (name === 'unedited' ? select(loadCorpus().items, [SELF_TEST_ON, ...new Set(Object.values(MUTATIONS).map((m) => m[3]).filter(Boolean))].join(',')) : MUTATIONS[name][3] ? select(loadCorpus().items, MUTATIONS[name][3]) : on)
+    console.log(a.tips ? `hud-check self-test: (F7b) the tooltips' ${Object.keys(TIP_MUTATIONS).length} edits, after the unedited code passes them` : `hud-check self-test: ${Object.keys(MUTATIONS).length} edits, each on ${on.map((x) => x.id).join(' and ')} ((F9c) or the battles it names: ${DECK_LOG}), after the unedited code passes there; then the tooltips' ${Object.keys(TIP_MUTATIONS).length}`)
     // ((F7b) with --tips, the tooltips' edits alone)
     for (const [k, name] of (a.tips ? [] : ['unedited', ...Object.keys(MUTATIONS)]).entries()) {
       const dir = copyCode(PKG, join(work, `${k}`))
@@ -584,14 +655,17 @@ try {
       const served = await startStaticServer(await buildApp(dir, join(work, `${k}-dist`)))
       const whys = []
       try {
-        for (const it of on) {
+        for (const it of onOf(name)) {
           let r
           try {
             r = await run(browser, served.url, it)
           } catch (e) {
             r = { error: e.message, snaps: [] }
           }
-          whys.push([it.id, judge(it, r)])
+          // ((F9c) DECK_LOG must have met the riders it is there for:
+          // frames where only riders could act, and a hint read)
+          const deck = it.id === DECK_LOG && !r.error && !(r.ready?.deck?.only > 0 && r.ready.deck.hints > 0) ? `deck: ${it.id} met ${r.ready?.deck?.only ?? 0} frames with only riders able and read ${r.ready?.deck?.hints ?? 0} hints` : ''
+          whys.push([it.id, judge(it, r) || deck])
         }
       } finally {
         served.close()
@@ -633,7 +707,7 @@ try {
     console.log(`hud-check: ${items.length} battles in Chromium ${browser.version()}, each snapped mid-battle where the table is behind (in the deployment, in the roll-off, in a seat's phase and at a charge's end, there again once the table has caught up, for a human log, and past its end), the HUD, the charge's spots and the end screen read once the table settles`)
     // End's readiness over every battle: at how many frames held, at how
     // many true
-    const ready = { checked: 0, ready: 0 }
+    const ready = { checked: 0, ready: 0, deck: { able: 0, only: 0, hints: 0 } }
     try {
       for (const it of a.tips ? [] : items) {
         let r
@@ -646,6 +720,7 @@ try {
         if (why) failed++
         ready.checked += r.ready?.checked ?? 0
         ready.ready += r.ready?.ready ?? 0
+        for (const k of ['able', 'only', 'hints']) ready.deck[k] += r.ready?.deck?.[k] ?? 0
         console.log(`  ${it.kind.padEnd(5)} ${it.id.padEnd(24)} ${say(it, r, why)}`)
       }
       // ((F7b) the tooltips that read heights, on a fortified board)
@@ -661,7 +736,13 @@ try {
       failed++
       console.log(`  FAIL: End's readiness held at ${ready.checked} frames idle on a local seat's phase, ${ready.ready} of them ready: never ${ready.ready ? 'not ready' : 'ready'}`)
     }
-    console.log(failed ? `\nhud-check FAILED: ${failed} problem(s) over ${a.tips ? 0 : items.length} battles and the tooltips` : `\nhud-check passed: after every snap mid-battle the HUD is the snapped match's (Begin battle in the deployment, End and Auto up for a local seat's phase, Shortest move and the spots at a charge's end, the end screen past the end, worded as the match's game.over), and End's readiness is the match's at ${ready.checked} frames idle on a local seat's phase (${ready.ready} ready); (F7b) the tooltips read heights (a climb's cost, a rim, a shot past a parapet in cover, the ray in the verdict's colour)`)
+    // ((F9c) the default battles hold riders able to shoot from a deck, a
+    // frame where only they can act, and a hint read with one picked up)
+    if (!failed && !a.only && !a.tips && !(ready.deck.only > 0 && ready.deck.hints > 0)) {
+      failed++
+      console.log(`  FAIL: (F9c) ${ready.deck.able} frames with a rider able to shoot from a deck, ${ready.deck.only} with only riders able, ${ready.deck.hints} hints read: the default battles must have both`)
+    }
+    console.log(failed ? `\nhud-check FAILED: ${failed} problem(s) over ${a.tips ? 0 : items.length} battles and the tooltips` : `\nhud-check passed: after every snap mid-battle the HUD is the snapped match's (Begin battle in the deployment, End and Auto up for a local seat's phase, Shortest move and the spots at a charge's end, the end screen past the end, worded as the match's game.over), and End's readiness is the match's at ${ready.checked} frames idle on a local seat's phase (${ready.ready} ready${ready.deck.able ? `; (F9c) ${ready.deck.able} of them in a shooting phase with a rider able to shoot from a deck, ${ready.deck.only} with only riders able, and a rider's hint its deck's and slots' ${ready.deck.hints} times` : ''}); (F7b) the tooltips read heights (a climb's cost, a rim, a shot past a parapet in cover, the ray in the verdict's colour)`)
   }
 } finally {
   await browser.close()

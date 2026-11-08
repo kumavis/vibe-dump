@@ -176,6 +176,12 @@ const CROSS = {
     // (core/footprint.js, which draws nothing: listed as the door's, for
     // the view's outline, overlay and tools)
     'discsOf', 'clearOf', 'fpGap',
+    // (F9c) the firing deck: its slots, those its riders spent this turn,
+    // the point they shoot from and a rider's eye there (core/actions/
+    // transport.js, pure: read off the units, drawing nothing), for the
+    // view's rays, range rings and lit chips, the HUD's hint and the
+    // group's fire
+    'fireSlots', 'ridersShot', 'deckPoint', 'deckEye',
   ],
   // (R8) KINDS: the command kinds, a frozen list of names, which
   // match/envelope.js decodes no other than

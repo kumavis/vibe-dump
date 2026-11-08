@@ -62,7 +62,21 @@
 // the AI's riders step off by their first turns, so its hulls die empty;
 // the bail-out's hop and dice are the vehicle/ corpus's bail-out log's, a
 // default row.) It runs by default and with --only cart; the self-test's
-// deck edits run on it.
+// deck edits run on it. (F9c, DESIGN §4.2.5's firing deck: decision Q19)
+// Its riders now shoot from their decks: the row must have seen shots from
+// a deck (every volley and template thrown by a unit aboard), and at each
+// checkpoint every rider's figures on a deck are held to the target it
+// last faced (unit.face), turned there relative to its hull until that
+// hull moves or the rider steps off (each figure within TURN_TOL of the
+// bearing from where it stood as it faced, less its hull's yaw then, once
+// it has had TURN_SETTLE frames more to turn; one whose hull has since
+// turned to a target of its own is turned with it, unchecked; one that
+// faced nothing since, or (F9c's review) rode through a snap, its hull's
+// front), with some checkpoint after a
+// shot holding a turned figure (the figures a hull's move turns back to
+// its front are counted, `resets`: neither watched battle has one, so
+// input-check's deck row holds that turn); no rider's glow lit (a watched battle lights no ring); and the
+// snaps' figures at their slots as ever (snapDiff).
 //
 // (F7c) And the collapse row (DESIGN §4.2.4's "Destruction and settle":
 // timber platforms shot out from under their defenders, who fall, and the
@@ -109,7 +123,11 @@
 // hull's figure turned as the mirror's heading has it (f·π/4: a snap's
 // yaw). Its moves end on a heading neither the seat's edge's nor the
 // hull's own, so a yaw left at either shows. It runs by default and with
-// --only howdah; the self-test's yaw edits run on it.
+// --only howdah; the self-test's yaw edits run on it. (F9c) Then, on a page
+// of its own, a watched Field battle of the AI's Howdahs (HOWDAH_WATCH:
+// the Coil with two Howdahs, their riders shooting from their decks) held
+// as the cart row's battle is, its deck shots and turned figures required
+// alike.
 //
 // (V3d) And the Powder Field's row (`powder-row`): the same, a watched
 // battle of the powder mission in place of the grand one's, its table's
@@ -157,7 +175,7 @@ try {
   console.error(`snap-check: ${e.message}\nusage: node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>] | --self-test [--mutations <names>]`)
   process.exit(2)
 }
-const DEFAULT = '64-89,4242-99,1-2,64886-198528,watch-keg-1,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1,bushtail-random-bail-3'
+const DEFAULT = '64-89,4242-99,1-2,64886-198528,watch-keg-1,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1,bushtail-random-bail-1'
 let items
 // ((F8b) the Grand row: by default, or named in --only)
 const only = (a.only ?? DEFAULT).split(',').map((x) => x.trim())
@@ -258,10 +276,23 @@ const MUTATIONS = {
   // (F9b, on the Howdah row) a long hull's figure never turned to its
   // facing: it walks on at the yaw it had
   'yaw-frozen': ['view/units.js', '            m.yaw = v.facing\n            m.moving = v.moving\n', '            m.moving = v.moving\n', 'howdah'],
+  // (F9c, on the cart row) a rider that shoots from its deck never turned
+  // to its target there
+  'riders-unturned': ['view/units.js', '      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z) - hm.rotation.y)\n', '      f.deckLook = undefined\n', 'cart'],
+  // (F9c, on the Howdah row's watched battle) the look yaw the target's
+  // bearing in the table's frame, not relative to the hull it rides
+  'look-world': ['view/units.js', '      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z) - hm.rotation.y)\n', '      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z))\n', 'howdah'],
 }
 // (F9a) the cart row's battle: the Field mission, seat 0's Bushtails with
 // two War-Carts (950 points), seat 1 its preset
 const CART_ARMIES = '1222112,field'
+// (F9c) the Howdah row's watched battle: the Field mission, seat 0 the Coil
+// with two Howdahs, the AI's riders shooting from their decks; how far a
+// rider's figure may stand off the yaw its turn set (rad: its last turn
+// eased out), once it has had TURN_SETTLE frames more than a checkpoint's
+// settle since a rider faced or a hull moved
+const HOWDAH_WATCH = 'races=serpent,squirrel&mission=field&armies=2232222,field'
+const TURN_TOL = 0.02, TURN_SETTLE = 40
 // (F7c) the collapse row's battle: corpus-add's candidate (its board and
 // dice from mulberry32(9000 + k), the bot's policy seed k), and the clock
 // speed it plays at without ?fast (a fall's drop and a figure's death end
@@ -500,14 +531,26 @@ async function grandRow(browser, url, mission = 'grand') {
   }
 }
 // (F9a) The cart row: a watched Field battle with War-Carts (above).
-// Returns { checks, error, ... }, judged by judgeCart.
-async function cartRow(browser, url) {
+// Returns { checks, error, ... }, judged by judgeCart. ((F9c) `q` the
+// battle's armies (the cart row's, or the Howdah row's watched battle,
+// HOWDAH_WATCH), `key` the hull counted. And its riders' shots from the
+// deck: every volley and template thrown by a unit aboard counted (`deck`
+// at each check), and at each check every rider's figures on a deck
+// turned to the target it last faced (unit.face), as the face put its
+// look yaw relative to the hull, until that hull moved or the rider
+// stepped off: each figure within TURN_TOL of the bearing from where it
+// stood as it faced, less its hull's yaw then (taken as the event plays,
+// the figure's own `want`; each figure checked counted, `turned`), else
+// its hull's front, a checkpoint after a turn or a move waiting
+// TURN_SETTLE frames more; and no rider's halo lit (a watched battle has
+// no seat played here, so no ring is lit for it).)
+async function cartRow(browser, url, q = `mission=field&armies=${CART_ARMIES}`, key = 'warcart') {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } })
   try {
     const page = await ctx.newPage()
     const errors = []
     page.on('pageerror', (e) => errors.push(e.message))
-    await page.addInitScript(`(${(settle) => {
+    await page.addInitScript(`(${(settle, TOL, MORE) => {
       const sim = (window.__cart = { checks: [], error: null })
       addEventListener('error', (e) => (sim.error ??= String(e.error?.stack ?? e.message)))
       addEventListener('unhandledrejection', (e) => (sim.error ??= String(e.reason?.stack ?? e.reason)))
@@ -518,14 +561,43 @@ async function cartRow(browser, url) {
       const hook = () => {
         if (!window.__ts) return void requestAnimationFrame(hook)
         window.__ts.view.pauseAtChecks((e) => new Promise((resolve) => {
-          let n = settle
+          // ((F9c) longer after a rider's turn or a hull's move: the
+          // figures' turns eased out)
+          let n = settle + (sim.deck.moved ? MORE : 0)
+          sim.deck.moved = false
           const f = () => {
             if (--n > 0) return void requestAnimationFrame(f)
             try {
               const ts = window.__ts, d = ts.view.snapDiff(e.proj)
               const riders = Object.values(e.proj.units).filter((u) => u.aboard && u.alive > 0).length
               const wrecks = ts.G.terrain.chunks.filter((c) => c.kind === 'wreck' && e.proj.chunks[c.id]?.alive).length
-              sim.checks.push({ mark: `check at trace line ${ts.trace.length}`, n: d.n, diffs: d.diffs, riders, wrecks, figures: d.figures })
+              // ((F9c) the riders' figures turned to their targets on the
+              // deck, and no halo lit)
+              const turn = [], deck = sim.deck
+              let turned = 0
+              ts.scenery.scene.traverse((o) => {
+                const r = o.userData?.rider
+                if (r === undefined || !o.parent || o.parent.userData?.deck === undefined) return
+                if (o.userData.glow) {
+                  if (o.visible) turn.push(`unit ${r}'s halo lit in a watched battle`)
+                  return
+                }
+                const at = deck.looks.get(o), wrap = (x) => Math.abs(((((x % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI)) - Math.PI))
+                // (one whose hull turned to a target of its own since it
+                // faced: turned as its hull, unchecked; (F9c's review) one
+                // riding through a snap faces its hull's front, as on a
+                // fresh table)
+                if (at === null) return
+                // (none faced since its hull last moved: its hull's front)
+                if (at === undefined) {
+                  if (!(wrap(o.rotation.y) <= TOL)) turn.push(`unit ${r}'s figure on the deck ${wrap(o.rotation.y).toFixed(3)} rad off its hull's front, no target faced since its hull moved`)
+                  return
+                }
+                const dy = wrap(o.rotation.y - at.want)
+                turned++
+                if (!(dy <= TOL)) turn.push(`unit ${r}'s figure on the deck ${dy.toFixed(3)} rad off the target it faced`)
+              })
+              sim.checks.push({ mark: `check at trace line ${ts.trace.length}`, n: d.n + turn.length, diffs: [...turn.slice(0, 4), ...d.diffs], riders, wrecks, figures: d.figures, deck: deck.shots, turned })
             } catch (err) {
               sim.error ??= String(err.stack ?? err)
             }
@@ -533,14 +605,56 @@ async function cartRow(browser, url) {
           }
           requestAnimationFrame(f)
         }))
-        // every bail-out played (a forced unit.disembark)
+        // every bail-out played (a forced unit.disembark); ((F9c) every shot
+        // from a deck, and each rider's last target faced, where it stood:
+        // forgotten as its hull moves or it steps off, as the view forgets it)
         const obs = window.__ts.player.observer
         sim.bails = 0
-        window.__ts.present.listen({ ...obs, event: (ev, M) => (ev.t === 'unit.disembark' && (sim[ev.forced ? 'bails' : 'steps'] = (sim[ev.forced ? 'bails' : 'steps'] ?? 0) + 1), obs?.event?.(ev, M)), reset: (M) => obs?.reset?.(M) })
+        // (`looks`: each rider figure's yaw on its deck as its last turn set
+        // it, { r, want }, as the view's face() takes it (from where the
+        // figure stands as the event plays, less its hull's yaw), or null
+        // once its hull has turned to a target of its own; none since its
+        // hull moved, or since a snap seated it: its front.)
+        // (`resets`: figures turned to a target whose hull then moved, so
+        // must face its front again)
+        const deck = (sim.deck = { shots: 0, looks: new Map(), moved: false, resets: 0 })
+        const figures = (id) => {
+          const out = []
+          window.__ts.scenery.scene.traverse((o) => o.userData?.rider === id && !o.userData.glow && o.parent?.userData?.deck !== undefined && out.push(o))
+          return out
+        }
+        const forget = (gone) => {
+          for (const [o, l] of [...deck.looks]) if (gone(l?.r ?? o.userData.rider)) deck.looks.delete(o)
+        }
+        const onDeck = (ev, M) => {
+          const u = M.units[ev.u]
+          if ((ev.t === 'volley' || ev.t === 'blast.fire') && u?.aboard) deck.shots++
+          if (ev.t === 'unit.face' && u?.aboard && M.units[ev.tg]) {
+            const T = M.units[ev.tg].pos
+            for (const o of figures(ev.u)) {
+              o.updateWorldMatrix(true, false)
+              const w = o.getWorldPosition(o.position.clone())
+              deck.looks.set(o, { r: ev.u, want: Math.atan2(T.x - w.x, T.z - w.z) - o.parent.parent.rotation.y })
+            }
+            deck.moved = true
+          }
+          // (a hull turning to a target of its own turns its riders with it)
+          if (ev.t === 'unit.face' && u && !u.aboard) for (const [o, l] of deck.looks) if (l && M.units[l.r]?.aboard === ev.u) deck.looks.set(o, null)
+          // (a hull with riders moving: they face its front again)
+          if (ev.t === 'unit.move' && Object.values(M.units).some((x) => x.aboard === ev.u && x.alive > 0)) {
+            for (const l of deck.looks.values()) if (l && M.units[l.r]?.aboard === ev.u) deck.resets++
+            forget((r) => M.units[r]?.aboard === ev.u)
+            deck.moved = true
+          }
+          if (ev.t === 'unit.disembark' || ev.t === 'unit.embark') {
+            forget((r) => r === ev.u)
+          }
+        }
+        window.__ts.present.listen({ ...obs, event: (ev, M) => (ev.t === 'unit.disembark' && (sim[ev.forced ? 'bails' : 'steps'] = (sim[ev.forced ? 'bails' : 'steps'] ?? 0) + 1), onDeck(ev, M), obs?.event?.(ev, M)), reset: (M) => (deck.looks.clear(), (deck.moved = true), obs?.reset?.(M)) })
       }
       hook()
-    }})(${SETTLE})`)
-    await page.goto(`${url}/?debug&fast&seed=4242&dice=99&mission=field&armies=${CART_ARMIES}`)
+    }})(${SETTLE}, ${TURN_TOL}, ${TURN_SETTLE})`)
+    await page.goto(`${url}/?debug&fast&seed=4242&dice=99&${q}`)
     await page.waitForFunction(() => window.__ts)
     const t0 = Date.now()
     await page.click('[data-mode="watch"]', { timeout: 30000 })
@@ -553,11 +667,11 @@ async function cartRow(browser, url) {
       const f = () => {
         if (--n > 0) return void requestAnimationFrame(f)
         const d = ts.view.snapDiff()
-        resolve({ mark: 'snapped in place', n: d.n, diffs: d.diffs, riders: 0, wrecks: 0 })
+        resolve({ mark: 'snapped in place', n: d.n, diffs: d.diffs, riders: 0, wrecks: 0, deck: 0, turned: 0 })
       }
       requestAnimationFrame(f)
     }), SETTLE)
-    const r = await page.evaluate(() => ({ checks: window.__cart.checks, error: window.__cart.error, bails: window.__cart.bails ?? 0, steps: window.__cart.steps ?? 0, carts: window.__ts.G.units.filter((u) => u.key === 'warcart').length, mission: window.__ts.G.setup.mission }))
+    const r = await page.evaluate((key) => ({ checks: window.__cart.checks, error: window.__cart.error, bails: window.__cart.bails ?? 0, steps: window.__cart.steps ?? 0, carts: window.__ts.G.units.filter((u) => u.key === key).length, mission: window.__ts.G.setup.mission, deck: window.__cart.deck.shots, resets: window.__cart.deck.resets }), key)
     r.checks.push(end)
     if (!r.error && errors.length) r.error = errors.join('\n')
     r.secs = Math.round((Date.now() - t0) / 1000)
@@ -570,7 +684,19 @@ async function cartRow(browser, url) {
 // Howdahs placed, turned and walked through the page's own session, its
 // table held at rest, mid-pivot and after. Returns { checks, error, ... },
 // judged by judgeHowdah.
+// ((F9c) then, on a page of its own once the hotseat's has closed, a
+// watched battle of the AI's Howdahs, their riders shooting from their
+// decks, held as the cart row's is: `watch`)
 async function howdahRow(browser, url) {
+  const r = await howdahTable(browser, url)
+  try {
+    r.watch = await cartRow(browser, url, HOWDAH_WATCH, 'howdah')
+  } catch (e) {
+    r.watch = { error: e.message, checks: [] }
+  }
+  return r
+}
+async function howdahTable(browser, url) {
   const ctx = await browser.newContext({ viewport: { width: 640, height: 400 } })
   try {
     const page = await ctx.newPage()
@@ -744,9 +870,18 @@ function judgeCart(r) {
   // dies with nobody aboard; the bail-out is the vehicle/ corpus's log's,
   // a default row)
   if (!r.checks.some((c) => c.wrecks > 0) || !(r.steps + r.bails)) why.push(`board: ${r.checks.some((c) => c.wrecks > 0) ? 'a wreck' : 'no wreck'} and ${r.steps} step-offs and ${r.bails} bail-outs (a wreck, and riders off a deck)`)
+  why.push(...deckWhy(r))
   const bad = r.checks.filter((c) => c.n)
   if (bad.length) why.unshift(`${bad.length} of ${r.checks.length} checks differ; first at ${bad[0].mark} (${bad[0].n} differences): ${bad[0].diffs.slice(0, 4).join('; ')}`)
   return why.join('; ')
+}
+// (F9c) what a watched battle with hulls must have seen of its decks' fire:
+// shots from a deck, and a check after one with riders' figures turned
+function deckWhy(r, what = 'War-Cart') {
+  const out = []
+  if (!(r.deck > 0)) out.push(`board: no shot from a ${what}'s deck`)
+  else if (!r.checks.some((c) => c.deck > 0 && c.turned > 0)) out.push(`board: ${r.deck} shots from a ${what}'s deck and no check with a rider's figures turned to its target`)
+  return out
 }
 
 // what the Grand row says is wrong ('' when nothing is)
@@ -761,6 +896,16 @@ function judgeHowdah(r) {
   if (r.checks.some((c) => c.hulls < 2)) why.push(`board: a check held ${Math.min(...r.checks.map((c) => c.hulls))} Howdah figures`)
   const bad = r.checks.filter((c) => c.n)
   if (bad.length) why.unshift(`${bad.length} of ${r.checks.length} checks differ; first at ${bad[0].mark} (${bad[0].n} differences): ${bad[0].diffs.slice(0, 4).join('; ')}`)
+  // ((F9c) its watched battle's decks, held as the cart row's table is)
+  const w = r.watch
+  if (!w) why.push('board: no watched battle of the Howdahs')
+  else if (w.error) why.push(`watched: ${w.error.split('\n')[0]}`)
+  else {
+    if (w.carts < 1 || !w.checks.some((c) => c.riders > 0)) why.push(`board: the watched battle had ${w.carts} Howdahs, ${w.checks.some((c) => c.riders > 0) ? '' : 'no '}riders aboard`)
+    why.push(...deckWhy(w, 'Howdah'))
+    const wb = w.checks.filter((c) => c.n)
+    if (wb.length) why.unshift(`watched: ${wb.length} of ${w.checks.length} checks differ; first at ${wb[0].mark} (${wb[0].n} differences): ${wb[0].diffs.slice(0, 4).join('; ')}`)
+  }
   return why.join('; ')
 }
 
@@ -889,7 +1034,7 @@ try {
     const why = judgeCart(r)
     if (why) failed++
     checks += r.checks.length
-    console.log(`  cart  ${'Field, two War-Carts'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${r.checks.length - 1} checkpoints (riders aboard at ${r.checks.filter((c) => c.riders > 0).length}, up to ${Math.max(...r.checks.map((c) => c.riders))} units; a wreck standing at ${r.checks.filter((c) => c.wrecks > 0).length}), ${r.steps} step-offs and ${r.bails} bail-outs played, and snapped in place (${r.secs} s)`}`)
+    console.log(`  cart  ${'Field, two War-Carts'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${r.checks.length - 1} checkpoints (riders aboard at ${r.checks.filter((c) => c.riders > 0).length}, up to ${Math.max(...r.checks.map((c) => c.riders))} units; a wreck standing at ${r.checks.filter((c) => c.wrecks > 0).length}), ${r.steps} step-offs and ${r.bails} bail-outs played, (F9c) ${r.deck} shots from a deck, riders' figures turned to their targets at ${r.checks.filter((c) => c.turned > 0).length} checkpoints and ${r.resets} turned back by their hull's move, and snapped in place (${r.secs} s)`}`)
   }
   if (HOWDAH_ROW) {
     let r
@@ -901,7 +1046,7 @@ try {
     const why = judgeHowdah(r)
     if (why) failed++
     checks += r.checks.length
-    console.log(`  hull  ${'Field, two Howdahs'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${r.checks.length} checks (${r.checks.map((c) => c.mark).join('; ')}), riders aboard at ${r.checks.filter((c) => c.riders > 0).length}, each Howdah's figure turned as its heading (${r.secs} s: the checks at ${r.checks.map((c) => Math.round(c.at / 1000)).join(', ')} s)`}`)
+    console.log(`  hull  ${'Field, two Howdahs'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${r.checks.length} checks (${r.checks.map((c) => c.mark).join('; ')}), riders aboard at ${r.checks.filter((c) => c.riders > 0).length}, each Howdah's figure turned as its heading (${r.secs} s: the checks at ${r.checks.map((c) => Math.round(c.at / 1000)).join(', ')} s); (F9c) its watched battle the same at ${r.watch.checks.length - 1} checkpoints, ${r.watch.deck} shots from a Howdah's deck, riders' figures turned to their targets at ${r.watch.checks.filter((c) => c.turned > 0).length} and ${r.watch.resets} turned back by their hull's move (${r.watch.secs} s)`}`)
   }
   if (COLLAPSE_ROW) {
     let it = null, r

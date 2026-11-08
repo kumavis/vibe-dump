@@ -12,7 +12,7 @@
 import { CHARGE_RANGE, AURA, expected, p2D6, pD6, hitNeed, attackCount, saveNeed } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot, hypot3 } from '../dmath.js'
-import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf, gap, isEngaged, canCharge } from '../queries.js'
+import { alive, enemiesOf, friendsOf, inCover, sight, controlOf, validEnd, levelDist, levelSlack, floorAt, rangeOf, fightOf, gap, isEngaged, canCharge, hullOf, deckPoint, deckEye } from '../queries.js'
 import { climbs, moveMode, latticeMode } from '../actions/move.js'
 import { clearOf } from '../footprint.js'
 import { friendsUnder } from '../actions/shoot.js'
@@ -262,20 +262,29 @@ export const KEG_FEAR = 0.12, KEG_SMASH = 0.3
 // (V3c; rule 10: it bumps with V3c) `w`: the weapon, a caster's spell that
 // strikes as one (an eruption, the gaze: spellValue's), its ranged weapon
 // by default; `pre` is only ever its ranged weapon's.
+//
+// (F9c, DESIGN §4.2.5's firing deck; rule 10: it bumps with F9c) `deck`,
+// for a rider weighing a shot from its hull's deck as shotInfo judges it
+// ({ v, eye }: its hull and its deck eye, `from` the hull's deckPoint;
+// riderShot below): the gap from the hull's nearest edge (the rules' own,
+// gap(v, e): where the hull stands is no hypothetical cell), the reach
+// from the deck point, the sight at the deck eye. Given only by bestShot
+// and spellValue for a unit aboard; never by the cell scan (score) or
+// bestLanding, which weigh a cell a rider would stand on, from the ground.
 // (F9b) shotValue's gap when either is a long hull: from `from`, the
 // shooter's body disc (a long hull's base) to the target's nearest disc
 function hullGap(u, e, from) {
   const r = u.t.fp ? u.t.base : u.r
   return e.t.fp ? clearOf(e, from.x, from.z, r) : hypot(e.pos.x - from.x, e.pos.z - from.z) - r - e.r
 }
-export function shotValue(G, u, e, from, moved, pre = null, w = u.t.ranged) {
+export function shotValue(G, u, e, from, moved, pre = null, w = u.t.ranged, deck = null) {
   if (!w) return 0
   // ((F9b, rule 10) a long hull shooting measures from its body disc, never
   // its bounding R (which would claim shots the rules refuse); a long hull
-  // target from its nearest disc)
-  const g = u.t.fp || e.t.fp ? hullGap(u, e, from) : hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
+  // target from its nearest disc; (F9c) a rider from its hull's edge)
+  const g = deck ? gap(deck.v, e) : u.t.fp || e.t.fp ? hullGap(u, e, from) : hypot(e.pos.x - from.x, e.pos.z - from.z) - u.r - e.r
   if (g > (w === u.t.ranged ? rangeOf(G, u, e, from) : w.range)) return 0
-  const s = sight(G, u, e, from, pre?.cover)
+  const s = deck ? sight(G, u, e, from, pre?.cover, deck.eye) : sight(G, u, e, from, pre?.cover)
   if (!s.visible && !w.indirect && !w.mesmerize) return 0
   if (w.mesmerize) {
     if (!s.visible) return 0
@@ -316,7 +325,18 @@ export function spellValue(G, u, sp, e, moved = !!u.flags.moved) {
   if (w.ward) return e.warded ? 0 : p * worth(e) * exposure(G, e) * wardGain(e)
   if (w.resolve) return e.resolute ? 0 : p * resolveGain(G, e)
   if (w.snare) return e.snared ? 0 : p * snareGain(G, u, e)
+  // ((F9c) a caster aboard casts from its hull's deck)
+  if (u.aboard) return riderShot(G, u, e, moved, w)
   return shotValue(G, u, e, u.pos, moved, null, w)
+}
+
+// (F9c, rule 10) What rider `u`'s shot (or strike of a spell, `w`) at `e`
+// from its hull's deck is worth: shotValue from the hull's deck point, with
+// the hull's edge and the rider's deck eye, as moved if it or its hull
+// moved. bestShot's and spellValue's, for a unit aboard alone.
+export function riderShot(G, u, e, moved = !!u.flags.moved, w = u.t.ranged) {
+  const v = hullOf(G, u)
+  return shotValue(G, u, e, deckPoint(v), moved || !!v.flags.moved, null, w, { v, eye: deckEye(G, u) })
 }
 
 // How much of `f` is in danger before its side's next turn, as a share of

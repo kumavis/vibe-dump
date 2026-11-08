@@ -27,7 +27,11 @@
 // of its own by the preview), the preview saying "riders ride along"; and
 // a rider under any standing
 // order does nothing of its own in the movement phase, its step reading
-// "with the hull", nor is it among the actors End would act for.
+// "with the hull", nor is it among the actors End would act for. (F9c)
+// And a War-Cart's riders fired as a group from its deck (three riders on
+// its two slots, the Elder boarded by hand): the preview counts the
+// deck's slots as its members fire ("2 of 3 fire"), and what the group
+// bar sends is that count, each a rider the preview named.
 // (F9b, DESIGN §4.2.9's P-macro row) And with long hulls, on Field battles
 // of their own (both seats human, the Coil's list holding two Howdahs, at
 // the Coil's movement phase): a group Move holding both Howdahs and a
@@ -532,6 +536,81 @@ async function ridersScenario(L, board, out) {
   return null
 }
 
+// (F9c, DESIGN §4.2.5's deck fire) A War-Cart's riders as a group firing
+// from its deck (the R key's group: the hull's riders), on a Field board
+// of its own: seat 0's Elder boarded by hand in the deployment onto the
+// War-Cart with room for him, so its deck carries three riders on two
+// slots; seat 0's movement phases played by a pilot naming every unit but
+// those riders (the AI then steps none of them off) and End, every other
+// decision by Auto, until a shooting phase of seat 0's where two of the
+// riders or more may shoot one enemy; there the group's Fire previewed
+// (present/orders.js previewGroup) and sent as the group bar sends it
+// (input/orders.js runGroup): the preview's count is the deck's, the able
+// riders up to its slots left ("2 of 3 fire"), and what is sent is that
+// count, each a rider the preview named. null when it holds, else why;
+// `out` counts the groups fired and the shots sent.
+async function deckFireScenario(L, board, out) {
+  const setup = { board, dice: 7, mission: 'field', terrain: 'open', seats: [0, 1].map(() => ({ race: 'squirrel', ctrl: 'human', army: RIDE_LIST })) }
+  const ses = new L.Session({ store: new L.LocalStore(), localSeats: [0, 1], dev: 'here' })
+  ses.start(seatDevices(setup, 'here'))
+  let G = ses.G
+  const elder = G.units.find((u) => u.side === 0 && u.t.spells)
+  const hull = G.units.find((u) => u.side === 0 && u.t.transport && ses.preview((G2, q) => q.room(G2, G2.units.find((x) => x.id === u.id)) >= elder.alive))
+  if (!elder || !hull) return `board ${board}: no Elder of seat 0's, or no War-Cart with room for him`
+  ses.submit(0, { t: 'embark', u: elder.id, v: hull.id })
+  ses.submit(0, { t: 'deployed' })
+  ses.submit(1, { t: 'deployed' })
+  const riders = () => ses.G.units.filter((p) => p.aboard === hull.id)
+  if (riders().length < 3) return `board ${board}: the War-Cart carries ${riders().length} riders after the Elder boarded, not three`
+  for (let n = 0; n < 400; n++) {
+    G = ses.G
+    if (G.turn.stage === 'over') return `board ${board}: the battle ended before two of the War-Cart's riders could fire at one enemy`
+    const seat = ses.decisionFor(), P = G.pending
+    if (seat < 0 || !P) return `board ${board}: no decision open (${JSON.stringify(P)})`
+    if (P.k === 'phase' && P.phase === 'move' && seat === 0) {
+      const ids = G.units.filter((u) => u.side === 0 && u.alive > 0 && u.aboard !== hull.id).map((u) => u.id)
+      const m = ses.preview((G2, q) => q.maskOf(G2, 0, ids))
+      if (ses.legal(0, { t: 'pilot', m }) === null) ses.submit(0, { t: 'pilot', m })
+      ses.submit(0, { t: 'end' })
+      continue
+    }
+    if (P.k === 'phase' && P.phase === 'shoot' && seat === 0 && riders().length >= 3) {
+      // the enemy most of the riders may shoot (the first of the most)
+      const pick = ses.preview((G2, q) => {
+        let best = null, bn = 1
+        for (const e of G2.units.filter((x) => x.side === 1 && x.alive > 0 && !x.aboard)) {
+          const k = G2.units.filter((p) => p.aboard === hull.id && q.canShoot(G2, p) && q.shootTargets(G2, p).includes(e)).length
+          if (k > bn) [best, bn] = [e.id, k]
+        }
+        return best === null ? null : { tg: best, able: bn, slots: q.fireSlots(G2.units.find((x) => x.id === hull.id)) - q.ridersShot(G2, G2.units.find((x) => x.id === hull.id)) }
+      })
+      if (pick) {
+        const members = riders(), target = G.units.find((x) => x.id === pick.tg)
+        const pv = ses.preview((G2, q) => L.previewGroup(G2, q, 0, 'fire', members.map((u) => G2.units.find((x) => x.id === u.id)), G2.units.find((x) => x.id === pick.tg), null, {}))
+        const may = pv.members.filter((m) => m.how === 'fire'), want = Math.min(pick.able, pick.slots)
+        if (may.length !== want) return `board ${board}: the group's Fire from the deck previews ${may.length} of ${members.length} firing ("${pv.summary}"), where ${pick.able} may shoot and the deck has ${pick.slots} slots left: want ${want}`
+        if (!new RegExp(`^${want} of ${members.length} fire`).test(pv.summary)) return `board ${board}: the preview's summary reads "${pv.summary}", not "${want} of ${members.length} fire …"`
+        const count = ses.count, rejected = ses.folder.rejected.length
+        const r = await L.runGroup({ session: ses, seat: 0, verb: 'fire', members, target })
+        if (ses.folder.rejected.length !== rejected) return `board ${board}: the group's Fire from the deck had ${ses.folder.rejected.length - rejected} entries rejected`
+        const shots = ses.store.entries().slice(count).filter((e) => e.t === 'shoot')
+        const stray = shots.find((e) => !may.some((m) => m.u.id === e.u))
+        if (stray) return `board ${board}: rider ${stray.u} fired from the deck, which the preview didn't name`
+        const tg2 = ses.G.units.find((x) => x.id === pick.tg)
+        if (shots.length > want || (tg2.alive > 0 && shots.length !== want)) return `board ${board}: the group's Fire from the deck sent ${shots.length} shots (${r.sent} commands), its preview ${want}${tg2.alive > 0 ? ', the target standing' : ''}`
+        const spent = ses.preview((G2, q) => q.ridersShot(G2, G2.units.find((x) => x.id === hull.id)))
+        if (spent > hull.t.transport.fire) return `board ${board}: ${spent} of the War-Cart's riders shot this turn, past its ${hull.t.transport.fire} slots`
+        out.decks++
+        out.deckShots += shots.length
+        if (want < members.length) out.spared++
+        return null
+      }
+    }
+    ses.submit(seat, P.k === 'chargeEnd' ? { t: 'chargeEnd', c: -1 } : P.k === 'roundLimit' ? { t: 'vote', more: false } : { t: 'auto' })
+  }
+  return `board ${board}: no shooting phase of seat 0's in 400 decisions found two of the War-Cart's riders able to shoot one enemy`
+}
+
 // ── (F9b) Long hulls ────────────────────────────────────────────────────────
 // A Field battle on `board`, both seats human: the Coil (seat 0) with a
 // list holding two Howdahs (autoList on the check's own seeds), the
@@ -884,7 +963,13 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
         if (why && out.bad.length < 8) out.bad.push(`long hulls: ${why}`)
       }
       if (!longs.turned.place || !longs.turned.move) out.bad.push(`long hulls: a turned ghost beside a member planned after it was met ${longs.turned.place} times in the deployment and ${longs.turned.move} in the movement phase (each must be met at least once)`)
-      for (const board of [52, 2, 4, 13, 17]) {
+      // ((F9c) the boards where that comes under F9c's AI, whose hulls keep
+      // their gunned riders' slots and never advance with them, and its
+      // prices, the Howdah's 5 drawing other Coil lists (hullSession's
+      // autoList): the first five of boards 1-400 to meet it on the final
+      // code, F9b's 52, 2, 4, 13 and 17 and those chosen before the prices,
+      // 5, 22, 61, 67 and 73, meeting it no more)
+      for (const board of [40, 76, 82, 111, 134]) {
         const why = await hullEngagedScenario(L, board, longs).catch((e) => `board ${board}: threw: ${e.stack}`)
         if (why && out.bad.length < 8) out.bad.push(`long hulls: ${why}`)
       }
@@ -896,11 +981,19 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
     }
   }
   // (F9a) the riders' rows, on code with transports
-  const rides = existsSync(join(dir, 'core', 'actions', 'transport.js')) ? { groups: 0, carried: 0, orders: 0 } : null
+  const rides = existsSync(join(dir, 'core', 'actions', 'transport.js')) ? { groups: 0, carried: 0, orders: 0, decks: 0, deckShots: 0, spared: 0 } : null
   if (rides) {
     for (const board of [4242, 31, 808, 52]) {
       const why = await ridersScenario(L, board, rides).catch((e) => `board ${board}: threw: ${e.message}`)
       if (why && out.bad.length < 8) out.bad.push(`riders: ${why}`)
+    }
+    // ((F9c) the deck's riders fired as a group, on code with the slots)
+    if (/export const fireSlots = \(v\)/.test(readFileSync(join(dir, 'core', 'actions', 'transport.js'), 'utf8'))) {
+      for (const board of [4242, 31, 808, 52]) {
+        const why = await deckFireScenario(L, board, rides).catch((e) => `board ${board}: threw: ${e.stack}`)
+        if (why && out.bad.length < 8) out.bad.push(`deck fire: ${why}`)
+      }
+      if (!rides.spared) out.bad.push("deck fire: no group's Fire from a deck met more riders able than its slots, so the preview's slots went unasked")
     }
   }
   const kinds = Object.entries(out.kinds).map(([k, n]) => `${k} ${n}`).join(', ')
@@ -908,7 +1001,7 @@ async function run(dir, { probes = 240, marches = 40, seed = 7, say = console.lo
   const arrive = M.n ? M.arrived / M.n : 0
   if (L.runOrders && M.n >= 10 && arrive < 0.8) out.bad.push(`a march arrived in ${M.arrived} of ${M.n} scenarios (${Math.round(arrive * 100)}%, under 80%)`)
   const ok = !out.bad.length && Object.keys(out.kinds).length >= 5 && out.lines > 0 && out.advances > 0 && (!L.runOrders || (O.runs >= probes / 2 && O.acted > 0 && (O.held ?? 0) > 0 && M.n >= 10))
-  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen${O.freed ? `, ${O.freed} more freed by an earlier order` : ''}), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${rides ? `; (F9a) ${rides.groups} group Moves with a hull, ${rides.carried} riders riding along (sent nothing, where their hull went), ${rides.orders} riders' standing orders "with the hull"` : ''}${longs ? `; (F9b) ${longs.groups} group Moves with Howdahs (${longs.smashed} more left out for a smash), ${longs.headings} long hulls on their previewed cell and heading; ${M.hullsArrived ?? 0} of ${M.hulls ?? 0} marches with a long hull arrived (among the marches above); (F9b's review) a turned ghost planned round in ${longs.turned.place} pinned placements and ${longs.turned.move} pinned moves, every hull landing on its ghost; ${longs.engaged} engaged lone Howdahs no group of one, each falling back by the move tool` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
+  say(`  ${ok ? 'ok  ' : 'FAIL'} ${out.probes} group actions (${kinds}; ${out.lines} in a line, ${out.advances} moves +D6): ${out.sent} commands sent, every one taken; ${out.landed} members landed on the cell their preview drew, ${out.stayed} it left in place stayed, ${out.once} in +D6 moves acted at most once, inside the group${L.runOrders ? `; ${O.runs} standing-order runs (${Object.entries(O.kinds).map(([k, n]) => `${k} ${n}`).join(', ')}; move ${O.move ?? 0}, shoot ${O.shoot ?? 0}, charge ${O.charge ?? 0}): ${O.sent} commands, every one taken, ${O.acted} units acted (${O.actors} foreseen${O.freed ? `, ${O.freed} more freed by an earlier order` : ''}), ${O.held ?? 0} held to their posts under Auto; marches arrived ${M.arrived} of ${M.n} (${Math.round(arrive * 100)}%), ${M.blocked} blocked (${M.cut} cut short: caught in combat, or the battle over); Autopilot first and Auto-End in ${out.settled.battles} battles: ${out.settled.pilots} autopilot pilots, each sent from settled, at most one a phase, and ${out.settled.ends} phases ended by Auto-End` : ''}${rides ? `; (F9a) ${rides.groups} group Moves with a hull, ${rides.carried} riders riding along (sent nothing, where their hull went), ${rides.orders} riders' standing orders "with the hull"${rides.decks ? `; (F9c) ${rides.decks} groups of a War-Cart's riders fired from its deck, ${rides.deckShots} shots, each the preview's count (the deck's slots: ${rides.spared} with more riders able than slots)` : ''}` : ''}${longs ? `; (F9b) ${longs.groups} group Moves with Howdahs (${longs.smashed} more left out for a smash), ${longs.headings} long hulls on their previewed cell and heading; ${M.hullsArrived ?? 0} of ${M.hulls ?? 0} marches with a long hull arrived (among the marches above); (F9b's review) a turned ghost planned round in ${longs.turned.place} pinned placements and ${longs.turned.move} pinned moves, every hull landing on its ghost; ${longs.engaged} engaged lone Howdahs no group of one, each falling back by the move tool` : ''}${out.bad.length ? `\n         ${out.bad.join('\n         ')}` : ''}`)
   return ok ? 0 : 1
 }
 
@@ -947,6 +1040,9 @@ const MUTANTS = [
   // (F9b's review) an engaged lone hull a group of one: its pin plans
   // nothing ("in combat"), so no click falls it back
   ['engaged-pins', 'input/group.js', 'q.canAct(G, u) && !q.isEngaged(G, u)', 'q.canAct(G, u)'],
+  // (F9c) a group's Fire previews every rider of a deck firing, its slots
+  // uncounted ("3 of 3 fire" from a War-Cart's two slots)
+  ['deck-slots-unpreviewed', 'present/orders.js', '      if (can && u.aboard) {\n', '      if (false) {\n'],
 ]
 
 if (a['self-test']) {

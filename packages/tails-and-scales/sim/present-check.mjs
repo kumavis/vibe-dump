@@ -164,7 +164,12 @@
 // set by a placement's `f` and a walk's `to.f`. The scripted seats place a
 // long hull at a heading of their choosing and move it with one, and over
 // the battles some Howdah must have turned on a walk, or `f` was held to
-// nothing that changed.
+// nothing that changed. (F9c) Their riders shoot from their decks (the
+// AI's, and the scripted seats' every rider that may before Auto in each
+// shooting phase), so the volleys, the templates (blast.aim, .scatter,
+// .fire, .land) and the casts of a unit aboard are folded in the mirror's
+// order at the same acts; over the battles a volley and a template from a
+// deck must have been met, or a rider's shot was held to nothing.
 //
 //
 // (F14) And, before the battles, in this process: the page's own player and
@@ -252,6 +257,12 @@ const RIDES = [
   ['riders-grand-coil-4', { board: 19, dice: 3, mission: 'grand', terrain: 'open', races: ['squirrel', 'serpent'] }, false],
   ['riders-hotseat-5', { board: 4242, dice: 99, mission: 'field', terrain: 'open', races: ['squirrel', 'squirrel'] }, true],
   ['riders-hotseat-6', { board: 808, dice: 41, mission: 'field', terrain: 'fortified', races: ['squirrel', 'serpent'] }, true],
+  // ((F9c) the riders kept aboard: both seats' lists P-riders' scenes' (a
+  // War-Cart carrying a Nutkin and a Grenadiers squad), the movement
+  // phases a hull's 3" and a pilot naming every unit but the riders, so
+  // the AI steps none off, and every rider that may shooting from its
+  // deck: a volley and a template from a deck)
+  ['riders-deck-7', { board: 4242, dice: 99, mission: 'field', terrain: 'open', races: ['squirrel', 'squirrel'], armies: ['1032012', '1032012'], deck: true }, true],
 ]
 
 // (F7c) The falls: [id, board, moved, slain]. Each a fortified Skirmish
@@ -999,7 +1010,7 @@ async function ridersChild(dir) {
   const [id, spec, scripted] = JSON.parse(readFileSync(0, 'utf8'))
   const at = (f) => import(pathToFileURL(join(dir, f)).href)
   const [core, mirror, { RACES }, { MISSIONS }] = await Promise.all([at('core/index.js'), at('present/mirror.js'), at('data/schema.js'), at('data/mission.js')])
-  const out = { id, acts: 0, stops: 0, events: 0, kinds: {}, aboard: 0, turns: 0, longs: 0, mismatch: null, error: null }
+  const out = { id, acts: 0, stops: 0, events: 0, kinds: {}, aboard: 0, turns: 0, longs: 0, deckVolleys: 0, deckBlasts: 0, mismatch: null, error: null }
   const miss = (why) => (out.mismatch ??= why)
   try {
     const A = core.army, rules = MISSIONS[spec.mission].list
@@ -1011,7 +1022,7 @@ async function ridersChild(dir) {
       }
       throw new Error(`no ${race} list with War-Carts at ${spec.mission} on seeds 1-399`)
     }
-    const setup = { board: spec.board, dice: spec.dice, mission: spec.mission, terrain: spec.terrain, seats: spec.races.map((race) => ({ race, ctrl: scripted ? 'human' : 'ai', army: army(race) })) }
+    const setup = { board: spec.board, dice: spec.dice, mission: spec.mission, terrain: spec.terrain, seats: spec.races.map((race, s) => ({ race, ctrl: scripted ? 'human' : 'ai', army: spec.armies?.[s] ?? army(race) })) }
     let M = null
     const projs = []
     const onTrace = (line, G) => {
@@ -1030,6 +1041,9 @@ async function ridersChild(dir) {
         // ((F9b) a long hull's walk that turned it: a heading on its path
         // other than the one it set out on)
         if (e.t === 'unit.move' && e.path[0]?.f !== undefined && e.path.some((p) => p.f !== e.path[0].f)) out.turns++
+        // ((F9c) a shot from a deck: its shooter rides (shooting moves
+        // nobody, so it rides still as the events are folded)
+        if ((e.t === 'volley' || e.t === 'blast.fire') && G.units.find((x) => x.id === e.u)?.aboard) out[e.t === 'volley' ? 'deckVolleys' : 'deckBlasts']++
         if (e.t !== 'act') continue
         const proj = projs.shift()
         out.acts++
@@ -1084,7 +1098,8 @@ async function ridersChild(dir) {
       if (P.k === 'phase' && P.phase === 'move') {
         // a rider steps off (the first that may), a unit boards (the first
         // that may), a hull moves 3" with its riders; then Auto
-        const p = mine.find((u) => u.aboard && !u.flags.moved)
+        // ((F9c) a deck battle's riders stay aboard: none steps off)
+        const p = spec.deck ? null : mine.find((u) => u.aboard && !u.flags.moved)
         const cells = p ? q.landing(G, p, G.units.find((v) => v.id === p.aboard)) : []
         if (cells.length) send({ t: 'disembark', u: p.id, c: cells[0] })
         let boarded = false
@@ -1100,7 +1115,25 @@ async function ridersChild(dir) {
           const f = v.t.fp && c >= 0 ? [1, 2, 3, 4, 5, 6, 7].map((k) => (v.facing + k) & 7).find((h) => q.validEnd(G, plan, c, null, h)) : undefined
           if (c >= 0) send(f === undefined ? { t: 'move', u: v.id, c } : { t: 'move', u: v.id, c, f })
         }
+        // ((F9c) a deck battle's AI plays every unit but the riders, which
+        // it would step off: a pilot, then End)
+        if (spec.deck && G.pending?.k === 'phase') {
+          const m = q.maskOf(G, s, mine.filter((u) => !u.aboard).map((u) => u.id))
+          if (core.legal(G, s, { t: 'pilot', m }) === null) send({ t: 'pilot', m })
+          if (G.pending?.k === 'phase') send({ t: 'end' })
+          continue
+        }
         if (G.pending?.k === 'phase') send({ t: 'auto' })
+        continue
+      }
+      if (P.k === 'phase' && P.phase === 'shoot') {
+        // ((F9c) each rider that may shoots from its deck at its first
+        // target, then Auto)
+        for (const p of mine.filter((u) => u.aboard)) {
+          const tg = G.pending?.k === 'phase' && G.pending.phase === 'shoot' && q.canShoot(G, p) ? q.shootTargets(G, p)[0] : null
+          if (tg) send({ t: 'shoot', u: p.id, tg: tg.id })
+        }
+        if (G.pending?.k === 'phase' && G.pending.phase === 'shoot') send({ t: 'auto' })
         continue
       }
       if (P.k === 'chargeEnd') send({ t: 'chargeEnd', c: -1 })
@@ -1109,7 +1142,10 @@ async function ridersChild(dir) {
     }
     look('the end')
     if (!out.aboard) miss('no act of the battle had a rider aboard: it held no rider to the mirror')
-    if (scripted && !(out.kinds['unit.embark'] && out.kinds['unit.disembark'])) miss(`the scripted battle met ${out.kinds['unit.embark'] ?? 0} embarks and ${out.kinds['unit.disembark'] ?? 0} steps off: it held too little`)
+    // ((F9c) a deck battle keeps its riders aboard: its own is a volley
+    // and a template from a deck)
+    if (spec.deck && !(out.deckVolleys && out.deckBlasts)) miss(`the deck battle met ${out.deckVolleys} volleys and ${out.deckBlasts} templates from a deck: it held too little`)
+    if (scripted && !spec.deck && !(out.kinds['unit.embark'] && out.kinds['unit.disembark'])) miss(`the scripted battle met ${out.kinds['unit.embark'] ?? 0} embarks and ${out.kinds['unit.disembark'] ?? 0} steps off: it held too little`)
   } catch (e) {
     out.error = String(e?.stack ?? e)
   }
@@ -1470,7 +1506,7 @@ async function parent({ env = process.env, quiet = false } = {}) {
   })
   // (F9a) the riders, in Node (their battles' lines read as the corpus's do)
   if (rides) {
-    const held = { acts: 0, stops: 0, aboard: 0, embarks: 0, steps: 0, turns: 0, longs: 0 }
+    const held = { acts: 0, stops: 0, aboard: 0, embarks: 0, steps: 0, turns: 0, longs: 0, deckVolleys: 0, deckBlasts: 0 }
     await pool(RIDES, CPUS, async (job) => {
       const r = await child(dir, job, env, '--riders')
       const why = r.error ?? r.mismatch
@@ -1482,9 +1518,17 @@ async function parent({ env = process.env, quiet = false } = {}) {
       held.steps += r.kinds?.['unit.disembark'] ?? 0
       held.turns += r.turns ?? 0
       held.longs += r.longs ?? 0
+      held.deckVolleys += r.deckVolleys ?? 0
+      held.deckBlasts += r.deckBlasts ?? 0
       say(`  ${(job[2] ? 'human' : 'ai').padEnd(5)} ${job[0].padEnd(24)} ${why ? `FAIL: ${why.split('\n')[0].slice(0, 300)}` : `${String(r.acts).padStart(3)} acts, ${String(r.stops).padStart(3)} stops, ${String(r.events).padStart(5)} events: the mirror is the match, riders aboard at ${r.aboard} acts`}`)
     })
-    say(`  (F9a) the riders: ${RIDES.length} battles with War-Carts in Node, the mirror held at ${held.acts} acts and ${held.stops} stops (riders aboard at ${held.aboard} acts; ${held.embarks} embarks, ${held.steps} steps off and bail-outs)${held.longs ? `; (F9b) a long hull's f held at ${held.longs} acts, ${held.turns} of its walks turning it` : ''}`)
+    say(`  (F9a) the riders: ${RIDES.length} battles with War-Carts in Node, the mirror held at ${held.acts} acts and ${held.stops} stops (riders aboard at ${held.aboard} acts; ${held.embarks} embarks, ${held.steps} steps off and bail-outs)${held.longs ? `; (F9b) a long hull's f held at ${held.longs} acts, ${held.turns} of its walks turning it` : ''}${held.deckVolleys + held.deckBlasts ? `; (F9c) ${held.deckVolleys} volleys and ${held.deckBlasts} templates from a deck` : ''}`)
+    // ((F9c) on code with the firing deck, a volley and a template thrown
+    // from a deck were folded)
+    if (/export const fireSlots = \(v\)/.test(readFileSync(join(dir, 'core', 'actions', 'transport.js'), 'utf8')) && !failed && !(held.deckVolleys && held.deckBlasts)) {
+      failed++
+      say(`  FAIL (F9c) the battles with War-Carts met ${held.deckVolleys} volleys and ${held.deckBlasts} templates from a deck: a rider's shot was held to ${held.deckVolleys || held.deckBlasts ? 'too little' : 'nothing'}`)
+    }
     // ((F9b) on code with the lattice, some Howdah turned on a walk)
     if (/hullReach\(/.test(readFileSync(join(dir, 'core', 'nav.js'), 'utf8')) && !failed && !held.turns) {
       failed++

@@ -23,6 +23,7 @@ import * as THREE from 'three'
 import { M } from '../models/kit.js'
 import { tween, wait, easeOut, lerp } from '../clock.js'
 import { eyeY, chestY } from '../../core/queries.js'
+import { RIDER_SCALE } from '../../present/deck.js'
 import { sfx } from '../sfx.js'
 
 // (Made with the view, never as the module loads: three.js draws
@@ -106,8 +107,10 @@ export class Shots {
     for (let i = 0; i < n; i++) {
       const s = shooters[i % shooters.length]
       const v = victims[(Math.random() * victims.length) | 0]
-      // ((F7a) each figure from the height it stands at: a deck's top)
-      const a = { x: s.x, y: (s.y ?? 0) + eyeY(u) * 0.8 + s.lift, z: s.z }
+      // ((F7a) each figure from the height it stands at: a deck's top;
+      // (F9c) a rider's from its slot on its hull's deck, where ride() puts
+      // its world place, at the deck's height and its figure's scale)
+      const a = { x: s.x, y: (s.y ?? 0) + eyeY(u) * 0.8 * (s.deck ? RIDER_SCALE : 1) + s.lift, z: s.z }
       const b = { x: v.x + (Math.random() - 0.5) * 0.6, y: (v.y ?? 0) + chestY(target) * 0.8, z: v.z + (Math.random() - 0.5) * 0.6 }
       flights.push(wait(i * 0.06).then(() => {
         if (gone()) return
@@ -162,12 +165,16 @@ export class Shots {
       if (anim.globe) anim.globe.visible = false
       await wait(0.15)
       if (gone()) return
-    } else {
-      // a grenadier winds up
+    } else if (!src.deck) {
+      // a grenadier winds up ((F9c's review) on the table: ride() plays no
+      // lunge on a deck, and one set there was played as the rider stepped
+      // off, a lurch toward its last throw)
       src.lunge = 1
       src.lungeDir = Math.atan2(land.x - src.x, land.z - src.z)
     }
-    const a = { x: src.x, y: (src.y ?? 0) + (u.t.big ? 1.8 : 0.9), z: src.z }, b = { x: land.x, y: this.floorAt(land.x, land.z) + 0.15, z: land.z }
+    // ((F9c) a rider's throw from its figure's slot on the deck: ride()'s
+    // world place, the deck's height, at its figure's scale)
+    const a = { x: src.x, y: (src.y ?? 0) + (u.t.big ? 1.8 : 0.9) * (src.deck ? RIDER_SCALE : 1), z: src.z }, b = { x: land.x, y: this.floorAt(land.x, land.z) + 0.15, z: land.z }
     sfx.shot()
     await this.fly(a, b, e.fx)
     if (gone()) return

@@ -55,6 +55,20 @@
 // are kept exactly. (V3c) A snare and a spell on a friend draw nothing
 // but their cast; every save reads the target's own (rules.js svOf: one
 // better while warded).
+//
+// (F9c, DESIGN §4.2.5's "Firing decks") A rider shoots from its hull's
+// deck: up to the deck's `fire` rider units a turn (core/actions/
+// transport.js fireSlots, ridersShot), never while its hull is in combat or
+// fell back, only with an assault weapon once its hull advanced; its range
+// from the hull's nearest edge (gap(hull, target): fpGap from a long
+// hull), its eye on the deck (transport.js deckPoint and deckEye, the
+// sight's eye-height override), a lob's reach the printed range (its drop
+// from the hull's floor: the deck's height adds nothing), and a heavy
+// weapon at −1 once it or its hull moved. Whatever the command takes from
+// the table it takes from the deck, a volley, a template or a spell, one
+// slot each. Each a branch only a rider reaches (u.aboard): a unit on the
+// table keeps the expressions it always had (§4.1 rule 26). The events are
+// as they were, the rider's id their `u`.
 import { hitNeed, roll, d6, passes, woundNeed, saveNeed, attackCount, svOf } from '../rules.js'
 import { draw } from '../rng.js'
 import { hypot, hypot3, sin, cos } from '../dmath.js'
@@ -66,6 +80,7 @@ import { HAZARDS } from '../../data/hazards.js'
 import { kegsIn } from '../terrain/terrain.js'
 import { settle } from './settle.js'
 import { discsOf } from '../footprint.js'
+import { hullOf, fireSlots, ridersShot, deckPoint, deckEye } from './transport.js'
 
 // (V3c) The weapon a shot or a cast uses: the unit's ranged weapon, or with
 // `sp` its spell of that index; null for a spell it doesn't have (the
@@ -76,15 +91,24 @@ export const weaponOf = (u, sp) => (sp === undefined ? u.t.ranged : u.t.spells?.
 export const allySpell = (w) => !!w && !!(w.ward || w.resolve)
 
 // May `u` shoot (or (V3c) cast) at all this phase: one shot or one spell a
-// phase, as ever (its `shot` flag). (F9a) A rider can't shoot while aboard:
-// the firing deck, from which up to `fire` rider units shoot from the
-// deck's height, is F9c's (DESIGN §4.2.5), and a rider is off the table
-// until then.
+// phase, as ever (its `shot` flag). (F9c, DESIGN §4.2.5's firing deck) A
+// rider (u.aboard) shoots from its hull's deck while a slot is free (fewer
+// of the hull's riders shot this turn than its `fire`), its hull isn't in
+// combat (a rider engages nobody itself: core/queries.js engagedWith) and
+// didn't fall back (they count as having moved, or advanced, if the hull
+// did: a fall back the same family), and with an assault weapon only once
+// its hull advanced. A spell on the hull (Mesmerize) bars the hull, not
+// its riders. (F9a refused every rider here.)
 export function canShoot(G, u) {
   const w = u.t.ranged
-  if (!w || !alive(u) || u.flags.shot || u.aboard) return false
+  if (!w || !alive(u) || u.flags.shot) return false
   if (u.mesmerized || u.flags.fellBack || isEngaged(G, u)) return false
   if (u.flags.advanced && !w.assault) return false
+  if (u.aboard) {
+    const v = hullOf(G, u)
+    if (isEngaged(G, v) || v.flags.fellBack || ridersShot(G, v) >= fireSlots(v)) return false
+    if (v.flags.advanced && !w.assault) return false
+  }
   return true
 }
 
@@ -145,24 +169,36 @@ export function rangeOf(G, u, tg = null, from = u.pos, sp = undefined) {
 // hull is the target, as the command has it (core/commands.js foe and
 // friend, shootTargets' pool); refused here so that the table's odds and
 // the click it sends say so rather than offer what legal() refuses.
+//
+// (F9c, DESIGN §4.2.5's firing deck) A rider (`v`, its hull) shoots from
+// the deck: `range` is the gap from its hull's nearest edge (gap(v,
+// target): a long hull's nearest disc), `reach` the weapon's from the deck
+// point (transport.js deckPoint: on the hull's floor, so a lob reaches its
+// printed range there, the deck's height adding nothing), the sight from
+// the deck point at the rider's deck eye (deckEye: the sight's eye-height
+// override), and a heavy weapon is −1 once the rider or its hull moved. A
+// spell on a friend measures from the hull's edge too (the hull itself at
+// 0; the rider, aboard, is no target of its own). Each only for a rider:
+// a unit on the table takes the expressions it always took.
 export function shotInfo(G, u, target, sp) {
   const w = weaponOf(u, sp)
   if (!w) return { ok: false, why: `no spell ${sp}` }
+  const v = u.aboard ? hullOf(G, u) : null
   if (allySpell(w)) {
     if (target.side !== u.side) return { ok: false, why: `${w.name} is cast on a friend` }
     if (target.aboard) return { ok: false, why: `${target.t.short} is inside a vehicle` }
-    const range = target === u ? 0 : gap(u, target)
+    const range = target === u ? 0 : v ? (target === v ? 0 : gap(v, target)) : gap(u, target)
     if (range > w.range) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${w.range}")` }
     return { ok: true, range, reach: w.range, ally: true }
   }
   if (target.side === u.side) return { ok: false, why: 'one of your own' }
   if (target.aboard) return { ok: false, why: `${target.t.short} is inside a vehicle` }
-  const range = gap(u, target), reach = rangeOf(G, u, target, u.pos, sp)
+  const range = v ? gap(v, target) : gap(u, target), reach = v ? rangeOf(G, u, target, deckPoint(v), sp) : rangeOf(G, u, target, u.pos, sp)
   if (range > reach) return { ok: false, why: `out of range (${range.toFixed(1)}" / ${reach === w.range ? w.range : reach.toFixed(1)}")` }
-  const s = sight(G, u, target)
+  const s = v ? sight(G, u, target, deckPoint(v), undefined, deckEye(G, u)) : sight(G, u, target)
   if (!s.visible && !w.indirect) return { ok: false, why: 'no line of sight' }
   let mod = 0
-  if (w.heavy && u.flags.moved) mod++
+  if (w.heavy && (v ? u.flags.moved || v.flags.moved : u.flags.moved)) mod++
   if (w.indirect && !s.visible) mod++
   return { ok: true, range, reach, ...s, mod, need: hitNeed(u.t.BS, mod), fight: fightOf(G, u, target), under: w.blast ? friendsUnder(G, u, target, w) : null }
 }
