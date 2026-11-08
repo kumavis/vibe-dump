@@ -1813,7 +1813,9 @@ follows N3.
   Grenadiers' and the Spitters' gone; playback-check's scale/ Grand row
   passes, `hull/`'s Grand pairs recorded again (the row's longest AI pair
   192 s as watched against 200, its average 171 s; F9b's 202.3 s on
-  `watch-hulls-grand-1` gone). DESIGN's F9c notes,
+  `watch-hulls-grand-1` gone); present-check's `no-embark-owners` edit,
+  missed since F7c's sweep, is caught by `vehicle/hotseat-ride-embark-1`
+  as played again. DESIGN's F9c notes,
   the firing deck's rule and section, the Data and schema rules, the AI's
   paragraph, the View's riders, card and deck fire, and F9a's, F9b's and
   F11b's Not here items corrected or closed in place.)
