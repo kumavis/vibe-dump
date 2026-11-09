@@ -44,6 +44,9 @@ import { gloss, polished, glow } from './gloss/gloss.js'
 // 'metal' (a helm, a gold band), 'glow' (a gem), 'wood', 'clear' (the
 // flight stand), 'cloth' (a pouch).
 const STAND = { transparent: true, opacity: 0.35 }
+// (the 'new' style's two finishes, below)
+const PLUMAGE = { roughness: 0.8, clearcoat: 0.12, clearcoatRoughness: 0.6, sheen: 0.8, sheenRoughness: 0.45, sheenColor: '#ffffff' }
+const HORN = { roughness: 0.34, clearcoat: 0.8, clearcoatRoughness: 0.1 }
 const CLASSIC = {
   G: () => G,
   paint: (kind, hex) => (kind === 'metal' ? metal(hex) : kind === 'glow' ? glowMat(hex) : kind === 'clear' ? M(hex, STAND) : M(hex)),
@@ -63,17 +66,17 @@ const NEW = {
   G: smooth,
   paint(kind, hex) {
     switch (kind) {
-      // (feathers soft, a sheen at the grazing angle and hardly a coat; the
-      // breast's down softer still; beaks and talons glossed horn)
-      case 'feather': return gloss(hex, { roughness: 0.8, clearcoat: 0.12, clearcoatRoughness: 0.6, sheen: 0.8, sheenRoughness: 0.45, sheenColor: '#ffffff' })
-      case 'down': return gloss(hex, { roughness: 0.9, clearcoat: 0.05, clearcoatRoughness: 0.7, sheen: 1, sheenRoughness: 0.6, sheenColor: '#fff8f0' })
-      case 'horn': return gloss(hex, { roughness: 0.34, clearcoat: 0.8, clearcoatRoughness: 0.1 })
-      case 'skin': return gloss(hex, { roughness: 0.55, clearcoat: 0.3, clearcoatRoughness: 0.3 })
-      case 'eye': return gloss(hex, { roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.03 })
+      // (two finishes, each part's colour its own: the plumage, soft, a
+      // sheen at the grazing angle and hardly a coat, the breast's down
+      // told apart by colour; and glossed horn, the beaks, talons, legs and
+      // eyes, the wood and the cloth. A finish is a class the bake draws in
+      // one call ((F5a's sweep) five finishes and matte wood and cloth drew
+      // a figure's body in up to six: render-bench's classic row))
+      case 'feather': case 'down': return gloss(hex, PLUMAGE)
+      case 'horn': case 'skin': case 'eye': case 'wood': case 'cloth': return gloss(hex, HORN)
       case 'metal': return polished(hex)
       case 'glow': return glow(hex)
       case 'clear': return M(hex, STAND)
-      // (wood and cloth matte, as the classic's)
       default: return M(hex)
     }
   },

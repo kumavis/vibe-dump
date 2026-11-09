@@ -1812,16 +1812,25 @@ Math.random = realRandom
 // is judged on every set a mission with a Vehicle slot offers (Field,
 // Grand, the Powder Field) and reported only on the others (the
 // Skirmish's, its slot [0, 0]), its crossings counted per mission and set.
+// (F5a, DESIGN §4.2.12's checks table) And a reported row, never judged, on
+// every set every mission offers (the Skirmish's too): a burrower's disc
+// (r BURROW_R, the Delvers' 1.011, the widest burrower's) starts on the
+// ground nearest each zone's middle and reaches (mode 'burrow': the hard
+// field, a floor above STEP refused, the cliff kept) a cell of the other
+// zone a walker could stand on, on the ground; a board counts crossed when
+// both seats' discs cross. On code without a burrower, no row.
 // (NavGrid: imported for P-climb, above)
 const { OBJECTIVE_RANGE } = await imp(PKG, 'core/rules.js')
 const { HIGH } = await imp(PKG, 'core/queries.js')
 const HULL_R = 1.5, SQUAD_R = 1.18
+// ((F5a) the burrow row's disc, on code whose races field a burrower)
+const BURROW_R = Object.values((await imp(PKG, 'data/schema.js')).RACES).some((r) => Object.values(r.units).some((t) => t.move === 'burrow')) ? 1.011 : 0
 // ((F9b) the footprints, one row each, on code with the lattice)
 const FOOTPRINTS = NavGrid.prototype.hullReach ? Object.values((await imp(PKG, 'data/schema.js')).RACES).flatMap((r) => Object.values(r.units).filter((t) => t.fp).map((t) => t.fp)) : []
 const lattice = {}
 const CONTROL = process.env.CONNECT_MUTATE ?? null
 // ((F19a) the Skirmish-sized missions, classic and keg, each reported apart)
-const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, byCentre: {}, small: {} }
+const conn = { boards: 0, failed: 0, reaches: 0, chunks: {}, byCentre: {}, small: {}, burrow: {} }
 // what scatter stood round the centre objective, from the footprints it
 // placed (recipes.js CENTRES: the keep's is marked `fort`, the tower ring's
 // `hollow`; the rock box's four piles stand off the centre)
@@ -1850,6 +1859,8 @@ function connectBoard(name, m, set, seed) {
   const centre = centreOf(T.features)
   // (with height) the cells off the ground, which the hull never enters
   const raised = nav.hasHeight ? Uint8Array.from(nav.floor, (f) => (f > STEP ? 1 : 0)) : null
+  // ((F5a) each seat's burrower crossed, the reported row's)
+  const burrow = BURROW_R ? [] : null
   for (const seat of [0, 1]) {
     const sgn = seat ? 1 : -1, mid = sgn * (BW / 2 - m.deploy / 2)
     for (const r of [HULL_R, SQUAD_R]) {
@@ -1901,8 +1912,25 @@ function connectBoard(name, m, set, seed) {
       const crossed = res.touched.some((s) => -sgn * nav.x(s >> 3) > edge)
       if (!crossed) why.push(`a long hull (${fp.id}) on its lattice from seat ${seat}'s zone (${nav.x(start)}, ${nav.z(start)}) facing ${h0} reaches no state of seat ${1 - seat}'s`)
     }
+    // ((F5a) the burrower: from the ground, ending where a walker could
+    // stand on the ground; reported, so it adds nothing to `why`)
+    if (burrow) {
+      let start = -1, bd = Infinity
+      for (let i = 0; i < nav.N; i++) {
+        if (!(sgn * nav.x(i) > edge) || !nav.standable(i, BURROW_R, 'walk', raised)) continue
+        const d = hypot(nav.x(i) - mid, nav.z(i))
+        if (d < bd) [bd, start] = [d, i]
+      }
+      let crossed = false
+      if (start >= 0) {
+        const res = nav.reach(nav.x(start), nav.z(start), { r: BURROW_R, max: Infinity, mode: 'burrow' })
+        conn.reaches++
+        for (let i = 0; i < nav.N && !crossed; i++) crossed = -sgn * nav.x(i) > edge && isFinite(res.dist[i]) && nav.standable(i, BURROW_R, 'walk', raised)
+      }
+      burrow.push(crossed)
+    }
   }
-  return { why, chunks: T.chunks.length, centre }
+  return { why, chunks: T.chunks.length, centre, burrow }
 }
 for (const [name, m] of Object.entries(MISSIONS)) {
   for (const set of m.sets) {
@@ -1918,6 +1946,12 @@ for (const [name, m] of Object.entries(MISSIONS)) {
         r = { why: [`threw: ${e.stack.split('\n').slice(0, 3).join(' / ')}`], chunks: 0 }
       }
       counts.push(r.chunks)
+      // ((F5a) the burrow row, per mission and set: both seats crossing)
+      if (BURROW_R) {
+        const B = (conn.burrow[key] ??= { boards: 0, crossed: 0 })
+        B.boards++
+        if (r.burrow?.every(Boolean)) B.crossed++
+      }
       // ((F9b) the lattice rows' crossings, per mission and set: judged where
       // the mission's Vehicle slot lets a hull in, else reported)
       for (const fp of FOOTPRINTS) {
@@ -1953,6 +1987,8 @@ for (const [name, C] of Object.entries(conn.small)) console.log(`  (reported, no
 // ((F9b) each footprint's lattice row, crossing zone to zone: both seats'
 // starts on a board crossing count it crossed)
 for (const [key, L] of Object.entries(lattice)) console.log(`  (F9b) the long hull ${key}${L.judged ? '' : ' (reported, not judged: no Vehicle slot)'}: crosses zone to zone on its lattice on ${L.crossed} of ${L.boards} boards (${(100 * L.crossed / L.boards).toFixed(0)}%)`)
+// ((F5a) the burrow row, reported)
+for (const [key, B] of Object.entries(conn.burrow)) console.log(`  (F5a, reported, not judged) a burrower (r ${BURROW_R}, the burrow field, floors at most STEP) ${key}: crosses zone to zone, both seats, on ${B.crossed} of ${B.boards} boards (${(100 * B.crossed / B.boards).toFixed(0)}%)`)
 if (conn.failed) {
   console.log(`MISMATCH: connectivity failed on ${conn.failed} of ${conn.boards} board(s) (by what stands round the centre objective: ${Object.entries(conn.byCentre).map(([k, v]) => `${k} ${v}`).join(', ')}):`)
   for (const s of connShown) console.log(`  ${s}`)

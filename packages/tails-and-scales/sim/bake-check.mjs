@@ -77,8 +77,9 @@
 // 6d. (F5a, DESIGN §4.2.12: Q16) The Hive's and the Aerie's figures in both
 //    styles: the 'new' one as the game builds it (a fresh build, then its
 //    template's clone), the classic one by its kit's builder, baked: its
-//    anim the view's ('insect': the four legs (a Boilback's six) and two
-//    antennae kept subtrees in the figure; 'bird': the two wings kept, each
+//    anim the view's ('insect': ((F5a's sweep) the legs the scuttle's two
+//    sets and the antennae one group, antR null, each kept in the figure,
+//    a Boilback's six legs and two antennae each its own; 'bird': the two wings kept, each
 //    with its rest pose and side, a walker's head kept, a flier's lift its
 //    stand's; a hero's gem a kept mesh; the Boilback's throwArm a kept
 //    subtree and its rest), the 'new' one's shadow cast through its one
@@ -535,9 +536,13 @@ else console.log(`  ok   9 furs for the seven units, each drawn by every figure 
     if (a?.kind !== kind) return [`anim.kind ${a?.kind}, not ${kind}`]
     for (const k of ['body', 'head']) if (!a[k]?.isObject3D || !inFig(a[k], fig)) out.push(`anim.${k} not in the figure`)
     if (kind === 'insect') {
-      const n = t.big ? 6 : 4
+      // ((F5a's sweep) bug()'s legs in the scuttle's two sets and its
+      // antennae one group, so each figure draws in fewer calls; the
+      // Boilback, one figure, keeps its six legs and two antennae)
+      const n = t.big ? 6 : 2
       if (!Array.isArray(a.legs) || a.legs.length !== n || a.legs.some((l) => !keptIn(l, fig))) out.push(`anim.legs not ${n} kept subtrees in the figure`)
-      for (const k of ['antL', 'antR']) if (!keptIn(a[k], fig)) out.push(`anim.${k} not a kept subtree in the figure`)
+      for (const k of t.big ? ['antL', 'antR'] : ['antL']) if (!keptIn(a[k], fig)) out.push(`anim.${k} not a kept subtree in the figure`)
+      if (!t.big && a.antR !== null) out.push('anim.antR not null (the antennae one group, antL)')
       if (!t.big) for (const k of ['armL', 'armR']) if (!a[k]?.userData.hand) out.push(`anim.${k} without its hand`)
     } else {
       for (const k of ['wingL', 'wingR']) if (!keptIn(a[k], fig) || typeof a[k].userData.z0 !== 'number' || Math.abs(a[k].userData.s) !== 1) out.push(`anim.${k} not a kept wing with its rest pose and side`)

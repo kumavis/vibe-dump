@@ -652,7 +652,27 @@ async function main() {
       const r = await playAll(tasksOf(`fit:${pair}`, fitN, pair, 'fit'), `${name} fit ${what}`)
       if (failErrors(r)) process.exit(1)
       console.log(`  ${RACES[pair[0]].short} score over the fit's battles ${pct(scoreOf(r.results))}; ${runtime(r)}`)
-      const bad = printFit(pair, fitOf(pair, r.results, rules), { gate: true, report: !!report })
+      // ((F5a's sweep) a fit that can't be made, its information matrix
+      // singular (a unit whose count says nothing of the result: on the
+      // Powder Field at 1111 the Bushtails won 4 of their 600 fit battles
+      // against the Windfolk), is that pair's verdict: a judged size's gate
+      // fails on it, a reported size's row says so, and the run goes on to
+      // the pairs and missions after it and to its summary, where the throw
+      // had ended the whole run)
+      let fit
+      try {
+        fit = fitOf(pair, r.results, rules)
+      } catch (e) {
+        console.log(`  the fit could not be made: ${e.message}`)
+        if (report) {
+          verdicts.push(`info ${name} per-unit ${what}: the fit could not be made (${e.message}) (fit N = ${fitN * SEEDS.length}), ${report}`)
+          continue
+        }
+        gate(false, `the per-unit gate, ${name}, ${what}: the fit could not be made: ${e.message}`)
+        verdicts.push(`FAIL ${name} per-unit ${what}: the fit could not be made (fit N = ${fitN * SEEDS.length})`)
+        continue
+      }
+      const bad = printFit(pair, fit, { gate: true, report: !!report })
       if (report) {
         console.log(`  the per-unit fit, ${name}, ${what}: ${bad ? `${bad} unit(s) outside their band` : 'every unit inside its band'}: ${report}`)
         verdicts.push(`info ${name} per-unit ${what}: ${bad ? `${bad} unit(s) outside their band` : 'every unit inside its band'} (fit N = ${fitN * SEEDS.length}), ${report}`)

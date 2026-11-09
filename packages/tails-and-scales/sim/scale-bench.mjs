@@ -66,6 +66,10 @@
 // open question 26's measure), against a War-Cart's walk of the same kind
 // (resolveWalk on its own 8" plan's farthest end) on the same table.
 //
+// (F5a) A reported row, never judged: a Grand battle of the Hive against
+// the Aerie on their ×3 presets, on the same open boards (DESIGN §4.2.12's
+// checks table: no budget is judged on the new races' lists).
+//
 //   node sim/scale-bench.mjs [--boards N] [--dir <code>] [--json]
 //   node sim/scale-bench.mjs --caps [--dir <code>]   (the search's cap lists, to record CAPS anew)
 //
@@ -254,6 +258,18 @@ if (grand) {
     if (r.units !== want) throw new Error(`the grand mission's battles field ${r.units} units, their lists ${want}: the setups' armies didn't take`)
     out[key] = { ...r, lists: Object.fromEntries(GRAND_RACES.map((race) => { const z = sizeOf(race, lists[race]); return [race, `'${lists[race]}' ${z.units} units, ${z.models} models, ${z.points} points`] })) }
   }
+  // ((F5a, DESIGN §4.2.12's scale-bench row) reported only, no budget
+  // judged on the new races' lists: a Grand battle of the Hive against the
+  // Aerie, each seat on its race's Grand preset ('336333': 21 units a side,
+  // 90 and 81 models), on the open set and the same boards. Code without
+  // the two races, from before F5a (--dir), has no row)
+  if (RACES.insect && RACES.bird) {
+    const NEW = ['insect', 'bird'], lists = Object.fromEntries(NEW.map((race) => [race, RACES[race].armies.grand]))
+    const r = await row(CODE, grandBoards, (b, d) => ({ board: b, dice: d, mission: 'grand', terrain: 'open', seats: NEW.map((race) => ({ race, ctrl: 'ai', army: lists[race] })) }))
+    const want = NEW.reduce((n, race) => n + sizeOf(race, lists[race]).units, 0)
+    if (r.units !== want) throw new Error(`the Hive against the Aerie fields ${r.units} units, their lists ${want}: the setups' armies didn't take`)
+    out.grandRaces = { ...r, lists: Object.fromEntries(NEW.map((race) => { const z = sizeOf(race, lists[race]); return [race, `'${lists[race]}' ${z.units} units, ${z.models} models, ${z.points} points`] })) }
+  }
 }
 // (F7a) the fortified rows, for code whose missions are fought on the set
 // ((the WIP merge with F8b) on the real grand mission, fortified, with the
@@ -384,6 +400,7 @@ if (!grand) {
 }
 line('Grand, ×3 presets', out.grand)
 line('Grand, cap lists', out.grandCaps)
+if (out.grandRaces) line('Grand ×3, Hive v Aerie', out.grandRaces)
 if (FORT) {
   line('classic, fortified', out.classicFort)
   line('Grand fort, ×3 presets', out.grandFort)
@@ -391,6 +408,11 @@ if (FORT) {
 }
 console.log(`\n  the grand mission on open; the ×3 presets: ${Object.entries(out.grand.lists).map(([r, l]) => `${r} ${l}`).join('; ')}`)
 console.log(`  the cap lists: ${Object.entries(out.grandCaps.lists).map(([r, l]) => `${r} ${l}`).join('; ')}`)
+if (out.grandRaces) {
+  // ((F5a) the new races' row beside the budget, reported: never ok or FAIL)
+  const r = out.grandRaces
+  console.log(`  (F5a) the Hive against the Aerie, a report: ${Object.entries(r.lists).map(([k, l]) => `${k} ${l}`).join('; ')}; createMatch ${(r.create / BUDGET.create).toFixed(2)}×, move p90 ${(r.move.p90 / BUDGET.moveP90).toFixed(2)}×, a battle ${(r.battle / BUDGET.battle).toFixed(2)}× the Grand budget (not judged)`)
+}
 for (const n of notes) console.log(`  ${n}`)
 console.log(`\nGrand against its budget (fails above ${OVER}×): createMatch ${BUDGET.create} ms, a movement phase's p90 ${BUDGET.moveP90} ms, a battle ${BUDGET.battle} ms`)
 const NAMES = { grand: 'presets', grandCaps: 'cap lists', grandFort: 'fort ×3', grandFortCaps: 'fort caps' }

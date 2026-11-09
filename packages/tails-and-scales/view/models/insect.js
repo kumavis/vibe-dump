@@ -7,15 +7,19 @@
 // shapes). The race's look.models names this kit ('insect').
 //
 // The body every one of them is built on is bug(): an upright ant-folk on
-// four legs (each a femur and a tibia, its own group at the hip, so they
-// scuttle), its banded abdomen slung behind a narrow waist, an upright
-// thorax with a breast plate, a head with gold compound eyes, two antennae
-// (each its own group, so they twitch) and a pair of mandibles, and two arms
-// to hold a weapon (kit.js's hold). Its anim (view/units.js's 'insect' kind,
-// view/diorama.js's idle): { kind, body, head, antL, antR, armL, armR, legs },
-// the legs in the scuttle's order (even and odd the two sets, each a front
-// leg and the back one across from it). The legs and antennae are kept out
-// of the bake (userData.keep) to move on their own; the rest bakes whole.
+// four legs (each a femur and a tibia), its banded abdomen slung behind a
+// narrow waist, an upright thorax with a breast plate, a head with gold
+// compound eyes, two antennae and a pair of mandibles, and two arms to hold
+// a weapon (kit.js's hold). Its anim (view/units.js's 'insect' kind,
+// view/diorama.js's idle): { kind, body, head, antL, antR, armL, armR, legs }.
+// ((F5a's sweep) render-bench's classic row: a figure drew in up to 15 main
+// calls, the Hive against the Aerie 1,032, 1.72× the 600, so each kept part
+// is a set) The legs are the scuttle's two sets, `legs` [even, odd], each a
+// front leg and the back one across from it in one group at the hips' mid
+// point (so a set's hips see-saw 0.024" as it swings); the antennae are one
+// group, antL (antR null: they twitch together). Both are kept out of the
+// bake (userData.keep) to move on their own; the rest bakes whole. (The
+// Boilback, one figure, keeps its six legs and two antennae each its own.)
 //
 // Each figure's top sits near its type's eye + 0.1 (DESIGN's heights row,
 // sim/bake-check.mjs): about 1.0" a walker (a Delver 0.75: the smallest
@@ -63,20 +67,22 @@ const NEW = {
   G: smooth,
   paint(kind, hex) {
     switch (kind) {
-      // (the lacquered shell, its plates a touch glossier, so the two bake
-      // as two classes; the joints satin)
-      case 'chitin': return gloss(hex, { roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.08 })
-      case 'plate': return gloss(hex, { roughness: 0.24, clearcoat: 1, clearcoatRoughness: 0.05 })
-      case 'joint': return gloss(hex, { roughness: 0.5, clearcoat: 0.45, clearcoatRoughness: 0.22 })
-      case 'eye': return gloss(hex, { roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.03 })
-      case 'horn': return gloss(hex, { roughness: 0.42, clearcoat: 0.6, clearcoatRoughness: 0.16 })
+      // (two finishes, each part's colour its own: the lacquered shell, its
+      // plates and gold eyes told apart by colour; and the satin of the
+      // joints, horn and claws, the wood and the turned earth. A finish is
+      // a class the bake draws in one call ((F5a's sweep) five finishes and
+      // matte wood and earth drew a figure in six to eight calls for its
+      // body alone: render-bench's classic row))
+      case 'chitin': case 'plate': case 'eye': return gloss(hex, SHELL)
+      case 'joint': case 'horn': case 'wood': case 'earth': return gloss(hex, SATIN)
       case 'metal': return polished(hex)
       case 'glow': return glow(hex)
-      // (wood and dry earth matte, as the classic's)
       default: return M(hex)
     }
   },
 }
+const SHELL = { roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.08 }
+const SATIN = { roughness: 0.5, clearcoat: 0.45, clearcoatRoughness: 0.22 }
 
 // ── The palette ───────────────────────────────────────────────────────────
 // Plum-dark chitin with heather-carmine plates and gold eyes: apart from
@@ -126,35 +132,42 @@ export function bug(S, { chitin = CHITIN, plate = PLATE, joint = JOINT, eye = EY
     md.rotation.set(Math.PI * 0.62, 0, -s * 0.5)
     head.add(md)
   }
-  // the antennae, each its own group (they twitch)
-  const ants = []
+  // the antennae, one group (they twitch together)
+  const ants = new THREE.Group()
+  ants.position.set(0, 0.065, 0.04)
   for (const s of [-1, 1]) {
     const ant = new THREE.Group()
-    ant.position.set(s * 0.035, 0.065, 0.04)
+    ant.position.set(s * 0.035, 0, 0)
     const L = 0.11 * antLen
     ant.add(rod([0, 0, 0], [s * 0.04, L, 0.02], 0.007, J))
     ant.add(rod([s * 0.04, L, 0.02], [s * 0.07, L * 1.15, L * 0.75], 0.006, J))
-    ant.userData.keep = true
-    head.add(ant)
-    ants.push(ant)
+    ants.add(ant)
   }
-  // four legs, each its own group at the hip (they scuttle): front left,
-  // front right, back right, back left, so even and odd are the diagonal
-  // pairs that step together; a hopper's back legs folded high behind
-  const legs = []
-  for (const [s, z] of [[-1, 0.03], [1, 0.03], [1, -0.11], [-1, -0.11]]) {
+  ants.userData.keep = true
+  head.add(ants)
+  // four legs (they scuttle): front left, front right, back right, back
+  // left, so even and odd are the diagonal pairs that step together, each
+  // pair one set, a group at the mid point of its two hips; a hopper's back
+  // legs folded high behind (its femurs in the chitin's colour, the
+  // joints' satin, so a set bakes as one class)
+  const legs = [new THREE.Group(), new THREE.Group()]
+  const HIP = [0, 0.36, -0.04]
+  for (const [k, [s, z]] of [[-1, 0.03], [1, 0.03], [1, -0.11], [-1, -0.11]].entries()) {
     const leg = new THREE.Group()
-    leg.position.set(s * 0.07, 0.36, z)
+    leg.position.set(s * 0.07, 0.36 - HIP[1], z - HIP[2])
     const back = z < 0, hi = hind && back
     const knee = hi ? [s * 0.1, 0.3, -0.17] : [s * 0.13, 0.07, back ? -0.03 : 0.04]
     const foot = hi ? [s * 0.11, -0.33, -0.07] : [s * 0.18, -0.32, back ? -0.08 : 0.09]
-    leg.add(rod([0, 0, 0], knee, hi ? 0.026 : 0.02, hi ? C : J))
+    leg.add(rod([0, 0, 0], knee, hi ? 0.026 : 0.02, hi ? P('joint', chitin) : J))
     leg.add(rod(knee, foot, 0.015, J))
     leg.add(part(g.sph, J, ...knee, hi ? 0.028 : 0.022))
     leg.add(part(g.sph, J, ...foot, 0.022))
-    leg.userData.keep = true
-    body.add(leg)
-    legs.push(leg)
+    legs[k % 2].add(leg)
+  }
+  for (const set of legs) {
+    set.position.set(...HIP)
+    set.userData.keep = true
+    body.add(set)
   }
   // two arms from the shoulders (the pivot), the hand at the end
   const arms = []
@@ -172,7 +185,7 @@ export function bug(S, { chitin = CHITIN, plate = PLATE, joint = JOINT, eye = EY
     body.add(arm)
     arms.push(arm)
   }
-  root.userData.anim = { kind: 'insect', body, head, antL: ants[0], antR: ants[1], armL: arms[0], armR: arms[1], legs }
+  root.userData.anim = { kind: 'insect', body, head, antL: ants, antR: null, armL: arms[0], armR: arms[1], legs }
   return root
 }
 
