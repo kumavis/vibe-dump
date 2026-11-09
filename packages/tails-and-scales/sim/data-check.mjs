@@ -21,7 +21,11 @@
 //    matchup, data/mission.js's CLASSIC, seat by seat); every race's
 //    voice is a sound view/sfx.js can play (its VOICES); (F5a) every two
 //    races' team colours stand at least 110 apart in RGB and each team at
-//    least 100 from its own alt; the AI roles are
+//    least 100 from its own alt; ((F5a's sweep) the help's Spells list,
+//    index.html, names every caster's every spell with its value and
+//    range, a template's size, S and AP as the race file has them: the
+//    Hive's Upwelling row kept S4 AP-1 after Q31's balance made it S5 AP2);
+//    the AI roles are
 //    the ones the AI orders by (core/ai/policy.js's ORDER since R6a, ai.js's
 //    before), in the legacy ai.js's order.
 // 3. defineRace refuses malformed race data (one broken field at a time),
@@ -459,6 +463,32 @@ check(kit.length && !mute.length, `every race's voice is one view/sfx.js plays (
   for (const r of rs) own.push([r.key, far(r.look.team, r.look.alt)])
   check(near.every(([, d]) => d >= 110), `every two races' team colours stand at least 110 apart in RGB (${near.map(([k, d]) => `${k} ${d.toFixed(0)}`).join(', ')})`, near.filter(([, d]) => d < 110).map(([k, d]) => `${k} ${d.toFixed(1)}`).join(', '))
   check(own.every(([, d]) => d >= 100), `each race's team stands at least 100 from its alt (${own.map(([k, d]) => `${k} ${d.toFixed(0)}`).join(', ')})`, own.filter(([, d]) => d < 100).map(([k, d]) => `${k} ${d.toFixed(1)}`).join(', '))
+}
+// ((F5a's sweep) the help's Spells rows (index.html), one <li> a caster,
+// against the race files: each spell's name, then "(N+, R")", and a
+// template's size, its S and its AP (none written for AP 0), the help's
+// words being the only copy of them a player reads before casting)
+{
+  const help = readFileSync(join(PKG, 'index.html'), 'utf8'), off = []
+  let n = 0
+  for (const r of Object.values(RACES)) {
+    for (const t of Object.values(r.units).filter((u) => u.spells)) {
+      const li = new RegExp(`<li><b>${t.name}</b> — (.*?)</li>`).exec(help)?.[1]
+      if (!li) {
+        off.push(`${t.name}: no row`)
+        continue
+      }
+      for (const sp of t.spells) {
+        n++
+        const at = li.indexOf(`<b>${sp.name}</b>`), next = li.indexOf('<b>', at + 3)
+        const txt = at < 0 ? '' : li.slice(at, next < 0 ? undefined : next)
+        const want = [`(${sp.spell}+, ${sp.range}")`, ...(sp.blast ? [`${sp.blast}"`, ` S${sp.S}${sp.AP ? ` AP-${sp.AP}` : ','}`] : [])]
+        const miss = at < 0 ? ['its name'] : want.filter((w) => !txt.includes(w))
+        if (miss.length) off.push(`${t.name}'s ${sp.name}: ${miss.map((w) => JSON.stringify(w)).join(', ')} not in "${txt.trim()}"`)
+      }
+    }
+  }
+  check(n > 0 && !off.length, `the help's Spells rows (index.html) give every caster's ${n} spells their values and ranges, and a template's size, S and AP, as the race files have them`, off.join('; '))
 }
 const { ORDER } = await imp(PKG, 'core/ai/policy.js')
 const order = [...ORDER]
