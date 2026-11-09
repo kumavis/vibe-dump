@@ -1330,8 +1330,9 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
   // the v6 table's classic lists (DESIGN §4.2.8.2): a retune re-pins them
   // here, and each stays within its mission's limit (army-sim's gate);
   // v6's still, judged after the parapets and kept (DESIGN's note of that
-  // name)
-  const CLASSIC_COST = { squirrel: 485, serpent: 495 }
+  // name); (F5a, DESIGN §4.2.12 Q31) the new races' as their fit and
+  // balance priced them
+  const CLASSIC_COST = { squirrel: 485, serpent: 495, insect: 485, bird: 500 }
   for (const [key, want] of Object.entries(CLASSIC_COST)) {
     const r = RACES[key], cost = A.listCost(r, countsOf(r.armies.classic))
     check(cost === want && cost <= MISSIONS.classic.list.points, `the ${r.short}' classic list ('${r.armies.classic}') costs ${cost}, the v6 table's ${want}, within the Skirmish limit of ${MISSIONS.classic.list.points}`, cost !== want ? 'a price changed: re-pin CLASSIC_COST with the retune (and run sim/army-sim.mjs --check)' : 'over the limit')
@@ -1339,8 +1340,9 @@ console.log("\n11. the army builder's data: prices, rosters, presets, the missio
   // (F8b) the larger battles' presets at those missions' own prices (the
   // fallback's `list.prices`, as F8b's retune fitted them, DESIGN
   // §4.2.8.2): a retune of a mission's prices re-pins them here ((F8b's
-  // review) Field's re-pinned with its retune)
-  const PRESET_COST = { field: { squirrel: 980, serpent: 950 }, grand: { squirrel: 1350, serpent: 1485 } }
+  // review) Field's re-pinned with its retune); (F5a) the new races' at
+  // `cost` (no Field entry of theirs: DESIGN §4.2.12 Q31)
+  const PRESET_COST = { field: { squirrel: 980, serpent: 950, insect: 970, bird: 1000 }, grand: { squirrel: 1350, serpent: 1485, insect: 1455, bird: 1500 } }
   for (const [m, by] of Object.entries(PRESET_COST)) {
     const mission = MISSIONS[m]
     for (const [key, want] of Object.entries(by)) {

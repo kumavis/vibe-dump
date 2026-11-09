@@ -1892,6 +1892,14 @@ follows N3.
   `races/` set, 14 battles (the corpus 111); decisions Q1-Q29, the design
   signals marked. Phases: Rules, View, Prices, Corpus, Sweep, Review, Fix
   (§4.2.12's staging table, each with its gate).
+  (Prices, after Q30's Delvers' role and Q31's balance) `RULES_ID`
+  20w3b8h0pjh; the Hive 60/75/75/90/65/45 (classic 485, the points binding
+  888 of 1,000 lists), the Aerie 70/85/65/50/45/120 (500, 776), fitted on
+  1111-3333 pooled and judged on 1111 and 5555 (the two seeds' mean,
+  classic/fortified): the Hive 58/47 against the Bushtails and 59/48
+  against the Coil, the Aerie 48/64 and 32/57, the Hive against the Aerie
+  69/42, so a pair with a new race passes one set at most; no flip, no
+  Field entry (Q31).
 - [ ] **F5b** The new races' vehicles: the insectoids' Brood Beetle and the
   bird-people's Sky-Basket (which may land on ramparts). (From F7c: a
   Basket landed on a timber platform falls with it as any unit does,

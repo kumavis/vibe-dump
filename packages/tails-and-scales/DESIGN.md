@@ -4083,8 +4083,11 @@ The classic lists sit by the older races' (raw 484 and 586, cost 485 and 495; §
 // fortification, and ends where a walker could stand), and the Delvers
 // swarm (`swarm`: in the fight, while `min` of them still stand, their
 // wound rolls of 1 are rolled again, core/actions/fight.js). Each `cost` is
-// a first guess, fitted at Skirmish against both older races by
-// sim/army-sim.mjs before the race is offered (§4.2.8.2).
+// fitted at Skirmish against both older races by sim/army-sim.mjs
+// (§4.2.8.2), after the balance (DESIGN §4.2.12 Q31) moved the stats marked
+// (Q31) below: the fit's seeds 1111, 2222 and 3333 pooled (N 7,200 a pair),
+// the I–W pair's fit the check, the table judged on 1111 and 5555 (N 2,400
+// a pair each), each unit's figures beside it.
 import { AURA } from '../../core/rules.js'
 
 const CLAWS = { name: 'Spur-claws', S: 3, AP: 0, D: 1 }
@@ -4106,8 +4109,12 @@ export default {
   armies: { field: '224222', grand: '336333' },
   units: {
     spinethrower: {
-      name: 'Spinethrower Brood', short: 'Spinethrowers', role: 'Troops', ai: 'shooter', models: 6, base: 0.3, pts: 8, cost: 70,
-      stats: 'M6 WS4 BS4 S3 T3 W1 A1 Ld6 Sv5 OC2',
+      // (F5a, fitted: 73 ± 3 against the Bushtails, 73 ± 3 against the
+      // Serpents, so 75 (band 15), the Windfolk 84 ± 3; judged 70 ± 5, 74 ± 5
+      // and 88 ± 5 on 1111, 82 ± 6, 78 ± 5 and 75 ± 5 on 5555, in band each)
+      name: 'Spinethrower Brood', short: 'Spinethrowers', role: 'Troops', ai: 'shooter', models: 6, base: 0.3, pts: 8, cost: 75,
+      // (Q31) OC 2 -> 3: a climber that holds the works' objectives the burrowers can't reach (the balance's probes)
+      stats: 'M6 WS4 BS4 S3 T3 W1 A1 Ld6 Sv5 OC3',
       ranged: { name: 'Spine volleys', range: 15, shots: 2, S: 3, AP: 1, D: 1, fx: 'sting' },
       melee: CLAWS,
       abilities: ['Spine volleys — shorter than a slingshot, and they go through bark.'],
@@ -4115,43 +4122,69 @@ export default {
     delver: {
       // (swarm's `min`: half the squad. Eight at base 0.25 make a disc of r
       // 1.011, inside the squads' 1.18 every lane is measured for.)
-      name: 'Delver Swarm', short: 'Delvers', role: 'Troops', ai: 'line', models: 8, base: 0.25, pts: 6, cost: 70, burrow: true, swarm: { min: 4 },
-      stats: 'M5 WS4 BS6 S3 T3 W1 A2 Ld6 Sv6 OC2',
+      // (Q30) ai 'melee', not 'line': a swarm whose rule is a melee re-roll seeks the fight.
+      // (Q31) S 3 -> 4 (and the claws'), A 2 -> 3, Sv 6 -> 4, W 1 -> 2, pts 6 -> 10: a blast took
+      // the whole squad (84% of the Delvers fielded died, most to templates); W2 is what lifts the fit (55 -> 80-90)
+      // and makes the points, not the 36 models, bind the Hive's lists (888 of 1,000)
+      // (F5a, fitted: 82 ± 4 and 86 ± 4, the mean 84, the Windfolk 89 ± 4; at
+      // 85 the models still bind 235 to 364 of 1,000 lists, so 90 (band 18),
+      // inside the band; judged 85 ± 6, 81 ± 6, 91 ± 6 on 1111 and 96 ± 7,
+      // 89 ± 6, 84 ± 6 on 5555, in band each)
+      name: 'Delver Swarm', short: 'Delvers', role: 'Troops', ai: 'melee', models: 8, base: 0.25, pts: 10, cost: 90, burrow: true, swarm: { min: 4 },
+      stats: 'M5 WS4 BS6 S4 T3 W2 A3 Ld6 Sv4 OC2',
       ranged: null,
-      melee: { name: 'Digging claws', S: 3, AP: 0, D: 1 },
+      melee: { name: 'Digging claws', S: 4, AP: 0, D: 1 },
       abilities: [
         'Burrow — tunnels under walls, hedges, trees and rough ground (never rock, nor a fortification) and comes up where it can stand.',
         'Swarm — in a fight, re-rolls wound rolls of 1 while 4 or more of it still stand.',
       ],
     },
     deepguard: {
-      name: 'Deepguard', short: 'Deepguard', role: 'Elite', ai: 'melee', models: 4, base: 0.36, pts: 24, cost: 100, burrow: true,
-      stats: 'M5 WS3 BS5 S5 T5 W2 A2 Ld8 Sv3 OC1',
+      // (F5a, fitted: 81 ± 4 and 74 ± 3, so 75 (band 15), the Windfolk 64 ±
+      // 3; judged 75 ± 5, 76 ± 5, 69 ± 6 on 1111; on 5555 94 ± 7 against the
+      // Bushtails, outside its band, 77 ± 6 and 62 ± 6)
+      name: 'Deepguard', short: 'Deepguard', role: 'Elite', ai: 'melee', models: 4, base: 0.36, pts: 24, cost: 75, burrow: true,
+      // (Q31) Sv 3 -> 4: the burrowers' weight moved off the classic board, where they pass under everything
+      stats: 'M5 WS3 BS5 S5 T5 W2 A2 Ld8 Sv4 OC1',
       ranged: null,
       melee: { name: 'Scythe forelegs', S: 5, AP: 2, D: 1 },
       abilities: ['Burrow — tunnels under walls, hedges, trees and rough ground (never rock, nor a fortification) and comes up where it can stand.', 'Old chitin — the Hive’s doorstep, and it bites.'],
     },
     hopper: {
-      name: 'Hopper Lancers', short: 'Hoppers', role: 'Fast', ai: 'raider', models: 4, base: 0.3, pts: 14, cost: 55,
-      stats: 'M10 WS3 BS4 S4 T3 W1 A2 Ld7 Sv5 OC1',
+      // (F5a, fitted: 70 ± 3 and 73 ± 3, the mean 71.5, the Windfolk 72 ± 3;
+      // priced 65 (band 13), the fit's lower 5, for the Hive's fortified
+      // battles, where 4444 had it short; judged 66 ± 5, 61 ± 5 on 1111 and
+      // 66 ± 5 against the Serpents on 5555, but 83 ± 6 against the Windfolk
+      // on 1111 and 78 ± 6 against the Bushtails on 5555, outside its band:
+      // the fit's 70 would have held both)
+      name: 'Hopper Lancers', short: 'Hoppers', role: 'Fast', ai: 'raider', models: 4, base: 0.3, pts: 14, cost: 65,
+      // (Q31) T 3 -> 4, Sv 5 -> 4, OC 1 -> 2: 97% of them died, most to shooting, for 58 kills in 120 battles
+      stats: 'M10 WS3 BS4 S4 T4 W1 A2 Ld7 Sv4 OC2',
       ranged: { name: 'Barbed spines', range: 8, shots: 1, S: 4, AP: 1, D: 1, assault: true, fx: 'sting' },
       melee: { name: 'Leg-spurs', S: 4, AP: 1, D: 1 },
       abilities: ['Spring — may shoot after Advancing.'],
     },
     boilback: {
-      name: 'Boilback Bombardier', short: 'Boilback', role: 'Artillery', ai: 'artillery', models: 1, base: 1.0, pts: 95, cost: 60, big: true,
+      // (F5a, fitted: 39 ± 4 and 47 ± 4, so 45 (band 14), the Windfolk 59 ±
+      // 4; judged 44 ± 7, 51 ± 7, 51 ± 7 on 1111 and 39 ± 8, 35 ± 7, 58 ± 7
+      // on 5555, in band each)
+      name: 'Boilback Bombardier', short: 'Boilback', role: 'Artillery', ai: 'artillery', models: 1, base: 1.0, pts: 95, cost: 45, big: true,
       stats: 'M4 WS6 BS4 S3 T6 W7 A2 Ld7 Sv3 OC0',
       ranged: { name: 'Boiling glob', range: 30, shots: 1, blast: 2.6, S: 5, AP: 2, D: 1, indirect: true, heavy: true, scenery: 2, fx: 'glob' },
       melee: { name: 'Crushing legs', S: 4, AP: 0, D: 1 },
       abilities: ['Indirect — fires without line of sight at −1 to hit.', 'Heavy — −1 to hit after moving.', 'Scalding — whatever it lands on, it lands on hot.'],
     },
     hivemother: {
+      // (F5a) at 60, as the older heroes: the fit's race-level edge is -2.2 ±
+      // 28.6 points against the Bushtails and -2.9 ± 25.9 against the
+      // Serpents, so no handicap; the classic list costs 485
       name: 'Hivemother Kesh', short: 'Hivemother', role: 'Hero', ai: 'hero', models: 1, base: 0.45, pts: 85, cost: 60, hero: true,
       stats: 'M5 WS3 BS3 S5 T5 W5 A3 Ld9 Sv4 OC1',
       // (V3c) three spells, one cast a shooting phase, the player's pick:
       // the first is her ranged weapon (data/schema.js)
       spells: [
-        { name: 'Upwelling', spell: 6, range: 18, shots: 1, blast: 2.4, S: 4, AP: 1, D: 1, scenery: 2, fx: 'mandibles' },
+        // (Q31) S 4 -> 5, AP 1 -> 2: Upwelling strikes as the Elder's Thornburst does
+        { name: 'Upwelling', spell: 6, range: 18, shots: 1, blast: 2.4, S: 5, AP: 2, D: 1, scenery: 2, fx: 'mandibles' },
         { name: 'Hive Hum', spell: 5, range: 12, resolve: true, fx: 'hum' },
         { name: 'Resin Snare', spell: 7, range: 18, snare: true, fx: 'resin' },
       ],
@@ -4176,8 +4209,11 @@ export default {
 // them dive (`swoop`: +chargeS to their melee weapon's Strength in the
 // fight of the turn they charged, core/actions/fight.js; the card calls it
 // Dive, since the Glider Wing's card already says Swoop of its darts). Each
-// `cost` is a first guess, fitted at Skirmish against both older races by
-// sim/army-sim.mjs before the race is offered (§4.2.8.2).
+// `cost` is fitted at Skirmish against both older races by
+// sim/army-sim.mjs (§4.2.8.2), after the balance (DESIGN §4.2.12 Q31) moved
+// the stat marked (Q31) below: the fit's seeds 1111, 2222 and 3333 pooled
+// (N 7,200 a pair), the I–W pair's fit the check, the table judged on 1111
+// and 5555 (N 2,400 a pair each), each unit's figures beside it.
 import { AURA } from '../../core/rules.js'
 
 const FLY = 'Fly — moves over scenery and enemy units; never in cover.'
@@ -4198,6 +4234,9 @@ export default {
   armies: { field: '224222', grand: '336333' },
   units: {
     longbill: {
+      // (F5a, fitted: 65 ± 3 against the Bushtails, 66 ± 3 against the
+      // Serpents, so 65 (band 13), the Hivekin 59 ± 3; judged 63 ± 5, 68 ± 4,
+      // 57 ± 5 on 1111 and 66 ± 4, 62 ± 5, 62 ± 5 on 5555, in band each)
       name: 'Longbill Pikes', short: 'Longbills', role: 'Troops', ai: 'line', models: 6, base: 0.32, pts: 9, cost: 65,
       stats: 'M6 WS3 BS4 S4 T3 W1 A1 Ld7 Sv4 OC2',
       ranged: { name: 'Flung quills', range: 10, shots: 1, S: 3, AP: 1, D: 1, fx: 'quill' },
@@ -4205,35 +4244,54 @@ export default {
       abilities: ['Wading line — the Aerie’s feet on the ground, beaks forward.'],
     },
     finch: {
-      name: 'Finch Flock', short: 'Finches', role: 'Troops', ai: 'shooter', models: 6, base: 0.28, pts: 8, cost: 60, fly: true,
+      // (F5a, fitted: 44 ± 2 and 50 ± 2, the mean 47, the Hivekin 47 ± 2; at
+      // 45 4444's check had it 54 ± 4 against the Serpents, outside its band,
+      // so 50 (band 10); judged 49 ± 4, 53 ± 4 on 1111 and 43 ± 4, 49 ± 4,
+      // 45 ± 4 on 5555, in band, but 35 ± 4 against the Hivekin on 1111)
+      name: 'Finch Flock', short: 'Finches', role: 'Troops', ai: 'shooter', models: 6, base: 0.28, pts: 8, cost: 50, fly: true,
       stats: 'M10 WS4 BS4 S2 T2 W1 A1 Ld6 Sv6 OC1',
       ranged: { name: 'Pebble drops', range: 12, shots: 2, S: 3, AP: 0, D: 1, assault: true, fx: 'pebble' },
       melee: { name: 'Tiny beaks', S: 2, AP: 0, D: 1 },
       abilities: [FLY, 'Flit — may shoot after Advancing.'],
     },
     kestrel: {
-      name: 'Kestrel Divers', short: 'Kestrels', role: 'Fast', ai: 'melee', models: 4, base: 0.32, pts: 16, cost: 55, fly: true, swoop: { chargeS: 2 },
+      // (F5a, fitted: 42 ± 2 and 52 ± 2, the mean 47, so 45 (band 9), the
+      // Hivekin 51 ± 3; judged 44 ± 4, 46 ± 4 on 1111 and 52 ± 4, 54 ± 4,
+      // 54 ± 4 on 5555, in band, but 55 ± 4 against the Serpents on 1111)
+      name: 'Kestrel Divers', short: 'Kestrels', role: 'Fast', ai: 'melee', models: 4, base: 0.32, pts: 16, cost: 45, fly: true, swoop: { chargeS: 2 },
       stats: 'M14 WS3 BS5 S3 T3 W1 A2 Ld7 Sv5 OC1',
       ranged: null,
       melee: { name: 'Hooked talons', S: 3, AP: 1, D: 1 },
       abilities: [FLY, 'Dive — +2 Strength in the fight on the turn it charges.'],
     },
     stormtalon: {
-      name: 'Stormtalon Guard', short: 'Stormtalons', role: 'Elite', ai: 'melee', models: 3, base: 0.38, pts: 30, cost: 95, fly: true, swoop: { chargeS: 1 },
-      stats: 'M12 WS3 BS5 S4 T4 W2 A3 Ld8 Sv4 OC1',
+      // (F5a, fitted at A2: 94 ± 4 and 80 ± 4, the mean 87, so 85 (band 17),
+      // the Hivekin 75 ± 4; judged 93 ± 6, 74 ± 5, 72 ± 6 on 1111 and 94 ± 5,
+      // 82 ± 6, 81 ± 6 on 5555, in band each)
+      name: 'Stormtalon Guard', short: 'Stormtalons', role: 'Elite', ai: 'melee', models: 3, base: 0.38, pts: 30, cost: 85, fly: true, swoop: { chargeS: 1 },
+      // (Q31) A 3 -> 2: at A3 the Aerie scored 57% and 69% against the Bushtails (round 1, 4444), the Stormtalons fitting 116 ± 3
+      stats: 'M12 WS3 BS5 S4 T4 W2 A2 Ld8 Sv4 OC1',
       ranged: null,
       melee: { name: 'War-talons', S: 4, AP: 2, D: 1 },
       abilities: [FLY, 'Dive — +1 Strength in the fight on the turn it charges.'],
     },
     roc: {
-      name: 'Greatwing Roc', short: 'Roc', role: 'Monster', ai: 'melee', models: 1, base: 0.9, pts: 120, cost: 95, big: true, fly: true, swoop: { chargeS: 1 },
+      // (F5a, fitted: 97 ± 4 and 103 ± 4, the mean 100, but the Hivekin's
+      // 128 ± 5 (and 139 ± 8 on 4444's check) lie outside 100's band, so 120
+      // (band 24), inside all three; judged 100 ± 8, 106 ± 7, 117 ± 8 on 1111
+      // and 111 ± 7, 100 ± 8, 127 ± 8 on 5555, in band each)
+      name: 'Greatwing Roc', short: 'Roc', role: 'Monster', ai: 'melee', models: 1, base: 0.9, pts: 120, cost: 120, big: true, fly: true, swoop: { chargeS: 1 },
       stats: 'M12 WS3 BS6 S6 T6 W8 A4 Ld8 Sv4 OC3',
       ranged: null,
       melee: { name: 'Rending beak', S: 6, AP: 2, D: 2 },
       abilities: [FLY, 'Dive — +1 Strength in the fight on the turn it charges.', 'Vast — a blast catches it for D3+1 hits.'],
     },
     skyseer: {
-      name: 'Skyseer Varra', short: 'Skyseer', role: 'Hero', ai: 'hero', models: 1, base: 0.42, pts: 80, cost: 60, hero: true, fly: true,
+      // (F5a) 70, above the older heroes' 60: the fit's race-level edge is
+      // -60.7 ± 25.9 points against the Bushtails and -24.8 ± 24.5 against the
+      // Serpents (the Aerie's), and 70 is as far as the classic list's 500 lets
+      // the handicap go
+      name: 'Skyseer Varra', short: 'Skyseer', role: 'Hero', ai: 'hero', models: 1, base: 0.42, pts: 80, cost: 70, hero: true, fly: true,
       stats: 'M10 WS3 BS3 S4 T4 W5 A3 Ld9 Sv5 OC1',
       // (V3c) three spells, one cast a shooting phase, the player's pick:
       // the first is her ranged weapon (data/schema.js)
@@ -4251,22 +4309,22 @@ export default {
 
 `data/schema.js` registers them after the two older races, `RACES = raceRegistry([squirrel, serpent, insect, bird])` (`:446`), so every `Object.keys(RACES)` loop (army-sim's `pairs()`, the race picker, data-check's sections) keeps the classic pair first and its streams as they are.
 
-**The units as `defineRace` makes them** (derived fields from the schema's rules, with Q4's `climb`; r the squad's disc at full strength, `formation`'s; pts × models the AI's appraisal):
+**The units as `defineRace` makes them** (derived fields from the schema's rules, with Q4's `climb`; r the squad's disc at full strength, `formation`'s; pts × models the AI's appraisal; the cost as the Prices phase fitted it, after Q31's balance moved the stats its race files mark (Q31)):
 
 | Unit | Role, `ai` | Models × base, r | pts (raw) | cost | move | eye / chest | brawler | climb |
 |---|---|---|---|---|---|---|---|---|
 | Hivemother Kesh | Hero, hero | 1 × 0.45, 0.450 | 85 (85) | 60 | walk | 0.95 / 0.55 | no | yes |
-| Deepguard | Elite, melee | 4 × 0.36, 0.982 | 24 (96) | 100 | **burrow** | 0.95 / 0.55 | yes | **no** (Q4) |
-| Spinethrower Brood | Troops, shooter | 6 × 0.3, 1.060 | 8 (48) | 70 | walk | 0.95 / 0.55 | no | yes |
-| Delver Swarm | Troops, line | 8 × 0.25, 1.011 | 6 (48) | 70 | **burrow** | 0.95 / 0.55 | yes | **no** (Q4) |
-| Hopper Lancers | Fast, raider | 4 × 0.3, 0.837 | 14 (56) | 55 | walk | 0.95 / 0.55 | no | yes |
-| Boilback Bombardier | Artillery, artillery | 1 × 1.0, 1.000 | 95 (95) | 60 | walk | 1.9 / 1.0 | no | no (big) |
-| Skyseer Varra | Hero, hero | 1 × 0.42, 0.420 | 80 (80) | 60 | fly | 1.5 / 1.0 | no | no (fly) |
-| Stormtalon Guard | Elite, melee | 3 × 0.38, 0.911 | 30 (90) | 95 | fly | 1.5 / 1.0 | yes | no (fly) |
+| Deepguard | Elite, melee | 4 × 0.36, 0.982 | 24 (96) | 75 | **burrow** | 0.95 / 0.55 | yes | **no** (Q4) |
+| Spinethrower Brood | Troops, shooter | 6 × 0.3, 1.060 | 8 (48) | 75 | walk | 0.95 / 0.55 | no | yes |
+| Delver Swarm | Troops, melee (Q30) | 8 × 0.25, 1.011 | 10 (80) (Q31) | 90 | **burrow** | 0.95 / 0.55 | yes | **no** (Q4) |
+| Hopper Lancers | Fast, raider | 4 × 0.3, 0.837 | 14 (56) | 65 | walk | 0.95 / 0.55 | no | yes |
+| Boilback Bombardier | Artillery, artillery | 1 × 1.0, 1.000 | 95 (95) | 45 | walk | 1.9 / 1.0 | no | no (big) |
+| Skyseer Varra | Hero, hero | 1 × 0.42, 0.420 | 80 (80) | 70 | fly | 1.5 / 1.0 | no | no (fly) |
+| Stormtalon Guard | Elite, melee | 3 × 0.38, 0.911 | 30 (90) | 85 | fly | 1.5 / 1.0 | yes | no (fly) |
 | Longbill Pikes | Troops, line | 6 × 0.32, 1.120 | 9 (54) | 65 | walk | 0.95 / 0.55 | no | yes |
-| Finch Flock | Troops, shooter | 6 × 0.28, 1.000 | 8 (48) | 60 | fly | 1.5 / 1.0 | no | no (fly) |
-| Kestrel Divers | Fast, melee | 4 × 0.32, 0.886 | 16 (64) | 55 | fly | 1.5 / 1.0 | yes | no (fly) |
-| Greatwing Roc | Monster, melee | 1 × 0.9, 0.900 | 120 (120) | 95 | fly | 1.9 / 1.0 | yes | no (big, fly) |
+| Finch Flock | Troops, shooter | 6 × 0.28, 1.000 | 8 (48) | 50 | fly | 1.5 / 1.0 | no | no (fly) |
+| Kestrel Divers | Fast, melee | 4 × 0.32, 0.886 | 16 (64) | 45 | fly | 1.5 / 1.0 | yes | no (fly) |
+| Greatwing Roc | Monster, melee | 1 × 0.9, 0.900 | 120 (120) | 120 | fly | 1.9 / 1.0 | yes | no (big, fly) |
 
 - **Squads.** Every climber's r is under `CLIMB_R` 1.22 and every squad's under the 1.18 the lanes are measured for (terrain-check's connectivity squad): the Longbills' 1.120 is the widest. Eight Delvers at base 0.25 make 1.011; ten would make 1.215, which is why the swarm is eight.
 - **The heroes** are first in roster order (`autoList` takes the first Hero, `core/army.js:245`), one hero type a race (open question 22), at the older heroes' 60 (the race-level handicap the Skirmish fit sets, §4.2.8.2 step 3).
@@ -4495,7 +4553,7 @@ const high = G.nav.hasHeight, climb = high && climbs(u), walks = high && !straig
 
 ##### Prices and presets
 
-**The first guesses** are the costs in the files: each unit near its role's older counterparts and the classic lists at the older races' 485 and 495 (the Hive 60 + 100 + 2 × 70 + 70 + 55 + 60; the Aerie 60 + 95 + 2 × 65 + 60 + 55 + 95). They are a starting point, not a table: §4.2.8.2's procedure fits them, at Skirmish against both older races (D:1193, D:1794), and its gates judge them, for every race pair (from F5a six: S–C, S–I, S–B, C–I, C–B, I–B; `pairs()`, `sim/army-sim.mjs:442-448`, in `RACES` order, each pair's score its first race's).
+**The balance** (Q31). The first guesses were each unit near its role's older counterparts and the classic lists at the older races' 485 and 495 (the Hive 60 + 100 + 2 × 70 + 70 + 55 + 60; the Aerie 60 + 95 + 2 × 65 + 60 + 55 + 95). No price table could carry them into the gates (the Hive's lists held by their 36 models, not their points; the Aerie's scores swinging with the set), so the stats moved first, each marked `(Q31)` in its file: the Hivemother's Upwelling S5 AP2, the Deepguard Sv4, the Spinethrowers OC3, the Delvers S4 (their claws S4) A3 W2 Sv4 at pts 10, the Hoppers T4 Sv4 OC2; the Stormtalons A2. The costs were then fitted: the Hive 60 + 75 + 2 × 75 + 90 + 65 + 45 = **485**, the Aerie 70 + 85 + 2 × 65 + 50 + 45 + 120 = **500**, each unit's figures beside it in its file and the judgment in Q31. §4.2.8.2's procedure fits them, at Skirmish against both older races (D:1193, D:1794), and its gates judge them, for every race pair (from F5a six: S–C, S–I, S–B, C–I, C–B, I–B; `pairs()`, `sim/army-sim.mjs:442-448`, in `RACES` order, each pair's score its first race's).
 
 **What a new race's prices must keep** (the schema, §4.2.8.2-5, and the checks):
 - every `cost` a whole multiple of 5 above 0;
@@ -4615,11 +4673,23 @@ Each with its options, the choice and why. **(design signal)** marks what a huma
 - **Q22. Heroes.** **One hero type a race**, first among its Heroes in roster order, at 60 as the older two (open question 22's default).
 - **Q23. The bump and the pins.** **`CORE_VERSION` 17** with the entry above; `PINNED` `17: V12`, `PINNED_UNDER` 17 (no new state); `RULES_ID` recorded by the Prices phase; the PIN moved to the last code commit for the new set alone.
 - **Q24. The races' names (design signal: names).** The **Deepdelve Hive** (short **Hivekin**) and the **Highwind Aerie** (short **Windfolk**), their heroes **Hivemother Kesh** and **Skyseer Varra**: invented, in the older races' form ("Bushtail Clans" / "Bushtails", "Coil of Ssithra" / "Serpents"); the keys `insect` and `bird` are F5b's data's and property's already (`sim/property.mjs:5623`).
-- **Q25. The rosters' shapes (design signal).** The Hive: no Monster and no flier, its burrowers its reach and the Boilback its gun; the Aerie: no Artillery and no burrower, five fliers and one walking line, the Roc its Monster. The other choices weighed: a Hive Monster (a big burrowing grub, too near F5b's Sapper Grub) and Aerie artillery (a stone-dropping wing, which flying Finches already are in small). Each race has a hole the other three can find.
+- **Q25. The rosters' shapes (design signal).** The Hive: no Monster and no flier, its burrowers its reach and the Boilback its gun; the Aerie: no Artillery and no burrower, five fliers and one walking line, the Roc its Monster. The other choices weighed: a Hive Monster (a big burrowing grub, too near F5b's Sapper Grub) and Aerie artillery (a stone-dropping wing, which flying Finches already are in small). Each race has a hole the other three can find. (Q30) The Delvers seek the fight (`ai: 'melee'`, as the Deepguard): the Hive's objective play rests on its other units and the AI's position terms.
 - **Q26. The AI's measure of a burrower with height.** (a) A walker's `levelDist`; (b) the straight line, as a flier's; (c) `levelDist` with the decks infinitely far. **(b)**: it passes under what a walker goes round and takes no gate; (c) would need a new field of the gate graph. Flat boards don't read it.
 - **Q27. A flying hero (design signal).** The Skyseer flies (no cover, eye 1.5, the circle); the Hivemother walks. Options: both walk, both their race's way, or as chosen. **As chosen**: the Aerie's hero leads from the air as its race does, and a burrowing Hivemother would leave the Hive's caster under the ground of every fort with nothing to climb.
 - **Q28. Where the dive is valued.** **`aiCharge`'s gain alone**, never the position terms or a defender's loss (Q9): those weigh fights the unit didn't choose.
 - **Q29. The default seat races.** **`CLASSIC` stays squirrel against serpent** (`data/mission.js:389`): the title's backdrop, every harness and title-shot read it.
+- **Q30. The Delver Swarm's role (the maintainer's call, after the Rules phase).** (a) `ai: 'line'`, as written; (b) `ai: 'melee'`, as the Deepguard. **(b)**: at `'line'` (charge threshold 0.33) the Delvers seldom fought, the swarm re-rolling in 4 of 10 battles fielding one in the Rules phase's smoke and play-report's 16-battle sweep, under the f5a row's 50%; a swarm whose rule is a melee re-roll should seek the fight, and the Hive's objective play rests on its other units and the AI's position terms. A role, nothing else: no rule changes, `RULES_ID` moves with the field. Set by the Prices phase, which fits the Hive's three pairs with it.
+- **Q31. Balance before prices (the maintainer's call, after the first Prices attempts).** (a) Prices alone, the stats as written; (b) the two new races' stats, weapons and `pts` first (never the older races', nor names, roles, flags, model counts, bases or the rosters' shapes), then, if the Aerie's swing between the sets outlived the stats, the Stormtalons and the Finches on foot, then the costs by the fit. **(b)**: three rounds of the price fit showed prices can't close the gap: the Hive's Random lists were held by their 36 models in 442 of 1,000, its race-level edge 110 and 51 points short of the older races, its scores 25-31%; the Aerie swung with the set (53.5% against the Bushtails on classic, 69.2% on fortified). What the balance found (its probes and rounds, the Prices phase's scratch `rounds.md`): a blast takes a whole 8-model Delver squad (84% of the Delvers fielded against the Bushtails died, most to the Trebuchet, Thornburst and the Grenadiers), so their S and A moved their fit little and W2 is what lifted it (55 → 80-90), and at 90 points the points bind 888 of 1,000 Hive lists (the models at 85); the Aerie's swing is its fragility in the open (against the Serpents on classic 28 of 100 of its losses were wipes, on fortified 15), and no stat tried closed it: the fliers' T and Sv down, as this call suggested, widened it, and their M, OC, the Skyseer's spell values and their durability left it. Nor did the walking Stormtalons and Finches: they widened it (against the Bushtails 12 → 20 points between the sets, the Serpents 22 → 27, at N 800), so nothing was flipped. The stats moved are the files' `(Q31)` lines: the Hivemother's Upwelling S4 AP1 → S5 AP2, the Deepguard Sv3 → 4, the Spinethrowers OC2 → 3, the Delvers S3 → 4 (the claws too), A2 → 3, Sv6 → 4, W1 → 2 and pts 6 → 10, the Hoppers T3 → 4, Sv5 → 4, OC1 → 2; the Stormtalons A3 → 2. The costs: the Hive 60/75/75/90/65/45 (Hivemother, Deepguard, Spinethrowers, Delvers, Hoppers, Boilback; the classic list 485), the Aerie 70/85/65/50/45/120 (Skyseer, Stormtalons, Longbills, Finches, Kestrels, Roc; 500), the fit's race-level edge for the Hive -2 ± 29 and -3 ± 26 points, the Aerie's -61 ± 26 and -25 ± 25 (its hero at 70, as far as the classic list's 500 lets the handicap go). Judged on 1111 and 5555 (N 1,500 a pair and set; the first race's score, classic / fortified):
+
+| pair | 1111 | 5555 |
+|---|---|---|
+| Bushtails v Hivekin | 42.1 / 53.5 | 40.9 / 52.0 |
+| Bushtails v Windfolk | 51.8 / 35.3 | 52.0 / 36.7 |
+| Serpents v Hivekin | 41.6 / 51.6 | 41.0 / 51.7 |
+| Serpents v Windfolk | 69.7 / 42.8 | 66.8 / 43.6 |
+| Hivekin v Windfolk | 69.4 / 40.8 | 69.1 / 42.4 |
+
+So the Hive swings 10-11 points between the sets (strong on classic, whose scenery its burrowers pass under; never the works), the Aerie 15-27 (strong on fortified), the two against each other 27-29: no table of stats and costs tried reached one both sets take for any pair with a new race, and small price moves only picked which of the Hive's sets passed (round 2, the classic; the final table, the fortified). Every new unit sits in its band against both older races on 1111 (on 5555 the Deepguard and the Hoppers against the Bushtails, 94 ± 7 and 78 ± 6, miss). At Field the new races play at `cost`: Q13's fallback, fitted on 1111-3333 pooled (N 2,700 a pair), moved every new pair's Field score further from even on 4444 (the Bushtails against the Hive 52.8 → 65.1 on open, against the Aerie 20.3 → 17.0 on fortified) and was not taken. At cost Field's gates (band 5) on 4444 and 1111 hold the Bushtails against the Hive on open (52.8, 52.1), the Coil against it on fortified (46.8, 48.4; on open 46.2, then 42.4) and the Hive against the Aerie on open (47.8, 52.6), and miss the rest: the Bushtails against the Hive on fortified (63.7, 62.4), against the Aerie (32.3 / 20.3, 30.3 / 22.2), the Coil against the Aerie (40.7 / 24.9, 39.9 / 26.8), the Hive against the Aerie on fortified (20.5, 20.8). The keg mission (1111, reported beside the classic pair's known 35.1): B–I 26.9, B–W 46.1, S–I 35.8, S–W 73.2, I–W 82.2 (the burrowers pass under the kegs, Q3). Grand and the Powder Field (1111, reported): the Aerie wins 96-100% at both (the Bushtails 1.3% and 1.8% at Grand, 0.1% on the Powder Field), and the Powder Field's Bushtails–Windfolk fit throws (its information matrix singular at the Roc, the Bushtails winning 0.7% of its 600 battles), so army-sim's full `--check` exits 1 there until the larger battles answer the Aerie. **(design signal)**: the swing is the burrow's and the flight's own (Q2, Q4, open question 5), and a set's own prices, or the works' bearing on the two modes, are the next levers; neither is a stat.
 
 #### 4.2.9 Checks, gates and corpora
 
