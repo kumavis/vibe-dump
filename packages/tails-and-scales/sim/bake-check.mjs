@@ -6,7 +6,9 @@
 // commit that never moves.)
 //
 // 1. Every classic figure (view/models/classic/squirrel.js and serpent.js,
-//    the 'classic' style's kits) built twice from one Math.random stream, one
+//    the 'classic' style's kits, (F5a) and the Hive's and the Aerie's,
+//    view/models/insect.js's and bird.js's classic builders) built twice
+//    from one Math.random stream, one
 //    baked by R7a's bake.js and the other by today's, compared node for
 //    node: the same children in the same order and places, every geometry
 //    attribute array equal value for value, the same index, the same
@@ -21,7 +23,9 @@
 //    figure as the game builds it: triangles, its height the figure's, and
 //    its colours the paint's (vertex colour times material colour), not the
 //    white of a glossy class's material.
-// 5. The glossy runtime (and the splat runtime, ./splat/) draws no
+// 5. The glossy runtime (and the splat runtime, ./splat/, (F5a) and the
+//    Hive's and the Aerie's kits, view/models/insect.js and bird.js, which
+//    make no three.js object until a figure is built) draws no
 //    Math.random as its modules load (three.js draws it for every object's
 //    uuid, and the title's table is painted from Math.random as the page
 //    loads: view/index.js), so a page drawing the classic figures draws its
@@ -70,6 +74,19 @@
 //    the riders' group at their sum) within DECK_TOL of the transport
 //    record's deckY, the height the rules see from (transport.js deckEye),
 //    so a rider is drawn where it shoots from.
+// 6d. (F5a, DESIGN §4.2.12: Q16) The Hive's and the Aerie's figures in both
+//    styles: the 'new' one as the game builds it (a fresh build, then its
+//    template's clone), the classic one by its kit's builder, baked: its
+//    anim the view's ('insect': the four legs (a Boilback's six) and two
+//    antennae kept subtrees in the figure; 'bird': the two wings kept, each
+//    with its rest pose and side, a walker's head kept, a flier's lift its
+//    stand's; a hero's gem a kept mesh; the Boilback's throwArm a kept
+//    subtree and its rest), the 'new' one's shadow cast through its one
+//    caster and its far stand-in as tall as it, in its paint. And the
+//    heights' row: each figure's top (its meshes, at the lift cache.js
+//    stands it at) within HEIGHT_TOL of its type's eye + 0.1, where the
+//    rules' sight looks from and under the label: the new kits judged in
+//    both styles, the older reported.
 // 7. The splats' preparation (splats.js's prepareSplats, a stub renderer
 //    1280×800 at pixel ratio 1): a figure ~28 px tall draws 1,500 splats and
 //    one ~60 px 6,000 ((V2) and at pixel ratio 0.5, ?lowfi's, one ~56 px
@@ -94,6 +111,8 @@ import { PKG } from './oracle/pin.mjs'
 const BAKE_REF = '417c0127b037c414605ad1b59e18067a44f21478'
 // (F9c) how far the drawn deck may stand from the rules' deckY (inches)
 const DECK_TOL = 0.05
+// (F5a) how far a figure's top may stand from its type's eye + 0.1 (inches)
+const HEIGHT_TOL = 0.4
 
 let bad = 0
 const fail = (what) => {
@@ -110,18 +129,23 @@ await import('../view/models/kit.js')
 await import('../view/models/classic/squirrel.js')
 await import('../view/models/classic/serpent.js')
 const before = draws
+// ((F5a) the Hive's and the Aerie's kits, both styles' builders in each)
+await import('../view/models/insect.js')
+await import('../view/models/bird.js')
 const { buildSerpent, KEYS } = await import('../view/models/gloss/serpents.js')
 const { triangles } = await import('../view/models/gloss/shapes.js')
 const { bake } = await import('../view/models/bake.js')
 const { DETAIL } = await import('../view/models/serpent.js')
 const cache = await import('../view/models/cache.js')
 Math.random = real
-console.log(`loading the glossy and splat runtimes, today's bake.js and the styles' kits: ${draws - before} Math.random draws`)
-if (draws !== before) fail(`the glossy and splat modules drew Math.random ${draws - before} times as they loaded`)
+console.log(`loading the glossy and splat runtimes, today's bake.js and the styles' kits ((F5a) the Hive's and the Aerie's among them): ${draws - before} Math.random draws`)
+if (draws !== before) fail(`the glossy and splat modules (or the Hive's and the Aerie's kits) drew Math.random ${draws - before} times as they loaded`)
 
 const THREE = await import('three')
 const { BUILDERS: SQUIRREL } = await import('../view/models/classic/squirrel.js')
 const { BUILDERS: SERPENT } = await import('../view/models/classic/serpent.js')
+const { CLASSIC_BUILDERS: INSECT } = await import('../view/models/insect.js')
+const { CLASSIC_BUILDERS: BIRD } = await import('../view/models/bird.js')
 const { RACES } = await import('../data/schema.js')
 
 // R7a's bake.js, its bare imports pointed at the files this script's own
@@ -192,7 +216,7 @@ function same(a, b, path, out) {
   a.children.forEach((c, i) => same(c, b.children[i], `${path}/${i}`, out))
 }
 console.log(`\n1. the classic figures, baked by R7a's bake.js (${BAKE_REF.slice(0, 7)}) and by today's`)
-for (const [kit, builders] of [['squirrel', SQUIRREL], ['serpent', SERPENT]]) {
+for (const [kit, builders] of [['squirrel', SQUIRREL], ['serpent', SERPENT], ['insect', INSECT], ['bird', BIRD]]) {
   for (const [key, build] of Object.entries(builders)) {
     // (a first build warms the kit's caches: three draws Math.random for each
     // object it makes, so a build that makes a cached material makes the
@@ -501,6 +525,92 @@ else console.log(`  ok   9 furs for the seven units, each drawn by every figure 
   }
 }
 
+// ── 6d. (F5a) The Hive's and the Aerie's figures ──────────────────────────
+{
+  console.log(`\n6d. (F5a) the Hive's and the Aerie's figures in both styles (view/models/insect.js, bird.js), and every figure's top against its eye + 0.1 (within ${HEIGHT_TOL}": the new kits judged, the older reported)`)
+  const keptIn = (o, fig) => !!o?.isObject3D && !!o.userData.keep && inFig(o, fig)
+  // the anim the view and the shots read
+  const animIssues = (fig, a, t, kind) => {
+    const out = []
+    if (a?.kind !== kind) return [`anim.kind ${a?.kind}, not ${kind}`]
+    for (const k of ['body', 'head']) if (!a[k]?.isObject3D || !inFig(a[k], fig)) out.push(`anim.${k} not in the figure`)
+    if (kind === 'insect') {
+      const n = t.big ? 6 : 4
+      if (!Array.isArray(a.legs) || a.legs.length !== n || a.legs.some((l) => !keptIn(l, fig))) out.push(`anim.legs not ${n} kept subtrees in the figure`)
+      for (const k of ['antL', 'antR']) if (!keptIn(a[k], fig)) out.push(`anim.${k} not a kept subtree in the figure`)
+      if (!t.big) for (const k of ['armL', 'armR']) if (!a[k]?.userData.hand) out.push(`anim.${k} without its hand`)
+    } else {
+      for (const k of ['wingL', 'wingR']) if (!keptIn(a[k], fig) || typeof a[k].userData.z0 !== 'number' || Math.abs(a[k].userData.s) !== 1) out.push(`anim.${k} not a kept wing with its rest pose and side`)
+      if (a.wingL?.userData.s === a.wingR?.userData.s) out.push('both wings on one side')
+      if (!a.tail?.isObject3D || !inFig(a.tail, fig)) out.push('anim.tail not in the figure')
+      const fly = t.move === 'fly'
+      if (fly ? !(a.lift > 0.3) : a.lift !== 0) out.push(`anim.lift ${a.lift} (a ${fly ? 'flier on its stand' : 'walker'})`)
+      if (!fly && !keptIn(a.head, fig)) out.push("a walker's head not kept (it bobs)")
+    }
+    if (t.hero && !(a.gem?.isMesh && keptIn(a.gem, fig))) out.push("the hero's gem not a kept mesh in the figure")
+    if (t.role === 'Artillery' && !(keptIn(a.throwArm, fig) && typeof a.rest === 'number')) out.push("the Boilback's throwArm not a kept subtree with its rest")
+    return out
+  }
+  // the figure's top: its meshes (no caster, no stand-in), at its lift
+  const topOf = (fig) => {
+    fig.updateMatrixWorld(true)
+    const b = new THREE.Box3()
+    fig.traverse((o) => o.isMesh && !o.userData.caster && !o.userData.lod && b.expandByObject(o, true))
+    return b.max.y
+  }
+  const heights = []
+  for (const race of ['insect', 'bird']) {
+    for (const [key, t] of Object.entries(RACES[race].units)) {
+      for (const how of ['fresh', 'clone']) {
+        const root = cache.buildModel(race, key, t, race === 'insect' ? '#d23a9a' : '#5a7cf0')
+        const fig = root.userData.fig, issues = [...animIssues(fig, root.userData.anim, t, race), ...casting(root)]
+        const stand = cache.lodOf(root)
+        stand.visible = false
+        root.updateMatrixWorld(true)
+        box.setFromObject(fig)
+        const tall = box.max.y, g = stand.geometry
+        g.computeBoundingBox()
+        if (Math.abs(g.boundingBox.max.y - tall) > 0.08 * tall) issues.push(`a stand-in ${g.boundingBox.max.y.toFixed(2)} tall, the figure ${tall.toFixed(2)}`)
+        const c = g.attributes.color.array
+        let white = 0
+        for (let i = 0; i < c.length; i += 3) if (c[i] > 0.95 && c[i + 1] > 0.95 && c[i + 2] > 0.95) white++
+        if (white > c.length / 3 / 20) issues.push(`${white} of the stand-in's ${c.length / 3} vertices white (a class's white, not its paint)`)
+        if (how === 'fresh') heights.push({ style: 'new', race, key, top: topOf(fig), want: t.eye + 0.1, judged: true })
+        console.log(`  ${issues.length ? 'FAIL' : 'ok  '} new     ${race.padEnd(6)} ${key.padEnd(12)} ${how.padEnd(5)} anim ${Object.keys(root.userData.anim).join(' ')}; one caster; stand-in ${g.index.count / 3} triangles, ${g.boundingBox.max.y.toFixed(2)} tall (the figure ${tall.toFixed(2)})${issues.length ? ': ' + issues.join('; ') : ''}`)
+        bad += issues.length
+        cache.disposeFigure(root)
+      }
+    }
+  }
+  for (const [race, builders] of [['insect', INSECT], ['bird', BIRD]]) {
+    for (const [key, build] of Object.entries(builders)) {
+      const t = RACES[race].units[key], fig = build()
+      bake(fig)
+      fig.position.y = t.big ? 0.09 : 0.06
+      const issues = animIssues(fig, fig.userData.anim, t, race)
+      heights.push({ style: 'classic', race, key, top: topOf(fig), want: t.eye + 0.1, judged: true })
+      console.log(`  ${issues.length ? 'FAIL' : 'ok  '} classic ${race.padEnd(6)} ${key.padEnd(12)} baked anim ${Object.keys(fig.userData.anim).join(' ')}${issues.length ? ': ' + issues.join('; ') : ''}`)
+      bad += issues.length
+    }
+  }
+  // (the older kits: reported, in both styles, as the game builds the 'new')
+  for (const race of ['squirrel', 'serpent']) {
+    for (const [key, t] of Object.entries(RACES[race].units)) {
+      const root = cache.buildModel(race, key, t, '#ec8a34')
+      heights.push({ style: 'new', race, key, top: topOf(root.userData.fig), want: t.eye + 0.1, judged: false })
+      cache.disposeFigure(root)
+      const fig = (race === 'squirrel' ? SQUIRREL : SERPENT)[key]()
+      fig.position.y = t.big ? 0.09 : 0.06
+      heights.push({ style: 'classic', race, key, top: topOf(fig), want: t.eye + 0.1, judged: false })
+    }
+  }
+  for (const h of heights) {
+    const off = h.top - h.want, ok = Math.abs(off) <= HEIGHT_TOL
+    console.log(`  ${!h.judged ? 'rep ' : ok ? 'ok  ' : 'FAIL'} height ${h.style.padEnd(7)} ${h.race.padEnd(8)} ${h.key.padEnd(12)} top ${h.top.toFixed(2)}", eye + 0.1 ${h.want.toFixed(2)}" (${off >= 0 ? '+' : ''}${off.toFixed(2)})${h.judged ? '' : ' (reported)'}`)
+    if (h.judged && !ok) bad++
+  }
+}
+
 // ── 7. The splats' preparation ─────────────────────────────────────────────
 {
   console.log(`\n7. the splats' preparation (prepareSplats, 1280×800 at pixel ratio 1)`)
@@ -628,4 +738,4 @@ if (bad) {
   console.log(`\nbake-check FAILED: ${bad} problem(s)`)
   process.exit(1)
 }
-console.log("\nbake-check passed: bake.js bakes every classic figure exactly as R7a's did, and keeps the glossy ones whole, their far stand-ins in their paint; the splat Bushtails keep their splats, shadow proxies and anim through the bake and a clone; every 'new' figure casts through its one shadow caster; (F9c) the War-Cart's and the Howdah's decks stand their riders at the rules' deckY in both styles; and the splats' preparation keeps its levels, its frame's budget and memory")
+console.log("\nbake-check passed: bake.js bakes every classic figure exactly as R7a's did, and keeps the glossy ones whole, their far stand-ins in their paint; the splat Bushtails keep their splats, shadow proxies and anim through the bake and a clone; every 'new' figure casts through its one shadow caster; (F9c) the War-Cart's and the Howdah's decks stand their riders at the rules' deckY in both styles; (F5a) the Hive's and the Aerie's figures draw nothing as their kits load, bake whole in both styles with the parts that move kept, cast through one caster and stand within 0.4\" of their eye + 0.1; and the splats' preparation keeps its levels, its frame's budget and memory")

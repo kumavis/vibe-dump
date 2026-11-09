@@ -146,6 +146,16 @@ export class Diorama {
         else if (a?.kind === 'naga') {
           fig.rotation.z = Math.sin(t * 1.4) * 0.035
           fig.scale.y = fig.userData.sy * (1 + Math.sin(t * 1.4) * 0.015)
+        } else if (a?.kind === 'insect') {
+          // ((F5a) the Hive's: the breath, the antennae twitching)
+          fig.scale.y = fig.userData.sy * (1 + Math.sin(t * 2.4) * 0.015)
+          if (a.antL) a.antL.rotation.x = Math.sin(t * 3.1) * 0.15
+          if (a.antR) a.antR.rotation.x = Math.sin(t * 3.1 + 1.3) * 0.15
+        } else if (a?.kind === 'bird') {
+          // ((F5a) the Aerie's: a flier hovering on its stand, the wings
+          // breathing about their rest pose)
+          if (a.lift) fig.position.y = fig.userData.y0 + Math.sin(t * 2.2) * 0.04
+          for (const w of [a.wingL, a.wingR]) if (w) w.rotation.z = w.userData.z0 + w.userData.s * Math.sin(t * 1.6) * 0.05
         }
         if (a?.gem) a.gem.rotation.y = t * 2
       }

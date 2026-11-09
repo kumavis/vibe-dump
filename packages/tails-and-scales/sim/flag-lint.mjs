@@ -180,7 +180,13 @@ const rulesFor = (f) => [...BANNED, ...(/^(core|data)\//.test(f) ? OWNED.filter(
 export const ALLOW = [
   ['view/effects/shots.js', 'this.fly(a, b, e.fx)', 2, 'the projectile a volley or a blast flies (the volley and blast.fire handlers): presentation'],
   ['view/effects/shots.js', "color: e.fx === 'spit' ? '#9aff5a' : '#ffe0a0'", 1, "a volley's impact sparks: presentation"],
-  ['view/effects/shots.js', "const erupted = e.fx === 'thorns' || e.fx === 'mist'", 1, 'the blast.land handler only skips the second explosion and boom: the thornburst plays its own, and (V3c) a venom mist billows rather than bangs'],
+  ['view/effects/shots.js', "const erupted = e.fx === 'thorns' || e.fx === 'mist' || e.fx === 'mandibles'", 1, 'the blast.land handler only skips the second explosion and boom: the thornburst plays its own, (V3c) a venom mist billows rather than bangs, and (F5a) an Upwelling bursts as the thornburst does'],
+  // (F5a, DESIGN §4.2.12) the Hive's and the Aerie's spells' looks, each a
+  // variant of its effect's handler
+  ['view/effects/shots.js', "const chitin = e.fx === 'mandibles'", 1, "(F5a) the spell.thorns handler's Upwelling: its spikes chitin mandibles, its motes amber: presentation"],
+  ['view/effects/shots.js', "const resin = w?.fx === 'resin'", 1, "(F5a) the spell.snare handler's Resin Snare, the caster's snare spell's look: amber strands for roots: presentation"],
+  ['view/effects/shots.js', "const gale = w?.fx === 'gale'", 1, "(F5a) the spell.snare handler's Gale, the caster's snare spell's look: wind-blown motes, no roots: presentation"],
+  ['view/effects/shots.js', "const down = e.fx === 'down'", 1, "(F5a) the spell.ward handler's Down Mantle: the frost look white as down, down drifting: presentation"],
   ['view/effects/shots.js', "if (e.fx === 'mist') return this.mist(e, { quiet })", 1, "(V3c) the spell.thorns handler plays the eruption's other look, Venom Mist's cloud: presentation"],
   ['view/effects/shots.js', "const bark = e.fx === 'bark'", 1, "(V3c) the spell.ward handler's colours, bark or frost: presentation"],
   ['view/effects/shots.js', ".find((w) => w.fx === e.fx)?.name ?? 'Warded'", 1, "(V3c) the spell.ward handler names the spell over its target by its look: presentation"],

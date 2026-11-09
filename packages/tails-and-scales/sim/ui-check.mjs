@@ -39,9 +39,12 @@
 //             the preset (no list kept for the new race), and back to the
 //             race of a list readied before, to that race's last list
 //             (ts.lists.last); an AI seat's Random rerolls for its race
+//             ((F5a) the change to a new race, the Hive)
 //   phone     a 360×780 touch screen: the panel and the Muster screen
 //             scroll nothing sideways (the page's width, and every box of
-//             the screen inside it but the role chips' own scroller), the
+//             the screen inside it but the role chips' own scroller),
+//             (F5a) each seat's race picker a button for every race (four),
+//             each 44 px at the least, wrapping inside the screen, the
 //             points bar and Ready stay put while the rows scroll to their
 //             end, − and + and Ready, the units' names (a tap: the card),
 //             Save list… and the tools at least 44 px, a tap on a disabled
@@ -392,12 +395,13 @@ const CHECKS = {
       await page.click('#musterReady')
       await page.waitForSelector('#muster.hidden', { state: 'attached' })
       const built = await lineOf(page, 0)
-      await pick(0, 'serpent')
+      // ((F5a) the change to a new race, the Hive)
+      await pick(0, 'insect')
       const reset = await lineOf(page, 0)
       const preset = MISSIONS.field.army
-      const pc = RACES.serpent.roster.map((k, i) => Number(RACES.serpent.armies[preset][i] ?? 0))
-      if (reset.value !== preset || reset.options.includes('list') || !reset.total.startsWith(`${cost('serpent', 'field', pc).toLocaleString('en')} pts`)) out.why.push(`the race changed to the Coil: the line ${reset.value} (${reset.options.join(', ')}), "${reset.total}" (want the preset ${preset}, no list)`)
-      else out.rows.push(`to the Coil: the preset, "${reset.total}"`)
+      const pc = RACES.insect.roster.map((k, i) => Number(RACES.insect.armies[preset][i] ?? 0))
+      if (reset.value !== preset || reset.options.includes('list') || !reset.total.startsWith(`${cost('insect', 'field', pc).toLocaleString('en')} pts`)) out.why.push(`the race changed to the Hive: the line ${reset.value} (${reset.options.join(', ')}), "${reset.total}" (want the preset ${preset}, no list)`)
+      else out.rows.push(`to the Hive: the preset, "${reset.total}"`)
       await pick(0, 'squirrel')
       const back = await lineOf(page, 0)
       const want = `${cost('squirrel', 'field', c).toLocaleString('en')} pts · ${c.reduce((x, y) => x + y, 0)} units`
@@ -440,6 +444,17 @@ const CHECKS = {
       const p = await wide()
       if (p.sw > p.W || p.n) out.why.push(`the panel at 360 px: ${p.sw} px wide, ${p.n} boxes outside (${p.bad.join(', ')})`)
       else out.rows.push('the panel: no sideways scroll')
+      // ((F5a) every race on each seat's picker, a button each, 44 px at
+      // the least, wrapping inside the screen: four races since F5a)
+      const rr = await page.evaluate(() => [...document.querySelectorAll('#setup .setupSeat .raceRow')].map((row) => {
+        const bs = [...row.querySelectorAll('button')].filter((b) => b.getClientRects().length && getComputedStyle(b).display !== 'none')
+        const W = document.documentElement.clientWidth
+        return { n: bs.length, rows: new Set(bs.map((b) => Math.round(b.getBoundingClientRect().top))).size, small: bs.filter((b) => b.getBoundingClientRect().width < 43.5 || b.getBoundingClientRect().height < 43.5).map((b) => `${b.dataset.race} ${Math.round(b.getBoundingClientRect().width)}×${Math.round(b.getBoundingClientRect().height)}`), out: bs.filter((b) => b.getBoundingClientRect().left < -0.5 || b.getBoundingClientRect().right > W + 0.5).length }
+      }))
+      const races = Object.keys(RACES).length
+      const rbad = rr.filter((r) => r.n !== races || r.small.length || r.out)
+      if (!rr.length || rbad.length) out.why.push(`the race pickers at 360 px: ${JSON.stringify(rr)} (want ${races} buttons a seat, each 44 px, inside the screen)`)
+      else out.rows.push(`its race pickers: ${rr.map((r) => `${r.n} buttons in ${r.rows} row${r.rows > 1 ? 's' : ''}`).join(', ')}, each 44 px`)
       await page.locator('.setupSeat[data-seat="0"] .armyBuild').tap()
       await page.waitForSelector('#muster:not(.hidden) #musterRows .mRow')
       const m = await wide()
@@ -746,6 +761,9 @@ const MUTATIONS = {
   // a Random AI seat's race changed: its Random let go for the default,
   // never rerolled
   'reroll-dropped': ['app/boot.js', '      picking.armies[s] = picking.armies[s].random ? { counts: randomOf(s, race, picking.mission), random: true } : armyDefault(s, race,', '      picking.armies[s] = armyDefault(s, race,', ['race']],
+  // ((F5a) the race picker's buttons their text's height on a phone: four
+  // races, each under a finger's 44 px)
+  'races-small': ['style.css', '    flex: 1 1 calc(50% - 3px);\n    min-height: 44px;', '    flex: 1 1 calc(50% - 3px);\n    min-height: 0;', ['phone']],
   // (F9c) a vehicle row without its deck's fire slots
   'fire-untold': ['ui/screens/muster.js', "        line.append(' · ', this.fireTip(t, hulls))\n", '', ['phone']],
   // (F9c) the fire slots' tip counting the hull's capacity in models for

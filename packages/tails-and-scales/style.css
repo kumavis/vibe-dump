@@ -1449,6 +1449,14 @@ button.link:hover {
   .picker .dwin {
     height: 150px;
   }
+  /* ((F5a) four races: on a phone the picker's buttons two to a line, each
+     a 44 px target, the names a touch tighter) */
+  .picker .raceRow button {
+    flex: 1 1 calc(50% - 3px);
+    min-height: 44px;
+    padding: 4px 6px;
+    font-size: 13px;
+  }
 }
 #setup .hidden {
   display: none;

@@ -437,10 +437,13 @@ async function runCases(dist, cases) {
       const line = await host.evaluate(() => ({ value: document.querySelector('.seat.mine .armyPick')?.value, total: document.querySelector('.seat.mine .armyTotal')?.textContent }))
       const cost = listCost(RACES.squirrel, mine.counts, MISSIONS.classic.list)
       must(line.value === 'list' && line.total === `${cost.toLocaleString('en')} pts · ${mine.counts.reduce((x, y) => x + y, 0)} units`, `the host's army line shows its list and its total: ${JSON.stringify(line)}`)
-      // a race change lets it go; built again
-      await host.click('.seat.mine .raceRow button[data-race="serpent"]')
-      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s0?.race === 'serpent', null, 10000, "the host's race change")
+      // a race change lets it go; built again ((F5a) the change to a new
+      // race, the Hive: its seat card shows it, its army let go)
+      await host.click('.seat.mine .raceRow button[data-race="insect"]')
+      await until(host, () => window.__ts.net.handle.doc().lobby.seats.s0?.race === 'insect', null, 10000, "the host's race change")
       must(!('army' in (await recOf(host, 's0'))), 'a race change lets the army go (no last list kept for the new race on this page)')
+      const card = await host.evaluate(() => document.querySelector('.seat.mine .raceRow button.on')?.dataset.race ?? null)
+      must(card === 'insect', `the host's seat card shows the Hive's button chosen: ${card}`)
       await host.click('.seat.mine .raceRow button[data-race="squirrel"]')
       await until(host, () => window.__ts.net.handle.doc().lobby.seats.s0?.race === 'squirrel', null, 10000, "the host's race back")
       const back = await recOf(host, 's0')

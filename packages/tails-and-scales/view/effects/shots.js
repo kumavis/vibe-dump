@@ -84,13 +84,36 @@ export class Shots {
       case 'bomb': return { mesh: new THREE.Mesh(projGeo.bomb, M('#7a4a22')), arc: 0.45, speed: 14, trail: (p) => fx.mote({ x: p.x, y: p.y + 0.1, z: p.z, size: 0.05, color: '#ffb030', life: 0.3, g: -1 }) }
       case 'pinecone': return { mesh: new THREE.Mesh(projGeo.pinecone, M('#6b4a26', { emissive: '#ff5a10', emissiveIntensity: 0.6 })), arc: 0.55, speed: 18, trail: (p) => { fx.mote({ x: p.x, y: p.y, z: p.z, size: 0.12, color: Math.random() < 0.5 ? '#ff8a2a' : '#ffd36e', life: 0.4, g: -2 }); fx.smoke({ x: p.x, y: p.y, z: p.z, size: 0.14, color: '#3a3430', life: 0.9 }) } }
       case 'acid': return { mesh: new THREE.Mesh(projGeo.acid, glow('#8aff5a')), arc: 0.5, speed: 15, trail: (p) => fx.mote({ x: p.x, y: p.y, z: p.z, size: 0.1, color: Math.random() < 0.5 ? '#5be04a' : '#c8ff8a', life: 0.5, g: 8 }) }
+      // ((F5a, DESIGN §4.2.12) the Hive's and the Aerie's four, each shape
+      // made at its first shot as the bolt's is, never with the others as
+      // the view is made; `aim`: the shape turned to its target as it is
+      // thrown (fly()), a spine or a quill flying point first)
+      // a dark amber spine, flat and fast (the Spinethrowers', the Hoppers')
+      case 'sting': return { mesh: new THREE.Mesh((projGeo.sting ??= new THREE.ConeGeometry(0.025, 0.32, 4).rotateX(Math.PI / 2)), M('#8a5a1a')), arc: 0.04, speed: 36, spin: 0, aim: true }
+      // a boiling glob, lobbed, steaming and spattering (the Boilback's)
+      case 'glob': return { mesh: new THREE.Mesh((projGeo.glob ??= new THREE.IcosahedronGeometry(0.2, 1)), glow('#ffb84a')), arc: 0.5, speed: 15, trail: (p) => { fx.smoke({ x: p.x, y: p.y, z: p.z, size: 0.15, color: '#f4f0ea', life: 0.8 }); if (Math.random() < 0.6) fx.mote({ x: p.x, y: p.y, z: p.z, vx: (Math.random() - 0.5) * 2, vz: (Math.random() - 0.5) * 2, size: 0.06, color: Math.random() < 0.5 ? '#ff8a2a' : '#ffd36e', life: 0.4, g: 8 }) } }
+      // a pale quill, a thin shaft with a flat vane (the Longbills')
+      case 'quill': {
+        const q = (projGeo.quill ??= { shaft: new THREE.CylinderGeometry(0.008, 0.012, 0.4, 4).rotateX(Math.PI / 2), vane: new THREE.BoxGeometry(0.008, 0.06, 0.18).translate(0, 0, -0.12) })
+        const mesh = new THREE.Group()
+        mesh.add(new THREE.Mesh(q.shaft, M('#e8e0c8')), new THREE.Mesh(q.vane, M('#cfc6ae')))
+        return { mesh, arc: 0.12, speed: 26, spin: 0, aim: true }
+      }
+      // a grey stone, dropped in a steep arc (the Finches')
+      case 'pebble': return { mesh: new THREE.Mesh((projGeo.pebble ??= new THREE.IcosahedronGeometry(0.06, 0)), M('#8a8a84')), arc: 0.35, speed: 18 }
     }
     return { mesh: new THREE.Mesh(projGeo.acorn, M('#888')) }
   }
 
   // fly one projectile in a weapon's style
   fly(a, b, kind) {
-    return this.effects.projectile(a, b, this.projectileStyle(kind))
+    const style = this.projectileStyle(kind)
+    // ((F5a) one that flies point first, turned to its target as thrown)
+    if (style.aim) {
+      style.mesh.position.set(a.x, a.y, a.z)
+      style.mesh.lookAt(b.x, b.y, b.z)
+    }
+    return this.effects.projectile(a, b, style)
   }
 
   // A volley: projectiles for a non-blast volley — a handful, not one per
@@ -188,8 +211,10 @@ export class Shots {
     const fx = this.effects, y = this.floorAt(e.x, e.z)
     // ((F19a) a powder keg's blast: its own, bigger bang)
     if (e.fx === 'keg') return this.kegLanded(e, y)
-    // ((V3c) nor a venom mist, which billows rather than bangs: mist())
-    const erupted = e.fx === 'thorns' || e.fx === 'mist'
+    // ((V3c) nor a venom mist, which billows rather than bangs: mist();
+    // (F5a) nor an Upwelling, the Hive's eruption, whose mandibles burst as
+    // the thorns do)
+    const erupted = e.fx === 'thorns' || e.fx === 'mist' || e.fx === 'mandibles'
     if (!erupted) {
       fx.explode(e.x, e.z, e.r, e.fx === 'acid' ? 'acid' : 'fire', y)
       sfx.boom(e.r / 2)
@@ -239,20 +264,24 @@ export class Shots {
     if (e.fx === 'mist') return this.mist(e, { quiet })
     const units = this.units, fx = this.effects
     const cv = units.get(e.u), gen = units.gen
+    // ((F5a) the Hive's Upwelling: the same eruption, its spikes chitin
+    // mandibles leaning in over the template, its motes resin amber)
+    const chitin = e.fx === 'mandibles'
     const gem = cv.models[0].mesh.userData.anim.gem
     if (gem && !quiet) {
       const p = new THREE.Vector3()
       gem.getWorldPosition(p)
-      for (let i = 0; i < 20; i++) fx.mote({ x: p.x, y: p.y, z: p.z, vx: (Math.random() - 0.5) * 3, vy: Math.random() * 3, vz: (Math.random() - 0.5) * 3, size: 0.06, color: '#9aff7a', life: 0.8, g: -1 })
+      for (let i = 0; i < 20; i++) fx.mote({ x: p.x, y: p.y, z: p.z, vx: (Math.random() - 0.5) * 3, vy: Math.random() * 3, vz: (Math.random() - 0.5) * 3, size: 0.06, color: chitin ? '#ffc04a' : '#9aff7a', life: 0.8, g: -1 })
     }
     // thorns burst up through the turf
     const spikes = []
     this.thorn ??= new THREE.ConeGeometry(0.12, 1, 5)
     for (let i = 0; i < 26; i++) {
       const a = Math.random() * Math.PI * 2, d = Math.sqrt(Math.random()) * e.r
-      const s = new THREE.Mesh(this.thorn, M(i % 3 ? '#5a7a2a' : '#7a5a2a'))
+      const s = new THREE.Mesh(this.thorn, M(chitin ? (i % 3 ? '#4a2430' : '#d8c8a0') : i % 3 ? '#5a7a2a' : '#7a5a2a'))
       s.position.set(e.x + Math.cos(a) * d, -0.6, e.z + Math.sin(a) * d)
-      s.rotation.set((Math.random() - 0.5) * 0.6, 0, (Math.random() - 0.5) * 0.6)
+      if (chitin) s.rotation.set(Math.sin(a) * -0.55, 0, Math.cos(a) * 0.55)
+      else s.rotation.set((Math.random() - 0.5) * 0.6, 0, (Math.random() - 0.5) * 0.6)
       s.scale.set(1, 0.6 + Math.random() * 1.1, 1)
       s.castShadow = true
       this.scene.add(s)
@@ -339,24 +368,41 @@ export class Shots {
     const units = this.units, fx = this.effects
     const tv = units.get(e.tg), gen = units.gen
     this.thorn ??= new THREE.ConeGeometry(0.12, 1, 5)
+    // ((F5a) the snare's look, the caster's snare spell's: Root Snare's
+    // roots; the Hive's Resin Snare, strands of amber resin; the Aerie's
+    // Gale, a ring of wind-blown motes whirling round each figure, no roots)
+    const w = units.unit(e.u)?.t.spells?.find((x) => x.snare)
+    const resin = w?.fx === 'resin'
+    const gale = w?.fx === 'gale'
     const roots = []
     for (const f of units.standing(e.tg)) {
       const y = f.y ?? 0
+      if (gale) {
+        for (let i = 0; i < 10; i++) {
+          const a = (i / 10) * Math.PI * 2, r = 0.25 + Math.random() * 0.15, s = 2.2 + Math.random()
+          fx.mote({ x: f.x + Math.cos(a) * r, y: y + 0.1 + Math.random() * 0.6, z: f.z + Math.sin(a) * r, vx: -Math.sin(a) * s, vy: 0.4 + Math.random() * 0.6, vz: Math.cos(a) * s, size: 0.04, color: i % 2 ? '#e8f2ff' : '#b8c8e0', life: 0.6 + Math.random() * 0.4, g: 0, drag: 1.5 })
+        }
+        fx.leaves(f.x, y + 0.3, f.z, ['#c8d4e0', '#8aa83a', '#efe8d8'], 3, 0.7)
+        continue
+      }
       for (let i = 0; i < 6; i++) {
         const a = (i / 6) * Math.PI * 2 + Math.random() * 0.5, d = 0.12 + Math.random() * 0.12
-        const s = new THREE.Mesh(this.thorn, M(i % 2 ? '#5a3f22' : '#6b7a2e'))
+        const s = new THREE.Mesh(this.thorn, resin ? M(i % 2 ? '#e0a030' : '#c07818', { emissive: '#7a3a08', emissiveIntensity: 0.4, roughness: 0.25 }) : M(i % 2 ? '#5a3f22' : '#6b7a2e'))
         s.position.set(f.x + Math.cos(a) * d, y - 0.5, f.z + Math.sin(a) * d)
         // (leaning in over the feet)
         s.rotation.set(Math.sin(a) * -0.7, 0, Math.cos(a) * 0.7)
-        s.scale.set(0.55, 0.45 + Math.random() * 0.35, 0.55)
+        if (resin) s.scale.set(0.22, 0.6 + Math.random() * 0.35, 0.22)
+        else s.scale.set(0.55, 0.45 + Math.random() * 0.35, 0.55)
         s.userData.y0 = s.position.y
         this.scene.add(s)
         roots.push(s)
         this.roots.add(s)
       }
-      fx.leaves(f.x, y + 0.2, f.z, ['#6b8a2e', '#8aa83a', '#5a3f22'], 4, 0.6)
+      if (resin) for (let i = 0; i < 5; i++) fx.mote({ x: f.x + (Math.random() - 0.5) * 0.4, y: y + 0.4, z: f.z + (Math.random() - 0.5) * 0.4, vy: -0.5, size: 0.045, color: i % 2 ? '#ffc04a' : '#e09020', life: 0.8, g: 4 })
+      else fx.leaves(f.x, y + 0.2, f.z, ['#6b8a2e', '#8aa83a', '#5a3f22'], 4, 0.6)
     }
-    sfx.crumble()
+    if (gale) sfx.fizzle()
+    else sfx.crumble()
     await tween(0.35, (k) => roots.forEach((s) => (s.position.y = s.userData.y0 + easeOut(k) * (0.3 + s.scale.y * 0.35))))
     if (units.gone(e.tg, tv, gen)) return
     this.effects.text(units.top(e.tg), 'Snared!', '#c8e07a', { size: 20 })
@@ -381,7 +427,10 @@ export class Shots {
     const tv = units.get(e.tg), gen = units.gen
     const gone = () => units.gone(e.tg, tv, gen)
     const bark = e.fx === 'bark'
-    const col = bark ? ['#c8954a', '#8bd16a', '#e8c890'] : ['#9fe6ff', '#e8fbff', '#5fb8e8']
+    // ((F5a) the Aerie's Down Mantle: the frost look, white as down, and
+    // down drifting over its figures)
+    const down = e.fx === 'down'
+    const col = bark ? ['#c8954a', '#8bd16a', '#e8c890'] : down ? ['#fffaf0', '#e8e0d0', '#d0d8e8'] : ['#9fe6ff', '#e8fbff', '#5fb8e8']
     const from = units.top(e.u), to = units.top(e.tg)
     if (!quiet && e.u !== e.tg) {
       const beam = []
@@ -397,6 +446,7 @@ export class Shots {
     for (let i = 0; i < 3; i++) fx.ring(at.pos.x, at.pos.z, at.r * (1.25 - i * 0.25), col[i], { life: 1.1 + i * 0.25, fill: 0.06, y })
     for (const f of units.standing(e.tg)) {
       if (bark) fx.leaves(f.x, (f.y ?? 0) + 0.3, f.z, ['#7a5a32', '#a07a46', '#6b8a2e'], 3, 0.5)
+      else if (down) fx.leaves(f.x, (f.y ?? 0) + 0.9, f.z, col, 3, 0.4)
       else for (let i = 0; i < 4; i++) fx.mote({ x: f.x + (Math.random() - 0.5) * 0.4, y: (f.y ?? 0) + 0.2, z: f.z + (Math.random() - 0.5) * 0.4, vy: 1 + Math.random(), size: 0.05, color: col[i % 3], life: 0.9, g: -0.6 })
     }
     const name = units.unit(e.u).t.spells?.find((w) => w.fx === e.fx)?.name ?? 'Warded'

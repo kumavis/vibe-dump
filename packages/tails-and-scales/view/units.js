@@ -189,6 +189,21 @@ const glowMat = (col) => {
 }
 // how long a figure's hop onto or off a deck takes (s), and how high it goes
 const HOP = 0.4, HOP_H = 0.55
+// (F5a) a burrower's walk throws its dust every BURROW_DUST inches, in the
+// turned earth's browns (walk(), dust())
+const BURROW_DUST = 0.3
+const DUST = ['#7a5a3a', '#9a7a52', '#5e4430', '#b8986a']
+// (F5a) how tall a figure stands as drawn: its miniature's top over its
+// base's foot (its own meshes, not its shadow caster), which a burrower's
+// walk sinks it by a share of (walk()). Measured once a unit, its figures
+// all of one type: a Delver's 0.74", a Deepguard's 0.95", where the type's
+// eye (0.95) would sink a Delver all but its antennae.
+function figureHeight(mesh) {
+  const fig = mesh.userData.fig ?? mesh, box = new THREE.Box3()
+  mesh.updateMatrixWorld(true)
+  fig.traverse((o) => o.isMesh && !o.userData.caster && !o.userData.lod && box.expandByObject(o))
+  return box.isEmpty() ? 0 : box.max.y - mesh.position.y
+}
 // (F7c) A fall with a timber platform (fell()): the figures ride the deck's
 // sag (FALL_SAG s, view/terrain.js's DROP_SAG) and then drop as it does,
 // faster as they go, in FALL_T(dy) s for a fall of dy" (2" in about a third
@@ -531,7 +546,7 @@ export class UnitViews {
           this.scene.add(mesh)
           f = v.models[k] = { mesh, x: 0, y: 0, z: 0, yaw: v.facing, lunge: 0, lungeDir: 0, lift: 0 }
         }
-        Object.assign(f, { yaw: v.facing, look: undefined, lunge: 0, lift: 0, flash: 0, flying: false, moving: false, fall: null })
+        Object.assign(f, { yaw: v.facing, look: undefined, lunge: 0, lift: 0, sink: 0, flash: 0, flying: false, moving: false, fall: null })
         f.mesh.position.y = 0
         // ((F7c) a fall cut short ends upright)
         f.mesh.rotation.x = 0
@@ -1137,7 +1152,9 @@ export class UnitViews {
             lx = Math.sin(m.lungeDir) * s
             lz = Math.cos(m.lungeDir) * s
           }
-          m.mesh.position.set(m.x + lx, (m.y ?? 0) + (m.lift || 0), m.z + lz)
+          // ((F5a) a burrower mid-tunnel sunk into the table, walk()'s
+          // `sink`: its base and figure with it, its ring and label not)
+          m.mesh.position.set(m.x + lx, (m.y ?? 0) + (m.lift || 0) - (m.sink || 0), m.z + lz)
           m.mesh.rotation.y = m.yaw
           // ((F9a) a hop down from a deck ends on the table)
           if (m.hop === 0 && m.lift && !v.models.some((x) => x.flying)) m.lift = 0
@@ -1164,6 +1181,30 @@ export class UnitViews {
           const k = m.moving ? 1 : 0.3, w = m.moving ? 5.5 : 0.9
           a.head.rotation.y = Math.sin(t * w) * 0.2 * k
           a.tail.rotation.y = -Math.sin(t * w + 1.1) * 0.34 * k
+        } else if (a.kind === 'insect') {
+          // ((F5a) the Hive's (view/models/insect.js): moving, the legs
+          // scuttle in two alternating sets and the body bobs; at rest the
+          // antennae twitch and the breath scales it, about its own height)
+          const legs = a.legs ?? []
+          if (m.moving) {
+            legs.forEach((l, i) => (l.rotation.x = Math.sin(t * 16 + i * Math.PI) * 0.35))
+            fig.position.y = fig.userData.y0 + Math.abs(Math.sin(t * 16)) * 0.04
+            fig.scale.y = fig.userData.sy
+          } else {
+            for (const l of legs) l.rotation.x = 0
+            fig.position.y = fig.userData.y0
+            fig.scale.y = fig.userData.sy * (1 + Math.sin(t * 2.4) * 0.015)
+          }
+          if (a.antL) a.antL.rotation.x = m.moving ? -0.25 : Math.sin(t * 3.1) * 0.15
+          if (a.antR) a.antR.rotation.x = m.moving ? -0.25 : Math.sin(t * 3.1 + 1.3) * 0.15
+        } else if (a.kind === 'bird') {
+          // ((F5a) the Aerie's (view/models/bird.js): flying, the wings
+          // beat; a flier at rest hovers on its stand, its wings breathing
+          // about their rest pose; a walker's head bobs as it walks)
+          const beat = 0.4 + Math.sin(t * 18) * 0.6, breath = Math.sin(t * 1.6) * 0.05
+          for (const w of [a.wingL, a.wingR]) if (w) w.rotation.z = m.flying ? w.userData.s * beat : w.userData.z0 + w.userData.s * breath
+          fig.position.y = fig.userData.y0 + (a.lift && !m.flying ? Math.sin(t * 2.2) * 0.04 : 0)
+          if (!a.lift && a.head?.userData.y0 !== undefined) a.head.position.y = a.head.userData.y0 + (m.moving ? Math.abs(Math.sin(t * 12)) * 0.03 : 0)
         }
         if (a.gem) a.gem.rotation.y = t * 2
         if (m.flash > 0) {
@@ -1521,6 +1562,16 @@ export class UnitViews {
     const { path: pts, L, speed, fly, smashes } = e
     // ((F16) a walker the fog veils stomps and smashes unheard)
     const hid = this.hid(e.u)
+    // ((F5a, DESIGN §4.2.12: Q6) a burrower, by its type (no event field):
+    // along its walk its figures sink by up to 60% of their height as drawn
+    // (figureHeight), eased in and out by sin(π·s/L), throwing brown dust
+    // from their bases every BURROW_DUST", and rise at the end; its ring and
+    // label stay on the table and the figure is never wholly hidden (open
+    // question 5))
+    const burrow = v.u.t.move === 'burrow'
+    if (burrow) v.figH ??= figureHeight((v.models.find((f) => f.mesh?.parent) ?? v.models[0]).mesh)
+    const deep = burrow ? 0.6 * v.figH : 0
+    let dug = 0
     if (e.stomp && !hid) sfx.boom(0.4)
     v.moving = true
     if (fly) for (const f of v.models) f.flying = true
@@ -1564,6 +1615,11 @@ export class UnitViews {
       }
       this.disc(e.u)
       if (fly) for (const f of v.models) f.lift = Math.sin(Math.min(1, d / L) * Math.PI) * Math.min(3, L * 0.3)
+      if (burrow) {
+        const sink = deep * Math.sin(Math.min(1, d / Math.max(len, 1e-6)) * Math.PI)
+        for (const f of v.models) f.sink = sink
+        for (; dug + BURROW_DUST <= d; dug += BURROW_DUST) if (!hid) this.dust(v)
+      }
       // (a smash sample's `s` is along the walk's ground length, L: a path
       // with a climb holds no smashes, the wreckers being big)
       while (next < smashes.length && smashes[next].s <= d) play(smashes[next++])
@@ -1576,7 +1632,23 @@ export class UnitViews {
     this.disc(e.u)
     v.moving = false
     if (fly) for (const f of v.models) (f.flying = false), (f.lift = 0)
+    if (burrow) for (const f of v.models) f.sink = 0
     await wait(0.15)
+  }
+
+  // (F5a) A burrower's dust: a few brown motes and a clod or two thrown up
+  // from each standing figure's base as it tunnels (walk())
+  dust(v) {
+    const fx = this.effects
+    for (const f of v.models) {
+      if (!f.mesh?.parent || f.dying) continue
+      const y = (f.y ?? 0) + 0.06
+      for (let i = 0; i < 2; i++) {
+        const a = Math.random() * Math.PI * 2, s = 0.6 + Math.random() * 1.2
+        fx.mote({ x: f.x + Math.cos(a) * 0.12, y, z: f.z + Math.sin(a) * 0.12, vx: Math.cos(a) * s, vy: 0.8 + Math.random() * 1.4, vz: Math.sin(a) * s, size: 0.035 + Math.random() * 0.025, color: DUST[(Math.random() * DUST.length) | 0], life: 0.45 + Math.random() * 0.3, g: 5 })
+      }
+      if (Math.random() < 0.35) fx.cube({ x: f.x, y: y + 0.05, z: f.z, vx: (Math.random() - 0.5) * 2, vy: 1.5 + Math.random() * 1.5, vz: (Math.random() - 0.5) * 2, size: 0.05, color: DUST[0], life: 0.8, fadeAt: 0.5 })
+    }
   }
 
   // (F9b) A long hull walks its path (unit.move's, core/actions/move.js's

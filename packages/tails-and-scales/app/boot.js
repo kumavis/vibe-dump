@@ -103,10 +103,12 @@ export const SIZES = Object.freeze(Object.entries(MISSIONS).map(([mission, m]) =
 
 // The races at the table: the classic Bushtails-versus-Coil matchup
 // (data/mission.js), or any pair a ?races=<seat 0>,<seat 1> URL names (e.g.
-// ?races=serpent,serpent), until the title screen gets a race picker. A
-// value naming no two races gets the classic matchup and a line on the title
-// card saying why, not a page that never starts (sim/mirror-check.mjs fails
-// a run whose log shows other races than it asked for).
+// ?races=serpent,serpent, (F5a) ?races=insect,bird), which the
+// battle-setup panel's race pickers (F6, ui/screens/setup.js) open on and
+// may change. A value naming no two races gets the classic matchup and a
+// line on the title card saying why, not a page that never starts
+// (sim/mirror-check.mjs fails a run whose log shows other races than it
+// asked for).
 // (F8a) The mission a battle started here is fought for: classic, or one a
 // ?mission=<name> URL names (data/mission.js; only classic ships until
 // F8b, so this is the door sim/'s Chromium runs start another board's

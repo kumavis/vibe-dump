@@ -125,19 +125,25 @@ import { BUILDERS as SQUIRREL, DRAWS as SQUIRREL_DRAWS } from './squirrel.js'
 import { BUILDERS as SERPENT, DRAWS as SERPENT_DRAWS } from './serpent.js'
 import { BUILDERS as CLASSIC_SQUIRREL, DRAWS as CLASSIC_SQUIRREL_DRAWS } from './classic/squirrel.js'
 import { BUILDERS as CLASSIC_SERPENT, DRAWS as CLASSIC_SERPENT_DRAWS } from './classic/serpent.js'
+import { BUILDERS as INSECT, CLASSIC_BUILDERS as CLASSIC_INSECT, DRAWS as INSECT_DRAWS } from './insect.js'
+import { BUILDERS as BIRD, CLASSIC_BUILDERS as CLASSIC_BIRD, DRAWS as BIRD_DRAWS } from './bird.js'
 import { Splats, registerSplats, unregisterSplats, SHADOW_LAYER } from './splat/splats.js'
 import { drawStats } from '../stats.js'
 
 // (V2) The figure styles: each a set of kits, by the name a race's look
 // gives its models (look.models). 'new' (the default): the glossy Ssithra
 // (serpent.js) and the splat-fur Bushtails (squirrel.js); 'classic': the
-// R7 figures (classic/), kept for comparison and as the fallback.
+// R7 figures (classic/), kept for comparison and as the fallback. ((F5a,
+// DESIGN §4.2.12: Q16) The Hive's and the Aerie's kits, insect.js and
+// bird.js, are one builder module a race shared by both styles, each style
+// its own finish: both entries hold both, so a page on ?models=classic
+// draws the new races too.)
 export const STYLES = Object.freeze({
-  new: Object.freeze({ squirrel: SQUIRREL, serpent: SERPENT }),
-  classic: Object.freeze({ squirrel: CLASSIC_SQUIRREL, serpent: CLASSIC_SERPENT }),
+  new: Object.freeze({ squirrel: SQUIRREL, serpent: SERPENT, insect: INSECT, bird: BIRD }),
+  classic: Object.freeze({ squirrel: CLASSIC_SQUIRREL, serpent: CLASSIC_SERPENT, insect: CLASSIC_INSECT, bird: CLASSIC_BIRD }),
 })
 // the builders whose figures are each built afresh (they draw)
-const DRAWS = new Set([...SQUIRREL_DRAWS, ...SERPENT_DRAWS, ...CLASSIC_SQUIRREL_DRAWS, ...CLASSIC_SERPENT_DRAWS])
+const DRAWS = new Set([...SQUIRREL_DRAWS, ...SERPENT_DRAWS, ...CLASSIC_SQUIRREL_DRAWS, ...CLASSIC_SERPENT_DRAWS, ...INSECT_DRAWS, ...BIRD_DRAWS])
 // ((V2) the styles whose figures cast through one shadow caster each: see above)
 const ONE_CASTER = new Set(['new'])
 

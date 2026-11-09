@@ -129,6 +129,22 @@
 // as the cart row's battle is, its deck shots and turned figures required
 // alike.
 //
+// (F5a, DESIGN §4.2.12's snap-check row) And the races' row (`races-row`):
+// a hotseat Skirmish battle of the Hive (seat 0) against the Aerie (seat
+// 1), played through the page's own session without ?fast, as the Howdah
+// row's: the table held at the deployment; in seat 0's movement phase a
+// burrower's walk (its longest reach) snapped mid-tunnel (its figures sunk
+// into the table, the walk under way: the player's snap(G), as a rejoin's)
+// and held, then another burrower's walked out to its end and held; in
+// seat 1's a flier's flight snapped mid-air and held, another's flown out
+// and held; and the battle snapped in place at the end. At each, snapDiff:
+// every figure at its end and at its height, a snapped burrower's never
+// left sunk nor a flier's left aloft. It runs by default and with --only
+// races-row; the self-test's `sink-kept` edit runs on it. (The races/
+// corpus set's battles, recorded by F5a's Corpus phase, join the DEFAULT
+// selection by RACES_BATTLES once the corpus holds them: until then the
+// run says they are not there yet and plays the rest.)
+//
 // (V3d) And the Powder Field's row (`powder-row`): the same, a watched
 // battle of the powder mission in place of the grand one's, its table's
 // fires held too: at every Grand checkpoint some chunk burns (the
@@ -175,7 +191,15 @@ try {
   console.error(`snap-check: ${e.message}\nusage: node sim/snap-check.mjs [--only <kinds, modes or ids>] [--dist <dir>] | --self-test [--mutations <names>]`)
   process.exit(2)
 }
-const DEFAULT = '64-89,4242-99,1-2,64886-198528,watch-keg-1,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1,bushtail-random-bail-1'
+// ((F5a) and a races/ battle of the Hive against the Aerie, once the
+// Corpus phase has recorded the set: a watched battle whose burrowers
+// tunnel and whose fliers fly, played as every corpus battle is; until the
+// corpus holds it, the selection goes without it, and says so)
+const RACES_BATTLES = ['watch-insect-bird-1']
+const CORPUS_IDS = new Set(loadCorpus().items.map((x) => x.id))
+const RACES_HELD = RACES_BATTLES.filter((id) => CORPUS_IDS.has(id))
+if (!a.only && RACES_HELD.length < RACES_BATTLES.length) console.log(`snap-check: the races/ set's ${RACES_BATTLES.filter((id) => !CORPUS_IDS.has(id)).join(', ')} not in the corpus yet (F5a's Corpus phase records it): the default selection goes without it`)
+const DEFAULT = ['64-89,4242-99,1-2,64886-198528,watch-keg-1,bushtail-random-6,serpent-late-1,hotseat-aggressive-103,serpent-random-vote-1,bushtail-random-bail-1', ...RACES_HELD].join(',')
 let items
 // ((F8b) the Grand row: by default, or named in --only)
 const only = (a.only ?? DEFAULT).split(',').map((x) => x.trim())
@@ -188,7 +212,9 @@ const POWDER_ROW = !a.only || only.includes('powder-row')
 const COLLAPSE_ROW = !a.only || only.includes('collapse')
 // ((F9b) and the Howdah row's)
 const HOWDAH_ROW = !a.only || only.includes('howdah')
-const ROWS = new Set(['grand', 'cart', 'powder-row', 'collapse', 'howdah'])
+// ((F5a) and the races' row's)
+const RACES_ROW = !a.only || only.includes('races-row')
+const ROWS = new Set(['grand', 'cart', 'powder-row', 'collapse', 'howdah', 'races-row'])
 try {
   items = only.filter((x) => !ROWS.has(x)).length ? select(loadCorpus().items, only.filter((x) => !ROWS.has(x)).join(',')) : []
 } catch (e) {
@@ -282,6 +308,10 @@ const MUTATIONS = {
   // (F9c, on the Howdah row's watched battle) the look yaw the target's
   // bearing in the table's frame, not relative to the hull it rides
   'look-world': ['view/units.js', '      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z) - hm.rotation.y)\n', '      f.deckLook = wrapAngle(Math.atan2(at.x - tmpV.x, at.z - tmpV.z))\n', 'howdah'],
+  // (F5a, on the races' row) a snap mid-tunnel leaves a burrower's figures
+  // sunk where the walk had them: the table made again from the mirror
+  // keeps the walk's sink (sync's reset without it)
+  'sink-kept': ['view/units.js', 'lift: 0, sink: 0, flash: 0, flying: false', 'lift: 0, flash: 0, flying: false', 'races-row'],
 }
 // (F9a) the cart row's battle: the Field mission, seat 0's Bushtails with
 // two War-Carts (950 points), seat 1 its preset
@@ -303,6 +333,9 @@ const COLLAPSE_SPEED = 12
 // Howdahs (985 points), seat 1 the Bushtails' preset
 const HOWDAH_ARMIES = 'races=serpent,squirrel&armies=2232222,field'
 const SELF_TEST_ON = 'hotseat-aggressive-103'
+// (F5a) the races' row's battle: a Skirmish, the Hive (seat 0) against the
+// Aerie (seat 1), each on its classic list
+const RACES_Q = 'races=insect,bird'
 
 // In the page, before main.js: catch window.__ts, record (the shadow and
 // battle log, as P-browser does), and run the battle frame by frame: the
@@ -836,6 +869,125 @@ async function howdahTable(browser, url) {
     await ctx.close()
   }
 }
+// (F5a) The races' row (above): a hotseat Skirmish of the Hive against the
+// Aerie, a burrower's walk snapped mid-tunnel and a flier's flight mid-air,
+// each beside a walk played out. Returns { checks, error, ... }, judged by
+// judgeRaces.
+async function racesRow(browser, url) {
+  const ctx = await browser.newContext({ viewport: { width: 640, height: 400 } })
+  try {
+    const page = await ctx.newPage()
+    const errors = []
+    page.on('pageerror', (e) => errors.push(e.message))
+    page.setDefaultTimeout(IDLE_MS)
+    await page.goto(`${url}/?debug&lowfi&seed=4242&dice=1&${RACES_Q}`)
+    await page.waitForSelector('#title:not(.hidden)')
+    const t0 = Date.now()
+    await page.click('[data-mode="hotseat"]')
+    await page.click('#setupStart')
+    await page.waitForFunction(() => window.__ts?.session?.G?.pending?.k === 'deploy' && window.__ts.player.idle, null, { timeout: IDLE_MS })
+    const checks = []
+    // the table held (the figures settled): snapDiff's. (Its walks play in
+    // real time, and a figure closes on its slot by 1 − e^(−7·dt) a frame
+    // once its unit stops: the Howdah row's SETTLE × 2 frames left a
+    // burrower's figures 3.4e-6" short of a fresh snap's, over snapDiff's
+    // 1e-6, on a loaded box; SETTLE × 6 lets them land. A figure left where
+    // it should not be, sunk or aloft, stays there however long it waits.)
+    const hold = async (mark) => {
+      checks.push(await page.evaluate(({ settle, mark }) => new Promise((resolve) => {
+        let n = settle * 6
+        const f = () => {
+          if (--n > 0) return void requestAnimationFrame(f)
+          const d = window.__ts.view.snapDiff()
+          resolve({ mark, n: d.n, diffs: d.diffs, figures: d.figures, at: performance.now() })
+        }
+        requestAnimationFrame(f)
+      }), { settle: SETTLE, mark }))
+    }
+    const idle = () => page.waitForFunction(() => window.__ts.player.idle, null, { timeout: IDLE_MS })
+    // on to seat s's movement phase
+    const toMove = async (s) => {
+      for (let k = 0; k < 60; k++) {
+        const P = await page.evaluate(() => ({ k: window.__ts.G.pending.k, phase: window.__ts.G.pending.phase, d: window.__ts.session.decisionFor(), idle: window.__ts.player.idle }))
+        if (P.k === 'phase' && P.phase === 'move' && P.d === s && P.idle) return true
+        if (P.idle && P.d >= 0) await page.evaluate(() => window.__ts.endPhase()).catch(() => {})
+        await new Promise((r) => setTimeout(r, 500))
+      }
+      return false
+    }
+    // a unit of the seat's moving by `mode` ('burrow' or 'fly'), not yet
+    // moved: its move to the farthest end it reaches (straight-line) that
+    // the match takes, and its key (its figures' template names it)
+    const moveOf = (mode, skip) => page.evaluate(({ mode, skip }) => {
+      const ts = window.__ts, seat = ts.session.decisionFor(), nav = ts.nav
+      for (const u of ts.G.units.filter((x) => x.side === seat && x.alive > 0 && x.t.move === mode && !skip.includes(x.id))) {
+        const plan = ts.q.movePlan(u, 0), cands = []
+        for (let c = 0; c < nav.N; c++) {
+          const d = plan.res.dist[c]
+          if (d <= plan.max && d >= plan.max * 0.6) cands.push({ c, D: Math.hypot(nav.x(c) - u.pos.x, nav.z(c) - u.pos.z) })
+        }
+        cands.sort((p, q) => q.D - p.D || p.c - q.c)
+        for (const m of cands.slice(0, 60)) if (ts.session.legal(seat, { t: 'move', u: u.id, c: m.c }) === null) return { body: { t: 'move', u: u.id, c: m.c }, key: u.key, D: m.D }
+      }
+      return null
+    }, { mode, skip })
+    const send = (body) => page.evaluate((b) => {
+      const ts = window.__ts, seat = ts.session.decisionFor(), why = ts.session.legal(seat, b)
+      if (why) return why
+      ts.session.submit(seat, b)
+      return null
+    }, body)
+    await hold('the deployment')
+    const moved = []
+    for (const [s, mode, kit, what, caught] of [[0, 'burrow', 'insect', 'tunnel', (y) => y < -0.12], [1, 'fly', 'bird', 'flight', (y) => y > 0.5]]) {
+      if (!(await toMove(s))) throw new Error(`seat ${s}'s movement phase never came`)
+      const m0 = await moveOf(mode, moved)
+      if (!m0) throw new Error(`seat ${s} has no ${mode} unit with a move`)
+      moved.push(m0.body.u)
+      let why = await send(m0.body)
+      if (why) throw new Error(`the ${what} was refused: ${why}`)
+      // mid-way: one of its figures sunk (a burrower) or aloft (a flier),
+      // the walk under way; then the table snapped in place there
+      const mid = await page.waitForFunction(({ tag, lo }) => {
+        let at = false
+        window.__ts.scenery.scene.traverse((o) => {
+          const k = o.userData?.lodKey
+          if (k && k.includes(tag) && o.parent && (lo ? o.position.y < -0.12 : o.position.y > 0.5)) at = true
+        })
+        return at && !window.__ts.player.idle
+      }, { tag: `/${kit}/${m0.key}|`, lo: mode === 'burrow' }, { timeout: 60000, polling: 'raf' }).then(() => true, () => false)
+      if (!mid) checks.push({ mark: `the ${m0.key}'s ${what}`, n: 1, diffs: [`its ${what} of ${m0.D.toFixed(1)}" never ${mode === 'burrow' ? 'sank' : 'lifted'} its figures`], figures: 0, at: 0 })
+      await page.evaluate(() => window.__ts.player.snap(window.__ts.G))
+      await hold(`the ${m0.key} snapped mid-${what} (${m0.D.toFixed(1)}")`)
+      // another's walked out to its end, the table built by its events
+      const m1 = await moveOf(mode, moved)
+      if (m1) {
+        moved.push(m1.body.u)
+        why = await send(m1.body)
+        if (why) throw new Error(`the second ${what} was refused: ${why}`)
+        await idle()
+        await hold(`the ${m1.key}'s ${what} played out (${m1.D.toFixed(1)}")`)
+      }
+    }
+    await page.evaluate(() => window.__ts.player.snap(window.__ts.G))
+    await hold('snapped in place')
+    const r = { checks, error: errors.length ? errors.join('\n') : null }
+    r.secs = Math.round((Date.now() - t0) / 1000)
+    return r
+  } finally {
+    await ctx.close()
+  }
+}
+// what the races' row says is wrong ('' when nothing is)
+function judgeRaces(r) {
+  if (r.error) return r.error.split('\n')[0]
+  const why = []
+  for (const w of ['tunnel', 'flight']) if (!r.checks.some((c) => new RegExp(`snapped mid-${w}`).test(c.mark))) why.push(`board: no snap mid-${w}`)
+  const bad = r.checks.filter((c) => c.n)
+  if (bad.length) why.unshift(`${bad.length} of ${r.checks.length} checks differ; first at ${bad[0].mark} (${bad[0].n} differences): ${bad[0].diffs.slice(0, 4).join('; ')}`)
+  return why.join('; ')
+}
+
 // (F7c) The collapse row (above): the battle made in Node on the code in
 // `dir`, then played in the page at COLLAPSE_SPEED. Returns { it, r }: the
 // battle as an item of the corpus (its hashes Node's), and run's result.
@@ -971,13 +1123,13 @@ if (a['self-test']) {
         if (id === 'collapse') {
           fell = await collapseRow(browser, served.url, dir)
           r = fell.r
-        } else r = it ? await run(browser, served.url, it) : id === 'cart' ? await cartRow(browser, served.url) : id === 'howdah' ? await howdahRow(browser, served.url) : await grandRow(browser, served.url, id === 'powder-row' ? 'powder' : undefined)
+        } else r = it ? await run(browser, served.url, it) : id === 'cart' ? await cartRow(browser, served.url) : id === 'howdah' ? await howdahRow(browser, served.url) : id === 'races-row' ? await racesRow(browser, served.url) : await grandRow(browser, served.url, id === 'powder-row' ? 'powder' : undefined)
       } catch (e) {
         r = { error: e.message, checks: [] }
       } finally {
         served.close()
       }
-      const why = fell ? judgeCollapse(fell.it, r) : id === 'collapse' ? (r.error ?? 'no run').split('\n')[0] : it ? judge(it, r) : id === 'cart' ? judgeCart(r) : id === 'howdah' ? judgeHowdah(r) : judgeGrand(r)
+      const why = fell ? judgeCollapse(fell.it, r) : id === 'collapse' ? (r.error ?? 'no run').split('\n')[0] : it ? judge(it, r) : id === 'cart' ? judgeCart(r) : id === 'howdah' ? judgeHowdah(r) : id === 'races-row' ? judgeRaces(r) : judgeGrand(r)
       const ok = name === 'unedited' ? !why : /checks differ|^board: /.test(why)
       if (!ok) missed++
       console.log(`  ${ok ? (name === 'unedited' ? 'passes' : 'caught') : 'WRONG '} ${name.padEnd(16)} ${id.padEnd(23)} ${(why || `the same at ${r.checks.length} checks`).slice(0, 220)}`)
@@ -1061,6 +1213,18 @@ try {
     const played = r.checks.filter((c) => c.stage !== 'in place'), last = played.at(-1)
     console.log(`  fall  ${(it?.id ?? 'hotseat-collapse').padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${played.length} checks (${played.filter((c) => c.falls > 0).length} after a fall), the page's battle Node's, ${r.decks} platforms fallen and ${r.falls} units with them, played at speed ${COLLAPSE_SPEED} without ?fast, and snapped in place (at the end ${last.figures} figures standing, ${last.shown} of ${last.chunks} chunks shown; ${r.secs} s)`}`)
   }
+  if (RACES_ROW) {
+    let r
+    try {
+      r = await racesRow(browser, url)
+    } catch (e) {
+      r = { error: e.message, checks: [] }
+    }
+    const why = judgeRaces(r)
+    if (why) failed++
+    checks += r.checks.length
+    console.log(`  races ${'the Hive v the Aerie'.padEnd(24)} ${why ? `FAIL: ${why.slice(0, 400)}` : `the same at ${r.checks.length} checks (${r.checks.map((c) => c.mark).join('; ')}) (${r.secs} s)`}`)
+  }
   if (POWDER_ROW) {
     let r
     try {
@@ -1079,5 +1243,5 @@ try {
   close()
   rmSync(work, { recursive: true, force: true })
 }
-console.log(failed ? `\nsnap-check FAILED: ${failed} of ${items.length + (GRAND_ROW ? 1 : 0) + (CART_ROW ? 1 : 0) + (HOWDAH_ROW ? 1 : 0) + (COLLAPSE_ROW ? 1 : 0) + (POWDER_ROW ? 1 : 0)} rows` : `\nsnap-check passed: ${checks} checks over ${items.length} battles${GRAND_ROW ? ' and the Grand row' : ''}${CART_ROW ? ' and the cart row' : ''}${HOWDAH_ROW ? ' and the Howdah row' : ''}${COLLAPSE_ROW ? ' and the collapse row' : ''}${POWDER_ROW ? ' and the Powder Field\'s row' : ''}, the table as built is the table a snap builds every time the player drains, and at every checkpoint on the way, and each battle's table snapped in place at its end is a fresh snap's, with no fx mark left`)
+console.log(failed ? `\nsnap-check FAILED: ${failed} of ${items.length + (GRAND_ROW ? 1 : 0) + (CART_ROW ? 1 : 0) + (HOWDAH_ROW ? 1 : 0) + (COLLAPSE_ROW ? 1 : 0) + (RACES_ROW ? 1 : 0) + (POWDER_ROW ? 1 : 0)} rows` : `\nsnap-check passed: ${checks} checks over ${items.length} battles${GRAND_ROW ? ' and the Grand row' : ''}${CART_ROW ? ' and the cart row' : ''}${HOWDAH_ROW ? ' and the Howdah row' : ''}${COLLAPSE_ROW ? ' and the collapse row' : ''}${RACES_ROW ? ' and the races\' row' : ''}${POWDER_ROW ? ' and the Powder Field\'s row' : ''}, the table as built is the table a snap builds every time the player drains, and at every checkpoint on the way, and each battle's table snapped in place at its end is a fresh snap's, with no fx mark left`)
 process.exit(failed ? 1 : 0)
