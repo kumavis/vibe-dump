@@ -38,7 +38,8 @@
 //      (F9a) One of them a Field battle with War-Carts: a rider is no eye
 //      and is seen exactly when its hull is. ((F9c) A rider is an eye from
 //      its hull's deck; (F9c's review) and hull/'s two human logs, a
-//      Howdah's ghost asked after at its heading as last seen);
+//      Howdah's ghost asked after at its heading as last seen; (F5a) and
+//      races/'s two human logs, burrowers and fliers);
 //   5. (F9c's review, Q15) a deck's eye over a wall: an enemy the seat sees
 //      from a Howdah's deck alone, the hull and the rider's ground eye
 //      blind to it.
@@ -262,7 +263,11 @@ section('4. the sight pass on corpus battles: the core\'s own sight, entry by en
   // War-Cart's, meets an enemy seen from a deck alone (a War-Cart rider's
   // 0.7 + 0.95" eye sits under its cart's 1.9" at the same point), so the
   // deck eye's rule is held by the scene after them)
-  const logs = ['sim/baselines/human/bushtail-random-6.json', 'sim/baselines/fort/hotseat-aggressive-climb-5.json', 'sim/baselines/fort/hotseat-collapse-platform-8.json', 'sim/baselines/scale/hotseat-aggressive-field-1.json', 'sim/baselines/scale/hotseat-pilot-grand-1.json', 'sim/baselines/vehicle/bushtail-random-bail-1.json', 'sim/baselines/hull/hotseat-hull-pivot-1.json', 'sim/baselines/hull/hotseat-hull-bail-1.json']
+  // ((F5a) and races/'s two human logs: the Hive's burrowers seen as
+  // walkers at both ends of a tunnel, never hidden under the ground (no
+  // fog rule of their own, open question 5), and the Aerie's fliers at
+  // their 1.5" eye, a dive among them)
+  const logs = ['sim/baselines/human/bushtail-random-6.json', 'sim/baselines/fort/hotseat-aggressive-climb-5.json', 'sim/baselines/fort/hotseat-collapse-platform-8.json', 'sim/baselines/scale/hotseat-aggressive-field-1.json', 'sim/baselines/scale/hotseat-pilot-grand-1.json', 'sim/baselines/vehicle/bushtail-random-bail-1.json', 'sim/baselines/hull/hotseat-hull-pivot-1.json', 'sim/baselines/hull/hotseat-hull-bail-1.json', 'sim/baselines/races/hotseat-aggressive-hive-2.json', 'sim/baselines/races/bushtail-aggressive-aerie-1.json']
   for (const file of logs) {
     const log = JSON.parse(readFileSync(join(PKG, file), 'utf8'))
     const G = core.createMatch(log.setup, { out: [] })
