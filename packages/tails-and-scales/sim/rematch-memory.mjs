@@ -97,6 +97,11 @@
 // its riders' figures parented to its deck, the capacity pips, the wrecks
 // and the bail-outs, each freed with its table (a wreck's meshes) or made
 // once and kept (the pips' shapes, the cart's template), as the rest are.
+// ((F5a) --races <seat 0>,<seat 1> seats those races in every battle (the
+// page's ?races=, which each rematch keeps): `insect,bird` draws the Hive's
+// and the Aerie's figures, their projectiles and spells' looks, a
+// burrower's dust, each freed with its table or made once and kept, as the
+// rest are.)
 // Exit 0 when nothing
 // grows and no program is linked twice (the self-test: when every edit is
 // caught so), 1 otherwise, 2 on bad arguments. Set CHROMIUM_PATH to the
@@ -141,12 +146,14 @@ const SELF_TESTS = {
 
 let a
 try {
-  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, board: { type: 'string' }, dice: { type: 'string' }, full: { type: 'boolean' }, classic: { type: 'boolean' }, terrain: { type: 'string' }, carts: { type: 'boolean' }, 'self-test': { type: 'boolean' } } }))
+  ({ values: a } = parseArgs({ options: { ref: { type: 'string' }, board: { type: 'string' }, dice: { type: 'string' }, full: { type: 'boolean' }, classic: { type: 'boolean' }, terrain: { type: 'string' }, carts: { type: 'boolean' }, races: { type: 'string' }, 'self-test': { type: 'boolean' } } }))
   if (a.carts && (a.classic || a.ref)) throw new Error('--carts plays Field battles: no --classic or --ref')
   if (a.ref && a['self-test']) throw new Error('--self-test edits the working tree: no --ref')
+  if (a.races && a.carts) throw new Error("--carts seats the Bushtails' War-Carts: no --races")
+  if (a.races !== undefined && !/^[a-z]+,[a-z]+$/.test(a.races)) throw new Error(`--races takes two races' keys, <seat 0>,<seat 1> (e.g. insect,bird), not ${JSON.stringify(a.races)}`)
   if (a.terrain !== undefined && !/^[a-z]+$/.test(a.terrain)) throw new Error(`--terrain takes a set's name (classic, fortified), not ${JSON.stringify(a.terrain)}`)
 } catch (e) {
-  console.error(`rematch-memory: ${e.message}\nusage: node sim/rematch-memory.mjs [--ref <git ref> | --self-test] [--board 4242] [--dice 99] [--full] [--terrain fortified]`)
+  console.error(`rematch-memory: ${e.message}\nusage: node sim/rematch-memory.mjs [--ref <git ref> | --self-test] [--board 4242] [--dice 99] [--full] [--terrain fortified] [--races insect,bird]`)
   process.exit(2)
 }
 // a battle and five rematches
@@ -212,8 +219,9 @@ async function play(code, work, { battles, snap, what, missions = ['classic'] })
     page.on('pageerror', (e) => errors.push(e.message))
     await page.addInitScript(`(${drawAlways})()`)
     const cdp = await page.context().newCDPSession(page)
-    // ((F9a) --carts: Field battles with War-Carts, from the page's URL)
-    await page.goto(`${url}/?debug&fast${a.full ? '' : '&lowfi'}&seed=${board}&dice=${dice}${a.terrain ? `&terrain=${a.terrain}` : ''}${a.carts ? `&${CARTS}` : ''}`)
+    // ((F9a) --carts: Field battles with War-Carts, from the page's URL;
+    // (F5a) --races: the seats' races)
+    await page.goto(`${url}/?debug&fast${a.full ? '' : '&lowfi'}&seed=${board}&dice=${dice}${a.terrain ? `&terrain=${a.terrain}` : ''}${a.carts ? `&${CARTS}` : ''}${a.races ? `&races=${a.races}` : ''}`)
     await page.waitForFunction(() => window.__ts)
     // The heap as a snapshot sums it: { own, kinds }, `own` the bytes of the
     // page's own objects, `kinds` theirs by (type, constructor); what V8 and
@@ -299,7 +307,7 @@ async function play(code, work, { battles, snap, what, missions = ['classic'] })
       rows.push({ what, ...m })
       console.log(`  ${what.padEnd(26)} geometries ${String(m.geometries).padStart(4)}  textures ${String(m.textures).padStart(2)}  programs ${String(m.programs).padStart(2)} (${String(m.links).padStart(2)} linked)  scene ${String(m.scene).padStart(4)}  terrain ${String(m.terrain).padStart(3)}  figures ${String(m.figures).padStart(2)}  labels ${String(m.labels).padStart(3)}  heap ${(m.heap / 1048576).toFixed(2)} MB${m.own === null ? '' : ` (the page's own ${(m.own / 1048576).toFixed(3)} MB)`}`)
     }
-    console.log(`rematch-memory: board ${board}, dice ${dice}, a watched battle and ${battles - 1} rematch${battles === 2 ? '' : 'es'} in one page${a.full ? ' without ?lowfi' : ''}, ${missions.length > 1 ? `the missions in turn (${missions.join(', ')}), ` : ''}on ${what} (Chromium ${browser.version()})`)
+    console.log(`rematch-memory: board ${board}, dice ${dice}, a watched battle and ${battles - 1} rematch${battles === 2 ? '' : 'es'} in one page${a.full ? ' without ?lowfi' : ''}${a.races ? `, the races ${a.races}` : ''}, ${missions.length > 1 ? `the missions in turn (${missions.join(', ')}), ` : ''}on ${what} (Chromium ${browser.version()})`)
     row('the title', await measure())
     const missionOf = (i) => missions[(i - 1) % missions.length]
     for (let i = 1; i <= battles; i++) {
