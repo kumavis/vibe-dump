@@ -391,7 +391,9 @@ export class Shots {
         s.position.set(f.x + Math.cos(a) * d, y - 0.5, f.z + Math.sin(a) * d)
         // (leaning in over the feet)
         s.rotation.set(Math.sin(a) * -0.7, 0, Math.cos(a) * 0.7)
-        if (resin) s.scale.set(0.22, 0.6 + Math.random() * 0.35, 0.22)
+        // (resin: strands, thinner and taller than roots, but thick enough
+        // to read round a figure's feet at the table's distance)
+        if (resin) s.scale.set(0.38, 0.65 + Math.random() * 0.35, 0.38)
         else s.scale.set(0.55, 0.45 + Math.random() * 0.35, 0.55)
         s.userData.y0 = s.position.y
         this.scene.add(s)
