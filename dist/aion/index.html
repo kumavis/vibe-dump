@@ -2,46 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>aion</title>
-  <script type="module" crossorigin src="./assets/index-gpNJBdFS.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BMzbRxHi.css">
+  <script type="module" crossorigin src="./assets/index-CxGRh6Im.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-lWjqGoMv.css">
 </head>
 <body>
   <div id="app">
-    <header id="top">
-      <button id="back" hidden>← All views</button>
-      <h1>aion</h1>
-      <p id="tagline">What happens in <abbr title="non-arteritic anterior ischemic optic neuropathy">NAION</abbr>, the most common anterior ischemic optic neuropathy — shown four ways. One timeline drives them all; tap one to open it.</p>
-      <button id="srcbtn">Sources</button>
-    </header>
-    <main id="panel"></main>
-    <footer id="dock">
-      <div id="timeline">
-        <button id="play" aria-label="Play or pause">❚❚</button>
-        <div id="track">
-          <input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Story timeline">
-          <div id="steps"></div>
+    <div id="stage">
+      <svg id="leaders" aria-hidden="true"></svg>
+      <div id="labels" aria-hidden="true"></div>
+      <header id="top">
+        <div id="brand">
+          <h1>aion</h1>
+          <p id="chapter"></p>
         </div>
-      </div>
-      <div id="story">
-        <div id="caption"><h2 id="stagetitle"></h2><p id="stagetext"></p></div>
-        <div id="meters">
-          <div class="meter"><span>Blood flow</span><i><b id="m-flow"></b></i></div>
-          <div class="meter"><span>Swelling</span><i><b id="m-swell"></b></i></div>
-          <div class="meter"><span>Fibres working</span><i><b id="m-work"></b></i></div>
-          <small>in the affected part of the disc</small>
+        <div id="where">
+          <p id="crumb"></p>
+          <div id="scale"><i id="scalebar"></i><span id="scaletext"></span></div>
         </div>
+        <button id="open-notes">Transcript &amp; sources</button>
+      </header>
+      <div id="gauges" hidden>
+        <div class="gauge"><span>Perfusion pressure</span><i><b id="g-pp"></b></i></div>
+        <div class="gauge"><span>Capillary flow</span><i><b id="g-flow"></b></i></div>
+        <div class="gauge"><span>Fibre swelling</span><i><b id="g-swell"></b></i></div>
+        <div class="gauge"><span>Fibres conducting</span><i><b id="g-work"></b></i></div>
+        <small>Upper nerve head · illustrative</small>
       </div>
-      <p id="safety"></p>
-    </footer>
-    <aside id="sources" hidden>
-      <button id="srcclose" aria-label="Close sources">×</button>
-      <h2>Where this comes from</h2>
-      <p>Numbers in the text point here. This is an educational model, not a diagnosis.</p>
-      <ol id="srclist"></ol>
-      <h3>What is illustration, not evidence</h3>
-      <ul id="caveats"></ul>
+      <figure id="figure" hidden><figcaption></figcaption><canvas></canvas></figure>
+      <p id="loading">Building the model…</p>
+      <p id="hint" hidden>Paused · drag to look around, scroll to zoom</p>
+      <div id="subs" aria-live="polite"><p id="subtext"></p></div>
+    </div>
+    <div id="bar">
+      <button id="prev" aria-label="Previous caption">⏮</button>
+      <button id="play" aria-label="Play or pause">▶</button>
+      <button id="next" aria-label="Next caption">⏭</button>
+      <div id="track">
+        <input id="scrub" type="range" min="0" max="1000" value="0" step="1" aria-label="Timeline">
+        <div id="ticks"></div>
+      </div>
+      <span id="clock">0:00 / 0:00</span>
+      <button id="speed" aria-label="Playback speed">1×</button>
+      <button id="cc" aria-label="Subtitles on or off" aria-pressed="true">CC</button>
+    </div>
+    <aside id="notes" hidden>
+      <div id="notes-head">
+        <div role="tablist">
+          <button role="tab" data-tab="transcript" aria-selected="true">Transcript</button>
+          <button role="tab" data-tab="sources" aria-selected="false">Sources</button>
+          <button role="tab" data-tab="limits" aria-selected="false">Limits of the model</button>
+        </div>
+        <button id="close-notes" aria-label="Close">×</button>
+      </div>
+      <div id="tab-transcript" class="tab"></div>
+      <div id="tab-sources" class="tab" hidden><p>Numbers in the subtitles point here. “Read in full” means the article text was checked for this project.</p><ol id="srclist"></ol></div>
+      <div id="tab-limits" class="tab" hidden><ul id="caveats"></ul></div>
     </aside>
   </div>
 </body>
