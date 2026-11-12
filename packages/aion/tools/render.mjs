@@ -2,6 +2,7 @@
 // Render the film to an MP4, frame by frame.
 //
 //   node tools/render.mjs <url> <durations.json> <narration.wav> <out.mp4> [--fps 30] [--size 1280x720] [--scale 1.5] [--workers 4]
+//                        [--start S --seconds N]   just that stretch, picture only, for patching a finished render
 //
 // <url> is the built app (e.g. a `vite preview`). The page is put in offline
 // mode and stepped one frame at a time, so the result does not depend on how
@@ -18,16 +19,16 @@ const { chromium } = createRequire(import.meta.url)('playwright')
 const [url, durFile, wav, out] = process.argv.slice(2)
 const opt = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d }
 const fps = +opt('--fps', 30), [W, H] = opt('--size', '1280x720').split('x').map(Number), scale = +opt('--scale', 1.5)
-const workers = +opt('--workers', 4), limit = +opt('--seconds', 0)
+const workers = +opt('--workers', 4), limit = +opt('--seconds', 0), begin = Math.round(+opt('--start', 0) * fps)
 const durations = JSON.parse(readFileSync(durFile, 'utf8'))
 const CREDITS = 14 // seconds of closing card listing the sources
-const film = limit || durations.reduce((a, b) => a + b, 0), filmFrames = Math.round(film * fps)
-const total = film + (limit ? 0 : CREDITS), frames = Math.round(total * fps)
+const filmFrames = Math.round(durations.reduce((a, b) => a + b, 0) * fps)
+const end = limit ? begin + Math.round(limit * fps) : filmFrames + CREDITS * fps, frames = end - begin
 const tmp = out + '.parts'; mkdirSync(tmp, { recursive: true })
-console.log(`${frames} frames, ${(total / 60).toFixed(1)} min, ${W * scale}x${H * scale} @ ${fps} fps, ${workers} workers`)
+console.log(`${frames} frames, ${(frames / fps / 60).toFixed(1)} min, ${W * scale}x${H * scale} @ ${fps} fps, ${workers} workers`)
 
 async function work(k) {
-  const first = Math.floor(frames * k / workers), last = Math.floor(frames * (k + 1) / workers)
+  const first = begin + Math.floor(frames * k / workers), last = begin + Math.floor(frames * (k + 1) / workers)
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined })
   const page = await browser.newPage({ viewport: { width: W, height: H }, deviceScaleFactor: scale })
   await page.addInitScript(d => {
@@ -46,8 +47,9 @@ async function work(k) {
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', part], { stdio: ['pipe', 'inherit', 'inherit'] })
   const t0 = Date.now()
   for (let f = first; f < last; f++) {
-    if (f === filmFrames) await page.evaluate(() => window.__aion.credits())
-    if (f > first && f < filmFrames) await page.evaluate(dt => window.__aion.step(dt, true), 1 / fps)
+    if (f === Math.max(first, filmFrames)) await page.evaluate(() => window.__aion.credits())
+    // dt 0 on a worker's first frame: draw where the replay left off (it drew nothing) without moving on
+    if (f < filmFrames) await page.evaluate(dt => window.__aion.step(dt, true), f > first ? 1 / fps : 0)
     const jpg = await page.screenshot({ type: 'jpeg', quality: 93 })
     if (!ff.stdin.write(jpg)) await new Promise(r => ff.stdin.once('drain', r))
     if ((f - first) % 600 === 599) console.log(`worker ${k}: ${f - first + 1}/${last - first}  (${((Date.now() - t0) / (f - first + 1)).toFixed(0)} ms/frame)`)
@@ -58,8 +60,8 @@ async function work(k) {
 
 const parts = await Promise.all(Array.from({ length: workers }, (_, k) => work(k)))
 const list = path.join(tmp, 'list.txt'); writeFileSync(list, parts.map(p => `file '${path.resolve(p)}'`).join('\n'))
-const audio = limit ? ['-t', String(limit)] : []
-execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', list, ...audio, '-i', wav,
-  '-c:v', 'copy', '-af', 'apad', '-c:a', 'aac', '-b:a', '128k', '-shortest', '-movflags', '+faststart', out], { stdio: 'inherit' })
+const sound = begin ? [] : [...(limit ? ['-t', String(limit)] : []), '-i', wav, '-af', 'apad', '-c:a', 'aac', '-b:a', '128k', '-shortest']
+execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', list, ...sound,
+  '-c:v', 'copy', '-movflags', '+faststart', out], { stdio: 'inherit' })
 rmSync(tmp, { recursive: true })
 console.log('wrote', out)

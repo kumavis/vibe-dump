@@ -99,6 +99,8 @@ export function buildHead(toWorld, trunks, nerveEnd) {
   cornea.rotation.x = Math.PI / 2; cornea.position.z = 5.35
   fellow.add(iris, pupil, cornea)
   group.add(fellow)
+  // the side-on views of the cut eye are taken from where this eye sits, so it steps aside for them
+  const fellowParts = fellow.children.map(m => ({ m, full: m.material.opacity, was: m.material.transparent }))
 
   // ---- visual pathway
   const NERVE = new THREE.Color(0xf0d488), FADED = new THREE.Color(0x8d8f98)
@@ -162,6 +164,8 @@ export function buildHead(toWorld, trunks, nerveEnd) {
     group,
     update(s, dt, span) {
       muscleMat.opacity = 0.8 * (1 - s.clip) * smooth(17, 30, span); for (const m of muscles) m.visible = muscleMat.opacity > 0.02
+      const there = 1 - smooth(0, 0.6, s.clip); fellow.visible = there > 0.01
+      for (const { m, full, was } of fellowParts) { m.material.opacity = full * there; m.material.transparent = was || there < 1 }
       // span = how many millimetres the frame covers; hide head-scale markers once we are inside the eye
       for (const sig of signals) sig.f.points.visible = span > 110
       for (const f of artFlow) f.points.visible = span > 26
