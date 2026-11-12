@@ -95,4 +95,12 @@ sup a { color: var(--accent); text-decoration: none; padding: 0 2px; font-weight
   #brand p { font-size: 12px; max-width: 34vw; }
   #where p { display: none; }
 }
+#credits { position: absolute; inset: 0; z-index: 5; display: flex; flex-direction: column; justify-content: center; padding: 4vh 9vw; background: rgba(8, 11, 17, 0.94); }
+#credits h2 { margin: 0 0 1.6vh; font-size: 2.6vh; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+#credits ol { margin: 0; padding-left: 2.4em; font-size: 1.95vh; line-height: 1.5; color: var(--ink); }
+#credits li { margin-bottom: 0.5vh; }
+#credits p { margin: 2.4vh 0 0; font-size: 1.95vh; color: var(--dim); max-width: 90ch; }
+#credits em { color: var(--alert); font-style: normal; }
+/* offline rendering: the film without the player around it */
+body.render #bar, body.render #open-notes, body.render #hint, body.render #loading { display: none !important; }
 @media (prefers-reduced-motion: reduce) { .label { transition: none; } }

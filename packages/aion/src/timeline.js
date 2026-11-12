@@ -10,7 +10,8 @@ export function makeTimeline(toWorld) {
   const cues = CUES.map((c, i) => {
     if (c.ch) { chapter = c.ch; chapterIndex++ }
     const plain = c.text.replace(/\[\[[\w-]+\]\]/g, '')
-    const dur = Math.max(7, 2.6 + plain.length / 15.5)
+    // a narrated render supplies its own cue lengths, measured from the recorded voice
+    const dur = globalThis.__AION_DUR?.[i] ?? Math.max(7, 2.6 + plain.length / 15.5)
     const P = p => (c.shot.f === 'o' ? toWorld(p) : new THREE.Vector3(...p))
     const at = P(c.shot.at), from = P(c.shot.from)
     const cue = { ...c, i, start: t0, dur, chapter, chapterIndex, first: !!c.ch, at, dir: from.clone().sub(at).normalize(), dist: from.distanceTo(at), move: Math.min(c.move ?? 3.6, dur * 0.7) }

@@ -11,7 +11,7 @@ const stage = $('stage')
 const lowRes = Math.min(innerWidth, innerHeight) < 560
 
 // ---------------------------------------------------------------- renderer
-const renderer = new THREE.WebGLRenderer({ antialias: true })
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: !!globalThis.__AION_DUR })
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2))
 renderer.localClippingEnabled = true
 stage.prepend(renderer.domElement)
@@ -154,11 +154,18 @@ const cam = { at: new THREE.Vector3(), dir: new THREE.Vector3(), dist: 1 }
 const right = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0)
 const DAY = new THREE.Color(0x0c1017), NIGHT = new THREE.Color(0x060a1e), bg = new THREE.Color()
 const UNITS = [100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005]
-let shownCue = -1, last = performance.now(), ready = false
+let shownCue = -1, last = performance.now(), ready = false, offline = false
 
 function frame(now) {
+  if (offline) return
   // the first frame's timestamp can precede `last`, so never let time run backwards
   const dt = clamp((now - last) / 1000, 0, 0.1); last = now
+  tick(dt, true)
+  requestAnimationFrame(frame)
+}
+
+/** Advance the film by dt seconds and (optionally) draw it. */
+function tick(dt, draw) {
   if (playing) {
     t += dt * rate
     look.yaw *= 0.9; look.pitch *= 0.9; look.zoom = lerp(look.zoom, 1, 0.1)
@@ -179,7 +186,7 @@ function frame(now) {
   renderer.setClearColor(bg.copy(DAY).lerp(NIGHT, s.night))
   const mmPerPx = 2 * dist * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) / H, span = mmPerPx * H
   world.update(s, playing ? dt * rate : dt * 0.35, camera, span)
-  renderer.render(scene, camera)
+  if (draw) renderer.render(scene, camera)
 
   // subtitles and chapter
   if (cue.i !== shownCue) {
@@ -209,9 +216,20 @@ function frame(now) {
   if (playing) $('scrub').value = Math.round(t / tl.total * 1000)
   $('clock').textContent = `${fmt(t)} / ${fmt(tl.total)}`
   if (!ready) { ready = true; $('loading').hidden = true; document.body.classList.add('ready') }
-  requestAnimationFrame(frame)
 }
 setPlaying(false)
 requestAnimationFrame(frame)
 // for automated screenshots
-window.__aion = { seek: x => seek(x), cueStart: i => tl.cues[i].start, cues: tl.cues.length, total: tl.total, play: () => setPlaying(true) }
+window.__aion = {
+  seek: x => seek(x), cueStart: i => tl.cues[i].start, cues: tl.cues.length, total: tl.total, play: () => setPlaying(true),
+  // frame-by-frame rendering to a video file (tools/render.mjs): the page stops its own clock and is stepped from outside
+  offline() { offline = true; document.body.classList.add('render'); t = 0; setPlaying(true); tick(0, true) },
+  // closing card for the rendered video: the numbered sources the subtitles pointed to
+  credits() {
+    $('credits').hidden = false
+    $('credits').innerHTML = `<h2>Sources</h2><ol>${SOURCES.map(s => `<li>${s.title}${s.read === 'summary' ? ' <em>(search summary only)</em>' : ''}</li>`).join('')}</ol>
+      <p>This film shows the leading explanation of NAION, which is unproven. It is not a diagnosis or medical advice. Sudden loss of vision needs same-day assessment.</p>`
+    for (const id of ['subs', 'figure', 'gauges', 'labels', 'leaders', 'top']) $(id).style.visibility = 'hidden'
+  },
+  step(dt, draw = true, n = 1) { for (let i = 0; i < n; i++) { if (t < tl.total) playing = true; tick(dt, draw && i === n - 1) } return t },
+}
