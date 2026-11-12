@@ -23,8 +23,9 @@
     ],
     "thinking": "high",
     "thumbnail": {
+      "waitFor": "body.ready",
       "click": "#ticks button:nth-child(5)",
-      "settle": 2500
+      "settle": 4000
     }
   }
 }

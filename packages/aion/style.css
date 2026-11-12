@@ -51,6 +51,7 @@ body.night #gauges::before { content: "☾ asleep"; display: block; color: #8fa8
 body:has(#figure:not([hidden])) #subs { justify-content: flex-end; }
 body:has(#figure:not([hidden])) #subs p { max-width: min(62ch, calc(100% - min(380px, 34vw) - 24px)); }
 sup a { color: var(--accent); text-decoration: none; padding: 0 2px; font-weight: 600; font-size: 0.72em; }
+#loading { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); margin: 0; color: var(--dim); font-size: 15px; }
 #hint { position: absolute; left: 50%; top: 58px; transform: translateX(-50%); margin: 0; padding: 3px 10px; border-radius: 999px; font-size: 12px; color: var(--dim); background: rgba(10, 13, 20, 0.7); }
 
 #bar { display: flex; align-items: center; gap: 8px; padding: 8px var(--gutr) 10px var(--gut); background: var(--panel); border-top: 1px solid var(--line); }

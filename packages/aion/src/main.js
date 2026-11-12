@@ -154,7 +154,7 @@ const cam = { at: new THREE.Vector3(), dir: new THREE.Vector3(), dist: 1 }
 const right = new THREE.Vector3(), up = new THREE.Vector3(0, 1, 0)
 const DAY = new THREE.Color(0x0c1017), NIGHT = new THREE.Color(0x060a1e), bg = new THREE.Color()
 const UNITS = [100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005]
-let shownCue = -1, last = performance.now()
+let shownCue = -1, last = performance.now(), ready = false
 
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000); last = now
@@ -207,6 +207,7 @@ function frame(now) {
 
   if (playing) $('scrub').value = Math.round(t / tl.total * 1000)
   $('clock').textContent = `${fmt(t)} / ${fmt(tl.total)}`
+  if (!ready) { ready = true; $('loading').hidden = true; document.body.classList.add('ready') }
   requestAnimationFrame(frame)
 }
 setPlaying(false)
