@@ -157,7 +157,8 @@ const UNITS = [100, 50, 20, 10, 5, 2, 1, 0.5, 0.2, 0.1, 0.05, 0.02, 0.01, 0.005]
 let shownCue = -1, last = performance.now(), ready = false
 
 function frame(now) {
-  const dt = Math.min(0.1, (now - last) / 1000); last = now
+  // the first frame's timestamp can precede `last`, so never let time run backwards
+  const dt = clamp((now - last) / 1000, 0, 0.1); last = now
   if (playing) {
     t += dt * rate
     look.yaw *= 0.9; look.pitch *= 0.9; look.zoom = lerp(look.zoom, 1, 0.1)

@@ -72,7 +72,7 @@ export function buildMicro() {
       capillary.morphTargetInfluences[0] = s.swelling
       // cargo: moves freely while there is energy; stalls and piles up in front of the lamina as flow fails
       cargo.forEach((c, i) => {
-        c.phase = (c.phase + dt * 0.05 * c.speed * (1 - s.stasis)) % 1
+        c.phase = (c.phase + Math.max(0, dt) * 0.05 * c.speed * (1 - s.stasis)) % 1
         const free = lerp(c.x0, c.x1, c.dir > 0 ? c.phase : 1 - c.phase)
         const x = lerp(free, c.pileAt, s.stasis)
         const b = pile(x) * s.swelling
@@ -82,7 +82,7 @@ export function buildMicro() {
       // red cells: slowed by poor flow, then held up behind the squeezed stretch
       const span = X1 - X0, gate = (LF - 0.118 - X0) / span
       for (let i = 0; i < RBC; i++) {
-        let nx = cellX[i] + dt * 0.11 * s.flow
+        let nx = cellX[i] + Math.max(0, dt) * 0.11 * s.flow
         if (s.swelling > 0.55 && cellX[i] <= gate && nx > gate - 0.02 * ((i * 5) % 4)) nx = cellX[i] // queue behind the pinch
         cellX[i] = nx % 1
         const x = X0 + cellX[i] * span

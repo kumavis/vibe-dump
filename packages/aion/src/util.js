@@ -76,7 +76,7 @@ export function flow(curve, count, size, color, stalledColor = 0x3d1620) {
   return {
     points, mat,
     advance(d, health = 1) {
-      phase = (phase + d) % 1
+      phase = (((phase + (Number.isFinite(d) ? d : 0)) % 1) + 1) % 1
       for (let i = 0; i < count; i++) {
         curve.getPointAt((i / count + phase) % 1, p)
         pos[i * 3] = p.x; pos[i * 3 + 1] = p.y; pos[i * 3 + 2] = p.z
