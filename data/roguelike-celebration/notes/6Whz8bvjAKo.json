@@ -1,0 +1,89 @@
+{
+  "id": "6Whz8bvjAKo",
+  "title": "droqen - The roguelike spirit without procedural generation",
+  "speaker": "droqen",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=6Whz8bvjAKo",
+  "talk_type": "design",
+  "summary": "A lightning talk asking what remains beautiful about roguelikes once procedural generation and permadeath are removed. droqen pairs off the Berlin Interpretation's 'low-value' factors into three concepts: simulation and embodiment (a single character and monsters similar to the player, everything obeying the same rules), the monolithic challenge (always starting from the beginning to master one whole task), and focus (ASCII and numbers boil presentation down to mechanics). He illustrates each with non-procedural games and calls his own Handmade Death Labyrinth a 'low-value roguelike'.",
+  "games": [
+    "NetHack",
+    "Below",
+    "Dark Souls",
+    "Signal Pals",
+    "Handmade Death Labyrinth"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "berlin interpretation",
+      "kind": "principle",
+      "claim": "Stripping procedural generation and permadeath from the Berlin Interpretation leaves its 'low-value' factors, which still capture much of what is beautiful about roguelikes.",
+      "detail": "droqen pairs the six low-value factors into three concepts and calls his own non-roguelike game a 'low-value roguelike' because it captures the essence he loves. He stresses these are not the only beautiful concepts in roguelikes.",
+      "t": 41,
+      "quote": "what if I took what is assumed to be the core of the Roguelike, which is procedural generation",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "uniform simulation",
+      "kind": "principle",
+      "claim": "Having a single player character treated the same as monsters makes the player feel embodied in a simulated world rather than above it as a special entity.",
+      "detail": "droqen contrasts this with games like The Sims, where the player is not an individual in the world. He first noticed this pure expression of a world made of its mechanics in traditional roguelikes.",
+      "t": 105,
+      "quote": "when I am treated as special as a player in the eyes of the world, again, it is not like I am part of the world",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "uniform simulation",
+      "kind": "example",
+      "claim": "In droqen's example game, a teleporter sends anything landing on it, including blocks, monsters and the player, to the save room, so dropping monsters there makes the safe hub dangerous.",
+      "detail": "The player reaches the save room the same way as blocks and monsters, by landing on the teleporter. droqen loves that treating everything the same is a core conceit: no fake walls or doors, only the game's rules.",
+      "t": 160,
+      "quote": "there is monsters in your save room that is presumed to be the safe place",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run structure",
+      "kind": "principle",
+      "claim": "Roguelikes offer a 'monolithic challenge': you always start from the beginning and try to master one whole task, unlike episodic games played chapter by chapter.",
+      "detail": "droqen cites NetHack, and Below, where each death returns you to the same mountain doorway. Arcade games with limited lives had the same feeling, and as that faded roguelikes carried the torch.",
+      "t": 277,
+      "quote": "you are always starting from the beginning and it feels like a whole thing that you are trying to master",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "fixed challenge",
+      "kind": "example",
+      "claim": "A non-procedural game like Dark Souls can still capture the monolithic feeling through unforgiving runs with enemies laid out that you repeat until mastered.",
+      "detail": "droqen sees glimmers of the roguelike aesthetic in that singular repeatable task even without procedural generation.",
+      "t": 371,
+      "quote": "it is just a singular task that you get to repeat and master until you have solved it",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ascii and abstraction",
+      "kind": "principle",
+      "claim": "ASCII display and visible numbers boil a game's presentation down so both developer and player can focus on the mechanics and what they say.",
+      "detail": "In Signal Pals, health shown as three of five bubbles still makes the player think in numbers. The frog and lizard enemies are purely iconic: one is just the enemy with three HP, the other with two.",
+      "t": 401,
+      "quote": "ASCII display and numbers are a way to boil down the presentation of a game",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "iconic representation",
+      "kind": "principle",
+      "claim": "Low-resolution pixel art and ASCII appeal in the same way: they show only what is necessary and ask players to interpret, learning the game's language while ignoring fluff.",
+      "detail": "A 'g' might be a goblin; it does not matter how tall it is. The '@' for the player boils away everything irrelevant: not what the avatar looks like, only what it can do and does.",
+      "t": 541,
+      "quote": "The at symbol representing the player is to me just this perfect example of boiling away everything that doesn't matter to the experience.",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,103 @@
+{
+  "id": "VhUh9rksfaE",
+  "title": "Janelle Shane: The Baltimore Orioles Effect: Hey! Stop poisoning my image prompt!",
+  "speaker": "Janelle Shane",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=VhUh9rksfaE",
+  "talk_type": "technical",
+  "summary": "Janelle Shane of AI Weirdness describes the 'Baltimore Orioles Effect': when a term appears in very different contexts on the internet, AI text and image generators trained on internet-scale data blend them unpredictably. DALL-E 2 keeps rendering the baseball team as birds eating oranges even when prompted otherwise, and both DALL-E and GPT-3 turn the fossil clam genus Megalodon into a shark-like predator. She connects this to harmful bias, such as a sentiment system that rated Mexican restaurant reviews negatively, and warns developers to think before building on internet-trained AI. In Q&A she recommends curating generated output before it reaches players and calls prompt-level filtering of open user input a fool's errand.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "machine learning",
+      "kind": "warning",
+      "claim": "Large text generators trained on most of the internet confuse terms that appear in multiple contexts, producing surreal mixed output such as a generated article flip-flopping between the Baltimore Orioles team and the bird species.",
+      "detail": "Shane's opening example is an SEO-harvesting 'cooking blog' written by a GPT-3-like model that mixed black-eyed peas the food with the band. Such generators use internet-wide training data because it improves coherence and is available, but that brings in non-cooking context.",
+      "t": 166,
+      "quote": "It tends to get confused when a phrase is used in more than one won text",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "machine learning",
+      "kind": "example",
+      "claim": "DALL-E 2 often renders 'the Baltimore Orioles' as birds and surrounds them with oranges, and adding 'team' or even 'baseball team' to the prompt fails to override this in fruit-related scenes.",
+      "detail": "Orioles are famous for eating orange slices at bird feeders, so grocery shopping and baking scenes fill with oranges. Asking for the Orioles eating apples still yields birds with oranges; Shane gets the baseball team at best maybe 1 in 10 times. The similarly coloured Cincinnati Bengals do not suffer the same effect.",
+      "t": 563,
+      "quote": "I added the whole words baseball team to my prompt and it is still firmly staying in bird land",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "machine learning",
+      "kind": "example",
+      "claim": "Both DALL-E and GPT-3 turn the fossil clam genus Megalodon into a shark-like predator, showing a more widely discussed meaning overriding a rarer one.",
+      "detail": "A press release generated about new Megalodon fossils described massive predatory ocean clams hunting prey with a giant muscular foot. Shane asks why the shark should be more important than the clam, and answers that training data reflects human editorializing.",
+      "t": 774,
+      "quote": "You can see it is being influenced strongly by the characteristics of the other more wildly used Megalodon",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "training data bias",
+      "kind": "warning",
+      "claim": "Any generator built on internet-scraped data can learn distorted versions of names, ethnicities or groups from wherever they appear online, with results ranging from funny to distressing.",
+      "detail": "Internet data represents dominant languages and often a Western point of view, not all of humanity. Shane cites researcher Robyn Speer, whose review-sentiment system judged Mexican restaurants negatively despite positive reviews because of how parts of the internet use the word 'Mexican'.",
+      "t": 913,
+      "quote": "an internet trained AI may have learned that version of you too and that will come out in stuff built on that AI",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "training data bias",
+      "kind": "warning",
+      "claim": "Context leakage from training data is sneaky and hard to auto-filter, so anyone asked to build on internet-trained AI must consider that it may fail, be unfun or be distressing for some people.",
+      "detail": "Shane's example is a Snickers logo leading to sneakers appearing in images, something hard to anticipate. She adds that discussion of training data focuses on artists' work but other non-art data also skews outputs in hard-to-detect ways.",
+      "t": 1000,
+      "quote": "This effect can be really sneaky when it shows up and it be hard to auto filter as well",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "curation",
+      "kind": "principle",
+      "claim": "Decide whether to use internet-trained AI before starting a project, and decline to build things that would harm even a few people, rather than discovering failures at demo stage.",
+      "detail": "In Q&A, Shane says creators are best placed to act on this and describes teams reaching the 'fun internet demo' before someone types in their name or uploads their picture with embarrassing or traumatic results.",
+      "t": 1169,
+      "quote": "the best time to really think about this and have an understanding and have some foresight is really before you get started",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "curation",
+      "kind": "technique",
+      "claim": "Game developers can use AI generators safely by generating and hand-picking content ahead of time, for brainstorming, injected randomness or background fill, rather than exposing the generator to arbitrary player input.",
+      "detail": "Shane would not trust any text or image generator with open public input. Alexei ties this to the procedural-generation tradition of keeping generator and creator in dialogue with intermediary curation, and Shane says AI experimenters could learn from procedural generation practice.",
+      "t": 1285,
+      "quote": "You as a creator can be generating and picking and choosing ahead of time what is going to make it into your game",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "prompt injection",
+      "kind": "warning",
+      "claim": "Trying to block malicious player input to a language model through clever prompting is a fool's errand because prompt injection lets users override your instructions.",
+      "detail": "Shane explains that an application is only as trustworthy as the AI's inclination to follow the developer's prompt over the user's; insulating users from free input and prescreening output are the defences.",
+      "t": 1716,
+      "quote": "your application is only as trustworthy as your AI's inclination to follow your prompt as opposed to your user's prom",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "machine learning",
+      "kind": "example",
+      "claim": "Most leading image generators judge their output with the same CLIP model, so they share the same kinds of failures, and patches like invisibly inserting diversity terms into prompts are opaque partial fixes.",
+      "detail": "Shane notes OpenAI's DALL-E inserts variables for gender and ethnicity when it knows its generator would produce only one kind of doctor, but nobody has solved the problem completely.",
+      "t": 1473,
+      "quote": "But the thing that's making the judgment is the same in a lot of these cases. So you do end up with the same kinds of screw ups",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

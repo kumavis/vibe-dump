@@ -1,0 +1,1852 @@
+[
+ [
+  {
+   "id": "e8Itfp3MHQ4",
+   "year": 2016,
+   "words": 5202,
+   "title": "Alexei Pepers - Accessibility"
+  },
+  {
+   "id": "lfb6uehmrWo",
+   "year": 2016,
+   "words": 5391,
+   "title": "Brian Walker - Proc gen & gameplay"
+  },
+  {
+   "id": "UGPkEWqwSAY",
+   "year": 2016,
+   "words": 3125,
+   "title": "Bruno Dias - Procedural Text in Voyageur"
+  },
+  {
+   "id": "Gs9Nb5ZYRY0",
+   "year": 2016,
+   "words": 4119,
+   "title": "David Craddock - Dungeon Hacks"
+  },
+  {
+   "id": "J4RK-3zW8vY",
+   "year": 2016,
+   "words": 6630,
+   "title": "Drew Streib - Servers and NAO"
+  },
+  {
+   "id": "eeSk665OXkM",
+   "year": 2016,
+   "words": 5430,
+   "title": "Erik Osheim and Robert Au - Angband"
+  }
+ ],
+ [
+  {
+   "id": "QBZkvtGucBU",
+   "year": 2016,
+   "words": 6232,
+   "title": "George Moromisato - Love Letter to Nethack"
+  },
+  {
+   "id": "IaB7iQhts_c",
+   "year": 2016,
+   "words": 5680,
+   "title": "Glenn Wichman, Michael Toy & Ken Arnold - Rogue panel"
+  },
+  {
+   "id": "zDTQM0Ipiz4",
+   "year": 2016,
+   "words": 4961,
+   "title": "Jason Grinblat - Markov by Candelight"
+  },
+  {
+   "id": "_Si626-Y_q0",
+   "year": 2016,
+   "words": 6235,
+   "title": "Jim Shepard - Tone and Humor in Dungeonmans"
+  },
+  {
+   "id": "KY-TmRw5sR8",
+   "year": 2016,
+   "words": 5354,
+   "title": "John Harris - Difficulty in random games"
+  }
+ ],
+ [
+  {
+   "id": "9se2M27LuOs",
+   "year": 2016,
+   "words": 5485,
+   "title": "Josh Ge - Cogmind & becoming a dev"
+  },
+  {
+   "id": "isB82kORimk",
+   "year": 2016,
+   "words": 6261,
+   "title": "Kate Compton - Practical Low Effort PCG: Tracery and data oriented PCG authoring"
+  },
+  {
+   "id": "b8uoQHedFV0",
+   "year": 2016,
+   "words": 4341,
+   "title": "Nicholas Feinberg - Dungeon Crawl Stone Soup"
+  },
+  {
+   "id": "blXH5pO8GA4",
+   "year": 2016,
+   "words": 4439,
+   "title": "Nick Montfort - Concrete Poems"
+  },
+  {
+   "id": "XFFyN10o87I",
+   "year": 2016,
+   "words": 7863,
+   "title": "Roguelike Celebration 2016 - Bad News Live"
+  }
+ ],
+ [
+  {
+   "id": "SDojcmObQzw",
+   "year": 2016,
+   "words": 5729,
+   "title": "Roguelike Celebration 2016 - Lightning Talks"
+  },
+  {
+   "id": "TMxzVy7-VYQ",
+   "year": 2016,
+   "words": 4221,
+   "title": "Santiago Zapata - Get your game done: experiences through the development of 13 roguelikes"
+  },
+  {
+   "id": "Zh6dnx9FM1g",
+   "year": 2016,
+   "words": 5210,
+   "title": "Zach and Tarn Adams - Dwarf Fortress Design Inspirations"
+  },
+  {
+   "id": "jNUMRG_tvrY",
+   "year": 2016,
+   "words": 5000,
+   "title": "Zack Johnson - Kingdom of Loathing"
+  }
+ ],
+ [
+  {
+   "id": "rIB0y_kwFuY",
+   "year": 2017,
+   "words": 19358,
+   "title": "Adeon - Live Nethack Speedrun"
+  },
+  {
+   "id": "QV57CYrIZow",
+   "year": 2017,
+   "words": 6590,
+   "title": "Alan Malloy - Data Driven Crawl Development"
+  }
+ ],
+ [
+  {
+   "id": "Z6lHExfem6U",
+   "year": 2017,
+   "words": 6687,
+   "title": "Ben Berman - Machine Learning and Level Generation"
+  },
+  {
+   "id": "OaQGNjqxKto",
+   "year": 2017,
+   "words": 3871,
+   "title": "Ben McGraw - Building an Engaging Character Creator"
+  },
+  {
+   "id": "IujSOW1OMWk",
+   "year": 2017,
+   "words": 6746,
+   "title": "Botnik - Live Procedurally Generated Comedy"
+  },
+  {
+   "id": "LoPxtQq0ut4",
+   "year": 2017,
+   "words": 2217,
+   "title": "Cassie Stuurman - Slime Molds"
+  },
+  {
+   "id": "kDKQM27U-Nc",
+   "year": 2017,
+   "words": 9889,
+   "title": "Caves of Qud Live Playthrough with Developer Commentary"
+  }
+ ],
+ [
+  {
+   "id": "FnJxkId-1eE",
+   "year": 2017,
+   "words": 3690,
+   "title": "Dan Recht - Startup Lessons Learned From Roguelikes"
+  },
+  {
+   "id": "CLi4PWxDmAI",
+   "year": 2017,
+   "words": 5569,
+   "title": "Darius Kazemi - Keeping Procedural Generation Interesting"
+  },
+  {
+   "id": "MNEG1sLSRcM",
+   "year": 2017,
+   "words": 5129,
+   "title": "Emilia Lazer-Walker - Emergent Storytelling in Physical Spaces (or, \"Is Sleep No More A Roguelike?\")"
+  },
+  {
+   "id": "b2VkgcC1xRc",
+   "year": 2017,
+   "words": 3810,
+   "title": "Ian Holmes - Cellular Automata for Emergent Dungeons"
+  },
+  {
+   "id": "ClGAApZYIvI",
+   "year": 2017,
+   "words": 5629,
+   "title": "Jason Grinblat - Procedural History in Caves of Qud"
+  }
+ ],
+ [
+  {
+   "id": "FZn4NeQOcFE",
+   "year": 2017,
+   "words": 7098,
+   "title": "Jim Shepard - Metaprogression and You"
+  },
+  {
+   "id": "4byHHDeVKoA",
+   "year": 2017,
+   "words": 3362,
+   "title": "Joe Sondow - Twitter and Procedural Generation"
+  },
+  {
+   "id": "ntVjLNl2_ro",
+   "year": 2017,
+   "words": 3214,
+   "title": "Leonard Richardson - Robot Finds Kitten"
+  },
+  {
+   "id": "KKwgKTbiEY0",
+   "year": 2017,
+   "words": 1316,
+   "title": "Matt Ritche - Tips for Finishing Your Video Games"
+  },
+  {
+   "id": "66O6WDcT8KY",
+   "year": 2017,
+   "words": 4674,
+   "title": "Max Kreminski - ProcGen Character Arcs"
+  },
+  {
+   "id": "H6fPIhLoA1Y",
+   "year": 2017,
+   "words": 4955,
+   "title": "Roguelike Celebration - Lightning Talks"
+  },
+  {
+   "id": "wwc7pZqs9UA",
+   "year": 2017,
+   "words": 4508,
+   "title": "Santiago Zapata - What is a Roguelike"
+  }
+ ],
+ [
+  {
+   "id": "UZ7XqQYDM7o",
+   "year": 2017,
+   "words": 3889,
+   "title": "Shawn Main - Randomness in Games"
+  },
+  {
+   "id": "G5rq5ei2Lec",
+   "year": 2017,
+   "words": 3867,
+   "title": "Tim Keenan - Curated Narratives in ProcGen Games"
+  },
+  {
+   "id": "OVSi3NzA0KM",
+   "year": 2017,
+   "words": 6254,
+   "title": "Tyriq Plummer - Roguelikes and Platformers"
+  }
+ ],
+ [
+  {
+   "id": "5y_IAdOwaYs",
+   "year": 2018,
+   "words": 5763,
+   "title": "Alexei Pepers - Nethack: Tech Tourist Mode"
+  },
+  {
+   "id": "Gluz5nIplcA",
+   "year": 2018,
+   "words": 5320,
+   "title": "Andrew Aversa - Tangledeep and the Puzzle of Roguelike Difficulty"
+  },
+  {
+   "id": "JxI3Eu5DPwE",
+   "year": 2018,
+   "words": 4749,
+   "title": "Bob Nystrom - Is There More to Game Architecture than ECS?"
+  },
+  {
+   "id": "Uo9-IcHhq_w",
+   "year": 2018,
+   "words": 6205,
+   "title": "Brian Walker - Procedural level design in Brogue and beyond"
+  }
+ ],
+ [
+  {
+   "id": "owmGknfj6H4",
+   "year": 2018,
+   "words": 8696,
+   "title": "Caves of Qud - Live Playthrough with Developer Commentary"
+  },
+  {
+   "id": "5VsM8bOywIY",
+   "year": 2018,
+   "words": 3279,
+   "title": "Colin Liotta: Rogue Puzzles: A rundown of the roguelike puzzle in the 2017 MIT Mystery Hunt"
+  },
+  {
+   "id": "p48ArjJweSo",
+   "year": 2018,
+   "words": 5797,
+   "title": "Danny Day - Dynamic Event-Listeners in Desktop Dungeons"
+  },
+  {
+   "id": "jd7K0EmkvPk",
+   "year": 2018,
+   "words": 6987,
+   "title": "Jim Shepard - Storytelling, World Building, and You"
+  },
+  {
+   "id": "oV5PjvcVky8",
+   "year": 2018,
+   "words": 4188,
+   "title": "Jongwoo Kim - Subjective Simulation Design: Ludonarrative Congruence in the Shrouded Isle"
+  }
+ ],
+ [
+  {
+   "id": "jviNpRGuCIU",
+   "year": 2018,
+   "words": 5195,
+   "title": "Josh Ge - How to Make a Roguelike"
+  },
+  {
+   "id": "Y0K-e83wYnQ",
+   "year": 2018,
+   "words": 3919,
+   "title": "Leif Bloomquist: Multiplayer RogueLike for the Commodore 64"
+  },
+  {
+   "id": "60MTG-__dt4",
+   "year": 2018,
+   "words": 7317,
+   "title": "Lightning Talks - Roguelike Celebration 2018"
+  },
+  {
+   "id": "TvlZinAvpwg",
+   "year": 2018,
+   "words": 6769,
+   "title": "Max Kreminski: Gardening as a Mode of Play"
+  },
+  {
+   "id": "l1YEJBKehAY",
+   "year": 2018,
+   "words": 5827,
+   "title": "Pippin Barr + Jonathan Lessard: Chess + Rogue = Chogue"
+  }
+ ],
+ [
+  {
+   "id": "ZMdxP7fO6wE",
+   "year": 2018,
+   "words": 4487,
+   "title": "Santiago Zapata - Roguelikes as automated Dungeon Masters: a historical overview"
+  },
+  {
+   "id": "4-7TtPX5uhg",
+   "year": 2018,
+   "words": 6486,
+   "title": "Tarn Adams - Villains in Dwarf Fortress"
+  }
+ ],
+ [
+  {
+   "id": "TsDIUuEneo4",
+   "year": 2019,
+   "words": 2122,
+   "title": "Aaron Santos - Optimizing procgen parameters using mini-batch gradient descent"
+  },
+  {
+   "id": "cGvig1f68Tg",
+   "year": 2019,
+   "words": 2272,
+   "title": "Adrian Herbez - Let's get Physical: 3d Printing for Roguelikes"
+  },
+  {
+   "id": "mYMdMAvTHpo",
+   "year": 2019,
+   "words": 5666,
+   "title": "Alexei Pepers - A Guide to Proc Gen Practitioners"
+  },
+  {
+   "id": "wxmio1S3iN0",
+   "year": 2019,
+   "words": 2052,
+   "title": "Andrea Interguglielmi - Designing a turn based roguelike inside a real time simulated environment"
+  },
+  {
+   "id": "2BHfpAF76J8",
+   "year": 2019,
+   "words": 1857,
+   "title": "Andrea Roberts - That's the Way the Ball Bounces: Using Physics to Manifest Chance in Roundguard"
+  },
+  {
+   "id": "DT9_7sW5knY",
+   "year": 2019,
+   "words": 5640,
+   "title": "Benjamin Berman - Tips, Tricks and History for Card Game Roguelike Design"
+  },
+  {
+   "id": "fnFj3dOKcIQ",
+   "year": 2019,
+   "words": 4784,
+   "title": "Brian Bucklew - Dungeon Generation via Wave Function Collapse"
+  },
+  {
+   "id": "Xwa1KbXqeGQ",
+   "year": 2019,
+   "words": 2357,
+   "title": "Evan Ovadia - ASCII, Sprites, and Symbolic Graphics"
+  }
+ ],
+ [
+  {
+   "id": "IYNKs8vfocc",
+   "year": 2019,
+   "words": 3905,
+   "title": "Everest Pipkin - Corpora as medium: on the work of curating a poetic textual dataset"
+  },
+  {
+   "id": "5sFVVQcUWVE",
+   "year": 2019,
+   "words": 2927,
+   "title": "Gabriel Santos - ASCII Art Techniques & Animation"
+  },
+  {
+   "id": "MHEkE7nPuZc",
+   "year": 2019,
+   "words": 4147,
+   "title": "Isaac Karth - Why Do You Want to Generate That? A Vocabulary For Talking About Procedural Generation"
+  },
+  {
+   "id": "MJZvWgcxV0M",
+   "year": 2019,
+   "words": 4942,
+   "title": "JP LeBreton - All Possible Glyphs: Playscii, an ASCII art, animation, and game creation tool"
+  },
+  {
+   "id": "LKCRim02opc",
+   "year": 2019,
+   "words": 5957,
+   "title": "Jim Shepard - Blooming on the Battlefield: Relationships, Rivals, and Romance in Gameplay"
+  },
+  {
+   "id": "KLHJsJuJfYg",
+   "year": 2019,
+   "words": 3807,
+   "title": "Kawa -  Yet Another Conduct Conversation: a history of conducts in roguelikes"
+  },
+  {
+   "id": "ASGn5J9PHbs",
+   "year": 2019,
+   "words": 2380,
+   "title": "Leif Bloomquist - Updates to Commodore 64 and Retro Multiplayer Roguelike Development"
+  }
+ ],
+ [
+  {
+   "id": "qh9vyoMviJI",
+   "year": 2019,
+   "words": 4718,
+   "title": "Mark R Johnson - Speech Generation in a Procedurally Generated World"
+  },
+  {
+   "id": "anwk8b7c_s0",
+   "year": 2019,
+   "words": 4736,
+   "title": "Max Hawkins - Mapping Activity Space - Adventures in Randomized Living"
+  },
+  {
+   "id": "BDcZSWHu8RQ",
+   "year": 2019,
+   "words": 5068,
+   "title": "Max Kreminski - Designing AI systems to support player storytelling"
+  },
+  {
+   "id": "ckDp6p4HbqA",
+   "year": 2019,
+   "words": 2146,
+   "title": "Patrick Devine - 2D Sprites with Unicode and Golang"
+  },
+  {
+   "id": "ftSC3Sn8O_s",
+   "year": 2019,
+   "words": 7668,
+   "title": "Randy Lubin & Raph D'Amico - Dungeon Court"
+  },
+  {
+   "id": "cIpErjWBqm0",
+   "year": 2019,
+   "words": 5628,
+   "title": "Robin Sloan - Writing with the machine: GPT-2 and text generation"
+  }
+ ],
+ [
+  {
+   "id": "HaBp4ETtDKI",
+   "year": 2019,
+   "words": 2635,
+   "title": "Roguelike Trivia"
+  },
+  {
+   "id": "s9Wyn9BJJI4",
+   "year": 2019,
+   "words": 5120,
+   "title": "Scott Kovach - Managing Game Logic With Rule Systems - Using Relational Programming to Build Games"
+  },
+  {
+   "id": "q4Tf0vf2kiI",
+   "year": 2019,
+   "words": 2180,
+   "title": "Spencer Egart - Procedurally Generated Ritual Spell Systems"
+  },
+  {
+   "id": "C7laugXEc9s",
+   "year": 2019,
+   "words": 2307,
+   "title": "Stella Mazeika - Turning Classic Games Into Multiplayer Roguelike Experiences"
+  },
+  {
+   "id": "l9eE4mT8xqI",
+   "year": 2019,
+   "words": 2450,
+   "title": "Todd Furmanski - Making \"Dragon's Descent,\" a Roguelike Action Game for the Atari 2600"
+  }
+ ],
+ [
+  {
+   "id": "x0Xh4oCX9t0",
+   "year": 2020,
+   "words": 3993,
+   "title": "Aaron A  Reed - Cadences, Lacunae, and Subcutaneans: Ten Years of Procedural Novels"
+  },
+  {
+   "id": "SMQuoI_M-kk",
+   "year": 2020,
+   "words": 1271,
+   "title": "Adrian Herbez - Make a thing to make a thing: 3d-printable Procedural Content in the Browser"
+  },
+  {
+   "id": "y1zkrTcNJbc",
+   "year": 2020,
+   "words": 1736,
+   "title": "Albert Ford - Vision Visualized"
+  },
+  {
+   "id": "WtdCY6NxX6I",
+   "year": 2020,
+   "words": 4232,
+   "title": "Andrea Roberts - Designing a Roguelike for People Who've Never Played Roguelikes"
+  },
+  {
+   "id": "kn2QkH5lByw",
+   "year": 2020,
+   "words": 3897,
+   "title": "Andrew Aversa - The End of Permadeath"
+  },
+  {
+   "id": "e4b--cyXEsM",
+   "year": 2020,
+   "words": 1633,
+   "title": "Andrew Clifton - Don't generate, hash! (Or, how I learned to stop worrying and love SplitMix64)"
+  },
+  {
+   "id": "NANqgqeqh2k",
+   "year": 2020,
+   "words": 3585,
+   "title": "Caelyn Sandel and Grahu-Rubufo - Teaching the Fun of Losing"
+  },
+  {
+   "id": "q7E1N-fJnrA",
+   "year": 2020,
+   "words": 3768,
+   "title": "Cat Manning - How To Build A Character System That Doesn't Fall Apart Two Turns Later"
+  }
+ ],
+ [
+  {
+   "id": "OzCGTXakbjE",
+   "year": 2020,
+   "words": 1730,
+   "title": "Clarissa Littler - (roughly) a hundred days of poetry in partnership"
+  },
+  {
+   "id": "C2sm-z7Ag4U",
+   "year": 2020,
+   "words": 5115,
+   "title": "Darren Grey - What Is A *Rogue* Like?"
+  },
+  {
+   "id": "xgBGrgucH2s",
+   "year": 2020,
+   "words": 1399,
+   "title": "Duke Dougal - My 30 year quest to find a lost Roguelike"
+  },
+  {
+   "id": "8HDmpu7Kp-A",
+   "year": 2020,
+   "words": 2463,
+   "title": "Dustin Freeman - Procedurally Generating Technology Trees"
+  },
+  {
+   "id": "VVRomN99Ygw",
+   "year": 2020,
+   "words": 4167,
+   "title": "Dylan White - Rift Wizards Showcase"
+  },
+  {
+   "id": "xju91VGh2Ps",
+   "year": 2020,
+   "words": 3363,
+   "title": "Gabriel Koenig - Good Mutation/Bad Mutation: Player Agency in Procedural Generation"
+  },
+  {
+   "id": "TlLIOgWYVpI",
+   "year": 2020,
+   "words": 4752,
+   "title": "Herbert Wolverson - Procedural Map Generation Techniques"
+  },
+  {
+   "id": "db6S2lgTWmI",
+   "year": 2020,
+   "words": 3707,
+   "title": "Ivy Melinda - A flower in the garden: Cultivating a community for Caves of Qud"
+  }
+ ],
+ [
+  {
+   "id": "zO05p-e57AQ",
+   "year": 2020,
+   "words": 4558,
+   "title": "Joel Clark - A Perfectly Ordinary Blaseball Experience"
+  },
+  {
+   "id": "TsaRxD3g_os",
+   "year": 2020,
+   "words": 1192,
+   "title": "Josh Grams - Turn-based Space Flight?"
+  },
+  {
+   "id": "aBbaUSWFQPM",
+   "year": 2020,
+   "words": 3584,
+   "title": "Julian Day - Poetry at the Edge of Roguelikes: Writing Around Iterative Media"
+  },
+  {
+   "id": "zGbQi5LJwIw",
+   "year": 2020,
+   "words": 1302,
+   "title": "Julian K  Jarboe - Procedural Sound Design for Roguelikes"
+  },
+  {
+   "id": "E5-3Ui7oO8U",
+   "year": 2020,
+   "words": 4054,
+   "title": "Kate Compton- Polite Programming Languages: Designing a Generative Language without a PL Degree"
+  },
+  {
+   "id": "-e4gF_SKWPk",
+   "year": 2020,
+   "words": 1585,
+   "title": "Lee Tusman - Lower Dimensional Dungeons"
+  },
+  {
+   "id": "bpSnPNr6ETc",
+   "year": 2020,
+   "words": 2379,
+   "title": "Leif Bloomquist - Dungeon of The Rogue Daemon: A multiplayer roguelike for retro + modern platforms"
+  },
+  {
+   "id": "Q_MFTUYnaf0",
+   "year": 2020,
+   "words": 1801,
+   "title": "Mark Gritter - Procedurally Generating Economies with Graph Grammars (and Math)"
+  }
+ ],
+ [
+  {
+   "id": "oaDI0lWkedg",
+   "year": 2020,
+   "words": 1407,
+   "title": "Max Kreminski - Synthesizing Story Sifters"
+  },
+  {
+   "id": "GMkBT4UbvAs",
+   "year": 2020,
+   "words": 1063,
+   "title": "Nicholas Feinberg - ??learndb's silliest corners"
+  },
+  {
+   "id": "2C3w7-SU5ek",
+   "year": 2020,
+   "words": 6106,
+   "title": "Phillip Daigle - Rogue's Gate: Feeling Around in the Dark"
+  },
+  {
+   "id": "BjqZdMW8U9Q",
+   "year": 2020,
+   "words": 5236,
+   "title": "Professor \"Prof\" Brown - Why do I even like roguelikes? An exploration of player motivation"
+  }
+ ],
+ [
+  {
+   "id": "tmrYfnMrifw",
+   "year": 2020,
+   "words": 17007,
+   "title": "Roguelike Celebration 2020 Preview"
+  },
+  {
+   "id": "j9ykOdQRUQk",
+   "year": 2020,
+   "words": 1039,
+   "title": "Rosalind Miles Chapman - Hungry Rogues: The evolution of roguelike hunger mechanics"
+  },
+  {
+   "id": "6ohPU0sECFE",
+   "year": 2020,
+   "words": 4050,
+   "title": "Tabitha Sable - Curses! A Story of UNIX Interface Hardware and Software Co-Evolution"
+  },
+  {
+   "id": "c6FQeo5n0Bc",
+   "year": 2020,
+   "words": 2281,
+   "title": "Tanya X. Short - A Procedure for Changing Culture"
+  }
+ ],
+ [
+  {
+   "id": "4jNMv79Xb6A",
+   "year": 2020,
+   "words": 7727,
+   "title": "The Delve Bros - Liveplay of 'Help Me Steal the Mona Lisa'"
+  },
+  {
+   "id": "ST6s_8ekeOg",
+   "year": 2020,
+   "words": 2723,
+   "title": "Todd Furmanski- Mysty Roguelikes: 1st Person Point&Click Paradigms with Realtime Graphics/Simulation"
+  },
+  {
+   "id": "neuJCYmbAG8",
+   "year": 2020,
+   "words": 3923,
+   "title": "Tyriq Plummer - YASDery Loves Company: Multiplayer in Traditional Roguelikes"
+  },
+  {
+   "id": "SjttI9N9KSM",
+   "year": 2020,
+   "words": 1509,
+   "title": "Xalavier Nelson Jr - Procedural Generation for Dogs"
+  },
+  {
+   "id": "s6Kxh_Zyiqs",
+   "year": 2020,
+   "words": 1346,
+   "title": "Younès Rabii-There’s A Skull In My Garden: Simple interactions give new meanings to generated things"
+  },
+  {
+   "id": "tg-CjNodlmY",
+   "year": 2020,
+   "words": 3545,
+   "title": "bhauth - What makes Dungeon Crawl Stone Soup a good game?"
+  },
+  {
+   "id": "6Whz8bvjAKo",
+   "year": 2020,
+   "words": 1415,
+   "title": "droqen - The roguelike spirit without procedural generation"
+  }
+ ],
+ [
+  {
+   "id": "pXib0WTfLbI",
+   "year": 2021,
+   "words": 5784,
+   "title": "Alice Lai - All Together Now: Creating Multiplicative Power in Hades"
+  },
+  {
+   "id": "WeRCGy3-uPY",
+   "year": 2021,
+   "words": 3809,
+   "title": "Allie Signet & Joe Maliksi - SIBR - Sports, Splorts, and Statistics: Why Data Accessibility Matters"
+  },
+  {
+   "id": "huMHQGr8PgM",
+   "year": 2021,
+   "words": 4754,
+   "title": "Arvi Teikari - Why Noita Became a Roguelite (and Why I Liked That a Lot)"
+  },
+  {
+   "id": "0ydWz1EvMJs",
+   "year": 2021,
+   "words": 2340,
+   "title": "Atty Vohra - Automating D&D Combat Prep with Roguelike Principles"
+  },
+  {
+   "id": "_vf3HO3wn20",
+   "year": 2021,
+   "words": 2809,
+   "title": "Brenda Romero - Dynamic Relationships and Traits in Empire of Sin"
+  },
+  {
+   "id": "qO3CIpP62Q0",
+   "year": 2021,
+   "words": 6604,
+   "title": "Brian Cronin - Off The Rails: Lessons from Monster Train Development"
+  }
+ ],
+ [
+  {
+   "id": "dJbUmDsyJRw",
+   "year": 2021,
+   "words": 5811,
+   "title": "Chris McCormick - Building Juicy Minimal Roguelikes in the Browser"
+  },
+  {
+   "id": "kvgKKRLil_8",
+   "year": 2021,
+   "words": 2896,
+   "title": "Dylan White - The Cost of Magic"
+  },
+  {
+   "id": "NMWQIdfCgQg",
+   "year": 2021,
+   "words": 5319,
+   "title": "Evan Debenham- Community-Driven Roguelike Development"
+  },
+  {
+   "id": "IPMXeSAvtDs",
+   "year": 2021,
+   "words": 2135,
+   "title": "Francesco Cottone - Chronicles of Stampadia"
+  },
+  {
+   "id": "NjIDVIIg1lY",
+   "year": 2021,
+   "words": 1896,
+   "title": "Jasmine Otto - Cyclic Plot Generation in a Narrative Instrument"
+  },
+  {
+   "id": "kvCky6BbTuE",
+   "year": 2021,
+   "words": 6065,
+   "title": "Jason Grinblat- Before you Fix a Leak, Ask if it's a Fountain"
+  }
+ ],
+ [
+  {
+   "id": "xSYVQc7cH-4",
+   "year": 2021,
+   "words": 6128,
+   "title": "Jeremiah Reid - Juice your Turns"
+  },
+  {
+   "id": "b45orGdFwi0",
+   "year": 2021,
+   "words": 5360,
+   "title": "John Harris - The Lost Roguelikes"
+  },
+  {
+   "id": "WutTZ4FCHA8",
+   "year": 2021,
+   "words": 5360,
+   "title": "Kristen Yu: Video Game Quest Theory for Improved Procedural Content Generation"
+  },
+  {
+   "id": "X4be22WoVgg",
+   "year": 2021,
+   "words": 3633,
+   "title": "Michael Brough - Possibility of Roguelike Elements"
+  },
+  {
+   "id": "wPN5bPxWXm8",
+   "year": 2021,
+   "words": 2607,
+   "title": "Michael Langford - For the Squishies: Making Roguelikes Accessible to Children and their Parents"
+  },
+  {
+   "id": "WTLPXhLjwLU",
+   "year": 2021,
+   "words": 2954,
+   "title": "Nathan Savant - One Quest To Rule Them All: Quest Design in Non-Games Media"
+  },
+  {
+   "id": "LaOcggk7U88",
+   "year": 2021,
+   "words": 1860,
+   "title": "Nick McConnell - Things I've Learnt from Maintaining Angband"
+  }
+ ],
+ [
+  {
+   "id": "IVDN5GDTIvY",
+   "year": 2021,
+   "words": 2606,
+   "title": "Noah Swartz - The Tombs of Atuan: The Original Roguelike?"
+  },
+  {
+   "id": "zlJNIJOog9M",
+   "year": 2021,
+   "words": 1843,
+   "title": "Qristy Overton - Exhibition: Attempting Brogue on a Dancepad"
+  },
+  {
+   "id": "wtlLa7BGZcs",
+   "year": 2021,
+   "words": 6149,
+   "title": "Rich Wilson: Roguelikes, Immersive Sims, and the Church of the Simulation"
+  },
+  {
+   "id": "WLBJJTc6LWI",
+   "year": 2021,
+   "words": 4317,
+   "title": "Shawn Main - You May Already Be A Roguelike"
+  },
+  {
+   "id": "YfLYPIXGF7E",
+   "year": 2021,
+   "words": 2296,
+   "title": "Spencer Egart- Tooling for Roguelikes and Procgen"
+  },
+  {
+   "id": "XQKNwaCwD-I",
+   "year": 2021,
+   "words": 1779,
+   "title": "Sraëka-Lillian - Procedural Phonology: Generating Name Generators"
+  },
+  {
+   "id": "f1t4yPjfZyM",
+   "year": 2021,
+   "words": 2526,
+   "title": "Thomas Robertson - Towards a New Understanding of Procedural Super Attacks"
+  },
+  {
+   "id": "SdQxLThAbs8",
+   "year": 2021,
+   "words": 4477,
+   "title": "Xalavier Nelson Jr. - Building an Economic Flesh Simulation Will Make You Disassociate from Reality"
+  }
+ ],
+ [
+  {
+   "id": "Ove6z8zDsjE",
+   "year": 2021,
+   "words": 2689,
+   "title": "Younès Rabii - Pokemon Glitch - Story of A Roguelike With No Author"
+  }
+ ],
+ [
+  {
+   "id": "_s-Tn0biyEk",
+   "year": 2022,
+   "words": 4013,
+   "title": "Abdelrahman Madkour: Controlling your generator using Expressive Range Analysis"
+  },
+  {
+   "id": "CS5MUwiVTYE",
+   "year": 2022,
+   "words": 2228,
+   "title": "Adam Newgas: Constraint Based Generation is a swiss army knife"
+  },
+  {
+   "id": "otEv5dh2f4E",
+   "year": 2022,
+   "words": 3370,
+   "title": "Alex Byaly: Causal Graphs for Procedural Generation"
+  },
+  {
+   "id": "0iNW5AYYWWw",
+   "year": 2022,
+   "words": 1438,
+   "title": "Benet Devereux: Seeking Treasure in the Tangled Bank: Biological Inspiration for Roguelike Me"
+  },
+  {
+   "id": "ua2Brr6KCJM",
+   "year": 2022,
+   "words": 2417,
+   "title": "Cara Esten Hurtle: Telnet, a New Session, and transsexualizing the past"
+  },
+  {
+   "id": "1Np1DSdpoR0",
+   "year": 2022,
+   "words": 2431,
+   "title": "Chris King: How To Let Your Players Take The Wheel without crashing the car"
+  },
+  {
+   "id": "RYZSdPuvta8",
+   "year": 2022,
+   "words": 3921,
+   "title": "Dustin Freeman: Simulating History as You’re Living Through It"
+  },
+  {
+   "id": "ke0cLTVg2_M",
+   "year": 2022,
+   "words": 4605,
+   "title": "Dylan Gedig: Perfect Synergy: How Roguelike Developers and Streamers Form the Perfect Ecosystem"
+  }
+ ],
+ [
+  {
+   "id": "kaojiu9syPE",
+   "year": 2022,
+   "words": 1763,
+   "title": "Evan Debenham: Smoothing the Sharp Edges of RNG"
+  },
+  {
+   "id": "IanNZxUaVQs",
+   "year": 2022,
+   "words": 1867,
+   "title": "Florence Smith Nicholls: Object Biographies: An Archaeological Approach to PCG"
+  },
+  {
+   "id": "mES03vaZo3U",
+   "year": 2022,
+   "words": 3641,
+   "title": "George Moromisato: Creating a Modding System for Roguelikes"
+  },
+  {
+   "id": "6GSXaM1PTMg",
+   "year": 2022,
+   "words": 1765,
+   "title": "Hannah Blair Salzman: Roguelikes, Neurodiversity, and Mental Illness"
+  },
+  {
+   "id": "5PF9RB0_ifM",
+   "year": 2022,
+   "words": 3966,
+   "title": "Jack Schlesinger: Your Puzzle Is A Secret Dungeon"
+  },
+  {
+   "id": "VhUh9rksfaE",
+   "year": 2022,
+   "words": 3773,
+   "title": "Janelle Shane: The Baltimore Orioles Effect: Hey! Stop poisoning my image prompt!"
+  },
+  {
+   "id": "ziN33iMQVPo",
+   "year": 2022,
+   "words": 3476,
+   "title": "Jeremy Rose: The Hitchhiker's Guide to the Cataclysm"
+  },
+  {
+   "id": "UIsNv3UOzvA",
+   "year": 2022,
+   "words": 4087,
+   "title": "Joel Ryan: A Small Clump of Pixels: Creating the Sil Q Tileset"
+  }
+ ],
+ [
+  {
+   "id": "Nnx33ctSmRA",
+   "year": 2022,
+   "words": 4048,
+   "title": "Phenry Ewing: A Million Little Players: Monte Carlo Simulations for Game Design"
+  },
+  {
+   "id": "wLLDPz8PnQg",
+   "year": 2022,
+   "words": 2157,
+   "title": "Philomena Schwab: This is too hard! How to broaden your game’s target audience with smart difficulty"
+  },
+  {
+   "id": "oVhq8V93gHM",
+   "year": 2022,
+   "words": 1545,
+   "title": "Pierre Vigier: Room Generation using Constraint Satisfaction"
+  },
+  {
+   "id": "ymgmhtkRLyY",
+   "year": 2022,
+   "words": 1812,
+   "title": "Reed Lockwood: Common \"Pitfalls\" of Roguelike Traps and How to Circumvent Them"
+  },
+  {
+   "id": "KYlq0Msu6hc",
+   "year": 2022,
+   "words": 6151,
+   "title": "Roguelike Celebration 2022 Preview: Casey Yano - Slay the Spire"
+  },
+  {
+   "id": "rNi5nO5yqLs",
+   "year": 2022,
+   "words": 5149,
+   "title": "Roguelike Celebration 2022 Preview: Justin Ma & Matthew Davis - Subset Games"
+  },
+  {
+   "id": "y6WCq0jYbHo",
+   "year": 2022,
+   "words": 2802,
+   "title": "Santiago Zapata: Celebrating Moria: a roguelike before the roguelikes"
+  },
+  {
+   "id": "6U8c6hbVJLY",
+   "year": 2022,
+   "words": 6138,
+   "title": "Sergio Garces: Procedural 3D environments on a budget"
+  }
+ ],
+ [
+  {
+   "id": "TeURjrAYFEU",
+   "year": 2022,
+   "words": 4271,
+   "title": "Sersa Victory: Choice Design in Roguelikes"
+  },
+  {
+   "id": "_w4yJsRzXBk",
+   "year": 2022,
+   "words": 1957,
+   "title": "Sherveen Uduwana: Persistence and Resistence: How narrative in roguelikes is currently underused"
+  },
+  {
+   "id": "SBjsVcffOHg",
+   "year": 2022,
+   "words": 2895,
+   "title": "Sonat Uzun: Procedural Music of Tea Garden"
+  },
+  {
+   "id": "ZJAgY73c8bA",
+   "year": 2022,
+   "words": 3984,
+   "title": "Tabea Iseli: How hard can it be to create a non violent rogue lite dungeon crawler?"
+  },
+  {
+   "id": "hdhKErNIYgE",
+   "year": 2022,
+   "words": 2472,
+   "title": "Tyler Robertson: Prototyping your games in Google Sheets"
+  },
+  {
+   "id": "6ik6jB2YhZg",
+   "year": 2022,
+   "words": 2167,
+   "title": "Younès Rabii:  \"La Horde du Contrevent\": A Novel That Didn't Know It Was A Roguelike"
+  }
+ ],
+ [
+  {
+   "id": "CE7o3GGif30",
+   "year": 2023,
+   "words": 4840,
+   "title": "Aaron A. Reed: Klingons, Hobbits, and the Oregon Trail"
+  },
+  {
+   "id": "tWFIQaeSs6M",
+   "year": 2023,
+   "words": 4578,
+   "title": "Aron Pietroń, Michał Ogłoziński - Discussion (Against the Storm)"
+  },
+  {
+   "id": "aJC3ioashbs",
+   "year": 2023,
+   "words": 4343,
+   "title": "Brianna McHorse & Chris Foster - Fusing AI with Game Design: Let the Chaos In"
+  },
+  {
+   "id": "avVsu4VLhes",
+   "year": 2023,
+   "words": 2000,
+   "title": "Crashtroid - Preventing Ear Fatigue with Roguelike Music"
+  },
+  {
+   "id": "OwFrTY3IoQQ",
+   "year": 2023,
+   "words": 4177,
+   "title": "David Brevik - Fireside Chat (The Making of Diablo)"
+  },
+  {
+   "id": "mXRKvbRi9qc",
+   "year": 2023,
+   "words": 3457,
+   "title": "Dustin Freeman - Live Action Roguelike Performance"
+  },
+  {
+   "id": "9yFferxbrBU",
+   "year": 2023,
+   "words": 4225,
+   "title": "Elliot Trinidad- Tuning the Blaseball Name Generator"
+  }
+ ],
+ [
+  {
+   "id": "3S6uRMCdvNs",
+   "year": 2023,
+   "words": 5989,
+   "title": "Eric Billingsley- Scoped-down design: Making a tiny roguelike"
+  },
+  {
+   "id": "O78uYtUZKYs",
+   "year": 2023,
+   "words": 3013,
+   "title": "Everest Pipkin-The Fortunate Isles-Fragment Worlds, Walled Gardens & the games that are played there"
+  },
+  {
+   "id": "MQw3pe-z6JM",
+   "year": 2023,
+   "words": 1969,
+   "title": "Florence Smith Nicholls- Another Stupid Date: Love Island as a Roguelike"
+  },
+  {
+   "id": "COeJTtSDd78",
+   "year": 2023,
+   "words": 4372,
+   "title": "Jasper Cole - Backpack Hero - Player Upgrades and Progression"
+  },
+  {
+   "id": "Gk5uWXBANkA",
+   "year": 2023,
+   "words": 3737,
+   "title": "Jeff Olson - Alphaman: Developing and releasing a post-apocalyptic Roguelike game in the DOS days"
+  },
+  {
+   "id": "9V_CkJ66uJQ",
+   "year": 2023,
+   "words": 4171,
+   "title": "Jesse Collet & Keni - Fireside chat about the development of NetHack"
+  },
+  {
+   "id": "D8A9dpITLAU",
+   "year": 2023,
+   "words": 2271,
+   "title": "Jonathan Lessard - A Simulation with a View"
+  },
+  {
+   "id": "6vMxH6OtI54",
+   "year": 2023,
+   "words": 2116,
+   "title": "Josh Galecki - Procedurally Generating Puzzles"
+  }
+ ],
+ [
+  {
+   "id": "FV_0rmqxbxw",
+   "year": 2023,
+   "words": 4397,
+   "title": "Jurie Horneman- Why Dynamic Content Selection Is Hard"
+  },
+  {
+   "id": "PvMJY8qtmc8",
+   "year": 2023,
+   "words": 2047,
+   "title": "Kes - Hunting the Asphynx: Roguelikes, Provenance, and You"
+  },
+  {
+   "id": "NjYS8XmeaiY",
+   "year": 2023,
+   "words": 5173,
+   "title": "Leigh Alexander - McMansions of Hell: Roguelikes and Reality TV"
+  },
+  {
+   "id": "jvZb9WoIHxo",
+   "year": 2023,
+   "words": 1710,
+   "title": "Linas Gabrielaitis - Fictions of Infinity in Geological Finitudes"
+  },
+  {
+   "id": "pYtlU9wGopo",
+   "year": 2023,
+   "words": 2139,
+   "title": "Ludipe - Exploring Pacifist Roguelikes"
+  },
+  {
+   "id": "RDWt6RGN9wM",
+   "year": 2023,
+   "words": 5509,
+   "title": "Mark Johnson - Generating Riddles for a Generated World"
+  },
+  {
+   "id": "3daNITP9vBc",
+   "year": 2023,
+   "words": 4859,
+   "title": "Mike Cook- Generating Procedures:Rule & System Generation for Roguelikes"
+  },
+  {
+   "id": "rcIVCrddozQ",
+   "year": 2023,
+   "words": 4107,
+   "title": "Nat Alison- In Defense of Hand-Crafted Sudoku"
+  }
+ ],
+ [
+  {
+   "id": "nSJA2yVsTFM",
+   "year": 2023,
+   "words": 4218,
+   "title": "Nic Tringali- Abstract Space Exploration in The Banished Vault"
+  },
+  {
+   "id": "rWPJ5fW1UH8",
+   "year": 2023,
+   "words": 5544,
+   "title": "Patrick Kemp - Design tooling at Spry Fox"
+  },
+  {
+   "id": "S5Ukp6AOdQY",
+   "year": 2023,
+   "words": 3066,
+   "title": "Paul Hembree- Coordinate Systems as a Resource for Music Generation"
+  },
+  {
+   "id": "n6mKigS_71Y",
+   "year": 2023,
+   "words": 1600,
+   "title": "Ray - Remixing the Layer Cake: Facilitating fan reinterpretation through Caves of Qud's modular data"
+  },
+  {
+   "id": "cDxL6JoxYQc",
+   "year": 2023,
+   "words": 3961,
+   "title": "Roguelike Celebration 2023 Preview: Nic Junius - Play as in Stage Play"
+  },
+  {
+   "id": "IliQZm5Itng",
+   "year": 2023,
+   "words": 4501,
+   "title": "Scott Burger- The Data Science of Roguelikes"
+  },
+  {
+   "id": "MyVigc1nDig",
+   "year": 2023,
+   "words": 2074,
+   "title": "Stav Hinenzon - A Messy Approach to Dynamic Narrative in Sunshine Shuffle"
+  },
+  {
+   "id": "3vSCncV5hkI",
+   "year": 2023,
+   "words": 2446,
+   "title": "Tom Francis - Generating boring levels for fresh experiences in Heat Signature"
+  }
+ ],
+ [
+  {
+   "id": "zwhNSbFVKQM",
+   "year": 2024,
+   "words": 4948,
+   "title": "Adrian Zeyfang: Probably Impossible: NecroDancer's network code"
+  },
+  {
+   "id": "0jFzBf0mCRY",
+   "year": 2024,
+   "words": 4802,
+   "title": "Alexander Birke: Practical procedural world & story generation in Sea Of Rifts, naval roguelike RPG"
+  },
+  {
+   "id": "Gxn_MA3-Vgo",
+   "year": 2024,
+   "words": 3626,
+   "title": "Andrew Cedotal - Life, Liberty and the Pursuit of Comboness"
+  },
+  {
+   "id": "jhcHlg7YhPg",
+   "year": 2024,
+   "words": 3876,
+   "title": "Brian Cronin: Black Box Sim for Roguelikes"
+  },
+  {
+   "id": "NklQJfhZT3k",
+   "year": 2024,
+   "words": 3764,
+   "title": "Cezar Capacle: Enhancing Narrative Through Randomness and Complications"
+  },
+  {
+   "id": "BRJEK20iM7o",
+   "year": 2024,
+   "words": 2911,
+   "title": "Courtney Liessen: Cheating the System (By Design!) for Epic Combos"
+  },
+  {
+   "id": "ohH6LBM2EiU",
+   "year": 2024,
+   "words": 3633,
+   "title": "Dan Norder: Chase: The BASIC Language Proto-Roguelike"
+  },
+  {
+   "id": "qogCwa12jEg",
+   "year": 2024,
+   "words": 1280,
+   "title": "Eiríkr Åsheim: Uxn: Permacomputing & Roguelikes"
+  }
+ ],
+ [
+  {
+   "id": "KWBpQz1mHcA",
+   "year": 2024,
+   "words": 7250,
+   "title": "Emily Halina: New Levels from a Single Example via Tree-based Reconstructive Partitioning (TRP)"
+  },
+  {
+   "id": "lGm8cZC8Lfk",
+   "year": 2024,
+   "words": 12924,
+   "title": "Gavin Verhey - Fireside chat with Principal Magic Designer, Wizards of the Coast"
+  },
+  {
+   "id": "AwOuZTCeOrU",
+   "year": 2024,
+   "words": 3945,
+   "title": "Harry Solomons: Trampling on Ghosts: Hauntology and Permadeath"
+  },
+  {
+   "id": "M6t5W5PPVW0",
+   "year": 2024,
+   "words": 2145,
+   "title": "Isaac Io Schankler: Orb Pondering Simulator LIVE!"
+  }
+ ],
+ [
+  {
+   "id": "ujKlmvfpNMo",
+   "year": 2024,
+   "words": 6422,
+   "title": "James Cartlidge, Marc Dolgin, Christine Tomlinson - The Rise of the Roguelite"
+  },
+  {
+   "id": "1sZlIfCcz_c",
+   "year": 2024,
+   "words": 3998,
+   "title": "Jeff Emtman & Martin Austwick: Neutrinowatch - the podcast that plays itself"
+  },
+  {
+   "id": "bpGRyzWCWwk",
+   "year": 2024,
+   "words": 2245,
+   "title": "John Bond: Doors or no Doors: How Roguelike games take you places"
+  },
+  {
+   "id": "0MdNwIHwXy0",
+   "year": 2024,
+   "words": 5307,
+   "title": "John Harris: A Trip Through The Mystery Dungeons"
+  },
+  {
+   "id": "dCWWId16VAo",
+   "year": 2024,
+   "words": 1868,
+   "title": "Joseph Hewitt: Magic in Game Design: (Mis)Directing the Player's Attention"
+  },
+  {
+   "id": "s0XCPTZDgUg",
+   "year": 2024,
+   "words": 3668,
+   "title": "Kaysa Konopljak: Going legit with DotA: How to transform a thousand authors into four"
+  },
+  {
+   "id": "FaLUhh_Vfmk",
+   "year": 2024,
+   "words": 3552,
+   "title": "Loren Schmidt: Inverse Terrain Solver"
+  }
+ ],
+ [
+  {
+   "id": "Wi-OHFmW4Ew",
+   "year": 2024,
+   "words": 5125,
+   "title": "Marlowe Dobbe: A Swarm of Monsters is Hard To Build: Generating Visual Concepts for Enemies"
+  },
+  {
+   "id": "27gUUW20fn8",
+   "year": 2024,
+   "words": 1414,
+   "title": "Max Bottega: Keeping Art Direction interesting in a procedurally generated world"
+  },
+  {
+   "id": "5_UET-rUtGU",
+   "year": 2024,
+   "words": 3660,
+   "title": "Nat Alison: Procedurality and the Primes"
+  },
+  {
+   "id": "sOZH6RPuNJ8",
+   "year": 2024,
+   "words": 4139,
+   "title": "Nic Junius: Braided Narratives: Or How I Learned to Stop Worrying and Love Linear Stories"
+  },
+  {
+   "id": "Ls9wksddN5c",
+   "year": 2024,
+   "words": 3457,
+   "title": "Oliver Withington: The Right Variety: Understanding & Visualising Output Diversity of Your Generator"
+  },
+  {
+   "id": "KtQh4QrsUzs",
+   "year": 2024,
+   "words": 2183,
+   "title": "Pandamander: \"Out of Book\": The Psychology of Why Roguelikes Keep Us Playing"
+  },
+  {
+   "id": "MTam5RT8Kn0",
+   "year": 2024,
+   "words": 2304,
+   "title": "Philomena Schwab: 100,000 wishlists in 3 months - Weird roguelikes are taking over the world"
+  },
+  {
+   "id": "ZtXGg6ECwQ8",
+   "year": 2024,
+   "words": 2498,
+   "title": "Robin Mendoza: The Use of Knowledge in the Labyrinth: The price mechanism as a storytelling device"
+  }
+ ],
+ [
+  {
+   "id": "HCbiYSzHtrI",
+   "year": 2024,
+   "words": 1933,
+   "title": "Stanley W. Baxton: Bringing Real-World Occultism into Your Games Without Accidentally Being Racist"
+  },
+  {
+   "id": "-MX1imoSxTg",
+   "year": 2024,
+   "words": 1845,
+   "title": "Tabea Iseli: Animal Crossing meets Roguelite Dungeon Crawler: The genre mixture of Grimoire Groves"
+  },
+  {
+   "id": "C6jR41fZjqM",
+   "year": 2024,
+   "words": 5546,
+   "title": "Tyler Coleman: Finding your 80/20 Rule with Proc-Gen"
+  },
+  {
+   "id": "KRZHT-gktD0",
+   "year": 2024,
+   "words": 2656,
+   "title": "Yong Zhen Zhou: Who Controls the Controller? Thinking about physical player interactions"
+  }
+ ],
+ [
+  {
+   "id": "VzoruhRyvqQ",
+   "year": 2025,
+   "words": 2367,
+   "title": "Ada Null - Dyke sex and ennui: Generating unending narrative in 'Kiss Garden'"
+  },
+  {
+   "id": "FC9GAL2piJI",
+   "year": 2025,
+   "words": 4133,
+   "title": "Alexander Birke & Sofie Kjær Schmidt - Art direction and tech art in Sea Of Rifts, a naval RPG"
+  },
+  {
+   "id": "uwiFwic03EE",
+   "year": 2025,
+   "words": 3867,
+   "title": "Alexander King - Don't Pick Just One: Set-Based Card Mechanics in Roguelike-Deckbuilders"
+  },
+  {
+   "id": "H5EU9_Gdu94",
+   "year": 2025,
+   "words": 9625,
+   "title": "Alexei Pepers - Designing for System Suspense"
+  },
+  {
+   "id": "NaqP13nkpfU",
+   "year": 2025,
+   "words": 1778,
+   "title": "Andrew Doull - Roguelike Radio 2011-present"
+  },
+  {
+   "id": "Kh9m-ixeqec",
+   "year": 2025,
+   "words": 6647,
+   "title": "Brian Cronin - Playtesting Process for Ultra Small Teams"
+  }
+ ],
+ [
+  {
+   "id": "HgnvMBVKP0M",
+   "year": 2025,
+   "words": 4558,
+   "title": "Cole Wehrle - Play as Procedural Generation: Oath as a Roguelike Strategy Game"
+  },
+  {
+   "id": "fSmaqjbU2xg",
+   "year": 2025,
+   "words": 4529,
+   "title": "Dan DiIorio - Luck be a Landlord - 10 Lessons Learned"
+  },
+  {
+   "id": "50u5_hXZkv4",
+   "year": 2025,
+   "words": 2378,
+   "title": "Dennis Greger - The Procedurality of Reality TV Design - An Overview"
+  },
+  {
+   "id": "JfNeYtH7xI4",
+   "year": 2025,
+   "words": 5993,
+   "title": "Ezra Szanton - Building Synergy Networks for better Roguelike Deckbuilders"
+  },
+  {
+   "id": "9kqvF2TqxLo",
+   "year": 2025,
+   "words": 1799,
+   "title": "Florence Smith Nicholls - Roll for Reminiscence: Procedural Keepsake Games"
+  },
+  {
+   "id": "685wpSUVw9s",
+   "year": 2025,
+   "words": 3068,
+   "title": "Jamie Brew - Robot Karaoke Goes Electric"
+  },
+  {
+   "id": "LQPGmxytTws",
+   "year": 2025,
+   "words": 4403,
+   "title": "Jeff Lait - Teaching Long Term Consequences in Games"
+  },
+  {
+   "id": "Uf34SbuWIos",
+   "year": 2025,
+   "words": 2647,
+   "title": "Johnathan Pagnutti - Wait, No, Hear Me Out: Simulating Encounter AI in Slay the Spire with SQL"
+  }
+ ],
+ [
+  {
+   "id": "NlxGPKV0PrY",
+   "year": 2025,
+   "words": 8581,
+   "title": "Jon Perry - UFO 50 Fireside Chat"
+  },
+  {
+   "id": "jBhcHdV5HHo",
+   "year": 2025,
+   "words": 6754,
+   "title": "Liza Knipscher - The Form and Function of Weird Li'l Guys"
+  },
+  {
+   "id": "mtSjgxS-QS4",
+   "year": 2025,
+   "words": 2656,
+   "title": "Mark Gritter - Sol LeWitt, Combinatorial Enumeration, and Rogue"
+  },
+  {
+   "id": "Tll23vq6j1s",
+   "year": 2025,
+   "words": 1381,
+   "title": "Max Sahin - Stuff: the behavioral science of inventory"
+  },
+  {
+   "id": "JpX2wWwhKdE",
+   "year": 2025,
+   "words": 3313,
+   "title": "Michael Brough - The Roots of Roguelikes in Fantasy Fiction"
+  }
+ ],
+ [
+  {
+   "id": "zDKheM-E45I",
+   "year": 2025,
+   "words": 7378,
+   "title": "Michael Brough - The Roots of Roguelikes in Fantasy Fiction (Full length backup)"
+  },
+  {
+   "id": "WbgdXalXPus",
+   "year": 2025,
+   "words": 2263,
+   "title": "Nifflas - Music algorithm showcase"
+  },
+  {
+   "id": "vtU3Xa0ShKw",
+   "year": 2025,
+   "words": 4351,
+   "title": "Patrick Belanger & Jackson Wagner - Hand-Crafted Randomness: Storytelling in Wildermyth"
+  },
+  {
+   "id": "nLqLOzrjkYU",
+   "year": 2025,
+   "words": 3905,
+   "title": "Paul Dean - Picking up the Pieces: Building Story in a Roguelike World"
+  },
+  {
+   "id": "a9flzzXJVcg",
+   "year": 2025,
+   "words": 1055,
+   "title": "Quinten Konyn - Anatomy of a Morgue File"
+  },
+  {
+   "id": "rPhXTcVVJmo",
+   "year": 2025,
+   "words": 2028,
+   "title": "Ray - A Mythopoetic Interface Reading of Caves of Qud"
+  },
+  {
+   "id": "K5FXzxDIQdQ",
+   "year": 2025,
+   "words": 2422,
+   "title": "Seth Cooper - Building a Roguelike with a Tile Rewrite Language"
+  },
+  {
+   "id": "Rs_-yMsJDq8",
+   "year": 2025,
+   "words": 3837,
+   "title": "Stephen G. Ware - Planning and Replanning Structured Adaptive Stories: 25 Years of History"
+  }
+ ],
+ [
+  {
+   "id": "QbTnKvRrNYY",
+   "year": 2025,
+   "words": 6154,
+   "title": "Sébastien \"deepnight\" Benard - Mixing hand-crafted content with procgen to achieve quality"
+  },
+  {
+   "id": "UNBAoc0TJSs",
+   "year": 2025,
+   "words": 2303,
+   "title": "Tyriq Plummer - Scrubbin' Trubble: The Journey to Multiplayer Roguelikery"
+  },
+  {
+   "id": "BJ_84d7v3K4",
+   "year": 2025,
+   "words": 5791,
+   "title": "Younès Rabii - We Are Maxwell's Demons: The Thermodynamics of Procedural Generators"
+  },
+  {
+   "id": "wOlSws-OI2o",
+   "year": 2025,
+   "words": 2172,
+   "title": "Zeno Rogue - The best genre for a non-Euclidean game"
+  },
+  {
+   "id": "FWQwtn-46rs",
+   "year": 2025,
+   "words": 3573,
+   "title": "bleeptrack - From Code to Craft: Procedural Generation for the Physical World"
+  }
+ ],
+ [
+  {
+   "id": "7h3T5NaFpcI",
+   "year": 2026,
+   "words": 5178,
+   "title": "Andrew Plotkin - Mazes: Are We Lost Yet?"
+  },
+  {
+   "id": "gxXZRofE5dI",
+   "year": 2026,
+   "words": 3429,
+   "title": "Bjarke Alexander Larson - Corrupted Databases - Building a Repeatable Logic Puzzle in a Discord Bot"
+  },
+  {
+   "id": "-xrcmY7LNPI",
+   "year": 2026,
+   "words": 2783,
+   "title": "Chelsea Thompto - Spaces for Contemplation: Procedural Generation in Nonlinear Narrative in Art"
+  },
+  {
+   "id": "oipNr8RE5bA",
+   "year": 2026,
+   "words": 2796,
+   "title": "David Dunham - Totally Not a Roguelike Deckbuilder"
+  },
+  {
+   "id": "VwZS0MQSpaU",
+   "year": 2026,
+   "words": 5822,
+   "title": "Everest Pipkin - Dungeons, Digging, and Wells - the Gamers Yearn for the Mines."
+  },
+  {
+   "id": "uZdEXqRkBZA",
+   "year": 2026,
+   "words": 4037,
+   "title": "G blekkenhorst - It's Standing Right Behind You: Interface Games as Metaleptic Convergences"
+  },
+  {
+   "id": "oj3xA28N60I",
+   "year": 2026,
+   "words": 4805,
+   "title": "Greg L - Bitwise Black Magic: How to Computer, Better Faster Stronger"
+  }
+ ],
+ [
+  {
+   "id": "C2CzHLtt1Fw",
+   "year": 2026,
+   "words": 5731,
+   "title": "Jamie Brittain - Don't Save the @"
+  },
+  {
+   "id": "DbZe8rWviS0",
+   "year": 2026,
+   "words": 2559,
+   "title": "Johnathon Pagnutti - Coin Flips, Violence and Spreadsheets: the Binomial Distribution in FE:3Houses"
+  },
+  {
+   "id": "9iTJ9Z8p0ao",
+   "year": 2026,
+   "words": 5282,
+   "title": "Lachlan Kingsford - Exploring the Monte Carlo Forest: Using MCTS to Balance your Game"
+  },
+  {
+   "id": "EMb6B2cIJps",
+   "year": 2026,
+   "words": 3907,
+   "title": "Martin Pichlmair - Ancient Roguelikes: The Pre-History of Roguelike Games"
+  },
+  {
+   "id": "SU-VcmsOvZo",
+   "year": 2026,
+   "words": 6566,
+   "title": "Matt Carney - Some Quite Fantastic Shapes: Procedural Narrative & Terry Riley’s In C"
+  }
+ ],
+ [
+  {
+   "id": "nOGNdrjm8ek",
+   "year": 2026,
+   "words": 6672,
+   "title": "Mike Cook - The City, The Street, The Lens: Building and Appreciating Generative Systems"
+  },
+  {
+   "id": "rmddpcmIJ2I",
+   "year": 2026,
+   "words": 2845,
+   "title": "Nathan Savant - Modular Motivations: Building Reactive Roguelike NPCs"
+  },
+  {
+   "id": "DJqBTJioVqM",
+   "year": 2026,
+   "words": 5225,
+   "title": "Paul Hembree - Found (Mathematical) Objects: Generative Beats Without AI/ML"
+  },
+  {
+   "id": "NjIduRLJL7U",
+   "year": 2026,
+   "words": 5191,
+   "title": "Sersa Victory and Joris Dormans - “Unfolding” Traps: Extending Hazards Across Time and Space"
+  },
+  {
+   "id": "KfYWVLV5UxQ",
+   "year": 2026,
+   "words": 5471,
+   "title": "droqen - Making Sudoku Poems Using Tools"
+  }
+ ]
+]

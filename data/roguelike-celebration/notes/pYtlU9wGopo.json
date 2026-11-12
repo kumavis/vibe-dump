@@ -1,0 +1,91 @@
+{
+  "id": "pYtlU9wGopo",
+  "title": "Ludipe - Exploring Pacifist Roguelikes",
+  "speaker": "Ludipe",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=pYtlU9wGopo",
+  "talk_type": "design",
+  "summary": "Ludipe, a game designer, gives a lightning talk defining pacifist roguelikes as games where conflict is not solved through violence, and argues the genre should explore them more for variety and to draw in new players. He acknowledges combat is easy to design because it offers readable conventions and an active opponent. He proposes two approaches: the easy path of reskinning existing combat systems with a non-violent theme (e.g. Rift Wizard as ballroom gossip), and the harder path of deriving new systems from a theme, as Insurmountable does with climbing. He notes opposition can be passive or a force of nature rather than an enemy, and lists everyday themes worth exploring.",
+  "games": [
+    "Insurmountable",
+    "Luck be a Landlord",
+    "The Waking Knot",
+    "Rift Wizard",
+    "Desktop Dungeons",
+    "Invisible, Inc.",
+    "Renowned Explorers"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "pacifist roguelikes",
+      "kind": "principle",
+      "claim": "A pacifist roguelike is one where conflict is not resolved through violence of any kind, including cute or abstract bump combat; games like Invisible, Inc. that allow non-violent runs are grey areas.",
+      "detail": "Ludipe also flags games where you support an entity that fights as grey areas. In Q&A he says his personal bar is that combat be around 5% of the game or an isolated event, rather than merely an optional pacifist route.",
+      "t": 131,
+      "quote": "When I am talking about a pacifist roguelikes I mean conflict and solved with violence, any kind of violence",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "pacifist roguelikes",
+      "kind": "principle",
+      "claim": "Roguelikes should explore non-violent designs more, both for variety in a combat-heavy genre and to draw more players in.",
+      "detail": "Ludipe says pacifist roguelikes are a tiny fraction of the genre and he wants more variety, comparing it to seeing six realistic shooters in a row at a conference.",
+      "t": 303,
+      "quote": "it is great tool to draw more players to the john -- genre",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "combat conventions",
+      "kind": "principle",
+      "claim": "Combat is an easy default for roguelikes because it has many reference games, instantly recognisable symbols like health hearts, and an active opposing force that creates excitement.",
+      "detail": "Ludipe's example: a warrior and goblin each with five hearts are instantly read as enemies and damage. This makes combat-based design easier, which is a reason pacifist design takes more effort.",
+      "t": 346,
+      "quote": "It is full of elements that players recognize instantly",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "reskinning",
+      "kind": "technique",
+      "claim": "An easy way to make a pacifist roguelike is to keep an existing combat system and replace its narrative wrapper, e.g. turning Rift Wizard's spell duels into ballroom gossip where 'damage' becomes reputation or affection.",
+      "detail": "Ludipe suggests swapping variables like health for energy to dance or how much a person likes you. It isn't always possible but often works and feels refreshing, though it is essentially doing the same thing with new wrapping.",
+      "t": 465,
+      "quote": "We would be keeping the same systems and kind of replacing the wrapping around them",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "theme-driven mechanics",
+      "kind": "technique",
+      "claim": "The harder but more rewarding path to pacifist roguelikes is deriving new systems from a theme's fantasy, as Insurmountable does by building mini systems around being a mountain climber.",
+      "detail": "Ludipe warns each iteration is harder, more ideas get discarded and it takes longer, but it reaches more interesting situations. In Q&A he gives a car-drifting roguelike as an example of mechanics from a theme.",
+      "t": 499,
+      "quote": "the harder path, staying away from those and trying to really lean on these new systems",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "passive opposition",
+      "kind": "example",
+      "claim": "Roguelike opposition need not be an active enemy: Desktop Dungeons uses big static enemies, and The Waking Knot uses roaming hazards as forces of nature to navigate around rather than defeat.",
+      "detail": "Ludipe argues static, passive elements on a grid can still make an experience, and in The Waking Knot a moving fireball is something to manipulate to suit your goal rather than fight.",
+      "t": 600,
+      "quote": "It is a force of nature. Not an enemy to be defeated",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "non-violent themes",
+      "kind": "open-question",
+      "claim": "Everyday non-violent themes such as gardening, sports team management, trip planning, laundry, cooking and hosting dinner could yield new roguelike mechanics.",
+      "detail": "Ludipe hopes creators lean on such inspirations. In Q&A he agrees with simulating social and economic processes instead of combat, and describes a trip/hiking game where the challenge is what to pack and where to sleep.",
+      "t": 629,
+      "quote": "we could be exploring so many cool things like gardening, sports, preparing a trip, doing laundry, cooking, hosting a dinner",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

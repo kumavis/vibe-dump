@@ -1,0 +1,168 @@
+{
+  "id": "CLi4PWxDmAI",
+  "title": "Darius Kazemi - Keeping Procedural Generation Interesting",
+  "speaker": "Darius Kazemi",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=CLi4PWxDmAI",
+  "talk_type": "design",
+  "summary": "Darius Kazemi, a former game developer turned maker of Twitter bots and generative tools, addresses Kate Compton's 'oatmeal problem': procedural content that is unique but uninteresting. Using his live deconstruction of Spelunky's level generator, he argues good generation mixes templated authorship, layered random input, and context, and that the game's rules are the context that makes generated content matter. He also discusses Hoplite's minimal generation, Emily Short's NaNoGenMo book, and filtering offensive bot output.",
+  "games": [
+    "Spelunky",
+    "Hoplite",
+    "Liberal Crime Squad",
+    "Rise of Nations"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "oatmeal problem",
+      "kind": "warning",
+      "claim": "Uniqueness alone does not make procedural content interesting: Markov text and Perlin-noise landscapes look plausible at a glance but bore within seconds.",
+      "detail": "Kazemi notes trivial code can generate more unique content than anyone could consume and it 'sucks'. Markov Shakespeare and a Perlin landscape are 'Thomas Kinkade paintings of procedural'; he prefers content with disruptive elements, like a big flat rectangle dropped into the landscape.",
+      "t": 617,
+      "quote": "at a glance they look pretty good but once you spend more than like 10 seconds with one of these things you get bored almost immediately",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "room templates",
+      "kind": "technique",
+      "claim": "Spelunky builds levels from a grid of rooms whose numeric types guarantee exits (right, left-and-right, T-shapes) so a path snakes from top to bottom, with special rooms like snake pits.",
+      "detail": "Kazemi's live mod of the open-source original shows enums in the code: 0 has an exit right, 1 guarantees left and right, 2 is T-shaped, 3 an upside-down T, and 8s and 9s are snake pits. These dictate the path through the level.",
+      "t": 729,
+      "quote": "those numbers sort of dictate the way that the path snakes through from the top to the bottom so like a zero tile has an exit",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "room templates",
+      "kind": "technique",
+      "claim": "Within each Spelunky room template, fixed tiles are mixed with swappable obstacle blocks and probabilistic tiles such as a 50% chance of a rock.",
+      "detail": "Kazemi varies the red obstacle areas while the ceiling and floor stay fixed, and shows white tiles that each have a chance of holding something. Layering these gives each room a recognisable texture that still changes between generations.",
+      "t": 853,
+      "quote": "tiles that say there's a 50% chance of you know of of a rock being here for example so those are",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "explaining generators",
+      "kind": "principle",
+      "claim": "Developers should publish interactive deconstructions of their own level generators, which is easier than writing an essay and more useful to other developers.",
+      "detail": "Kazemi says this is especially easy for games already running in a browser. Several roguelike authors have told him they based their level generation entirely on his Spelunky toy.",
+      "t": 889,
+      "quote": "this is way making this as a game developer is way easier than writing a big long essay about or giving a talk about how you did the thing",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "treasure placement",
+      "kind": "technique",
+      "claim": "Spelunky places treasure with a one-line rule: the chance of treasure on a tile is proportional to the number of walls around it, so nooks and enclosed pockets hold loot.",
+      "detail": "Kazemi gives this as an elegant rule: a tile in the open floor with one wall rarely has treasure, a nook bounded on three sides likely does, and an empty tile inside solid rock very likely does.",
+      "t": 946,
+      "quote": "the probability of there being treasure on a given tile is directly proportional to the number of walls surrounding a tile",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "monster placement",
+      "kind": "example",
+      "claim": "Spelunky also uses inelegant special-case rules, such as placing at most one giant spider per cave level under a brick with a 2x2 empty space below, at a 1-in-40 chance.",
+      "detail": "Kazemi reads out the conditions: first cave tileset, not the level ceiling, not in a shop or start room, not the bottom half of a room, a 2x2 empty block below, and none generated yet. He presents it as contrast to the elegant treasure rule.",
+      "t": 1019,
+      "quote": "then there is a one in 40 chance that we generate a giant spider and some cobwebs right beneath this brick",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "templated authorship",
+      "kind": "principle",
+      "claim": "Spelunky's rooms are mostly authored, roughly 60-70% fixed tiles counting empty space, with just enough probabilistic tiles to feel different, and the sameness lets players learn the templates' rhythm.",
+      "detail": "Kazemi says experienced players enter a room they have never seen yet know subconsciously that a running jump off a ledge will land them on a platform. They develop an intuitive sense of the underlying shape and rhythm of the templates.",
+      "t": 1085,
+      "quote": "he smartly placed probabilistic tiles and obstacles and things like that just enough to make it seem different every time but also the sameness kind of helps",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "combinatorics",
+      "kind": "technique",
+      "claim": "Layering many small random decisions exploits combinatorial explosion: no single choice is complex, but the combinations are enormous.",
+      "detail": "Kazemi describes Spelunky's random input as layers upon layers of probabilistic tiles, so the computer never makes too many decisions about one thing yet output varies hugely.",
+      "t": 1140,
+      "quote": "he's definitely taking advantage of the explosive combinatorics here so there's never too many decisions to make about one individual thing for the computer",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "context",
+      "kind": "principle",
+      "claim": "A game's rules are the context that makes its generated content meaningful: a great level generator is worthless if movement feels bad or the jump height is miscalibrated.",
+      "detail": "Kazemi's example is a word definition that becomes a joke when framed with a pickup line. Spelunky's generator alone is lifeless and only becomes interesting when you run and jump in it; with floaty controls or a different jump height the levels would no longer work as levels.",
+      "t": 1238,
+      "quote": "when you're making a game I think your game itself like the rules of the game are the context",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "simple generators",
+      "kind": "example",
+      "claim": "Hoplite has very high replayability despite a near-trivial generator (arena, blobs of lava, randomly placed enemies with a safe first move) because its core design is tense enough.",
+      "detail": "Kazemi has played Hoplite daily for four years. As far as he can tell it just draws an arena and lava and places enemies at random from a distribution, with a rule guaranteeing the first move does not kill you.",
+      "t": 1541,
+      "quote": "hoplite is an interesting enough and tense enough game design that you can just throw enemies down at random",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "start simple",
+      "kind": "technique",
+      "claim": "Start any generative or AI system with the dumbest possible version, such as picking a strategy at random, and only add complexity if playtesting shows it is needed.",
+      "detail": "Kazemi relays Brian Reynolds' Rise of Nations AI talk: they started with x = rnd(3), and if playtests went fine they saved the design time. Kazemi makes his bots as stupid as possible until they amuse enough people, then ships.",
+      "t": 1508,
+      "quote": "when we make AI for games we always start out with x equals rnd three like like just we just pick a strategy at random",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "aesthetic separation",
+      "kind": "example",
+      "claim": "Emily Short's generated travel guide stays interesting by assigning each town one of a few distinct aesthetic 'elements' instead of mixing all traits into incoherent soup.",
+      "detail": "Kazemi says the book is clearly templated and repetitive (each chapter a county with a tavern, geography, a castle), but Short baked in context by giving each town an almost alchemical element, e.g. fertile and fungal versus prim and proper, producing interesting towns and contrasts between them.",
+      "t": 1691,
+      "quote": "she's really taking care to separate out all these sort of different aesthetic qualities of the different towns",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "story generation",
+      "kind": "technique",
+      "claim": "Long-form text generation splits into a linguistic approach (training on books) and a simulationist approach, which is essentially a roguelike whose renderer outputs prose.",
+      "detail": "Answering a question on generated choose-your-own-adventure stories, Kazemi favours the simulation approach, describing it as building your own roguelike but rendering text that describes what is going on.",
+      "t": 1825,
+      "quote": "I'm gonna build my own roguelike but instead of rendering you know you know a screen with what's happening in all these rooms",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "meaningful choices",
+      "kind": "principle",
+      "claim": "Hoplite offers only three or four choices at any point but every move has dire consequences, so there are effectively no no-op moves.",
+      "detail": "Kazemi suggests a voted story game with few options should follow this, making all four choices equally dire rather than offering many trivial ones.",
+      "t": 1861,
+      "quote": "there's only three or four choices you can make at any given point in a game of hoplite but every move you take in the game has extremely dire consequences",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "output filtering",
+      "kind": "technique",
+      "claim": "Generators that remix real-world text need layered safeguards: shared word filters, per-generator blacklists, targeted detectors for bad joke patterns, and a public takedown policy.",
+      "detail": "Kazemi uses his npm word filter module plus bot-specific blacklists, and built a subsystem for Two Headlines that detects and deletes transphobic jokes before tweeting. He says you will never catch everything, so he also publishes a policy and deletes on report.",
+      "t": 1952,
+      "quote": "I built something that detects that kind of joke in the context of a two headlines tweet and deletes it before it before it can tweet it",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

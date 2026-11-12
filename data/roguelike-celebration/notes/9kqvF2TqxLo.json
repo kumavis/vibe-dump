@@ -1,0 +1,79 @@
+{
+  "id": "9kqvF2TqxLo",
+  "title": "Florence Smith Nicholls - Roll for Reminiscence: Procedural Keepsake Games",
+  "speaker": "Florence Smith Nicholls",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=9kqvF2TqxLo",
+  "talk_type": "design",
+  "summary": "Florence Smith Nicholls, a video game archaeology researcher, introduces keepsake games (a term from Shing Yin Khor): games whose play produces a memorable artifact, made in collaboration between designer and player. She presents three procedural keepsake case studies: a digital game where players interpret Internet Archive artifacts with randomly dealt tarot-like cards and get a zine PDF; Ascending, where players write a postcard about a city from Watabou's medieval fantasy city generator; and a player study of Nothing Beside Remains, a procedurally generated ruined village. She argues that the ways players record play, and archaeological affordances like incongruity and ambiguity, connect to the uncanny texture of PCG.",
+  "games": [
+    "Nothing Beside Remains",
+    "Ascending",
+    "A Mending",
+    "Luminary",
+    "Watabou's Medieval Fantasy City Generator"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "keepsake games",
+      "kind": "principle",
+      "claim": "Keepsake games produce a beautiful, memorable artifact through play, as a collaboration between designer and player, and procedural systems (dice, cards, generators) are a natural fit for them.",
+      "detail": "Smith Nicholls credits Shing Yin Khor with the term, citing A Mending (embroidery on a map) and Luminary, where a scarf is knitted according to choices in a Twine game. She is especially interested in digital-analog hybrids.",
+      "t": 80,
+      "quote": "games that produce beautiful, memorable artifacts through the process of playing the game",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "interpretation prompts",
+      "kind": "example",
+      "claim": "A digital keepsake game built with Mike Cook deals players random tarot-like cards as interpretation aids for obscure Internet Archive artifacts, collecting their free-text interpretations into a zine PDF.",
+      "detail": "Made for the Internet Archive jam using '90s-era archive assets, it was inspired by Italo Calvino's The Castle of Crossed Destinies, where people communicate only through tarot cards. Each round shows three artifacts and three random cards; she calls it a proof of concept.",
+      "t": 234,
+      "quote": "using these uh strange tarot cards as like an interpretation aid",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "generator as prompt",
+      "kind": "technique",
+      "claim": "Ascending uses an existing procedural generator, Watabou's medieval fantasy city generator, as a prompt: players generate a city and write a postcard about an imagined visit to it.",
+      "detail": "Made at a Dagstuhl seminar session on PCG keepsake games, the game asks players to imagine what a 2D schematic map is like to be inside, e.g. what a labelled hall north of a river means. The generator was chosen partly because it is free and runs in a browser.",
+      "t": 329,
+      "quote": "we'll write a postcard based on an imagined visit to this place",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "environmental storytelling",
+      "kind": "example",
+      "claim": "Nothing Beside Remains is an ASCII-style game with a procedurally generated ruined village and no win state, whose implicit goal is for players to interpret what happened there.",
+      "detail": "Players bump into objects and read descriptions. Smith Nicholls argues environmental storytelling is archaeological because it means interpreting material remains of an imagined past; her player study asked people what they thought happened.",
+      "t": 404,
+      "quote": "environmental storytelling is very archeological because it's about interpreting kind of material remains",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player records",
+      "kind": "example",
+      "claim": "Players of Nothing Beside Remains recorded their play by making maps or taking screenshots, and these records scaffolded their interpretations, functioning like keepsakes.",
+      "detail": "Different recording methods afforded interpretation, communication and personal expression. Smith Nicholls links this to keepsakes as records of a gameplay process.",
+      "t": 453,
+      "quote": "often it was very much about like scaffolding their interpretations",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "uncanny pcg",
+      "kind": "principle",
+      "claim": "Incongruity and ambiguity spur players to interpret game worlds, which parallels the uncanny texture of procedural generation (repetitions, glitches) and could be exploited in keepsake games.",
+      "detail": "From her study Smith Nicholls derived 'archaeological game world affordances', qualities that prompt players to interpret more or extend an interpretation. She suggests getting players to record or produce artifacts interpreting what they find in PCG worlds.",
+      "t": 495,
+      "quote": "the uncanny nature or like texture of you know PCG that can happen whether that be through repetitions, glitches",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,382 @@
+[
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 0,
+  "end": 1713,
+  "speaker": "",
+  "title": "Pre-show music, welcome, housekeeping and introduction of the first speakers",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[0:16:12] 'Welcome to Rogike Celebration' (MC opens the 11th conference); stream starts with music; [0:27:11] MC begins introducing the first talk."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 1714,
+  "end": 3568,
+  "speaker": "Sersa Victory and Joris Dormans",
+  "title": "“Unfolding” Traps: Extending Hazards Across Time and Space",
+  "status": "published",
+  "published_id": "NjIduRLJL7U",
+  "evidence": "[0:27:11] MC: 'be from Sarasa Victory and Yurus Dorman's'; [0:28:30] 'take it away. Talking about traps.' Matches published 2026 talk."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 3617,
+  "end": 5327,
+  "speaker": "Mike Cook",
+  "title": "The City, The Street, The Lens: Building and Appreciating Generative Systems",
+  "status": "published",
+  "published_id": "nOGNdrjm8ek",
+  "evidence": "[0:59:32] MC: 'Next up, we have Mike Cook ... AI researcher based in London'; [1:28:34] 'thank you so much Mike'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 5356,
+  "end": 6327,
+  "speaker": "Bjarke Alexander Larson",
+  "title": "Corrupted Databases - Building a Repeatable Logic Puzzle in a Discord Bot",
+  "status": "published",
+  "published_id": "gxXZRofE5dI",
+  "evidence": "[1:28:59] MC: 'lightning talk coming up next is from Barkc A Larson ... building repeatable logic puzzles in a Discord bot'; [1:29:24] speaker: 'my name is Ba'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 6350,
+  "end": 7217,
+  "speaker": "Chelsea Thompto",
+  "title": "Spaces for Contemplation: Procedural Generation in Nonlinear Narrative in Art",
+  "status": "published",
+  "published_id": "-xrcmY7LNPI",
+  "evidence": "[1:45:37] MC: 'next up is uh Chelsea Tomto, who is here to talk about um procedural generation and nonlinear narrative in art'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 7218,
+  "end": 8961,
+  "speaker": "",
+  "title": "Breakout-room announcements, social break, welcome back",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[2:00:18] MC: 'that brings us to the end of our first block of talks'; music until [2:27:49] 'Welcome back to our next block'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 8962,
+  "end": 10754,
+  "speaker": "G blekkenhorst",
+  "title": "It's Standing Right Behind You: Interface Games as Metaleptic Convergences",
+  "status": "published",
+  "published_id": "uZdEXqRkBZA",
+  "evidence": "[2:28:57] MC: 'We have G. Breenhurst, a Canadian artist and experimental narrative designer ... Talking about metalic convergences'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 10784,
+  "end": 12541,
+  "speaker": "Andrew Plotkin",
+  "title": "Mazes: Are We Lost Yet?",
+  "status": "published",
+  "published_id": "7h3T5NaFpcI",
+  "evidence": "[2:59:23] MC: 'next up, we have Andrew Plotkin ... here to talk about mazes' (MC later says she read the wrong bio); [3:00:12] speaker: 'I'm here to talk about mazees'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 12581,
+  "end": 14511,
+  "speaker": "Everest Pipkin",
+  "title": "Dungeons, Digging, and Wells - the Gamers Yearn for the Mines.",
+  "status": "published",
+  "published_id": "VwZS0MQSpaU",
+  "evidence": "[3:29:03] MC: 'the last talk of this block from Everest ... you're here to talk about holes'; speaker: 'I am here to talk about holes'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 14513,
+  "end": 17103,
+  "speaker": "",
+  "title": "Breakout-room announcements, 40-minute social break, welcome back",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[4:01:53] MC reminds breakout rooms, 'We'll be back in 40 minutes' [4:04:35]; music; [4:43:30] 'Welcome back'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 17104,
+  "end": 18831,
+  "speaker": "Paul Hembree",
+  "title": "Found (Mathematical) Objects: Generative Beats Without AI/ML",
+  "status": "published",
+  "published_id": "DJqBTJioVqM",
+  "evidence": "[4:44:23] MC: 'Paul Hembry uh right now in found mathematical objects generative beats without AI'; [4:45:19] speaker: 'my name is Paul Hebry'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 18861,
+  "end": 20798,
+  "speaker": "Matt Carney",
+  "title": "Some Quite Fantastic Shapes: Procedural Narrative & Terry Riley’s In C",
+  "status": "published",
+  "published_id": "SU-VcmsOvZo",
+  "evidence": "[5:13:54] MC: 'Our next speaker is Matt Carney ... presenting the talk, some quite fantastic shapes, procedural narrative and Terry Riley's inc'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 20798,
+  "end": 22401,
+  "speaker": "",
+  "title": "Reminders, social break, welcome back",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[5:46:38] MC: 'a couple reminders um shout outs before we go into the break'; music; [6:12:19] 'Hello, welcome back'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 22402,
+  "end": 23444,
+  "speaker": "David Dunham",
+  "title": "Totally Not a Roguelike Deckbuilder",
+  "status": "published",
+  "published_id": "oipNr8RE5bA",
+  "evidence": "[6:12:56] MC: 'the next talk we'll be having David Dunham ... designer of King of Dragon Pass'; [6:13:34] speaker: 'I'm David'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 23489,
+  "end": 24268,
+  "speaker": "Johnathon Pagnutti",
+  "title": "Coin Flips, Violence and Spreadsheets: the Binomial Distribution in FE:3Houses",
+  "status": "published",
+  "published_id": "DbZe8rWviS0",
+  "evidence": "[6:30:52] MC: 'Jonathan Pagnetti ... coin flips, violence, and spreadsheets. The binomial distribution in ... Fire Emblem 3 Houses'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 24307,
+  "end": 26069,
+  "speaker": "droqen",
+  "title": "Making Sudoku Poems Using Tools",
+  "status": "published",
+  "published_id": "KfYWVLV5UxQ",
+  "evidence": "[6:44:46] MC: 'Draen will be presenting Making Sudoku poems using tools'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 26071,
+  "end": 27839,
+  "speaker": "",
+  "title": "Break reminders, social break, welcome back",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[7:14:31] MC: 'I'll do the uh the reminders for the break'; [7:15:40] 'enjoy the break'; music; [7:43:10] 'Welcome, welcome back'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 27840,
+  "end": 29668,
+  "speaker": "Lachlan Kingsford",
+  "title": "Exploring the Monte Carlo Forest: Using MCTS to Balance your Game",
+  "status": "published",
+  "published_id": "9iTJ9Z8p0ao",
+  "evidence": "[7:43:50] MC: '...balance your game and enlighten your monsters ... Lachlan, welcome'; [7:44:16] 'Take it away, Lachlan'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 29710,
+  "end": 30621,
+  "speaker": "Nathan Savant",
+  "title": "Modular Motivations: Building Reactive Roguelike NPCs",
+  "status": "published",
+  "published_id": "rmddpcmIJ2I",
+  "evidence": "[8:14:42] MC: 'his talk is called Modular Motivations: Building Reactive Rogike NPCs. And uh yeah, uh Nathan, welcome to the stage'; [8:15:48] speaker: 'I'm Nathan and this is Modular Motivations'."
+ },
+ {
+  "video_id": "d2NR-od_zeM",
+  "start": 30622,
+  "end": 30870,
+  "speaker": "",
+  "title": "End-of-day announcements, unconferencing, sponsor and volunteer thanks",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[8:30:22] MC: 'we are wrapping up for today'; ends [8:34:09] 'we'll be back tomorrow at 9:00 a.m. Pacific'."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 0,
+  "end": 1659,
+  "speaker": "",
+  "title": "Pre-show, welcome back, housekeeping and introduction of the first speaker",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[0:15:19] MC: 'Welcome back. Hopefully you can hear me'; housekeeping until [0:26:31] 'we should be starting to get into the talks'."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 1660,
+  "end": 2680,
+  "speaker": "Nick Bush",
+  "title": "Stealing roguelike mechanics from Microsoft Word",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[0:26:31] MC: 'our first Nick, Nick Bush ... experimented with mechanics for Microsoft Word'; [0:27:32] speaker: 'So this is stealing rogike mechanics from Microsoft Word' (title read from his title slide). Speaker name and title: high confidence (name only from MC intro)."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 2704,
+  "end": 3515,
+  "speaker": "Nick Cummings",
+  "title": "Baseball Is a Roguelike (no, really)",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[0:43:53] MC: 'We now have our next Nick of the day. Uh hello Nick Cummings'; [0:44:55] speaker: 'my name is Nick Cummings ... today I'd like to explain to you how baseball is a rogike and why that matters'. Name: high confidence (MC + self-intro). Title: NOT announced; descriptive title built from the speaker's own sentence."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 3555,
+  "end": 5328,
+  "speaker": "Gillian Smith",
+  "title": "Roguelike Design = Instructional Design: Connecting Procgen and Pedagogy",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[0:58:11] MC: 'a full talk from Jillian Smith, a professor and director at the interactive media and game development program at Worcester Polytechnic'; [0:59:12] speaker: 'talk about how rogike design and instructional design, I think, are actually the same thing'. Captions spell 'Jillian'; spelled Gillian Smith because the WPI role and the MC's reference to her chapter in the procedural generation book identify the PCG researcher Gillian Smith (medium-high confidence in spelling). Title NOT announced; descriptive, from the speaker's own framing."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 5367,
+  "end": 7316,
+  "speaker": "Brian Bucklew and Corey Frang",
+  "title": "Localizing Caves of Qud",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[1:28:38] MC: 'Brian Buckloo, co-founder of Freehold Games, co-creator of Caves of Cud, as well as Corey Frank, a software developer on Caves of Cud'; [1:29:39] speakers: 'I'm Brian Buckley, the studio co-founder of Freehold Games' / 'I'm Corey Frank, team lead on the localization project'; 'we're going to talk about the localization of Caves of Cud'. Brian Bucklew: high confidence (known Freehold co-founder; captions mangle it). Corey Frank: as captioned (medium confidence in spelling). Title: descriptive from the speakers' own sentence."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 7317,
+  "end": 15169,
+  "speaker": "",
+  "title": "Breakout rooms, unconferencing and long social block (about 2 hours, music only); MC handover",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[2:01:47] MC lists breakout rooms and explains unconferencing; [2:03:21] 'a nice big block of socializing'; only music/fragments until [4:11:38] 'Welcome back ... I'm Josh, new MC'."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 15170,
+  "end": 17040,
+  "speaker": "Scott Anderson",
+  "title": "Cellular automata in Roguelikes",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[4:11:38] MC: 'I'm going to be introducing Scott Anderson ... senior graphics engineer [at Unity] ... presenting on cellular automata and rogue likes'; [4:12:39] speaker: 'this is cellular automa in rogue likes'. Name and title: high confidence."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 17074,
+  "end": 18846,
+  "speaker": "Nic Tringali",
+  "title": "Hubris, Bluffing, and Large Numbers: Exploring Push Your Luck",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[4:43:26] MC: 'coming up next we have Nick Trangali ... best known for the banish the banished vault and Amber Spire'; [4:44:27] 'Nick will be presenting today hubris bluffing and large numbers exploring push your luck'; speaker: 'my name is Nick'. Title: high confidence. Surname only from the MC's spoken intro: LOW confidence in spelling ('Trangali' as captioned)."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 18888,
+  "end": 20706,
+  "speaker": "Tyler Coleman",
+  "title": "Kitbashing & Databending for Proc-Gen",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[5:14:06] MC: 'Tyler Coleman ... to tell us about kit bashing and data bending for procgen'; speaker: 'I'm here to talk about kip bashing data bending. It's the name of the talk'. Name and title: high confidence."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 20706,
+  "end": 22363,
+  "speaker": "",
+  "title": "Breakout rooms, social time, break, welcome back",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[5:45:04] MC: 'We're going to cut into some social time now'; music; [6:11:37] 'Hello and welcome back'."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 22364,
+  "end": 24194,
+  "speaker": "Paris Buttfield-Addison",
+  "title": "Please Hold: Building a Playable Museum Exhibit About 1993 Game Support",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[6:11:37] MC: 'Paris Butfield Addison ... co-founder of Secret Lab ... behind Yarn Spinner ... built Help Hint Line 93, a playable museum exhibit'; [6:12:39] speaker: 'This talk is uh about a visual novel where you answer the phone on a video game hintline in 1993'; 'The game is called Hintline 93'. Name: high confidence (Yarn Spinner/Secret Lab). Title NOT announced; descriptive."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 24276,
+  "end": 26221,
+  "speaker": "Dan Stormont and Michael Howk",
+  "title": "Hack: The \"Lost Roguelike\"",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[6:43:04] MC: 'a joint talk on Net Hack ... introduce uh Mikey Hul and Dan Stormmont'; [6:44:05] 'the hack special or hack the lost rogike'; [7:03:29] Mikey: 'this is the Lost Rogike'. Title: medium-high confidence. Speaker surnames only from captions ('Stormmont', 'Hul'/'Hal'): LOW confidence in spelling; first names Dan and Mikey are certain."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 26221,
+  "end": 28747,
+  "speaker": "",
+  "title": "Breakout rooms, break, welcome back for the last block",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[7:16:47] MC: 'we'll break out for breakout rooms now'; music; [7:57:01] 'Welcome back ... our last block of talks'."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 28748,
+  "end": 30672,
+  "speaker": "Alexandra Leonhart",
+  "title": "Roguelike, more like Roguedyke: A queer Reading of Traditional Roguelike Conventions",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[7:58:03] MC: 'Alexandra Leonard ... PhD candidate at Victoria University of Wellington'; [7:59:03] speaker: 'My name is Alexandria Leanhart ... the title of my talk is rogue like more like rogue dyke a queer reading of traditional rogike conventions'. Title: high confidence (speaker states it). Name: MC and self-intro captions disagree; self-intro spelling used, LOW-medium confidence."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 30756,
+  "end": 31531,
+  "speaker": "Tim Keenan",
+  "title": "Roguelike Run Variety: Balancing Intra and Inter",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[8:30:43] MC: 'it is Tim Keenan who founded an independent game studio ... Duskers'; pre-recorded talk then live Q&A; [8:32:45] speaker: 'I'm gonna talk about rogike run variety, balancing intra and inter ... I'm Tim Keenan. I'm the founder of Misfits Attic'. Name and title: high confidence."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 31561,
+  "end": 32349,
+  "speaker": "Stella Vermilion",
+  "title": "The Art of the Long-form Roguelike Run: The Nuzlocke",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[8:45:02] MC: 'Dr. Stella Vermillion ... I'm glad you're here to talk about Nuzlocke'; [8:46:04] speaker: 'Hi, I'm Stella'. Name: medium-high confidence (surname only from MC). Title NOT announced; descriptive, from the speaker's thesis that roguelikes could learn from Nuzlockes."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 32392,
+  "end": 33342,
+  "speaker": "slashie",
+  "title": "The Decades-Long Design Experiment That Escapes Permadeath and Finds a New Form Every Run",
+  "status": "unpublished",
+  "published_id": null,
+  "evidence": "[8:58:24] MC: 'a longtime uh friend and speaker of the conference, Slashy ... Created Rogue Temple and Rogue Basin'; [8:59:25] speaker: 'my name is Ant Zapata, also known as Lashi'; [9:00:27] 'It's called the decadesl long design experiment that escapes permade and finds a new form on every run'. Name: high confidence (Slashie = Santiago Zapata, creator of Temple of the Roguelike/RogueBasin; captions garble first name). Title: high confidence (speaker states it)."
+ },
+ {
+  "video_id": "R8DSq8qSJ44",
+  "start": 33344,
+  "end": 34218,
+  "speaker": "",
+  "title": "Conference closing: thanks, survey, sponsors, volunteers",
+  "status": "not-a-talk",
+  "published_id": null,
+  "evidence": "[9:14:45] MC: 'we are at the end of the talks of Rogike Celebration'; volunteer and sponsor thanks to the end."
+ }
+]

@@ -1,0 +1,217 @@
+{
+  "id": "owmGknfj6H4",
+  "title": "Caves of Qud - Live Playthrough with Developer Commentary",
+  "speaker": "Jason Grinblat, Brian Bucklew, Nick (first Caves of Qud playtester)",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=owmGknfj6H4",
+  "talk_type": "performance",
+  "summary": "The Caves of Qud co-creators and their first playtester play a live, audience-directed run of the game, building a mutant 'spider person' and exploring one of the newly added procedural starting villages. Along the way they explain how villages, quests, Sultan histories, shrines, signature dishes, factions and the water ritual are generated and how they connect. They also describe how world generation works: a high-level history and connectivity framework is generated up front, while actual zone maps are fabricated on the fly from those constraints, and how ruins combine wave function collapse interiors with higher-level structures.",
+  "games": [
+    "Caves of Qud",
+    "Gamma World",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "caves of qud origins",
+      "kind": "history",
+      "claim": "Caves of Qud grew out of three friends' shared tabletop play (notably Gamma World) and their mid-2000s Dwarf Fortress play, and for years its only players were its creators.",
+      "detail": "The developers say they grew up playing tabletop games together, especially Gamma World, a pulpy sci-fi derivative of D&D, and around 2006-2007 were playing a lot of Dwarf Fortress when they had the idea for a weird sci-fi roguelike. For several years the only people who played it were the three on stage.",
+      "t": 128,
+      "quote": "we were playing a lot of Adam playing a lot of dwarf fortress we had the idea to make this weird sci-fi roguelike",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character archetypes",
+      "kind": "principle",
+      "claim": "Caves of Qud splits characters into True Kin, who cannot mutate but can install cybernetic implants, and Mutants, who gain strange mutations, giving two distinct build paths from the first choice.",
+      "detail": "The first character-creation choice is between pure-strain True Kin, descendants of the arcology inhabitants with stable genomes, and mutated humans. True Kin trade mutations for cybernetic implants; mutants get access to the broad mutation list.",
+      "t": 187,
+      "quote": "the advantage of the true kin is that you can't get mutations but you keep installed cybernetic implants",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "mutations",
+      "kind": "principle",
+      "claim": "Caves of Qud's mutation list is broad enough that players can replicate almost any character fantasy or archetype (e.g. a spider person) by combining mutations.",
+      "detail": "The developers ask the audience to think of a weird character idea or archetype such as animals or superheroes, saying there are usually enough mutations to approximate it. The audience's 'spider person' is built from multiple legs, spinnerets, night vision and corrosive gas, and they note the spider is 'well supported' as a player type.",
+      "t": 248,
+      "quote": "think of a weird character idea or archetype that you that we can try to replicate through mutations",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "defects",
+      "kind": "technique",
+      "claim": "Caves of Qud lets players take a negative 'defect' mutation in exchange for extra mutation points, making drawbacks a deliberate build resource.",
+      "detail": "Defects are described as mutations that are generally negative or that the player must work around; taking one grants a few more mutation points. Only one defect can be picked, and the audience chose an 'evil twin' defect.",
+      "t": 433,
+      "quote": "defects or like mutations but they're generally negative or you have to work around them in some way",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "shared world seeds",
+      "kind": "technique",
+      "claim": "Caves of Qud lets players enter a world seed, so stream viewers can play in largely the same generated world as the streamers, which creates a shared experience.",
+      "detail": "The developers enter a seed during the stream and invite viewers to use it too. They say it 'sort of works': most of the world is the same, so viewers may have a similar experience, and entering the same seed is itself a type of shared experience.",
+      "t": 615,
+      "quote": "if you're watching on stream you can enter this world see it as well and play in the same world as us",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "starting location",
+      "kind": "example",
+      "claim": "Caves of Qud's new start offers a choice of regions, each granting reputation bonuses with particular factions, instead of a single fixed starting village.",
+      "detail": "Previously players always started in the static village of Joppa; now there are four options (marsh, desert, canyons, hills). Starting in the marsh, for example, grants bonus reputation with insects and fish.",
+      "t": 707,
+      "quote": "if we start in the marsh we get bonus reputation with insects and fish",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural villages",
+      "kind": "technique",
+      "claim": "Caves of Qud's procedural villages are each driven by their own generated history, which in turn shapes their architecture style, culture and quests.",
+      "detail": "The developers describe the patch as an amalgam of all their procedural systems: villages driven by procedural histories, with procedural architecture styles, culture, quests, NPCs and even village proverbs. The example village is populated by snapjaws, normally early-game enemies, who have settled down.",
+      "t": 799,
+      "quote": "now we have these procedural villages they're driven they're each driven by their own procedural histories they have like these cool procedural architecture styles",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "environmental storytelling",
+      "kind": "technique",
+      "claim": "Caves of Qud places generated village history into the world as painted objects, so ordinary props like amphoras act as monuments to events from that village's past.",
+      "detail": "The slime-filled ceramic amphoras in the village have a mechanical use (adding slime-spitting effects to cooking) and are also painted with scenes from the village's generated history, such as the people coming to revere the 'Vermillion Light Bulb' through contemplating gelatin. Another amphora tells the player that everyone in the village has light-manipulation mutations.",
+      "t": 936,
+      "quote": "this object is also a monument to a scene from the history of this village",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "generated history",
+      "kind": "technique",
+      "claim": "Caves of Qud generates the life histories of ancient Sultans each game, records them as a historical record, and then surfaces those scenes on shrines, artifacts and snippets throughout the world.",
+      "detail": "Shrines depict significant events from a Sultan's life, like a battle or a tavern visit. The developers explain that the Sultans' generated histories become inscribed in the historical record, and scenes from it can then appear on various artifacts or as historical snippets anywhere in the world.",
+      "t": 2984,
+      "quote": "we generate these histories for the Sultan's they become like inscribed in the historical record and then they can those scenes can appear on various artifacts",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "factions",
+      "kind": "example",
+      "claim": "In Caves of Qud, generated history connects to the faction system: a Sultan's generated deeds (e.g. being a 'friend of vines') carry implications for how factions and cults relate later in the game.",
+      "detail": "A shrine describes a Sultan liberating vines with an axe, earning the name 'friend of vines'. The developers explain the game has over 60 factions, many of them sentient animals and plants, so this ancient ruler being friendly to vines matters if the player later meets vines or cults that worship Sultans.",
+      "t": 1353,
+      "quote": "there are over 60 factions of the game many of which are strange sentient animals and plants vines are one of them",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "signature dishes",
+      "kind": "example",
+      "claim": "Each Caves of Qud village has a procedurally generated signature dish that grants a procedurally generated status effect when eaten.",
+      "detail": "The example village's dish is 'meat apple baklava'. Eating it grants a procedurally generated status effect, tying the cooking system to village generation.",
+      "t": 1380,
+      "quote": "each village has its own procedurally generated signature dish this village has meat apple baklava",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergent coherence",
+      "kind": "example",
+      "claim": "Layering independent generators in Caves of Qud produces emergent, coherent-feeling results, such as a village of light-shooting mutants who worship a Sultan called the Vermillion Light Bulb and are led by a crocodile mayor.",
+      "detail": "The developers note that it makes sense these light-manipulating villagers would worship a Sultan nicknamed the Vermillion Light Bulb. The crocodile mayor explains his folk adopted new rituals after meeting the light manipulators, and the developers call this combination emergent.",
+      "t": 1561,
+      "quote": "who worship a sultan cult of a million light bulb is a that is not that is emergent",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural quests",
+      "kind": "technique",
+      "claim": "Caves of Qud's starting villages usually offer two procedurally generated quests that link to generated locations in the world, giving the player reasons to head out into the map.",
+      "detail": "Alongside a static quest found in every village, the villages give generated quests such as locating a forgotten place for a fish or recovering a farmer's token tied to a Sultan. These quests reveal locations, which are inscribed in the player's journal and can be marked on the map.",
+      "t": 1577,
+      "quote": "each of these starting villages has usually two different procedurally generated quests that will lead you out to locations in the world",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "lazy zone generation",
+      "kind": "technique",
+      "claim": "Caves of Qud fabricates each zone map only when the player steps into it, using constraints generated during travel, because generating the whole world up front would take too long.",
+      "detail": "Answering an audience question, the developers explain zones are built on entry from constraints, so approaching from a different direction or having manipulated the environment can cause somewhat different outcomes while largely keeping the same physical structures. Generating everything up front would mean 'you would just never start the game'.",
+      "t": 1984,
+      "quote": "all of these zones are fabricated at the moment you step into them based on constraints that have been generated as you travel",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "world generation",
+      "kind": "technique",
+      "claim": "Caves of Qud generates a high-level framework at world creation (procedural history, road connections, villages, lairs, hidden monasteries, canyon connectivity) that later constrains the zones fabricated on the fly.",
+      "detail": "The legendary fish's lair, for example, was decided at world generation even though its map was fabricated on entry. The developers say they build a high-level connectivity map and then take those high-level constraints to fabricate the actual zone the player travels through.",
+      "t": 2038,
+      "quote": "we generate a procedural history we generate a framework like where roads connect and what villages exist and what the history of those villages",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "water ritual",
+      "kind": "technique",
+      "claim": "Caves of Qud makes fresh water both a survival resource (a thirst clock) and the world's currency, and lets players share it with NPCs in a 'water ritual' to gain faction standing and extra dialogue.",
+      "detail": "Thirst works somewhat like a hunger clock, and because fresh water is semi-rare it is also currency. With an NPC who has significant faction reputation, the player can share precious water, which endears them and unlocks dialogue options; spending reputation can let creatures teach skills or share secrets (a fish might teach swimming or reveal pools of water).",
+      "t": 2132,
+      "quote": "it's also the currency of the world so freshwater is is semi rare and so what you could do is like you can talk to an NPC",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "faction reputation",
+      "kind": "technique",
+      "claim": "In Caves of Qud, a water ritual with a generated character shifts reputation not just with that character's faction but also with other factions according to that character's generated backstory.",
+      "detail": "Sharing water with the legendary fish raises reputation with fish by 100, but because this fish's backstory says roots hate him (for beating them at dice), roots now like the player a little less. The developers call this the basic unit of cultural exchange in the game.",
+      "t": 2185,
+      "quote": "we get these modifiers for reputation bait with these other factions based on the backstory of this particular fish",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "social rules",
+      "kind": "example",
+      "claim": "Caves of Qud enforces a social rule: attacking someone after performing the water ritual with them is a grievous breach of etiquette that makes everyone hate you.",
+      "detail": "When the audience considers killing the fish after sharing water, the developers point out that betraying him would violate the water ritual, and admit they were trying to lure the audience into doing it.",
+      "t": 2304,
+      "quote": "once you've read a ritual with someone attacking them later is a grievous breach of cuds etiquette",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "Caves of Qud generates ruin interiors with wave function collapse, but wraps them in a higher-level structure (e.g. a circular tower) because WFC output alone looks the same in every direction.",
+      "detail": "The developers explain WFC generates isomorphic interiors that are the same in every direction, so to give them texture they create one of several varieties of higher-level structure and fill its interior with WFC-based structures.",
+      "t": 2860,
+      "quote": "the same in every direction and so in order to give them some texture we create a higher level structure",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "shrines",
+      "kind": "example",
+      "claim": "Caves of Qud added shrines that players can pray at or desecrate, partly because the procedural quest design needed reasons for players to desecrate statues.",
+      "detail": "The developers wanted quiet places in the world with no real mechanical impact where players could pray. It also came up in procedural quest design that sometimes a player has reason to desecrate shrines, for example out of a vendetta against the faction that worships them.",
+      "t": 3010,
+      "quote": "it also came up in sort of our procedural quest design that there's there's reason at times to desecrate them",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

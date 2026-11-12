@@ -1,0 +1,136 @@
+{
+  "id": "cDxL6JoxYQc",
+  "title": "Roguelike Celebration 2023 Preview: Nic Junius - Play as in Stage Play",
+  "speaker": "Nic Junius",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=cDxL6JoxYQc",
+  "talk_type": "design",
+  "summary": "Nic Junius, a playwright and PhD candidate researching character AI, argues that theater is an analog, human-powered story generator: a script is a set of constraints, and productions and acting find endless new versions within it, much as players replay a roguelike like Caves of Qud. Using contrasting productions of Macbeth, they show that how a line is played (line reads, physicality) can transform its meaning. Most game dialogue tightly couples what is said to how it is performed, leaving little play; Junius proposes decoupling them and building a small 'language of physicality' in which gestures carry emotional affect that other characters, human or AI, interpret and respond to, borrowing the idea of fighting-game frame data. Q&A touches on directing, typography as expression in text games, and interpretation as a design goal.",
+  "games": [
+    "Cataclysm: Dark Days Ahead",
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "theater as generator",
+      "kind": "principle",
+      "claim": "Junius frames theater as an analog, human-powered story generator in which the script supplies constraints and the production process generates an always-different finished work.",
+      "detail": "A playwright must accept their work is always unfinished: every production differs to stay relevant to its audience, which is why Shakespeare and Greek tragedy are still retold. The production finishes a play by poking at its themes, characters and stagecraft.",
+      "t": 411,
+      "quote": "I want to argue that theater is an analog human powered generator of stories",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "unfinished works",
+      "kind": "principle",
+      "claim": "In theater no script has a single universal version; the production process is what finishes a play, which Junius offers as a model for designing stories that players complete.",
+      "detail": "Productions differ even in the same year with the same people, because the process is about trying new things with what is available.",
+      "t": 320,
+      "quote": "There is never going to be a single universal version of your story",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "play within linearity",
+      "kind": "principle",
+      "claim": "Even a linear scene with few choices can contain play and interactivity, just as players find new things in fixed game levels.",
+      "detail": "Junius focuses on creativity within apparently rigid constraints, asking why storytelling cannot afford the kind of play that levels in other games already do.",
+      "t": 494,
+      "quote": "even if you have a story with or a scene with foe choices and it is entirely linearly that doesn't mean you can't have people find new things in it",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "performance",
+      "kind": "example",
+      "claim": "Two productions of Macbeth using the same words can make Macbeth either manipulated by the witches and Lady Macbeth or the one driving events, purely through how scenes are played.",
+      "detail": "Small choices, like whether the witches touch Macbeth and whether he notices, change how manipulated he seems and in turn who pushes for the terrible deeds. Same script, different relationships and different feel of the themes.",
+      "t": 542,
+      "quote": "How you say something or do something can completely",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "story volumes",
+      "kind": "principle",
+      "claim": "Junius argues roguelikes like Caves of Qud and plays like Macbeth are both story volumes, generative spaces players revisit to find something new in the familiar.",
+      "detail": "Drawing on Jason Grinblat's term, a story volume is a generative function producing storylines whose meaning lies partly in relations among them. One production of Macbeth cannot reveal all its possibilities, just as one run of Qud cannot.",
+      "t": 879,
+      "quote": "This is how roguelikes, i.e. Caves of Qud in this example, can be viewed as theater and how a play like Macbeth can be viewed as a roguelike",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "replayability",
+      "kind": "principle",
+      "claim": "Players return to both roguelikes and plays to find something new in the old and explore as much of the story volume as possible.",
+      "detail": "Performers also use this idea night to night to stay invested, and each new production must answer why do this play now.",
+      "t": 917,
+      "quote": "We want to find something new in the familiar space and explore the space as much as possible in the story volumes",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "dialogue coupling",
+      "kind": "warning",
+      "claim": "Most game dialogue gives players control only over what is said, with line reads, gestures and expressions fixed to each choice, so each option has only one way of being played.",
+      "detail": "This tight coupling limits the number of possible versions of a scene regardless of how many options are written.",
+      "t": 1153,
+      "quote": "There is a very tight coupling between the text and the lines of a scene and the reads and the gestures and expressions that the characters perform",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "decoupled expression",
+      "kind": "principle",
+      "claim": "Decoupling dialogue lines from their reads, gestures and expressions opens a new dimension of interactivity where players can act out a character rather than just pick lines.",
+      "detail": "Letting different kinds of expression inform how a line feels lets players play with the feel of a scene. Junius invites others to try their own approaches to this decoupling.",
+      "t": 1201,
+      "quote": "If we break the tight coupling between our dialogue lines and our reads and gestures and expressions we suddenly have the freedom to play with the feel of the scene",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "expressive actions",
+      "kind": "principle",
+      "claim": "Junius's approach starts from the rule that any action a character takes should convey something beyond its basic function that others can interpret and react to.",
+      "detail": "Gestures need grounding in text and context to be readable; without it they are vague gestures at nothing. Actions need not be gestures, but the talk treats them so.",
+      "t": 1303,
+      "quote": "any action a character can take in the game, in the world, should convey something additional beyond the basic like forming function of that action",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "gesture frame data",
+      "kind": "technique",
+      "claim": "Like fighting-game frame data annotates attacks, Junius annotates gestures with emotional affect so other characters perceive emotions and choose responses accordingly.",
+      "detail": "Fighting games are an existing example of games built around physicality, with frame data describing how each action interacts. Junius swaps danger and hit properties for emotional expression.",
+      "t": 1408,
+      "quote": "what if instead we attached an expression of emotional affect to these suggestions that then allow you to have specific emotions conveyed by gestures",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "language of physicality",
+      "kind": "technique",
+      "claim": "Junius recommends building a small language of physical actions that human and AI characters share, so each reads and responds to the other's gestures based on relationships and context.",
+      "detail": "In the example, actions include pointing aggressively or lazily and shrugging nonchalantly or dismissively. A character who likes the first responds with a nonchalant shrug; the first, deeming the occasion formal, points aggressively back.",
+      "t": 1456,
+      "quote": "create a small language that your human and AI characters can use to communicate to a similar level to each other at",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "theater techniques",
+      "kind": "open-question",
+      "claim": "Junius suggests directing, the high-level shaping of a scene's tone and themes, and encouraging varied player interpretation are theater techniques games have yet to adopt.",
+      "detail": "In Q&A they also note Aristotle's view of playwrights as remixers, comparing it to hypertext, and describe their own game as demanding fighting-game-like interpretive legwork from players. Host Alexei raised lighting design and interpretation.",
+      "t": 2014,
+      "quote": "even stuff like directing and the way that you can play with the scene at a high level as a director",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

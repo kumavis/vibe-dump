@@ -1,0 +1,193 @@
+{
+  "id": "VwZS0MQSpaU",
+  "title": "Everest Pipkin - Dungeons, Digging, and Wells - the Gamers Yearn for the Mines.",
+  "speaker": "Everest Pipkin",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=VwZS0MQSpaU",
+  "talk_type": "culture",
+  "summary": "Everest Pipkin gives an essayistic 'retrospective of video game holes', a sequel to their 2023 talk on islands and boundaries. They argue that digging in games gamifies the satisfaction of labour without bodily exhaustion, and sort game digging into categories: digging for treasure (random reward, often a scratch-card-like micro-gamble), extractive mining with upgrade and automation loops, landscape-changing digging that sculpts the world, and digging as the primary means of movement and progression (Dig Dug, SteamWorld Dig, Downwell). They then argue that the subterranean is structurally useful for game design, providing bounded, directional, room-like space, and that descent conventionally maps to increasing difficulty and strangeness, with wells and caves as portals to a world with different rules. Real-world hobby tunnellers, art projects and Pipkin's own unfinished 'asset flip' digging game frame digging as both labour and devotion.",
+  "games": [
+    "Minecraft",
+    "Terraria",
+    "Stardew Valley",
+    "Sea of Thieves",
+    "Animal Crossing",
+    "Pokemon Diamond and Pearl",
+    "Super Mario Bros. 2",
+    "Before the Green Moon",
+    "Tiny Glade",
+    "SimAnt",
+    "Diggers",
+    "Dig Dug",
+    "Mr. Driller",
+    "Downwell",
+    "Shovel Knight",
+    "Pepper Grinder",
+    "SteamWorld Dig",
+    "Undertale",
+    "Kentucky Route Zero",
+    "Cave Story",
+    "Dwarf Fortress",
+    "Noita",
+    "Animal Well",
+    "Hollow Knight",
+    "Spelunky",
+    "Rogue",
+    "The Legend of Zelda: Tears of the Kingdom",
+    "Dark Souls",
+    "Dragon Quest VII"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "digging",
+      "kind": "principle",
+      "claim": "Digging in games generally gamifies the satisfaction of labour while removing its bodily exhaustion, placing it among undesirable jobs made frictionless by tap- or click-based play.",
+      "detail": "Pipkin compares it to foraging without bugs, cooking without dishes, welding without metal shards: digging without calluses. They also note a deep link between digging and play, from sandpits to beaches, drawing on their own childhood excavating a sand pile.",
+      "t": 343,
+      "quote": "digging in games follows a general trend of gamifying the satisfaction of doing labor without the menial bodily exhaustion of it",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "digging",
+      "kind": "principle",
+      "claim": "Although digging is mechanically similar across games (equip a tool, click a spot), its purpose varies so much that it is a mechanic rather than a genre.",
+      "detail": "Pipkin notes the Game Mechanics Wiki has an entry for digging, but its examples are sandboxes or adventure games that centre digging without being 'digging games'. The goals of digging are distinct even under the same tactile skin, which motivates their categories.",
+      "t": 550,
+      "quote": "The goals of gameplay digging are often very distinct despite being skinned under that same tactile physical act of digging a hole.",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "random rewards",
+      "kind": "example",
+      "claim": "Digging up soil for a random object from a pool, as in Stardew Valley and other farming sims, works like a scratch card: a micro-gambling, chance-based reward loop that can be addictive.",
+      "detail": "These games usually limit digging through stamina tied to skill trees, shovel upgrades and food. Pipkin recalls spending whole in-game days excavating Stardew's town for minerals, and compares it to paying to dig for diamonds at Crater of Diamonds State Park.",
+      "t": 684,
+      "quote": "this is a piece of micro gambling and chance-based reward mechanics",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden treasure",
+      "kind": "technique",
+      "claim": "Games hide treasure in the earth and give players indirect ways to sense it, such as dowsing rods, smell, metal detectors or treasure maps.",
+      "detail": "Pipkin cites Pokemon's dowsing, smelling in a Yoshi game, metal detecting, and Sea of Thieves, where players can bury as well as dig treasure and use maps found in the overworld or from other players.",
+      "t": 600,
+      "quote": "Many games use digging as a mechanic to expose hidden objects which might be externally sensed through dowsing",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "daily limits",
+      "kind": "example",
+      "claim": "Animal Crossing limits digging in real time by placing three fossils at random marked spots in town each day, turning digging into a daily chore with a hoped-for rare find.",
+      "detail": "Pipkin describes running around to find the three telltale cracked-earth marks and hoping one is the T-Rex skull needed to finish the museum, a conceit carried over from game to game.",
+      "t": 787,
+      "quote": "three fossils that are placed randomly somewhere within your town's boundaries every human day",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "upgrade loops",
+      "kind": "warning",
+      "claim": "Mining games commonly wrap extractive digging in upgrade and automation loops that are often little more than Skinner boxes, turning dangerous real labour into an owner-operator wealth fantasy.",
+      "detail": "Pipkin notes that when digging becomes extractive, game descriptions switch the verb to 'mining'. Even in low-key farming games, upgradable tools (a shovel that digs multiple holes) progress toward engaging with the world ever more automatically as pressing A to dig becomes dull.",
+      "t": 904,
+      "quote": "there are thousands and thousands of games that take this tack, many with little more than Skinner boxes towards dopamine rush",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "persistence",
+      "kind": "example",
+      "claim": "Treasure-seeking and minigame digging usually has no permanent effect: soil re-smooths, treasure regenerates, dig spots move each day, and mines may reorganize on each entry.",
+      "detail": "Pipkin contrasts this with digging that changes the surface of the world, like Super Mario Bros. 2 letting you dig to trap enemies or change movement, and farming games where clearing and tilling land is the introduction.",
+      "t": 958,
+      "quote": "this kind of treasure seeking or mini game style digging often doesn't have permanent or meaningful effects",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "terrain sculpting",
+      "kind": "example",
+      "claim": "Voxel and terrain-sculpting games like Animal Crossing: New Horizons let players reshape the world and then watch NPCs and creatures live on the new surface, their systems interacting with what was built.",
+      "detail": "Pipkin traces these to lessons from Minecraft and Terraria, landscape decoration games like Tiny Glade, and older games like SimAnt (1991) and Diggers (1993), which they say feel closest to the impulse to tunnel a castle out of a sand pile.",
+      "t": 1066,
+      "quote": "They allow you to sculpt a world piece by piece and then watch residents, creatures, animals, etc., live on the new surface",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "destructible terrain",
+      "kind": "history",
+      "claim": "Digging as the primary means of movement has existed as long as video games because tile-based play affords it: fill a screen with destructible tiles and let the character destroy what they touch.",
+      "detail": "Pipkin cites Dig Dug (1982) and its copycats such as Mr. Do and the Mr. Driller series, with the vertical soil-cut schema persisting in Pepper Grinder, Shovel Knight and Downwell. In Lauren Schmidt's Dig the player can hold one block at a time, so excavated earth must be placed elsewhere, forming walls.",
+      "t": 1512,
+      "quote": "If you fill a screen with destroyable tiles, drop a character on the top and let them destroy what they touch, that looks exactly like digging.",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "getting stuck",
+      "kind": "example",
+      "claim": "SteamWorld Dig deliberately made the risk of digging yourself into a position you can't climb out of the main source of tension, turning digging into a route-planning puzzle.",
+      "detail": "Pipkin quotes the developers' 2014 article: digging too deep without planning a route back meant being unable to return to the surface to sell minerals. Natural caves, falling rocks and passable walls are the obstacles.",
+      "t": 1573,
+      "quote": "keeping the player in a constant risk of getting stuck as the main source of tension in the game",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "subterranean space",
+      "kind": "principle",
+      "claim": "Subterranean settings are structurally useful for game design because enclosed, bounded space makes progress directional and naturally divides into discrete, connected rooms.",
+      "detail": "Pipkin says descent is so omnipresent, especially in roguelikes, that it is almost invisible. Inside caves you explore, unlock doors, make shortcuts and map the space; room-based games can be set in buildings, but caves, wells and burrows do much of this work for you. 'A hole is an open medium inside of a closed one.'",
+      "t": 1624,
+      "quote": "Insideness with its edges and boundaries makes progress perhaps fiddly and backtracking, but still directional.",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "depth as difficulty",
+      "kind": "principle",
+      "claim": "Games about descent conventionally increase complexity, difficulty and alienness with depth, so dungeon strata map to challenge rather than historical time.",
+      "detail": "Pipkin lists Cave Story, Dwarf Fortress, Noita, Animal Well, Hollow Knight, Spelunky and Rogue. Even non-fantastic games use descent this way mechanically.",
+      "t": 1749,
+      "quote": "Games about descent often have increasing complexity, difficulty, and alienness the deeper you go.",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "descent",
+      "kind": "principle",
+      "claim": "Descending through a hole is a narrative device for entering a world where the surface rules no longer apply, letting the strange and otherworldly in.",
+      "detail": "Pipkin cites fiction (The Wind-Up Bird Chronicle) and games: Undertale's fall into a world of monsters and Kentucky Route Zero's underground highway as the heart of its story.",
+      "t": 1732,
+      "quote": "Through diving into the earth, the world is turned on its head. The rules that existed above no longer apply here.",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "wells",
+      "kind": "example",
+      "claim": "Wells in games rarely hold water; they serve as portals, hideouts, treasure boxes, enemy lairs, lore spots and shortcuts marking a boundary to a different world.",
+      "detail": "Pipkin's examples: Tears of the Kingdom's 58 wells mirrored underground with a quest to visit them all, older Zelda well easter eggs, Dark Souls wells as moody shortcuts requiring a leap of faith, and a whole casino down a well in Dragon Quest VII.",
+      "t": 1781,
+      "quote": "In games, wells very rarely hold water. Instead, they're an entrance or hideout or a treasure box or swarming with enemies.",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "labor and devotion",
+      "kind": "example",
+      "claim": "Pipkin's unfinished asset-flip digging prototype used digging to build a warren the player must learn and eventually live in, framing digging as both labour and love.",
+      "detail": "A first-person angel cast into a pit excavates asset-store objects for a demanding god, building caverns and tunnels that become warehouses and living space until the requests stop. Pipkin asked whether it was a game about labour or about love and concludes digging holds both: repetition and devotion.",
+      "t": 1890,
+      "quote": "do I want this to be a game about labor or a game about love?",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

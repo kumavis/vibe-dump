@@ -1,0 +1,100 @@
+{
+  "id": "IanNZxUaVQs",
+  "title": "Florence Smith Nicholls: Object Biographies: An Archaeological Approach to PCG",
+  "speaker": "Florence Smith Nicholls",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=IanNZxUaVQs",
+  "talk_type": "design",
+  "summary": "Florence Smith Nicholls, a former field archaeologist doing a PhD on procedural generation and archaeology, proposes the archaeological concept of object biographies (tracing an object's whole lifecycle and network of interactions) as a lens for procedural content generation. She points to Caves of Qud's relics as an existing example and describes a planned rework of Mike Cook's Nothing Beside Remains in which the protagonist's role colours the generated object descriptions and fragmented objects yield different biographies depending on interaction order. She also wants generated villages to reference earlier playthroughs. The Q&A with Alexei touches on Dwarf Fortress, Ultima Ratio Regum and player-to-player heirlooms.",
+  "games": [
+    "Caves of Qud",
+    "Nothing Beside Remains",
+    "Disco Elysium",
+    "Heaven's Vault",
+    "Dwarf Fortress",
+    "Ultima Ratio Regum"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "object biographies",
+      "kind": "principle",
+      "claim": "Procedurally generated objects can be given 'object biographies': the full lifecycle and network of interactions an object went through, not just the object as found.",
+      "detail": "Borrowing from archaeology, Smith Nicholls uses a chair: what material it is made of, where the wood came from, who made it with what tools, whether it was reused as something else, who owned or exchanged it, and whether it ended up in the ground or a museum.",
+      "t": 114,
+      "quote": "it is very much about trying to trace the lifecycle of an object",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "item histories",
+      "kind": "example",
+      "claim": "Caves of Qud already has a form of object biographies: sultans' important items become relics placed in their reliquaries, with decorations that can relate to their history.",
+      "detail": "Smith Nicholls shows a relic blade decorated with sapphire, whose decoration might relate to its history, as an example of object biographies in roguelikes.",
+      "t": 181,
+      "quote": "if sultans have important items called relics when they die they go into their reliquary",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "environmental storytelling",
+      "kind": "example",
+      "claim": "Mike Cook's Nothing Beside Remains generates a ruined desert village whose objects and replacement-grammar descriptions depend on which of three causes ended the village.",
+      "detail": "The player explores the village and interacts with objects; the objects present and their text depend on whether wildlife, environmental factors or overpopulation leading to starvation ended it.",
+      "t": 251,
+      "quote": "The objects you see and what descriptions you get depend on three factors that may have led to the ending of the village",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "unreliable narrator",
+      "kind": "technique",
+      "claim": "Giving the protagonist one of several roles (e.g. archaeologist, tourist, poet) can make generated object descriptions subjective, with no role presented as the 'good' or authoritative one.",
+      "detail": "Smith Nicholls wants to satirize the lone-traveller-discovers-ruins trope rooted in pop-culture and colonial ideas of archaeology. She worried an archaeologist role would seem like the good one, so the roles overlap and none is privileged; the poet role links back to the Shelley poem the game is named after.",
+      "t": 367,
+      "quote": "having free potential roles for the protagonist you can giving you different perspectives on the objects you find",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "talking objects",
+      "kind": "example",
+      "claim": "Disco Elysium's speaking objects and Heaven's Vault's translation mechanic, where earlier inferences shape how new artifacts are read, model how objects can carry a point of view and how interpretation can accumulate.",
+      "detail": "Smith Nicholls cites Disco Elysium for objects that speak directly to you with their own opinions on events, and Heaven's Vault because previous translations influence how you interpret later artifact fragments.",
+      "t": 472,
+      "quote": "Inferences you have already made will change how you respond to new information",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "object biographies",
+      "kind": "technique",
+      "claim": "A generated object can be physically shaped by the world's history and fragmented, so the order in which the player examines its parts changes the biography and text they construct.",
+      "detail": "Example: a tourist protagonist finds a book in a village destroyed by wild animals; pages have been ripped out by animals to make a nest. The order of interacting with the book and its pages changes the object biography and the generated text.",
+      "t": 511,
+      "quote": "The order in which they interact with on book pages and the book itself because of the fragmented objects will change kind of the object biography",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "cross-run persistence",
+      "kind": "technique",
+      "claim": "In an exploration game with no fail state, each unrepeatable generated world gives a kind of permadeath, and feeding data from earlier generated villages into new ones could let objects across playthroughs reference each other.",
+      "detail": "The original Nothing Beside Remains was designed to be played once; Smith Nicholls wants a version played several times where entries from previous generations feed back into the generation of new villages. Alexei likens this to Dwarf Fortress cross-world references as an underexplored form of meta progression.",
+      "t": 573,
+      "quote": "previous versions generated kind of like data or maybe some of the entries from that will like feedback into the generation of new villages",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "culture generation",
+      "kind": "example",
+      "claim": "Ultima Ratio Regum's developer Mark Johnson has written on 'qualitative procedural generation': generating abstract content like religion and asking how it shapes the generated culture.",
+      "detail": "Raised in Q&A; Smith Nicholls summarises the paper as going beyond generating buildings to generating abstract context such as religion.",
+      "t": 736,
+      "quote": "can we procedurally generate more abstract context like religion and how would that affect the abstract culture generated in that world",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

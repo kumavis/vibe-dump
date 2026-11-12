@@ -1,0 +1,208 @@
+{
+  "id": "TvlZinAvpwg",
+  "title": "Max Kreminski: Gardening as a Mode of Play",
+  "speaker": "Max Kreminski",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=TvlZinAvpwg",
+  "talk_type": "design",
+  "summary": "Max Kreminski proposes 'gardening' as a mode of play and emerging genre, built on the pleasures of nurturing a generative system you only partly control and of customizing it. He argues many games suffer from solipsism, bending the world around the player, and that procedural generation is often used in 'mining' games like Minecraft to feed endlessly extractive, colonial play and suffers from oatmeal-style sameness. Gardening games such as Animal Crossing instead generate a single small artifact once and evolve it over time with many small generative processes, building player attachment through repeated interaction. He contrasts these with 'farming' games that still extract value, and sees an alliance with roguelikes as games that push back on the player and try to be worlds. His game Epitaph, where the player nudges procedurally generated alien civilizations via a tech tree, is his first gardening game.",
+  "games": [
+    "Epitaph",
+    "Civilization",
+    "Dwarf Fortress",
+    "SimCity",
+    "A Dark Room",
+    "Animal Crossing",
+    "Animal Crossing: Pocket Camp",
+    "80 Days",
+    "Minecraft",
+    "Spelunky",
+    "RollerCoaster Tycoon",
+    "Stellaris",
+    "Slime Rancher",
+    "FarmVille"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "gardening games",
+      "kind": "example",
+      "claim": "Epitaph is a procedural-narrative idle game that strips Civilization down to just its tech tree, casting the player as a rarely-intervening guide who can teach procedurally generated alien civilizations technologies to help them survive to the stars.",
+      "detail": "Made for the Fermi Paradox jam, its answer is that most civilizations go extinct before contact. The player can only intervene every so often, prime-directive style, so success comes partly from guidance and partly from the civilization's own development; winning is possible but most people don't.",
+      "t": 135,
+      "quote": "you're sort of placing this nurturing role over a generative system that does stuff on its own but you can also sort of influence its guidance",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelikes as worlds",
+      "kind": "principle",
+      "claim": "Kreminski finds roguelikes distinctive because procedural generation is necessary to their design, they don't bend over backwards to serve the player, and they try hard to be worlds that exist independently.",
+      "detail": "He contrasts this with games that put the player at the center and shape everything around them in a way that excludes the world as its own thing.",
+      "t": 193,
+      "quote": "roguelikes it's sort of unique is that they don't band they don't bend over backwards to serve the player",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "contests stories worlds",
+      "kind": "principle",
+      "claim": "Kreminski classifies games into contests or rituals (repeated actions), stories (an author telling a mostly linear story), and worlds (a window into a parallel world that continues to exist when the player isn't looking).",
+      "detail": "He calls it a totalizing framework improvised in response to a question, with awkward overlaps. World-games are the ones he cares about because they benefit most from deep procedural content and AI.",
+      "t": 288,
+      "quote": "the game is actually really more of like a window into that world where you can sort of like look in a knot and poke it",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "genre as attractor",
+      "kind": "principle",
+      "claim": "A genre is a collection of mutually supportive design patterns that shore up each other's weaknesses, so adopting a few pulls a designer toward the rest, making genres attractors in design space.",
+      "detail": "Kreminski credits the definition to Kate Compton (and possibly Jonathan, via her). His research tries to map design space and find these attractors; he believes gardening is a new one.",
+      "t": 346,
+      "quote": "it's a collection of mutually supportive design patterns so basically like you have these design patterns that are all sort of reinforcing one another",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "gardening games",
+      "kind": "principle",
+      "claim": "Gardening play rests on two pleasures: nurturing, watching a system grow while guiding but not controlling its direction, and customization, fussing over aesthetic choices to leave the world better than you found it.",
+      "detail": "Kreminski sees these in idle games, A Dark Room and Animal Crossing, and with more control in SimCity and Dwarf Fortress. He notes these are usually peripheral rather than the reason people play a game.",
+      "t": 497,
+      "quote": "watching a system grow and sort of feeling like you have a hand and guiding the direction of its growth even though you don't have total control",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "solipsism",
+      "kind": "warning",
+      "claim": "Many games suffer from a solipsism problem: the world is shaped around the player so thoroughly that anything the player isn't currently interacting with might as well not exist.",
+      "detail": "Kreminski illustrates with a Scott McCloud childhood daydream from Understanding Comics and with frustum culling, where unseen objects aren't rendered, as a surface-level analogue present in deeper game systems too.",
+      "t": 600,
+      "quote": "the world is often sort of bent around the player shaped for the player to such an extent that if the player is not looking at a thing",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "npc agency",
+      "kind": "example",
+      "claim": "80 Days avoided go-anywhere-do-anything 'entitlement simulator' design by making NPCs sometimes more powerful than the player, with boundaries and lives of their own that push back on player demands.",
+      "detail": "Kreminski relays Meg Jayanth's GDC 2016 talk on writing NPCs with agency: the novel's rich white gentleman protagonist has the world at his disposal, and open worlds that never push back teach players the world exists to serve them.",
+      "t": 719,
+      "quote": "make NPCs who could sort of push back against what the player demands of them that have boundaries of their own",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "replayability",
+      "kind": "warning",
+      "claim": "Procedural generation is commonly used to let players churn through and discard endless content, which can prop up extractive, colonial play, though PCG can also create worlds beyond the player's grasp that go on without them.",
+      "detail": "Kreminski cites a tweet framing 100%-completion and speedrunning as expressions of a colonial impulse to fully understand and control game worlds; PCG can subvert or reinforce that.",
+      "t": 739,
+      "quote": "we're going to generate a whole bunch of content and let the player sort of churn through it as fast as they can",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "oatmeal problem",
+      "kind": "warning",
+      "claim": "Generating mathematically distinct content is not enough because players perceive sameness when they can't see meaningful differences, so designers need something beyond large numbers of possibilities to keep players invested.",
+      "detail": "Kreminski relays Kate Compton's 'oatmeal' problem: you can generate countless unique bowls of oatmeal but players see a lot of oatmeal; uniqueness is perceptual.",
+      "t": 876,
+      "quote": "if they can't see the differences that are meaningful to them then they sort of start to not see the differences at all",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "extractive play",
+      "kind": "warning",
+      "claim": "In mining games like Minecraft the player's presence makes the world worse over time, as ore, chests, NPCs and puzzles are used up, and infinite generation lets players repeat this extraction forever instead of facing the damage.",
+      "detail": "Kreminski argues extractive play dynamics leave depleted areas with no reason to stay, and generating more world avoids confronting the player with having made their place worse.",
+      "t": 913,
+      "quote": "the player's presence tends to make the world worse over time",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Roguelikes address the disposability problem of heavily generative games through permadeath, which makes players strongly attached to their character.",
+      "detail": "Kreminski calls this an inspiring end-run around the problems of generative games, while proposing gardening games as another route.",
+      "t": 958,
+      "quote": "by making players really attached to their character through the perma death thing they sort of take an end run around them",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "single bounded world",
+      "kind": "example",
+      "claim": "Animal Crossing runs its terrain generator exactly once to create a small bounded town, and because players can't discard it for another, they form strong attachment through repeated interaction even though towns look similar.",
+      "detail": "Generated towns have only five or six basic features and look alike side by side, yet players are attached to theirs; Kreminski attributes this to relationships built with time and energy, which can't form if players can throw generated content away.",
+      "t": 995,
+      "quote": "Animal Crossing want to strain generator exactly once which is basically at the start of town when you sort of move in for the first time",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "temporal generation",
+      "kind": "technique",
+      "claim": "Gardening games use many small, largely independent generative processes acting on one shared artifact to evolve it gradually, instead of one large visible generator producing many disposable artifacts.",
+      "detail": "In Animal Crossing separate processes place weeds over time, choose which bugs and fish appear on which days, and decide when villagers move in or out, all acting on the town; Minecraft's terrain generator and Spelunky's level generator are the contrast.",
+      "t": 1097,
+      "quote": "gardening games sort of do the opposite by using lots of many small largely independent generative processes",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "temporal generation",
+      "kind": "principle",
+      "claim": "Mining games distribute generated content across space and generate on demand, while gardening games distribute it across time and generate on a clock, which prevents players from churning through content as fast as they can click.",
+      "detail": "Minecraft players search many chunks for rare far-flung dungeons; Animal Crossing ties generation to the real calendar so different things appear on different days and compose nicely.",
+      "t": 1171,
+      "quote": "garden and games tend to do the opposite by distributing generative content across time",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "simulation integrity",
+      "kind": "example",
+      "claim": "Animal Crossing punishes players who change the console clock or reset without saving, which Kreminski reads as the game responding to a violation of the simulation's integrity as a kind of violence.",
+      "detail": "He describes the game's reaction as almost violent and says he likes it, since it treats extra-diegetic manipulation as an attack on the world.",
+      "t": 1210,
+      "quote": "the game is like reacting to your violation of the integrity of the simulation as a kind of violence in and of itself",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "farming games",
+      "kind": "open-question",
+      "claim": "Games like RollerCoaster Tycoon, Stellaris, Slime Rancher and FarmVille feel like gardening but task the player with extracting value, suggesting a separate 'farming' category whose boundary with gardening Kreminski cannot yet draw.",
+      "detail": "He notes Animal Crossing drifting toward control (the player as mayor) and Pocket Camp selling real-money leaf tickets to skip orchard timers, antithetical to a game willing to make the player wait; he cites Robert Yang on Slime Rancher's industrialized slime farms.",
+      "t": 1389,
+      "quote": "it feels like there's a meaningful distinction to be drawn between games and which like sort of the the world exists for its own sake",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "offline simulation",
+      "kind": "open-question",
+      "claim": "A world that evolves without the player initiating changes is significant for gardening games, but there's a tradeoff between worlds that run only while the game is open and worlds that run in parallel with real time.",
+      "detail": "In Q&A Kreminski says Epitaph is designed to run in a background browser tab and plays best that way, but closing the browser invalidates the world and creates a fresh one.",
+      "t": 1543,
+      "quote": "it definitely feels like it's sort of significant that the world can do things without the player initiating those things",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "metrics",
+      "kind": "open-question",
+      "claim": "Kreminski resists giving a gardening world an algorithmic beauty score because the world should exist for its own sake rather than as a number the player drives up, though unusual metrics might encourage interesting play.",
+      "detail": "Asked in Q&A whether his garden would measure beauty, he says he is resistant but curious about systems that measure unusual things and reflect back what's interesting.",
+      "t": 1697,
+      "quote": "it feels like the world should exist for its own sake and not as a thing do you like sort of have a number that goes up",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

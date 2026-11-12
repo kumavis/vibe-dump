@@ -1,0 +1,137 @@
+{
+  "id": "s9Wyn9BJJI4",
+  "title": "Scott Kovach - Managing Game Logic With Rule Systems - Using Relational Programming to Build Games",
+  "speaker": "Scott Kovach",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=s9Wyn9BJJI4",
+  "talk_type": "technical",
+  "summary": "Scott Kovach argues that domain-specific languages let game makers spend their effort on the interesting problems (rules, fairness, UI) rather than incidental programming chores, citing PuzzleScript and Inform 7 as examples. He identifies a core roguelike problem: many intricate rule systems written by different people that must interact, illustrated by flying boots made of cloth burning up over lava. He then presents his relational/logic programming language (working name 'itch'), where the whole game state is a set of facts, rules derive new facts, and game change over time is expressed as rules that create facts from old ones. He claims benefits in traceability (every fact exists because a rule fired) and extensibility (add behaviour by appending rules rather than editing old code).",
+  "games": [
+    "PuzzleScript",
+    "Inform 7",
+    "Go"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "domain-specific languages",
+      "kind": "principle",
+      "claim": "Choosing or designing a domain-specific language for a kind of game lets developers spend time on the hard design problems instead of incidental programming chores.",
+      "detail": "Kovach lists incidental barriers such as package management, dependency versions, learning APIs, and thinking about data structures. He contrasts these with the genuinely hard problems of making rules fun, fair and easy to learn and UIs that communicate well, and argues careful language choice shifts effort toward the latter.",
+      "t": 176,
+      "quote": "if we are careful about the languages we use, we can help people spend more time thinking about the interesting problems they need to solve",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "puzzlescript",
+      "kind": "example",
+      "claim": "PuzzleScript expresses the entire Sokoban push mechanic as a single pattern-to-consequence rule, and reversing its arrows yields a pull mechanic instead.",
+      "detail": "Stephen Lavelle's PuzzleScript rule says that when the player is next to a crate and moves toward it, the crate should attempt to move too. Kovach notes the language is useless for general tasks but provides a focused toolkit, and its whole engine model fits on one slide, giving designers a simple mental model of execution.",
+      "t": 266,
+      "quote": "PuzzleScript gives you this remarkable answer which is there is only one line of code in the game",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "inform 7",
+      "kind": "example",
+      "claim": "Inform 7 lets interactive fiction authors write game state and new world rules in near-natural English, such as defining a container as bursting when its contents outweigh its breaking strain.",
+      "detail": "Kovach shows an Inform 7 scene description with no programming syntax, including pronoun resolution, and a definition of a weight property with defaults. The bursting definition is itself a rule that updates the world whenever the condition holds.",
+      "t": 529,
+      "quote": "a container is bursting if the total weight of things in it is greater than its breaking strain",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "interacting rules",
+      "kind": "principle",
+      "claim": "Roguelikes should aim for unexpected interactions between rule systems, like cloth flying boots burning up over lava, but the code to support such layered interactions is hard to write conventionally.",
+      "detail": "Kovach builds the example step by step: movement, then impassable water and lava, then boots of flying, then a separate developer's material and combustion simulation making the boots cloth. The result is a player falling into lava when their boots burn, which he calls a funny story games should produce, while noting each addition forces edits to older code.",
+      "t": 699,
+      "quote": "we should all be trying to make games that lead to these complicated little unexpected interactions",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "language as conduct",
+      "kind": "principle",
+      "claim": "Picking a programming language is like choosing a roguelike conduct: its constraints make some easy things hard but force you to learn new ways of thinking.",
+      "detail": "Kovach compares C (manual memory), Haskell (no mutable state) and APL (terseness) to self-imposed conducts like never equipping items. His relational language has no functions, no local state, no control flow and one data type, which he presents as a deliberate constraint rather than a flaw.",
+      "t": 798,
+      "quote": "When you force yourself to play under a new constraint, things that previously were very",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "relational programming",
+      "kind": "technique",
+      "claim": "In a relational game language the entire world state is a collection of typed facts (relations), such as monster(m), position(p), adjacent(p1,p2) and at(m,p), and input/output are facts too.",
+      "detail": "Kovach takes Wittgenstein's 'the world is everything that is the case' as the slogan. Facts like 'west is a direction' or 'the player is symbolized by @' describe state; keypresses are transcribed into facts each loop, and queries join facts sharing variables, e.g. finding all pairs of adjacent monsters.",
+      "t": 897,
+      "quote": "the whole state of the game or program or world is stored as a collection of facts",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "logic rules",
+      "kind": "technique",
+      "claim": "Logic rules derive new facts from queries, acting like functional abstraction: e.g. 'touching' from adjacency, 'alive' from HP above zero, and reachability from two recursive rules.",
+      "detail": "Kovach shows that two rules (adjacent implies reachable; adjacent plus reachable implies reachable) fully compute whether a path exists between map nodes, though not an optimal A* path. Derived facts like alive stop being true automatically when HP drops to zero.",
+      "t": 1456,
+      "quote": "These two rules completely encapsulate that problem. They don’t do A*, they don’t find an optimal path",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "rule-based grid",
+      "kind": "technique",
+      "claim": "A map grid can be generated by recursive rules (row 8 exists; row N>1 creates row N-1; each row/column pair creates a cell), then adjacency computed once so later code only queries adjacency instead of doing index arithmetic.",
+      "detail": "Kovach builds an 8x8 board this way rather than writing 64 positions by hand. Adjacency rules do the i+1 index calculation once, abstracting the grid into a graph for movement queries.",
+      "t": 1624,
+      "quote": "we don’t have to do any more index calculations, we can just query for all the adjacencies",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "rule composition",
+      "kind": "example",
+      "claim": "The flying-boots-over-lava interaction can be written as independent rules by different authors: boots are cloth, lava tiles have temperature 100, and worn items combust when the wearer's position exceeds their combustion point.",
+      "detail": "Further rules act as event handlers: a combusting worn item gets unequipped and destroyed. Kovach explains in Q&A that a fact appearing on a rule's right-hand side is created like an event, and rules referencing it on the left-hand side respond to it.",
+      "t": 1664,
+      "quote": "whenever we have an item that has a combustion point that's temperature and whenever that item is being worn by a character",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "traceability",
+      "kind": "principle",
+      "claim": "In a rule-based game every fact exists because a rule fired, so any visible state can be traced back through the events that caused it, aiding debugging and player understanding.",
+      "detail": "Kovach says you can ask of any fact why it is around and follow the chain of earlier facts backward in time. He suggests this helps debugging and lets users peel back layers of complexity to see and change internals.",
+      "t": 1756,
+      "quote": "It is possible starting from any visible thing to trace backwards in time through all the past events",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "extensibility",
+      "kind": "principle",
+      "claim": "Rule-based game logic can often be modified by appending new rules or adding higher-priority rules, rather than editing old code.",
+      "detail": "Kovach presents this as the second benefit of the model: behaviour changes come from new rules, so the program can be structured more naturally and old code touched less.",
+      "t": 1783,
+      "quote": "it is often possible to modify a game by simply adding more rules on the end",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "rendering and state",
+      "kind": "technique",
+      "claim": "In a relational game engine, output is handled by rules that map game facts into output-layer relations (e.g. DOM nodes or grid glyphs) interpreted by a small external driver, and mutable slots like equipment can be modelled by aggregating equip/unequip events.",
+      "detail": "In Q&A Kovach explains that relations with 'js' in the name are interpreted as DOM nodes by a driver outside the engine. For inventory, an aggregation over equip facts per slot sets the current item and unequip events null it, which he describes as bringing variables back into the model.",
+      "t": 1887,
+      "quote": "mapping the facts in your game logic into facts about, directly into facts about DOM objects",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

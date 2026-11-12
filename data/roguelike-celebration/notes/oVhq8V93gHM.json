@@ -1,0 +1,93 @@
+{
+  "id": "oVhq8V93gHM",
+  "title": "Pierre Vigier: Room Generation using Constraint Satisfaction",
+  "speaker": "Pierre Vigier",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=oVhq8V93gHM",
+  "talk_type": "technical",
+  "summary": "Pierre Vigier explains how he furnishes rooms (and potentially caves, dungeons, swamps or marketplaces) by framing object placement as a constraint satisfaction problem solved with randomized backtracking. He covers modelling the room as a grid of empty/free/margin/full cells, objects as boxes with margin boxes, splitting required from optional objects, and implementing unary, no-overlap and connectivity constraints efficiently. He then addresses the '10,000 bowls of oatmeal' sameness problem: vary the context, avoid overusing templates, add alternative/optional objects, and drive room contents from a higher-level generator via tags and triggers. Demo C++ code is MIT-licensed on his GitHub.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint satisfaction",
+      "kind": "technique",
+      "claim": "Room furnishing can be framed as a constraint satisfaction problem: one variable per object, each with a domain of all possible positions, plus constraints such as connectivity or 'place against a wall/in a corner'.",
+      "detail": "Vigier says the approach works for placing monsters, furniture and decorations in dungeons or buildings, and even outdoor structures like swamps or marketplaces. Solving means finding an assignment where all constraints hold.",
+      "t": 128,
+      "quote": "In room generation domain objects all the possible positions for this object",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint satisfaction",
+      "kind": "principle",
+      "claim": "Constraint satisfaction suits procedural generation because constraints are intuitive to author and give strong guarantees about the output.",
+      "detail": "If you want the shower in the corner, you just add a constraint for it; and any solution found is guaranteed to satisfy all constraints.",
+      "t": 183,
+      "quote": "we have strong guarantees on the output which is a nice thing in procedural generation",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "backtracking",
+      "kind": "technique",
+      "claim": "A backtracking solver assigns variables one at a time, checking constraints after each and backtracking when a domain is exhausted; shuffling the domains beforehand makes it produce varied rather than identical solutions.",
+      "detail": "The algorithm is under 10 lines and finds a solution if one exists, but is deterministic if values are always tried in the same order. Variable order needn't be random; processing smallest domains first (minimum remaining values heuristic) speeds it up significantly.",
+      "t": 269,
+      "quote": "We just have to shuffle the domains before running the algorithm",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "room furnishing",
+      "kind": "technique",
+      "claim": "Vigier models a room as a 2D or 3D grid whose cells are empty, free, margin (free and must stay free, e.g. doorways) or full, and each object as a box plus a margin box of space that must stay clear for access.",
+      "detail": "A 3D grid allows placing objects above others. Margin cells keep connections to other rooms reachable; an object's margin box keeps space in front of it so players can access it. Optional boolean masks refine box shapes; grouped objects like a table with chairs can be one object to keep the CSP easier.",
+      "t": 358,
+      "quote": "We want the connection to the other rooms to remain free so that they are reachable",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "room furnishing",
+      "kind": "technique",
+      "claim": "Separate required objects, placed with full backtracking, from optional decorative objects placed afterwards with a single attempt per value and no backtracking, which keeps the problem small and allows extra randomness.",
+      "detail": "More variables make the CSP harder, but missing decorations don't invalidate a room. Optional objects can have appearance probabilities or random counts, and each variable can sample from a list of alternatives (e.g. which painting) to add variety.",
+      "t": 510,
+      "quote": "I will place them after the required objects and I will just write each value in the domains once",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint satisfaction",
+      "kind": "technique",
+      "claim": "Implement constraints efficiently: unary constraints just prune domains up front, no-overlap uses an incrementally updated grid, and connectivity runs a DFS only when the free cells might have split.",
+      "detail": "For 'against a wall' keep only the first-row positions; for 'in a corner' keep the four corners. The connectivity check is expensive after every assignment, but if the free tiles are still one connected piece you can skip the DFS, giving about an order-of-magnitude speedup.",
+      "t": 616,
+      "quote": "If you look at the free tiles connected in one piece you are sure the room is connected",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "10,000 bowls of oatmeal",
+      "kind": "warning",
+      "claim": "Constraint-based room generation suffers from the '10,000 bowls of oatmeal' problem: the same input yields rooms that are technically different but look alike.",
+      "detail": "Vigier's fixes: vary the context (room shape, wall textures, object skins), don't overuse one template especially for neighbouring rooms, use many alternative and optional objects, and use a higher-level generator to produce inputs that convey meaning.",
+      "t": 720,
+      "quote": "Don't overuse a template especially for rooms close to each other",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "tags and triggers",
+      "kind": "technique",
+      "claim": "Use tags and triggers to make generated rooms express meaning: a higher-level generator puts tags in a context, and room descriptions include objects that appear only if their trigger tag is present, like a telescope for a character who loves astronomy.",
+      "detail": "Vigier notes this keeps the generators very loosely coupled while letting rooms convey information about the world, and it can be made more complex if desired.",
+      "t": 787,
+      "quote": "this object will be added only if the trigger tag is in the context",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

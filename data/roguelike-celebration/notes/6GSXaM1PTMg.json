@@ -1,0 +1,79 @@
+{
+  "id": "6GSXaM1PTMg",
+  "title": "Hannah Blair Salzman: Roguelikes, Neurodiversity, and Mental Illness",
+  "speaker": "Hannah Blair Salzman",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=6GSXaM1PTMg",
+  "talk_type": "culture",
+  "summary": "Hannah Blair Salzman, an anthropologist who is neurodiverse, explains why roguelikes held her attention during a period of poor mental health when large 300-hour open-world games did not. Using Shovel Knight's randomized boss rush, Animal Crossing's drop-anytime tasks and Dynasty Warriors' short, varied battles as comparisons, she identifies randomness, easy switching between tasks, and low time commitment as the shared features. Together these reduce frustration by breaking long repetitive play into small, varied pieces, which she argues makes roguelikes especially valuable to neurodivergent players.",
+  "games": [
+    "Shovel Knight",
+    "Shovel Knight Dig",
+    "Cult of the Lamb",
+    "Animal Crossing",
+    "Dynasty Warriors"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "session length",
+      "kind": "principle",
+      "claim": "Short, self-contained roguelike runs can hold the attention of players with neurodivergence or poor mental health who cannot face 300-hour open-world games, even when they end up playing the roguelike for more total hours.",
+      "detail": "Salzman describes being unable to play even games she enjoyed in college while struggling with mental health, as games pushed toward huge open worlds. Roguelikes held her attention even though she sometimes put more hours into them than a big campaign would take.",
+      "t": 256,
+      "quote": "why is this holding my attention when the big games with 300-500 hours of play don't especially when I am sometimes putting more hours into these roguelikes",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomized order",
+      "kind": "example",
+      "claim": "Shovel Knight's final boss rush is less frustrating to repeat after death because the order of bosses is not fixed, showing how even small randomness makes retries feel fresh.",
+      "detail": "Salzman says boss rushes usually frustrate her because dying means repeating the exact same sequence, but Shovel Knight's lack of a set order meant even dying on the last boss didn't bother her much.",
+      "t": 365,
+      "quote": "There is no set order were which one you fight first. Even if I beat most of them and died on the last one it didn't frustrate me",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "player agency",
+      "kind": "example",
+      "claim": "Animal Crossing lets players pick up and drop tasks freely without consequences or forced time commitments, a quality Salzman sees as part of roguelikes' appeal too.",
+      "detail": "In Animal Crossing you can do whatever you want, drop something when bored, and are never strong-armed into uncomfortable time commitments.",
+      "t": 458,
+      "quote": "If you get bored of something you can drop it. You don't get strong armed into uncomfortable time commitments",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "session length",
+      "kind": "example",
+      "claim": "Dynasty Warriors battles last under 30 minutes, are quick to restart after death, and offer many characters, battles and sides to switch between, giving low commitment and high variety.",
+      "detail": "Salzman describes it as a less structured fighting-game subgenre with armies and victory conditions like defeating the enemy commander; tired players can switch characters, battles or sides.",
+      "t": 570,
+      "quote": "The battles take less than 30 minutes to complete and if you die that's a bummer but it probably won't take long to restart",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player psychology",
+      "kind": "principle",
+      "claim": "Randomness, easy task switching and low time commitment together reduce frustration by making repetitive play feel like small, varied tidbits rather than long repetitive tasks.",
+      "detail": "Salzman says people she talked to with similar conditions agreed with this explanation, while noting it differs for everyone. Host Alexei related it to finding 'one more run' more approachable than committing to a long experience.",
+      "t": 662,
+      "quote": "all of it adds up to less frustration because you are tricking your brain into thinking you are not doing long, repeative tasks",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "neurodiversity",
+      "kind": "principle",
+      "claim": "Roguelikes are especially valuable to neurodivergent players because they engage mind and hands without requiring hyperfocus on a single enormous game.",
+      "detail": "Salzman notes games are already popular among neurodivergent people, and argues roguelikes even more so; she thanks roguelike developers for benefiting such players in ways they may not have imagined.",
+      "t": 706,
+      "quote": "unless you get really hyperfocused on a 300-500 game you are probably just going to be like I wish I could play this but I can't",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,129 @@
+{
+  "id": "ntVjLNl2_ro",
+  "title": "Leonard Richardson - Robot Finds Kitten",
+  "speaker": "Leonard Richardson",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=ntVjLNl2_ro",
+  "talk_type": "history",
+  "summary": "Leonard Richardson explains how robotfindskitten, a tiny game he wrote in three days in 1997 as a novice programmer, became a folk game with over 50 ports. His answer is that it is built around features of early roguelikes usually considered misfeatures: ambiguous ASCII symbols you must bump to identify (from DOS Rogue) and long lists of weird flavor text such as NetHack's false rumors and hallucination monster names. He describes how its simplicity made it a gateway to programming, and closes with a plea for games built on variety of content, intertextuality and mystery created by misleading the player, citing Spelunky as a precedent for reviving unpopular features.",
+  "games": [
+    "robotfindskitten",
+    "Rogue",
+    "NetHack",
+    "Planetfall",
+    "Spelunky"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "robotfindskitten",
+      "kind": "history",
+      "claim": "robotfindskitten was written in about three days in 1997 for a contest by a beginner programmer and became a folk game, like Snake or Life, with over 50 ports.",
+      "detail": "The player is a robot moving in a featureless field bumping into mystery characters; each non-kitten object yields a weird message, and finding kitten wins the game.",
+      "t": 112,
+      "quote": "There's over 50 ports to different programming languages and platforms. It's become a kind of folk game like Snake or Conway's Life.",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "misfeatures",
+      "kind": "principle",
+      "claim": "robotfindskitten succeeded by building a game around parts of early roguelikes that are usually regarded as misfeatures, which 'real designers' generally don't borrow.",
+      "detail": "Richardson says this is his answer to how someone bad at design and programming made a good game; the rest of the talk elaborates.",
+      "t": 154,
+      "quote": "I made a game about parts of our early roguelikes that are often regarded as misfeatures or missteps",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ascii symbols",
+      "kind": "principle",
+      "claim": "ASCII roguelike glyphs create a kind of imaginative play: a letter that is text at the top of the screen becomes a deadly monster in the map, and players delight in learning the symbol vocabulary.",
+      "detail": "Richardson loved seeing new letters in DOS Rogue (H = hobgoblin) and the strange IBM PC characters like the happy face and box-drawing doorways. He contrasts this with the school of thought that the H should be replaced with a realistic tile.",
+      "t": 281,
+      "quote": "I recognized H equals hobgoblin. It was the same kind of imaginary play where I'd imagine that my bedroom was a spaceship.",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "symbol ambiguity",
+      "kind": "principle",
+      "claim": "robotfindskitten makes a game out of the ambiguity of roguelike symbols, finding fun in touching characters to discover what they are, a mystery exclusive to roguelikes.",
+      "detail": "Richardson acknowledges that remembering whether a lowercase c is a cockatrice or a cat is not considered desirable, and does not claim to like the ambiguity, but robotfindskitten is built around it.",
+      "t": 359,
+      "quote": "Robot Finds Kitten is a game that's based around finding the fun in a type of mystery that is exclusive to roguelikes",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "false rumors",
+      "kind": "principle",
+      "claim": "NetHack's false fortune-cookie rumors expand the imagined possibilities of the game at almost no cost, since one line of text suggests a mechanic that would be expensive to implement.",
+      "detail": "Example: 'Ever tried enchanting a rope?' when NetHack has no ropes. Richardson loved speculating about the false rumors and now loves them more than the true ones; they directly inspired robotfindskitten's list of weird short texts.",
+      "t": 474,
+      "quote": "Implementing a rope would be a huge pain, but adding one line of text is free",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "flavor text",
+      "kind": "example",
+      "claim": "NetHack's hallucination monster names show a random unrelated thing each time you look at a monster, which Richardson found enjoyable in itself; 'kitten prospecting robot' is now one of them.",
+      "detail": "A rat might appear as a Ravenous Bugblatter Beast or Godzilla. Richardson admits designers may see such lists as bloat, but argues there's a rarely-made type of game where glimpses into varied worlds are the main point.",
+      "t": 546,
+      "quote": "there's a whole other type of game that's not made very often, where this kind of thing isn't bloated at all",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "simple programs",
+      "kind": "principle",
+      "claim": "robotfindskitten spread to many platforms because it is a simple program that does something non-trivial and fun, making it a good first program on any new language or platform.",
+      "detail": "Mel Chua learned programming by modifying robotfindskitten's open-source code to add in-jokes for friends. Richardson notes it's easier to write a new version than to port one, and that the fullest way to enjoy it is to write your own.",
+      "t": 643,
+      "quote": "it's a really simple program that does something non-trivial but fun",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "unreliable narrator",
+      "kind": "open-question",
+      "claim": "Richardson wants more games where fun comes from variety of content rather than tactics, that are intertextual, and that create mystery by misleading the player about mechanics through secrecy or an unreliable narrator.",
+      "detail": "He notes the trend in roguelikes has moved away from these Rogue and NetHack elements, and asks designers to find the fun in neglected concepts even if they were neglected for good reason.",
+      "t": 730,
+      "quote": "a game can create mystery by misleading the player about its mechanisms, either by keeping certain things secret or by an unreliable narrator",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "unpopular features",
+      "kind": "example",
+      "claim": "Spelunky (2009) became a hit by bringing two of the least popular roguelike features, permadeath and extreme randomness, into a then-unpopular genre, showing neglected features can be revived.",
+      "detail": "Richardson cites Derek Yu's success as precedent and hopes it can happen again.",
+      "t": 764,
+      "quote": "Derek Yu made a hit by incorporating two of the least popular features of Roguelikes, permadeath and extreme randomness",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "grinding",
+      "kind": "open-question",
+      "claim": "Grinding and completionism are widely disliked, but Richardson suggests that makes them a rich vein for designers to find new angles on or subvert.",
+      "detail": "Asked which unpopular aspects of current games could be fertile, he names grinding and completionism such as collecting 64,000 bananas for an achievement.",
+      "t": 846,
+      "quote": "I really dislike in current games is grinding and completionism, but I think because I dislike it so much",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "flavor text",
+      "kind": "technique",
+      "claim": "Many of robotfindskitten's object descriptions were made by taking a mundane observed thing and altering words until it looked weird.",
+      "detail": "'Daily hunger conditioner from Australasia' came from a bottle of hair conditioner in the shower; '100,000 carpet fibers' came from looking around the room after recalling a phrase in The Goonies novelization.",
+      "t": 1006,
+      "quote": "I just took that idea of hair conditioner and and changed words until it looked weird",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,66 @@
+{
+  "id": "xgBGrgucH2s",
+  "title": "Duke Dougal - My 30 year quest to find a lost Roguelike",
+  "speaker": "Duke Dougal",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=xgBGrgucH2s",
+  "talk_type": "history",
+  "summary": "Duke Dougal tells the story of searching for decades for Wilderness, a 1979 BASIC game he and his brother Paul played at their Australian high school on a Sorcerer (Z80) computer bought by their science teacher. After years of forum posts and collecting vintage computers, he bought a Sorcerer with floppy disks locally, had it repaired, and found the game file. He demos Wilderness (overworld map, random monsters, identification, levelling, scrolls, and a Hunt the Wumpus-like room-based underworld) and a Commodore 64 remake he and Paul wrote in 1984 and preserved via a magazine printout. The original author remains unknown; the source is on GitHub.",
+  "games": [
+    "Wilderness",
+    "Hunt the Wumpus"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "proto-roguelikes",
+      "kind": "history",
+      "claim": "Wilderness, a 1979 BASIC game for the Exidy Sorcerer, already had many roguelike features: spells and scrolls, treasure, wandering a wilderness, random monster encounters, levelling and hit points.",
+      "detail": "Dougal played it at high school in Australia on a computer the science teacher bought with his own money. He describes it as everything you would recognise as a roguelike.",
+      "t": 175,
+      "quote": "Wilderness was one of the games and was everything you would recognize to be a Roguelike",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "software archaeology",
+      "kind": "history",
+      "claim": "Dougal recovered Wilderness only by buying an original Sorcerer with disks after about 15 years of collecting vintage computers, then repairing it and writing a file-transfer program to extract the file.",
+      "detail": "Forum posts went unanswered for years. When he powered on the bought machine its 40-year-old capacitors failed, so it had to be repaired before he found a file called wilder.dos on a disk.",
+      "t": 254,
+      "quote": "I started collecting vintage computers and did it for 15 years with no sign of one turning up",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "wilderness gameplay",
+      "kind": "example",
+      "claim": "Wilderness is played with typed commands: advance to repaint a small map of trees around the player, identify a monster, attack, and view experience tables or a full monster list.",
+      "detail": "In the demo, an F on the map is a monster identified as bats; killing one levels the player up. A U marks an entrance to the underworld. Dougal selects beginner mode because it is brutally difficult as roguelikes go.",
+      "t": 408,
+      "quote": "As you advance through the Wilderness, you can see other things appear on the map",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "wilderness underworld",
+      "kind": "example",
+      "claim": "Wilderness's underworld resembles Hunt the Wumpus: the player moves between numbered rooms and checks each for monsters, using scrolls to deal with groups.",
+      "detail": "In the demo a room holds four big worms, and Dougal reads a scroll that kills four 'greeblies'.",
+      "t": 481,
+      "quote": "the underworld in wilderness is a strange thing because it is very much like the old game hunt the whompers",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "type-in preservation",
+      "kind": "history",
+      "claim": "A 1984 Commodore 64 version of Wilderness by the Dougal brothers survived because it was printed in a magazine and Dougal kept a copy, which he retyped and debugged for 2020.",
+      "detail": "Paul wrote it, with Duke helping, for their home C64. The original author of the 1979 Wilderness remains unknown; nothing in the source indicates who wrote it, and the source is on GitHub.",
+      "t": 553,
+      "quote": "It was preserved because I sent a printout who printed it in a magazine and I kept a copy for all of the years",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

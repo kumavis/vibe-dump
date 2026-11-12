@@ -1,0 +1,85 @@
+{
+  "id": "Tll23vq6j1s",
+  "title": "Max Sahin - Stuff: the behavioral science of inventory",
+  "speaker": "Max Sahin",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=Tll23vq6j1s",
+  "talk_type": "design",
+  "summary": "Behavioral scientist Max Sahin examines why inventory and objects carry special meaning in roguelikes. She notes that research on how people feel about inventory is scarce and hard to apply to roguelikes, since players are poor at naming their experience and most game research comes from social, narrative-heavy MMOs. Drawing on the psychology of objects and mortality, she argues that reminders of death make experiences meaningful, and that because roguelikes have permadeath and generated maps without a stable sense of place, persistent objects become the vessels of memory and meaning. Designers should treat items as emotional handles that give players safety amid danger.",
+  "games": [
+    "World of Warcraft"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player research",
+      "kind": "warning",
+      "claim": "Asking players how they feel about a game's inventory or menus yields little, because people are bad at naming their experience and good interviewing is an expensive skill.",
+      "detail": "Sahin says research on how people think and feel about inventory is rare and low quality for this reason, and the cost shrinks the research pool, especially for small game companies.",
+      "t": 106,
+      "quote": "If you ask a player do you like this menu? Or how do you feel? You will get an it is nice or something there of",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "digital goods value",
+      "kind": "principle",
+      "claim": "Research shows people value digital goods less than physical goods except in games, and permadeath further muddies how general research applies to roguelikes.",
+      "detail": "Sahin notes research on people's relationship to stuff was dominated by Freudian theory until about 2010 and has since turned up many paradoxes; since you only die once in real life, findings do not transfer cleanly to roguelikes.",
+      "t": 176,
+      "quote": "we value digital goods less than physical goods except when it is in a game",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "applicability of game research",
+      "kind": "warning",
+      "claim": "Game research on meaning mostly comes from MMORPGs and narrative, social meaning-making, so applying it to roguelikes can leave designers worse off than before.",
+      "detail": "The same words mean slightly different things across these contexts and nuance gets lost. Sahin adds that if players wanted narrative creation and complex social interaction, they would choose something like World of Warcraft rather than a roguelike.",
+      "t": 243,
+      "quote": "It is easy to turn to research and end up worse off than you started if you are trying to understand roguelikes specifically",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "objects carry meaning",
+      "kind": "principle",
+      "claim": "For humans an object is never just an object: it accumulates associations from every interaction, as with a wedding-gift cup handed to a friend every morning.",
+      "detail": "Sahin argues tool use is a defining human trait and we use objects to represent ourselves. Thinking of the cup evokes the specific cup, cups in general, the people who use them, a newly noticed chip, and fear of breaking it, linking objects to mortality.",
+      "t": 305,
+      "quote": "We use them to represent ourselves. For us a thing is never just a thing",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath and meaning",
+      "kind": "principle",
+      "claim": "Reminders of mortality make experiences more meaningful, and roguelike permadeath harnesses this by evoking fear divorced from real danger.",
+      "detail": "Sahin describes the fear response as heightening perception, focus, memory and reaction speed; humans love that edge and feel alive there. Research shows anything that reminds us we are mortal enhances meaning, and permadeath shifts which parts of a game carry the meaning-making load.",
+      "t": 474,
+      "quote": "Permadeath changes what parts of a game are carrying the meaning-making load",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "items as anchors",
+      "kind": "principle",
+      "claim": "Because roguelikes' generated maps deny players a stable sense of place to hang memories on, objects become the main vessels of memory and meaning.",
+      "detail": "In ordinary games, revisiting places echoes past experiences; roguelikes lack this. Items persist as constants despite death and physical constraints, acting as both tools of agency and carriers of familiarity.",
+      "t": 493,
+      "quote": "Generated maps and a lack of sense of place also alter how we make meaning within these games",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "inventory design",
+      "kind": "principle",
+      "claim": "Designers should treat roguelike items as emotional handles that create a sense of safety amid danger and recall every positive interaction the player has had with them.",
+      "detail": "Sahin concludes that remembering the cup is never just a cup lets designers empower players to take the best parts of confronting death and have fun with it.",
+      "t": 641,
+      "quote": "Creating a sense of safety amidst danger and creating a sense of meaning, something they can look back on",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

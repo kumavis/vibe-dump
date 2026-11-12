@@ -1,0 +1,126 @@
+{
+  "id": "blXH5pO8GA4",
+  "title": "Nick Montfort - Concrete Poems",
+  "speaker": "Nick Montfort",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=blXH5pO8GA4",
+  "talk_type": "history",
+  "summary": "Nick Montfort traces the material history behind text-display conventions, from the 160-character SMS limit back through 80-column terminals and punch cards to the size of the US dollar bill, and asks why roguelikes are drawn on a monospace grid, crediting tabular type and above all the typewriter. He then shows concrete poetry, including Steve McCaffery's 'dirty concrete' typewriter work Carnival and Dom Sylvester Houédard's typewriter pieces, as pre-computer precedents for turning characters into architectural spaces that look like dungeon maps. He argues roguelikes' unique contribution is endless generation of explorable, rule-driven spaces, and challenges developers to do for the computer display what McCaffery did for the typewriter. The transcript begins about two minutes into the talk.",
+  "games": [
+    "Rogue",
+    "Adventure"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "80-column grid",
+      "kind": "history",
+      "claim": "The 80-column width of terminals, and indirectly limits like SMS's 160 characters, descends from IBM's 1928 80-column punch card, whose size followed Hollerith's 1890 card and roughly matched a US dollar bill.",
+      "detail": "Montfort says Friedhelm Hillebrand justified 160 SMS characters by looking at postcards and telex messages, often under two 80-column lines. The 80 columns trace to the 1928 IBM card, built at the size of Hollerith's earlier 45-column card so existing machines could use it, and that size was close to an 1869-series dollar bill, possibly so currency trays and machinery could be reused.",
+      "t": 299,
+      "quote": "why are all these things 80 characters and that may be factored into this 160 character decision with sms well it actually goes back to the punch card",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "monospace grid",
+      "kind": "history",
+      "claim": "The character grid roguelikes are drawn on is not a given of text: early print type was proportional, and the regular monospace grid came into ordinary use mainly through the typewriter.",
+      "detail": "Gutenberg's 42-line Bible used proportional type. Around 1800, tabular lining figures of equal width were cast so numbers lined up in tables such as logarithm tables. But Montfort credits or blames the typewriter, which mechanically needed every key to advance the same amount, for bringing a regularised monospace grid into everyday use.",
+      "t": 605,
+      "quote": "this type of system of the typewriter is what brought into ordinary use um a regularized monospace grid",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "cursor addressing",
+      "kind": "history",
+      "claim": "Rogue depended on cursor-addressable video terminals: on a printing teletype like the ASR-33 you could play Adventure but not Rogue.",
+      "detail": "Teletypewriters were the interface to computers for years, printing output on paper. Montfort says this is why cursor addressability was once an exciting novelty, since less fortunate users were still on printing terminals through the 1970s. Home computers often had 40-column displays because TVs could not show 80 columns legibly.",
+      "t": 683,
+      "quote": "you can play adventure like this and people did but you can't play rogue",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "concrete poetry",
+      "kind": "example",
+      "claim": "Concrete poetry arranges letters so the visual layout carries the meaning, so reading it aloud misses the point, a precedent for how roguelikes use characters as space.",
+      "detail": "Montfort shows a concrete poem that repeats 'silence' around a gap, noting that reading it aloud would invert it. He presents the Noigandres group and others as using the regularity and shape of the typed page to engage with language visually.",
+      "t": 825,
+      "quote": "if i read this out loud to you you really wouldn't be getting the poem right you missed the point here",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "dirty concrete",
+      "kind": "example",
+      "claim": "Steve McCaffery's typewriter work Carnival uses 'dirty concrete' techniques (rotating the page, masking letters, overtyping in red and black) to create spaces that look like dungeon maps while remaining legible text.",
+      "detail": "Carnival is a 16-page piece assembled into one panel, made entirely on a typewriter around 1970. It reads as visual art but is legible, about Adam and Eve's eviction from the garden and gaining language, which may explain why A and E recur in the shapes. Montfort says its architectural and undulating spaces look like a dungeon map.",
+      "t": 893,
+      "quote": "he moves the page around well it's actually on the platen and he types in different orientations he masks and only types part of the letter",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "display expressiveness",
+      "kind": "open-question",
+      "claim": "Montfort challenges roguelike developers to push their display technology the way McCaffery pushed the typewriter, and make a roguelike as stunning for the computer as Carnival is for the typewriter.",
+      "detail": "He raises this after showing Carnival's dungeon-like spaces and again at the end of the talk. Asked whether any roguelike pushes ASCII representation this way, he could not name one that works the way 20th-century concrete poets did.",
+      "t": 997,
+      "quote": "how can you take your your display technology the computer you know and do what steve mccaffrey did to the typewriter",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "typewriter art",
+      "kind": "example",
+      "claim": "Dom Sylvester Houédard's 1960s typewriter pieces produced three-dimensional-looking forms from as few as two characters by varying fine horizontal spacing.",
+      "detail": "Montfort shows Houédard, a Benedictine monk and concrete poet, using dirty concrete techniques before McCaffery, and a piece that seems to use only microspacing while typing left to right to suggest three-dimensionality, which he calls more Fez-like than roguelike.",
+      "t": 1059,
+      "quote": "it's an amazing sort of view of three-dimensionality you using i think two characters on the typewriter",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii art",
+      "kind": "principle",
+      "claim": "ASCII art is focused on representing a picture, whereas concrete poetry and roguelikes engage with space and give letters new meanings.",
+      "detail": "Montfort distinguishes handcrafted and computer-rendered ASCII art, which use characters to depict things, from concrete poetry's engagement with space and with letters taking on different meaning. Roguelikes depict space in a more rectilinear grid than typewriter works.",
+      "t": 1135,
+      "quote": "i don't think there's the same engagement with the with space and the the letters being different being given different meaning",
+      "weight": 1
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "unique contribution",
+      "kind": "principle",
+      "claim": "Rogue's unique contribution over earlier spatial text art is boundless generation of explorable, interactive architecture that makes players think about underlying rules.",
+      "detail": "Concrete poems cannot be navigated, while Adventure and roguelikes let you move through represented space. Montfort says there are pre-computer precedents for representing space with characters, but Rogue adds endlessly generated landscapes rather than a single handmade panel.",
+      "t": 1243,
+      "quote": "endlessly generated landscapes that intrigues that make us think about underlying rules and an interactive and explorable architecture",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "defamiliarization",
+      "kind": "principle",
+      "claim": "Roguelikes that make letters and symbols like @ stand for creatures defamiliarise the alphabet, which Montfort sees as a valuable contribution even when not visually spectacular.",
+      "detail": "Answering a question, he notes that we don't normally associate the letters A to Z with monsters, and asks why the @ sign, little used early in the 20th century, became standard. Systems that appropriate the ASCII set to mean something else suggest dual levels of meaning.",
+      "t": 1360,
+      "quote": "all sorts of systems that tend to de-familiarize the alphabet are making and then the other characters are making some interesting contributions",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "generated poetry",
+      "kind": "principle",
+      "claim": "Montfort treats generated text as material rather than content, and judges it by goals like expanding what writing can do rather than imitating human poetry.",
+      "detail": "Asked how he decides a poetry generator works, he says his goals vary: once a computer-generated book worth reading from one page of standalone Python with no external data, sometimes exaggerating permutational writing like Beckett's Watt. He says he is not trying to make a nice imitation haiku.",
+      "t": 1525,
+      "quote": "i'm not trying to imitate like oh here's a nice haiku isn't it isn't this beautiful i'm trying to expand maybe the frontier of what writing and poetry could do",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

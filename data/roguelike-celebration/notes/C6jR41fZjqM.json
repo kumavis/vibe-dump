@@ -1,0 +1,174 @@
+{
+  "id": "C6jR41fZjqM",
+  "title": "Tyler Coleman: Finding your 80/20 Rule with Proc-Gen",
+  "speaker": "Tyler Coleman",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=C6jR41fZjqM",
+  "talk_type": "design",
+  "summary": "Tyler Coleman, developer of Merchant and Space Merchant, argues that game developers think linearly while reality and games run on curves, using the Pareto (80/20) principle as a loose lens rather than exact numbers. He applies it to four areas: production time (the last 20% of work takes 80% of the time, recursively), innovation (80% familiar foundation, 20% unique), community conversation (20% of content, usually generated artifacts and outliers, drives 80% of discussion), and the math of randomness and rewards. He recommends weighted or curved random distributions, letting a game meta exist rather than over-balancing, and sometimes replacing randomness with cycles.",
+  "games": [
+    "Merchant",
+    "Space Merchant",
+    "Caves of Qud",
+    "The Sims",
+    "Facade",
+    "Clash Royale",
+    "Dungeons & Dragons",
+    "Magic: The Gathering",
+    "League of Legends",
+    "Overwatch"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "scoping",
+      "kind": "warning",
+      "claim": "Adding 'just multiplayer' to an existing game turned Coleman's Merchant sequel from a one-year project announced for 2021 into a 2024 release, so never put a release year on a trailer.",
+      "detail": "The team expected to add a few things to an existing game, then realized how much more was needed to make it good, and kept pushing the date back. He shows two versions of the trailer, one saying 2021 and one 2024.",
+      "t": 154,
+      "quote": "if you will take away anything from me on this it's don't put coming year on any trailer ever",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "thinking in curves",
+      "kind": "principle",
+      "claim": "Developers instinctively think linearly (one turn, one level at a time), but games and reality are distributed along curves with non-uniform contributions, so designers should learn to think in curves.",
+      "detail": "Coleman frames the 80/20 rule as a loose heuristic, not numerology; 90/10 or any other split works. His point is simply that outcomes are rarely linear, and roguelike developers, who already think in big numbers, are well placed to adapt.",
+      "t": 325,
+      "quote": "what I'm actually here to tell you is you know this is linear bad curve good",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "estimation",
+      "kind": "technique",
+      "claim": "Because 80% of the work is done in 20% of the time and this repeats recursively (done, really done, integrated, polished), multiply any time estimate by four and then do it again.",
+      "detail": "Coleman's example: a one-week prototype takes four more weeks to finish, then 20 more weeks to be really done, then integration into a cohesive whole stretches it to about 125 weeks, and it is still never truly finished.",
+      "t": 637,
+      "quote": "just always assume it'll take longer than you think take that number multiply it by four then do it again",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "familiar and unique",
+      "kind": "principle",
+      "claim": "A game should be roughly 80% familiar foundation (controls, interface, camera, genre tropes and expectations) and 20% unique, with the unique part being what makes it stand out.",
+      "detail": "Coleman reads 'great artists steal' as stealing 80%. The familiar foundation is the structural integrity that makes the game accessible; the 20% the developer does differently from every other game in the genre is what makes it stand out.",
+      "t": 666,
+      "quote": "products are 80% familiar 20% unique that all Innovations All Creations building upon this familiar space",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "familiar and unique",
+      "kind": "warning",
+      "claim": "Going 100% familiar produces a clone, while avoiding all familiarity produces a 'game maker's game' that is praised but not broadly accessible.",
+      "detail": "Coleman says cloning is a fine way for students to learn but legally and ethically dicey for profit; he cites the saying 'first game is innovative, second is a clone, third is a genre'. Games that avoid familiarity, like Facade in his view, are called ahead of their time but struggle to reach a broad audience because they explore too much new space at once.",
+      "t": 809,
+      "quote": "first game is innovative second is a clone third is a genre",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "theme familiarity",
+      "kind": "example",
+      "claim": "Medieval fantasy easily supplies 80% familiarity from known tropes, while sci-fi does not, so Space Merchant used 'narrative greebles' that attach novel words to familiar objects (a 'tachyon disruptor rifle').",
+      "detail": "Even magic in fantasy has a known, trusted rule set, but a sci-fi item name will mean something different in every game. Keeping a familiar base noun like 'rifle' and adding a flavourful modifier preserves some familiarity.",
+      "t": 982,
+      "quote": "it's really easy to hit 80% familiar with medieval fantasy right we have these sort of tropes we have these expectations",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "sequels",
+      "kind": "example",
+      "claim": "In a series like The Sims, the previous game becomes the familiar base: the plumbob stays constant while the neighbourhood changes each game, and breakout elements like the Goth family become part of the familiar.",
+      "detail": "Coleman notes the Goths were built on a familiar Addams Family trope but became so iconic they recur in every Sims game. Maxis also uses developer 'calling cards' such as 'reticulating splines' and llama references as part of its familiar identity. He asks the audience what the 80% familiar and 20% unique of roguelikes is.",
+      "t": 1039,
+      "quote": "once you've made a game and you've sort of set that Foundation where people understand it you actually then are able to explore different sets of unique",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player conversation",
+      "kind": "principle",
+      "claim": "About 20% of a game's content generates 80% of player conversation, and the familiar foundation should be the quiet majority, since nobody talks about controls or cameras that work.",
+      "detail": "If players are not discussing your character controller or key mapping, that is good: it means they are focusing on what is unique. When people do talk about the foundation, it is usually not positive.",
+      "t": 1274,
+      "quote": "your foundation should be quiet the silent majority of your content should be your foundation um because usually if it's working no one's talking about it",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "static vs generated",
+      "kind": "example",
+      "claim": "Caves of Qud mixes static and generative content, and according to its developer Jason its fans' conversation splits roughly 50/50 between static characters and the generative systems.",
+      "detail": "Static elements give players a common thread (e.g., spine fruit always leading to spine fruit jam, characters always available from default starting conditions). Coleman relays that some fans show love for specific static NPCs while others discuss what the generative systems produce.",
+      "t": 1405,
+      "quote": "generally they see it as 50/50 you know some people love talking about the characters and the things that are kind of known",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generated outliers",
+      "kind": "principle",
+      "claim": "Players talk about the artifacts of a generator, not the generator itself, and specifically about the standout outliers, so generative systems must allow rare weird combinations to occur.",
+      "detail": "Riffing on the '10,000 bowls of oatmeal' problem, Coleman says among 10,000 bowls of alphabet soup the one that spells something is the one that gets discussed. Developers should build systems where the right combination of randoms can produce those outliers.",
+      "t": 1431,
+      "quote": "most of your players most of your audience are going to be talking about the artifact of the generative system not the generative system itself",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balance and meta",
+      "kind": "principle",
+      "claim": "A game's meta will naturally be dominated by about 20% of its items, characters or combos; rather than fighting for perfect balance, let a discoverable meta exist and keep it shifting with updates, modes and modifiers.",
+      "detail": "Coleman thinks expanding the meta to most content is close to utopian and not worth it, because people enjoy figuring the meta out. He also notes the interesting 20% is subjective per player, citing Magic: The Gathering's player profiles (Timmy, Spike).",
+      "t": 1538,
+      "quote": "it's important to just have a meta that people can find because people enjoy the process of figuring that out",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "reward distribution",
+      "kind": "technique",
+      "claim": "Deliberately concentrate outcomes: let 80% of damage come from 20% of attacks (crits, armor break) and 80% of rewards from 20% of loot (boss chests, secret rooms), recursively.",
+      "detail": "Coleman cites tabletop RPGs: in Dungeons & Dragons, setting aside natural 1 and 20 as special guarantees those standout moments.",
+      "t": 1619,
+      "quote": "80% of rewards coming from 20% of your loot this is that boss chest after defeating the boss in the region",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "weighted randomness",
+      "kind": "technique",
+      "claim": "Never roll alone: combine multiple random values or curve a uniform random with an easing function to get weighted distributions instead of flat ones.",
+      "detail": "Coleman generates a basic 0-to-1 random and applies an easing curve to it in many of his games. He also suggests weighting barks so a fun special line from an NPC only appears a limited number of times.",
+      "t": 1680,
+      "quote": "I actually curve my randoms using eings so I'm just doing a basic lurp zero to one random and then I apply an easing",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "pseudo-randomness",
+      "kind": "technique",
+      "claim": "To guarantee good moments arrive at the right intervals, you can replace randomness with a hidden fixed cycle that feels random, as Clash Royale's chest cycle does.",
+      "detail": "Coleman's games borrowed this chest-cycle idea so the rotation of good moments occurs when intended. He cautions the 80/20 lens is just one tool, may verge on dark patterns if misused, and that you will not always predict which content becomes the 20%.",
+      "t": 1720,
+      "quote": "you can give the sense of random without actually having a random system to really ensure that that 8020 is coming at a good cycle",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "generated vs handcrafted",
+      "kind": "example",
+      "claim": "The host (Alexei) relays that the procedural generation maxim on a game he previously worked on (name garbled in captions) was '80% generated, 20% handcrafted', and Assassin's Creed Odyssey's cutscene generator output was 20% usable as-is.",
+      "detail": "In the post-talk remarks the host says the remaining 80% of Assassin's Creed Odyssey's generated cutscenes required varying levels of hand touching, supporting the 80/20 framing for generation.",
+      "t": 1798,
+      "quote": "the maxim was 80% generated 20% handcrafted was our approach to PSAL generation",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

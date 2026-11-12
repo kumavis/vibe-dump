@@ -1,0 +1,171 @@
+{
+  "id": "neuJCYmbAG8",
+  "title": "Tyriq Plummer - YASDery Loves Company: Multiplayer in Traditional Roguelikes",
+  "speaker": "Tyriq Plummer",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=neuJCYmbAG8",
+  "talk_type": "design",
+  "summary": "Tyriq Plummer argues that party-based multiplayer is an under-explored space for traditional roguelikes, which descend from social tabletop RPGs yet are almost always single-player. He presents two local 2-4 player experiments: HVNTRS (a 2018 7DRL) with queued simultaneous turns, streamlined deterministic play and friendly fire, and Clean Sweep, which introduces a 'parallel asynchronous schedule' where each monster syncs its turns to the most relevant player. He closes with lessons from letting Twitch chat control monsters in Clean Sweep.",
+  "games": [
+    "HVNTRS",
+    "Clean Sweep",
+    "Catacomb Kids",
+    "MAngband",
+    "TomeNET",
+    "Dungeon of the Rogue Daemons",
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "multiplayer",
+      "kind": "principle",
+      "claim": "Party-based multiplayer is an under-explored space for traditional roguelikes, even though Rogue's tabletop RPG inspirations centre on teamwork and human interaction.",
+      "detail": "Plummer notes JRPGs and first-person dungeon crawlers kept the adventuring party even as single-player games, but roguelikes did not; a lone delver hungry for godlike power is more like a supervillain than a hero.",
+      "t": 271,
+      "quote": "I feel like party based Roguelike is an under explored space yearning to be more investigated",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Multiplayer roguelikes generate richer stories than solo deaths: betrayal, revenge and tragedy between players, which a real human supplies more cheaply than simulated relationships.",
+      "detail": "Plummer gives examples: a companion stealing a vital potion and leaving you, hunting them down for revenge, or both ending up cornered. He suggests replacing a relationship simulation (citing Jim Shepard's 2019 talk) with an actual human could save code.",
+      "t": 324,
+      "quote": "Multi players provides stories of betrayal as your companion steals a vital potion and leaves you to your fate",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "onboarding",
+      "kind": "principle",
+      "claim": "Playing with a companion makes players more tolerant of a roguelike's difficulty and failure and eases newcomers in, since a partner can teach mechanics hands-on.",
+      "detail": "Plummer says he learned from Catacomb Kids that people are more tolerant of failure when they have someone to fail with and more inclined to keep trying with a companion, rather than relying on wiki pages.",
+      "t": 394,
+      "quote": "people are more tolerant of failure and difficulty if they have something to fail along with them",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "allies",
+      "kind": "principle",
+      "claim": "Human party members can engage a roguelike's full system complexity in ways AI allies cannot and that would be tedious for one player controlling several units.",
+      "detail": "Plummer imagines the wild character builds of Caves of Qud paired with a second, equally complex character built and operated intelligently to support and synergise.",
+      "t": 430,
+      "quote": "you can really dig into the meat of certain systems in ways that would be inconceivable with AI-based allies",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "multiplayer roguelikes",
+      "kind": "history",
+      "claim": "MAngband and its descendant TomeNET are early online multiplayer roguelikes that go real-time but offset the speed demands with input macros while keeping full old-school depth.",
+      "detail": "Players pick a server and interact with anyone on it. Plummer thinks the macros are invaluable at higher levels and that depth and complexity are not diminished. He contrasts them with the stripped-down Dungeon of the Rogue Daemons.",
+      "t": 500,
+      "quote": "both games make concessions by being real-time but to alleviate the burden of doing quick mental acrobatics",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "multiplayer turns",
+      "kind": "principle",
+      "claim": "Plummer's three goals for multiplayer turn design: no timers pressuring decisions, no player waiting ages on others, and multiplayer that actually matters rather than parallel solo play.",
+      "detail": "Avoiding long waits means limiting the decision space so choices can be made quickly and are easy to input. Making multiplayer matter means encouraging collaboration and risk-taking on behalf of others.",
+      "t": 700,
+      "quote": "two turns shouldn't make other players wait for ages. This might seem contradictory but it means I want to limit the decision space",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "simultaneous turns",
+      "kind": "technique",
+      "claim": "HVNTRS has each player queue an action and resolves the turn once all players have chosen, which makes coordination easy and keeps everyone engaged.",
+      "detail": "Plummer says multiple brains mulling the best move narrows options and speeds things up. Drawbacks: turn order still matters (two players entering the same tile, a move before or after a shield bash), so clear priority rules are needed, and waiting for all inputs is irritating in low-stakes moments like backtracking.",
+      "t": 751,
+      "quote": "having each player input action to cue it up for execution and as soon as every player has decided on the action the turn resolves",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "streamlining",
+      "kind": "technique",
+      "claim": "To keep simultaneous turns short, HVNTRS is deterministic with no dice, has no menus, puts every action within two button presses, and hides no information.",
+      "detail": "Plummer did not want one player allocating skills or navigating menus while others wait. Everything needed to assess a situation is visible on screen, which also makes the game welcoming to new players.",
+      "t": 883,
+      "quote": "no action in the game is further than two button presses away. You never have to navigate a menu or read anything",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "friendly fire",
+      "kind": "warning",
+      "claim": "Friendly fire in HVNTRS was meant to encourage communication about positioning but may simply be unpleasant in an already tough game.",
+      "detail": "Weapons like the axe and spear hit multiple tiles, so standing in the wrong place gets you hit by an ally. Plummer concedes it might be overkill in a genre already known for difficulty.",
+      "t": 945,
+      "quote": "I am definitely concede that friendly fire might actually just suck in practice especially in a game that's already dang tough",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "team items",
+      "kind": "technique",
+      "claim": "Items that need setup and payoff, such as tools to move allies, are of little use alone but become valuable in a team, which better encourages cooperation than friendly fire.",
+      "detail": "Plummer says such items let players think ahead together and make otherwise unwanted actions interesting in team play; HVNTRS only scratches the surface. It also has a bleed-out timer.",
+      "t": 969,
+      "quote": "items that beget setup and pay off. These are the items that enable players to think ahead",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn scheduling",
+      "kind": "technique",
+      "claim": "Clean Sweep's 'parallel asynchronous schedule' has each creature advance its turn only when its most relevant player acts, so players act independently without waiting on or rushing each other.",
+      "detail": "Plummer's goal was to allow more complexity (bigger inventories, careful scrutiny) without making others wait. Each enemy, after spotting a player, syncs to that player's actions. It works well when players are far apart or separated by walls.",
+      "t": 1130,
+      "quote": "Creatures don't need to care about whose turn it is on a global scale just whose turn it is on the most relevant scale",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "targeting",
+      "kind": "technique",
+      "claim": "In Clean Sweep a creature picks its relevant player by line of sight, proximity (stepping adjacent steals attention) and activity (switch to a visible nearby player who has taken more actions than the current target).",
+      "detail": "Breaking line of sight unsyncs a creature so it can target someone else. The activity rule means if one player idles while another moves and uses items nearby, the monster goes after the active one.",
+      "t": 1302,
+      "quote": "If a player steps adjacent to the player it becomes the target and the closer the player is the more likely to draw the attention",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "exploits as tactics",
+      "kind": "principle",
+      "claim": "Forcing a monster to switch attention in a parallel schedule is probably exploitable, so a game using it should be designed around those exploits as tactics rather than retrofitted onto an existing roguelike.",
+      "detail": "Plummer doubts the system can be dropped into an established roguelike with good results, but would welcome someone trying.",
+      "t": 1399,
+      "quote": "you would design the game around exploits and maybe instead of exploits you could call them tactics",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "cooperative actions",
+      "kind": "example",
+      "claim": "Clean Sweep lets any action be queued to fire with the next player's action, enabling combo attack bonuses, push speed boosts, and catching thrown items, which produced comeback moments.",
+      "detail": "Striking an enemy simultaneously gives an attack bonus; being pushed in your direction of travel gives speed; standing still with a queued action catches thrown items, a fun alternative to dropping or menu trading. Plummer recalls a friend tossing him a healing item when surrounded and near death.",
+      "t": 1461,
+      "quote": "if you cue up an action and stand still you will catch any item any player throws at you",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "twitch integration",
+      "kind": "warning",
+      "claim": "Letting Twitch chat control monsters in Clean Sweep showed that visuals must be readable by drop-in viewers, chat ideally needs its own view to plan surprises, and 'minimal viable fun' is not minimal.",
+      "detail": "Plummer calls the Twitch integration probably the game's biggest failure. Chat players unfamiliar with roguelike conventions need visual clarity; they cannot do smart things if always in the player's view; and they need many systems and stakes beyond reducing player HP.",
+      "t": 1684,
+      "quote": "the minimal viable fun may not be minimal. You need to do interesting and useful things than just chasing and hurting the player",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

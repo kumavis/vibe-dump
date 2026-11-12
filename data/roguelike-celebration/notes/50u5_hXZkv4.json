@@ -1,0 +1,103 @@
+{
+  "id": "50u5_hXZkv4",
+  "title": "Dennis Greger - The Procedurality of Reality TV Design - An Overview",
+  "speaker": "Dennis Greger",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=50u5_hXZkv4",
+  "talk_type": "design",
+  "summary": "Dennis Greger, a reality TV producer turned game designer, gives a fast overview of how reality TV formats are designed as procedural containers for emotion. He describes formats like Survivor as rigid structures that set goals and stakes while leaving space for participants, a content hierarchy topped by raw emotion, and his 'fly in the soup' method of actively sifting reality and enabling participants in a repeatable loop. Techniques include using the magic circle, keeping social roles in motion, spotlighting, hinting at secrets and giving participants an alibi. He explicitly runs out of time to draw game parallels, but argues games should focus more on genuine emotion.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "reality tv formats",
+      "kind": "principle",
+      "claim": "A reality TV format like Survivor is a procedural container: a rigid structure that sets goals and stakes while leaving open space for participants to fill with whatever they do.",
+      "detail": "Greger describes Survivor's cycle of hanging around and scheming, clear competitions for benefits, and voting. Between those fixed beats the show can be filled with any content, which he calls the format's strength because it lets producers go searching for emotion.",
+      "t": 130,
+      "quote": "It sets a goal. It gives you a bit of stakes uh and uh lets you rely uh no lets you go searching for the emotions",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "content hierarchy",
+      "kind": "principle",
+      "claim": "In reality TV the most valuable content is rare moments of raw, unfiltered, relatable emotion, followed by broken taboos, characterization, 'juice', and only then traditional story.",
+      "detail": "Two raw-emotion moments make a strong episode. Taboos that engage viewers are social norms (lying to someone's face, who pays the bill) more than sex. Juice means fast edits, music, colour, noise. Traditional narrative structure matters little because the format backbone carries it.",
+      "t": 155,
+      "quote": "You really want to find raw emotion. You want to have these moments that are really few and far between",
+      "weight": 3
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "fly in the soup",
+      "kind": "technique",
+      "claim": "Greger's 'fly in the soup' production method alternates between sifting reality for content and enabling participants, then feeds what happens back into further sifting, which is closer to systems design and more replicable than fly-on-the-wall filming.",
+      "detail": "Traditional fly-on-the-wall production casts, captures everything and spends a long time editing, which is expensive and low-yield. His active loop produced better content more cheaply and is a defined procedural approach.",
+      "t": 392,
+      "quote": "This process led to a lot better content, but it also happens to be a lot closer to systems to design and a more defined replicable procedural approach",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "magic circle",
+      "kind": "principle",
+      "claim": "A magic circle, a bubble where normal rules do not apply, is why unusual things happen on a reality set, and creators sustain it by maintaining tone, building trust and treating the game as seriously as those inside it.",
+      "detail": "In reality TV the circle comes mainly from cameras and the awareness of being watched. Greger says producers, though half outside, should pretend to be inside the fiction and mirror participants' emotions.",
+      "t": 456,
+      "quote": "A magical circle is a bubble wherein normal rules do not apply. Uh a game uh should be a magical circle",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "social roles",
+      "kind": "technique",
+      "claim": "Keeping participants' social roles in motion, by assigning concrete roles and regularly shifting relationships, is key to generating drama.",
+      "detail": "People want a role in the group even if it opposes the group. A concrete role might be deciding who eats tonight; more effective is shifting roles, e.g. suggesting the person interested in one participant might also be interested in another.",
+      "t": 530,
+      "quote": "keeping roles in motion is really key to good drama",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "party structure",
+      "kind": "principle",
+      "claim": "Reality TV narrative works like a party of rooms with heightened moods: you need not explain everything, only who we are looking at and a clue to what they are doing.",
+      "detail": "Greger says you should not even try to show everything; if the basics are clear and the content hierarchy is delivered, viewers will love it.",
+      "t": 635,
+      "quote": "you don't have to show or explain everything. You You shouldn't even really try, but you got to explain who we're looking at",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "prompting action",
+      "kind": "technique",
+      "claim": "Participants can be nudged to act by spotlighting them, directing their attention to others, or hinting that you know a secret you cannot share.",
+      "detail": "Pointing a camera at someone and waiting makes things happen. Bluntly stating 'there's something about the way Albert is looking at you' prompts them to check, and claiming to know a secret about a group sends people over to investigate.",
+      "t": 804,
+      "quote": "kind of telling people that you know a secret and therefore can't share the secret is really helpful",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "feedback loop",
+      "kind": "technique",
+      "claim": "When participants are stuck, give them an alibi or excuse to act, or just state plainly what to do, and then use their actions as information to make new space, forming an escalating spiral.",
+      "detail": "Greger's loop: gather info, use it, make space for participants, enable them if needed, then use what they did as new info. He says the spiral can produce utter mayhem of emotions.",
+      "t": 848,
+      "quote": "You gather info. You use the info. You make space for participants to act. You enable them if need be",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emotion",
+      "kind": "open-question",
+      "claim": "Genuine emotion is why audiences return to reality TV, but the conversation about centring emotion is barely happening in games.",
+      "detail": "Greger closes by saying reality TV sometimes forgets its purpose, but games hardly discuss it at all, and he wants that to change.",
+      "t": 907,
+      "quote": "in games that conversation is hardly even happening. Uh let's make that happen more often",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

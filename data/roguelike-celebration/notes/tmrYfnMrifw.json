@@ -1,0 +1,258 @@
+{
+  "id": "tmrYfnMrifw",
+  "title": "Roguelike Celebration 2020 Preview",
+  "speaker": "Darren Grey, Julian Day, Todd Furmanski, Tabitha Sable, Gabriel Koenig, Kat Manning, Kate Compton, Eli Delventhal",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=tmrYfnMrifw",
+  "talk_type": "other",
+  "summary": "A two-hour livestreamed preview event for Roguelike Celebration 2020, held in the conference's new online social space, in which several speakers gave short teasers of their upcoming full talks. Darren Grey asks what makes a 'rogue' and how games can make players feel like one; Julian Day describes writing a long Spenserian-stanza poem as lore for Shadow of the Worm; Todd Furmanski proposes combining roguelike simulation with Myst-style static-image presentation; Tabitha Sable previews a history of Unix terminal hardware and curses; Gabriel Koenig explains moving from behind-the-scenes procedural generation (Jettomero) to player-facing mutation (Test Tube Titans); Kat Manning critiques character traits in The Sims 3; Kate Compton discusses designing generative languages like Tracery and Chancery. It ends with a live crowd-hacking demo of a heist prototype by the Delve Bros.",
+  "games": [
+    "Rogue",
+    "Shadow of the Worm",
+    "ADOM",
+    "NetHack",
+    "Myst",
+    "Jettomero",
+    "Test Tube Titans",
+    "The Sims 3",
+    "The Sims 2",
+    "Crusader Kings II",
+    "Tracery",
+    "Chancery",
+    "Spore",
+    "Wobbledogs"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "rogue as fantasy",
+      "kind": "principle",
+      "claim": "Roguelike designers can ask how to make the player feel like an actual rogue, a weak, cunning character surrounded by unknown threats, rather than a heroic warrior.",
+      "detail": "Darren Grey argues the name Rogue carries meaning: unlike Hero Quest or Bard's Tale, you play a relatively weak character who can easily die and must rely on cunning and ingenuity. He wants to ask how games can embed the cultural idea of the rogue so the player feels like one.",
+      "t": 511,
+      "quote": "you're playing a relatively weak character you're not playing a big warrior character uh and that character uh is surrounded by unknowns surrounded by threats",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "box art",
+      "kind": "example",
+      "claim": "Two pieces of Rogue box art communicate very different games: a burly blood-splattered warrior versus a sensibly dressed character reaching for treasure while unseen eyes lurk.",
+      "detail": "Darren Grey contrasts a flashy, macho cover with a minimalist one showing a character on tiptoe reaching from a position of low power for a jewel, with a mysterious threat of green eyes behind him. He argues the second better conveys the game: a moment of achievement that is also extreme, unknown danger, and that such framing shapes the player's idea of what the game is about.",
+      "t": 734,
+      "quote": "it's showing that he is reaching from a position of low power to attain something greater",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "rogue naming",
+      "kind": "history",
+      "claim": "According to Glenn Wichman, Rogue was named Rogue simply because it was a short word, which suited typing on Unix terminals.",
+      "detail": "Darren Grey recounts a Roguelike Radio interview in which Glenn Wichman said the name was chosen for brevity. Grey adds that short naming conventions mattered because players were typing on Unix terminals.",
+      "t": 842,
+      "quote": "he said it's because it was a short word and i've never been more disappointed in a hero of mine",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "poetry as lore",
+      "kind": "technique",
+      "claim": "In Shadow of the Worm, Julian Day writes a long poem in a modernized Spenserian stanza and uses it as a lore-building exercise that feeds back into the game's world.",
+      "detail": "The poem tells of the early days of the world and can be found in the in-game library or loaded via the Lua console. He added one or two stanzas a week for years, basing game lore on the poem while working on code, until it reached a couple of thousand lines.",
+      "t": 1302,
+      "quote": "i've been kind of basing game lore on the poem i've been sort of working on the code and feeding stuff back into it",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "item descriptions",
+      "kind": "example",
+      "claim": "Shadow of the Worm hides prose poetry in its item codex descriptions, such as for wildflowers, in the tradition of ADOM's poetic in-game lore.",
+      "detail": "Julian Day says his influences are ADOM and NetHack rather than Caves of Qud or Crawl; he cites ADOM's Mad Minstrel, whose poem fragments explain things about the world, such as practical advice about fire resistance before entering the tower, delivered poetically.",
+      "t": 1154,
+      "quote": "there's poetry in the item codex i've been sneaking prose poetry into some of the item descriptions and in particular wildflowers",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "kitchen sink design",
+      "kind": "example",
+      "claim": "Julian Day treats Shadow of the Worm as a test bed and zen garden, adding features like alcohol poisoning that have little gameplay outcome, in a kitchen-sink style.",
+      "detail": "He admits this is to the detriment of the game, and describes the game as ADOM/NetHack-style where adding more things does no harm, explicitly not a streamlined Crawl-style tight game.",
+      "t": 1143,
+      "quote": "i use it as a test bed for things that i want to work on as much as creating an actual game kind of to the detriment of the game",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "static image presentation",
+      "kind": "principle",
+      "claim": "Combining roguelike turn-based simulation with Myst-style static images frees a developer from frame-rate and real-time animation work to focus on visual style and world algorithms.",
+      "detail": "Todd Furmanski says he is tired of obsessing over 60fps, characters getting stuck in walls, and tutorials teaching 16-button controllers. Rendering one composed image per turn lets him obsess over painterly styles (pencil sketch, Mediterranean mosaic) and the simulation instead.",
+      "t": 1850,
+      "quote": "when i do want to obsess over features that would take over an entire development cycle i want to obsess over visual style and pretty pictures",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "simulation between turns",
+      "kind": "technique",
+      "claim": "Because a turn-based player takes an eternity in computer time to decide, the gap between turns can be spent simulating weather, day-night cycles, temperature and material chemistry.",
+      "detail": "Todd Furmanski wants every material to have a chemical simulation, so a fireball not only damages a monster but melts snow, singes cloth and weakens metal. He notes simulating everything all the time is still hard.",
+      "t": 1989,
+      "quote": "that's a lot of time where you can use to simulate weather simulate day night cycles simulate uh temperature dispersals simulate magic systems",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "abstract travel distance",
+      "kind": "technique",
+      "claim": "Making travel relative to points of interest rather than real-time walking lets a game represent literary-scale distances, like walking for a month to distant sands.",
+      "detail": "Todd Furmanski notes real-time movement forces the town and castle to be ten feet apart; a point-of-interest model lets the player experience long journeys as in literature, with salient moments moving in and out. He also uses A* not for agent pathfinding but to carve paths between points of interest such as ruins on generated islands.",
+      "t": 2071,
+      "quote": "if you have everything be relative or based on points of interest um where like it like in literature you can say it the the hero",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "mystery monster",
+      "kind": "example",
+      "claim": "A procedurally generated haunted-house game could hide which monster is present, so players must investigate, like horror-movie protagonists, to learn whether it is a vampire or werewolf.",
+      "detail": "Todd Furmanski describes this idea alongside open-ended puzzles such as translation puzzles and ciphers, e.g. a library of books in an unknown language decoded through context. He also floats removing graphics entirely and describing a live simulation in text.",
+      "t": 2210,
+      "quote": "there's a haunted house you know there's a monster but you're not sure what the monster is",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "terminals and curses",
+      "kind": "history",
+      "claim": "Unix interface hardware evolved from printing telegraphs to paper teletypes to video terminals like the ADM-3A and VT100, and the curses screen-redraw library, for which Rogue was a killer app, grew out of software adapting to them.",
+      "detail": "Tabitha Sable traces how hardware and software co-evolved: software first had to adapt just to drive new terminal capabilities, then exploited them. She found Rogue in BSD's /usr/share/games alongside Hunt the Wumpus and Colossal Cave Adventure.",
+      "t": 2767,
+      "quote": "the development of the curses library which is an optimized screen redrawing library",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "terminal emulation",
+      "kind": "example",
+      "claim": "Playing a classic curses roguelike on a mismatched terminal would quickly turn into line noise, because optimized redraws send control sequences the terminal does not understand.",
+      "detail": "Answering a question about playing on a paper teletype, Tabitha Sable explains that terminals interpret meta-characters that alter internal state; with the wrong terminal type, the initial map may draw but as soon as the character moves the optimized line redraw emits junk characters. She suggests reproducing this with a strict VT52/VT100 emulator and TERM set to vt220.",
+      "t": 2930,
+      "quote": "that whole optimized line redraw thing is going to kick in and so it's not going to give you anything pretty",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "invisible generation",
+      "kind": "warning",
+      "claim": "Gabriel Koenig found that Jettomero's procedural systems added almost nothing to the play experience because they ran entirely behind the scenes.",
+      "detail": "He used physics and raycasts to place objects, generated color palettes, and built procedural ragdoll animation and monsters from parts. These made development exciting for him, but he says he could have made the same game manually in about the same time; the photo mode best showcased the generation, separate from gameplay.",
+      "t": 3780,
+      "quote": "the experience of playing general marrow gained almost nothing from the procedural systems that i used for making the game",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "player-facing generation",
+      "kind": "principle",
+      "claim": "Test Tube Titans makes procedural generation hands-on, letting players creatively interact with and take ownership of a mutation system, turning generation into a collaboration with the player.",
+      "detail": "Inspired by Wobbledogs and a genetic cars simulation, Gabriel Koenig built a flexible bipedal physics controller that could fit any set of traits, then a mutation system. Where Jettomero created the illusion of a predetermined world, he wanted the opposite; he says this changed his view of procedural generation from a tool to a way of collaborating with players.",
+      "t": 3881,
+      "quote": "what i wanted to achieve with test tube titans was the opposite of that which was a chance to go hands-on with the procedural systems",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "orthogonal traits",
+      "kind": "example",
+      "claim": "The Sims 3 replaced The Sims 2's five-axis point-based personality with many orthogonal traits that the game does not correlate, leaving players to connect them mentally.",
+      "detail": "Kat Manning borrows 'orthogonal' from Emily Short: Friendly does not imply Party Animal. Apart from a few binary pairs like Slob/Neat and Evil/Good, the game does not close out traits or require picking per category.",
+      "t": 4238,
+      "quote": "the game itself does not impose that correlation with the exception of a couple binary traits like slob and neat or evil and good",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "trait overlap",
+      "kind": "warning",
+      "claim": "Many Sims 3 traits are perceptually distinct in name but mechanically overlapping, such as Flirty and Irresistible or Friendly, Charismatic and Schmoozer, so they produce indistinguishable gameplay.",
+      "detail": "Kat Manning ties this to Kate Compton's '10,000 bowls of oatmeal' problem: what matters is perceptual uniqueness, not indexical or mathematical uniqueness. Flirty unlocks romantic actions at a lower score while Irresistible builds score faster, an effect players cannot really distinguish; the differences live in how players interpret the words, making traits more about co-authoring than distinct NPC behavior.",
+      "t": 4286,
+      "quote": "it has a lot of traits that are perceptually unique in the player's mind but essentially end up offering the same gameplay performances",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "expansion bloat",
+      "kind": "warning",
+      "claim": "Sims 3 expansion-pack traits felt either like a variant of an existing trait or like an isolated showcase of that pack's feature, with shallow integration into existing systems.",
+      "detail": "Kat Manning notes designers could not know which expansions players owned so could only build on base-game systems, which made an already crowded, maximalist trait space feel more cluttered.",
+      "t": 4408,
+      "quote": "new expansion pack traits often either felt like this expansion packs version of a pre-existing trade or entirely designed to show off feature x",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "traits and core loop",
+      "kind": "warning",
+      "claim": "A realistic trait can wreck the core loop: The Sims 3's Absent-Minded trait randomly dropped queued actions, forcing players to constantly monitor their Sims.",
+      "detail": "Kat Manning says it was a great idea as simulation on paper but became infuriating; however interesting a trait seems on its own, it is interlinked with the rest of the systems and must be checked against the core loop to avoid a UX nightmare.",
+      "t": 4470,
+      "quote": "no matter how interesting a trait seems on its own it's going to be interlinked to the rest of your game systems",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "traits and core loop",
+      "kind": "principle",
+      "claim": "Smaller games should weave expressive traits into their core systems from the start rather than adding cosmetic systems for traits to hook into, as a sprawling game like The Sims 3 could.",
+      "detail": "Kat Manning says expressive rather than tightly mechanical traits worked for The Sims 3 because it already had appearance, home decor and profession systems for players to express personality through, but most listeners are not making AAA life sims.",
+      "t": 4534,
+      "quote": "you want to interweave them into the core systems of your game from the start",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "passive traits",
+      "kind": "technique",
+      "claim": "Seemingly passive traits can be made active by linking them to other systems, e.g. a Chaste character could gossip about, judge, or interfere with others' romances rather than just resisting romance.",
+      "detail": "Kat Manning, citing Tanya Short in 'Procedural Storytelling in Game Design' and Crusader Kings II, says she is wary of passive traits. Nearly every trait can be connected to one or two systems; if one cannot, ask why it exists and whether another trait or non-systemic art, design or music could express that feeling.",
+      "t": 4662,
+      "quote": "they can be gossipy about other people's romantic relationships they can be a little bit judgmental they can be they can try to actively interfere",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generative languages",
+      "kind": "principle",
+      "claim": "A generative language like Tracery is not just its syntax but its whole environment: IDE, error messages, community, tools and libraries.",
+      "detail": "Kate Compton points to Processing, which recognized that bundling an IDE, debugger and compiler mattered more than the Java-variant language itself, and to Scratch. She proposes a tongue-in-cheek 'Compton completeness': a first-time user can make an expressively significant program in one hour on the device they have, connected to a socially meaningful platform.",
+      "t": 5209,
+      "quote": "a language is an environment it's the language it's the ide it's the error messages it's the community and it's the tools and libraries",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generative languages",
+      "kind": "technique",
+      "claim": "Good generative languages can be scaffolded, unfoldable and little: they guide correct writing, let users start simple and add complexity gradually, and fit politely inside other systems.",
+      "detail": "Kate Compton cites HTML as unfoldable (plain text, then tags, then JavaScript) and regular expressions as a classic little language socketed into many other languages. Her Chancery-based bot for Swedish ambient musicians uses tools like MIDI sliders and a blackboard to control generation dynamically.",
+      "t": 5251,
+      "quote": "you can slowly unfold the language you don't have to write the whole language all at once",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "heist economy",
+      "kind": "example",
+      "claim": "The Delve Bros' heist prototype plans a run structure where daily hacking costs must be covered by painting income, creating a risk-reward choice about how much to steal before escaping.",
+      "detail": "Eli Delventhal demoed a pre-alpha game where he plays a thief and the audience acts as his tech team, hacking doors, robots and alarms through a web command line using a Mastermind-like puzzle. The level shown was hand-built because procedural generation was not working yet.",
+      "t": 7142,
+      "quote": "it's this like risk reward of you got to steal the paintings and escape",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

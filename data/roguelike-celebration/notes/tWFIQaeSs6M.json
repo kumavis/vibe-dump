@@ -1,0 +1,195 @@
+{
+  "id": "tWFIQaeSs6M",
+  "title": "Aron Pietroń, Michał Ogłoziński - Discussion (Against the Storm)",
+  "speaker": "Aron Pietroń, Michał Ogłoziński",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=tWFIQaeSs6M",
+  "talk_type": "panel",
+  "summary": "Eremite Games co-founders Aron Pietroń and Michał Ogłoziński discuss how they built Against the Storm, a roguelite city builder, with host Alexei. They describe distilling the opening hours of a city builder into ~2-hour runs, treating 'roguelite' as a flavour of elements (broken builds, meaningful decisions, play-in-bursts rhythm) added to another genre, and filtering every feature by whether it makes runs differ. Much of the discussion is about their early-access process: biweekly updates, beta branches with pointed questions, analytics that can mislead, and reading emotional player feedback. They also explain the Queen's Impatience timer, which evolved from a bare countdown dressed in thin fiction into a resource, and share emergent player exploits like farming the Living Matter event.",
+  "games": [
+    "Against the Storm"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "roguelite city builder",
+      "kind": "technique",
+      "claim": "Against the Storm built its roguelite city builder by distilling the first 1-2 hours of a city builder's loop into a run, then layering generated perks and building blueprints on top.",
+      "detail": "Aron says they focused on the replayability and generation side of roguelites. Players are dealt a pseudo-random hand of perks and blueprints and must find ways to play with it; each ~2-hour settlement is followed by the world map and a new settlement.",
+      "t": 148,
+      "quote": "we tried to distill the essence of our citybuilder of the beginning 1-2 hours of gameplay loop in the citybuilder",
+      "weight": 3
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelite as element",
+      "kind": "principle",
+      "claim": "Against the Storm's designers treat 'roguelite' like 'RPG elements': a set of flavours that can be added to any genre once you identify what makes a game feel roguelike.",
+      "detail": "Michał says that just as a farming game can have RPG elements, they asked what it means for a game to be a roguelike and identified elements to transplant into a simple city builder prototype.",
+      "t": 271,
+      "quote": "the roguelite is more of an RPG elements is the same basically. You can have RPG elements and a farming game with RPG elements",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "broken builds",
+      "kind": "principle",
+      "claim": "Roguelikes uniquely permit a rare 'magical build' that breaks the game, which would be unacceptable in other genres, and Against the Storm deliberately sought this power fantasy.",
+      "detail": "Michał calls the ultimate power fantasy the most important element they identified: you play to find the build that appears 1 time in 20 and absolutely breaks the game. In other genres that would collapse to one strategy, but in roguelikes it is the point.",
+      "t": 332,
+      "quote": "you play to find this one magical build 1 time out of 20 and absolutely break the game and in any other generate would be unacceptable",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "session rhythm",
+      "kind": "principle",
+      "claim": "Against the Storm aimed to capture roguelikes' play rhythm, where a player can play for two hours, leave for weeks and return, along with meaningful decisions with repercussions.",
+      "detail": "Michał lists meaningful decisions and their repercussions, and the unique beats of roguelikes (two hours, then a two-week break, then eight hours) as elements they wanted to bring into a stalling city-builder genre.",
+      "t": 372,
+      "quote": "You can play them for two hours and leave them to return after two weeks and play eight hours",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "replayability filter",
+      "kind": "principle",
+      "claim": "Against the Storm measured almost every feature by whether it made runs differ from each other, and declined features that did not, even fantastic ones.",
+      "detail": "Responding to Alexei's point that city builders usually converge on one optimal opening, the developers say they thought hard about what would make players play differently, which they consider unusual for the genre.",
+      "t": 471,
+      "quote": "if the feature didn't make the game different, even if it was fantastic, in most cases, we didn't go for it",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "dominant strategies",
+      "kind": "warning",
+      "claim": "Against the Storm rejected city walls because an overwhelmingly impactful system would be built every run, making every town look the same and adding a chore.",
+      "detail": "Michał wanted walls because they look fantastic, but Aron argued players would feel obliged to build them every game. Michał agreed: such a system would be repeated every game and defeat the purpose of variety.",
+      "t": 602,
+      "quote": "If you would add such an overwhelmingly impactful system to the game it would be repeated in every game and defeat the purpose",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "repeated openings",
+      "kind": "open-question",
+      "claim": "City builders have long basic actions, so some repetition at the start of every Against the Storm run (roads, wood camp, gathering camp) is hard to avoid.",
+      "detail": "In action or turn-based games the basic actions are small enough not to notice, but in a city builder they span more time, so repeated openings remain even after heavy focus on run variety.",
+      "t": 674,
+      "quote": "In a citybuilder, your basic actions are a lot longer and their time span is longer",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "beta branches",
+      "kind": "technique",
+      "claim": "Against the Storm tests controversial features on an experimental beta branch for dedicated players and asks pointed questions, especially whether the change makes play more repetitive or more interesting.",
+      "detail": "The team filters ideas through the designer, then a democratic team decision, then players. Many features were iterated three or four times before both devs and players were happy.",
+      "t": 737,
+      "quote": "we just give the most dedicated players access to a beta branch basically and they can test the new feature and give us feedback",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "analytics",
+      "kind": "warning",
+      "claim": "Pick-rate analytics can mislead in a roguelite because the most beloved perks are often situational and rarely picked, while a dull +50% wood cutting perk tops the charts.",
+      "detail": "Coming from mobile games, the team reviews anonymous gameplay analytics every two weeks but does not follow them blindly. They pair data with reading feedback on every channel.",
+      "t": 858,
+      "quote": "very often the most interesting and beloved perks are also the most situational",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balance",
+      "kind": "technique",
+      "claim": "Spiky, interesting perks in Against the Storm need to sit against a balanced background, which analytics on perks, buildings, actions and events helps maintain.",
+      "detail": "Aron lists tracked data: perks and buildings chosen, basic actions, events encountered and how they are solved. This establishes a balanced baseline against which the spiky perks stand out.",
+      "t": 951,
+      "quote": "those spiky perks as Michal said are the most interesting ones but they have to be juxtapose to a background that's balanced",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "reading feedback",
+      "kind": "warning",
+      "claim": "Player requests to buff something often reflect a favourite playstyle rather than weakness, and player-proposed solutions often miss the real problem.",
+      "detail": "Aron says a request for more power may just mean it's someone's favourite style. On their upvote board, a 'weak perk' may really be a playstyle that isn't well defined yet. He admits an urge to react to every complaint, which is not always right.",
+      "t": 1018,
+      "quote": "people wanting some perks or some abilities or anything to be more powerful doesn't really mean that something is like not -- is too weak",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player feedback",
+      "kind": "principle",
+      "claim": "Players have every right to give emotional or wrong feedback; unpacking it is the designer's job.",
+      "detail": "The developers say it is not players' job to give well-designed, informed feedback, especially in high-stakes games where people get emotional.",
+      "t": 1188,
+      "quote": "it is not their job to give perfect informed and designed well thoughtful feedback because we really believe that that's something that the designer is responsible for",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "patience with changes",
+      "kind": "technique",
+      "claim": "Against the Storm's developers wait about two weeks before reacting to backlash about a change, because players often adapt and find a niche for it.",
+      "detail": "Given time they can judge whether a change disrupted playstyles in a good way (sometimes intended in a long-lived game) or is universally hated bad design. Team members with different temperaments, plus a player-focused community manager, balance reactivity.",
+      "t": 1282,
+      "quote": "Probably the best advice is waiting two weeks. There are multiple occasions where people are like it is horrible and after a week or two people get used to it",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run length",
+      "kind": "technique",
+      "claim": "Against the Storm set a target run length of 1.5-2 hours early and balanced every major change against it.",
+      "detail": "Answering a question about the Queen's Impatience bar, they say they always designed so runs would be that long, and every major change was balanced to make the game shorter or longer accordingly.",
+      "t": 1481,
+      "quote": "very quickly we came to the like hour and a half and two hours so we were always designing the game to be so the runs would be as long",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "fiction over mechanics",
+      "kind": "example",
+      "claim": "Against the Storm's early Queen's Impatience was a bare 30-60 minute timer, but dressing it as an impatient queen made players accept and react emotionally to it.",
+      "detail": "The demo, a year into production, had a simple timeout the developer calls one of the worst mechanics. Adding the fantasy of a visible impatient queen matched expectations; a streamer screamed 'please' at her. He was stunned how much a thin layer of fiction achieved.",
+      "t": 1613,
+      "quote": "I remember I was stunned by how much one can achieve and just a thin layer of friction that matches the expectation",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "timer as resource",
+      "kind": "technique",
+      "claim": "Against the Storm turned the Queen's Impatience from a fixed timer into a resource that can be stretched or reduced, keeping necessary pressure for a roguelike city builder.",
+      "detail": "Publishers and some players still dislike being rushed, but the developers see pressure as part of the game's identity. Impatience decreases with reputation and has benefits, making it more mechanic than timer.",
+      "t": 1704,
+      "quote": "It is now more mechanic than a timer but even to this day there is some people who don't really like that",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "ending at peak power",
+      "kind": "principle",
+      "claim": "Against the Storm ends a run quickly once the player is doing great, so a perfect build is enjoyed briefly rather than becoming boring.",
+      "detail": "When every species is happy, the game completes in a minute or two. The designers say the game cannot give too much power for too long or players would get bored; pressure is controlled on both sides.",
+      "t": 1768,
+      "quote": "We don't want the player to be satisfied for too long",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "player exploits",
+      "kind": "example",
+      "claim": "Against the Storm players fenced in the self-duplicating Living Matter event to farm its rewards all game, exploiting its rule of avoiding buildings.",
+      "detail": "The event slowly ate food and doubled if unsolved, with good rewards. Because it avoided structures, enclosing it in fences made it unable to spread. Another example: players stacked perks to gain meat from deaths without raising impatience, then triggered hostile events to farm resources.",
+      "t": 1972,
+      "quote": "They were building like those small fences around four of them. They were like creating a small farm of living matter",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

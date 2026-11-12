@@ -1,0 +1,137 @@
+{
+  "id": "DJqBTJioVqM",
+  "title": "Paul Hembree - Found (Mathematical) Objects: Generative Beats Without AI/ML",
+  "speaker": "Paul Hembree",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=DJqBTJioVqM",
+  "talk_type": "technical",
+  "summary": "Composer and programmer Paul Hembree presents Euclidean rhythms as a rule-based, non-ML way to generate syncopated beats. He traces them from Bjorklund's pulse-distribution algorithm for a particle accelerator to Toussaint's observation that they match many traditional rhythms, and frames them as 'found mathematical objects'. He shows they can be computed simply by quantizing an n-tuplet to a grid, introduces a rounding-point parameter that moves smoothly between rotations, and explains the perceptual limits of high-resolution grids. He closes with layering, segmenting and ornamenting (allative and ablative substitutions) and his beat generator at foundobjects.org, whose controls are based on music perception.",
+  "games": [
+    "Good Night Traffic City",
+    "Rite of Terra",
+    "Wool Gatherer"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "euclidean rhythms",
+      "kind": "principle",
+      "claim": "Euclidean rhythms are an efficient way to represent a very large set of syncopated rhythms for procedural music without any machine learning.",
+      "detail": "Hembree frames the talk as classical, rule-based AI centred on Euclidean rhythms and says this is the one thing to take away. He contrasts it with ML music tools that scrape the internet; his own industry work used content made by fairly compensated in-house composers.",
+      "t": 257,
+      "quote": "uklidian rhythms are an efficient way of representing many possible syncopated rhythms",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "bjorklund algorithm",
+      "kind": "technique",
+      "claim": "Bjorklund's algorithm distributes n pulses over m time slots as evenly as possible by recursively pairing longer sequences with leftover shorter ones until few or no remainders are left.",
+      "detail": "Eric Bjorklund devised it in 2004 to control high-voltage power supplies for a particle accelerator at Oak Ridge. For 5 pulses in 12 slots, the first pass pairs each pulse with a following silence, leaving two silences; later passes group the longer sequences with the leftover shorter ones until no short sequences remain. The results are most interesting when n and m are co-prime.",
+      "t": 352,
+      "quote": "what we do is we pair as many pulses with a following silence as possible",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "euclidean rhythms",
+      "kind": "history",
+      "claim": "Godfrey Toussaint noticed that Bjorklund's algorithm shares the recursive shape of Euclid's GCD algorithm and that its outputs match many traditional musical rhythms, finding 98 examples.",
+      "detail": "Hembree says it is a common misconception, popular in the Eurorack community, that Euclid's algorithm itself generates these rhythms; Bjorklund's algorithm is different but has the same recursive shape. Traditional musicians were not using either algorithm; they simply found the same patterns.",
+      "t": 462,
+      "quote": "these rhythms um basically the patterns of pulsation and silence that occur here in Bjorggan's algorithm are really not at all rare in traditional music",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "found mathematical objects",
+      "kind": "principle",
+      "claim": "Mathematical structures such as Pascal's triangle, the Narayana series, cellular automata or Euclidean rhythms can be used as 'found objects' that provoke further systems to be built on top of them.",
+      "detail": "Hembree cites composer Tom Johnson's 2001 idea of the found mathematical object, by analogy with Duchamp's Fountain. He notes Narayana-series lattice paths look like elemental melodic ornaments such as trills, and that Lauren Schmidt's Good Night Traffic City used cellular automata for world generation as a provocation for other systems like growing plants.",
+      "t": 498,
+      "quote": "a composer or artist might choose to work with a found mathematical object like Pascal's triangle or the Narana series or some automaton",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "euclidean rhythms",
+      "kind": "technique",
+      "claim": "Euclidean rhythms can be generated more simply than with Bjorklund's algorithm by quantizing an evenly spaced tuplet onto a grid: multiply each note index by the numerator, divide by the denominator, and round with a floor function and rounding point.",
+      "detail": "Hembree says Euclidean rhythms are equivalent to any arbitrary tuplet quantized to a grid, a technique producers use every day. Played unquantized, a 5-in-12 tuplet sounds like an unrelated rhythmic stratum; quantized with a rounding point of 0.2, one note snaps forward and the result suddenly sounds groovy.",
+      "t": 612,
+      "quote": "it turns out that uklitian rhythms are just equivalent to any arbitrary quantized to any grid",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "euclidean rhythms",
+      "kind": "technique",
+      "claim": "Varying the quantization rounding point moves one note at a time through a family of related rhythm rotations, giving a perceptually smooth continuum instead of jumping between rotations.",
+      "detail": "Toussaint treated Euclidean rhythms as necklaces on a clock face and rotated them to start on different slots. Hembree instead raises the rounding point from 0 upward (even above 1, to start on rests), which mutates a single event at each step, and demonstrates walking through the five rotations of the son clave pattern that start on a pulse.",
+      "t": 921,
+      "quote": "access to modulating through a family of distinct but related rotations in a perceptually smooth continuum",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "possibility space",
+      "kind": "principle",
+      "claim": "A generator's possibility space can be small enough for a human to learn and love, but slightly finer resolution can explode it beyond what a human can know without statistical methods.",
+      "detail": "With sixteenth notes in 4/4 there are 120 numerator/denominator pairs, 79 co-prime, giving 431 rotations starting on notes or 862 including rests, which a dedicated person could learn in days. At thirty-second notes there are about 7,000 rotations, too many to know as a human.",
+      "t": 1008,
+      "quote": "it's a a universe that you could get to know and love as a human",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "euclidean rhythms",
+      "kind": "warning",
+      "claim": "Euclidean rhythms lose their charm at high grid resolutions, because their appeal comes from failing to be perfectly even and the resulting syncopation.",
+      "detail": "As time slots increase, the perceptible difference from the pure tuplet shrinks and the rhythm starts to sound like an unrelated stratum. Hembree disputes calling them 'maximally even'; in a listening test from 5:8 to 5:32 he describes a categorical perceptual shift, and suggests about 24 slots as an upper limit at medium and fast tempos.",
+      "t": 1064,
+      "quote": "the charm of lowresolution uklidian rhythms really comes from their failure to be per perfectly even and the resulting sensation of syncopation",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "curating generators",
+      "kind": "principle",
+      "claim": "A single generative rule is not enough for interesting output; the designer must act as a composer, curating a stylistic subset of parameters and layering results.",
+      "detail": "Hembree says one Euclidean rhythm alone is not good enough for interesting music. Curate co-prime ratios that fit the style (powers of two or multiples of three for common time, primes for asymmetrical meters), then layer and segment them with other Euclidean or isochronous rhythms and use them as accent patterns.",
+      "t": 1186,
+      "quote": "a single ukidian rhythm is really not good enough for interesting music alone. So what's the solution? Um and the solution is to be a composer.",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "rhythmic ornaments",
+      "kind": "technique",
+      "claim": "Substitution systems that act like musical ornaments, allative (prepending short notes leading into a long one) and ablative (replacing a long note with trailing short notes), enrich generated rhythms.",
+      "detail": "Allative ornaments resemble the acciaccatura and ablative ones the appoggiatura. Applying allative ornaments to a pattern produced the Afro-Caribbean bembe, which is also a 7-in-12 Euclidean rhythm; Hembree says applying them algorithmically surfaces such traditional patterns all over the place.",
+      "t": 1251,
+      "quote": "using substitution systems um or as musicians understand them ornaments",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "generator controls",
+      "kind": "technique",
+      "claim": "Hembree's beat generator renders thousands of candidate rhythms cheaply and selects among them using perception-based controls (density, durational variance, syncopation as offbeatness, irregularity), kept separate from the generator itself.",
+      "detail": "Because Euclidean rhythms are just quantization they are extremely cheap, so candidates are matched against the controls rather than parameterizing the generator directly, letting him work on each side independently. Syncopation has about 15 competing formal definitions, so he picked the simplest, offbeatness, and paired it with aperiodicity.",
+      "t": 1467,
+      "quote": "I can render thousands of them per second and then I match the candidate uh rhythms with these controls",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "tool scope",
+      "kind": "principle",
+      "claim": "A small generative tool that outputs editable material (MP3 plus MIDI) acts as a provocation to build on rather than replacing a creator's whole workflow.",
+      "detail": "In Q&A, Hembree recommends Pure Data, Max/MSP, SuperCollider, MuseScore, Dorico and Reaper, and explains foundobjects.org exports MIDI for use in a DAW with your own sounds. He contrasts this deliberately limited scope with Suno, which he says scraped the internet including his work.",
+      "t": 1774,
+      "quote": "the idea with found objects.org is to be not so large that it replaces your entire workflow",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

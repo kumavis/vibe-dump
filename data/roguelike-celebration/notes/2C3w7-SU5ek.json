@@ -1,0 +1,201 @@
+{
+  "id": "2C3w7-SU5ek",
+  "title": "Phillip Daigle - Rogue's Gate: Feeling Around in the Dark",
+  "speaker": "Phillip Daigle",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=2C3w7-SU5ek",
+  "talk_type": "postmortem",
+  "summary": "Industry veteran Phillip Daigle (Baldur's Gate Enhanced Editions at Beamdog) describes building Rogue's Gate, a solo real-time-with-pause roguelike inspired by Baldur's Gate and 90s PC games, as a way to learn programming. He covers choosing GameMaker Studio 2, staying engaged while learning to code, kit-bashing open-licensed art (OpenGameArt, the Stratagus/Wyrmsun sprite sets), using open audio and a friend for music, writing lore that serves gameplay, and designing by sketching target scenarios and working backwards. His core argument is that making a game purely for yourself, without commercial pressure, permits exploratory 'feeling around in the dark' design and is a creative, therapeutic exercise anyone can attempt.",
+  "games": [
+    "Rogue's Gate",
+    "Baldur's Gate",
+    "NetHack",
+    "FTL: Faster Than Light",
+    "Warcraft II",
+    "Stratagus",
+    "Wyrmsun"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "win condition",
+      "kind": "example",
+      "claim": "Rogue's Gate's win condition is a fetch-and-return quest: retrieve items of power from the tops of six towers on a procedurally generated world map and bring them to a shrine, modelled on NetHack's amulet ascent.",
+      "detail": "Players create a character by race, class and starting party (which sets companions, equipment and a narrative nudge), then roam an overworld fighting, talking to NPCs and upgrading gear. Daigle explicitly compares it to going down for the Amulet of Yendor and coming back up.",
+      "t": 266,
+      "quote": "you have to travel to six different towers on this world map at the top of each tower is an item of",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "starting party",
+      "kind": "technique",
+      "claim": "In Rogue's Gate the chosen starting party determines starting companions, equipment and a slight narrative direction, giving different flavours and challenges to each run's opening.",
+      "detail": "Character creation consists of choosing a race, a class and a starting party; the party choice acts as a run-defining starting package.",
+      "t": 244,
+      "quote": "the starting party will determine your starting companions the equipment that you have and a little bit of a narrative nudge",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural rpg",
+      "kind": "principle",
+      "claim": "Even a narrative-heavy RPG like Baldur's Gate can be decomposed into components that could be procedurally generated, which was the guiding experiment behind Rogue's Gate.",
+      "detail": "Daigle's guiding principles were to make something for his 12-year-old self capturing 90s PC gaming, to try procedurally generating Baldur's Gate, and to keep runs short like FTL, which offers a complete experience in about an hour and a half.",
+      "t": 428,
+      "quote": "when you really look at the components of the game and how they come together you can see a way that it could be procedurally generated",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "Permadeath adds tension and threat that make roguelikes pure expressions of gameplay, which is why Daigle wanted his party RPG to be a roguelike.",
+      "detail": "He states that knowing characters can die permanently adds a lot to a game, and that this was a primary reason to make Rogue's Gate a roguelike.",
+      "t": 375,
+      "quote": "the added tension and threats when you know your characters can die permanently forever the thing adds a lot to a game",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run length",
+      "kind": "principle",
+      "claim": "Keeping runs short, as FTL does with a complete experience in about an hour and a half, was a deliberate design goal for Rogue's Gate.",
+      "detail": "Daigle names FTL as an inspiration specifically because a whole run fits into a short session.",
+      "t": 437,
+      "quote": "an inspirational game of mine is ftl which you can play a complete experience in an hour and a half",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "engine choice",
+      "kind": "technique",
+      "claim": "For a non-programmer learning to code, a 2D engine like GameMaker Studio 2 hits a sweet spot between low-level languages and heavy 3D engines by handling assets, memory and sprites while still requiring real programming.",
+      "detail": "Daigle rejected Python as slow to show visible results beyond ASCII, C/Go/Java as high barrier, and Unity/Unreal as heavy overhead with too much hand-holding. Caveats: GameMaker costs money, older documentation may not match the version, and at the time it lacked structs and try/catch and couldn't use libtcod or pygame; he says he would probably pick Godot if starting over.",
+      "t": 576,
+      "quote": "i wanted kind of that sweet spot of accelerated development while still having some learning and challenge ahead of me",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "staying motivated",
+      "kind": "principle",
+      "claim": "Beginners stay engaged with programming by seeing small, highly visible bits of progress, since abstract problems are hardest to stick with.",
+      "detail": "Daigle repeatedly bounced off learning programming; what kept him going was visible progress, which GameMaker supports by providing ready functions (e.g. rotating a sprite) so time goes to fun parts.",
+      "t": 755,
+      "quote": "what was key for me staying involved was seeing like little bits of progress that were very very visible",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope control",
+      "kind": "warning",
+      "claim": "Features like pathfinding are infinite problems that can absorb unlimited time, so developers should learn when good enough is good enough and keep two or three features to rotate between.",
+      "detail": "Daigle advises switching to another feature once further progress on one becomes a grind. He also says it's usually your mistake, not the engine's, so read error messages carefully.",
+      "t": 806,
+      "quote": "pathfinding for instance for essentially an infinite amount of time and you know you will always make progress but that is an infinite problem",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "learning by tinkering",
+      "kind": "technique",
+      "claim": "When first learning, it is fine to change a variable, recompile and see what happens, even though experienced programmers call blind guessing bad practice.",
+      "detail": "Daigle concedes the standard advice is correct but says tinkering is the only way a beginner learns what functions do. He also says work that gets thrown away is fine because the point is understanding why something does or doesn't fit.",
+      "t": 863,
+      "quote": "don't feel afraid to just like poke something tinker with it see what happens",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "asset kitbashing",
+      "kind": "technique",
+      "claim": "Developers who cannot draw can kit-bash pieces of open-licensed art that are almost right into assets that look bespoke to their game.",
+      "detail": "Daigle cites the open source, public domain and Creative Commons communities, OpenGameArt.org (his most visited site, including the Stone Soup tileset and the cross-compatible Liberated Pixel Cup archive), Kenney's free assets, and cheap paid tilesets. Kit-bashing comes from sci-fi TV model makers combining parts from different model kits.",
+      "t": 920,
+      "quote": "you can kind of kit bash those things together to make something that looks bespoke and custom to your game",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "asset licensing",
+      "kind": "warning",
+      "claim": "Track licenses and credits for every third-party asset from the start, even when just goofing around, or you will struggle months later to work out where each graphic came from.",
+      "detail": "Daigle recommends keeping a credits file throughout. In Q&A he adds that OpenGameArt and Wikimedia Commons let you filter by license, while generic web searches for free assets return commercial stock sites.",
+      "t": 1002,
+      "quote": "make sure you're keeping track of your licenses and your credits",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "layered sprites",
+      "kind": "example",
+      "claim": "Rogue's Gate adopted the openly licensed art of Wyrmsun, an RTS on the Stratagus engine, because its sprites were split into layers that could be stacked to create new sprites.",
+      "detail": "Daigle had idled with the Stratagus (formerly FreeCraft) team decades earlier and knew its sprite layout, which led him to Wyrmsun and its permissively licensed custom art; this is why Rogue's Gate resembles Warcraft II.",
+      "t": 1148,
+      "quote": "all the sprites were broken down by layers so i could make new sprites just by stacking them together",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "music collaboration",
+      "kind": "warning",
+      "claim": "Audio is a good place to bring in a collaborator, but bringing a musician in too early is frustrating for them because the game's direction is still shifting.",
+      "detail": "A friend who wanted to learn game music composed for Rogue's Gate. Daigle warns that a target that swings from sci-fi ship shooter to Baldur's Gate clone in a week is hard to score; open-source audio otherwise covers most needs.",
+      "t": 1213,
+      "quote": "try not to bring that friend in a little early because it's very frustrating for a musician to try and make music for a rapidly moving target",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "lore",
+      "kind": "principle",
+      "claim": "Lore should give rise to interesting gameplay scenarios and be written from the designer's own genuine interest, since lore written to appeal to an imagined audience shows its insincerity.",
+      "detail": "Daigle says all lore is made up and there are no wrong answers. In Q&A he favours lightweight lore that players fill in themselves, possibly incorporating directions players take back into the game.",
+      "t": 1239,
+      "quote": "to me lore should give rise to interesting gameplay scenarios i'm always interested in writing something that's actually relevant to the game",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "exploratory design",
+      "kind": "principle",
+      "claim": "On a personal project it is fine to start with only a vague design and build features you later discard, because each discarded feature teaches why something does or doesn't work.",
+      "detail": "Daigle contrasts this with commercial development, where such waste of time and resources is a horrible idea. His original plan for Rogue's Gate was dramatically different from where it ended up, guided by gut feel.",
+      "t": 1282,
+      "quote": "it's okay to start working on something that you've only got a vague design or a vague idea for",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scenario-first design",
+      "kind": "technique",
+      "claim": "Design by sketching a desired gameplay scenario (its mood, pressure and emotion) as a mock-up, then work backwards to the systems the player needs to reach it.",
+      "detail": "Daigle doodles pixel-art scenarios in Photoshop using his assets, asks what emotion and pressure he wants the player to feel, and once something looks worth playing asks how the player would arrive there and what features to build. He likens it to agile user stories.",
+      "t": 1378,
+      "quote": "how would a player arrive at the scenario what systems do they need to interact with what should i build to make this happen",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "personal projects",
+      "kind": "principle",
+      "claim": "Making a game purely for yourself removes commercial pressure, turning development into creative expression and a way to learn your own preferences.",
+      "detail": "Daigle says anyone who can make a game for themselves should; whether others like Rogue's Gate is secondary. He ignored common advice like starting small, and says arbitrary deadlines shouldn't be imposed on a personal project.",
+      "t": 1414,
+      "quote": "when there's no pressure it stops being a chore and a stressor it becomes an expression of creativity",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "getting unstuck",
+      "kind": "technique",
+      "claim": "Rubber-duck debugging, explaining a problem in full to an object or a non-technical friend, often surfaces the solution.",
+      "detail": "Daigle says to describe all variables, attempted fixes and why they failed; organising it for communication helps. He also recommends RogueBasin's 'How to Write a Roguelike in 15 Steps' as remarkably accurate.",
+      "t": 1515,
+      "quote": "if you ever get stuck on something try rubber ducking so explain the problem that you're facing to a rubber duck",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

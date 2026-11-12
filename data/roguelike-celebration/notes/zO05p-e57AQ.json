@@ -1,0 +1,215 @@
+{
+  "id": "zO05p-e57AQ",
+  "title": "Joel Clark - A Perfectly Ordinary Blaseball Experience",
+  "speaker": "Joel Clark",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=zO05p-e57AQ",
+  "talk_type": "design",
+  "summary": "Joel Clark of The Game Band, who built the simulation behind Blaseball (a weekly, global simulated baseball-ish league where players vote to change players, teams and rules), frames the game's design around chaos, which he redefines as the personal discomfort of trying to understand something. He names four sources of Blaseball's chaos: randomness, emergent systems, improvisational week-to-week design in dialogue with the community, and a deliberate tolerance for sloppy, broken systems that get patched by layering new systems on top. He argues players tolerate far more confusion than designers expect, and that narrative and above all community are the paths players use to make sense of chaos. The Q&A covers differing player thresholds for chaos, how the community steered the game toward horror, modular system architecture and a modification system that lets new rules link any two systems, and the admittedly broken raffle-based blessing vote.",
+  "games": [
+    "Blaseball"
+  ],
+  "insights": [
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "chaos",
+      "kind": "principle",
+      "claim": "Chaos in games is best treated as a personal emotional experience, the discomfort of struggling to understand something, rather than as objective disorder.",
+      "detail": "Clark moved from the scientific view of chaos as unparseable initial conditions to a personal one: the same system feels more chaotic to one person than another depending on their understanding. He uses this to reframe game design as repeatedly exposing players to chaos and then showing them a path through it.",
+      "t": 378,
+      "quote": "Chaos is discomfort caused by trying to understand something. Particularly when failing or struggling to understand that thing",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "pattern learning",
+      "kind": "example",
+      "claim": "A new enemy or boss with unfamiliar attacks is chaotic until the player has been hit and lost a few times and starts recognizing its patterns, after which it stops being chaotic.",
+      "detail": "Clark uses this as the everyday illustration of his definition: pacing and introducing new systems are always a little chaotic to the player until they learn them. The uncomfortable process between first exposure and figuring it out is what he calls chaos.",
+      "t": 429,
+      "quote": "It is going to be unpredictable until you get hit by it once, twice, lose a few times, and then you start to recognize the patterns",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "principle",
+      "claim": "Randomness, including procedural generation, is the cheapest way to add chaos and excitement to a game, and Blaseball openly embraces being a random number generator with lore on top.",
+      "detail": "Clark confirms the community description of Blaseball as an RNG with lore on top. Randomness is inherently something players cannot understand, which makes it exciting and chaotic at low cost.",
+      "t": 512,
+      "quote": "I think is the cheapest form of chaos you can add to the game. Adding randomness, procedural generation is a great example",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "emergence",
+      "kind": "principle",
+      "claim": "Interacting systems drive complexity of outcome far beyond what scripting can achieve and surprise even the developer, which keeps players learning and interpreting.",
+      "detail": "Clark says when systems interact, the outcome complexity goes 'through the roof', producing a level of chaos you cannot get by scripting. Blaseball is equally chaotic to him as its developer.",
+      "t": 574,
+      "quote": "You are going to create things that are unexpected for even you, the developer, and that is just exciting",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "sports simulation",
+      "kind": "principle",
+      "claim": "Sports are a model of emergent system design because simple rules produce endless unexpected outcomes, which is why Blaseball chose baseball as its base.",
+      "detail": "Clark argues fans tune into sports to revel in the chaos produced by simple rules. Baseball being simple yet generating so much unexpected behavior was the starting point for Blaseball.",
+      "t": 593,
+      "quote": "They producing infinite outcomes based off simple rules and fans tune in to revel in that chaos",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "improvisational design",
+      "kind": "technique",
+      "claim": "Blaseball's promise of weekly updates and continual change forces an improvisational design process with little filtering and no fear of bad or weird ideas.",
+      "detail": "Because the team committed to weekly updates, mystery and weirdness, they cannot filter designs heavily or they would run out of time. They work 'out of the subconscious', try to stay in sync so meetings don't stall, and accept that the design is raw because it must move fast.",
+      "t": 648,
+      "quote": "We can't have too much of a filter in your design or else we would run out of time and we wouldn't get any changes in",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "live design",
+      "kind": "example",
+      "claim": "Blaseball's developers react alongside players to random outcomes and pick up community-driven plots, making each season a dialogue between developers and community.",
+      "detail": "When the randomness shakes out in surprising ways the team changes course and embraces it, and when the community uses the systems to do something exciting they run with it. Clark gives the example of the team half-anticipating a team having no pitchers but not expecting the community to rally around it.",
+      "t": 741,
+      "quote": "we are having a dialogue every season because between developers and community and that brings so much unpredictability to the experience",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "broken systems",
+      "kind": "technique",
+      "claim": "Blaseball deliberately tolerates sloppiness: rather than fixing a system that falls flat, the team adds new systems on top while the broken one keeps influencing the simulation.",
+      "detail": "Clark says they are OK with the game getting sloppy, sometimes intentionally. Instead of fixing a flawed system they add a new system and a link between the two, 'fixing problems essentially by adding more problems', which he finds adds a lot of fun chaos.",
+      "t": 811,
+      "quote": "We are instead trying to address issues by adding new systems on top of the old broken systems and adding another link between the two",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "live updates",
+      "kind": "principle",
+      "claim": "For a live game like Blaseball, a steady influx of new systems matters more than polishing old ones, both to keep unpredictability and because rebuilding a broken system is harder than adding a simple new one.",
+      "detail": "Clark says the influx of new things keeps up unpredictability and gives the community more to interpret. Partly they cannot afford time to overhaul broken systems, as tearing down and rebuilding is harder than adding a new simple system, but that is not the main reason.",
+      "t": 864,
+      "quote": "We prioritize new over better always and it is partially that we can't afford to the time to overhaul a broken system",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "theme",
+      "kind": "principle",
+      "claim": "Blaseball's pile-up of broken, layered rules is partly a deliberate experiment in replicating how broken real-world systems, especially American politics, come to exist.",
+      "detail": "Clark says it is nearly impossible to gut and redesign a system in American politics, so rules and clauses keep being added until the whole is incomprehensible. Seeing Blaseball go in a chaotic direction, he made it a goal to understand the brokenness of systems through the project and help players understand it too, and would like a future experiment on tearing down and fixing such systems.",
+      "t": 893,
+      "quote": "this game has been experiment in replicating how broken systems get made in our world particularly in America",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player tolerance",
+      "kind": "principle",
+      "claim": "Blaseball shows players have a higher threshold for confusion and learning than designers assume, because overcoming chaos and making sense of things is rewarding.",
+      "detail": "Despite being messy, improvised and random, Blaseball has many people keeping up with it. Clark notes it feels most chaotic when the community is struggling to interpret new information, and once something is understood it stops being chaotic.",
+      "t": 983,
+      "quote": "people have a higher threshold for confusion and learning in games than I thought. People like to make sense of things",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "principle",
+      "claim": "Narrative is a path players use to rise above and explain chaos, so allowing more chaos into a design can make told or generated stories better.",
+      "detail": "Clark ties this to procedural narrative: narrative is how people explain things that otherwise make no sense. He believes understanding chaos and allowing more of it into design will improve the stories we tell or generate.",
+      "t": 1039,
+      "quote": "Narrative is our way of rising above and explaining things that don't make sense to us otherwise",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community",
+      "kind": "principle",
+      "claim": "Community is the strongest path through a game's chaos: Blaseball would be insufferable to experience alone, and players figure things out faster together.",
+      "detail": "Clark's closing thesis is that Blaseball is a game about building community amid forces out of control. Players wade through difficult experiences more easily together and work things out faster.",
+      "t": 1075,
+      "quote": "I think the number one path through chaos is community",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "player tolerance",
+      "kind": "open-question",
+      "claim": "Players have very different thresholds for chaos, so permanent losses like Blaseball's player incinerations delight some fans and upset others, and a single experience cannot fit everyone.",
+      "detail": "Asked about players who want more order when favorite players are incinerated, Clark said everyone has a different tolerance; some revel in the chaos and some don't want to lose their players. He states a goal of making Blaseball more respectful of players' time and energy, though the current story is about chaos and is hard to pivot from immediately.",
+      "t": 1367,
+      "quote": "It is challenging to make to a single experience that fits everyone and I know",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "tone",
+      "kind": "example",
+      "claim": "Blaseball did not start as a horror game; its horror tone grew because players were intrigued by elements like the forbidden book and the incinerations, and the team leaned in.",
+      "detail": "Clark says the forbidden book was thrown in, players were desperate to open it, and it progressed from there; incinerations were planned as the first domino. The team listens to the community and would back away if reactions became 'this is too much'.",
+      "t": 1524,
+      "quote": "we were also listening to the community and seeing they really liked the more weird or horror elements. So we have leaned into that",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "co-authorship",
+      "kind": "principle",
+      "claim": "Blaseball is made by three authors at once: the simulation, the developers and the community.",
+      "detail": "Clark repeatedly describes the game as the process of these three forces coming together, with the developers always responding to the community.",
+      "t": 1545,
+      "quote": "The simulator is making this game. We are making this game and the community is making this game",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "modularity",
+      "kind": "technique",
+      "claim": "To add mechanics on the fly, Blaseball designs every system in isolation with a clean purpose and defined plug points that other systems can call into.",
+      "detail": "Clark's example is a team roster: just a list of players with ways players can leave or be added. Other systems can plug in to add a player, incinerate one, or swap one with another team. Designing each system cleanly makes it easy to tie things together.",
+      "t": 1582,
+      "quote": "You design for modularity and you think about every system as its own thing",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "modifiers",
+      "kind": "technique",
+      "claim": "Blaseball's modification system, where players can carry a modification, lets the team link any two systems together or add new rules to an existing system.",
+      "detail": "Clark says the modification system has added a lot of extendability, complementing the isolated-system design.",
+      "t": 1649,
+      "quote": "the players can have the modification and it can really link any two systems together or it can add new rules to an existing system",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "name generation",
+      "kind": "example",
+      "claim": "Generated names were a core seed of Blaseball, and players became far more attached to the generated players and teams than the developers expected.",
+      "detail": "Clark says the game was made so fast there was no time to test what people would like; he made it because he likes generating fake names and getting attached to them. Seeing fan art of generated players surprised him.",
+      "t": 1832,
+      "quote": "I made this game because I like generating fake names and getting attached to those names",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "voting systems",
+      "kind": "example",
+      "claim": "Blaseball's blessing vote was designed as a raffle and lets large fan blocs gain outsized power, and the team is leaving it as a known broken system and patching around it with new systems.",
+      "detail": "Asked whether the voting system replicates existing power imbalances, Clark agreed the point is valid. Rather than overhaul it, they add things like a differently balanced 'enhanced party time' and new election items to address its problems.",
+      "t": 1921,
+      "quote": "We did design the blessing system to be a raffle. It is one of the perfect examples of a broken system that we are leaving in",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

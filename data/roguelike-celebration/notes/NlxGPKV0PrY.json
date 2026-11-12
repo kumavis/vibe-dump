@@ -1,0 +1,240 @@
+{
+  "id": "NlxGPKV0PrY",
+  "title": "Jon Perry - UFO 50 Fireside Chat",
+  "speaker": "Jon Perry",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=NlxGPKV0PrY",
+  "talk_type": "panel",
+  "summary": "A fireside-chat interview with designer Jon Perry about several games he led in the UFO 50 collection. He explains how Mini and Max mixes handcrafted and procedural content across three shrinking scales, how Party House was balanced with play, spreadsheets and Monte Carlo bots and how it mitigates push-your-luck variance, and how Planet Zoldath guarantees solvable seeds with lock-and-key gates that have multiple solutions. He also reflects on board vs video game design, randomness as a way to relieve the player of decisions, and the freedom of a 50-game framing.",
+  "games": [
+    "UFO 50",
+    "Mini and Max",
+    "Party House",
+    "Planet Zoldath",
+    "Lords of Vicenzo",
+    "Slay the Spire"
+  ],
+  "insights": [
+    {
+      "topic": "level-generation",
+      "subtopic": "fixed seed",
+      "kind": "example",
+      "claim": "Mini and Max uses procedural generation with a single locked seed so every player gets the same world and can share discoveries.",
+      "detail": "Perry says the seed is fixed so that friends can talk about the game, e.g. that shrinking on a particular corner of the bookshelf yields a cool item. The aim was the illusion that the world is real and persists.",
+      "t": 280,
+      "quote": "it's a locked seed so that um >> you know and that's like so that if you want to talk about the game with your friends",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "scope of nested scales",
+      "kind": "warning",
+      "claim": "In Mini and Max, each additional shrinking level multiplied the content needed, so Perry capped the game at three scales and kept the top level as small as possible.",
+      "detail": "He found that going too many levels deep rapidly gets out of hand in content to fill the space. Three was the maximum, and the starting storage room had to be tiny for the concept to work at all.",
+      "t": 174,
+      "quote": "if you go too many levels deep it very rapidly gets out of hand in terms of the amount of content",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "reward density",
+      "kind": "principle",
+      "claim": "Mini and Max's core experience is that you can shrink anywhere and find something, which forced a long list of procedurally distributable rewards rather than Metroidvania-style lock-and-key upgrades.",
+      "detail": "Perry attacked the goal from two angles: brute-force handcrafted content (with help from Paul and the team) and procgen to fill the gaps. Upgrades exist mainly because he needed things to give out; some rewards are as small as an NPC sharing lore.",
+      "t": 434,
+      "quote": "I needed those just a long list of rewards that I could give out in a procedural fashion",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "fungible win currency",
+      "kind": "technique",
+      "claim": "Mini and Max makes victory a matter of accumulating a fungible currency (shinies) so that any exploration path makes progress in a fully open game.",
+      "detail": "Perry compares it to victory points and 'point salad' board games where everything gives points. Since he cannot control where the player goes, every thread they follow rewards shinies and moves them forward.",
+      "t": 474,
+      "quote": "winning the game doesn't mean doing something specific. It means getting a lot of this very fungeable resource",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "guidance funnels",
+      "kind": "technique",
+      "claim": "Mini and Max uses hidden funnels to guarantee players are eventually steered toward key content, such as an NPC tipping them off to a town, regardless of exploration order.",
+      "detail": "Perry does not know where the player is or the order they play, but behind-the-scenes logic ensures they will eventually be shunted toward the paths where interesting things are.",
+      "t": 549,
+      "quote": "these funnels behind the scenes that are like making sure, you know, that you'll get an NPC that tips you off to where a town is eventually",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "handcrafted vs procedural",
+      "kind": "principle",
+      "claim": "Mini and Max stopped trying to hide the seam between handcrafted and procedural areas because constraining handcrafted areas to match procgen made them worse.",
+      "detail": "Perry originally restrained the handcrafted areas to what procgen could do; he loosened that and allowed bespoke backgrounds. Procedural content is used only at the lowest, microscopic scale, where abstraction is acceptable because germs and viruses are unfamiliar and it is a fantasy game.",
+      "t": 706,
+      "quote": "I think making the handcrafted areas a little worse originally because I was restraining them too much to be like what was possible with the procedural generation",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "music as signposting",
+      "kind": "technique",
+      "claim": "Mini and Max plays distinct music when the player enters a handcrafted area, signalling that the spot is special.",
+      "detail": "Eric's score calls out the special areas. Perry considers this key signposting because a player might otherwise enter from one side, not realise it matters, and leave before reaching the key part.",
+      "t": 739,
+      "quote": "there's like a different music that usually plays when you enter an area that is handcrafted. And I think actually that is really key signposting",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "gating reveals",
+      "kind": "example",
+      "claim": "Mini and Max originally let players shrink to the microscopic level immediately, but gating it later turned it into a mind-blowing reveal and reduced overwhelm.",
+      "detail": "For much of development the third scale was ungated. Perry realised it was a nice thing to hold back and the game was already overwhelming, so players should explore one level for a while first.",
+      "t": 906,
+      "quote": "you could shrink down to that microscopic level immediately. It wasn't gated at all",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "rarity tiers",
+      "kind": "technique",
+      "claim": "Mini and Max builds microscopic levels from 'atoms' classified as common, uncommon and rare, so rare atoms extend the tail of novelty long after common ones are familiar.",
+      "detail": "Perry likens the rarity system to Magic cards. Additional logic spaces out key items so players do not encounter too much too quickly and the content budget is not spent immediately.",
+      "t": 966,
+      "quote": "the atoms are classified as like common, uncommon, and rare. Like I almost think of it like Magic cards actually",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balancing methods",
+      "kind": "technique",
+      "claim": "Perry balances games like Party House by alternating between heavy playtesting by feel, spreadsheet valuation of resources, and Monte Carlo simulations, letting each reinforce the others.",
+      "detail": "He asks questions like whether he would still always buy a guest if it cost one more; he assigns values to money and popularity in spreadsheets, but warns you can get lost in the math, which only gets you close. He calls balancing not an exact science.",
+      "t": 1185,
+      "quote": "I have kind of a threepronged approach that I use for my my board games as well",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "monte carlo bots",
+      "kind": "technique",
+      "claim": "For Party House, Perry ran simple bot strategies, like one that buys nothing and only saves for star guests, to find a no-strategy baseline; if such a strategy can win, the design is broken.",
+      "detail": "The dumb AI did a simple expected-value calculation for letting guests in vs ending the party. He measured how many days degenerate strategies took, then tried variants like buying four copies of one guest to see how that changed the result.",
+      "t": 1294,
+      "quote": "if you can win using that strategy, that's bad, right? Like that's not fun. I want people to buy stuff",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "resource caps",
+      "kind": "example",
+      "claim": "Party House's odd 65 popularity cap was derived from star-guest costs to stop players hoarding until they could buy all four winning guests at once.",
+      "detail": "Perry says designers avoid numbers like 65 in favour of round ones, but sometimes the right number is odd. The cap forces buying a star guest then saving for the next, while still allowing double-buying cheaper guests.",
+      "t": 1388,
+      "quote": "if there was no limit then you would just never buy uh the star guest that you need to win",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "luck mitigation",
+      "kind": "technique",
+      "claim": "Party House mitigates push-your-luck variance through a long 25-day game, troublemakers that still give popularity, and a temporary ban after busting.",
+      "detail": "Perry likes games with lots of luck and lots of strategy, but busting for nothing is punishing. With 25 days randomness evens out (a bust in a seven-day game would cost a seventh of your turns); starting troublemakers give two popularity so a bad draw still pays; and busting lets you temporarily ban someone, making consecutive busts less likely.",
+      "t": 1592,
+      "quote": "randomness just doesn't impact you as like it tends to even out, right? If you have like enough chances at it",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "fiction justifies mechanics",
+      "kind": "principle",
+      "claim": "Party House's temporary ban after a bust is mechanically clunky but the narrative of kicking out the guilty guest sells it and gives players someone to blame.",
+      "detail": "The ban is temporary because a permanent one would be too powerful. The host notes it gives frustrated players a character to be mad at instead of the developer; Perry agrees that was his intent and it feels better because of the story.",
+      "t": 1701,
+      "quote": "I think mechanically it's a bit cluji, but because it has that story and you get to Yeah, you get to blame somebody",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "tabletop constraints",
+      "kind": "principle",
+      "claim": "Perry finds tabletop design more restrictive than video games because players must learn and execute the rules and pieces are physical, but those limits are creatively freeing.",
+      "detail": "People don't act like computers; choosing between the media is about how much creative limitation he wants. He did not paper prototype Party House because UFO 50's pace left no time.",
+      "t": 1780,
+      "quote": "limits are can be super freeing, right? And so I think like that also makes it a lot of fun to work on tabletop games",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "mods",
+      "kind": "principle",
+      "claim": "Perry deliberately keeps fan mods of UFO 50 at a distance so they don't influence his own future work on those systems.",
+      "detail": "He likes that mods exist (some appeared in a community stream event) but does not look closely, e.g. at Party House mods. The host adds that creators engaging too closely can turn a fan community into a popularity contest for approval.",
+      "t": 1864,
+      "quote": "I don't want to be >> I guess I don't want to be like influenced by that if I decide to do something else with the system",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "solvability",
+      "kind": "technique",
+      "claim": "Planet Zoldath keeps randomized seeds solvable by building around a stable core of eight items and giving almost every lock-and-key gate multiple solutions.",
+      "detail": "Gates have a primary solution (e.g. nail gun breaks crystals) and a weirder two-item path (metamorpher changes crystals, then a bomb detonates them). The secondary paths make it feel less constrained and act as insurance for solvability.",
+      "t": 2046,
+      "quote": "almost all of those gates you encounter have multiple solutions to get past them",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "lock and key placement",
+      "kind": "technique",
+      "claim": "Planet Zoldath uses a fixed high-level structure, with a map piece always in a gated dungeon, and places keys while ensuring none land behind their own gates.",
+      "detail": "One of three map pieces is always in the dungeon, which has at least two internal gates and sits behind another gate. Keys must be placed outside the dungeon: you don't want to lock the keys in the car.",
+      "t": 2150,
+      "quote": "You don't want to lock the keys in the car, so to speak",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "fictional developer framing",
+      "kind": "example",
+      "claim": "Perry designed Planet Zoldath role-playing as a fictional developer who had just discovered procgen, so wild, unbalanced seeds were acceptable as long as they stayed solvable.",
+      "detail": "Within UFO 50's meta-story it is a narratively early game. He did not mind easy and hard seeds, but still ensured solvability.",
+      "t": 1976,
+      "quote": "I was sort of like roleplaying as if I was a developer who'd like just discovered Procgen and was like going a little nuts with it",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "collection framing",
+      "kind": "principle",
+      "claim": "Making UFO 50 as a 50-game collection was freeing because no single game had to carry the whole thing, allowing experiments and odd choices.",
+      "detail": "Over nine years Perry stretched into genres that don't come naturally to avoid repeating himself. He is unsure how to carry that freedom into a future single project.",
+      "t": 2340,
+      "quote": "no single game has to carry the whole thing right so you can be a little more experimental you can make some odd choices",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "randomness reduces burden",
+      "kind": "principle",
+      "claim": "Random unit order in Lords of Vicenzo (pick from the first three of a random queue) was chosen because randomness lets players relax instead of optimizing purchase order.",
+      "detail": "With a two-button strategy game you must pick where to give extra decisions. A suggestion to order by purchase would force players to track optimal buying order; Perry contrasts this with Slay the Spire's predictable enemy choices, which suit players who want to think more.",
+      "t": 2469,
+      "quote": "sometimes random is just the best way to like allow the player to relax right like",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "cognitive load",
+      "kind": "principle",
+      "claim": "UFO 50 intentionally overwhelms players, unlike Perry's board games where he usually carefully manages cognitive load.",
+      "detail": "Perry describes the team as pretty maximalist and says they talked openly about overwhelming people as part of the point.",
+      "t": 2549,
+      "quote": "we talked openly about we're going to overwhelm people and that is that's part of the point",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

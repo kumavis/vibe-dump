@@ -1,0 +1,88 @@
+{
+  "id": "ckDp6p4HbqA",
+  "title": "Patrick Devine - 2D Sprites with Unicode and Golang",
+  "speaker": "Patrick Devine",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=ckDp6p4HbqA",
+  "talk_type": "technical",
+  "summary": "Patrick Devine shows 'stupid terminal tricks' for drawing animated 2D sprites in a terminal using a Go ASCII sprite library he wrote. He explains the clear-update-draw animation loop, adds a timer to match NES Tetris frame timing in a terminal Tetris homage, and uses Unicode quadrant block characters to get four pixels per character cell. He demos a Space Invaders clone and a terminal recreation of Super Mario Bros level 1-1, and discusses color limits, font and line-spacing requirements, and terminal differences across Linux, macOS and Windows.",
+  "games": [
+    "DND (1984 MS-DOS)",
+    "Tetris",
+    "Space Invaders",
+    "Super Mario Bros"
+  ],
+  "insights": [
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "terminal rendering",
+      "kind": "technique",
+      "claim": "Devine's Go terminal sprite library animates sprites with a simple loop of clearing the screen, updating sprite positions and redrawing, repeated forever.",
+      "detail": "His first demo bounced several Docker whale sprites around the terminal; the main source of lag was the terminal's size. In Q&A he says he relies on tmux to avoid actually doing full redraws.",
+      "t": 194,
+      "quote": "the way that any kind of animation works relates just three steps clearing the screen they're updating the sprites removing all those mobis around",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "terminal games",
+      "kind": "history",
+      "claim": "Devine notes that Tetris was originally a terminal game, written in 1984 by Alexey Pajitnov for a Soviet PDP-11 clone, the Electronika 60.",
+      "detail": "He wrote a terminal Tetris homage while commuting on Caltrain.",
+      "t": 219,
+      "quote": "Tetris was written in as a terminal game so this was written in 1984 by Alexey Pajitnov",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "frame timing",
+      "kind": "technique",
+      "claim": "To match NES Tetris frame timing in a terminal, Devine adds a fixed 60-frames-per-second timer to the clear-update-draw loop.",
+      "detail": "He timed all frames to be exactly those of NES Tetris. He says other approaches exist for sprites, but for blocky terminal movement a timer works best.",
+      "t": 338,
+      "quote": "you also are going to introduce a timer",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "unicode graphics",
+      "kind": "technique",
+      "claim": "Unicode quadrant block characters give each terminal cell four independently lit 'pixels' (16 combinations), using foreground and background colours to draw higher-resolution sprites.",
+      "detail": "Devine's character sprite is 6 by 6 characters. Since he isn't an artist and has no drawing tool, he authors sprites as ASCII text and interpolates them into quadrant characters.",
+      "t": 399,
+      "quote": "you can actually light up different quadrants of that character itself and there's 16 values",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "terminal rendering",
+      "kind": "warning",
+      "claim": "Quadrant-character graphics need a good monospaced font and adjusted line spacing, and work best on Linux; macOS and Windows terminals often break the line spacing.",
+      "detail": "Devine recommends iTerm2, which is GPU accelerated, and warns the code points require dealing with UTF-16 rather than UTF-8, which gets weird.",
+      "t": 479,
+      "quote": "the key here is that you need a good font a good monospaced font you got to change the line spacing",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "terminal color",
+      "kind": "warning",
+      "claim": "Terminals' 256-colour palettes exceed 1980s 8-bit consoles, but each quadrant character can only show two colours and pixels are taller than wide, causing artifacting.",
+      "detail": "Devine's Text Invaders Space Invaders clone is playable in the terminal and can even be cut and pasted. The two-colour limit per cell and elongated pixels are the trade-offs of the technique.",
+      "t": 605,
+      "quote": "you can only do in one of those four pixel characters you can only do two character or two colors",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "text map files",
+      "kind": "example",
+      "claim": "Devine's terminal recreation of Super Mario Bros level 1-1 stores the whole map in a text file and draws 16-by-16 sprites interpolated into quadrant characters.",
+      "detail": "Mario only walks through the level since Devine did not want to finish and be sued; it's not distributed for legal reasons, unlike his other Docker Hub demos.",
+      "t": 706,
+      "quote": "I have the entire map of one one is is just like in a text file and it kind of works",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

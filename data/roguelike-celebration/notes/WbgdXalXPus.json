@@ -1,0 +1,115 @@
+{
+  "id": "WbgdXalXPus",
+  "title": "Nifflas - Music algorithm showcase",
+  "speaker": "Nifflas",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=WbgdXalXPus",
+  "talk_type": "technical",
+  "summary": "Nifflas demonstrates the node-based algorithmic music software he built for his game Rhythm Doggo, in which a dog composes music via a drum-machine interface and levels react to the music. He walks through a series of quirky generative devices: a step sequencer with a chaos parameter, a sorting arpeggiator, a 'desire' device for controlled randomness, a bouncing reflector, train-inspired track-switching and queueing devices, crowd-voted drum weights, human-supplied 'random' numbers and a Monty Hall simulation. Every parameter can be driven by the game, and the talk ends with a live performance and a short Q&A about intensity control and releasing the tool.",
+  "games": [
+    "Rhythm Doggo"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "adaptive music",
+      "kind": "technique",
+      "claim": "In Rhythm Doggo's music software, a step sequencer's cursor jumps randomly by an amount set by a 'chaos' node, and named node groups can be referenced and controlled directly from game code.",
+      "detail": "At chaos 0 the sequencer plays normally; at 1 it jumps around wildly. Grouping nodes under a name (his example: 'fish') exposes them to the game, which is how the level drives the music.",
+      "t": 194,
+      "quote": "now I have a node where I can control the chaos. At 0 no chaos and at 1 full jumping around like crazy",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural music",
+      "kind": "technique",
+      "claim": "A 'rainbow' arpeggiator that performs a real-time sort, one step at a time, on its note array produces slowly mutating melodies, giving a repeated tune a slightly changed variation each time the player passes through a door.",
+      "detail": "The arpeggiator alternates between notes like a Commodore 64 arpeggio, but progressively sorts and then reverse-sorts the array. Nifflas uses it on melodies playing on repeat so that the music subtly varies as the player moves.",
+      "t": 320,
+      "quote": "every time you walk through the door you end up with a slightly changed variation of the melody",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "controlled randomness",
+      "kind": "technique",
+      "claim": "Nifflas's 'desire' device gives each possible note a desire bar that grows over time, so events that haven't happened for a while become more likely, yielding controlled rather than uniform randomness.",
+      "detail": "There are five triggers whose desire builds; the larger the bar, the stronger the urge to play that note. He can also control when desires are active and building, producing alternating dense and sparse phases.",
+      "t": 363,
+      "quote": "You get more controlled randomness where things that haven't happened for a while are more likely to happen over time",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural music",
+      "kind": "technique",
+      "claim": "The reflector device spawns cursors that bounce around a grid, always reflecting off white squares and only probabilistically reflecting off intermediate squares, generating percussion patterns.",
+      "detail": "Nifflas improvised a pattern of squares and lets the bouncing cursors play it, creating a semi-predictable rhythm.",
+      "t": 445,
+      "quote": "When it collides with a white square it always reflects but when it collides with one in between there is a chance it will collide or proceed",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural music",
+      "kind": "technique",
+      "claim": "Real-life situations can be turned into music algorithms: Nifflas's railway device switches tracks with some chance per note, and his train-stop device queues notes like stalled trains that then rush through to catch up.",
+      "detail": "The train-stop device was inspired by being stuck three hours in train traffic: trains queue up when blocked and then go 'super, super fast' once released, producing odd rhythmic feels.",
+      "t": 768,
+      "quote": "That's how I took a real life situation and just turned it into this algorithm",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "crowdsourced weights",
+      "kind": "technique",
+      "claim": "Nifflas built a drum instrument from crowd-voted weights, averaging Twitter poll results for each step of a loop into probability arrays.",
+      "detail": "Followers voted on what goes into each step of a drum loop; the averaged results became weight arrays that the device samples from.",
+      "t": 652,
+      "quote": "People got to vote for what goes into the different steps of the drum loop. And then I -- yeah. Combined all the different weights into these arrays",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "randomness",
+      "kind": "example",
+      "claim": "Uniform computer random numbers sound like evenly distributed white noise, so Nifflas drove an instrument with sequences of numbers people invented 'randomly' in their heads, whose human biases give distinctive results.",
+      "detail": "He contrasts a website's random sequence, which 'isn't random at all' in feel, with crowd-submitted sequences full of repeated 7s, one huge number and a single negative. Each person's sequence produces a different melody, e.g. one that sticks to the same notes.",
+      "t": 844,
+      "quote": "None of this looks random. It is just numbers that are super evenly distributed and it looks like white noise",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "procedural music",
+      "kind": "example",
+      "claim": "Nifflas composed melodies by simulating repeated Monty Hall problems under configurable host assumptions, and in Rhythm Doggo the in-game Monty Hall encounter's randomized car position is itself the algorithm generating the music.",
+      "detail": "He parameterises whether the host is evil, knows where the car is, is in a hurry, and so on; 14 iterations of a configuration yield a melody, and changing assumptions changes it completely. He admits 'why not' is the best reason.",
+      "t": 1175,
+      "quote": "when the car position is randomized, the algorithm you hear playing the music is the Monty Hall Problem itself",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "adaptive music",
+      "kind": "technique",
+      "claim": "In Rhythm Doggo, long-term musical intensity is managed by the level rather than the music software: songs are placed throughout the level so progress moves to a new music stage, with local tweaks like raising intensity on a platform.",
+      "detail": "Answering a question about director systems for tension, Nifflas says he places many songs in his level editor so any progress enters a new stage, and every control in the software is one the game can modify.",
+      "t": 1667,
+      "quote": "That part is built into the level rather than the music software. I place a lot of different songs all over the level in my level editor",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "tool usability",
+      "kind": "warning",
+      "claim": "Nifflas's expression-driven music tool is too hard for others to use without documentation and UX work, so releasing it would need funding and a collaborator.",
+      "detail": "Most of the work is writing undocumented expressions you only know if you know the software inside out.",
+      "t": 1759,
+      "quote": "It is mostly done through expressions. Most of the writing is writing expressions and",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

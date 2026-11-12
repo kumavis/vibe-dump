@@ -1,0 +1,128 @@
+{
+  "id": "rmddpcmIJ2I",
+  "title": "Nathan Savant - Modular Motivations: Building Reactive Roguelike NPCs",
+  "speaker": "Nathan Savant",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=rmddpcmIJ2I",
+  "talk_type": "design",
+  "summary": "Nathan Savant presents a cheap technique for making NPCs feel reactive and alive: place multiple copies of an NPC in different states and locations and enable or disable them based on triggers. Starting from Elden Ring's moving NPCs and Hades' hub, he builds up an example villain who plots against City Hall through randomized intermediate states, branching plans and alternate outcomes. He argues that NPCs should be driven by motivations, which determine which game systems they react to, and that any value in the game can serve as a trigger. In Q&A he relates the approach to the Nemesis system (which he worked on) and Hades' dialogue scripting, and stresses building only what you need.",
+  "games": [
+    "Elden Ring",
+    "Hades",
+    "Middle-earth: Shadow of Mordor",
+    "Left 4 Dead"
+  ],
+  "insights": [
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "npc placement",
+      "kind": "technique",
+      "claim": "Elden Ring makes NPCs seem to move through the world with purpose by placing multiple copies of each NPC and enabling one while disabling another when the player hits triggers.",
+      "detail": "Savant says Elden Ring's NPCs feel random but motivated, which makes them feel alive because the player never knows where they will show up. The trick is simple: copies are placed wherever they make sense and toggled on triggers, which makes them appear to move back and forth.",
+      "t": 161,
+      "quote": "you have multiple copies in your world and as the player hits certain triggers you disable one and enable another",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "hub npcs",
+      "kind": "example",
+      "claim": "Hades uses the same toggle technique in a roguelike structure, respawning hub NPCs slightly differently with different dialogue each time the player dies, but the technique need not be confined to a hub town.",
+      "detail": "Savant opened with Elden Ring rather than Hades precisely so listeners would not lock into the Hades format; NPCs can show up anywhere in any format, not only in a small town between runs.",
+      "t": 175,
+      "quote": "Each time you die in Hades you return to a space where the NPCs spawn slightly differently with different dialogue",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "npc states",
+      "kind": "technique",
+      "claim": "A minimal reactive villain needs only a location, a couple of animations and a trigger: spawn them arming a bomb outside City Hall, swap to a handcuffed animation on interaction, then hide them until a later trigger brings them back.",
+      "detail": "The player finds the villain, presses X, and they are cuffed; when the player looks away they disappear into jail, and after time or a trigger they reappear. An alternate outcome, sealing them in a time crystal, adds a third animation, and repeated escapes can escalate into stronger villains needing stronger means of capture.",
+      "t": 213,
+      "quote": "The simplest possible version of that is that when the villain wants to blow up City Hall they spawn outside City Hall next to a bomb.",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "npc states",
+      "kind": "technique",
+      "claim": "Give an NPC's plan a fixed start and end with several interchangeable intermediate states, then pick one at random so the plot varies between runs.",
+      "detail": "The villain starts in the lair and ends at City Hall, but in between may go shopping and build a bomb, forage for supplies instead, or steal someone else's bomb. Because start and end are fixed, a random number can choose the middle path, and branching states can also let events change the goal entirely.",
+      "t": 363,
+      "quote": "Since we start and end in the same place we start plotting with the layer and end at City Hall we can pick a random number",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "branching plans",
+      "kind": "principle",
+      "claim": "When designing reactive NPC plans, know the story you are telling so that triggers make sense, for example a villain's plans must be thwartable if the hero is meant to thwart them.",
+      "detail": "Savant's villain abandons the bomb plot after the hero thwarts it and targets the hero's loved one instead. He says the setup applies to any roguelike: a taunting dungeon villain, merchants who appear based on the economy, or a rival heading to the same dungeon with a mysterious goal.",
+      "t": 427,
+      "quote": "What is important here is just that you understand the story that you are telling as you are choosing your triggers and what's changing.",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "npc motivations",
+      "kind": "technique",
+      "claim": "A recurring NPC that guards something, such as a villain who attacks whenever the player nears a particular door, builds suspense across a run until meta-progression disables them.",
+      "detail": "The villain needs to care about a thing; the door can appear many times in a run but cannot be reached until a meta-progression unlock removes the guardian. Different characters can be motivated to defend a door, item or location, or to attack people and places.",
+      "t": 457,
+      "quote": "Maybe they show up and attack you any time you get near a particular door and that builds suspense for what is behind that door",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "npc motivations",
+      "kind": "technique",
+      "claim": "Motivations can be randomly assigned when an NPC is generated, with dialogue and reactions keyed to the motivation so characters talk about current goals or past history with the player.",
+      "detail": "Savant calls this ambitious but doable: assign a motivation from your generation list, attach dialogue to it, and have characters respond to different motivations and world events.",
+      "t": 505,
+      "quote": "Simply by assigning a motivation when the character is generated from whatever generation list you have, you can then attach, you know, dialogue to that",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "triggers",
+      "kind": "principle",
+      "claim": "Any value in a game can act as a trigger for an NPC state change, and state-based NPCs make it easy to query another system's number and react.",
+      "detail": "Triggers need not be limited to dialogue or engine volume triggers; a door could unlock after three points in fire magic, three rooms of power, or 3,000 gold. Savant says anything in your game can be a key.",
+      "t": 572,
+      "quote": "Anything in your game can be a key and the benefit of NPCs states like I have been describing is it is easy to do a check",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "npc motivations",
+      "kind": "principle",
+      "claim": "An NPC's motivation decides which game systems it reacts to: a villain responds to being thwarted, while a merchant in the same reactivity system responds only to the economy.",
+      "detail": "The villain who wants to hurt people seeks revenge on loved ones when foiled. The merchant ignores revenge but cares about the economy or a rare item in the region, so the game must actually have an economy; Savant also imagines wizard cops who hunt players who grow too powerful in one branch of magic.",
+      "t": 606,
+      "quote": "The merchant character is built into the same system of reactivity but don't respond to the same systems. They don't care who is seeking revenge.",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scoping",
+      "kind": "warning",
+      "claim": "NPC reactivity systems can be stacked endlessly, up to something as elaborate as the Nemesis system, so the hard part is holding back and building only what you need.",
+      "detail": "Savant, who worked on the Nemesis system, says it is built on everything he described and goes much further with compound conditions. The challenge is balancing what excites the player against the burden on the programmer who must build it.",
+      "t": 812,
+      "quote": "The trick is learning to hold yourself back and only build what you need which hard.",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "reactive dialogue",
+      "kind": "example",
+      "claim": "Hades achieves its reactivity mostly through dialogue, using relatively simple triggers but enormous scripts of conditional lines, rather than moving characters physically around the world.",
+      "detail": "Savant contrasts this with Elden Ring, whose characters move physically through the world, and imagines combining Hades-style dialogue reactivity with a full open world. He also likens Left 4 Dead's reactive barks and the Nemesis system's 'you killed me last time' to the same underlying approach.",
+      "t": 864,
+      "quote": "it uses relatively simple triggers but the scripts are insane. There is a ton of different if this then you get this line of dialogue",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

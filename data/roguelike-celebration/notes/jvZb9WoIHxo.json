@@ -1,0 +1,69 @@
+{
+  "id": "jvZb9WoIHxo",
+  "title": "Linas Gabrielaitis - Fictions of Infinity in Geological Finitudes",
+  "speaker": "Linas Gabrielaitis",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=jvZb9WoIHxo",
+  "talk_type": "culture",
+  "summary": "Linas Gabrielaitis, a game studies PhD student, gives a lightning talk comparing roguelikes with geology through the themes of death and depth. He reads the dungeon dive (e.g. the 1994 Diablo pitch) as a spatialisation of time like geological strata, notes that roguelike progression inverts real geology by making deeper layers more complex, and contrasts 'deep space' promises of infinite procedural generation (Starbound, No Man's Sky, Borges' Library of Babel) with a proposed 'deep time' procedurality. He closes by provocatively proposing geological folding as a possible mechanic for procedural layers.",
+  "games": [
+    "Diablo",
+    "Dwarf Fortress",
+    "Starbound",
+    "No Man's Sky",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "level-generation",
+      "subtopic": "dungeon depth",
+      "kind": "history",
+      "claim": "The 1994 Diablo pitch framed the game in roguelike format as a town for upgrades plus a dungeon whose deeper levels hold progressively harder creatures, with permanent character deletion on death.",
+      "detail": "Gabrielaitis reads the pitch's lines about character erasure from the hard drive and deeper levels being harder, using it as the archetype of roguelike death and depth.",
+      "t": 203,
+      "quote": "Deeper levels will contain progressively more difficult creatures and hazards",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "depth as time",
+      "kind": "principle",
+      "claim": "Descending through dungeon layers can be read like geological strata, where depth is a spatialisation of time.",
+      "detail": "Gabrielaitis notes early geology discovered that the deeper you dig the older things get, the first vertical diagramming of time, and links this to 'deep sciences' like depth psychology. He frames roguelike dungeons through this death-and-depth lens.",
+      "t": 261,
+      "quote": "the deepening you go the older everything gets so that cause kind of the first spatialization of time",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "depth progression",
+      "kind": "example",
+      "claim": "Roguelike progression, where deeper means more complex, inverts real geology (deeper is more primitive) and resembles Don DeLillo's Ratner's Star, where artifacts grow more advanced the deeper one digs.",
+      "detail": "Gabrielaitis cites the novel's great hole in which ancient artifacts grow more complex with depth, and connects it to how progression works in roguelikes.",
+      "t": 468,
+      "quote": "I am reminded of the way progression works in roguelikes where the deeper you go, the more complex everything is",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "infinite generation",
+      "kind": "warning",
+      "claim": "Procedural generation promising 'infinite' worlds, as in Starbound or No Man's Sky, delivers a deep-space infinity that is in practice constrained or more than anyone can meaningfully explore.",
+      "detail": "He notes Starbound's planets are constrained (ocean on the left, lava at the bottom) and someone calculated No Man's Sky would take 600,000 years to explore. He links this to Borges' Library of Babel, whose characters are lost in an infinity lacking meaning.",
+      "t": 537,
+      "quote": "star bound for example was using procedurality to also kind of promise an infinite amount of stars",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "folding",
+      "kind": "open-question",
+      "claim": "Geological folding, where strata move in place by turning over on themselves, is proposed as a possible model for a 'deep time' procedurality of layered roguelike levels.",
+      "detail": "Gabrielaitis offers this explicitly as a provocation with a question mark rather than a worked mechanic. In Q&A Alexei suggests NetHack's bones levels are a kind of proto-folding, where previous games are folded into future ones.",
+      "t": 716,
+      "quote": "I am trying to propose folding as a mechanism of how maybe a deep procedurality could look like",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

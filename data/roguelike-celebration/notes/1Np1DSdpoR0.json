@@ -1,0 +1,107 @@
+{
+  "id": "1Np1DSdpoR0",
+  "title": "Chris King: How To Let Your Players Take The Wheel without crashing the car",
+  "speaker": "Chris King",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=1Np1DSdpoR0",
+  "talk_type": "design",
+  "summary": "Chris King, developer of the co-op roguelike action platformers 20XX and 30XX, describes how open development in long Steam Early Access runs let player feedback drive design. Roguelikes have a natural audience that replays the game after every change, making players an efficient source of problem recognition and ideation. He recommends lowering friction for feedback and visibly showing that you listen, then handling the volume sustainably through public answers, presence at high-traffic moments and scheduled batch sessions. Above all, the developer stays the final arbiter: feedback is filtered through the team's own taste, not implemented by popularity.",
+  "games": [
+    "20XX",
+    "30XX",
+    "Rogue Legacy 2"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "open development",
+      "kind": "principle",
+      "claim": "Roguelikes suit open development because their players naturally replay the game, so the same audience can respond to each change and keep giving feedback as the design evolves.",
+      "detail": "King spent nine to ten years making 20XX and 30XX and says community input was a critical part of their design iteration; he advocates making the game live and notes they stayed in Steam Early Access much longer than planned.",
+      "t": 60,
+      "quote": "we have a natural audience that wants to play and replay our games which means when we develop them open source fashion",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "player feedback",
+      "kind": "principle",
+      "claim": "Player feedback is a time-efficient source of recognition (what needs changing) and ideation (proposed changes), and choosing from a wide pool of player ideas is faster than inventing everything yourself.",
+      "detail": "King breaks the feature pipeline into recognition, ideation, decisions and implementation, and says deciding from player-ideated feedback gets him to implementation much faster.",
+      "t": 146,
+      "quote": "deciding from a wide pool of player ideated feedback gets pea to the point where I can implement changes much faster",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "player feedback",
+      "kind": "principle",
+      "claim": "After years of development a designer cannot judge the new player experience or notice flavour decisions that put off parts of the audience; only players can tell you.",
+      "detail": "King says along the way you make many aesthetic and flavour decisions that clash with some demographic, and retaining a player base means not turning them off.",
+      "t": 167,
+      "quote": "You make a game for two years and you will never have any idea what your new player experience is like",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "feedback channels",
+      "kind": "technique",
+      "claim": "Minimize the friction of giving feedback with in-game links to forums and Discord, or an in-game report key like Rogue Legacy 2's F10 form that attaches diagnostic information, rather than asking players to DM or email.",
+      "detail": "King's team uses public forums, Discord and Steam community, with buttons linking to them. He says DMs and email are time-consuming for the developer.",
+      "t": 275,
+      "quote": "You want to make it as easy as possible for players to give feedback",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "feedback channels",
+      "kind": "technique",
+      "claim": "Players give more feedback when they see the developer is listening, so post in public, chat in Discord, and write verbose patch notes that credit community-suggested changes.",
+      "detail": "King adds that being civil and professional but not uptight sets a tone that some of the community will follow.",
+      "t": 382,
+      "quote": "If you have community suggested changes that make it to the patch notes anybody reading can realize this",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community management",
+      "kind": "technique",
+      "claim": "Answer questions in public, persistent spaces so veteran community members internalize the answers and repeat them to newcomers for you.",
+      "detail": "King calls this a force multiplier: more than the questioner gets the answer, and veterans later answer for you.",
+      "t": 491,
+      "quote": "in the future they are going to give people those answers for you so you don't have do it",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community management",
+      "kind": "warning",
+      "claim": "Encouraging feedback without a sustainable process for handling it leads to burnout; plan community time up front, be present at patches and releases, and schedule batch sessions during quiet periods.",
+      "detail": "King says on 20XX he spent about 8 hours a week, 15-16% of his work time, interacting with the community, and only learned to plan for it after not doing so the first time. It is work like anything else.",
+      "t": 822,
+      "quote": "if you don't plan for it, you don't have time to",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "player feedback",
+      "kind": "principle",
+      "claim": "Community feedback is not a democracy: filter every suggestion through your own taste, scope and fit with the game, and do not just implement whatever is popular.",
+      "detail": "King says the team stays the final arbiter. When they decline a popular request they say so publicly so the community knows they are listening, and valuable ideas often come from one-off suggesters never heard from again.",
+      "t": 609,
+      "quote": "You are not instilling a democracy by doing this. You and your team are still the sort of final arbiters",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "new player feedback",
+      "kind": "open-question",
+      "claim": "In a long early access, the committed community stops representing first-time players, and new-player feedback has to come from other sources like convention demos.",
+      "detail": "King says knowing community members helps calibrate their feedback, such as one civil user who is always doom-laden, but that same familiarity makes it hard to tell what a newcomer would experience. He calls it a tough question.",
+      "t": 910,
+      "quote": "as that happens you lose the ability to understand when somebody is new",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

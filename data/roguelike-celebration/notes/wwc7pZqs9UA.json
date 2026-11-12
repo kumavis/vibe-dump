@@ -1,0 +1,158 @@
+{
+  "id": "wwc7pZqs9UA",
+  "title": "Santiago Zapata - What is a Roguelike",
+  "speaker": "Santiago Zapata",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=wwc7pZqs9UA",
+  "talk_type": "history",
+  "summary": "Santiago Zapata (Slashie), creator of Temple of the Roguelike and the roguelike Ananias, examines the perennial question of what a roguelike is. He argues definitions matter mainly for discoverability, then surveys three approaches: literal ('like Rogue'), historical (the 1993 Usenet proposal that created the 'roguelike' newsgroup name, which emphasised character-based display and free distribution rather than turns, permadeath or procedural generation), and authority-based feature lists like the Berlin Interpretation, which he warns can block innovation. He welcomes the explosion of procedural games and higher production values, prefers 'action roguelike' among new labels, and proposes keeping a 'classic-style roguelike' definition: turn-based, permanent consequences, procedural content.",
+  "games": [
+    "Rogue",
+    "Moria",
+    "Angband",
+    "Ananias"
+  ],
+  "insights": [
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "discoverability",
+      "kind": "principle",
+      "claim": "The main practical reason to maintain a definition of 'roguelike' is discoverability: players seeking turn-based games where they can take their time find stores flooded with shooters and action games under the same label.",
+      "detail": "Zapata says the 'not a real roguelike' debate recurs weekly and has no right answer, but finding games of the original style is a real problem on Steam and app stores.",
+      "t": 80,
+      "quote": "the the actual a real reason why I think is important besides confusing young people and being a grumpy old gamer is discoverability",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "definition",
+      "kind": "principle",
+      "claim": "There is no governing authority for the term 'roguelike', unlike a standard such as HTTP 1.1, so any definition is evolving, personal and contested.",
+      "detail": "A definitive definition would need to be objective and widely accepted; roguelike is a higher-level concept and anyone proposing a definition is instantly challenged.",
+      "t": 143,
+      "quote": "there is no governing authority that can say what is a roguelike",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "literal definition",
+      "kind": "warning",
+      "claim": "Defining roguelikes literally as 'games like Rogue' fails because one must arbitrarily choose which of Rogue's features count, and in the end all games are like Rogue in some way.",
+      "detail": "Should a roguelike run on Unix mainframes? Must it have item identification? Zapata notes the Wikipedia article analyses Rogue rather than researching the history of the term.",
+      "t": 259,
+      "quote": "what features of rogue are you taking and what features are you leaving",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "term origin",
+      "kind": "history",
+      "claim": "The term 'roguelike' was first used broadly in a 1993 Usenet request for discussion to reorganise the overflowing rec.games.rogue group, which grouped games by being character-based and easy to port.",
+      "detail": "The proposer initially suggested a rec.games.dungeon hierarchy and then 'roguelike' because Rogue is the granddaddy of these games. Zapata presents this as his own research into the historical meaning of the word.",
+      "t": 411,
+      "quote": "the two character it characteristics that he said group these games were that they were character based",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "term origin",
+      "kind": "history",
+      "claim": "When 'roguelike' was proposed on Usenet, many participants found it a terrible name and some saw no relationship between Moria, Angband and Rogue because they played very differently.",
+      "detail": "Since character display was how nearly all games were played then, it wasn't seen as a unifying feature. Alternatives proposed included 'Moria-like', 'ASCII dungeon games' and 'TTY games'; 'roguelike' was the least unpopular option and became established.",
+      "t": 521,
+      "quote": "some people did not see any relationship at all between Moria Egmond and rogue for example",
+      "weight": 1
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "historical definition",
+      "kind": "history",
+      "claim": "A 1990s Usenet FAQ definition described roguelikes as free, single-user fantasy RPGs set in a dungeon with a character-graphic interface, and excluded commercial, multi-user, puzzle and text adventure games.",
+      "detail": "Zapata notes these historical definitions say nothing about turn-based play, permadeath or procedural generation; the emphasis was on presentation and distribution, which may not be relevant today.",
+      "t": 730,
+      "quote": "single user fantasy role-playing games set in a dungeon run with a simple character graphic interface",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "historical definition",
+      "kind": "principle",
+      "claim": "Early definitions of roguelike never mentioned turn-based play, permadeath or procedural generation; usage has since shifted from presentation and distribution features to game design features.",
+      "detail": "Zapata concludes the historical definition is of doubtful use today because the word has evolved.",
+      "t": 859,
+      "quote": "don't make any mention of being turn base being perma debt or primal failure or permanent consequences or even being procedural generated",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "berlin interpretation",
+      "kind": "warning",
+      "claim": "Feature-list definitions like the Berlin Interpretation (2008, derived from five canonical roguelikes) or Temple of the Roguelike's 13 features risk blocking innovation by encouraging copies of the same game.",
+      "detail": "Zapata notes the Berlin Interpretation was meant for studying games, not strictly gatekeeping; still, defining by a feature list doesn't let other kinds of games in.",
+      "t": 1005,
+      "quote": "interpretation based on a list of feature may block the innovation because you are not leading letting other kind of games come",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "genre growth",
+      "kind": "history",
+      "claim": "The lack of a strict definition coincided with a boom of procedural games and much wider awareness of roguelikes, which in the 2000s were mostly played by people who were also developers.",
+      "detail": "Zapata frames these as the 'sad results' ironically; he says competition raised production values and pushed developers away from unusable interfaces.",
+      "t": 1071,
+      "quote": "on the first decade of the 2000s rogue lights were still like a developer thing I mean most of the players were also developers",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "production values",
+      "kind": "principle",
+      "claim": "Roguelikes reaching a wider audience can no longer rely on unusable interfaces or mechanics nobody understands; competition has raised the bar.",
+      "detail": "Zapata sees this as good for the genre because it is not stuck in the past.",
+      "t": 1101,
+      "quote": "we cannot like a stick to unusable user interfaces or things that no one understands",
+      "weight": 1
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelite",
+      "kind": "principle",
+      "claim": "Zapata prefers 'action roguelike' over 'roguelite' because 'roguelite' implies a lesser, more casual game, while 'action roguelike' clearly signals real-time play for discoverability.",
+      "detail": "He finds 'roguelike-like' circular, 'procedural death labyrinth' too narrow, and 'roguelike elements' and 'procedural' accurate but broad. He notes developers have become more careful labelling games after years of debate.",
+      "t": 1175,
+      "quote": "action roguelike I think it's the one that I like the most",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "classic roguelike",
+      "kind": "principle",
+      "claim": "Zapata's personal definition of a classic-style roguelike reduces to three features: turn-based, permanent consequences and procedural content.",
+      "detail": "He argues classic turn-based roguelikes can be modern and enjoyed by modern players, so a definition is needed to keep finding them; these three features capture the spirit out of his list of 13.",
+      "t": 1311,
+      "quote": "a roguelike that is turn-based a roguelike that has permanent consequences and had procedural content",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "curation",
+      "kind": "technique",
+      "claim": "To fix discoverability of classic-style roguelikes, Zapata suggests curated catalogs and communities focused on that style.",
+      "detail": "His conclusion is that roguelike itself should not be strictly defined so the genre can keep evolving, while a 'classic-style roguelike' definition helps people keep finding that kind of game.",
+      "t": 1373,
+      "quote": "having curated catalogs so that people that likes in this kind of games has a list of reviews",
+      "weight": 1
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "meta progression",
+      "kind": "open-question",
+      "claim": "Whether a game uses permanent consequences or meta-progression is hard to see from screenshots, unlike turn-based versus real-time, so developers should state their meta-progression model when labelling games.",
+      "detail": "An audience member said meta-progression bothered them more than real-time play and 'action roguelike' doesn't capture it. Zapata suggested developers describe how they handle non-permanent consequences, as they now note turn-based vs action.",
+      "t": 1611,
+      "quote": "maybe they can also describe the model that it has for handling this meta progression",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,115 @@
+{
+  "id": "ASGn5J9PHbs",
+  "title": "Leif Bloomquist - Updates to Commodore 64 and Retro Multiplayer Roguelike Development",
+  "speaker": "Leif Bloomquist",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=ASGn5J9PHbs",
+  "talk_type": "postmortem",
+  "summary": "Leif Bloomquist gives a progress update on his unnamed networked multiplayer roguelike for the Commodore 64, which now also has JavaScript (web and mobile) and telnet clients all connected to the same game instance. He explains why he loves developing for the C64, the two-hand inventory designed to push cooperation, and changes made from last year's playtest feedback, such as explicit combat feedback and self-describing signs. He lists plans (ranged weapons, A* movement, limited vision, a much larger dungeon, character types) and runs a live demo with around 40 audience players, which exposes a problem with a shared key-and-door puzzle.",
+  "games": [
+    "TomeNET"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "retro platforms",
+      "kind": "history",
+      "claim": "The Commodore 64 remains an attractive homebrew platform because it is thoroughly documented after decades of reverse engineering and has an active community, with network adapters now able to connect it to the internet.",
+      "detail": "Bloomquist notes the C64 has around 25,000 game titles, many of them roguelikes, and devices like the 64NIC+ and new Wi-Fi adapters, which led him to explore multiplayer games.",
+      "t": 108,
+      "quote": "it's very well documented after 30 years of reverse engineering and tinkering so there's a lot of neat tricks you can tease out of it",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "multiplayer roguelike",
+      "kind": "principle",
+      "claim": "A multiplayer roguelike can make the other characters in the dungeon real players who team up against monsters, solve puzzles together, and leave each other tools, clues and equipment.",
+      "detail": "Bloomquist describes this as the core vision of his C64 roguelike, which he built after asking the roguelikedev subreddit for algorithms.",
+      "t": 186,
+      "quote": "what if the other characters in the dungeon that you saw were other players you could interact with them even go on quests together with them",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "cross-platform play",
+      "kind": "technique",
+      "claim": "Bloomquist's multiplayer roguelike connects a C64 assembly client, a JavaScript web/mobile port and a telnet ASCII client to the same game instance, so players on very different machines play together.",
+      "detail": "The JavaScript port keeps the same gameplay, controls, character set and sound effects to recreate the retro experience; the font binary is the only directly shared code, the C64 client being pure 6502 assembler and the web one JavaScript with WebSockets.",
+      "t": 256,
+      "quote": "these are all connected to the same game instance so you can have someone on you know Linux in a telnet terminal",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "inventory limits",
+      "kind": "technique",
+      "claim": "Limiting inventory to two items, one per hand, pushes multiplayer cooperation, since puzzles needing several items require more players to carry them.",
+      "detail": "Bloomquist found in playtesting that players naturally fall into D&D-like roles: one grabs two swords as fighter, others carry potions as healer. Use and inspect are separate actions.",
+      "t": 308,
+      "quote": "you have your inventory as only two items you can carry something in your left hand and in your right hand",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "multiplayer roguelike",
+      "kind": "example",
+      "claim": "In playtests of Bloomquist's two-item-inventory multiplayer roguelike, players spontaneously adopted classic party roles like fighter and healer.",
+      "detail": "Bloomquist observed this emerging from item limits rather than any class system; currently everyone plays the same generic character.",
+      "t": 341,
+      "quote": "people naturally fall into you know different roles that you would see in a D&D you know fantasy type setting",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "combat feedback",
+      "kind": "technique",
+      "claim": "Playtest feedback led Bloomquist to replace sound-only combat feedback with explicit messages of damage dealt and misses.",
+      "detail": "This was the most important change since the previous year's demo.",
+      "t": 392,
+      "quote": "better feedback on the combat so it's rather than just a bunch of sound effects you actually get a stat you did this damage",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ambiguous graphics",
+      "kind": "technique",
+      "claim": "Low-resolution retro graphics are often ambiguous, so in-world signs that describe themselves when walked over help players identify things.",
+      "detail": "Bloomquist says players mistook a sign graphic for a hammer; walking over it tells you what it is.",
+      "t": 415,
+      "quote": "people like is that a hammer it's a sign so when you walk over it it tells you what it is",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "networked updates",
+      "kind": "technique",
+      "claim": "Because the game is networked, all players, including those on the Commodore 64, always play the latest version, which supports iterative feature tweaking based on player response.",
+      "detail": "Bloomquist plans to introduce features, see how people like them and let the game evolve. The code is on GitHub for others to fork.",
+      "t": 496,
+      "quote": "everyone who's playing it is always playing the latest version including on the Commodore it automatically updates",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "shared puzzles",
+      "kind": "technique",
+      "claim": "Shared multiplayer key-and-door puzzles must guard against griefing, so Bloomquist's key teleports back to its origin after use and the door re-closes after ten seconds.",
+      "detail": "This stops a player running off with the key or locking others out. In the live demo with about 40 players it became a bottleneck, which he says seemed to be his undoing.",
+      "t": 721,
+      "quote": "the key has a magic property when you use it it teleports back to its origin for the first player or for the next player to use",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "tutorial level",
+      "kind": "technique",
+      "claim": "The top level of Bloomquist's multiplayer roguelike acts as a tutorial that walks players through simple actions to learn the controls before the real game.",
+      "detail": "Bloomquist describes this during the demo. He also hopes to reach a point where players can't tell whether a character they meet is an NPC or another player.",
+      "t": 900,
+      "quote": "the top level is kind of a tutorial level where you have to step through it and go through those simple motions",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,65 @@
+{
+  "id": "zlJNIJOog9M",
+  "title": "Qristy Overton - Exhibition: Attempting Brogue on a Dancepad",
+  "speaker": "Qristy Overton",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=zlJNIJOog9M",
+  "talk_type": "performance",
+  "summary": "A live exhibition in which Qristy Overton plays Brogue on a custom 18-button dance pad built with a Makey Makey, needing one foot on a ground pad and the other on the key she wants, so it plays more like Twister than DDR. An emcee (captioned as KAWA) provides commentary on Brogue's design: item-based progression, the identification game, environmental hazards like fire and deep water, allies, vaults, stealth range and hallucination. The run ends when the hallucinating player is killed by a jackal displayed as something else. Design content is limited to the live commentary.",
+  "games": [
+    "Brogue"
+  ],
+  "insights": [
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "alternative controllers",
+      "kind": "example",
+      "claim": "A traditional roguelike like Brogue can be played on a custom Makey Makey dance pad because it needs only about 18 inputs and turns advance only when a key is pressed.",
+      "detail": "Overton mapped directions, search, rest, apply, inventory, throw, yes/no and enter to foil pads; an off-the-shelf mat lacks enough buttons. Each press needs one foot on a ground pad, and she said she would add more ground pads next time, since the ground foil wore out from constant contact.",
+      "t": 79,
+      "quote": "using every input on the Makey Makey I have got almost all of the keys I need",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "item-based progression",
+      "kind": "example",
+      "claim": "In Brogue, characters start essentially identical and progression comes from the items and allies found during the run.",
+      "detail": "The commentator explained that items found during the run change your abilities, and that allies can follow you and help. Scrolls of enchanting can be applied to almost anything, and strength gates better weapons and armor.",
+      "t": 205,
+      "quote": "your character will kind of always be the same at the start and the only things that will change is as you find interesting and cool items",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "environmental hazards",
+      "kind": "example",
+      "claim": "Brogue's levels include terrain that interacts with items and creatures, such as flammable foliage and deep water that makes you drop items and holds eels.",
+      "detail": "The commentator pointed to big open caverns with foliage that can catch fire from incendiary darts, and deep water which the player can enter but shouldn't, because items float away and eels attack.",
+      "t": 278,
+      "quote": "That big dark blue area is deep water. She technically can go through it but really shouldn't because her items will get away from her",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness and luck",
+      "kind": "principle",
+      "claim": "Early-game luck in traditional roguelikes, such as facing potion-gated puzzles before you can identify potions, is part of what makes them compelling.",
+      "detail": "Facing two puzzles that need potions she could not yet tell apart, the commentator said luck matters especially on early levels, and that sometimes you get an overpowered run very early, which is fascinating.",
+      "t": 829,
+      "quote": "there is always a bit of luck in things like early levels especially in these traditional Roguelikes but that's part of what makes it compelling",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hallucination",
+      "kind": "example",
+      "claim": "Brogue's hallucination effect hides monster identities from the player, which can lead to fatal misjudgements.",
+      "detail": "After being licked by a toad, the player was hallucinating and could not tell what an enemy was; she chose to fight it and died to a jackal that had appeared as a unicorn.",
+      "t": 890,
+      "quote": "She is going to be hallucinating for quite a while. You the player don't know what's going on.",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

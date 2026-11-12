@@ -1,0 +1,176 @@
+{
+  "id": "FV_0rmqxbxw",
+  "title": "Jurie Horneman- Why Dynamic Content Selection Is Hard",
+  "speaker": "Jurie Horneman",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=FV_0rmqxbxw",
+  "talk_type": "technical",
+  "summary": "Jurie Horneman gives a production-focused talk on dynamic content selection: picking content (rooms, quests, locations, barks, storylets) from a pool at runtime rather than fixing it before the game runs. He frames it around two questions, 'does it work' (can you prove it won't break the game) and 'is it good' (does it do what you want). Using a tag-based room/level system and an RPG quest-and-location picking system as examples, he argues that automated static data validation can answer the functionality question, but quality depends on runtime factors like recency and proximity and needs analytics over time. His takeaway is to budget real time and skill for answering both questions whenever you use dynamic content.",
+  "games": [
+    "Albion",
+    "Watch Dogs: Legion"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "dynamic content selection",
+      "kind": "principle",
+      "claim": "Dynamic content selected at runtime from a pool must be validated differently from static content, by asking separately whether it can break the game and whether it produces good results.",
+      "detail": "Horneman distinguishes dynamic selection (barks, storylets, rooms picked from a pool) from seeded procedural generation. The two questions are the same as for static content, but how you answer them differs; quality is easier to ship unevenly but harder to define.",
+      "t": 109,
+      "quote": "My thesis is that you need to approach dynamic content differently from static content",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "tag-based rooms",
+      "kind": "technique",
+      "claim": "A level can be built by filling a grid with tags (e.g. 'medieval corridor' plus exit directions) and letting the game pick any authored room matching each tag, which makes level creation fast and cheap.",
+      "detail": "Horneman describes a low-budget game where levels were grids of tags and rooms were a tagged pool. He frames it not as procedural generation but as rendering a declarative level description: the designer says what they want and the computer fills in details.",
+      "t": 210,
+      "quote": "What's nice about this is level creation becomes fast. To make a level you fill a grid with some tags",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "decoupling",
+      "kind": "principle",
+      "claim": "Tag-based room selection decouples level creation from room creation so different people can produce levels and rooms in parallel with little coordination.",
+      "detail": "Unlike a typical workflow where a level designer and level artist must coordinate and wait on each other, the tag system breaks that dependency for production purposes. Horneman later notes this decoupling raises integration risk, which is why validation matters.",
+      "t": 227,
+      "quote": "It is also great because it decouples level creation from room creation",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "static data validation",
+      "kind": "technique",
+      "claim": "To guarantee a tag-based level never requests a room that doesn't exist, statically cross-reference level data against the room list in a script and run it in continuous integration.",
+      "detail": "Alternatives like optional tags, grey-box placeholder rooms, or manual testing after every change were weaker. He wrote a Python script that loads both files and outputs errors, and hooking it into something like Jenkins means bad data is never checked in.",
+      "t": 329,
+      "quote": "The most powerful solution I found was to statically analyze the level data and room list and to identify room requests without a matching room",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quest selection",
+      "kind": "example",
+      "claim": "In a big-world RPG, a non-combat class like a bard can be given dynamically selected quests to avoid fights, with both the quest and its locations picked at runtime to fit the opponent and the player's position.",
+      "detail": "Since there are far more fights than authored quests, a pool is used; the quest is chosen based on whether the player is sweet-talking an ogre or goblin, and quest locations are picked near the player so they aren't sent back to the same place. This yields two layers of dynamic selection.",
+      "t": 488,
+      "quote": "Two kinds of dynamic selection one for the quest and one for the quest locations",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "static data validation",
+      "kind": "warning",
+      "claim": "Statically proving that a dynamic location-reservation system never runs out of locations on a large project is far harder than it sounds and requires deep system knowledge, custom data export and checks for false negatives and false positives.",
+      "detail": "Horneman had to learn a system he hadn't written, write C++ and Python to extract quest/location data, reconcile QA-found lockups with his spreadsheet (false negatives), build synthetic games to confirm predicted failures (false positives), rerun analysis whenever data changed, and still add a runtime fallback so saves would not break forever.",
+      "t": 531,
+      "quote": "in the real situation the example is based on -- this turned out to be significantly harder",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quest selection",
+      "kind": "technique",
+      "claim": "Separate content requests into picky (story quests needing one specific location) and non-picky (generic reusable quests), and keep special locations in a story-only pool until their story quest is done, then release them to the general pool.",
+      "detail": "Core story quests usually need a location once, e.g. the big fight in the fortress. Reserving it ensures the story quest always has its location, and releasing it afterwards freshens the general pool over time.",
+      "t": 723,
+      "quote": "One thing you can do is put the quest and location to two pulls places like the fortress you need for that one story quest",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "resource allocation",
+      "kind": "technique",
+      "claim": "A location allocator can be proven safe with a counting rule: for every point in the game, there must be at least as many matching locations as the quests that could simultaneously request them, assuming the worst case.",
+      "detail": "His rule was e.g. one quest needing a green tavern plus four happy with any location requires at least five green taverns. Knowing which quests can be active at once is hard and their likelihood even harder, so they assumed the player grabs every optional quest and never closes any.",
+      "t": 846,
+      "quote": "We just sort of assumed the worst case that the player grabs all the optional quests and never closes them",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "repetition",
+      "kind": "warning",
+      "claim": "Tag-based content selection can technically work yet keep showing the player the same quest or room, because tag constraints combined with the world's spatial distribution make one option highly likely.",
+      "detail": "His example: a bard repeatedly getting the same ointment quest because it is tagged for an enemy type the player happens to meet often. Such repetition arising from how content and constraints are spread out is much harder to analyse from data.",
+      "t": 897,
+      "quote": "your bark layer may keep getting the quest where they need to find the ointment",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "weighted scoring",
+      "kind": "technique",
+      "claim": "Dynamic location picking can score each candidate on several metrics (suitability, recency, distance), combine them with weights into one total, and pick the top scorer or randomly from the top few.",
+      "detail": "Horneman notes recency and proximity are inherently runtime factors that can't be checked with static data analysis, unlike scarcity in the room example. Because the per-candidate values exist, they are cheap to print to a log or debug window to see why a choice was made.",
+      "t": 1070,
+      "quote": "We take those numbers and make it so we can smash them together into one number for the total score",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "analytics",
+      "kind": "principle",
+      "claim": "Per-decision debug output is not enough for dynamic selection quality; you need to log selection inputs through analytics and analyse them over time, because individually fine picks can add up to a bad experience.",
+      "detail": "He suggests analysing logged data to find root causes and retroactively test alternative weights. Without that data, his teams could only tweak a weight and hope the problem went away.",
+      "t": 1126,
+      "quote": "each individual selection can be fine but it is over time they add up to a bad experience",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "static data validation",
+      "kind": "principle",
+      "claim": "Automated static data validation matters most when independently authored assets, often from different disciplines, must fit together in a system, and should ideally run on every data submission.",
+      "detail": "Levels need rooms and situations need quests; those are independent pieces that only meet inside the system, so integration risk is higher. He also observes that static analysis is essentially data mining: getting, shaping, hypothesising and making it repeatable takes time and may need engine or tool support.",
+      "t": 1219,
+      "quote": "Static data validation is generally useful and I am a big proponent of this but particularly when independent assets need to work together",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scheduling",
+      "kind": "warning",
+      "claim": "Sometimes analysis of a dynamic content system cannot start until the content data is nearly complete, so a known risk may have to wait late into production.",
+      "detail": "On the location project they knew about the problem but couldn't pick a solution until the world, locations and quests were set up. They also ended up eyeballing quality rather than automating it, which he calls a risk.",
+      "t": 1309,
+      "quote": "sometimes you cannot start the analysis until the data is close to done",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "dynamic content selection",
+      "kind": "principle",
+      "claim": "When using dynamic content, explicitly budget time to work out how you will answer both the functionality and quality questions, since it is real, skilled work.",
+      "detail": "This is Horneman's single closing takeaway.",
+      "t": 1368,
+      "quote": "When you use dynamic content don't forget to budget time to figure out how you will answer these questions",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balancing",
+      "kind": "technique",
+      "claim": "Simulating randomized player paths through generated levels can produce probability distributions of rooms seen and enemies met, useful for progression balancing.",
+      "detail": "In Q&A, Horneman says he used this for progression balancing on the game behind the level-generation example, though not for judging room quality.",
+      "t": 1489,
+      "quote": "I kind of used that for progressive balancing so doing three analysis through a level",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "tunability",
+      "kind": "warning",
+      "claim": "It is easy to design a dynamic content system that sounds good but turns out untunable or uncontrollable, especially when selections cascade into rewards and progression.",
+      "detail": "Responding to Alexei's question about quests feeding rewards feeding progression, Horneman calls this maybe the bigger takeaway. Linear level-by-level games were easier to balance; in an open RPG where the player can go anywhere, it is hard to control and simulate.",
+      "t": 1562,
+      "quote": "It is very easy to design a system that sounds good and that is untunable or uncontrollable",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

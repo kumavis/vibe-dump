@@ -1,0 +1,167 @@
+{
+  "id": "db6S2lgTWmI",
+  "title": "Ivy Melinda - A flower in the garden: Cultivating a community for Caves of Qud",
+  "speaker": "Ivy Melinda",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=db6S2lgTWmI",
+  "talk_type": "culture",
+  "summary": "Ivy Melinda, community manager for Caves of Qud since 2018 (its Discord grew from a handful to over 3,000 people), describes community management as care and cultivation. She argues Caves of Qud leaves room for players' own narratives through procedurally generated history, evocative prose, a diverse cast and systems that tell stories, and that the gaps between players' differing interpretations are fertile ground for fan creations that feed back into the game. She traces her own path from an ADOM IRC community to working on Qud, shows fan work that became canon (Caelyn Sandel's hindren, the mopango), community activities like build club, and mods such as a homesteading mod. In Q&A she discusses volunteer moderation and why she plays mostly unmodded.",
+  "games": [
+    "Caves of Qud",
+    "Dwarf Fortress",
+    "ADOM"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "community management",
+      "kind": "principle",
+      "claim": "Melinda frames community management as care and cultivation rather than management, and says there is no one-size-fits-all recipe for a healthy community.",
+      "detail": "She saw the Caves of Qud Discord grow from half a dozen people to over 3,000. Her talk aims to demonstrate rather than instruct.",
+      "t": 54,
+      "quote": "I find conceptualizing as what I do as management to be officious and overselling my actual role which is that of care and cultivation",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "procedural history",
+      "kind": "example",
+      "claim": "Caves of Qud's procedurally generated sultan histories assemble narrative fragments blindly, leaving room for players to interpret and build their own stories, as Dwarf Fortress's histories do.",
+      "detail": "Melinda describes procgen history as jigsaw pieces pulled blindly from a bag and crammed together in hope of coherence. Statues in Qud recount sultans' deeds, such as being saved by a band of worms after driving a carriage off the road and being forever indebted to them.",
+      "t": 155,
+      "quote": "it is a narrative built from jigsaw pieces selected from a bag blindly and crammed together in the hope of creating a coherent narrative",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "prose and characters",
+      "kind": "principle",
+      "claim": "Caves of Qud's carefully written, evocative prose and its lovingly depicted, diverse cast in safe hub locations make the world feel real and alive beyond pure mechanics.",
+      "detail": "Melinda calls Qud's prose the purplest she has seen, and well written with care by Jason Grinblat. Safe places let players hang out with characters without worrying who will attack next.",
+      "t": 274,
+      "quote": "having these characters depicted as they are I feel is paramount to creating a world that feels real and alive",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "systems tell stories",
+      "kind": "history",
+      "claim": "Jason Grinblat found that Caves of Qud's naive implementation of traditional roguelike heritage created a 'combat gravity well', making the game more bloodthirsty than intended because systems themselves tell stories.",
+      "detail": "Melinda relays this from Grinblat's own narrative talk, using it to argue that game systems are narratives in and of themselves and must be accounted for.",
+      "t": 341,
+      "quote": "a naive implementation of traditional Roguelike heritage results in what he refers to in his talk as a combat gravity well",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "simulation vs fiction",
+      "kind": "example",
+      "claim": "Simulations produce unintended world details that clash with hand-written fiction, such as Caves of Qud's 1200-turn day implying either 72-second turns or two-hour days.",
+      "detail": "If a Qud day is 24 hours, turns are 72 seconds; if turns are standard six-second dungeon turns, days are two hours. Melinda says simulated and handwritten narratives collide, sometimes hilariously, requiring suspension of disbelief.",
+      "t": 424,
+      "quote": "The narratives built by simulation tend to run into narratives written by hand",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "fan creations",
+      "kind": "principle",
+      "claim": "Because systems, procgen and emergent narrative give each player a different take on the story, the gaps between interpretations are fertile ground for fan art, mods and fiction, which in turn influence the game.",
+      "detail": "Melinda calls this a social ecology: a feedback cycle in which fan works expand the narrative boundaries of Caves of Qud and bear fruit for everyone.",
+      "t": 475,
+      "quote": "the spaces where they don't overlap tend to be the most fertile ground for telling your own story",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player communities",
+      "kind": "history",
+      "claim": "ADOM's difficulty drove Melinda to an IRC community whose people and annual meetups, rather than finishing the game, kept her coming back and shaped her life.",
+      "detail": "She found the channel seeking help, was introduced to the newsgroup and guidebook, and went to a meetup in Amsterdam where she met ADOM's creator. She traces a direct line from dying to jackals in ADOM to her salaried Qud role.",
+      "t": 606,
+      "quote": "Very little allow aeded me to complete a playthrough but I found that wasn't what I kept coming back to that space for",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community infrastructure",
+      "kind": "technique",
+      "claim": "As the Caves of Qud community grew, it added an official wiki with a volunteer crew, volunteer moderators called 'mayors', a Patreon and a subreddit.",
+      "detail": "Melinda started as a moderator when the Discord had a handful of people, later got a stipend, and grew into the role. She also spent most of a year drafting the design document for a mutation update.",
+      "t": 897,
+      "quote": "I started appointing volunteer mayors. That is our word for moderation staff",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "fan work to canon",
+      "kind": "example",
+      "claim": "Caves of Qud's hindren began as a fan creation by Caelyn Sandel; her writing captured Qud's voice so well that she was hired and added them to the game, showing fan work leapfrogging into canon.",
+      "detail": "Melinda says Jason never thought anyone would capture the game's voice like Caelyn did. Sandel also added an endgame book tied to the cooking revamp.",
+      "t": 1012,
+      "quote": "This is how the community builds on each other and leapfrogs from fan work to canyon",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "mechanics to theme",
+      "kind": "example",
+      "claim": "Caves of Qud's mopango grew from a character build into a settled culture: their subterranean nature fit a settlement in a cramped tomb, and Quaker-like traits gave them their pseudospeech.",
+      "detail": "Melinda relays Caelyn Sandel saying it was a small narrative leap from the basic build to the thematic concept, having attended a Quaker school.",
+      "t": 1068,
+      "quote": "it was a pretty small narrative leap to get from the basic build to the theme as a concept",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community events",
+      "kind": "technique",
+      "claim": "Caves of Qud's Discord 'build club' had players share a seed and starting village, then take different characters in different directions, producing fan art and revealing world-seeding bugs.",
+      "detail": "Melinda says it ran for a few months after the procedurally generated villages update and was a lot of fun.",
+      "t": 1207,
+      "quote": "Anyone could provide a character code seed and starting village. We had a bunch of different people building different characters",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "example",
+      "claim": "A fan homesteading mod for Caves of Qud adds diegetic building with tiles, furniture and customisation, which Melinda feels makes the game more honest by letting players build a home where community can gather.",
+      "detail": "She shows a large bazaar built with the mod and muses that if Dwarf Fortress has a roguelike mode, Caves of Qud should have a fortress mode.",
+      "t": 1267,
+      "quote": "Caves of Qud is a much more honest experience when given the ability to build yourself a home",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "volunteer moderation",
+      "kind": "principle",
+      "claim": "Asked about relying on volunteer moderators in a commercial project, Melinda says it is opt-in and that offering more ways for invested players to give back benefits them, the community and the developer.",
+      "detail": "She says many people feel strongly enough about the community to want to give back but don't know how. She notes she isn't in charge of payroll.",
+      "t": 1438,
+      "quote": "the more ways that we provide people to give back to the community it is good for us, it is good for the community",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "modding",
+      "kind": "principle",
+      "claim": "Community managers and developers may avoid heavy mod use so their experience stays close to an entry-level one, enabling them to guide new players.",
+      "detail": "Melinda says heavily modded Qud can become unrecognisable, making it harder to know what new players need; the host adds developers must preserve the base experience too.",
+      "t": 1490,
+      "quote": "I want my experience to be similar enough to an entry level experience that I can still provide meaningful guidance",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "key giveaways",
+      "kind": "warning",
+      "claim": "The community impact of giving away game keys is hard to measure, because the connections they create are invisible in sales or activation statistics.",
+      "detail": "Melinda says she can count keys given and unpurchased copies on Steam but that doesn't reveal impact; she'd have to chase down every recipient.",
+      "t": 1637,
+      "quote": "the connections that get formed that way are sort of invisible",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

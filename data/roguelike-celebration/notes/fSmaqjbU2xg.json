@@ -1,0 +1,151 @@
+{
+  "id": "fSmaqjbU2xg",
+  "title": "Dan DiIorio - Luck be a Landlord - 10 Lessons Learned",
+  "speaker": "Dan DiIorio",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=fSmaqjbU2xg",
+  "talk_type": "postmortem",
+  "summary": "Dan DiIorio, developer of the slot-machine roguelike deckbuilder Luck be a Landlord, presents ten lessons from its development. They cover reading feedback (including from quiet, satisfied players), preferring interesting content over balanced content, letting players become overpowered in single-player games, fixing design problems early, giving content extra text to create combos, introducing complexity gradually through rarity, not steering playtesters, making small numeric buffs, not showing win rates, and accepting that a released game belongs to its players. The Q&A adds his preference for buffing over nerfing and how he added symbols to support under-connected ones.",
+  "games": [
+    "Luck be a Landlord",
+    "Slay the Spire",
+    "Magic: The Gathering",
+    "League of Legends",
+    "Balatro",
+    "The Binding of Isaac",
+    "Dota"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "difficulty modifiers",
+      "kind": "example",
+      "claim": "Luck be a Landlord resolved conflicting 'too easy' and 'too hard' feedback by adding 20 selectable unlockable difficulties, like Slay the Spire's Ascension, instead of changing base difficulty.",
+      "detail": "During early access DiIorio made the base game harder in response to 'too easy' complaints, which just produced 'too hard' complaints. Adding unlockable difficulty levels stopped both kinds of feedback.",
+      "t": 149,
+      "quote": "add unlockable difficulties that the player can select. I eventually realized this and added 20 of them to the game",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player feedback",
+      "kind": "principle",
+      "claim": "When changing a game to satisfy vocal critics, account for the quiet, content players too, or the two groups simply swap places.",
+      "detail": "DiIorio calls this 'hear what isn't being said'; otherwise a developer ends up playing feedback whack-a-mole. The lesson is not that every game needs difficulty modifiers.",
+      "t": 190,
+      "quote": "if I'm going to make a change to appeal to the vocal critical players, I need to take the quiet content players into account",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "interesting over balanced",
+      "kind": "principle",
+      "claim": "Boring content goes unused regardless of its power level, so a small mechanical twist beats a numeric rebalance.",
+      "detail": "Luck be a Landlord's card-suit symbols first boosted all adjacent suits and were overpowered, then only same-colour suits and became boring. Adding a secondary effect (an extra coin if you have at least three suits) got players engaging with them, which was better than nudging values or appearance rates.",
+      "t": 255,
+      "quote": "If a piece of content in your game is boring, it doesn't matter if it's overpowered, underpowered, or just right",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "power fantasy",
+      "kind": "principle",
+      "claim": "A single-player roguelike should not be balanced like a competitive game such as League of Legends or chess; players have more fun when they become more powerful than their enemies.",
+      "detail": "In competitive multiplayer an overpowered item gives one team an unfair edge, but in a roguelike the other side is everything between the player and the win condition, and enemies don't have feelings. An extra queen ruins chess but not a roguelike.",
+      "t": 405,
+      "quote": "Your players will have more fun if they become more powerful than their enemies",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "early access",
+      "kind": "warning",
+      "claim": "Fix design problems as soon as you notice them, because removing or changing beloved content gets harder the longer it ships.",
+      "detail": "Luck be a Landlord's Cultist symbol, useless alone but stronger in numbers, leads players into uninteresting all-or-nothing builds. DiIorio noticed early but kept it because players liked it; years after early access, changing it would provoke much more backlash.",
+      "t": 493,
+      "quote": "If you notice a design issue, fix it before you regret it",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "item effects",
+      "kind": "principle",
+      "claim": "A roguelike designer's job is to make all content exciting rather than powerful, and adding effects to content creates unplanned interactions and combos.",
+      "detail": "DiIorio's example: armour with +12 defence that breaks after two hits is more exciting than plain +5 defence, even if weaker, and could combo with gear that grants bonuses when armour is destroyed. He added effects to many symbols that previously had none.",
+      "t": 538,
+      "quote": "my job isn't to make sure all the content is powerful. It's to make sure all the content is exciting",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "complexity curve",
+      "kind": "technique",
+      "claim": "Luck be a Landlord ties complexity to rarity and only offers common symbols early in a run, creating a complexity curve analogous to a difficulty curve.",
+      "detail": "Borrowing Magic: The Gathering's 'New World Order' (complex effects kept off commons, which are about 80% of a pack), DiIorio made complex symbols uncommon or rarer, and rarity chances increase gradually after the first few choices so players aren't overwhelmed.",
+      "t": 670,
+      "quote": "only common symbols could appear at the beginning of a run. After the player has been offered a few symbol choices, the base rarity chances gradually increase",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "warning",
+      "claim": "Don't steer playtesters toward the right way to play; watching them make 'mistakes' reveals how real players will behave when you can't be in the room.",
+      "detail": "An early tester repeatedly took Coal (zero coins, 2% chance per spin to become a five-coin diamond) and lost. Asked afterward, they said 'if it transforms, I'm good', which DiIorio says he would never have learned if he had intervened.",
+      "t": 712,
+      "quote": "If I stop play testers from finding sore spots in my game, in my design, I won't know where they are",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "technique",
+      "claim": "Content with a small random chance to trigger should still give a small benefit when it doesn't trigger, and long-shot chances can be replaced with guaranteed timers.",
+      "detail": "After the playtest, Luck be a Landlord's Coal was reworked to always transform after 20 spins instead of its random chance, and DiIorio adopted the chance-effects-still-help rule for the whole game.",
+      "t": 832,
+      "quote": "Symbols that have a chance to do something should still have a small beneficial effect when not triggering their low random chance",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "tuning",
+      "kind": "technique",
+      "claim": "Tiny across-the-board buffs can turn many one-coin-short losses into wins without alienating players who want challenge.",
+      "detail": "Luck be a Landlord's 'big buffs update' made minuscule changes such as raising the Watering Can bonus from 10 to 12 coins. Players are often one coin short of winning, and being one coin ahead makes a better story.",
+      "t": 910,
+      "quote": "By increasing the power of content by a seemingly inconsequential amount, I've increased the number of players that are able to beat my game",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "win rate display",
+      "kind": "principle",
+      "claim": "Don't display a win-rate statistic in a single-player roguelike, because it undercuts the triumph of finally winning after losses.",
+      "detail": "Richard Garfield suggested a recent win-rate stat; DiIorio declined, arguing a win after four losses should feel triumphant, not come with a 20% reminder, and players who want it will track it themselves. In Q&A he says he tracks win streaks but only on a stats screen, and dislikes Binding of Isaac's negative streaks.",
+      "t": 978,
+      "quote": "if a player wins a run after losing four times, they should feel triumphant. They finally won. I shouldn't remind them",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player ownership",
+      "kind": "principle",
+      "claim": "Once players experience a game, their experiences belong to them, especially in roguelikes with endless possibilities, and designers have to accept letting the game go.",
+      "detail": "DiIorio says players feel it's a game they played rather than one he made. He relates it to losing a childhood beach ball to the ocean, concluding that others may experience and build on what he released.",
+      "t": 1065,
+      "quote": "They don't feel like it's a game I made. They feel like it's a game they played",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "buff over nerf",
+      "kind": "technique",
+      "claim": "Like Dota, Luck be a Landlord prefers buffing weaker content or changing mechanics over nerfing strong content, since overbuffed combos in a single-player game can become fun new stories.",
+      "detail": "In Q&A DiIorio describes adding symbols to fill gaps, e.g. Jellyfish, Pufferfish and Sand Dollar were added because the Diver could only remove a few specific symbols and had few interactions.",
+      "t": 1518,
+      "quote": "they try not to nerf or uh nerf things and try to instead buff everything else",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

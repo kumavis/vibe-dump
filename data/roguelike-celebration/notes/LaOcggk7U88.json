@@ -1,0 +1,106 @@
+{
+  "id": "LaOcggk7U88",
+  "title": "Nick McConnell - Things I've Learnt from Maintaining Angband",
+  "speaker": "Nick McConnell",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=LaOcggk7U88",
+  "talk_type": "postmortem",
+  "summary": "Nick McConnell, an Angband maintainer since 2005, shares lessons from looking after a free, open-source, volunteer-run C game in continuous development since 1990. He notes that players hold very different views of which Angband is 'the' game, that the game and its player tradition shape each other (including variants feeding ideas back and the community's shift from ultra-conservative play to aggressive diving), that forking a variant frees a developer from historical baggage, and that vision must be balanced with early feedback and getting things done. In Q&A he explains how mechanics ossify over time, using Angband's trap rework as an example.",
+  "games": [
+    "Angband",
+    "UMoria"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "angband",
+      "kind": "history",
+      "claim": "Angband, derived from UMoria by UK students and released on the early internet in 1993, has been in continuous development since 1990, so players hold very different views of which version is 'the' game.",
+      "detail": "McConnell says it had a zeitgeist moment in the mid-90s. Release comments asking why anything was changed leave him unsure whether they mean 2.6, 2.8 or 3.0.",
+      "t": 266,
+      "quote": "A game that has existed over such a long span has a very eclectic range of viewpoints that people have of it.",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "player tradition",
+      "kind": "history",
+      "claim": "A long-running roguelike and its player tradition shape each other, and in Angband's case many variants were released and maintainers absorbed bits back into the main game.",
+      "detail": "Players discuss the game, developers listen, fix bugs and add features; in the 90s Angband was extensively modded, producing a long interweaving of game and tradition.",
+      "t": 344,
+      "quote": "the original maintainers then absorbing bits of that back into the main game",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "dive strategy",
+      "kind": "example",
+      "claim": "Angband's community long believed ultra-conservative play was optimal, but in the mid-2000s players showed aggressive diving wins more games per hour, and development now assumes players dive.",
+      "detail": "Conservative play made the 100-level game very long, which made players even more afraid of losing a month's character, with rules like no going below level 20 without free action. Diving loses some characters but lets you take five to level 20 in the time one used to reach level 24. Angband doesn't tell players how to play, so some still play conservatively.",
+      "t": 433,
+      "quote": "you are actually better in terms of number of games you complete successfully to play aggressively, to dive hard, to take down stairs as soon as you can",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "variants",
+      "kind": "principle",
+      "claim": "Forking a long-lived roguelike into a new variant frees a developer from its historical baggage, and the community tends to welcome variants more warmly than changes to the original.",
+      "detail": "McConnell says players are hard on the original game but excited and positive about variants, even buggy ones.",
+      "t": 534,
+      "quote": "One thing that you can do which frees you from this baggage is to just fork the game. Make a new variant.",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "principle",
+      "claim": "A developer needs a vision, but should get players' feedback early because grand plans often prove unpopular on release.",
+      "detail": "McConnell echoes a suggestion from another talk that early playtesting and releasing to players early are among the most useful things to do.",
+      "t": 620,
+      "quote": "putting it out to the players early is a very good way to get early feedback and something I would advise for everybody",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scope",
+      "kind": "warning",
+      "claim": "To make progress on a game, especially one already released, avoid rabbit holes; sometimes you just need to do it and ship.",
+      "detail": "McConnell frames 'best practice is getting stuff done' and says this may be even more true for games still in development.",
+      "t": 655,
+      "quote": "avoiding going down rabbit holes is a really good idea",
+      "weight": 1
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "forums",
+      "kind": "principle",
+      "claim": "Community discussion and playtesting on Angband's forums have massively improved many design ideas.",
+      "detail": "The forums discuss what is right and wrong with the game and proposed improvements.",
+      "t": 698,
+      "quote": "so many ideas that I have had or that other people have had have been improved massively by discussion and by play testing",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "traps",
+      "kind": "example",
+      "claim": "Angband's traps degenerated into a pointless 'press button not to die' check once every character gained easy early trap detection, so the team reworked the trap system to make traps interesting again.",
+      "detail": "McConnell's general point is that mechanics in a decade-old game ossify: some once worked and gradually degenerated, others never worked but nobody objected.",
+      "t": 784,
+      "quote": "it degenerated to the point where every character would get easy trap detection early on in the game. Now, what's the point?",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "competitions",
+      "kind": "history",
+      "claim": "Speedrunning has long been part of Angband through an ongoing competition judged by turn count.",
+      "detail": "Asked whether speedrunners changed Angband, McConnell says not much, since competitions judged on turn count have existed for a long time.",
+      "t": 862,
+      "quote": "There is an ongoing Angband competition thing and that is usually judged by Turn Count",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

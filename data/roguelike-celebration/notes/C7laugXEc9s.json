@@ -1,0 +1,135 @@
+{
+  "id": "C7laugXEc9s",
+  "title": "Stella Mazeika - Turning Classic Games Into Multiplayer Roguelike Experiences",
+  "speaker": "Stella Mazeika",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=C7laugXEc9s",
+  "talk_type": "design",
+  "summary": "Stella Mazeika, a speedrunner and randomizer developer, introduces game randomizers: external programs that take a ROM, a set of flags and a seed and produce a transformed version of a classic game. She surveys what gets randomized (aesthetics, enemies, abilities, maps and especially key item locations) and explains the beatability problem and generate-and-test solutions. She argues randomizers can be viewed as games with meta-progression, as roguelikes (procedurally generated routes and a race-level permadeath), as procedural ROM-hacking software, and above all as communities. Q&A covers combo and multiworld randomizers and practical complexity limits.",
+  "games": [
+    "Final Fantasy",
+    "The Legend of Zelda",
+    "The Legend of Zelda: A Link to the Past",
+    "Final Fantasy IV Free Enterprise",
+    "Super Metroid",
+    "Dragon Warrior",
+    "La-Mulana",
+    "The Witness",
+    "Dwarf Fortress",
+    "Sonic Adventure 2",
+    "Morrowind"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "randomizers",
+      "kind": "technique",
+      "claim": "A game randomizer is an external program that takes a ROM, a set of flags selecting which elements to shuffle or tune, and a seed, and outputs a transformed playable game.",
+      "detail": "Mazeika's example flags include shuffling key items and treasure chest contents or scaling experience gained in Final Fantasy 1. The seed fixes the random choices so friends can play the exact same randomized version.",
+      "t": 152,
+      "quote": "You take a ROM and I’m not going to talk about where you got those ROMs",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "randomizer scene",
+      "kind": "history",
+      "claim": "Randomizers exist for at least 300 games by 2019, including Dwarf Fortress, The Witness, La-Mulana and even NES golf, and are more often than not open source.",
+      "detail": "Mazeika counted the list at debigare.com/randomizers a few nights before the talk. In her summary she says they are popular, prolific and usually open source, with communities welcoming new players and developers.",
+      "t": 235,
+      "quote": "there are at least 300 different randomizers on that list",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "randomizer elements",
+      "kind": "example",
+      "claim": "Randomizers vary aesthetics (dialogue, sprite swaps), enemy placement and skills, player abilities, generated maps, and most importantly key item locations, which reshape the space of the game.",
+      "detail": "Examples include Darknuts in the Zelda overworld, wizards nuking the party in Final Fantasy 1, generated Final Fantasy 1 caves and Dragon Warrior overworlds, and shuffled Link to the Past items like the hookshot and power gloves that gate areas.",
+      "t": 345,
+      "quote": "the big thing that gets randomized are these key item locations because these really effect the space of game",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generate and test",
+      "kind": "technique",
+      "claim": "Randomizers guarantee beatability of shuffled key items mainly by generate-and-test (place items, check reachability, discard and retry), with a few newer ones using logic or constraint systems.",
+      "detail": "Mazeika warns naive shuffling creates deadlocks like needing the flippers to get the gloves and the gloves to get the flippers. Generate-and-test generation time becomes a concern with many dependencies or locations; she wrote the one constraint-based randomizer she knows of.",
+      "t": 413,
+      "quote": "You make sure that you can get them and if you can't you throw it away, you try it again",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "item gating",
+      "kind": "warning",
+      "claim": "Randomly placing items that gate progress can make a game unbeatable through circular dependencies.",
+      "detail": "Mazeika's Link to the Past example: if the flippers are placed behind a boulder requiring the gloves and the gloves behind water requiring the flippers, the game cannot be finished. She calls this the danger zone where most randomizer effort goes.",
+      "t": 377,
+      "quote": "I need the flippers to get the gloves but I need the gloves to get the flippers and the game is no longer beatable",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "principle",
+      "claim": "Randomizer players gain a knowledge-based meta-progression across seeds: deeper base-game knowledge, randomizer-specific knowledge, routing, and glitch techniques.",
+      "detail": "Examples include discovering an instakill spell exiling Lich in Final Fantasy, the Fusoya challenge flag unique to Free Enterprise because Fusoya is overpowered, routing which items unlock which regions, and a Link to the Past glitch to swim without flippers. Flags and sliders let players build very different experiences.",
+      "t": 523,
+      "quote": "You get this sort of meta progression as you go through the games where you get more interesting base game knowledge",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "randomizers as roguelikes",
+      "kind": "principle",
+      "claim": "Randomizers qualify as roguelikes because shuffled key items create a procedurally generated route through a fixed map, a kind of meta generated level.",
+      "detail": "Mazeika drops turn-based and tile-based criteria from the Wikipedia definition and argues that even when maps are not generated, an early item may open an area normally visited sixth, forcing players to piece together a new exploration order.",
+      "t": 639,
+      "quote": "you get this sort of procedurally generated route through the game",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "In randomizer racing, permadeath applies to the whole run rather than the character: a blind seed is played once, abandoning it ends it, and the next race rolls a new seed.",
+      "detail": "Most base games let you respawn, but racers play an unseen seed head to head, and stopping and rerunning a seed is considered cheating, so death is effectively at the level of the run.",
+      "t": 724,
+      "quote": "you have this permadeath over the course of an entire run and for the next race you roll a new seed",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "randomizer communities",
+      "kind": "principle",
+      "claim": "Every randomizer has built a community that organizes play, races, teaching and events, showing that strong inclusive communities are essential to software.",
+      "detail": "Mazeika says no system exists in a vacuum; communities teach newcomers, host events, promote the randomizer and get races into larger events. She calls this the most important lens to her.",
+      "t": 809,
+      "quote": "software is made out of people and building strong and inclusive communities around your software is very, very important",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "multiworld randomizers",
+      "kind": "example",
+      "claim": "Combo randomizers shuffle items between two games (e.g. Super Metroid and Link to the Past), and multiworld randomizers shuffle items across several players' copies over networked emulators, creating cooperative play.",
+      "detail": "In Q&A Mazeika says in a multiworld one player may find another's hookshot in Link to the Past, giving it to them, which makes the cooperative experience interesting. Combo versions also exist for Zelda 1 and Metroid 1.",
+      "t": 909,
+      "quote": "take multiple copies of the same game and shuffle the items around different players where people are playing through network connected emulators",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomization scope",
+      "kind": "principle",
+      "claim": "For complex games, players tend to dial back wild randomization; restricting shuffles to key items gives players guarantees about where they need to go.",
+      "detail": "Asked about randomizing Morrowind, Mazeika says there is a practical player limit though no software limit; she imagines a Morrowind randomizer that only relocates key items rather than shuffling everything.",
+      "t": 962,
+      "quote": "most people are going to take those and dial them back",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

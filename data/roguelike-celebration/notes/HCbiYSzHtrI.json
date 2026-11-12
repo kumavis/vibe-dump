@@ -1,0 +1,75 @@
+{
+  "id": "HCbiYSzHtrI",
+  "title": "Stanley W. Baxton: Bringing Real-World Occultism into Your Games Without Accidentally Being Racist",
+  "speaker": "Stanley W. Baxton",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=HCbiYSzHtrI",
+  "talk_type": "culture",
+  "summary": "A lightning talk warning developers who borrow real-world occult symbols and magic for their games that Western esoterica has a long history of cultural appropriation. Baxton traces how figures such as Aleister Crowley and Helena Blavatsky took from other traditions, introduces the distinction between open and closed traditions, and gives a rule of thumb about Hebrew letters in occult symbols. His core advice is to ask why you want to use a symbol and to talk to practitioners of minority religions about how (or whether) they want their practices depicted.",
+  "games": [
+    "Fallen London"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "cultural appropriation",
+      "kind": "warning",
+      "claim": "A developer who adds 'real magic' symbols found online to a game for spooky flavour can unknowingly ship something antisemitic or appropriative.",
+      "detail": "Baxton's hypothetical is a horror developer who researches real magic, finds a scary-looking symbol and ships it; the symbol turns out to be antisemitic. Searching for real magic online mostly turns up Western esoteric resources, which syncretize practices taken from specific cultures.",
+      "t": 139,
+      "quote": "Terrifying and pack up the game and ship it. You have just done something antisemitic",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "cultural appropriation",
+      "kind": "history",
+      "claim": "Western esoterica, the main source of 'real' occult imagery used in games, was built substantially by appropriating other cultures' traditions, notably through figures like Aleister Crowley and Helena Blavatsky.",
+      "detail": "Baxton says many magic traditions grew out of specific cultures and Western esoterica has a history of taking from them. Crowley continued a tradition of stealing from many sources, and Blavatsky invented supposed Tibetan teachings and influenced ideas from chakras to lost-continent myths and Nazi cultism; people then put these symbols into games, comics and novels without knowing where they come from.",
+      "t": 202,
+      "quote": "Western esoterica has a history of culture appropriation",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "open and closed traditions",
+      "kind": "principle",
+      "claim": "Before depicting a real magical tradition in a game, determine whether it is open (practicable by anyone) or closed (by invitation, often an ethno-religion); closed traditions need permission, which is often refused.",
+      "detail": "Closed traditions are usually tied to a specific culture so tightly that divorcing them strips their meaning. Representing them almost always requires permission or a very specific approach, and practices are often closed because of disrespect from colonizers. Even open traditions require considering context, since everything is political.",
+      "t": 463,
+      "quote": "If you want to represent a closed tradition in your game, or in any sort of media, you almost always need permission",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "occult symbols",
+      "kind": "technique",
+      "claim": "A practical rule of thumb for occult imagery in games is to avoid any occult symbol containing Hebrew letters, which Baxton says sidesteps roughly 80% of appropriation.",
+      "detail": "Using the Baphomet symbol from his opening example, he notes its central figure draws on an open Greco-Egyptian tradition but the Hebrew letters come from Judaism's sacred language; Jewish magic is not for outsiders, and Western esoterica frequently misuses Hebrew letters.",
+      "t": 552,
+      "quote": "If you see Hebrew letters an an occult symbol it is something you should avoid for either of those reasons",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "occult symbols",
+      "kind": "principle",
+      "claim": "When using a real symbol in a game, ask why: whether it just looks cool, and whether the idea it represents in your game is what it actually means or what others decided it means.",
+      "detail": "Baxton stresses there is no paint-by-numbers solution and always context and edge cases. He urges developers to talk to people from minority religions about how they want their practices depicted, if at all, and to respect a refusal to share.",
+      "t": 622,
+      "quote": "why do you want to use that symbol. Does it just look cool?",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "cultural appropriation",
+      "kind": "example",
+      "claim": "Fallen London is cited as a game that handles occult ideas well, partly by being set before Crowley's time and by using transformed or 'if you know you know' nods rather than full references.",
+      "detail": "Answering a Q&A question, Baxton says games can either make a subtle nod without pulling in the full problematic reference, or take the core idea and transform it in a different direction. He adds that for diasporic practices like Santeria, the answer is to talk to living practitioners.",
+      "t": 929,
+      "quote": "fallen London is a good one. I think fallen London gets away with it because it is set before Crawley is born",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

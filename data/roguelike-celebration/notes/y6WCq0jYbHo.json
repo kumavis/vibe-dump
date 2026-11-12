@@ -1,0 +1,122 @@
+{
+  "id": "y6WCq0jYbHo",
+  "title": "Santiago Zapata: Celebrating Moria: a roguelike before the roguelikes",
+  "speaker": "Santiago Zapata",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=y6WCq0jYbHo",
+  "talk_type": "history",
+  "summary": "Santiago Zapata (Slashie) argues that Moria, one of the first games built directly on Rogue, deserves celebration as the root of a major branch of the genre. He sketches its context (university minicomputers, games shared on magnetic tape), why it faded (development aimed at a small core of challenge-seeking players, then eclipsed by its descendant Angband), and its legacy: the first 'XRL' adapting an existing setting (Tolkien), the town level and its many-runs-within-a-run structure that inspired Diablo, larger-than-screen levels, premade rooms, spellbooks and RPG-style character creation, and indirectly the 'roguelike' umbrella term itself. He mentions an abandoned real-time version and closes with testimonials from developers including Jason Grinblat (Caves of Qud) and Michael Toy.",
+  "games": [
+    "Moria",
+    "Angband",
+    "Rogue",
+    "Hack",
+    "NetHack",
+    "Diablo",
+    "ADOM",
+    "Caves of Qud"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "moria",
+      "kind": "history",
+      "claim": "Moria, released around the same time as Hack, was one of the first games built directly on Rogue, inheriting its character display, procedural generation and fantasy theme, and became the ancestor of Angband and its hundreds of variants.",
+      "detail": "Zapata calls it the first roguelike in terms of public release predating Hack. Where Hack made gameplay feel alive, Moria took the path of a more solid setting with much more content.",
+      "t": 217,
+      "quote": "it is one of the first games that took Rogue and built a game inspired directly by it",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "early distribution",
+      "kind": "history",
+      "claim": "Early roguelikes like Rogue, Hack and Moria ran on university minicomputers before personal computers and the internet, with tightly limited access, and were shared between universities by mailing magnetic tapes.",
+      "detail": "The audience was only students and researchers on those campuses. Zapata says Moria arose because talented engineers addicted to Rogue wanted a way to play more.",
+      "t": 391,
+      "quote": "One of the developers of Moria shared the game with other universities mainly using giant magnetic tape things",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "accessibility",
+      "kind": "warning",
+      "claim": "Moria's development was guided by keeping the game challenging for a small core of players, which made it inaccessible to newcomers and contributed to it not surviving into the 1990s.",
+      "detail": "Combined with Angband being bigger and better, this is why Moria dwindled quietly. In Q&A Zapata adds that, unlike Angband, Moria's interface never got improvements and stayed stuck in the '80s.",
+      "t": 539,
+      "quote": "keeping the game challenge to a small core of players made it inaccessible to new players",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "xrl adaptations",
+      "kind": "history",
+      "claim": "Moria was the first 'XRL', adapting an existing setting (The Lord of the Rings) to roguelike play, pioneering Rogue's conventions as a shared language for adventures in many settings.",
+      "detail": "While Hack built its own fantasy setting pushing item and world interactivity, Moria used the character display to reduce asset-production friction and legal issues with unauthorized usage. Zapata says XRLs are now an entry point into the genre for many.",
+      "t": 638,
+      "quote": "Moria instead pioneered reusing the conventions of rogue as a shared language to allow player do is have adventures in many settings",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "town level",
+      "kind": "history",
+      "claim": "Moria introduced the town level, changing the game from a pure dungeon dive into a journey of repeatedly delving, returning to spend gold on equipment, and descending again, a structure that inspired Diablo and many RPGs.",
+      "detail": "Zapata calls it 'many runs within your run'. Computer RPGs used this to provide an extended experience easier to break into episodes for gameplay and narrative.",
+      "t": 720,
+      "quote": "It changed the nature of the game from being a pure dungeon to being a more journey",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "level size",
+      "kind": "history",
+      "claim": "Moria broke Rogue's single-screen, nine-room level limit with scrolling larger-than-screen levels, which were initially rather empty, and added handcrafted premade rooms with more interesting content.",
+      "detail": "Zapata presents these as innovations showing developers how much room for expansion Rogue had.",
+      "t": 903,
+      "quote": "Rogue had single screen levels with nine rooms. Moria broke that barrier of the screen",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character creation",
+      "kind": "history",
+      "claim": "Moria introduced detailed character creation based on Dungeons & Dragons and other RPG systems, plus spellbooks for learning spells, making character creation a fundamental part of roguelikes.",
+      "detail": "Zapata notes you can spend a long time creating and tweaking a character into what you want it to be.",
+      "t": 942,
+      "quote": "creating a character that is so fundamentally a part of roguelikes was introduced also by Moria",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "origin of the term",
+      "kind": "history",
+      "claim": "Angband's rising popularity as an advanced Moria-like split discussion out of the Moria newsgroup and prompted creation of an umbrella group for similar games, triggering the 'roguelike' umbrella term.",
+      "detail": "Zapata dramatically suggests Moria sacrificed itself so roguelikes could exist as a genre, a topic he explored in a previous Roguelike Celebration talk.",
+      "t": 1007,
+      "quote": "what if we have do that and create an umbrella group of groups that contain similar games? Moria triggered that",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "real-time roguelike",
+      "kind": "history",
+      "claim": "At one point Moria's developers built a working real-time version abandoning Rogue's turn-based nature, but players disliked it and it was ditched.",
+      "detail": "Zapata wonders whether the world simply wasn't ready and is tempted to build a real-time Moria for the next 7DRL.",
+      "t": 1047,
+      "quote": "It was coding and working but the players just did not like it and it ended up being ditched",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "influence",
+      "kind": "history",
+      "claim": "Moria inspired later developers: Jason Grinblat (Caves of Qud) played it as a child, and Rogue co-creator Michael Toy felt Moria was what he wanted Rogue to be, with jobs and monsters that each had different behaviours.",
+      "detail": "Zapata also relays John Harris's view that Rogue had unique ideas like identification that didn't spread widely, whereas Moria founded what the genre became, and David Craddock's praise of how it brought Tolkien's world to life through simplified presentation that lets players project their imagination.",
+      "t": 1213,
+      "quote": "When Michael played Moria it felt like this is what I wanted Rogue to be",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

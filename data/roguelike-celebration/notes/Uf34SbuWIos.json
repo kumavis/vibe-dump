@@ -1,0 +1,76 @@
+{
+  "id": "Uf34SbuWIos",
+  "title": "Johnathan Pagnutti - Wait, No, Hear Me Out: Simulating Encounter AI in Slay the Spire with SQL",
+  "speaker": "Johnathan Pagnutti",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=Uf34SbuWIos",
+  "talk_type": "technical",
+  "summary": "Johnathan Pagnutti shows how to simulate the Jaw Worm encounter from Slay the Spire in a single SQL query. He models Jaw Worm's moves (Chomp, Thrash, Bellow) and its no-repeat rules as a probabilistic finite state machine, noting that drawing the graph reveals the fight's dynamics. The states and transitions are stored as tables, and a recursive common table expression in SQLite expands every possible move trace round by round, accumulating trace, probability, damage, block and strength. It is a short, playful technical talk with a declarative-programming motivation.",
+  "games": [
+    "Slay the Spire",
+    "Stardew Valley"
+  ],
+  "insights": [
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "enemy intents",
+      "kind": "example",
+      "claim": "Slay the Spire's Jaw Worm is a probabilistic state machine: it always opens with Chomp, then weighs Bellow over Thrash over Chomp, and can't Bellow or Chomp twice in a row or Thrash three times in a row.",
+      "detail": "Chomp deals heavy damage, Thrash deals some damage and gains block, and Bellow gives permanent strength plus block. Pagnutti takes these rules from the Slay the Spire wiki.",
+      "t": 216,
+      "quote": "jawworm always starts with chomp. Uh and then has most of a chance of using bellow, less of a chance of using thrash",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "finite state machines",
+      "kind": "technique",
+      "claim": "No-repeat rules can be encoded in a finite state machine by duplicating states, e.g. separate 'thrashed once' and 'thrashed twice' nodes, but this makes the graph explode if extended to react to player input.",
+      "detail": "Pagnutti notes Thrash becomes two nodes with no arrow from the second back to Thrash. He says FSMs produce dynamic enemy behaviour but are hard to make very reactive, hinting that state duplication is why.",
+      "t": 241,
+      "quote": "there's two thrash nodes now. And that's because jawworm can't thrash three times in a row",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "encounter texture",
+      "kind": "example",
+      "claim": "Graphing Jaw Worm's weighted transitions reveals a fight texture players rarely notice: it spends most of its time blocking and buffing strength before eventually chomping hard.",
+      "detail": "Pagnutti had played about 300 hours of Slay the Spire without realising this; the thick, high-probability arrows cluster around block and strength moves.",
+      "t": 297,
+      "quote": "It lends a texture to it and it's a texture that's not easy to figure out just by experiencing it",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "data-driven ai",
+      "kind": "technique",
+      "claim": "An enemy's state machine can be expressed entirely as data: a states table (each move's block, damage, strength) and a transitions table of probabilities between moves.",
+      "detail": "For example, Bellow generates six block and three strength, and a transitions row reads as '60% of the time after Chomp, Jaw Worm will Bellow'.",
+      "t": 339,
+      "quote": "all of this can just be expressed as data in tables",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "sql simulation",
+      "kind": "technique",
+      "claim": "A recursive common table expression in SQLite can simulate every possible enemy move trace: a seed step loads the start state, and a recursive step joins transitions and states to append each next move.",
+      "detail": "The simulation table tracks round, trace, current state, running probability (product of transition probabilities, starting at 1 because Chomp is forced) and running damage, block and strength. By round three there are five possible traces. Pagnutti notes recursive CTEs may not be standard SQL.",
+      "t": 589,
+      "quote": "That first top join where we're talking about the transitions table is how we spider out and figure out how many more new rows we have to add",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "spreadsheet simulation",
+      "kind": "technique",
+      "claim": "Declarative tools like SQL and spreadsheets can be used to simulate game systems and explore their outcomes without writing a game engine.",
+      "detail": "In Q&A Pagnutti calls himself a 'spreadsheet sicko' with a Google Sheet optimising Stardew Valley planting; he chose SQL as the declarative workhorse he knows because he is bad at Prolog.",
+      "t": 807,
+      "quote": "I've done a lot of trying to like simulate out games in nothing but Google Sheets",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

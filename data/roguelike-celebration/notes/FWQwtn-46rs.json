@@ -1,0 +1,123 @@
+{
+  "id": "FWQwtn-46rs",
+  "title": "bleeptrack - From Code to Craft: Procedural Generation for the Physical World",
+  "speaker": "bleeptrack",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=FWQwtn-46rs",
+  "talk_type": "other",
+  "summary": "Generative artist bleeptrack tours her projects that turn procedural generators into physical objects: hand-cut unique stickers, NFC-tagged stickers that evolve a generative series per scan, printed fabric, pen plots, laser-cut snowflakes, beetle patches and paper lanterns, a tileable rubber stamp set, a CNC-milled chair grown from a leaf-vein simulation, and procedurally designed circuit-board macro keyboards. Recurring themes are that mass manufacturing fights against showing off generative variety, that digital fabrication needs vector/path data rather than pixels, that physical production involves heavy manual work, and that physical artifacts and visible machines draw people in. The talk has little game design content but offers transferable ideas about seeds, variety, uniqueness and participatory generation.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "physical generative art",
+      "kind": "warning",
+      "claim": "Manufacturing works against procedural variety: a printer won't make 10,000 different stickers, so bleeptrack prints and hand-cuts her own to show off a generator's range.",
+      "detail": "Generators are optimised for large variety, but manufacturers expect identical runs. She prints on vinyl, laminates with protective foil and cuts by hand, which she finds soothing and lets her look at each piece and sign it.",
+      "t": 262,
+      "quote": "can't say make me 10,000 different stickers because I want to show off my variety. This isn't going to work",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "uniqueness as appeal",
+      "kind": "example",
+      "claim": "Telling people that every generated sticker on a table is unique makes them spend minutes choosing the one that matches them best.",
+      "detail": "bleeptrack hands out generative stickers like business cards; laying them out at a booth and saying each is unique is, she says, a strong incentive and a good way to show off a generator.",
+      "t": 345,
+      "quote": "each one of these stickers is unique so choose the one you like best they will be excited",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "seeds",
+      "kind": "technique",
+      "claim": "bleeptrack's NFC sticker project seeds a generative series from each tag's unique ID and uses the tag's scan counter to produce a new variation with every tap.",
+      "detail": "The tag ID sets the colour and shape base, and the scan count shuffles shapes to add a new piece to the series; tapping opens a site where you scroll through all scans so far. She warns that ordinary NFC tags don't work on metal surfaces like street signs.",
+      "t": 411,
+      "quote": "I use one as a color and shape base seed and the counting number I use to just shuffle the shapes around",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "texture arrangement",
+      "kind": "technique",
+      "claim": "A generator that makes single objects can be turned into a texture by arranging many outputs with a fixed palette, as bleeptrack did with her flower generator for printed fabric.",
+      "detail": "Fabric printing just takes a pixel image and can cover large areas cheaply. She arranged a flower bed where colours stay the same but each flower is unique, and has made pouches and a signature cape this way.",
+      "t": 509,
+      "quote": "if your generator is maybe not doing a texture think maybe you can arrange your generative outcome to be more like a texture",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "digital fabrication",
+      "kind": "technique",
+      "claim": "Digital fabrication such as pen plotting needs path or vector data rather than pixel images, so generators must output geometry the machine can follow.",
+      "detail": "Stickers and fabric only need a pixel image, but a plotter must know where to move the pen. She recommends used 1980s architectural plotters for features like electrostatic beds and automatic pen changes.",
+      "t": 680,
+      "quote": "You really need past data. You usually want to work",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "showing generators",
+      "kind": "principle",
+      "claim": "A pen plotter drawing live at an event draws people in and starts conversations, and people value machine-drawn pieces more because they can see the effort.",
+      "detail": "bleeptrack brings plotters to events; one plotted forms from a neural net trained on her own scribbles as part of her research.",
+      "t": 830,
+      "quote": "people also really value the drawings more if they are drawn from a machine and can see the effort",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "laser cutting",
+      "kind": "technique",
+      "claim": "Laser cutters can both cut and, at reduced power, engrave or lighten paper, letting generated patterns become layered physical objects like bleeptrack's beetle patches.",
+      "detail": "She cut about 200 beetle patches, engraved the wing patterns as background texture and sandwiched dark and colourful paper. She also laser-cut generated snowflakes, which she calls one of nature's nicest procedural systems, and stresses the considerable manual work involved.",
+      "t": 1016,
+      "quote": "You can set the laser cutter to half the power you need to cut and it will just etch or darken the parts of the paper",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "accessible output",
+      "kind": "example",
+      "claim": "bleeptrack's 'Wish Upon a Star' lantern generator outputs a parameterised 2D cut pattern that can be printed on a home printer and assembled by hand, not just laser-cut.",
+      "detail": "Parameters control spike count and size. Assembly takes over half an hour per star and she redid the maths several times; she emphasises making projects accessible.",
+      "t": 1191,
+      "quote": "This works if you just print it on your regular ink jet printer at home and just cut out regular paper and assembly that",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "tile stamps",
+      "kind": "technique",
+      "claim": "To bring the generative process itself into the physical world, bleeptrack made sets of three triangular rubber stamps with matching edges that people tile by hand to form patterns.",
+      "detail": "One stamp connects on one side, one on two and one on all sides; sets aren't interchangeable since their connectors differ. She made 35 sets and calls it an interactive, participatory way to show how procedural generation works.",
+      "t": 1222,
+      "quote": "I really wanted to bring the generative process itself to the physical world in some form",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "simulation control",
+      "kind": "warning",
+      "claim": "Simulation-based generation, like the leaf-vein growth bleeptrack CNC-milled into a chair, is hard to control, which ruled it out for structural parts.",
+      "detail": "She reimplemented a vein-growth paper and milled the seat and backrest, each taking about 10 hours plus days of sanding. She dropped patterned legs because she couldn't control how the simulated pattern would end up and it needed to be sturdy.",
+      "t": 1478,
+      "quote": "with the simulation part, I can't really control how the pattern will look like in the end",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "variety versus cost",
+      "kind": "technique",
+      "claim": "For procedurally designed circuit-board keyboards, bleeptrack balanced uniqueness against manufacturing cost by ordering 10 boards per design and keeping the functional traces identical.",
+      "detail": "PCBs are cheap only in identical batches, so procedural variety needs a middle path. She also used translucent fiberglass and decorative copper areas as visual material.",
+      "t": 1608,
+      "quote": "if you are doing procedural stuff and want to show off variety you want unique pieces you you need to find the path in between",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

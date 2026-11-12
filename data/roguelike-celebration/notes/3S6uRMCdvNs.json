@@ -1,0 +1,219 @@
+{
+  "id": "3S6uRMCdvNs",
+  "title": "Eric Billingsley- Scoped-down design: Making a tiny roguelike",
+  "speaker": "Eric Billingsley",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=3S6uRMCdvNs",
+  "talk_type": "design",
+  "summary": "Eric Billingsley describes making Into Ruins, a traditional roguelike for the Pico-8 fantasy console heavily inspired by Brogue. Pico-8's hard limits on code size, sprites and colours forced him to simplify, and he presents a set of questions for cutting or merging systems. He walks through concrete cuts and merges: no doors, no character levels, potions and scrolls merged into orbs, staves and wands merged, light and stealth unified, and stairs replaced by holes. He argues that fewer, tightly interacting systems give a more focused, cohesive and learnable design.",
+  "games": [
+    "Into Ruins",
+    "Brogue",
+    "Porklike",
+    "Curse of the Lich King",
+    "Pixel Dungeon"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "platform constraints",
+      "kind": "example",
+      "claim": "On Pico-8 the code-size limit is the hardest constraint for a roguelike because, unlike sprite budgets, it is hard to estimate how much code a system will need.",
+      "detail": "Billingsley contrasts sprite planning (e.g. a quarter of the sheet at 8x8 with four frames gives 16 enemies) with guessing how many lines pathing will take. Halfway through development every new feature required reworking existing code to fit, which he found frustrating but satisfying, like solving a puzzle.",
+      "t": 341,
+      "quote": "anytime I wanted to add something new I had to go in and rework what I already had in order to make it fit",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "enchantment scrolls",
+      "kind": "example",
+      "claim": "Brogue has no classes: players build a character by choosing which found equipment to invest scrolls of enchantment into, effectively building a class as they go.",
+      "detail": "Billingsley names this as one of the things that makes Brogue special. Because you pick which pieces of equipment to keep and which to power up, it is flexible and produces a lot of variety from run to run.",
+      "t": 496,
+      "quote": "you choose which ones to invest uh this resource into and you build your character that way",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "monster design",
+      "kind": "principle",
+      "claim": "A small roster of monsters that each have a unique ability, as in Brogue, gives variety while keeping the amount players must learn manageable.",
+      "detail": "Brogue has relatively few monsters, but each has something special. After enough plays you are familiar with them and know what to expect, so variety does not come at the cost of an overwhelming learning load.",
+      "t": 524,
+      "quote": "there's a lot of variety but also that there's not as much to learn",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "transparency",
+      "kind": "example",
+      "claim": "Brogue tells the player what monsters and equipment can do and shows stats in-game, so players do not need external sources.",
+      "detail": "Billingsley lists this transparency among Brogue's strengths alongside its machine rooms (dungeon puzzles that open a vault where you may take only one item), which he did not attempt in Into Ruins because they would take too much code.",
+      "t": 537,
+      "quote": "it also has a lot of trans Arcy so it tells you a lot about what the monsters can do what your equipment can do what the stats are",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scoping",
+      "kind": "principle",
+      "claim": "Before adding a system, ask whether you really need it, especially if it is considered a given for the genre, and whether it is worth the development time.",
+      "detail": "Billingsley argues designers assume genre staples are required without examining the question. He also asks whether the system adds enough to justify the time, since developers have limited time and may not want to spend two years on a roguelike.",
+      "t": 666,
+      "quote": "ask yourself do I really need the system uh even if it's like a given for the genre that you're working in ask the question maybe especially if it is",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "scoping",
+      "kind": "principle",
+      "claim": "When considering a system, ask whether it would take attention away from the game's core, and whether leaving it out would make the game more unique or lead to interesting other decisions.",
+      "detail": "Even a system that adds something can distract from core elements. Billingsley suggests thinking through what decisions not having the element would force: some compromises, but possibly new possibilities you would not otherwise have found.",
+      "t": 731,
+      "quote": "would not having this give your game something unique would it add something different to your environments or have add some kind of unique gameplay thing",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "doors",
+      "kind": "example",
+      "claim": "Into Ruins has no doors because doors touch field of view, AI, pathing and item interactions; removing them also makes each floor play as one big arena.",
+      "detail": "Doors create many edge cases (what happens when you throw an item at a door). Without them enemies spot you from other rooms and combat spills between rooms, small levels feel less claustrophobic, and it suits the aesthetic of crumbling ancient dungeons where only stone remains.",
+      "t": 779,
+      "quote": "doors are really hard they affect lots of different systems like they affect your they affect field of view they affect enemy Ai and pathing",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character levels",
+      "kind": "technique",
+      "claim": "Removing character levels and XP (as Brogue did in a patch and Into Ruins does) focuses progression on item investment, increases build variety, and makes avoiding fights a viable option.",
+      "detail": "Billingsley concedes you lose the feeling of growing stronger by killing monsters. But with orbs of power as the only progression, choices of what to power up become more meaningful, builds don't scale the same way, and players can flee or use stealth without falling behind on XP, making more builds viable.",
+      "t": 942,
+      "quote": "because the player isn't thinking about you know I I really don't want to engage in this encounter but if I don't I I'll miss out on XP",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "enemy reuse",
+      "kind": "technique",
+      "claim": "Without XP-based player scaling, early-game enemies can be reused on deeper levels (for example in bigger groups) and still challenge the player, stretching a small monster roster.",
+      "detail": "Into Ruins can only fit about 14 enemies on Pico-8. Removing levels meant goblins could still appear on lower depths, perhaps in larger groups, and remain a threat.",
+      "t": 970,
+      "quote": "I can take those early game enemies and plop them on later levels and there's still a challenge for the",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "combining systems",
+      "kind": "principle",
+      "claim": "When planning two systems, ask whether one can do the job of the other, since a merged system may be easier to implement, easier for players to understand, and open new possibilities.",
+      "detail": "Billingsley notes players who already know a mechanic can transfer that understanding when they see it in another context. If two systems don't quite merge, consider massaging your goals or one system so it mostly covers what the other does, and examine the consequences.",
+      "t": 1004,
+      "quote": "ask yourself can one of these systems do the job of the other one and if it can would that be easier to implement",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "consumables",
+      "kind": "example",
+      "claim": "Into Ruins merges potions and scrolls into a single item type, orbs, which can all be either used on yourself or thrown.",
+      "detail": "Drinking a potion and reading a scroll are very similar actions. An orb of fire thrown sets the target and environment alight; used, the player bursts into flames. Billingsley considered making the verb 'eat' but dropped it because eating something that powers up equipment didn't make sense, and left the diegetic action to the player's imagination.",
+      "t": 1090,
+      "quote": "drinking a potion and using a scroll is very similar action so I decided to combine these two concepts together into something I called orbs",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "technique",
+      "claim": "Merging item categories makes the identification game more interesting because one pool of eight unknowns takes longer to narrow down than two pools of four.",
+      "detail": "With very few item types possible on Pico-8, putting all orbs in one category means players must try out eight colours. Throwing an orb of data, normally used to identify equipment, at a goblin reveals its name and stats.",
+      "t": 1177,
+      "quote": "combining these two categories makes the identification game more interesting because now we have eight differently colored things and we have to try them out",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "staves and wands",
+      "kind": "example",
+      "claim": "Into Ruins merges Brogue's staves and wands into staves that never recharge over time but can be recharged by orbs or by wisdom gear on descent, so their role depends on the build.",
+      "detail": "In Brogue staves recharge over time and are core to builds while wands have limited charges and get discarded. In Into Ruins a melee build spends charges and throws the staff away, while a magic build invests orbs of power or finds the amulet or cloak of wisdom to recharge several staves at once.",
+      "t": 1282,
+      "quote": "depending on your build you would use these items really differently so if you're playing like a melee build",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "stealth",
+      "kind": "technique",
+      "claim": "Into Ruins unifies light and stealth: enemies spot you only when you are lit, so they see the way the player does, which is easier to reason about than Brogue's separate stealth range.",
+      "detail": "Brogue's stealth range depends on tile light and your last action and is hard to judge without an overlay. In Into Ruins, stealth items let you see further into darkness instead of making you harder to spot, so you can stay in the dark, knock over torches with thrown items and sneak past enemies.",
+      "t": 1380,
+      "quote": "instead of having a separate stealth range what if I just use light to determine visibility",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "balancing",
+      "kind": "technique",
+      "claim": "Tying stealth to light makes balance easy to tune: if stealth is too strong, add more light sources such as torch-carrying enemies or spells that illuminate the caster.",
+      "detail": "Billingsley admits stealth may be a little overpowered in Into Ruins, but notes it can be tweaked by having more things cast light. Using certain staves illuminates your character for a turn so enemies can spot you, making the system dynamic and intuitive.",
+      "t": 1452,
+      "quote": "stealth is a little bit overpowered in the game um but the interesting thing is you can tweak this really easily just by having more things cast light",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "food clock",
+      "kind": "technique",
+      "claim": "In Into Ruins the only way down is jumping into holes, and an orb of gravity that grants a ticking slowfall status acts as a substitute hunger clock pushing the player onward.",
+      "detail": "Brogue's chasms hurt you and are a desperation move; Billingsley asked what if they were the only way to progress. To avoid always hurting the player he added the orb of gravity, and the need to descend before slowfall runs out and to find more orbs adds the pressure a hunger meter normally provides.",
+      "t": 1571,
+      "quote": "it's sort of a replacement for the Hunger meter because it adds this pressure to keep going um you have to make progress",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "inventory management",
+      "kind": "technique",
+      "claim": "Making descent one-way lets passive item effects trigger only on descending, removing any incentive to wait around for recharges and forcing inventory decisions before each jump.",
+      "detail": "Since you can't go back up, you can't stash items and return, so you choose what to bring before jumping. Billingsley made essentially all passive effects (like the wisdom cloak) activate on jumping down, which would be exploitable if stairs allowed going up and down.",
+      "t": 1637,
+      "quote": "because it only activates when you go down there's no incentive to just wait around for your stuff to recharge um you always have to make progress",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "level transitions",
+      "kind": "technique",
+      "claim": "Into Ruins requires holes on every floor and generates the next depth differently depending on which hole the player jumped down, so the dungeon feels cohesive.",
+      "detail": "Cutting stairs affected level generation and the aesthetics of levels since players are always looking for holes. Billingsley mentions generating the next level based on the chosen hole only briefly.",
+      "t": 1666,
+      "quote": "I'm actually generating the next depth differently depending on which hole you",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "theme from mechanics",
+      "kind": "example",
+      "claim": "Cutting stairs from Into Ruins shaped its story: the game opens with the player drawn into a chasm, and the goal item, the Wings of Yendor, is the only means of escape upward.",
+      "detail": "Billingsley made this decision early and says it defined what the game became; with stairs it would be a completely different game. One cut cascaded through gameplay, items, levels and themes.",
+      "t": 1709,
+      "quote": "cutting stairs from the game really for me I made this decision early on and it really defined what the game became",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "system interactions",
+      "kind": "principle",
+      "claim": "Having fewer elements forces a designer to tune how every system interacts, producing a more focused, cohesive and learnable roguelike than one with a thousand loosely connected things.",
+      "detail": "Roguelikes rely on interacting systems for unexpected behaviour, but with very many elements you won't consider all combinations and some parts feel separate. Billingsley adds that achieving that roguelike emergence with fewer elements is all the more striking, and simpler games are faster to make.",
+      "t": 1747,
+      "quote": "having fewer things forces you to really tune the systems you have and think about how they interact together",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

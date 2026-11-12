@@ -1,0 +1,68 @@
+{
+  "id": "NaqP13nkpfU",
+  "title": "Andrew Doull - Roguelike Radio 2011-present",
+  "speaker": "Andrew Doull",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=NaqP13nkpfU",
+  "talk_type": "history",
+  "summary": "In a short, fast lightning talk, Andrew Doull (Unangband developer, Roguelike Radio co-founder) looks back at the Roguelike Radio podcast from 2011 to the present. He sketches a timeline of the genre from individual developers' 'fantasy heartbreakers' through the 7DRL-driven 'roguelike renaissance', Spelunky's console release and Slay the Spire, to roguelikes flooding Steam, and describes the podcast's open, credential-blind guest policy, practical recording advice and highlight episodes such as one on designing for visually impaired players. He closes that the community 'won': roguelikes have taken over. The talk has little direct game-design content.",
+  "games": [
+    "Unangband",
+    "Spelunky",
+    "Slay the Spire",
+    "Rogue"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "roguelike renaissance",
+      "kind": "history",
+      "claim": "Andrew Doull frames roguelike history since 2011 as moving from lone developers' 'fantasy heartbreakers' to a 7DRL-sparked renaissance, then mainstream success via Spelunky and Slay the Spire and a flood of Steam roguelikes.",
+      "detail": "He borrows 'fantasy heartbreaker' from the tabletop RPG community for individual developers each working on their own game, credits the Seven Day Roguelike competition with starting what he terms the roguelike renaissance, and marks a span from Spelunky's Xbox 360 release to Slay the Spire, followed by much greater quantities of roguelikes on Steam.",
+      "t": 205,
+      "quote": "The seven day roguelike commutation starts what I term the roguelike renaissance",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "podcasting",
+      "kind": "principle",
+      "claim": "Roguelike Radio deliberately does not introduce guests by credentials; the only qualification is having played the game under discussion and having something interesting to say.",
+      "detail": "Doull calls it a democratizing process, bringing on knowledgeable community volunteers rather than people with authority. Host Alexei Pepers notes Roguelike Celebration shares this ethos and uses past Roguelike Radio guests as a checklist when looking for speakers.",
+      "t": 327,
+      "quote": "I choose not to introduce guests with backgrounds that may convey authority",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "podcasting",
+      "kind": "technique",
+      "claim": "Doull's main advice for recording a podcast is to spend money on client-side recording software and a room with soft furnishings, since microphones are rarely the problem.",
+      "detail": "He describes recording five people around a wooden table with a headset, and editing that involves equalizing volumes, separating talk, removing lip smacks and manual levelling.",
+      "t": 438,
+      "quote": "if you spend money on one thing spend it on the software. You want client side",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "visual impairment",
+      "kind": "history",
+      "claim": "Roguelike Radio ran an episode on designing roguelikes for visually impaired players, including how they use screen readers.",
+      "detail": "Doull singles it out as personally important because he has a blind family member; the episode wove recorded voice clips into the show.",
+      "t": 496,
+      "quote": "The episode for design trying designing for visually impaired was important for me because I have a family member who is blind",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "mainstream success",
+      "kind": "history",
+      "claim": "Doull argues the long-time roguelike community was right that the genre was special, and roguelikes have now taken over mainstream games.",
+      "detail": "He credits the Seven Day Roguelike competition, talented insiders and outsiders, and long discussion by people around since Rogue; Pepers adds that 'everything is a roguelike now' made it a good time for a retrospective.",
+      "t": 545,
+      "quote": "The biggest highlight as a community was being right. We knew there was something special about roguelikes",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

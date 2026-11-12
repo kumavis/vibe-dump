@@ -1,0 +1,181 @@
+{
+  "id": "q7E1N-fJnrA",
+  "title": "Cat Manning - How To Build A Character System That Doesn't Fall Apart Two Turns Later",
+  "speaker": "Cat Manning",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=q7E1N-fJnrA",
+  "talk_type": "design",
+  "summary": "Cat Manning examines how to design character traits that hook into game systems and support emergent stories, comparing The Sims 3, Dwarf Fortress, The Shrouded Isle, Crusader Kings II and III. She defines traits as simple in-game words gesturing at a generated character's personality, and shows failure modes: mechanically overlapping traits (the 10,000 bowls of oatmeal problem), traits that disrupt the core loop, opaque trait webs that are hard to trace, and walls of indistinct icons. Successes include orthogonal traits creating value clashes, traits foregrounded as a central puzzle, the 'venom' principle of spiky standout characters, CK3's surfaced personality epithets, and its stress system making traits active choices. Her takeaway: decide how much to surface versus leave to player interpretation, and make traits active rather than passive.",
+  "games": [
+    "The Sims 3",
+    "Dwarf Fortress",
+    "The Shrouded Isle",
+    "Crusader Kings II",
+    "Crusader Kings III",
+    "Blaseball",
+    "Prom Week"
+  ],
+  "insights": [
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character traits",
+      "kind": "principle",
+      "claim": "A character trait should be a simple in-game word that gestures at a generated character's personality and gives clear hooks into the game's mechanics, letting players imagine and extrapolate stories.",
+      "detail": "Manning defines traits as simple and often binary, deliberately oversimplified. They help players parse dense systems that would otherwise present overwhelming data.",
+      "t": 116,
+      "quote": "they should offer clear hooks to a game's mechanics that allow players to imagine and extrapolate stories",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "trait overlap",
+      "kind": "warning",
+      "claim": "The Sims 3 shows that adding many granular traits creates mechanically overlapping ones that undermine uniqueness, an instance of Kate Compton's '10,000 bowls of oatmeal' problem.",
+      "detail": "Flirty and irresistible differ only in that irresistible Sims build romance faster and get flirting actions earlier; friendly, charismatic and schmoozer similarly overlap. Any difference lies in how players interpret the words rather than surprising emergent gameplay, so the traits serve co-authoring more than distinct behaviour.",
+      "t": 260,
+      "quote": "It undermines the uniqueness by offering the same gameplay affordances",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "trait bloat",
+      "kind": "warning",
+      "claim": "Traits added in expansions to an already crowded trait set tend to feel like variants of existing traits or shallow showcases for new features.",
+      "detail": "In The Sims 3, expansion traits could only draw on base-game possibilities, so their integration into existing systems was shallow and they cluttered an already crowded space.",
+      "t": 391,
+      "quote": "new traits felt like this expansion packs version of a preexisting trait or entirely designed to show off feature X",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "trait design",
+      "kind": "warning",
+      "claim": "A trait that realistically simulates behaviour can still fail if it disrupts the core loop, as The Sims 3's absent-minded trait did by randomly dropping queued actions.",
+      "detail": "Absent-minded Sims would stop what they were doing to wander off, so players had to monitor them constantly. It tied story to system but took away from gameplay instead of opening options; Manning says you must consider how traits interface with the core loop to avoid a UX nightmare.",
+      "t": 474,
+      "quote": "No matter how interesting a trait is on its own you do still need to consider how your traits will interface with the rest of your core loop",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "orthogonal traits",
+      "kind": "example",
+      "claim": "Dwarf Fortress gives dwarves orthogonal beliefs and facets, so a dwarf who values friendship but is unfriendly experiences a value clash that generates stories.",
+      "detail": "Beliefs determine what dwarves value; facets range from -50 to 50 and govern how they act toward others. Citing Emily Short and Tanya Short, Manning notes we often correlate personality aspects that need not be correlated (not all extroverts are loud), and decoupling them creates interesting clashes.",
+      "t": 625,
+      "quote": "A dwarf can have a high friendship believe and low friendly facet which leads you to a sad dwarf",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "legibility",
+      "kind": "principle",
+      "claim": "Procedurally generated traits do not narrativize themselves; designers must choose how much to surface causes to players versus leave them to dig out, and design for that point.",
+      "detail": "In Dwarf Fortress, the strangest stories take work to extract and it is often hard to trace which trait caused an observed behaviour, such as why one dwarf is sadder than its peers. Manning calls this a sliding scale each game should place itself on deliberately.",
+      "t": 723,
+      "quote": "There is a sliding scale how much you want to surface to players and how much you want them to do the work",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "trait discovery",
+      "kind": "example",
+      "claim": "The Shrouded Isle makes discovering villagers' simple virtue and vice traits the core puzzle, creating tension because the most investigated characters are the ones you must sacrifice.",
+      "detail": "Everyone has one virtue and one vice tied to the cult's five values; players make educated guesses to discover them and purge sinners. Traits are foregrounded and must be legible to engaged players, and the more time spent on someone the more interesting they become.",
+      "t": 831,
+      "quote": "The game feeds on the tension generated by having to kill the most interesting players and the most time the players spent",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "trait display",
+      "kind": "warning",
+      "claim": "Crusader Kings II surfaces trait effects clearly via icons and tooltips, but long-lived characters accumulate an overwhelming, hard-to-differentiate wall of trait icons.",
+      "detail": "Traits link to stats, influence and piety and can be inherited, gained or lost. A character may reach 60+ learning, traceable only by summing traits, and the effect is like a monologue of every Shakespeare character at once where traits blur together.",
+      "t": 919,
+      "quote": "you get an overwhelming litany of icons that are difficult to differentiate",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "venom principle",
+      "kind": "principle",
+      "claim": "Under the 'venom' principle, a few spiky, statistically unlikely characters or traits should stand out against a mostly unremarkable supporting cast, scaled to how many characters players engage with.",
+      "detail": "Drawing on an Emily Short appendix, Manning says Crusader Kings II doesn't need every character interesting; enough standouts make interesting ones easier to pick from hundreds, and if everyone had rich backstories it would overwhelm. In a game with only five characters you must interact with, two or three interesting ones won't suffice.",
+      "t": 980,
+      "quote": "In venom design, Vivid statistically less likely or spiky moments stand out and provide variation that's suppose to surprise",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "surfacing ai state",
+      "kind": "technique",
+      "claim": "Crusader Kings III surfaces hidden AI personality stats as a two-word epithet built from the two most extreme of nine hidden attributes.",
+      "detail": "In CK2 traits fed five hidden AI stats that were impossible to read without looking under the hood. In CK3, compassionate gives +200 compassion and so usually surfaces, but a compassionate greedy character can come out as a 'vindictive ravener', which Manning finds interesting; a 'callous planner' has low compassion and high rationality.",
+      "t": 1151,
+      "quote": "These are correlated to nine hidden attributes and the top two most extreme are selected and surfaced",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "stress system",
+      "kind": "technique",
+      "claim": "Crusader Kings III's stress system turns traits from passive bonuses into active decision factors by penalizing rulers for acting against their character.",
+      "detail": "Playing against type quickly drives a ruler to breakdown, which can be fun but disruptive. A compassionate pagan ruler, for example, struggles to gain piety, so traits shape choices.",
+      "t": 1196,
+      "quote": "With stress, traits aren't just passive bonuses. They are an active part of the player's decision making",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "trait design",
+      "kind": "principle",
+      "claim": "A trait need not be beautiful on its own but must fit its context; a few ornate flavour traits are fine, but too many make players doubt whether any traits matter mechanically.",
+      "detail": "Manning says how much to surface and tie into systems depends on how much of the loop is discovery versus acting on known information. Her balance advice is to experiment ('fuck around and find out').",
+      "t": 1268,
+      "quote": "A trait doesn't have to be beautiful on its own. What it needs is to fit into context",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "active traits",
+      "kind": "technique",
+      "claim": "Traits should be designed as active drivers of behaviour rather than lists of prohibitions, e.g. a chaste character who actively harasses others about sex rather than one merely closed off from options.",
+      "detail": "In Q&A, crediting Tanya Short, Manning says chaste in Crusader Kings II as 'what you can't do' is a boring passive trait, whereas making it active creates surprising gameplay. She urges designers to rethink traits that just sit there.",
+      "t": 1376,
+      "quote": "if chased means you are running around yelling at everybody who is having sex then suddenly your game is much more interesting",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "character complexity",
+      "kind": "warning",
+      "claim": "Very complex simulated characters, as in Prom Week, can become chaotic and frustrating when moods and relationships shift too quickly to follow.",
+      "detail": "In Q&A Manning says Prom Week is a fascinating artifact but its characters waffled back and forth and changed moods rapidly. She sees fruitful work in making such confusion legible without being simplistic, but has no clear hypothesis.",
+      "t": 1575,
+      "quote": "the complexity of characters, how much they sport of waffled back and forth and how quickly moods changes",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "simulation weaknesses",
+      "kind": "principle",
+      "claim": "Designers should lean into their simulation's weaknesses and design toward them rather than trying to cover them up.",
+      "detail": "Discussing how Until Dawn's teens making foolish choices fits the horror premise while the same behaviour would feel dissonant from Mass Effect's Shepard, Manning calls leaning into simulation weaknesses one of her top design tips.",
+      "t": 1653,
+      "quote": "leaning into your simulation's weaknesses is always one of my number one design tips",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "personality axes",
+      "kind": "principle",
+      "claim": "Cat Manning's three most valuable character dimensions are beliefs and values, how a character relates to others, and how likely they are to act on beliefs given societal defaults.",
+      "detail": "Asked in Q&A to pick three spectra for a career, she chose these, emphasizing social design: for her, traits are about how characters interact with the world, not cool pieces of paper on a screen.",
+      "t": 1442,
+      "quote": "how likely they are to take specific actions based on both their beliefs and society",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

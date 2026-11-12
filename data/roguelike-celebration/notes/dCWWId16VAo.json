@@ -1,0 +1,78 @@
+{
+  "id": "dCWWId16VAo",
+  "title": "Joseph Hewitt: Magic in Game Design: (Mis)Directing the Player's Attention",
+  "speaker": "Joseph Hewitt",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=dCWWId16VAo",
+  "talk_type": "design",
+  "summary": "In a short prerecorded talk, Joseph Hewitt (GearHead, Dungeon Monkey) argues that games, and especially procedural generation, are illusions, and applies four principles of stage magic to game design: attention, misdirection, simulation and performance. He illustrates them with a simple card trick that swaps the whole hand. Attention maps to UI design, misdirection to surprises and hidden mechanics, simulation to the player's imagination filling gaps (suspension of disbelief), and performance to presentation mattering as much as technique.",
+  "games": [
+    "Undertale",
+    "Bloodborne",
+    "GearHead",
+    "Dungeon Monkey"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "procgen as illusion",
+      "kind": "principle",
+      "claim": "Procedural generation is a form of stage illusion: conjuring worlds from thin air that technically do not exist, so the craft of illusion is especially relevant to roguelike developers.",
+      "detail": "Hewitt defines magic as making the audience see what didn't happen or not see what did. He says a computer game is nothing but a very large number, which players experience as adventuring, piloting a robot or farming.",
+      "t": 154,
+      "quote": "Procedural generation is conjuring new worlds from thin air making up stuff that did not exist before and technically does not exist now",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "directing attention",
+      "kind": "principle",
+      "claim": "UI design is the magician's principle of attention: designers must deliberately direct the player's attention to what they need to know and do, or players will miss required mechanics.",
+      "detail": "In the card trick, Hewitt asks the viewer to focus on one card because remembering any other would break the trick. In games, players miss a required mechanic when the designer failed to draw their attention to it properly.",
+      "t": 387,
+      "quote": "Attention has probably the most application to game design because it is UI programming, user interface",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "misdirection",
+      "kind": "technique",
+      "claim": "Misdirection lets designers set up surprises and reveals by getting players used to a rhythm and then breaking it, as Undertale does by presenting itself as a normal JRPG.",
+      "detail": "Hewitt explains the card trick swapped the entire hand while a story about burning the card gave viewers time to forget the other cards. In games, misdirection can lead players astray and set up big reveals.",
+      "t": 570,
+      "quote": "You get the player used to a certain rhythm and then you break the expectation and do something unexpected",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden mechanics",
+      "kind": "principle",
+      "claim": "Although games usually give players all the information, designers can sometimes keep mechanics deliberately obscured so things are not going the way the player assumes.",
+      "detail": "Hewitt says misdirection can be used to obfuscate game mechanics; usually we want to tell the player everything, but not always.",
+      "t": 600,
+      "quote": "Usual in a game we want to give the player all the information but not always",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player imagination",
+      "kind": "principle",
+      "claim": "Players knowingly cooperate with a game's illusion, and their imagination does much of the world-building, so sparse information as in Bloodborne can produce elaborate imagined worlds.",
+      "detail": "Hewitt says the mind keeps a mental simulation that fills gaps, which is why the card swap works. Players know the game is a lie but suspend disbelief because they want to be entertained; designers should include points that stimulate imagination.",
+      "t": 790,
+      "quote": "It is the player's imagination that is doing a lot of the heavy lifting to build this game world",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "presentation",
+      "kind": "principle",
+      "claim": "Presentation can matter as much as the underlying mechanism, so programmer-designers should not treat everything as a technical problem.",
+      "detail": "Hewitt notes many great magicians perform tricks that are easy to figure out but elevate them through performance. He urges keeping the player in mind at all times and asking what aesthetic experience to give them.",
+      "t": 877,
+      "quote": "The presentation, the way drew something can be ad important as what you are doing",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

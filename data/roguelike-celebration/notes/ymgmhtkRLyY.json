@@ -1,0 +1,127 @@
+{
+  "id": "ymgmhtkRLyY",
+  "title": "Reed Lockwood: Common \"Pitfalls\" of Roguelike Traps and How to Circumvent Them",
+  "speaker": "Reed Lockwood",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=ymgmhtkRLyY",
+  "talk_type": "design",
+  "summary": "Reed Lockwood, developer of the non-combat roguelike Subterrestrian, argues that traps are a ubiquitous but overlooked roguelike mechanic that could give dungeons character as hazardous places. He defines a hypothetical worst trap (hidden, no warning, flat damage, instant, single tile, player-only) that amounts to a hit point tax on exploration, and explains why turn-based play and symbolic graphics make real-time trap design inapplicable. He then offers a palette of improvements along axes of fairness and interest: separating trigger from hazard, passive and active detection clues, non-damage effects, tying traps into game systems, timing, dungeon manipulation, and especially monster interaction.",
+  "games": [
+    "Subterrestrian",
+    "Bloodborne",
+    "Pokemon"
+  ],
+  "insights": [
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "traps",
+      "kind": "principle",
+      "claim": "Traps can give a roguelike dungeon character as a hazardous place rather than an empty room to fight monsters in, yet they are often an overlooked mechanic.",
+      "detail": "Lockwood notes traps are ubiquitous in traditional roguelikes but often neglected; he offers his designs as a palette of ideas, many of which have been done before in some form.",
+      "t": 96,
+      "quote": "they have a potential to give your roguelike dungeon a flavor as a hazardous place",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "traps",
+      "kind": "warning",
+      "claim": "The worst roguelike trap is hidden, springs with no warning, deals flat damage instantly to one tile and only the player; it amounts to a hit point tax for walking over unexplored tiles.",
+      "detail": "Such traps lead to tedious play, either carefully mapping every step or building stats (hit points, perception) so traps don't matter. Lockwood says common roguelike traps trend toward this hypothetical.",
+      "t": 168,
+      "quote": "This amounts to just like a hit point tax for traveling over unexplored dungeon tiles",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "traps",
+      "kind": "principle",
+      "claim": "Trap design from real-time games doesn't transfer to traditional roguelikes, because turn-based play removes reaction time and symbolic graphics prevent players from visually reading clues like a hole in the wall.",
+      "detail": "In turn-based games, dodging depends on character attributes, not player skill. With ASCII or symbolic tiles, the player can't interpret a scene to spot a tripwire; they rely on the character's perception, after which the trap appears as a discrete object.",
+      "t": 222,
+      "quote": "With traditional roguelikes you have a turn-base game so there is no reaction time",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "traps",
+      "kind": "technique",
+      "claim": "Model a trap as two connected parts, a trigger (pressure plate, tripwire, magic field) and one or more hazards (e.g. a crossbow), so you can hide one while revealing the other.",
+      "detail": "Lockwood's example: a visible grate on the floor signals something fishy without saying what will happen. He also concludes that multi-tile traps tend to be better than single-tile ones.",
+      "t": 388,
+      "quote": "You have the trigger which is like a pressure plate on the floor or a trip wire or something like that",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "trap detection",
+      "kind": "technique",
+      "claim": "Give players passive clues to traps: treasure as bait, remains of previous victims, messages like smelling something or feeling a draft, blood, bones, soot, or a suspiciously clean patch of floor where a trap has fired.",
+      "detail": "Lockwood plays on the roguelike convention of items lying in the middle of the floor: why is it there? Maybe it is bait. A clean spot in fungus-coated floor could indicate a previous trap activation.",
+      "t": 496,
+      "quote": "Blood, bones, soot and other signs like a trap has gone off or even a lack of dirt",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "trap detection",
+      "kind": "technique",
+      "claim": "Offer active ways to detect traps, such as triggering them with thrown items or limited-use items like chalk dust that reveal tripwires or vents.",
+      "detail": "Lockwood says triggering traps with thrown items seems obvious but is not often implemented.",
+      "t": 522,
+      "quote": "Having your traps be triggered by thrown items is one sort of seems obvious but you know not often implemented",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "traps",
+      "kind": "technique",
+      "claim": "Traps should do more than damage: status effects like paralysis or poison, inventory effects like burning scrolls or magnetically yanking weapons, and movement effects like teleporters, conveyor belts and rushing water.",
+      "detail": "Lockwood warns that adding inventory effects to a game that has none elsewhere can be unbalancing.",
+      "t": 567,
+      "quote": "you can also do things like affect their inventory, burning scrolls, having weapons yanked out of their hands",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "traps",
+      "kind": "principle",
+      "claim": "The most important trap principle is to tie traps into the game's other systems, such as combat, monsters, or even a religion system where a trap might draw a deity's attention.",
+      "detail": "Lockwood calls this the most important thing, assuming a roguelike with the usual systems of combat, hit points and monsters.",
+      "t": 613,
+      "quote": "you should tie your traps into the game system",
+      "weight": 3
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "traps",
+      "kind": "principle",
+      "claim": "Timed traps like a periodic swinging axe are ineffective alone in a turn-based game, but become interesting when combined with other pressures like a monster fight, forcing tactical choices.",
+      "detail": "Without randomness in move speed, the player knows they will be clear of the axe. Slow-acting traps like rooms filling with water, closing walls and rolling boulders also use time.",
+      "t": 695,
+      "quote": "if there is other stuff going on in the dungeon like you are fighting a monster or something like that it will make the game more interesting",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "traps",
+      "kind": "technique",
+      "claim": "Traps can manipulate the dungeon itself: adding hazards like fire or acid puddles, flooding (which brings knock-on effects like aquatic monsters), darkness and fog, or opening and closing off parts of the map.",
+      "detail": "Lockwood lists these as dungeon manipulation effects that go beyond direct harm.",
+      "t": 738,
+      "quote": "Water traps are good because you can have other knock on effects like aquatic monsters",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "traps",
+      "kind": "principle",
+      "claim": "Monster interaction is the most interesting trap dimension: traps that injure monsters, monsters that know about or set traps, traps that summon monsters, captured or friendly monsters that spot or lead you to traps, and monsters that deliberately trigger traps that won't affect them.",
+      "detail": "Lockwood concludes that designers should design encounters holistically with monsters in mind, remembering the two axes of fairness and complexity.",
+      "t": 760,
+      "quote": "Traps can injur monsters or which monsters know about which traps? Maybe some are intelligent enough to even be setting the traps",
+      "weight": 3
+    }
+  ],
+  "verified": true
+}

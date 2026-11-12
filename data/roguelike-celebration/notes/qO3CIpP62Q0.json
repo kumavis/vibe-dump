@@ -1,0 +1,179 @@
+{
+  "id": "qO3CIpP62Q0",
+  "title": "Brian Cronin - Off The Rails: Lessons from Monster Train Development",
+  "speaker": "Brian Cronin",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=qO3CIpP62Q0",
+  "talk_type": "technical",
+  "summary": "Shiny Shoe gameplay engineer Brian Cronin gives four engineering lessons from the roguelike deckbuilder Monster Train. The real-time prototype became the turn-based product, and its coroutine-driven game loop made damage previews hard because the simulation was never deterministic. Cards are effectively a programming language; the shipped script-plus-traits representation forced custom code for non-linear cards, and he proposes a domain-specific action graph instead. An in-game F8 feedback button that sent logs, save files and screenshots to Slack, with every report triaged, was the most important tool for the game's success. Finally, mixing gameplay logic with presentation breeds spaghetti; he advocates an isolated world state modified by a world engine through commands, emitting state changes that drive visuals, sound and achievements.",
+  "games": [
+    "Monster Train",
+    "Dominion",
+    "Netrunner",
+    "Hearthstone",
+    "Slay the Spire"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "power curve",
+      "kind": "example",
+      "claim": "Monster Train deliberately uses a wild power curve, e.g. a basic card deals 2 damage for 1 ember while another deals 100 piercing damage to all units for 3 ember, which players enjoy.",
+      "detail": "Cronin contrasts this with Dominion, where the upgrade from Copper to Woodcutter is a modest step. Monster Train also has an extensive upgrade system letting players reduce unit cost, change size and boost damage to customize runs.",
+      "t": 181,
+      "quote": "we really play with the the power scales is just you know a little bit wild in the game and something that also players really enjoy",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "example",
+      "claim": "Monster Train's expansive meta-progression, a logbook tracking card unlocks and the escalating Covenant challenge rank, is something players particularly enjoy.",
+      "detail": "Cronin describes the game as a deckbuilder with a roguelike (probably roguelite) run structure where losing restarts the run, layered with unlocks and increasing challenge levels.",
+      "t": 125,
+      "quote": "it has a very expansive meta progression systems that's something that players really enjoy about the game",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "prototyping",
+      "kind": "warning",
+      "claim": "The prototype will become the product: Monster Train's real-time prototype code was kept and built on even after the game became turn-based.",
+      "detail": "The original version had three lanes with energy ticking up and combat at fixed rates. The team moved to turn-based play but kept much of the prototype code, which caused many problems.",
+      "t": 305,
+      "quote": "a lot of the code that drives this prototype exists in the final version so we just kept building on top of what we created",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "coroutines",
+      "kind": "warning",
+      "claim": "Coroutines keep timed sequences readable in one place but bundle UI, input, sound and game logic together with no separation of concerns.",
+      "detail": "A damage sequence (animate, wait 0.8 seconds, resolve death trigger, animate) reads like Lego instructions, which suits prototyping, but Monster Train used them overzealously and ran its whole game loop as a giant coroutine.",
+      "t": 399,
+      "quote": "the big disadvantage is there's no separation of concern all of your ui and input and sound effects and game logic are all bundled together",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "previews",
+      "kind": "example",
+      "claim": "Monster Train needed damage previews showing which units will die before a card is played, because complex board states with many units, statuses and artifacts make resolution confusing.",
+      "detail": "Hovering shows a red X on doomed units, and the preview updates if a spell changes the equation. Cronin calls it basically necessary to ship and something players really enjoy.",
+      "t": 426,
+      "quote": "we implemented damage previews which is that little red x there",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "determinism",
+      "kind": "warning",
+      "claim": "Features like previews need a deterministic simulation, which must be intentionally designed from the start; Monster Train's lack of it meant many preview-mode exceptions.",
+      "detail": "Random number generation and cross-platform floating point can break determinism. Without it, the team had to special-case sound effects and warnings in preview mode throughout the coroutine loop, which took a lot of work.",
+      "t": 486,
+      "quote": "you kind of need to at the start you need to intentionally shoot for a deterministic simulation and we didn't really do that",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "card representation",
+      "kind": "technique",
+      "claim": "Monster Train represents a card as data pointing to effect scripts with parameters, with description text that hooks into effect values so numbers update automatically across languages.",
+      "detail": "Torch has a name, description, type and a CardEffectDamage effect with a target mode and an integer parameter. Changing damage from 2 to 3 updates card text without re-translation. Playing a card spends ember and resolves effects in order.",
+      "t": 609,
+      "quote": "if we change the number to three or one later all the card text will just dynamically update which is really handy",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "card representation",
+      "kind": "warning",
+      "claim": "A script-per-effect card architecture works for independent linear effects but breaks down for dependent, scaling effects, forcing engineers to write custom code for specific cards.",
+      "detail": "X-cost cards like Vent use invisible card traits that modify damage implicitly inside a character's bonus-damage calculation. Because behavior was implicit in code, designers lacked control and engineers custom-wrote traits and effects.",
+      "t": 725,
+      "quote": "it really broke down on effects were dependent on each other and when they were non-linear so when they were scaling involved",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "action graph",
+      "kind": "technique",
+      "claim": "Cronin proposes representing card effects as a domain-specific action graph of control-flow nodes and parameter nodes, letting designers rewire effects while programmers write small simple nodes.",
+      "detail": "For Awoken Rail Spike (draw X cards, reduce their cost, consume), nodes draw, upgrade and consume, fed by parameters like energy spent. Changing it to draw one card per discard-pile card, or doubling it with a multiplier node, is a trivial rewiring.",
+      "t": 928,
+      "quote": "this gives the designer a lot more leverage over how these effects resolve and allows the programmers to write more specific simple nodes",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "player feedback",
+      "kind": "technique",
+      "claim": "Monster Train's frictionless in-game feedback button (F8) sent each report to Slack with the log file, save file and screenshot, making bugs easy to reproduce.",
+      "detail": "No username, password or alt-tabbing was needed. Although battles were not resumable mid-fight, the save file restored the start of the battle, and logs revealed errors like out-of-memory. The system remains in the Steam build.",
+      "t": 985,
+      "quote": "what's great about this is just no friction they don't have to put in a username password there's no alt tabbing to a website",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "player feedback",
+      "kind": "principle",
+      "claim": "Collecting feedback only pays off with consistent action: someone must read and triage every report, which Cronin credits as the main tool behind Monster Train's success.",
+      "detail": "The producer reviewed feedback daily, filing it to Jira and tagging with Slack emoji reactions (already filed, not a bug). It was a lot of work but made the game what it is.",
+      "t": 1091,
+      "quote": "i think this tool more than anything was the reason for our success",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "separation of concerns",
+      "kind": "warning",
+      "claim": "Mixing gameplay logic with animation, input and UI produces callback spaghetti where every change feels dangerous, and engines like Unity nudge developers toward it.",
+      "detail": "Cards calling managers calling back into objects (e.g. on-discard effects triggered after animations) devolved into global access; by late development Cronin felt like 'do not touch any of these wires'. Unity's game objects invite cramming lights, models and logic together.",
+      "t": 1244,
+      "quote": "it's the folly of mixing gameplay logic with animation input and ui",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "world state",
+      "kind": "technique",
+      "claim": "Cronin advocates an isolated world state modified only by a world engine processing commands, which outputs world state changes that presentation systems (sound, animation, achievements) subscribe to.",
+      "detail": "Commands (move unit, play card, damage) do not map one-to-one to changes; damage may or may not cause a death. He likens it to model-view-controller; game objects become a view into the state, which need not touch engine code at all.",
+      "t": 1311,
+      "quote": "the world engine itself is responsible for modifying that state and it does that through commands",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "world state",
+      "kind": "principle",
+      "claim": "Isolating game state makes serialization for saves and networking much easier, and would have enabled Monster Train features it never got, like server-side run verification and mid-battle saves.",
+      "detail": "Cronin says such a world state would have been a huge improvement for Monster Train: they wanted to verify runs against cheating and save mid-battle, both of which were too much work without it. Snapshots of the state could also support rollback or run history.",
+      "t": 1402,
+      "quote": "it's relatively easier to serialize the state so you can output this to a save file to json it's also it makes a lot easier to do networking",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "logging",
+      "kind": "technique",
+      "claim": "Extensive categorized logging (gameplay vs audio) was the main technique for debugging Monster Train's hard-to-follow callback chains.",
+      "detail": "Asked about debugging callbacks, Cronin said the company is big on logging with filterable categories; he now advocates not using callbacks at all.",
+      "t": 1541,
+      "quote": "we did take advantage of extensive logging so the company is really big on login in general",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "technical constraints",
+      "kind": "warning",
+      "claim": "Without schedule room for big refactors, Monster Train's architecture likely limited which cards could be made, an unavoidable trade-off.",
+      "detail": "Asked whether card effects ever forced major refactors, Cronin said there were many small refactors but the schedule eventually ruled out big ones, so they made things work as best they could.",
+      "t": 1506,
+      "quote": "we probably did limit some of the cards we wanted to make because of technical limitations",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

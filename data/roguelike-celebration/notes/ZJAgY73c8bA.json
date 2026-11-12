@@ -1,0 +1,143 @@
+{
+  "id": "ZJAgY73c8bA",
+  "title": "Tabea Iseli: How hard can it be to create a non violent rogue lite dungeon crawler?",
+  "speaker": "Tabea Iseli",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=ZJAgY73c8bA",
+  "talk_type": "postmortem",
+  "summary": "Tabea Iseli describes developing Grimoire Groves, a non-violent roguelite dungeon crawler where a witch grows plant creatures with spells instead of killing monsters. Her team planned to reskin a traditional dungeon-crawler loop (70% familiar, 20% adapted, 10% experimental), but found that standard game-feel 'juice' is mostly about violence, and that players' game literacy (e.g. touching an enemy hurts) breaks down in a non-violent game. The core challenge became balancing reliance on game literacy against subverting it. She shares seven techniques: growth-stage character design, intricate animations, farming-style harvest, round shapes, indirect ground-targeted casting, reframed crowd control, and happy plant sounds as the non-violent equivalent of bass-heavy weapon audio.",
+  "games": [
+    "Grimoire Groves",
+    "Hades",
+    "Boyfriend Dungeon",
+    "Don't Starve",
+    "Animal Crossing",
+    "Stardew Valley",
+    "Vampire Survivors",
+    "Cult of the Lamb",
+    "Atomicrops"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "market research",
+      "kind": "principle",
+      "claim": "Grimoire Groves was made non-violent because roguelikes tend to be dark and gritty, while cozy-game players are entering dungeon crawlers through games like Hades and Don't Starve.",
+      "detail": "Iseli says the reason was frankly money: the team believed there was a market. Market research on Steam (estimating sales of adjacent titles over time) found nothing very close; farming sims and roguelikes already overlap in sandbox play, resource management and simple repeating gameplay.",
+      "t": 157,
+      "quote": "they also tend to be dark and gritty and you are always slaying skeletons and demons and grotesque monsters",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "familiarity ratio",
+      "kind": "technique",
+      "claim": "Grimoire Groves' concept was planned as roughly 70% proven mechanics from roguelike crawlers and farming sims, 20% adaptations of familiar elements, and 10% experimentation.",
+      "detail": "Iseli says players like games familiar to what they love, and building on others' work is easier. The 70% was the core loop of home base, procedural levels and returning home on failure; the 20% included a non-violent version of traditional combat.",
+      "t": 323,
+      "quote": "Our plan was to adopt roughly 70% from games and genres we were looking at so roguelike dungeon crawlers and farming sims",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "non-violent reskin",
+      "kind": "example",
+      "claim": "Grimoire Groves maps each roguelike crawler element to a non-violent one: colourful forest for dungeon, growing plants for killing, gathering fruit for looting, crafting for buying, and energy instead of health.",
+      "detail": "Iseli says the loop was mechanically near-identical to a traditional crawler, with differences mostly narrative. Some elements were hard to align, such as bosses: a big hard-to-grow plant has no reason to block progress to the next level.",
+      "t": 407,
+      "quote": "instead of killing enemies you would use your weapons which in our case were magical witch spells and grow plants",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "game feel",
+      "kind": "warning",
+      "claim": "Standard game-juice advice is largely about violence, so a non-violent game like Grimoire Groves cannot fall back on conventional screenshake-and-flash solutions.",
+      "detail": "Iseli marked the techniques in the Art of Screenshake list and found almost half relate directly to weapons, explosions or impact. They aren't useless (a plant can have a hit animation when receiving energy) but the team had to experiment and build feel for growing and energizing from scratch.",
+      "t": 634,
+      "quote": "almost half of the techniques are directly relating to violence and weapons like explosions and so on",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "game literacy",
+      "kind": "principle",
+      "claim": "Players rely on learned game literacy, both roguelike conventions and basic vocabulary like 'touching an enemy hurts', and removing violence wipes out much of it.",
+      "detail": "Iseli's example is a cute turtle: nothing about it says it kills on touch, yet players know from other games. In a non-violent game players must relearn what happens on contact and what the game-over condition is, a lengthy process that can be unfun for players and developers alike.",
+      "t": 930,
+      "quote": "If you have year zero game literacy, how would you know touching the turtle kills you?",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "game literacy",
+      "kind": "principle",
+      "claim": "The biggest challenge in making Grimoire Groves was not inventing fun non-violent mechanics but balancing reliance on game literacy against subverting it.",
+      "detail": "Iseli says that because making the game non-violent was already a big subversion, the team tried to minimize other subversions. The rest of the talk presents seven ways they handled this.",
+      "t": 1049,
+      "quote": "finding the right balance of relying on game literacy and when to subvert it",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "character design",
+      "kind": "technique",
+      "claim": "Grimoire Groves gives each plant creature multiple growth stages and intricate animations so players read that spells make plants grow and bloom rather than hurt them.",
+      "detail": "Iseli contrasts Vampire Survivors' two-frame sprites and the usual flash-white-then-despawn hit feedback, which suffice when players know they're killing things. Fully grown plants happily jump into the ground and spawn fruit; nearly every design decision told players 'you are not killing these plants'.",
+      "t": 1176,
+      "quote": "we created multiple stages for each plan creature to tell the players, hey, if you cast spells on the plants, they will grow and they will bloom",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "borrowed conventions",
+      "kind": "example",
+      "claim": "Grimoire Groves replaced roguelike loot drops with farming-style button harvesting because drops made plants feel stabbed with guts spilling out.",
+      "detail": "Iseli says loot dropping is not inherently violent, but roguelike literacy made it read that way. Swapping in the farming-game convention of pressing a button to harvest used game literacy to the team's advantage.",
+      "t": 1282,
+      "quote": "We conveniently replaced the game literacy from roguelike games with what we already have learned from farming games",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "indirect casting",
+      "kind": "technique",
+      "claim": "In Grimoire Groves any projectile thrown at a plant felt violent, so the team switched to indirect spells cast on the ground or environment, inspired by MMO healing circles.",
+      "detail": "Round shapes and friendly colours helped, but even a pink cotton ball projectile felt like an attack. MMO ground-targeted heals let people choose to stand in the circle, which Iseli likens to consent; their working projectile became a cloud that flies above a plant and rains on it.",
+      "t": 1393,
+      "quote": "no matter what we were throwing at the plants it could be a pink fluffy cotton ball but it was still feeling violent",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "crowd control",
+      "kind": "technique",
+      "claim": "Grimoire Groves keeps crowd-control effects by analysing what they do mechanically: burning becomes energizing over time, and freezing becomes a plant napping in a sleep bubble.",
+      "detail": "Iseli says crowd control is fun and important in roguelike crawlers for managing enemies, but burning or freezing doesn't feel like helping a plant. Since damage was replaced by energizing, damage over time became energizing over time; she notes this was a rare case of a mostly visual fix.",
+      "t": 1549,
+      "quote": "If you look at a burning spell for example, it is nothing more than damage over time",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "sound design",
+      "kind": "technique",
+      "claim": "Grimoire Groves' non-violent equivalent of adding bass to make a gun feel powerful is making energized plants laugh, chuckle and cheer.",
+      "detail": "The team started from rewarding pickup sounds like a coin bling and tried to crank them up. Since the plants have faces and mouths, adding happy vocal reactions was a 'complete game changer'.",
+      "t": 1700,
+      "quote": "If you ask what the equivalent of adding more base and explosion in non violent games it is more happiness and love",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "non-violent loop",
+      "kind": "warning",
+      "claim": "After two years, making a satisfying non-action gameplay loop remains one of Grimoire Groves' biggest challenges.",
+      "detail": "Iseli shows early versus recent footage to show progress, but says the team always knew it was a big experiment and still must put a lot of work into satisfying gameplay.",
+      "t": 1742,
+      "quote": "We have been working on the game for two years and had a focus on creating a satisfying and choosing gameplay it is still one of our biggest challenges",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

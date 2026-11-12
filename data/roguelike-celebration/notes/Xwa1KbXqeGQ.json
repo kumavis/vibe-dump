@@ -1,0 +1,108 @@
+{
+  "id": "Xwa1KbXqeGQ",
+  "title": "Evan Ovadia - ASCII, Sprites, and Symbolic Graphics",
+  "speaker": "Evan Ovadia",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=Xwa1KbXqeGQ",
+  "talk_type": "design",
+  "summary": "Evan Ovadia, a self-described non-artist, describes developing Domino, a graphics layer that renders traced font symbols as 3D outlined meshes on domino-like tiles, which he used for the 7DRL game Incendian Falls. He then compares ASCII, sprites and symbolic graphics across seven criteria: learning curve, beauty, evoking imagination, clarity, information density, design efficiency and reusability. He argues symbolic graphics sit in a sweet spot, nearly as pretty as sprites and nearly as cheap as ASCII, and that there are other unexplored ways to combine the strengths of ASCII and sprites.",
+  "games": [
+    "Incendian Falls",
+    "Brogue",
+    "Cogmind",
+    "Angband"
+  ],
+  "insights": [
+    {
+      "topic": "art-and-audio",
+      "subtopic": "symbolic graphics",
+      "kind": "technique",
+      "claim": "A non-artist can produce attractive roguelike graphics by tracing symbols and icons with the pen tool in a font editor and rendering them as outlined 3D meshes on tiles.",
+      "detail": "Ovadia traced a fancy symbol in BirdFont in under a minute; a friend's tool generated better meshes with outlines. In the 7DRL for Incendian Falls he traced a licensed icon set into the game in under 30 minutes, turning art from his most frustrating task into half an hour of tracing.",
+      "t": 136,
+      "quote": "it might sound like it's hard to trace fonts and you know add curves and stuff but it's actually just the pen tool",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ascii vs tiles",
+      "kind": "principle",
+      "claim": "ASCII graphics have a steep learning curve: newcomers see noise and must learn what letters mean before they can have fun, while sprites are understood at a glance.",
+      "detail": "Ovadia notes you cannot tell whether a T or quote marks are friends, enemies, objects or food. Symbolic graphics land in between: a claw does not say 'goblin' but does tell the player it is a scary enemy.",
+      "t": 276,
+      "quote": "ASCII requires you to learn before you can have fun",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "sprite sheets",
+      "kind": "warning",
+      "claim": "Without an artist, developers relying on sprite sheets eventually need something missing and mixing sheets produces clashing art styles.",
+      "detail": "Ovadia contrasts this with ASCII, which can be beautiful (Brogue, Cogmind's colours and animations), and with symbolic graphics, which he thinks come close to sprites in looks.",
+      "t": 316,
+      "quote": "reaching for other sprite sheets is kind of dangerous because their art styles will clash",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "evoking imagination",
+      "kind": "principle",
+      "claim": "ASCII alone does not automatically evoke imagination; it needs a little extra detail, like flickering floor colours suggesting flames, just enough to trigger the player's mind.",
+      "detail": "Ovadia feels imagination less in random levels than in places with touches like flickering colours. An orange letter named 'ambling shambler' creates a different image in each mind. In Incendian Falls symbols deliberately did not depict creatures, but he suspects too much colour and detail kept imagination from kicking in and calls the secret an open question.",
+      "t": 364,
+      "quote": "I think switching to ASCII is the first step but I think one has to give a tiny bit of extra detail like just enough to trigger imagination",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "clarity",
+      "kind": "principle",
+      "claim": "ASCII and symbolic graphics give a clearer read of a tactical situation than detailed sprites, and leaving non-threatening objects off backing tiles helps players see what matters.",
+      "detail": "Comparing identical scenes, Ovadia finds ASCII easier to parse. Domino's non-humanoid symbols let him emphasise each creature's distinguishing traits, and stairs, trees and furniture lacking a domino backing made threats stand out, though domino height and pentagonal terrain cost some clarity.",
+      "t": 425,
+      "quote": "objects like stairs trees tables chairs and so on they're not backed by a domino and that makes it easier to add a glance",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "information display",
+      "kind": "technique",
+      "claim": "Symbolic tiles can carry extra information that plain ASCII cannot, such as small symbols showing which characters wield swords or guns, at a slight cost in clarity.",
+      "detail": "Ovadia shows Domino characters with small weapon symbols indicating sword or gun attacks.",
+      "t": 453,
+      "quote": "you can't really show that kind of detail with ASCII in Domino these little symbols about the characters they sacrifice a little bit of clarity",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "design efficiency",
+      "kind": "principle",
+      "claim": "ASCII and symbolic graphics let developers add a new creature in moments with no poses or style-fit worries, freeing time for gameplay and story.",
+      "detail": "A sprite might need 20 poses; ASCII needs a character and colour, and it fits the game automatically. Ovadia rates this, with reusability, the most important difference.",
+      "t": 485,
+      "quote": "design efficiency is super important for roguelikes if we can get graphics out of the way we can focus more time what makes roguelikes really great",
+      "weight": 3
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "reusability",
+      "kind": "technique",
+      "claim": "Letters and symbols can be reused endlessly with different foreground and background colours (a green o as an orc, a purple o as a chieftain), unlike sprites which are hard to recolour.",
+      "detail": "Ovadia notes a goblin sprite is hard to reuse, while a symbol like a claw works in many colour combinations.",
+      "t": 510,
+      "quote": "we can reuse any letter with any color any background color all day long right for example a green oh as an orc",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "symbolic graphics",
+      "kind": "open-question",
+      "claim": "Domino is one local maximum among many possible ways to combine ASCII's and sprites' strengths, and other combinations remain to be discovered.",
+      "detail": "Ovadia frames his seven criteria as a way to decompose what is good about each style and look for new combinations. In Q&A an audience member suggested adding audio cues, such as a sound when a creature first appears, which he liked.",
+      "t": 534,
+      "quote": "I'm sure there's many other local Maxo many other local maxima out there that we can discover",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

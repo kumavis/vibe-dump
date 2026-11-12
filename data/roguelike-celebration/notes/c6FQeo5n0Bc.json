@@ -1,0 +1,56 @@
+{
+  "id": "c6FQeo5n0Bc",
+  "title": "Tanya X. Short - A Procedure for Changing Culture",
+  "speaker": "Tanya X. Short",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=c6FQeo5n0Bc",
+  "talk_type": "culture",
+  "summary": "A short talk by Kitfox Games' Tanya X. Short that uses a live-simulation metaphor to think about changing culture: society is an ancient live-ops game, each person is a thread with local and global variables, and some bugs are deep legacy code while behavioral ones like racism, sexism and unequal resource distribution are patchable. She contrasts slow, legitimacy-hungry centralized authority (law) with fast but error-prone decentralized, peer-to-peer change, describes Pixelles' 'ripple effect' approach of giving tools to marginalized genders, and urges patience: you can only edit your own small file, and culture change takes a lifetime. It contains almost no game design content.",
+  "games": [
+    "Boyfriend Dungeon",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "culture change",
+      "kind": "principle",
+      "claim": "Tanya Short suggests thinking of society as a very old live-ops simulation in which you are a thread rather than a player, which makes changing culture feel less helpless.",
+      "detail": "Each person has local variables (tastes, disposition) and can expose global variables others see. Some bugs are hard-coded legacy that cannot change in our lifetimes, while behavior-based bugs like starving threads, racism and sexism should be fixable, but the servers can never be taken down.",
+      "t": 192,
+      "quote": "rather than seeing yourself as a player I think it is helpful to see yourself as a part of the simulation",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "centralized vs grassroots",
+      "kind": "principle",
+      "claim": "Centralized authority such as law is clear and consistent but slow, costly and inaccessible, while decentralized peer-to-peer change is faster and stronger but prone to error and sabotage.",
+      "detail": "Short adds that people tend to elevate credible sources until they become central authority again with the same problems; she sees this as a feature when credibility flows organically and can shift to someone better qualified.",
+      "t": 418,
+      "quote": "It is clearer and consistent but needs to defend its claim to legitimacy often and it is inaccessible.",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "community empowerment",
+      "kind": "technique",
+      "claim": "Pixelles' 'ripple effect' approach changes culture by putting tools in the hands of women and other marginalized genders and letting them affect their own communities, which Short says Roguelike Celebration also does.",
+      "detail": "Rather than trying to teach people something, the approach empowers them to inspire and educate others, relying on increasingly overlapping networks for ideas to spread quickly.",
+      "t": 512,
+      "quote": "Our approach is to put the tools in the hands of women and other marginalized genders over the years and see how they affect their communities",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "culture change",
+      "kind": "warning",
+      "claim": "Culture change has enormous inertia and should not be approached like a game jam; act in your own small corner and expect years of work.",
+      "detail": "Short says new ideas will make people uncomfortable at first, that you only have influence over 'one little file' such as your neighborhood or family, and that you should be patient and avoid burnout. In Q&A she adds that minds change through real conversation, not signs or slogans, and that you must ask who benefits so you are not just elevating already privileged voices.",
+      "t": 742,
+      "quote": "You can't approach it like a game jam. This is a game that takes your whole lifetime to build",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

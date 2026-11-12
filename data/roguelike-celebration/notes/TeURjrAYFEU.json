@@ -1,0 +1,210 @@
+{
+  "id": "TeURjrAYFEU",
+  "title": "Sersa Victory: Choice Design in Roguelikes",
+  "speaker": "Sersa Victory",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=TeURjrAYFEU",
+  "talk_type": "design",
+  "summary": "Sersa Victory, a gamebook writer and tabletop designer working on a remake of Rogue, surveys game design literature on why choices are fun: they test tradeoffs, grant agency, create uncertainty and make players feel smart. She then lays out five types of engaging choice (mutually exclusive actions, risk versus reward, now versus later, resource trade, and dilemma), illustrating each with examples from Brogue, Forays into Norrendrin, ADOM, NetHack and her own Rogue remake. She argues that generators should layer several choice types into one encounter, offers a list of choice ideas to try, and stresses that playtesting is the only reliable way to tune choices and choice density.",
+  "games": [
+    "Brogue",
+    "Forays into Norrendrin",
+    "ADOM",
+    "NetHack",
+    "Rogue",
+    "Dark Souls"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meaningful choice",
+      "kind": "principle",
+      "claim": "Choices in games are fun because they test the player's weighing of tradeoffs, grant agency, create uncertainty, and make the player feel smart.",
+      "detail": "Victory frames the whole talk on these four reasons, drawn from game design literature. She returns to them in her summary as the reason choosing is both fun and dramatic.",
+      "t": 197,
+      "quote": "Choices in games are fun and dramatic for four reasons. They test the player's ability to weigh the benefits and opportunity costs of tradeoffs",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meaningful choice",
+      "kind": "principle",
+      "claim": "A well-designed game choice should be an agonizing tradeoff where taking one option means giving up something else the player really wants.",
+      "detail": "Victory cites Ian Schreiber, Jeff Warrender (who says a well-designed choice should be agonizing) and a book on player decisions that calls tradeoffs the single most useful technique. She says every choice type in her talk is a flavour of tradeoff.",
+      "t": 258,
+      "quote": "a well designed choice in a game should be agonizing. In an agonizing decision you have several things you want do but you can't do them all",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "meaningful play",
+      "kind": "principle",
+      "claim": "For a choice to feel meaningful, the player must know what she is choosing, get clear feedback on the immediate result, and see how it affected the longer-term outcome.",
+      "detail": "Drawing on a widely cited text's definition of meaningful play as action-outcome relationships that are discernible and integrated, Victory breaks it into three questions about the player's understanding of the choice and its consequences. Agency matters because a player who feels nothing she does matters becomes bored and frustrated.",
+      "t": 423,
+      "quote": "did the player know what choice she was making? Was she provided with clear feedback on the immediate result of her choice?",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "uncertainty",
+      "kind": "principle",
+      "claim": "In traditional roguelikes, where so much is randomized, the player's struggle to master uncertainty through careful, smart choices takes center stage.",
+      "detail": "Victory argues players would be bored if they knew they would escape or that every unidentified scroll was safe. Roguelike players cannot know what the next level holds or whether an attack will hit, so they play carefully to capitalize on helpful surprises and mitigate harmful ones.",
+      "t": 488,
+      "quote": "in traditional roguelikes where so many things are randomized this struggle to master uncertainty takes center stage",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "emotional swings",
+      "kind": "principle",
+      "claim": "The ebb and flow of emotion as a result of the player's choices, swinging from unstoppable to hopeless, is one of the most entertaining parts of traditional roguelikes.",
+      "detail": "Victory compares playing a game to running a race rather than watching one: the player feels mastery or failure based on her own choices. Her favourite roguelikes swing between 'best run ever' and 'no way out of this mess'.",
+      "t": 659,
+      "quote": "This ebbing and flowing of emotions as a result of choices is in my opinion one of the most entertaining parts of traditional roguelikes",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "turn structure",
+      "kind": "example",
+      "claim": "A single roguelike turn is a mutually exclusive action choice: the player can drink a potion, swap rings or zap a fireball, but only one before monsters act.",
+      "detail": "Victory uses the basic turn as the canonical mutually exclusive choice, the most basic tradeoff. In crunch moments where one wrong move means permadeath, picking the single action becomes very tense.",
+      "t": 742,
+      "quote": "Typically the player only gets one action on her turn before the monster and environment take their turn",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "mutually exclusive choice",
+      "kind": "example",
+      "claim": "Brogue's treasure rooms and Forays into Norrendrin's paired skill shrines force the player to pick one benefit and forgo the others.",
+      "detail": "In Brogue, taking an item off a pedestal drops cages on the rest, so the player chooses based on play style, build, run history and predictions. Forays' shrines come in pairs and accepting one makes the other inert, so the player must choose which skill to level.",
+      "t": 787,
+      "quote": "Once the player takes the item off the pedestal cages drop down and she can only choose one item it leave with",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "risk versus reward",
+      "kind": "example",
+      "claim": "Using unidentified items, fighting out-of-depth monsters, and entering vaults are classic roguelike risk-versus-reward choices.",
+      "detail": "Victory says the player weighs an unknown item's danger against how dire her situation is, e.g. reading an unknown scroll hoping for teleport while surrounded. Out-of-depth monsters threaten but give experience and loot; vaults pair dangerous monsters with powerful treasure.",
+      "t": 884,
+      "quote": "If the player is surrounded by monsters, is using an unknown scroll and hoping it is teleport worth the risk of it being explosive ruins instead?",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "now versus later",
+      "kind": "example",
+      "claim": "Forays into Norrendrin allows only one rest per dungeon level, turning recovery into a now-versus-later choice about how serious the current situation is.",
+      "detail": "Victory calls this her favourite now-versus-later example, contrasting it with roguelikes that let you recover by resting in any corner. Consumables and limited-charge wands are the more common form of this choice type.",
+      "t": 1021,
+      "quote": "foray gives one action recovery per dungeon level and this creates an interesting tension",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "now versus later",
+      "kind": "example",
+      "claim": "In Victory's Rogue remake, praying at an early altar makes the player a lesser priestess but forfeits the chance to become a high priestess deeper down.",
+      "detail": "The player can become priestess of one of three goddesses. She must judge how early she needs the help versus whether she is confident enough to survive to deeper levels and earn the stronger role.",
+      "t": 1056,
+      "quote": "She encounters early in the game where she can become a les important priestess but if she does she want pray at the one to become a high priestess",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "resource trade",
+      "kind": "example",
+      "claim": "Resource-trade choices let the player exchange something she has for something useful in a different context, as with ADOM's blacksmith forges and NetHack's magic lamp.",
+      "detail": "In ADOM, metal items are melted into ingots to repair or enhance gear. NetHack's magic lamp never runs out of oil, but rubbing it for a wish turns it into an ordinary lamp that burns out, so the player decides if and when to trade light for a wish.",
+      "t": 1102,
+      "quote": "In a resource trade the player can trade something she has for something she doesn't",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "allies",
+      "kind": "example",
+      "claim": "Victory's Rogue remake has inert golems that come to life as a bodyguard if the player sacrifices a magic ring into their chest slot.",
+      "detail": "This is her third resource-trade example: the ring is lost permanently. The player must weigh the ring's power against having a tough ally fighting alongside her.",
+      "t": 1191,
+      "quote": "if a player gives up the magical ring to put it in the slot the ring is lost and the Golem comes to life and fights alongside the player",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "dilemma",
+      "kind": "technique",
+      "claim": "Turning a failure into a dilemma, such as letting the player choose which scroll a fire attack burns, injects an agonizing decision into what would otherwise be a random penalty.",
+      "detail": "Victory defines a dilemma as being forced, after some failure (trap, monster ability, cursed item, wrong puzzle answer), to choose what to give up or which punishment to take. She found few real examples in traditional roguelikes, so she mocked up a Balrog burning scrolls where the player picks which scroll is destroyed.",
+      "t": 1211,
+      "quote": "In a dilemma the player has failed in some way and is forced to choose between two or more things to give up or punishment",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "layered encounters",
+      "kind": "principle",
+      "claim": "Level generators should be tuned to layer multiple choices of different types into one encounter, because these high-stakes layered moments embody roguelikes.",
+      "detail": "Victory describes falling through a pit trap in her Rogue remake into a room with out-of-depth monsters, a teleport scroll, an unknown wand, a fountain and a once-per-game prayer all available. Weighing them all at once was the kind of moment she says developers should strive for.",
+      "t": 1295,
+      "quote": "pay special attention to how your generation algorithm layers multiple choices and presenting with multiple choices of varying types you can create truly engaging scenario",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "branching paths",
+      "kind": "technique",
+      "claim": "Designers can offer choices through structure, such as branching stairs to a safer or richer level, or several locked chambers with only one key.",
+      "detail": "Victory's list of ideas includes upgrade-or-threat picks at fixed intervals, branching stairs trading danger for treasure, and multiple 'locked' chambers where the key need not be literal. She also suggests once-per-level powers like the Forays rest.",
+      "t": 1388,
+      "quote": "You might present the player with branching stairs leading to either a lower danger level with less treasure or a higher danger level with more treasure",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "risky powers",
+      "kind": "technique",
+      "claim": "Choice-rich mechanics include stat trades, tokens that grow by waiting, powers that strengthen with danger, cursed items that are stronger but risky, and extra lives at a cost.",
+      "detail": "Victory suggests trading strength for armor class, a cashable token whose reward grows the longer the rogue waits, a power buffed by the number of adjacent monsters, cursed items more powerful than normal but risky per use, choosing a trap's punishment, and an extra life with a significant cost.",
+      "t": 1453,
+      "quote": "I love cursed items that grantability is more powerful than what is normal but each use is risky",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "playtesting",
+      "kind": "warning",
+      "claim": "A choice that looks good on paper can fall flat in play, so choices must be playtested and retuned from player feedback.",
+      "detail": "In Victory's Rogue remake, players could smash petrified out-of-depth monsters for XP at the risk of attracting a medusa. Discord players said they rarely did it because the XP bonus did not justify the risk, so she adjusted it to feel less one-sided.",
+      "t": 1488,
+      "quote": "Sometimes a choice that looks good on paper and that embodies one of the types described in this presentation can still end up falling flat",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "resource hoarding",
+      "kind": "technique",
+      "claim": "To fight consumable hoarding, create situations where using consumables is necessary, which permadeath reinforces because a run cannot be retried.",
+      "detail": "Answering a Q&A question, Victory admits she hoards consumables herself. She contrasts Dark Souls, where she can just retry a boss, with tactical roguelikes where permadeath pressures players to teleport or pray rather than lose the run.",
+      "t": 1720,
+      "quote": "I think part is to create situations where the use of consumables is necessary or a better option",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "choice density",
+      "kind": "warning",
+      "claim": "Too many choice prompts, especially frequent dilemma prompts, overload the player and pull her out of flow, so choice density must be tuned by playtesting.",
+      "detail": "In Q&A, Victory says it is possible to overload players with choices. If players report being asked to 'pick their poison' every 20 seconds, dial it back; without such feedback, it can be tuned up. She calls it more art than science.",
+      "t": 1828,
+      "quote": "you have to be careful because if you do that too frequently you are pulling the player out of the flow constantly",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,167 @@
+{
+  "id": "sOZH6RPuNJ8",
+  "title": "Nic Junius: Braided Narratives: Or How I Learned to Stop Worrying and Love Linear Stories",
+  "speaker": "Nic Junius",
+  "year": 2024,
+  "url": "https://www.youtube.com/watch?v=sOZH6RPuNJ8",
+  "talk_type": "design",
+  "summary": "Nic Junius, a narrative designer at CCP Games with a PhD in computational media, argues that linear stories and highly systemic games are complementary. Branching narratives explode combinatorially and become unauthorable, so Junius proposes 'braided narrative structure': many linear storylines whose progression is gated by both independent and shared state conditions, letting them interleave without branching. Case studies are Hades, where character side stories are gated by relationship, run count and other conditions and capped per run, and Fire Emblem: Three Houses, where mutual linear support conversations are unlocked through combat together. Junius admits both games still contain enormous amounts of writing, but argues braided authoring scales roughly linearly.",
+  "games": [
+    "Hades",
+    "Fire Emblem: Three Houses",
+    "EVE Online"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "branching narrative",
+      "kind": "warning",
+      "claim": "Branching interactive narratives that react to player actions breed fractally branching structures whose authoring burden quickly becomes untenable.",
+      "detail": "Junius argues that whether stories are static or assembled dynamically, someone still has to write every piece, and accounting for everything players might do produces trees of alternate realities. Tools can help, but it is hard to know when systemic authoring actually becomes easier than writing by hand, and combinatorial systems often call for more content than is reasonable to write.",
+      "t": 481,
+      "quote": "in terms of authoring your narratives this quickly becomes untenable",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "authoring burden",
+      "kind": "principle",
+      "claim": "However dynamic a narrative system is, someone still has to write the actual content, so story structure must be chosen with authoring cost in mind.",
+      "detail": "Junius stresses that with anything interactive, regardless of how complicated the systems, the content still has to be put to paper. Writing any story is hard, and writing branching content that responds to unpredictable player actions is even harder.",
+      "t": 438,
+      "quote": "someone has to write the damn thing someone has to put the pen to paper and write the actual content you are putting into the game",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "braided narrative",
+      "kind": "technique",
+      "claim": "A braided narrative is a structure of individual linear storylines whose progression is controlled by both independent and shared state conditions, letting them interweave without branching.",
+      "detail": "Junius uses the braid metaphor: separate strands twisted in a shared direction, separating at points, stronger together while remaining flexible. Ideally the linear stories share casts and complementary themes. Making each story linear constrains authoring burden to roughly linear growth, and variability comes from when a player sees each piece rather than branching on everything the player does.",
+      "t": 675,
+      "quote": "a narrative structure made up of individual linear storylines whose progression is controlled by both independent and shared State conditions",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "braided narrative",
+      "kind": "technique",
+      "claim": "In a braided narrative, independent progression conditions keep storylines distinct, while overlapping shared conditions keep them moving together and invite players to connect them.",
+      "detail": "If every storyline progressed only under its own conditions, the design would drift back toward the combinatorial tree. Overlapping progression conditions make storylines share momentum and timeliness, and common conditionals encourage players to draw connections between storylines whether or not the authors make them explicit.",
+      "t": 861,
+      "quote": "we also want to overlap our progression conditions to make our story lines flow in that same direction and share momentum and timeliness",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "narrative pacing",
+      "kind": "technique",
+      "claim": "Gating side stories on major central-plot beats lets plot events be referenced in side stories without extra branches, and forces players who exhaust side content to advance the main plot.",
+      "detail": "Shared states are usually reserved for major beats of the central story; if a player hasn't reached a point, side stories simply pause. This avoids writing content for players arriving out of order, and a player naturally runs out of storylines to progress and must move the central plot forward.",
+      "t": 1002,
+      "quote": "we can simply just pause progressing some of these stories at any points and be done with it",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "narrative pacing",
+      "kind": "technique",
+      "claim": "Braided storylines need a pacing cap on how many new story units are released at a time, as in Hades' limit of about three new story events per run.",
+      "detail": "Pure if-statement conditions aren't enough; without a cap, the player gets every piece of narrative available at once and must pace it themselves. Junius says Hades tends to allow a maximum of around three new story events per run, or more generally limits access to story units at will. Tying progression to other systems also rewards engagement with them.",
+      "t": 1101,
+      "quote": "in Hades case this tends to be around maximum of three new story events per run of the game",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "run-based storytelling",
+      "kind": "example",
+      "claim": "Hades routes its narrative through escape runs: beating Hades ten times advances the central plot, while character side stories advance independently through runs.",
+      "detail": "Players escape Tartarus, Asphodel, Elysium and the Styx, gathering resources and talking to characters such as the Olympians along the way. Because of the difficulty, players rarely see the central story in their first ten runs; side stories pace the experience and give non-mechanical reasons to keep playing past the credits.",
+      "t": 1219,
+      "quote": "the player must reach to the surface and beat their father in combat 10 times and then the credits roll",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story gating conditions",
+      "kind": "example",
+      "claim": "Hades gates character storylines on varied conditions (gift-filled relationship meters, conversation counts, run-count breakpoints, difficulty settings) that are independent of main-story progress.",
+      "detail": "Beyond the obvious nectar and ambrosia relationship meter, conditions include how many times a character was spoken to, number of runs, and the difficulty customization system. Players can finish the main story with little side progress or progress most side stories before the credits, depending on escape success.",
+      "t": 1361,
+      "quote": "hitting certain break points on the number of runs you've done or other even less obvious conditions tied into the games difficulty customization system",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "story gating conditions",
+      "kind": "example",
+      "claim": "Hades only makes a subset of its cast accessible on each escape attempt, so players cannot advance any storyline at will and keep finding more after dozens of hours.",
+      "detail": "Even when a character appears, the player may lack resources or other conditions to progress them. Junius says this is the trick of Hades' braided narrative, and it means that post-credits players still discover more to characters' stories and relationships.",
+      "t": 1414,
+      "quote": "you only ever have a subset of the cast accessible on a given escape attempt",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "failure as reward",
+      "kind": "principle",
+      "claim": "Braided narratives in a roguelike ease the frustration of losing a run because almost every run advances someone's side story, and they make players' experiences diverge for comparing notes.",
+      "detail": "In Hades, players trigger story conditions in different places, so playing as a group means comparing which characters you've met. Wherever you are in the narrative there's someone to get to know better, so at minimum a lost run lets you chat with a denizen of the House of Hades.",
+      "t": 1490,
+      "quote": "this helps ease the frustration of losing a run since at minimum you get to chat with one of the other Denis of the House",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "relationship systems",
+      "kind": "example",
+      "claim": "Fire Emblem: Three Houses avoids combinatorial explosion in its large recruitable cast by making support conversations mutual, linear, and unlocked by characters fighting together.",
+      "detail": "Characters strengthen relationships by fighting side by side, gaining combat effectiveness and unlocking more scenes. Supports have no directionality: each pair has one linear set of scenes. Triggers are almost entirely time spent fighting together, with the exception that a few final conversations are gated behind main-plot beats.",
+      "t": 1623,
+      "quote": "character supports and their scenes are mutual so there's no directionality in a relationship graph everybody just has one scene together",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "narrative feedback loop",
+      "kind": "example",
+      "claim": "Fire Emblem: Three Houses ties story to combat in a positive feedback loop: using a character more both strengthens them and reveals more of their story.",
+      "detail": "Junius notes that time spent together makes characters more effective and unlocks more about them, making it more rewarding to keep using them. Because recruitment and supports vary who appears, each route's details change a lot, and one player's run will likely differ greatly from another's.",
+      "t": 1712,
+      "quote": "there's this positive feedback loop of if you use a character more you will get more information about them",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "authoring burden",
+      "kind": "warning",
+      "claim": "Braided narratives do not eliminate writing load: Hades and Three Houses contain enormous amounts of writing, and authoring burden still grows with game scope, though roughly linearly.",
+      "detail": "Junius calls this the elephant in the room. He argues braided structures don't require books' worth of narrative to function, and their effort scales like writing linear stories rather than like branching trees or exhaustive dynamic-system coverage.",
+      "t": 1772,
+      "quote": "both the games I talk about here have an obscene amount of writing in them",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "systems-driven story",
+      "kind": "principle",
+      "claim": "Tying storyline progression to non-narrative systems such as combat makes the whole game feel like it matters to the narrative and steers players toward story rather than pure optimization.",
+      "detail": "Junius argues other systems can tie linear narratives together without losing their identities, so even systems that rarely talk to each other feel narratively significant. Interlacing linear stories gives players more hooks to find unexpected connections between them.",
+      "t": 1891,
+      "quote": "this can make the entire game at a certain point feel like everything matters to the narrative even if these systems don't talk to each other very frequently",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "theatre and roguelikes",
+      "kind": "example",
+      "claim": "Hades' run progression can be read as a theatrical production, moving from a bad cold read through rehearsal-like practice to an 'opening night' when the credits roll.",
+      "detail": "Junius, a former playwright, describes a paper he wrote likening Hades' structure to theatre. He also says his playwriting taught him to bound a story's possibility space and let a production fill the gaps, an interactive process with little structural branching, which informs his preference for alternatives to branching.",
+      "t": 376,
+      "quote": "likened the way the progression through Hades Works to a theatral production where you start off and you're doing a cold read",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

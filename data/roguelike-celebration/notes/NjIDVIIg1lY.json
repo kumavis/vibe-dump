@@ -1,0 +1,127 @@
+{
+  "id": "NjIDVIIg1lY",
+  "title": "Jasmine Otto - Cyclic Plot Generation in a Narrative Instrument",
+  "speaker": "Jasmine Otto",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=NjIDVIIg1lY",
+  "talk_type": "design",
+  "summary": "Jasmine Otto presents Druid Game, a series of prototypes for a prose-based social simulation about feuding druids, and the 'narrative instrument' interface through which players direct attention in a simulation too big to show at once. Drawing on tarot, she wants players to act as both querent and reader, stacking a deck of story elements and reading meaning into polysemous cards. She walks through prototypes that failed in instructive ways (multi-generational family trees, characters accumulating description text forever, factions whose murder accusations were impossible to engineer) and arrives at cyclic plot generation, adapting cyclic dungeon generation from Unexplored so that every plot setup is guaranteed a payoff. She also covers pacing by walking social-graph edges to create scenes and cuts, keeping dead characters as ghosts, and multiscale faction play.",
+  "games": [
+    "Druid Game",
+    "The Sims 3",
+    "Unexplored"
+  ],
+  "insights": [
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "attention direction",
+      "kind": "principle",
+      "claim": "In a social simulation with hundreds of characters the player cannot follow everything, so the interface must let players aim their attention at the parts of the simulation relevant to them.",
+      "detail": "Otto's example is a Sims player whose Sim has a rival: they check what the rival is doing while 80 other Sims go about their day unobserved. She calls this interface the 'narrative instrument', the point of contact that suggests as much as possible without doing all the heavy lifting behind the scenes.",
+      "t": 165,
+      "quote": "you're going to give them an interface that allows them to very cleverly point their attention at different parts of the simulation that are relevant to them",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "tarot reading",
+      "kind": "principle",
+      "claim": "Modelled on tarot, a narrative card game can let the player be both querent and reader, stacking a deck of story elements to steer their own reading, with surprises coming from cards that have many features of which only a few get latched onto.",
+      "detail": "Otto says such cards have no AI and so can't have bugs, yet produce funny surprises. She has seen this polysemous quality in illustration and wants to test whether prose cards have it too; Druid Game has drifted from parser game to idle game to decks of cards.",
+      "t": 300,
+      "quote": "Most of the surprises come from the card having uh many many features I could latch onto",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "retelling",
+      "kind": "technique",
+      "claim": "Asking a story generator for repeated retellings of the same events, or new stories, lets a designer 'converse with the deck' and judge whether it makes principled decisions or contradicts itself.",
+      "detail": "Otto describes an early three-character prototype that pulls plot beats from a source of randomness and prints them into a context. She notes this works less well in generic story worlds.",
+      "t": 375,
+      "quote": "that lets me have the conversation with the deck that gives me the sense of whether it's it's making principal decisions or it's starting to contradict itself",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "warning",
+      "claim": "A hands-off multi-generational simulation (like letting The Sims 3 run for generations) can produce interesting artifacts such as family trees, but is not fun to sit and watch; it is something to piece together after the fact.",
+      "detail": "Otto built a family-tree module with long-lived vampires who can turn others into vampires, producing fun trees to tab through, but concluded it was an end artifact rather than a prose game.",
+      "t": 462,
+      "quote": "it's not that fun to just sit down with it and watch it go for a little bit",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "forward simulation",
+      "kind": "warning",
+      "claim": "Pure forward simulation has no idea how to stop: Otto's characters who gained aspects from each other just accumulated description text forever.",
+      "detail": "In this prototype characters' text descriptions grow as they borrow aspects from others, with special characters able to invent new aspects from a text tree. It produced story-rich histories that she is rolling back into the game, but lacked any ending.",
+      "t": 524,
+      "quote": "since it's forward simulation, they have no idea how to stop. They just accumulate more description text forever.",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "warning",
+      "claim": "In a faction simulation with murders and accusations, so many characters retaliating tit-for-tat made it very hard to engineer a specific dramatic event like someone being accused of murder.",
+      "detail": "Otto added murders as a reset condition and factions that can attack and accuse each other, but found debugging toward the desired event painful: interesting, but the system didn't give her the leverage she needed. This motivated cyclic plot generation.",
+      "t": 571,
+      "quote": "I want this event ultimately to fire where somebody is dramatically accused of doing a murder, uh and it's There's just so many people uh going tit-for-tat",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "cyclic plot generation",
+      "kind": "technique",
+      "claim": "Cyclic plot generation adapts cyclic dungeon generation from Unexplored to story: instead of guaranteeing a key for every door, it guarantees that every plot element set up will pay off.",
+      "detail": "Otto colours a social graph with roles (e.g. an heir who generates a verb toward a target, plus a helper) and reads plot off the colouring. Each verb may have stateful consequences in the world, while its storylet is a prose gloss with consequences only in the reader's mind.",
+      "t": 621,
+      "quote": "instead of trying to guarantee there's a key and a door, we're guaranteeing I when I set up a plot element, it will pay off",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "verbs and storylets",
+      "kind": "principle",
+      "claim": "Otto separates verbs, which can change world state, from storylets, which are prose with no game consequences and exist only in the reader's mind, where the sense of interaction is ultimately created.",
+      "detail": "She describes trying to find the boundary between the two as a core design question for Druid Game.",
+      "t": 687,
+      "quote": "the storylet which doesn't have any consequences in the world of the game, but only in the mind of the reader",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "pacing",
+      "kind": "technique",
+      "claim": "To pace generated plot, walk the social graph edge by edge rather than picking edges at random, so characters accumulate in a scene and new scenes create cuts that make output read like chapters rather than a raw event trace.",
+      "detail": "Otto says walking an edge brings both characters into the scene; the next edge may add a third character or start a new scene, which is a cut. She likens this chunking to separating floors of the game and hopes it supports more complex prose.",
+      "t": 731,
+      "quote": "the cuts start to create the feeling that maybe this is a chapter of prose rather than the a raw event trace",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "cyclic plot generation",
+      "kind": "technique",
+      "claim": "Because cyclic generation requires characters to complete their remaining actions, killed characters can't be removed; instead their deck is changed so they return as ghosts that others react to with appropriate distress.",
+      "detail": "Otto calls this a fun thing to author for.",
+      "t": 775,
+      "quote": "we can stack their deck and change it so that if they got killed, now they're a ghost",
+      "weight": 1
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "factions",
+      "kind": "open-question",
+      "claim": "A modular cyclic plot library could be multiscale: a faction-level game triggers peer-to-peer character interactions and then zooms back out to the larger picture.",
+      "detail": "Otto presents this as a goal and extension rather than a finished system.",
+      "t": 810,
+      "quote": "you can have the faction game that's triggering these uh peer-to-peer interactions and then zooms back out to the larger picture",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

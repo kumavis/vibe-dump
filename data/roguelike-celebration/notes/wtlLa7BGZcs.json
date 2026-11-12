@@ -1,0 +1,207 @@
+{
+  "id": "wtlLa7BGZcs",
+  "title": "Rich Wilson: Roguelikes, Immersive Sims, and the Church of the Simulation",
+  "speaker": "Rich Wilson",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=wtlLa7BGZcs",
+  "talk_type": "postmortem",
+  "summary": "Rich Wilson, former lead level designer at Arkane on Prey: Mooncrash, uses that project to explore the kinship between immersive sims and roguelikes: both rely on simulation whose outcomes carry a 'truth' that scripted events lack. He covers systemic design via stimuli and responses, scripting that must bend to the simulation, Chris Crawford's process intensity and the 'threat of infinite content', and Mooncrash's roguelike choices: a Rogue Legacy-style persistent death model with five characters sharing a finite world, chunky authored randomization to avoid the 'chopped salad' effect, escalating hazards, and high-level goals. He closes with unresolved tensions (drama vs replay, drama vs agency, fidelity vs agency, NPC fidelity) and where simulation tech may go.",
+  "games": [
+    "Prey: Mooncrash",
+    "Prey",
+    "Dishonored",
+    "Ultima Underworld",
+    "Dwarf Fortress",
+    "Spelunky",
+    "Rogue Legacy",
+    "Risk of Rain",
+    "Darkest Dungeon",
+    "Shadows of Doubt",
+    "Noita",
+    "Teardown",
+    "Deathloop"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "simulation truth",
+      "kind": "principle",
+      "claim": "Events produced by impartial simulation feel like they actually happened, which makes systemic games such as immersive sims and roguelikes generate more powerful player stories than scripted cinematic games.",
+      "detail": "Wilson calls this the 'church of the simulation': a scripted event happens the same way every time and is just someone telling you a tale, while a systemic event really occurred in a microcosmic reality. He cites a Polygon article ('The Dice Can Kill You') about a first-edition D&D wizard who disintegrated a goddess against long odds, a story told for years because the dice, not the DM, made it happen.",
+      "t": 263,
+      "quote": "if an event occurs because of systems then it actually happened in this sort of microcosmic reality whereas anything else is just someone telling you about it happening",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "stimulus and response",
+      "kind": "technique",
+      "claim": "Immersive sims avoid brittle, combinatorial hand-coded interactions by having objects emit stimuli (like fire) and other objects respond to those stimuli.",
+      "detail": "Drawing on a circa-2004 GDC talk by Randy and Harvey Smith, Wilson explains that hard-coding every pairwise interaction is brittle and discourages adding content. Instead, a flaming arrow and a candle both produce fire, and a torch or oil puddle responds to fire, so a shot guard dropping a torch into oil ignites it through systems rather than trigger volumes.",
+      "t": 407,
+      "quote": "distill that stuff down into this sort of stimuli that they produce and then things that can respond to stimuli",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "systemic objects",
+      "kind": "principle",
+      "claim": "In systemic design, every placed object should be a full representation of itself with all its systemic properties, not a static mesh.",
+      "detail": "Wilson's example is a gas can: anywhere it is placed it can explode, be picked up and dropped, or fuel things. This consistency is what lets systems interact honestly across the whole world.",
+      "t": 372,
+      "quote": "time you place the gas can it is a gas can and that means it can explode or be picked up and dropped",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "scripting with systems",
+      "kind": "example",
+      "claim": "When authored scenes use systemic objects, the script must bend to the simulation, as in a Dishonored poisoning scene where the wine bottle and glasses could be broken.",
+      "detail": "Wilson calls this 'systemish design'. Because the glasses were real breakable objects, he scripted listeners for breakage and a branch where, if they were broken, the poisoner instead lures the victim to the basement and stabs him. Having done the work, he added 'spill the glasses' to the context menu so more players would discover it.",
+      "t": 566,
+      "quote": "i ended up scripting listeners to listen for the things being broken",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "awareness model",
+      "kind": "principle",
+      "claim": "Simulation depth in immersive sims means NPCs have an organic awareness model, such as vision cones, rather than always knowing where the player is.",
+      "detail": "Wilson defines immersive sims as marrying Dwarf Fortress-like simulation depth with the immediacy of a first-person shooter. Besides awareness models he cites elemental propagation, like fire through grass or electricity through water, instead of a particle effect with a damage volume.",
+      "t": 198,
+      "quote": "enemy npcs have an organic awareness model instead of just knowing where the player is at all times",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "process intensity",
+      "kind": "warning",
+      "claim": "Process intensity favours systems over data, but it carries a 'threat of infinite content': being able to generate endless gameplay does not mean you should.",
+      "detail": "Wilson cites Chris Crawford's process intensity, the degree to which a program uses processes rather than data, and says immersive sims pull content toward the systems end. He warns that procedurally filling a warehouse with crates to search, or looping something a thousand times, can come from a zealotry for more hours of gameplay.",
+      "t": 682,
+      "quote": "just because you could procedurally populate a warehouse with crates that the player has to search you know doesn't mean you should",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "death models",
+      "kind": "technique",
+      "claim": "Prey: Mooncrash weighed a stateless 'Spelunky model' of death against a persistent 'Rogue Legacy model', choosing the latter, where death feeds progress toward a long-range goal.",
+      "detail": "The Spelunky model is session-based like a sport, with ideas like daily challenges; the Rogue Legacy model brings death inside the systems with persistence and progress you don't achieve the first time. Mooncrash added multiple unlockable characters (inspired largely by Risk of Rain) and meta-progression currency, creating loops within loops.",
+      "t": 816,
+      "quote": "we distilled everything down to two models that we ended up calling the spelunky and rogue legacy models",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "shared world state",
+      "kind": "example",
+      "claim": "In Prey: Mooncrash, five characters play sequentially in the same finite-resource world, so one character's looting, escape or death directly shapes the next character's options.",
+      "detail": "Each new character picks up where the last left off until all five escape or die, then the simulation resets. A character who escapes with lots of loot takes it away, leaving drawers empty for later selves; one who dies is resurrected as a monster that the next self must fight to recover the gear. Wilson calls this accountability and long-range player agency.",
+      "t": 928,
+      "quote": "your choices then impact your next self who can then make choices and impact your next self",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "authored variation",
+      "kind": "technique",
+      "claim": "Without full procedural generation, Prey: Mooncrash varied its authored levels by toggling layers driven by a deterministic, serialized chain of random numbers.",
+      "detail": "Technical and expertise constraints ruled out full procgen, but the loop structure needed variation. A chain of random numbers picked values like a level's 'fire index', and the level set itself up accordingly. Each variant carried high art overhead (melted banisters, burst pipes) because of AAA fidelity.",
+      "t": 1043,
+      "quote": "we had a chain of random numbers that would say okay what is this level's fire index",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "chopped salad effect",
+      "kind": "warning",
+      "claim": "Mixing many small random elements into every level makes levels indistinguishable, the 'chopped salad effect', so Prey: Mooncrash made variation chunkier with one dominant hazard per level.",
+      "detail": "Wilson relates it to Kate Compton's 10,000 bowls of oatmeal problem: if every level has a little flooding, radiation and fire, each tastes the same. Instead a level was mostly fire or mostly radiation, with three or four variants, giving a larger experiential difference between levels.",
+      "t": 1144,
+      "quote": "we ended up making it chunkier so you know this level's mostly fire this level is mostly radiation",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "escalation",
+      "kind": "technique",
+      "claim": "Prey: Mooncrash escalated hazards and variation over the course of progress, starting calm and building to a fever pitch so players learn the elements gradually.",
+      "detail": "Because there was overarching progress toward completion, the team layered in more hazards as players advanced, giving them time to get accustomed to each element before the end.",
+      "t": 1176,
+      "quote": "at the beginning it's pretty pretty calm and then we add elements and add elements and stuff like that until the end it's this kind of fever pitch",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "win conditions",
+      "kind": "principle",
+      "claim": "Like roguelikes, Prey: Mooncrash gave high-level goals (a checklist, chiefly escaping with all five characters in five different ways) and told players what to do, not how.",
+      "detail": "Instead of micromanaging objectives, the 'five escapes' run became a puzzle box to figure out. Wilson compares it to 'get to the bottom of the dungeon' in roguelikes and to immersive sims' 'get into this room, we don't care how'.",
+      "t": 1245,
+      "quote": "we let the player figure out and we just tell them what to do not how to do it",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "drama vs replay",
+      "kind": "open-question",
+      "claim": "Reconciling a replayable system with a dramatic story is unresolved; Prey: Mooncrash handled it with a framing narrative in which the player cannot die.",
+      "detail": "Wilson notes Prey's deaths were non-canonical, like Sands of Time's 'that's not how it happened'. Mooncrash framed the player as a hacker in an isolated satellite running a moon-base simulation, so the static story was told outside while the loops ran safely inside.",
+      "t": 1272,
+      "quote": "how do you reconcile a replayable system uh with a dramatic uh telling of a story",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "drama vs agency",
+      "kind": "open-question",
+      "claim": "Keeping player agency from breaking authored narrative remains unsolved; Prey: Mooncrash sidestepped it by keeping its handcrafted story beats as unfailable flashback-like character threads.",
+      "detail": "Wilson contrasts Assassin's Creed 'desyncing' the player with Skyrim, where you can put a bucket on someone's head and the game carries on. Mooncrash's narrative bits wove orthogonally through play and could not be failed or messed up.",
+      "t": 1326,
+      "quote": "drama versus agency like what can you do to keep the player from messing up your you know preciously planned narrative",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "interaction articulation",
+      "kind": "open-question",
+      "claim": "First-person games lack verbs to express feelings like grief, and Wilson frames this as a problem of 'interaction articulation' rather than interaction scale.",
+      "detail": "He cites the panned 'Press F to pay respects' funeral as players having 'guns for hands'. Sims-style radial menus give expressive range but break first-person immediacy; the question is how to let players express deeper intent and whether the game has receptors for it. He sees VR hand interaction (Alyx, Boneworks) and Elebits as promising directions.",
+      "t": 1425,
+      "quote": "introduction articulation is like how yeah how can you express different deeper feelings and thoughts and things like that and then does the game have the receptors",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "abstraction",
+      "kind": "principle",
+      "claim": "Low-fidelity, abstract representation like Dwarf Fortress's makes simulated NPC behaviour cheap to depict, whereas high fidelity makes simple acts like sitting in a chair or opening a door a nightmare.",
+      "detail": "Wilson notes many immersive sims are set on abandoned space stations because NPCs are hard. In Shadows of Doubt a door can just open; in Dwarf Fortress sitting is two glyphs overlapping; in AAA it means capsule collision, nav mesh and animation problems. He cites Understanding Comics on abstraction letting players project meaning.",
+      "t": 1513,
+      "quote": "if you look at dwarf fortress all you have to do to depict someone sitting in a chair there is just flash the two icons on top of each other",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "simulation granularity",
+      "kind": "open-question",
+      "claim": "As fine-grained simulation like Noita's or Teardown's becomes feasible, the challenge shifts to designers working out what to do with worlds where everything responds.",
+      "detail": "Wilson describes a 'Moore's law inevitability' of simulation granularity: not one box you can set on fire, but everything wooden. He cites Red Faction Guerrilla's destructible buildings as an example that now puts the problem in design's court, and sees tools like Nanite and Houdini as force multipliers for richer simulated worlds.",
+      "t": 1611,
+      "quote": "now it becomes a design problem of okay what do we do with that",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "component systems",
+      "kind": "technique",
+      "claim": "Component-based architecture suits immersive sims because a behaviour like 'emits fire' can be attached to any object.",
+      "detail": "Answering a Q&A question on whether ECS fits immersive sims, Wilson said component-based approaches definitely help because modularity lets you put a fire emitter on whatever objects you want.",
+      "t": 1784,
+      "quote": "component based stuff definitely because then you can say this thing emits fire i'll just put it on this and this and this",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

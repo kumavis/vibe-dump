@@ -1,0 +1,184 @@
+{
+  "id": "jd7K0EmkvPk",
+  "title": "Jim Shepard - Storytelling, World Building, and You",
+  "speaker": "Jim Shepard",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=jd7K0EmkvPk",
+  "talk_type": "design",
+  "summary": "Jim Shepard (Dungeonmans, Tangledeep) argues roguelike developers can tell stories using tools they already have rather than walls of text, optional books or expensive voiced audio logs. He shows how the combat log, monster names and themed encounters can make the player the centre of the story, and how item flavour text, which players read anyway, can foreshadow, set tone and characterise the hero, as in Tangledeep's first-person item descriptions. He discusses choosing a consistent narrative perspective, writing dialogue with important information first, and a rookie technique of borrowing an existing fictional character's voice wholesale.",
+  "games": [
+    "Tangledeep",
+    "Dungeonmans",
+    "Castle of the Winds",
+    "The Elder Scrolls V: Skyrim",
+    "Horizon Zero Dawn",
+    "Doom",
+    "BioShock",
+    "Diablo",
+    "Final Fantasy XII",
+    "Jupiter Hell"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player imagination",
+      "kind": "principle",
+      "claim": "Roguelike storytelling should respect that players fill in gaps themselves, so a merely okay story presented in a fun way grows on players, while a great story shown badly falls apart.",
+      "detail": "Shepard says presentation matters more than the raw story: information should be shown in a way players can and choose to retain. Roguelike players already do mental lifting with ASCII symbols, so developers can spell out a lot but not everything.",
+      "t": 161,
+      "quote": "if you have a great story it falls apart if you show it wrong and if you have it just okay story it'll grow on the player",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "walls of text",
+      "kind": "warning",
+      "claim": "Walls of story text are dense and rigid, leave no room for player imagination, and trigger players' instinct to skip, even in games they love, like Castle of the Winds.",
+      "detail": "Shepard shows a long late-game Castle of the Winds text screen. The developer dictates how information arrives, the player can't make it their own, and seeing three paragraphs makes even engaged players want to skip.",
+      "t": 236,
+      "quote": "it's dense and it's rigid I'm throwing this information at you in the way that I choose for you to get it",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "optional lore books",
+      "kind": "warning",
+      "claim": "Optional in-game books, as in The Elder Scrolls, give players lore on their own terms, but mandatory plot information placed in them may never be read.",
+      "detail": "Shepard likes optional readable books and cites a friend who loved reading Skyrim books in VR atop a wintry spire. But books meander from the core story, and writing many paragraphs is daunting if you are not a strong writer.",
+      "t": 306,
+      "quote": "if you put mandatory plot information in these books players may not read them",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "audio logs",
+      "kind": "example",
+      "claim": "Audio logs (as in Doom or Horizon) deliver story without interrupting gameplay, but voice acting is usually too costly for indie roguelike developers.",
+      "detail": "You can keep blasting monsters while a recording plays, and voice adds life to characters. Shepard says it is practical only if you happen to have a voice actor on speed dial; he wants to focus on the tools roguelikes already have.",
+      "t": 354,
+      "quote": "it's cool because the information doesn't get in the way of gameplay",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "combat log storytelling",
+      "kind": "technique",
+      "claim": "A roguelike's combat log and monster names tell the player about a creature through play itself: evocative attack and defence descriptions make an unfamiliar monster feel distinct without any exposition.",
+      "detail": "Shepard walks through a wolf fight ('deals four damage with sharp canines', 'howls mournfully and dies') and then a fight with an unfamiliar monster with 'molten slashers' and 'deflected phasic chitin'. The player learns about the creature because the information happens to them during combat they must do anyway; variants and names like 'dire' or 'apex' sell fierceness.",
+      "t": 505,
+      "quote": "that information just happened to me while I was playing right it's in the combat log you have to do that to to fight a monster and win",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "show through gameplay",
+      "kind": "principle",
+      "claim": "Shepard urges using gameplay to put the player at the centre of a story as it happens (e.g. fighting monsters in a burning town) instead of leaving gameplay to tell them about events they only watch.",
+      "detail": "A fight in a burning village is 'ten million billion jillion times better' than a text box from a survivor describing it. He says to make a town on fire rather than a puppy cave: the monsters are just as easy and the tutorial steps the same, but theme and story come for free.",
+      "t": 566,
+      "quote": "don't make a puppy cave make a town on fire right the monsters are just as easy",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "flavor text",
+      "kind": "warning",
+      "claim": "Item flavour text that merely restates what the item is ('a long sword is a weapon') wastes player reading time, developer time and localisation money; that space should tell the story instead.",
+      "detail": "Shepard mocks flavour text written to check off an RPG box, likely pulled from prepackaged descriptions. Translators still charge per word, so pointless text costs real money.",
+      "t": 639,
+      "quote": "you're wasting your own time the players reading time you're reading to disk space and and if you're localizing this god help you",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "foreshadowing",
+      "kind": "technique",
+      "claim": "Early, mechanically boring items are a good place to foreshadow, by dropping a proper noun (like a special steel) that the player will later recognise on better gear or monsters.",
+      "detail": "Shepard's example flavour text says great weapons are forged with a named steel 'but this will have to suffice until then'. Seeing the name again later on plate mail or a golem signals something special. Flavour text can also sell tone: overwrought drama for a Final Fantasy Tactics-style game, or silliness for a comedic one.",
+      "t": 683,
+      "quote": "you can pepper you're early items with this because the early item so have much to say so why not foreshadow a bit",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "character through items",
+      "kind": "example",
+      "claim": "Tangledeep characterises its heroine Mirai entirely through item flavour text written as her own thoughts, so players learn about her curiosity and growth from the gear they pick up.",
+      "detail": "She expects to find better swords, is baffled by strange magic, and is amused by a curved sword. Themed weapon sets add arcs: claws for the Wild Child job prompt her to realise she might be a cold-blooded killer. The thread runs through the game without leaving gameplay.",
+      "t": 762,
+      "quote": "you learn about her through the items you pick up right everything you find has some flavor text and they're all written in her thoughts about the item",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "writing workarounds",
+      "kind": "technique",
+      "claim": "In Tangledeep, scroll text is written as the heroine's imperfect translations of runes, a workaround that let Shepard dodge writing rhymes for every scroll while making her more interesting.",
+      "detail": "Shepard tried writing rhymes for all scrolls and got stuck (nothing rhymes with 'toxic'), so the heroine gets words wrong ('dirt fold', 'fat wet splash'). His lesson: if you can't write something well, work around it in a way that also adds character.",
+      "t": 824,
+      "quote": "Mariah is learning to read the scroll language right she's learning to translate runes",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "narrative perspective",
+      "kind": "principle",
+      "claim": "Item text can be written in third person (neutral description), second person (a narrator addressing the player, like a dungeon master) or first person (the character's voice); Shepard recommends picking one consistently.",
+      "detail": "He admits mixing third and second person by accident and says consistency changes the game's tone. First person is the most powerful: the same ornate plate can reveal a complaining, pompous, or loot-hungry 'murder-hobo' character, while stats, sprites and slot already convey the critical information.",
+      "t": 911,
+      "quote": "a lot of us myself included mix third and second person by accident maybe I think consistency is better",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "dialogue writing",
+      "kind": "principle",
+      "claim": "Game dialogue should deliver the important information first and flavour second (a shop must read as a shop before the jokes), and should be concise unless the character is meant to be wordy.",
+      "detail": "Shepard's analogy: you don't serve a brick of salt with chicken sprinkled on top. Say everything needed but no more or less; if a character is a rambling mad scientist, commit to that. A consistent voice is the bedrock of memorable characters, whether hero, shopkeeper or villain.",
+      "t": 1095,
+      "quote": "the important information comes first flavor second so if you have a dialogue that's a shop you have to address it as a shop",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "borrowed voices",
+      "kind": "technique",
+      "claim": "Shepard's rookie dialogue technique is to borrow an existing fictional character's voice wholesale and apply it to your own, even a mismatched one, as a resource for consistent lines.",
+      "detail": "His example: a young blacksmith written with Deckard Cain's love of history, patience and riddles, without becoming an old man. For Tangledeep's antagonist Shara he blended an earlier, idealistic Jaina Proudmoore with Final Fantasy XII's driven, ghost-guided Vayne Solidor.",
+      "t": 1183,
+      "quote": "think about somebody that you know well and just rip them off entirely steal them like it's yours now",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "item cards",
+      "kind": "technique",
+      "claim": "Shepard recommends presenting item functionality first and keeping flavour text visually separate, as Magic cards and Tangledeep's item cards do, so text never obstructs players who don't care.",
+      "detail": "Tangledeep's item cards show clear stat information in distinct colours with flavour text underneath in a different colour. Weapon themes keep it engaging; players look forward to what the next claws will say. Experienced writers who feel an item deserves little text are probably right.",
+      "t": 1466,
+      "quote": "I would do functionality first and make it completely separate from the flavor like the magic cards do",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "plot twists",
+      "kind": "technique",
+      "claim": "For a backstory twist, establish only the pertinent facts the twist will overturn, delivered in small bites by other characters and found objects, as BioShock does.",
+      "detail": "Answering a question, Shepard says a twist only matters if the player knows what's being twisted. He recommends playing BioShock as homework: many people give you nuggets of who you are, then the twist changes and drives the rest of the story.",
+      "t": 1584,
+      "quote": "the tryst only matters if you know what's being twisted right so if you don't get that initial part you can't tell",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "character arcs",
+      "kind": "technique",
+      "claim": "Even procedurally generated roguelikes have acts and phases (dungeon levels) that can mark changes in the hero, e.g. switching their responses to the same shopkeeper once a corruption meter crosses a threshold.",
+      "detail": "Answering a question on the hero's journey, Shepard says to keep important information on the critical path with fluff supporting it, and to use the game's progression markers to change how the hero thinks, acts and responds so the player experiences the arc while playing.",
+      "t": 1733,
+      "quote": "even a procedurally generated roguelike has like acts and phases and you go from here to here to here or get the levels in the dungeon",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

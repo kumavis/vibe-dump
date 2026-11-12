@@ -1,0 +1,107 @@
+{
+  "id": "D8A9dpITLAU",
+  "title": "Jonathan Lessard - A Simulation with a View",
+  "speaker": "Jonathan Lessard",
+  "year": 2023,
+  "url": "https://www.youtube.com/watch?v=D8A9dpITLAU",
+  "talk_type": "design",
+  "summary": "Jonathan Lessard presents a social-simulation god game (its title is captioned as 'design affairs') modelling stone-age societies, and addresses two problems of deep simulations: how players can know what the simulation did, and why they would care. His answer to the first is 'chronicles', a live, hyperlinked, Wikipedia-like archive of every person, event and statistic, inspired by Dwarf Fortress's Legends mode and James Ryan's work. His answer to the second is casting the player as one of many simulated gods whose believers pray for specific outcomes, giving reasons to dig into individual stories and to weigh the ethics of intervening. In Q&A he explains a gift-economy model that builds families, clans, tribes and kingdoms from one action.",
+  "games": [
+    "Dwarf Fortress",
+    "Crusader Kings",
+    "The Sims"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "hidden simulation",
+      "kind": "open-question",
+      "claim": "Deep simulations in games like Dwarf Fortress or Lessard's stone-age god game generate far more than players ever see, raising the question of how players will know about it.",
+      "detail": "Lessard set out to model the social and ecological conditions behind the Neolithic revolution, but most of that is unseen. A typical roguelike game view exposes only what the player attends to in the present, so past events are buried and lost.",
+      "t": 158,
+      "quote": "You have complex systems but exposing them is a challenge actually",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "limited awareness",
+      "kind": "principle",
+      "claim": "Limiting the player's awareness to their game view is a deliberate, valid roguelike design choice, but it means everything outside attention and everything in the past is lost.",
+      "detail": "Lessard notes missing much of the simulation is not an issue in itself because the player's limited awareness is part of the game, but suggests one could imagine something else.",
+      "t": 189,
+      "quote": "It is design on purpose because the positioning of the player as a limited awareness is definitely part of the game",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "chronicles",
+      "kind": "technique",
+      "claim": "Lessard's game exposes its simulation through 'chronicles': a live, exhaustive, hyperlinked wiki of the world, inspired by Dwarf Fortress's Legends mode, that updates as the game advances.",
+      "detail": "Coming from historical training, he imagined the world being completely documented in an archive. He also cites James Ryan's work that outputs a whole simulation as web pages. At any moment the player can open the chronicles; the world page shows graphs like population over time.",
+      "t": 272,
+      "quote": "you have access to something like as exhaustive as possible Wikipedia of the world",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "technique",
+      "claim": "Per-character pages with family tabs, hyperlinked year-by-year timelines and graphs of values like influence give players leads that arouse curiosity and invite them to dig into emergent stories.",
+      "detail": "A character with a current husband and two ex-husbands, or children with different surnames, raises questions about what happened. A spike or drop in social influence around a given year is a lead to investigate. Events range from important to trivial, but they are all there.",
+      "t": 322,
+      "quote": "This person has a husband right now but two ex-husbands so I could be curious as to what happened to them",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player motivation",
+      "kind": "open-question",
+      "claim": "Making simulation history accessible doesn't answer why players would care about thousands of fictional people and their minor details; Lessard's answer is to build a game role that gives reasons to look at many characters.",
+      "detail": "Lessard says he doesn't claim to have an answer. His team found that playing a single character made it unlikely that the one life would be interesting, but having reasons to look at many characters made interesting emergent stories more likely to surface.",
+      "t": 429,
+      "quote": "the big question now is why would people/players care about all that information? All these fictional people living or dead",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "god game",
+      "kind": "example",
+      "claim": "In Lessard's god game the player is one of many simulated protector gods created by communities, in a reciprocal relationship where believers give energy and expect their prayers fulfilled.",
+      "detail": "Believers communicate through prayers: Jessica, in love with Valerie, promises to sacrifice food if the god makes it happen and threatens to voice her disappointment to her peers otherwise. Gods are themselves part of the simulation.",
+      "t": 500,
+      "quote": "believers of these gods endue them with energy but in response the gods are expected to fulfill the believer's desires or ambitions",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "consequences",
+      "kind": "example",
+      "claim": "Intervening in Lessard's simulation creates incentive to inspect the aftermath: moving Jessica to be near Valerie led to her joining a clan, dying in a battle there, and having almost no one at her funeral.",
+      "detail": "Lessard first investigated the situation (they lived far apart; the attraction was one-sided but Jessica's poetry was making progress), then used a miracle to move Jessica, noting he was taking responsibility for meddling in lives. The tragic outcome only becomes visible by examining the chronicles.",
+      "t": 681,
+      "quote": "So because of my action she went to the other end of the world and she was immediately killed",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "social structures",
+      "kind": "technique",
+      "claim": "Lessard models social structure with a single fractal gift-exchange action: exchange within families builds clans, between clans builds tribes, and between tribes builds something like a kingdom.",
+      "detail": "Drawing on the book Stone Age Economics, he says it is pleasant for systems modelling because one action piles up at different levels into a full social structure. It doesn't show much in play but makes the world feel alive with relationships.",
+      "t": 850,
+      "quote": "it is a one action that at very levels pile up to become a full social structure",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "player agency",
+      "kind": "principle",
+      "claim": "In Lessard's god game the world lives on without the player, and the player's limited, belief-funded actions become ethical choices about how much to meddle and who pays the price.",
+      "detail": "A god starts with around 20 believers and limited action; doing the job well spreads word and grows action potential. You can do nothing and the world goes on, leaving room for sandbox experiments as a deity.",
+      "t": 933,
+      "quote": "ethical decisions and positioning yourself to say how much do I want to meddle in these people's life",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

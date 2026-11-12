@@ -1,0 +1,155 @@
+{
+  "id": "VVRomN99Ygw",
+  "title": "Dylan White - Rift Wizards Showcase",
+  "speaker": "Dylan White",
+  "year": 2020,
+  "url": "https://www.youtube.com/watch?v=VVRomN99Ygw",
+  "talk_type": "performance",
+  "summary": "Dylan White, programmer and designer of Rift Wizard (then in Steam early access), plays through several levels while explaining its design. Rift Wizard is a traditional roguelike focused on mechanical combat and character builds: single-screen levels, no melee, a large freely purchasable spell list with trading-card-like synergies, scarce non-grindable skill points, per-spell charges restored only by mana potions, portal-based level choice with previewed rewards, and circles that discount spell schools. Over the run he builds a fire build around Flame Gate, then pivots to a dark/fire synergy (Ghost Fire plus Nightmare) that snowballs into an army of fire ghosts.",
+  "games": [
+    "Rift Wizard"
+  ],
+  "insights": [
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "no melee",
+      "kind": "example",
+      "claim": "In Rift Wizard the player wizard has no melee attack and cannot bump enemies, while enemies can melee the player, so every kill must come from spells.",
+      "detail": "White describes Rift Wizard as a traditional roguelike with emphasis on mechanical combat and character builds and very little plot. Whole levels fit on one screen.",
+      "t": 193,
+      "quote": "there is no melee attack you cannot walk into enemies though they have melee attacks they will walk into you",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "spell list",
+      "kind": "example",
+      "claim": "Rift Wizard lets players buy any spell in any order with skill points, and its many spell synergies and passive skills make building like a trading card game.",
+      "detail": "The big feature is a large list of spells; passive skills alter how spells work. White starts the demo by buying Fireball.",
+      "t": 215,
+      "quote": "it's a little bit like a trading card game in that there are many synergies and dependencies between the different spells",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "fixed economy",
+      "kind": "example",
+      "claim": "Rift Wizard has exactly 25 levels with three skill points each and no way to grind, making skill points scarce so every purchase must be careful.",
+      "detail": "White collects the skill point orbs on each level and spends them between levels.",
+      "t": 265,
+      "quote": "there's no way to grind so you gotta expend stuff very carefully",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "level choice",
+      "kind": "example",
+      "claim": "Rift Wizard offers several portals to next levels that the player can preview, judging difficulty and loot, and then choose where on the map to deploy.",
+      "detail": "Walking into a portal shows the level; the player can click any square to deploy for the best tactical position or back out if the loot isn't good enough or the level looks too hard.",
+      "t": 291,
+      "quote": "we could click on any square in the level to deploy there kind of find our best tactical position",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "resource pressure",
+      "kind": "example",
+      "claim": "Rift Wizard has no hunger or mana; each spell has limited charges restored only by randomly dropped mana potions, which fill the role food plays in other roguelikes.",
+      "detail": "There is no resting. Fireball has 18 charges, Flame Gate four; potions are scarce, so White plans levels to avoid wasting spell charges.",
+      "t": 344,
+      "quote": "each spell has a limited number of charges so fireball has 18 charges flame gate has four charges and you can only refresh the charges by drinking a mana potion",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "spell synergy",
+      "kind": "example",
+      "claim": "Rift Wizard's Flame Gate enchantment spawns a short-lived fire elemental each time the player casts a fire spell, as long as they don't move or cast a non-fire spell, rewarding stationary fire builds.",
+      "detail": "White weighs moving (which ends Flame Gate) against limited charges of both Flame Gate and Fireball to trigger it.",
+      "t": 387,
+      "quote": "for as long as you don't move or cast anything that's not a fire spell you will get a fire elemental every time you cast a fire spell",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "build steering",
+      "kind": "example",
+      "claim": "Rift Wizard's circles of power discount spells of one school (e.g. sorcery, dark, enchantment) by a skill point while the player stands on them, nudging what the player buys and which level they pick.",
+      "detail": "On a sorcery circle White buys Pyrostatic Pulse, which is both fire and lightning and comes with full charges. He also weighs levels by their circle and shrines that upgrade spells of particular schools.",
+      "t": 483,
+      "quote": "every spell which is a sorcery which is all the spells that have instantaneous effects costs one fewer skill point while we're standing on the circle",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "monster lairs",
+      "kind": "example",
+      "claim": "In Rift Wizard lairs continuously spawn enemies that eventually come to the player, so choosing a level and deployment point depends on where the lairs are.",
+      "detail": "White says he always looks at lair positions: you could whittle down initial enemies anywhere, but streams from lairs keep coming. He also weighs fire-resistant enemies against his fire build.",
+      "t": 597,
+      "quote": "i'm always looking at where the layers are because the enemies will eventually come to you",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "damage resistances",
+      "kind": "example",
+      "claim": "Rift Wizard uses a simple transparent damage formula with percentage resistances and shields that block one instance of damage, so players can count hits exactly when evaluating a level.",
+      "detail": "Fireball deals 9; an enemy with -50 fire resist takes 14 (rounding up) and dies in one hit. Fairies with 9 HP and one shield need two fireballs.",
+      "t": 791,
+      "quote": "damage formula it's pretty simple fireball it deals 9 damage this guy he's got minus 50 fire resist",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "consumables",
+      "kind": "example",
+      "claim": "Rift Wizard's consumables like an earthquake orb that deletes half the level's walls, or a death dice that kills six random enemies, rescue the player from bad terrain or situations.",
+      "detail": "White uses the earthquake orb when a bottomless pit forces a long detour, letting him and his fire elementals reach a lair directly; later he uses death dice in a bad spot with cultists.",
+      "t": 947,
+      "quote": "we'll use an earthquake orb deletes half the walls of the level now we can walk directly towards this layer",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "friendly fire",
+      "kind": "example",
+      "claim": "Rift Wizard has friendly fire and multi-element spells, so players must consider allies' immunities (a fire elemental is immune to fire but not lightning) and enemy traits like troll regeneration being stopped by fire.",
+      "detail": "Pyrostatic Pulse deals lightning damage around the edges of its beam, which would hurt White's fire elemental; he prefers fire damage on trolls to prevent healing.",
+      "t": 1027,
+      "quote": "he's immune to fire but he's not immune to lightning and there is friendly fire",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "spell synergy",
+      "kind": "example",
+      "claim": "Rift Wizard's Ghost Fire skill summons a fire ghost when an enemy takes dark and fire damage in the same turn, which White enables by pairing it with the Nightmare aura that randomly deals dark or arcane damage nearby.",
+      "detail": "A dark sorcery can't be cast the same turn as Fireball, so a passive aura is the fit. Once running, fire ghosts' own fire attacks spawn more ghosts and the level fills up, getting out of control in the player's favour.",
+      "t": 1101,
+      "quote": "if an enemy takes dark and fire damage we automatically get a fire ghost for a limited time",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "snowballing",
+      "kind": "example",
+      "claim": "Rift Wizard's summon synergies can snowball: fire ghosts' fire attacks trigger more ghosts, making the player feel super powerful.",
+      "detail": "White notes it might get out of control in an advantageous way; he then buys Permanence to make the summons last longer, while still being nearly killed by a fire-resistant toad.",
+      "t": 1277,
+      "quote": "they have a fire attack so they'll help us spawn even more fire ghosts and it might get out of control in a way that's very advantageous",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "threat display",
+      "kind": "example",
+      "claim": "Rift Wizard can display every tile that is unsafe from enemy ranged attacks, helping the player position tactically.",
+      "detail": "White uses it when cultists are shooting at him, identifying which enemies can hit him.",
+      "t": 1428,
+      "quote": "this is a display of all the tiles that are not safe so that guy can hit me",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

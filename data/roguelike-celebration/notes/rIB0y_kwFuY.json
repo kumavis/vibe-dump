@@ -1,0 +1,286 @@
+{
+  "id": "rIB0y_kwFuY",
+  "title": "Adeon - Live Nethack Speedrun",
+  "speaker": "Adeon",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=rIB0y_kwFuY",
+  "talk_type": "performance",
+  "summary": "Adeon, holder of the NetHack real-time speedrun record, plays a live dwarven Valkyrie run on the NAO server and ascends in about one hour fifty minutes, while he and co-commentators (including a conference organizer) explain what is happening to the audience. The commentary walks through NetHack's structure — Gnomish Mines, Oracle, quest, Medusa, castle wand of wishing, Gehennom, the invocation ritual, escape with the Amulet, the elemental and astral planes — and many of its interlocking item and monster systems. It is a performance rather than a talk, but the running commentary contains many concrete examples of NetHack's identification tricks, emergent item interactions, endgame structure and mechanics the players find frustrating.",
+  "games": [
+    "NetHack",
+    "Dwarf Fortress"
+  ],
+  "insights": [
+    {
+      "topic": "community-and-business",
+      "subtopic": "speedrunning",
+      "kind": "history",
+      "claim": "Adeon's NetHack real-time speedrun record of about one hour three minutes took roughly a month and around 1,000 attempts, so a live run aims for a balance of risk and a realistic chance to win.",
+      "detail": "Adeon estimated a roughly 30 percent chance of winning within the two-hour slot. The run finished in about 1:50, which he believes beats anyone else's time apart from his own record; commentators contrast this with their own first wins of 20 to 36 hours.",
+      "t": 18,
+      "quote": "my record is one hour of three minutes but that took like one month of trying maybe 1,000 games",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "monster generation",
+      "kind": "example",
+      "claim": "NetHack generates a level's monsters when the level is first created, scaled to the player's level at that time, so visiting a level early makes it easier when returning stronger.",
+      "detail": "The commentators explain this while Adeon briefly visits a lower level before clearing the current one. Later Adeon deliberately avoids reaching experience level 15 before arriving at the castle, because a higher level makes the generated monsters harder and gives diminishing returns.",
+      "t": 309,
+      "quote": "if you generate a level it generates all the monsters in the level and they'll be of level proportionate to the level when you first explore it",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "example",
+      "claim": "NetHack lets players price-identify unidentified items, because each item type has a fixed shop price, so shops reveal which scroll, potion, boots or lamp an item might be.",
+      "detail": "Prices scale with charisma but stay proportional to each other, so the price class narrows the possibilities; the commentators say this is much easier than finding scrolls of identify. Adeon names a scroll 'ID' based on its price without ever reading it, and later distinguishes a magic lamp from an oil lamp by price and elimination.",
+      "t": 344,
+      "quote": "items that start as unidentified still have fixed cost to them so if you see them in a shop and they're of a cost you get insight",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "fixed levels",
+      "kind": "example",
+      "claim": "NetHack mixes procedurally generated levels with fixed branches and guaranteed special levels such as the Gnomish Mines with Minetown and a guaranteed luckstone.",
+      "detail": "The commentators describe the Mines as a fixed path filled with dwarves and gnomes, with Minetown's shops, temple and priest, and a guaranteed luckstone at the bottom. Later they note the castle always has a guaranteed wand of wishing and the Oracle, Medusa and Sokoban levels recur every game.",
+      "t": 387,
+      "quote": "nethack has clearly procedurally generated levels but some fix things in it so the mines are one of the fixed paths",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "elbereth",
+      "kind": "example",
+      "claim": "NetHack's Elbereth engraving is a word of protection that frightens most monsters away from the square, and it can be used tactically on stairs to trap fleeing monsters.",
+      "detail": "The commentators explain that engraving it in the dust wears away, while burning it with a wand of lightning or fire makes it permanent. Adeon stands on Elbereth on the up stairs so a fleeing quest nemesis repeatedly approaches, gets scared, and takes free hits.",
+      "t": 478,
+      "quote": "it's a word of protection if you're standing on top of it monsters won't attack you",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "wishes",
+      "kind": "example",
+      "claim": "NetHack's wishes let players fill gaps in an 'ascension kit' of near-essential items, and an early wish greatly raises the chance of winning.",
+      "detail": "A wish can specify an item and enhancements like blessed, +2 and rustproof, and it appears in inventory immediately. In this run an early wish produced blessed fixed +2 silver dragon scale mail for reflection, chosen so the amulet slot stays free for life saving.",
+      "t": 893,
+      "quote": "your chances of winning a game like really increase if you get a early wish",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "monster exploits",
+      "kind": "example",
+      "claim": "NetHack's leprechauns steal gold and teleport away, but because they do not pick up gold from the floor, players can drop their gold and fight them safely.",
+      "detail": "The commentators describe this as a standard trick and note the frustration of forgetting and having to chase a leprechaun to recover hundreds of gold. Adeon later keeps most gold in a bag of holding so leprechauns cannot steal it and demons only see a small amount when demanding a bribe.",
+      "t": 1020,
+      "quote": "leprechauns are stupid enough that they like don't pick up gold off the ground so if you see a leprechaun you can just drop your gold",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "example",
+      "claim": "NetHack lets players identify many wands by engraving with them, since each wand type produces a distinctive message.",
+      "detail": "A wand of magic missile reports the floor is 'riddled with bullets' and a wand of digging sends up gravel and leaves a permanent engraving. It costs a charge but is much more informative than zapping wands randomly at a wall.",
+      "t": 1103,
+      "quote": "one way to identify them is to write something on the floor with them when you do that you'll get a message",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "bones files",
+      "kind": "example",
+      "claim": "Adeon plays NetHack speedruns with bones files turned off because inheriting a dead character's gear makes a run feel like cheating.",
+      "detail": "He explains that bones often contain very good items, such as a dead wizard's cloak of magic resistance, which would give a run an unearned head start.",
+      "t": 1416,
+      "quote": "if I find bones often they have so good items that I feel like the run is cheating",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "holy water",
+      "kind": "example",
+      "claim": "NetHack lets one potion of holy water convert a whole stack of water into holy water, so players dilute unknown potions into water to mass-produce it regardless of what they were.",
+      "detail": "Holy water is made by praying over water on an altar and is used to bless items. Adeon dips all his unidentified potions in a fountain to turn them to water, saying he does not care what they actually are; falling into water also blanked his scrolls, which he later rewrote with a magic marker.",
+      "t": 1535,
+      "quote": "as long as you have one potion of holy water you can create sort of like an infinite amount of holy water potions",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "genocide",
+      "kind": "example",
+      "claim": "NetHack lets a player genocide their own monster class, which kills them outright regardless of life saving — a famous 'stupid death'.",
+      "detail": "Because the dwarven Valkyrie belongs to the 'h' class, Adeon cannot genocide all h's to remove mind flayers. A commentator recalls doing exactly that in an older version where the player was an '@', noting the amulet of life saving does nothing when your whole race is wiped out.",
+      "t": 1568,
+      "quote": "your amulet of life-saving does nothing when you wipe out your entire race",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "intrinsics",
+      "kind": "example",
+      "claim": "NetHack grants intrinsic resistances and abilities from eating certain monster corpses, such as dragons for elemental resistances or a floating eye for telepathy.",
+      "detail": "The commentators note armor can also grant resistances, but corpses are the main route, with dragons of different colours tied to different elements. Telepathy from a floating eye shows all monsters with minds when blind, which Adeon uses deliberately to scout levels.",
+      "t": 1950,
+      "quote": "eating the corpses of monsters of certain types will give you those resistances",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "item interactions",
+      "kind": "example",
+      "claim": "NetHack's bag of holding reduces carried weight and protects contents, but putting a bag of holding or wand of cancellation inside it destroys the bag and everything in it.",
+      "detail": "A blessed bag reduces weight further, letting players carry ludicrous amounts. The commentators call the explosion heartbreaking and note it is a real risk when playing very fast.",
+      "t": 2064,
+      "quote": "if you put a bag of holding and a bag of holding it blows up",
+      "weight": 1
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "level description languages",
+      "kind": "technique",
+      "claim": "NetHack builds its levels with custom level compilers: one description language draws fixed levels as a picture, and another describes constraints for randomized levels.",
+      "detail": "A commentator explains that guaranteed levels look the same every time because they are written as a literal map, while the second language specifies things like how many doors and monsters a level needs. Building NetHack runs these compilers to produce the level data.",
+      "t": 3232,
+      "quote": "the levels that are guaranteed is one level description language that looks like a picture of the level basically",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "speedrunning",
+      "kind": "example",
+      "claim": "Digging straight down with a pickaxe saves NetHack speedrunners enormous time, but in normal-paced play excessive digging is a common way to starve.",
+      "detail": "Adeon spends time returning to the Mines for a pickaxe because it pays back in Gehennom's mazes and gives a direct stair-to-stair escape route later. The commentators note digging costs extra turns.",
+      "t": 3149,
+      "quote": "typically if you're playing a lot slower than this it's a great way to starve to death by digging too much",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "artifacts",
+      "kind": "example",
+      "claim": "NetHack makes wishing for named artifacts likelier to fail the more artifacts already exist in the game, so Adeon checks for randomly spawned artifacts before wishing.",
+      "detail": "Artifacts such as Excalibur and quest items can come from god gifts or wishes. Adeon wished for the Caveman quest artifact, the Sceptre of Might, for magic resistance and toggleable conflict without using a ring slot.",
+      "t": 3566,
+      "quote": "there's a chance that they won't show up and that chance is proportional to the number of artifacts that already exist in the game",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "debug mode",
+      "kind": "example",
+      "claim": "NetHack's developer debug 'wizard mode' gives unlimited wishes and lets players refuse death, which commentators recommend for exploring late-game content without the skill to reach it.",
+      "detail": "A commentator notes the game is so hard that reaching Gehennom requires being very good and knowing many obscure things, so wizard mode offers a much more forgiving way to explore and learn.",
+      "t": 4113,
+      "quote": "you can play in wizard mode in a much more forgiving way and and get to here",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "magic marker",
+      "kind": "example",
+      "claim": "NetHack's magic marker lets players write any scroll they have seen onto blank scrolls, at a charge cost proportional to the scroll's power.",
+      "detail": "A scroll of genocide might take far more charges than a weak scroll of magic mapping. In normal play players write enchant armor and enchant weapon; in this speedrun Adeon writes magic mapping to cross Gehennom's mazes quickly, and is limited by both blank scrolls and charges.",
+      "t": 4507,
+      "quote": "the amount of charges that it uses off of a magic marker is proportional to the like perceived strength of the scroll",
+      "weight": 1
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "curses",
+      "kind": "example",
+      "claim": "NetHack's cursed equipment usually still works but cannot be removed, so the danger of a curse is being locked into a slot rather than losing the item's function.",
+      "detail": "A cursed pickaxe would still dig and a cursed amulet of life saving would still save a life, but a cursed weapon would prevent switching to the pickaxe. A commentator adds that some items have different effects when cursed or read while confused, such as a cursed potion of gain level raising you up a dungeon level.",
+      "t": 4573,
+      "quote": "a cursed piece of equipment or item is something that you can't take off but they still typically do the thing they're supposed to do",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "conducts",
+      "kind": "example",
+      "claim": "NetHack tracks voluntary conducts such as vegan, pacifist, wishless or illiterate play, effectively offering optional challenge modes reported at the end of a game.",
+      "detail": "The commentators mention players winning without eating or while never carrying more than about 150 weight. Adeon's run keeps no special conducts except, unusually for him, not genociding anything until late.",
+      "t": 4904,
+      "quote": "it's sort of like optional challenge mode for playing the game",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "ascii ambiguity",
+      "kind": "example",
+      "claim": "NetHack turns the limits of ASCII into a mechanic: the Wizard of Yendor's decoys are Elven kings drawn as the same purple '@', creating real visual confusion.",
+      "detail": "A commentator calls this an interesting feature of NetHack, since multiple monsters mapping to identical glyphs makes it hard to tell which purple symbol is the real wizard. The run later fights an 'imitation' wizard that was actually an elf shooting arrows.",
+      "t": 5057,
+      "quote": "it uses the limitation of the ASCII art like the fact that multiple characters are mapped to purple add symbols",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player character",
+      "kind": "example",
+      "claim": "A commentator relays the description of the typical roguelike character as a 'murder hobo' who kills, steals and wears random clothes, a behaviour NetHack normalises.",
+      "detail": "The point is made as Adeon breaks into the Wizard of Yendor's tower to kill him and take the Book of the Dead. The commentator attributes the phrase to Jim, an earlier speaker.",
+      "t": 4999,
+      "quote": "described the typical roguelike character as being a murderer hobo",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "escape sequence",
+      "kind": "example",
+      "claim": "NetHack ends its descent with an escape sequence: taking the Amulet of Yendor wakes and alerts every monster while the resurrecting Wizard of Yendor harasses the player all the way up.",
+      "detail": "The commentators compare it to Indiana Jones. Rodney repeatedly returns to steal the Amulet or quest item, curse items and summon monsters; leaving the dungeon without noticing the Amulet was stolen simply loses the game, so players pre-dig direct stair-to-stair paths on the way down.",
+      "t": 2700,
+      "quote": "when you grab it like all monsters are alerted to your presence and just sort of like it's like Indiana Jones style",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "frustrating mechanics",
+      "kind": "warning",
+      "claim": "The commentators call NetHack's endgame mechanic of randomly dragging the Amulet-carrier back down levels a really annoying mechanic that forces replaying levels.",
+      "detail": "It happens randomly within a turn range, so fighting fewer monsters and taking fewer turns on the way out reduces how often it triggers. A commentator says they would have many non-family-friendly words for it; Adeon copes by cutting direct paths between stairs.",
+      "t": 5685,
+      "quote": "it's just like a thing that Rodney does to make the endgame harder is you just get pulled back down levels randomly",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "online servers",
+      "kind": "example",
+      "claim": "The NAO public NetHack server added in-game mail delivered by a mail daemon, balanced so letters weigh nothing and evaporate after reading to avoid giving players extra items.",
+      "detail": "A commentator recalls receiving warnings from a friend this way while learning to win. They also note NAO records ttyrec replays of all games, so this run can be rewatched.",
+      "t": 5623,
+      "quote": "the letters evaporate as soon as you read them and they don't weigh anything",
+      "weight": 1
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "summoning",
+      "kind": "example",
+      "claim": "NetHack's demons can summon other demons when they hit, which can cascade into increasingly dangerous fights, so players kill them quickly.",
+      "detail": "The commentators say named demons like Beelzebub and Asmodeus are guaranteed, while hits may summon random or named demons, the most dangerous being Demogorgon; lawful demons cannot summon him. Each new demon can summon more.",
+      "t": 5893,
+      "quote": "they can summon more and more demons and make your life really miserable",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "conflict",
+      "kind": "example",
+      "claim": "NetHack's conflict effect makes all monsters fight each other, turning crowded endgame levels like the elemental and astral planes into self-thinning brawls.",
+      "detail": "Adeon gets toggleable conflict from the Sceptre of Might and uses it to slip past massed monsters and keep angels off him on the Astral Plane. It speeds hunger, so it is normally only turned on when needed, and it means a god-sent pet angel immediately attacks you.",
+      "t": 3839,
+      "quote": "in the case of like a big room like this it would cause all the monsters to sort of kill each other",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

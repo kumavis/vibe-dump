@@ -1,0 +1,85 @@
+{
+  "id": "K5FXzxDIQdQ",
+  "title": "Seth Cooper - Building a Roguelike with a Tile Rewrite Language",
+  "speaker": "Seth Cooper",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=K5FXzxDIQdQ",
+  "talk_type": "technical",
+  "summary": "Seth Cooper presents Tile Rewrite Behavior Trees (TRBT), a visual domain-specific language for grid- and turn-based games in which game state is a layered 2D board of tiles, state changes are tile rewrite rules, and control flow is a behavior tree. He builds Trogue, an emoji-based roguelike inspired by a daily emoji dungeon game, implementing dungeon generation, HUD, fog of war, enemy movement, health and fireball combat purely as tile rewrites, using hidden underscore-tagged tiles and extra layers to track state. He closes with planned features and a user-study finding that tiles have no object identity, which changes how programmers think.",
+  "games": [
+    "Trogue"
+  ],
+  "insights": [
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "tile rewriting",
+      "kind": "technique",
+      "claim": "TRBT represents a grid game's entire state as a layered 2D board of tiles and every state change as a visual rewrite rule replacing one tile pattern with another, so both state and rules are visible.",
+      "detail": "Player movement is a rewrite of player-plus-blank into blank-plus-player; placing a room is rewriting a rectangle of solid tiles into empty space; checking a win is matching a gem-tile pattern on the board.",
+      "t": 124,
+      "quote": "tile rewrites which are essentially a visual representation of replacing one arrangement of tiles with another arrangement",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "behavior trees",
+      "kind": "technique",
+      "claim": "TRBT uses behavior trees, normally used for agent AI, to control the logic of the whole game, combining order, loop-until-fail, any-order and player-choice nodes over tile rewrites.",
+      "detail": "A minimal game sets the board solid, rewrites an empty room, places player and exit, then loops a player node letting the player choose movement rewrites until a gem tile appears. Nodes succeed or fail and parents react to children's results.",
+      "t": 159,
+      "quote": "we are using the behavior trees to control sort of like the logic of the entire game",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "hidden state",
+      "kind": "technique",
+      "claim": "Trogue tracks hidden state with extra layers and underscore-tagged tiles invisible to the player but shown in a debug view, such as arrows under patrolling snakes recording their direction.",
+      "detail": "Layers stack tiles at the same position to associate information; a larger tile above a smaller one hides it during play. A dedicated layer stores whether each enemy moved this turn and its heading.",
+      "t": 506,
+      "quote": "there are tiles completely hidden from the player that are tagged with this underscore and you can only see them when debugging",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "corridor pathfinding",
+      "kind": "technique",
+      "claim": "Trogue generates dungeons purely with rewrites: stamping rooms with a centre marker, then growing a field of arrows outward from one room until it reaches another room's centre, and following the arrows to carve a corridor.",
+      "detail": "Arrows are rewritten onto empty tiles in a particular layer, pointing toward the room centre or toward existing arrows, iteratively expanding like a pathfinding flood until another centre is hit.",
+      "t": 570,
+      "quote": "iteratively growing this path finding structure out until we hit the center of another room and then just follow it along to a clear pathway",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "fog of war",
+      "kind": "technique",
+      "claim": "Trogue implements exploration with two cover layers of large emoji: darkness, which is cleared permanently as the player explores, and fog, which refills each move so only areas near the player are visible.",
+      "detail": "Each move iteratively finds tiles near the player by rewriting and clears darkness and fog there. Even the HUD must be spatially located on the grid, placed by dropping tiles and moving them into position.",
+      "t": 651,
+      "quote": "The fog refills every time the player moves but the darkness doesn't",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "simple movement",
+      "kind": "example",
+      "claim": "Trogue has two enemy types distinguished by movement: bats move randomly and snakes patrol back and forth, dealing one and two damage respectively.",
+      "detail": "Damage randomly removes hearts from the health meter and shifts the rest so the meter stays continuous; with no hearts the player loses. The player can cast fireballs in a chosen direction with a wand via an action button then an arrow key.",
+      "t": 665,
+      "quote": "The bats move randomly and the snakes patrol back and forth",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "tile identity",
+      "kind": "open-question",
+      "claim": "In a tile rewrite language, tiles have no object identity, so even the player is just an emoji any rule can match, which a user study suggested requires a different way of thinking about program structure.",
+      "detail": "Cooper's small user study found a rewrite involving the player tile applies to any player tile on the board, unlike an object-oriented player entity; it applies just as it would to fog, wand or fireball tiles.",
+      "t": 954,
+      "quote": "the tiles don't really have an identity so to speak. The little player tile doesn't have -- it as it just an emoji of the player",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

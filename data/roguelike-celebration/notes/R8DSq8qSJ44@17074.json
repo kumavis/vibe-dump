@@ -1,0 +1,159 @@
+{
+  "id": "R8DSq8qSJ44@17074",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 17074,
+    "end": 18846
+  },
+  "title": "Hubris, Bluffing, and Large Numbers: Exploring Push Your Luck",
+  "speaker": "Nic Tringali",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=17074s",
+  "talk_type": "design",
+  "summary": "Starting from the half-serious thought that every game is secretly a push-your-luck game, designer Nic Tringali (Amber Spire, The Vanished Vault) compares three pure push-your-luck games: Blackjack (player against a prefigured external world), Can't Stop (player against their own hubris) and Skull (player against other people). He concludes that what matters is not the opposing force but how each transforms information and uncertainty, and how that shapes the player's sense of time. A shuffled deck, like an unexplored dungeon or written story, holds information that already exists; dice represent true uncertainty and the parts of the world a game will not simulate; other players create hidden information that makes play feel simultaneous. He illustrates this with two of his own card games, Wheel to Wheel and Tall Ships.",
+  "games": [
+    "Blackjack",
+    "Can't Stop",
+    "Skull",
+    "Netrunner",
+    "Blood Bowl",
+    "Quacks of Quedlinburg",
+    "Dune",
+    "Dark Souls",
+    "Wheel to Wheel",
+    "Tall Ships"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "uncertainty",
+      "kind": "principle",
+      "claim": "Many games feel push-your-luck-ish without feeling alike because games give players access to uncertainty in different ways, and players interpret that uncertainty differently.",
+      "detail": "Tringali says Netrunner and Blood Bowl both have push-your-luck traits yet feel nothing alike at a 'bone deep' level of play. He stresses he is not arguing every game is one secret style of push-your-luck; what interests designers is the player not knowing what happens next.",
+      "t": 17193,
+      "quote": "games have uncertainty that players kind of access and interpret in different ways and though that uncertainty can feel meaningfully different",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "push your luck",
+      "kind": "example",
+      "claim": "Blackjack's push-your-luck lies less in the single hit-or-stand choice than in playing against a fixed, already-shuffled deck across many rounds, where each card shifts the odds and the player profits when luck runs their way.",
+      "detail": "The player watches the whole table, the dealer and when the shoe is shuffled, because other players also draw from the deck. Nobody sits down for one round; the risk and tension come from numbers averaging out over time, which Tringali frames as the player against an external world.",
+      "t": 17283,
+      "quote": "in blackjack the order of the deck is fixed, right? It's been shuffled and it's been set",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "push your luck",
+      "kind": "example",
+      "claim": "In Sid Sackson's Can't Stop each round is self-contained and every dice roll independent, so push-your-luck becomes a contest with the player's own hubris rather than with the world.",
+      "detail": "Players roll four dice, pair them into sums that advance tracks numbered 2 to 12, and can bank progress or keep rolling, losing the round's progress if they cannot match their chosen results. The streak grows less likely the longer it goes, and what one player does barely affects the next.",
+      "t": 17463,
+      "quote": "the rest of the world sort of fades away. It's just about the dice and the player and their own hubris",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "bluffing",
+      "kind": "example",
+      "claim": "Skull layers bluffing on push-your-luck: you wager how many cards you can flip without hitting a skull, but must flip your own stack first, so a player holding a skull must pretend to compete without ever winning the wager.",
+      "detail": "Each player has three flowers and a skull, stacks cards face down, and wagers in turn; two won wagers win the game. Players read whether others' wagers are genuine and where in their stacks a skull might sit. Tringali says you are playing against another person, not a random deck or die.",
+      "t": 17639,
+      "quote": "to excel at Skull, you need to make yourself vulnerable, but really to try and either trap someone into doing something or at least anticipate",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "randomness",
+      "kind": "principle",
+      "claim": "The useful distinction between push-your-luck styles is not who the player opposes but how each game stores, transforms and reveals information and uncertainty, which lines up with the three basic sources of randomness: decks, dice and people.",
+      "detail": "Tringali first framed the three games as player versus world, self and others, then decided that was possibly specific to those games. All three share a structure in which each action resolves uncertainty and raises risk and reward, but they differ in how information exists. He sets bag-building games such as Quacks of Quedlinburg aside as feeling like Blackjack and Can't Stop.",
+      "t": 17685,
+      "quote": "what felt fundamental about these pusher luck games was not this kind of opposing force necessarily, but how information and uncertainty are transformed",
+      "weight": 3
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "design intuition",
+      "kind": "warning",
+      "claim": "Designers tend to assemble games from components whose feel they assume (dice feel like this, cards like that), which can gloss over fine detail and leave intuitive designs on shaky foundations.",
+      "detail": "Tringali says he does not believe a game can be designed without iteration and testing, but that he is prone to designing by intuition and then iterating on that intuition. He wants to keep the formal differences between games in mind alongside the player's experience.",
+      "t": 17854,
+      "quote": "I find myself prone to like designing intuitively and then kind of iterating on that intuition which um sometimes feels like building on shaky foundations",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "hidden information",
+      "kind": "principle",
+      "claim": "An unexplored dungeon or a branching story works like a shuffled deck: the information already exists and the game 'knows' it, so uncertainty exists only from the player's frame of reference and each step is a revelation about a world that is already set.",
+      "detail": "Tringali says drawing a card collapses a small slice of an already-decided reality. In the game's sense of time, events have already happened; the player can wait as long as they like, but can only learn or respond after the fact, and the risk is how far in they dare to go, as when trying to romance a party member through a conversation tree.",
+      "t": 17997,
+      "quote": "When you enter a dungeon and you can't see around the corner, the game knows what's there.",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "dice",
+      "kind": "principle",
+      "claim": "Dice represent true uncertainty that nobody, including the game, knows yet, and they stand in for everything the game cannot or does not want to simulate.",
+      "detail": "When an orc throws the ball in Blood Bowl, wind, sweat, crowd distractions and the simultaneous movement of other players all exist in the fiction, but they are outside the player's knowledge and are captured by one die roll that moves reality a fraction of a second forward. Tringali sees the same reveal of the undecided future in real-time play, such as squeezing an extra attack into a Dark Souls boss cycle.",
+      "t": 18168,
+      "quote": "we use dice to say what the game can't or doesn't want to simulate",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "simultaneous decisions",
+      "kind": "principle",
+      "claim": "When opponents secretly commit information, as in Dune's battle wheels or Netrunner's face-down ice, players push their luck against what the other person created, which makes the exchange feel simultaneous.",
+      "detail": "Information exists but is known to only one player, so the player takes the place of the deck or dice, with all the fuzziness of a person. Each side moves forward into the unknown making decisions until the two hidden pathways reconcile, which Tringali says can feel like an 'experiential present'.",
+      "t": 18403,
+      "quote": "It feels tense and it makes battles feel simultaneous because you had to anticipate another creator another player's created information",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "tabletop design",
+      "kind": "example",
+      "claim": "Tringali's racing card game Wheel to Wheel failed for a long time as modified Blackjack because a deck implies events that have already happened, and it worked once it borrowed Skull's hidden stacks so players react to what the other driver is doing.",
+      "detail": "In the finished game players build stacks and egg each other toward a shared bust value; drawn cards are hidden from the opponent but known to the drawer. The sense that something has happened too fast to see fully fits a fast-paced car duel.",
+      "t": 18521,
+      "quote": "the deck of cards feels like something has already happened as not thematically suited to this fast-paced dueling game",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "tabletop design",
+      "kind": "example",
+      "claim": "Tringali's naval tactics game Tall Ships makes action feel slow and unpredictable simply by having each player assign action cards to ships before a random activation order is revealed.",
+      "detail": "The randomised order creates a new baseline game state for both players, and actions carrying over from the past feel slow and delayed, which suits the theme. He made Tall Ships during a break from Wheel to Wheel, and the two sets of ideas merged.",
+      "t": 18585,
+      "quote": "having each player assign their ship uh an action card before knowing what order the ships will activate in",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "component meaning",
+      "kind": "principle",
+      "claim": "Decks and dice carry no inherent sense of past or future; their effect depends on how players read them, so the same effect can be produced by other means, such as rolling dice in advance and storing the results.",
+      "detail": "Tringali's conclusion is that push-your-luck's way of exposing uncertainty is deeply entangled with how the player understands information: what they know and what they don't. Elements like the world, the future and other actors carry risk and reward familiar from everyday life.",
+      "t": 18670,
+      "quote": "You could roll a bunch of dice and store them somewhere and that creates the same effect",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "optimization",
+      "kind": "warning",
+      "claim": "Players optimise the fun out of chance-based games when they have played too much, know the game too well, or the game has an ideal path through its systems.",
+      "detail": "Asked how to prevent optimisation when the core mechanic is estimating chances and rewards, Tringali says it depends too much on the specific design to answer generally, and that players can choose to be swept along by uncertainty instead.",
+      "t": 18832,
+      "quote": "or being too familiar with it or the game having a like an ideal path through its systems",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

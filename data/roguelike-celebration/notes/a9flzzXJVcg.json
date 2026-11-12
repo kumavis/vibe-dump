@@ -1,0 +1,65 @@
+{
+  "id": "a9flzzXJVcg",
+  "title": "Quinten Konyn - Anatomy of a Morgue File",
+  "speaker": "Quinten Konyn",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=a9flzzXJVcg",
+  "talk_type": "other",
+  "summary": "A pre-recorded lightning talk framed as a 'murder mystery' that dissects a Dungeon Crawl Stone Soup morgue file left by a dead character. Konyn walks through its sections (overview, death messages, ASCII map of death with visible monsters, notes, skills, vanquished list) to reconstruct how three enemies killed his character. The investigation reveals he had an unused Elyvilon 'heal other' ability, strong because of high Invocations skill, that might have pacified the attacker, concluding his own poor judgement was the culprit. It shows the morgue file as an artifact for post-mortem learning.",
+  "games": [
+    "Dungeon Crawl Stone Soup"
+  ],
+  "insights": [
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "morgue files",
+      "kind": "example",
+      "claim": "Dungeon Crawl Stone Soup's morgue file is a roughly 19 KB text record of a dead character covering overview, inventory, skills, spells, death messages, map of death, vanquished monsters, notes, vaults and timelines.",
+      "detail": "The overview is concise structured information mostly copied from in-game status menus or the death screen.",
+      "t": 127,
+      "quote": "We've got an overview, inventory, skills, spells, dungeon, weirdness, death, map of death, vanquished, notes, vaults, timelines, and timing",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "post-mortem analysis",
+      "kind": "technique",
+      "claim": "DCSS morgue files record the messages leading up to death and an ASCII snapshot of the map with a list of visible creatures, letting players reconstruct who dealt damage and from where.",
+      "detail": "Konyn highlights every damage message (more exclamation marks means more damage) and uses the map to identify three attackers: an orc warrior with a reach-2 glaive, an orc high priest attacking from afar, and a cobalt blast miner whose range-4 cannon hit hardest. The map lacks colour, so the creature list disambiguates it.",
+      "t": 261,
+      "quote": "This is an ASCII screenshot of the map at the moment of death. It's a little ambiguous because it's missing color",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "range and positioning",
+      "kind": "example",
+      "claim": "The reconstructed death shows a ranged enemy reaching a hiding spot where the axe-wielding player couldn't retaliate, baiting the player to step out into a fatal exchange.",
+      "detail": "Konyn guesses he retreated around a corner; the cobalt could hit him but he couldn't hit it, so he stepped out, was blasted, and the orc warrior landed the killing blow.",
+      "t": 354,
+      "quote": "In this position, it can attack me, but I couldn't attack it. I stepped out of hiding to use my axe",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "post-mortem analysis",
+      "kind": "example",
+      "claim": "The morgue file's notes and skills sections revealed an unused option: the character's Elyvilon 'heal other' ability, boosted by high Invocations skill, had earlier pacified an orc warlord and might have neutralised the killer.",
+      "detail": "The notes log both automatic and player-written events. Konyn concludes he underused the ability for fear of spending god favour and because he underestimated a cobalt after killing five of them, so his own judgement was the 'murderer'.",
+      "t": 430,
+      "quote": "My friend was able to use heal other earlier to pacify an orc warlord, one of the scariest enemies you'll ever encounter",
+      "weight": 3
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "threat assessment",
+      "kind": "example",
+      "claim": "Players hoard limited resources against obviously dangerous foes (highlighted, high-level) but underestimate familiar weak-seeming enemies, which then kill them.",
+      "detail": "Konyn used heal other on the red-highlighted orc warlord but didn't think the 'little cobalt' could kill him, having already vanquished five.",
+      "t": 515,
+      "quote": "I didn't really think that little cobalt could kill me. I already killed five of them in the vanquished category",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

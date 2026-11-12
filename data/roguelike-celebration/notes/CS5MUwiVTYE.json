@@ -1,0 +1,138 @@
+{
+  "id": "CS5MUwiVTYE",
+  "title": "Adam Newgas: Constraint Based Generation is a swiss army knife",
+  "speaker": "Adam Newgas",
+  "year": 2022,
+  "url": "https://www.youtube.com/watch?v=CS5MUwiVTYE",
+  "talk_type": "technical",
+  "summary": "Hobbyist developer Adam Newgas explains WaveFunctionCollapse and model synthesis as constraint-based generators: solver techniques turned into generators by injecting randomness. He walks through the algorithm (sample analysis, output initialization, pick-and-propagate loop) and then shows that nearly every step can be swapped out: patch vs adjacency rules, multi-cell hero pieces, annotated tile edges, inpainting around fixed tiles, non-random heuristics as in Townscaper, and extra propagation constraints such as path connectivity. The main caveat is that more constraints mean more contradictions.",
+  "games": [
+    "Caves of Qud",
+    "Bad North",
+    "Townscaper",
+    "Infinite WaveFunctionCollapse"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint solving",
+      "kind": "principle",
+      "claim": "Constraint-based generation takes a normal constraint-solving technique and injects randomness into it to make a generator, so you describe what output should be like rather than specifying exact construction rules.",
+      "detail": "Newgas presents WaveFunctionCollapse as constraint-based generation of tile maps and images, and says this approach is appealing because you do not need to state rules directly yet still get varied, interesting results.",
+      "t": 130,
+      "quote": "you have taken what would be a normal solving technique and by injecting randomness you can turn it on its head and make a generator",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "example",
+      "claim": "Caves of Qud, Bad North, Townscaper and Infinite WaveFunctionCollapse all use WaveFunctionCollapse, and none of them uses the algorithm exactly as originally described.",
+      "detail": "Newgas says WFC learns from example, is relatively easy to code and works on any grid, but what drew him to it is how easily it can be tweaked; every game he listed added its own variations.",
+      "t": 205,
+      "quote": "of the four games I mentioned not one use the function as it was originally described. They have all added extra variations",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "WaveFunctionCollapse starts with every tile possible in every output cell, repeatedly picks a cell and assigns a still-possible tile, then propagates the sample-derived rules to rule out tiles in neighbouring cells.",
+      "detail": "Because each pick only chooses among tiles already consistent with the rules, the output builds up into an image that is locally similar to the sample but larger, with potentially different global structure. The propagation step reuses the AC3 arc-consistency algorithm from solvers.",
+      "t": 354,
+      "quote": "we are only going to pick a tile from those that we have determined are already possible and that's the magic that makes this work",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "Overlapped WaveFunctionCollapse requires every 3x3 patch of the output to match some 3x3 patch of the input sample, possibly rotated or reflected.",
+      "detail": "Newgas calls this the most common variant, and the one he demonstrated pixel by pixel with a small red, black and white sample.",
+      "t": 407,
+      "quote": "every three by three patch in the output sample must match a three by three patch in the input sample possibly rotated or reflected",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "model synthesis",
+      "kind": "technique",
+      "claim": "Model synthesis, which predates WaveFunctionCollapse, learns only adjacency between tiles from the sample, so non-adjacent features can reshuffle and produce global structure absent from the sample.",
+      "detail": "Newgas's example: a bridge learned to be adjacent to river tiles stays next to rivers, but a forest not orthogonally adjacent to the bridge is free to move. That two variants differ only in details suggests nearly any part of the algorithm can be changed.",
+      "t": 460,
+      "quote": "we just look at adjacency between cells and we have learned that this bridge is adjacent to river tile so in the output bridge is adjacent to river",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "Large hand-made pieces can be embedded in a WaveFunctionCollapse output by splitting them into multi-cell tiles with rules that force their parts to appear together.",
+      "detail": "Newgas calls these hero pieces: once one tile of the piece is placed, the rules leave only one possibility for its neighbours, so the whole image is inserted verbatim but still integrates with the surrounding generation.",
+      "t": 577,
+      "quote": "It will insert the entire image for you verbatim as those are the only possibilities under the rules you set",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "technique",
+      "claim": "Instead of a sample, WaveFunctionCollapse tiles can be annotated with painted edge types (e.g. green connects to green, brown to brown), which scales to large tile sets better than samples do.",
+      "detail": "Newgas notes that covering all tile combinations with a sample requires the sample to grow exponentially, whereas edge annotations give the connection rules directly.",
+      "t": 609,
+      "quote": "the rule that I want enforced is that green tiles can always be placed next to green ones, brown can always be placed to brown ones",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "inpainting",
+      "kind": "technique",
+      "claim": "WaveFunctionCollapse can fill in around tiles that are fixed in advance (by hand, by another algorithm or by the user), guaranteeing generated tiles connect consistently to them.",
+      "detail": "Newgas fixed a river, forest and bridge and let WFC generate the rest. He says this is how Townscaper works: the user paints what they want and WFC only chooses the tiles and fixes up consistency.",
+      "t": 673,
+      "quote": "It is insuring the generator tiles always connect to the stuff I have manually specified",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "example",
+      "claim": "Caves of Qud drives WaveFunctionCollapse with its own region decisions, telling the algorithm which tiles and weights to use in each area so one algorithm produces ruins in one place and forest in another.",
+      "detail": "Newgas says the choice of which cell and tile to pick can be any heuristic and the result stays valid; he also shows a temple complex filtered by an overall yin-yang image.",
+      "t": 750,
+      "quote": "this area is a ruins and this one is a forest even though it is all one algorithm fundamentally",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "wave function collapse",
+      "kind": "example",
+      "claim": "Townscaper uses WaveFunctionCollapse with no randomness at all, always picking the highest-priority tile that fits, and the solver's inference produces consequences the designer did not plan.",
+      "detail": "When a user adds a house, the algorithm infers that a closed-off area now allows grass, a high-priority tile, where before it had to place a low-priority patch. Newgas says the solver heritage makes WFC good at if-A-then-B inference that yields surprising emergent behaviour.",
+      "t": 828,
+      "quote": "it will come up with surprising consequences which you don't really spot as the designer until the algorithm alerts you",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint propagation",
+      "kind": "technique",
+      "claim": "Any rule that can say 'this tile here would cause a problem', such as keeping a path connected end to end, can be added to WaveFunctionCollapse by running it at every step of the propagation loop.",
+      "detail": "Newgas shows several such constraints run sequentially, each able to veto a tile, for effects like path connectivity that are not inferred from the sample.",
+      "t": 893,
+      "quote": "if I waw to place this tile it would cause my path to become disconnected",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "constraint propagation",
+      "kind": "warning",
+      "claim": "The more constraints you add to a WaveFunctionCollapse generator, the more likely it hits contradictions that make it run forever or fail to return a result.",
+      "detail": "Newgas calls contradictions one of the key hang-ups of this kind of generation.",
+      "t": 915,
+      "quote": "the more rules you have like that the more likely you are to run into contradictions and that will cause the algorithm to run forever",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

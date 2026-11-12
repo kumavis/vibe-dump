@@ -1,0 +1,190 @@
+{
+  "id": "jNUMRG_tvrY",
+  "title": "Zack Johnson - Kingdom of Loathing",
+  "speaker": "Zack Johnson",
+  "year": 2016,
+  "url": "https://www.youtube.com/watch?v=jNUMRG_tvrY",
+  "talk_type": "technical",
+  "summary": "Zack Johnson, founder of Asymmetric, describes how Kingdom of Loathing, a humour-driven web MMORPG, uses procedurally generated text to keep repetitive play funny. He positions KoL's approach between pure randomness (Markov chains, RNNs: funny only as nonsense) and canned jokes, using 'word buckets' of hand-written lines assembled by a 'mad lib' function with grammar handling, uniqueness and reuse state, and recursion. Examples include combat messages, the hobo name generator, a game-wide haiku mode, Paul Blart-style names, and a 1,500-line script generating a fake game-FAQ that builds a playable zone. Q&A covers a randomised liar/truth-teller lock puzzle, a NetHack-themed zone with per-player randomised potions, and how generators complicate wiki documentation and preservation.",
+  "games": [
+    "Kingdom of Loathing",
+    "NetHack",
+    "ADOM",
+    "Hack",
+    "Spelunky",
+    "World of Warcraft"
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "humorous text",
+      "kind": "principle",
+      "claim": "Funny procedural text works best between pure random generation, which is funny mostly as nonsense, and canned jokes, which are only ever as funny as the original.",
+      "detail": "Johnson said Markov chain and recurrent neural network text can be funny but usually because it is nonsense, so it is hard to use; the funniest knock-knock joke might be in random output but is hard to find. A fixed joke is always exactly as funny as its source. Kingdom of Loathing aims between the two.",
+      "t": 216,
+      "quote": "a lot of times it's funny because it's nonsense and so it's sort of difficult to use it for anything",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "combat messages",
+      "kind": "technique",
+      "claim": "Kingdom of Loathing assembles combat messages from per-monster metadata (a gender pronoun and a single attack verb), a hard-coded body-part list and random pain and impact noises so fights don't repeat the same sentence.",
+      "detail": "The verb takes an 's' for present tense. The system was rudimentary but necessary once players fought monsters rather than reading stories, and was easy to extend, e.g. replacing hit noises when attacking with a squeaky hammer. The body part 'bung' appeared in nearly every early press screenshot.",
+      "t": 381,
+      "quote": "once once we moved to this model where you were actually fighting monsters it needed to just not be the same sentence over and over again",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "name generation",
+      "kind": "example",
+      "claim": "Kingdom of Loathing randomly named the identical trash mobs in its hobo raid dungeon so repetitive fights felt less grindy, and players liked the generated names more than much of the hand-written content.",
+      "detail": "The generator started from John Hodgman's 700 hobo names (used with permission), split up and extended with names reflecting traits like hot elemental attacks. Players shared screenshots of hobos named after friends. Johnson found the response to generated names honestly 'kind of demoralizing'.",
+      "t": 521,
+      "quote": "the response to the randomly generated names were often so much better than the stuff that we had written on purpose that it was honestly kind of demoralizing",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "word buckets",
+      "kind": "technique",
+      "claim": "Kingdom of Loathing's text generators rest on 'word buckets': SQL text fields from which a function pulls a random line, optionally filtered, e.g. by starting letter or index.",
+      "detail": "Originally called misc text blocks, these were renamed word buckets. Even the hobo name structure (first name, last name) adds only a little structure on top. Johnson jokes KoL is a game with programmer art and artist code.",
+      "t": 486,
+      "quote": "it became cumbersome to refer to these as misc text blocks so we started just calling them word buckets",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "repetition variety",
+      "kind": "principle",
+      "claim": "When a game asks players to do something very repetitive, generated variation gives them something to look forward to in the next fight beyond stats going up.",
+      "detail": "Johnson drew this lesson from the hobo name generator, adding that it is much easier to have the computer write things than to write all of it yourself.",
+      "t": 563,
+      "quote": "especially if we're going to ask the player to do something really repetitive like this is a nice way of differentiating things to make it interesting",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "information clarity",
+      "kind": "principle",
+      "claim": "A stylistic text mode like Kingdom of Loathing's haiku mode must not conceal game information, because a game becomes unplayable if events are abstracted into jokes.",
+      "detail": "Modernising an early zone written entirely in haiku, Johnson wanted the whole game output convertible to haiku without hiding information. This required categorising every kind of text the combat script could produce, writing haikus for each, and later putting exact numbers like HP lost into hover text.",
+      "t": 628,
+      "quote": "it just becomes impossible to actually play the game if you don't know what's happening if they're abstracted out to just just to just a joke",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "constrained verse",
+      "kind": "technique",
+      "claim": "Generating haiku with variable content in Kingdom of Loathing required a function counting syllables in numbers and syllable counts for every item name, with haiku variants per syllable length.",
+      "detail": "The team argued over how to pronounce numbers like 108. Because haiku mode was made available everywhere, all items (then four to five thousand, now nearly ten thousand) needed syllable counts, around when they hired their first intern.",
+      "t": 656,
+      "quote": "we're gonna need to have like a bunch of different variants on that haiku depending on how many syllables the number is",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "template grammar",
+      "kind": "technique",
+      "claim": "Kingdom of Loathing's 'mad lib' template function handles grammar for generated text: automatic a/an, proper-noun capitalisation, singular/plural and gendered forms.",
+      "detail": "It was important to the team that the writing be grammatically correct, so early code handled groups of monsters and vowel-initial item names. The mad lib function standardised this, gaining features like inserting a or an before a bucket pull and capitalising to build proper nouns such as a random 'colorville'.",
+      "t": 748,
+      "quote": "it was very important to us that the writing be like at least grammatically correct",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generator state",
+      "kind": "technique",
+      "claim": "Kingdom of Loathing's mad lib function tracks state within a generation, with a 'unique' option so a lizard isn't blue with blue stripes and a 'reuse' option to repeat an earlier pick.",
+      "detail": "Unique asks for distinct values from a bucket; reuse stores what the bucket yielded last time so the same random thing can be referenced again.",
+      "t": 846,
+      "quote": "we wanted a lizard to not be blue with blue stripes so we would ask for two colors that were unique",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "recursion and rarity",
+      "kind": "principle",
+      "claim": "Recursive word buckets in Kingdom of Loathing occasionally produce absurd results like 'big big big big big ugly Dan', and such outcomes should be built to be rare so they are remarkable and funny.",
+      "detail": "The adjectives bucket could call itself, so with lucky dice rolls it would stack adjectives. Johnson said the key is to build it in so it happens only every once in a while.",
+      "t": 882,
+      "quote": "i think the key is to build it in so that happens every once in a while so that it is remarkable when it happens and and thus actually funny",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "humour",
+      "kind": "technique",
+      "claim": "Generated names become funny through juxtaposing an ordinary part with a silly part, as in 'Paul Blart', which Kingdom of Loathing used for its trick-or-treating security guards.",
+      "detail": "The guard name generator produces either a silly first name with a normal last name or the reverse. The team also has an internal rule that any person-name generator must be capable of producing 'Bob Goldwater', funny precisely because it is so ordinary.",
+      "t": 914,
+      "quote": "the juxtaposition of the ordinary name and the silly name results in what i think is pretty funny",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "generated zones",
+      "kind": "example",
+      "claim": "A 1,500-line Kingdom of Loathing script by writer Riff Conner generates a fake game-FAQ for an imaginary video game and then builds a playable zone from it, including a maze solvable only by reading the FAQ.",
+      "detail": "The script language, made so writers could code without PHP, could set persistent state on the player, unlike mad lib's per-run state. Programmer Chris Moyer added randomly chosen ASCII-art fonts for headers; generated monsters like 'diseased skeleton superstars' populate the zone. Johnson called it the culmination of text generation feeding back into gameplay.",
+      "t": 1063,
+      "quote": "it sets states on the player rather than just for the for the duration of the of the execution of the generator",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "randomised puzzles",
+      "kind": "example",
+      "claim": "Kingdom of Loathing's original endgame had a randomised lock puzzle where three guards (a liar, a truth-teller and one who craves human flesh) gave clues to a randomly generated code.",
+      "detail": "Answering a question, Johnson said randomising the answer was meant to stop players looking it up on the wiki; if the answer is just a number it can be any number.",
+      "t": 1201,
+      "quote": "it would randomly generate the code and then randomly generate things that they would say that you had to figure out",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "spoilers",
+      "kind": "warning",
+      "claim": "Randomising puzzles and mazes to defeat wiki lookups in Kingdom of Loathing interested the designers more than players, and players simply wrote Greasemonkey scripts to solve them automatically.",
+      "detail": "Johnson said they have backed off from this approach because an auto-solver is effectively the same as looking up the wiki, and the game has become easier as a result.",
+      "t": 1248,
+      "quote": "somebody just writes a grease monkey script to automatically solve it for you so that's effectively the same as you looking it up on the wiki",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "example",
+      "claim": "Kingdom of Loathing's NetHack-themed zone used potions described by NetHack's potion adjectives whose effects were randomised per player.",
+      "detail": "The zone started with players fighting literal letters and finding symbols like '+' and '!', until an oracle puzzle revealed monsters' NetHack names. Johnson called it an homage, since ADOM, Hack and NetHack were hugely influential on him.",
+      "t": 1311,
+      "quote": "there was a set of effects that was associated with them but it was randomized on a per player basis",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "preserving generators",
+      "kind": "principle",
+      "claim": "Random generation is a barrier to archiving a game, since a document can only list examples, so generative games especially need preserving in playable form.",
+      "detail": "Johnson said the KoL wiki records lists of possibilities, and praised Darius Kazemi's write-up of Spelunky's level generation as a companion document. KoL's word buckets could simply be printed to reconstruct things, but the game-FAQ script is hard to parse, lacking blocks and relying on gotos.",
+      "t": 1495,
+      "quote": "random generation of stuff is kind of a barrier to archival and i think it makes it even more important",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "localization",
+      "kind": "warning",
+      "claim": "Kingdom of Loathing is effectively unlocalisable because its text is embedded in old PHP files and much of its humour is wordplay and puns.",
+      "detail": "Johnson said localisation would be a huge hassle and not worth it; the game has to be played in English.",
+      "t": 1362,
+      "quote": "so much of it is like wordplay and pun based i think that really it's a game that just has to be played in english",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

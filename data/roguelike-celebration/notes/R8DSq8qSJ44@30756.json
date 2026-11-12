@@ -1,0 +1,95 @@
+{
+  "id": "R8DSq8qSJ44@30756",
+  "video_id": "R8DSq8qSJ44",
+  "segment": {
+    "start": 30756,
+    "end": 31531
+  },
+  "title": "Roguelike Run Variety: Balancing Intra and Inter",
+  "speaker": "Tim Keenan",
+  "year": 2026,
+  "url": "https://www.youtube.com/watch?v=R8DSq8qSJ44&t=30756s",
+  "talk_type": "design",
+  "summary": "A short pre-recorded lightning talk by Tim Keenan of Misfits Attic, followed by live Q&A. He separates variety within a run from variety between runs. Duskers maximised within-run variety, so runs began to feel samey; Below the Crown deliberately narrowed each run, for instance by fixing the player's chess-piece type for the whole run, so that runs feel distinct from each other. He argues this is a slider designers should set consciously, not a binary choice and not the only axis of variety. In Q&A he discusses how veterans come to value between-run variety (daily runs, extra constraints), meta-progression as another lever with a grindy downside, and restricting each run to a subset of hazards.",
+  "games": [
+    "Duskers",
+    "Below the Crown",
+    "Slay the Spire",
+    "FTL",
+    "Shogun Showdown",
+    "Kingdom"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run variety",
+      "kind": "principle",
+      "claim": "Roguelike variety has two distinct dimensions, variety within a run and variety between runs, and designers should choose deliberately where their game sits on that slider rather than defaulting to one end.",
+      "detail": "Keenan says it is not a binary choice and not the only axis of variety; neither end is good or bad. He made it a conscious decision only on his second roguelike, because of the type of game it was.",
+      "t": 30825,
+      "quote": "there's always going to be variety that happens within a run and then there is variety that happens between runs",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "run variety",
+      "kind": "example",
+      "claim": "Duskers aimed for as much of the possibility space as possible in every run, which gave great variety within a run but meant different runs kept running into the same things.",
+      "detail": "Keenan compares it to running through the same crazy forest each time from a different angle, maybe with different tools; starting conditions differed only slightly between runs.",
+      "t": 30869,
+      "quote": "there is a lot of variety within a run. However, between runs, a lot of the same things can happen",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "character class",
+      "kind": "example",
+      "claim": "Below the Crown locks the player's chess-piece type (king, rook or queen) for the whole run instead of letting it change mid-run, trading some within-run variety for runs that feel distinct from each other.",
+      "detail": "Keenan's first instinct, from Duskers, was to let the wizard switch piece types during a run. Narrowing the possibility space within each run, 'building some walls', still leaves common power-ups across runs. His RPG analogy: letting players combine a wizard's staff with a warrior's shield maximises within-run variety, while restricting them to one class makes runs more distinct.",
+      "t": 30981,
+      "quote": "you started your run as a king or a rook or a queen and that was it. You couldn't switch between them during the run",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "starting conditions",
+      "kind": "example",
+      "claim": "Slay the Spire, FTL and Shogun Showdown sit towards between-run variety because their starting conditions vary and shape later synergies, while Kingdom and Below put fewer walls between runs.",
+      "detail": "This is Keenan's best guess at where some of his favourite roguelikes fall on the slider. He notes the games without varying starts still have plenty of variety as you play.",
+      "t": 31073,
+      "quote": "Slay the Spire FTL and Shogun Showdown all having these beginning conditions that change and then really start to shape your synergies",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "player experience",
+      "kind": "principle",
+      "claim": "New players value variety within a run, but experienced players increasingly favour variety between runs, which is why heavily constrained modes such as daily runs appeal to veterans.",
+      "detail": "Responding to the host's point that Slay the Spire 2 dailies feel fresh because of their constraints, Keenan says modes within one game can occupy different parts of the slider, even to a comical degree, like playing Halo with only grenades, which wouldn't be fun for a new player.",
+      "t": 31247,
+      "quote": "after you've played a lot I think you start to favor that variety across runs so that like it it starts to feel distinct",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "meta-progression",
+      "kind": "principle",
+      "claim": "Meta-progression is another lever for making runs feel different, because unlocked items set a direction, but it can also make a game feel grindy.",
+      "detail": "Keenan says designers make this decision sometimes consciously, sometimes not. Purists dislike having to play several runs before they 'get momentum going', while others like feeling that a run is different because they have earned things.",
+      "t": 31357,
+      "quote": "Some purists don't like the fact that like with that meta progression, it can make the game feel grindy",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "synergy",
+      "kind": "technique",
+      "claim": "Runs can feel distinct even with a shared content pool, either because synergies steer players towards different picks (as in Slay the Spire) or by only allowing a subset of content per run, as Below the Crown does with two of its five board hazards.",
+      "detail": "Keenan contrasts this with Duskers, where all possible problems could randomly happen in any run. Limiting hazards per run makes each run more distinct at the cost of within-run variety.",
+      "t": 31442,
+      "quote": "we have like five hazards for the board and we're like on this run you're only going to ever get two of them",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

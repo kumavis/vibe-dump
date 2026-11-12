@@ -1,0 +1,146 @@
+{
+  "id": "Ove6z8zDsjE",
+  "title": "Younès Rabii - Pokemon Glitch - Story of A Roguelike With No Author",
+  "speaker": "Younès Rabii",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=Ove6z8zDsjE",
+  "talk_type": "other",
+  "summary": "Younès Rabii randomly mutated bits in the Pokemon Gold ROM, treating source code like DNA, and after about 200 attempts got a playable but heavily corrupted game he calls Pokemon Glitch. He narrates a playthrough: glitched visuals that react to the player, crashes that act as permadeath, broken Pokemon Centers, randomly moved tiles, absurdly overleveled enemies beaten with a percentage-damage move, and an evolution line that changes type. The finale is the boss Red, who in the glitched game speaks gibberish and 'erases the curse'. He argues the result plays like a roguelike, full of uncertainty and rediscovery even for someone who knows the original, and that its mechanics and story have no author because they emerged from randomness.",
+  "games": [
+    "Pokemon Gold",
+    "Pokemon Glitch"
+  ],
+  "insights": [
+    {
+      "topic": "generation-methods",
+      "subtopic": "rom corruption",
+      "kind": "technique",
+      "claim": "Randomly flipping bits in a game's binary (Pokemon Gold) is a way to generate a new, mutated game, treating source code like DNA.",
+      "detail": "Rabii frames source code as the DNA of games: mutate the bits randomly and you get a new game to explore. He picked Pokemon Gold because it is easy to mutate as a ROM file, its construction makes a mutated version likely to remain playable, and he knows it well enough to spot every change.",
+      "t": 43,
+      "quote": "take it source codes mutate it change the bits in it randomly and then get a new game at the end",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "generate and test",
+      "kind": "warning",
+      "claim": "Naive random mutation of a game binary mostly produces unplayable results, so getting a playable mutant (Pokemon Glitch) required many tries and tuning of where and how much to mutate.",
+      "detail": "His first attempts did not boot or crashed. He tweaked the mutation parameters and the locations in the code being changed, progressing from a game that passed the title screen then crashed, to one where you could leave the first room, after about 200 tries.",
+      "t": 142,
+      "quote": "parameters tweak the locations in the source code that i wanted to to to get and slowly and slowly i got a game that could pass the title screen",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "glitch aesthetic",
+      "kind": "example",
+      "claim": "In Pokemon Glitch the corruption is not just cosmetic: graphics react to player actions and create an eerie mood, such as walls changing colour on interaction and creepier forests.",
+      "detail": "Glitches persist throughout the game and are embedded in it: walls react organically when you interact with items, forests become extra creepy, wrong turns lead to 'dimensions' with infinite staircases, and you can meet and talk to a clone of yourself.",
+      "t": 219,
+      "quote": "the wall just reacts organically by its color changing the way it is displayed it gives like a whole new vibe to forest",
+      "weight": 1
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "example",
+      "claim": "In Pokemon Glitch, crash-triggering NPCs and trap Pokemon Centers turn the save system into de facto permadeath, since a crash or a save in a soft-locked spot loses the run.",
+      "detail": "Talking to the rival crashes the game and loses unsaved progress, so 'people can kill you'. Some Pokemon Centers trap you inside after healing; if you saved there you must restart the whole game.",
+      "t": 296,
+      "quote": "if you have saved right after you are [ __ ] you have to restart the whole game again there's permadeath now in pokemon glitch",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "connectivity",
+      "kind": "warning",
+      "claim": "Randomly moving tiles in Pokemon Glitch adds walls and shortcuts but can make essential areas unreachable, which Rabii handled by allowing himself cheat codes only in those cases.",
+      "detail": "Random tile changes create new obstacles and new shortcuts. When an important part of the game became inaccessible, he accepted using cheat codes only for that specific situation during his playthrough.",
+      "t": 315,
+      "quote": "sometimes it can it can make whole areas of the game inaccessible so what i did is that i accepted that i had to use cheat codes",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "example",
+      "claim": "A random glitch in Pokemon Glitch accidentally fit the existing lore: in Sprout Tower, said to be a giant Bellsprout, a monk's Bellsprout became level 131, making it feel like fighting the tower itself.",
+      "detail": "An NPC says the tower was once a 100-foot Bellsprout. In the glitched game a monk who should have a level-3 Bellsprout instead has one at level 131, an illegal level, and the player's mind connects it to the legend. Rabii uses this to show how the weirdness can sometimes make sense.",
+      "t": 389,
+      "quote": "this tower is supposed to be a big ass pokemon and i'm battling a pokemon that is that has a level that is not even legal",
+      "weight": 2
+    },
+    {
+      "topic": "combat-and-tactics",
+      "subtopic": "percentage damage",
+      "kind": "example",
+      "claim": "Against a wildly overleveled enemy in Pokemon Glitch, the counter was a move that deals damage relative to the target's HP rather than absolute damage, combined with luck and sacrificing other Pokemon to survive.",
+      "detail": "He caught a night-time ghost Pokemon, trained it to learn Curse, which takes 1/8 of the enemy's HP each turn regardless of its huge HP pool. He still needed luck putting it to sleep and had to sacrifice other Pokemon to last, but says it is beatable with luck and creativity.",
+      "t": 440,
+      "quote": "he doesn't deal absolute damage which is useless against an opponent which has so many hp's but it is relative damage",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "rediscovery",
+      "kind": "principle",
+      "claim": "Corrupting a familiar game makes rediscovery the core pleasure: players use their knowledge of the original and their creativity to escape situations the original never posed.",
+      "detail": "Rabii says facing overpowered Pokemon forces you to use your knowledge of the game and creativity, and that rediscovering a game you already knew is what makes Pokemon Glitch exciting to explore.",
+      "t": 478,
+      "quote": "this whole idea of we're just covering a game you already knew will always be very in this game which is which which which is what makes it exciting",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "player head canon",
+      "kind": "example",
+      "claim": "Glitched content in Pokemon Glitch, like a fire starter evolving into a plant type through five stages, invites players to invent explanatory head canon.",
+      "detail": "Cyndaquil instead evolved into a plant Pokemon and then a bigger one, a five-step, type-changing line never seen in Pokemon; a plant knowing fire moves was useful. Rabii made up a story that it is a sequoia that grows from the ashes of forest fires.",
+      "t": 536,
+      "quote": "you can even try to make up a story about it like hey it doesn't make sense",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent narrative",
+      "kind": "example",
+      "claim": "In Pokemon Glitch the silent final boss Red becomes 'Rocket Red' and, once defeated with Curse, speaks gibberish, takes the cursed Pokemon's move and says the curse is erased, giving an unplanned ending that fits the playthrough.",
+      "detail": "In Pokemon Gold Red says nothing, which fuels community speculation. In the glitched game he is named Rocket Red, asks in glitch text for a Pokemon and an attack; Rabii chose his ghost Pokemon and Curse, and Red said the curse is erased and disappeared, closing a story about a hostile, cursed world.",
+      "t": 745,
+      "quote": "he takes the pokemon he takes the attack and he says the curse is erased and then he disappears",
+      "weight": 2
+    },
+    {
+      "topic": "genre-and-definitions",
+      "subtopic": "roguelike feel",
+      "kind": "principle",
+      "claim": "Rabii argues Pokemon Glitch counts as a roguelike because of its pervasive uncertainty, rediscovery even for experienced players, and permadeath.",
+      "detail": "He calls it at least half a roguelike: so much uncertainty that you rediscover the game even knowing the original, plus permadeath in unlikely places.",
+      "t": 778,
+      "quote": "a roguelike because there's like so much uncertainty in the game and you have so much rediscovery when you play",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "authorless story",
+      "kind": "principle",
+      "claim": "Pokemon Glitch's mechanics and story have no author: nobody (Nintendo, Rabii, or his program) designed them, yet randomness mixing existing material produced a coherent story in the player's mind.",
+      "detail": "Rabii closes by saying the mechanics just appeared from randomness and mixing, and the story was written by no one; the right ingredients were present for a story to form in the audience's mind.",
+      "t": 793,
+      "quote": "some of the mechanics we've seen nobody consciously designed them they just appeared not nintendo not me not my program",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "hostile design",
+      "kind": "example",
+      "claim": "Pokemon Glitch is a hostile world that shows the player no respect, yet its brokenness motivates players to push through to the end to explore it.",
+      "detail": "Storylines are broken and reconnected strangely, Team Rocket rules the world, important Pokemon cannot be healed, and the game makes you save just before glitches so you restart repeatedly. It 'wants to push you away' but you keep going to explore it.",
+      "t": 585,
+      "quote": "it wants to push you away but you will continue going in it to explore it to the end",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

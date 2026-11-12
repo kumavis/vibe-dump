@@ -1,0 +1,126 @@
+{
+  "id": "q4Tf0vf2kiI",
+  "title": "Spencer Egart - Procedurally Generated Ritual Spell Systems",
+  "speaker": "Spencer Egart",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=q4Tf0vf2kiI",
+  "talk_type": "design",
+  "summary": "Spencer Egart, a game engineer on Slime Rancher, presents a system for procedurally generating magic rituals: repeatable sequences of in-world actions that cause an effect indirectly, without any menu or targeting UI. A generator picks verbs and nouns associated with the effect's requirements (target, element, magnitude) and pads them with flavourful structure, and an interpreter watches player actions and fires the spell when a sequence completes. He argues rituals suit long-term effects like buffs and enchantments, can give magic to non-caster classes, and reward players for reading in-game text where the rituals are recorded.",
+  "games": [
+    "NetHack",
+    "Slime Rancher"
+  ],
+  "insights": [
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "ritual magic",
+      "kind": "principle",
+      "claim": "A ritual spell system is defined as a repeatable sequence of in-world actions whose effect is caused indirectly by an external system, not by the actions themselves.",
+      "detail": "Egart distinguishes rituals from hitting a goblin five times until it dies: in a ritual, the series of actions triggers some external force that produces the effect. He built a Proc Jam generator producing endless spellbooks with generated contents, icons and text.",
+      "t": 70,
+      "quote": "A ritual is a repeatable set of actions that cause some effect within the game world indirectly",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "spellbooks",
+      "kind": "example",
+      "claim": "Egart's generated ritual 'A charm to bring fortune to your ally' chains concrete steps like shattering a pearl, shouting the ally's name, facing west, burning thyme and drawing a rune.",
+      "detail": "He reads this generated spellbook entry and suggests its effect might be a Bless buff. He also mentions a ritual to bless a hammer, describing the style as a hokey-pokey-like set of steps.",
+      "t": 145,
+      "quote": "shatter a pearl upon the earth, and then shout the name of your ally and look toward the west",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "ritual magic",
+      "kind": "example",
+      "claim": "NetHack's Elbereth, writing a magic word on the ground to protect yourself, is an existing roguelike ritual, and speedrun glitch sequences are unintended rituals between the real and game worlds.",
+      "detail": "Egart cites real-world magic, alchemy and religious practices as inspiration, then Elbereth, then glitch techniques where a precise sequence of menu and movement actions lets a player pass through a wall.",
+      "t": 210,
+      "quote": "This is a real ritual that works within Nethack, you can write a magic word on the ground and protect yourself from harm",
+      "weight": 1
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "diegetic casting",
+      "kind": "principle",
+      "claim": "A ritual system should not be accessed through a menu or targeting popup; all information the effect needs, such as its target or element, must be specified by the ritual's actions themselves.",
+      "detail": "Egart says a 'Do Bless Ritual' menu option makes rituals no different from any other spell system. The generator must therefore know each effect's requirements and ensure some step in the ritual satisfies them, e.g. a step that names the target.",
+      "t": 328,
+      "quote": "if the spell needs a target, something that I am doing in this ritual has to say who the target is",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "ritual generation",
+      "kind": "technique",
+      "claim": "Egart's ritual generator works from tagged lists of verbs and nouns, associating them with effect parameters like element, target and magnitude, and picks steps to satisfy the effect's requirements.",
+      "detail": "The verb and noun lists may already exist in a game using an action pattern. In his Unity data, entries are tagged with strings to determine associations, and he notes the larger the combination space, the more diverse the rituals.",
+      "t": 356,
+      "quote": "takes a, you know, a big list of all of the verbs and nouns that it is interested in",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "per-run associations",
+      "kind": "technique",
+      "claim": "Ritual associations should mix fixed, intuitive mappings (fire rune means fire) with per-run randomized ones (made-up runes mapped to elements), so players can learn them and derive parallel rituals by substitution.",
+      "detail": "Egart says a fire rune associated with water would be incomprehensible, so some links are preauthored. A generated alphabet's runes can be reassigned each run; a player who knows the fire bless ritual and which rune means water can swap runes to get a different effect.",
+      "t": 448,
+      "quote": "players will learn this over time so you can create parallel rituals",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "ritual generation",
+      "kind": "technique",
+      "claim": "Functional ritual steps (draw the fire rune to set the element, speak the target's name to set the target) are padded with extra flavour steps like stepping in directions and drawing circles to feel ritualistic.",
+      "detail": "Egart's example: step north, draw the fire rune, step south, speak the target's name, draw a circle, step west, and the target is protected from fire. Targeting could equally use other actions, like burning a scrap of the target's hair, if the game links actions to entities.",
+      "t": 591,
+      "quote": "we pad it out with some structure to give it kind of more of a ritualistic flavor",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "action interpreter",
+      "kind": "technique",
+      "claim": "A ritual interpreter tracks reported player actions against each ritual's step list, tolerating a few intervening actions but timing out so rituals are not completed accidentally over a long run.",
+      "detail": "Every game action is reported to the interpreter. Intervening actions are allowed (e.g. taking out chalk before drawing), but progress must not persist forever or a spell could pop off unexpectedly after hours. On completion it calls the game's existing spell system and tells the player.",
+      "t": 675,
+      "quote": "not allowing it to go forever so that you can kind of distinguish between when a player is intentionally doing this",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "ritual magic",
+      "kind": "principle",
+      "claim": "Ritual spells fit long-term effects like enchanting equipment, buffs, healing or pre-boss protection rather than combat, and can give magic to classes like fighters who otherwise lack it.",
+      "detail": "Egart notes that dancing to cast a fireball would get you killed in most games. Preparing a protective ritual before a known boss room may be worthwhile, and a fighter who finds a spellbook could perform enchantments.",
+      "t": 732,
+      "quote": "Probably not combat because if you have to do a dance to cast a fireball, you are probably not going to live very long",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "in-game texts",
+      "kind": "principle",
+      "claim": "Embedding ritual instructions in in-game books and dialogue gives players a mechanical reason to read world text.",
+      "detail": "Egart says textual representations of rituals can be found throughout the world and the knowledge used, which he describes as tricking people into reading in-game text by providing value there.",
+      "t": 797,
+      "quote": "It is tricking people into the reading your in-game text because you are providing value there",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "ritual failure",
+      "kind": "open-question",
+      "claim": "Flubbed rituals could be detected once a player is far enough through (e.g. 90%) to be clearly attempting one, and could produce backfire effects that players then learn to exploit deliberately.",
+      "detail": "In Q&A Egart says a common first step like stepping north should not count as failure, but near completion intent is clear. A flubbed protection-from-fire ritual might set the target on fire, which players could then use on purpose.",
+      "t": 884,
+      "quote": "Maybe they flub a ritual and instead of protecting someone from fire, they set them on fire",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

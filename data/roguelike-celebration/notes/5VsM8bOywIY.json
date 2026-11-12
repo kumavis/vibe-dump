@@ -1,0 +1,148 @@
+{
+  "id": "5VsM8bOywIY",
+  "title": "Colin Liotta: Rogue Puzzles: A rundown of the roguelike puzzle in the 2017 MIT Mystery Hunt",
+  "speaker": "Colin Liotta",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=5VsM8bOywIY",
+  "talk_type": "postmortem",
+  "summary": "Colin Liotta describes building a roguelike-style puzzle for the 2017 MIT Mystery Hunt as a tribute to and improvement on the 2014 puzzle 'Walk Across Some Dungeons'. He explains running the game client-side while having the server replay submitted keypress sequences to validate solutions, building a level editor, testing levels publicly on a site called Rogue Puzzles to gather metrics, and adding mechanics such as two simultaneously controlled characters. His lessons: build on others' work, test early with real players, be hard but not evil (he added undo), find an audience, and accept that roguelikes are never finished; he later expanded it into a standalone app.",
+  "games": [
+    "Walk Across Some Dungeons",
+    "Rogue Puzzles",
+    "Sokoban",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "puzzle hunts",
+      "kind": "example",
+      "claim": "The 2014 MIT Mystery Hunt puzzle 'Walk Across Some Dungeons' turned the roguelike into a puzzle format: discrete hand-built dungeon levels with four-direction movement where the goal is reaching the stairs without dying.",
+      "detail": "Each level was its own dungeon; on each turn you could only move in a direction. Along the way players had to manipulate objects and avoid enemies that attacked in different ways, exploring rhythm and other puzzle mechanics. The title's initials spelled WASD, signalling to puzzle solvers that it would be a roguelike.",
+      "t": 242,
+      "quote": "each level was its own discrete dungeon and you can only do one of four things you'd only move in a particular direction on each turn",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "server latency",
+      "kind": "warning",
+      "claim": "Walk Across Some Dungeons' telnet-style server simulation broke down under load, making every move take about ten seconds, which combined with no undo made dying and restarting agonizing.",
+      "detail": "Commands were sent to a server that simulated each turn and replied. It presumably worked in testing, but with a hundred teams hitting a small box at once, each keypress took around ten seconds to resolve, and an accidental bump into an enemy meant restarting from scratch.",
+      "t": 302,
+      "quote": "you would send a key camed it would take you about ten seconds to find out where your character is moved",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "building on others",
+      "kind": "principle",
+      "claim": "Liotta argues it is fine to take something another person built and build on it, improve it or take it in new directions, and that this iterative borrowing is the premise of roguelikes.",
+      "detail": "His first lesson from making the tribute puzzle: he loved the original concept and set out to fix its problems and add new mechanics. He says the ever-evolving nature of roguelikes is one of the things he loves most about them.",
+      "t": 335,
+      "quote": "it is totally okay to take something that someone else's built and build off of it and make it better or go in different directions",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "replay validation",
+      "kind": "technique",
+      "claim": "To run a puzzle roguelike client-side without letting players cheat by reading source, Liotta had the client submit its exact keypress sequence and the server replay it with identical code before unlocking the next level.",
+      "detail": "Mystery Hunt solvers assume anything, including page source and protocols, can be part of a puzzle, so shipping the full game client would invite reverse engineering. Each level has a unique URL; on reaching the stairs the client sends the keypresses, the server simulates them deterministically, and on victory returns the next level's URL, otherwise imposing a one-minute penalty timeout.",
+      "t": 428,
+      "quote": "the client then takes the exact series of key presses that achieved that result sent it to the server the server is running the exact same code",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "javascript and rot.js",
+      "kind": "technique",
+      "claim": "Liotta used JavaScript so the same simulation code could run on client and server, and recommends the rot.js library as indispensable for web-based roguelikes.",
+      "detail": "Sharing code between client and server was the easy route to the replay-validation scheme. He found JavaScript fast for prototyping and says rot.js handles rendering and much more, though he used little of its broader functionality.",
+      "t": 463,
+      "quote": "if you want the same code running on both the client and the server the easy solution is to run this in JavaScript",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "level editor",
+      "kind": "technique",
+      "claim": "A level editor that lets the designer jump instantly between editing and playing a level made it fast to prototype and evaluate many puzzle ideas.",
+      "detail": "One of the first things Liotta built was an editor for quickly assembling levels from entities, components and systems. Being able to switch immediately between editing and playtesting let him produce many quick ideas and judge how well each was working.",
+      "t": 524,
+      "quote": "you can immediately jump between editing and playing it in order to sort of evaluate how well it's working",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "public playtesting",
+      "kind": "principle",
+      "claim": "Liotta recommends releasing early to the public and closely studying metrics on real players, as he did on Rogue Puzzles, to learn which puzzles are fun, which are hated and where players get stuck.",
+      "detail": "He hosted early levels on a public site, navigated via an in-world menu, and collected metrics from a few thousand players. Looking at which levels people enjoyed, hated and where the choke points were let him quickly learn what made a good puzzle; this was his second lesson.",
+      "t": 612,
+      "quote": "what levels were they having fun with what levels did they hate and where were the choke points",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "puzzle enemies",
+      "kind": "example",
+      "claim": "Liotta's puzzle levels used enemies with simple legible triggers, such as monsters that stay put until they see you and then chase, and pathfinding dragons, so players can plan stealthy routes.",
+      "detail": "The W and M enemies wait until they see the player and then give chase, so one level requires building a bridge out of boulders and timing the crossing so they never spot you. Dragons pathfind for the most efficient way to kill the player. Other mechanics included pushable boulders, arrows, portals, keys, locks and gnomes.",
+      "t": 670,
+      "quote": "the W's and the MS both will sit there or do their thing until they see you at which point they'll freak out and start chasing you",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "mirrored control",
+      "kind": "technique",
+      "claim": "Liotta's signature mechanic had the player control two characters with the same keypresses, requiring both to reach the stairs without either dying, which suits roguelike grid movement well.",
+      "detail": "He wanted something unique for a sequel puzzle and drew on mobile games like Linked Mind. Some levels separate the two characters into parallel mazes where you must watch both; others put them together so you exploit movement interactions to align them reaching the stairs simultaneously.",
+      "t": 712,
+      "quote": "there are two characters but your key presses affect both of them equally and you have to try to actually navigate through without either of you killing or dying",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "undo",
+      "kind": "principle",
+      "claim": "Adding undo turned Liotta's roguelike levels into actual puzzles instead of frustration, illustrating his rule to be hard but not too evil, even in a roguelike.",
+      "detail": "Two days of internal feedback taught the team not to be too evil, so he added a Z-to-undo feature absent from the original. He acknowledges this is a strange thing to say about a roguelike but thinks it adds a lot; this is his third lesson.",
+      "t": 819,
+      "quote": "you could press Z to undo and that made the puzzles into puzzles rather than just an endless pile of frustration",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "target solve time",
+      "kind": "example",
+      "claim": "Liotta targeted an average solve time of about two hours to make the puzzle hard but not impossible, and real-time monitoring showed it landing there.",
+      "detail": "He watched live data as teams unlocked and solved it: around 32 teams unlocked it naturally, 40 teams solved it, and average solve time was right around two hours, which was his target.",
+      "t": 867,
+      "quote": "the average solve time was right around 2 hours which I was targeting because I wanted to be hard but not impossible",
+      "weight": 1
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "puzzle answer extraction",
+      "kind": "technique",
+      "claim": "Liotta's roguelike puzzle extracted its word answer by making the only safe path through the final level pass over letters that spell the answer.",
+      "detail": "A puzzle hunt needs a final word or phrase. The final level showed unfamiliar characters; navigating the only route that avoided dying traced letters spelling the answer, 'keyboard player'.",
+      "t": 891,
+      "quote": "as you navigate through in the only way possible to avoid dying the letters spell out the",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "never finished",
+      "kind": "example",
+      "claim": "Liotta expanded the puzzle into a standalone app with about 120 levels and new mechanics like ice, trailing lava and burning ice, concluding that roguelikes are never finished.",
+      "detail": "After a break he fleshed out the concept into six dungeons with treasures to collect. Ice lets you skate, fire turns the level behind you into lava, and his favourite is ice that is on fire. His fourth lesson was to find an audience that will love what you build; his final lesson is that roguelikes are never finished.",
+      "t": 954,
+      "quote": "there's about 120 levels six different dungeons I played around with some new mechanics so I added ice",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

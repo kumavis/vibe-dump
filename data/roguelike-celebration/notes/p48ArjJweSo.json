@@ -1,0 +1,186 @@
+{
+  "id": "p48ArjJweSo",
+  "title": "Danny Day - Dynamic Event-Listeners in Desktop Dungeons",
+  "speaker": "Danny Day",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=p48ArjJweSo",
+  "talk_type": "technical",
+  "summary": "Danny Day of QCF Design explains the architecture behind Desktop Dungeons, a single-screen, ten-minute puzzle roguelike. After an inheritance-based prototype made god-system changes painfully slow, the team rebuilt the game around a dynamic event-handler model: game objects only store state, and all gameplay logic lives in handlers that listen to and emit events in a queue, and can be added or removed at runtime. He walks through movement and combat event chains, input state swapping, UI handler priorities, level generation and save games built from events, and the mistakes around combat prediction, concluding that the system is not performant but makes massive gameplay changes nearly frictionless.",
+  "games": [
+    "Desktop Dungeons",
+    "Dungeon Crawl Stone Soup"
+  ],
+  "insights": [
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "session compression",
+      "kind": "history",
+      "claim": "Desktop Dungeons was designed by Rodain Joubert to compress the feeling of a long Dungeon Crawl Stone Soup run into a ten-minute single-screen session, cutting resting and food so every action is a meaningful choice.",
+      "detail": "Day describes it as a quick-play puzzle roguelike, 'Minesweeper meets Dark Souls'. Joubert was frustrated with Stone Soup runs taking too long. The team removed resting and food because things like fast exploration were boring, aiming to make everything a meaningful choice.",
+      "t": 48,
+      "quote": "who'd gotten frustrated with stone zubrin's taking too long and wanted to compress that feeling into a 10-minute session",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "exploration regeneration",
+      "kind": "technique",
+      "claim": "Desktop Dungeons regenerates health and mana only when the player reveals unexplored terrain, and enemies regenerate at the same time, turning unexplored space into a finite resource.",
+      "detail": "Regen depends on level and items. Because enemies also regenerate when you explore, unrevealed space is both a resource and a potential danger. This works because enemies won't attack unless you attack them first.",
+      "t": 73,
+      "quote": "whenever you explore unrevealed terrain you regenerate a little bit of health and mana depending on your level and whatever items you have enemies regen at the same time",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "everything is a resource",
+      "kind": "principle",
+      "claim": "Desktop Dungeons turns nearly everything into a resource, including which enemy levels you fight, item conversion and racial traits, so that beating the boss means throwing everything you have at it.",
+      "detail": "Fighting higher-level enemies yields more experience; items get converted and race traits turn those into bonuses for your class. By the boss of a dungeon you are 'throwing the kitchen sink' at it. Winning lets you bring the monster's head back to a taxidermist in the overworld kingdom.",
+      "t": 98,
+      "quote": "we focused on turning everything into the game in the game into a resource including sort of like enemy levels that you're fighting",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "inheritance hierarchies",
+      "kind": "warning",
+      "claim": "In Desktop Dungeons' inheritance-based prototype, the god system spread special-case checks throughout the object hierarchy, making every change slow and pushing release cadence from weekly to every two months.",
+      "detail": "Gods change how players approach the single screen, which was fun, but a god that disliked throwing required a worship check on every throw, and one that liked flying required checks whenever an entity's movement changed. Prototyping changes meant rebuilding these 'tendrils'. Day suspects ECS roguelikes would hit similar problems but hopes he is wrong.",
+      "t": 235,
+      "quote": "gods were sort of spread throughout that like fungus they had these little tendrils everywhere and we had to keep writing special case code",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "event handlers",
+      "kind": "technique",
+      "claim": "Desktop Dungeons uses a dynamic event-handler model in which game objects only store state and all gameplay logic lives in handlers that listen for events, change state and emit further events.",
+      "detail": "For example, a throw emits a player-throw-item event; a throw handler handles it and, if a potion hits an enemy, emits a quaff event; a potion handler emits begin-levitating; and a god handler can listen to both and approve or disapprove. All god-specific code thus sits in one place and can change without affecting the rest of the game.",
+      "t": 333,
+      "quote": "we could shift all of our gameplay functionality to handlers that could listen for specific gameplay events and make changes to the game state",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "event queue",
+      "kind": "technique",
+      "claim": "Desktop Dungeons processes each player input as a cascade through an event queue; a turn ends once all handler-emitted events have percolated through.",
+      "detail": "An interface manager turns input into events; handlers add more events to the queue. In movement, a grid click becomes a move event, the movement handler issues reveal events for new tiles, and a regen handler hears reveals and updates health and mana. Game state changes instantly and animations follow, so fast clicking interrupts animations.",
+      "t": 471,
+      "quote": "once the player does something a event gets logged into this thing and that causes a cascade of other events as handlers listen to something",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "runtime handlers",
+      "kind": "technique",
+      "claim": "Desktop Dungeons adds and removes handlers at runtime, e.g. a damaged enemy gets its own regen handler that listens for reveal events and destroys itself once health is full.",
+      "detail": "Day says the event system earns its keep because handlers can be added on the fly. When an enemy takes damage, the enemy damage handler adds an enemy-regen handler for that enemy; there is no need to loop over all enemies checking whether each is damaged.",
+      "t": 657,
+      "quote": "when an enemy takes damage through enemy damage handler it adds an enemy region handler specifically for that enemy",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "input modes",
+      "kind": "technique",
+      "claim": "Desktop Dungeons implements input modes like targeting a spell by swapping the active click handler, so the default click handler never needs to know how fireballs work.",
+      "detail": "Casting fireball removes the click handler and installs a fireball click handler that listens to the same events but behaves differently; on a grid click it emits a cast-fireball event, or on right-click/cancel it removes itself and restores the normal handler. New spells don't require other spells or systems to know about them.",
+      "t": 711,
+      "quote": "it removes the click handler and puts in a fireball click handler which listens to all the same standard events",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "handler priority",
+      "kind": "technique",
+      "claim": "Desktop Dungeons separated UI from game logic by giving UI handlers the lowest priority, so they see each event only after all game handlers have modified it.",
+      "detail": "If UI listened early, e.g. to an experience event before an angry god docked some, it would show the wrong value. The team added handler priorities and the ability to inject events mid-queue, after the current event, or at the end, such as a UI refresh event at the end of the queue.",
+      "t": 802,
+      "quote": "we implemented a priority system for handlers and shoved our UI handlers all the way to the back of the queue",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "combat prediction",
+      "kind": "warning",
+      "claim": "Desktop Dungeons' combat prediction UI was hard to build because simulated events could not change game state, forcing duplicated state; Day says a decoupled, copyable game state would have made it easy.",
+      "detail": "The UI shows damage you'll take and pips for follow-up hits, but subtle displays (e.g. no second pip meaning you'll die) make players think the game needs lots of math. Effects like a Naga weakening you each attack required duplicating state. Ideally, a simulated event chain would take a game state and return a new one, repeating until one side died.",
+      "t": 908,
+      "quote": "simulated events weren't allowed to change the game State at all",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "event-driven generation",
+      "kind": "technique",
+      "claim": "Desktop Dungeons generates levels by sending a per-dungeon recipe of events (terrain amounts, enemy spawns by level) to swappable generator and spawn handlers, so mixing handlers and recipes yields varied but regionally consistent dungeons.",
+      "detail": "Terrain handlers might be maze or interlocked-room generators; spawn handlers might cluster enemies or place low-level ones near a player who has been dying a lot. Items brought from the kingdom or an angry god can change which handlers wait. Each location has three or four handlers per system to mix and match.",
+      "t": 990,
+      "quote": "that dungeon would have a standard recipe of events that it would squirt into the queue we would then change a series of handlers that would listen for those events",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "save games",
+      "kind": "technique",
+      "claim": "Desktop Dungeons stores save games as serialized strings of handled events, so when content is removed, unhandled events simply fizzle and players never needed a progress reset across two and a half years of early access.",
+      "detail": "Events like 'player built a building' are replayed on load; if no handler exists for an event anymore, nothing goes wrong. Because only events that were handled get stored, saves prune themselves. A save file size bug only surfaced three years in, which they'd have missed had they reset at release.",
+      "t": 1132,
+      "quote": "save games were essentially just like serialized strings of events",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "performance",
+      "kind": "warning",
+      "claim": "Day warns that dynamic event-handler systems are not performant (constant cache misses), making them a poor fit for real-time games, though fine for turn-based ones.",
+      "detail": "The team logged thousands of events per frame early on without big drops; the largest queue in Desktop Dungeons is around 50 events (e.g. a god, a pact, a spell and a spell-immune enemy). He says it is not a performant system but a massively functional one if you want to change your game a lot.",
+      "t": 1218,
+      "quote": "I don't think they're very performant you know cache misses and all that you're basically guaranteed to do that all the time",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "replays and undo",
+      "kind": "technique",
+      "claim": "Saving every state-changing event gives replays nearly for free, and Day suggests undo is best done by keeping game-state snapshots (e.g. every 20 events) and replaying inputs, rather than making every event reversible.",
+      "detail": "Day regrets not building gameplay replays from the start; retrofitting was too complicated. Reversible events get complicated with long chains. He is unsure Desktop Dungeons should have undo ('if you die you die') but notes it would have helped its strict puzzle levels, perhaps as a 'wand of undo', and asks what a roguelike with undo would be.",
+      "t": 1341,
+      "quote": "you would basically just like maintain a stack of game States and you could even have a you know a game state every like 20 events",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "iteration speed",
+      "kind": "principle",
+      "claim": "Desktop Dungeons' event system achieved its goal of massive gameplay changes with minimal friction: Day built two whole new classes in a week, versus months of slog updating the UI for mobile.",
+      "detail": "He did not want to search a growing codebase to change small balance things, and the system let the team tweak balance for a long time. He contrasts the week of class work with the UI port and jokes that the takeaway is that UIs are bad.",
+      "t": 1416,
+      "quote": "building two whole new classes for an update and I did that in a week which felt amazing",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "debugging events",
+      "kind": "technique",
+      "claim": "To offset the lost readability of decoupled event code, Desktop Dungeons has a verbose-events debug mode with breakpoints on specific events and a stepable log of past events.",
+      "detail": "Answering a question about readability versus flexibility, Day says you can break when a specific event is handled and passed between systems, or print everything that happened with it, and step through the saved event log. Good event naming keeps it reasonably functional.",
+      "t": 1480,
+      "quote": "if you switch over to verbose events you can either insert breakpoints whenever a specific event gets handled and passed from one system to another",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "event ordering",
+      "kind": "technique",
+      "claim": "Desktop Dungeons keeps event ordering deterministic through fixed handler priorities, and breaks event loops by splitting a handler into a high-priority and a low-priority half.",
+      "detail": "Answering a question about a god that modifies fire damage, Day says god handlers sit high in the queue and handlers subscribed to an event are evaluated in priority order. The low-priority half can never issue an event the high-priority half cares about. The main problems were UI/game-state mismatches, not random ordering.",
+      "t": 1670,
+      "quote": "splitting a handler into two and making one handler high priority and the other hand or low priority",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

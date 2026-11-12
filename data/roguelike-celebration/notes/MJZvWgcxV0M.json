@@ -1,0 +1,180 @@
+{
+  "id": "MJZvWgcxV0M",
+  "title": "JP LeBreton - All Possible Glyphs: Playscii, an ASCII art, animation, and game creation tool",
+  "speaker": "JP LeBreton",
+  "year": 2019,
+  "url": "https://www.youtube.com/watch?v=MJZvWgcxV0M",
+  "talk_type": "technical",
+  "summary": "JP LeBreton presents Playscii, his free, open-source ASCII art, animation and game creation tool written in Python, demoed live in its own game mode. He situates text-mode art in a lineage from pictographs and typewriter art through semigraphics, BBS ANSI art and ZZT, and explains the tile/character-set/palette model of ASCII art. He describes his tool-design values: low-friction 'tool flow', approachability, liveness and tight feedback loops (shared art data between editor and game, hot reloading, a Python console, few performance restrictions). He closes by arguing against dependence on the Unity/Unreal duopoly and for a renaissance of small tools that embody their makers' values.",
+  "games": [
+    "ZZT",
+    "Doom",
+    "Quake",
+    "Half-Life",
+    "Frog Fractions 2",
+    "Nauticrawl"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "ascii art history",
+      "kind": "history",
+      "claim": "Text-mode art descends from pictographic writing and typewriter art; early microcomputers added semigraphic glyphs, and BBS-era ANSI art flourished because transmitting raster images over modems was far slower.",
+      "detail": "LeBreton traces ASCII art to hieroglyphs, concrete poetry and typewriter art, then character sets with blocks and wedges (e.g. the Commodore 64 infinite maze program). When home computers networked, they were pushed back to text-mode art.",
+      "t": 181,
+      "quote": "transmitting them over a modem was almost always massively slower. So when home computers became networked, they kind of got busted back down to pure text mode art",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "zzt",
+      "kind": "history",
+      "claim": "ZZT, an ASCII game with a built-in level editor, was enormously influential and an early seed for game mods and flexible game engines.",
+      "detail": "LeBreton says he missed it at the time but that it influenced many people for decades.",
+      "t": 206,
+      "quote": "it was an early seed for the concept of game mods and having flexible enough technology, a game engine, to support that",
+      "weight": 1
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii data model",
+      "kind": "technique",
+      "claim": "ASCII art decomposes into a grid of tiles, each holding a character index into a character set and foreground and background color indices into a palette.",
+      "detail": "LeBreton describes this as the underlying decomposition of all ASCII art, which his earlier tool EDSCII and Playscii both use.",
+      "t": 307,
+      "quote": "A document is simply a grid of tiles, and each of these tiles has a character, a foreground color, and a background color",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "ascii aesthetics",
+      "kind": "principle",
+      "claim": "ASCII art suits solo developers because it discretizes the space of visual decisions into a finite visible set of characters and colors, making it easier to start drawing.",
+      "detail": "LeBreton chose ASCII for his roguelite to be visually distinct and within his artistic abilities. It also gains the advantages of tile-based level editing; Playscii was used to lay out the Frog Fractions 2 overworld map.",
+      "t": 371,
+      "quote": "it was a way of making art that reduced and discretized the total number of decisions to be made on a page",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "tool authenticity",
+      "kind": "principle",
+      "claim": "Rather than restricting an art tool to what old hardware could do, build a more powerful editor and export down to simpler retro formats when authenticity is needed.",
+      "detail": "LeBreton wanted layers, alpha blending, post-processing like a CRT filter and a built-in game engine with off-grid objects, which existing editors like REXPaint, PabloDraw and PETSCII did not offer.",
+      "t": 441,
+      "quote": "it's easier to create that in a more powerful program and write a bit of code to export down to the simpler format",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "tool flow",
+      "kind": "principle",
+      "claim": "Good tool UX means finding high-friction operations done several times a minute and reducing their cost, while also weighing the cognitive cost of each UI action.",
+      "detail": "LeBreton asks what the user is made to think about, when decisions happen, how many decisions and UI concepts an operation needs. Playscii's spacebar character/color popup, dockable as persistent UI, is one result.",
+      "t": 535,
+      "quote": "finding operations that you do several times a minute, but are high friction",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "onboarding",
+      "kind": "technique",
+      "claim": "A tool can be made approachable by opening on a pre-filled starting document that gets users past the blank page and invites play, plus a bundled manual when the tool breaks conventions.",
+      "detail": "Playscii's starting document even has a bottom edge that invites panning, teaching that documents can be any size. LeBreton says it targets a certain expertise level but tries to make the on-ramp simple.",
+      "t": 567,
+      "quote": "Playscii's starting document here, which is what I've been painting on, gets new users past a blank page and immediately invites them to play with it",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "character sets",
+      "kind": "principle",
+      "claim": "The choice of character set and color palette has a massive effect on the art produced; each has its own personality, like choosing a font, a tileset and a human language at once.",
+      "detail": "LeBreton bundled the character sets and palettes of 80s microcomputers into Playscii and found they shape the work strongly, engaging both language and visual parts of the brain.",
+      "t": 622,
+      "quote": "Each character set and color palette have their own personality, and it's hard to put into words.",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "liveness",
+      "kind": "principle",
+      "claim": "Game tools should emphasize liveness: tight feedback loops, making hidden things visible, and minimizing compile, reboot and load turnaround for each action.",
+      "detail": "Inspired by Bret Victor, LeBreton contrasts this with waiting hours for Quake or Half-Life maps to recompile. He asks of every action what turnaround time it has.",
+      "t": 694,
+      "quote": "This idea of tightening feedback loops, seeing things that are hidden or hard to visualize, seeing all the way through a process",
+      "weight": 3
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "hot reloading",
+      "kind": "technique",
+      "claim": "Having game objects reference the same art data the editor edits lets changes appear in the running game instantly, without saving.",
+      "detail": "In the live demo LeBreton selects an animated owl, enlarges its eyes in art mode and flips back to game mode to see the change immediately. He also hot-reloads character sets and palettes and keeps a thin separation between art and game modes.",
+      "t": 749,
+      "quote": "the art that a game object refers to is the same data object that you work with in the editor",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "engine design",
+      "kind": "principle",
+      "claim": "Engines should impose as few speed-related restrictions on behavior as possible, because designers exploit whatever is cheap, as Doom's free floor and ceiling movement showed.",
+      "detail": "In Doom moving floors and ceilings was basically free, so level designers used it everywhere: elevators, collapsing floors, rising staircases. LeBreton avoided premature optimization and made any restrictions easy to lift.",
+      "t": 813,
+      "quote": "make as few speed-related restrictions on behavior as possible, and the ones that are there should be easy to lift",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "runtime scripting",
+      "kind": "technique",
+      "claim": "Playscii exposes a Python REPL console and lets game code modify art at runtime, enabling procedural animation and running scripts such as cellular automata directly on art documents.",
+      "detail": "Games are Python modules with little protection between engine and game code. In the demo LeBreton runs a cellular automaton on a document step by step or over simulation time.",
+      "t": 879,
+      "quote": "Any of this code can modify a game object's art at runtime, so you can do things like procedural animation",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "rooms",
+      "kind": "technique",
+      "claim": "In a larger game world, grouping objects into rooms helps organize content and limits the scope of simulation and rendering.",
+      "detail": "LeBreton added rooms after his first collision-system test with Chrono Trigger sprites, when building a ZZT-like multi-screen example game.",
+      "t": 960,
+      "quote": "I needed to add this concept of rooms that let you organize stuff and manage the scope of the simulation and rendering",
+      "weight": 1
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "small tools",
+      "kind": "principle",
+      "claim": "Building your own engine or tool is valuable less for autonomy than for putting your own values into practice, in contrast to the Unity/Unreal duopoly.",
+      "detail": "LeBreton calls big engines tools for converting money into content, designed around business models, and argues for a flourishing of small tools with distinct identities, focus or approachability, such as those on itch.io.",
+      "t": 1068,
+      "quote": "For me, it was actually being able to put different values into practice.",
+      "weight": 3
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "toolmaking",
+      "kind": "principle",
+      "claim": "Making creative tools is a social and political act that opens doors for new creators, and seeing what others make is deeply rewarding.",
+      "detail": "LeBreton cites Playscii use in Nauticrawl, album covers, galleries and music videos, and says he would rather spend his career building tools than games. He urges others to build tools echoing their own values.",
+      "t": 1263,
+      "quote": "Building a tool for creative work is a specific kind of social act, a political act.",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "file formats",
+      "kind": "technique",
+      "claim": "Playscii's native format is JSON-based so art and animations can be parsed into other engines, with plugin import/export to PNG and legacy ANSI formats.",
+      "detail": "Answering a Q&A question about using Playscii animations as sprites elsewhere, LeBreton said he wanted people to be able to ship art to other engines, printing or BBSes.",
+      "t": 1363,
+      "quote": "Playscii has a native internal format that's JSON-based, so it's very easy to just take the native format and parse it into whatever",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

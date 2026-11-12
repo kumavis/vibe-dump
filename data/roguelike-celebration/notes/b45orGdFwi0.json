@@ -1,0 +1,195 @@
+{
+  "id": "b45orGdFwi0",
+  "title": "John Harris - The Lost Roguelikes",
+  "speaker": "John Harris",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=b45orGdFwi0",
+  "talk_type": "history",
+  "summary": "John Harris tours the largely forgotten Rogue-descended games played on 1980s college mainframes: Advanced Rogue 5 and 7, Super Rogue, UltraRogue, XRogue, plus the very different Larn. He traces their lineage, explains how they were rescued by the Roguelike Restoration Project and its maintained fork, and catalogues their innovations over Rogue: D&D stats, character classes, miscellaneous magic items, cursed consumables, magic pools, smarter fleeing monsters, monsters using found weapons, and up-staircases to a wilderness. He closes with a short live play of Larn (imperfect mazes, a time limit instead of food, a town with shops and a college). Along the way he argues that long start-up times raise the stakes of death and that games stay alive only while people play them.",
+  "games": [
+    "Rogue",
+    "Advanced Rogue",
+    "Super Rogue",
+    "UltraRogue",
+    "XRogue",
+    "Larn",
+    "Moria",
+    "Angband",
+    "Hack",
+    "NetHack",
+    "Rog-O-Matic"
+  ],
+  "insights": [
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "rogue lineage",
+      "kind": "history",
+      "claim": "Alongside the Moria/Angband and Hack/NetHack lines, Rogue spawned its own line of mainframe variants (Advanced Rogue, Super Rogue, UltraRogue, XRogue) that petered out with XRogue in 1991 and are now rarely discussed.",
+      "detail": "Harris colour-codes the lineages: Moria to UMoria to Angband, Hack to NetHack, and the Rogue line. The Rogue variants were played in college computer labs on timeshare systems, and he wants to reintroduce them.",
+      "t": 266,
+      "quote": "these were all games that were played on college and they called it computer labs and mainframes in timeshare systems",
+      "weight": 3
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "rogue room grid",
+      "kind": "example",
+      "claim": "Rogue builds each level from a 3x3 grid of sectors holding rooms or corridors, so experienced players can predict layouts and guess where secret rooms are.",
+      "detail": "Each sector contains a room, passages or branching corridors, all connected. After a few levels the player gets a feel for the layout, which matters for finding secrets. All the variants except Larn reuse this generator and the mega-dungeon descent structure, so Rogue knowledge transfers.",
+      "t": 367,
+      "quote": "once you've seen a few of these types of levels you get a good feel of how the levels will be laid out",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "rogue",
+      "kind": "history",
+      "claim": "Rogue organizes much of its design around the number 26: 26 monster types, 26 levels, and the Amulet of Yendor appearing from around level 26.",
+      "detail": "Harris recaps Rogue: descend a mega-dungeon, collect food, identify items by use or scroll, and you cannot go upstairs until you hold the Amulet.",
+      "t": 336,
+      "quote": "26 is kind of the magic number of rogue by the way a lot of things in the game are centered around the number 26",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "restoration project",
+      "kind": "history",
+      "claim": "The Roguelike Restoration Project, begun in 2000, rescued binaries of Rogue variants and Rog-O-Matic, and a fork maintained since around 2012 keeps them buildable today.",
+      "detail": "Harris says the fork's maintainer supplies only source, so he compiled binaries himself and fixed crash bugs in Advanced Rogue 7 to make them playable. UltraRogue's creator Herb Chong has found an unreleased 2.0 and is trying to get it working.",
+      "t": 422,
+      "quote": "restoration project which began in 2000 by someone who identified on the website as indoor",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "miscellaneous magic",
+      "kind": "example",
+      "claim": "Advanced Rogue and its successors added D&D-style stats and a 'miscellaneous magic' item category whose powerful items can also kill you outright.",
+      "detail": "Rogue had only strength; the successors have four to six D&D stats. A bag of dust might be dust of disappearance or dust of choking, so experimenting is dangerous.",
+      "t": 737,
+      "quote": "he also has something called miscellaneous magic which has some particularly powerful items in it um and also they can also be very dangerous items",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "fleeing monsters",
+      "kind": "example",
+      "claim": "Monsters in the Advanced Rogue family flee when losing a fight, stand and fight when cornered, and can loop through rooms so the player never catches them.",
+      "detail": "Harris describes the AI as aware enough of its surroundings to judge whether escape would just trap it; if a loop of rooms is available, a fleeing monster can be chased forever. He calls it really clever.",
+      "t": 764,
+      "quote": "monsters are smart enough to run away from you if a fight isn't going well for them and they know enough not to bother if they're trapped",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "magic pools",
+      "kind": "example",
+      "claim": "Magic pools in the Advanced Rogue family let players dip items to bless or curse them, a gamble that mainly trips up new players.",
+      "detail": "Pools are dungeon spots you stand on and dip items into; outcomes may add pluses or curse the item. Harris notes later roguelikes tend to have such features.",
+      "t": 806,
+      "quote": "it could either bless them you can gain like pluses on them or it can curse them",
+      "weight": 1
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "example",
+      "claim": "In Advanced Rogue 5, a magician who starts with an identify spell transforms the game, because identification from memory removes the risk of testing unknown items.",
+      "detail": "Classes (fighter, magician, cleric, thief) don't play very differently, and fighters have it easiest because strength boosts damage and carrying capacity. But a high-intelligence magician starting with identify completely changes the nature of the game.",
+      "t": 928,
+      "quote": "if you can just cast identify from memory and not have to rely on scrolls it completely changes the whole nature of the game",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "permadeath",
+      "kind": "principle",
+      "claim": "The longer it takes to start playing a roguelike, the worse it is, so games meant to be learned through death should make restarting as painless as possible.",
+      "detail": "Harris treats time invested in a run as the ante in a poker bet: dying loses it all. Advanced Rogue 5 rolls stats for you so you can start in under a second, unlike games with long character creation; Advanced Rogue 7's creation plus a mandatory trading post is slower.",
+      "t": 1030,
+      "quote": "if it's a game in which players are intended to to learn a lot from death then you should make death as painless possible",
+      "weight": 3
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "monster item use",
+      "kind": "example",
+      "claim": "Monsters in Advanced Rogue can pick up and use the player's kinds of weapons, so picking up stray missile weapons denies them to enemies.",
+      "detail": "Harris was one-shot on level 1 by a gnome that found a two-handed sword. Kobolds with arrows or rocks in dark rooms are lethal because you can't tell where shots come from; three of his first five deaths were to monsters throwing things in the dark.",
+      "t": 1091,
+      "quote": "it's a good idea on to if you find missile weapons on the ground to pick them up just so another monster can't come across and find them",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "wilderness",
+      "kind": "example",
+      "claim": "Advanced Rogue lets players climb back up before finding the goal and leave level one into a wilderness, a surprising feature for a mid-1980s game though its purpose is unclear.",
+      "detail": "Harris contrasts this with Rogue's rule that you can't ascend until holding the Amulet; he doesn't know why you'd go to the wilderness.",
+      "t": 1113,
+      "quote": "you can go up from level one explore the outside world which is this weird wilderness",
+      "weight": 1
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "game preservation",
+      "kind": "principle",
+      "claim": "A game is only truly lost when nobody plays it, because playing animates and inhabits it; preservation means getting people to play old roguelikes again.",
+      "detail": "Harris gives this as the motivation for the talk and for compiling binaries others can download.",
+      "t": 1151,
+      "quote": "games are kind of dead if people aren't playing them in the process of playing a game you animate it you inhabit it",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "cursed items",
+      "kind": "example",
+      "claim": "Advanced Rogue extended curses from equipment to consumables, replacing pure-bad potions with cursed versions of good ones (a cursed potion of see invisible instead of blindness).",
+      "detail": "In most roguelikes curses only make equipment unremovable; here potions and scrolls can be cursed, so even an identified item can harm you if its curse status is unknown. Rogue's worst potions (blindness, confusion, paralysis) were removed.",
+      "t": 1243,
+      "quote": "ordinary magic items like potions and scrolls can be cursed too and that can make a usually good item have a bad effect",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "class restrictions",
+      "kind": "example",
+      "claim": "Advanced Rogue 7's paladins and rangers follow a code of conduct: attacking a sleeping monster can strip their special powers, which trips up players used to ordinary play.",
+      "detail": "AR7 adds five classes (druid, assassin, paladin, ranger, monk). Monks fight best unarmed and unarmored but tend to be hit first. Most classes are restricted in usable equipment.",
+      "t": 1308,
+      "quote": "if you see a sweeping monster you're expected not to attack it if you do you have a chance of losing all of your special power",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "imperfect mazes",
+      "kind": "principle",
+      "claim": "Larn's imperfect mazes (with multiple routes) give players navigation choices, unlike the perfect mazes of Hack, NetHack and Super Rogue that force the same path every time.",
+      "detail": "Harris defines a perfect maze as having exactly one route between any two points. In an imperfect maze, players can decide which way is best rather than being forced along the same spaces.",
+      "t": 1494,
+      "quote": "whereas in an imperfect maze you have choices you can choose uh make decisions about which is the best way to go",
+      "weight": 2
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "time limit",
+      "kind": "example",
+      "claim": "Larn replaces the food clock with an overall time limit to cure the hero's daughter, extendable by scrolls of time warp, and winning raises difficulty for the next game.",
+      "detail": "The limit is 300 'mobuls' of 100 turns each; the cure lies at the bottom of a three-level volcano below a ten-level main dungeon. Harris says the timer is not much of a problem at first but may become one as difficulty rises after wins.",
+      "t": 1525,
+      "quote": "it doesn't have a food system instead it has a time limit",
+      "weight": 2
+    },
+    {
+      "topic": "history-and-preservation",
+      "subtopic": "larn",
+      "kind": "example",
+      "claim": "Larn has a town with a trading post, an expensive one-shot-kill lamp of death shop and a college to buy skills, and its spells can be cast by typing three-letter codes.",
+      "detail": "Some credit Larn (or Moria) with the first town level. Harris notes Larn has been remade over a dozen times and influenced people despite little discussion. Hard monsters' high evasion counters the lamps of death.",
+      "t": 1615,
+      "quote": "there's things like there's a town level some people say it's the first game of the town level",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

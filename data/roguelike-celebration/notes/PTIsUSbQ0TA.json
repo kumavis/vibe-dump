@@ -1,0 +1,217 @@
+{
+  "id": "PTIsUSbQ0TA",
+  "title": "Thomas Biskup - Ultimate ADOM live demo",
+  "speaker": "Thomas Biskup",
+  "year": 2018,
+  "url": "https://www.youtube.com/watch?v=PTIsUSbQ0TA",
+  "talk_type": "design",
+  "summary": "Thomas Biskup, creator of ADOM, demos a pre-alpha build of Ultimate ADOM nine months into development and explains the design decisions behind it. The goal is to widen ADOM's audience to more casual players without sacrificing roguelike depth, so the team is fixing what he calls ADOM's mistakes: poor accessibility, an unexplained backstory, opaque statistics and item identification. The demo shows an ECS-driven world where everything can interact with everything: grafting body parts, an environment altered by spells, chain-reacting crystals, animating objects into creatures and swapping souls via a pentagram. In Q&A he names 'interaction, everything with everything' as the core mechanic, describes a context-sensitive 'fiddle' key to keep discovery without spoilers, and stresses observed user testing as the main way they learn what casual players struggle with.",
+  "games": [
+    "Ultimate ADOM",
+    "ADOM",
+    "NetHack"
+  ],
+  "insights": [
+    {
+      "topic": "production-and-process",
+      "subtopic": "scoping",
+      "kind": "principle",
+      "claim": "Ultimate ADOM's first release is scoped to a single dungeon crawl with four races so the team can ship something soon rather than replicating all of ADOM plus a surface world over years.",
+      "detail": "Biskup jokes that recreating everything in ADOM would mean shipping in 2036. They chose the Caverns of Chaos crawl and a few strongly differentiated races so something interesting happens almost every level, since starting with 15 races and 20 classes could not be finished in time.",
+      "t": 353,
+      "quote": "we want to have a shippable first version of the game as soon as possible, so we decided to focus on an exciting and really challenging dungeon trawl first",
+      "weight": 2
+    },
+    {
+      "topic": "community-and-business",
+      "subtopic": "wider audience",
+      "kind": "principle",
+      "claim": "Ultimate ADOM aims to bring roguelikes to a wider, more casual audience without sacrificing complexity or fun, partly because a commercial game needs more players.",
+      "detail": "Biskup says they do not want to disappoint ADOM's existing fans but want to earn money, which requires more players, and are trying hard to avoid the many mistakes made over 27 years of ADOM. Graphics are no longer ASCII-only for this reason.",
+      "t": 108,
+      "quote": "It's our attempt to bring Roguelike gaming to a wider, let's say casual audience without sacrificing complexity, fun or anything that makes Roguelikes worthwhile to play.",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "complex controls",
+      "kind": "warning",
+      "claim": "Biskup names ADOM's poor accessibility, with too many hard-to-use commands and a UI bolted onto a 27-year-old game, as one of its biggest sins and very hard to change later.",
+      "detail": "He says the UI being cobbled onto an old game is noticeable and hard to change, so Ultimate ADOM is trying a different approach. He uses an ASCII version for fast prototyping and a graphical one for the wider audience.",
+      "t": 154,
+      "quote": "one of the biggest sins of ADOM probably is its rather complex accessibility, to put it carefully. There are too many commands, they are very hard to use",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "backstory",
+      "kind": "example",
+      "claim": "ADOM had involved story elements but never explained its backstory at the start of the game, so Ultimate ADOM opens with an introductory trailer establishing the setting.",
+      "detail": "Biskup calls the omission over 25-26 years strange. The trailer explains the lord of chaos, the cataclysm and the player as someone buried alive who must escape the Caverns of Chaos.",
+      "t": 310,
+      "quote": "we noticed that for the first 25 years of ADOM, we failed to explain the backstory.",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "factions",
+      "kind": "technique",
+      "claim": "Ultimate ADOM adds seven factions with their own agendas in the law-versus-chaos conflict to strengthen the storyline, each giving minor benefits and hindrances, with an unaligned option.",
+      "detail": "Factions are meant to make the game more than a straight dungeon crawl, and not everything may be as it seems. Players who do not care for politics can play unaligned and just explore. Faction choice modifies how the story works.",
+      "t": 421,
+      "quote": "we have decided to include factions to strengthen the storyline. So, now you are not necessarily an adventurer on your own",
+      "weight": 2
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "data-driven tooltips",
+      "kind": "technique",
+      "claim": "Because Ultimate ADOM is data-driven, the game can introspect any definition and generate readable explanations and tooltips automatically, unlike hard-coded ADOM where every explanation was written by hand.",
+      "detail": "Maps, locations, quests, items, monsters and races are all modeled with ECS, so e.g. the Archer definition can be shown as '+1 strength, +4 toughness'. Hovering over anything, including the player and spells, shows statistics, modifiers and capabilities.",
+      "t": 572,
+      "quote": "we can, during the game, introspect everything and explain it.",
+      "weight": 2
+    },
+    {
+      "topic": "art-and-audio",
+      "subtopic": "2.5d graphics",
+      "kind": "example",
+      "claim": "Ultimate ADOM chose 2.5D (3D walls, 2D sprites) after rejecting 3D as too expensive, plain 2D as too limited, and isometric because of wall fading and hard targeting.",
+      "detail": "Isometric means constantly deciding which walls to fade and makes targeting hard. Biskup notes ADOM's barely visible grid made it hard for casual players to hit targets, so the current version clearly shows the grid to prevent misclicks and mistargeting.",
+      "t": 683,
+      "quote": "The grid in ADOM is barely visible and it's very hard for casual players to even hit a target",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "item identification",
+      "kind": "principle",
+      "claim": "Ultimate ADOM removes item identification by default because the fun should be in discovering interesting uses of items, and casual players found identification tedious and confusing.",
+      "detail": "Biskup says if you must identify almost everything before understanding what it does, you lose much of the fun of interactions. Casual players did not understand identification and hunting for scrolls was tedium. A hardcore mode might restore it.",
+      "t": 796,
+      "quote": "We noticed with more casual players, they don't understand identification, it's not fun to look for the scrolls, it's just tedium.",
+      "weight": 3
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "grafting",
+      "kind": "technique",
+      "claim": "Ultimate ADOM's grafting lets players collect body parts from beings and attach them to themselves or others for new powers, such as a dragon head to breathe fire or spider spinnerets to spin webs.",
+      "detail": "Inspired by elaborate body structures seen in NetHack's code, Biskup says body structure becomes nice when you can do something with it: hacking off parts, then grafting them. In the ASCII demo, grafted spider spinnerets add a 'spin a web' option; a ghoul's hand gives a paralytic touch.",
+      "t": 886,
+      "quote": "You can basically collect body parts from other beings and put them either to you or to other beings and give them new, let's say, uses, special powers",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "message log",
+      "kind": "principle",
+      "claim": "Ultimate ADOM's graphical version aims to show effects visually with very little text so players focus on watching the environment rather than reading message boxes.",
+      "detail": "Text messages can be turned on, but Biskup says the latest ADOM release's hovering texts showed that this makes play much more compelling than reading endless boxes of text.",
+      "t": 980,
+      "quote": "we are going for an approach where there is very little text and you basically just can focus on the player play just watching his environment",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "magic system",
+      "kind": "principle",
+      "claim": "Ultimate ADOM wants a far more magical, flexible spell system than ADOM's small-damage and utility spells, e.g. a Bladestorm that amputates and injures everything around.",
+      "detail": "Biskup characterizes ADOM's spells as a little damage here and there, opening and closing, trap removal and curing. Bladestorm, likely very rare and powerful in the final game, fills the area with blades that sever body parts.",
+      "t": 1085,
+      "quote": "We really want to be our spell system something very magical with, let's say, very very flexible effects.",
+      "weight": 1
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "environment interaction",
+      "kind": "example",
+      "claim": "In Ultimate ADOM spells change terrain: ice storm freezes floor water so monsters slip, stun or slow, fireball melts it back, and repeated fireballs gradually damage walls.",
+      "detail": "Biskup says the world will be fully defined rather than decoration. Casting fireball too often in a small room may break walls so other monsters can reach you more easily, an unintended consequence.",
+      "t": 1312,
+      "quote": "So if you cast fireball too often in a small room, maybe the walls break down, other monsters can reach you more easily.",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "chain reactions",
+      "kind": "example",
+      "claim": "Ultimate ADOM's magical pulse activates crystals of power that re-emit pulses, letting players build fuse-like setups that end at crystals of fire exploding into fireballs.",
+      "detail": "In the demo room Biskup clears a room of monsters with a planned chain of crystals. He frames it as one of many mechanisms players will combine, for instance luring stronger monsters into prepared situations.",
+      "t": 1388,
+      "quote": "When this magical pulse reaches the crystal of power, it emits yet another wave of magical energy, activating other things. So I can build a kind of fuse.",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "animate objects",
+      "kind": "example",
+      "claim": "Ultimate ADOM lets dark magic turn features and items into monsters, so an animated altar can be charmed into a companion and a Wave of Life animates gauntlets, rations and walls.",
+      "detail": "Animated things have statistics and capabilities. Biskup suggests combinations such as animating armor and grafting arms or a dragon head onto it, then charming it, to create new kinds of companions and change the battlescape.",
+      "t": 1500,
+      "quote": "wouldn't it be fun if we could turn items into monsters by dark magic? Because that again allows new interesting combinations of things.",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "body swapping",
+      "kind": "example",
+      "claim": "Ultimate ADOM's pentagram of possession swaps souls between two beings that step on it, letting players inhabit goblins, dragons or even a wall that cannot open doors for lack of hands.",
+      "detail": "The motivation is to explore the game more deeply than playing dwarves, elves and humans. In the demo an animated wall stepped on the pentagram and Biskup became the wall while the wall's soul controlled his spellcaster; a Swap Soul spell then put him in a ring.",
+      "t": 1575,
+      "quote": "When our second being steps on it, they exchange their souls and you suddenly are in the body of something else and have all the powers of this other thing.",
+      "weight": 2
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "interaction",
+      "kind": "principle",
+      "claim": "Ultimate ADOM's core mechanic, summed up as 'your dungeon, your rules', is creative interaction of everything with everything, aiming for emergent strategies the designers cannot foresee.",
+      "detail": "Asked for the core mechanic, Biskup answers interaction. He says the underlying technology allows endless combinations and, given the ingenuity the community showed with ADOM's limited scope, he looks forward to what players will find.",
+      "t": 2110,
+      "quote": "Basically I would say interaction, everything with everything.",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "statistic detail levels",
+      "kind": "technique",
+      "claim": "Ultimate ADOM adds detail modes that spell out abbreviations like DV and PV and show damage as a range instead of dice notation, reserving dice for expert players.",
+      "detail": "ADOM is statistics-heavy and casual players get confused by terms like DV and PV. In the simpler mode a battle axe shows 3 to 8 damage, maybe eventually a single number; higher detail levels show 1d6+2. Biskup admits there is still too much statistics.",
+      "t": 1938,
+      "quote": "We learned that casual gamers no longer understand dice notations so we decided to only have them for expert players",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "context actions",
+      "kind": "technique",
+      "claim": "Ultimate ADOM replaces ADOM's hundred keys with a single context-sensitive 'fiddle with the environment' key that offers whatever is reasonably possible, preserving accidental discovery like plugging ears with beeswax.",
+      "detail": "Asked whether ADOM's charm (wiping mud from eyes, beeswax against a banshee) survives streamlining, Biskup says items will get suggestive descriptions ('sticky, gluey') rather than spoilers, and the F key detects possible actions so players may discover them by accident.",
+      "t": 2246,
+      "quote": "So it won't spoil you in the sense of telling you everything you can do, but giving those textual hints that tell you, sticky, gluey, don't know.",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "user testing",
+      "kind": "technique",
+      "claim": "After Steam feedback on ADOM's UI, the team began watching new players use the game without explanation; Biskup calls user testing their most important mechanism.",
+      "detail": "Test users who had never played ADOM were put in front of a notebook and observed. After the first 60-minute session he had about 150 notes and felt much of what they did was stupid. They intend to test heavily.",
+      "t": 2331,
+      "quote": "I remember our very first session, it was about 60 minutes and I had like 150 notes afterwards",
+      "weight": 2
+    },
+    {
+      "topic": "character-and-builds",
+      "subtopic": "grafting",
+      "kind": "technique",
+      "claim": "Ultimate ADOM's grafting has costs: deviating from your normal physique temporarily lowers attributes like dexterity until you adapt, and size limits forbid some combinations outright.",
+      "detail": "The engine knows your normal body plan (two arms, two legs, one head). Four untrained legs could lower dexterity for a while. A small gnome cannot take an ancient red wyrm's head because it would be squashed. Biskup sums up that everything has a price.",
+      "t": 2386,
+      "quote": "when you deviate from that, it has negative effects, because it's harder to control for you,",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

@@ -1,0 +1,173 @@
+{
+  "id": "Rs_-yMsJDq8",
+  "title": "Stephen G. Ware - Planning and Replanning Structured Adaptive Stories: 25 Years of History",
+  "speaker": "Stephen G. Ware",
+  "year": 2025,
+  "url": "https://www.youtube.com/watch?v=Rs_-yMsJDq8",
+  "talk_type": "technical",
+  "summary": "Stephen Ware gives a partial history of event-level story planning research, arguing the interesting question is not whether a computer can write a story but whether it can rewrite one to adapt to a player. He explains planners as search over events with preconditions and effects, then walks through successive definitions of a 'good story' (intentionality, failed plans via alternative stories, character beliefs, emotions like hope/fear/relief, and Pareto-optimal plans), each motivated by 'misspun tales' from a grandmother-medicine-bandit-guard example world. He covers replanning by intervention or accommodation, speed limits (5-10 event stories) and heuristics, notes LLMs are not better than older heuristics at long-term story planning, and describes a deterministic VR police de-escalation trainer. His core lesson: storytelling is non-Markovian and stories can only be judged relative to the alternatives.",
+  "games": [],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "adaptive story",
+      "kind": "principle",
+      "claim": "The interesting problem for computational narrative in games is not getting a computer to write a story but to rewrite it on the fly when a player does things the author can't control, as a D&D game master does.",
+      "detail": "Ware notes story generation dates to Tale-Spin in 1974 but the world is full of people who want to write stories; adaptation is what games need.",
+      "t": 74,
+      "quote": "can you get a computer to rewrite a story for you? Writing a story is fun but if you put it in a game you have to adapt this",
+      "weight": 3
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "emergent vs planned",
+      "kind": "principle",
+      "claim": "Emergent stories from many lightweight agents (as in Dwarf Fortress or The Sims) are unpredictable, so required story beats can only be hoped for, whereas planned stories look ahead to guarantee requirements can be met.",
+      "detail": "Ware distinguishes atomic units (scenes, events, tokens) and approaches; with emergence you must 'herd virtual cats' to hit beats. Handwritten scripts are limited to what can be imagined in advance.",
+      "t": 187,
+      "quote": "if you have specific story beats you have to hit you have to hope they happen randomly",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "planning",
+      "kind": "technique",
+      "claim": "A story planner treats events (about one sentence: subject, verb, object) as actions with preconditions and effects, searching forward from the initial world state through all applicable events until reaching an ending state.",
+      "detail": "Search over all event sequences is the most flexible but most expensive approach, versus reactive planning that looks only one or a few events ahead. Storylets are similar but scene-sized.",
+      "t": 278,
+      "quote": "There are preconditions and effects that change the world in some way",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "planning",
+      "kind": "principle",
+      "claim": "A classical planner needs story context hand-written into preconditions (e.g. only rogues steal), whereas a story planner lets authors write basic events and infers who acts and why, at the cost of needing a formal model of what makes a good story.",
+      "detail": "Ware's analogy: a classical planner puts Lego bricks together any way they fit, so the author must ensure they look good; a story planner only combines them in ways that make sense, which requires a complicated definition of sense.",
+      "t": 393,
+      "quote": "A classical planner can put Lego bricks any way they fit so it is up to you that they always look good",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "intentionality",
+      "kind": "technique",
+      "claim": "To stop a classical planner producing nonsense like a merchant walking to your house and giving you medicine, the first story planners required every action to contribute to some character's goal, propagating intentions backward.",
+      "detail": "In the grandmother-needs-medicine world, the player walking to market and buying medicine is explained backward from the achieved goal, and the merchant's reason for selling can also be explained.",
+      "t": 514,
+      "quote": "every action needs to attribute to achieving some character goal",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "failed plans",
+      "kind": "technique",
+      "claim": "Story planners can explain actions in failed plans (like walking to a crossroads and being robbed) by using the many unused stories the search generated: an action makes sense if there exists some story where it does.",
+      "detail": "Ware notes stories revolve around conflict, so plans must be able to fail. The millions of discarded stories are not wasted but a database of what could have happened instead.",
+      "t": 641,
+      "quote": "an action makes sense if there exist a story where it makes sense even if that isn't the story you actually end up telling",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "character beliefs",
+      "kind": "warning",
+      "claim": "Planners that assume full observability produce stories where characters act on knowledge they couldn't have, such as a guard charging in from off-screen to slay a bandit whose robbery he never saw.",
+      "detail": "The Sabre planner adds character beliefs: a character's action is explained only by a plan they believe will work based on what they know and have observed, even if it really wouldn't.",
+      "t": 690,
+      "quote": "planners assume full observability which means everybody knows about everything accurately as soon as it happens",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "emotion and personality",
+      "kind": "technique",
+      "claim": "Modelling hope (a plan achieving one's goals), fear (a plan by others bad for you) and relief (a plan preventing a fear) lets planned characters anticipate others, with personality determining risk-taking.",
+      "detail": "Without this, a bandit ignores what the guard will do; with it, a risky bandit may try a second robbery at the guarded market while a careful one avoids it. Characters only form plans they believe lead to positive emotion.",
+      "t": 761,
+      "quote": "Now we can reason about fear which means imaging a plan other characters might do that will be bad for you and relief",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "goal priorities",
+      "kind": "technique",
+      "claim": "Characters should only choose plans on their Pareto front, with no alternative better in some way without being worse in another, otherwise they pursue minor goals at absurd cost.",
+      "detail": "A hungry guard kept stealing food then arresting and killing himself as a criminal. Ware's pizza example: someone who prefers pepperoni ordering cheese makes no sense unless pepperoni has a Listeria outbreak, making cheese safer.",
+      "t": 892,
+      "quote": "A plan only makes sense if there was no other plan that was better in some ways without being worse",
+      "weight": 2
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "replanning",
+      "kind": "technique",
+      "claim": "When a player is about to make the planned story impossible, a drama manager can either intervene to stop the action or, ideally, accommodate it by replanning the story around it.",
+      "detail": "Fast planning makes replanning possible whenever the player does something unexpected.",
+      "t": 939,
+      "quote": "If the player is about to do something that will make telling the story impossible you stop them from doing it. We call that intervention",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "planning performance",
+      "kind": "technique",
+      "claim": "Story planners currently manage roughly 5-10 event stories at runtime, sped up by heuristics that sketch the rest of the story, building only plans whose events enable later events, and restricting events to elements salient in the player's working memory.",
+      "detail": "Planning may need billions of sequences, so Ware's group has researched several speedups.",
+      "t": 1021,
+      "quote": "We can reason about which people, places and goals are salient in the player's working memory and only allow events that involve those salient elements",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "llm storytelling",
+      "kind": "open-question",
+      "claim": "Large language models are good at open-ended storytelling but, surprisingly, no better than older heuristic methods at long-term story planning, though thinking models and outline-first approaches are improving this.",
+      "detail": "Ware says it is hard to get an LLM to follow a formal definition of a story; LLMs largely do reactive planning with some long-term reasoning in their context.",
+      "t": 1040,
+      "quote": "Language models are pretty good at open ended storytelling but struggle with long term story planning",
+      "weight": 2
+    },
+    {
+      "topic": "beyond-roguelikes",
+      "subtopic": "training simulations",
+      "kind": "example",
+      "claim": "Ware's VR police de-escalation trainer uses a fully deterministic planned story so trainees can replay, deliberately change an action, and see why it leads to a better or worse ending.",
+      "detail": "The engine looks ahead to ensure the required content is always possible and that right actions get good endings. Ware jokes it is meant to be repeated and has permadeath, inviting debate over whether it is a roguelike.",
+      "t": 1121,
+      "quote": "we want a fully deterministic story with no randomness because we want you to replay it, intentionally do something different",
+      "weight": 1
+    },
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "non-markovian story",
+      "kind": "principle",
+      "claim": "Storytelling is non-Markovian: whether an event makes sense depends on the whole sequence of past and future events and on alternatives, so a story's quality can only be judged relative to other stories that could have been told.",
+      "detail": "Ware's main lesson: this is why planning stories is expensive, since all alternatives must be generated and checked.",
+      "t": 1211,
+      "quote": "We can only judge the quality of a story relative to the other stories we could have told",
+      "weight": 3
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "story representation",
+      "kind": "technique",
+      "claim": "Story planners encode world knowledge as variables with values (a character's location, whether they're alive), while the interesting reasoning lives in metadata about past events and possible futures.",
+      "detail": "Answering a question comparing this with writing storylets, Ware adds that authoring sets of actions for a target story usually yields something totally different and hilariously terrible.",
+      "t": 1301,
+      "quote": "Most of the interesting information we need for storytelling is metadata structure including all the possible future states",
+      "weight": 1
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "defining good output",
+      "kind": "open-question",
+      "claim": "Formal story definitions swing between too broad and too narrow: each expansion admits stories that shouldn't exist and each restriction loses stories that should.",
+      "detail": "Host Alexei observed the research oscillates between broadening and narrowing; Ware agreed the definition is constantly made bigger and smaller.",
+      "t": 1584,
+      "quote": "Every time we expand it we find new stories that should not be there and every time we narrow it we find we are missing important stories",
+      "weight": 2
+    }
+  ],
+  "verified": true
+}

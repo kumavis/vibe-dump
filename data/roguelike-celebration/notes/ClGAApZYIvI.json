@@ -1,0 +1,167 @@
+{
+  "id": "ClGAApZYIvI",
+  "title": "Jason Grinblat - Procedural History in Caves of Qud",
+  "speaker": "Jason Grinblat",
+  "year": 2017,
+  "url": "https://www.youtube.com/watch?v=ClGAApZYIvI",
+  "talk_type": "design",
+  "summary": "Jason Grinblat, co-creator of Caves of Qud, explains how each game generates a history of five ancient sultans and how that history seeds the world. The player never reads the history directly; they discover it through cultural artifacts (shrines, engraved weapons, painted bottles) that log snippets to a journal, spawn quests to generated locations, and point to legendary items and generated cults. He covers sultan 'domains' as epithet-like themes, event-by-event generation with after-the-fact rationalised causes, a hands-off approach with no prescribed narrative arc, and macro-variation of society to avoid the oatmeal problem.",
+  "games": [
+    "Caves of Qud",
+    "Dwarf Fortress",
+    "Gamma World"
+  ],
+  "insights": [
+    {
+      "topic": "narrative-and-worldbuilding",
+      "subtopic": "handcrafted plus simulation",
+      "kind": "example",
+      "claim": "Caves of Qud weaves a handcrafted RPG narrative around simulative systems: physical (dig anywhere, every wall has a melting point), social (NPCs and factions with reputation) and a generated history.",
+      "detail": "Grinblat says the physical systems take a page from Dwarf Fortress. A new history is generated at the start of every game and used to seed world generation, with its locations instantiated as places to explore.",
+      "t": 100,
+      "quote": "at the start of every game we generate a new history and we sort of use that to see the world generation",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural history",
+      "kind": "technique",
+      "claim": "Caves of Qud constrains the enormous scope of history generation by centring each generated history on five ancient sultans from a period before most of the handwritten lore.",
+      "detail": "Each world seed produces a different history and a different set of five sultans, set in a sultanate era preceding the game's existing handwritten lore.",
+      "t": 193,
+      "quote": "to constrain the sort of colossal scope of generating a full-blown history what we've decided to is is Center the history around these five great Sultan's",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "environmental storytelling",
+      "kind": "principle",
+      "claim": "Caves of Qud never exposes its generated history directly, unlike Dwarf Fortress's legends mode; players learn it only through cultural artifacts in the present-day world.",
+      "detail": "Artifacts include shrines built in veneration of sultans, an engraved mace showing a sultan's birth, and wine bottles painted with scenes. These are ordinary usable items that can also be examined for history.",
+      "t": 253,
+      "quote": "it's always filtered through the lens of the of the present of the game the game worlds present",
+      "weight": 3
+    },
+    {
+      "topic": "interface-and-accessibility",
+      "subtopic": "journal",
+      "kind": "technique",
+      "claim": "Caves of Qud logs each discovered history snippet in a journal in chronological order, so fragments found out of order cohere into a readable story of each sultan's life.",
+      "detail": "In Q&A, Grinblat agreed that before the journal existed players had to take diligent notes; the sultan tab now lets them read the snippets in order as a story, which is how they are meant to be read.",
+      "t": 329,
+      "quote": "as you accrue more and more of these snippets of history about a sultan they get inscribed in a player journal in chronological order",
+      "weight": 2
+    },
+    {
+      "topic": "level-generation",
+      "subtopic": "history-seeded locations",
+      "kind": "technique",
+      "claim": "Locations named in Caves of Qud's history become real places on the map; discovering an artifact that mentions one adds it to the journal and generates a quest to visit it.",
+      "detail": "The location's description and dungeon builder use properties from history generation. Tuwan Palace, a place where the rich lived, gets garden alcoves and a 'becoming nook' where aristocrats installed cybernetics, still holding an implant (motorized treads) to find.",
+      "t": 377,
+      "quote": "whenever a location is mentioned in these histories it's a location that was generated during the course of the history",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "thematic domains",
+      "kind": "technique",
+      "claim": "Each Caves of Qud sultan is assigned a 'domain' (jewels, ice, starlight, scholarship, might) that flavours their events, acting like an epithet in epic poetry to make them memorable and blur history with myth.",
+      "detail": "One sultan born with emeralds on his eyes later murders someone by trapping him in a jewel and founds a hermitage for chanting to rubies. Another's weddings all happen in blocks of ice or lakes of frost because her domain is ice.",
+      "t": 550,
+      "quote": "they sort of function like epithets do an epic poetry right to associate this character with some sort of like resonant cultural meme",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural history",
+      "kind": "technique",
+      "claim": "Caves of Qud generates history one event at a time (birth, siege, marriage, death), each like a chapter in a ruler's biography.",
+      "detail": "Grinblat recounts a bug when the marriage event was added that made it the only event, so every sultan only got married, including to cats, baboons and a robot.",
+      "t": 568,
+      "quote": "when we generate history in caves of code we do it one event at a time",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "legendary items",
+      "kind": "technique",
+      "claim": "Items named in Caves of Qud's history are instantiated too: if a sultan lost an artifact at a battle site, the player gets quests to visit that place and recover the item, whose stats reflect the history.",
+      "detail": "A sultan saved by dogs wielded the axe 'Freezing Ages, Boon of Dogs' and lost it at the Hippodrome Quarter. The recovered axe has a description carved with icicles and dogs, deals +5 cold damage, and gives +200 reputation with dogs.",
+      "t": 733,
+      "quote": "just like when we're generating the history and we end up taking the locations that we generated and instantiating them the real world we do the same with items",
+      "weight": 2
+    },
+    {
+      "topic": "ai-and-npcs",
+      "subtopic": "factions",
+      "kind": "example",
+      "claim": "Caves of Qud's 60+ factions have preferences tied to generated history, such as dogs wanting secrets about sultans they admire, which players can trade to talking creatures for reputation.",
+      "detail": "Dogs are the only faction the player starts liked by. A legendary creature gets a procedural backstory and faction relationships; after the sacred ritual of sharing water (also the game's currency), you can share a secret it cares about.",
+      "t": 831,
+      "quote": "dogs are interested in trading secrets about locations of humanoid settlements and Sultan's they admire despise",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "generated factions",
+      "kind": "technique",
+      "claim": "Besides its static factions, Caves of Qud procedurally generates cults that form around sultans, named after the sultan or one of their epithets, and populates history sites with cultists.",
+      "detail": "The cult of the dog-loving sultan sits beside dogs on the faction screen. At the Hippodrome, aggressive dog cultists guard the lost axe; players can kill them or find another way to endear themselves.",
+      "t": 984,
+      "quote": "some of them are procedurally generated because they spawn up around these Sultan's from the from the procedurally generated history",
+      "weight": 2
+    },
+    {
+      "topic": "generation-methods",
+      "subtopic": "retroactive causation",
+      "kind": "technique",
+      "claim": "Caves of Qud picks each history event at random, then rationalises a cause by querying the sultan's earlier events, creating apparent causality without simulating it.",
+      "detail": "A sultan saved by dogs then randomly besieged a city; the description generator found her relationship with dogs and wrote that she fought to liberate dogs. In Q&A, Grinblat says a Tracery-like grammar is driven by internal state, e.g. being liked by a faction enables a rule like 'liberate faction'.",
+      "t": 1154,
+      "quote": "there's no actual inherent cause and effect to the system we're just picking events randomly and then like rationalizing their causes",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "hands-off generation",
+      "kind": "principle",
+      "claim": "Caves of Qud deliberately imposes no narrative arc such as the hero's journey on sultan lives, which it can afford because the history system is off the critical path.",
+      "detail": "Grinblat says they like to let generators run wild; a bizarre life is fine because you'll get another next game. One of the few constraints is that each must at some point become sultan, producing a 100-year-old who assassinates his father, becomes sultan, and dies the next day.",
+      "t": 1201,
+      "quote": "we sort of afforded ourselves this freedom because this whole system is a little tertiary it's not like along the critical path",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "macro variation",
+      "kind": "technique",
+      "claim": "To make generated histories characterful rather than oatmeal, Caves of Qud also varies the structure of society, such as a high succession rate creating a dynasty or organising locations by wealth versus function.",
+      "detail": "Grinblat ties this to Kazemi's oatmeal problem. One history had four of five sultans from one dynasty; locations may be palaces, slums and middle-class districts, or a garrison quarter, museum quarter and hippodrome.",
+      "t": 1331,
+      "quote": "we also like to do some higher level like macro variation on the structure of society that we're generating",
+      "weight": 3
+    },
+    {
+      "topic": "systems-and-emergence",
+      "subtopic": "item interactions",
+      "kind": "example",
+      "claim": "A generated Caves of Qud helm granting the Temporal Fugue clone mutation interacts with the Evil Twin defect, since the twin copies your gear and can spawn its own clones.",
+      "detail": "Item descriptions mix handwritten text with procedural parameters. Grinblat jokes that a resulting epic battle with time clones might get you inscribed in history as the next sultan.",
+      "t": 1571,
+      "quote": "if you're wielding an artifact that gives you temporal few that means your twin will also have that artifact and they'll create their own clones",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "procedural history",
+      "kind": "technique",
+      "claim": "Caves of Qud's sultans are generated along one shared timeline, so earlier sultans' actions, such as renaming a location after an epic battle, carry forward into later sultans' histories.",
+      "detail": "Answering a question about intersections and contradictions, Grinblat says histories are per-game (reproducible by world seed) and progress along a single timeline with a progression of influence.",
+      "t": 1890,
+      "quote": "it's all happening along a single timeline and there is sort of like a progression of influence that way",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}

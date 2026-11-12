@@ -1,0 +1,156 @@
+{
+  "id": "WutTZ4FCHA8",
+  "title": "Kristen Yu: Video Game Quest Theory for Improved Procedural Content Generation",
+  "speaker": "Kristen Yu",
+  "year": 2021,
+  "url": "https://www.youtube.com/watch?v=WutTZ4FCHA8",
+  "talk_type": "design",
+  "summary": "Kristen Yu, a PhD researcher and quest designer at Improbable, presents a general technical quest definition synthesized from 16 academic papers on quest generation plus production experience: a quest is a set of tasks completed for rewards, and each task has players, objective, monitoring system, presentation and rewards. She then presents the Definition-Context-Purpose paradigm, distilled from interviews with 15 developers, in which context (creative and production constraints) and purpose (why the quest exists) funnel the space of all possible quests into those that fit a game. She illustrates both with Animal Crossing: New Horizons' Nook Miles systems and shows how the paradigm helps specify a quest generator, classify content beyond 'main' and 'side', evaluate content against its purpose, and impose production constraints.",
+  "games": [
+    "Animal Crossing: New Horizons",
+    "Super Mario Bros."
+  ],
+  "insights": [
+    {
+      "topic": "content-generation",
+      "subtopic": "quest definition",
+      "kind": "principle",
+      "claim": "A shared, technical, genre-independent definition of a quest is needed because developers and academics each define quests differently, and a technical definition enables procedural quest generation and precise discussion.",
+      "detail": "Yu asked coworkers and a lead world designer with 15+ years experience what a quest is and got different answers or none; the 16 papers on quest generation she read had 16 different definitions. She synthesized their common elements with her production experience.",
+      "t": 230,
+      "quote": "i read 16 different papers and they were actually focused on procedurally generating quest and they had 16 different definitions of a quest",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quest definition",
+      "kind": "technique",
+      "claim": "Under Yu's general quest definition, a quest is a set of tasks the player must complete to earn rewards, where rewards include items, narrative elements and progression such as XP or unlocking map areas.",
+      "detail": "Rewards cover in-game items and currencies, narrative payoffs like NPC dialogue or cutscenes, and progression like XP, skill points or unlocked areas.",
+      "t": 263,
+      "quote": "a quest is a set of tasks the player must complete in order to get one or more rewards",
+      "weight": 3
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quest tasks",
+      "kind": "technique",
+      "claim": "Each quest task should be specified by who can complete it, its objective, the monitoring system that detects completion, its presentation to the player, and its own rewards.",
+      "detail": "Yu stresses that the monitoring system and presentation are often ignored by academics yet are critically important in practice. Task-level rewards allow a reward schedule of small payouts as the quest progresses.",
+      "t": 318,
+      "quote": "the system that actually monitors the game of whether the player actually completed that task or not. And this is something that's actually often ignored by academics",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quest definition",
+      "kind": "example",
+      "claim": "Animal Crossing: New Horizons' 'Angling for Perfection' fishing quest decomposes into five tasks (catch 10 to 3,000 fish), each monitored, presented on a stamp card with progress bubble, and rewarded with Nook Miles tickets and passport titles.",
+      "detail": "Yu applies her definition: single player, objective 'catch X fish', a system checking catches, presentation via stamps showing completed tasks and a bubble showing current progress, and differing rewards per task.",
+      "t": 381,
+      "quote": "The first is to catch 10 fish, catch 100 fish, catch 500 fish, catch 1,000 fish, and catch 3,000 fish.",
+      "weight": 1
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "quest system design",
+      "kind": "technique",
+      "claim": "Agreeing on quest terminology lets designers hand programmers a complete list of desired objective types up front so the quest system is built to support them all.",
+      "detail": "At Improbable the definition onboarded both quest designers and programmers. Designers listed every objective they wanted, even long-shot goals, so programming could build for them ahead of time rather than having later requests break the existing system.",
+      "t": 512,
+      "quote": "put together a list of all of the kinds of objectives that we wanted to be quests in the game. And we gave that to programming",
+      "weight": 2
+    },
+    {
+      "topic": "architecture-and-tools",
+      "subtopic": "quest system reuse",
+      "kind": "example",
+      "claim": "Recognizing that 'quest-like objects' fit the general quest definition let Improbable deliver them through the existing quest system instead of building a separate one.",
+      "detail": "Their game had things explicitly called quests and other content that looked like quests but wasn't labeled so. Treating them as quests saved building a second content-delivery system.",
+      "t": 558,
+      "quote": "the quest like objects can actually just be considered quests. And what we were able to do then was actually use the quest system that we had already built",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "definition context purpose",
+      "kind": "technique",
+      "claim": "The Definition-Context-Purpose paradigm frames quest design as a funnel: the definition gives all possible quests, context adds creative and production constraints, and purpose states why the quest is in the game.",
+      "detail": "Yu derived it from thematic analysis of 13+ hours of interviews with 15 developers (indie and not, 3 to 30 years experience), yielding 21 tags in six categories. A game can have multiple overlapping contexts and purposes.",
+      "t": 723,
+      "quote": "the context and the purpose act as a funnel where they take the state space of all possible quests and they narrow it into the set of quests",
+      "weight": 3
+    },
+    {
+      "topic": "difficulty-and-progression",
+      "subtopic": "reward pacing",
+      "kind": "example",
+      "claim": "Animal Crossing pairs exhaustible multi-task Nook Miles quests with large rewards and infinitely replenished one-task Nook Miles+ quests with small rewards, creating complementary reward pacing.",
+      "detail": "Nook Miles uses a stamp-card look, 1, 3 or 5 tasks of varying length, and is used up once complete. Nook Miles+ shows five bubbles, each one easy task replaced on completion. Large and small rewards interleave for satisfying pacing.",
+      "t": 864,
+      "quote": "provide a satisfying pacing experience where you have large amounts of rewards from the regular Nook Miles system interspersed with small rewards",
+      "weight": 2
+    },
+    {
+      "topic": "learning-and-discovery",
+      "subtopic": "directed goals",
+      "kind": "principle",
+      "claim": "In high-agency games like Animal Crossing, quests give lost players directed goals that make them interact with systems until they can set their own goals.",
+      "detail": "Yu describes the overall purpose of Animal Crossing's quests as providing in-game goals; once a quest has introduced a system, players can self-regulate and pursue it by choice.",
+      "t": 821,
+      "quote": "When you have a game like Animal Crossing, when there is a high amount of player agency, they can sometimes feel lost and don't really know what to do.",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quest generator",
+      "kind": "technique",
+      "claim": "When building a quest generator, specify its context (task types, rewards, presentation) and purpose explicitly so other developers using it have appropriate expectations.",
+      "detail": "Yu's hypothetical generator links quests to tell a secondary story. Its context can define tasks, rewards, presentation and whether generated content looks different from handcrafted content; stating context and purpose counters colleagues' own biases about what a quest is.",
+      "t": 948,
+      "quote": "if you specifically lay lay out this is the context and this is the purpose of these quests they're going to come out of it",
+      "weight": 2
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "content classification",
+      "kind": "principle",
+      "claim": "Classifying content by context and purpose is more flexible than the main/side quest split, since generated narrative quests fit neither label well.",
+      "detail": "In Yu's example game with quick fetch quests, handcrafted main quests and a narrative quest generator, fetch quests have one task and aim to encourage exploration, while the generated and main content aim to tell the story; any number of content buckets can be defined.",
+      "t": 1038,
+      "quote": "it's more flexible than the old way of saying side and main quests because you're able to have as many kinds of silos",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "content evaluation",
+      "kind": "technique",
+      "claim": "Evaluate each piece of quest content against its stated purpose and tweak it, cut it, or move it to another bucket if it isn't fulfilling it; contexts can also encode production limits like 'no cutscenes'.",
+      "detail": "Yu says contexts can hold practical constraints, such as avoiding expensive cutscenes so designers don't get carried away, and that constraints breed creativity.",
+      "t": 1075,
+      "quote": "is this content actually fulfilling its purpose? If it's not we either tweak it, get rid of it, or move it to a different content bucket",
+      "weight": 2
+    },
+    {
+      "topic": "production-and-process",
+      "subtopic": "content classification",
+      "kind": "example",
+      "claim": "At Improbable, a pitched 'multiplayer quest' was reclassified as single-player by checking it against the defined purposes of each content type.",
+      "detail": "Because anyone at the studio can suggest quests, the team compared the idea with the context and purpose of multiplayer versus single-player quests; it matched the single-player purpose better.",
+      "t": 1153,
+      "quote": "does this match the purpose for multiplayer or does this match the purpose for single player? And it better match the purpose for single player.",
+      "weight": 1
+    },
+    {
+      "topic": "content-generation",
+      "subtopic": "quest definition",
+      "kind": "principle",
+      "claim": "By the general definition, a level such as Mario 1-1, or a season pass, is a quest, even if calling it one is not useful in practice.",
+      "detail": "Answering a question, Yu says the definition is deliberately game- and genre-independent because quests now appear everywhere, e.g. season passes. Developers needn't use every part, such as monitoring, if it isn't useful to them.",
+      "t": 1359,
+      "quote": "I actually would consider like a level to be a quest. So like Mario 1-1 is a quest",
+      "weight": 1
+    }
+  ],
+  "verified": true
+}
