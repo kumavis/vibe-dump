@@ -1,0 +1,1428 @@
+{
+ "id": "zO05p-e57AQ",
+ "url": "https://www.youtube.com/watch?v=zO05p-e57AQ",
+ "title": "Joel Clark - A Perfectly Ordinary Blaseball Experience",
+ "speaker": "Joel Clark",
+ "talk_title": "A Perfectly Ordinary Blaseball Experience",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 2041,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nJoel is a member of The Game Band, and built the simulation that governs blaseball. He's responsible for so much of the game's unique tone – there would be no York Silk without his name generator. His talk explains design methodology and attitudes towards procedural generation that lead the team in creating blaseball and embracing chaos.\n\nBlaseball: https://www.blaseball.com/\nFind Blaseball on Twitter: https://twitter.com/blaseball \nFind Joel on Twitter: https://twitter.com/joel_a_clark",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Blaseball"
+  },
+  {
+   "start": 140,
+   "title": "The role of chaos in design"
+  },
+  {
+   "start": 294,
+   "title": "Defining chaos in games"
+  },
+  {
+   "start": 464,
+   "title": "Core elements of Blaseball"
+  },
+  {
+   "start": 624,
+   "title": "Improvisational development"
+  },
+  {
+   "start": 761,
+   "title": "Designing for broken systems"
+  },
+  {
+   "start": 975,
+   "title": "Community as a path forward"
+  },
+  {
+   "start": 1123,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4558,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 2.16,
+   "d": 1.84,
+   "text": "[Captioner break] >> We have an exciting time"
+  },
+  {
+   "t": 8.88,
+   "d": 20.16,
+   "text": "out. I can say the Baltimore crabs are the place faulty of Roguelike Celebration."
+  },
+  {
+   "t": 29.6,
+   "d": 9.2,
+   "text": "My others might say the Hawaii Fridays, Canada moist talkers, hades tigers."
+  },
+  {
+   "t": 43.12,
+   "d": 6.48,
+   "text": "The commissioner is doing a great job. I will like we might go ahead and start this a little"
+  },
+  {
+   "t": 49.6,
+   "d": 9.76,
+   "text": "bit early if that's all right. It is my pleasure to introduce Joel Clark from the Game Band."
+  },
+  {
+   "t": 63.04,
+   "d": 14.16,
+   "text": "Joel built the simulation that governs blaseball. Yeah, you are here to give us a perfectly,"
+  },
+  {
+   "t": 77.2,
+   "d": 18.0,
+   "text": "ordinary, normal mundane blaseball experience. >> I wish I had a baseball or a blaseball to"
+  },
+  {
+   "t": 96.08,
+   "d": 12.24,
+   "text": "add something. Really boring and mundane. My name is Joel. I work for a studio called the game gand."
+  },
+  {
+   "t": 109.12,
+   "d": 11.92,
+   "text": "We made a website called www.blaseball.com. Now it is three months later and I am really"
+  },
+  {
+   "t": 121.04,
+   "d": 6.96,
+   "text": "just trying to figure out what's happened over the past few months. Thank you to the wonderful"
+  },
+  {
+   "t": 128.0,
+   "d": 5.84,
+   "text": "organizers of this event. Preparing were this talk has helped me step back"
+  },
+  {
+   "t": 134.48,
+   "d": 8.99,
+   "text": "and make sense of this wild game we have made. If you don't have the context for blaseball I"
+  },
+  {
+   "t": 143.47,
+   "d": 8.53,
+   "text": "will give it. Weekly, global simulated league of a baseball-ish support and you can vote to change"
+  },
+  {
+   "t": 152.0,
+   "d": 4.8,
+   "text": "all things about the league. Everything from players, to teams, to even rules of the game."
+  },
+  {
+   "t": 159.68,
+   "d": 8.96,
+   "text": "It is weird, it is dark and I hope it is funny to people. It is sometimes terrifying when a squid or"
+  },
+  {
+   "t": 168.64,
+   "d": 6.88,
+   "text": "giant peanut shows up. There is a lively community doing all sorts of creative things around it."
+  },
+  {
+   "t": 177.04,
+   "d": 6.08,
+   "text": "There is just always something going on whether it is in the discord or on Twitter or something"
+  },
+  {
+   "t": 183.12,
+   "d": 4.56,
+   "text": "going on in the game itself. Any time you check in there is something knew."
+  },
+  {
+   "t": 189.52,
+   "d": 3.68,
+   "text": "There are a 100 more things I could tell you about baseball and"
+  },
+  {
+   "t": 193.2,
+   "d": 10.16,
+   "text": "that's more or less the gist of it. The single most common question weiveuble Blaseball is why?"
+  },
+  {
+   "t": 204.56,
+   "d": 8.8,
+   "text": "Why did we make this thing? -- we receive about. The simplest, quickest answer I can give is"
+  },
+  {
+   "t": 214.64,
+   "d": 11.2,
+   "text": "blaseball is a reaction to Chaos. When we came up with this idea, our studio was going through odd"
+  },
+  {
+   "t": 225.84,
+   "d": 6.72,
+   "text": "times and we were trying to find our next step after finishing up another game and suddenly"
+  },
+  {
+   "t": 233.6,
+   "d": 6.24,
+   "text": "there was a pandemic and we were self-isolating and suddenly remote studio and we were just trying"
+  },
+  {
+   "t": 239.84,
+   "d": 6.72,
+   "text": "to make sense of how to navigate that. At that time, Sam, our CEO of the game band, pitched a"
+  },
+  {
+   "t": 246.56,
+   "d": 7.76,
+   "text": "game about bringing people together amidst that chaos. We had an hour-long scope ballooning chat"
+  },
+  {
+   "t": 255.12,
+   "d": 6.64,
+   "text": "as we always do and at the end we had the full idea for blaseball including that wonderful name"
+  },
+  {
+   "t": 261.76,
+   "d": 7.28,
+   "text": "which you can pronounce however you like. I accept all pronunciations. Making this game has helped me"
+  },
+  {
+   "t": 270.32,
+   "d": 3.84,
+   "text": "make sense of just the chaos of the world that's been happening"
+  },
+  {
+   "t": 276.0,
+   "d": 4.64,
+   "text": "and it has helped our studios start to find a path forward through it. I have just been thinking"
+  },
+  {
+   "t": 280.64,
+   "d": 4.32,
+   "text": "a lot about chaos and learning a lot about it and that's what I want to share with you today."
+  },
+  {
+   "t": 286.08,
+   "d": 4.16,
+   "text": "I am going to say chaos enough times where it won't make sense to anybody but"
+  },
+  {
+   "t": 292.64,
+   "d": 6.64,
+   "text": "deal with it. On base level, chase is just unpredictability. It is not being able to"
+  },
+  {
+   "t": 299.28,
+   "d": 6.16,
+   "text": "predict or parse the outcome of a set of initial conditions and behaviors. It is something that"
+  },
+  {
+   "t": 305.44,
+   "d": 7.6,
+   "text": "feels totally random even if it is not. Chaos theory would say it is not random. We just can't"
+  },
+  {
+   "t": 313.04,
+   "d": 6.56,
+   "text": "parse it because we don't have enough information. This is more or less the scientific view of chaos"
+  },
+  {
+   "t": 319.6,
+   "d": 11.84,
+   "text": "but I am paraphrasing and butchering it. We talk about chaos as being complete disorder. Like the"
+  },
+  {
+   "t": 331.44,
+   "d": 8.16,
+   "text": "2020 news cycle where things are being thrown at you all of the time or like an explosion"
+  },
+  {
+   "t": 339.6,
+   "d": 7.36,
+   "text": "or, you know, a storm with stuff flying around. We think about when we talk about chaos is disorder."
+  },
+  {
+   "t": 347.92,
+   "d": 7.04,
+   "text": "I have really changed my definition to something that happens on a more personal level. Chaos is"
+  },
+  {
+   "t": 354.96,
+   "d": 7.68,
+   "text": "a personal emotional experience rather than this big phenomenon. The same system is going to feel"
+  },
+  {
+   "t": 362.64,
+   "d": 8.08,
+   "text": "much more chaotic to one person versus another depending on your understanding and chaos."
+  },
+  {
+   "t": 370.72,
+   "d": 7.6,
+   "text": "Chaos is a moment to moment part of people's lives and a core part of what makes games interesting. I"
+  },
+  {
+   "t": 378.32,
+   "d": 9.84,
+   "text": "wanted to find a definition to match that. Here is what I came up with. Chaos is discomfort caused by"
+  },
+  {
+   "t": 388.16,
+   "d": 6.88,
+   "text": "trying to understand something. Particularly when failing or struggling to understand that thing."
+  },
+  {
+   "t": 396.72,
+   "d": 5.68,
+   "text": "And then I have been using that definition to reframe my own game design as we are exposing"
+  },
+  {
+   "t": 402.4,
+   "d": 8.16,
+   "text": "players to chaos and then showing them path through it over and over. I think we are thinking"
+  },
+  {
+   "t": 410.56,
+   "d": 7.2,
+   "text": "about that all of the time whether we phrase it that way in game design. We can talk about pacing,"
+  },
+  {
+   "t": 417.76,
+   "d": 4.48,
+   "text": "introducing new systems and everything is going to be a little chaotic to that player"
+  },
+  {
+   "t": 422.96,
+   "d": 6.8,
+   "text": "until they learn about it and understand it. If you have a new enemy or a boss with suddenly"
+  },
+  {
+   "t": 429.76,
+   "d": 5.36,
+   "text": "a bunch of new weird attacks you are not going to understand what's going on. It is going to"
+  },
+  {
+   "t": 435.12,
+   "d": 6.96,
+   "text": "be unpredictable until you get hit by it once, twice, lose a few times, and then you start to"
+  },
+  {
+   "t": 442.08,
+   "d": 6.8,
+   "text": "recognize the patterns and then you settle in. Once you figure it out, it is no longer chaotic."
+  },
+  {
+   "t": 448.88,
+   "d": 8.24,
+   "text": "You under it and know how to beat it but that process from being exposed to that new information"
+  },
+  {
+   "t": 457.12,
+   "d": 11.6,
+   "text": "and figuring it out is uncomfortable. That's chaos to me. Let's get into Blaseball. There is"
+  },
+  {
+   "t": 468.72,
+   "d": 7.24,
+   "text": "a lot of of things that make Blaseball chaotic but I had to narrow it down for this talk. The"
+  },
+  {
+   "t": 479.68,
+   "d": 7.84,
+   "text": "first two I think will be understandable to everybody here. The first one is randomness. There"
+  },
+  {
+   "t": 487.52,
+   "d": 7.12,
+   "text": "is a lot of talk about how Blaseball is a random number generator with lore on top and I am here to"
+  },
+  {
+   "t": 494.64,
+   "d": 9.6,
+   "text": "confirm that's a 100% correct. Randomness is just exciting. Blaseball definitely embraces it is."
+  },
+  {
+   "t": 504.24,
+   "d": 6.32,
+   "text": "It is inherently chaotic and something you can't understand. That's the purpose of chaos, really."
+  },
+  {
+   "t": 512.48,
+   "d": 8.16,
+   "text": "I think is the cheapest form of chaos you can add to the game. Adding randomness, procedural"
+  },
+  {
+   "t": 521.28,
+   "d": 8.8,
+   "text": "generation is a great example. If you embrace randomness, you can add chaos pretty cheaply. The"
+  },
+  {
+   "t": 530.08,
+   "d": 8.64,
+   "text": "next one emergence or emergent system design. I am sure everyone has a some frame of what this is"
+  },
+  {
+   "t": 539.44,
+   "d": 5.6,
+   "text": "being the Roguelike Celebration. I am not going to dive too far into it because it has"
+  },
+  {
+   "t": 545.04,
+   "d": 7.12,
+   "text": "been explored for decades and all day today and yesterday but the idea is when systems interact"
+  },
+  {
+   "t": 552.8,
+   "d": 5.76,
+   "text": "it drives complexity of outcome through the roof and that will keep players on their toes and"
+  },
+  {
+   "t": 559.68,
+   "d": 6.4,
+   "text": "learning and interpreting and therefore causing chaos. When systems interact, it is going to cause"
+  },
+  {
+   "t": 567.44,
+   "d": 5.28,
+   "text": "such a level of complexity and chaos that you just really can't do just by scripting something."
+  },
+  {
+   "t": 574.24,
+   "d": 3.68,
+   "text": "You are going to create things that are unexpected for even you, the developer, and that is just"
+  },
+  {
+   "t": 577.92,
+   "d": 15.92,
+   "text": "exciting. I will probably mention more and about how Blaseball is equally chaotic to me. Sports in"
+  },
+  {
+   "t": 593.84,
+   "d": 5.92,
+   "text": "particular are perfect examples of emergent system design. They producing infinite outcomes based off"
+  },
+  {
+   "t": 600.88,
+   "d": 5.52,
+   "text": "simple rules and fans tune in to revel in that chaos. That's a big part of why we lean"
+  },
+  {
+   "t": 606.4,
+   "d": 8.56,
+   "text": "into baseball as a topic. Baseball is so simple but it generates so much unexpected behavior."
+  },
+  {
+   "t": 616.88,
+   "d": 8.72,
+   "text": "That was really the starting point. And then we get more specifically into Blaseball."
+  },
+  {
+   "t": 626.48,
+   "d": 11.84,
+   "text": "The third thing is improvisational design. We have promised a lot mere -- here. We have promised"
+  },
+  {
+   "t": 638.32,
+   "d": 9.68,
+   "text": "weekly updates, continued mystery and change and weirdness and that forces us to think on our toes"
+  },
+  {
+   "t": 648.0,
+   "d": 7.12,
+   "text": "constantly. We can't have too much of a filter in your design or else we would run out of time and"
+  },
+  {
+   "t": 656.16,
+   "d": 6.16,
+   "text": "we wouldn't get any changes in. It really forces us to change our approach to designing in this"
+  },
+  {
+   "t": 662.32,
+   "d": 7.04,
+   "text": "game. We work out of the subconscious and we have to try to stay in synch with one another so"
+  },
+  {
+   "t": 669.36,
+   "d": 5.52,
+   "text": "our design meetings don't, you know, get stuck on something. We have to keep moving and keep moving."
+  },
+  {
+   "t": 675.68,
+   "d": 7.84,
+   "text": "We are really not afraid of getting ideas in that are bad or weird. The design of this game"
+  },
+  {
+   "t": 683.52,
+   "d": 6.64,
+   "text": "is really raw because it has to be because we have to move fast and you can imagine how that could"
+  },
+  {
+   "t": 690.16,
+   "d": 8.08,
+   "text": "create some chaos. We are watching the randomness cause of events and reacting along with you. When"
+  },
+  {
+   "t": 698.24,
+   "d": 7.28,
+   "text": "things shake out in surprising weird ways we have to change course and embrace it. Similarly,"
+  },
+  {
+   "t": 707.84,
+   "d": 5.12,
+   "text": "when the community comes up with a plot, when they take the systems that are in their hands,"
+  },
+  {
+   "t": 713.76,
+   "d": 6.88,
+   "text": "and decide to do something really exciting and fun with it, we have to pick it up and run with"
+  },
+  {
+   "t": 720.64,
+   "d": 10.6,
+   "text": "it with the best we can. We at least partially anticipate it usually. We thought well, if they --"
+  },
+  {
+   "t": 732.24,
+   "d": 3.52,
+   "text": "what happens if they don't have any pitchers? We don't have to think about that."
+  },
+  {
+   "t": 737.52,
+   "d": 3.6,
+   "text": "But the community deciding to rally around it is something that we can't"
+  },
+  {
+   "t": 741.12,
+   "d": 5.84,
+   "text": "expect. Yeah, we are having a dialogue every season because between developers"
+  },
+  {
+   "t": 747.68,
+   "d": 4.08,
+   "text": "and community and that brings so much unpredictability to the experience."
+  },
+  {
+   "t": 752.64,
+   "d": 6.8,
+   "text": "You know? It is a little stressful but it is incredibly fun to build a game that way."
+  },
+  {
+   "t": 761.76,
+   "d": 3.68,
+   "text": "The last thing I will mention as a design rule that I have tried to enforce"
+  },
+  {
+   "t": 766.4,
+   "d": 7.36,
+   "text": "and it will sound a little absurd or funny but we are OK with the game getting sloppy."
+  },
+  {
+   "t": 779.36,
+   "d": 5.68,
+   "text": "I want you to happen there is going to be a bunch more pictures of trash cans just appearing so if"
+  },
+  {
+   "t": 785.04,
+   "d": 8.56,
+   "text": "you can picture that it will help everyone's experience of that. We are OK with the game"
+  },
+  {
+   "t": 793.6,
+   "d": 8.56,
+   "text": "sloppy. We are OK with that and lean into it and sometimes it is a little intentional. So"
+  },
+  {
+   "t": 803.28,
+   "d": 7.76,
+   "text": "we are not afraid to take risks and if the design of a system falls flat we are probably"
+  },
+  {
+   "t": 811.04,
+   "d": 7.28,
+   "text": "not going to fix it. Is that weird? At least not right now. We are instead trying to address issues"
+  },
+  {
+   "t": 818.32,
+   "d": 5.2,
+   "text": "by adding new systems on top of the old broken systems and adding another link between the two"
+  },
+  {
+   "t": 825.04,
+   "d": 4.64,
+   "text": "and the old broken systems continue to exist in the background and continue to influence"
+  },
+  {
+   "t": 830.4,
+   "d": 7.04,
+   "text": "the game and simulation. We are fixing problems essentially by adding more problems which is, you"
+  },
+  {
+   "t": 837.44,
+   "d": 4.72,
+   "text": "know, hilarious especially if you are a designer who tries to design cleanly around things."
+  },
+  {
+   "t": 844.64,
+   "d": 3.6,
+   "text": "I think this adds so much chaos to the experience and it is very fun."
+  },
+  {
+   "t": 852.0,
+   "d": 3.04,
+   "text": "With Blaseball specially I think it is important there is an"
+  },
+  {
+   "t": 855.04,
+   "d": 6.88,
+   "text": "influx of new things in order to keep up the sense of unpredictability, in order to allow"
+  },
+  {
+   "t": 864.72,
+   "d": 6.16,
+   "text": "more things for the community to interpret and try to make sense of. We prioritize new over better"
+  },
+  {
+   "t": 871.68,
+   "d": 4.64,
+   "text": "always and it is partially that we can't afford to the time to overhaul a broken system."
+  },
+  {
+   "t": 878.4,
+   "d": 6.4,
+   "text": "I think it is a lot harder to take a broken system and reshape or tear it down and rebuild it than it"
+  },
+  {
+   "t": 884.8,
+   "d": 8.08,
+   "text": "is to just add a new simple system but that's not the main thing. For me personally, mainly,"
+  },
+  {
+   "t": 893.44,
+   "d": 8.96,
+   "text": "this game has been experiment in replicating how broken systems get made in our world particularly"
+  },
+  {
+   "t": 902.4,
+   "d": 8.4,
+   "text": "in America. There is an abundance of systems that govern this country and our society and none of"
+  },
+  {
+   "t": 910.8,
+   "d": 6.8,
+   "text": "them are perfect and in American politics it is nearly impossible to gut and redesign a system."
+  },
+  {
+   "t": 918.16,
+   "d": 8.48,
+   "text": "Instead we just keep adding rules and clauses and it is absolutely incomprehensible. Yeah. So when I"
+  },
+  {
+   "t": 927.52,
+   "d": 4.16,
+   "text": "saw Blaseball going in a chaotic direction I made it a goal to understand the brokenness of systems"
+  },
+  {
+   "t": 931.68,
+   "d": 5.52,
+   "text": "better through the project and hopefully, help other people under it all better too."
+  },
+  {
+   "t": 939.76,
+   "d": 7.44,
+   "text": "I just watched Tonia's talk and talking about how to change culture and it was really interesting."
+  },
+  {
+   "t": 947.2,
+   "d": 5.6,
+   "text": "It is really cool to know other designers are thinking about the same things and trying to"
+  },
+  {
+   "t": 953.68,
+   "d": 5.84,
+   "text": "understand the brokenness of systems in our world and how to change them through game design."
+  },
+  {
+   "t": 962.08,
+   "d": 5.52,
+   "text": "Yeah. And then, hopefully, I don't know. At some point it would be really cool to do another"
+  },
+  {
+   "t": 967.6,
+   "d": 5.44,
+   "text": "experiment where we tear it down and replace or fix the broken systems and learn about that."
+  },
+  {
+   "t": 976.08,
+   "d": 6.56,
+   "text": "Blaseball is messy, improvivation and random and yet there is a ton of people keeping up with it."
+  },
+  {
+   "t": 983.2,
+   "d": 4.48,
+   "text": "It is teaching me people have a higher threshold for confusion and learning in"
+  },
+  {
+   "t": 987.68,
+   "d": 5.52,
+   "text": "games than I thought. People like to make sense of things. It is rewarding"
+  },
+  {
+   "t": 993.2,
+   "d": 4.4,
+   "text": "to overcome chaos. The times where Blaseball feels the most"
+  },
+  {
+   "t": 997.6,
+   "d": 4.72,
+   "text": "chaotic are times when the community is struggling to interpret new information."
+  },
+  {
+   "t": 1006.16,
+   "d": 6.4,
+   "text": "Chaos is the discomfort of struggling or trying to understand something. Per that definition,"
+  },
+  {
+   "t": 1013.68,
+   "d": 6.56,
+   "text": "when you do finally make sense of something, it is no longer chaotic. There is a path through it."
+  },
+  {
+   "t": 1022.08,
+   "d": 6.88,
+   "text": "You are going figure out how to beat that enemy or that boss in that game with time and perseverance."
+  },
+  {
+   "t": 1031.76,
+   "d": 7.76,
+   "text": "There are other paths that can help us through. Narrative is a path through chaos. I know"
+  },
+  {
+   "t": 1039.52,
+   "d": 8.16,
+   "text": "procedural narrative is a big topic. Narrative is our way of rising above and explaining things that"
+  },
+  {
+   "t": 1047.68,
+   "d": 7.04,
+   "text": "don't make sense to us otherwise. I think taking the time to understand this concept of chaos and"
+  },
+  {
+   "t": 1054.72,
+   "d": 5.36,
+   "text": "allowing more of it into our design is going to make the stories that we tell or generate better."
+  },
+  {
+   "t": 1062.08,
+   "d": 5.04,
+   "text": "The real point here, my final thought, is that in a previous statement we have said"
+  },
+  {
+   "t": 1067.12,
+   "d": 5.68,
+   "text": "Blaseball is a game about building communities amongst belevant forces outf of control."
+  },
+  {
+   "t": 1075.68,
+   "d": 7.12,
+   "text": "I think the number one path through chaos is community. Think about how insufferable"
+  },
+  {
+   "t": 1084.08,
+   "d": 6.32,
+   "text": "Blaseball would be if you didn't have anyone to talk about it and were experiencing this chaotic"
+  },
+  {
+   "t": 1090.4,
+   "d": 8.0,
+   "text": "stuff on your own. We figure out things faster together. We wade through difficult"
+  },
+  {
+   "t": 1098.4,
+   "d": 5.36,
+   "text": "experiences more easily together and I believe community is the best path through the chaos."
+  },
+  {
+   "t": 1107.12,
+   "d": 5.28,
+   "text": "Yeah, I know I kind of sped through that. I didn't really dive into specifics about Blaseball"
+  },
+  {
+   "t": 1112.96,
+   "d": 7.6,
+   "text": "but I think we have a lot of time left for Q&A so if you want to is me about weird stuff going"
+  },
+  {
+   "t": 1120.56,
+   "d": 6.56,
+   "text": "on in Blaseball I am happy to go over that. MODERATOR: Again, you bring the emotions into it."
+  },
+  {
+   "t": 1128.48,
+   "d": 9.76,
+   "text": "Gosh, this Sunday. It is a beautiful definition. I thought our through line was going to be Proc"
+  },
+  {
+   "t": 1138.24,
+   "d": 5.12,
+   "text": "Gen and to a certain degree Blaseball but the fact we have this through line of community and"
+  },
+  {
+   "t": 1143.36,
+   "d": 6.16,
+   "text": "using different systems look at the world and find ways to make sense of it and make it better."
+  },
+  {
+   "t": 1150.96,
+   "d": 6.16,
+   "text": "2020 mood and what our thoughts were in creating and celebrating community but"
+  },
+  {
+   "t": 1157.12,
+   "d": 7.76,
+   "text": "still it is amazing seeing that come together. >> It is important to see community when it forms"
+  },
+  {
+   "t": 1165.52,
+   "d": 9.6,
+   "text": "whether it is Blaseball community or even just this Roguelike Celebration is another great"
+  },
+  {
+   "t": 1175.12,
+   "d": 17.36,
+   "text": "community and seeing the work you put into it. MODERATOR: We have question. Can you tell us"
+  },
+  {
+   "t": 1192.48,
+   "d": 4.32,
+   "text": "what Shakespearean is? We are dying from not knowing or say something"
+  },
+  {
+   "t": 1196.8,
+   "d": 6.56,
+   "text": "cryptic to put us on a new goose chase. >> Shakespearean is exactly what it sounds like"
+  },
+  {
+   "t": 1204.24,
+   "d": 15.6,
+   "text": "for starters. Let's think. I will say that it is linked with tragicness,"
+  },
+  {
+   "t": 1220.4,
+   "d": 3.68,
+   "text": "I believe. Sometimes when I get these questions I have to open up the code and go like"
+  },
+  {
+   "t": 1225.12,
+   "d": 6.96,
+   "text": "remember but I think it is linked tragicness and tragicness is obviously an illusive stat"
+  },
+  {
+   "t": 1232.08,
+   "d": 7.04,
+   "text": "for multiple reasons in Blaseball. I will add that bread crumb. If that helps -- I hope it helps."
+  },
+  {
+   "t": 1239.12,
+   "d": 6.24,
+   "text": "MODERATOR: I love it. I am sure there will be papers written based on analyzing every"
+  },
+  {
+   "t": 1245.36,
+   "d": 5.36,
+   "text": "bit of that. Another great question. Was there ever a moment when you were genuinely surprised"
+  },
+  {
+   "t": 1250.72,
+   "d": 7.92,
+   "text": "by what the fans did? I assume there is many. >> Yeah, many. There has certainly been plenty"
+  },
+  {
+   "t": 1258.64,
+   "d": 6.72,
+   "text": "of moments where I have been surprised by multiple elements of the simulation surprises me all of the"
+  },
+  {
+   "t": 1265.36,
+   "d": 9.68,
+   "text": "time. The community especially since we added the idles board. The community surprises me"
+  },
+  {
+   "t": 1275.04,
+   "d": 7.6,
+   "text": "every season. It would be hard not to answer this with the hot dog fingers necromancy because we"
+  },
+  {
+   "t": 1284.16,
+   "d": 9.44,
+   "text": "anticipated and knew you could idolize a dead player but to see people rallying around it"
+  },
+  {
+   "t": 1293.6,
+   "d": 4.96,
+   "text": "and especially in the first few days of having launched that feature. They were like they will"
+  },
+  {
+   "t": 1298.56,
+   "d": 6.4,
+   "text": "find it eventually. No, it was like the day we launched it. That was really -- we did have to"
+  },
+  {
+   "t": 1304.96,
+   "d": 5.04,
+   "text": "scramble around and figure stuff out but it was incredibly fun and I loved that whole week."
+  },
+  {
+   "t": 1311.44,
+   "d": 5.04,
+   "text": "MODERATOR: I am glad the attitude is I loved it and not the worst week of my life."
+  },
+  {
+   "t": 1316.48,
+   "d": 10.48,
+   "text": ">> Well, it's both. It is a lot of fun, yeah. MODERATOR: I guess a question I am curious about"
+  },
+  {
+   "t": 1326.96,
+   "d": 4.48,
+   "text": "and I think people will find interesting. I think that it is very interesting for the"
+  },
+  {
+   "t": 1331.44,
+   "d": 4.88,
+   "text": "community to watch how some people have a lot of familiarity with procedurally generated games"
+  },
+  {
+   "t": 1341.12,
+   "d": 6.16,
+   "text": "but I think you see in terms of key players getting incinerated or the reaction to kiki famila"
+  },
+  {
+   "t": 1349.04,
+   "d": 8.0,
+   "text": "appearing with a burst of fan art and immediately dying and some people are having trouble dealing"
+  },
+  {
+   "t": 1357.04,
+   "d": 6.8,
+   "text": "with the expectation they want there to be more of a sense of order. How do you feel about that"
+  },
+  {
+   "t": 1363.84,
+   "d": 3.68,
+   "text": "and an approach where I think different people come to the game with different"
+  },
+  {
+   "t": 1367.52,
+   "d": 7.28,
+   "text": "levels of comfort around procedural narrative? >> That's a great question. It is challenging"
+  },
+  {
+   "t": 1374.8,
+   "d": 6.56,
+   "text": "to make to a single experience that fits everyone and I know -- I mean there is a big thing that"
+  },
+  {
+   "t": 1381.36,
+   "d": 6.4,
+   "text": "led me to what I was talking about here. Everyone has a different threshold for chaos. Everyone is"
+  },
+  {
+   "t": 1387.76,
+   "d": 4.32,
+   "text": "going to have their difference tolerance for what they want to experience and what they want to,"
+  },
+  {
+   "t": 1392.96,
+   "d": 3.92,
+   "text": "you know, some people in the community are reveling in this chaos and some people"
+  },
+  {
+   "t": 1396.88,
+   "d": 6.96,
+   "text": "really don't want to see their players incinerated and we, I mean, we want to make this game"
+  },
+  {
+   "t": 1404.56,
+   "d": 9.68,
+   "text": "for everybody. We do plan -- it is a big goal of mine in the future to make Blaseball more"
+  },
+  {
+   "t": 1414.96,
+   "d": 8.16,
+   "text": "respectful of your time and respectful of the energy you are putting into the game and it is"
+  },
+  {
+   "t": 1423.12,
+   "d": 6.16,
+   "text": "something we haven't been able to really approach like immediately as soon as the minute that"
+  },
+  {
+   "t": 1432.16,
+   "d": 3.52,
+   "text": "these emotions are pouring out of the game. It takes us time to implement it"
+  },
+  {
+   "t": 1436.48,
+   "d": 5.2,
+   "text": "but it is a huge goal for our future. The story we are telling right now with the discipline era"
+  },
+  {
+   "t": 1441.68,
+   "d": 5.76,
+   "text": "and what's going on is mostly about chaos. It is hard to pivot off that immediately."
+  },
+  {
+   "t": 1448.64,
+   "d": 5.76,
+   "text": "But I want to ensure people we know it and we hear it and we are really trying"
+  },
+  {
+   "t": 1454.4,
+   "d": 5.04,
+   "text": "to make this experience respectful of everyone. It will get there I hope."
+  },
+  {
+   "t": 1459.44,
+   "d": 6.24,
+   "text": "MODERATOR: Yeah, it is an interesting thing because people love drama and the consequences"
+  },
+  {
+   "t": 1465.68,
+   "d": 6.4,
+   "text": "of that so that's very curious. It ties into the question of it has been said Blaseball is a horror"
+  },
+  {
+   "t": 1472.08,
+   "d": 5.6,
+   "text": "game. Has the exact nature of that changed or I would add do"
+  },
+  {
+   "t": 1477.68,
+   "d": 6.56,
+   "text": "you see that changing in the future? >> It is certainly change. I don't think"
+  },
+  {
+   "t": 1484.24,
+   "d": 7.92,
+   "text": "it started as a horror game. It started with the forbidden book. We threw that in there and"
+  },
+  {
+   "t": 1492.8,
+   "d": 7.12,
+   "text": "found people so intrigued by it and they had to open it, wanted to open it, and it has just only"
+  },
+  {
+   "t": 1499.92,
+   "d": 5.28,
+   "text": "progressed from there. The horror elements -- MODERATOR: It is our fault is what you are saying."
+  },
+  {
+   "t": 1507.52,
+   "d": 6.32,
+   "text": "The necromancy is... >> We knew we wanted the"
+  },
+  {
+   "t": 1513.84,
+   "d": 6.96,
+   "text": "incinerations to start and that was the first idea that set us up and pushed the first domino over."
+  },
+  {
+   "t": 1524.0,
+   "d": 4.48,
+   "text": "Yeah, so we knew kind of it was going to go in that direction but we were also listening to the"
+  },
+  {
+   "t": 1528.48,
+   "d": 6.48,
+   "text": "community and seeing they really liked the more weird or horror elements. So we have leaned into"
+  },
+  {
+   "t": 1534.96,
+   "d": 6.88,
+   "text": "that. So it will continue to change. You know, if people's reaction become well, this is too much,"
+  },
+  {
+   "t": 1542.4,
+   "d": 3.2,
+   "text": "we will back away from it. We are always responding to the community. We are making"
+  },
+  {
+   "t": 1545.6,
+   "d": 7.04,
+   "text": "this game with the community. I keep saying there is three elements making this game. The simulator"
+  },
+  {
+   "t": 1552.64,
+   "d": 4.56,
+   "text": "is making this game. We are making this game and the community is making this game and it is just a"
+  },
+  {
+   "t": 1557.2,
+   "d": 4.24,
+   "text": "process of those three things coming together. MODERATOR: The Fridays are pulling it away"
+  },
+  {
+   "t": 1561.44,
+   "d": 6.8,
+   "text": "from hor on a daily basis. Another interesting question especially makes sense given all of the"
+  },
+  {
+   "t": 1568.24,
+   "d": 3.6,
+   "text": "technical people who like to come to Roguelike Celebration. How do you program the game so you"
+  },
+  {
+   "t": 1571.84,
+   "d": 5.36,
+   "text": "can add new mechanics on the fly? To what degree can you talk about the back end concept. It is"
+  },
+  {
+   "t": 1577.2,
+   "d": 5.28,
+   "text": "kind of terrifying that you just layer things on top of other things. What does that look"
+  },
+  {
+   "t": 1582.48,
+   "d": 7.76,
+   "text": "like from a technical perspective? >> You design for modularity and"
+  },
+  {
+   "t": 1590.24,
+   "d": 8.4,
+   "text": "you think about every system as its own thing. Can you design that system in isolation without"
+  },
+  {
+   "t": 1598.64,
+   "d": 7.2,
+   "text": "interacting with anything else? You think about a team raster. It is just a list of players."
+  },
+  {
+   "t": 1605.84,
+   "d": 6.4,
+   "text": "That is that object and the data on it and you are saying the system is players can leave"
+  },
+  {
+   "t": 1612.24,
+   "d": 3.92,
+   "text": "in different ways, players can get added to that. It is just a single simple system."
+  },
+  {
+   "t": 1617.52,
+   "d": 5.92,
+   "text": "And then, you know, it has its ways it can plug into things and other systems can come in and say"
+  },
+  {
+   "t": 1624.56,
+   "d": 6.24,
+   "text": "let me add a player or incinerate a player and let's have feedback and I will give you"
+  },
+  {
+   "t": 1630.8,
+   "d": 5.04,
+   "text": "a different player from another team and take one from it. By designing every system in isolation"
+  },
+  {
+   "t": 1637.6,
+   "d": 5.6,
+   "text": "with really just like, you know, its purpose. Very cleanly you know its purpose. It is really"
+  },
+  {
+   "t": 1643.2,
+   "d": 6.24,
+   "text": "easy to tie things together. And then I would say, like, our modification system that we have"
+  },
+  {
+   "t": 1649.44,
+   "d": 5.28,
+   "text": "added is like really helping with that too. We just say the players can have the modification"
+  },
+  {
+   "t": 1655.36,
+   "d": 6.56,
+   "text": "and it can really link any two systems together or it can add new rules to an existing system and"
+  },
+  {
+   "t": 1661.92,
+   "d": 3.88,
+   "text": "that has addeded a ton of extendability for us. >>"
+  },
+  {
+   "t": 1667.52,
+   "d": 7.44,
+   "text": "MODERATOR: Here is a question I love. How many of your design decisions are driven by light hearted"
+  },
+  {
+   "t": 1674.96,
+   "d": 2.2,
+   "text": "spite to be honest? >>"
+  },
+  {
+   "t": 1678.96,
+   "d": 5.52,
+   "text": "Lighthearted spite. That's a wonderful -- that's really creative."
+  },
+  {
+   "t": 1684.48,
+   "d": 7.04,
+   "text": "Not many. Some. Not many. I was feeling very spiteful after peanut fraud"
+  },
+  {
+   "t": 1693.68,
+   "d": 7.36,
+   "text": "so that did influence a lot of what's happening by butterfly effect. You know,"
+  },
+  {
+   "t": 1701.04,
+   "d": 10.96,
+   "text": "that's when I in a huff changed to sportsmanship is dead. That was pure emotional spite coming out."
+  },
+  {
+   "t": 1713.36,
+   "d": 3.44,
+   "text": "Really beyond that not a whole lot. MODERATOR: That makes sense."
+  },
+  {
+   "t": 1716.8,
+   "d": 2.88,
+   "text": ">> Probably all butterfly effect from that one peanut fraud event."
+  },
+  {
+   "t": 1719.68,
+   "d": 7.28,
+   "text": "MODERATOR: There is call out to the fact the commissioner is doing a great job. Is there a plan"
+  },
+  {
+   "t": 1726.96,
+   "d": 5.36,
+   "text": "for everything under the redactions in the book? >> Yeah, we have a book."
+  },
+  {
+   "t": 1733.04,
+   "d": 5.2,
+   "text": "MODERATOR: All right. They have the book. >> Don't worry."
+  },
+  {
+   "t": 1739.04,
+   "d": 3.84,
+   "text": "MODERATOR: Sheer here is a really good question. Did you have a good CS dev?"
+  },
+  {
+   "t": 1742.88,
+   "d": 10.88,
+   "text": ">> I did. I am in the process of moving. I am alt my sisters's house in Denver. It's great. There is"
+  },
+  {
+   "t": 1753.76,
+   "d": 4.56,
+   "text": "a husky here and I can play with a husky. MODERATOR: Everyone now is going to want to"
+  },
+  {
+   "t": 1758.32,
+   "d": 6.96,
+   "text": "see the dog, Joel. If Sierra -- I don't know where she is but if she"
+  },
+  {
+   "t": 1765.28,
+   "d": 5.76,
+   "text": "wanders into the frame I will pick her up. MODERATOR: And there is encouragement to"
+  },
+  {
+   "t": 1772.08,
+   "d": 9.44,
+   "text": "make sure to take time for yourself. Honestly, for developers to set a precedent for taking time"
+  },
+  {
+   "t": 1781.52,
+   "d": 4.16,
+   "text": "for themselves is really important. I am really glad to here it was a good siesta and not like a"
+  },
+  {
+   "t": 1786.72,
+   "d": 3.04,
+   "text": "we are crunching during this week so we can crunch more when"
+  },
+  {
+   "t": 1789.76,
+   "d": 7.84,
+   "text": "it is live. I think that's really fantastic. >> Can I just say how amazing it is how much our"
+  },
+  {
+   "t": 1797.6,
+   "d": 7.28,
+   "text": "communities understands that and wishes for us to get some rest? It makes it easy to take a siesta"
+  },
+  {
+   "t": 1804.88,
+   "d": 8.56,
+   "text": "and just rest up. I really appreciated that. MODERATOR: Did you expect to people to get as"
+  },
+  {
+   "t": 1813.44,
+   "d": 10.56,
+   "text": "attached to the individual players as they have? >> No. No, I mean at the time"
+  },
+  {
+   "t": 1826.96,
+   "d": 6.0,
+   "text": "we made this game so fast that we didn't really expect anything. We didn't have time to test it"
+  },
+  {
+   "t": 1832.96,
+   "d": 8.8,
+   "text": "with people and see what they liked about it. I mean, I made this game because I like generating"
+  },
+  {
+   "t": 1841.76,
+   "d": 5.12,
+   "text": "fake names and getting attached to those names. MODERATOR: It shows in how good those names are."
+  },
+  {
+   "t": 1846.88,
+   "d": 8.08,
+   "text": ">> But I am not like -- seeing fan art is just wild for me. So like the first time I saw"
+  },
+  {
+   "t": 1854.96,
+   "d": 9.2,
+   "text": "a boyfriend Montreal fan art of eight blinking eyes it wowed me. I was like people are going to"
+  },
+  {
+   "t": 1864.16,
+   "d": 5.04,
+   "text": "really care about the players and teams. MODERATOR: Yeah, and then you light them"
+  },
+  {
+   "t": 1869.2,
+   "d": 3.68,
+   "text": "on fire. >> It is the"
+  },
+  {
+   "t": 1872.88,
+   "d": 5.36,
+   "text": "simulator. I am just putting in numbers. MODERATOR: Who wrote the simulator, Joel?"
+  },
+  {
+   "t": 1880.24,
+   "d": 4.56,
+   "text": "Here is a good one. Might be one of the last questions. What do you think about the voting"
+  },
+  {
+   "t": 1884.8,
+   "d": 7.04,
+   "text": "system? It replicates already existing power imbalances which I know is not fun for everyone."
+  },
+  {
+   "t": 1895.36,
+   "d": 6.88,
+   "text": "There is a lot of discussion about how a team like the crabs as a voting bloc yields a greater"
+  },
+  {
+   "t": 1902.24,
+   "d": 4.16,
+   "text": "amount of power and what that does. >> This is a great question and I"
+  },
+  {
+   "t": 1906.4,
+   "d": 4.96,
+   "text": "add after this election we got with the crabs winning five blessings"
+  },
+  {
+   "t": 1912.08,
+   "d": 2.56,
+   "text": "they won zero last season. MODERATOR: I know."
+  },
+  {
+   "t": 1916.56,
+   "d": 5.12,
+   "text": "The crabs were the bottom of the league why joined and we had the highest in four blessings"
+  },
+  {
+   "t": 1921.68,
+   "d": 7.6,
+   "text": "and only got one previously, so, yes. >> The point is valid. We did design"
+  },
+  {
+   "t": 1930.32,
+   "d": 13.68,
+   "text": "the blessing system to be a raffle. It is one of the perfect examples of"
+  },
+  {
+   "t": 1944.0,
+   "d": 12.72,
+   "text": "a broken system that we are leaving in and I mean there has been a -- we have thought of more ways."
+  },
+  {
+   "t": 1959.2,
+   "d": 5.92,
+   "text": "We certainly haven't found the time to overhaul the system. We will throw in stuff like"
+  },
+  {
+   "t": 1965.84,
+   "d": 5.84,
+   "text": "enhanced party time where we will balance it in a different way. We will fix the problem"
+  },
+  {
+   "t": 1971.68,
+   "d": 5.76,
+   "text": "by introducing a different system that kind of addresses some of the problems that are happening."
+  },
+  {
+   "t": 1981.44,
+   "d": 6.24,
+   "text": "We are adding new election items and overhaul and rework it but the blessings are going to"
+  },
+  {
+   "t": 1987.68,
+   "d": 5.2,
+   "text": "be the way they work for a little while longer. MODERATOR: I think that's great and last question."
+  },
+  {
+   "t": 1994.24,
+   "d": 5.04,
+   "text": "Hello Joel, cyber commissioner, has Parker been sleeping well this siesta?"
+  },
+  {
+   "t": 1999.28,
+   "d": 8.0,
+   "text": ">> Plenty of sleep, I think. I will force him to call me every once in a while to get an update"
+  },
+  {
+   "t": 2007.28,
+   "d": 3.52,
+   "text": "and he hasn't been calling me a lot. I think Parker is getting some rest."
+  },
+  {
+   "t": 2014.08,
+   "d": 4.4,
+   "text": "MODERATOR: There are a ton more questions. We will share them with you"
+  },
+  {
+   "t": 2019.2,
+   "d": 5.92,
+   "text": "in one form or another and hopefully people get a chance but lots of love for Blaseball."
+  },
+  {
+   "t": 2025.12,
+   "d": 5.68,
+   "text": "Thank you for coming and on short notice in terms of us finding out we had a way to talk"
+  },
+  {
+   "t": 2030.8,
+   "d": 3.52,
+   "text": "to you and coming on the door saying, please, come talk about Blaseball."
+  },
+  {
+   "t": 2034.32,
+   "d": 3.36,
+   "text": ">> Super fun. Thank you for inviting me to do this."
+  }
+ ]
+}

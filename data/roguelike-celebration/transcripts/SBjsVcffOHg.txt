@@ -1,0 +1,88 @@
+Sonat Uzun: Procedural Music of Tea Garden
+Speaker: Sonat Uzun
+https://www.youtube.com/watch?v=SBjsVcffOHg
+Year: 2022   Kind: talk   Captions: manual (en)
+
+## Introduction and setup
+
+[0:00:00] ALEXEI: Hello, everybody. We are back. Hope you had a good social break. I had some fun chats in the breakout room. Let's keep this going. Next up I am excited to announce - SONAT: I don't how to see you when you are presenting. ALEXEI: Yeah, you can focus and we will just Echo until then. I think your audio sounds good. SONAT: I want to test desktop audio because I will be doing an interactive presentation.
+
+[0:01:09] Let me open the correct one. ALEXEI: I think that worked. Little BOOP-BOOP. SONAT: Is the volume level good? Is that too loud? ALEXEI: I think it is really good. Maybe a little high if you could bring it down just a little. SONAT: Is this better now? ALEXEI: Yeah, I think that's perfect. All right. Take it away. SONAT: I also have video as well if that's fine. Is this fine? ALEXEI: Yes I can hear it and it looks great.
+
+## Tea Garden overview
+
+[0:02:01] SONAT: I am taking it away then. All right. I am Sonat Uzun and I am the composer of a game called Tea Garden. Tea Garden is a Grandma we are making with Younès Rabii who opened the conference. I joined the project six months ago. We are developing the project in PICO-8 and I have this interactive part of the presentation made in PICO-8 as well. Let's talk a bit about Tea Garden. Yeah. Also Tea Garden was a talk in Roguelike Celebration 2020 where Younès talk about design of it and ideas but today I will just be talking about music. Let's start by talking about Tea Garden. You decorate your garden with procedurally generated flowers and you make tea, you sleep
+
+[0:03:12] and visit procedurally generated dream world to create more procedurally generated flowers and find interesting stuff, hopefully. This is a perfect match for Procedural music because the game we think is primarily about exploration and discovery. In the game you can find procedural flowers that you may like, dreams you may like and why not discover music you might enjoy. My goal while composing the music was capturing the vibe of a Tea Garden which is what any composer does procedurally or otherwise. And generate distinct music for each garden in the game. And also make the experience of exploring dreams magical through this, hopefully. I want to first start by showing some music from Tea Garden. These are from an older version of the generator I couldn't make it small enough to put it
+
+[0:04:16] in a game. They are pretty cool I think. Let's enjoy. [] SONAT: Yeah, these are some music from Tea
+
+[0:05:42] Garden. I hope you like them.
+
+## Motif-based generation
+
+[0:05:44] In this talk, I will be talking about how the generator works. I am talk about motif-based generation which is my technique I developed. The talk is more technical but I will talk about some music theory and let's go. What I want with this project is not an all genres music generator. But I want a music generator specifically for Tea Garden. This generator is meant for Tea Garden but I believe the methods and ideas can be used to make many other generators. Let's explore this together. Perhaps you might learn something from this talk today and might want to try to explore the ideas in your generators and we can explore difference together. I am using PICO-8 to begin with.
+
+[0:06:45] It means only 3 sound channels for melodies, arpeggio, bass and drums. I use three because one is used for sound effects. I will talk about this later. It has a secret sound channel I use for special effects and I have a work in process reverb going on there. It has short waveforms which give it a dreamy and natural feeling. There are also effects and custom instruments in it which I use to get rich sounds and there is a token limit which I will talk about at the end of the presentation. What is motif-based generation? A motif is a short musical phrase, a salient reoccurring figure, musical fragment or secession
+
+[0:07:52] of notes that has some special importance in and/or characteristic of a composition like this one. This famous motif from Michael Jackson speaks for itself. When I think of motif as a recipe for music. It is not the only recipe you might follow but this is what I am following in my generator.
+
+## Building musical parts
+
+[0:08:31] In generator, I have motifs which are strings enough -- strings of numbers and special characters. 1, 2, 3, 4 or 1, 2, 3, X might be a motif. Numbers are translates to notes later. We write each character to attract one by one and when we finish we return to the beginning of the motif. As an example, here is the motif 1, 2, 3, 4. When we finish we don't stop. We just loop back to the beginning. I write the music to the memory of PICO-8 and PICO-8 plays the music for me. I have motifs for different elements like melodies or arpeggios, or base, or kick, or
+
+[0:09:38] scenario. -- snare. But I don't really stop there. I have motifs for each important aspect of music as well like FX which is something in PICO-8. Fast RPG effect. This motif sounds like wis the effect on top. -- with the. Our instruments. Our volume. Also here is an instrument which has a bell like sound and it is an instrument I design with a grid like sound. You can define these in PICO-8 and use them. Let's listen to it again. And also volume. This volume motif increases over time from 1-6. If you combine all of them we get a part.
+
+[0:10:41] A part is a set of motifs and their combination produced interesting results. I have parts for melody, arpeggio, base, kick and snare. It is just a table in PICO-8 with four different random motifs. The part with all the different motifs stuck together will sound like this. Quite interesting, right? Also diagram. Here is the music. We have parts in it. Each part has a different motif in it. I have a couple parts I use in some song structures. In some I have 1fx and 1 arpeggio and that's enough.
+
+## Embracing procedural glitches
+
+[0:11:33] I will talk about something special now. I didn't have the idea to make everything instruments or just enough in the beginning. But then something really surprising happened and generator broke. There was a glitch in that. It made this awesome song which I wasn't following it. I was really surprised by it. I am going to point out I was surprised by all the music you will listen to today. They are all very special to me and I didn't know the generator could go to those land sets first. I want you to be surprised when you hear the music for the first time but as a developer I got surprised quite often as well.
+
+[0:12:41] [] SONAT: OK. This was a real special occurrence are and the generator was primitive back then. This was a glitch that inspired me to make something in the generator. Anyway, let's continue. Motif-based generation is finding important aspects of the music, defining a pool of possible motifs from each and choose randomly.
+
+[0:13:45] Here I have a diagram. We have the pools, we chose a motif from each, they go to the generator and make music. How can you control this generator and have control over it? We can alter the pools, contents of the pools, and then motifs will be different as well, and then the resulting music will be different as well.
+
+## Refining the system
+
+[0:14:08] My motif pools were real small for this project. This is the melody pool and this is the melody effects pool. Another music break. These are sort of back-to-back but I like this one. This is from the most recent version is from
+
+[0:15:39] the generator. Enjoy. Yeah, also this is a user interface I am making for the generator. You can see some of the ideas here as well. I have record and analog the is volume. I don't use these. This is the things for arpeggio. Let's go continue. Now I will be talking a bit more about music theory.
+
+## Music theory and context
+
+[0:16:28] They will be simplified because these are the theory that helped me create the generator. This is also how I communicate with the computer. And I think in your generators, feel free to use different music theory concepts if you think it serves the purpose of your generator and the style of the music and alter them to fit your needs if you want it. Let's go. Motifs are just recipes and in order to cook we should add context. Scale is a set of notes and for an example this is the measure scale. Melodies follow these sets of notes. I only use these sets of notes and nothing else. This is our melody in major. Cool. And what scale is like greatly Altering the vibe?
+
+[0:17:32] Let's go. This is another scale and a minor scale. Let's listen to that. Nice. If I use minor scale with the melody it will sound different and a feel a lot different I think. Also nice. I also have chords which are a subset of the scale and RPGs only use these. I have different subsets which determine the chord. This is 7 and this is 4, for example. Chords constantly change in the composition according to chord progression which is a sequence of chords and each piece has a randomly selected chord progressions.
+
+[0:18:36] This is a chord progression as an example. Cool. In the generator, so far we choose random motifs for each part and a random context for our song right now there are many combinations but most sound similar and we don't want that. We want each of them to sound different and unique. In order to achieve that we will deliberately create variation. My first way of creating variation is something I called the shift motif.
+
+## Adding variation
+
+[0:19:17] It is to shift entire motif. Let's take the shift with entire motif. It sounds nice but let's apply 4 shift motifs so it shifts upwards. My other way of creating variation is with special consumption. The most simplest one is X for silence and B means begin the loop and J jump to random location in motif, S means change speed, and these all make sense on like sort of intuitive things but I have meaningful things you might think of.
+
+[0:20:17] D means target a chord tone below meaning if you are playing a melody and you are using nodes from scale only and if you encounter this you will use a note from the chord instead which is meaningful in music. They are called chord tones and are analyzed according to them sometimes. Not very intuitive if you are not thinking about the musical characteristics of the generator. And O is just a play note one octave higher. And if you need a special thing from your generator, you can just assign a special symbol to that and it will do that. Let's implement X for silence which is really simple. I write parts in this way. We first write up to 3 melody to arpeggio parts to 3 channels.
+
+[0:21:24] And custom settings can be passed in three ways. This creates something really cool. When you cram up to six different parts into three channels sometimes voices block each other. Snare drum might block a note in melody and this adds variation and often sounds intentional. I have an example of this. This is an arpeggio motif. Here I have a kick motif. And if you combine the arpeggio motif with the kick motif you will get this cool pattern. Nice. And it sounds quite different than what we saw earlier with the arpeggio mode itself.
+
+[0:22:29] Cool, right? This was a really easy way to create variation for me. I didn't expect to do this as well. It just happened and I was like cool, let's capitalize on this mistake, I guess. But it creates cool stuff. I like song structures. They are just brief descriptions of what part will enter at what time. They are very fun to write because it feels like composing with little effort and it is not randomly generated but each song followed a random chord progression and this creates a different feeling of structure. This is nice in the way I don't have to make everything random. If enough stuff is random it will feel different every time which is nice.
+
+## Code efficiency and future
+
+[0:23:20] Let's talk about PICO-8's token limit. This helped me come up with the method for the generator so it is meaningful for me. A token is an element of the code and when you have a token it means that the code should be short and PICO-8 has a token limit of 8192 tokens. As an example, these are all tokens. X is a token equal is a token and 3 is a token and this statement is 3 tokens. If we have a loop statement it is 11 tokens. This is a sort of substantial functional from the program that iterates motifs which is a 100 tokens. Reducing token count is a thing that PICO-8 developers must do. The steps for reducing count are intuitive. Simplify code, improve code sharing, and generate data.
+
+[0:24:21] Do more with less. Viggles, from PICO-8's forum. Simplify code and generating data is what we do but improving code sharing is the important thing here. Token limits help me invent motif-base generation. Code sharing is when you search different sort of processes share the same code in the generator. I can do that because all motifs are created similarly by the code. The same iterative loop through different motifs and all the parts will use the same write part function in the code. Because the generator is like around 1500 tokens which is really short for a program that can do this much. And I am also working on a development tool that is useful in the videos.
+
+[0:25:21] -- that you saw in the videos. It shows there the parts and motifs that make up the pieces and I can force the generator to use certain motifs and it will help me fine tune the generator in the future. In the future I will influence generation depending on the qualities of dream gardens and restrict context and restrict motifs and I will refine my motifs and motif pools and I refine the sound of the generator and of course do more experimentation and another music break. This is from a later version of the generator but I have a reverb.
+
+[0:26:25] Let's go. Yeah, so that was it. Thank you for listening. ALEXEI: Beautiful.
+
+[0:27:26] Excellent.
+
+## Q&A session
+
+[0:27:28] SONAT: I can actually see you now, I guess. ALEXEI: Yes and it looks like the Echo is gone. That was delightful. I am glad we had the dance emoji in chat because people used it throughout all of the music. SONAT: Oh, that's nice. ALEXEI: Yes, everyone was dancing along. We have three minutes for question. The top vote question is from Younès who I am sure you don't talk too much. Have to ask questions through Roguelike Celebration. SONAT: Would see that guy? ALEXEI: The question is do you think you could ask your generator to put a specific mood into the music and code? SONAT: Oh, actually, I can. There are certain scales that sound very distinct sort of scary or spooky. Like this is one where I can do that. There are also motifs with more silences with them.
+
+[0:28:29] So I can just use them so the pieces are quieter. I can, just choose the selection, modify them, and then it will generate a search. -- a certain mood. I have a little control over that. I don't need to have a lot of control because I can trust randomness and that something good will happen at some point which is what happened with these compositions because I wasn't picking motifs much. They are just random and nice. ALEXEI: Super nice. There is another question do you feed anything about the game state in the generator? Does anything about the current state of the game change had music? -- the music? SONAT: I am considering that. It would make the music more dynamic. I think I will change the reverb depending on the elements of the music but things might come and enter depending on what's going on in the game.
+
+[0:29:30] We are not that far in integrating the game and the generator so we don't know yet. ALEXEI: Could you potentially do composition using shorthand and PICO-8? Composition? Writing music by hand using the language you created versus it being a generator? SONAT: I think that would be really nice. It is nice to experiment with how things will interact with each other. I think you can, you know, sort of start by just putting motifs in a generator to see what is possible and composing might have advantages like other instruments of course and take more risk because you have the full control of what's going on. That's a neat idea. I thought about doing that actually in the future. That's can be a good tool for composition as well.

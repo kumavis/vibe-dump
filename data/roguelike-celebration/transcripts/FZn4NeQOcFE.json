@@ -1,0 +1,4865 @@
+{
+ "id": "FZn4NeQOcFE",
+ "url": "https://www.youtube.com/watch?v=FZn4NeQOcFE",
+ "title": "Jim Shepard - Metaprogression and You",
+ "speaker": "Jim Shepard",
+ "talk_title": "Metaprogression and You",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 2038,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Jim Shepard talks about the history of metaprogression in video games.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to speaker"
+  },
+  {
+   "start": 68,
+   "title": "Defining meta progression"
+  },
+  {
+   "start": 225,
+   "title": "Types of meta mechanics"
+  },
+  {
+   "start": 332,
+   "title": "Meta knowledge and players"
+  },
+  {
+   "start": 457,
+   "title": "Meta power and balancing"
+  },
+  {
+   "start": 811,
+   "title": "Meta presence in worldbuilding"
+  },
+  {
+   "start": 1075,
+   "title": "Telling stories through meta"
+  },
+  {
+   "start": 1222,
+   "title": "Player-driven storytelling"
+  },
+  {
+   "start": 1334,
+   "title": "Historical examples of meta"
+  },
+  {
+   "start": 1460,
+   "title": "Q&A session"
+  },
+  {
+   "start": 1824,
+   "title": "Closing and charity plug"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 7098,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.03,
+   "d": 3.93,
+   "text": "so hi Jim my name is Jim Sheppard like"
+  },
+  {
+   "t": 3.96,
+   "d": 2.46,
+   "text": "the commander I made games about"
+  },
+  {
+   "t": 6.42,
+   "d": 1.53,
+   "text": "crushing monsters and taking their stuff"
+  },
+  {
+   "t": 7.95,
+   "d": 2.46,
+   "text": "and dungeon Mans is the project that I"
+  },
+  {
+   "t": 10.41,
+   "d": 2.01,
+   "text": "shipped a while ago and I continued to"
+  },
+  {
+   "t": 12.42,
+   "d": 2.61,
+   "text": "update and I'm working on a game called"
+  },
+  {
+   "t": 15.03,
+   "d": 2.73,
+   "text": "tangle deep as an assistant to a dear"
+  },
+  {
+   "t": 17.76,
+   "d": 3.0,
+   "text": "friend of mine yeah look"
+  },
+  {
+   "t": 20.76,
+   "d": 1.11,
+   "text": "new slide who just this is the"
+  },
+  {
+   "t": 21.87,
+   "d": 1.38,
+   "text": "description of me that we're already"
+  },
+  {
+   "t": 23.25,
+   "d": 2.34,
+   "text": "getting oh I can see this but they can't"
+  },
+  {
+   "t": 25.59,
+   "d": 2.73,
+   "text": "see this okay yeah so and I think"
+  },
+  {
+   "t": 28.32,
+   "d": 1.38,
+   "text": "roguelikes have been working in games"
+  },
+  {
+   "t": 29.7,
+   "d": 2.01,
+   "text": "for a long time I was triple-a for eight"
+  },
+  {
+   "t": 31.71,
+   "d": 2.13,
+   "text": "years I've been indie for five and a"
+  },
+  {
+   "t": 33.84,
+   "d": 4.23,
+   "text": "half I work on stream three days a week"
+  },
+  {
+   "t": 38.07,
+   "d": 5.75,
+   "text": "at minimum the clicking right cool"
+  },
+  {
+   "t": 44.33,
+   "d": 2.86,
+   "text": "great okay cool so yeah this is me and"
+  },
+  {
+   "t": 47.19,
+   "d": 2.73,
+   "text": "here's the stuff and I just went over"
+  },
+  {
+   "t": 49.92,
+   "d": 1.95,
+   "text": "this cool we've already saved time but"
+  },
+  {
+   "t": 51.87,
+   "d": 1.44,
+   "text": "yeah this is the stuff I'm working on"
+  },
+  {
+   "t": 53.31,
+   "d": 1.86,
+   "text": "and great so what are we doing today"
+  },
+  {
+   "t": 55.17,
+   "d": 1.98,
+   "text": "we're gonna talk about meta progression"
+  },
+  {
+   "t": 57.15,
+   "d": 2.37,
+   "text": "across the history of video games we'll"
+  },
+  {
+   "t": 59.52,
+   "d": 2.61,
+   "text": "look at what it does today in modern"
+  },
+  {
+   "t": 62.13,
+   "d": 1.53,
+   "text": "games particularly roguelikes and we're"
+  },
+  {
+   "t": 63.66,
+   "d": 1.77,
+   "text": "going to talk about the rad ship we"
+  },
+  {
+   "t": 65.43,
+   "d": 1.47,
+   "text": "could do in the future with this"
+  },
+  {
+   "t": 66.9,
+   "d": 2.58,
+   "text": "technology right so what is meta"
+  },
+  {
+   "t": 69.48,
+   "d": 2.07,
+   "text": "progression I think everybody knows but"
+  },
+  {
+   "t": 71.55,
+   "d": 1.38,
+   "text": "we're gonna have some definitions anyway"
+  },
+  {
+   "t": 72.93,
+   "d": 2.25,
+   "text": "so the good enough definitions because"
+  },
+  {
+   "t": 75.18,
+   "d": 3.06,
+   "text": "I'm not really academic are that meta is"
+  },
+  {
+   "t": 78.24,
+   "d": 2.22,
+   "text": "a concept beyond a concept that ties the"
+  },
+  {
+   "t": 80.46,
+   "d": 2.85,
+   "text": "sub concept together right so we talked"
+  },
+  {
+   "t": 83.31,
+   "d": 1.71,
+   "text": "about the meta in games all the time and"
+  },
+  {
+   "t": 85.02,
+   "d": 1.47,
+   "text": "and some examples are when you're"
+  },
+  {
+   "t": 86.49,
+   "d": 1.26,
+   "text": "playing something like Magic the"
+  },
+  {
+   "t": 87.75,
+   "d": 2.34,
+   "text": "Gathering each individual game is"
+  },
+  {
+   "t": 90.09,
+   "d": 1.68,
+   "text": "u-verse an opponent your deck their deck"
+  },
+  {
+   "t": 91.77,
+   "d": 1.47,
+   "text": "and it's one contained system but"
+  },
+  {
+   "t": 93.24,
+   "d": 2.28,
+   "text": "outside of that you're building other"
+  },
+  {
+   "t": 95.52,
+   "d": 1.95,
+   "text": "decks and you're saying well you know I"
+  },
+  {
+   "t": 97.47,
+   "d": 2.19,
+   "text": "just be you know Jeffie over here with"
+  },
+  {
+   "t": 99.66,
+   "d": 1.98,
+   "text": "my deck but dirty Steve's got this other"
+  },
+  {
+   "t": 101.64,
+   "d": 1.86,
+   "text": "deck and I got to beat him and like what"
+  },
+  {
+   "t": 103.5,
+   "d": 1.5,
+   "text": "am I gonna do about this other one and"
+  },
+  {
+   "t": 105.0,
+   "d": 2.16,
+   "text": "so there's this collection of game"
+  },
+  {
+   "t": 107.16,
+   "d": 3.21,
+   "text": "concepts outside of the single game when"
+  },
+  {
+   "t": 110.37,
+   "d": 1.98,
+   "text": "we play big MOBAs right there's like a"
+  },
+  {
+   "t": 112.35,
+   "d": 1.89,
+   "text": "hundred in ten champion heroes to pick"
+  },
+  {
+   "t": 114.24,
+   "d": 1.47,
+   "text": "from and they all have different ups and"
+  },
+  {
+   "t": 115.71,
+   "d": 2.01,
+   "text": "downs and you want to make sure your"
+  },
+  {
+   "t": 117.72,
+   "d": 1.56,
+   "text": "picks be their picks on the other team"
+  },
+  {
+   "t": 119.28,
+   "d": 2.28,
+   "text": "but like which person sucks which hero"
+  },
+  {
+   "t": 121.56,
+   "d": 1.56,
+   "text": "doesn't suck and then oh they ship a new"
+  },
+  {
+   "t": 123.12,
+   "d": 1.83,
+   "text": "patch and everything is topsy-turvy and"
+  },
+  {
+   "t": 124.95,
+   "d": 2.07,
+   "text": "that creates a game outside the game but"
+  },
+  {
+   "t": 127.02,
+   "d": 2.07,
+   "text": "this applies to real life too it's not"
+  },
+  {
+   "t": 129.09,
+   "d": 2.13,
+   "text": "necessarily a game focused thing right"
+  },
+  {
+   "t": 131.22,
+   "d": 2.1,
+   "text": "there's this concept that oh you know"
+  },
+  {
+   "t": 133.32,
+   "d": 0.75,
+   "text": "you go to a part"
+  },
+  {
+   "t": 134.07,
+   "d": 1.83,
+   "text": "and you want to be at the party and it's"
+  },
+  {
+   "t": 135.9,
+   "d": 1.56,
+   "text": "one thing but man last time I was at"
+  },
+  {
+   "t": 137.46,
+   "d": 1.47,
+   "text": "that party that dude totally addressed"
+  },
+  {
+   "t": 138.93,
+   "d": 1.89,
+   "text": "me and like wow that time rule I'm gonna"
+  },
+  {
+   "t": 140.82,
+   "d": 1.98,
+   "text": "show him next time and so you know"
+  },
+  {
+   "t": 142.8,
+   "d": 2.19,
+   "text": "things about other things the next event"
+  },
+  {
+   "t": 144.99,
+   "d": 2.46,
+   "text": "matters to you and there's some sort of"
+  },
+  {
+   "t": 147.45,
+   "d": 2.04,
+   "text": "collection of games outside the games"
+  },
+  {
+   "t": 149.49,
+   "d": 1.8,
+   "text": "and progression is what happens that you"
+  },
+  {
+   "t": 151.29,
+   "d": 0.99,
+   "text": "don't get to have when you die in"
+  },
+  {
+   "t": 152.28,
+   "d": 1.47,
+   "text": "roguelikes right we all know this that's"
+  },
+  {
+   "t": 153.75,
+   "d": 2.78,
+   "text": "what progression is here's some more"
+  },
+  {
+   "t": 156.53,
+   "d": 3.28,
+   "text": "academia definitions the Tri Nintendo"
+  },
+  {
+   "t": 159.81,
+   "d": 2.13,
+   "text": "long ago called tries he didn't say"
+  },
+  {
+   "t": 161.94,
+   "d": 2.25,
+   "text": "lives they said you had tries and a try"
+  },
+  {
+   "t": 164.19,
+   "d": 2.43,
+   "text": "is one attempt to play the game and it"
+  },
+  {
+   "t": 166.62,
+   "d": 2.79,
+   "text": "ends when conditions are met so you run"
+  },
+  {
+   "t": 169.41,
+   "d": 2.13,
+   "text": "out of hit points the try is over you"
+  },
+  {
+   "t": 171.54,
+   "d": 1.59,
+   "text": "fall down a hole like in Mario the try"
+  },
+  {
+   "t": 173.13,
+   "d": 2.79,
+   "text": "is over and when these tries ends you"
+  },
+  {
+   "t": 175.92,
+   "d": 1.98,
+   "text": "restart at some other conditions so"
+  },
+  {
+   "t": 177.9,
+   "d": 1.65,
+   "text": "usually it's a checkpoint sometimes it's"
+  },
+  {
+   "t": 179.55,
+   "d": 2.16,
+   "text": "the start of the level but it's one"
+  },
+  {
+   "t": 181.71,
+   "d": 2.55,
+   "text": "attempt to get a game done and then even"
+  },
+  {
+   "t": 184.26,
+   "d": 2.07,
+   "text": "in games like final fight or Streets of"
+  },
+  {
+   "t": 186.33,
+   "d": 1.8,
+   "text": "Rage when you die you just drop right"
+  },
+  {
+   "t": 188.13,
+   "d": 2.37,
+   "text": "back in in the same position but you've"
+  },
+  {
+   "t": 190.5,
+   "d": 1.68,
+   "text": "still lost something because if you had"
+  },
+  {
+   "t": 192.18,
+   "d": 2.31,
+   "text": "like three lives and a health bar think"
+  },
+  {
+   "t": 194.49,
+   "d": 1.77,
+   "text": "of it as having like 3,000 health and"
+  },
+  {
+   "t": 196.26,
+   "d": 1.65,
+   "text": "when it drops below that minimum value"
+  },
+  {
+   "t": 197.91,
+   "d": 1.98,
+   "text": "you can eat all the turkeys in the world"
+  },
+  {
+   "t": 199.89,
+   "d": 1.71,
+   "text": "but you're not going to get back up out"
+  },
+  {
+   "t": 201.6,
+   "d": 2.64,
+   "text": "of that next life bar right so tries"
+  },
+  {
+   "t": 204.24,
+   "d": 2.16,
+   "text": "continue to degrade and eventually you"
+  },
+  {
+   "t": 206.4,
+   "d": 2.37,
+   "text": "run out and we have a game over game"
+  },
+  {
+   "t": 208.77,
+   "d": 2.52,
+   "text": "over is an event that resets things to"
+  },
+  {
+   "t": 211.29,
+   "d": 1.8,
+   "text": "the very beginning as if nobody had ever"
+  },
+  {
+   "t": 213.09,
+   "d": 2.22,
+   "text": "touched the machine of the game and so"
+  },
+  {
+   "t": 215.31,
+   "d": 2.07,
+   "text": "that's our complete set you have tries"
+  },
+  {
+   "t": 217.38,
+   "d": 1.59,
+   "text": "and then you run out of tries and the"
+  },
+  {
+   "t": 218.97,
+   "d": 2.43,
+   "text": "game is over anything that lives outside"
+  },
+  {
+   "t": 221.4,
+   "d": 2.85,
+   "text": "that game over state we look at as meta"
+  },
+  {
+   "t": 224.25,
+   "d": 2.76,
+   "text": "progression hmm so now what's the"
+  },
+  {
+   "t": 227.01,
+   "d": 2.04,
+   "text": "difference between game over and and"
+  },
+  {
+   "t": 229.05,
+   "d": 2.19,
+   "text": "meta game over and so sometimes that"
+  },
+  {
+   "t": 231.24,
+   "d": 1.95,
+   "text": "game has only one try right and if that"
+  },
+  {
+   "t": 233.19,
+   "d": 2.1,
+   "text": "happens we usually call that permit if"
+  },
+  {
+   "t": 235.29,
+   "d": 2.22,
+   "text": "you had your one try you didn't make it"
+  },
+  {
+   "t": 237.51,
+   "d": 1.74,
+   "text": "and you're done and now you start from"
+  },
+  {
+   "t": 239.25,
+   "d": 2.54,
+   "text": "scratch again we are very used to that"
+  },
+  {
+   "t": 241.79,
+   "d": 2.8,
+   "text": "there are the idea of continues right so"
+  },
+  {
+   "t": 244.59,
+   "d": 1.26,
+   "text": "you're playing normally it's an arcade"
+  },
+  {
+   "t": 245.85,
+   "d": 2.46,
+   "text": "game but let's again say oh game over"
+  },
+  {
+   "t": 248.31,
+   "d": 3.24,
+   "text": "except you can put in a quarter or you"
+  },
+  {
+   "t": 251.55,
+   "d": 2.49,
+   "text": "can buy some gems or you can press Start"
+  },
+  {
+   "t": 254.04,
+   "d": 1.62,
+   "text": "right you can do a few things to keep"
+  },
+  {
+   "t": 255.66,
+   "d": 1.92,
+   "text": "going and get more tries and stave off"
+  },
+  {
+   "t": 257.58,
+   "d": 3.45,
+   "text": "that game over the concept of save games"
+  },
+  {
+   "t": 261.03,
+   "d": 1.95,
+   "text": "and passwords like break all this I"
+  },
+  {
+   "t": 262.98,
+   "d": 2.49,
+   "text": "think we know that out there there's a"
+  },
+  {
+   "t": 265.47,
+   "d": 1.39,
+   "text": "timeline where"
+  },
+  {
+   "t": 266.86,
+   "d": 1.92,
+   "text": "for office licking the last bits of Tifa"
+  },
+  {
+   "t": 268.78,
+   "d": 2.67,
+   "text": "office soared because he won right then"
+  },
+  {
+   "t": 271.45,
+   "d": 2.25,
+   "text": "he killed all the heroes and evil reigns"
+  },
+  {
+   "t": 273.7,
+   "d": 1.89,
+   "text": "forever but then he just loved your save"
+  },
+  {
+   "t": 275.59,
+   "d": 1.74,
+   "text": "and that didn't actually happen really"
+  },
+  {
+   "t": 277.33,
+   "d": 2.19,
+   "text": "happened is you won so that kind of"
+  },
+  {
+   "t": 279.52,
+   "d": 3.09,
+   "text": "breaks the the try game over loop but"
+  },
+  {
+   "t": 282.61,
+   "d": 2.1,
+   "text": "conceptually you're just game as one"
+  },
+  {
+   "t": 284.71,
+   "d": 4.49,
+   "text": "long try and saved games change the"
+  },
+  {
+   "t": 289.2,
+   "d": 3.04,
+   "text": "change the time state there okay so a"
+  },
+  {
+   "t": 292.24,
+   "d": 2.85,
+   "text": "meta game one or more games and those"
+  },
+  {
+   "t": 295.09,
+   "d": 2.97,
+   "text": "end when well hold on so we're gonna"
+  },
+  {
+   "t": 298.06,
+   "d": 1.86,
+   "text": "talk about what isn't meta progression"
+  },
+  {
+   "t": 299.92,
+   "d": 2.64,
+   "text": "first right so these games when you"
+  },
+  {
+   "t": 302.56,
+   "d": 1.41,
+   "text": "think about oh there's meta stuff"
+  },
+  {
+   "t": 303.97,
+   "d": 2.01,
+   "text": "because it's between adventures like"
+  },
+  {
+   "t": 305.98,
+   "d": 1.5,
+   "text": "darkest dungeon you go down and you die"
+  },
+  {
+   "t": 307.48,
+   "d": 1.38,
+   "text": "in a dungeon then they come back and"
+  },
+  {
+   "t": 308.86,
+   "d": 1.91,
+   "text": "send everybody for the brothel and so on"
+  },
+  {
+   "t": 310.77,
+   "d": 3.16,
+   "text": "that isn't necessarily meta progression"
+  },
+  {
+   "t": 313.93,
+   "d": 2.25,
+   "text": "because that's one contained game so"
+  },
+  {
+   "t": 316.18,
+   "d": 1.89,
+   "text": "those things don't quite count in that"
+  },
+  {
+   "t": 318.07,
+   "d": 2.81,
+   "text": "regard they're just really long tries"
+  },
+  {
+   "t": 320.88,
+   "d": 3.28,
+   "text": "here are the three types of meta"
+  },
+  {
+   "t": 324.16,
+   "d": 2.91,
+   "text": "progress right power progression and"
+  },
+  {
+   "t": 327.07,
+   "d": 1.74,
+   "text": "knowledge and we're gonna go over"
+  },
+  {
+   "t": 328.81,
+   "d": 2.19,
+   "text": "knowledge first because that's kind of"
+  },
+  {
+   "t": 331.0,
+   "d": 1.59,
+   "text": "the weird one that we don't think of"
+  },
+  {
+   "t": 332.59,
+   "d": 1.29,
+   "text": "very much let's cover that one right"
+  },
+  {
+   "t": 333.88,
+   "d": 3.66,
+   "text": "first meta knowledge okay this is player"
+  },
+  {
+   "t": 337.54,
+   "d": 2.4,
+   "text": "stored information in your head that you"
+  },
+  {
+   "t": 339.94,
+   "d": 3.15,
+   "text": "carry from game to game every game you"
+  },
+  {
+   "t": 343.09,
+   "d": 1.56,
+   "text": "start fresh with that fresh character"
+  },
+  {
+   "t": 344.65,
+   "d": 2.34,
+   "text": "but does the player start fresh and we"
+  },
+  {
+   "t": 346.99,
+   "d": 3.15,
+   "text": "know that's not true you're playing some"
+  },
+  {
+   "t": 350.14,
+   "d": 1.8,
+   "text": "dungeon crawl and you make your way down"
+  },
+  {
+   "t": 351.94,
+   "d": 1.62,
+   "text": "a hallway and sure left and you're like"
+  },
+  {
+   "t": 353.56,
+   "d": 2.16,
+   "text": "why does that man have a horse bottom"
+  },
+  {
+   "t": 355.72,
+   "d": 3.06,
+   "text": "and he hits you with an arrow and you"
+  },
+  {
+   "t": 358.78,
+   "d": 1.68,
+   "text": "died and you're like oh okay horse"
+  },
+  {
+   "t": 360.46,
+   "d": 1.68,
+   "text": "bottom men are gonna arrow me so when"
+  },
+  {
+   "t": 362.14,
+   "d": 1.92,
+   "text": "you play again and you see one you're"
+  },
+  {
+   "t": 364.06,
+   "d": 1.5,
+   "text": "like ah I'm gonna duck back behind the"
+  },
+  {
+   "t": 365.56,
+   "d": 2.58,
+   "text": "hallway so that character is not smarter"
+  },
+  {
+   "t": 368.14,
+   "d": 1.74,
+   "text": "but the player is right so that is"
+  },
+  {
+   "t": 369.88,
+   "d": 2.22,
+   "text": "actually some sort of progression from"
+  },
+  {
+   "t": 372.1,
+   "d": 3.42,
+   "text": "one game to the next egg band had a"
+  },
+  {
+   "t": 375.52,
+   "d": 1.41,
+   "text": "dictionary right so when you started"
+  },
+  {
+   "t": 376.93,
+   "d": 1.2,
+   "text": "fighting monsters you've got information"
+  },
+  {
+   "t": 378.13,
+   "d": 1.62,
+   "text": "and they stored it for you so you could"
+  },
+  {
+   "t": 379.75,
+   "d": 1.26,
+   "text": "look it up later and that's actually the"
+  },
+  {
+   "t": 381.01,
+   "d": 1.26,
+   "text": "asterisks that player stored is that"
+  },
+  {
+   "t": 382.27,
+   "d": 2.19,
+   "text": "it's not always player stored sometimes"
+  },
+  {
+   "t": 384.46,
+   "d": 1.68,
+   "text": "the game will be kind and do it for you"
+  },
+  {
+   "t": 386.14,
+   "d": 2.13,
+   "text": "puzzle solutions are part of this I know"
+  },
+  {
+   "t": 388.27,
+   "d": 2.46,
+   "text": "we can look at wiki's for stuff but if"
+  },
+  {
+   "t": 390.73,
+   "d": 1.77,
+   "text": "games have concrete puzzles and you're"
+  },
+  {
+   "t": 392.5,
+   "d": 1.35,
+   "text": "playing them you can remember that and"
+  },
+  {
+   "t": 393.85,
+   "d": 1.23,
+   "text": "blow through there next time and it's"
+  },
+  {
+   "t": 395.08,
+   "d": 0.51,
+   "text": "easier"
+  },
+  {
+   "t": 395.59,
+   "d": 1.71,
+   "text": "there's also Maps most games have"
+  },
+  {
+   "t": 397.3,
+   "d": 2.01,
+   "text": "dynamic maps but some have some static"
+  },
+  {
+   "t": 399.31,
+   "d": 1.02,
+   "text": "areas and when you know"
+  },
+  {
+   "t": 400.33,
+   "d": 1.56,
+   "text": "you know where the traps are you got to"
+  },
+  {
+   "t": 401.89,
+   "d": 1.83,
+   "text": "get there through quickly and this"
+  },
+  {
+   "t": 403.72,
+   "d": 2.4,
+   "text": "information oh also there's this like if"
+  },
+  {
+   "t": 406.12,
+   "d": 1.83,
+   "text": "you're playing a game and I'm in the"
+  },
+  {
+   "t": 407.95,
+   "d": 1.32,
+   "text": "dungeon and oops"
+  },
+  {
+   "t": 409.27,
+   "d": 1.59,
+   "text": "like I smelled the fart monster and died"
+  },
+  {
+   "t": 410.86,
+   "d": 1.08,
+   "text": "because they didn't know I had to put"
+  },
+  {
+   "t": 411.94,
+   "d": 2.4,
+   "text": "beeswax up my nose like gosh that"
+  },
+  {
+   "t": 414.34,
+   "d": 1.44,
+   "text": "character had no way to know this but"
+  },
+  {
+   "t": 415.78,
+   "d": 1.8,
+   "text": "now the player does and the player comes"
+  },
+  {
+   "t": 417.58,
+   "d": 1.62,
+   "text": "back with beeswax up her nose and it's"
+  },
+  {
+   "t": 419.2,
+   "d": 1.73,
+   "text": "fine and nobody dies except the monsters"
+  },
+  {
+   "t": 420.93,
+   "d": 4.51,
+   "text": "this is information and you know what we"
+  },
+  {
+   "t": 425.44,
+   "d": 2.28,
+   "text": "expect this right this is not anything"
+  },
+  {
+   "t": 427.72,
+   "d": 2.58,
+   "text": "crazy this is in games that have game"
+  },
+  {
+   "t": 430.3,
+   "d": 2.13,
+   "text": "over States we expect you to do this"
+  },
+  {
+   "t": 432.43,
+   "d": 1.62,
+   "text": "this is something that players just kind"
+  },
+  {
+   "t": 434.05,
+   "d": 2.73,
+   "text": "of do as developers if you're here we"
+  },
+  {
+   "t": 436.78,
+   "d": 1.53,
+   "text": "have no control over this they're gonna"
+  },
+  {
+   "t": 438.31,
+   "d": 2.49,
+   "text": "do it so embrace it except that it will"
+  },
+  {
+   "t": 440.8,
+   "d": 2.43,
+   "text": "happen and no one thinks of this"
+  },
+  {
+   "t": 443.23,
+   "d": 1.68,
+   "text": "definite progress right why even this is"
+  },
+  {
+   "t": 444.91,
+   "d": 1.35,
+   "text": "so basic what am I even talking about"
+  },
+  {
+   "t": 446.26,
+   "d": 2.22,
+   "text": "this is this is a thing that we take for"
+  },
+  {
+   "t": 448.48,
+   "d": 2.91,
+   "text": "granted and so what is important about"
+  },
+  {
+   "t": 451.39,
+   "d": 1.8,
+   "text": "humans remembering their experiences"
+  },
+  {
+   "t": 453.19,
+   "d": 2.91,
+   "text": "between plays well so that is a la hold"
+  },
+  {
+   "t": 456.1,
+   "d": 1.86,
+   "text": "on actually we're gonna talk about meta"
+  },
+  {
+   "t": 457.96,
+   "d": 2.82,
+   "text": "power first now meta power is what you"
+  },
+  {
+   "t": 460.78,
+   "d": 1.29,
+   "text": "think of when you think of progression"
+  },
+  {
+   "t": 462.07,
+   "d": 2.58,
+   "text": "right this is where oh you died but you"
+  },
+  {
+   "t": 464.65,
+   "d": 1.65,
+   "text": "come back and you've got like bonus"
+  },
+  {
+   "t": 466.3,
+   "d": 2.16,
+   "text": "muscles cuz the previous person brought"
+  },
+  {
+   "t": 468.46,
+   "d": 1.41,
+   "text": "some muscles back and then that person"
+  },
+  {
+   "t": 469.87,
+   "d": 2.49,
+   "text": "goes out and that person dies but the"
+  },
+  {
+   "t": 472.36,
+   "d": 1.32,
+   "text": "next person starts with like three"
+  },
+  {
+   "t": 473.68,
+   "d": 1.92,
+   "text": "rocket launchers because so on and that"
+  },
+  {
+   "t": 475.6,
+   "d": 2.91,
+   "text": "power carries over and over yeah so"
+  },
+  {
+   "t": 478.51,
+   "d": 1.53,
+   "text": "that's cool that's the one that we think"
+  },
+  {
+   "t": 480.04,
+   "d": 1.97,
+   "text": "of as meta progress and usually it is"
+  },
+  {
+   "t": 482.01,
+   "d": 2.92,
+   "text": "straight-up kinetic or hard power right"
+  },
+  {
+   "t": 484.93,
+   "d": 1.77,
+   "text": "there stat increases you you walk out"
+  },
+  {
+   "t": 486.7,
+   "d": 2.55,
+   "text": "the door swing in bigger parts than you"
+  },
+  {
+   "t": 489.25,
+   "d": 2.19,
+   "text": "did when your previous guy happened and"
+  },
+  {
+   "t": 491.44,
+   "d": 1.92,
+   "text": "that's what kinetic power is but we also"
+  },
+  {
+   "t": 493.36,
+   "d": 2.82,
+   "text": "have soft power potential energy and"
+  },
+  {
+   "t": 496.18,
+   "d": 2.43,
+   "text": "this is stuff where you're playing an E"
+  },
+  {
+   "t": 498.61,
+   "d": 2.01,
+   "text": "chord answer and find some giant"
+  },
+  {
+   "t": 500.62,
+   "d": 1.35,
+   "text": "diamonds and you ring them back and"
+  },
+  {
+   "t": 501.97,
+   "d": 1.32,
+   "text": "they're like oh hey now the shop will"
+  },
+  {
+   "t": 503.29,
+   "d": 1.86,
+   "text": "sell like a double flute and you don't"
+  },
+  {
+   "t": 505.15,
+   "d": 2.43,
+   "text": "start with double flute but you could"
+  },
+  {
+   "t": 507.58,
+   "d": 2.37,
+   "text": "buy it and the thing about these also"
+  },
+  {
+   "t": 509.95,
+   "d": 1.56,
+   "text": "you unlock classes and games too you'll"
+  },
+  {
+   "t": 511.51,
+   "d": 2.43,
+   "text": "unlock the toast mansur and stuff after"
+  },
+  {
+   "t": 513.94,
+   "d": 1.56,
+   "text": "burning like ten pieces of bread and"
+  },
+  {
+   "t": 515.5,
+   "d": 4.56,
+   "text": "these things that's my next you'll see"
+  },
+  {
+   "t": 520.06,
+   "d": 3.54,
+   "text": "these things they're they're soft coward"
+  },
+  {
+   "t": 523.6,
+   "d": 3.33,
+   "text": "now not always but typically they're"
+  },
+  {
+   "t": 526.93,
+   "d": 2.1,
+   "text": "kind of better choices than the previous"
+  },
+  {
+   "t": 529.03,
+   "d": 2.1,
+   "text": "stuff I mean it's one thing if like you"
+  },
+  {
+   "t": 531.13,
+   "d": 1.5,
+   "text": "start with a fight or an unlock super"
+  },
+  {
+   "t": 532.63,
+   "d": 0.57,
+   "text": "ninja"
+  },
+  {
+   "t": 533.2,
+   "d": 2.25,
+   "text": "that's not usually what happens but you"
+  },
+  {
+   "t": 535.45,
+   "d": 1.5,
+   "text": "have more things to pick from more"
+  },
+  {
+   "t": 536.95,
+   "d": 1.32,
+   "text": "interesting choices and stronger"
+  },
+  {
+   "t": 538.27,
+   "d": 3.12,
+   "text": "characters and all that stuff well you"
+  },
+  {
+   "t": 541.39,
+   "d": 2.55,
+   "text": "know most players like it please boo if"
+  },
+  {
+   "t": 543.94,
+   "d": 3.57,
+   "text": "you don't like meta progress I know"
+  },
+  {
+   "t": 547.51,
+   "d": 1.71,
+   "text": "you're out there and that's cool and"
+  },
+  {
+   "t": 549.22,
+   "d": 2.1,
+   "text": "like three of you booed so I'm right"
+  },
+  {
+   "t": 551.32,
+   "d": 4.71,
+   "text": "most players dig this right and so"
+  },
+  {
+   "t": 556.03,
+   "d": 1.83,
+   "text": "you're not wrong for not liking this"
+  },
+  {
+   "t": 557.86,
+   "d": 1.41,
+   "text": "right because it's an opinion and it's"
+  },
+  {
+   "t": 559.27,
+   "d": 1.95,
+   "text": "totally cool if you're like I need games"
+  },
+  {
+   "t": 561.22,
+   "d": 1.53,
+   "text": "where I grind it out and when I'm dead"
+  },
+  {
+   "t": 562.75,
+   "d": 1.62,
+   "text": "I'm just gonna like quit forever because"
+  },
+  {
+   "t": 564.37,
+   "d": 3.21,
+   "text": "that's it and cool good that exists meta"
+  },
+  {
+   "t": 567.58,
+   "d": 3.15,
+   "text": "power in particular softens the edge of"
+  },
+  {
+   "t": 570.73,
+   "d": 2.13,
+   "text": "game over and perma death so you won't"
+  },
+  {
+   "t": 572.86,
+   "d": 3.36,
+   "text": "you died and you lost and rip ok well"
+  },
+  {
+   "t": 576.22,
+   "d": 2.13,
+   "text": "come back in right get back on the horse"
+  },
+  {
+   "t": 578.35,
+   "d": 1.83,
+   "text": "and fight some more because hey there's"
+  },
+  {
+   "t": 580.18,
+   "d": 1.62,
+   "text": "new toys right there's cool stuff and"
+  },
+  {
+   "t": 581.8,
+   "d": 2.34,
+   "text": "you don't have to feel like you know you"
+  },
+  {
+   "t": 584.14,
+   "d": 1.95,
+   "text": "you wasted your time and this is"
+  },
+  {
+   "t": 586.09,
+   "d": 1.17,
+   "text": "something that lets you kind of play"
+  },
+  {
+   "t": 587.26,
+   "d": 2.85,
+   "text": "around an experiment and oh yeah so that"
+  },
+  {
+   "t": 590.11,
+   "d": 1.61,
+   "text": "one's important right because when you"
+  },
+  {
+   "t": 591.72,
+   "d": 3.16,
+   "text": "when you have pressure in your game"
+  },
+  {
+   "t": 594.88,
+   "d": 1.74,
+   "text": "right we all developers we want pressure"
+  },
+  {
+   "t": 596.62,
+   "d": 1.83,
+   "text": "it's sometimes pressure monsters like I"
+  },
+  {
+   "t": 598.45,
+   "d": 1.92,
+   "text": "have to kill that thing first or he's"
+  },
+  {
+   "t": 600.37,
+   "d": 1.11,
+   "text": "gonna turn me into a toad"
+  },
+  {
+   "t": 601.48,
+   "d": 1.5,
+   "text": "I have to get out of this right now"
+  },
+  {
+   "t": 602.98,
+   "d": 1.71,
+   "text": "because the four underneath me is red"
+  },
+  {
+   "t": 604.69,
+   "d": 1.32,
+   "text": "and that means it's turning to fire like"
+  },
+  {
+   "t": 606.01,
+   "d": 1.01,
+   "text": "it's pressure"
+  },
+  {
+   "t": 607.02,
+   "d": 2.5,
+   "text": "we don't want constant pressure because"
+  },
+  {
+   "t": 609.52,
+   "d": 1.8,
+   "text": "that gives our players anxiety and then"
+  },
+  {
+   "t": 611.32,
+   "d": 2.46,
+   "text": "they need medicine that's not what we"
+  },
+  {
+   "t": 613.78,
+   "d": 2.22,
+   "text": "want we want pressure sometimes at other"
+  },
+  {
+   "t": 616.0,
+   "d": 2.64,
+   "text": "times we don't and so practicing and"
+  },
+  {
+   "t": 618.64,
+   "d": 2.03,
+   "text": "letting somebody play weird combinations"
+  },
+  {
+   "t": 620.67,
+   "d": 3.88,
+   "text": "if they can do that and still die early"
+  },
+  {
+   "t": 624.55,
+   "d": 1.08,
+   "text": "look at they want to try something a"
+  },
+  {
+   "t": 625.63,
+   "d": 1.53,
+   "text": "build that seems silly and it is silly"
+  },
+  {
+   "t": 627.16,
+   "d": 1.41,
+   "text": "and they get crushed but you know what"
+  },
+  {
+   "t": 628.57,
+   "d": 1.95,
+   "text": "they brought some stuff back they made"
+  },
+  {
+   "t": 630.52,
+   "d": 1.5,
+   "text": "some progress and they didn't feel like"
+  },
+  {
+   "t": 632.02,
+   "d": 2.01,
+   "text": "they wasted their time and you're not"
+  },
+  {
+   "t": 634.03,
+   "d": 1.47,
+   "text": "punished for playing around which i"
+  },
+  {
+   "t": 635.5,
+   "d": 2.22,
+   "text": "think is cool now there's dark uses of"
+  },
+  {
+   "t": 637.72,
+   "d": 1.86,
+   "text": "this right so this is actually kind of"
+  },
+  {
+   "t": 639.58,
+   "d": 1.41,
+   "text": "well we don't do this very much although"
+  },
+  {
+   "t": 640.99,
+   "d": 1.44,
+   "text": "maybe there's some mobile games that do"
+  },
+  {
+   "t": 642.43,
+   "d": 3.18,
+   "text": "I'm not sure you would play a shattered"
+  },
+  {
+   "t": 645.61,
+   "d": 1.77,
+   "text": "answer right one of the arcade shinobi"
+  },
+  {
+   "t": 647.38,
+   "d": 1.71,
+   "text": "games and you'd get pretty far into the"
+  },
+  {
+   "t": 649.09,
+   "d": 1.89,
+   "text": "game and you would die and then the game"
+  },
+  {
+   "t": 650.98,
+   "d": 1.68,
+   "text": "would say you want to continue if you do"
+  },
+  {
+   "t": 652.66,
+   "d": 2.04,
+   "text": "we're gonna give you two ninja magic"
+  },
+  {
+   "t": 654.7,
+   "d": 2.49,
+   "text": "like for one quarter you put it in and"
+  },
+  {
+   "t": 657.19,
+   "d": 2.64,
+   "text": "like great or you're playing on 1942 and"
+  },
+  {
+   "t": 659.83,
+   "d": 1.68,
+   "text": "you get blown up and then when you"
+  },
+  {
+   "t": 661.51,
+   "d": 1.38,
+   "text": "continue the games like oh we're gonna"
+  },
+  {
+   "t": 662.89,
+   "d": 2.07,
+   "text": "drop like three extra bombs and stuff"
+  },
+  {
+   "t": 664.96,
+   "d": 1.35,
+   "text": "well that's great"
+  },
+  {
+   "t": 666.31,
+   "d": 1.62,
+   "text": "because they want you to keep playing at"
+  },
+  {
+   "t": 667.93,
+   "d": 2.46,
+   "text": "the hard part because the game gets more"
+  },
+  {
+   "t": 670.39,
+   "d": 2.79,
+   "text": "quarters from you per minute when it's"
+  },
+  {
+   "t": 673.18,
+   "d": 2.22,
+   "text": "harder and at the end so the whole like"
+  },
+  {
+   "t": 675.4,
+   "d": 2.37,
+   "text": "one-credit finish mythos for mostly this"
+  },
+  {
+   "t": 677.77,
+   "d": 1.11,
+   "text": "started in Japan where it's like you"
+  },
+  {
+   "t": 678.88,
+   "d": 2.25,
+   "text": "play one credit and when you die the"
+  },
+  {
+   "t": 681.13,
+   "d": 1.53,
+   "text": "game says continue and you're like nope"
+  },
+  {
+   "t": 682.66,
+   "d": 1.47,
+   "text": "and you wait ten seconds and then you"
+  },
+  {
+   "t": 684.13,
+   "d": 1.86,
+   "text": "put a quarter in and start again you get"
+  },
+  {
+   "t": 685.99,
+   "d": 2.58,
+   "text": "more gameplay per minute that way but"
+  },
+  {
+   "t": 688.57,
+   "d": 2.34,
+   "text": "the arcade and the dirty arcade owners"
+  },
+  {
+   "t": 690.91,
+   "d": 2.19,
+   "text": "want you to keep putting coins in that's"
+  },
+  {
+   "t": 693.1,
+   "d": 2.82,
+   "text": "kind of a dark use of meta power now"
+  },
+  {
+   "t": 695.92,
+   "d": 4.92,
+   "text": "meta power also and meta power has some"
+  },
+  {
+   "t": 700.84,
+   "d": 2.37,
+   "text": "interesting other parts too everybody"
+  },
+  {
+   "t": 703.21,
+   "d": 1.65,
+   "text": "likes it except for you guys a food like"
+  },
+  {
+   "t": 704.86,
+   "d": 1.35,
+   "text": "this is the range of the kids these days"
+  },
+  {
+   "t": 706.21,
+   "d": 1.53,
+   "text": "you're gonna see it constantly right"
+  },
+  {
+   "t": 707.74,
+   "d": 2.22,
+   "text": "it's just happening I think developers"
+  },
+  {
+   "t": 709.96,
+   "d": 1.89,
+   "text": "are kind of caught on like permanents"
+  },
+  {
+   "t": 711.85,
+   "d": 1.32,
+   "text": "great but more people are gonna play the"
+  },
+  {
+   "t": 713.17,
+   "d": 1.95,
+   "text": "game and not refund it if they get to do"
+  },
+  {
+   "t": 715.12,
+   "d": 3.09,
+   "text": "something cool after they die and great"
+  },
+  {
+   "t": 718.21,
+   "d": 2.49,
+   "text": "you know that's cool we have a hundred"
+  },
+  {
+   "t": 720.7,
+   "d": 1.59,
+   "text": "percent control over this right as a"
+  },
+  {
+   "t": 722.29,
+   "d": 2.73,
+   "text": "developer all of this is knobs and"
+  },
+  {
+   "t": 725.02,
+   "d": 2.19,
+   "text": "levers you have so if you don't want any"
+  },
+  {
+   "t": 727.21,
+   "d": 1.44,
+   "text": "there's none if you want some there's"
+  },
+  {
+   "t": 728.65,
+   "d": 1.8,
+   "text": "some whatever the player can't make this"
+  },
+  {
+   "t": 730.45,
+   "d": 2.85,
+   "text": "happen unless they scum however it"
+  },
+  {
+   "t": 733.3,
+   "d": 2.61,
+   "text": "creates an additional variable set for"
+  },
+  {
+   "t": 735.91,
+   "d": 2.82,
+   "text": "game balance now some people say you"
+  },
+  {
+   "t": 738.73,
+   "d": 1.47,
+   "text": "don't need to balance stuff which is"
+  },
+  {
+   "t": 740.2,
+   "d": 1.47,
+   "text": "pretty funny actually in that last talk"
+  },
+  {
+   "t": 741.67,
+   "d": 1.29,
+   "text": "that balance doesn't need to happen I"
+  },
+  {
+   "t": 742.96,
+   "d": 1.86,
+   "text": "kind of dig that but if you do want to"
+  },
+  {
+   "t": 744.82,
+   "d": 1.44,
+   "text": "balance and you do make meta progress"
+  },
+  {
+   "t": 746.26,
+   "d": 2.43,
+   "text": "you've got to do it right or people will"
+  },
+  {
+   "t": 748.69,
+   "d": 1.95,
+   "text": "see it as a crutch or Grimes right two"
+  },
+  {
+   "t": 750.64,
+   "d": 3.27,
+   "text": "different sides of a sad spectrum what"
+  },
+  {
+   "t": 753.91,
+   "d": 1.98,
+   "text": "happens is if you're too stronk early on"
+  },
+  {
+   "t": 755.89,
+   "d": 2.79,
+   "text": "then the early game becomes a joke but"
+  },
+  {
+   "t": 758.68,
+   "d": 2.34,
+   "text": "if you get too powerful too quickly what"
+  },
+  {
+   "t": 761.02,
+   "d": 2.91,
+   "text": "ends up happening is you just like you"
+  },
+  {
+   "t": 763.93,
+   "d": 1.35,
+   "text": "walk over stuff in the beginning and"
+  },
+  {
+   "t": 765.28,
+   "d": 1.68,
+   "text": "it's kind of boring right so these are"
+  },
+  {
+   "t": 766.96,
+   "d": 1.86,
+   "text": "all level one characters but they're"
+  },
+  {
+   "t": 768.82,
+   "d": 1.65,
+   "text": "based on some amount of meta progress"
+  },
+  {
+   "t": 770.47,
+   "d": 3.81,
+   "text": "meta power particularly however if"
+  },
+  {
+   "t": 774.28,
+   "d": 2.31,
+   "text": "you're like well when the player gets to"
+  },
+  {
+   "t": 776.59,
+   "d": 1.68,
+   "text": "you know the big purple fortress at the"
+  },
+  {
+   "t": 778.27,
+   "d": 2.55,
+   "text": "end I probably died 20 times so the"
+  },
+  {
+   "t": 780.82,
+   "d": 1.5,
+   "text": "monsters are gonna have like this many"
+  },
+  {
+   "t": 782.32,
+   "d": 2.67,
+   "text": "extra fangs and so on you do that and"
+  },
+  {
+   "t": 784.99,
+   "d": 3.36,
+   "text": "somebody who's playing one run gets to"
+  },
+  {
+   "t": 788.35,
+   "d": 1.5,
+   "text": "this wall in there like why the hell are"
+  },
+  {
+   "t": 789.85,
+   "d": 2.4,
+   "text": "these monsters so Diesel oh because the"
+  },
+  {
+   "t": 792.25,
+   "d": 1.2,
+   "text": "game thinks I need to grind out some"
+  },
+  {
+   "t": 793.45,
+   "d": 1.17,
+   "text": "deaths and they just sort of like jump"
+  },
+  {
+   "t": 794.62,
+   "d": 1.62,
+   "text": "off the nearest cliff and start another"
+  },
+  {
+   "t": 796.24,
+   "d": 1.47,
+   "text": "character with the bonus and run it back"
+  },
+  {
+   "t": 797.71,
+   "d": 0.84,
+   "text": "and run it back in"
+  },
+  {
+   "t": 798.55,
+   "d": 2.7,
+   "text": "back both those things suck right you"
+  },
+  {
+   "t": 801.25,
+   "d": 2.07,
+   "text": "don't want that because it's one thing"
+  },
+  {
+   "t": 803.32,
+   "d": 1.65,
+   "text": "to not balance but those things make"
+  },
+  {
+   "t": 804.97,
+   "d": 1.77,
+   "text": "people like genuinely unhappy with their"
+  },
+  {
+   "t": 806.74,
+   "d": 5.37,
+   "text": "play so we must avoid them but now meta"
+  },
+  {
+   "t": 812.11,
+   "d": 2.58,
+   "text": "presence right the third P in knowledge"
+  },
+  {
+   "t": 814.69,
+   "d": 2.01,
+   "text": "power and presence and this is what I"
+  },
+  {
+   "t": 816.7,
+   "d": 1.95,
+   "text": "think is the good stuff I really dig"
+  },
+  {
+   "t": 818.65,
+   "d": 2.28,
+   "text": "this and what this is elements of the"
+  },
+  {
+   "t": 820.93,
+   "d": 1.92,
+   "text": "game that are affected by your actions"
+  },
+  {
+   "t": 822.85,
+   "d": 2.82,
+   "text": "as a player but don't necessarily change"
+  },
+  {
+   "t": 825.67,
+   "d": 2.88,
+   "text": "the gameplay right as developers we can"
+  },
+  {
+   "t": 828.55,
+   "d": 1.68,
+   "text": "say oh yeah hey you played you're doing"
+  },
+  {
+   "t": 830.23,
+   "d": 1.65,
+   "text": "cool stuff and we're gonna do cool stuff"
+  },
+  {
+   "t": 831.88,
+   "d": 1.68,
+   "text": "too but this isn't gonna make the game"
+  },
+  {
+   "t": 833.56,
+   "d": 2.91,
+   "text": "any easier or harder so those of you who"
+  },
+  {
+   "t": 836.47,
+   "d": 2.55,
+   "text": "boo it met a power fine this is"
+  },
+  {
+   "t": 839.02,
+   "d": 1.26,
+   "text": "something else and you may still not"
+  },
+  {
+   "t": 840.28,
+   "d": 1.47,
+   "text": "like it well I want the world to be the"
+  },
+  {
+   "t": 841.75,
+   "d": 2.82,
+   "text": "same every time totally cool but this"
+  },
+  {
+   "t": 844.57,
+   "d": 2.55,
+   "text": "gives people who are more purists or"
+  },
+  {
+   "t": 847.12,
+   "d": 1.5,
+   "text": "even people who aren't and just want to"
+  },
+  {
+   "t": 848.62,
+   "d": 2.19,
+   "text": "see neat things happen this is what we"
+  },
+  {
+   "t": 850.81,
+   "d": 1.35,
+   "text": "can do to make that happen the world"
+  },
+  {
+   "t": 852.16,
+   "d": 2.67,
+   "text": "grows with the player and she's grinding"
+  },
+  {
+   "t": 854.83,
+   "d": 1.89,
+   "text": "it out and she's in the dungeons and she"
+  },
+  {
+   "t": 856.72,
+   "d": 1.68,
+   "text": "is getting her ass kicked repeatedly and"
+  },
+  {
+   "t": 858.4,
+   "d": 1.98,
+   "text": "the game is saying thank you for doing"
+  },
+  {
+   "t": 860.38,
+   "d": 2.4,
+   "text": "this right it's cool I know everything"
+  },
+  {
+   "t": 862.78,
+   "d": 1.35,
+   "text": "sucks for you you're a pile of skulls"
+  },
+  {
+   "t": 864.13,
+   "d": 2.16,
+   "text": "but check it the things you do matter"
+  },
+  {
+   "t": 866.29,
+   "d": 3.03,
+   "text": "and we're gonna show we're gonna show"
+  },
+  {
+   "t": 869.32,
+   "d": 1.62,
+   "text": "some of that and that player feels more"
+  },
+  {
+   "t": 870.94,
+   "d": 2.58,
+   "text": "ownership over the adventure alright and"
+  },
+  {
+   "t": 873.52,
+   "d": 1.89,
+   "text": "that's important and that's important"
+  },
+  {
+   "t": 875.41,
+   "d": 2.07,
+   "text": "because whoa hold on here's an example"
+  },
+  {
+   "t": 877.48,
+   "d": 1.8,
+   "text": "of what happens I talked about caves"
+  },
+  {
+   "t": 879.28,
+   "d": 1.53,
+   "text": "occurred to me quick about it if you"
+  },
+  {
+   "t": 880.81,
+   "d": 1.77,
+   "text": "don't know caves ekkada is gamma world"
+  },
+  {
+   "t": 882.58,
+   "d": 2.61,
+   "text": "on steroids right you're in this crazy"
+  },
+  {
+   "t": 885.19,
+   "d": 2.22,
+   "text": "irradiated future and there are"
+  },
+  {
+   "t": 887.41,
+   "d": 1.62,
+   "text": "spiraling towers everywhere and there's"
+  },
+  {
+   "t": 889.03,
+   "d": 1.38,
+   "text": "no water but there's plants that taste"
+  },
+  {
+   "t": 890.41,
+   "d": 1.83,
+   "text": "like water and you can have all the arms"
+  },
+  {
+   "t": 892.24,
+   "d": 1.59,
+   "text": "you want right and this is a really"
+  },
+  {
+   "t": 893.83,
+   "d": 1.49,
+   "text": "chloro black which you can buy and play"
+  },
+  {
+   "t": 895.32,
+   "d": 2.65,
+   "text": "right now and when you're doing this you"
+  },
+  {
+   "t": 897.97,
+   "d": 2.84,
+   "text": "start in a town called Jabba Jabba and"
+  },
+  {
+   "t": 900.81,
+   "d": 2.29,
+   "text": "you walk there and you talk to the king"
+  },
+  {
+   "t": 903.1,
+   "d": 1.59,
+   "text": "of town and the king of town is like hey"
+  },
+  {
+   "t": 904.69,
+   "d": 2.16,
+   "text": "adventurer how's it going listen we got"
+  },
+  {
+   "t": 906.85,
+   "d": 1.11,
+   "text": "these water vines and they taste like"
+  },
+  {
+   "t": 907.96,
+   "d": 1.59,
+   "text": "piss and we don't know why and we can't"
+  },
+  {
+   "t": 909.55,
+   "d": 2.28,
+   "text": "drink piss so help us out there's a well"
+  },
+  {
+   "t": 911.83,
+   "d": 2.76,
+   "text": "to the north and there's a cave and go"
+  },
+  {
+   "t": 914.59,
+   "d": 1.14,
+   "text": "in there can you find out what's going"
+  },
+  {
+   "t": 915.73,
+   "d": 1.35,
+   "text": "on cuz you're an adventurer and he said"
+  },
+  {
+   "t": 917.08,
+   "d": 1.35,
+   "text": "yeah alright I got this and you go north"
+  },
+  {
+   "t": 918.43,
+   "d": 1.77,
+   "text": "and you die you come back with next"
+  },
+  {
+   "t": 920.2,
+   "d": 1.62,
+   "text": "character and you go north you owe this"
+  },
+  {
+   "t": 921.82,
+   "d": 2.43,
+   "text": "time you died deeper but eventually you"
+  },
+  {
+   "t": 924.25,
+   "d": 1.35,
+   "text": "get to the bottom of the well and"
+  },
+  {
+   "t": 925.6,
+   "d": 2.16,
+   "text": "there's a some purple critters pissing"
+  },
+  {
+   "t": 927.76,
+   "d": 1.71,
+   "text": "in the water like wow alright these are"
+  },
+  {
+   "t": 929.47,
+   "d": 1.53,
+   "text": "the guys so you beat them up you get a"
+  },
+  {
+   "t": 931.0,
+   "d": 1.31,
+   "text": "whole bunch of these guys to"
+  },
+  {
+   "t": 932.31,
+   "d": 2.08,
+   "text": "bringing the bodies back to the king of"
+  },
+  {
+   "t": 934.39,
+   "d": 1.59,
+   "text": "town you're like dude and you put the"
+  },
+  {
+   "t": 935.98,
+   "d": 2.01,
+   "text": "body down he goes dude great okay this"
+  },
+  {
+   "t": 937.99,
+   "d": 1.5,
+   "text": "is what's going on I know what those are"
+  },
+  {
+   "t": 939.49,
+   "d": 1.98,
+   "text": "those are the worst here's a clutch"
+  },
+  {
+   "t": 941.47,
+   "d": 1.17,
+   "text": "fueling item you don't realize how"
+  },
+  {
+   "t": 942.64,
+   "d": 2.88,
+   "text": "important it is and go north and talk to"
+  },
+  {
+   "t": 945.52,
+   "d": 2.04,
+   "text": "a bear and you say great and you go"
+  },
+  {
+   "t": 947.56,
+   "d": 1.35,
+   "text": "north and then in a trips you in half"
+  },
+  {
+   "t": 948.91,
+   "d": 2.52,
+   "text": "right that's the end of your run fine"
+  },
+  {
+   "t": 951.43,
+   "d": 1.8,
+   "text": "run it back start to go to the king of"
+  },
+  {
+   "t": 953.23,
+   "d": 1.83,
+   "text": "town and he says hey adventurer water"
+  },
+  {
+   "t": 955.06,
+   "d": 1.29,
+   "text": "tastes like piss and we don't know why"
+  },
+  {
+   "t": 956.35,
+   "d": 3.12,
+   "text": "and the player goes alright fine like"
+  },
+  {
+   "t": 959.47,
+   "d": 2.16,
+   "text": "you know you're starting over but the"
+  },
+  {
+   "t": 961.63,
+   "d": 1.47,
+   "text": "player knows what's up the player knows"
+  },
+  {
+   "t": 963.1,
+   "d": 2.22,
+   "text": "why the water tastes like piss mitte"
+  },
+  {
+   "t": 965.32,
+   "d": 2.1,
+   "text": "presence is the idea that the mayor"
+  },
+  {
+   "t": 967.42,
+   "d": 1.26,
+   "text": "would say hey adventurer girl how you"
+  },
+  {
+   "t": 968.68,
+   "d": 0.45,
+   "text": "doing"
+  },
+  {
+   "t": 969.13,
+   "d": 1.77,
+   "text": "listen we had a problem our water tastes"
+  },
+  {
+   "t": 970.9,
+   "d": 1.95,
+   "text": "like piss and it's because these purple"
+  },
+  {
+   "t": 972.85,
+   "d": 2.01,
+   "text": "things are peeing in the well right it's"
+  },
+  {
+   "t": 974.86,
+   "d": 2.43,
+   "text": "at the same place the same monsters the"
+  },
+  {
+   "t": 977.29,
+   "d": 1.77,
+   "text": "same concept the gameplay doesn't change"
+  },
+  {
+   "t": 979.06,
+   "d": 2.22,
+   "text": "but it kind of is a nod to the player"
+  },
+  {
+   "t": 981.28,
+   "d": 2.01,
+   "text": "saying well okay this is this is what's"
+  },
+  {
+   "t": 983.29,
+   "d": 2.4,
+   "text": "happened now that does mean the world"
+  },
+  {
+   "t": 985.69,
+   "d": 1.89,
+   "text": "becomes less static which is a design"
+  },
+  {
+   "t": 987.58,
+   "d": 2.1,
+   "text": "choice and maybe you don't want that but"
+  },
+  {
+   "t": 989.68,
+   "d": 1.83,
+   "text": "it's kind of harmless in terms of"
+  },
+  {
+   "t": 991.51,
+   "d": 2.67,
+   "text": "gameplay and I think that rules I think"
+  },
+  {
+   "t": 994.18,
+   "d": 1.44,
+   "text": "there's so much that we could do with"
+  },
+  {
+   "t": 995.62,
+   "d": 1.89,
+   "text": "this right you play a game and there's a"
+  },
+  {
+   "t": 997.51,
+   "d": 1.65,
+   "text": "bar that serves drinks and after your"
+  },
+  {
+   "t": 999.16,
+   "d": 1.35,
+   "text": "favorite hero and like why do they do"
+  },
+  {
+   "t": 1000.51,
+   "d": 1.74,
+   "text": "this right so oh well maybe he just"
+  },
+  {
+   "t": 1002.25,
+   "d": 1.41,
+   "text": "drank a lot there and got drunk and"
+  },
+  {
+   "t": 1003.66,
+   "d": 2.37,
+   "text": "puked and they remember that or maybe he"
+  },
+  {
+   "t": 1006.03,
+   "d": 1.98,
+   "text": "was a hero and saved down good job right"
+  },
+  {
+   "t": 1008.01,
+   "d": 1.86,
+   "text": "who knows what he did maybe he sold a"
+  },
+  {
+   "t": 1009.87,
+   "d": 1.47,
+   "text": "bunch of stuff to the town maybe he"
+  },
+  {
+   "t": 1011.34,
+   "d": 3.09,
+   "text": "rescued the barkeep son he remembers and"
+  },
+  {
+   "t": 1014.43,
+   "d": 1.95,
+   "text": "he'll name something after that you'll"
+  },
+  {
+   "t": 1016.38,
+   "d": 1.47,
+   "text": "find a tribute in the town if you want"
+  },
+  {
+   "t": 1017.85,
+   "d": 3.33,
+   "text": "player names in your world great"
+  },
+  {
+   "t": 1021.18,
+   "d": 1.95,
+   "text": "sometimes you don't because players"
+  },
+  {
+   "t": 1023.13,
+   "d": 1.71,
+   "text": "always name things dumb and that means"
+  },
+  {
+   "t": 1024.84,
+   "d": 1.8,
+   "text": "your world has you know lost some of its"
+  },
+  {
+   "t": 1026.64,
+   "d": 3.03,
+   "text": "theme that's fine if you want that NPC's"
+  },
+  {
+   "t": 1029.67,
+   "d": 2.64,
+   "text": "show up who say they're related to"
+  },
+  {
+   "t": 1032.31,
+   "d": 1.89,
+   "text": "things you did now their job is the same"
+  },
+  {
+   "t": 1034.2,
+   "d": 3.99,
+   "text": "right so the mayor of some town shows up"
+  },
+  {
+   "t": 1038.19,
+   "d": 1.35,
+   "text": "and it's like well actually I'm named"
+  },
+  {
+   "t": 1039.54,
+   "d": 3.75,
+   "text": "after a previous character because I"
+  },
+  {
+   "t": 1043.29,
+   "d": 1.65,
+   "text": "have a reason to be and this thing"
+  },
+  {
+   "t": 1044.94,
+   "d": 1.44,
+   "text": "happened and I'm out for revenge and I'm"
+  },
+  {
+   "t": 1046.38,
+   "d": 2.13,
+   "text": "the mayor and I clean up this city the"
+  },
+  {
+   "t": 1048.51,
+   "d": 1.17,
+   "text": "mayor always says they want to clean up"
+  },
+  {
+   "t": 1049.68,
+   "d": 1.59,
+   "text": "this city right doesn't matter who it is"
+  },
+  {
+   "t": 1051.27,
+   "d": 1.89,
+   "text": "but now there's a reason that ties to"
+  },
+  {
+   "t": 1053.16,
+   "d": 1.83,
+   "text": "what you did and even though the"
+  },
+  {
+   "t": 1054.99,
+   "d": 2.55,
+   "text": "gameplay it ruins the same things are"
+  },
+  {
+   "t": 1057.54,
+   "d": 1.41,
+   "text": "changing they're happening and you are"
+  },
+  {
+   "t": 1058.95,
+   "d": 1.77,
+   "text": "putting your imprint on this world I"
+  },
+  {
+   "t": 1060.72,
+   "d": 2.31,
+   "text": "mean we could do so much stuff with this"
+  },
+  {
+   "t": 1063.03,
+   "d": 1.2,
+   "text": "right there's there's a whole bunch of"
+  },
+  {
+   "t": 1064.23,
+   "d": 1.14,
+   "text": "things that"
+  },
+  {
+   "t": 1065.37,
+   "d": 3.36,
+   "text": "take data from one play the next play is"
+  },
+  {
+   "t": 1068.73,
+   "d": 1.7,
+   "text": "different the next play is more familiar"
+  },
+  {
+   "t": 1070.43,
+   "d": 2.91,
+   "text": "but it isn't changed in the gameplay"
+  },
+  {
+   "t": 1073.34,
+   "d": 3.13,
+   "text": "however if you want to do both I mean"
+  },
+  {
+   "t": 1076.47,
+   "d": 2.31,
+   "text": "holy crap right we can go nuts and this"
+  },
+  {
+   "t": 1078.78,
+   "d": 1.44,
+   "text": "is something that dungeon man's does to"
+  },
+  {
+   "t": 1080.22,
+   "d": 1.74,
+   "text": "some degree and I can always do it more"
+  },
+  {
+   "t": 1081.96,
+   "d": 2.01,
+   "text": "because I want players to have met a"
+  },
+  {
+   "t": 1083.97,
+   "d": 1.62,
+   "text": "power progression in Dungeon Mans to"
+  },
+  {
+   "t": 1085.59,
+   "d": 2.22,
+   "text": "some degree but I also want players to"
+  },
+  {
+   "t": 1087.81,
+   "d": 2.28,
+   "text": "feel like it's a campaign that they're"
+  },
+  {
+   "t": 1090.09,
+   "d": 1.86,
+   "text": "part of when they die in the field"
+  },
+  {
+   "t": 1091.95,
+   "d": 1.86,
+   "text": "a dungeon shows up and the person who"
+  },
+  {
+   "t": 1093.81,
+   "d": 2.49,
+   "text": "killed your hero is now the boss and"
+  },
+  {
+   "t": 1096.3,
+   "d": 1.05,
+   "text": "it's kind of broken because if like the"
+  },
+  {
+   "t": 1097.35,
+   "d": 1.65,
+   "text": "scrappiest monster got the last hit in"
+  },
+  {
+   "t": 1099.0,
+   "d": 2.4,
+   "text": "that scrub monsters the king and he's"
+  },
+  {
+   "t": 1101.4,
+   "d": 1.59,
+   "text": "like a level 2 monster a little 5 zone"
+  },
+  {
+   "t": 1102.99,
+   "d": 1.41,
+   "text": "like all the other monsters are way"
+  },
+  {
+   "t": 1104.4,
+   "d": 1.68,
+   "text": "stronger than the king but he's got the"
+  },
+  {
+   "t": 1106.08,
+   "d": 2.16,
+   "text": "big parts because he beat the hero so"
+  },
+  {
+   "t": 1108.24,
+   "d": 1.77,
+   "text": "they'll listen to him right and there's"
+  },
+  {
+   "t": 1110.01,
+   "d": 2.16,
+   "text": "a lot of stuff that you know we have"
+  },
+  {
+   "t": 1112.17,
+   "d": 2.07,
+   "text": "lots of gameplay systems especially in"
+  },
+  {
+   "t": 1114.24,
+   "d": 1.83,
+   "text": "the game worlds we have that are large"
+  },
+  {
+   "t": 1116.07,
+   "d": 3.09,
+   "text": "open explorable areas we can combine"
+  },
+  {
+   "t": 1119.16,
+   "d": 2.19,
+   "text": "these things an oh boy oh boy like this"
+  },
+  {
+   "t": 1121.35,
+   "d": 1.95,
+   "text": "is great for the player and it creates"
+  },
+  {
+   "t": 1123.3,
+   "d": 2.16,
+   "text": "this world all its challenges and it"
+  },
+  {
+   "t": 1125.46,
+   "d": 1.47,
+   "text": "rises and falls with the heroes"
+  },
+  {
+   "t": 1126.93,
+   "d": 1.38,
+   "text": "adventure your upstair downs that"
+  },
+  {
+   "t": 1128.31,
+   "d": 1.62,
+   "text": "changed things and that is important"
+  },
+  {
+   "t": 1129.93,
+   "d": 3.9,
+   "text": "right isn't it I mean what who cares"
+  },
+  {
+   "t": 1133.83,
+   "d": 1.38,
+   "text": "right this is weird like why are we even"
+  },
+  {
+   "t": 1135.21,
+   "d": 3.12,
+   "text": "talking about this ok ok cool like"
+  },
+  {
+   "t": 1138.33,
+   "d": 2.28,
+   "text": "humans remember their experiences"
+  },
+  {
+   "t": 1140.61,
+   "d": 2.1,
+   "text": "between plays and players feel ownership"
+  },
+  {
+   "t": 1142.71,
+   "d": 1.47,
+   "text": "over the adventure and there's this"
+  },
+  {
+   "t": 1144.18,
+   "d": 2.49,
+   "text": "whole world and it's a campaign and it's"
+  },
+  {
+   "t": 1146.67,
+   "d": 2.55,
+   "text": "your campaign and all of this is the"
+  },
+  {
+   "t": 1149.22,
+   "d": 2.79,
+   "text": "meta game that wraps around one game to"
+  },
+  {
+   "t": 1152.01,
+   "d": 1.28,
+   "text": "the next to the next and actually"
+  },
+  {
+   "t": 1153.29,
+   "d": 3.28,
+   "text": "surprise this is not a talked about meta"
+  },
+  {
+   "t": 1156.57,
+   "d": 1.59,
+   "text": "progression you need to talk about"
+  },
+  {
+   "t": 1158.16,
+   "d": 2.4,
+   "text": "storytelling because the tools that met"
+  },
+  {
+   "t": 1160.56,
+   "d": 2.13,
+   "text": "a progression give us our tools of"
+  },
+  {
+   "t": 1162.69,
+   "d": 2.7,
+   "text": "storytelling all of it all of it and I"
+  },
+  {
+   "t": 1165.39,
+   "d": 1.8,
+   "text": "know that power makes some people booing"
+  },
+  {
+   "t": 1167.19,
+   "d": 1.26,
+   "text": "that's cool but all these things"
+  },
+  {
+   "t": 1168.45,
+   "d": 2.22,
+   "text": "together we can do some cool stuff"
+  },
+  {
+   "t": 1170.67,
+   "d": 2.01,
+   "text": "because player stories are meta stories"
+  },
+  {
+   "t": 1172.68,
+   "d": 2.52,
+   "text": "right developers we give the players a"
+  },
+  {
+   "t": 1175.2,
+   "d": 2.1,
+   "text": "grand campaign do this do that do it"
+  },
+  {
+   "t": 1177.3,
+   "d": 1.83,
+   "text": "over again cool and then the players"
+  },
+  {
+   "t": 1179.13,
+   "d": 2.7,
+   "text": "give other players the highlights but"
+  },
+  {
+   "t": 1181.83,
+   "d": 1.74,
+   "text": "when they talk to each other when you"
+  },
+  {
+   "t": 1183.57,
+   "d": 1.41,
+   "text": "guys talk you don't go like this you"
+  },
+  {
+   "t": 1184.98,
+   "d": 2.76,
+   "text": "don't go hey I played rogue and I got to"
+  },
+  {
+   "t": 1187.74,
+   "d": 1.71,
+   "text": "level 3 and then some monster stabbed me"
+  },
+  {
+   "t": 1189.45,
+   "d": 1.11,
+   "text": "in the butt and that sucked"
+  },
+  {
+   "t": 1190.56,
+   "d": 2.01,
+   "text": "and then I played a rogue and it's a"
+  },
+  {
+   "t": 1192.57,
+   "d": 2.1,
+   "text": "little v and then a bat-like bit me a"
+  },
+  {
+   "t": 1194.67,
+   "d": 3.03,
+   "text": "bunch and I died but then I played rogue"
+  },
+  {
+   "t": 1197.7,
+   "d": 2.07,
+   "text": "I got the level 2 in this time I know"
+  },
+  {
+   "t": 1199.77,
+   "d": 1.65,
+   "text": "you don't do that right we talked about"
+  },
+  {
+   "t": 1201.42,
+   "d": 2.61,
+   "text": "dude playing a road and this crazy stuff"
+  },
+  {
+   "t": 1204.03,
+   "d": 1.62,
+   "text": "happens and you give them the highlight"
+  },
+  {
+   "t": 1205.65,
+   "d": 2.04,
+   "text": "reel and that's meta right because all"
+  },
+  {
+   "t": 1207.69,
+   "d": 2.01,
+   "text": "your games are tied together and that"
+  },
+  {
+   "t": 1209.7,
+   "d": 2.04,
+   "text": "meta knowledge is there and so what we"
+  },
+  {
+   "t": 1211.74,
+   "d": 1.92,
+   "text": "have is they remember please remember"
+  },
+  {
+   "t": 1213.66,
+   "d": 2.19,
+   "text": "the fun the challenge the highs and the"
+  },
+  {
+   "t": 1215.85,
+   "d": 2.01,
+   "text": "lows the elation of victory that aw crap"
+  },
+  {
+   "t": 1217.86,
+   "d": 3.69,
+   "text": "defeat all of that stuff they helped"
+  },
+  {
+   "t": 1221.55,
+   "d": 2.46,
+   "text": "create it right developers cool we did a"
+  },
+  {
+   "t": 1224.01,
+   "d": 1.86,
+   "text": "good job to think the players are doing"
+  },
+  {
+   "t": 1225.87,
+   "d": 1.95,
+   "text": "the work right they're dying they're"
+  },
+  {
+   "t": 1227.82,
+   "d": 1.02,
+   "text": "putting in the time they're making"
+  },
+  {
+   "t": 1228.84,
+   "d": 1.41,
+   "text": "decisions they're thinking about you're"
+  },
+  {
+   "t": 1230.25,
+   "d": 2.19,
+   "text": "gonna care about the stuff you made holy"
+  },
+  {
+   "t": 1232.44,
+   "d": 2.37,
+   "text": "crap what a great feeling somebody gives"
+  },
+  {
+   "t": 1234.81,
+   "d": 1.89,
+   "text": "a damn about your work even if it's even"
+  },
+  {
+   "t": 1236.7,
+   "d": 1.77,
+   "text": "as a pirated it right they're gonna get"
+  },
+  {
+   "t": 1238.47,
+   "d": 1.29,
+   "text": "out there they're gonna play it and they"
+  },
+  {
+   "t": 1239.76,
+   "d": 2.37,
+   "text": "say oh man wow I'm diggin this and they"
+  },
+  {
+   "t": 1242.13,
+   "d": 1.56,
+   "text": "should pay you if it's money don't"
+  },
+  {
+   "t": 1243.69,
+   "d": 3.21,
+   "text": "pirate games but they care they care and"
+  },
+  {
+   "t": 1246.9,
+   "d": 1.71,
+   "text": "that means we're making people happy and"
+  },
+  {
+   "t": 1248.61,
+   "d": 1.53,
+   "text": "that's really good and all this stuff"
+  },
+  {
+   "t": 1250.14,
+   "d": 2.04,
+   "text": "this meta progression power presence of"
+  },
+  {
+   "t": 1252.18,
+   "d": 3.18,
+   "text": "knowledge that combines to make a grand"
+  },
+  {
+   "t": 1255.36,
+   "d": 3.03,
+   "text": "story and it ties everything together if"
+  },
+  {
+   "t": 1258.39,
+   "d": 1.58,
+   "text": "you into plates and I'll tell you what"
+  },
+  {
+   "t": 1259.97,
+   "d": 2.29,
+   "text": "nobody does this better than roguelikes"
+  },
+  {
+   "t": 1262.26,
+   "d": 2.1,
+   "text": "right we are lucky we have these tools"
+  },
+  {
+   "t": 1264.36,
+   "d": 2.22,
+   "text": "we can make cool stuff that carries over"
+  },
+  {
+   "t": 1266.58,
+   "d": 2.91,
+   "text": "we're not tied to static things we're"
+  },
+  {
+   "t": 1269.49,
+   "d": 1.47,
+   "text": "not tied to triple-a games where they"
+  },
+  {
+   "t": 1270.96,
+   "d": 1.8,
+   "text": "have well here's a bunch of like really"
+  },
+  {
+   "t": 1272.76,
+   "d": 1.92,
+   "text": "expensive assets like some dude spent"
+  },
+  {
+   "t": 1274.68,
+   "d": 1.32,
+   "text": "three months of his life making this"
+  },
+  {
+   "t": 1276.0,
+   "d": 2.01,
+   "text": "statue and it has to be here and nothing"
+  },
+  {
+   "t": 1278.01,
+   "d": 1.32,
+   "text": "can change it that person's gonna kill"
+  },
+  {
+   "t": 1279.33,
+   "d": 3.24,
+   "text": "himself like we can't do that and static"
+  },
+  {
+   "t": 1282.57,
+   "d": 1.47,
+   "text": "roads are great and that's fun but we"
+  },
+  {
+   "t": 1284.04,
+   "d": 1.92,
+   "text": "have these players who'll make stories"
+  },
+  {
+   "t": 1285.96,
+   "d": 2.55,
+   "text": "that anything you guys are had a hand it"
+  },
+  {
+   "t": 1288.51,
+   "d": 1.38,
+   "text": "doesn't matter what you're playing some"
+  },
+  {
+   "t": 1289.89,
+   "d": 1.44,
+   "text": "how the fiction ties together in your"
+  },
+  {
+   "t": 1291.33,
+   "d": 1.5,
+   "text": "head and you get really excited on"
+  },
+  {
+   "t": 1292.83,
+   "d": 1.74,
+   "text": "forums on discord even just talking"
+  },
+  {
+   "t": 1294.57,
+   "d": 1.32,
+   "text": "about how cool that is"
+  },
+  {
+   "t": 1295.89,
+   "d": 3.27,
+   "text": "and us row black devs holy cow we are"
+  },
+  {
+   "t": 1299.16,
+   "d": 2.16,
+   "text": "mining the deepest levels are proceed"
+  },
+  {
+   "t": 1301.32,
+   "d": 1.62,
+   "text": "want to learn about that stuff we're"
+  },
+  {
+   "t": 1302.94,
+   "d": 1.08,
+   "text": "going to eat it up when people talk"
+  },
+  {
+   "t": 1304.02,
+   "d": 2.58,
+   "text": "about it here we research it we practice"
+  },
+  {
+   "t": 1306.6,
+   "d": 1.59,
+   "text": "it we get it wrong more often than we"
+  },
+  {
+   "t": 1308.19,
+   "d": 1.71,
+   "text": "get it right but we get a right holy"
+  },
+  {
+   "t": 1309.9,
+   "d": 1.83,
+   "text": "and we're gonna keep diving that"
+  },
+  {
+   "t": 1311.73,
+   "d": 1.59,
+   "text": "and doing it and so yeah developers can"
+  },
+  {
+   "t": 1313.32,
+   "d": 2.58,
+   "text": "we tell stories of course but we have to"
+  },
+  {
+   "t": 1315.9,
+   "d": 2.61,
+   "text": "listen right and that's important"
+  },
+  {
+   "t": 1318.51,
+   "d": 2.64,
+   "text": "because no matter how rad your pretend"
+  },
+  {
+   "t": 1321.15,
+   "d": 1.29,
+   "text": "stuff is I don't care how many Jason's"
+  },
+  {
+   "t": 1322.44,
+   "d": 2.34,
+   "text": "you put into one body storytelling is"
+  },
+  {
+   "t": 1324.78,
+   "d": 2.73,
+   "text": "only the best when the player"
+  },
+  {
+   "t": 1327.51,
+   "d": 1.59,
+   "text": "contributes to the output and if you"
+  },
+  {
+   "t": 1329.1,
+   "d": 0.94,
+   "text": "don't have that"
+  },
+  {
+   "t": 1330.04,
+   "d": 1.53,
+   "text": "you're missing something but we're"
+  },
+  {
+   "t": 1331.57,
+   "d": 1.77,
+   "text": "missing it if we don't do it and and"
+  },
+  {
+   "t": 1333.34,
+   "d": 2.4,
+   "text": "that has to be a key ingredient we've"
+  },
+  {
+   "t": 1335.74,
+   "d": 2.04,
+   "text": "got to do this and and game makers are"
+  },
+  {
+   "t": 1337.78,
+   "d": 0.51,
+   "text": "storytellers"
+  },
+  {
+   "t": 1338.29,
+   "d": 2.34,
+   "text": "awesome right but game players are"
+  },
+  {
+   "t": 1340.63,
+   "d": 2.01,
+   "text": "storytellers too and they tell each"
+  },
+  {
+   "t": 1342.64,
+   "d": 1.83,
+   "text": "other stories and they tell they tell"
+  },
+  {
+   "t": 1344.47,
+   "d": 1.56,
+   "text": "they tell themselves stories right they"
+  },
+  {
+   "t": 1346.03,
+   "d": 1.8,
+   "text": "get to do something and we give them the"
+  },
+  {
+   "t": 1347.83,
+   "d": 2.76,
+   "text": "seeds and they plant it and they make it"
+  },
+  {
+   "t": 1350.59,
+   "d": 2.13,
+   "text": "happen and I'll tell you what this is a"
+  },
+  {
+   "t": 1352.72,
+   "d": 2.61,
+   "text": "story as old as our kids right meta"
+  },
+  {
+   "t": 1355.33,
+   "d": 1.8,
+   "text": "progression has been around since the"
+  },
+  {
+   "t": 1357.13,
+   "d": 1.89,
+   "text": "beginning and what's happening here is"
+  },
+  {
+   "t": 1359.02,
+   "d": 2.04,
+   "text": "that okay here's an example back home"
+  },
+  {
+   "t": 1361.06,
+   "d": 2.22,
+   "text": "there's a really cool place called Full"
+  },
+  {
+   "t": 1363.28,
+   "d": 2.55,
+   "text": "Tilt Full Tilt is an ice cream parlor"
+  },
+  {
+   "t": 1365.83,
+   "d": 1.32,
+   "text": "with some of the best ice cream if"
+  },
+  {
+   "t": 1367.15,
+   "d": 1.86,
+   "text": "you're in Seattle don't go to Molly"
+  },
+  {
+   "t": 1369.01,
+   "d": 0.36,
+   "text": "moons"
+  },
+  {
+   "t": 1369.37,
+   "d": 3.27,
+   "text": "it's tourist crap never go like they"
+  },
+  {
+   "t": 1372.64,
+   "d": 1.71,
+   "text": "pump a scent and the scent gets you"
+  },
+  {
+   "t": 1374.35,
+   "d": 1.56,
+   "text": "because it's full of like secret dirty"
+  },
+  {
+   "t": 1375.91,
+   "d": 1.65,
+   "text": "pheromones that ice cream is is garbage"
+  },
+  {
+   "t": 1377.56,
+   "d": 2.49,
+   "text": "go to Full Tilt if you like frozen"
+  },
+  {
+   "t": 1380.05,
+   "d": 1.41,
+   "text": "custard go to old-school frozen custard"
+  },
+  {
+   "t": 1381.46,
+   "d": 2.34,
+   "text": "there's a great place but in this arcade"
+  },
+  {
+   "t": 1383.8,
+   "d": 1.44,
+   "text": "there are pinball games there are lots"
+  },
+  {
+   "t": 1385.24,
+   "d": 2.4,
+   "text": "of pinball games and pinball fun and"
+  },
+  {
+   "t": 1387.64,
+   "d": 1.83,
+   "text": "there's like 20 games up here and so"
+  },
+  {
+   "t": 1389.47,
+   "d": 2.01,
+   "text": "when the renewer and these pinball games"
+  },
+  {
+   "t": 1391.48,
+   "d": 1.53,
+   "text": "have high-score tables and you can put"
+  },
+  {
+   "t": 1393.01,
+   "d": 1.32,
+   "text": "in more than just three letters right"
+  },
+  {
+   "t": 1394.33,
+   "d": 3.63,
+   "text": "but at full tilt keV is the boss right"
+  },
+  {
+   "t": 1397.96,
+   "d": 1.53,
+   "text": "keV is Grand Champion as so many of"
+  },
+  {
+   "t": 1399.49,
+   "d": 2.04,
+   "text": "these are things and then you see like"
+  },
+  {
+   "t": 1401.53,
+   "d": 1.44,
+   "text": "second place and sometimes it's this"
+  },
+  {
+   "t": 1402.97,
+   "d": 6.3,
+   "text": "right so high score tables persist"
+  },
+  {
+   "t": 1409.27,
+   "d": 2.19,
+   "text": "between game overs which means since"
+  },
+  {
+   "t": 1411.46,
+   "d": 2.34,
+   "text": "Space Invader we've had meta progression"
+  },
+  {
+   "t": 1413.8,
+   "d": 1.83,
+   "text": "we've had meta knowledge we've had meta"
+  },
+  {
+   "t": 1415.63,
+   "d": 2.73,
+   "text": "data going from game to game and arcades"
+  },
+  {
+   "t": 1418.36,
+   "d": 1.77,
+   "text": "that mattered because when you play it"
+  },
+  {
+   "t": 1420.13,
+   "d": 2.1,
+   "text": "the high score changed the way you"
+  },
+  {
+   "t": 1422.23,
+   "d": 1.77,
+   "text": "played when you were close to it and you"
+  },
+  {
+   "t": 1424.0,
+   "d": 1.95,
+   "text": "wanted to beat it you got tense you are"
+  },
+  {
+   "t": 1425.95,
+   "d": 1.62,
+   "text": "more nervous and you would be before and"
+  },
+  {
+   "t": 1427.57,
+   "d": 1.5,
+   "text": "you think about what you did and you"
+  },
+  {
+   "t": 1429.07,
+   "d": 2.22,
+   "text": "want to beat that score you're not just"
+  },
+  {
+   "t": 1431.29,
+   "d": 0.48,
+   "text": "playing for fun"
+  },
+  {
+   "t": 1431.77,
+   "d": 1.32,
+   "text": "you're playing for blood right you"
+  },
+  {
+   "t": 1433.09,
+   "d": 1.71,
+   "text": "playing for calves blood and that's why"
+  },
+  {
+   "t": 1434.8,
+   "d": 2.34,
+   "text": "and that's what you're doing and and so"
+  },
+  {
+   "t": 1437.14,
+   "d": 2.7,
+   "text": "that only happens because of that meta"
+  },
+  {
+   "t": 1439.84,
+   "d": 1.71,
+   "text": "progression there right and the players"
+  },
+  {
+   "t": 1441.55,
+   "d": 1.89,
+   "text": "are doing it that's not something that"
+  },
+  {
+   "t": 1443.44,
+   "d": 1.53,
+   "text": "we are saying they do the players make"
+  },
+  {
+   "t": 1444.97,
+   "d": 2.28,
+   "text": "that happen and so that is why I think"
+  },
+  {
+   "t": 1447.25,
+   "d": 2.49,
+   "text": "meta freshen rules there you go that's"
+  },
+  {
+   "t": 1449.74,
+   "d": 5.12,
+   "text": "it that's all I got thank you"
+  },
+  {
+   "t": 1460.84,
+   "d": 6.22,
+   "text": "okay okay okay yeah we have some time"
+  },
+  {
+   "t": 1467.06,
+   "d": 2.7,
+   "text": "for questions say one have any questions"
+  },
+  {
+   "t": 1469.76,
+   "d": 2.16,
+   "text": "in the back in the back oh yeah"
+  },
+  {
+   "t": 1471.92,
+   "d": 8.76,
+   "text": "double back what do you got I'm kind of"
+  },
+  {
+   "t": 1480.68,
+   "d": 2.15,
+   "text": "curious what you think of the idea of"
+  },
+  {
+   "t": 1482.83,
+   "d": 3.91,
+   "text": "using medic progression not to add power"
+  },
+  {
+   "t": 1486.74,
+   "d": 2.45,
+   "text": "to subsequent runs but to add fun"
+  },
+  {
+   "t": 1489.19,
+   "d": 2.32,
+   "text": "because like to me that feels like maybe"
+  },
+  {
+   "t": 1491.51,
+   "d": 3.24,
+   "text": "it might be locking off a potential fund"
+  },
+  {
+   "t": 1494.75,
+   "d": 2.22,
+   "text": "that players could be having sooner and"
+  },
+  {
+   "t": 1496.97,
+   "d": 2.19,
+   "text": "like if they if they're not persistent"
+  },
+  {
+   "t": 1499.16,
+   "d": 2.16,
+   "text": "or enough to like stick with is like oh"
+  },
+  {
+   "t": 1501.32,
+   "d": 3.06,
+   "text": "let me just not have that fun ever if"
+  },
+  {
+   "t": 1504.38,
+   "d": 2.4,
+   "text": "they can't manage to unlock it right so"
+  },
+  {
+   "t": 1506.78,
+   "d": 3.66,
+   "text": "I hate fun yeah I love fun so let me"
+  },
+  {
+   "t": 1510.44,
+   "d": 1.32,
+   "text": "think of an example off top I had"
+  },
+  {
+   "t": 1511.76,
+   "d": 2.43,
+   "text": "imagine that you have a game and when"
+  },
+  {
+   "t": 1514.19,
+   "d": 1.25,
+   "text": "your character gets to level six"
+  },
+  {
+   "t": 1515.44,
+   "d": 2.44,
+   "text": "somebody shows up with a ticket to cool"
+  },
+  {
+   "t": 1517.88,
+   "d": 1.68,
+   "text": "town and cool town has a really new"
+  },
+  {
+   "t": 1519.56,
+   "d": 1.77,
+   "text": "dungeon and new types of stuff and if"
+  },
+  {
+   "t": 1521.33,
+   "d": 1.38,
+   "text": "you never get to six you never get there"
+  },
+  {
+   "t": 1522.71,
+   "d": 2.13,
+   "text": "and maybe what we're saying is like meta"
+  },
+  {
+   "t": 1524.84,
+   "d": 2.58,
+   "text": "presence not power can get you to a"
+  },
+  {
+   "t": 1527.42,
+   "d": 1.56,
+   "text": "point where the person shows up with"
+  },
+  {
+   "t": 1528.98,
+   "d": 2.94,
+   "text": "pity and say hey I've been watching you"
+  },
+  {
+   "t": 1531.92,
+   "d": 1.77,
+   "text": "and the twelve copies of you in this"
+  },
+  {
+   "t": 1533.69,
+   "d": 1.17,
+   "text": "pile of Bones and why don't you have a"
+  },
+  {
+   "t": 1534.86,
+   "d": 1.35,
+   "text": "ticket to cool town right and it scales"
+  },
+  {
+   "t": 1536.21,
+   "d": 2.07,
+   "text": "it down I think that's great I think"
+  },
+  {
+   "t": 1538.28,
+   "d": 2.07,
+   "text": "giving players the opportunity to"
+  },
+  {
+   "t": 1540.35,
+   "d": 1.77,
+   "text": "experience new content especially if"
+  },
+  {
+   "t": 1542.12,
+   "d": 1.98,
+   "text": "it's free of power creep is really"
+  },
+  {
+   "t": 1544.1,
+   "d": 1.32,
+   "text": "powerful that's one of the things I"
+  },
+  {
+   "t": 1545.42,
+   "d": 1.92,
+   "text": "believe that this can do for us for"
+  },
+  {
+   "t": 1547.34,
+   "d": 1.08,
+   "text": "developers at least I think that's"
+  },
+  {
+   "t": 1548.42,
+   "d": 1.7,
+   "text": "that's really something we can deliver"
+  },
+  {
+   "t": 1550.12,
+   "d": 6.7,
+   "text": "thank you tiny idea suggestion um P"
+  },
+  {
+   "t": 1556.82,
+   "d": 4.17,
+   "text": "knowledge perception oh nice you're"
+  },
+  {
+   "t": 1560.99,
+   "d": 0.6,
+   "text": "welcome"
+  },
+  {
+   "t": 1561.59,
+   "d": 4.44,
+   "text": "do you have a question miss I like I"
+  },
+  {
+   "t": 1566.03,
+   "d": 2.21,
+   "text": "like peanuts"
+  },
+  {
+   "t": 1568.24,
+   "d": 5.77,
+   "text": "all right so I'm one of the pores so you"
+  },
+  {
+   "t": 1574.01,
+   "d": 2.78,
+   "text": "mentioned that your game does have some"
+  },
+  {
+   "t": 1576.79,
+   "d": 4.03,
+   "text": "meta power right can you talk about how"
+  },
+  {
+   "t": 1580.82,
+   "d": 4.35,
+   "text": "you have attempted to avoid the grind or"
+  },
+  {
+   "t": 1585.17,
+   "d": 3.18,
+   "text": "crutch that you mentioned absolutely so"
+  },
+  {
+   "t": 1588.35,
+   "d": 1.71,
+   "text": "for one thing I know that everyone in"
+  },
+  {
+   "t": 1590.06,
+   "d": 1.8,
+   "text": "the room has bought 10 copies of dungeon"
+  },
+  {
+   "t": 1591.86,
+   "d": 1.47,
+   "text": "Man's you're all familiar I understand"
+  },
+  {
+   "t": 1593.33,
+   "d": 2.52,
+   "text": "that that's great and also tell you just"
+  },
+  {
+   "t": 1595.85,
+   "d": 2.85,
+   "text": "in case there is an Iron Man's mode ok"
+  },
+  {
+   "t": 1598.7,
+   "d": 1.74,
+   "text": "great so you get none of that stuff and"
+  },
+  {
+   "t": 1600.44,
+   "d": 1.65,
+   "text": "when you die the whole world fails and"
+  },
+  {
+   "t": 1602.09,
+   "d": 3.6,
+   "text": "nobody remembers you cool what I tried"
+  },
+  {
+   "t": 1605.69,
+   "d": 4.13,
+   "text": "to do was create a sort of difficulty"
+  },
+  {
+   "t": 1609.82,
+   "d": 3.97,
+   "text": "curve that at some point relied on gear"
+  },
+  {
+   "t": 1613.79,
+   "d": 2.64,
+   "text": "and ability in terms of skills now it"
+  },
+  {
+   "t": 1616.43,
+   "d": 2.04,
+   "text": "takes a long time of playing dungeon"
+  },
+  {
+   "t": 1618.47,
+   "d": 1.14,
+   "text": "man's and dying and you have to get"
+  },
+  {
+   "t": 1619.61,
+   "d": 1.77,
+   "text": "pretty far if you want to get skills"
+  },
+  {
+   "t": 1621.38,
+   "d": 2.76,
+   "text": "early you need to do a lot of work it"
+  },
+  {
+   "t": 1624.14,
+   "d": 2.19,
+   "text": "can happen but usually what happens is"
+  },
+  {
+   "t": 1626.33,
+   "d": 1.65,
+   "text": "you start with a couple more stat points"
+  },
+  {
+   "t": 1627.98,
+   "d": 1.92,
+   "text": "and a little bit of better gear which is"
+  },
+  {
+   "t": 1629.9,
+   "d": 1.62,
+   "text": "good it carries you through the"
+  },
+  {
+   "t": 1631.52,
+   "d": 1.68,
+   "text": "beginning gives you confidence to go off"
+  },
+  {
+   "t": 1633.2,
+   "d": 2.34,
+   "text": "and make a mistake and die but that is"
+  },
+  {
+   "t": 1635.54,
+   "d": 1.68,
+   "text": "different from saying you know here's"
+  },
+  {
+   "t": 1637.22,
+   "d": 1.44,
+   "text": "this power creep that's gonna crush"
+  },
+  {
+   "t": 1638.66,
+   "d": 2.46,
+   "text": "everything the gear that you get is kind"
+  },
+  {
+   "t": 1641.12,
+   "d": 2.22,
+   "text": "of capped I mean if you want to build a"
+  },
+  {
+   "t": 1643.34,
+   "d": 1.83,
+   "text": "so there is a point like you mentioned"
+  },
+  {
+   "t": 1645.17,
+   "d": 1.92,
+   "text": "with disguise brokenness you play the"
+  },
+  {
+   "t": 1647.09,
+   "d": 1.29,
+   "text": "game enough and you start beating it a"
+  },
+  {
+   "t": 1648.38,
+   "d": 2.46,
+   "text": "bunch you fill your bank with crazy loot"
+  },
+  {
+   "t": 1650.84,
+   "d": 2.22,
+   "text": "and if you want to like swag out the"
+  },
+  {
+   "t": 1653.06,
+   "d": 1.62,
+   "text": "gate covered in giant shoulder pads and"
+  },
+  {
+   "t": 1654.68,
+   "d": 2.13,
+   "text": "such you can do it right but that's a"
+  },
+  {
+   "t": 1656.81,
+   "d": 2.88,
+   "text": "player choice I also tried to create a"
+  },
+  {
+   "t": 1659.69,
+   "d": 3.36,
+   "text": "system where enemies get higher and"
+  },
+  {
+   "t": 1663.05,
+   "d": 2.22,
+   "text": "higher elemental damage powers alright"
+  },
+  {
+   "t": 1665.27,
+   "d": 1.26,
+   "text": "so they're gonna throw fireballs and"
+  },
+  {
+   "t": 1666.53,
+   "d": 2.34,
+   "text": "bleeding balls and and that's terrible"
+  },
+  {
+   "t": 1668.87,
+   "d": 3.69,
+   "text": "ice balls and other stuff and you can't"
+  },
+  {
+   "t": 1672.56,
+   "d": 1.41,
+   "text": "just shake those off unless you have"
+  },
+  {
+   "t": 1673.97,
+   "d": 1.71,
+   "text": "some ability to mitigate it and those"
+  },
+  {
+   "t": 1675.68,
+   "d": 1.65,
+   "text": "mitigation abilities exist in the world"
+  },
+  {
+   "t": 1677.33,
+   "d": 2.43,
+   "text": "and have to get them so their gear their"
+  },
+  {
+   "t": 1679.76,
+   "d": 2.49,
+   "text": "scrolls and such and you don't really"
+  },
+  {
+   "t": 1682.25,
+   "d": 1.23,
+   "text": "have those from the start and you can"
+  },
+  {
+   "t": 1683.48,
+   "d": 1.29,
+   "text": "put all the strength you want in your"
+  },
+  {
+   "t": 1684.77,
+   "d": 1.59,
+   "text": "stats and science helps a little bit but"
+  },
+  {
+   "t": 1686.36,
+   "d": 3.06,
+   "text": "otherwise you need to get that so I feel"
+  },
+  {
+   "t": 1689.42,
+   "d": 2.64,
+   "text": "like that gave you a chance to say even"
+  },
+  {
+   "t": 1692.06,
+   "d": 1.26,
+   "text": "if you come out strong there's still a"
+  },
+  {
+   "t": 1693.32,
+   "d": 2.22,
+   "text": "challenge there it's that sort of like"
+  },
+  {
+   "t": 1695.54,
+   "d": 3.77,
+   "text": "the mid game - thank you"
+  },
+  {
+   "t": 1704.55,
+   "d": 1.33,
+   "text": "Thanks"
+  },
+  {
+   "t": 1705.88,
+   "d": 3.15,
+   "text": "hey in your talk one thing that I was"
+  },
+  {
+   "t": 1709.03,
+   "d": 2.7,
+   "text": "thinking a lot about was that so a new"
+  },
+  {
+   "t": 1711.73,
+   "d": 1.68,
+   "text": "player and overwatch the game is a lot"
+  },
+  {
+   "t": 1713.41,
+   "d": 2.49,
+   "text": "more forgiving to like how much damage"
+  },
+  {
+   "t": 1715.9,
+   "d": 2.37,
+   "text": "you take and how good like the auto aim"
+  },
+  {
+   "t": 1718.27,
+   "d": 4.71,
+   "text": "is and so it seems like there is a split"
+  },
+  {
+   "t": 1722.98,
+   "d": 1.47,
+   "text": "side to this in a multiplayer world"
+  },
+  {
+   "t": 1724.45,
+   "d": 3.06,
+   "text": "where if I'm keV my perception is that I"
+  },
+  {
+   "t": 1727.51,
+   "d": 2.43,
+   "text": "got there on my own and when keV sucks"
+  },
+  {
+   "t": 1729.94,
+   "d": 2.34,
+   "text": "finally beats me it was like that person"
+  },
+  {
+   "t": 1732.28,
+   "d": 2.52,
+   "text": "just totally like it was the meta game"
+  },
+  {
+   "t": 1734.8,
+   "d": 2.52,
+   "text": "that got me if that got that person over"
+  },
+  {
+   "t": 1737.32,
+   "d": 2.61,
+   "text": "the edge unfair so how do you think"
+  },
+  {
+   "t": 1739.93,
+   "d": 0.93,
+   "text": "about what's the right way to think"
+  },
+  {
+   "t": 1740.86,
+   "d": 2.79,
+   "text": "about balancing this in a sort of not"
+  },
+  {
+   "t": 1743.65,
+   "d": 1.92,
+   "text": "necessarily a multiplayer game but in a"
+  },
+  {
+   "t": 1745.57,
+   "d": 2.04,
+   "text": "multiplayer world sure in a place where"
+  },
+  {
+   "t": 1747.61,
+   "d": 2.04,
+   "text": "there's a high scoreboard right okay so"
+  },
+  {
+   "t": 1749.65,
+   "d": 1.92,
+   "text": "for one thing the nuclear option is when"
+  },
+  {
+   "t": 1751.57,
+   "d": 1.59,
+   "text": "you make a big patch nukes leaderboards"
+  },
+  {
+   "t": 1753.16,
+   "d": 0.84,
+   "text": "right that's fair enough"
+  },
+  {
+   "t": 1754.0,
+   "d": 2.31,
+   "text": "and so Diablo has been doing that since"
+  },
+  {
+   "t": 1756.31,
+   "d": 2.13,
+   "text": "Diablo 2 there's a ladder system and"
+  },
+  {
+   "t": 1758.44,
+   "d": 2.01,
+   "text": "okay here's your ego fresh characters"
+  },
+  {
+   "t": 1760.45,
+   "d": 1.77,
+   "text": "get as high as you can without dying"
+  },
+  {
+   "t": 1762.22,
+   "d": 2.19,
+   "text": "eventually somebody's the best and then"
+  },
+  {
+   "t": 1764.41,
+   "d": 1.02,
+   "text": "when the next patch comes out and"
+  },
+  {
+   "t": 1765.43,
+   "d": 2.46,
+   "text": "changes the meta right you you restart"
+  },
+  {
+   "t": 1767.89,
+   "d": 1.44,
+   "text": "everything clears out so there's that"
+  },
+  {
+   "t": 1769.33,
+   "d": 2.91,
+   "text": "level if somebody feels like they earned"
+  },
+  {
+   "t": 1772.24,
+   "d": 2.04,
+   "text": "their way to the top and then someone"
+  },
+  {
+   "t": 1774.28,
+   "d": 1.44,
+   "text": "else would beat them cheese their way to"
+  },
+  {
+   "t": 1775.72,
+   "d": 3.09,
+   "text": "the top are they just salty number one"
+  },
+  {
+   "t": 1778.81,
+   "d": 1.53,
+   "text": "like is it just salt right do they feel"
+  },
+  {
+   "t": 1780.34,
+   "d": 1.38,
+   "text": "the same way the next morning that's a"
+  },
+  {
+   "t": 1781.72,
+   "d": 1.98,
+   "text": "question two second did the developer"
+  },
+  {
+   "t": 1783.7,
+   "d": 1.95,
+   "text": "screw up right do we actually do"
+  },
+  {
+   "t": 1785.65,
+   "d": 2.46,
+   "text": "something that patched in a way to make"
+  },
+  {
+   "t": 1788.11,
+   "d": 1.41,
+   "text": "that character stronger and we didn't"
+  },
+  {
+   "t": 1789.52,
+   "d": 2.13,
+   "text": "realize it crap okay now they're gonna"
+  },
+  {
+   "t": 1791.65,
+   "d": 1.89,
+   "text": "clean house and somebody who got their"
+  },
+  {
+   "t": 1793.54,
+   "d": 1.35,
+   "text": "way to the top the old fashioned way"
+  },
+  {
+   "t": 1794.89,
+   "d": 2.55,
+   "text": "like feels dunked on by somebody who"
+  },
+  {
+   "t": 1797.44,
+   "d": 1.53,
+   "text": "just used the person with the spammy gun"
+  },
+  {
+   "t": 1798.97,
+   "d": 1.35,
+   "text": "yeah that can happen and that's a"
+  },
+  {
+   "t": 1800.32,
+   "d": 2.31,
+   "text": "developer mistake so to defend against"
+  },
+  {
+   "t": 1802.63,
+   "d": 1.53,
+   "text": "it we want to make sure we push out"
+  },
+  {
+   "t": 1804.16,
+   "d": 2.73,
+   "text": "things that don't change the balance so"
+  },
+  {
+   "t": 1806.89,
+   "d": 1.89,
+   "text": "much but if we do we want to make sure"
+  },
+  {
+   "t": 1808.78,
+   "d": 1.74,
+   "text": "okay here's a new chance to start over"
+  },
+  {
+   "t": 1810.52,
+   "d": 2.46,
+   "text": "and whoever keV was at the end of season"
+  },
+  {
+   "t": 1812.98,
+   "d": 1.53,
+   "text": "whatever can get a really special hat"
+  },
+  {
+   "t": 1814.51,
+   "d": 1.92,
+   "text": "with more hats on top of it and it's"
+  },
+  {
+   "t": 1816.43,
+   "d": 2.43,
+   "text": "great it has no power ability but look"
+  },
+  {
+   "t": 1818.86,
+   "d": 1.14,
+   "text": "how cool that is and then we start over"
+  },
+  {
+   "t": 1820.0,
+   "d": 1.17,
+   "text": "again right that's what that's what"
+  },
+  {
+   "t": 1821.17,
+   "d": 4.29,
+   "text": "happened to keV anyone else yes ma'am a"
+  },
+  {
+   "t": 1825.46,
+   "d": 1.62,
+   "text": "microphone will appear in your hand"
+  },
+  {
+   "t": 1827.08,
+   "d": 3.15,
+   "text": "shortly thank you no running around like"
+  },
+  {
+   "t": 1830.23,
+   "d": 1.31,
+   "text": "this"
+  },
+  {
+   "t": 1831.54,
+   "d": 3.19,
+   "text": "so as a net heck player I consider the"
+  },
+  {
+   "t": 1834.73,
+   "d": 2.61,
+   "text": "spoiler sort of part of the game so how"
+  },
+  {
+   "t": 1837.34,
+   "d": 1.8,
+   "text": "and that seems like it falls into the"
+  },
+  {
+   "t": 1839.14,
+   "d": 3.09,
+   "text": "knowledge category of sort of meta game"
+  },
+  {
+   "t": 1842.23,
+   "d": 3.09,
+   "text": "experience right what what do you think"
+  },
+  {
+   "t": 1845.32,
+   "d": 1.85,
+   "text": "about documentation as part of this"
+  },
+  {
+   "t": 1847.17,
+   "d": 2.44,
+   "text": "framework or how do you think developers"
+  },
+  {
+   "t": 1849.61,
+   "d": 7.26,
+   "text": "can can use the occupation to kind of"
+  },
+  {
+   "t": 1856.87,
+   "d": 1.71,
+   "text": "make the game more fun or to integrate"
+  },
+  {
+   "t": 1858.58,
+   "d": 2.31,
+   "text": "that into their design sure Oh a"
+  },
+  {
+   "t": 1860.89,
+   "d": 1.8,
+   "text": "developer's integrated into the design"
+  },
+  {
+   "t": 1862.69,
+   "d": 3.75,
+   "text": "okay so net hacks a weird case because"
+  },
+  {
+   "t": 1866.44,
+   "d": 2.1,
+   "text": "the spoilers are so arcane that some of"
+  },
+  {
+   "t": 1868.54,
+   "d": 1.32,
+   "text": "it you you can't even figure out the"
+  },
+  {
+   "t": 1869.86,
+   "d": 1.35,
+   "text": "trial and error right I mean maybe some"
+  },
+  {
+   "t": 1871.21,
+   "d": 1.26,
+   "text": "of it most of it you can but somebody"
+  },
+  {
+   "t": 1872.47,
+   "d": 2.97,
+   "text": "can that's a weird case when I think"
+  },
+  {
+   "t": 1875.44,
+   "d": 1.86,
+   "text": "about what I want players to learn and"
+  },
+  {
+   "t": 1877.3,
+   "d": 3.21,
+   "text": "how they figure stuff out in a game like"
+  },
+  {
+   "t": 1880.51,
+   "d": 1.59,
+   "text": "okay so like an MMO World of Warcraft"
+  },
+  {
+   "t": 1882.1,
+   "d": 1.92,
+   "text": "you fight a boss and the boss is full of"
+  },
+  {
+   "t": 1884.02,
+   "d": 1.35,
+   "text": "clever techniques he's got like four"
+  },
+  {
+   "t": 1885.37,
+   "d": 0.78,
+   "text": "phases"
+  },
+  {
+   "t": 1886.15,
+   "d": 2.28,
+   "text": "he's got ads he's got like ads on top of"
+  },
+  {
+   "t": 1888.43,
+   "d": 1.71,
+   "text": "ads you can be fire there's cone circles"
+  },
+  {
+   "t": 1890.14,
+   "d": 1.92,
+   "text": "stuff you play and you figure it out by"
+  },
+  {
+   "t": 1892.06,
+   "d": 1.71,
+   "text": "dying or you go up to convince the boss"
+  },
+  {
+   "t": 1893.77,
+   "d": 1.47,
+   "text": "you wipe in the first three seconds what"
+  },
+  {
+   "t": 1895.24,
+   "d": 1.2,
+   "text": "what happened you do it again and again"
+  },
+  {
+   "t": 1896.44,
+   "d": 2.43,
+   "text": "and again we can't do that in row blanks"
+  },
+  {
+   "t": 1898.87,
+   "d": 2.67,
+   "text": "right hard bosses at the end of dungeons"
+  },
+  {
+   "t": 1901.54,
+   "d": 2.13,
+   "text": "if you want you to figure them out we"
+  },
+  {
+   "t": 1903.67,
+   "d": 1.62,
+   "text": "can't make them so ridiculous that you"
+  },
+  {
+   "t": 1905.29,
+   "d": 1.32,
+   "text": "have to learn by dying because screw"
+  },
+  {
+   "t": 1906.61,
+   "d": 1.92,
+   "text": "that and we shouldn't make them so"
+  },
+  {
+   "t": 1908.53,
+   "d": 1.68,
+   "text": "ridiculous that you need spoilers to do"
+  },
+  {
+   "t": 1910.21,
+   "d": 3.54,
+   "text": "it however if somebody wants to look up"
+  },
+  {
+   "t": 1913.75,
+   "d": 2.04,
+   "text": "those spoilers they can learn things"
+  },
+  {
+   "t": 1915.79,
+   "d": 2.82,
+   "text": "that are kind of broken if they want and"
+  },
+  {
+   "t": 1918.61,
+   "d": 1.65,
+   "text": "maybe use that to their advantage and"
+  },
+  {
+   "t": 1920.26,
+   "d": 2.4,
+   "text": "have extra fun doing it now I'm not sure"
+  },
+  {
+   "t": 1922.66,
+   "d": 1.65,
+   "text": "I would do this myself but I know that"
+  },
+  {
+   "t": 1924.31,
+   "d": 1.47,
+   "text": "conceptually you can say well there's a"
+  },
+  {
+   "t": 1925.78,
+   "d": 1.08,
+   "text": "bunch of stuff you can do to make this"
+  },
+  {
+   "t": 1926.86,
+   "d": 2.58,
+   "text": "really sick broken build it's not"
+  },
+  {
+   "t": 1929.44,
+   "d": 2.07,
+   "text": "obvious to the player but if you look at"
+  },
+  {
+   "t": 1931.51,
+   "d": 2.25,
+   "text": "the spoilers and you pick up this egg"
+  },
+  {
+   "t": 1933.76,
+   "d": 1.35,
+   "text": "and then you juggle the egg and then you"
+  },
+  {
+   "t": 1935.11,
+   "d": 1.2,
+   "text": "say the word and then you rub it on"
+  },
+  {
+   "t": 1936.31,
+   "d": 1.86,
+   "text": "something untoward like cool now you get"
+  },
+  {
+   "t": 1938.17,
+   "d": 1.68,
+   "text": "this power and then it's broken and now"
+  },
+  {
+   "t": 1939.85,
+   "d": 2.04,
+   "text": "the spoiler has made some fun for you if"
+  },
+  {
+   "t": 1941.89,
+   "d": 1.83,
+   "text": "you consider you know crushing"
+  },
+  {
+   "t": 1943.72,
+   "d": 1.53,
+   "text": "everything without a thought fund which"
+  },
+  {
+   "t": 1945.25,
+   "d": 2.34,
+   "text": "some people do other people see that and"
+  },
+  {
+   "t": 1947.59,
+   "d": 1.26,
+   "text": "they're like well this breaks the game"
+  },
+  {
+   "t": 1948.85,
+   "d": 1.98,
+   "text": "now this makes it too easy and they"
+  },
+  {
+   "t": 1950.83,
+   "d": 1.68,
+   "text": "didn't want to see the spoilers so"
+  },
+  {
+   "t": 1952.51,
+   "d": 1.5,
+   "text": "that's a whole bunch of player choice"
+  },
+  {
+   "t": 1954.01,
+   "d": 2.76,
+   "text": "and I don't believe that spoilers should"
+  },
+  {
+   "t": 1956.77,
+   "d": 2.04,
+   "text": "be mandatory I know even in Dungeon"
+  },
+  {
+   "t": 1958.81,
+   "d": 1.95,
+   "text": "Man's there's some stuff that is close"
+  },
+  {
+   "t": 1960.76,
+   "d": 1.44,
+   "text": "to mandatory spoilers you can pick up"
+  },
+  {
+   "t": 1962.2,
+   "d": 2.55,
+   "text": "the clues in game but I did a bad job"
+  },
+  {
+   "t": 1964.75,
+   "d": 2.04,
+   "text": "and I learned from that games you can do"
+  },
+  {
+   "t": 1966.79,
+   "d": 1.92,
+   "text": "better but I didn't want to make"
+  },
+  {
+   "t": 1968.71,
+   "d": 1.98,
+   "text": "somebody say you have to go online to"
+  },
+  {
+   "t": 1970.69,
+   "d": 3.69,
+   "text": "figure this out anyone else because"
+  },
+  {
+   "t": 1974.38,
+   "d": 2.22,
+   "text": "lunch is happening and maybe not anyone"
+  },
+  {
+   "t": 1976.6,
+   "d": 3.54,
+   "text": "else cool oh yeah I asked I got one more"
+  },
+  {
+   "t": 1980.14,
+   "d": 3.51,
+   "text": "thing speaking of food there is a"
+  },
+  {
+   "t": 1983.65,
+   "d": 2.7,
+   "text": "charity drive starting I think next week"
+  },
+  {
+   "t": 1986.35,
+   "d": 2.91,
+   "text": "right 17 November stop the hunger"
+  },
+  {
+   "t": 1989.26,
+   "d": 1.92,
+   "text": "o'clock is something where real people"
+  },
+  {
+   "t": 1991.18,
+   "d": 2.52,
+   "text": "go into the real world and fight hunger"
+  },
+  {
+   "t": 1993.7,
+   "d": 2.22,
+   "text": "in their real communities and get"
+  },
+  {
+   "t": 1995.92,
+   "d": 1.65,
+   "text": "rewarded with the key to a video game"
+  },
+  {
+   "t": 1997.57,
+   "d": 1.74,
+   "text": "which they can play and go die in a"
+  },
+  {
+   "t": 1999.31,
+   "d": 1.71,
+   "text": "dungeon and last year there were about"
+  },
+  {
+   "t": 2001.02,
+   "d": 2.49,
+   "text": "25 developers who pitched in keys to"
+  },
+  {
+   "t": 2003.51,
+   "d": 1.92,
+   "text": "their games to help if you're a dev and"
+  },
+  {
+   "t": 2005.43,
+   "d": 1.53,
+   "text": "you want to get in on this talk to me if"
+  },
+  {
+   "t": 2006.96,
+   "d": 1.35,
+   "text": "you're a player and you're interested in"
+  },
+  {
+   "t": 2008.31,
+   "d": 2.22,
+   "text": "more information about this talk to me"
+  },
+  {
+   "t": 2010.53,
+   "d": 2.28,
+   "text": "this launches next week last year we had"
+  },
+  {
+   "t": 2012.81,
+   "d": 1.86,
+   "text": "a lot of success in getting food into"
+  },
+  {
+   "t": 2014.67,
+   "d": 1.56,
+   "text": "the hands of people who really need it"
+  },
+  {
+   "t": 2016.23,
+   "d": 1.32,
+   "text": "in the real world in their real"
+  },
+  {
+   "t": 2017.55,
+   "d": 1.74,
+   "text": "community because if you think starving"
+  },
+  {
+   "t": 2019.29,
+   "d": 2.94,
+   "text": "to death sucks in a game starving to"
+  },
+  {
+   "t": 2022.23,
+   "d": 1.74,
+   "text": "death in like the real world probably"
+  },
+  {
+   "t": 2023.97,
+   "d": 1.26,
+   "text": "sucks more I don't know I haven't done"
+  },
+  {
+   "t": 2025.23,
+   "d": 1.71,
+   "text": "it yet but I think if something pretty"
+  },
+  {
+   "t": 2026.94,
+   "d": 1.5,
+   "text": "bad and we can fight that with our"
+  },
+  {
+   "t": 2028.44,
+   "d": 1.44,
+   "text": "charity and our coolness so that is"
+  },
+  {
+   "t": 2029.88,
+   "d": 1.71,
+   "text": "happening starting next week thank you"
+  },
+  {
+   "t": 2031.59,
+   "d": 3.66,
+   "text": "for letting me advertise that you guys"
+  },
+  {
+   "t": 2035.25,
+   "d": 2.96,
+   "text": "are the best thank you"
+  }
+ ]
+}

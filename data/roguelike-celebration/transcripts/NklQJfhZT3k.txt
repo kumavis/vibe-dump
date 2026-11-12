@@ -1,0 +1,124 @@
+Cezar Capacle: Enhancing Narrative Through Randomness and Complications
+Speaker: Cezar Capacle
+https://www.youtube.com/watch?v=NklQJfhZT3k
+Year: 2024   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:03] ALEXEI: Next up we have Cezar Capacle who is a Brazilian table top designer. He has been creating games since 2016 and dedicated full time to creating games for the last three years releasing over 30 games which is very impressive. Known for light rules and corky mechanics and after getting recognition into the community they have been translated into eight different languages. Lots of fun stuff to check out. Is here to talk about "Enhancing Narrative Through Randomness and Complications." I am excited for this as a cross-knowledge sharing from table top into roguelikes CEZAR: Thanks for having me. Thanks, guys.
+
+## Welcome
+
+[0:01:01] Pleasure being here and thanks to the organizers for the invitation. I am a table top designer so I am excited to share insight from the pen and paper side of game design. The topic today is "Enhancing Narrative Through Randomness and Complications." We have a lot of cover so let's jump right in.
+
+## Railroad vs Sandbox
+
+[0:01:31] If you are familiar with table top RPGs one of the many multiple ways that we can analyze how RPG adventures are conducted is dividing them between railroad or sandbox. Those terms mean generally -- they have different interpretations but generally it means pre-established events that unfold in a set sequence. So there is a clear past to the story. Players move along this path. There is little deviation from the plot points that have been planned. In the other hand we have sandbox adventures that are like the open world approach where players have the freedom to interact with the world however they chose. The stories depends on the interaction and what they choose to interact with. There is more flexibility. Regardless of which approach
+
+## Two Assumptions
+
+[0:02:30] you chose, there are two assumptions that work for both of them. There are key things. There is a predefined world with existing lure, fractions, and ongoing events. It is a living breathing world created before gameplay starts. The second traditional assumption is that there is a game master which is a person different responsibilities from the other players which is responsibility for preparing everything. The adventure, the world, block points, or populate the world with MPC locations and everything regardless of if it is railroad or a sandbox. Those two assumptions are traditionally considered the case usually. Now,
+
+## Our Approach
+
+[0:03:23] in the games I design and enjoy and many other people also do, we tend to challenge these two traditional consumptions. We have an anti-canon approach with no predefined lure. Lure is created, developed, and experienced as we play. There is no world building. Perhaps brush strokes and that's it. Also, I tend to enjoy more GM-less games which there is no single person for prepping the world so the game doesn't rely on an intelligent being bringing outside knowledge into the game to clarify and fill out blank spots. Everything is generated and decided within the game itself. And together collaboratively amongst all players. How is that possible? One of the
+
+## The Oracle
+
+[0:04:26] tools we use is called the Oracle. The Oracle is mechanical and it answers questions that a game master would typically handle. Simple yes or no questions, for example. We arrive at a town. Is it raining? Yes or no. Or do I recognize this person? If you don't have this preset, you have to have a tool to answer those questions. You will either roll dice, draw cards, modified by probabilities or likelihood and get a yes or no answer. Now, there are also complex questions that can't be answered with yes and no. There are open-ended questions like what, where, why and how that you have to have different tools to answer that. The Oracle uses prompts or randomly selected words that work like tarot carts. They don't have predefined interpretation and rely on the players
+
+[0:05:31] using their imagination and context to create answers on the fly without someone who holds all of the truth to the game. A classic example is what's in the chest? You stumble upon a chest
+
+## Whats in the Chest
+
+[0:05:51] and under a traditional setting the GM would be responsible for that. If it wasn't prepared in advanced, they would reply on tables, treasure tables or specific tables for that dudgeon. They rely on participation meaning you have to anticipate all interactions that players have to your world and perhaps have a dedicated table for each one of those circumstances which can be open ended Oracles are used instead because they don't rely on those assumptions because you can use those random worlds. Let me give you an example. What's in the chest. One way to approach
+
+## In Context
+
+[0:06:46] this is what mythic game master emulator, one of the original systems to play GM-less defines as meaning tables meaning you will run using a D-100 dice and combine these two world do is interpret the context of the story. What's in the chest here. I roll heal and fear. There is a healing potion that removes the fear condition you can say. That's fine. If you were considering the context of this story and perhaps your character is afraid of mimics and you know the monster that takes the shape of the object especially chests. You open the chest and there is nothing inside. Heal and fear could mean in the context of this specific storyline, the fact you open the chest and nothing bad happened to you, it kind of helped you overcome your fear of mimics. It
+
+[0:07:52] is tied more to the specific narrative of your character, your party, and of your adventure specifically. That's the power of random words used in context as a definition tool. One
+
+## Random Encounters
+
+[0:08:12] might say creating everything on the fly, and creating -- is all based on random encounters and random worlds. We will generate a scenario with situations that don't stretch together a series of undefined events with no cohesion and chaotic mass as a result. From my experience that's not what happens really. That's because we as human beings have a tendency to find patterns
+
+## Cognitive Biases
+
+[0:08:50] in everything. The mind's ability which in the real world can be seen as cognitive biases that can be very harmful in real world situations are actually helpful in role-playing games when you are creating everything as you go along because you can rely on thing like the tendency of the human brain to perceive patterns and connections in unrelated data and conformation bias which is the tendency to interpret information in a way that confirms existing beliefs or expectations. When we are faced with random Oracle results or encounters we tend to weave them into a cohesive narrative similar to how we interpret definition tools. Everything that seems like random stuff
+
+[0:09:50] when integrated back into the narrative, using human nature and relying on this behavior, we tend to create cohesive worlds and even be surprised our own definitions and interpretations
+
+## The Sweet Spot
+
+[0:10:09] of those random encounters and scenario. The sweet spot for me is offering a balance between surprise and confirming expectations. Oracles should provide responses that break away from the things we expect and confirm expectations at the same time to confirm the coherence within the story we are developing. When you reach that sweet spot that you go of course that's the answer for that. That's why I found this chest here. That's why she recognized me. It is a small surprise but it feels like you are foreshadowed that revelation in the past even though you are creating the answer at the very moment. This gives the player a sense of satisfaction and cleverness
+
+[0:11:16] because you were able to connect all these facts and come up to this conclusion that can be both surprising and also fulfill the expectation of a possible shadow created from other random events you rolled previously in your narrative. So what I mean to say here is that random is different
+
+## Random is different from meaningless
+
+[0:11:37] from meaningless. A randomly generated world is not meaningless. With our ability to create patterns we can craft compelling narratives even if we create them as playing. If we refer back to the elements we introduce and create connections these events create a cohesive world in the end. This approach often leads to more interesting outcomes that we could even have written without these tools. They can be more surprising, different, and less predictable. Now without
+
+## Without a game master
+
+[0:12:17] a game master, there is no one to push the story forward, or decide what happens next. We have interesting elements being created by the Oracles but players still need move the narrative along. In a typical RPGs players to look there GM and ask what happens next? Without this person, how do we ensure that story progresses and the players stay engaged and know what to do? I like
+
+## Fail Forward
+
+[0:12:53] doing this by complications and most specifically the concept of fail forward which is where even failures push the story forward often creating new avenues to be explored. Stories thrive on drama which is built from conflict. Conflicts arise when characters don't get exactly what they want. Fail forward is a way to ensure that even when players fail a test or a role the narrative continues instead of offering stop block. Complications don't stop progress. Instead they offer narrative paths. This concept has become a significant development in more modern RPGs that maintain those this momentum avoiding dead ends. Conflict resolution in RPGs used to be
+
+## Avoiding Dead Ends
+
+[0:13:57] binary. You role a dice, often add modifiers, and have to meet or beat a target number or difficulty rating, however you may call it. Success means you get things you want and failure means you don't. In many cases those failures lead to blockage in the story, right? For example, you are trying to pick a lock. You will roll over picking a lock and you fail and the story stalls. What happens next? Without the game master we need tools to push the story forward. With this binary system, there are many instances in which the results were kind of dull. You either walk away with success, or you hit a dead end with a fill area. It breaks the momentum of the narrative. Now,
+
+## Partial Success
+
+[0:14:54] with partial successes that have been popularized by the apocalypse world games and hundreds of variations that have been created, although mind you, that was not first game to use it but probably the most popular one nowadays, you have this new middle ground of results which is the partial success. In this case, you would roll the traditional six-sided dice and add modifiers. On a six or less, it is a miss. A miss is not that nothing happens. Something happens that you didn't want to happen. So failure means it is not what you wanted. For example, pick a lock, trying to pick a lock, and you alert the guards or practice the tools. 7-9 is a partial success where you get what you want but there is a cost, compromise or complication. You pick the lock but lose time
+
+[0:15:59] and find an enemy behind the door as you open it. 10 plus is a full success where you achieve the goal and sometimes with an ad benefit like you pick the lock and find something valuable or avoid a potential danger. For me the 7-9 range is the goldy lock zone of the partial
+
+## Indiana Jones Effect
+
+[0:16:24] success. This is what drives the story forward. I call this the Indiana Jones effect. You get what you want but someone needs another complication and you keep the action moving forward. Resolving one conflict creates the next. You move from one obstacle to the other without halting the story. After the first initial push of the inciting incident, you rely on these roles to make sure the story moves forward without the need to inject anything else. Statistically players in the 7-9 range most often creating a balance of getting the satisfaction and the stakes of the complication. You neither waltz away with success nor come to a dead end with a complete failure.
+
+## Limitations of Complications
+
+[0:17:31] However, those complications and partial successes can get very tiring very fast and have informed the ways I design games but the majority of my games have partial success. After you use them for a while they can become taxing after long sessions. About one third of your results land in the partial success range. You have to constantly creatively come up with new complications and new story paths. It can become a little repetitive or predictable like relying to default outcomes like you get this but you get hurt in the process. Or it can get overly complex. You keep adding layers and layers of threats and story paths to a point that you don't even recognize what was the original storyline that you were following. Your mission has been deviated so far from the original
+
+[0:18:34] task you don't even recognize it any more. You can reply on those using the random words I showed you affordable care act have a dedicated list of the predefined complications. However, I want to show here a middle ground approach you have a dedicated Oracle that lies in between random words and specific predetermined complications. I deskilled six words. Break, harm, lose, escalate, drain, and expose and coupled them with a few keywords to interpret those outcomes that give you guidance
+
+[0:19:38] in ways you can create engaging complications but don't fix you into a predefined narrative. For example, you are picking the lock. Your role escalates suspicion or tension. You can say that I am messing with the key mere. And we narrate a cut seen showing that the guards hear a noise and say that's probably nothing. You have two advantages here. One you create complications that you couldn't have thought without the use of this tool and second you can get a break and do not add complications that completely deviates the story to another direction. In this case, the example I gave, you can keep going forward in the direction that you have but you know that there is
+
+[0:20:39] a rising tension on the horizon. A looming threat that might put at-risk the story or mission you are following. It avoids repetitiveness but offers a way to keep the main narrative going forward.
+
+## Using Procedures
+
+[0:21:01] I talk about Oracles to offer inspiration and complications to push the story forward. However, there are tools, isolated tools. They need a structure to function smoothly. For me, this is where procedures come in. I advocate for established procedures in table top RPGs because they create a framework for what I like to call structured randomness. Procedures guide players on when and how to use those tools like Oracles and complication tables. So there is clarity and consistency in gameplay. Sometimes I even include flow charts like this one. I start here and frame
+
+## FL Flowchart
+
+[0:21:45] the scene you are in. You decide what kind of complication arises, you decide on your approach, and then you roll to see what happens if there are paths that go in a different direction. You conclude the seen and then you start over creating a new challenge or a new scenario. This allows for players playing without a game master to look at the narrative and progress the narrative even when they think they don't know what to do next because there is this structure there to back them. Now, there is resistance somehow still in the table top RPG community to structure procedures because they can seem to be restrictive or similar to a board game like experience. RPGs are not supposed to be freedom of choice and you can do whatever you want. Providing a fixed structure procedure
+
+[0:22:49] structure like that wouldn't compromise the open ended free form spirit of role-playing games -- no, this concern stems from the misunderstanding that those procedures predetermine the story beats or plot points in a specific order. This is not the case. We are not talking about a railroad where everything is preplanned or predictable. This experience is not going to be a pre-set series of events that players just follow. No. Instead the procedures work on the mechanical level not on the story level and guide you on how and when to use those shares to ensure the gameplay is lose and moving forward. They don't detect story beats. Instead this structure support a variety of narratives and keep things moving. When the procedure mechanisms are running in the background, the players have a freer or more diverse storytelling experience
+
+[0:23:55] not a more constricted one from my experience. You can play the stories, focus on the stories, and if at any moment you feel like you don't know what should happen next, you look at the mechanics and see I can inject an Oracle there determine what's the motivation of this NPC or I failed this role, how can I insert a complication here to raise the stakes of the story, for example. So to summarize, I believe that Oracles, when well crafted with evoc TV curated
+
+## Summary
+
+[0:24:35] words combined with the human ability to create patterns and connections, allow players to work beyond their expectations and consumptions and create interesting, cohesive worlds without the need of a pre-set pre-defined gigantic lore. That together with embracing complications, drama, and conflict are the drivers of interesting narratives and pushes the story forward in interesting and unexpected directions. It encourages to follow brain chain stories and surprise yourself with the results of the dice. All these together with a clear, well oiled procedure that organizes the flow of the gameplay gives you a framework that you can trust. It is a game that you can trust. I think that is very important. That will tell you what happens, what to do next. Together these
+
+[0:25:35] elements can result in a richer, more engaging, and satisfying role-playing experience. Stories emerge dynamically and organically and naturally as you play. That's all I have for today. Thank
+
+## Questions
+
+[0:25:55] you. Made it to the end. Yay. My name is Cezar Capacle. You can find all my links, social, at quirky.games. I will be available for questions. ALEXEI: Wonderful. Oh, the confetti at the end. Yeah, no, that was fantastic. Yeah, lots of enjoyment in the chat. It was reminding people of their favorite games and Oracle decks. Lots of links I think ended up in the obelisk from this which is great. We have one question up already and go ahead and add more questions. I think we will have time for a couple. Silence walker wanted to clarify what is the difference between a table and an Oracle if both of them curated beforehand to fit the moon theme of the game? CEZAR: There is definitely a Venn Diagram with some juxtaposition and overlapping of
+
+[0:26:58] those concepts. Some people treat them as the same thing. What I like to call out as the distinction here is what I like to call Oracles are the ones that are not pre-defined statements. For example, a treasure random table is like you find a 100 gold pieces, this is a random table, and there is five sapphires, a helmet and 20 piece and those are hard coded whereas an Oracle gives you random worlds that might provoke a thought. That doesn't mean Oracles can't be curated even if they are not pre-specified results. You can have, as I have done in the past, you can curate some worlds that the inspire and evoke the feeling for those kinds of specific things. You could have an Oracle for magical items and treasure in which you have a lot of verbs that evoke, for example, magical effects,
+
+[0:27:58] like transparent, void, fire, shadow, freeze, or mishaps of magical effects like corruption, decay, metamorphis, and mutant then you roll both and know the power and what corruption it might have if you use it in the wrong way. But there is still in a way open to interpretation. I have made a companion supplement called random realities. I have a set of tables for crafting locations, crafting cities, NPCs, magical items, scenes, obstacles, monsters and everything. They are still open to interpretation but you kind of direct those interpretations when you offer words that are more relevant to things you trying to create.
+
+[0:29:00] ALEXEI: I wonder do you have advice or techniques because you were sharing the list of partial success keywords that were quite evocative. I feel like forms of procgen and randomness is like finding the right level of abstraction where it isn't too specific or vague. What techniques do you use to narrow down the six sweet words or finding the sweet spot of abstraction. CEZAR: Alder is a game designer I love. They wrote monster hearts, monster hearts 2, dream apart and dream cue and they said once on Twitter that game design is working for four hours and saying there, I have a list of 12 words. Sometimes you write 25 20 pages of specific things
+
+[0:30:08] in a day and to create and curate six words on a random table it takes a week. Because distilling those concentrated and very evocative words is not easy so my tip for that is consuming as much as possible of other people's worth. This is what I did. That includes other published games and even videos of people saying this is my favorite way do this in my home games and red Reddit posts and everything. I compiled like 200 different words and by trial and error I tried to come up with a broader and I have in fact, in the game I mentioned, for the complications I showed, and one for advantages when you have success in your tests that is more than what you expected
+
+[0:31:11] and those have also six words. If you are trying to find a balance between two random or two specific my goal would be to actually consume a lot and try to find words that are too similar or either too broad or too specific and then you kind of write it down and you kind of see the words that sit in between those and you go for that sweet spot between random and specific. ALEXEI: Excellent. I think that's great advice. This is why game design is a job. It is very specific. Wonderful. Thank you so much, Cezar. It has been wonderful to have you. I hope you enjoy the rest of the conference. If people want to discuss this further at the breakout it will be in the Joust Arena. CEZAR: I will be there. Thank you.

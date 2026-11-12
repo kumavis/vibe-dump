@@ -1,0 +1,62 @@
+Reed Lockwood: Common "Pitfalls" of Roguelike Traps and How to Circumvent Them
+Speaker: Reed Lockwood
+https://www.youtube.com/watch?v=ymgmhtkRLyY
+Year: 2022   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:00] ALEXEI: Next up, Reed Lockwood here to talk about traps which is exciting. REED: I am Reed Lockwood and this is "Common "Pitfalls" of Roguelike Traps and How to Circumvent Them." Who am I? Oh, this is an older version of my slides. OK. Well pretend there is a
+
+## Who am I
+
+[0:00:38] picture of me there. It looks a lot like me. I am Reed Lockwood and a software engineer by day and a software engineer by night also. I am working on a surterrainian non combat farming and exploration roguelike titled Subterrestrian. You can follow me on Twitter to get updates on development and see some screen shots which are supposed to be in this but are not for technical reasons. I had a
+
+## Why traps
+
+[0:01:15] picture of my bunny in there. OK. Why traps? Traps they simultaneously are a ubiquitous mechanic in traditional roguelikes but they also feel like they are overlooked a lot of the time, right? I think they have a potential to give your roguelike dungeon a flavor as a hazardous place are character rather than an empty room to fight monsters in. And another thing is that many designs in this talk aren't really new. A lot have been done before in one form or another but I want to create a palate that you can draw on to, you know, just get some ideas for your own game perhaps. OK. Let's talk about the hypothetical
+
+## Worst trap
+
+[0:02:14] worst possible trap. We have seen the little caret symbol and it springs out at you with no warning. It does X-damage. It happens instantly. It affects only one space and it affects only the player. This is sort of hypothetical. I am not a 100% sure off the top of my head if there are any traps that are exactly like this in any of the well-known traditional roguelike games. You see how everything sort of trends towards this, right? Why is this bad? This amounts to just like a hit point tax for traveling over unexplored dungeon tiles. This leads to tedious or boring gameplay where you are carefully mapping out where you want to go and where you have been or you just sort of put your
+
+[0:03:15] stats up in such a way that either traps can't really doing less to you. Like putting and giving yourself more hit points or perception or however it works mechanically in the game. There are traps in regular video games. The big swinging log from bloodborne comes to mind. In most games they rely on the real-time nature of these games. With traditional roguelikes you have a turn-base game so there is no reaction time, right? You know a 100% that your character is going to move out of the way before -- unless there is a randomness but still it is not your player skill it is the skill of your character and the attributes of your character which are determining if they can, you know, dodge the trap or whatever, right? And then secondally,
+
+[0:04:17] traditional roguelikes have kind of symbolic graphics or what I am calling symbolic graphic and if anyone has a better term for it I am happy to discuss it but I am trying to get across that you are seeing this, you are seeing a bunch of symbols which have been interpreted for you from like a game world that probably looks something more like this. If it was rendered as a 3D screen or something like that; right? So with this, right, you are not -- you can't look at the scene and interpret like what's going on with a hole in the wall or a trip wire or something and say to yourself oh, there is a trap there. You have to rely on your in-game character to have that perception score or those skills or whatever to determine that they see that trap or not and then it is rendered in this ASCII or like sort of
+
+[0:05:19] symbolic graphics and it is rendered as a discreet object in the game world. I am not sure if I am getting that across correctly but hopefully you get the idea. Let's go back to this. I also broke
+
+## Categories of Roguelikes
+
+[0:05:34] these five categories down of like aspects of this trap which are sort of bad design in my opinion. This can be further sort of categorized into two categories here. The first one is that this trap is unfair; right? The second one is that it doesn't necessarily make the game that much more interesting. The rest of this talk is just going through each of these five categories and trying to think about like how can we improve the trap in this way, right? How can we improve this aspect of the roguelike-trap? When you have the trap above it is just one tile where everything
+
+## Improving Roguelike Traps
+
+[0:06:23] is happening but you can consider the trap as two separate parts which are working together, right? You have the trigger which is like a pressure plate on the floor or a trip wire or something like that. Some sort of magic field and then that's connected to a hazard or a set of hazards, right, which are the things that are actually damaging like your character, like this cross bow in the picture or whatever, you know, ridiculous device you can come up with. All right. With that in mind, let's go into sort of the meat of this talk here. How to detect a
+
+## How to Detect a Trap
+
+[0:07:02] trap? One of the common things that I have seen suggested for this are just to not hide the traps. I think that's interesting but I can you can do other things as well. And keep in mind with the hazard and trigger and hazard separation you can hide maybe like one of those, hide the trigger, but not hide the hazard so in this illustration you see there is this grate on the floor and you see that and think there is something fishy going on but you don't know what is going to happen. Baited traps, a funny convention of roguelikes is they are treasure or whatever item sitting in the middle of the floor and think about that. Why is that there? Maybe it is put there as a lure or bate for a trap -- bait. The remains of previous victims could be there.
+
+[0:08:07] You could have like messages that say oh you smell something or feel a draft or something like that. Blood, bones, soot and other signs like a trap has gone off or even a lack of dirt. If there is a fungus coating the dungeon floor maybe there is a clean spot where a trap has activated. So the above, these are all sort of passive ways of detecting a trap but what about more active ways? Having your traps be triggered by thrown items is one sort of seems obvious but you know not often implemented. And also, traps that can be detected by like some sort of limited use item, right? If you have chalk dust your character can sort of throw across a space and detect maybe like
+
+[0:09:08] a trip wire or a vent that's there. OK. And let's think about doing more to the player than just damaging them, right? This is a pretty common one. You see like paralysis traps or poisoned traps a lot already. And you can also do things like affect their inventory, burning scrolls, having weapons yanked out of their hands due a magnetic force. If you have a game where you don't have inventory effects and suddenly add them I think that can be unbalancing potentially. Sorry. There we go. You can have trap that moves a player around a dungeon like teleportation, conveyer belts. Sort of like Pokemon. Rushing water something like that. Shoots.
+
+## Traps and Game Systems
+
+[0:10:13] And I think the most important thing is that like, you know, you should tie your traps into the game system, right? Game systems, right? This talk assumes that your roguelike has sort of the systems that most do, right? You have combat, hit points, you have monsters and you have those elements and you have a religion system in your game. There is an attraction of a certain deity and think about it in that way. Timing. As I said before, because traditional roguelikes are
+
+## Timing
+
+[0:11:04] turn-based there is not a whole lot -- I mean, like this is somewhat ineffective by itself. If you have a swinging ax blade that periodically crosses a certain spot, right, if that by itself is not effective because you know unless there is some sort of random chance for your move speed, that effects your move speed, you know with a 100% certainty your character is going to be out of the way before that ax will swing across but if there is other stuff going on in the dungeon like you are fighting a monster or something like that it will make the game more interesting because you have to sort of think about how the two things interact and you have to make tactical choices about it; right? And then there is also traps that take time to go off like rooms that fill with water, walls that close in and rolling boulders.
+
+## Dungeon Manipulation
+
+[0:12:12] Changing the dungeon level and adding hazards like file or puddles of acid. Water traps are good because you can have other knock on effects like aquatic monsters. Darkness and fog and visibility. Reconnecting the map and open up new spaces or closing them off. And finally, monster interaction which I think is the most interesting thing,
+
+## Monster Interaction
+
+[0:12:40] right? Traps can injur monsters or which monsters know about which traps? Maybe some are intelligent enough to even be setting the traps. Traps that summon monsters. Having a captured monster that can spot traps for you or a monster that is friendly and leads you to a trap. Monsters that set traps off on purpose especially if, you know, those traps they know those traps won't affect them. Here we go. Conclusions. There is plenty of room to innovate on traps.
+
+## Conclusions
+
+[0:13:29] I think it is a rewarding space to explore which can really add flavor to a dungeon. Just remember the two axes of fairness and complexity. Multi-tile traps tend to be better just from going through this. And then design encounters holistically with monsters in mind. I would like to knowledge these resources I used to make the thing. And thank you to the Roguelike Celebration staff. Yeah, hopefully, you guys can ask me questions later. Cool. ALEXEI: Thank you so much, Reed. Good job keeping that tight. Quick 15 minutes. Yes, so the Warrior room if you end up being in chat. Thank you. That was an information-dense 15 minutes. I love it. Excellent. Moving right along. The lightning talks go quick.

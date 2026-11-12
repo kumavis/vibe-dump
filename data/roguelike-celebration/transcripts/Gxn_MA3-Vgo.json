@@ -1,0 +1,1126 @@
+{
+ "id": "Gxn_MA3-Vgo",
+ "url": "https://www.youtube.com/watch?v=Gxn_MA3-Vgo",
+ "title": "Andrew Cedotal - Life, Liberty and the Pursuit of Comboness",
+ "speaker": "Andrew Cedotal",
+ "talk_title": "Life, Liberty and the Pursuit of Comboness",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-09-26",
+ "duration_s": 1783,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Why do people play games with combos? The same reason they play any game—to revel in the anxiety of their actual lives. In this talk, we’ll take a whirlwind tour through the world’s first formal definition of combos, a brief combo-centric overview of the entirety of human history, and the reason why 3-pick-1 upgrade screens are actually a lot smarter than you think.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and definition"
+  },
+  {
+   "start": 121,
+   "title": "Refining the combo concept"
+  },
+  {
+   "start": 395,
+   "title": "Life as a complex system"
+  },
+  {
+   "start": 618,
+   "title": "Biography as a combo"
+  },
+  {
+   "start": 1343,
+   "title": "Applying combos to game design"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3626,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 4.8,
+   "d": 4.2,
+   "text": "I will now introduce your next speaker where if you have been at Roguelike Celebration along"
+  },
+  {
+   "t": 9.0,
+   "d": 6.2,
+   "text": "enough to come in person you have probably met. A long time attendee of Roguelike Celebration. Hi,"
+  },
+  {
+   "t": 15.2,
+   "d": 7.36,
+   "text": "Andrew. It is great to have you speaking and not just attending and giving us your"
+  },
+  {
+   "t": 22.56,
+   "d": 8.6,
+   "text": "presence as a member of the larger Roguelike Celebration. You are software product executive,"
+  },
+  {
+   "t": 31.16,
+   "d": 6.52,
+   "text": "formal studio head, published video game designer and you are here to talk about"
+  },
+  {
+   "t": 37.68,
+   "d": 7.88,
+   "text": "combos which is near and dear to the heart. >> Andrew: Thank you for the intro. It has been"
+  },
+  {
+   "t": 45.56,
+   "d": 15.16,
+   "text": "a great eight years and I hope we can keep the conference going. I know we can keep the -- Thank"
+  },
+  {
+   "t": 60.72,
+   "d": 6.0,
+   "text": "you for coming to Roguelike Celebration and to this talk. A brief introduction to start."
+  },
+  {
+   "t": 66.72,
+   "d": 4.96,
+   "text": "I am Andrew Cedotal. I am a product executive and occasional game designer. I am currently working"
+  },
+  {
+   "t": 71.68,
+   "d": 6.28,
+   "text": "on design life which let's people use procedural generation to make their homes beautiful. This"
+  },
+  {
+   "t": 77.96,
+   "d": 5.76,
+   "text": "talk is all about combos. We will formalize the definition of comboness and centralize on"
+  },
+  {
+   "t": 83.72,
+   "d": 7.24,
+   "text": "the idea they are non-obvious. We will go over the expanding self-improvement space"
+  },
+  {
+   "t": 90.96,
+   "d": 8.2,
+   "text": "available. And then go through biographies of people who have excelled in their careers."
+  },
+  {
+   "t": 101.6,
+   "d": 5.36,
+   "text": "We will also consider the notion that high comboness passed to success is increasingly"
+  },
+  {
+   "t": 106.96,
+   "d": 7.24,
+   "text": "common as this space expands. We will look at how the parallels between combos and expanding"
+  },
+  {
+   "t": 114.2,
+   "d": 4.84,
+   "text": "space of real world self-improvement can be used to achieve experimental goals. Part"
+  },
+  {
+   "t": 121.6,
+   "d": 8.92,
+   "text": "Part one a definition of comboness. Most of us intuitively know what a combo. It is when you"
+  },
+  {
+   "t": 130.52,
+   "d": 5.68,
+   "text": "get to different upgrades in a game that happen to go well together. Let's try to get as precise"
+  },
+  {
+   "t": 136.2,
+   "d": 5.72,
+   "text": "as possible and see where that precision takes us. Let's start with a first draft of formal"
+  },
+  {
+   "t": 141.92,
+   "d": 9.68,
+   "text": "definition and refine it until we get to something that works with our into tuition. A combois a"
+  },
+  {
+   "t": 151.6,
+   "d": 6.52,
+   "text": "subset of upgrades with a value of one with a value greater than the sum of the individual"
+  },
+  {
+   "t": 158.12,
+   "d": 7.32,
+   "text": "parts when counting to conditions internal to the subset. Let's take the simplest example. A game"
+  },
+  {
+   "t": 165.44,
+   "d": 8.88,
+   "text": "with three upgrades. A with value one, B value two and C value 0 in less B is present in which case"
+  },
+  {
+   "t": 174.32,
+   "d": 13.68,
+   "text": "it has value 3. Let's say you have to pick value of subset 3. This game is probably not fun unless"
+  },
+  {
+   "t": 188.0,
+   "d": 7.28,
+   "text": "you are at the candy land cognitive stage but this definition and example don't reflect how the term"
+  },
+  {
+   "t": 195.28,
+   "d": 12.08,
+   "text": "is used colloquially. It leaves a loophole for A has value 10, C 0 unless B is present."
+  },
+  {
+   "t": 215.52,
+   "d": 5.96,
+   "text": "BC is more valuable than the sum of its individual parts but it isn't a subset one would voluntarily"
+  },
+  {
+   "t": 221.48,
+   "d": 10.36,
+   "text": "choose and most won't define as a combo. Let's redine the definition to given a set of three"
+  },
+  {
+   "t": 231.84,
+   "d": 7.16,
+   "text": "or more probably up grades, a combo is a subset of upgrades with a greater valuable than one that"
+  },
+  {
+   "t": 239.0,
+   "d": 6.0,
+   "text": "exceeds the highest unconditional value of all subsets of the same size when counting for"
+  },
+  {
+   "t": 245.0,
+   "d": 15.6,
+   "text": "conditions. Our definition leaves open whether the conditional value is explicit or implicit. That is"
+  },
+  {
+   "t": 260.6,
+   "d": 4.84,
+   "text": "whether there is a conditional value increasing effect directly flowing from the upgrades"
+  },
+  {
+   "t": 265.44,
+   "d": 5.16,
+   "text": "themselves or whether the value increase occurs implicitly after the effects of the upgrades in"
+  },
+  {
+   "t": 270.6,
+   "d": 7.36,
+   "text": "the subset are passed on into other game systems. Common usage of the term only includes the latter."
+  },
+  {
+   "t": 277.96,
+   "d": 10.4,
+   "text": "So BC would not be a comboif this were the text printed on upgrades. But if we change the text on"
+  },
+  {
+   "t": 288.36,
+   "d": 8.76,
+   "text": "the upgrades to the equivalent, A has value 2 and B value 1 take an foo token and C has value 0 and"
+  },
+  {
+   "t": 297.12,
+   "d": 7.48,
+   "text": "grants 3 are value for each foo token most players of value central games would report it as a combo,"
+  },
+  {
+   "t": 304.6,
+   "d": 12.44,
+   "text": "but not as much. The less obvious a combo is the more comboness players are likely to attribute"
+  },
+  {
+   "t": 317.04,
+   "d": 6.64,
+   "text": "to it. This example from magic the gathering that my CTO shared with me took five minutes to"
+  },
+  {
+   "t": 323.68,
+   "d": 5.08,
+   "text": "explain and I think we can all agree even without a live five minute explanation that it appears to"
+  },
+  {
+   "t": 328.76,
+   "d": 7.56,
+   "text": "have a lot of comboness. This point gets us to something that is important to drawing out the"
+  },
+  {
+   "t": 336.32,
+   "d": 8.28,
+   "text": "implications of combos. It isn't a binary property but a matter of degree and that is dependent on"
+  },
+  {
+   "t": 344.6,
+   "d": 7.76,
+   "text": "the non-obviousness of the conditional value as much as on the conditional value itself. Let's"
+  },
+  {
+   "t": 352.36,
+   "d": 5.96,
+   "text": "revisit the definition one more time. Given a set of three or more possible upgrades,"
+  },
+  {
+   "t": 358.32,
+   "d": 9.44,
+   "text": "the degree of comboness of subset, size greater than one, is roughly the degree to which value"
+  },
+  {
+   "t": 367.76,
+   "d": 5.84,
+   "text": "exceeds the highest unconditional value of all subsets of the same size, and the"
+  },
+  {
+   "t": 373.6,
+   "d": 8.64,
+   "text": "non obviousness of the conditional value. Or if you are board of all this logical formalization,"
+  },
+  {
+   "t": 382.24,
+   "d": 4.72,
+   "text": "a combois a subset of upgrades whose value is higher than what you would get if you picked"
+  },
+  {
+   "t": 386.96,
+   "d": 13.28,
+   "text": "purely on unconditional value and non-obvious. Part 2. Life keeps getting more combo-licated."
+  },
+  {
+   "t": 400.24,
+   "d": 5.68,
+   "text": "Let's talk about something apparently completely different from combos. The complexity of modern"
+  },
+  {
+   "t": 405.92,
+   "d": 6.48,
+   "text": "life. Figuring out your best life is more complicated than it was for hunter gathers"
+  },
+  {
+   "t": 414.12,
+   "d": 8.48,
+   "text": "let's say. This sounds like a zero information platitude. Things were much simpler but let's"
+  },
+  {
+   "t": 422.6,
+   "d": 5.2,
+   "text": "try to put structure on the complexity of space improvement offered to an individual"
+  },
+  {
+   "t": 427.8,
+   "d": 7.12,
+   "text": "over time. We know the best way to understand global human history scale trends is with a"
+  },
+  {
+   "t": 434.92,
+   "d": 10.76,
+   "text": "shamelessly brewered S diagram. That is a lot of stuff. Look, some areas of self-improvement do go"
+  },
+  {
+   "t": 445.68,
+   "d": 4.56,
+   "text": "away over time. Most people in the audience don't have to worry about crop selection or"
+  },
+  {
+   "t": 450.24,
+   "d": 6.36,
+   "text": "stabbing thing with spears but the general term is individuals have to worry about more and more"
+  },
+  {
+   "t": 456.6,
+   "d": 6.0,
+   "text": "self-improvement areas over time. The number of areas people have to worry about isn't the only"
+  },
+  {
+   "t": 462.6,
+   "d": 9.8,
+   "text": "thing increasing. I would argue the complexity space has been increasing. God forbid you be"
+  },
+  {
+   "t": 472.4,
+   "d": 5.48,
+   "text": "an incoming college freshman in 2024 in which case you have to answer most of of what humans have had"
+  },
+  {
+   "t": 477.88,
+   "d": 5.04,
+   "text": "to answer including all of the following. Which has their way as a prestige fall because of the"
+  },
+  {
+   "t": 488.2,
+   "d": 12.48,
+   "text": "trends? Is it worth moving to expensive global hub because of connection and cultural development?"
+  },
+  {
+   "t": 502.12,
+   "d": 8.88,
+   "text": "Which cities support which type of work? The internet has shown you a shift of subculture."
+  },
+  {
+   "t": 511.0,
+   "d": 10.72,
+   "text": "Which one offers the most? The I have to consume lots of media? The weirdness? Which could you"
+  },
+  {
+   "t": 521.72,
+   "d": 6.8,
+   "text": "participate in the city you chose and the previous step? How are you going build an understanding of"
+  },
+  {
+   "t": 528.52,
+   "d": 6.28,
+   "text": "the contemporary digital NFRPGZ land information landscape to avoid getting addictsed out of money"
+  },
+  {
+   "t": 534.8,
+   "d": 5.96,
+   "text": "and time? Can you answer this for every one of the digital platforms you are to interact with"
+  },
+  {
+   "t": 540.76,
+   "d": 13.48,
+   "text": "now and the dozens you will encounter over your life? The important point here is that you can't"
+  },
+  {
+   "t": 554.24,
+   "d": 6.76,
+   "text": "have it all. Investment in any of these areas is relatively expensive. If you are a preindustrial"
+  },
+  {
+   "t": 561.0,
+   "d": 4.16,
+   "text": "farmer and want to learn about the different things to land to make it more productive even"
+  },
+  {
+   "t": 565.16,
+   "d": 13.04,
+   "text": "determining if you are good at it could cost you. If you are a freshman and want to try quantum"
+  },
+  {
+   "t": 578.2,
+   "d": 8.56,
+   "text": "computing or federal land use regulations, the cost just as high but worse because you have so"
+  },
+  {
+   "t": 586.76,
+   "d": 9.28,
+   "text": "many more to choose from. We live in an increasing post-thalthusiasm world so if you get this wrong"
+  },
+  {
+   "t": 596.04,
+   "d": 11.48,
+   "text": "you probably won't die but could end up broke and miserable or even worse you could end up average."
+  },
+  {
+   "t": 607.52,
+   "d": 10.12,
+   "text": "What's going to become much more important in this exploding possibility space? Combos."
+  },
+  {
+   "t": 617.64,
+   "d": 10.56,
+   "text": "Part 3. Biography as combo. Let's go back to the short definition of combos we ended up with. A"
+  },
+  {
+   "t": 628.2,
+   "d": 5.32,
+   "text": "combo is a subset of upgrades whose value is higher than what you would get if you picked"
+  },
+  {
+   "t": 633.52,
+   "d": 9.16,
+   "text": "purely on unconditional value and non-obvious. Let's go over the biography of three people who"
+  },
+  {
+   "t": 642.68,
+   "d": 7.44,
+   "text": "exceled in fields that developed skills that didn't obviously combo together and were not"
+  },
+  {
+   "t": 650.12,
+   "d": 7.32,
+   "text": "obviously useful in the chosen field. They acquired skills are high conditional values"
+  },
+  {
+   "t": 657.44,
+   "d": 4.0,
+   "text": "but low unconditional values and then managed to get the conditional"
+  },
+  {
+   "t": 661.44,
+   "d": 6.72,
+   "text": "values to kick in to put it in another way. Let's start with number one, the crate digger,"
+  },
+  {
+   "t": 668.16,
+   "d": 6.92,
+   "text": "a humble person trying to break into the game industry. This person has no experience with"
+  },
+  {
+   "t": 675.08,
+   "d": 8.24,
+   "text": "no degree in games and no professional connections but they are determined. To"
+  },
+  {
+   "t": 683.32,
+   "d": 6.2,
+   "text": "call this person's taste in games uncommercial might be understating the game. Their favorite"
+  },
+  {
+   "t": 689.52,
+   "d": 6.84,
+   "text": "game is ultima online and we are not telling a story about the 1990s. This person's story"
+  },
+  {
+   "t": 696.36,
+   "d": 10.88,
+   "text": "starts in the 20 teens. Ultima Online looks like this. It is completely not obvious how this is of"
+  },
+  {
+   "t": 707.24,
+   "d": 7.28,
+   "text": "any contemporary advantage in making commercially successful games. This person is also as people"
+  },
+  {
+   "t": 714.52,
+   "d": 6.68,
+   "text": "used to say in the age of vinyl records a crate digger. Just like people would dig through and"
+  },
+  {
+   "t": 722.32,
+   "d": 7.8,
+   "text": "hoping to find an awesome track, this person digs through obscure mobile games to find novel games."
+  },
+  {
+   "t": 731.6,
+   "d": 7.6,
+   "text": "We are getting warmer in terms of maybe this is skill you would want to have but plenty of people,"
+  },
+  {
+   "t": 739.84,
+   "d": 5.12,
+   "text": "certainly some in the audience of this talk, have pounded through thousands of obscure games,"
+  },
+  {
+   "t": 745.84,
+   "d": 10.32,
+   "text": "console roms and others without finding a commercially viable idea. This goes poorly"
+  },
+  {
+   "t": 756.16,
+   "d": 6.92,
+   "text": "and they end up working in fast food to make ends meet. They finally get a games job but it is only"
+  },
+  {
+   "t": 763.08,
+   "d": 9.48,
+   "text": "sort of in games? It is working on slot machines. Now, I have a big tent view of what games are. I,"
+  },
+  {
+   "t": 772.56,
+   "d": 6.56,
+   "text": "by default, regard mainstream casino games as a valid part of the human play experience."
+  },
+  {
+   "t": 780.08,
+   "d": 6.56,
+   "text": "But among hipster indie developers, of which there are certainly none in the audience of this talk,"
+  },
+  {
+   "t": 786.64,
+   "d": 5.12,
+   "text": "the general perception is that the negative social value of working on casino games is one step short"
+  },
+  {
+   "t": 791.76,
+   "d": 7.76,
+   "text": "of leprosy but this person still doesn't give up. One day they play a game that's really,"
+  },
+  {
+   "t": 799.52,
+   "d": 5.2,
+   "text": "really fun. It has got incredibly chaotic gameplay but the game design community"
+  },
+  {
+   "t": 804.72,
+   "d": 4.4,
+   "text": "doesn't seem to be aware of it because it is fairly new and only available on Android."
+  },
+  {
+   "t": 810.04,
+   "d": 8.76,
+   "text": "It is missing a legible approach to the battles and better approach to its progression system."
+  },
+  {
+   "t": 818.8,
+   "d": 8.92,
+   "text": "What we have here is a passion for retro games with really weird/bad graphics. Video game crate"
+  },
+  {
+   "t": 827.72,
+   "d": 9.32,
+   "text": "digging and an experience making slot machines. What we get is Luca Galante the creator of vampire"
+  },
+  {
+   "t": 839.52,
+   "d": 9.96,
+   "text": "slayers. Ultima online is a wildly visual chaotic 2D real-time game using low res assets from the"
+  },
+  {
+   "t": 849.48,
+   "d": 11.44,
+   "text": "late '90s. Many adopted a pixel esthetic because it is cheaper and you can get nostalgic people to"
+  },
+  {
+   "t": 860.92,
+   "d": 14.92,
+   "text": "give you $5. There is extremely stiff competition in the few game genres that don't have to worry"
+  },
+  {
+   "t": 875.84,
+   "d": 10.24,
+   "text": "about moving in real-time. There is a now mostly dead tradition that knew how to do that and that's"
+  },
+  {
+   "t": 886.08,
+   "d": 11.12,
+   "text": "the tradition of 2D MMOs like this. Let's look at ultima online next to vampire survivors. I"
+  },
+  {
+   "t": 897.2,
+   "d": 8.96,
+   "text": "don't know for sure if the developers of 20 XX and Rogue Legacy and others could have pulled off A"
+  },
+  {
+   "t": 906.16,
+   "d": 6.76,
+   "text": "retro console graphics and while having hundreds of active entities on screen thus solving steam"
+  },
+  {
+   "t": 912.92,
+   "d": 13.56,
+   "text": "funnel with SNES nostalgia and breaking into a new genre but no one did before Luca. What about"
+  },
+  {
+   "t": 926.48,
+   "d": 10.8,
+   "text": "the crate digging? Arb Triage games is the only way and in theory any developer should be looking"
+  },
+  {
+   "t": 937.28,
+   "d": 8.4,
+   "text": "for opportunities to import emerging genres from others platforms but in practice very few do. In"
+  },
+  {
+   "t": 945.68,
+   "d": 6.24,
+   "text": "fact, I only know less than half a dozen people who are true cross-platform inspiration magpies"
+  },
+  {
+   "t": 951.92,
+   "d": 6.72,
+   "text": "and half are in the audience of this talk right now. The casino stuff is the easiest to explain."
+  },
+  {
+   "t": 958.64,
+   "d": 7.12,
+   "text": "It is not as many developers have claimed who are salty oh the mass market is dumb and like"
+  },
+  {
+   "t": 965.76,
+   "d": 8.84,
+   "text": "randomness. It is again an abTriage opportunity. The proportion of attention is out of step with"
+  },
+  {
+   "t": 974.6,
+   "d": 7.04,
+   "text": "the proportion of total museum Fe human dollars. The global gaming industry makes roughly half what"
+  },
+  {
+   "t": 981.64,
+   "d": 7.88,
+   "text": "the video game makes and only a minuscule pay attention to. There is something important if"
+  },
+  {
+   "t": 989.52,
+   "d": 8.84,
+   "text": "someone dug around. A point by the breakout success of Boruto this year. Biography number"
+  },
+  {
+   "t": 998.36,
+   "d": 9.04,
+   "text": "two. The ice skater. Let's say you are an aspiring professional ice skater. Let's say you don't make"
+  },
+  {
+   "t": 1007.4,
+   "d": 5.92,
+   "text": "the Olympic team and everyone tells you your skating career is over. Your family wants you to"
+  },
+  {
+   "t": 1013.32,
+   "d": 5.28,
+   "text": "join the pharmaceutical distribution business. You are aware of how it works but don't particularly"
+  },
+  {
+   "t": 1018.6,
+   "d": 11.8,
+   "text": "like distributing pharmaceuticals. You become a fashion journalist for 20 years. In your own"
+  },
+  {
+   "t": 1030.4,
+   "d": 7.72,
+   "text": "words, I didn't know anything about dress design and then become a famous designer likely the best"
+  },
+  {
+   "t": 1038.12,
+   "d": 10.76,
+   "text": "bridle designer. I am talking about statistically the least likely person to be mentioned in a game"
+  },
+  {
+   "t": 1048.88,
+   "d": 7.8,
+   "text": "development talk Verawang. I love this example because it turns out there were non obvious"
+  },
+  {
+   "t": 1056.68,
+   "d": 10.88,
+   "text": "conditionals hiding at every step. Professional ice skaters don't just learn routines. They also"
+  },
+  {
+   "t": 1067.56,
+   "d": 10.56,
+   "text": "learn what it is like to be wearing a complicated expensive Sayre Fe ceremonial outfit. Running any"
+  },
+  {
+   "t": 1078.12,
+   "d": 21.56,
+   "text": "distribution business isn't just about merchandise. When asked by the Harvard"
+  },
+  {
+   "t": 1099.68,
+   "d": 7.84,
+   "text": "business review why she chose bridle, my father identified that as an opportunity. He didn't work"
+  },
+  {
+   "t": 1107.52,
+   "d": 5.92,
+   "text": "in the garment industry buzz but was a businessman and saw it came with lower risks. Lower inventory,"
+  },
+  {
+   "t": 1113.44,
+   "d": 8.24,
+   "text": "fewer fabrics and a steady stream of customers. Journalists don't just learn how to write and"
+  },
+  {
+   "t": 1121.68,
+   "d": 6.4,
+   "text": "edit. They learn what gets coverage. When was the last time you heard about a celebrity dress"
+  },
+  {
+   "t": 1128.08,
+   "d": 12.6,
+   "text": "and the designer is mentioned and it wasn't by them? The military intelligent archivist"
+  },
+  {
+   "t": 1140.68,
+   "d": 8.32,
+   "text": "who developed shark repellent. Let's say you are working in artificial intelligence and are good"
+  },
+  {
+   "t": 1149.0,
+   "d": 6.6,
+   "text": "at filing and people know it. You know where all the spies are. One day you get assigned to a weird"
+  },
+  {
+   "t": 1155.6,
+   "d": 11.16,
+   "text": "project. Sharks are eating sailors. Someone has to keep track of all the chemical compounds that"
+  },
+  {
+   "t": 1166.76,
+   "d": 5.32,
+   "text": "scientists are dumping into water to see if the sharks runaway. You use the skills to track the"
+  },
+  {
+   "t": 1172.08,
+   "d": 9.12,
+   "text": "spies to track the combos. The project works and you and the team invent a shark repellent that"
+  },
+  {
+   "t": 1181.2,
+   "d": 10.04,
+   "text": "is standard for decades. Then get married and move to France and discover a small circle of"
+  },
+  {
+   "t": 1191.24,
+   "d": 6.8,
+   "text": "people digging into the culinary culture of your adopted country but not in any rush. Amateurs"
+  },
+  {
+   "t": 1198.04,
+   "d": 7.0,
+   "text": "like you willing to learn the basics from scratch even if it takes a decade. What we have here is"
+  },
+  {
+   "t": 1205.04,
+   "d": 5.52,
+   "text": "the ability to keep track of an enormous number of cards with similarly structured information,"
+  },
+  {
+   "t": 1210.56,
+   "d": 8.2,
+   "text": "experience managing shark repellent RND and a social circle enthusiastic and we"
+  },
+  {
+   "t": 1218.76,
+   "d": 9.44,
+   "text": "get Julia child. The evidence she was pursuing a non-obvious path is she even look said like"
+  },
+  {
+   "t": 1228.2,
+   "d": 7.8,
+   "text": "a bad vet to the experts. A contract was broke with her for mastering the art of French cooking"
+  },
+  {
+   "t": 1236.0,
+   "d": 9.92,
+   "text": "because the manuscript seemed like too much of a reference work. It turns out she was on"
+  },
+  {
+   "t": 1245.92,
+   "d": 6.92,
+   "text": "to something. The publication of mastering the art of French cooking changed the entire American cook"
+  },
+  {
+   "t": 1252.84,
+   "d": 5.76,
+   "text": "book industry leading more publishers to place emphasis on clarity and precision away from the"
+  },
+  {
+   "t": 1258.6,
+   "d": 9.32,
+   "text": "chatty and sometimes sketchy style that typified American cook books. I admit I deliberately picked"
+  },
+  {
+   "t": 1267.92,
+   "d": 7.56,
+   "text": "underdog stories but it is where they succeed not only through support sport movie style grit"
+  },
+  {
+   "t": 1276.44,
+   "d": 9.04,
+   "text": "because because they acquired and exploited a non-obvious combination of skills. There"
+  },
+  {
+   "t": 1285.48,
+   "d": 8.6,
+   "text": "are certainly people that succeed in careers by following a path. If you are learning composition"
+  },
+  {
+   "t": 1295.24,
+   "d": 8.48,
+   "text": "as a young child your life might make for an interesting story but not due to comboness."
+  },
+  {
+   "t": 1303.72,
+   "d": 6.0,
+   "text": "My contention is if as we explored in the previous section the possible space of self improvement"
+  },
+  {
+   "t": 1309.72,
+   "d": 4.84,
+   "text": "is increasing at an increasing rate more and more success stories are going to look like"
+  },
+  {
+   "t": 1314.56,
+   "d": 7.12,
+   "text": "these three. Years of work acquire apparently unrelated skills followed by a turn where they"
+  },
+  {
+   "t": 1322.28,
+   "d": 7.52,
+   "text": "might come together but it takes years of high risk commitment to find out. If more and more"
+  },
+  {
+   "t": 1329.8,
+   "d": 4.44,
+   "text": "people are going to be living this way, or at least trying to, more and more people are going"
+  },
+  {
+   "t": 1334.24,
+   "d": 8.24,
+   "text": "to be feeling like the primary struggle of their life is searching rather than well struggling."
+  },
+  {
+   "t": 1342.48,
+   "d": 8.0,
+   "text": "Part 4. What combos evoke. As noted at the beginning, this talk is not going to argue"
+  },
+  {
+   "t": 1350.48,
+   "d": 8.0,
+   "text": "that fames -- games make you better at life. The point here is not that you should play games with"
+  },
+  {
+   "t": 1358.48,
+   "d": 14.64,
+   "text": "combos to get better at personal endeavors. I am pretty sure Verawang never played any. Why do I go"
+  },
+  {
+   "t": 1373.12,
+   "d": 6.0,
+   "text": "on about how real life has dynamics that sort of look like combos? I am about to make an argument"
+  },
+  {
+   "t": 1379.12,
+   "d": 8.8,
+   "text": "in the opposite direction about how to make games evoke life. Games like any media work portraying"
+  },
+  {
+   "t": 1388.52,
+   "d": 9.56,
+   "text": "events work through a cycle of -- this is a fancy way of saying they create anxiety and then make"
+  },
+  {
+   "t": 1398.08,
+   "d": 5.64,
+   "text": "it ago away. You are familiar with this notion if you have heard of rising and falling tension in"
+  },
+  {
+   "t": 1403.72,
+   "d": 7.0,
+   "text": "literature or diagramed out gameplay loops. If you want to be able to create anxiety and then take it"
+  },
+  {
+   "t": 1410.72,
+   "d": 6.64,
+   "text": "away you need a structural understanding of your audience's anxieties. As a very simple example,"
+  },
+  {
+   "t": 1417.36,
+   "d": 8.96,
+   "text": "I will now show you a page of text with F come see me written on it. Some of you are likely having"
+  },
+  {
+   "t": 1426.32,
+   "d": 6.6,
+   "text": "anxiety flashbacks right now. But if our hunter gather ancestors saw this they would have no"
+  },
+  {
+   "t": 1432.92,
+   "d": 5.52,
+   "text": "reaction at all I would guess. Now I am going to show you an image of a Savannah during a drought."
+  },
+  {
+   "t": 1440.08,
+   "d": 4.84,
+   "text": "Most of you would not have an immediate reaction of anxiety but again our ancestors might remember"
+  },
+  {
+   "t": 1444.92,
+   "d": 7.56,
+   "text": "a particularly desperate dry season and feel a deep-seated dread. Importantly, if you want your"
+  },
+  {
+   "t": 1452.48,
+   "d": 6.24,
+   "text": "work to have an impact on your audience it must be strongly like this. It doesn't matter if your"
+  },
+  {
+   "t": 1458.72,
+   "d": 8.96,
+   "text": "intention is to force gazes at the unpleasant life or make the most escapist work possible."
+  },
+  {
+   "t": 1468.72,
+   "d": 7.76,
+   "text": "The irritant won't be consumed without relief and the sense of relief is in direct to the irritant."
+  },
+  {
+   "t": 1476.48,
+   "d": 8.68,
+   "text": "A big pearl needs a big grain of sand. If you want deep reaction of any sort from the audience,"
+  },
+  {
+   "t": 1485.16,
+   "d": 6.4,
+   "text": "you need to be able to evoke deeply. As far back as we are able to peer in the history of human"
+  },
+  {
+   "t": 1491.56,
+   "d": 6.84,
+   "text": "storing telling, narrative has mostly involved a hero who has a relatively defined goal. The"
+  },
+  {
+   "t": 1498.4,
+   "d": 9.24,
+   "text": "typical hero's journey is full of refusal of call and challenges. It is a single highway with off"
+  },
+  {
+   "t": 1507.64,
+   "d": 6.28,
+   "text": "ramps and the struggle is about not being weak enough to take the off-ramps. This made sense"
+  },
+  {
+   "t": 1513.92,
+   "d": 9.88,
+   "text": "where it was just accept commonly held virtues and work hard at them. This overwhelming tie"
+  },
+  {
+   "t": 1523.8,
+   "d": 5.68,
+   "text": "of superficial viable options is the core anxiety source for people. If you want to create work that"
+  },
+  {
+   "t": 1529.48,
+   "d": 7.64,
+   "text": "appeals to those people you need to understand how to envoke anxiety and then relief. Our time is too"
+  },
+  {
+   "t": 1537.12,
+   "d": 13.0,
+   "text": "short to do this so we are going to look at just one. Constructed upgrades versus drafted upgrades."
+  },
+  {
+   "t": 1550.12,
+   "d": 4.76,
+   "text": "Very broadly in constructed upgrade selection the player has perfect knowledge of upgrades"
+  },
+  {
+   "t": 1554.88,
+   "d": 19.8,
+   "text": "and drafted is the opposite. I am going to make a goldie locks argument. Think of the experience"
+  },
+  {
+   "t": 1574.68,
+   "d": 7.04,
+   "text": "of engaging with game in pure constructive goal. Whenever you want to hap back into the game it is"
+  },
+  {
+   "t": 1581.72,
+   "d": 7.12,
+   "text": "there. -- hop. Think about purely random upgrade systems like let's try to play with truly random"
+  },
+  {
+   "t": 1588.84,
+   "d": 7.24,
+   "text": "blind decks. Something every team tries once and never again. By taking decision responsibility"
+  },
+  {
+   "t": 1596.08,
+   "d": 9.56,
+   "text": "away, the game makes itself less. The two modes have the ability to create anxiety but will not"
+  },
+  {
+   "t": 1605.64,
+   "d": 5.64,
+   "text": "be effective at long term engagement because they are not structurally reflective of the anxiety"
+  },
+  {
+   "t": 1611.28,
+   "d": 10.12,
+   "text": "people feel in their everyday life. What form is? Within the subset of self-improvement areas opened"
+  },
+  {
+   "t": 1621.4,
+   "d": 6.76,
+   "text": "up to each by chance, they had some control over how and how much to invest in each one. We will"
+  },
+  {
+   "t": 1628.16,
+   "d": 5.4,
+   "text": "call the upgrade design pattern the drafting mullet approach. It is drafting in the front,"
+  },
+  {
+   "t": 1633.56,
+   "d": 4.64,
+   "text": "constructed in the back. To use soren Johnson of preand post luck. Preluck is the"
+  },
+  {
+   "t": 1642.0,
+   "d": 11.4,
+   "text": "decisions -- games with this structure exist. The three pick one format of roguelike upgrade systems"
+  },
+  {
+   "t": 1653.4,
+   "d": 6.76,
+   "text": "is popular because it is a simple and elegant way of achievering the drafting mullet. It is only"
+  },
+  {
+   "t": 1660.16,
+   "d": 4.56,
+   "text": "viable to pursue the subset of combos for which you are offered one component early enough in"
+  },
+  {
+   "t": 1664.72,
+   "d": 6.88,
+   "text": "the run you might draw the others. For the combos you are offered an option on you have some freedom"
+  },
+  {
+   "t": 1671.6,
+   "d": 9.4,
+   "text": "about how to dig in to each one. I will leave it the reader of how this is implemented in other"
+  },
+  {
+   "t": 1681.0,
+   "d": 11.52,
+   "text": "games. I will also leave it as an exercise for the reader to apply this theory to all the other"
+  },
+  {
+   "t": 1692.52,
+   "d": 7.52,
+   "text": "possible elements in an upgrade system. I suggest the following design threads to pull on. Method"
+  },
+  {
+   "t": 1700.04,
+   "d": 6.6,
+   "text": "of creating combodensity, rarity systems and the interaction of upgrade system with simulation."
+  },
+  {
+   "t": 1711.76,
+   "d": 8.76,
+   "text": "Combos are non-obvious. Life is complex and increasingly about finding combos. If"
+  },
+  {
+   "t": 1720.52,
+   "d": 6.16,
+   "text": "the goal of the game is to reflect anxiety in people's lives, design upgrade systems"
+  },
+  {
+   "t": 1726.68,
+   "d": 9.64,
+   "text": "to open a subject of subset but give them freedom to pursue. Thank you, everyone."
+  },
+  {
+   "t": 1736.32,
+   "d": 11.64,
+   "text": "ALEXEI: Thank you for everyone hooting and hollering about Julia Child in chat."
+  },
+  {
+   "t": 1747.96,
+   "d": 7.48,
+   "text": "As someone who is in the process of quitting my games job to take a sabbatical to pursue my other"
+  },
+  {
+   "t": 1755.44,
+   "d": 7.08,
+   "text": "skills this talk came to me personally. >> What would it say if you got a degree"
+  },
+  {
+   "t": 1762.52,
+   "d": 6.8,
+   "text": "in moral philosophy -- if you are not careful, Alexei, you are going to be in the V2 of this."
+  },
+  {
+   "t": 1770.4,
+   "d": 6.2,
+   "text": "ALEXEI: That's the goal. Hopefully if people wants to stick around and"
+  },
+  {
+   "t": 1776.6,
+   "d": 5.04,
+   "text": "ask questions they can do that later. Thank for the fantastic presentation."
+  }
+ ]
+}

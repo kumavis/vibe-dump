@@ -1,0 +1,3447 @@
+{
+ "id": "66O6WDcT8KY",
+ "url": "https://www.youtube.com/watch?v=66O6WDcT8KY",
+ "title": "Max Kreminski - ProcGen Character Arcs",
+ "speaker": "Max Kreminski",
+ "talk_title": "ProcGen Character Arcs",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1267,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Max Kreminski talks about how to craft compelling character arcs in procedurally generated systems",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 104,
+   "title": "Star Freighter"
+  },
+  {
+   "start": 370,
+   "title": "Relationships Take Time"
+  },
+  {
+   "start": 441,
+   "title": "Core Techniques"
+  },
+  {
+   "start": 465,
+   "title": "Foreshadowing"
+  },
+  {
+   "start": 565,
+   "title": "Player Expectations"
+  },
+  {
+   "start": 704,
+   "title": "Reusing Characters"
+  },
+  {
+   "start": 804,
+   "title": "Character Focus"
+  },
+  {
+   "start": 896,
+   "title": "Good End Bad End"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4674,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.05,
+   "d": 3.4,
+   "text": "hi so once upon a time in space there"
+  },
+  {
+   "t": 3.45,
+   "d": 2.19,
+   "text": "was an entire galaxy full of"
+  },
+  {
+   "t": 5.64,
+   "d": 2.82,
+   "text": "procedurally generated characters but"
+  },
+  {
+   "t": 8.46,
+   "d": 1.23,
+   "text": "these weren't just any procedurally"
+  },
+  {
+   "t": 9.69,
+   "d": 1.77,
+   "text": "generated characters in fact these"
+  },
+  {
+   "t": 11.46,
+   "d": 1.08,
+   "text": "procedurally generated characters were"
+  },
+  {
+   "t": 12.54,
+   "d": 2.31,
+   "text": "special why was this why were they"
+  },
+  {
+   "t": 14.85,
+   "d": 1.83,
+   "text": "special because these procedurally"
+  },
+  {
+   "t": 16.68,
+   "d": 1.62,
+   "text": "generated characters unlike many others"
+  },
+  {
+   "t": 18.3,
+   "d": 5.91,
+   "text": "had compelling character arcs so how the"
+  },
+  {
+   "t": 24.21,
+   "d": 2.94,
+   "text": "heck did that happen well my name is max"
+  },
+  {
+   "t": 27.15,
+   "d": 1.47,
+   "text": "Kaminsky and today i'm here to tell you"
+  },
+  {
+   "t": 28.62,
+   "d": 3.51,
+   "text": "about how the heck that happened so"
+  },
+  {
+   "t": 32.13,
+   "d": 1.05,
+   "text": "first I guess I'm going to do a little"
+  },
+  {
+   "t": 33.18,
+   "d": 2.76,
+   "text": "bit of brief self intro stuff I am a PhD"
+  },
+  {
+   "t": 35.94,
+   "d": 1.8,
+   "text": "student at UC Santa Cruz specifically"
+  },
+  {
+   "t": 37.74,
+   "d": 1.77,
+   "text": "the express of intelligence studio in"
+  },
+  {
+   "t": 39.51,
+   "d": 2.31,
+   "text": "computational media I'm interested in"
+  },
+  {
+   "t": 41.82,
+   "d": 1.23,
+   "text": "things like procedural content"
+  },
+  {
+   "t": 43.05,
+   "d": 2.52,
+   "text": "generation obviously procedural"
+  },
+  {
+   "t": 45.57,
+   "d": 1.14,
+   "text": "narrative interactive narrative in"
+  },
+  {
+   "t": 46.71,
+   "d": 2.82,
+   "text": "general I'm also a game designer one"
+  },
+  {
+   "t": 49.53,
+   "d": 1.32,
+   "text": "thing that I should note in response to"
+  },
+  {
+   "t": 50.85,
+   "d": 1.83,
+   "text": "something been I believe came up in his"
+  },
+  {
+   "t": 52.68,
+   "d": 2.7,
+   "text": "talk is that I am not really a machine"
+  },
+  {
+   "t": 55.38,
+   "d": 1.74,
+   "text": "learning person although I do know many"
+  },
+  {
+   "t": 57.12,
+   "d": 1.44,
+   "text": "of them and there are many among my lab"
+  },
+  {
+   "t": 58.56,
+   "d": 1.65,
+   "text": "mates so I can't really help you out"
+  },
+  {
+   "t": 60.21,
+   "d": 1.65,
+   "text": "with save neural networks besides just"
+  },
+  {
+   "t": 61.86,
+   "d": 1.23,
+   "text": "like pointing you at the people who know"
+  },
+  {
+   "t": 63.09,
+   "d": 3.24,
+   "text": "more about neural networks than I do and"
+  },
+  {
+   "t": 66.33,
+   "d": 2.19,
+   "text": "yeah so I'm not exactly into roguelikes"
+  },
+  {
+   "t": 68.52,
+   "d": 1.77,
+   "text": "in a strict sense but I do tend to make"
+  },
+  {
+   "t": 70.29,
+   "d": 1.05,
+   "text": "things that are heavy on generated"
+  },
+  {
+   "t": 71.34,
+   "d": 2.01,
+   "text": "content and I'm also super interested in"
+  },
+  {
+   "t": 73.35,
+   "d": 1.86,
+   "text": "anything that involves a computer and a"
+  },
+  {
+   "t": 75.21,
+   "d": 2.4,
+   "text": "player co-authoring content whether"
+  },
+  {
+   "t": 77.61,
+   "d": 2.58,
+   "text": "that's a story or whatever and a lot of"
+  },
+  {
+   "t": 80.19,
+   "d": 1.05,
+   "text": "roguelike seem to fit the bill in that"
+  },
+  {
+   "t": 81.24,
+   "d": 2.88,
+   "text": "sense one good example is the sort of"
+  },
+  {
+   "t": 84.12,
+   "d": 1.17,
+   "text": "thing that I tend to make is epitaph"
+  },
+  {
+   "t": 85.29,
+   "d": 2.55,
+   "text": "which is a game in which there's a bunch"
+  },
+  {
+   "t": 87.84,
+   "d": 0.96,
+   "text": "of procedurally generated alien"
+  },
+  {
+   "t": 88.8,
+   "d": 2.16,
+   "text": "civilizations you are trying to prevent"
+  },
+  {
+   "t": 90.96,
+   "d": 2.52,
+   "text": "them from going extinct and you do that"
+  },
+  {
+   "t": 93.48,
+   "d": 1.38,
+   "text": "by intervening to teach them new"
+  },
+  {
+   "t": 94.86,
+   "d": 2.94,
+   "text": "technologies and hopefully the"
+  },
+  {
+   "t": 97.8,
+   "d": 1.32,
+   "text": "technologies you teach them do not make"
+  },
+  {
+   "t": 99.12,
+   "d": 1.53,
+   "text": "them go extinct faster and actually save"
+  },
+  {
+   "t": 100.65,
+   "d": 1.44,
+   "text": "them from existential risks instead of"
+  },
+  {
+   "t": 102.09,
+   "d": 2.82,
+   "text": "creating new ones for them but the game"
+  },
+  {
+   "t": 104.91,
+   "d": 0.81,
+   "text": "I'm going to be talking about today"
+  },
+  {
+   "t": 105.72,
+   "d": 2.25,
+   "text": "mostly is called star freighter and star"
+  },
+  {
+   "t": 107.97,
+   "d": 1.23,
+   "text": "freighter is a game that I was"
+  },
+  {
+   "t": 109.2,
+   "d": 1.38,
+   "text": "developing prototyping over the summer"
+  },
+  {
+   "t": 110.58,
+   "d": 1.44,
+   "text": "it is currently sort of paused not"
+  },
+  {
+   "t": 112.02,
+   "d": 1.86,
+   "text": "really actively in development anymore"
+  },
+  {
+   "t": 113.88,
+   "d": 3.96,
+   "text": "but well I guess we're going to see what"
+  },
+  {
+   "t": 117.84,
+   "d": 2.67,
+   "text": "it looks like it was sort of originally"
+  },
+  {
+   "t": 120.51,
+   "d": 2.04,
+   "text": "a game about this which is basically the"
+  },
+  {
+   "t": 122.55,
+   "d": 2.16,
+   "text": "premise is you are a captain of us of a"
+  },
+  {
+   "t": 124.71,
+   "d": 2.37,
+   "text": "star freighter hence the title you're"
+  },
+  {
+   "t": 127.08,
+   "d": 1.65,
+   "text": "running these jobs of dubious legality"
+  },
+  {
+   "t": 128.73,
+   "d": 1.47,
+   "text": "for pay and trying to eke out an"
+  },
+  {
+   "t": 130.2,
+   "d": 2.28,
+   "text": "existence in space over time though what"
+  },
+  {
+   "t": 132.48,
+   "d": 1.05,
+   "text": "it turned into was I was proud"
+  },
+  {
+   "t": 133.53,
+   "d": 1.77,
+   "text": "typing was a more game about this really"
+  },
+  {
+   "t": 135.3,
+   "d": 2.37,
+   "text": "so the relationships between a crew of"
+  },
+  {
+   "t": 137.67,
+   "d": 1.98,
+   "text": "quirky misfits small-scale interpersonal"
+  },
+  {
+   "t": 139.65,
+   "d": 1.71,
+   "text": "dramas and sort of slice of life stories"
+  },
+  {
+   "t": 141.36,
+   "d": 3.99,
+   "text": "that just happened to be set in space so"
+  },
+  {
+   "t": 145.35,
+   "d": 1.35,
+   "text": "mechanically start free tour started out"
+  },
+  {
+   "t": 146.7,
+   "d": 1.68,
+   "text": "as a range like for those who aren't"
+  },
+  {
+   "t": 148.38,
+   "d": 1.44,
+   "text": "familiar reigns is this iPhone game"
+  },
+  {
+   "t": 149.82,
+   "d": 1.29,
+   "text": "where the premise is basically you're"
+  },
+  {
+   "t": 151.11,
+   "d": 1.53,
+   "text": "the king your subjects bring you all"
+  },
+  {
+   "t": 152.64,
+   "d": 1.41,
+   "text": "these little requests and you have to"
+  },
+  {
+   "t": 154.05,
+   "d": 1.5,
+   "text": "swipe right or left tinder style to say"
+  },
+  {
+   "t": 155.55,
+   "d": 2.4,
+   "text": "yes or no to those requests in rains"
+  },
+  {
+   "t": 157.95,
+   "d": 1.74,
+   "text": "there's these four stats at the top of"
+  },
+  {
+   "t": 159.69,
+   "d": 1.83,
+   "text": "the screen you're trying to manage and"
+  },
+  {
+   "t": 161.52,
+   "d": 1.65,
+   "text": "if any of those go to zero then it's"
+  },
+  {
+   "t": 163.17,
+   "d": 2.04,
+   "text": "game over for your current ruler you die"
+  },
+  {
+   "t": 165.21,
+   "d": 1.62,
+   "text": "in some horrifying typically fashion and"
+  },
+  {
+   "t": 166.83,
+   "d": 4.62,
+   "text": "you advance to the next ruler in line so"
+  },
+  {
+   "t": 171.45,
+   "d": 1.32,
+   "text": "Starfighter originally the first"
+  },
+  {
+   "t": 172.77,
+   "d": 1.77,
+   "text": "prototype looked like this and you can"
+  },
+  {
+   "t": 174.54,
+   "d": 0.96,
+   "text": "see that there's actually a lot of"
+  },
+  {
+   "t": 175.5,
+   "d": 1.86,
+   "text": "inspiration from rains in this there's a"
+  },
+  {
+   "t": 177.36,
+   "d": 1.32,
+   "text": "little text box at the top and some"
+  },
+  {
+   "t": 178.68,
+   "d": 1.44,
+   "text": "choices below it that you can use to say"
+  },
+  {
+   "t": 180.12,
+   "d": 1.14,
+   "text": "yes or no to things that people are"
+  },
+  {
+   "t": 181.26,
+   "d": 1.86,
+   "text": "bringing you and there's also these"
+  },
+  {
+   "t": 183.12,
+   "d": 1.56,
+   "text": "three stat bars which represent the"
+  },
+  {
+   "t": 184.68,
+   "d": 3.18,
+   "text": "equivalent of rains as for needs the"
+  },
+  {
+   "t": 187.86,
+   "d": 1.56,
+   "text": "bottom most of these stat bars is the"
+  },
+  {
+   "t": 189.42,
+   "d": 0.81,
+   "text": "one that we're gonna be talking about"
+  },
+  {
+   "t": 190.23,
+   "d": 2.22,
+   "text": "today originally this represented crew"
+  },
+  {
+   "t": 192.45,
+   "d": 1.26,
+   "text": "morale and it was just a number between"
+  },
+  {
+   "t": 193.71,
+   "d": 2.01,
+   "text": "0 and 100 so nothing super sophisticated"
+  },
+  {
+   "t": 195.72,
+   "d": 3.06,
+   "text": "nothing super fancy just a flat number"
+  },
+  {
+   "t": 198.78,
+   "d": 2.79,
+   "text": "basically so let's look at what star"
+  },
+  {
+   "t": 201.57,
+   "d": 2.4,
+   "text": "crater looks like today you can see that"
+  },
+  {
+   "t": 203.97,
+   "d": 1.68,
+   "text": "the user interface has gotten a lot more"
+  },
+  {
+   "t": 205.65,
+   "d": 1.32,
+   "text": "complicated and there's a few reasons"
+  },
+  {
+   "t": 206.97,
+   "d": 2.37,
+   "text": "for that you can see for one thing that"
+  },
+  {
+   "t": 209.34,
+   "d": 1.68,
+   "text": "the meters have vanished there's no"
+  },
+  {
+   "t": 211.02,
+   "d": 2.82,
+   "text": "three simple needs anymore and actually"
+  },
+  {
+   "t": 213.84,
+   "d": 1.08,
+   "text": "the reason for that is because the game"
+  },
+  {
+   "t": 214.92,
+   "d": 2.94,
+   "text": "has gotten a lot more simulation estate"
+  },
+  {
+   "t": 217.86,
+   "d": 1.53,
+   "text": "at a much more fine-grained level and"
+  },
+  {
+   "t": 219.39,
+   "d": 1.8,
+   "text": "you can see if we zoom into the crew"
+  },
+  {
+   "t": 221.19,
+   "d": 2.22,
+   "text": "section here that each of our crew"
+  },
+  {
+   "t": 223.41,
+   "d": 1.5,
+   "text": "members actually has their own mood now"
+  },
+  {
+   "t": 224.91,
+   "d": 1.59,
+   "text": "and these individual crew moods have now"
+  },
+  {
+   "t": 226.5,
+   "d": 2.6,
+   "text": "completely subsumed the overall the"
+  },
+  {
+   "t": 229.1,
+   "d": 3.34,
+   "text": "summary average mood of the crew so each"
+  },
+  {
+   "t": 232.44,
+   "d": 1.14,
+   "text": "of these crew members is generated"
+  },
+  {
+   "t": 233.58,
+   "d": 2.01,
+   "text": "character they have a name they have"
+  },
+  {
+   "t": 235.59,
+   "d": 1.92,
+   "text": "some stats or things that they're good"
+  },
+  {
+   "t": 237.51,
+   "d": 1.17,
+   "text": "at which are represented by the little"
+  },
+  {
+   "t": 238.68,
+   "d": 2.67,
+   "text": "emojis next to them and they also each"
+  },
+  {
+   "t": 241.35,
+   "d": 1.17,
+   "text": "have their own individual mood which is"
+  },
+  {
+   "t": 242.52,
+   "d": 1.68,
+   "text": "influenced by how you're responding to"
+  },
+  {
+   "t": 244.2,
+   "d": 1.11,
+   "text": "them how they're in again and how"
+  },
+  {
+   "t": 245.31,
+   "d": 0.72,
+   "text": "they're getting on with other crew"
+  },
+  {
+   "t": 246.03,
+   "d": 3.36,
+   "text": "members right now and so the central"
+  },
+  {
+   "t": 249.39,
+   "d": 1.05,
+   "text": "question of Starfighter is I was"
+  },
+  {
+   "t": 250.44,
+   "d": 1.62,
+   "text": "developing it really became for me how"
+  },
+  {
+   "t": 252.06,
+   "d": 1.8,
+   "text": "do I get players to become invested in"
+  },
+  {
+   "t": 253.86,
+   "d": 1.65,
+   "text": "these procedurally generated characters"
+  },
+  {
+   "t": 255.51,
+   "d": 1.92,
+   "text": "this is not really a hard problem for"
+  },
+  {
+   "t": 257.43,
+   "d": 1.89,
+   "text": "authored characters because there's a"
+  },
+  {
+   "t": 259.32,
+   "d": 1.05,
+   "text": "lot of things that people like to get"
+  },
+  {
+   "t": 260.37,
+   "d": 2.13,
+   "text": "invested in in authored media but when"
+  },
+  {
+   "t": 262.5,
+   "d": 0.84,
+   "text": "you're procedurally generating these"
+  },
+  {
+   "t": 263.34,
+   "d": 1.05,
+   "text": "characters how do you get them to have"
+  },
+  {
+   "t": 264.39,
+   "d": 2.1,
+   "text": "procedurally interesting story arcs"
+  },
+  {
+   "t": 266.49,
+   "d": 1.62,
+   "text": "so we're actually going to take a quick"
+  },
+  {
+   "t": 268.11,
+   "d": 1.35,
+   "text": "digression and talk about story let's"
+  },
+  {
+   "t": 269.46,
+   "d": 1.83,
+   "text": "first because that's a key part of how a"
+  },
+  {
+   "t": 271.29,
+   "d": 1.34,
+   "text": "stock trader does its narrative stuff"
+  },
+  {
+   "t": 272.63,
+   "d": 2.35,
+   "text": "this is a term I'm borrowing from fallen"
+  },
+  {
+   "t": 274.98,
+   "d": 1.8,
+   "text": "London and other favorable fail better"
+  },
+  {
+   "t": 276.78,
+   "d": 2.64,
+   "text": "games it basically represents a small"
+  },
+  {
+   "t": 279.42,
+   "d": 1.26,
+   "text": "self-contained unit of story that you"
+  },
+  {
+   "t": 280.68,
+   "d": 1.68,
+   "text": "can play through and each of these units"
+  },
+  {
+   "t": 282.36,
+   "d": 1.41,
+   "text": "of story has some prerequisites that"
+  },
+  {
+   "t": 283.77,
+   "d": 2.55,
+   "text": "dictate when it can be played so you"
+  },
+  {
+   "t": 286.32,
+   "d": 1.5,
+   "text": "have to have stats above a certain level"
+  },
+  {
+   "t": 287.82,
+   "d": 1.8,
+   "text": "in certain particular stats before you"
+  },
+  {
+   "t": 289.62,
+   "d": 1.98,
+   "text": "can play through one of these and in"
+  },
+  {
+   "t": 291.6,
+   "d": 2.7,
+   "text": "fall in London there's also branching"
+  },
+  {
+   "t": 294.3,
+   "d": 1.35,
+   "text": "and things like that internally that you"
+  },
+  {
+   "t": 295.65,
+   "d": 1.26,
+   "text": "can do so each of these is basically a"
+  },
+  {
+   "t": 296.91,
+   "d": 1.77,
+   "text": "little hypertext node with possible"
+  },
+  {
+   "t": 298.68,
+   "d": 1.95,
+   "text": "changes to the state based on what you"
+  },
+  {
+   "t": 300.63,
+   "d": 4.05,
+   "text": "do inside that node so stock trader does"
+  },
+  {
+   "t": 304.68,
+   "d": 1.68,
+   "text": "things a little bit differently in fall"
+  },
+  {
+   "t": 306.36,
+   "d": 2.04,
+   "text": "in London you can actually choose which"
+  },
+  {
+   "t": 308.4,
+   "d": 2.01,
+   "text": "store you like to play yourself in star"
+  },
+  {
+   "t": 310.41,
+   "d": 1.05,
+   "text": "freighter it's actually selecting"
+  },
+  {
+   "t": 311.46,
+   "d": 1.44,
+   "text": "dynamically from the pool of story"
+  },
+  {
+   "t": 312.9,
+   "d": 1.14,
+   "text": "lights whose prerequisites are currently"
+  },
+  {
+   "t": 314.04,
+   "d": 1.56,
+   "text": "met which one to select and play next"
+  },
+  {
+   "t": 315.6,
+   "d": 2.52,
+   "text": "for you and this is an example of what a"
+  },
+  {
+   "t": 318.12,
+   "d": 1.2,
+   "text": "story alert and star freighter happens"
+  },
+  {
+   "t": 319.32,
+   "d": 1.47,
+   "text": "to look like right now this is actually"
+  },
+  {
+   "t": 320.79,
+   "d": 2.3,
+   "text": "a pretty simple one this is actually"
+  },
+  {
+   "t": 323.09,
+   "d": 2.14,
+   "text": "saying basically there's there's two"
+  },
+  {
+   "t": 325.23,
+   "d": 1.65,
+   "text": "crew members on your ship and they have"
+  },
+  {
+   "t": 326.88,
+   "d": 1.47,
+   "text": "a slightly more positive interaction"
+  },
+  {
+   "t": 328.35,
+   "d": 1.5,
+   "text": "that makes the relationship slightly"
+  },
+  {
+   "t": 329.85,
+   "d": 2.52,
+   "text": "more positive overall so you can see"
+  },
+  {
+   "t": 332.37,
+   "d": 1.35,
+   "text": "that there's two crew members being"
+  },
+  {
+   "t": 333.72,
+   "d": 2.94,
+   "text": "selected up top and it's also checking"
+  },
+  {
+   "t": 336.66,
+   "d": 1.11,
+   "text": "to be sure that these two crew members"
+  },
+  {
+   "t": 337.77,
+   "d": 1.08,
+   "text": "have not recently had a super negative"
+  },
+  {
+   "t": 338.85,
+   "d": 1.74,
+   "text": "interaction between them and then it"
+  },
+  {
+   "t": 340.59,
+   "d": 0.99,
+   "text": "generally it's procedurally with a"
+  },
+  {
+   "t": 341.58,
+   "d": 2.37,
+   "text": "grammar some text to say what's going on"
+  },
+  {
+   "t": 343.95,
+   "d": 1.08,
+   "text": "and adds a memory to each of those"
+  },
+  {
+   "t": 345.03,
+   "d": 1.2,
+   "text": "characters that says oh we have a"
+  },
+  {
+   "t": 346.23,
+   "d": 1.35,
+   "text": "slightly more positive relationship now"
+  },
+  {
+   "t": 347.58,
+   "d": 4.59,
+   "text": "basically so back to the question of how"
+  },
+  {
+   "t": 352.17,
+   "d": 0.96,
+   "text": "do we get players to care about"
+  },
+  {
+   "t": 353.13,
+   "d": 2.76,
+   "text": "procedural eternity characters the my"
+  },
+  {
+   "t": 355.89,
+   "d": 0.75,
+   "text": "favorite way to answer a question"
+  },
+  {
+   "t": 356.64,
+   "d": 1.41,
+   "text": "typically is with another question and"
+  },
+  {
+   "t": 358.05,
+   "d": 1.83,
+   "text": "so the next thing I found myself asking"
+  },
+  {
+   "t": 359.88,
+   "d": 1.47,
+   "text": "was how do we get audiences to care"
+  },
+  {
+   "t": 361.35,
+   "d": 1.05,
+   "text": "about characters and other forms of"
+  },
+  {
+   "t": 362.4,
+   "d": 2.45,
+   "text": "media so television film all those and"
+  },
+  {
+   "t": 364.85,
+   "d": 2.44,
+   "text": "this sort of led me in the direction of"
+  },
+  {
+   "t": 367.29,
+   "d": 1.38,
+   "text": "this one central principle which"
+  },
+  {
+   "t": 368.67,
+   "d": 1.23,
+   "text": "everything else I'm going to talk about"
+  },
+  {
+   "t": 369.9,
+   "d": 2.01,
+   "text": "pretty much came out of and that is that"
+  },
+  {
+   "t": 371.91,
+   "d": 2.31,
+   "text": "relationships take time so relationships"
+  },
+  {
+   "t": 374.22,
+   "d": 0.96,
+   "text": "with people and relationships with"
+  },
+  {
+   "t": 375.18,
+   "d": 2.25,
+   "text": "characters I think a lot of generative"
+  },
+  {
+   "t": 377.43,
+   "d": 1.5,
+   "text": "systems tend to fall into a certain trap"
+  },
+  {
+   "t": 378.93,
+   "d": 1.65,
+   "text": "they tend to generate a lot of"
+  },
+  {
+   "t": 380.58,
+   "d": 1.59,
+   "text": "information upfront and then dump it on"
+  },
+  {
+   "t": 382.17,
+   "d": 2.31,
+   "text": "the player all at once so for instance"
+  },
+  {
+   "t": 384.48,
+   "d": 0.99,
+   "text": "if you generate a character that has"
+  },
+  {
+   "t": 385.47,
+   "d": 1.77,
+   "text": "three traits say they're adaptable"
+  },
+  {
+   "t": 387.24,
+   "d": 3.69,
+   "text": "dependable and courageous then those"
+  },
+  {
+   "t": 390.93,
+   "d": 1.17,
+   "text": "three traits are typically presented to"
+  },
+  {
+   "t": 392.1,
+   "d": 1.59,
+   "text": "you all up front so you can see the list"
+  },
+  {
+   "t": 393.69,
+   "d": 1.95,
+   "text": "of what the traits are right away this"
+  },
+  {
+   "t": 395.64,
+   "d": 2.16,
+   "text": "is good for a few different reasons the"
+  },
+  {
+   "t": 397.8,
+   "d": 1.59,
+   "text": "most important one"
+  },
+  {
+   "t": 399.39,
+   "d": 2.28,
+   "text": "is that Tania short talks about in this"
+  },
+  {
+   "t": 401.67,
+   "d": 1.5,
+   "text": "article on maximizing the impact of"
+  },
+  {
+   "t": 403.17,
+   "d": 1.26,
+   "text": "procedural personalities which is a"
+  },
+  {
+   "t": 404.43,
+   "d": 1.29,
+   "text": "fantastic article by the way you should"
+  },
+  {
+   "t": 405.72,
+   "d": 3.69,
+   "text": "all go read it is that otherwise players"
+  },
+  {
+   "t": 409.41,
+   "d": 1.95,
+   "text": "tend to miss the fact that there are"
+  },
+  {
+   "t": 411.36,
+   "d": 2.97,
+   "text": "traits at all that are mattering and not"
+  },
+  {
+   "t": 414.33,
+   "d": 1.35,
+   "text": "really realize that the characters have"
+  },
+  {
+   "t": 415.68,
+   "d": 3.03,
+   "text": "internal lives whatsoever but there's a"
+  },
+  {
+   "t": 418.71,
+   "d": 1.74,
+   "text": "problem with this also and that is that"
+  },
+  {
+   "t": 420.45,
+   "d": 1.68,
+   "text": "it's not what we expect in real life and"
+  },
+  {
+   "t": 422.13,
+   "d": 1.08,
+   "text": "it's not what you see in other forms of"
+  },
+  {
+   "t": 423.21,
+   "d": 2.16,
+   "text": "storytelling in many cases it takes a"
+  },
+  {
+   "t": 425.37,
+   "d": 1.32,
+   "text": "lot of interactions with a character or"
+  },
+  {
+   "t": 426.69,
+   "d": 1.56,
+   "text": "a person distribute it out over a long"
+  },
+  {
+   "t": 428.25,
+   "d": 1.83,
+   "text": "period of time for those traits to be"
+  },
+  {
+   "t": 430.08,
+   "d": 1.17,
+   "text": "gradually revealed through their actions"
+  },
+  {
+   "t": 431.25,
+   "d": 1.83,
+   "text": "so if you meet me for the first time"
+  },
+  {
+   "t": 433.08,
+   "d": 1.2,
+   "text": "you're not going to immediately know"
+  },
+  {
+   "t": 434.28,
+   "d": 1.8,
+   "text": "Omax must be dependable thrifty and"
+  },
+  {
+   "t": 436.08,
+   "d": 1.95,
+   "text": "courageous you have to see those traits"
+  },
+  {
+   "t": 438.03,
+   "d": 1.59,
+   "text": "revealed in my actions as I as I take"
+  },
+  {
+   "t": 439.62,
+   "d": 3.42,
+   "text": "them so in the process of thinking about"
+  },
+  {
+   "t": 443.04,
+   "d": 1.14,
+   "text": "this principle I actually came up with"
+  },
+  {
+   "t": 444.18,
+   "d": 2.04,
+   "text": "five core techniques or five main"
+  },
+  {
+   "t": 446.22,
+   "d": 0.93,
+   "text": "techniques that I'm going to be talking"
+  },
+  {
+   "t": 447.15,
+   "d": 1.98,
+   "text": "about for how to make procedurally"
+  },
+  {
+   "t": 449.13,
+   "d": 1.11,
+   "text": "generated characters have compelling"
+  },
+  {
+   "t": 450.24,
+   "d": 1.62,
+   "text": "character arcs these have been"
+  },
+  {
+   "t": 451.86,
+   "d": 1.47,
+   "text": "implemented to various extents in"
+  },
+  {
+   "t": 453.33,
+   "d": 1.59,
+   "text": "Starfighter I believe the first three"
+  },
+  {
+   "t": 454.92,
+   "d": 1.29,
+   "text": "are actually implemented in some form"
+  },
+  {
+   "t": 456.21,
+   "d": 2.01,
+   "text": "all of them I'd say are incompletely"
+  },
+  {
+   "t": 458.22,
+   "d": 2.19,
+   "text": "implemented and the last two have not"
+  },
+  {
+   "t": 460.41,
+   "d": 2.43,
+   "text": "even really been touched code wise but"
+  },
+  {
+   "t": 462.84,
+   "d": 1.32,
+   "text": "there are cool ideas I'd like to try out"
+  },
+  {
+   "t": 464.16,
+   "d": 2.28,
+   "text": "at some point in the future number one"
+  },
+  {
+   "t": 466.44,
+   "d": 2.64,
+   "text": "of these without further ado is using"
+  },
+  {
+   "t": 469.08,
+   "d": 2.04,
+   "text": "foreshadowing to build anticipation this"
+  },
+  {
+   "t": 471.12,
+   "d": 1.29,
+   "text": "is something you see a lot in a lot of"
+  },
+  {
+   "t": 472.41,
+   "d": 1.47,
+   "text": "different forms of media basically"
+  },
+  {
+   "t": 473.88,
+   "d": 2.13,
+   "text": "hinting at future events trying to get"
+  },
+  {
+   "t": 476.01,
+   "d": 1.71,
+   "text": "players or well not players in the case"
+  },
+  {
+   "t": 477.72,
+   "d": 1.11,
+   "text": "of television shows or something like"
+  },
+  {
+   "t": 478.83,
+   "d": 0.24,
+   "text": "that"
+  },
+  {
+   "t": 479.07,
+   "d": 2.28,
+   "text": "but the audience in general to develop"
+  },
+  {
+   "t": 481.35,
+   "d": 1.47,
+   "text": "theories or to develop hypotheses about"
+  },
+  {
+   "t": 482.82,
+   "d": 1.44,
+   "text": "what they think is going to happen next"
+  },
+  {
+   "t": 484.26,
+   "d": 1.8,
+   "text": "and want to see if these things were"
+  },
+  {
+   "t": 486.06,
+   "d": 3.6,
+   "text": "true the difficulty is that in games"
+  },
+  {
+   "t": 489.66,
+   "d": 1.86,
+   "text": "foreshadowing sort of requires you to"
+  },
+  {
+   "t": 491.52,
+   "d": 1.86,
+   "text": "predict the future right so you have to"
+  },
+  {
+   "t": 493.38,
+   "d": 1.2,
+   "text": "sort of know what the narrative is going"
+  },
+  {
+   "t": 494.58,
+   "d": 1.41,
+   "text": "to be ahead of time before you can hint"
+  },
+  {
+   "t": 495.99,
+   "d": 1.8,
+   "text": "at what it's going what what is going to"
+  },
+  {
+   "t": 497.79,
+   "d": 2.58,
+   "text": "happen in the future star freighter"
+  },
+  {
+   "t": 500.37,
+   "d": 1.14,
+   "text": "actually gets around this with a"
+  },
+  {
+   "t": 501.51,
+   "d": 1.68,
+   "text": "specific dodge that is generating"
+  },
+  {
+   "t": 503.19,
+   "d": 1.62,
+   "text": "characters with hidden or latent traits"
+  },
+  {
+   "t": 504.81,
+   "d": 2.31,
+   "text": "so a character might have say a dark"
+  },
+  {
+   "t": 507.12,
+   "d": 1.23,
+   "text": "secret and that might be that they're a"
+  },
+  {
+   "t": 508.35,
+   "d": 1.8,
+   "text": "fugitive from the law or they might have"
+  },
+  {
+   "t": 510.15,
+   "d": 1.38,
+   "text": "a hidden potential say that this"
+  },
+  {
+   "t": 511.53,
+   "d": 1.02,
+   "text": "character would be really good at"
+  },
+  {
+   "t": 512.55,
+   "d": 1.5,
+   "text": "fighting if they ever tried it but"
+  },
+  {
+   "t": 514.05,
+   "d": 1.32,
+   "text": "they'd simply never had occasion to or"
+  },
+  {
+   "t": 515.37,
+   "d": 1.56,
+   "text": "I've never had a need to and so they"
+  },
+  {
+   "t": 516.93,
+   "d": 0.99,
+   "text": "don't even know that they have this"
+  },
+  {
+   "t": 517.92,
+   "d": 2.82,
+   "text": "potential yet temporarily concealing"
+  },
+  {
+   "t": 520.74,
+   "d": 1.2,
+   "text": "these traits not showing these to the"
+  },
+  {
+   "t": 521.94,
+   "d": 1.53,
+   "text": "player right away allows the system to"
+  },
+  {
+   "t": 523.47,
+   "d": 1.92,
+   "text": "predict the future by dropping hints"
+  },
+  {
+   "t": 525.39,
+   "d": 2.7,
+   "text": "about these things and then gradually"
+  },
+  {
+   "t": 528.09,
+   "d": 2.07,
+   "text": "developing these traits over time so"
+  },
+  {
+   "t": 530.16,
+   "d": 1.38,
+   "text": "what you can do is you can write story"
+  },
+  {
+   "t": 531.54,
+   "d": 0.69,
+   "text": "lights the check for"
+  },
+  {
+   "t": 532.23,
+   "d": 2.07,
+   "text": "the presence of these hidden traits say"
+  },
+  {
+   "t": 534.3,
+   "d": 1.83,
+   "text": "write a story like that only fires if"
+  },
+  {
+   "t": 536.13,
+   "d": 1.14,
+   "text": "this character has the potential to"
+  },
+  {
+   "t": 537.27,
+   "d": 1.26,
+   "text": "become a great fighter but hasn't yet"
+  },
+  {
+   "t": 538.53,
+   "d": 2.67,
+   "text": "activated it and say you get in a fight"
+  },
+  {
+   "t": 541.2,
+   "d": 2.07,
+   "text": "your crew barely survives this character"
+  },
+  {
+   "t": 543.27,
+   "d": 2.4,
+   "text": "realizes then oh I have the potential to"
+  },
+  {
+   "t": 545.67,
+   "d": 1.08,
+   "text": "become a great fighter I should probably"
+  },
+  {
+   "t": 546.75,
+   "d": 1.32,
+   "text": "learn how to defend myself so this"
+  },
+  {
+   "t": 548.07,
+   "d": 2.34,
+   "text": "doesn't happen to me ever again and then"
+  },
+  {
+   "t": 550.41,
+   "d": 2.22,
+   "text": "you can have another story later on that"
+  },
+  {
+   "t": 552.63,
+   "d": 1.56,
+   "text": "triggers when the character is has the"
+  },
+  {
+   "t": 554.19,
+   "d": 1.38,
+   "text": "desire but not the means to learn how to"
+  },
+  {
+   "t": 555.57,
+   "d": 1.83,
+   "text": "fight where a passenger who is really"
+  },
+  {
+   "t": 557.4,
+   "d": 1.56,
+   "text": "good at martial arts happens to join and"
+  },
+  {
+   "t": 558.96,
+   "d": 3.33,
+   "text": "oh this this person can take can take"
+  },
+  {
+   "t": 562.29,
+   "d": 0.93,
+   "text": "lessons with this person while they're"
+  },
+  {
+   "t": 563.22,
+   "d": 3.59,
+   "text": "on the ship basically number two is"
+  },
+  {
+   "t": 566.81,
+   "d": 1.69,
+   "text": "building and supporting players"
+  },
+  {
+   "t": 568.5,
+   "d": 2.34,
+   "text": "expectations for surprise so player"
+  },
+  {
+   "t": 570.84,
+   "d": 1.95,
+   "text": "expectations in procedural systems have"
+  },
+  {
+   "t": 572.79,
+   "d": 1.53,
+   "text": "a lot of interactions with randomness"
+  },
+  {
+   "t": 574.32,
+   "d": 1.47,
+   "text": "and probability and also with players"
+  },
+  {
+   "t": 575.79,
+   "d": 1.11,
+   "text": "perceptions of randomness and"
+  },
+  {
+   "t": 576.9,
+   "d": 2.43,
+   "text": "probability that tend to be sort of"
+  },
+  {
+   "t": 579.33,
+   "d": 1.53,
+   "text": "divergent from what actual randomness"
+  },
+  {
+   "t": 580.86,
+   "d": 2.25,
+   "text": "and probability look like initially"
+  },
+  {
+   "t": 583.11,
+   "d": 1.29,
+   "text": "players come into a game with very"
+  },
+  {
+   "t": 584.4,
+   "d": 1.08,
+   "text": "little sense of what to expect from a"
+  },
+  {
+   "t": 585.48,
+   "d": 2.34,
+   "text": "generator they might over time learn to"
+  },
+  {
+   "t": 587.82,
+   "d": 1.26,
+   "text": "read the generator and get a sense for"
+  },
+  {
+   "t": 589.08,
+   "d": 1.38,
+   "text": "how likely certain things are to happen"
+  },
+  {
+   "t": 590.46,
+   "d": 1.56,
+   "text": "but until they spent some time with the"
+  },
+  {
+   "t": 592.02,
+   "d": 1.2,
+   "text": "system they can't really really"
+  },
+  {
+   "t": 593.22,
+   "d": 1.65,
+   "text": "understand what a normal baseline would"
+  },
+  {
+   "t": 594.87,
+   "d": 1.8,
+   "text": "look like that means they can't really"
+  },
+  {
+   "t": 596.67,
+   "d": 1.53,
+   "text": "recognize special things or exceptional"
+  },
+  {
+   "t": 598.2,
+   "d": 2.28,
+   "text": "things when they happen and so you have"
+  },
+  {
+   "t": 600.48,
+   "d": 1.56,
+   "text": "to spend some time building expectations"
+  },
+  {
+   "t": 602.04,
+   "d": 2.93,
+   "text": "before you can start subverting them"
+  },
+  {
+   "t": 604.97,
+   "d": 2.05,
+   "text": "when you take a look at something like"
+  },
+  {
+   "t": 607.02,
+   "d": 1.41,
+   "text": "this this is actually just a run of"
+  },
+  {
+   "t": 608.43,
+   "d": 1.5,
+   "text": "random digits between zero and four that"
+  },
+  {
+   "t": 609.93,
+   "d": 2.37,
+   "text": "I generated right before this talk you"
+  },
+  {
+   "t": 612.3,
+   "d": 1.5,
+   "text": "can see that the there's three runs here"
+  },
+  {
+   "t": 613.8,
+   "d": 1.62,
+   "text": "that are highlighted in red and all of"
+  },
+  {
+   "t": 615.42,
+   "d": 2.64,
+   "text": "these runs basically talk about well"
+  },
+  {
+   "t": 618.06,
+   "d": 1.59,
+   "text": "what do you think they represent they"
+  },
+  {
+   "t": 619.65,
+   "d": 2.13,
+   "text": "represent basically runs in which"
+  },
+  {
+   "t": 621.78,
+   "d": 1.56,
+   "text": "there's only one or two of these five"
+  },
+  {
+   "t": 623.34,
+   "d": 1.65,
+   "text": "total digits that are possible being"
+  },
+  {
+   "t": 624.99,
+   "d": 1.89,
+   "text": "displayed for quite a long time and if"
+  },
+  {
+   "t": 626.88,
+   "d": 1.47,
+   "text": "any of these runs are the players first"
+  },
+  {
+   "t": 628.35,
+   "d": 1.65,
+   "text": "experience of your game then that's"
+  },
+  {
+   "t": 630.0,
+   "d": 1.35,
+   "text": "going to be a very different first"
+  },
+  {
+   "t": 631.35,
+   "d": 1.26,
+   "text": "experience than someone who sees"
+  },
+  {
+   "t": 632.61,
+   "d": 2.13,
+   "text": "actually like the full variation they"
+  },
+  {
+   "t": 634.74,
+   "d": 1.55,
+   "text": "might have a run where they expect oh"
+  },
+  {
+   "t": 636.29,
+   "d": 1.78,
+   "text": "everything in this game is always going"
+  },
+  {
+   "t": 638.07,
+   "d": 1.05,
+   "text": "to be the same if they have the first"
+  },
+  {
+   "t": 639.12,
+   "d": 2.19,
+   "text": "run or oh there's only ever going to be"
+  },
+  {
+   "t": 641.31,
+   "d": 1.32,
+   "text": "ones and fours there's only ever going"
+  },
+  {
+   "t": 642.63,
+   "d": 2.46,
+   "text": "to be zeroes and threes and that can be"
+  },
+  {
+   "t": 645.09,
+   "d": 1.83,
+   "text": "hard to subvert once you've once you've"
+  },
+  {
+   "t": 646.92,
+   "d": 2.22,
+   "text": "built that up and it's not always clear"
+  },
+  {
+   "t": 649.14,
+   "d": 1.68,
+   "text": "to players what the possibility space is"
+  },
+  {
+   "t": 650.82,
+   "d": 1.53,
+   "text": "until they played enough to see the full"
+  },
+  {
+   "t": 652.35,
+   "d": 4.47,
+   "text": "random sequence so one thing you can do"
+  },
+  {
+   "t": 656.82,
+   "d": 2.01,
+   "text": "is star Frater sort of puts its hand on"
+  },
+  {
+   "t": 658.83,
+   "d": 2.4,
+   "text": "the scale tips the scales to make it so"
+  },
+  {
+   "t": 661.23,
+   "d": 2.19,
+   "text": "that the most random choices don't come"
+  },
+  {
+   "t": 663.42,
+   "d": 2.34,
+   "text": "up first and the most random I mean the"
+  },
+  {
+   "t": 665.76,
+   "d": 0.18,
+   "text": "most"
+  },
+  {
+   "t": 665.94,
+   "d": 3.78,
+   "text": "exceptional by saying we're always going"
+  },
+  {
+   "t": 669.72,
+   "d": 1.59,
+   "text": "to have say the first there's an event"
+  },
+  {
+   "t": 671.31,
+   "d": 1.56,
+   "text": "where a passenger can be a pirate or"
+  },
+  {
+   "t": 672.87,
+   "d": 1.17,
+   "text": "something who tries to hijack the ship"
+  },
+  {
+   "t": 674.04,
+   "d": 1.8,
+   "text": "this is never going to happen to you on"
+  },
+  {
+   "t": 675.84,
+   "d": 1.02,
+   "text": "your first three passengers that you"
+  },
+  {
+   "t": 676.86,
+   "d": 3.03,
+   "text": "take ever because when it happens it has"
+  },
+  {
+   "t": 679.89,
+   "d": 1.86,
+   "text": "to be surprising to matter and if it's"
+  },
+  {
+   "t": 681.75,
+   "d": 1.26,
+   "text": "the first thing that happens is going to"
+  },
+  {
+   "t": 683.01,
+   "d": 2.01,
+   "text": "seem random antics and unexceptional but"
+  },
+  {
+   "t": 685.02,
+   "d": 1.68,
+   "text": "if it's the thing that happens after"
+  },
+  {
+   "t": 686.7,
+   "d": 1.29,
+   "text": "you've seen a bunch of safe passengers"
+  },
+  {
+   "t": 687.99,
+   "d": 1.47,
+   "text": "in a row and it's going to feel all that"
+  },
+  {
+   "t": 689.46,
+   "d": 2.22,
+   "text": "much more impactful and the reason we"
+  },
+  {
+   "t": 691.68,
+   "d": 1.17,
+   "text": "care about surprise for generating"
+  },
+  {
+   "t": 692.85,
+   "d": 1.32,
+   "text": "characters and generating procedural"
+  },
+  {
+   "t": 694.17,
+   "d": 1.47,
+   "text": "character arcs is because when a"
+  },
+  {
+   "t": 695.64,
+   "d": 2.25,
+   "text": "character surprises you you start to be"
+  },
+  {
+   "t": 697.89,
+   "d": 1.38,
+   "text": "more intrigued by that character and"
+  },
+  {
+   "t": 699.27,
+   "d": 1.59,
+   "text": "then to care a lot more about their fate"
+  },
+  {
+   "t": 700.86,
+   "d": 5.04,
+   "text": "in general okay number three this is"
+  },
+  {
+   "t": 705.9,
+   "d": 1.35,
+   "text": "actually my favorite of them and this"
+  },
+  {
+   "t": 707.25,
+   "d": 1.38,
+   "text": "one is about reusing characters instead"
+  },
+  {
+   "t": 708.63,
+   "d": 0.83,
+   "text": "of throwing them away"
+  },
+  {
+   "t": 709.46,
+   "d": 1.84,
+   "text": "another thing that happens a lot in"
+  },
+  {
+   "t": 711.3,
+   "d": 1.59,
+   "text": "procedural systems is you generate a lot"
+  },
+  {
+   "t": 712.89,
+   "d": 2.25,
+   "text": "of content upfront and then immediately"
+  },
+  {
+   "t": 715.14,
+   "d": 1.74,
+   "text": "use it for its intended purpose and then"
+  },
+  {
+   "t": 716.88,
+   "d": 1.65,
+   "text": "you never really use it again so you"
+  },
+  {
+   "t": 718.53,
+   "d": 1.5,
+   "text": "might generate a character to fight the"
+  },
+  {
+   "t": 720.03,
+   "d": 2.01,
+   "text": "player in a in a battle sort of scene"
+  },
+  {
+   "t": 722.04,
+   "d": 1.77,
+   "text": "and then this character is defeated and"
+  },
+  {
+   "t": 723.81,
+   "d": 2.28,
+   "text": "never appears again or you might"
+  },
+  {
+   "t": 726.09,
+   "d": 1.53,
+   "text": "introduce a character for the purpose of"
+  },
+  {
+   "t": 727.62,
+   "d": 2.28,
+   "text": "a specifically scoped plot line or quest"
+  },
+  {
+   "t": 729.9,
+   "d": 1.59,
+   "text": "line and then when that plot line or"
+  },
+  {
+   "t": 731.49,
+   "d": 1.65,
+   "text": "quest line is over that character never"
+  },
+  {
+   "t": 733.14,
+   "d": 2.25,
+   "text": "appears again in the game the problem"
+  },
+  {
+   "t": 735.39,
+   "d": 1.02,
+   "text": "with this is that it limits the amount"
+  },
+  {
+   "t": 736.41,
+   "d": 1.62,
+   "text": "of time that the player can spend with"
+  },
+  {
+   "t": 738.03,
+   "d": 2.25,
+   "text": "any given character and thus limits the"
+  },
+  {
+   "t": 740.28,
+   "d": 1.2,
+   "text": "amount of development in that character"
+  },
+  {
+   "t": 741.48,
+   "d": 2.28,
+   "text": "can possibly ever receive so what"
+  },
+  {
+   "t": 743.76,
+   "d": 1.56,
+   "text": "Starfighter does is instead of reusing"
+  },
+  {
+   "t": 745.32,
+   "d": 1.5,
+   "text": "characters well instead of throwing"
+  },
+  {
+   "t": 746.82,
+   "d": 2.85,
+   "text": "characters away it reuses them so for"
+  },
+  {
+   "t": 749.67,
+   "d": 1.86,
+   "text": "instance even in a character is even in"
+  },
+  {
+   "t": 751.53,
+   "d": 0.81,
+   "text": "situation where you have to fight a"
+  },
+  {
+   "t": 752.34,
+   "d": 1.5,
+   "text": "character say it's a bounty hunter who's"
+  },
+  {
+   "t": 753.84,
+   "d": 2.04,
+   "text": "pursuing you if you manage to defeat"
+  },
+  {
+   "t": 755.88,
+   "d": 1.44,
+   "text": "them there's very good odds that they'll"
+  },
+  {
+   "t": 757.32,
+   "d": 1.38,
+   "text": "manage to either run away or survive"
+  },
+  {
+   "t": 758.7,
+   "d": 1.77,
+   "text": "somehow and then they'll come after you"
+  },
+  {
+   "t": 760.47,
+   "d": 2.46,
+   "text": "again later at some unspecified date in"
+  },
+  {
+   "t": 762.93,
+   "d": 1.74,
+   "text": "the future likewise if you have"
+  },
+  {
+   "t": 764.67,
+   "d": 1.29,
+   "text": "passengers you've just finished dropping"
+  },
+  {
+   "t": 765.96,
+   "d": 1.59,
+   "text": "off or you have crew members who have"
+  },
+  {
+   "t": 767.55,
+   "d": 1.68,
+   "text": "left the ship for whatever reason they"
+  },
+  {
+   "t": 769.23,
+   "d": 1.53,
+   "text": "can actually they stay in the database"
+  },
+  {
+   "t": 770.76,
+   "d": 1.11,
+   "text": "instead of being removed from it and"
+  },
+  {
+   "t": 771.87,
+   "d": 1.2,
+   "text": "they can be brought back in different"
+  },
+  {
+   "t": 773.07,
+   "d": 1.98,
+   "text": "roles later on so someone you might not"
+  },
+  {
+   "t": 775.05,
+   "d": 1.77,
+   "text": "have expected to ever see again can"
+  },
+  {
+   "t": 776.82,
+   "d": 2.16,
+   "text": "return unexpectedly at precisely the"
+  },
+  {
+   "t": 778.98,
+   "d": 2.64,
+   "text": "worst possible moment even the merchants"
+  },
+  {
+   "t": 781.62,
+   "d": 1.26,
+   "text": "that you interact with each planet are"
+  },
+  {
+   "t": 782.88,
+   "d": 1.23,
+   "text": "persistent and you have a tracked"
+  },
+  {
+   "t": 784.11,
+   "d": 1.62,
+   "text": "reputation with those merchants so if"
+  },
+  {
+   "t": 785.73,
+   "d": 1.23,
+   "text": "you ever find yourself backtracking you"
+  },
+  {
+   "t": 786.96,
+   "d": 0.75,
+   "text": "might have to deal with the"
+  },
+  {
+   "t": 787.71,
+   "d": 1.2,
+   "text": "repercussions of things that you did in"
+  },
+  {
+   "t": 788.91,
+   "d": 1.71,
+   "text": "the past that were maybe not the most"
+  },
+  {
+   "t": 790.62,
+   "d": 1.47,
+   "text": "ethical things you could have possibly"
+  },
+  {
+   "t": 792.09,
+   "d": 1.94,
+   "text": "done in your business dealings"
+  },
+  {
+   "t": 794.03,
+   "d": 2.11,
+   "text": "you can also almost think of this like a"
+  },
+  {
+   "t": 796.14,
+   "d": 1.5,
+   "text": "generalization of this shadow of mordor"
+  },
+  {
+   "t": 797.64,
+   "d": 2.05,
+   "text": "nemesis system that applies to not just"
+  },
+  {
+   "t": 799.69,
+   "d": 1.68,
+   "text": "rivals but all kinds of characters both"
+  },
+  {
+   "t": 801.37,
+   "d": 1.59,
+   "text": "your friends your enemies anyone in"
+  },
+  {
+   "t": 802.96,
+   "d": 6.69,
+   "text": "between number four is using character"
+  },
+  {
+   "t": 809.65,
+   "d": 1.49,
+   "text": "focus to deepen characterization"
+  },
+  {
+   "t": 811.14,
+   "d": 2.2,
+   "text": "character focus is something it's one of"
+  },
+  {
+   "t": 813.34,
+   "d": 1.11,
+   "text": "these it's one of the two that I have"
+  },
+  {
+   "t": 814.45,
+   "d": 1.26,
+   "text": "not yet implemented in starfighter in"
+  },
+  {
+   "t": 815.71,
+   "d": 2.16,
+   "text": "any real way this is something you see a"
+  },
+  {
+   "t": 817.87,
+   "d": 1.44,
+   "text": "lot in television shows I think another"
+  },
+  {
+   "t": 819.31,
+   "d": 2.28,
+   "text": "sort of serial forms of media basically"
+  },
+  {
+   "t": 821.59,
+   "d": 1.53,
+   "text": "what happens is you see a character"
+  },
+  {
+   "t": 823.12,
+   "d": 1.71,
+   "text": "being given focus in quotation marks for"
+  },
+  {
+   "t": 824.83,
+   "d": 1.32,
+   "text": "an episode or sometimes even for a whole"
+  },
+  {
+   "t": 826.15,
+   "d": 2.58,
+   "text": "arc of several episodes and during that"
+  },
+  {
+   "t": 828.73,
+   "d": 1.71,
+   "text": "during that period of focus you learn"
+  },
+  {
+   "t": 830.44,
+   "d": 1.26,
+   "text": "more about that character specifically"
+  },
+  {
+   "t": 831.7,
+   "d": 1.83,
+   "text": "you learn some about their backstory you"
+  },
+  {
+   "t": 833.53,
+   "d": 1.05,
+   "text": "might see their interactions of other"
+  },
+  {
+   "t": 834.58,
+   "d": 1.2,
+   "text": "characters you don't often see them on"
+  },
+  {
+   "t": 835.78,
+   "d": 2.67,
+   "text": "screen with you might see more about the"
+  },
+  {
+   "t": 838.45,
+   "d": 1.5,
+   "text": "personality traits their motivations for"
+  },
+  {
+   "t": 839.95,
+   "d": 2.16,
+   "text": "doing the things they do and the reasons"
+  },
+  {
+   "t": 842.11,
+   "d": 1.74,
+   "text": "for even being on the show in the first"
+  },
+  {
+   "t": 843.85,
+   "d": 0.57,
+   "text": "place"
+  },
+  {
+   "t": 844.42,
+   "d": 1.83,
+   "text": "this can also appear in the form of"
+  },
+  {
+   "t": 846.25,
+   "d": 1.44,
+   "text": "relationship focus where instead of one"
+  },
+  {
+   "t": 847.69,
+   "d": 1.56,
+   "text": "character being spotlighted it's the"
+  },
+  {
+   "t": 849.25,
+   "d": 1.2,
+   "text": "relationship between two or a few"
+  },
+  {
+   "t": 850.45,
+   "d": 2.1,
+   "text": "characters this is a really good way to"
+  },
+  {
+   "t": 852.55,
+   "d": 1.35,
+   "text": "make you feel like you understand a"
+  },
+  {
+   "t": 853.9,
+   "d": 1.29,
+   "text": "character better it gives you more of a"
+  },
+  {
+   "t": 855.19,
+   "d": 2.52,
+   "text": "connection to that character and one of"
+  },
+  {
+   "t": 857.71,
+   "d": 1.53,
+   "text": "the ways this is commonly used is it'll"
+  },
+  {
+   "t": 859.24,
+   "d": 1.41,
+   "text": "probably make you much sadder also when"
+  },
+  {
+   "t": 860.65,
+   "d": 1.38,
+   "text": "this character eventually gets killed a"
+  },
+  {
+   "t": 862.03,
+   "d": 3.21,
+   "text": "couple episodes down the line so how do"
+  },
+  {
+   "t": 865.24,
+   "d": 2.22,
+   "text": "you implement this in a game the first"
+  },
+  {
+   "t": 867.46,
+   "d": 1.59,
+   "text": "way that I can think of or the primary"
+  },
+  {
+   "t": 869.05,
+   "d": 1.26,
+   "text": "way that I can think of is to have a"
+  },
+  {
+   "t": 870.31,
+   "d": 1.53,
+   "text": "procedural storytelling system that has"
+  },
+  {
+   "t": 871.84,
+   "d": 2.13,
+   "text": "a narrow notion of which characters are"
+  },
+  {
+   "t": 873.97,
+   "d": 2.97,
+   "text": "currently in focus and then what you can"
+  },
+  {
+   "t": 876.94,
+   "d": 1.2,
+   "text": "have is you can have it as act as a"
+  },
+  {
+   "t": 878.14,
+   "d": 1.95,
+   "text": "puppet master or a drama manager to"
+  },
+  {
+   "t": 880.09,
+   "d": 2.31,
+   "text": "randomly up wait the selection of story"
+  },
+  {
+   "t": 882.4,
+   "d": 1.95,
+   "text": "lets that involve these characters so a"
+  },
+  {
+   "t": 884.35,
+   "d": 1.5,
+   "text": "story like that involves a focused"
+  },
+  {
+   "t": 885.85,
+   "d": 1.17,
+   "text": "character or a focused group of"
+  },
+  {
+   "t": 887.02,
+   "d": 1.35,
+   "text": "characters is much more likely to be"
+  },
+  {
+   "t": 888.37,
+   "d": 2.45,
+   "text": "selected than a story like that doesn't"
+  },
+  {
+   "t": 890.82,
+   "d": 1.9,
+   "text": "this is not something I'm currently"
+  },
+  {
+   "t": 892.72,
+   "d": 1.35,
+   "text": "doing in star freighter but it's"
+  },
+  {
+   "t": 894.07,
+   "d": 1.08,
+   "text": "definitely I'd like to explore in the"
+  },
+  {
+   "t": 895.15,
+   "d": 3.45,
+   "text": "future and of course number five this"
+  },
+  {
+   "t": 898.6,
+   "d": 1.86,
+   "text": "one is entirely speculative and I"
+  },
+  {
+   "t": 900.46,
+   "d": 2.25,
+   "text": "haven't really even touched it yet but"
+  },
+  {
+   "t": 902.71,
+   "d": 1.2,
+   "text": "it seems interesting so I decided to"
+  },
+  {
+   "t": 903.91,
+   "d": 1.68,
+   "text": "throw it in there and this is the"
+  },
+  {
+   "t": 905.59,
+   "d": 1.56,
+   "text": "concept of generating a good end and a"
+  },
+  {
+   "t": 907.15,
+   "d": 1.73,
+   "text": "bad end for every significant character"
+  },
+  {
+   "t": 908.88,
+   "d": 1.99,
+   "text": "to explain what I mean by this we're"
+  },
+  {
+   "t": 910.87,
+   "d": 1.47,
+   "text": "actually going to refer to a blog post"
+  },
+  {
+   "t": 912.34,
+   "d": 3.27,
+   "text": "by Emily short which was a general tip"
+  },
+  {
+   "t": 915.61,
+   "d": 1.29,
+   "text": "on authoring characters or interactive"
+  },
+  {
+   "t": 916.9,
+   "d": 3.06,
+   "text": "narrative and the idea is basically that"
+  },
+  {
+   "t": 919.96,
+   "d": 1.65,
+   "text": "you as an author can figure out the best"
+  },
+  {
+   "t": 921.61,
+   "d": 1.29,
+   "text": "and worst possible outcomes for a"
+  },
+  {
+   "t": 922.9,
+   "d": 1.65,
+   "text": "character write those down in advance"
+  },
+  {
+   "t": 924.55,
+   "d": 1.26,
+   "text": "and then give the player ways"
+  },
+  {
+   "t": 925.81,
+   "d": 1.56,
+   "text": "specifically to bring about either one"
+  },
+  {
+   "t": 927.37,
+   "d": 2.01,
+   "text": "or both of those outcomes you can do"
+  },
+  {
+   "t": 929.38,
+   "d": 1.23,
+   "text": "things like making the goals of multiple"
+  },
+  {
+   "t": 930.61,
+   "d": 1.08,
+   "text": "characters fundamentally incompatible"
+  },
+  {
+   "t": 931.69,
+   "d": 0.79,
+   "text": "and then"
+  },
+  {
+   "t": 932.48,
+   "d": 1.11,
+   "text": "the character of making the player"
+  },
+  {
+   "t": 933.59,
+   "d": 1.59,
+   "text": "choose between them or you can also"
+  },
+  {
+   "t": 935.18,
+   "d": 1.35,
+   "text": "challenge the player to resolve a tense"
+  },
+  {
+   "t": 936.53,
+   "d": 1.32,
+   "text": "situation in such a way that all the"
+  },
+  {
+   "t": 937.85,
+   "d": 2.7,
+   "text": "characters are eventually ok with it how"
+  },
+  {
+   "t": 940.55,
+   "d": 1.34,
+   "text": "would you do this in a procedural system"
+  },
+  {
+   "t": 941.89,
+   "d": 2.59,
+   "text": "so I think this can also be applied of"
+  },
+  {
+   "t": 944.48,
+   "d": 1.5,
+   "text": "storytelling for generated characters by"
+  },
+  {
+   "t": 945.98,
+   "d": 1.86,
+   "text": "for each significant character using"
+  },
+  {
+   "t": 947.84,
+   "d": 1.56,
+   "text": "sort of hidden traits framework I"
+  },
+  {
+   "t": 949.4,
+   "d": 1.77,
+   "text": "discussed earlier with the dark secrets"
+  },
+  {
+   "t": 951.17,
+   "d": 1.88,
+   "text": "the hidden pasts things like that and"
+  },
+  {
+   "t": 953.05,
+   "d": 3.22,
+   "text": "generating ahead of time the the best"
+  },
+  {
+   "t": 956.27,
+   "d": 1.2,
+   "text": "and worst possible outcomes for this"
+  },
+  {
+   "t": 957.47,
+   "d": 1.71,
+   "text": "character and then providing the player"
+  },
+  {
+   "t": 959.18,
+   "d": 1.47,
+   "text": "with story lights that let them realize"
+  },
+  {
+   "t": 960.65,
+   "d": 2.07,
+   "text": "one or both of these outcomes and again"
+  },
+  {
+   "t": 962.72,
+   "d": 1.08,
+   "text": "this is another thing star trader does"
+  },
+  {
+   "t": 963.8,
+   "d": 1.59,
+   "text": "not currently do but that might be neat"
+  },
+  {
+   "t": 965.39,
+   "d": 3.12,
+   "text": "to see so those are five techniques for"
+  },
+  {
+   "t": 968.51,
+   "d": 1.95,
+   "text": "crafting capella crafting compelling"
+  },
+  {
+   "t": 970.46,
+   "d": 1.11,
+   "text": "character arcs for procedurally"
+  },
+  {
+   "t": 971.57,
+   "d": 2.13,
+   "text": "generated characters we're actually"
+  },
+  {
+   "t": 973.7,
+   "d": 1.56,
+   "text": "going to look at a quick example right"
+  },
+  {
+   "t": 975.26,
+   "d": 1.41,
+   "text": "now it's as examples plural but there's"
+  },
+  {
+   "t": 976.67,
+   "d": 2.19,
+   "text": "only one of them of how this might play"
+  },
+  {
+   "t": 978.86,
+   "d": 3.69,
+   "text": "out in an actual story in the game so on"
+  },
+  {
+   "t": 982.55,
+   "d": 1.02,
+   "text": "your way out of court you pick up a"
+  },
+  {
+   "t": 983.57,
+   "d": 2.34,
+   "text": "passenger you decide to stop by the"
+  },
+  {
+   "t": 985.91,
+   "d": 1.53,
+   "text": "salvation system along the way your"
+  },
+  {
+   "t": 987.44,
+   "d": 1.65,
+   "text": "passenger seems nervous and they suggest"
+  },
+  {
+   "t": 989.09,
+   "d": 2.82,
+   "text": "an alternate or longer route when you"
+  },
+  {
+   "t": 991.91,
+   "d": 1.41,
+   "text": "get to the salvation spaceport your ship"
+  },
+  {
+   "t": 993.32,
+   "d": 2.37,
+   "text": "is stopped for a random search as it"
+  },
+  {
+   "t": 995.69,
+   "d": 1.5,
+   "text": "turns out the passenger was in fact a"
+  },
+  {
+   "t": 997.19,
+   "d": 0.84,
+   "text": "fugitive from the law"
+  },
+  {
+   "t": 998.03,
+   "d": 2.79,
+   "text": "they had a dark secret and so you have"
+  },
+  {
+   "t": 1000.82,
+   "d": 1.17,
+   "text": "the choice at this point of hiding them"
+  },
+  {
+   "t": 1001.99,
+   "d": 1.14,
+   "text": "in a secret compartment or turning them"
+  },
+  {
+   "t": 1003.13,
+   "d": 2.7,
+   "text": "in for a reward so how do the systems"
+  },
+  {
+   "t": 1005.83,
+   "d": 1.29,
+   "text": "that I just talked about interact with"
+  },
+  {
+   "t": 1007.12,
+   "d": 3.84,
+   "text": "this storyline well let's go buy lunch"
+  },
+  {
+   "t": 1010.96,
+   "d": 1.89,
+   "text": "let's go line by line on your way out of"
+  },
+  {
+   "t": 1012.85,
+   "d": 0.93,
+   "text": "court you pick up a passenger this"
+  },
+  {
+   "t": 1013.78,
+   "d": 1.23,
+   "text": "passenger is obviously a procedurally"
+  },
+  {
+   "t": 1015.01,
+   "d": 1.32,
+   "text": "generated character like everyone else"
+  },
+  {
+   "t": 1016.33,
+   "d": 3.87,
+   "text": "in the game you have a plan to to go in"
+  },
+  {
+   "t": 1020.2,
+   "d": 1.08,
+   "text": "a specific direction to go to a specific"
+  },
+  {
+   "t": 1021.28,
+   "d": 2.04,
+   "text": "spaceport and your passenger seems"
+  },
+  {
+   "t": 1023.32,
+   "d": 1.29,
+   "text": "nervous this is actually a foreshadowing"
+  },
+  {
+   "t": 1024.61,
+   "d": 1.92,
+   "text": "at work what the system is doing here is"
+  },
+  {
+   "t": 1026.53,
+   "d": 1.29,
+   "text": "it's it's got a story look that's been"
+  },
+  {
+   "t": 1027.82,
+   "d": 1.83,
+   "text": "written for oh this character is a"
+  },
+  {
+   "t": 1029.65,
+   "d": 1.26,
+   "text": "fugitive and they recognize that the"
+  },
+  {
+   "t": 1030.91,
+   "d": 1.29,
+   "text": "destination is a heavily policed"
+  },
+  {
+   "t": 1032.2,
+   "d": 2.07,
+   "text": "spaceport that means they're going to"
+  },
+  {
+   "t": 1034.27,
+   "d": 1.77,
+   "text": "act nervous and maybe try to get out of"
+  },
+  {
+   "t": 1036.04,
+   "d": 2.28,
+   "text": "going in that particular direction so"
+  },
+  {
+   "t": 1038.32,
+   "d": 2.28,
+   "text": "you have this foreshadowing of oh this"
+  },
+  {
+   "t": 1040.6,
+   "d": 1.23,
+   "text": "character might have a reason for not"
+  },
+  {
+   "t": 1041.83,
+   "d": 1.29,
+   "text": "wanting to do this thing but they're"
+  },
+  {
+   "t": 1043.12,
+   "d": 2.82,
+   "text": "being very cagey about why when you"
+  },
+  {
+   "t": 1045.94,
+   "d": 1.17,
+   "text": "arrive at the spaceport your ship is"
+  },
+  {
+   "t": 1047.11,
+   "d": 1.29,
+   "text": "stopped for a random search this is"
+  },
+  {
+   "t": 1048.4,
+   "d": 1.59,
+   "text": "another story lit that cascades from the"
+  },
+  {
+   "t": 1049.99,
+   "d": 2.37,
+   "text": "first one and in fact what's happening"
+  },
+  {
+   "t": 1052.36,
+   "d": 2.34,
+   "text": "here is star fighter chooses to increase"
+  },
+  {
+   "t": 1054.7,
+   "d": 2.31,
+   "text": "the weight of being stopped for a random"
+  },
+  {
+   "t": 1057.01,
+   "d": 1.26,
+   "text": "search when you actually have someone"
+  },
+  {
+   "t": 1058.27,
+   "d": 1.2,
+   "text": "who is a fugitive or something that is"
+  },
+  {
+   "t": 1059.47,
+   "d": 1.86,
+   "text": "contraband aboard your ship because it's"
+  },
+  {
+   "t": 1061.33,
+   "d": 1.41,
+   "text": "not as interesting when you have a lot"
+  },
+  {
+   "t": 1062.74,
+   "d": 1.65,
+   "text": "of instances of oh we get to the place"
+  },
+  {
+   "t": 1064.39,
+   "d": 1.29,
+   "text": "we're searched nothing actually"
+  },
+  {
+   "t": 1065.68,
+   "d": 1.34,
+   "text": "because we're not doing anything illegal"
+  },
+  {
+   "t": 1067.02,
+   "d": 2.26,
+   "text": "but it's much more dramatic when you"
+  },
+  {
+   "t": 1069.28,
+   "d": 1.23,
+   "text": "have something that actually is"
+  },
+  {
+   "t": 1070.51,
+   "d": 2.91,
+   "text": "important to hide and they are looking"
+  },
+  {
+   "t": 1073.42,
+   "d": 3.18,
+   "text": "for it and this is what I talked about"
+  },
+  {
+   "t": 1076.6,
+   "d": 1.38,
+   "text": "earlier with the hidden traits the"
+  },
+  {
+   "t": 1077.98,
+   "d": 1.29,
+   "text": "passenger had a dark secret that way"
+  },
+  {
+   "t": 1079.27,
+   "d": 0.84,
+   "text": "ever fugitive from the law"
+  },
+  {
+   "t": 1080.11,
+   "d": 2.28,
+   "text": "and so finally you have this choice of"
+  },
+  {
+   "t": 1082.39,
+   "d": 1.23,
+   "text": "hiding them in a secret compartment or"
+  },
+  {
+   "t": 1083.62,
+   "d": 1.56,
+   "text": "turning them in for a reward this is"
+  },
+  {
+   "t": 1085.18,
+   "d": 1.8,
+   "text": "sort of a manual implementation of Emily"
+  },
+  {
+   "t": 1086.98,
+   "d": 2.58,
+   "text": "shorts concept of giving you the concept"
+  },
+  {
+   "t": 1089.56,
+   "d": 1.14,
+   "text": "giving you the ability as a player to"
+  },
+  {
+   "t": 1090.7,
+   "d": 1.08,
+   "text": "choose between the best or worst"
+  },
+  {
+   "t": 1091.78,
+   "d": 1.35,
+   "text": "possible outcome for this character"
+  },
+  {
+   "t": 1093.13,
+   "d": 1.32,
+   "text": "so the best possible outcome for this"
+  },
+  {
+   "t": 1094.45,
+   "d": 0.99,
+   "text": "character might be something like I am"
+  },
+  {
+   "t": 1095.44,
+   "d": 2.07,
+   "text": "reunited with my family safely the worst"
+  },
+  {
+   "t": 1097.51,
+   "d": 1.41,
+   "text": "possible might be I am turned into the"
+  },
+  {
+   "t": 1098.92,
+   "d": 1.95,
+   "text": "police and you in this case have the"
+  },
+  {
+   "t": 1100.87,
+   "d": 1.38,
+   "text": "choice to turn them in to the police and"
+  },
+  {
+   "t": 1102.25,
+   "d": 2.18,
+   "text": "bring about their worst possible outcome"
+  },
+  {
+   "t": 1104.43,
+   "d": 2.23,
+   "text": "so that is everything I have right now"
+  },
+  {
+   "t": 1106.66,
+   "d": 0.75,
+   "text": "thank you"
+  },
+  {
+   "t": 1107.41,
+   "d": 2.47,
+   "text": "any questions"
+  },
+  {
+   "t": 1109.88,
+   "d": 9.02,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1124.07,
+   "d": 6.45,
+   "text": "hello ho okay um so when you put I guess"
+  },
+  {
+   "t": 1130.52,
+   "d": 2.19,
+   "text": "the generative system into a game"
+  },
+  {
+   "t": 1132.71,
+   "d": 2.97,
+   "text": "eventually like somebody's gonna go"
+  },
+  {
+   "t": 1135.68,
+   "d": 1.44,
+   "text": "through all the story lights and then go"
+  },
+  {
+   "t": 1137.12,
+   "d": 2.61,
+   "text": "write a wiki and someone's gonna be like"
+  },
+  {
+   "t": 1139.73,
+   "d": 1.86,
+   "text": "hey I have a passenger look up the wiki"
+  },
+  {
+   "t": 1141.59,
+   "d": 1.62,
+   "text": "oh he's suspicious that means like he"
+  },
+  {
+   "t": 1143.21,
+   "d": 1.59,
+   "text": "might be a fugitive okay I already know"
+  },
+  {
+   "t": 1144.8,
+   "d": 1.5,
+   "text": "this dude steel-like"
+  },
+  {
+   "t": 1146.3,
+   "d": 1.98,
+   "text": "and then it transforms into okay what do"
+  },
+  {
+   "t": 1148.28,
+   "d": 1.59,
+   "text": "I want from this reward let me look up"
+  },
+  {
+   "t": 1149.87,
+   "d": 2.91,
+   "text": "the probabilities here like is that sort"
+  },
+  {
+   "t": 1152.78,
+   "d": 3.54,
+   "text": "of intrinsic to encoding that story in a"
+  },
+  {
+   "t": 1156.32,
+   "d": 1.8,
+   "text": "game or like is there a way you can see"
+  },
+  {
+   "t": 1158.12,
+   "d": 2.61,
+   "text": "to get around that the primary way I can"
+  },
+  {
+   "t": 1160.73,
+   "d": 1.74,
+   "text": "think of to get around that is not to"
+  },
+  {
+   "t": 1162.47,
+   "d": 2.31,
+   "text": "try I guess and to just have enough"
+  },
+  {
+   "t": 1164.78,
+   "d": 1.8,
+   "text": "story let's that players are tired of"
+  },
+  {
+   "t": 1166.58,
+   "d": 1.32,
+   "text": "the game already by the time they get to"
+  },
+  {
+   "t": 1167.9,
+   "d": 1.26,
+   "text": "the point of wanting to strategize so"
+  },
+  {
+   "t": 1169.16,
+   "d": 2.37,
+   "text": "specifically I think that in a lot of"
+  },
+  {
+   "t": 1171.53,
+   "d": 2.55,
+   "text": "cases we tend to worry too much about"
+  },
+  {
+   "t": 1174.08,
+   "d": 1.92,
+   "text": "players spoiling themselves or learning"
+  },
+  {
+   "t": 1176.0,
+   "d": 1.23,
+   "text": "about the game outside of the game and"
+  },
+  {
+   "t": 1177.23,
+   "d": 1.71,
+   "text": "there's some people who are going to do"
+  },
+  {
+   "t": 1178.94,
+   "d": 1.5,
+   "text": "that no matter what I think and if it's"
+  },
+  {
+   "t": 1180.44,
+   "d": 1.41,
+   "text": "their first time playing through then"
+  },
+  {
+   "t": 1181.85,
+   "d": 1.32,
+   "text": "the only thing they spoiled is their own"
+  },
+  {
+   "t": 1183.17,
+   "d": 3.72,
+   "text": "experience and if they're that invested"
+  },
+  {
+   "t": 1186.89,
+   "d": 1.17,
+   "text": "in the game that they want to strategize"
+  },
+  {
+   "t": 1188.06,
+   "d": 1.56,
+   "text": "about it then I think that giving them"
+  },
+  {
+   "t": 1189.62,
+   "d": 1.8,
+   "text": "the ability to make those resources and"
+  },
+  {
+   "t": 1191.42,
+   "d": 1.5,
+   "text": "use them on their own is fine there's no"
+  },
+  {
+   "t": 1192.92,
+   "d": 1.79,
+   "text": "problem with that"
+  },
+  {
+   "t": 1194.71,
+   "d": 3.45,
+   "text": "other questions"
+  },
+  {
+   "t": 1200.94,
+   "d": 3.75,
+   "text": "so what do you think of rather than"
+  },
+  {
+   "t": 1204.69,
+   "d": 2.58,
+   "text": "procedurally generating or as well as"
+  },
+  {
+   "t": 1207.27,
+   "d": 2.13,
+   "text": "procedurally generating kind of backed"
+  },
+  {
+   "t": 1209.4,
+   "d": 2.31,
+   "text": "arriving the characters and the secret"
+  },
+  {
+   "t": 1211.71,
+   "d": 1.77,
+   "text": "traits that you want from what you need"
+  },
+  {
+   "t": 1213.48,
+   "d": 1.74,
+   "text": "right now so you're going to salvation"
+  },
+  {
+   "t": 1215.22,
+   "d": 2.16,
+   "text": "so you're going well we probably need"
+  },
+  {
+   "t": 1217.38,
+   "d": 1.62,
+   "text": "something exciting to happen here so why"
+  },
+  {
+   "t": 1219.0,
+   "d": 2.79,
+   "text": "don't we have that character always have"
+  },
+  {
+   "t": 1221.79,
+   "d": 3.39,
+   "text": "that secret like story and is that"
+  },
+  {
+   "t": 1225.18,
+   "d": 2.91,
+   "text": "cheating or is that acceptable for the"
+  },
+  {
+   "t": 1228.09,
+   "d": 1.83,
+   "text": "benefits of the plot sure so I would"
+  },
+  {
+   "t": 1229.92,
+   "d": 1.5,
+   "text": "consider that probably cheating in the"
+  },
+  {
+   "t": 1231.42,
+   "d": 1.32,
+   "text": "sense that it doesn't fit the way that I"
+  },
+  {
+   "t": 1232.74,
+   "d": 2.64,
+   "text": "want the system to work but there's no"
+  },
+  {
+   "t": 1235.38,
+   "d": 1.02,
+   "text": "reason why I couldn't work in some"
+  },
+  {
+   "t": 1236.4,
+   "d": 1.59,
+   "text": "contexts I think that that's in sort of"
+  },
+  {
+   "t": 1237.99,
+   "d": 1.86,
+   "text": "a different the other direction of"
+  },
+  {
+   "t": 1239.85,
+   "d": 1.62,
+   "text": "looking at this narrative management or"
+  },
+  {
+   "t": 1241.47,
+   "d": 1.49,
+   "text": "this drama management sort of system of"
+  },
+  {
+   "t": 1242.96,
+   "d": 1.93,
+   "text": "deciding what is the most dramatic thing"
+  },
+  {
+   "t": 1244.89,
+   "d": 1.38,
+   "text": "to have happen here and then doing it"
+  },
+  {
+   "t": 1246.27,
+   "d": 2.34,
+   "text": "I'm aiming for a more simulation as sort"
+  },
+  {
+   "t": 1248.61,
+   "d": 2.25,
+   "text": "of the state is set up a certain way"
+  },
+  {
+   "t": 1250.86,
+   "d": 1.47,
+   "text": "first and then things fall out of that"
+  },
+  {
+   "t": 1252.33,
+   "d": 1.89,
+   "text": "state but there's there's no problem"
+  },
+  {
+   "t": 1254.22,
+   "d": 0.87,
+   "text": "with the other approach it's just a"
+  },
+  {
+   "t": 1255.09,
+   "d": 2.63,
+   "text": "different way of doing things"
+  },
+  {
+   "t": 1258.44,
+   "d": 8.94,
+   "text": "anyone else okay thank you so much"
+  }
+ ]
+}

@@ -1,0 +1,2433 @@
+{
+ "id": "kvgKKRLil_8",
+ "url": "https://www.youtube.com/watch?v=kvgKKRLil_8",
+ "title": "Dylan White - The Cost of Magic",
+ "speaker": "Dylan White",
+ "talk_title": "The Cost of Magic",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 946,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "The cost of casting a spell: one of the most impactful design decisions in your roguelike.\n\nWhat mechanics will lead to interesting gameplay? Mana costs? Spells per level? Charges per spell?\n\nI will discuss the various popular systems, categorize them along various axis including but not limited to fungibility and replacability, and share some fun design anecdotes from various early RW prototypes.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 70,
+   "title": "Why Spellcasting"
+  },
+  {
+   "start": 228,
+   "title": "Questions"
+  },
+  {
+   "start": 252,
+   "title": "Renewability"
+  },
+  {
+   "start": 417,
+   "title": "Exchangeable"
+  },
+  {
+   "start": 560,
+   "title": "Examples"
+  },
+  {
+   "start": 727,
+   "title": "Time as a Resource"
+  },
+  {
+   "start": 812,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2896,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.76,
+   "d": 2.72,
+   "text": "our next speaker is dylan white who is"
+  },
+  {
+   "t": 6.48,
+   "d": 2.08,
+   "text": "talking about riff uh the programming"
+  },
+  {
+   "t": 8.56,
+   "d": 2.72,
+   "text": "designer behind professor talking about"
+  },
+  {
+   "t": 11.28,
+   "d": 2.32,
+   "text": "the cost of magic and"
+  },
+  {
+   "t": 13.6,
+   "d": 1.68,
+   "text": "what mechanics lead to interesting"
+  },
+  {
+   "t": 15.28,
+   "d": 1.6,
+   "text": "gameplay and magic systems we've touched"
+  },
+  {
+   "t": 16.88,
+   "d": 1.36,
+   "text": "on this a little bit in a couple of"
+  },
+  {
+   "t": 18.24,
+   "d": 2.56,
+   "text": "different talks today but like let's go"
+  },
+  {
+   "t": 20.8,
+   "d": 2.56,
+   "text": "into that in more detail whenever"
+  },
+  {
+   "t": 23.36,
+   "d": 2.64,
+   "text": "he's ready to actually share whatever"
+  },
+  {
+   "t": 26.0,
+   "d": 1.84,
+   "text": "whenever he's ready okay"
+  },
+  {
+   "t": 27.84,
+   "d": 1.44,
+   "text": "yeah can you see the uh you see the"
+  },
+  {
+   "t": 29.28,
+   "d": 1.52,
+   "text": "slides and everything can you hear me"
+  },
+  {
+   "t": 30.8,
+   "d": 1.84,
+   "text": "and all yep you're you're great"
+  },
+  {
+   "t": 32.64,
+   "d": 2.56,
+   "text": "okay i'll just uh i'll just get started"
+  },
+  {
+   "t": 35.2,
+   "d": 0.88,
+   "text": "then"
+  },
+  {
+   "t": 36.08,
+   "d": 2.64,
+   "text": "um yeah so i'm dylan white uh i am a"
+  },
+  {
+   "t": 38.72,
+   "d": 1.76,
+   "text": "roguelike programmer and designer i"
+  },
+  {
+   "t": 40.48,
+   "d": 1.68,
+   "text": "recently released a game called rift"
+  },
+  {
+   "t": 42.16,
+   "d": 2.16,
+   "text": "wizard and this is a lightning talk it's"
+  },
+  {
+   "t": 44.32,
+   "d": 2.16,
+   "text": "going to be just 15 minutes long and the"
+  },
+  {
+   "t": 46.48,
+   "d": 1.2,
+   "text": "interesting thing about giving a"
+  },
+  {
+   "t": 47.68,
+   "d": 1.76,
+   "text": "lightning talk is"
+  },
+  {
+   "t": 49.44,
+   "d": 2.08,
+   "text": "i can't talk about like all of my whole"
+  },
+  {
+   "t": 51.52,
+   "d": 1.28,
+   "text": "design philosophy you know i have to"
+  },
+  {
+   "t": 52.8,
+   "d": 1.6,
+   "text": "really focus on"
+  },
+  {
+   "t": 54.4,
+   "d": 1.6,
+   "text": "on one little thing so i was trying to"
+  },
+  {
+   "t": 56.0,
+   "d": 2.4,
+   "text": "think what is the uh what's the most"
+  },
+  {
+   "t": 58.4,
+   "d": 1.28,
+   "text": "interesting"
+  },
+  {
+   "t": 59.68,
+   "d": 0.8,
+   "text": "like"
+  },
+  {
+   "t": 60.48,
+   "d": 2.72,
+   "text": "hyper specific talk that i could give"
+  },
+  {
+   "t": 63.2,
+   "d": 2.08,
+   "text": "and what i came up with was the cost of"
+  },
+  {
+   "t": 65.28,
+   "d": 2.32,
+   "text": "magic spell casting resource mechanics"
+  },
+  {
+   "t": 67.6,
+   "d": 3.44,
+   "text": "and roguelikes rpgs and beyond"
+  },
+  {
+   "t": 71.04,
+   "d": 2.48,
+   "text": "so like why why are"
+  },
+  {
+   "t": 73.52,
+   "d": 2.0,
+   "text": "why should we talk about spell casting"
+  },
+  {
+   "t": 75.52,
+   "d": 2.64,
+   "text": "resource mechanics why is this a"
+  },
+  {
+   "t": 78.16,
+   "d": 1.76,
+   "text": "like a really interesting part of"
+  },
+  {
+   "t": 79.92,
+   "d": 2.72,
+   "text": "roguelike design"
+  },
+  {
+   "t": 82.64,
+   "d": 1.76,
+   "text": "well this is what um"
+  },
+  {
+   "t": 84.4,
+   "d": 2.16,
+   "text": "like in most roguelikes"
+  },
+  {
+   "t": 86.56,
+   "d": 2.16,
+   "text": "your your turn to turn or second to"
+  },
+  {
+   "t": 88.72,
+   "d": 1.84,
+   "text": "second gameplay is you're thinking about"
+  },
+  {
+   "t": 90.56,
+   "d": 1.92,
+   "text": "do i want to move do i want to attack or"
+  },
+  {
+   "t": 92.48,
+   "d": 1.76,
+   "text": "do i cast a spell"
+  },
+  {
+   "t": 94.24,
+   "d": 1.76,
+   "text": "and some games have more options some"
+  },
+  {
+   "t": 96.0,
+   "d": 2.0,
+   "text": "games have less but"
+  },
+  {
+   "t": 98.0,
+   "d": 1.52,
+   "text": "these are kind of the basic options in"
+  },
+  {
+   "t": 99.52,
+   "d": 1.52,
+   "text": "that you have um you have the option to"
+  },
+  {
+   "t": 101.04,
+   "d": 1.76,
+   "text": "reposition a little bit"
+  },
+  {
+   "t": 102.8,
+   "d": 2.0,
+   "text": "you have the option to do"
+  },
+  {
+   "t": 104.8,
+   "d": 1.68,
+   "text": "a small change to the board which is"
+  },
+  {
+   "t": 106.48,
+   "d": 2.16,
+   "text": "what i think of as attack and then you"
+  },
+  {
+   "t": 108.64,
+   "d": 1.84,
+   "text": "have the option to make a big change to"
+  },
+  {
+   "t": 110.48,
+   "d": 1.84,
+   "text": "the game state while expending a bunch"
+  },
+  {
+   "t": 112.32,
+   "d": 1.28,
+   "text": "of resources and that's what i would"
+  },
+  {
+   "t": 113.6,
+   "d": 2.24,
+   "text": "consider spell casting even maybe in a"
+  },
+  {
+   "t": 115.84,
+   "d": 1.68,
+   "text": "game that wasn't in a fantasy setting"
+  },
+  {
+   "t": 117.52,
+   "d": 2.32,
+   "text": "like in a sci-fi game you might have um"
+  },
+  {
+   "t": 119.84,
+   "d": 2.0,
+   "text": "maybe you call it items or devices or"
+  },
+  {
+   "t": 121.84,
+   "d": 1.12,
+   "text": "something"
+  },
+  {
+   "t": 122.96,
+   "d": 1.84,
+   "text": "but you often have these options that"
+  },
+  {
+   "t": 124.8,
+   "d": 2.08,
+   "text": "consume a resource and then"
+  },
+  {
+   "t": 126.88,
+   "d": 2.64,
+   "text": "change what the what the game state"
+  },
+  {
+   "t": 129.52,
+   "d": 2.0,
+   "text": "looks like"
+  },
+  {
+   "t": 131.52,
+   "d": 1.6,
+   "text": "and so the resource mechanics are"
+  },
+  {
+   "t": 133.12,
+   "d": 1.76,
+   "text": "interesting because"
+  },
+  {
+   "t": 134.88,
+   "d": 2.16,
+   "text": "once you've decided what the game's"
+  },
+  {
+   "t": 137.04,
+   "d": 2.48,
+   "text": "resource mechanics are going to be"
+  },
+  {
+   "t": 139.52,
+   "d": 1.44,
+   "text": "um"
+  },
+  {
+   "t": 140.96,
+   "d": 1.92,
+   "text": "it's very hard to sorry i'm good"
+  },
+  {
+   "t": 142.88,
+   "d": 3.36,
+   "text": "is everything good i just got a message"
+  },
+  {
+   "t": 146.32,
+   "d": 0.96,
+   "text": "okay"
+  },
+  {
+   "t": 147.28,
+   "d": 1.84,
+   "text": "uh once you've sorry once you've decided"
+  },
+  {
+   "t": 149.12,
+   "d": 2.16,
+   "text": "what the the resource mechanics are"
+  },
+  {
+   "t": 151.28,
+   "d": 1.92,
+   "text": "going to be it's very hard to change"
+  },
+  {
+   "t": 153.2,
+   "d": 1.6,
+   "text": "them retroactively because you may have"
+  },
+  {
+   "t": 154.8,
+   "d": 2.16,
+   "text": "designed a lot of you may have designed"
+  },
+  {
+   "t": 156.96,
+   "d": 1.36,
+   "text": "spells you may have designed items you"
+  },
+  {
+   "t": 158.32,
+   "d": 2.08,
+   "text": "may have designed character skills"
+  },
+  {
+   "t": 160.4,
+   "d": 2.8,
+   "text": "around manipulating these resources"
+  },
+  {
+   "t": 163.2,
+   "d": 2.16,
+   "text": "and so once you've like once you've just"
+  },
+  {
+   "t": 165.36,
+   "d": 1.84,
+   "text": "decided on what they are it's very you"
+  },
+  {
+   "t": 167.2,
+   "d": 1.36,
+   "text": "can have to delete a lot of work if you"
+  },
+  {
+   "t": 168.56,
+   "d": 2.24,
+   "text": "want to go back and change them"
+  },
+  {
+   "t": 170.8,
+   "d": 1.92,
+   "text": "and in addition to that there"
+  },
+  {
+   "t": 172.72,
+   "d": 1.76,
+   "text": "are infinite ways to design your"
+  },
+  {
+   "t": 174.48,
+   "d": 2.48,
+   "text": "resource mechanics you can have a mana"
+  },
+  {
+   "t": 176.96,
+   "d": 2.96,
+   "text": "bar you can have cooldowns you can have"
+  },
+  {
+   "t": 179.92,
+   "d": 2.72,
+   "text": "uh cards you can have different and all"
+  },
+  {
+   "t": 182.64,
+   "d": 2.08,
+   "text": "these different you can drill down"
+  },
+  {
+   "t": 184.72,
+   "d": 1.52,
+   "text": "further into these decisions like you"
+  },
+  {
+   "t": 186.24,
+   "d": 1.68,
+   "text": "can draw one card every turn you can"
+  },
+  {
+   "t": 187.92,
+   "d": 1.52,
+   "text": "have a mana bar that regenerates really"
+  },
+  {
+   "t": 189.44,
+   "d": 1.28,
+   "text": "quickly"
+  },
+  {
+   "t": 190.72,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 191.6,
+   "d": 1.84,
+   "text": "like there's there's no limit to the"
+  },
+  {
+   "t": 193.44,
+   "d": 1.6,
+   "text": "different the different ways that you"
+  },
+  {
+   "t": 195.04,
+   "d": 2.88,
+   "text": "can allocate resources to the player so"
+  },
+  {
+   "t": 197.92,
+   "d": 1.6,
+   "text": "i sat down and i tried to think about"
+  },
+  {
+   "t": 199.52,
+   "d": 2.08,
+   "text": "like what are the um"
+  },
+  {
+   "t": 201.6,
+   "d": 2.0,
+   "text": "like what are the most important"
+  },
+  {
+   "t": 203.6,
+   "d": 2.64,
+   "text": "things about resource mechanics and i"
+  },
+  {
+   "t": 206.24,
+   "d": 3.36,
+   "text": "came up with two questions and i think"
+  },
+  {
+   "t": 209.6,
+   "d": 2.08,
+   "text": "answering these questions either for a"
+  },
+  {
+   "t": 211.68,
+   "d": 1.68,
+   "text": "game that you're playing or for a game"
+  },
+  {
+   "t": 213.36,
+   "d": 1.44,
+   "text": "that you're designing"
+  },
+  {
+   "t": 214.8,
+   "d": 2.08,
+   "text": "will tell you a lot about that game and"
+  },
+  {
+   "t": 216.88,
+   "d": 1.84,
+   "text": "if you're designing a game"
+  },
+  {
+   "t": 218.72,
+   "d": 1.04,
+   "text": "then"
+  },
+  {
+   "t": 219.76,
+   "d": 1.6,
+   "text": "answering these questions will really"
+  },
+  {
+   "t": 221.36,
+   "d": 1.92,
+   "text": "shape your game and so i think"
+  },
+  {
+   "t": 223.28,
+   "d": 1.36,
+   "text": "you really want to think about these"
+  },
+  {
+   "t": 224.64,
+   "d": 2.16,
+   "text": "questions before you before you commit"
+  },
+  {
+   "t": 226.8,
+   "d": 1.36,
+   "text": "to something"
+  },
+  {
+   "t": 228.16,
+   "d": 2.0,
+   "text": "so without further ado here are the"
+  },
+  {
+   "t": 230.16,
+   "d": 2.56,
+   "text": "questions the questions are"
+  },
+  {
+   "t": 232.72,
+   "d": 1.76,
+   "text": "number one how are your spell casting"
+  },
+  {
+   "t": 234.48,
+   "d": 1.68,
+   "text": "resources renewed"
+  },
+  {
+   "t": 236.16,
+   "d": 1.44,
+   "text": "and number two"
+  },
+  {
+   "t": 237.6,
+   "d": 1.92,
+   "text": "do different spells use the same"
+  },
+  {
+   "t": 239.52,
+   "d": 1.92,
+   "text": "resources or do they use different"
+  },
+  {
+   "t": 241.44,
+   "d": 1.28,
+   "text": "resources"
+  },
+  {
+   "t": 242.72,
+   "d": 1.84,
+   "text": "and i'm going to call these renewability"
+  },
+  {
+   "t": 244.56,
+   "d": 1.76,
+   "text": "and fungibility"
+  },
+  {
+   "t": 246.32,
+   "d": 1.2,
+   "text": "so i want to talk about each one of"
+  },
+  {
+   "t": 247.52,
+   "d": 2.24,
+   "text": "these and why i think"
+  },
+  {
+   "t": 249.76,
+   "d": 1.36,
+   "text": "both of these questions are really"
+  },
+  {
+   "t": 251.12,
+   "d": 2.32,
+   "text": "important and impactful to how how a"
+  },
+  {
+   "t": 253.44,
+   "d": 1.6,
+   "text": "game feels"
+  },
+  {
+   "t": 255.04,
+   "d": 1.76,
+   "text": "so first of all renewability how do you"
+  },
+  {
+   "t": 256.8,
+   "d": 1.84,
+   "text": "get your resource back after you spend"
+  },
+  {
+   "t": 258.64,
+   "d": 2.32,
+   "text": "it is it easy to get your resources back"
+  },
+  {
+   "t": 260.96,
+   "d": 1.44,
+   "text": "does your manager regenerate really"
+  },
+  {
+   "t": 262.4,
+   "d": 2.48,
+   "text": "quickly or is it is it difficult do you"
+  },
+  {
+   "t": 264.88,
+   "d": 2.24,
+   "text": "have to find a safe space to rest"
+  },
+  {
+   "t": 267.12,
+   "d": 2.32,
+   "text": "do you have to use a limited consumable"
+  },
+  {
+   "t": 269.44,
+   "d": 2.48,
+   "text": "that you can only find by um"
+  },
+  {
+   "t": 271.92,
+   "d": 1.44,
+   "text": "by finishing encounters and getting"
+  },
+  {
+   "t": 273.36,
+   "d": 2.32,
+   "text": "further into the game"
+  },
+  {
+   "t": 275.68,
+   "d": 1.68,
+   "text": "and i think there's a big there's always"
+  },
+  {
+   "t": 277.36,
+   "d": 1.68,
+   "text": "a big debate over"
+  },
+  {
+   "t": 279.04,
+   "d": 1.52,
+   "text": "like which one is better i mean there"
+  },
+  {
+   "t": 280.56,
+   "d": 2.0,
+   "text": "are you'll always hear players asking"
+  },
+  {
+   "t": 282.56,
+   "d": 2.0,
+   "text": "you to make the resource easier to get"
+  },
+  {
+   "t": 284.56,
+   "d": 1.68,
+   "text": "and you'll you'll also always hear"
+  },
+  {
+   "t": 286.24,
+   "d": 1.36,
+   "text": "people telling you to make it harder to"
+  },
+  {
+   "t": 287.6,
+   "d": 0.72,
+   "text": "get"
+  },
+  {
+   "t": 288.32,
+   "d": 3.36,
+   "text": "each um each direction for this question"
+  },
+  {
+   "t": 291.68,
+   "d": 1.92,
+   "text": "has advantages and disadvantages there's"
+  },
+  {
+   "t": 293.6,
+   "d": 0.8,
+   "text": "no"
+  },
+  {
+   "t": 294.4,
+   "d": 2.64,
+   "text": "there's no easy conclusion"
+  },
+  {
+   "t": 297.04,
+   "d": 2.08,
+   "text": "i think that the way the way this"
+  },
+  {
+   "t": 299.12,
+   "d": 1.84,
+   "text": "impacts the gameplay of a game is if you"
+  },
+  {
+   "t": 300.96,
+   "d": 2.48,
+   "text": "can renew your resources really easily"
+  },
+  {
+   "t": 303.44,
+   "d": 1.84,
+   "text": "you're gonna cast your spells a lot and"
+  },
+  {
+   "t": 305.28,
+   "d": 1.36,
+   "text": "that's really fun it's really fun to"
+  },
+  {
+   "t": 306.64,
+   "d": 2.0,
+   "text": "cast spells in a game especially a game"
+  },
+  {
+   "t": 308.64,
+   "d": 2.56,
+   "text": "that has a lot of audio visual flair so"
+  },
+  {
+   "t": 311.2,
+   "d": 2.16,
+   "text": "like uh like a triple a game like a"
+  },
+  {
+   "t": 313.36,
+   "d": 2.32,
+   "text": "great example is um"
+  },
+  {
+   "t": 315.68,
+   "d": 2.56,
+   "text": "diablo iii diablo 3 not technically a"
+  },
+  {
+   "t": 318.24,
+   "d": 1.84,
+   "text": "roguelike but"
+  },
+  {
+   "t": 320.08,
+   "d": 2.0,
+   "text": "that is the game where that i can think"
+  },
+  {
+   "t": 322.08,
+   "d": 2.16,
+   "text": "of that is the most satisfying game to"
+  },
+  {
+   "t": 324.24,
+   "d": 1.68,
+   "text": "cast a spell it has great particle"
+  },
+  {
+   "t": 325.92,
+   "d": 2.64,
+   "text": "effects great sound there's this really"
+  },
+  {
+   "t": 328.56,
+   "d": 2.24,
+   "text": "like heavy sense that you are"
+  },
+  {
+   "t": 330.8,
+   "d": 2.0,
+   "text": "doing something"
+  },
+  {
+   "t": 332.8,
+   "d": 1.68,
+   "text": "like you're doing something big when you"
+  },
+  {
+   "t": 334.48,
+   "d": 1.52,
+   "text": "cast a spell"
+  },
+  {
+   "t": 336.0,
+   "d": 2.88,
+   "text": "and so for games like that if"
+  },
+  {
+   "t": 338.88,
+   "d": 2.24,
+   "text": "it feels a little bit bad"
+  },
+  {
+   "t": 341.12,
+   "d": 1.44,
+   "text": "you can't cast spells a lot you feel"
+  },
+  {
+   "t": 342.56,
+   "d": 0.96,
+   "text": "like you're"
+  },
+  {
+   "t": 343.52,
+   "d": 1.76,
+   "text": "you're like missing out on the fun part"
+  },
+  {
+   "t": 345.28,
+   "d": 2.4,
+   "text": "of the game"
+  },
+  {
+   "t": 347.68,
+   "d": 2.32,
+   "text": "and i think like the the basic thing"
+  },
+  {
+   "t": 350.0,
+   "d": 3.2,
+   "text": "here is the more you get to like the"
+  },
+  {
+   "t": 353.2,
+   "d": 2.0,
+   "text": "easier it is to get your resources back"
+  },
+  {
+   "t": 355.2,
+   "d": 1.6,
+   "text": "the more you get to spend them and the"
+  },
+  {
+   "t": 356.8,
+   "d": 1.36,
+   "text": "more you get to interact with the game"
+  },
+  {
+   "t": 358.16,
+   "d": 2.72,
+   "text": "and the more fun that can be"
+  },
+  {
+   "t": 360.88,
+   "d": 1.52,
+   "text": "but then on the other side of the"
+  },
+  {
+   "t": 362.4,
+   "d": 1.36,
+   "text": "spectrum"
+  },
+  {
+   "t": 363.76,
+   "d": 1.76,
+   "text": "the harder it is to get your resources"
+  },
+  {
+   "t": 365.52,
+   "d": 1.6,
+   "text": "back the more you have to think about"
+  },
+  {
+   "t": 367.12,
+   "d": 2.0,
+   "text": "how you're going to spend them"
+  },
+  {
+   "t": 369.12,
+   "d": 2.24,
+   "text": "and so for a low graphics game and a lot"
+  },
+  {
+   "t": 371.36,
+   "d": 2.08,
+   "text": "of roguelikes fit into this category"
+  },
+  {
+   "t": 373.44,
+   "d": 1.44,
+   "text": "the game i worked on rift wizard"
+  },
+  {
+   "t": 374.88,
+   "d": 2.16,
+   "text": "definitely an example of this"
+  },
+  {
+   "t": 377.04,
+   "d": 2.0,
+   "text": "dungeon crawl stone soup is a popular"
+  },
+  {
+   "t": 379.04,
+   "d": 1.68,
+   "text": "example of this too"
+  },
+  {
+   "t": 380.72,
+   "d": 2.24,
+   "text": "when it's hard to renew your resource"
+  },
+  {
+   "t": 382.96,
+   "d": 2.32,
+   "text": "when it's hard to your resources"
+  },
+  {
+   "t": 385.28,
+   "d": 2.16,
+   "text": "when it's hard to get them back"
+  },
+  {
+   "t": 387.44,
+   "d": 1.76,
+   "text": "you have to think really hard about"
+  },
+  {
+   "t": 389.2,
+   "d": 2.48,
+   "text": "every action that you're going to take"
+  },
+  {
+   "t": 391.68,
+   "d": 2.64,
+   "text": "so if the goal of your game is to make"
+  },
+  {
+   "t": 394.32,
+   "d": 1.44,
+   "text": "people think really hard and think"
+  },
+  {
+   "t": 395.76,
+   "d": 1.52,
+   "text": "really strategically and you're willing"
+  },
+  {
+   "t": 397.28,
+   "d": 1.68,
+   "text": "to sacrifice"
+  },
+  {
+   "t": 398.96,
+   "d": 1.68,
+   "text": "some uh"
+  },
+  {
+   "t": 400.64,
+   "d": 2.16,
+   "text": "like some audi some"
+  },
+  {
+   "t": 402.8,
+   "d": 3.04,
+   "text": "i guess satisfaction like some some look"
+  },
+  {
+   "t": 405.84,
+   "d": 2.64,
+   "text": "and feel of your game for strategy then"
+  },
+  {
+   "t": 408.48,
+   "d": 3.12,
+   "text": "maybe low renewability is the way to go"
+  },
+  {
+   "t": 411.6,
+   "d": 2.96,
+   "text": "so that's renewability"
+  },
+  {
+   "t": 414.56,
+   "d": 1.6,
+   "text": "uh now let me just move on to the next"
+  },
+  {
+   "t": 416.16,
+   "d": 1.04,
+   "text": "question"
+  },
+  {
+   "t": 417.2,
+   "d": 1.92,
+   "text": "this one's a bit more complicated"
+  },
+  {
+   "t": 419.12,
+   "d": 2.08,
+   "text": "so the next question that i think is"
+  },
+  {
+   "t": 421.2,
+   "d": 1.84,
+   "text": "really important is"
+  },
+  {
+   "t": 423.04,
+   "d": 2.24,
+   "text": "are all of the different resources in"
+  },
+  {
+   "t": 425.28,
+   "d": 3.52,
+   "text": "your game exchangeable for one another"
+  },
+  {
+   "t": 428.8,
+   "d": 2.4,
+   "text": "like is there one big to all your does"
+  },
+  {
+   "t": 431.2,
+   "d": 1.84,
+   "text": "all your spell casting come from one"
+  },
+  {
+   "t": 433.04,
+   "d": 2.56,
+   "text": "pool or do you do you have many"
+  },
+  {
+   "t": 435.6,
+   "d": 2.16,
+   "text": "different pools of resources the"
+  },
+  {
+   "t": 437.76,
+   "d": 2.08,
+   "text": "extremes of this would be"
+  },
+  {
+   "t": 439.84,
+   "d": 1.92,
+   "text": "a game where you have a mana bar and"
+  },
+  {
+   "t": 441.76,
+   "d": 2.08,
+   "text": "every spell costs mana that would be a"
+  },
+  {
+   "t": 443.84,
+   "d": 1.6,
+   "text": "game that i would say has high"
+  },
+  {
+   "t": 445.44,
+   "d": 2.08,
+   "text": "fungibility"
+  },
+  {
+   "t": 447.52,
+   "d": 1.76,
+   "text": "and the other extreme would be a game"
+  },
+  {
+   "t": 449.28,
+   "d": 2.4,
+   "text": "that didn't have mana at all where each"
+  },
+  {
+   "t": 451.68,
+   "d": 2.72,
+   "text": "of your spells just had a set number of"
+  },
+  {
+   "t": 454.4,
+   "d": 1.92,
+   "text": "charges and when you cast fireball that"
+  },
+  {
+   "t": 456.32,
+   "d": 1.68,
+   "text": "has no bearing on your ability to cast"
+  },
+  {
+   "t": 458.0,
+   "d": 2.64,
+   "text": "lightning bolt"
+  },
+  {
+   "t": 460.8,
+   "d": 2.0,
+   "text": "and this is"
+  },
+  {
+   "t": 462.8,
+   "d": 2.24,
+   "text": "this is really important because this"
+  },
+  {
+   "t": 465.04,
+   "d": 1.12,
+   "text": "dictates"
+  },
+  {
+   "t": 466.16,
+   "d": 2.0,
+   "text": "how the player is thinking about"
+  },
+  {
+   "t": 468.16,
+   "d": 1.6,
+   "text": "action selection this dictates how"
+  },
+  {
+   "t": 469.76,
+   "d": 1.44,
+   "text": "they're thinking about"
+  },
+  {
+   "t": 471.2,
+   "d": 2.32,
+   "text": "what should i do now and why"
+  },
+  {
+   "t": 473.52,
+   "d": 2.64,
+   "text": "if all your resources are fungible"
+  },
+  {
+   "t": 476.16,
+   "d": 1.84,
+   "text": "then what the player is doing most of"
+  },
+  {
+   "t": 478.0,
+   "d": 1.68,
+   "text": "their time is say is trying to figure"
+  },
+  {
+   "t": 479.68,
+   "d": 0.88,
+   "text": "out"
+  },
+  {
+   "t": 480.56,
+   "d": 2.4,
+   "text": "how do i optimize this resource what's"
+  },
+  {
+   "t": 482.96,
+   "d": 1.68,
+   "text": "the best thing that i can do with my"
+  },
+  {
+   "t": 484.64,
+   "d": 2.16,
+   "text": "mana what is the most damage that i can"
+  },
+  {
+   "t": 486.8,
+   "d": 1.36,
+   "text": "deal with my mana"
+  },
+  {
+   "t": 488.16,
+   "d": 1.36,
+   "text": "what's the highest amount of healing"
+  },
+  {
+   "t": 489.52,
+   "d": 2.0,
+   "text": "that i can get with my mana"
+  },
+  {
+   "t": 491.52,
+   "d": 1.44,
+   "text": "etc"
+  },
+  {
+   "t": 492.96,
+   "d": 1.12,
+   "text": "whereas"
+  },
+  {
+   "t": 494.08,
+   "d": 0.8,
+   "text": "if"
+  },
+  {
+   "t": 494.88,
+   "d": 2.8,
+   "text": "your game has low fungibility"
+  },
+  {
+   "t": 497.68,
+   "d": 2.88,
+   "text": "then the k the player has all of these"
+  },
+  {
+   "t": 500.56,
+   "d": 1.68,
+   "text": "different actions that they can take and"
+  },
+  {
+   "t": 502.24,
+   "d": 1.92,
+   "text": "taking one does not preclude them from"
+  },
+  {
+   "t": 504.16,
+   "d": 2.8,
+   "text": "later taking another"
+  },
+  {
+   "t": 506.96,
+   "d": 0.8,
+   "text": "so"
+  },
+  {
+   "t": 507.76,
+   "d": 1.52,
+   "text": "they'll probably end up taking more"
+  },
+  {
+   "t": 509.28,
+   "d": 1.6,
+   "text": "different actions and isn't a game where"
+  },
+  {
+   "t": 510.88,
+   "d": 1.84,
+   "text": "you take more different actions more"
+  },
+  {
+   "t": 512.72,
+   "d": 1.84,
+   "text": "interesting than a game where you take"
+  },
+  {
+   "t": 514.56,
+   "d": 1.44,
+   "text": "the same action"
+  },
+  {
+   "t": 516.0,
+   "d": 2.4,
+   "text": "over and over"
+  },
+  {
+   "t": 518.4,
+   "d": 1.92,
+   "text": "so i thought about this some more and"
+  },
+  {
+   "t": 520.32,
+   "d": 1.84,
+   "text": "really the drawback with let making the"
+  },
+  {
+   "t": 522.16,
+   "d": 1.76,
+   "text": "player take different actions is now"
+  },
+  {
+   "t": 523.92,
+   "d": 0.96,
+   "text": "they're not"
+  },
+  {
+   "t": 524.88,
+   "d": 2.24,
+   "text": "choosing which action to take so when"
+  },
+  {
+   "t": 527.12,
+   "d": 1.36,
+   "text": "you're thinking about fungibility in a"
+  },
+  {
+   "t": 528.48,
+   "d": 2.4,
+   "text": "game what you're thinking about is"
+  },
+  {
+   "t": 530.88,
+   "d": 3.6,
+   "text": "do i want the strategic depth of the pla"
+  },
+  {
+   "t": 534.48,
+   "d": 3.2,
+   "text": "of player agency and letting players"
+  },
+  {
+   "t": 537.68,
+   "d": 1.6,
+   "text": "uh"
+  },
+  {
+   "t": 539.28,
+   "d": 1.92,
+   "text": "evaluate a situation and think which"
+  },
+  {
+   "t": 541.2,
+   "d": 2.48,
+   "text": "tool is best for this situation"
+  },
+  {
+   "t": 543.68,
+   "d": 1.04,
+   "text": "or"
+  },
+  {
+   "t": 544.72,
+   "d": 2.32,
+   "text": "do i want the gameplay variety of having"
+  },
+  {
+   "t": 547.04,
+   "d": 3.92,
+   "text": "the player do different things"
+  },
+  {
+   "t": 550.96,
+   "d": 1.44,
+   "text": "so there's no clearance there's no clear"
+  },
+  {
+   "t": 552.4,
+   "d": 1.6,
+   "text": "answer for what you want but that those"
+  },
+  {
+   "t": 554.0,
+   "d": 1.92,
+   "text": "are the um that is the consequence of"
+  },
+  {
+   "t": 555.92,
+   "d": 1.76,
+   "text": "going in each direction with the"
+  },
+  {
+   "t": 557.68,
+   "d": 3.2,
+   "text": "fungibility axis"
+  },
+  {
+   "t": 560.88,
+   "d": 1.6,
+   "text": "so just to give um to make this more"
+  },
+  {
+   "t": 562.48,
+   "d": 2.48,
+   "text": "concrete and look at a a couple"
+  },
+  {
+   "t": 564.96,
+   "d": 2.08,
+   "text": "a couple games and what they do"
+  },
+  {
+   "t": 567.04,
+   "d": 1.92,
+   "text": "one game i think a lot of roguelike fans"
+  },
+  {
+   "t": 568.96,
+   "d": 1.84,
+   "text": "have played is dungeon crawl stone soup"
+  },
+  {
+   "t": 570.8,
+   "d": 2.24,
+   "text": "so i like to use that for examples"
+  },
+  {
+   "t": 573.04,
+   "d": 2.08,
+   "text": "and it uses an interesting trick there"
+  },
+  {
+   "t": 575.12,
+   "d": 2.24,
+   "text": "are two different resources in dungeon"
+  },
+  {
+   "t": 577.36,
+   "d": 1.44,
+   "text": "crawl stone soup"
+  },
+  {
+   "t": 578.8,
+   "d": 1.52,
+   "text": "one of them is mana"
+  },
+  {
+   "t": 580.32,
+   "d": 2.4,
+   "text": "which you use to cast all of your spells"
+  },
+  {
+   "t": 582.72,
+   "d": 1.84,
+   "text": "very fungible you can do a lot of"
+  },
+  {
+   "t": 584.56,
+   "d": 1.68,
+   "text": "different things with mana"
+  },
+  {
+   "t": 586.24,
+   "d": 1.68,
+   "text": "and it's very easy to renew your mana"
+  },
+  {
+   "t": 587.92,
+   "d": 1.76,
+   "text": "pool you can walk around and you get"
+  },
+  {
+   "t": 589.68,
+   "d": 2.88,
+   "text": "your mana back after a couple turns"
+  },
+  {
+   "t": 592.56,
+   "d": 2.0,
+   "text": "but the other resource in dungeon crawl"
+  },
+  {
+   "t": 594.56,
+   "d": 2.32,
+   "text": "stone soup is piety"
+  },
+  {
+   "t": 596.88,
+   "d": 2.4,
+   "text": "and piety works very differently"
+  },
+  {
+   "t": 599.28,
+   "d": 2.88,
+   "text": "with piety piety is the um"
+  },
+  {
+   "t": 602.16,
+   "d": 1.84,
+   "text": "the resource that you use to cast your"
+  },
+  {
+   "t": 604.0,
+   "d": 2.24,
+   "text": "priests spells like your miracle your"
+  },
+  {
+   "t": 606.24,
+   "d": 1.92,
+   "text": "miracles"
+  },
+  {
+   "t": 608.16,
+   "d": 2.48,
+   "text": "and it's it's harder to get pi piety"
+  },
+  {
+   "t": 610.64,
+   "d": 1.92,
+   "text": "than it is to get mana so piety has"
+  },
+  {
+   "t": 612.56,
+   "d": 2.32,
+   "text": "lower renewability you have to"
+  },
+  {
+   "t": 614.88,
+   "d": 1.28,
+   "text": "the way the game works is you have to"
+  },
+  {
+   "t": 616.16,
+   "d": 2.16,
+   "text": "please your god in some way to get piety"
+  },
+  {
+   "t": 618.32,
+   "d": 2.4,
+   "text": "often by killing the enemies of your god"
+  },
+  {
+   "t": 620.72,
+   "d": 2.0,
+   "text": "or by taking some action that your god"
+  },
+  {
+   "t": 622.72,
+   "d": 1.68,
+   "text": "thinks is cool like exploring the"
+  },
+  {
+   "t": 624.4,
+   "d": 1.52,
+   "text": "dungeon"
+  },
+  {
+   "t": 625.92,
+   "d": 1.84,
+   "text": "and you usually have more than"
+  },
+  {
+   "t": 627.76,
+   "d": 2.0,
+   "text": "one thing you can do with piety but way"
+  },
+  {
+   "t": 629.76,
+   "d": 1.68,
+   "text": "fewer things to do with piety than with"
+  },
+  {
+   "t": 631.44,
+   "d": 1.44,
+   "text": "mana"
+  },
+  {
+   "t": 632.88,
+   "d": 1.84,
+   "text": "and so they use this cool dungeon crawl"
+  },
+  {
+   "t": 634.72,
+   "d": 1.84,
+   "text": "uses this cool trick where"
+  },
+  {
+   "t": 636.56,
+   "d": 1.44,
+   "text": "you have these two different resource"
+  },
+  {
+   "t": 638.0,
+   "d": 1.68,
+   "text": "systems so you get"
+  },
+  {
+   "t": 639.68,
+   "d": 2.72,
+   "text": "you get the benefits of high fungibility"
+  },
+  {
+   "t": 642.4,
+   "d": 2.48,
+   "text": "and low fungibility in the same game and"
+  },
+  {
+   "t": 644.88,
+   "d": 1.6,
+   "text": "that's a very con that's a very common"
+  },
+  {
+   "t": 646.48,
+   "d": 1.68,
+   "text": "trick if you look at uh game resource"
+  },
+  {
+   "t": 648.16,
+   "d": 2.0,
+   "text": "systems you'll often see two resource"
+  },
+  {
+   "t": 650.16,
+   "d": 2.96,
+   "text": "systems layered on top of each other"
+  },
+  {
+   "t": 653.12,
+   "d": 2.32,
+   "text": "another system which is very popular is"
+  },
+  {
+   "t": 655.44,
+   "d": 0.72,
+   "text": "um"
+  },
+  {
+   "t": 656.16,
+   "d": 2.4,
+   "text": "cooldowns mmos are big users of cooldown"
+  },
+  {
+   "t": 658.56,
+   "d": 2.48,
+   "text": "so world of warcraft uses cooldowns"
+  },
+  {
+   "t": 661.04,
+   "d": 2.72,
+   "text": "uh tales of magill4 is a roguelike that"
+  },
+  {
+   "t": 663.76,
+   "d": 2.16,
+   "text": "uses cooldowns and cooldowns are"
+  },
+  {
+   "t": 665.92,
+   "d": 2.08,
+   "text": "interesting you can think of a cooldown"
+  },
+  {
+   "t": 668.0,
+   "d": 1.2,
+   "text": "system"
+  },
+  {
+   "t": 669.2,
+   "d": 2.64,
+   "text": "as a little mana bar for each spell like"
+  },
+  {
+   "t": 671.84,
+   "d": 1.68,
+   "text": "each spell has its own mana bar which is"
+  },
+  {
+   "t": 673.52,
+   "d": 1.76,
+   "text": "the cooldown timer"
+  },
+  {
+   "t": 675.28,
+   "d": 2.32,
+   "text": "it's very easy to renew cooldowns they"
+  },
+  {
+   "t": 677.6,
+   "d": 2.0,
+   "text": "automatically renew over time or over"
+  },
+  {
+   "t": 679.6,
+   "d": 0.96,
+   "text": "turns"
+  },
+  {
+   "t": 680.56,
+   "d": 2.0,
+   "text": "and there's zero fungibility with"
+  },
+  {
+   "t": 682.56,
+   "d": 2.24,
+   "text": "cooldowns you cannot use the cooldown of"
+  },
+  {
+   "t": 684.8,
+   "d": 1.36,
+   "text": "one spell"
+  },
+  {
+   "t": 686.16,
+   "d": 3.04,
+   "text": "to pay for another spell"
+  },
+  {
+   "t": 689.2,
+   "d": 1.76,
+   "text": "um"
+  },
+  {
+   "t": 690.96,
+   "d": 1.92,
+   "text": "d d spell charges that's a zero"
+  },
+  {
+   "t": 692.88,
+   "d": 2.48,
+   "text": "fungibility again you cannot use"
+  },
+  {
+   "t": 695.36,
+   "d": 1.36,
+   "text": "use um"
+  },
+  {
+   "t": 696.72,
+   "d": 1.2,
+   "text": "one"
+  },
+  {
+   "t": 697.92,
+   "d": 2.72,
+   "text": "one memorized spell to uh cast another"
+  },
+  {
+   "t": 700.64,
+   "d": 1.76,
+   "text": "memorized spell in dungeons and dragons"
+  },
+  {
+   "t": 702.4,
+   "d": 1.68,
+   "text": "or in any of the uh"
+  },
+  {
+   "t": 704.08,
+   "d": 1.84,
+   "text": "computer rpgs derived from dungeons and"
+  },
+  {
+   "t": 705.92,
+   "d": 1.6,
+   "text": "dragons"
+  },
+  {
+   "t": 707.52,
+   "d": 1.68,
+   "text": "cards are another zero fungibility"
+  },
+  {
+   "t": 709.2,
+   "d": 2.16,
+   "text": "mechanic often with high renewability as"
+  },
+  {
+   "t": 711.36,
+   "d": 2.88,
+   "text": "you're drawing cards"
+  },
+  {
+   "t": 714.84,
+   "d": 1.72,
+   "text": "and"
+  },
+  {
+   "t": 716.56,
+   "d": 1.2,
+   "text": "i have a little bit of time left and"
+  },
+  {
+   "t": 717.76,
+   "d": 2.0,
+   "text": "what i want to do what i want one"
+  },
+  {
+   "t": 719.76,
+   "d": 1.6,
+   "text": "resource system that i want to talk"
+  },
+  {
+   "t": 721.36,
+   "d": 2.24,
+   "text": "about is a resource system that probably"
+  },
+  {
+   "t": 723.6,
+   "d": 2.24,
+   "text": "exists in your game that you may not"
+  },
+  {
+   "t": 725.84,
+   "d": 2.0,
+   "text": "even know exists in your game"
+  },
+  {
+   "t": 727.84,
+   "d": 3.28,
+   "text": "and that is the implicit time resource"
+  },
+  {
+   "t": 731.12,
+   "d": 2.08,
+   "text": "so you can think of time as a resource"
+  },
+  {
+   "t": 733.2,
+   "d": 1.6,
+   "text": "just like mana"
+  },
+  {
+   "t": 734.8,
+   "d": 3.12,
+   "text": "or charges or cards or cooldowns"
+  },
+  {
+   "t": 737.92,
+   "d": 1.92,
+   "text": "because time is something that you have"
+  },
+  {
+   "t": 739.84,
+   "d": 2.32,
+   "text": "to use in order to cast your spells if"
+  },
+  {
+   "t": 742.16,
+   "d": 1.92,
+   "text": "your game is turn based then just think"
+  },
+  {
+   "t": 744.08,
+   "d": 2.88,
+   "text": "about turns instead of time"
+  },
+  {
+   "t": 746.96,
+   "d": 2.48,
+   "text": "and time"
+  },
+  {
+   "t": 749.44,
+   "d": 2.08,
+   "text": "always kind of works the same way time"
+  },
+  {
+   "t": 751.52,
+   "d": 1.76,
+   "text": "is a fungible"
+  },
+  {
+   "t": 753.28,
+   "d": 2.64,
+   "text": "uh highly renewable resource"
+  },
+  {
+   "t": 755.92,
+   "d": 2.8,
+   "text": "you cannot hoard time if you"
+  },
+  {
+   "t": 758.72,
+   "d": 1.6,
+   "text": "if you waste your time you can't put"
+  },
+  {
+   "t": 760.32,
+   "d": 2.16,
+   "text": "that time in a pool somewhere and use it"
+  },
+  {
+   "t": 762.48,
+   "d": 0.88,
+   "text": "later"
+  },
+  {
+   "t": 763.36,
+   "d": 1.04,
+   "text": "and it"
+  },
+  {
+   "t": 764.4,
+   "d": 1.84,
+   "text": "you get one turn per turn or you get one"
+  },
+  {
+   "t": 766.24,
+   "d": 2.56,
+   "text": "second per second you're always renewing"
+  },
+  {
+   "t": 768.8,
+   "d": 1.68,
+   "text": "you're always renewing it at a constant"
+  },
+  {
+   "t": 770.48,
+   "d": 1.92,
+   "text": "rate"
+  },
+  {
+   "t": 772.4,
+   "d": 1.52,
+   "text": "and so this kind of snuck up on me and"
+  },
+  {
+   "t": 773.92,
+   "d": 1.52,
+   "text": "rift wizard because i never thought"
+  },
+  {
+   "t": 775.44,
+   "d": 2.0,
+   "text": "about this as a resource but in a"
+  },
+  {
+   "t": 777.44,
+   "d": 1.6,
+   "text": "turn-based game where"
+  },
+  {
+   "t": 779.04,
+   "d": 2.4,
+   "text": "your actions end the turn"
+  },
+  {
+   "t": 781.44,
+   "d": 1.76,
+   "text": "every turn is a really important"
+  },
+  {
+   "t": 783.2,
+   "d": 1.92,
+   "text": "resource and it might even be a more"
+  },
+  {
+   "t": 785.12,
+   "d": 1.28,
+   "text": "important resource"
+  },
+  {
+   "t": 786.4,
+   "d": 2.48,
+   "text": "than the explicit mechanics in your game"
+  },
+  {
+   "t": 788.88,
+   "d": 1.52,
+   "text": "i found in rift wizard that there are a"
+  },
+  {
+   "t": 790.4,
+   "d": 1.92,
+   "text": "lot of spells that"
+  },
+  {
+   "t": 792.32,
+   "d": 2.24,
+   "text": "people are reluctant to use because they"
+  },
+  {
+   "t": 794.56,
+   "d": 1.76,
+   "text": "didn't feel like they were worth a turn"
+  },
+  {
+   "t": 796.32,
+   "d": 2.08,
+   "text": "and that made me think about"
+  },
+  {
+   "t": 798.4,
+   "d": 2.4,
+   "text": "the resource system very differently"
+  },
+  {
+   "t": 800.8,
+   "d": 1.6,
+   "text": "so the lesson here is"
+  },
+  {
+   "t": 802.4,
+   "d": 2.16,
+   "text": "think carefully about time and"
+  },
+  {
+   "t": 804.56,
+   "d": 1.28,
+   "text": "think about if there are any other"
+  },
+  {
+   "t": 805.84,
+   "d": 1.84,
+   "text": "implicit resource systems that exist in"
+  },
+  {
+   "t": 807.68,
+   "d": 1.2,
+   "text": "your game that"
+  },
+  {
+   "t": 808.88,
+   "d": 3.04,
+   "text": "you don't even realize are there"
+  },
+  {
+   "t": 811.92,
+   "d": 3.68,
+   "text": "anyway i want to wrap this up and the um"
+  },
+  {
+   "t": 815.6,
+   "d": 2.96,
+   "text": "i don't think there's a takeaway for"
+  },
+  {
+   "t": 818.56,
+   "d": 1.6,
+   "text": "you know your resource system should be"
+  },
+  {
+   "t": 820.16,
+   "d": 1.76,
+   "text": "this or your resource should system"
+  },
+  {
+   "t": 821.92,
+   "d": 2.0,
+   "text": "should be that but i think the takeaway"
+  },
+  {
+   "t": 823.92,
+   "d": 1.36,
+   "text": "should be you need to know what your"
+  },
+  {
+   "t": 825.28,
+   "d": 1.92,
+   "text": "resource systems are and you should"
+  },
+  {
+   "t": 827.2,
+   "d": 2.4,
+   "text": "think about what your research system"
+  },
+  {
+   "t": 829.6,
+   "d": 2.0,
+   "text": "is encouraging your players to do and"
+  },
+  {
+   "t": 831.6,
+   "d": 2.96,
+   "text": "how it how the feel of your game is"
+  },
+  {
+   "t": 834.56,
+   "d": 2.0,
+   "text": "affected by the cost of the actions in"
+  },
+  {
+   "t": 836.56,
+   "d": 2.32,
+   "text": "that game"
+  },
+  {
+   "t": 838.88,
+   "d": 3.92,
+   "text": "and yeah that's all i got"
+  },
+  {
+   "t": 842.8,
+   "d": 3.2,
+   "text": "excellent thank you so much that was"
+  },
+  {
+   "t": 846.0,
+   "d": 2.88,
+   "text": "delightful um lots of fun hold on having"
+  },
+  {
+   "t": 848.88,
+   "d": 1.92,
+   "text": "a lot of crosstalk here in terms of"
+  },
+  {
+   "t": 850.8,
+   "d": 2.56,
+   "text": "sharing screens it's fine uh we've got"
+  },
+  {
+   "t": 853.36,
+   "d": 2.32,
+   "text": "time for one quick question which is"
+  },
+  {
+   "t": 855.68,
+   "d": 1.52,
+   "text": "like what's your favorite style of"
+  },
+  {
+   "t": 857.2,
+   "d": 1.92,
+   "text": "resource you usage and management in"
+  },
+  {
+   "t": 859.12,
+   "d": 1.52,
+   "text": "roguelikes what have you found to be"
+  },
+  {
+   "t": 860.64,
+   "d": 2.4,
+   "text": "really compelling"
+  },
+  {
+   "t": 863.04,
+   "d": 2.08,
+   "text": "well i'm very biased um"
+  },
+  {
+   "t": 865.12,
+   "d": 1.04,
+   "text": "of course i don't mean this is a"
+  },
+  {
+   "t": 866.16,
+   "d": 1.84,
+   "text": "self-promotion but it's gotta be rift"
+  },
+  {
+   "t": 868.0,
+   "d": 2.64,
+   "text": "wizard the game i made you make the game"
+  },
+  {
+   "t": 870.64,
+   "d": 1.6,
+   "text": "you want to see it you make it yeah i"
+  },
+  {
+   "t": 872.24,
+   "d": 2.32,
+   "text": "made the um yeah i think outside of"
+  },
+  {
+   "t": 874.56,
+   "d": 1.68,
+   "text": "games that i made i would have to say"
+  },
+  {
+   "t": 876.24,
+   "d": 1.68,
+   "text": "dungeon crawl stone soup and i would"
+  },
+  {
+   "t": 877.92,
+   "d": 1.44,
+   "text": "have to say"
+  },
+  {
+   "t": 879.36,
+   "d": 1.76,
+   "text": "i would say that the piety system in"
+  },
+  {
+   "t": 881.12,
+   "d": 2.0,
+   "text": "that game is really really interesting"
+  },
+  {
+   "t": 883.12,
+   "d": 2.16,
+   "text": "you can um"
+  },
+  {
+   "t": 885.28,
+   "d": 0.96,
+   "text": "one of them"
+  },
+  {
+   "t": 886.24,
+   "d": 1.76,
+   "text": "don't ignore it entirely and just play"
+  },
+  {
+   "t": 888.0,
+   "d": 3.04,
+   "text": "some all the time all day every day"
+  },
+  {
+   "t": 891.04,
+   "d": 1.6,
+   "text": "uh for those of you in the in the crowd"
+  },
+  {
+   "t": 892.64,
+   "d": 1.6,
+   "text": "who don't know danger carlson soup is a"
+  },
+  {
+   "t": 894.24,
+   "d": 1.92,
+   "text": "huge traditional roguelike some is the"
+  },
+  {
+   "t": 896.16,
+   "d": 2.08,
+   "text": "god of chaos who ignores piety mechanics"
+  },
+  {
+   "t": 898.24,
+   "d": 1.36,
+   "text": "in exchange for"
+  },
+  {
+   "t": 899.6,
+   "d": 1.52,
+   "text": "making your life more interesting"
+  },
+  {
+   "t": 901.12,
+   "d": 2.0,
+   "text": "because they find it funny"
+  },
+  {
+   "t": 903.12,
+   "d": 1.84,
+   "text": "i never play zombie because he has no"
+  },
+  {
+   "t": 904.96,
+   "d": 1.6,
+   "text": "pie d mechanic and i find him to be the"
+  },
+  {
+   "t": 906.56,
+   "d": 2.88,
+   "text": "most boring of all the gods i like um"
+  },
+  {
+   "t": 909.44,
+   "d": 2.64,
+   "text": "i honestly i like trog i know traga is"
+  },
+  {
+   "t": 912.08,
+   "d": 2.4,
+   "text": "the easy god it's fun though but his"
+  },
+  {
+   "t": 914.48,
+   "d": 1.36,
+   "text": "ability"
+  },
+  {
+   "t": 915.84,
+   "d": 1.52,
+   "text": "like thinking about you know when am i"
+  },
+  {
+   "t": 917.36,
+   "d": 2.24,
+   "text": "going to cast the um when am i going to"
+  },
+  {
+   "t": 919.6,
+   "d": 1.76,
+   "text": "do the summon you know this he has this"
+  },
+  {
+   "t": 921.36,
+   "d": 1.84,
+   "text": "summon that takes like"
+  },
+  {
+   "t": 923.2,
+   "d": 2.08,
+   "text": "a really big portion of your piety bar"
+  },
+  {
+   "t": 925.28,
+   "d": 1.6,
+   "text": "and its strength is actually determined"
+  },
+  {
+   "t": 926.88,
+   "d": 1.84,
+   "text": "by how much piety you have"
+  },
+  {
+   "t": 928.72,
+   "d": 2.16,
+   "text": "so it's like this um you're looking at"
+  },
+  {
+   "t": 930.88,
+   "d": 1.36,
+   "text": "every situation and you're saying like"
+  },
+  {
+   "t": 932.24,
+   "d": 1.2,
+   "text": "you know can i"
+  },
+  {
+   "t": 933.44,
+   "d": 1.76,
+   "text": "can i just tab through this can i just"
+  },
+  {
+   "t": 935.2,
+   "d": 2.4,
+   "text": "like mash through this encounter"
+  },
+  {
+   "t": 937.6,
+   "d": 2.0,
+   "text": "or do i need to like do the thing and"
+  },
+  {
+   "t": 939.6,
+   "d": 2.48,
+   "text": "even just that's that very simple act of"
+  },
+  {
+   "t": 942.08,
+   "d": 2.08,
+   "text": "resource management i find very very"
+  },
+  {
+   "t": 944.16,
+   "d": 3.56,
+   "text": "interesting and satisfying"
+  }
+ ]
+}

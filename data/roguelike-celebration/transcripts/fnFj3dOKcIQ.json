@@ -1,0 +1,2023 @@
+{
+ "id": "fnFj3dOKcIQ",
+ "url": "https://www.youtube.com/watch?v=fnFj3dOKcIQ",
+ "title": "Brian Bucklew - Dungeon Generation via Wave Function Collapse",
+ "speaker": "Brian Bucklew",
+ "talk_title": "Dungeon Generation via Wave Function Collapse",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1591,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nBrian is a developer at Freehold Games and has worked on Caves of Qud and Sproggiwood",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 64,
+   "title": "Understanding WFC"
+  },
+  {
+   "start": 173,
+   "title": "Modes and Inputs"
+  },
+  {
+   "start": 304,
+   "title": "How the algorithm works"
+  },
+  {
+   "start": 441,
+   "title": "Collapse visualization"
+  },
+  {
+   "start": 548,
+   "title": "Mathematical intuition"
+  },
+  {
+   "start": 642,
+   "title": "Experimenting with WFC"
+  },
+  {
+   "start": 707,
+   "title": "Controlling the output"
+  },
+  {
+   "start": 844,
+   "title": "Technical implementation"
+  },
+  {
+   "start": 923,
+   "title": "Addressing limitations"
+  },
+  {
+   "start": 1038,
+   "title": "Full generation example"
+  },
+  {
+   "start": 1152,
+   "title": "Conclusion and resources"
+  },
+  {
+   "start": 1277,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4784,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.78,
+   "d": 4.12,
+   "text": "I'm Brian Bucklew. I'm an artificer at Freehold Games."
+  },
+  {
+   "t": 4.9,
+   "d": 2.93,
+   "text": "There's a bunch of Freehold Games people here in the audience."
+  },
+  {
+   "t": 7.83,
+   "d": 5.4,
+   "text": "So, I mostly make tools to let them make cool games. We're gonna talk about -"
+  },
+  {
+   "t": 13.23,
+   "d": 2.41,
+   "text": "Offscreen: Can you move closer to the mic?"
+  },
+  {
+   "t": 15.64,
+   "d": 3.98,
+   "text": "We are gonna talk about wave function collapse."
+  },
+  {
+   "t": 19.63,
+   "d": 2.27,
+   "text": "And its use in Caves of Qud."
+  },
+  {
+   "t": 21.89,
+   "d": 2.7,
+   "text": "Why are we gonna talk about this? You guys know what Caves of Qud is."
+  },
+  {
+   "t": 24.59,
+   "d": 4.63,
+   "text": "I did this deck at GDC, and those people don't know what Caves of Qud is, so."
+  },
+  {
+   "t": 29.23,
+   "d": 4.22,
+   "text": "One of the things we use in Caves of Qud, amongst other procedural generation"
+  },
+  {
+   "t": 33.44,
+   "d": 4.6,
+   "text": "techniques, is wave function collapse. And this sounds like, super intimidating, right?"
+  },
+  {
+   "t": 38.04,
+   "d": 4.08,
+   "text": "Like some quantum physics things. And in fact, it is really simple."
+  },
+  {
+   "t": 42.13,
+   "d": 3.28,
+   "text": "And so what I'm gonna do, as a good artificer, is send you each home"
+  },
+  {
+   "t": 45.41,
+   "d": 3.68,
+   "text": "with a magic wand you can just do whatever you want with in your village."
+  },
+  {
+   "t": 49.09,
+   "d": 2.9,
+   "text": "I don't know if it's shoot it at it or whatever, but it's up to you."
+  },
+  {
+   "t": 51.99,
+   "d": 5.38,
+   "text": "And so we're gonna start by showing the final results of this in Caves of Qud,"
+  },
+  {
+   "t": 57.37,
+   "d": 4.12,
+   "text": "and then we'll talk about how we got there, and then we'll review these"
+  },
+  {
+   "t": 61.49,
+   "d": 1.8,
+   "text": "results and see if you can figure out in your head how we got there"
+  },
+  {
+   "t": 63.29,
+   "d": 2.17,
+   "text": "with these techniques."
+  },
+  {
+   "t": 65.46,
+   "d": 3.52,
+   "text": "So let's take a look at this area. This area looks, to me, sort of"
+  },
+  {
+   "t": 68.97,
+   "d": 3.71,
+   "text": "like an enclosed compound, right? Like a palace area. It's got sort of"
+  },
+  {
+   "t": 72.69,
+   "d": 4.63,
+   "text": "an outer wall and some interior buildings, sort of an interesting forest there."
+  },
+  {
+   "t": 77.32,
+   "d": 6.41,
+   "text": "This looks like an underground waterway, right? You've got some sort of buried"
+  },
+  {
+   "t": 83.74,
+   "d": 5.0,
+   "text": "aqueducts of some kind. Maybe a sewer system."
+  },
+  {
+   "t": 89.53,
+   "d": 4.32,
+   "text": "This is sort of an old tower, encased in salt walls."
+  },
+  {
+   "t": 95.34,
+   "d": 2.88,
+   "text": "This is a nice little village, right? Like a little forested village."
+  },
+  {
+   "t": 98.22,
+   "d": 2.85,
+   "text": "You've got a bunch of buildings on the bottom, you've got a big ruins"
+  },
+  {
+   "t": 101.06,
+   "d": 3.98,
+   "text": "on the top, which is maybe why they located their village here."
+  },
+  {
+   "t": 105.85,
+   "d": 2.73,
+   "text": "And so, I think we an all agree that each of these had a pretty"
+  },
+  {
+   "t": 108.58,
+   "d": 3.17,
+   "text": "distinct character, right? Like, each of those felt like a"
+  },
+  {
+   "t": 111.75,
+   "d": 4.32,
+   "text": "pretty different map. And traditionally, I know for like 20 years,"
+  },
+  {
+   "t": 116.07,
+   "d": 4.21,
+   "text": "while I was trying to make roguelikes, each of these would have been its own"
+  },
+  {
+   "t": 120.28,
+   "d": 3.72,
+   "text": "sort of artisanally handcrafted algorithm. I'm gonna make a village builder,"
+  },
+  {
+   "t": 124.0,
+   "d": 2.35,
+   "text": "or I'm gonna make something that builds aqueducts. Maybe I can use"
+  },
+  {
+   "t": 126.35,
+   "d": 5.04,
+   "text": "some common techniques between these. But very cool. All of these maps are"
+  },
+  {
+   "t": 131.54,
+   "d": 3.44,
+   "text": "produced by the exact same technique, literally the same block of code"
+  },
+  {
+   "t": 134.98,
+   "d": 5.2,
+   "text": "with some tiny different little training inputs. And this texture synthesis"
+  },
+  {
+   "t": 140.18,
+   "d": 2.85,
+   "text": "technique is called wave function collapse."
+  },
+  {
+   "t": 143.03,
+   "d": 6.23,
+   "text": "It was developed by a mathematician, a cool guy on Twitter, Maxim Gumin."
+  },
+  {
+   "t": 149.26,
+   "d": 3.7,
+   "text": "It was released in 2016, so this isn't super new. This is a couple years old."
+  },
+  {
+   "t": 152.96,
+   "d": 3.74,
+   "text": "But in the world of procedural generation techniques, I feel we leaned on the"
+  },
+  {
+   "t": 156.7,
+   "d": 3.82,
+   "text": "same mathematical techniques for a long time. 30 years of roguelikes"
+  },
+  {
+   "t": 160.52,
+   "d": 2.77,
+   "text": "were built using really similar mathematical tools."
+  },
+  {
+   "t": 163.29,
+   "d": 3.13,
+   "text": "And so, this was a brand new tool that came out, and"
+  },
+  {
+   "t": 166.42,
+   "d": 3.06,
+   "text": "Caves of Qud is its first commercial use. But a bunch of others followed,"
+  },
+  {
+   "t": 169.49,
+   "d": 2.84,
+   "text": "because as you'll see, it's an extremely powerful and simple"
+  },
+  {
+   "t": 172.32,
+   "d": 1.42,
+   "text": "to use technique."
+  },
+  {
+   "t": 174.79,
+   "d": 7.03,
+   "text": "So, WFC has two modes of function. It does tiles. Tiles are really cool,"
+  },
+  {
+   "t": 181.82,
+   "d": 3.87,
+   "text": "if you use Wang tiles in your systems. It's similar to Wang tiles, but"
+  },
+  {
+   "t": 185.69,
+   "d": 2.9,
+   "text": "extremely powerful. This is tiny, 'cause we're not gonna talk about it."
+  },
+  {
+   "t": 188.59,
+   "d": 2.75,
+   "text": "You can go look it up. I don't know anything about it, really."
+  },
+  {
+   "t": 191.34,
+   "d": 3.78,
+   "text": "I don't use it. Caves of Qud uses Texture Mode."
+  },
+  {
+   "t": 195.12,
+   "d": 3.77,
+   "text": "So, Texture Mode is cool, because it has these tiny little training inputs"
+  },
+  {
+   "t": 198.88,
+   "d": 3.07,
+   "text": "that you can just make in MS Paint or in your favorite paint program."
+  },
+  {
+   "t": 201.95,
+   "d": 4.05,
+   "text": "It takes a couple minutes, and the outputs from those tiny training inputs"
+  },
+  {
+   "t": 206.0,
+   "d": 4.15,
+   "text": "are arbitrarily large output textures that are locally similar to the input."
+  },
+  {
+   "t": 210.15,
+   "d": 1.65,
+   "text": "What does that mean?"
+  },
+  {
+   "t": 213.28,
+   "d": 3.78,
+   "text": "Wow, this is cool. So on the left, we've got inputs."
+  },
+  {
+   "t": 217.06,
+   "d": 3.38,
+   "text": "You can see three different inputs, and these are literally tiny little"
+  },
+  {
+   "t": 220.44,
+   "d": 4.7,
+   "text": "black and white textures made in MS Paint. At the top, you've got"
+  },
+  {
+   "t": 225.15,
+   "d": 4.78,
+   "text": "little square rooms attached by halls. In the middle, you've got a sort of"
+  },
+  {
+   "t": 229.93,
+   "d": 3.45,
+   "text": "squiggly cavern. In the bottom, you've got literally a 5x5 training"
+  },
+  {
+   "t": 233.38,
+   "d": 4.43,
+   "text": "texture that's a single line and then two dots. And you can see on the right,"
+  },
+  {
+   "t": 237.81,
+   "d": 5.98,
+   "text": "seven sample outputs, but these are from the not infinite, but very large"
+  },
+  {
+   "t": 243.79,
+   "d": 5.15,
+   "text": "base of possible outputs, that WFC generates based on this input."
+  },
+  {
+   "t": 248.94,
+   "d": 2.82,
+   "text": "And you can see that locally, in a small scale, they're similar"
+  },
+  {
+   "t": 251.76,
+   "d": 4.49,
+   "text": "to these inputs, and that creates these huge outputs."
+  },
+  {
+   "t": 256.25,
+   "d": 2.32,
+   "text": "If you think about the techniques you're currently using in your game"
+  },
+  {
+   "t": 258.57,
+   "d": 4.42,
+   "text": "to generate these, these would be three extremely different techniques, right?"
+  },
+  {
+   "t": 262.99,
+   "d": 4.25,
+   "text": "Probably some kind of recursive builder up top, probably some kind of"
+  },
+  {
+   "t": 267.24,
+   "d": 3.52,
+   "text": "cellular automata in the middle, and some other custom line drawing algorithm"
+  },
+  {
+   "t": 270.76,
+   "d": 2.92,
+   "text": "at the bottom. Instead, you're using a single technique and a single"
+  },
+  {
+   "t": 273.67,
+   "d": 3.0,
+   "text": "input texture that anybody can design. You can give that to a designer and say,"
+  },
+  {
+   "t": 276.67,
+   "d": 3.65,
+   "text": "\"Draw me a little 8x8 tile, and I'll generate maps of an arbitrary size"
+  },
+  {
+   "t": 280.32,
+   "d": 4.3,
+   "text": "with that character.\" That's just incredibly powerful."
+  },
+  {
+   "t": 285.12,
+   "d": 3.38,
+   "text": "So, what's going on here? I'm gonna try to give you an"
+  },
+  {
+   "t": 288.5,
+   "d": 2.95,
+   "text": "intuition for how this works. If you do not understand this or"
+  },
+  {
+   "t": 291.45,
+   "d": 3.03,
+   "text": "don't even care to listen to it, you don't need to use it."
+  },
+  {
+   "t": 294.49,
+   "d": 3.88,
+   "text": "You know, you don't need to understand it to use this. But it's an interesting"
+  },
+  {
+   "t": 298.37,
+   "d": 3.13,
+   "text": "technique, and so I want to give those in the audience who want to understand"
+  },
+  {
+   "t": 301.5,
+   "d": 4.25,
+   "text": "it, just a sort of intuitive understanding of what's going on here."
+  },
+  {
+   "t": 305.75,
+   "d": 4.33,
+   "text": "So what's gonna happen is that the algorithm takes your input texture,"
+  },
+  {
+   "t": 310.08,
+   "d": 5.72,
+   "text": "and it chops it up into you can imagine a big stack of tiny little cards."
+  },
+  {
+   "t": 315.8,
+   "d": 5.76,
+   "text": "So, you pick a size and most of the time, in Caves of Qud, you're using 3x3 tiles."
+  },
+  {
+   "t": 321.56,
+   "d": 2.82,
+   "text": "So you can imagine it goes like a cookie cutter along the texture."
+  },
+  {
+   "t": 324.38,
+   "d": 4.87,
+   "text": "It cuts out a 3x3 tile, sticks it in its pile of cards. Moves over one pixel,"
+  },
+  {
+   "t": 329.25,
+   "d": 4.77,
+   "text": "cuts out another 3x3 tile, puts it in its pile of cards, and it goes"
+  },
+  {
+   "t": 334.01,
+   "d": 4.85,
+   "text": "like that across the entire texture until it's collected a 3x3 pixel subtexture"
+  },
+  {
+   "t": 338.86,
+   "d": 4.45,
+   "text": "from every little segment of the texture. Right? And now I've got a big old pile"
+  },
+  {
+   "t": 343.31,
+   "d": 4.12,
+   "text": "of cards. A 10x10 image is gonna create 100 cards. If I rotate and reflect"
+  },
+  {
+   "t": 347.43,
+   "d": 5.5,
+   "text": "those, it might create 800 cards. So that's a big stack of input textures."
+  },
+  {
+   "t": 352.93,
+   "d": 4.58,
+   "text": "Now you can imagine, for each pixel and output texture, it just takes a copy"
+  },
+  {
+   "t": 357.51,
+   "d": 4.3,
+   "text": "of that stack and puts it on each pixel. Right? These cards overlap right at the"
+  },
+  {
+   "t": 361.81,
+   "d": 5.3,
+   "text": "edges, and so we've now got big old many piles of cards, right?"
+  },
+  {
+   "t": 367.11,
+   "d": 2.75,
+   "text": "And it's gonna say, \"Well, what does my input texture look like?\""
+  },
+  {
+   "t": 369.86,
+   "d": 4.38,
+   "text": "It picks a random element of that random stack on that output."
+  },
+  {
+   "t": 374.24,
+   "d": 2.23,
+   "text": "It says, \"I'm just gonna pick a random card from that stack."
+  },
+  {
+   "t": 376.47,
+   "d": 3.22,
+   "text": "This is what that pixel's gonna be.\" And so you can sort of imagine that"
+  },
+  {
+   "t": 379.69,
+   "d": 3.21,
+   "text": "stack sort of disappears into one, with much bigger stacks around it."
+  },
+  {
+   "t": 382.9,
+   "d": 3.19,
+   "text": "Then it says, \"Okay. Well, let me pull out all the cards that overlap that"
+  },
+  {
+   "t": 386.09,
+   "d": 4.33,
+   "text": "card where the pixel colors don't match.\" Right? Those little stacks get smaller."
+  },
+  {
+   "t": 390.42,
+   "d": 2.78,
+   "text": "And now we have a little more information and the stacks around those get"
+  },
+  {
+   "t": 393.2,
+   "d": 4.8,
+   "text": "smaller, and so you've got sort of a dip around the one it chose, right?"
+  },
+  {
+   "t": 398.0,
+   "d": 3.3,
+   "text": "So if you can picture that, you basically understand how the algorithm works,"
+  },
+  {
+   "t": 401.3,
+   "d": 4.25,
+   "text": "because then we just recurse. Find the shortest stack that's left."
+  },
+  {
+   "t": 405.55,
+   "d": 2.55,
+   "text": "Pick a random card out of it. I don't care which one, because"
+  },
+  {
+   "t": 408.1,
+   "d": 3.35,
+   "text": "we know all these overlap pixel colors with the adjacent one."
+  },
+  {
+   "t": 411.45,
+   "d": 3.38,
+   "text": "Pull the card out, and now I've got two flattened areas, right?"
+  },
+  {
+   "t": 414.83,
+   "d": 4.57,
+   "text": "Now we have some little more information, about the superimposed states of"
+  },
+  {
+   "t": 419.4,
+   "d": 4.2,
+   "text": "what remains. We just flatten out the whole image, right?"
+  },
+  {
+   "t": 423.6,
+   "d": 4.66,
+   "text": "And now we've got an output image that's locally similar to a 3x3 area,"
+  },
+  {
+   "t": 428.26,
+   "d": 5.42,
+   "text": "and as a whole is characteristic of your input image."
+  },
+  {
+   "t": 433.68,
+   "d": 2.7,
+   "text": "So we've got - these are really bad slides, but you can imagine."
+  },
+  {
+   "t": 436.38,
+   "d": 3.15,
+   "text": "We've cut up the little tiles, and we've figured out where they"
+  },
+  {
+   "t": 439.53,
+   "d": 8.5,
+   "text": "overlap. And now we'll look at an actual in-progress WFC collapse."
+  },
+  {
+   "t": 448.03,
+   "d": 4.84,
+   "text": "So, the little image on the left here is the input texture. It's three colors."
+  },
+  {
+   "t": 452.88,
+   "d": 2.15,
+   "text": "Just red, green, and blue."
+  },
+  {
+   "t": 455.03,
+   "d": 4.5,
+   "text": "And we've got the first four steps of a collapse on the right."
+  },
+  {
+   "t": 459.53,
+   "d": 5.62,
+   "text": "So the mixed colors are all of the possible tiles that remain. So where red, green, and blue"
+  },
+  {
+   "t": 465.14,
+   "d": 3.42,
+   "text": "overlap, those colors overlap, and you can see it's kind of reddish at the edges."
+  },
+  {
+   "t": 468.56,
+   "d": 3.73,
+   "text": "And that's because there's more red input pixels than green and blue"
+  },
+  {
+   "t": 472.29,
+   "d": 4.1,
+   "text": "input pixels. And so you can see on the left, we've made our first selection,"
+  },
+  {
+   "t": 476.39,
+   "d": 3.78,
+   "text": "our first stack of cards. That's the outline area in the white."
+  },
+  {
+   "t": 480.18,
+   "d": 5.45,
+   "text": "That's our 3x3 texture. We've put that tile down. And you can see quite a lot"
+  },
+  {
+   "t": 485.62,
+   "d": 4.58,
+   "text": "about what is likely to exist in the area around it. We then just pick one"
+  },
+  {
+   "t": 490.21,
+   "d": 3.75,
+   "text": "at random, the shortest stack at random. That's the second image."
+  },
+  {
+   "t": 493.96,
+   "d": 3.3,
+   "text": "We've collapsed the second card down. It's an overlapping card."
+  },
+  {
+   "t": 497.26,
+   "d": 4.67,
+   "text": "It takes a 3x3 that overlaps with the first 3x3. Then we just keep stepping"
+  },
+  {
+   "t": 501.92,
+   "d": 4.81,
+   "text": "around the image until the whole image is resolved."
+  },
+  {
+   "t": 506.74,
+   "d": 5.67,
+   "text": "So, let's take a really close look at this first step, to sort of finish our intuition,"
+  },
+  {
+   "t": 512.4,
+   "d": 6.03,
+   "text": "and try to figure out why did those three pixels look the way they did?"
+  },
+  {
+   "t": 518.44,
+   "d": 5.65,
+   "text": "You can see that these three pixels, or this 3x3 area, is very green and"
+  },
+  {
+   "t": 524.09,
+   "d": 3.45,
+   "text": "very blue. We know for sure what these pixels are gonna be."
+  },
+  {
+   "t": 527.54,
+   "d": 4.58,
+   "text": "But if we look at these three pixels, we can see that those top two pixels"
+  },
+  {
+   "t": 532.11,
+   "d": 4.9,
+   "text": "are a little green-ish, but mostly blue. So it thinks that there's a little green"
+  },
+  {
+   "t": 537.01,
+   "d": 4.92,
+   "text": "input possible here, but mostly blue input. You see that it thinks that that bottom"
+  },
+  {
+   "t": 541.93,
+   "d": 4.53,
+   "text": "green pixel is gonna be very green. Why does it think this?"
+  },
+  {
+   "t": 549.51,
+   "d": 3.63,
+   "text": "So let's look at this image and try to find all the tiles it could be thinking"
+  },
+  {
+   "t": 553.15,
+   "d": 6.05,
+   "text": "about for this place, right? We know that this column that"
+  },
+  {
+   "t": 559.2,
+   "d": 9.56,
+   "text": "we're interested in has, to its left, a blue, blue, green column."
+  },
+  {
+   "t": 568.76,
+   "d": 4.65,
+   "text": "So what other places have a blue, blue, green column to its left?"
+  },
+  {
+   "t": 573.41,
+   "d": 5.2,
+   "text": "Well, there's this first tile on the left, the one with a pink middle, right?"
+  },
+  {
+   "t": 578.61,
+   "d": 4.65,
+   "text": "Its leftmost column is blue, blue, green. And to its right, there's another tile"
+  },
+  {
+   "t": 583.26,
+   "d": 3.43,
+   "text": "that has its leftmost column as blue, blue, green. And to its right,"
+  },
+  {
+   "t": 586.69,
+   "d": 3.64,
+   "text": "there's one more tile that has a blue, blue, green to its left. And that's it."
+  },
+  {
+   "t": 590.33,
+   "d": 6.88,
+   "text": "There's no other tiles in the entire image that can overlap that blue, blue, green"
+  },
+  {
+   "t": 597.21,
+   "d": 3.0,
+   "text": "pattern on the leftmost edge."
+  },
+  {
+   "t": 600.21,
+   "d": 6.07,
+   "text": "And so when we look at that possibility, where that vertical column could be"
+  },
+  {
+   "t": 606.27,
+   "d": 4.38,
+   "text": "sourced from, we see that two of them have blue pixels in the topmost row,"
+  },
+  {
+   "t": 610.66,
+   "d": 4.1,
+   "text": "one of them has a green pixel in the topmost row. And we can see we get"
+  },
+  {
+   "t": 614.76,
+   "d": 4.43,
+   "text": "green tinted blue, when you overlap those three pixels. The same thing is"
+  },
+  {
+   "t": 619.18,
+   "d": 3.82,
+   "text": "true for that middle pixel, and the bottommost pixels of all three of those possible"
+  },
+  {
+   "t": 623.0,
+   "d": 3.65,
+   "text": "selection tiles is green. So it knows for sure, when I've picked one of these"
+  },
+  {
+   "t": 626.65,
+   "d": 4.67,
+   "text": "remaining cards, it's gonna have a green output. So for those of you familiar with"
+  },
+  {
+   "t": 631.32,
+   "d": 5.03,
+   "text": "Markov chains, it's sort of similar to Markov chaining words, but you're doing"
+  },
+  {
+   "t": 636.35,
+   "d": 3.22,
+   "text": "it on a sort of 2D texture."
+  },
+  {
+   "t": 641.04,
+   "d": 5.42,
+   "text": "And so again, let's watch this. I don't know if this video will work."
+  },
+  {
+   "t": 646.45,
+   "d": 4.38,
+   "text": "Maybe. We'll watch this thing build these things in real time."
+  },
+  {
+   "t": 650.84,
+   "d": 2.83,
+   "text": "And so you can see the input textures on the left - we'll refer to these again"
+  },
+  {
+   "t": 653.67,
+   "d": 6.35,
+   "text": "in a minute - are the input sources, and each of these is, in sequence,"
+  },
+  {
+   "t": 660.02,
+   "d": 6.11,
+   "text": "going to produce a WFC output. And it's pretty cool to watch it work."
+  },
+  {
+   "t": 666.13,
+   "d": 3.3,
+   "text": "That's pretty magic feeling."
+  },
+  {
+   "t": 678.43,
+   "d": 2.17,
+   "text": "Cool. That's cool. When I saw that happen, I was"
+  },
+  {
+   "t": 680.6,
+   "d": 4.5,
+   "text": "like, \"Woah, that's neat. I like that.\""
+  },
+  {
+   "t": 687.14,
+   "d": 4.02,
+   "text": "Okay. Alright. So I picked this up, and"
+  },
+  {
+   "t": 691.16,
+   "d": 3.62,
+   "text": "I'm not like a pure wizard, right? I like to kick things around before"
+  },
+  {
+   "t": 694.78,
+   "d": 3.62,
+   "text": "I understand the math underneath them. And I sat down with this technique"
+  },
+  {
+   "t": 698.39,
+   "d": 3.92,
+   "text": "and I said, \"Ah, I want to build a little village,\" right?"
+  },
+  {
+   "t": 702.31,
+   "d": 2.96,
+   "text": "Let me build a little village of square buildings. How am I gonna do this?"
+  },
+  {
+   "t": 705.27,
+   "d": 2.65,
+   "text": "Can I get WFC to do this at all? I have no idea."
+  },
+  {
+   "t": 707.93,
+   "d": 3.6,
+   "text": "So I started feeding this thing textures, and the first thing I fed it,"
+  },
+  {
+   "t": 711.53,
+   "d": 2.92,
+   "text": "\"I want to make square buildings,\" was a square. It looked like this."
+  },
+  {
+   "t": 714.44,
+   "d": 4.03,
+   "text": "Black square on a white background. But my output didn't look like a bunch"
+  },
+  {
+   "t": 718.48,
+   "d": 3.8,
+   "text": "of square buildings. It looked like kind of - I mean, it's an interesting"
+  },
+  {
+   "t": 722.27,
+   "d": 5.38,
+   "text": "shape, but there's no sort of clear interior or exterior."
+  },
+  {
+   "t": 727.66,
+   "d": 3.28,
+   "text": "And so there's mathematical reasons behind this output, but I wasn't"
+  },
+  {
+   "t": 730.94,
+   "d": 3.05,
+   "text": "thinking super analytically. And I said, \"What if I just told"
+  },
+  {
+   "t": 733.99,
+   "d": 4.32,
+   "text": "it what the inside of the building was, by giving it a different color?\""
+  },
+  {
+   "t": 739.09,
+   "d": 3.5,
+   "text": "And so I did that. I put some red pixels inside the building. Suddenly,"
+  },
+  {
+   "t": 742.59,
+   "d": 6.52,
+   "text": "I've told this algorithm, underneath the covers, that every turn around a red pixel"
+  },
+  {
+   "t": 749.1,
+   "d": 4.63,
+   "text": "is gonna be clockwise, right? And so, now instead of getting"
+  },
+  {
+   "t": 753.74,
+   "d": 5.58,
+   "text": "random turns, I get clockwise turns, and I've enclosed these red areas."
+  },
+  {
+   "t": 759.32,
+   "d": 5.14,
+   "text": "And suddenly, I have an extremely controllable algorithm. This, now"
+  },
+  {
+   "t": 764.45,
+   "d": 3.33,
+   "text": "I'm excited, right? This is like a couple hours into me figuring out how to work it."
+  },
+  {
+   "t": 767.78,
+   "d": 2.25,
+   "text": "I'm like, \"Oh, I can make this thing do something.\""
+  },
+  {
+   "t": 770.03,
+   "d": 3.5,
+   "text": "What if I just give it some crazy, crazy input texture that looks like"
+  },
+  {
+   "t": 773.53,
+   "d": 5.02,
+   "text": "a little temple? And out popped that. I was like, \"This is so sweet!\""
+  },
+  {
+   "t": 778.55,
+   "d": 4.4,
+   "text": "Right? Like, imagine the algorithm you would have to write to make an output that looks"
+  },
+  {
+   "t": 782.95,
+   "d": 3.02,
+   "text": "like that thing on the right. Like, I can't even really conceptualize"
+  },
+  {
+   "t": 785.97,
+   "d": 3.68,
+   "text": "what I would have to do to BSP this space to get the interesting pillar"
+  },
+  {
+   "t": 789.65,
+   "d": 2.8,
+   "text": "in the middle and the cool little turning walls. I mean, I would sit there for a"
+  },
+  {
+   "t": 792.45,
+   "d": 3.36,
+   "text": "week, trying to make something look like that. And I literally just scribbled something up in"
+  },
+  {
+   "t": 795.81,
+   "d": 3.55,
+   "text": "MS Paint in five minutes. I was like, \"Oh, what if I try to do"
+  },
+  {
+   "t": 799.36,
+   "d": 5.08,
+   "text": "more organic shapes? Like, I want to do a garden.\" Again, imagine the algorithm"
+  },
+  {
+   "t": 804.45,
+   "d": 4.93,
+   "text": "traditionally doing like BSP trees and noise maps to try to get an interesting"
+  },
+  {
+   "t": 809.38,
+   "d": 6.03,
+   "text": "forest like that, combining organic and non-organic shapes? I mean, it's wild,"
+  },
+  {
+   "t": 815.41,
+   "d": 4.1,
+   "text": "the power you get out of a few minutes of messing around with this algorithm."
+  },
+  {
+   "t": 819.51,
+   "d": 3.28,
+   "text": "Let's look at one more, and I picked this because we'll come back to this."
+  },
+  {
+   "t": 822.79,
+   "d": 4.04,
+   "text": "And you can see that the output here is a little less varied. I didn't understand"
+  },
+  {
+   "t": 826.83,
+   "d": 5.13,
+   "text": "then exactly what was going on, and I will explain it to you. You get a couple"
+  },
+  {
+   "t": 831.96,
+   "d": 4.25,
+   "text": "different variations of star shapes, right? It's still pretty interesting. How do you make that?"
+  },
+  {
+   "t": 836.21,
+   "d": 2.8,
+   "text": "And I'd probably have to hand draw each of those templates and then place them"
+  },
+  {
+   "t": 839.01,
+   "d": 3.84,
+   "text": "spaced out from one another, versus just one little image."
+  },
+  {
+   "t": 842.85,
+   "d": 2.59,
+   "text": "So what kind of code does it take to make this?"
+  },
+  {
+   "t": 846.11,
+   "d": 4.0,
+   "text": "This slide is kind of hard to read, but I'll put it up on the web."
+  },
+  {
+   "t": 850.11,
+   "d": 2.5,
+   "text": "But it's literally three lines of code."
+  },
+  {
+   "t": 852.6,
+   "d": 3.42,
+   "text": "You initialize the model with some input parameters, and we'll go over those."
+  },
+  {
+   "t": 856.02,
+   "d": 2.46,
+   "text": "They're real simple. You tell the model to run, and"
+  },
+  {
+   "t": 858.49,
+   "d": 2.4,
+   "text": "then you get your texture back. You do whatever you want with"
+  },
+  {
+   "t": 860.89,
+   "d": 4.65,
+   "text": "your texture. It's that simple. In the repository, there's implementations"
+  },
+  {
+   "t": 865.54,
+   "d": 3.35,
+   "text": "in like 25 languages, and they're all just that easy to use."
+  },
+  {
+   "t": 868.89,
+   "d": 3.03,
+   "text": "So, when you're messing around with it, you literally just feed this thing a"
+  },
+  {
+   "t": 871.92,
+   "d": 3.0,
+   "text": "texture and get back an arbitrarily large output texture, and figure out"
+  },
+  {
+   "t": 874.92,
+   "d": 2.55,
+   "text": "what you want to do with it. I mean, that's just incredible."
+  },
+  {
+   "t": 877.47,
+   "d": 3.08,
+   "text": "The only things you tell it are the input training image,"
+  },
+  {
+   "t": 880.55,
+   "d": 3.55,
+   "text": "the width and height of the output, whether you want the thing to tile"
+  },
+  {
+   "t": 884.1,
+   "d": 4.43,
+   "text": "on the edges. It's smart enough to be able to sample across the edge, so"
+  },
+  {
+   "t": 888.53,
+   "d": 3.78,
+   "text": "if you want, it can produce a repeating tile or not. And the only thing that's"
+  },
+  {
+   "t": 892.31,
+   "d": 5.48,
+   "text": "even mildly confusing is the symmetry, which is just the value between 0 and 8,"
+  },
+  {
+   "t": 897.8,
+   "d": 3.15,
+   "text": "which is how many times you want to rotate and reflect these inputs."
+  },
+  {
+   "t": 900.95,
+   "d": 3.11,
+   "text": "So, when you're first messing around with it, just set the symmetry to the max,"
+  },
+  {
+   "t": 904.06,
+   "d": 4.27,
+   "text": "and it'll produce non-orientated results, and once you get comfortable,"
+  },
+  {
+   "t": 908.33,
+   "d": 3.81,
+   "text": "you can say, \"Okay, I have some specific things I want to do with orientation here,\""
+  },
+  {
+   "t": 912.14,
+   "d": 4.08,
+   "text": "and you can set the symmetry then. So, that was it."
+  },
+  {
+   "t": 916.22,
+   "d": 2.22,
+   "text": "I said, \"Well, what can I do with this in Caves of Qud?\""
+  },
+  {
+   "t": 918.44,
+   "d": 3.88,
+   "text": "I ran into a couple problems trying to make a really production-quality"
+  },
+  {
+   "t": 922.33,
+   "d": 7.73,
+   "text": "use of this function. One was the outputs were very homogenous, right?"
+  },
+  {
+   "t": 930.06,
+   "d": 4.1,
+   "text": "You produce a million by a million texture, and it's locally similar, which"
+  },
+  {
+   "t": 934.16,
+   "d": 4.88,
+   "text": "means you get repeating output on the scale of your input."
+  },
+  {
+   "t": 939.04,
+   "d": 5.82,
+   "text": "And the execution time and energy of this function scales with the size of"
+  },
+  {
+   "t": 944.86,
+   "d": 3.47,
+   "text": "the input, so you don't want to give it like a 1024x1024 input, unless"
+  },
+  {
+   "t": 948.32,
+   "d": 4.43,
+   "text": "you have a big set of nodes to run it on. It runs very quickly on small inputs,"
+  },
+  {
+   "t": 952.75,
+   "d": 4.17,
+   "text": "but exponentially slowly on large outputs. And so, this was a problem for producing"
+  },
+  {
+   "t": 956.92,
+   "d": 2.88,
+   "text": "interesting maps, even though that input is pretty neat, right?"
+  },
+  {
+   "t": 959.8,
+   "d": 2.45,
+   "text": "You don't necessarily want to play that map."
+  },
+  {
+   "t": 962.25,
+   "d": 4.71,
+   "text": "The second problem took me a little longer to understand, which is how"
+  },
+  {
+   "t": 966.97,
+   "d": 3.3,
+   "text": "the algorithm will overfit, if you give it a highly detailed input."
+  },
+  {
+   "t": 970.27,
+   "d": 6.0,
+   "text": "And what that means is if your input texture, for instance here, has like"
+  },
+  {
+   "t": 976.26,
+   "d": 4.74,
+   "text": "seven colors, then once it chooses one color, there's really only one other"
+  },
+  {
+   "t": 981.0,
+   "d": 5.63,
+   "text": "way these tiles overlap. And so, instead of getting interesting combinatorial"
+  },
+  {
+   "t": 986.63,
+   "d": 4.62,
+   "text": "results from your input, you get just your input repeated over and over again,"
+  },
+  {
+   "t": 991.25,
+   "d": 4.9,
+   "text": "tiled across space. And so, I tried at first to figure out, \"Hey, maybe"
+  },
+  {
+   "t": 996.15,
+   "d": 4.53,
+   "text": "I can build the door locations into WFC, maybe I can build furniture locations"
+  },
+  {
+   "t": 1000.68,
+   "d": 3.87,
+   "text": "into WFC.\" It turns out that when you do that, you can get output,"
+  },
+  {
+   "t": 1004.55,
+   "d": 5.1,
+   "text": "but it tends to overfit, and the interesting complexity of your results narrows."
+  },
+  {
+   "t": 1009.65,
+   "d": 6.88,
+   "text": "So, I solved it in a couple simple ways. The solution in Caves of Qud"
+  },
+  {
+   "t": 1016.53,
+   "d": 5.0,
+   "text": "to homogenous output was to do a pre-process pass, where"
+  },
+  {
+   "t": 1021.53,
+   "d": 3.6,
+   "text": "we figure out some large scale structure. In the dungeons I'm gonna show you,"
+  },
+  {
+   "t": 1025.13,
+   "d": 4.82,
+   "text": "this pre-process pass is very simple. It's just picking a couple big shapes,"
+  },
+  {
+   "t": 1029.94,
+   "d": 4.75,
+   "text": "circles, squares, whatever, laying them down on the map, and then filling"
+  },
+  {
+   "t": 1034.69,
+   "d": 4.18,
+   "text": "each of those with a different WFC output."
+  },
+  {
+   "t": 1039.71,
+   "d": 3.32,
+   "text": "The solution to overfitting was doing those small details, like doors and"
+  },
+  {
+   "t": 1043.03,
+   "d": 4.46,
+   "text": "furnitures, in a post-process pass. So we allow WFC to focus on what"
+  },
+  {
+   "t": 1047.49,
+   "d": 4.87,
+   "text": "it's really good at, which is generating interesting interior architecture,"
+  },
+  {
+   "t": 1052.36,
+   "d": 4.58,
+   "text": "and do the post-processing, which WFC overfits,"
+  },
+  {
+   "t": 1056.94,
+   "d": 4.25,
+   "text": "in a post-step. So let's look at a full example of this in Caves of Qud."
+  },
+  {
+   "t": 1062.19,
+   "d": 2.57,
+   "text": "So step one for this output map will be segmentation."
+  },
+  {
+   "t": 1064.76,
+   "d": 3.17,
+   "text": "We're gonna pick a big circle in the middle of the map."
+  },
+  {
+   "t": 1069.12,
+   "d": 3.53,
+   "text": "Then we're gonna just run WFC. This is the three lines that I showed you."
+  },
+  {
+   "t": 1072.65,
+   "d": 3.33,
+   "text": "We're gonna take that input on the left, we're gonna say, \"Generate me"
+  },
+  {
+   "t": 1075.99,
+   "d": 4.28,
+   "text": "some interesting interior architecture.\" Then we're gonna just cut that out"
+  },
+  {
+   "t": 1080.27,
+   "d": 4.0,
+   "text": "of our segmentation. In this case, we're generating ruins so this sort"
+  },
+  {
+   "t": 1084.27,
+   "d": 4.35,
+   "text": "of non-contiguous area is interesting to us.This looks like sort of a worn away"
+  },
+  {
+   "t": 1088.62,
+   "d": 5.46,
+   "text": "area. And now, we say, \"Well, we have some disconnected areas.\""
+  },
+  {
+   "t": 1094.08,
+   "d": 4.13,
+   "text": "So we're gonna run a simple ASTAR from the center to each disconnected"
+  },
+  {
+   "t": 1098.22,
+   "d": 2.9,
+   "text": "area. Anywhere where it punches through a wall, we're gonna place"
+  },
+  {
+   "t": 1101.12,
+   "d": 8.8,
+   "text": "a door. So we do one there. We do one there, and there, and there, and there."
+  },
+  {
+   "t": 1109.92,
+   "d": 3.4,
+   "text": "And now, the whole thing is gonna be connected. Now we've got an"
+  },
+  {
+   "t": 1113.32,
+   "d": 4.68,
+   "text": "output texture. We give it some skin, and you've got a Caves of Qud map,"
+  },
+  {
+   "t": 1118.0,
+   "d": 2.68,
+   "text": "which I mean, this is kind of like where you go, \"I drew some circles,\""
+  },
+  {
+   "t": 1120.68,
+   "d": 5.93,
+   "text": "and then finish the owl. But I mean, you can really look"
+  },
+  {
+   "t": 1126.61,
+   "d": 6.3,
+   "text": "at that and see where you've got a really simple process that produces"
+  },
+  {
+   "t": 1132.91,
+   "d": 3.72,
+   "text": "something that if you try and produce that with traditional techniques,"
+  },
+  {
+   "t": 1136.63,
+   "d": 3.58,
+   "text": "it would - I don't know that I can sit down and write something that"
+  },
+  {
+   "t": 1140.21,
+   "d": 5.27,
+   "text": "could produce maps of that variety, in any kind of reasonable time."
+  },
+  {
+   "t": 1145.48,
+   "d": 5.11,
+   "text": "And so, let's circle back now to the examples that we looked at at first,"
+  },
+  {
+   "t": 1150.59,
+   "d": 3.14,
+   "text": "which was like four completely different map builders."
+  },
+  {
+   "t": 1153.73,
+   "d": 3.45,
+   "text": "So how did we build this one? This one was just a fullscreen"
+  },
+  {
+   "t": 1157.18,
+   "d": 4.26,
+   "text": "output, square input WFC."
+  },
+  {
+   "t": 1162.52,
+   "d": 5.05,
+   "text": "Here's another one. This one was a full screen with a tiny little"
+  },
+  {
+   "t": 1167.58,
+   "d": 4.51,
+   "text": "aqueduct input texture, maybe 8x8."
+  },
+  {
+   "t": 1173.47,
+   "d": 1.63,
+   "text": "Here's another one. How did we do this?"
+  },
+  {
+   "t": 1175.11,
+   "d": 2.9,
+   "text": "We got two segments. We got a big circle segment and a little"
+  },
+  {
+   "t": 1178.01,
+   "d": 3.48,
+   "text": "square segment, ran WFC twice, stamped it in there."
+  },
+  {
+   "t": 1182.49,
+   "d": 2.65,
+   "text": "How did we do this one? two rectangular segments,"
+  },
+  {
+   "t": 1185.14,
+   "d": 2.91,
+   "text": "one smaller one sitting on top of one big one, ran a little"
+  },
+  {
+   "t": 1188.05,
+   "d": 3.1,
+   "text": "building WFC in both of them, and now you've got this really"
+  },
+  {
+   "t": 1191.14,
+   "d": 2.66,
+   "text": "cool village input. Right? And that's it."
+  },
+  {
+   "t": 1193.81,
+   "d": 5.78,
+   "text": "So now you understand how to use WFC in your projects."
+  },
+  {
+   "t": 1199.59,
+   "d": 2.65,
+   "text": "If you're interested in getting a little more wizard-y,"
+  },
+  {
+   "t": 1202.24,
+   "d": 3.43,
+   "text": "Issac Karth has done a ton of really good papers and talks"
+  },
+  {
+   "t": 1205.67,
+   "d": 2.72,
+   "text": "about how the algorithm really works underneath. I've really just"
+  },
+  {
+   "t": 1208.39,
+   "d": 4.7,
+   "text": "given you an intuition for how it works, and this algorithm is extremely powerful."
+  },
+  {
+   "t": 1213.09,
+   "d": 3.06,
+   "text": "People are using it to make poetry. It's a constraint solver."
+  },
+  {
+   "t": 1216.16,
+   "d": 3.67,
+   "text": "It's a more powerful Markov chain system. You can do it in 3D."
+  },
+  {
+   "t": 1219.82,
+   "d": 2.56,
+   "text": "You can do it against any graph, basically."
+  },
+  {
+   "t": 1222.39,
+   "d": 4.32,
+   "text": "What we're doing here is a simple 2D graph, but it's usable in really powerful ways."
+  },
+  {
+   "t": 1226.7,
+   "d": 2.22,
+   "text": "So if you're interested, I really recommend you check out"
+  },
+  {
+   "t": 1228.92,
+   "d": 4.27,
+   "text": "Isaac's work, and I recommend you check out the repository on GitHub."
+  },
+  {
+   "t": 1233.19,
+   "d": 3.83,
+   "text": "It is filled with tons of amazing documentation, right? Like most,"
+  },
+  {
+   "t": 1237.02,
+   "d": 2.98,
+   "text": "you go to the blank ReadMe file? This is not one of those."
+  },
+  {
+   "t": 1240.0,
+   "d": 3.97,
+   "text": "This is a nice, just dozens of pages of really good documentation"
+  },
+  {
+   "t": 1243.97,
+   "d": 3.5,
+   "text": "that people have written, and it's implemented in all kinds"
+  },
+  {
+   "t": 1247.47,
+   "d": 3.36,
+   "text": "of languages. This was all in C#, but whatever your favorite language,"
+  },
+  {
+   "t": 1250.83,
+   "d": 2.3,
+   "text": "it has an implementation now."
+  },
+  {
+   "t": 1253.13,
+   "d": 1.47,
+   "text": "And that is it."
+  },
+  {
+   "t": 1267.17,
+   "d": 1.82,
+   "text": "Yeah, I'll take questions."
+  },
+  {
+   "t": 1273.88,
+   "d": 2.4,
+   "text": "Host: We have time for some questions."
+  },
+  {
+   "t": 1278.78,
+   "d": 2.31,
+   "text": "Audience: Hey, Brian. Great talk. Thanks, love your games."
+  },
+  {
+   "t": 1281.1,
+   "d": 3.05,
+   "text": "What are some of the judgment calls you guys have discovered"
+  },
+  {
+   "t": 1284.15,
+   "d": 4.4,
+   "text": "between using Wave Function Collapse for overworld or more macro maps"
+  },
+  {
+   "t": 1288.55,
+   "d": 3.4,
+   "text": "versus things like puzzles and other handcrafted content?"
+  },
+  {
+   "t": 1291.94,
+   "d": 3.98,
+   "text": "Brian: Yeah, WFC produces really locally similar content, right?"
+  },
+  {
+   "t": 1295.93,
+   "d": 3.8,
+   "text": "It's useful for internal filling. More advanced versions of it"
+  },
+  {
+   "t": 1299.73,
+   "d": 4.75,
+   "text": "are able to take hand-drawn input and then just fill in the blanks,"
+  },
+  {
+   "t": 1304.47,
+   "d": 2.82,
+   "text": "which are really interesting. I didn't show that here."
+  },
+  {
+   "t": 1307.29,
+   "d": 3.52,
+   "text": "It's more advanced, but you could use the same technique in puzzles"
+  },
+  {
+   "t": 1310.81,
+   "d": 3.67,
+   "text": "or overworld, giving it hand-based seeding, drop the cities in, and let"
+  },
+  {
+   "t": 1314.48,
+   "d": 3.35,
+   "text": "WFC fill in the forest. And in fact, there are examples in that repository"
+  },
+  {
+   "t": 1317.82,
+   "d": 2.07,
+   "text": "of people doing that."
+  },
+  {
+   "t": 1320.68,
+   "d": 2.61,
+   "text": "Audience: Are there some things that you tried using this technique for,"
+  },
+  {
+   "t": 1323.29,
+   "d": 2.2,
+   "text": "where you found they didn't work well?"
+  },
+  {
+   "t": 1325.49,
+   "d": 4.24,
+   "text": "Brian: In Caves of Qud, I wanted to generate bigger, more interesting"
+  },
+  {
+   "t": 1329.72,
+   "d": 3.78,
+   "text": "complexes, like Greco-Roman temples with big columns, right?"
+  },
+  {
+   "t": 1333.51,
+   "d": 4.37,
+   "text": "And those often required a sample size, like the window, to be very"
+  },
+  {
+   "t": 1337.87,
+   "d": 4.23,
+   "text": "large. And as you increase the size of that window, memory use gets"
+  },
+  {
+   "t": 1342.1,
+   "d": 5.07,
+   "text": "really high. And so, our target market was mobile devices, and you didn't"
+  },
+  {
+   "t": 1347.17,
+   "d": 3.87,
+   "text": "want to really use 64 gigabytes of RAM to generate your maps."
+  },
+  {
+   "t": 1351.04,
+   "d": 3.55,
+   "text": "And so, we use it mostly for maps where that window can be pretty small."
+  },
+  {
+   "t": 1354.59,
+   "d": 3.83,
+   "text": "Those ruins are really good ones, small villages and that kind of stuff."
+  },
+  {
+   "t": 1358.42,
+   "d": 4.8,
+   "text": "So like, huge, large-scale ordered output is a little more challenging, because of"
+  },
+  {
+   "t": 1363.22,
+   "d": 3.85,
+   "text": "the technical requirements, though the algorithm could conceptually do it."
+  },
+  {
+   "t": 1369.03,
+   "d": 5.85,
+   "text": "Audience: Hey, so you showed the example with ASTAR, where you were kind of filling in the"
+  },
+  {
+   "t": 1374.89,
+   "d": 4.0,
+   "text": "doors, so it was actually a traversable space. It seems like that would be"
+  },
+  {
+   "t": 1378.89,
+   "d": 4.5,
+   "text": "a lot harder in the more cellular, automata-looking caved system"
+  },
+  {
+   "t": 1383.39,
+   "d": 4.08,
+   "text": "you showed early on. Is there a way to use this to make a system"
+  },
+  {
+   "t": 1387.47,
+   "d": 5.18,
+   "text": "like that be traversable, other than just drawing lines within ASTAR?"
+  },
+  {
+   "t": 1392.65,
+   "d": 3.04,
+   "text": "What approach would you take for that? Brian: To my knowledge,"
+  },
+  {
+   "t": 1395.69,
+   "d": 2.93,
+   "text": "you can't really force WFC to have connections, and we do use"
+  },
+  {
+   "t": 1398.62,
+   "d": 3.45,
+   "text": "WFC in cavelike areas, and I still just ASTAR through the caves."
+  },
+  {
+   "t": 1402.07,
+   "d": 3.7,
+   "text": "What I'll do is I'll use other PCG techniques you might use to"
+  },
+  {
+   "t": 1405.77,
+   "d": 4.7,
+   "text": "generate caves to overlay the passages, do things like noise-based pathfinding,"
+  },
+  {
+   "t": 1410.47,
+   "d": 2.76,
+   "text": "where you drop a bunch of seeds and let the pathfinder kind of wind"
+  },
+  {
+   "t": 1413.23,
+   "d": 2.98,
+   "text": "its way through, and then instead of blowing up a one-wide thing,"
+  },
+  {
+   "t": 1416.22,
+   "d": 3.02,
+   "text": "you might blow up in an area that's controlled by noise."
+  },
+  {
+   "t": 1419.24,
+   "d": 2.1,
+   "text": "And so, it can fit in pretty well with the caves. But it's a little bit of"
+  },
+  {
+   "t": 1421.34,
+   "d": 3.34,
+   "text": "extra work to get those areas connected. But again, way less work than"
+  },
+  {
+   "t": 1424.68,
+   "d": 4.43,
+   "text": "handcrafting each of the outputs and then also getting it to connect, right?"
+  },
+  {
+   "t": 1429.11,
+   "d": 3.03,
+   "text": "So net-net, it's a huge time savings, even when you have to handcraft"
+  },
+  {
+   "t": 1432.14,
+   "d": 1.8,
+   "text": "some connectors."
+  },
+  {
+   "t": 1435.01,
+   "d": 4.55,
+   "text": "Audience: It seems like in the algorithms you described, there's a potential for"
+  },
+  {
+   "t": 1439.56,
+   "d": 7.38,
+   "text": "getting a tiled - getting an area that has impossible constraints."
+  },
+  {
+   "t": 1446.94,
+   "d": 2.32,
+   "text": "How does it deal with that?"
+  },
+  {
+   "t": 1449.26,
+   "d": 4.76,
+   "text": "Brian: It does sometimes fail. It fails internally and just"
+  },
+  {
+   "t": 1454.02,
+   "d": 6.0,
+   "text": "force retries until it gets a success, because in practice, failures"
+  },
+  {
+   "t": 1460.02,
+   "d": 3.21,
+   "text": "are very rare. So, the reality is it's not a complete solver."
+  },
+  {
+   "t": 1463.23,
+   "d": 3.29,
+   "text": "It can get into a position where it's like, \"Oh, I can't solve for this tile.\""
+  },
+  {
+   "t": 1466.52,
+   "d": 3.35,
+   "text": "And this is one of the things that the inventor said he was concerned about,"
+  },
+  {
+   "t": 1469.87,
+   "d": 2.88,
+   "text": "but when he actually ran it against any kind of reasonable input,"
+  },
+  {
+   "t": 1472.75,
+   "d": 3.6,
+   "text": "you just actually don't in practice end up with those unsolvable situations."
+  },
+  {
+   "t": 1478.49,
+   "d": 3.43,
+   "text": "Audience: In your first conceptual demonstration, you start from the center"
+  },
+  {
+   "t": 1481.92,
+   "d": 2.7,
+   "text": "and then work your way out. That was your general description."
+  },
+  {
+   "t": 1484.62,
+   "d": 3.07,
+   "text": "In one of your videos, it was going from the outside in."
+  },
+  {
+   "t": 1487.69,
+   "d": 3.67,
+   "text": "Brian: Yeah, it actually just - it will pick the lowest entropy"
+  },
+  {
+   "t": 1491.35,
+   "d": 4.67,
+   "text": "stack of cards, and what that means is the stack of cards that has the"
+  },
+  {
+   "t": 1496.02,
+   "d": 2.95,
+   "text": "least number of cards in it. At first, all of them are equally sized,"
+  },
+  {
+   "t": 1498.97,
+   "d": 3.77,
+   "text": "so it'll literally just pick one at random. So it can start at the corners,"
+  },
+  {
+   "t": 1502.73,
+   "d": 2.68,
+   "text": "it may start in the middle. It's not up to you though, right?"
+  },
+  {
+   "t": 1505.42,
+   "d": 2.43,
+   "text": "You just put in the image and WFC comes back."
+  },
+  {
+   "t": 1507.85,
+   "d": 3.33,
+   "text": "So you can get it to give you step-wise images, which is how you"
+  },
+  {
+   "t": 1511.18,
+   "d": 4.25,
+   "text": "generate that, but in reality, those maps generate in a fraction"
+  },
+  {
+   "t": 1515.43,
+   "d": 2.03,
+   "text": "of a milisecond, most of the time."
+  },
+  {
+   "t": 1517.47,
+   "d": 2.33,
+   "text": "Audience: One last small question, sorry, if I may."
+  },
+  {
+   "t": 1519.8,
+   "d": 4.35,
+   "text": "The ASTAR generation algorithm for the doors, I was kind of surprised"
+  },
+  {
+   "t": 1524.15,
+   "d": 3.07,
+   "text": "that one of your paths went all the way around, when it could have just went"
+  },
+  {
+   "t": 1527.22,
+   "d": 3.21,
+   "text": "through one of the walls. That part, I didn't quite get."
+  },
+  {
+   "t": 1530.43,
+   "d": 3.3,
+   "text": "Brian: Well, if you weight walls too low, it tends to just go straight"
+  },
+  {
+   "t": 1533.73,
+   "d": 3.6,
+   "text": "through a bunch of walls, and to get a naturalistic village, you tend"
+  },
+  {
+   "t": 1537.33,
+   "d": 4.07,
+   "text": "to not build as many doors as possible. You tend to build as few as possible."
+  },
+  {
+   "t": 1541.4,
+   "d": 4.43,
+   "text": "And so instead, in the door punching system, the wall weight is really high."
+  },
+  {
+   "t": 1545.83,
+   "d": 3.04,
+   "text": "So it will tend to wind its way around until it just really can't do anything"
+  },
+  {
+   "t": 1548.86,
+   "d": 3.05,
+   "text": "but punch through a wall. So you minimize the number of doors."
+  },
+  {
+   "t": 1551.91,
+   "d": 4.4,
+   "text": "So that's just an aesthetic choice, to generate a village-y looking map."
+  },
+  {
+   "t": 1556.31,
+   "d": 5.08,
+   "text": "Audience: Thank you. Host: Any other questions?"
+  },
+  {
+   "t": 1567.96,
+   "d": 2.67,
+   "text": "Audience: Have you guys tried this with text yet?"
+  },
+  {
+   "t": 1570.63,
+   "d": 1.9,
+   "text": "Brian: I have not. I don't know if Jason has."
+  },
+  {
+   "t": 1572.53,
+   "d": 3.03,
+   "text": "Audience: Jason? Brian: But I don't know anything about text."
+  },
+  {
+   "t": 1575.56,
+   "d": 2.18,
+   "text": "Audience: Damn. Terrible answer."
+  },
+  {
+   "t": 1577.74,
+   "d": 3.93,
+   "text": "Brian: Sorry. Narrow knowledge base."
+  },
+  {
+   "t": 1583.24,
+   "d": 2.98,
+   "text": "Host: Cool. Well, thank you so much. Brian: Thank you guys."
+  }
+ ]
+}

@@ -1,0 +1,4366 @@
+{
+ "id": "Uo9-IcHhq_w",
+ "url": "https://www.youtube.com/watch?v=Uo9-IcHhq_w",
+ "title": "Brian Walker - Procedural level design in Brogue and beyond",
+ "speaker": "Brian Walker",
+ "talk_title": "Procedural level design in Brogue and beyond",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-10",
+ "duration_s": 1967,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the Roguelike Celebration 2018 - http://roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 35,
+   "title": "Why procedurally generated?"
+  },
+  {
+   "start": 146,
+   "title": "Room Accretion"
+  },
+  {
+   "start": 173,
+   "title": "Create a room"
+  },
+  {
+   "start": 431,
+   "title": "Room full of dry grass..."
+  },
+  {
+   "start": 505,
+   "title": "Lava field"
+  },
+  {
+   "start": 706,
+   "title": "Machine components"
+  },
+  {
+   "start": 786,
+   "title": "Organic pathways between two points"
+  },
+  {
+   "start": 820,
+   "title": "\"Functional\" Types of Machines"
+  },
+  {
+   "start": 1154,
+   "title": "Roguelike Platformer"
+  },
+  {
+   "start": 1229,
+   "title": "Cerebral non-twitchy experience"
+  },
+  {
+   "start": 1263,
+   "title": "Pathfinding is harder"
+  },
+  {
+   "start": 1331,
+   "title": "Prevent \"wells of doom\""
+  },
+  {
+   "start": 1379,
+   "title": "Gravity allows more dynamic terrain"
+  },
+  {
+   "start": 1497,
+   "title": "One large map"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6205,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 3.42,
+   "text": "hi everyone I'm Brian Walker I made"
+  },
+  {
+   "t": 3.42,
+   "d": 3.78,
+   "text": "broke and I was trying to think about"
+  },
+  {
+   "t": 7.2,
+   "d": 2.31,
+   "text": "what I should talk about today and I"
+  },
+  {
+   "t": 9.51,
+   "d": 2.46,
+   "text": "think the part of broke that I liked the"
+  },
+  {
+   "t": 11.97,
+   "d": 2.01,
+   "text": "most that I enjoyed programming the most"
+  },
+  {
+   "t": 13.98,
+   "d": 2.82,
+   "text": "and that I did first was the level"
+  },
+  {
+   "t": 16.8,
+   "d": 2.34,
+   "text": "generation and I don't know that that's"
+  },
+  {
+   "t": 19.14,
+   "d": 1.23,
+   "text": "always the way that people approach"
+  },
+  {
+   "t": 20.37,
+   "d": 1.77,
+   "text": "roguelike development I think sometimes"
+  },
+  {
+   "t": 22.14,
+   "d": 1.95,
+   "text": "people start with systems and then kind"
+  },
+  {
+   "t": 24.09,
+   "d": 0.99,
+   "text": "of build the roguelike"
+  },
+  {
+   "t": 25.08,
+   "d": 3.8,
+   "text": "build the level design system after that"
+  },
+  {
+   "t": 28.88,
+   "d": 2.74,
+   "text": "but for me it was all about designing"
+  },
+  {
+   "t": 31.62,
+   "d": 3.51,
+   "text": "cool levels and I was kind of thinking"
+  },
+  {
+   "t": 35.13,
+   "d": 2.6,
+   "text": "about what makes procedural generation"
+  },
+  {
+   "t": 37.73,
+   "d": 3.1,
+   "text": "so exciting for the genre that it's sort"
+  },
+  {
+   "t": 40.83,
+   "d": 1.41,
+   "text": "of at the center of the genre if you"
+  },
+  {
+   "t": 42.24,
+   "d": 4.5,
+   "text": "will and I think I the obvious one is"
+  },
+  {
+   "t": 46.74,
+   "d": 1.44,
+   "text": "that the skill curve is more about"
+  },
+  {
+   "t": 48.18,
+   "d": 1.83,
+   "text": "mastering the systems of the game"
+  },
+  {
+   "t": 50.01,
+   "d": 2.46,
+   "text": "learning how to adapt to what you're"
+  },
+  {
+   "t": 52.47,
+   "d": 2.82,
+   "text": "given and how to deal with the level do"
+  },
+  {
+   "t": 55.29,
+   "d": 2.91,
+   "text": "you find it rather than memorizing a"
+  },
+  {
+   "t": 58.2,
+   "d": 3.09,
+   "text": "level and memorizing the set of actions"
+  },
+  {
+   "t": 61.29,
+   "d": 2.61,
+   "text": "that it takes to beat the level but I"
+  },
+  {
+   "t": 63.9,
+   "d": 1.71,
+   "text": "think equally important to me at least"
+  },
+  {
+   "t": 65.61,
+   "d": 1.53,
+   "text": "is like the kind of feeling of"
+  },
+  {
+   "t": 67.14,
+   "d": 2.55,
+   "text": "exploration you get when you play a new"
+  },
+  {
+   "t": 69.69,
+   "d": 2.64,
+   "text": "level where it feels like a real place"
+  },
+  {
+   "t": 72.33,
+   "d": 1.47,
+   "text": "that you're discovering for the first"
+  },
+  {
+   "t": 73.8,
+   "d": 2.97,
+   "text": "time no one's seen it before assuming"
+  },
+  {
+   "t": 76.77,
+   "d": 2.19,
+   "text": "you're using like a 32-bit seed probably"
+  },
+  {
+   "t": 78.96,
+   "d": 1.38,
+   "text": "no one else has ever seen that level"
+  },
+  {
+   "t": 80.34,
+   "d": 3.48,
+   "text": "before and especially as a game"
+  },
+  {
+   "t": 83.82,
+   "d": 2.25,
+   "text": "developer I frankly don't know how"
+  },
+  {
+   "t": 86.07,
+   "d": 1.71,
+   "text": "people do it when they make static games"
+  },
+  {
+   "t": 87.78,
+   "d": 1.95,
+   "text": "because you have to play them so many"
+  },
+  {
+   "t": 89.73,
+   "d": 3.81,
+   "text": "times and having the privilege of seeing"
+  },
+  {
+   "t": 93.54,
+   "d": 2.25,
+   "text": "a new level each time means that you can"
+  },
+  {
+   "t": 95.79,
+   "d": 2.84,
+   "text": "approach it with a degree of novelty and"
+  },
+  {
+   "t": 98.63,
+   "d": 4.69,
+   "text": "sort of an interesting mnestheus of more"
+  },
+  {
+   "t": 103.32,
+   "d": 1.68,
+   "text": "static games probably have to lean on"
+  },
+  {
+   "t": 105.0,
+   "d": 3.45,
+   "text": "third party play testers more for it's"
+  },
+  {
+   "t": 108.45,
+   "d": 2.01,
+   "text": "not easier to develop you get an"
+  },
+  {
+   "t": 110.46,
+   "d": 1.68,
+   "text": "infinite number of levels I guess or"
+  },
+  {
+   "t": 112.14,
+   "d": 3.6,
+   "text": "roughly but it takes a lot of time to"
+  },
+  {
+   "t": 115.74,
+   "d": 1.56,
+   "text": "come up with the systems but it's also"
+  },
+  {
+   "t": 117.3,
+   "d": 1.62,
+   "text": "like a different skill set like I'm not"
+  },
+  {
+   "t": 118.92,
+   "d": 1.5,
+   "text": "sure that I would know how to build a"
+  },
+  {
+   "t": 120.42,
+   "d": 3.18,
+   "text": "static level where as procedural"
+  },
+  {
+   "t": 123.6,
+   "d": 2.07,
+   "text": "generation rather than like being an"
+  },
+  {
+   "t": 125.67,
+   "d": 2.04,
+   "text": "artist and like laying out elements of"
+  },
+  {
+   "t": 127.71,
+   "d": 1.98,
+   "text": "the level on a canvas you kind of like"
+  },
+  {
+   "t": 129.69,
+   "d": 1.89,
+   "text": "make it tweak and you decide which one"
+  },
+  {
+   "t": 131.58,
+   "d": 1.54,
+   "text": "feels better like which painting"
+  },
+  {
+   "t": 133.12,
+   "d": 2.16,
+   "text": "like more and you kind of iterate like"
+  },
+  {
+   "t": 135.28,
+   "d": 1.47,
+   "text": "that and you come up with an idea you"
+  },
+  {
+   "t": 136.75,
+   "d": 1.5,
+   "text": "try it you tweak the the hyper"
+  },
+  {
+   "t": 138.25,
+   "d": 3.36,
+   "text": "parameters for four years so it's it's"
+  },
+  {
+   "t": 141.61,
+   "d": 1.5,
+   "text": "like a different skill set I don't think"
+  },
+  {
+   "t": 143.11,
+   "d": 1.74,
+   "text": "it's necessarily harder but it's it's"
+  },
+  {
+   "t": 144.85,
+   "d": 2.94,
+   "text": "not a time-saver so let me just walk"
+  },
+  {
+   "t": 147.79,
+   "d": 3.24,
+   "text": "through the brogue level design"
+  },
+  {
+   "t": 151.03,
+   "d": 2.88,
+   "text": "algorithm and we will build the level"
+  },
+  {
+   "t": 153.91,
+   "d": 2.16,
+   "text": "that you saw so on the title slide at"
+  },
+  {
+   "t": 156.07,
+   "d": 4.68,
+   "text": "the start so the basic you know"
+  },
+  {
+   "t": 160.75,
+   "d": 1.86,
+   "text": "algorithm that brogue uses is room"
+  },
+  {
+   "t": 162.61,
+   "d": 2.07,
+   "text": "accretion which is a very simple"
+  },
+  {
+   "t": 164.68,
+   "d": 2.25,
+   "text": "algorithm you start with a room you add"
+  },
+  {
+   "t": 166.93,
+   "d": 1.86,
+   "text": "another room on to it and you keep doing"
+  },
+  {
+   "t": 168.79,
+   "d": 1.92,
+   "text": "that until the level is full so that's"
+  },
+  {
+   "t": 170.71,
+   "d": 2.73,
+   "text": "like the basic skeleton of it"
+  },
+  {
+   "t": 173.44,
+   "d": 1.5,
+   "text": "so there's a bunch of different ways"
+  },
+  {
+   "t": 174.94,
+   "d": 2.75,
+   "text": "that we can create these rooms"
+  },
+  {
+   "t": 177.69,
+   "d": 4.15,
+   "text": "overlapping rectangles so then the you"
+  },
+  {
+   "t": 181.84,
+   "d": 0.84,
+   "text": "know you just come up with two"
+  },
+  {
+   "t": 182.68,
+   "d": 1.5,
+   "text": "rectangles and you kind of place them on"
+  },
+  {
+   "t": 184.18,
+   "d": 1.65,
+   "text": "top of each other maybe symmetrically"
+  },
+  {
+   "t": 185.83,
+   "d": 4.02,
+   "text": "maybe not cellular automata or CA I"
+  },
+  {
+   "t": 189.85,
+   "d": 1.02,
+   "text": "think this is a pretty well-known"
+  },
+  {
+   "t": 190.87,
+   "d": 2.55,
+   "text": "technique you take a grid of cells you"
+  },
+  {
+   "t": 193.42,
+   "d": 3.12,
+   "text": "fill it randomly each one maybe 50%"
+  },
+  {
+   "t": 196.54,
+   "d": 3.41,
+   "text": "chance of being wall or floor and then"
+  },
+  {
+   "t": 199.95,
+   "d": 2.29,
+   "text": "any floor that's surrounded by a"
+  },
+  {
+   "t": 202.24,
+   "d": 2.34,
+   "text": "majority of walls becomes a wall and"
+  },
+  {
+   "t": 204.58,
+   "d": 1.38,
+   "text": "vice versa and you can play with the"
+  },
+  {
+   "t": 205.96,
+   "d": 1.38,
+   "text": "thresholds to get different levels of"
+  },
+  {
+   "t": 207.34,
+   "d": 1.89,
+   "text": "density and smoothness but it kind of"
+  },
+  {
+   "t": 209.23,
+   "d": 4.08,
+   "text": "causes sort of coherent organic shapes"
+  },
+  {
+   "t": 213.31,
+   "d": 1.71,
+   "text": "to kind of emerge from the static that"
+  },
+  {
+   "t": 215.02,
+   "d": 2.37,
+   "text": "you start with and then you know just"
+  },
+  {
+   "t": 217.39,
+   "d": 2.49,
+   "text": "circles overlaying small circles"
+  },
+  {
+   "t": 219.88,
+   "d": 1.68,
+   "text": "sometimes you had a hallway to it"
+  },
+  {
+   "t": 221.56,
+   "d": 3.36,
+   "text": "sometimes you don't these green green"
+  },
+  {
+   "t": 224.92,
+   "d": 2.16,
+   "text": "cells it picks out some door candidates"
+  },
+  {
+   "t": 227.08,
+   "d": 2.7,
+   "text": "from each direction for each room and"
+  },
+  {
+   "t": 229.78,
+   "d": 1.41,
+   "text": "that's basically how it comes up with"
+  },
+  {
+   "t": 231.19,
+   "d": 2.13,
+   "text": "rooms so it starts by placing one"
+  },
+  {
+   "t": 233.32,
+   "d": 2.13,
+   "text": "randomly and then it just starts"
+  },
+  {
+   "t": 235.45,
+   "d": 1.77,
+   "text": "generating rooms sometimes with hallways"
+  },
+  {
+   "t": 237.22,
+   "d": 3.54,
+   "text": "sometimes not and it scans through all"
+  },
+  {
+   "t": 240.76,
+   "d": 2.19,
+   "text": "the locations on the level one at a time"
+  },
+  {
+   "t": 242.95,
+   "d": 1.05,
+   "text": "in random order"
+  },
+  {
+   "t": 244.0,
+   "d": 1.74,
+   "text": "until it finds one where the where the"
+  },
+  {
+   "t": 245.74,
+   "d": 1.8,
+   "text": "room fits snugly against another room"
+  },
+  {
+   "t": 247.54,
+   "d": 2.64,
+   "text": "where the door links it up and where it"
+  },
+  {
+   "t": 250.18,
+   "d": 2.85,
+   "text": "doesn't overlap any other rooms so"
+  },
+  {
+   "t": 253.03,
+   "d": 1.92,
+   "text": "that's like the basic practice to come"
+  },
+  {
+   "t": 254.95,
+   "d": 3.03,
+   "text": "up with the skeleton level design there"
+  },
+  {
+   "t": 257.98,
+   "d": 2.82,
+   "text": "is a fatal flaw to it which is that it's"
+  },
+  {
+   "t": 260.8,
+   "d": 4.3,
+   "text": "like a perfect tree each room has"
+  },
+  {
+   "t": 265.1,
+   "d": 2.01,
+   "text": "exactly one parent except for the first"
+  },
+  {
+   "t": 267.11,
+   "d": 2.49,
+   "text": "room which has no parents and any number"
+  },
+  {
+   "t": 269.6,
+   "d": 2.13,
+   "text": "of children which means that if you pick"
+  },
+  {
+   "t": 271.73,
+   "d": 2.34,
+   "text": "any two points on that level there's"
+  },
+  {
+   "t": 274.07,
+   "d": 2.49,
+   "text": "exactly one path that doesn't backtrack"
+  },
+  {
+   "t": 276.56,
+   "d": 2.79,
+   "text": "to get between those two points which is"
+  },
+  {
+   "t": 279.35,
+   "d": 2.55,
+   "text": "like it looks nice on a screen but it's"
+  },
+  {
+   "t": 281.9,
+   "d": 1.65,
+   "text": "not that fun because it's easy to get"
+  },
+  {
+   "t": 283.55,
+   "d": 2.1,
+   "text": "cornered it causes a lot of backtracking"
+  },
+  {
+   "t": 285.65,
+   "d": 2.73,
+   "text": "when you play it so the next step is we"
+  },
+  {
+   "t": 288.38,
+   "d": 1.53,
+   "text": "basically go through again in random"
+  },
+  {
+   "t": 289.91,
+   "d": 2.91,
+   "text": "order and find wall tiles that have a"
+  },
+  {
+   "t": 292.82,
+   "d": 2.43,
+   "text": "floor on each of the two opposite sides"
+  },
+  {
+   "t": 295.25,
+   "d": 2.1,
+   "text": "and if the pathing distance between"
+  },
+  {
+   "t": 297.35,
+   "d": 1.83,
+   "text": "those two floor tiles is large enough"
+  },
+  {
+   "t": 299.18,
+   "d": 2.22,
+   "text": "then we just turn it into a door and you"
+  },
+  {
+   "t": 301.4,
+   "d": 2.46,
+   "text": "just do that until you've found all the"
+  },
+  {
+   "t": 303.86,
+   "d": 2.19,
+   "text": "candidates for that looks like that"
+  },
+  {
+   "t": 306.05,
+   "d": 2.88,
+   "text": "creates a nice you know densely"
+  },
+  {
+   "t": 308.93,
+   "d": 3.24,
+   "text": "connected level and then that level"
+  },
+  {
+   "t": 312.17,
+   "d": 1.56,
+   "text": "looks like this when you carve it into"
+  },
+  {
+   "t": 313.73,
+   "d": 2.76,
+   "text": "the the game assets and then the next"
+  },
+  {
+   "t": 316.49,
+   "d": 1.5,
+   "text": "step I think if you play this kind of a"
+  },
+  {
+   "t": 317.99,
+   "d": 3.09,
+   "text": "level the rooms are interesting in terms"
+  },
+  {
+   "t": 321.08,
+   "d": 1.44,
+   "text": "of their shape and connectivity but"
+  },
+  {
+   "t": 322.52,
+   "d": 2.1,
+   "text": "they're all kind of samey like it's it's"
+  },
+  {
+   "t": 324.62,
+   "d": 3.6,
+   "text": "amazing to see passages and I think it's"
+  },
+  {
+   "t": 328.22,
+   "d": 1.86,
+   "text": "cool to give a level kind of a coherent"
+  },
+  {
+   "t": 330.08,
+   "d": 3.6,
+   "text": "global scale to the features where you"
+  },
+  {
+   "t": 333.68,
+   "d": 1.41,
+   "text": "know you can see across the level you"
+  },
+  {
+   "t": 335.09,
+   "d": 1.53,
+   "text": "can affect things that aren't just in"
+  },
+  {
+   "t": 336.62,
+   "d": 2.07,
+   "text": "your local vicinity things can affect"
+  },
+  {
+   "t": 338.69,
+   "d": 1.59,
+   "text": "you and when they're not in your local"
+  },
+  {
+   "t": 340.28,
+   "d": 3.06,
+   "text": "vicinity and you can sometimes see like"
+  },
+  {
+   "t": 343.34,
+   "d": 1.5,
+   "text": "secret doors on the other side of the"
+  },
+  {
+   "t": 344.84,
+   "d": 1.41,
+   "text": "level but not necessarily know how to"
+  },
+  {
+   "t": 346.25,
+   "d": 3.39,
+   "text": "get to them so to accomplish that we put"
+  },
+  {
+   "t": 349.64,
+   "d": 3.21,
+   "text": "in lakes and these are again just"
+  },
+  {
+   "t": 352.85,
+   "d": 2.37,
+   "text": "cellular automata blobs that we create"
+  },
+  {
+   "t": 355.22,
+   "d": 2.79,
+   "text": "and then again find all the different"
+  },
+  {
+   "t": 358.01,
+   "d": 1.32,
+   "text": "places on the level where they could be"
+  },
+  {
+   "t": 359.33,
+   "d": 3.69,
+   "text": "placed and only place it if it doesn't"
+  },
+  {
+   "t": 363.02,
+   "d": 3.18,
+   "text": "block the level and by that I mean it"
+  },
+  {
+   "t": 366.2,
+   "d": 1.71,
+   "text": "blocks the level if you put it somewhere"
+  },
+  {
+   "t": 367.91,
+   "d": 2.4,
+   "text": "and that makes any pair of walkable"
+  },
+  {
+   "t": 370.31,
+   "d": 3.24,
+   "text": "tiles inaccessible to one another so we"
+  },
+  {
+   "t": 373.55,
+   "d": 1.11,
+   "text": "just scan through kind of brute force"
+  },
+  {
+   "t": 374.66,
+   "d": 2.04,
+   "text": "see if there's if it blocks and if not"
+  },
+  {
+   "t": 376.7,
+   "d": 2.85,
+   "text": "you just place it let them overlap and"
+  },
+  {
+   "t": 379.55,
+   "d": 1.53,
+   "text": "then kind of assign media types"
+  },
+  {
+   "t": 381.08,
+   "d": 3.84,
+   "text": "afterward after that you just kind of"
+  },
+  {
+   "t": 384.92,
+   "d": 1.91,
+   "text": "iterate through place dungeon features"
+  },
+  {
+   "t": 386.83,
+   "d": 2.02,
+   "text": "there there's a whole bunch of these I"
+  },
+  {
+   "t": 388.85,
+   "d": 2.19,
+   "text": "think coming up with cool terrain design"
+  },
+  {
+   "t": 391.04,
+   "d": 1.65,
+   "text": "is like a big part of level design"
+  },
+  {
+   "t": 392.69,
+   "d": 2.61,
+   "text": "seeing of luminescent fungus you have"
+  },
+  {
+   "t": 395.3,
+   "d": 2.95,
+   "text": "trees you have grass you have doors"
+  },
+  {
+   "t": 398.25,
+   "d": 3.72,
+   "text": "I choose torches later levels you have"
+  },
+  {
+   "t": 401.97,
+   "d": 2.99,
+   "text": "different kinds of kind of dangerous"
+  },
+  {
+   "t": 404.96,
+   "d": 5.17,
+   "text": "foliage chasms are another lake type you"
+  },
+  {
+   "t": 410.13,
+   "d": 2.79,
+   "text": "do this to sort of add some flavor to"
+  },
+  {
+   "t": 412.92,
+   "d": 1.53,
+   "text": "the dungeon and a lot of these features"
+  },
+  {
+   "t": 414.45,
+   "d": 1.89,
+   "text": "are interactive you know some of them"
+  },
+  {
+   "t": 416.34,
+   "d": 2.07,
+   "text": "will burn some of them will explode"
+  },
+  {
+   "t": 418.41,
+   "d": 1.65,
+   "text": "some of them will generate gases of"
+  },
+  {
+   "t": 420.06,
+   "d": 3.93,
+   "text": "various types and so on so after that's"
+  },
+  {
+   "t": 423.99,
+   "d": 2.19,
+   "text": "finished the next step is what I call"
+  },
+  {
+   "t": 426.18,
+   "d": 3.03,
+   "text": "machines and to sort of describe what"
+  },
+  {
+   "t": 429.21,
+   "d": 1.26,
+   "text": "those are let me give you a couple"
+  },
+  {
+   "t": 430.47,
+   "d": 2.91,
+   "text": "examples first so let's say you come"
+  },
+  {
+   "t": 433.38,
+   "d": 1.89,
+   "text": "into a room it's full of dry grass it's"
+  },
+  {
+   "t": 435.27,
+   "d": 2.85,
+   "text": "a big open space and there's an altar"
+  },
+  {
+   "t": 438.12,
+   "d": 2.3,
+   "text": "with a key at the far end of the room"
+  },
+  {
+   "t": 440.42,
+   "d": 2.77,
+   "text": "there's a torch on the wall near the"
+  },
+  {
+   "t": 443.19,
+   "d": 3.48,
+   "text": "door which you can see up here so the"
+  },
+  {
+   "t": 446.67,
+   "d": 1.68,
+   "text": "player runs over to the altar and grabs"
+  },
+  {
+   "t": 448.35,
+   "d": 2.67,
+   "text": "the key and the torch falls off the wall"
+  },
+  {
+   "t": 451.02,
+   "d": 2.19,
+   "text": "and ignites the grass near the entrance"
+  },
+  {
+   "t": 453.21,
+   "d": 3.12,
+   "text": "and then the fire gradually spreads"
+  },
+  {
+   "t": 456.33,
+   "d": 2.55,
+   "text": "toward the player and then the player"
+  },
+  {
+   "t": 458.88,
+   "d": 1.65,
+   "text": "has to either you know if they have a"
+  },
+  {
+   "t": 460.53,
+   "d": 1.38,
+   "text": "teleport that would be a good time to"
+  },
+  {
+   "t": 461.91,
+   "d": 0.39,
+   "text": "use it"
+  },
+  {
+   "t": 462.3,
+   "d": 4.17,
+   "text": "to blink fire immunity or just try to"
+  },
+  {
+   "t": 466.47,
+   "d": 1.77,
+   "text": "like find a spot that's already burned"
+  },
+  {
+   "t": 468.24,
+   "d": 3.06,
+   "text": "out before the fire reaches you so it's"
+  },
+  {
+   "t": 471.3,
+   "d": 1.53,
+   "text": "kind of an interesting spatial puzzle"
+  },
+  {
+   "t": 472.83,
+   "d": 1.14,
+   "text": "it's like a little different every time"
+  },
+  {
+   "t": 473.97,
+   "d": 1.83,
+   "text": "the stakes are super high although they"
+  },
+  {
+   "t": 475.8,
+   "d": 2.19,
+   "text": "can be depending on what other monsters"
+  },
+  {
+   "t": 477.99,
+   "d": 2.37,
+   "text": "are around what what your health level"
+  },
+  {
+   "t": 480.36,
+   "d": 3.3,
+   "text": "is and so on another example this is a"
+  },
+  {
+   "t": 483.66,
+   "d": 3.78,
+   "text": "great animation that I found online so"
+  },
+  {
+   "t": 487.44,
+   "d": 1.8,
+   "text": "the player runs down to the altar grabs"
+  },
+  {
+   "t": 489.24,
+   "d": 1.92,
+   "text": "the key and and somebody's find them on"
+  },
+  {
+   "t": 491.16,
+   "d": 2.43,
+   "text": "the way out and that's it's not a"
+  },
+  {
+   "t": 493.59,
+   "d": 1.65,
+   "text": "coincidence like if you see in the very"
+  },
+  {
+   "t": 495.24,
+   "d": 1.56,
+   "text": "first frame there's a statue way up"
+  },
+  {
+   "t": 496.8,
+   "d": 2.4,
+   "text": "there on the top and when you when you"
+  },
+  {
+   "t": 499.2,
+   "d": 1.92,
+   "text": "grab the key off the altar monsters"
+  },
+  {
+   "t": 501.12,
+   "d": 2.19,
+   "text": "burst out of all the statues and running"
+  },
+  {
+   "t": 503.31,
+   "d": 3.87,
+   "text": "you another example lava field so the"
+  },
+  {
+   "t": 507.18,
+   "d": 1.74,
+   "text": "the player comes in from the top left"
+  },
+  {
+   "t": 508.92,
+   "d": 1.74,
+   "text": "there's the altar with the key in the"
+  },
+  {
+   "t": 510.66,
+   "d": 1.74,
+   "text": "top right there's a door that's"
+  },
+  {
+   "t": 512.4,
+   "d": 1.92,
+   "text": "completely inaccessible down here across"
+  },
+  {
+   "t": 514.32,
+   "d": 2.49,
+   "text": "the lava pit somewhere on the level"
+  },
+  {
+   "t": 516.81,
+   "d": 1.02,
+   "text": "there's probably a potion of fire"
+  },
+  {
+   "t": 517.83,
+   "d": 2.1,
+   "text": "immunity or potion of levitation or"
+  },
+  {
+   "t": 519.93,
+   "d": 1.35,
+   "text": "maybe there's a lever hidden in one of"
+  },
+  {
+   "t": 521.28,
+   "d": 2.91,
+   "text": "the walls and use that to reach the"
+  },
+  {
+   "t": 524.19,
+   "d": 2.37,
+   "text": "altar and when you reach it then the"
+  },
+  {
+   "t": 526.56,
+   "d": 2.16,
+   "text": "lava kind of disintegrate or evaporates"
+  },
+  {
+   "t": 528.72,
+   "d": 1.62,
+   "text": "I guess in a cloud of steam leaving a"
+  },
+  {
+   "t": 530.34,
+   "d": 1.98,
+   "text": "pathway to get back out"
+  },
+  {
+   "t": 532.32,
+   "d": 1.59,
+   "text": "or to get to this room that's kind of"
+  },
+  {
+   "t": 533.91,
+   "d": 4.59,
+   "text": "nested within it and here's an example"
+  },
+  {
+   "t": 538.5,
+   "d": 1.95,
+   "text": "of a full level that's been generated"
+  },
+  {
+   "t": 540.45,
+   "d": 1.62,
+   "text": "not the one that we're generating step"
+  },
+  {
+   "t": 542.07,
+   "d": 1.68,
+   "text": "by step kind of here but just to give a"
+  },
+  {
+   "t": 543.75,
+   "d": 1.82,
+   "text": "sense of how this all kind of interlocks"
+  },
+  {
+   "t": 545.57,
+   "d": 2.2,
+   "text": "there's a key in the upper right of the"
+  },
+  {
+   "t": 547.77,
+   "d": 2.79,
+   "text": "level and a hidden walkway well it's"
+  },
+  {
+   "t": 550.56,
+   "d": 2.04,
+   "text": "it's a walkway to the key I don't know"
+  },
+  {
+   "t": 552.6,
+   "d": 1.14,
+   "text": "if you can see it clearly but it's"
+  },
+  {
+   "t": 553.74,
+   "d": 1.8,
+   "text": "surrounded by chasm tiles but those are"
+  },
+  {
+   "t": 555.54,
+   "d": 1.77,
+   "text": "actually traps they're hidden chasms you"
+  },
+  {
+   "t": 557.31,
+   "d": 2.79,
+   "text": "have to search to find them to find your"
+  },
+  {
+   "t": 560.1,
+   "d": 2.13,
+   "text": "way to the key there's actually another"
+  },
+  {
+   "t": 562.23,
+   "d": 3.0,
+   "text": "key here the M is a monkey who grabbed"
+  },
+  {
+   "t": 565.23,
+   "d": 1.53,
+   "text": "the key off the altar and is gonna run"
+  },
+  {
+   "t": 566.76,
+   "d": 1.98,
+   "text": "away when you try to get it from him so"
+  },
+  {
+   "t": 568.74,
+   "d": 1.53,
+   "text": "you gotta find some way to kill the"
+  },
+  {
+   "t": 570.27,
+   "d": 1.47,
+   "text": "monkey from a distance and get the key"
+  },
+  {
+   "t": 571.74,
+   "d": 2.73,
+   "text": "so you have two keys and those will open"
+  },
+  {
+   "t": 574.47,
+   "d": 1.59,
+   "text": "the door right here and the end the door"
+  },
+  {
+   "t": 576.06,
+   "d": 1.71,
+   "text": "right here so these two orange rooms"
+  },
+  {
+   "t": 577.77,
+   "d": 2.1,
+   "text": "will open up and each one will let you"
+  },
+  {
+   "t": 579.87,
+   "d": 3.0,
+   "text": "choose one of any items in the room the"
+  },
+  {
+   "t": 582.87,
+   "d": 2.28,
+   "text": "items are only kind of accessible when"
+  },
+  {
+   "t": 585.15,
+   "d": 1.8,
+   "text": "all of the items are in place so you can"
+  },
+  {
+   "t": 586.95,
+   "d": 1.89,
+   "text": "only pick one if you change your mind"
+  },
+  {
+   "t": 588.84,
+   "d": 1.29,
+   "text": "you can put it back and take a different"
+  },
+  {
+   "t": 590.13,
+   "d": 3.78,
+   "text": "one and so those are kind of like reward"
+  },
+  {
+   "t": 593.91,
+   "d": 1.35,
+   "text": "rooms they give you a choice of a bunch"
+  },
+  {
+   "t": 595.26,
+   "d": 1.56,
+   "text": "of items to make sure that they're sort"
+  },
+  {
+   "t": 596.82,
+   "d": 1.11,
+   "text": "of boosts the chance that you have the"
+  },
+  {
+   "t": 597.93,
+   "d": 1.47,
+   "text": "ability to put together a competent"
+  },
+  {
+   "t": 599.4,
+   "d": 1.35,
+   "text": "character based on the items you find"
+  },
+  {
+   "t": 600.75,
+   "d": 2.43,
+   "text": "and then in this room you discover at"
+  },
+  {
+   "t": 603.18,
+   "d": 1.35,
+   "text": "the bottom here which you couldn't see"
+  },
+  {
+   "t": 604.53,
+   "d": 1.74,
+   "text": "from elsewhere on the level there's like"
+  },
+  {
+   "t": 606.27,
+   "d": 2.69,
+   "text": "a vampire lair and there's the vampire"
+  },
+  {
+   "t": 608.96,
+   "d": 2.83,
+   "text": "and he's he's holding another key so you"
+  },
+  {
+   "t": 611.79,
+   "d": 1.77,
+   "text": "fight him he turns into a bunch of bats"
+  },
+  {
+   "t": 613.56,
+   "d": 1.35,
+   "text": "you kill the bats you fight them"
+  },
+  {
+   "t": 614.91,
+   "d": 1.32,
+   "text": "eventually you kill him"
+  },
+  {
+   "t": 616.23,
+   "d": 1.5,
+   "text": "you get the key and then that unlocks"
+  },
+  {
+   "t": 617.73,
+   "d": 2.04,
+   "text": "the room on the top right and that's a"
+  },
+  {
+   "t": 619.77,
+   "d": 1.98,
+   "text": "room with some kind of magical weapon in"
+  },
+  {
+   "t": 621.75,
+   "d": 3.42,
+   "text": "it so it's kind of like a like the level"
+  },
+  {
+   "t": 625.17,
+   "d": 2.37,
+   "text": "is kind of globally coherent like"
+  },
+  {
+   "t": 627.54,
+   "d": 1.29,
+   "text": "they're elements from all parts of the"
+  },
+  {
+   "t": 628.83,
+   "d": 1.86,
+   "text": "level that tie into the other parts to"
+  },
+  {
+   "t": 630.69,
+   "d": 2.49,
+   "text": "make it feel more like maybe not a"
+  },
+  {
+   "t": 633.18,
+   "d": 1.86,
+   "text": "narrative structure to the extent that"
+  },
+  {
+   "t": 635.04,
+   "d": 2.49,
+   "text": "that Tarn was talking about earlier but"
+  },
+  {
+   "t": 637.53,
+   "d": 1.53,
+   "text": "it at least sort of a physical structure"
+  },
+  {
+   "t": 639.06,
+   "d": 2.25,
+   "text": "to the level concrete set of goals where"
+  },
+  {
+   "t": 641.31,
+   "d": 2.49,
+   "text": "the whole level kind of interlocks as a"
+  },
+  {
+   "t": 643.8,
+   "d": 1.29,
+   "text": "whole and of course there's items and"
+  },
+  {
+   "t": 645.09,
+   "d": 3.8,
+   "text": "monsters around the rest of the level -"
+  },
+  {
+   "t": 648.89,
+   "d": 2.14,
+   "text": "here's another example a little less"
+  },
+  {
+   "t": 651.03,
+   "d": 2.31,
+   "text": "intricate but a different kind of"
+  },
+  {
+   "t": 653.34,
+   "d": 1.98,
+   "text": "machine the darker part of the level"
+  },
+  {
+   "t": 655.32,
+   "d": 1.95,
+   "text": "around the periphery is a goblin warren"
+  },
+  {
+   "t": 657.27,
+   "d": 2.25,
+   "text": "it's generated according to a different"
+  },
+  {
+   "t": 659.52,
+   "d": 3.18,
+   "text": "set of rules for room generation to make"
+  },
+  {
+   "t": 662.7,
+   "d": 2.16,
+   "text": "it kind of narrower passages different"
+  },
+  {
+   "t": 664.86,
+   "d": 1.2,
+   "text": "kind of flavor for the wall"
+  },
+  {
+   "t": 666.06,
+   "d": 2.48,
+   "text": "and fleurs goblins throughout items"
+  },
+  {
+   "t": 668.54,
+   "d": 3.85,
+   "text": "weapons and armour throughout some tough"
+  },
+  {
+   "t": 672.39,
+   "d": 2.94,
+   "text": "groups of goblins and then somewhere in"
+  },
+  {
+   "t": 675.33,
+   "d": 1.5,
+   "text": "the goblin war in which in this case is"
+  },
+  {
+   "t": 676.83,
+   "d": 2.13,
+   "text": "down here there's a goblin warlord which"
+  },
+  {
+   "t": 678.96,
+   "d": 2.4,
+   "text": "will have a particularly valuable item"
+  },
+  {
+   "t": 681.36,
+   "d": 2.04,
+   "text": "if you can fight your way to him and you"
+  },
+  {
+   "t": 683.4,
+   "d": 1.14,
+   "text": "have you have to enter it there's"
+  },
+  {
+   "t": 684.54,
+   "d": 1.65,
+   "text": "generally just one point of entrance for"
+  },
+  {
+   "t": 686.19,
+   "d": 2.64,
+   "text": "the war and so you know enter it there"
+  },
+  {
+   "t": 688.83,
+   "d": 2.37,
+   "text": "and fight your way through it and it's a"
+  },
+  {
+   "t": 691.2,
+   "d": 2.01,
+   "text": "it's it's pretty interesting to go from"
+  },
+  {
+   "t": 693.21,
+   "d": 1.8,
+   "text": "the kind of ordinary level on the top"
+  },
+  {
+   "t": 695.01,
+   "d": 2.43,
+   "text": "right I guess ordinary except for this"
+  },
+  {
+   "t": 697.44,
+   "d": 4.5,
+   "text": "walkway across the chasm to this kind of"
+  },
+  {
+   "t": 701.94,
+   "d": 1.65,
+   "text": "different feel for the level once you"
+  },
+  {
+   "t": 703.59,
+   "d": 1.67,
+   "text": "get into the Goblin ward"
+  },
+  {
+   "t": 705.26,
+   "d": 3.67,
+   "text": "so how do these machines work they"
+  },
+  {
+   "t": 708.93,
+   "d": 2.36,
+   "text": "depend on specific types of terrain and"
+  },
+  {
+   "t": 711.29,
+   "d": 3.13,
+   "text": "items you know in the the grass room"
+  },
+  {
+   "t": 714.42,
+   "d": 1.35,
+   "text": "you've got the altar of the key you got"
+  },
+  {
+   "t": 715.77,
+   "d": 2.58,
+   "text": "the torch you got grass everywhere and"
+  },
+  {
+   "t": 718.35,
+   "d": 2.22,
+   "text": "you can as I just described that you"
+  },
+  {
+   "t": 720.57,
+   "d": 1.77,
+   "text": "describe it kind of qualitatively in"
+  },
+  {
+   "t": 722.34,
+   "d": 2.22,
+   "text": "terms of how the things interlock it's"
+  },
+  {
+   "t": 724.56,
+   "d": 2.4,
+   "text": "not mapped out on a grid all that you"
+  },
+  {
+   "t": 726.96,
+   "d": 1.98,
+   "text": "need is is for the room to be full of"
+  },
+  {
+   "t": 728.94,
+   "d": 2.4,
+   "text": "grass the altars distant and the torches"
+  },
+  {
+   "t": 731.34,
+   "d": 2.7,
+   "text": "near so come up with a bunch of"
+  },
+  {
+   "t": 734.04,
+   "d": 2.25,
+   "text": "different relationships that define"
+  },
+  {
+   "t": 736.29,
+   "d": 1.77,
+   "text": "where these items need to be where the"
+  },
+  {
+   "t": 738.06,
+   "d": 3.03,
+   "text": "the terrain types need to be how much"
+  },
+  {
+   "t": 741.09,
+   "d": 1.86,
+   "text": "space each one needs whether they need"
+  },
+  {
+   "t": 742.95,
+   "d": 1.52,
+   "text": "to be in line of sight of the doorway"
+  },
+  {
+   "t": 744.47,
+   "d": 2.14,
+   "text": "the minimum number that need to be"
+  },
+  {
+   "t": 746.61,
+   "d": 1.74,
+   "text": "generated for the room to succeed and"
+  },
+  {
+   "t": 748.35,
+   "d": 3.24,
+   "text": "actually be built and so the idea is you"
+  },
+  {
+   "t": 751.59,
+   "d": 1.38,
+   "text": "define it with the minimum amount of"
+  },
+  {
+   "t": 752.97,
+   "d": 2.28,
+   "text": "specification that you need to make the"
+  },
+  {
+   "t": 755.25,
+   "d": 2.22,
+   "text": "machine work and that way the level"
+  },
+  {
+   "t": 757.47,
+   "d": 2.22,
+   "text": "generator can take this pre-existing"
+  },
+  {
+   "t": 759.69,
+   "d": 2.1,
+   "text": "level that we saw at the beginning where"
+  },
+  {
+   "t": 761.79,
+   "d": 1.59,
+   "text": "you just build rooms off of one another"
+  },
+  {
+   "t": 763.38,
+   "d": 2.25,
+   "text": "can can take that kind of skeleton and"
+  },
+  {
+   "t": 765.63,
+   "d": 2.04,
+   "text": "choose a spot and turn it into one of"
+  },
+  {
+   "t": 767.67,
+   "d": 2.19,
+   "text": "those machines instead of just placing a"
+  },
+  {
+   "t": 769.86,
+   "d": 2.19,
+   "text": "machine from a predefined grid and that"
+  },
+  {
+   "t": 772.05,
+   "d": 1.41,
+   "text": "makes them more interesting sometimes"
+  },
+  {
+   "t": 773.46,
+   "d": 1.44,
+   "text": "you don't necessarily know what you're"
+  },
+  {
+   "t": 774.9,
+   "d": 1.17,
+   "text": "encountering because some of them look"
+  },
+  {
+   "t": 776.07,
+   "d": 3.45,
+   "text": "similar at the outset and it's kind of"
+  },
+  {
+   "t": 779.52,
+   "d": 2.79,
+   "text": "more organic you don't sort of see the"
+  },
+  {
+   "t": 782.31,
+   "d": 1.23,
+   "text": "first tile of the room and know where"
+  },
+  {
+   "t": 783.54,
+   "d": 2.3,
+   "text": "everything in the room is going to be"
+  },
+  {
+   "t": 785.84,
+   "d": 2.26,
+   "text": "one kind of sub technique is how you"
+  },
+  {
+   "t": 788.1,
+   "d": 3.12,
+   "text": "build these sort of meandering pathways"
+  },
+  {
+   "t": 791.22,
+   "d": 4.5,
+   "text": "between two points so I used for a bunch"
+  },
+  {
+   "t": 795.72,
+   "d": 1.41,
+   "text": "of things you can use them with bridges"
+  },
+  {
+   "t": 797.13,
+   "d": 1.74,
+   "text": "that are you there from the start or"
+  },
+  {
+   "t": 798.87,
+   "d": 0.75,
+   "text": "that kind of"
+  },
+  {
+   "t": 799.62,
+   "d": 3.21,
+   "text": "and during the level tunnels through"
+  },
+  {
+   "t": 802.83,
+   "d": 3.51,
+   "text": "granite pathways between traps so how do"
+  },
+  {
+   "t": 806.34,
+   "d": 1.98,
+   "text": "you do this you just build obstructive"
+  },
+  {
+   "t": 808.32,
+   "d": 1.83,
+   "text": "terrain everywhere in random order one"
+  },
+  {
+   "t": 810.15,
+   "d": 2.19,
+   "text": "cell at a time and you don't build it if"
+  },
+  {
+   "t": 812.34,
+   "d": 1.89,
+   "text": "it would block the level now you just"
+  },
+  {
+   "t": 814.23,
+   "d": 1.59,
+   "text": "keep doing that until all that's left is"
+  },
+  {
+   "t": 815.82,
+   "d": 1.83,
+   "text": "a single wandering pathway between two"
+  },
+  {
+   "t": 817.65,
+   "d": 3.87,
+   "text": "points so there they're a bunch of"
+  },
+  {
+   "t": 821.52,
+   "d": 1.35,
+   "text": "different types of machines in the game"
+  },
+  {
+   "t": 822.87,
+   "d": 1.62,
+   "text": "I really think these machines are kind"
+  },
+  {
+   "t": 824.49,
+   "d": 2.34,
+   "text": "of the core of the brogue level"
+  },
+  {
+   "t": 826.83,
+   "d": 1.89,
+   "text": "generation in terms of the the"
+  },
+  {
+   "t": 828.72,
+   "d": 3.39,
+   "text": "atmosphere and tactics they create so"
+  },
+  {
+   "t": 832.11,
+   "d": 2.4,
+   "text": "one of them is reward machines those are"
+  },
+  {
+   "t": 834.51,
+   "d": 1.2,
+   "text": "the ones I showed you earlier with a"
+  },
+  {
+   "t": 835.71,
+   "d": 1.65,
+   "text": "choice of a bunch of different item"
+  },
+  {
+   "t": 837.36,
+   "d": 2.64,
+   "text": "types and they're generated in kind of"
+  },
+  {
+   "t": 840.0,
+   "d": 1.65,
+   "text": "rubber-banded fashion where the the"
+  },
+  {
+   "t": 841.65,
+   "d": 1.86,
+   "text": "probability goes up every time one is"
+  },
+  {
+   "t": 843.51,
+   "d": 2.37,
+   "text": "not generated and drops down when one is"
+  },
+  {
+   "t": 845.88,
+   "d": 2.54,
+   "text": "so you get roughly the same pace of"
+  },
+  {
+   "t": 848.42,
+   "d": 3.1,
+   "text": "reward rooms at any given game key"
+  },
+  {
+   "t": 851.52,
+   "d": 1.47,
+   "text": "guarding machines that's any machine"
+  },
+  {
+   "t": 852.99,
+   "d": 1.41,
+   "text": "with like an altar with a key in it"
+  },
+  {
+   "t": 854.4,
+   "d": 1.5,
+   "text": "where something terrible happens when"
+  },
+  {
+   "t": 855.9,
+   "d": 2.19,
+   "text": "you take the key generally and then"
+  },
+  {
+   "t": 858.09,
+   "d": 1.32,
+   "text": "flavor machines which just have"
+  },
+  {
+   "t": 859.41,
+   "d": 2.76,
+   "text": "interesting terrain which can be you"
+  },
+  {
+   "t": 862.17,
+   "d": 2.13,
+   "text": "know tactically relevant like maybe like"
+  },
+  {
+   "t": 864.3,
+   "d": 1.98,
+   "text": "every room with a decaying sleeping bag"
+  },
+  {
+   "t": 866.28,
+   "d": 2.01,
+   "text": "and a glyph of warding on the door and a"
+  },
+  {
+   "t": 868.29,
+   "d": 1.23,
+   "text": "pile of bones somewhere in the room"
+  },
+  {
+   "t": 869.52,
+   "d": 3.93,
+   "text": "maybe an item so then there's also those"
+  },
+  {
+   "t": 873.45,
+   "d": 1.65,
+   "text": "are kind of functional types of machines"
+  },
+  {
+   "t": 875.1,
+   "d": 2.52,
+   "text": "here the different spatial types the the"
+  },
+  {
+   "t": 877.62,
+   "d": 2.25,
+   "text": "first is room machines which you've"
+  },
+  {
+   "t": 879.87,
+   "d": 1.8,
+   "text": "already seen a bunch of basically the"
+  },
+  {
+   "t": 881.67,
+   "d": 1.92,
+   "text": "level generator will look for any point"
+  },
+  {
+   "t": 883.59,
+   "d": 1.14,
+   "text": "in the level where there's a choke point"
+  },
+  {
+   "t": 884.73,
+   "d": 3.48,
+   "text": "that dominates a particular number of"
+  },
+  {
+   "t": 888.21,
+   "d": 2.73,
+   "text": "sort of subordinate cells it doesn't"
+  },
+  {
+   "t": 890.94,
+   "d": 1.35,
+   "text": "need to be generated as a room at the"
+  },
+  {
+   "t": 892.29,
+   "d": 1.56,
+   "text": "outside it just kind of analyzes the"
+  },
+  {
+   "t": 893.85,
+   "d": 1.59,
+   "text": "level and finds a place where there's a"
+  },
+  {
+   "t": 895.44,
+   "d": 3.51,
+   "text": "single a single point that dominates a"
+  },
+  {
+   "t": 898.95,
+   "d": 1.32,
+   "text": "certain number of other points and it"
+  },
+  {
+   "t": 900.27,
+   "d": 2.43,
+   "text": "can turn that into a room and sometimes"
+  },
+  {
+   "t": 902.7,
+   "d": 1.95,
+   "text": "it'll it'll alter the room once it gets"
+  },
+  {
+   "t": 904.65,
+   "d": 1.77,
+   "text": "there I'll use cellular automata to kind"
+  },
+  {
+   "t": 906.42,
+   "d": 2.69,
+   "text": "of widen it out or open it up a bit"
+  },
+  {
+   "t": 909.11,
+   "d": 2.26,
+   "text": "another type is what I call vestibule"
+  },
+  {
+   "t": 911.37,
+   "d": 2.52,
+   "text": "machines so these are it sort of"
+  },
+  {
+   "t": 913.89,
+   "d": 2.16,
+   "text": "captures the area immediately outside of"
+  },
+  {
+   "t": 916.05,
+   "d": 2.55,
+   "text": "a room so find a choke point and then"
+  },
+  {
+   "t": 918.6,
+   "d": 1.89,
+   "text": "capture the area like a certain number"
+  },
+  {
+   "t": 920.49,
+   "d": 2.55,
+   "text": "of cells growing outward but not into"
+  },
+  {
+   "t": 923.04,
+   "d": 2.25,
+   "text": "the room but outward from the room so"
+  },
+  {
+   "t": 925.29,
+   "d": 2.25,
+   "text": "you could have about a bunch of glyphs"
+  },
+  {
+   "t": 927.54,
+   "d": 1.88,
+   "text": "that will trigger this this magic statue"
+  },
+  {
+   "t": 929.42,
+   "d": 2.72,
+   "text": "outside the door of this room you"
+  },
+  {
+   "t": 932.14,
+   "d": 1.5,
+   "text": "to kind of pick your way carefully to"
+  },
+  {
+   "t": 933.64,
+   "d": 2.67,
+   "text": "avoid this this kind of invulnerable"
+  },
+  {
+   "t": 936.31,
+   "d": 2.82,
+   "text": "monster attacking you here you have"
+  },
+  {
+   "t": 939.13,
+   "d": 1.62,
+   "text": "another like sort of walkway right"
+  },
+  {
+   "t": 940.75,
+   "d": 1.59,
+   "text": "outside the room guarding the door for"
+  },
+  {
+   "t": 942.34,
+   "d": 3.33,
+   "text": "the reward room and then just sort of"
+  },
+  {
+   "t": 945.67,
+   "d": 2.16,
+   "text": "flammable wooden obstruction in the"
+  },
+  {
+   "t": 947.83,
+   "d": 1.47,
+   "text": "doorway with something else somewhere"
+  },
+  {
+   "t": 949.3,
+   "d": 1.98,
+   "text": "else in the level that will let you burn"
+  },
+  {
+   "t": 951.28,
+   "d": 3.84,
+   "text": "it to get in and then the final sort of"
+  },
+  {
+   "t": 955.12,
+   "d": 1.56,
+   "text": "spatial type is just area machines it"
+  },
+  {
+   "t": 956.68,
+   "d": 1.59,
+   "text": "picks a spot on the level that doesn't"
+  },
+  {
+   "t": 958.27,
+   "d": 1.77,
+   "text": "need to be enclosed by walls necessarily"
+  },
+  {
+   "t": 960.04,
+   "d": 2.61,
+   "text": "so on the left you've got like a switch"
+  },
+  {
+   "t": 962.65,
+   "d": 1.35,
+   "text": "that you've got to throw an item on to"
+  },
+  {
+   "t": 964.0,
+   "d": 3.44,
+   "text": "to trigger the switch and access the key"
+  },
+  {
+   "t": 967.44,
+   "d": 2.38,
+   "text": "or over here you just have a bunch of"
+  },
+  {
+   "t": 969.82,
+   "d": 1.83,
+   "text": "goblins standing around a goblin totem"
+  },
+  {
+   "t": 971.65,
+   "d": 2.22,
+   "text": "which is generated by the machines as"
+  },
+  {
+   "t": 973.87,
+   "d": 2.15,
+   "text": "well"
+  },
+  {
+   "t": 976.69,
+   "d": 2.04,
+   "text": "so okay going back to the level that"
+  },
+  {
+   "t": 978.73,
+   "d": 2.46,
+   "text": "we're generating so here's where we left"
+  },
+  {
+   "t": 981.19,
+   "d": 1.43,
+   "text": "off"
+  },
+  {
+   "t": 982.62,
+   "d": 3.58,
+   "text": "now the machines kind of kick in so at"
+  },
+  {
+   "t": 986.2,
+   "d": 1.5,
+   "text": "first I don't know if you saw that in"
+  },
+  {
+   "t": 987.7,
+   "d": 1.71,
+   "text": "the lower left here this is two rooms"
+  },
+  {
+   "t": 989.41,
+   "d": 2.82,
+   "text": "and it picks that second doorway second"
+  },
+  {
+   "t": 992.23,
+   "d": 1.71,
+   "text": "up from the bottom and widens the"
+  },
+  {
+   "t": 993.94,
+   "d": 2.58,
+   "text": "interior to make it look like that and"
+  },
+  {
+   "t": 996.52,
+   "d": 2.42,
+   "text": "then it generates basically a spider"
+  },
+  {
+   "t": 998.94,
+   "d": 3.61,
+   "text": "sitting on an altar across this chasm so"
+  },
+  {
+   "t": 1002.55,
+   "d": 1.59,
+   "text": "the player can't reach this castle this"
+  },
+  {
+   "t": 1004.14,
+   "d": 2.88,
+   "text": "the spider at first and basically what"
+  },
+  {
+   "t": 1007.02,
+   "d": 1.35,
+   "text": "you have to do is stand on the edge"
+  },
+  {
+   "t": 1008.37,
+   "d": 1.74,
+   "text": "unless you happen to have some kind of"
+  },
+  {
+   "t": 1010.11,
+   "d": 2.37,
+   "text": "teleport item or something you kind of"
+  },
+  {
+   "t": 1012.48,
+   "d": 1.53,
+   "text": "attract the spiders attention"
+  },
+  {
+   "t": 1014.01,
+   "d": 2.25,
+   "text": "the spider launches a web across the"
+  },
+  {
+   "t": 1016.26,
+   "d": 2.1,
+   "text": "chasm and then you kind of climb your"
+  },
+  {
+   "t": 1018.36,
+   "d": 2.37,
+   "text": "way across the web to reach the altar"
+  },
+  {
+   "t": 1020.73,
+   "d": 1.67,
+   "text": "that the spider is standing on and"
+  },
+  {
+   "t": 1022.4,
+   "d": 2.11,
+   "text": "there's an item on the altar when you"
+  },
+  {
+   "t": 1024.51,
+   "d": 2.49,
+   "text": "grab it at this hidden walkway which is"
+  },
+  {
+   "t": 1027.0,
+   "d": 2.76,
+   "text": "this blue pathway will emerge to let you"
+  },
+  {
+   "t": 1029.76,
+   "d": 3.75,
+   "text": "get back so it builds that one first"
+  },
+  {
+   "t": 1033.51,
+   "d": 1.91,
+   "text": "that's kind of a self-contained room"
+  },
+  {
+   "t": 1035.42,
+   "d": 3.22,
+   "text": "next it builds a little less"
+  },
+  {
+   "t": 1038.64,
+   "d": 1.47,
+   "text": "architectural II interesting just sort"
+  },
+  {
+   "t": 1040.11,
+   "d": 1.62,
+   "text": "of a boss layer on the top left with a"
+  },
+  {
+   "t": 1041.73,
+   "d": 3.27,
+   "text": "tough monster in it and then the next"
+  },
+  {
+   "t": 1045.0,
+   "d": 2.01,
+   "text": "one is pretty cool where it picks"
+  },
+  {
+   "t": 1047.01,
+   "d": 3.21,
+   "text": "I think yep so it picks this doorway"
+  },
+  {
+   "t": 1050.22,
+   "d": 2.73,
+   "text": "here and determines that that's a choke"
+  },
+  {
+   "t": 1052.95,
+   "d": 1.92,
+   "text": "point that dominates all these points on"
+  },
+  {
+   "t": 1054.87,
+   "d": 2.22,
+   "text": "the level not including the layer in the"
+  },
+  {
+   "t": 1057.09,
+   "d": 2.09,
+   "text": "top left or the chasm on the lower left"
+  },
+  {
+   "t": 1059.18,
+   "d": 2.77,
+   "text": "and decides that that's enough space to"
+  },
+  {
+   "t": 1061.95,
+   "d": 1.26,
+   "text": "build a goblin warren"
+  },
+  {
+   "t": 1063.21,
+   "d": 2.1,
+   "text": "and then basically reruns the level"
+  },
+  {
+   "t": 1065.31,
+   "d": 2.46,
+   "text": "accretion algorithm to redesign the"
+  },
+  {
+   "t": 1067.77,
+   "d": 3.35,
+   "text": "space that's captured by that by that"
+  },
+  {
+   "t": 1071.12,
+   "d": 3.82,
+   "text": "room so you can see it kind of drawing"
+  },
+  {
+   "t": 1074.94,
+   "d": 2.67,
+   "text": "smaller more claustrophobic rooms there"
+  },
+  {
+   "t": 1077.61,
+   "d": 2.34,
+   "text": "and then it comes up with that as the"
+  },
+  {
+   "t": 1079.95,
+   "d": 3.78,
+   "text": "floorplan and steps through creating the"
+  },
+  {
+   "t": 1083.73,
+   "d": 2.22,
+   "text": "elements of the goblin war and from"
+  },
+  {
+   "t": 1085.95,
+   "d": 2.43,
+   "text": "there and then it's just building some"
+  },
+  {
+   "t": 1088.38,
+   "d": 3.29,
+   "text": "flavor machines elsewhere in the level"
+  },
+  {
+   "t": 1091.67,
+   "d": 4.09,
+   "text": "so then I guess it adds some items but"
+  },
+  {
+   "t": 1095.76,
+   "d": 1.95,
+   "text": "the other main part of the the level"
+  },
+  {
+   "t": 1097.71,
+   "d": 1.5,
+   "text": "generation is just to pick a location"
+  },
+  {
+   "t": 1099.21,
+   "d": 3.71,
+   "text": "for some stairs it tries to line up the"
+  },
+  {
+   "t": 1102.92,
+   "d": 2.14,
+   "text": "upward stairs with the downstairs"
+  },
+  {
+   "t": 1105.06,
+   "d": 1.86,
+   "text": "location on the previous level to give a"
+  },
+  {
+   "t": 1106.92,
+   "d": 1.71,
+   "text": "sense of kind of spatial continuity"
+  },
+  {
+   "t": 1108.63,
+   "d": 2.7,
+   "text": "between levels and it tries to pick a"
+  },
+  {
+   "t": 1111.33,
+   "d": 2.19,
+   "text": "spot for stairs where you don't like"
+  },
+  {
+   "t": 1113.52,
+   "d": 1.8,
+   "text": "there's no reason to step on that space"
+  },
+  {
+   "t": 1115.32,
+   "d": 1.47,
+   "text": "except to use the stairs so you don't"
+  },
+  {
+   "t": 1116.79,
+   "d": 2.49,
+   "text": "need a separate command to use them so"
+  },
+  {
+   "t": 1119.28,
+   "d": 3.09,
+   "text": "it picks spots where I like this spot"
+  },
+  {
+   "t": 1122.37,
+   "d": 1.35,
+   "text": "for example there's walls all the way"
+  },
+  {
+   "t": 1123.72,
+   "d": 1.59,
+   "text": "around it except on one side and that"
+  },
+  {
+   "t": 1125.31,
+   "d": 3.59,
+   "text": "one side is not a choke point or hallway"
+  },
+  {
+   "t": 1128.96,
+   "d": 3.37,
+   "text": "so that's the level and this is what it"
+  },
+  {
+   "t": 1132.33,
+   "d": 1.74,
+   "text": "looks like when it's finished and you"
+  },
+  {
+   "t": 1134.07,
+   "d": 3.6,
+   "text": "play it so that that's sort of the broke"
+  },
+  {
+   "t": 1137.67,
+   "d": 2.46,
+   "text": "level generation techniques I thought"
+  },
+  {
+   "t": 1140.13,
+   "d": 2.43,
+   "text": "would also be interesting you know I I"
+  },
+  {
+   "t": 1142.56,
+   "d": 2.16,
+   "text": "was I think replaying probably Super"
+  },
+  {
+   "t": 1144.72,
+   "d": 2.28,
+   "text": "Metroid a while ago and kind of"
+  },
+  {
+   "t": 1147.0,
+   "d": 1.53,
+   "text": "daydreaming about what that game would"
+  },
+  {
+   "t": 1148.53,
+   "d": 1.5,
+   "text": "feel like if it were procedurally"
+  },
+  {
+   "t": 1150.03,
+   "d": 2.76,
+   "text": "generated along similar lines so I"
+  },
+  {
+   "t": 1152.79,
+   "d": 2.58,
+   "text": "started developing what I call this it"
+  },
+  {
+   "t": 1155.37,
+   "d": 1.23,
+   "text": "doesn't have a name yet but it's a"
+  },
+  {
+   "t": 1156.6,
+   "d": 1.17,
+   "text": "roguelike platformer"
+  },
+  {
+   "t": 1157.77,
+   "d": 1.86,
+   "text": "does it bother anyone when I call a"
+  },
+  {
+   "t": 1159.63,
+   "d": 2.37,
+   "text": "platform or a roguelike you can be"
+  },
+  {
+   "t": 1162.0,
+   "d": 2.7,
+   "text": "honest safe space it's just us and the"
+  },
+  {
+   "t": 1164.7,
+   "d": 2.76,
+   "text": "12 people watching on Twitch and the"
+  },
+  {
+   "t": 1167.46,
+   "d": 3.03,
+   "text": "30,000 who watch on YouTube well if it"
+  },
+  {
+   "t": 1170.49,
+   "d": 1.35,
+   "text": "does bother you you can always call it a"
+  },
+  {
+   "t": 1171.84,
+   "d": 3.0,
+   "text": "broke like I hereby license that that"
+  },
+  {
+   "t": 1174.84,
+   "d": 3.45,
+   "text": "trademark so the roguelike platformer"
+  },
+  {
+   "t": 1178.29,
+   "d": 3.06,
+   "text": "that I'm developing it's a 1x2 character"
+  },
+  {
+   "t": 1181.35,
+   "d": 2.01,
+   "text": "a little different and that it has some"
+  },
+  {
+   "t": 1183.36,
+   "d": 4.29,
+   "text": "height Mario style jumping very limited"
+  },
+  {
+   "t": 1187.65,
+   "d": 1.56,
+   "text": "level destructibility which makes it"
+  },
+  {
+   "t": 1189.21,
+   "d": 1.38,
+   "text": "kind of higher stakes when you design"
+  },
+  {
+   "t": 1190.59,
+   "d": 3.3,
+   "text": "the level I wanted it to be a single"
+  },
+  {
+   "t": 1193.89,
+   "d": 2.77,
+   "text": "giant level so you don't unlike a rogue"
+  },
+  {
+   "t": 1196.66,
+   "d": 1.56,
+   "text": "game where you go through maybe 26"
+  },
+  {
+   "t": 1198.22,
+   "d": 1.59,
+   "text": "levels and sequence this would be one"
+  },
+  {
+   "t": 1199.81,
+   "d": 2.4,
+   "text": "giant level it's more similar to kind of"
+  },
+  {
+   "t": 1202.21,
+   "d": 3.57,
+   "text": "the Super Metroid idea you start at the"
+  },
+  {
+   "t": 1205.78,
+   "d": 2.01,
+   "text": "very top and and the amulet of yin door"
+  },
+  {
+   "t": 1207.79,
+   "d": 3.66,
+   "text": "is at the very bottom and then I think"
+  },
+  {
+   "t": 1211.45,
+   "d": 1.29,
+   "text": "platformers probably work better with"
+  },
+  {
+   "t": 1212.74,
+   "d": 3.21,
+   "text": "controllers which give us and it taketh"
+  },
+  {
+   "t": 1215.95,
+   "d": 1.62,
+   "text": "because then it makes it much harder to"
+  },
+  {
+   "t": 1217.57,
+   "d": 2.66,
+   "text": "do kind of finicky inventory"
+  },
+  {
+   "t": 1220.23,
+   "d": 2.38,
+   "text": "manipulation so have to come up with a"
+  },
+  {
+   "t": 1222.61,
+   "d": 1.92,
+   "text": "controller scheme that's good for"
+  },
+  {
+   "t": 1224.53,
+   "d": 2.52,
+   "text": "inventory work and probably fewer items"
+  },
+  {
+   "t": 1227.05,
+   "d": 4.05,
+   "text": "overall I also wanted it to feel more"
+  },
+  {
+   "t": 1231.1,
+   "d": 1.41,
+   "text": "like a roguelike I didn't want it to be"
+  },
+  {
+   "t": 1232.51,
+   "d": 1.8,
+   "text": "kind of like a reaction time based"
+  },
+  {
+   "t": 1234.31,
+   "d": 2.7,
+   "text": "experience so kind of taking a page from"
+  },
+  {
+   "t": 1237.01,
+   "d": 3.12,
+   "text": "braid it metals with the speed of time"
+  },
+  {
+   "t": 1240.13,
+   "d": 3.12,
+   "text": "as you play never rewinds but if you're"
+  },
+  {
+   "t": 1243.25,
+   "d": 1.59,
+   "text": "motionless standing on the ground not"
+  },
+  {
+   "t": 1244.84,
+   "d": 1.5,
+   "text": "using any items than time is frozen"
+  },
+  {
+   "t": 1246.34,
+   "d": 2.4,
+   "text": "automatically and if you're in the air"
+  },
+  {
+   "t": 1248.74,
+   "d": 2.31,
+   "text": "or you used using an item then time is"
+  },
+  {
+   "t": 1251.05,
+   "d": 2.13,
+   "text": "passing an ordinary speed and if you"
+  },
+  {
+   "t": 1253.18,
+   "d": 1.89,
+   "text": "move along the ground and time passes in"
+  },
+  {
+   "t": 1255.07,
+   "d": 1.77,
+   "text": "proportion to your speed along the"
+  },
+  {
+   "t": 1256.84,
+   "d": 2.16,
+   "text": "ground and then you can just freely"
+  },
+  {
+   "t": 1259.0,
+   "d": 1.77,
+   "text": "toggle into slow motion to kind of"
+  },
+  {
+   "t": 1260.77,
+   "d": 4.11,
+   "text": "execute something complicated so it was"
+  },
+  {
+   "t": 1264.88,
+   "d": 1.56,
+   "text": "it's a very interesting framework it's"
+  },
+  {
+   "t": 1266.44,
+   "d": 2.46,
+   "text": "much different than building kind of a"
+  },
+  {
+   "t": 1268.9,
+   "d": 3.39,
+   "text": "top-down top-down turn-based grid based"
+  },
+  {
+   "t": 1272.29,
+   "d": 2.67,
+   "text": "roguelike pathfinding is a lot harder"
+  },
+  {
+   "t": 1274.96,
+   "d": 2.1,
+   "text": "jumps are more complicated and the"
+  },
+  {
+   "t": 1277.06,
+   "d": 4.77,
+   "text": "controller's is more difficult I and and"
+  },
+  {
+   "t": 1281.83,
+   "d": 2.01,
+   "text": "the the basic key for the path finding"
+  },
+  {
+   "t": 1283.84,
+   "d": 2.52,
+   "text": "is that you need some algorithm to look"
+  },
+  {
+   "t": 1286.36,
+   "d": 1.56,
+   "text": "at two points and decide if you can jump"
+  },
+  {
+   "t": 1287.92,
+   "d": 1.86,
+   "text": "between them which is actually a lot"
+  },
+  {
+   "t": 1289.78,
+   "d": 2.16,
+   "text": "harder than it seemed at first or at"
+  },
+  {
+   "t": 1291.94,
+   "d": 4.68,
+   "text": "least based on my abilities it's very"
+  },
+  {
+   "t": 1296.62,
+   "d": 2.25,
+   "text": "finicky to create even harder to make a"
+  },
+  {
+   "t": 1298.87,
+   "d": 1.38,
+   "text": "monster or a creature that will"
+  },
+  {
+   "t": 1300.25,
+   "d": 1.53,
+   "text": "automatically actually follow that"
+  },
+  {
+   "t": 1301.78,
+   "d": 2.94,
+   "text": "routine there's a lot of kind of tricky"
+  },
+  {
+   "t": 1304.72,
+   "d": 1.26,
+   "text": "jumps that you can do a lot of"
+  },
+  {
+   "t": 1305.98,
+   "d": 2.49,
+   "text": "configurations of headroom of obstacles"
+  },
+  {
+   "t": 1308.47,
+   "d": 2.22,
+   "text": "in the way and I never got it to be"
+  },
+  {
+   "t": 1310.69,
+   "d": 2.61,
+   "text": "perfect but you know game for good"
+  },
+  {
+   "t": 1313.3,
+   "d": 3.78,
+   "text": "enough I guess so that means that you"
+  },
+  {
+   "t": 1317.08,
+   "d": 1.14,
+   "text": "often need a lot of flying enemies"
+  },
+  {
+   "t": 1318.22,
+   "d": 2.58,
+   "text": "because there it's easier to get"
+  },
+  {
+   "t": 1320.8,
+   "d": 1.68,
+   "text": "ground-based enemies kind of stuck in"
+  },
+  {
+   "t": 1322.48,
+   "d": 2.43,
+   "text": "the platforming and you can't really use"
+  },
+  {
+   "t": 1324.91,
+   "d": 1.47,
+   "text": "auto travel so you need to add"
+  },
+  {
+   "t": 1326.38,
+   "d": 2.28,
+   "text": "teleporters everywhere to make it not"
+  },
+  {
+   "t": 1328.66,
+   "d": 2.39,
+   "text": "boring"
+  },
+  {
+   "t": 1331.39,
+   "d": 1.86,
+   "text": "and then I think pretty crucial you have"
+  },
+  {
+   "t": 1333.25,
+   "d": 1.53,
+   "text": "to prevent these kind of wells of doom"
+  },
+  {
+   "t": 1334.78,
+   "d": 2.1,
+   "text": "or you can fall down into a pit and you"
+  },
+  {
+   "t": 1336.88,
+   "d": 3.69,
+   "text": "can't jump back out and so the path"
+  },
+  {
+   "t": 1340.57,
+   "d": 1.44,
+   "text": "finding method works well for that you"
+  },
+  {
+   "t": 1342.01,
+   "d": 2.07,
+   "text": "just run a single pathfinding pass with"
+  },
+  {
+   "t": 1344.08,
+   "d": 2.22,
+   "text": "the level entrance as the goal point of"
+  },
+  {
+   "t": 1346.3,
+   "d": 1.89,
+   "text": "the path finding and then if there are"
+  },
+  {
+   "t": 1348.19,
+   "d": 4.41,
+   "text": "any cells that that are passable but the"
+  },
+  {
+   "t": 1352.6,
+   "d": 2.07,
+   "text": "cell below them is not so this would be"
+  },
+  {
+   "t": 1354.67,
+   "d": 2.43,
+   "text": "a cell if there's any location where"
+  },
+  {
+   "t": 1357.1,
+   "d": 1.68,
+   "text": "from that point you can get back to the"
+  },
+  {
+   "t": 1358.78,
+   "d": 2.07,
+   "text": "start but from the the cell immediately"
+  },
+  {
+   "t": 1360.85,
+   "d": 2.82,
+   "text": "below it you're stuck I just start"
+  },
+  {
+   "t": 1363.67,
+   "d": 1.98,
+   "text": "building platforms there until you solve"
+  },
+  {
+   "t": 1365.65,
+   "d": 1.71,
+   "text": "that and you just keep repeating that"
+  },
+  {
+   "t": 1367.36,
+   "d": 2.4,
+   "text": "until the whole level is is passable and"
+  },
+  {
+   "t": 1369.76,
+   "d": 2.43,
+   "text": "you're just about guaranteed to the"
+  },
+  {
+   "t": 1372.19,
+   "d": 1.2,
+   "text": "limits of the accuracy of your"
+  },
+  {
+   "t": 1373.39,
+   "d": 2.55,
+   "text": "pathfinding algorithm that there won't"
+  },
+  {
+   "t": 1375.94,
+   "d": 1.44,
+   "text": "be any points that the player can get"
+  },
+  {
+   "t": 1377.38,
+   "d": 4.29,
+   "text": "stuck I think working with gravity has"
+  },
+  {
+   "t": 1381.67,
+   "d": 2.28,
+   "text": "been really interesting in a in a"
+  },
+  {
+   "t": 1383.95,
+   "d": 2.37,
+   "text": "top-down roguelike game up-and-down is"
+  },
+  {
+   "t": 1386.32,
+   "d": 2.13,
+   "text": "kind of analogous to left and right"
+  },
+  {
+   "t": 1388.45,
+   "d": 2.31,
+   "text": "there's really no symmetry breaking"
+  },
+  {
+   "t": 1390.76,
+   "d": 4.08,
+   "text": "feature but in a platformer gravity"
+  },
+  {
+   "t": 1394.84,
+   "d": 1.77,
+   "text": "means that up and down is like feels"
+  },
+  {
+   "t": 1396.61,
+   "d": 1.35,
+   "text": "qualitatively different and plays"
+  },
+  {
+   "t": 1397.96,
+   "d": 2.52,
+   "text": "different from left and right so that"
+  },
+  {
+   "t": 1400.48,
+   "d": 2.76,
+   "text": "allows for example vines that spread and"
+  },
+  {
+   "t": 1403.24,
+   "d": 2.67,
+   "text": "grow and can have different effects on"
+  },
+  {
+   "t": 1405.91,
+   "d": 3.27,
+   "text": "the game means that gases can have"
+  },
+  {
+   "t": 1409.18,
+   "d": 2.37,
+   "text": "buoyancy or or weight to them they can"
+  },
+  {
+   "t": 1411.55,
+   "d": 2.13,
+   "text": "sort of rise or fall as they expand and"
+  },
+  {
+   "t": 1413.68,
+   "d": 3.45,
+   "text": "diffuse liquids can fall kind of"
+  },
+  {
+   "t": 1417.13,
+   "d": 2.76,
+   "text": "dynamically they can evaporate terrain"
+  },
+  {
+   "t": 1419.89,
+   "d": 3.21,
+   "text": "can create or or absorb either gases or"
+  },
+  {
+   "t": 1423.1,
+   "d": 2.91,
+   "text": "liquids doors can block them until the"
+  },
+  {
+   "t": 1426.01,
+   "d": 1.47,
+   "text": "doors are open and then let them flow"
+  },
+  {
+   "t": 1427.48,
+   "d": 3.99,
+   "text": "through and then it also creates a bunch"
+  },
+  {
+   "t": 1431.47,
+   "d": 2.58,
+   "text": "of liquid interactions like lava and"
+  },
+  {
+   "t": 1434.05,
+   "d": 1.86,
+   "text": "water turning into steam you can kind of"
+  },
+  {
+   "t": 1435.91,
+   "d": 1.35,
+   "text": "see the progression of the lower-left"
+  },
+  {
+   "t": 1437.26,
+   "d": 2.28,
+   "text": "this is again sort of a machine concept"
+  },
+  {
+   "t": 1439.54,
+   "d": 2.34,
+   "text": "like from broke where you grab the the"
+  },
+  {
+   "t": 1441.88,
+   "d": 1.8,
+   "text": "item here and that triggers the trap"
+  },
+  {
+   "t": 1443.68,
+   "d": 1.47,
+   "text": "which are these vents which release a"
+  },
+  {
+   "t": 1445.15,
+   "d": 2.55,
+   "text": "bunch of water into the lava that"
+  },
+  {
+   "t": 1447.7,
+   "d": 1.65,
+   "text": "creates a bunch of steam in the room and"
+  },
+  {
+   "t": 1449.35,
+   "d": 2.01,
+   "text": "in this case I was able to just kind of"
+  },
+  {
+   "t": 1451.36,
+   "d": 1.41,
+   "text": "stand under the water so the steam"
+  },
+  {
+   "t": 1452.77,
+   "d": 3.39,
+   "text": "couldn't reach me but it your ability to"
+  },
+  {
+   "t": 1456.16,
+   "d": 1.74,
+   "text": "do to do that is really dependent on the"
+  },
+  {
+   "t": 1457.9,
+   "d": 1.5,
+   "text": "shape of the room so there's no kind of"
+  },
+  {
+   "t": 1459.4,
+   "d": 3.62,
+   "text": "one-size-fits-all approach to that"
+  },
+  {
+   "t": 1464.5,
+   "d": 1.65,
+   "text": "there's also you can you can talk about"
+  },
+  {
+   "t": 1466.15,
+   "d": 2.85,
+   "text": "structural support I think some top-down"
+  },
+  {
+   "t": 1469.0,
+   "d": 2.46,
+   "text": "games have a similar idea I think Dwarf"
+  },
+  {
+   "t": 1471.46,
+   "d": 3.15,
+   "text": "Fortress in particular has cave-ins but"
+  },
+  {
+   "t": 1474.61,
+   "d": 4.56,
+   "text": "I guess that's here it's maybe a little"
+  },
+  {
+   "t": 1479.17,
+   "d": 2.52,
+   "text": "more straightforward to add because you"
+  },
+  {
+   "t": 1481.69,
+   "d": 1.23,
+   "text": "can just sort of calculate directly"
+  },
+  {
+   "t": 1482.92,
+   "d": 3.18,
+   "text": "which you can calculate and also see"
+  },
+  {
+   "t": 1486.1,
+   "d": 1.74,
+   "text": "directly which terrain is supporting"
+  },
+  {
+   "t": 1487.84,
+   "d": 1.74,
+   "text": "which other train so a bunch of"
+  },
+  {
+   "t": 1489.58,
+   "d": 1.47,
+   "text": "explosions in the battle on the Left"
+  },
+  {
+   "t": 1491.05,
+   "d": 1.74,
+   "text": "kind of sever all the platforms on the"
+  },
+  {
+   "t": 1492.79,
+   "d": 1.32,
+   "text": "right and they collapse to the bottom"
+  },
+  {
+   "t": 1494.11,
+   "d": 3.93,
+   "text": "and that's the aftermath like I said at"
+  },
+  {
+   "t": 1498.04,
+   "d": 1.94,
+   "text": "the start I wanted to make one giant map"
+  },
+  {
+   "t": 1499.98,
+   "d": 2.83,
+   "text": "with the start at the very top and the"
+  },
+  {
+   "t": 1502.81,
+   "d": 2.64,
+   "text": "goal at the bottom and so unlike the"
+  },
+  {
+   "t": 1505.45,
+   "d": 2.1,
+   "text": "room accretion method I used in broke I"
+  },
+  {
+   "t": 1507.55,
+   "d": 2.04,
+   "text": "just used cellular automata for the"
+  },
+  {
+   "t": 1509.59,
+   "d": 2.88,
+   "text": "entire thing I created this meandering"
+  },
+  {
+   "t": 1512.47,
+   "d": 3.27,
+   "text": "blob shape across the entire level and"
+  },
+  {
+   "t": 1515.74,
+   "d": 2.28,
+   "text": "then it just analyzes to find which"
+  },
+  {
+   "t": 1518.02,
+   "d": 1.62,
+   "text": "regions are disconnected from the rest"
+  },
+  {
+   "t": 1519.64,
+   "d": 2.37,
+   "text": "and just connects them with vertical or"
+  },
+  {
+   "t": 1522.01,
+   "d": 2.22,
+   "text": "horizontal doors which need to be"
+  },
+  {
+   "t": 1524.23,
+   "d": 1.32,
+   "text": "designed differently of course because"
+  },
+  {
+   "t": 1525.55,
+   "d": 3.12,
+   "text": "of gravity and then instead of sort of"
+  },
+  {
+   "t": 1528.67,
+   "d": 1.74,
+   "text": "depth level like wraiths can spawn on"
+  },
+  {
+   "t": 1530.41,
+   "d": 3.06,
+   "text": "depths 8 through 15 or whatever and in a"
+  },
+  {
+   "t": 1533.47,
+   "d": 1.68,
+   "text": "roguelike you just use distance from the"
+  },
+  {
+   "t": 1535.15,
+   "d": 3.21,
+   "text": "start as your proxy for depth and then I"
+  },
+  {
+   "t": 1538.36,
+   "d": 1.59,
+   "text": "also added these kind of shortcut doors"
+  },
+  {
+   "t": 1539.95,
+   "d": 1.77,
+   "text": "throughout the level I really like how"
+  },
+  {
+   "t": 1541.72,
+   "d": 1.65,
+   "text": "in Super Metroid you kind of explore"
+  },
+  {
+   "t": 1543.37,
+   "d": 1.53,
+   "text": "that you're kind of channeled toward one"
+  },
+  {
+   "t": 1544.9,
+   "d": 1.92,
+   "text": "path as you explore but then eventually"
+  },
+  {
+   "t": 1546.82,
+   "d": 1.86,
+   "text": "that path kind of loops back and you can"
+  },
+  {
+   "t": 1548.68,
+   "d": 2.04,
+   "text": "find a hidden connection that opens up"
+  },
+  {
+   "t": 1550.72,
+   "d": 1.77,
+   "text": "the level makes it more connected as you"
+  },
+  {
+   "t": 1552.49,
+   "d": 3.3,
+   "text": "as you continue to retrack it so these"
+  },
+  {
+   "t": 1555.79,
+   "d": 2.31,
+   "text": "are one-way until you open them from the"
+  },
+  {
+   "t": 1558.1,
+   "d": 2.19,
+   "text": "far side and in fact they're completely"
+  },
+  {
+   "t": 1560.29,
+   "d": 2.07,
+   "text": "hidden if it does the job right until"
+  },
+  {
+   "t": 1562.36,
+   "d": 2.82,
+   "text": "you discover them from the far side so"
+  },
+  {
+   "t": 1565.18,
+   "d": 1.68,
+   "text": "that's kind of a complete level from top"
+  },
+  {
+   "t": 1566.86,
+   "d": 2.4,
+   "text": "to bottom kind of hard to see in detail"
+  },
+  {
+   "t": 1569.26,
+   "d": 2.34,
+   "text": "but I would say it's about the same"
+  },
+  {
+   "t": 1571.6,
+   "d": 3.38,
+   "text": "length to play as a typical roguelike"
+  },
+  {
+   "t": 1574.98,
+   "d": 5.79,
+   "text": "alright so that's it thank you very much"
+  },
+  {
+   "t": 1583.76,
+   "d": 4.15,
+   "text": "cool we have time for a few questions if"
+  },
+  {
+   "t": 1587.91,
+   "d": 1.05,
+   "text": "you want to take questions"
+  },
+  {
+   "t": 1588.96,
+   "d": 3.72,
+   "text": "sure does anyone have questions so I'm"
+  },
+  {
+   "t": 1592.68,
+   "d": 3.51,
+   "text": "curious when for the for that chokepoint"
+  },
+  {
+   "t": 1596.19,
+   "d": 4.17,
+   "text": "analysis where the game has to figure"
+  },
+  {
+   "t": 1600.36,
+   "d": 2.4,
+   "text": "out you said if putting a wall there"
+  },
+  {
+   "t": 1602.76,
+   "d": 2.67,
+   "text": "would block walkability you're saying"
+  },
+  {
+   "t": 1605.43,
+   "d": 1.79,
+   "text": "just brute-force it's are you checking"
+  },
+  {
+   "t": 1607.22,
+   "d": 2.35,
+   "text": "literally every tile against every other"
+  },
+  {
+   "t": 1609.57,
+   "d": 2.25,
+   "text": "tile ever Grande tile or is there like a"
+  },
+  {
+   "t": 1611.82,
+   "d": 1.8,
+   "text": "shortcut there to make it more"
+  },
+  {
+   "t": 1613.62,
+   "d": 1.56,
+   "text": "performant yeah you know you don't need"
+  },
+  {
+   "t": 1615.18,
+   "d": 2.91,
+   "text": "to write the you don't need to look at"
+  },
+  {
+   "t": 1618.09,
+   "d": 1.74,
+   "text": "every single pair of tiles on the level"
+  },
+  {
+   "t": 1619.83,
+   "d": 2.19,
+   "text": "what what all you need to do I think and"
+  },
+  {
+   "t": 1622.02,
+   "d": 1.14,
+   "text": "there's probably a more elegant way of"
+  },
+  {
+   "t": 1623.16,
+   "d": 1.47,
+   "text": "doing it but one that works perfectly"
+  },
+  {
+   "t": 1624.63,
+   "d": 2.49,
+   "text": "well is you just find the first you scan"
+  },
+  {
+   "t": 1627.12,
+   "d": 1.2,
+   "text": "through the level find the first"
+  },
+  {
+   "t": 1628.32,
+   "d": 1.95,
+   "text": "passable tile that you hit do a"
+  },
+  {
+   "t": 1630.27,
+   "d": 2.49,
+   "text": "breadth-first search out from there to"
+  },
+  {
+   "t": 1632.76,
+   "d": 1.65,
+   "text": "see what tiles are accessible from that"
+  },
+  {
+   "t": 1634.41,
+   "d": 2.16,
+   "text": "point and then keep skating through and"
+  },
+  {
+   "t": 1636.57,
+   "d": 1.95,
+   "text": "if you find a second passable tile that"
+  },
+  {
+   "t": 1638.52,
+   "d": 1.86,
+   "text": "wasn't covered by the search then you"
+  },
+  {
+   "t": 1640.38,
+   "d": 2.67,
+   "text": "know that the level is not connected so"
+  },
+  {
+   "t": 1643.05,
+   "d": 1.53,
+   "text": "it's sort of one breadth-first"
+  },
+  {
+   "t": 1644.58,
+   "d": 2.82,
+   "text": "breadth-first search to analyze the"
+  },
+  {
+   "t": 1647.4,
+   "d": 2.22,
+   "text": "level if you're gonna place an"
+  },
+  {
+   "t": 1649.62,
+   "d": 1.77,
+   "text": "obstruction everywhere you can in a"
+  },
+  {
+   "t": 1651.39,
+   "d": 1.47,
+   "text": "large area as long as it doesn't block"
+  },
+  {
+   "t": 1652.86,
+   "d": 0.93,
+   "text": "then you're gonna have to do one of"
+  },
+  {
+   "t": 1653.79,
+   "d": 1.56,
+   "text": "those searches for every one of those"
+  },
+  {
+   "t": 1655.35,
+   "d": 2.16,
+   "text": "points but you know I'm not dealing with"
+  },
+  {
+   "t": 1657.51,
+   "d": 2.31,
+   "text": "a very large level so it's it's pretty"
+  },
+  {
+   "t": 1659.82,
+   "d": 6.6,
+   "text": "tractable I had the same question a"
+  },
+  {
+   "t": 1666.42,
+   "d": 2.28,
+   "text": "while back when I was reading an article"
+  },
+  {
+   "t": 1668.7,
+   "d": 1.71,
+   "text": "about your level generator and I was"
+  },
+  {
+   "t": 1670.41,
+   "d": 0.9,
+   "text": "trying to figure out how to calculate"
+  },
+  {
+   "t": 1671.31,
+   "d": 1.86,
+   "text": "choke points I think there is a better"
+  },
+  {
+   "t": 1673.17,
+   "d": 1.8,
+   "text": "algorithm that will find all of them in"
+  },
+  {
+   "t": 1674.97,
+   "d": 2.34,
+   "text": "a single pass it's thinked arjen's"
+  },
+  {
+   "t": 1677.31,
+   "d": 2.43,
+   "text": "minimal cut algorithms if you want to do"
+  },
+  {
+   "t": 1679.74,
+   "d": 1.74,
+   "text": "your Wikipedia I actually have a"
+  },
+  {
+   "t": 1681.48,
+   "d": 2.52,
+   "text": "question though when you were designing"
+  },
+  {
+   "t": 1684.0,
+   "d": 1.56,
+   "text": "the level generator for broke how many"
+  },
+  {
+   "t": 1685.56,
+   "d": 1.89,
+   "text": "techniques did you try that didn't work"
+  },
+  {
+   "t": 1687.45,
+   "d": 3.03,
+   "text": "out that you ended up discarding well"
+  },
+  {
+   "t": 1690.48,
+   "d": 1.5,
+   "text": "they're not like kind of discrete"
+  },
+  {
+   "t": 1691.98,
+   "d": 1.65,
+   "text": "techniques like I would try it tweak and"
+  },
+  {
+   "t": 1693.63,
+   "d": 2.52,
+   "text": "it would either work or not so I don't"
+  },
+  {
+   "t": 1696.15,
+   "d": 1.47,
+   "text": "really know that I have a crisp answer"
+  },
+  {
+   "t": 1697.62,
+   "d": 2.16,
+   "text": "but I would say most of the time that"
+  },
+  {
+   "t": 1699.78,
+   "d": 1.56,
+   "text": "I've spent developing the game was spent"
+  },
+  {
+   "t": 1701.34,
+   "d": 2.28,
+   "text": "tweaking level generation you know"
+  },
+  {
+   "t": 1703.62,
+   "d": 2.07,
+   "text": "tweaking the various parameters of each"
+  },
+  {
+   "t": 1705.69,
+   "d": 4.2,
+   "text": "type of terrain I I think I think that's"
+  },
+  {
+   "t": 1709.89,
+   "d": 1.38,
+   "text": "the most exciting part of developing"
+  },
+  {
+   "t": 1711.27,
+   "d": 1.5,
+   "text": "roguelikes I think it's why it's why I"
+  },
+  {
+   "t": 1712.77,
+   "d": 0.78,
+   "text": "made broke"
+  },
+  {
+   "t": 1713.55,
+   "d": 3.84,
+   "text": "I wanted a game that felt like that so I"
+  },
+  {
+   "t": 1717.39,
+   "d": 2.31,
+   "text": "the bulk of the time went into that in"
+  },
+  {
+   "t": 1719.7,
+   "d": 3.24,
+   "text": "terms of choke point analysis good tip I"
+  },
+  {
+   "t": 1722.94,
+   "d": 1.8,
+   "text": "will look that up you might have to"
+  },
+  {
+   "t": 1724.74,
+   "d": 2.52,
+   "text": "remind me of the name afterward but the"
+  },
+  {
+   "t": 1727.26,
+   "d": 1.83,
+   "text": "the method I use is you basically start"
+  },
+  {
+   "t": 1729.09,
+   "d": 2.22,
+   "text": "with a level filled and then you kind of"
+  },
+  {
+   "t": 1731.31,
+   "d": 1.95,
+   "text": "retract it from the distant most point"
+  },
+  {
+   "t": 1733.26,
+   "d": 1.83,
+   "text": "from the level entrance one cell at a"
+  },
+  {
+   "t": 1735.09,
+   "d": 4.5,
+   "text": "time and as it retracts each retracts"
+  },
+  {
+   "t": 1739.59,
+   "d": 1.74,
+   "text": "into a cell and that cell remembers how"
+  },
+  {
+   "t": 1741.33,
+   "d": 1.95,
+   "text": "many cells in total have retracted into"
+  },
+  {
+   "t": 1743.28,
+   "d": 2.73,
+   "text": "it and if you retract past the cell that"
+  },
+  {
+   "t": 1746.01,
+   "d": 2.91,
+   "text": "has only a single it's it's only a"
+  },
+  {
+   "t": 1748.92,
+   "d": 1.41,
+   "text": "single point then it knows that that's"
+  },
+  {
+   "t": 1750.33,
+   "d": 1.53,
+   "text": "the number of cells that it's a choke"
+  },
+  {
+   "t": 1751.86,
+   "d": 2.07,
+   "text": "point that covers so it kind of does do"
+  },
+  {
+   "t": 1753.93,
+   "d": 2.28,
+   "text": "the whole level in one pass but again it"
+  },
+  {
+   "t": 1756.21,
+   "d": 8.4,
+   "text": "aa great perfect convergent design great"
+  },
+  {
+   "t": 1764.61,
+   "d": 2.76,
+   "text": "yes anyone else"
+  },
+  {
+   "t": 1767.37,
+   "d": 4.53,
+   "text": "yes um in all the overlapping schemes"
+  },
+  {
+   "t": 1771.9,
+   "d": 1.62,
+   "text": "that you have I thought the most"
+  },
+  {
+   "t": 1773.52,
+   "d": 1.53,
+   "text": "fascinating one was the idea of the"
+  },
+  {
+   "t": 1775.05,
+   "d": 1.98,
+   "text": "machines because I feel like that is"
+  },
+  {
+   "t": 1777.03,
+   "d": 3.12,
+   "text": "like such a staged experience of like"
+  },
+  {
+   "t": 1780.15,
+   "d": 1.08,
+   "text": "something really cool that's happening"
+  },
+  {
+   "t": 1781.23,
+   "d": 3.24,
+   "text": "but were there any examples of when you"
+  },
+  {
+   "t": 1784.47,
+   "d": 2.82,
+   "text": "were adding machines that because of the"
+  },
+  {
+   "t": 1787.29,
+   "d": 2.13,
+   "text": "way that you generate the world you made"
+  },
+  {
+   "t": 1789.42,
+   "d": 2.43,
+   "text": "it effectively insurmountable like the"
+  },
+  {
+   "t": 1791.85,
+   "d": 2.01,
+   "text": "Indiana Jones where you can't get"
+  },
+  {
+   "t": 1793.86,
+   "d": 2.76,
+   "text": "through the door in time or yes yes none"
+  },
+  {
+   "t": 1796.62,
+   "d": 1.71,
+   "text": "of this will ever work perfectly in a"
+  },
+  {
+   "t": 1798.33,
+   "d": 1.8,
+   "text": "hundred percent of the cases and if it"
+  },
+  {
+   "t": 1800.13,
+   "d": 1.29,
+   "text": "does you're not being ambitious enough"
+  },
+  {
+   "t": 1801.42,
+   "d": 2.58,
+   "text": "that's kind of my philosophy as a game"
+  },
+  {
+   "t": 1804.0,
+   "d": 2.31,
+   "text": "designer I think you can afford an"
+  },
+  {
+   "t": 1806.31,
+   "d": 1.92,
+   "text": "occasional edge case failure what you"
+  },
+  {
+   "t": 1808.23,
+   "d": 1.44,
+   "text": "can't afford is an edge case failure"
+  },
+  {
+   "t": 1809.67,
+   "d": 1.68,
+   "text": "that like completely blocks the player"
+  },
+  {
+   "t": 1811.35,
+   "d": 3.27,
+   "text": "from progress so that's like the one but"
+  },
+  {
+   "t": 1814.62,
+   "d": 1.32,
+   "text": "that's that's an arrow is sort of"
+  },
+  {
+   "t": 1815.94,
+   "d": 1.89,
+   "text": "subclass of edge cases like there there"
+  },
+  {
+   "t": 1817.83,
+   "d": 1.92,
+   "text": "may be machines where you can't get to a"
+  },
+  {
+   "t": 1819.75,
+   "d": 1.95,
+   "text": "key and maybe that renders a reward room"
+  },
+  {
+   "t": 1821.7,
+   "d": 3.6,
+   "text": "inaccessible but that's okay I every now"
+  },
+  {
+   "t": 1825.3,
+   "d": 1.05,
+   "text": "and then as long as it doesn't happen"
+  },
+  {
+   "t": 1826.35,
+   "d": 1.44,
+   "text": "too much and maybe they'll have some"
+  },
+  {
+   "t": 1827.79,
+   "d": 1.74,
+   "text": "other item that lets them surmount that"
+  },
+  {
+   "t": 1829.53,
+   "d": 2.94,
+   "text": "anyway the one that you can't have is"
+  },
+  {
+   "t": 1832.47,
+   "d": 1.23,
+   "text": "where like you just can't reach the"
+  },
+  {
+   "t": 1833.7,
+   "d": 3.87,
+   "text": "downstairs from the upstairs and yeah"
+  },
+  {
+   "t": 1837.57,
+   "d": 1.44,
+   "text": "you always do a bunch of checks to make"
+  },
+  {
+   "t": 1839.01,
+   "d": 1.92,
+   "text": "sure that doesn't inadvertently happen"
+  },
+  {
+   "t": 1840.93,
+   "d": 2.1,
+   "text": "if there's destructible terrain you need"
+  },
+  {
+   "t": 1843.03,
+   "d": 1.56,
+   "text": "to make sure that the player doesn't"
+  },
+  {
+   "t": 1844.59,
+   "d": 1.14,
+   "text": "rely on that destructor"
+  },
+  {
+   "t": 1845.73,
+   "d": 3.15,
+   "text": "terrain to keep the level passable so I"
+  },
+  {
+   "t": 1848.88,
+   "d": 1.41,
+   "text": "think that's like that's like the one"
+  },
+  {
+   "t": 1850.29,
+   "d": 1.41,
+   "text": "category that you have to be careful"
+  },
+  {
+   "t": 1851.7,
+   "d": 3.03,
+   "text": "about and in fact the seed the level"
+  },
+  {
+   "t": 1854.73,
+   "d": 1.74,
+   "text": "generation seed method this is where you"
+  },
+  {
+   "t": 1856.47,
+   "d": 1.71,
+   "text": "can you can enter in your random seed"
+  },
+  {
+   "t": 1858.18,
+   "d": 1.62,
+   "text": "and it creates the same level every time"
+  },
+  {
+   "t": 1859.8,
+   "d": 2.25,
+   "text": "it's used for seed contests online where"
+  },
+  {
+   "t": 1862.05,
+   "d": 1.86,
+   "text": "everyone can play the same level I"
+  },
+  {
+   "t": 1863.91,
+   "d": 1.65,
+   "text": "originally came up with that because I"
+  },
+  {
+   "t": 1865.56,
+   "d": 1.47,
+   "text": "needed to debug all of these like"
+  },
+  {
+   "t": 1867.03,
+   "d": 2.55,
+   "text": "obnoxious edge cases that come off like"
+  },
+  {
+   "t": 1869.58,
+   "d": 2.1,
+   "text": "one in ten thousand times like a player"
+  },
+  {
+   "t": 1871.68,
+   "d": 1.35,
+   "text": "would encounter it I would say send me"
+  },
+  {
+   "t": 1873.03,
+   "d": 1.53,
+   "text": "the seed and then I can sort of step"
+  },
+  {
+   "t": 1874.56,
+   "d": 1.44,
+   "text": "through the level generation to figure"
+  },
+  {
+   "t": 1876.0,
+   "d": 7.31,
+   "text": "out what went wrong all right one more"
+  },
+  {
+   "t": 1883.31,
+   "d": 2.92,
+   "text": "let's see you oh sorry"
+  },
+  {
+   "t": 1886.23,
+   "d": 2.34,
+   "text": "question regarding your the actual"
+  },
+  {
+   "t": 1888.57,
+   "d": 4.29,
+   "text": "platformer how do you handle so the"
+  },
+  {
+   "t": 1892.86,
+   "d": 2.16,
+   "text": "platformer you said has limited terrain"
+  },
+  {
+   "t": 1895.02,
+   "d": 1.62,
+   "text": "destructibility but it seems like"
+  },
+  {
+   "t": 1896.64,
+   "d": 2.13,
+   "text": "terrain destructibility in a platformer"
+  },
+  {
+   "t": 1898.77,
+   "d": 4.2,
+   "text": "would break the levels traverse ability"
+  },
+  {
+   "t": 1902.97,
+   "d": 1.98,
+   "text": "a lot more easily how do you handle that"
+  },
+  {
+   "t": 1904.95,
+   "d": 1.5,
+   "text": "like do you just make any necessary"
+  },
+  {
+   "t": 1906.45,
+   "d": 4.26,
+   "text": "trained indestructible or is there some"
+  },
+  {
+   "t": 1910.71,
+   "d": 1.41,
+   "text": "way to hit make sure that when a player"
+  },
+  {
+   "t": 1912.12,
+   "d": 1.8,
+   "text": "destroys something there's still a way"
+  },
+  {
+   "t": 1913.92,
+   "d": 2.4,
+   "text": "to move between the points yeah it's a"
+  },
+  {
+   "t": 1916.32,
+   "d": 1.68,
+   "text": "it's a really good question"
+  },
+  {
+   "t": 1918.0,
+   "d": 2.22,
+   "text": "so tureen destructibility generally only"
+  },
+  {
+   "t": 1920.22,
+   "d": 2.13,
+   "text": "happens once you get explosives and that"
+  },
+  {
+   "t": 1922.35,
+   "d": 1.68,
+   "text": "usually happens in the deeper parts of"
+  },
+  {
+   "t": 1924.03,
+   "d": 1.38,
+   "text": "the game and there's going to be"
+  },
+  {
+   "t": 1925.41,
+   "d": 1.89,
+   "text": "mobility items throughout that will kind"
+  },
+  {
+   "t": 1927.3,
+   "d": 3.15,
+   "text": "of like make the constraint less strict"
+  },
+  {
+   "t": 1930.45,
+   "d": 2.22,
+   "text": "I guess so if you get a double jump item"
+  },
+  {
+   "t": 1932.67,
+   "d": 1.74,
+   "text": "somewhere then suddenly you have a lot"
+  },
+  {
+   "t": 1934.41,
+   "d": 1.44,
+   "text": "more leeway to accidentally blow up a"
+  },
+  {
+   "t": 1935.85,
+   "d": 2.28,
+   "text": "piece of the level teleporters"
+  },
+  {
+   "t": 1938.13,
+   "d": 1.23,
+   "text": "throughout that means as long as you"
+  },
+  {
+   "t": 1939.36,
+   "d": 2.37,
+   "text": "found a teleporter that's kind of below"
+  },
+  {
+   "t": 1941.73,
+   "d": 1.97,
+   "text": "that point you can use it to get back up"
+  },
+  {
+   "t": 1943.7,
+   "d": 2.47,
+   "text": "and if you screw up the level on your"
+  },
+  {
+   "t": 1946.17,
+   "d": 1.59,
+   "text": "own like if you if you intentionally"
+  },
+  {
+   "t": 1947.76,
+   "d": 2.07,
+   "text": "break it so you can't get back out then"
+  },
+  {
+   "t": 1949.83,
+   "d": 2.0,
+   "text": "like so be it it's kind of my attitude"
+  },
+  {
+   "t": 1951.83,
+   "d": 2.71,
+   "text": "you can use they're kind of extra lives"
+  },
+  {
+   "t": 1954.54,
+   "d": 1.47,
+   "text": "that you can find and you can trigger an"
+  },
+  {
+   "t": 1956.01,
+   "d": 3.0,
+   "text": "extra life to teleport back up as a"
+  },
+  {
+   "t": 1959.01,
+   "d": 3.72,
+   "text": "safety valve yep cool thank you so much"
+  },
+  {
+   "t": 1962.73,
+   "d": 2.48,
+   "text": "thank you know"
+  }
+ ]
+}

@@ -1,0 +1,4815 @@
+{
+ "id": "TvlZinAvpwg",
+ "url": "https://www.youtube.com/watch?v=TvlZinAvpwg",
+ "title": "Max Kreminski: Gardening as a Mode of Play",
+ "speaker": "Max Kreminski",
+ "talk_title": "Gardening as a Mode of Play",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-11",
+ "duration_s": 1728,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the Roguelike Celebration 2018 - http://roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Epitaph"
+  },
+  {
+   "start": 145,
+   "title": "Defining Gaming Genres"
+  },
+  {
+   "start": 408,
+   "title": "Gardening as a Mode of Play"
+  },
+  {
+   "start": 482,
+   "title": "The Problem with Solipsism"
+  },
+  {
+   "start": 611,
+   "title": "Colonial Impulses in Gaming"
+  },
+  {
+   "start": 841,
+   "title": "Problems with PCG in Mining"
+  },
+  {
+   "start": 948,
+   "title": "Gardening vs Mining Games"
+  },
+  {
+   "start": 1080,
+   "title": "Temporal Procedural Generation"
+  },
+  {
+   "start": 1221,
+   "title": "Colonialism in Gardening Games"
+  },
+  {
+   "start": 1342,
+   "title": "Conclusion and Future Work"
+  },
+  {
+   "start": 1450,
+   "title": "Q&A Session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6769,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 2.37,
+   "text": "all right so yeah hi my name is max"
+  },
+  {
+   "t": 2.37,
+   "d": 0.63,
+   "text": "Kaminsky"
+  },
+  {
+   "t": 3.0,
+   "d": 2.76,
+   "text": "I am a computational media PhD student"
+  },
+  {
+   "t": 5.76,
+   "d": 1.89,
+   "text": "at UC Santa Cruz and also an indie game"
+  },
+  {
+   "t": 7.65,
+   "d": 2.55,
+   "text": "developer and today I'm going to be"
+  },
+  {
+   "t": 10.2,
+   "d": 1.14,
+   "text": "talking about gardening as a mode of"
+  },
+  {
+   "t": 11.34,
+   "d": 2.28,
+   "text": "play what exactly that is we're going to"
+  },
+  {
+   "t": 13.62,
+   "d": 0.96,
+   "text": "take a little bit of time to get into"
+  },
+  {
+   "t": 14.58,
+   "d": 1.83,
+   "text": "first I'm going to talk about a thing"
+  },
+  {
+   "t": 16.41,
+   "d": 1.74,
+   "text": "that I made way back in 2016 and that"
+  },
+  {
+   "t": 18.15,
+   "d": 3.54,
+   "text": "thing is epitaph epitaph is I would"
+  },
+  {
+   "t": 21.69,
+   "d": 2.43,
+   "text": "probably call it a procedural narrative"
+  },
+  {
+   "t": 24.12,
+   "d": 2.34,
+   "text": "idol game another way that I've"
+  },
+  {
+   "t": 26.46,
+   "d": 1.71,
+   "text": "described it is you so you know like"
+  },
+  {
+   "t": 28.17,
+   "d": 1.62,
+   "text": "save or like save are the tech tree"
+  },
+  {
+   "t": 29.79,
+   "d": 1.86,
+   "text": "basically epitaph is sort of an attempt"
+  },
+  {
+   "t": 31.65,
+   "d": 1.98,
+   "text": "to like see if you take the tech tree"
+  },
+  {
+   "t": 33.63,
+   "d": 2.01,
+   "text": "and that only the tech tree and remove"
+  },
+  {
+   "t": 35.64,
+   "d": 1.77,
+   "text": "everything else from civ can you still"
+  },
+  {
+   "t": 37.41,
+   "d": 1.77,
+   "text": "make a creative like sort of engaging"
+  },
+  {
+   "t": 39.18,
+   "d": 1.98,
+   "text": "playable game and the answer seems to be"
+  },
+  {
+   "t": 41.16,
+   "d": 0.42,
+   "text": "yes"
+  },
+  {
+   "t": 41.58,
+   "d": 2.91,
+   "text": "overall the basic premise of epitaph is"
+  },
+  {
+   "t": 44.49,
+   "d": 2.88,
+   "text": "that like it's it's it was created for"
+  },
+  {
+   "t": 47.37,
+   "d": 1.56,
+   "text": "the Fermi paradox jam and that was a jam"
+  },
+  {
+   "t": 48.93,
+   "d": 0.96,
+   "text": "that was sort of trying to create a"
+  },
+  {
+   "t": 49.89,
+   "d": 1.26,
+   "text": "bunch of games that respond to the Fermi"
+  },
+  {
+   "t": 51.15,
+   "d": 0.9,
+   "text": "paradox which if you're not familiar"
+  },
+  {
+   "t": 52.05,
+   "d": 3.21,
+   "text": "with it is like oh the universe is a big"
+  },
+  {
+   "t": 55.26,
+   "d": 0.66,
+   "text": "place"
+  },
+  {
+   "t": 55.92,
+   "d": 2.01,
+   "text": "there's probably aliens out there so why"
+  },
+  {
+   "t": 57.93,
+   "d": 1.2,
+   "text": "haven't we heard from them already and"
+  },
+  {
+   "t": 59.13,
+   "d": 1.44,
+   "text": "epitaphs the answer to that particular"
+  },
+  {
+   "t": 60.57,
+   "d": 2.76,
+   "text": "question is there's probably a lot of"
+  },
+  {
+   "t": 63.33,
+   "d": 1.86,
+   "text": "aliens out there sure but they don't"
+  },
+  {
+   "t": 65.19,
+   "d": 1.38,
+   "text": "often get to the level of civilization"
+  },
+  {
+   "t": 66.57,
+   "d": 1.41,
+   "text": "they need to get to in order to like"
+  },
+  {
+   "t": 67.98,
+   "d": 2.37,
+   "text": "ever hear from us before they go extinct"
+  },
+  {
+   "t": 70.35,
+   "d": 3.96,
+   "text": "in various horrible ways so more to the"
+  },
+  {
+   "t": 74.31,
+   "d": 0.96,
+   "text": "point of this talk but I've also"
+  },
+  {
+   "t": 75.27,
+   "d": 1.2,
+   "text": "represents my first attempt at creating"
+  },
+  {
+   "t": 76.47,
+   "d": 2.04,
+   "text": "a sort of gardening game and what"
+  },
+  {
+   "t": 78.51,
+   "d": 1.26,
+   "text": "exactly a gardening gave me is I'm going"
+  },
+  {
+   "t": 79.77,
+   "d": 1.2,
+   "text": "to talk a little bit more about going"
+  },
+  {
+   "t": 80.97,
+   "d": 2.52,
+   "text": "forward but basically gardening games"
+  },
+  {
+   "t": 83.49,
+   "d": 1.08,
+   "text": "are a thing I want to see a lot more of"
+  },
+  {
+   "t": 84.57,
+   "d": 2.64,
+   "text": "in the world and epitaphs sort of places"
+  },
+  {
+   "t": 87.21,
+   "d": 2.85,
+   "text": "the player in this role of guiding or"
+  },
+  {
+   "t": 90.06,
+   "d": 2.16,
+   "text": "helping to develop or nurturing a bunch"
+  },
+  {
+   "t": 92.22,
+   "d": 1.23,
+   "text": "of procedurally generated alien"
+  },
+  {
+   "t": 93.45,
+   "d": 1.71,
+   "text": "civilizations that are sort of young"
+  },
+  {
+   "t": 95.16,
+   "d": 1.29,
+   "text": "civilizations they're starting to emerge"
+  },
+  {
+   "t": 96.45,
+   "d": 1.05,
+   "text": "they don't have a whole lot of like"
+  },
+  {
+   "t": 97.5,
+   "d": 2.04,
+   "text": "technology things figured out yet and"
+  },
+  {
+   "t": 99.54,
+   "d": 2.25,
+   "text": "what you can do as the player is either"
+  },
+  {
+   "t": 101.79,
+   "d": 1.44,
+   "text": "sit back and watch them as they sort of"
+  },
+  {
+   "t": 103.23,
+   "d": 1.23,
+   "text": "struggle to make their way in the world"
+  },
+  {
+   "t": 104.46,
+   "d": 1.14,
+   "text": "and eventually die off in various"
+  },
+  {
+   "t": 105.6,
+   "d": 2.64,
+   "text": "horrible ways or occasionally teach them"
+  },
+  {
+   "t": 108.24,
+   "d": 1.5,
+   "text": "new technologies introduced into things"
+  },
+  {
+   "t": 109.74,
+   "d": 2.67,
+   "text": "like oh how to make tools or how to hunt"
+  },
+  {
+   "t": 112.41,
+   "d": 3.3,
+   "text": "for food or stuff like that ideally with"
+  },
+  {
+   "t": 115.71,
+   "d": 1.59,
+   "text": "the goal of helping them survive to the"
+  },
+  {
+   "t": 117.3,
+   "d": 1.23,
+   "text": "point where they don't go extinct and"
+  },
+  {
+   "t": 118.53,
+   "d": 2.34,
+   "text": "they end up like living and making it to"
+  },
+  {
+   "t": 120.87,
+   "d": 2.22,
+   "text": "the Stars and it's possible to win but"
+  },
+  {
+   "t": 123.09,
+   "d": 2.09,
+   "text": "most people don't and stuff like that so"
+  },
+  {
+   "t": 125.18,
+   "d": 1.96,
+   "text": "you can only intervene every so often"
+  },
+  {
+   "t": 127.14,
+   "d": 1.37,
+   "text": "because I like the prime directive or"
+  },
+  {
+   "t": 128.51,
+   "d": 2.85,
+   "text": "and basically the idea is that you can"
+  },
+  {
+   "t": 131.36,
+   "d": 1.47,
+   "text": "eventually get to a point where the"
+  },
+  {
+   "t": 132.83,
+   "d": 1.2,
+   "text": "civilization makes it as the star is"
+  },
+  {
+   "t": 134.03,
+   "d": 1.65,
+   "text": "partly based on your guidance but also"
+  },
+  {
+   "t": 135.68,
+   "d": 1.92,
+   "text": "partly on their own and you're sort of"
+  },
+  {
+   "t": 137.6,
+   "d": 1.5,
+   "text": "placing this nurturing role over a"
+  },
+  {
+   "t": 139.1,
+   "d": 1.53,
+   "text": "generative system that does stuff on its"
+  },
+  {
+   "t": 140.63,
+   "d": 1.29,
+   "text": "own but you can also sort of influence"
+  },
+  {
+   "t": 141.92,
+   "d": 1.62,
+   "text": "its guidance or influence its direction"
+  },
+  {
+   "t": 143.54,
+   "d": 3.21,
+   "text": "or development so this talk is about"
+  },
+  {
+   "t": 146.75,
+   "d": 1.53,
+   "text": "gardening as a mode of play and it some"
+  },
+  {
+   "t": 148.28,
+   "d": 1.35,
+   "text": "of you at this point might be wondering"
+  },
+  {
+   "t": 149.63,
+   "d": 2.67,
+   "text": "what exactly does this have to do with"
+  },
+  {
+   "t": 152.3,
+   "d": 1.58,
+   "text": "roguelikes"
+  },
+  {
+   "t": 153.88,
+   "d": 2.35,
+   "text": "what's all this about gardening this is"
+  },
+  {
+   "t": 156.23,
+   "d": 1.68,
+   "text": "the roguelike celebration I want to hear"
+  },
+  {
+   "t": 157.91,
+   "d": 2.04,
+   "text": "about a certain kind of game that we all"
+  },
+  {
+   "t": 159.95,
+   "d": 1.95,
+   "text": "play that has like roguelike II stuff in"
+  },
+  {
+   "t": 161.9,
+   "d": 4.35,
+   "text": "it and the answer that I have to this"
+  },
+  {
+   "t": 166.25,
+   "d": 2.25,
+   "text": "question is something that took me a"
+  },
+  {
+   "t": 168.5,
+   "d": 2.07,
+   "text": "little while to figure out I was sort of"
+  },
+  {
+   "t": 170.57,
+   "d": 1.68,
+   "text": "sitting there in this very building last"
+  },
+  {
+   "t": 172.25,
+   "d": 1.56,
+   "text": "night sort of revising my my slides"
+  },
+  {
+   "t": 173.81,
+   "d": 1.08,
+   "text": "trying to figure out like what I wanted"
+  },
+  {
+   "t": 174.89,
+   "d": 1.65,
+   "text": "to say and eventually got to a point"
+  },
+  {
+   "t": 176.54,
+   "d": 2.07,
+   "text": "where it's like oh so there's a few"
+  },
+  {
+   "t": 178.61,
+   "d": 1.02,
+   "text": "different things that I find super"
+  },
+  {
+   "t": 179.63,
+   "d": 1.11,
+   "text": "interesting about roguelikes"
+  },
+  {
+   "t": 180.74,
+   "d": 2.07,
+   "text": "they're one of the only kinds of games"
+  },
+  {
+   "t": 182.81,
+   "d": 2.01,
+   "text": "that sort of make central like core use"
+  },
+  {
+   "t": 184.82,
+   "d": 1.62,
+   "text": "of procedural content generation or"
+  },
+  {
+   "t": 186.44,
+   "d": 2.46,
+   "text": "generative methods as like necessary to"
+  },
+  {
+   "t": 188.9,
+   "d": 1.62,
+   "text": "the design of the game without without"
+  },
+  {
+   "t": 190.52,
+   "d": 1.74,
+   "text": "PCG you can't really have roguelike so"
+  },
+  {
+   "t": 192.26,
+   "d": 1.35,
+   "text": "they don't really work"
+  },
+  {
+   "t": 193.61,
+   "d": 1.62,
+   "text": "another thing about roguelikes it's sort"
+  },
+  {
+   "t": 195.23,
+   "d": 1.38,
+   "text": "of unique is that they don't band they"
+  },
+  {
+   "t": 196.61,
+   "d": 1.17,
+   "text": "don't bend over backwards to serve the"
+  },
+  {
+   "t": 197.78,
+   "d": 1.8,
+   "text": "player so a lot of games very much are"
+  },
+  {
+   "t": 199.58,
+   "d": 1.2,
+   "text": "sort of like interested in putting the"
+  },
+  {
+   "t": 200.78,
+   "d": 1.17,
+   "text": "player at the center of the world at"
+  },
+  {
+   "t": 201.95,
+   "d": 1.05,
+   "text": "shaping the world around the player"
+  },
+  {
+   "t": 203.0,
+   "d": 1.38,
+   "text": "making sure everything is sort of"
+  },
+  {
+   "t": 204.38,
+   "d": 2.34,
+   "text": "responding to and created for the player"
+  },
+  {
+   "t": 206.72,
+   "d": 2.31,
+   "text": "in a way that sort of excludes the world"
+  },
+  {
+   "t": 209.03,
+   "d": 2.37,
+   "text": "as its own thing and that sort of"
+  },
+  {
+   "t": 211.4,
+   "d": 1.11,
+   "text": "dovetails into the third point here"
+  },
+  {
+   "t": 212.51,
+   "d": 2.16,
+   "text": "which is that rogue links unlike a lot"
+  },
+  {
+   "t": 214.67,
+   "d": 1.05,
+   "text": "of other games are really actually"
+  },
+  {
+   "t": 215.72,
+   "d": 2.16,
+   "text": "trying their level best to be worlds and"
+  },
+  {
+   "t": 217.88,
+   "d": 2.85,
+   "text": "what I mean by that is sort of"
+  },
+  {
+   "t": 220.73,
+   "d": 2.01,
+   "text": "complicated so last weekend I was in"
+  },
+  {
+   "t": 222.74,
+   "d": 1.14,
+   "text": "Canada and someone asked me a question"
+  },
+  {
+   "t": 223.88,
+   "d": 1.74,
+   "text": "and I came up with a sort of totalizing"
+  },
+  {
+   "t": 225.62,
+   "d": 1.38,
+   "text": "framework that classifies all the video"
+  },
+  {
+   "t": 227.0,
+   "d": 1.77,
+   "text": "games into three big categories I'm so"
+  },
+  {
+   "t": 228.77,
+   "d": 1.17,
+   "text": "far I'm pretty happy with this framework"
+  },
+  {
+   "t": 229.94,
+   "d": 2.46,
+   "text": "we'll see how I feel about it like a"
+  },
+  {
+   "t": 232.4,
+   "d": 1.23,
+   "text": "years or you can Jack me down to the"
+  },
+  {
+   "t": 233.63,
+   "d": 1.11,
+   "text": "next drug like and ask me how it turned"
+  },
+  {
+   "t": 234.74,
+   "d": 2.22,
+   "text": "out for me but basically the idea is"
+  },
+  {
+   "t": 236.96,
+   "d": 1.2,
+   "text": "that there's these three basic kinds of"
+  },
+  {
+   "t": 238.16,
+   "d": 1.44,
+   "text": "games one of them is games that are"
+  },
+  {
+   "t": 239.6,
+   "d": 2.34,
+   "text": "trying to be contests er rituals and"
+  },
+  {
+   "t": 241.94,
+   "d": 1.56,
+   "text": "these are the things where you're sort"
+  },
+  {
+   "t": 243.5,
+   "d": 1.59,
+   "text": "of like doing the same actions over and"
+  },
+  {
+   "t": 245.09,
+   "d": 1.56,
+   "text": "over again sort of reenacting these"
+  },
+  {
+   "t": 246.65,
+   "d": 1.98,
+   "text": "these basic sets of things that happen"
+  },
+  {
+   "t": 248.63,
+   "d": 1.05,
+   "text": "over and over again there's not really a"
+  },
+  {
+   "t": 249.68,
+   "d": 1.11,
+   "text": "whole lot of narrative to it there's not"
+  },
+  {
+   "t": 250.79,
+   "d": 1.14,
+   "text": "really a whole lot of like parallel"
+  },
+  {
+   "t": 251.93,
+   "d": 1.8,
+   "text": "world enos to it it's just the thing"
+  },
+  {
+   "t": 253.73,
+   "d": 2.94,
+   "text": "that you do the next kind of game is"
+  },
+  {
+   "t": 256.67,
+   "d": 1.41,
+   "text": "stories and these are sort of like"
+  },
+  {
+   "t": 258.08,
+   "d": 1.53,
+   "text": "mostly linear typically these include"
+  },
+  {
+   "t": 259.61,
+   "d": 1.32,
+   "text": "things like telltale games"
+  },
+  {
+   "t": 260.93,
+   "d": 1.71,
+   "text": "like really fancy storybooks they might"
+  },
+  {
+   "t": 262.64,
+   "d": 1.47,
+   "text": "include elements of like audio they"
+  },
+  {
+   "t": 264.11,
+   "d": 1.38,
+   "text": "might include elements of video or"
+  },
+  {
+   "t": 265.49,
+   "d": 1.59,
+   "text": "pictures or whatever they might even"
+  },
+  {
+   "t": 267.08,
+   "d": 2.73,
+   "text": "include things like branching but the"
+  },
+  {
+   "t": 269.81,
+   "d": 1.8,
+   "text": "basic idea of them is still that there's"
+  },
+  {
+   "t": 271.61,
+   "d": 2.16,
+   "text": "like an author who's telling a story to"
+  },
+  {
+   "t": 273.77,
+   "d": 1.68,
+   "text": "you the reader and you are reading it"
+  },
+  {
+   "t": 275.45,
+   "d": 1.71,
+   "text": "and then there's the third kind of games"
+  },
+  {
+   "t": 277.16,
+   "d": 1.11,
+   "text": "and these are the kind of games that I"
+  },
+  {
+   "t": 278.27,
+   "d": 1.89,
+   "text": "find myself like mostly interested in in"
+  },
+  {
+   "t": 280.16,
+   "d": 0.99,
+   "text": "practice and these are the games that"
+  },
+  {
+   "t": 281.15,
+   "d": 1.59,
+   "text": "are trying to be worlds they're trying"
+  },
+  {
+   "t": 282.74,
+   "d": 1.41,
+   "text": "to be sort of these parallel things to"
+  },
+  {
+   "t": 284.15,
+   "d": 2.16,
+   "text": "our own sort of real world that exists"
+  },
+  {
+   "t": 286.31,
+   "d": 2.22,
+   "text": "independently of our own real world and"
+  },
+  {
+   "t": 288.53,
+   "d": 1.68,
+   "text": "that the game is actually really more of"
+  },
+  {
+   "t": 290.21,
+   "d": 1.95,
+   "text": "like a window into that world where you"
+  },
+  {
+   "t": 292.16,
+   "d": 1.59,
+   "text": "can sort of like look in a knot and poke"
+  },
+  {
+   "t": 293.75,
+   "d": 2.04,
+   "text": "it and sort of like do things to it but"
+  },
+  {
+   "t": 295.79,
+   "d": 1.53,
+   "text": "it continues to exist even when you the"
+  },
+  {
+   "t": 297.32,
+   "d": 1.53,
+   "text": "player are not necessarily interacting"
+  },
+  {
+   "t": 298.85,
+   "d": 2.55,
+   "text": "with it or even looking at it and like I"
+  },
+  {
+   "t": 301.4,
+   "d": 1.41,
+   "text": "said these are sort of the games that"
+  },
+  {
+   "t": 302.81,
+   "d": 1.59,
+   "text": "I'm most interested in they're the kind"
+  },
+  {
+   "t": 304.4,
+   "d": 1.17,
+   "text": "of games that are most directly relevant"
+  },
+  {
+   "t": 305.57,
+   "d": 2.34,
+   "text": "to my work in that like they benefit a"
+  },
+  {
+   "t": 307.91,
+   "d": 1.83,
+   "text": "lot from lots of deep sort of procedural"
+  },
+  {
+   "t": 309.74,
+   "d": 1.38,
+   "text": "content things from lots of deep sort of"
+  },
+  {
+   "t": 311.12,
+   "d": 3.18,
+   "text": "interesting AI things and basically I'm"
+  },
+  {
+   "t": 314.3,
+   "d": 1.5,
+   "text": "going to sort of focus on these games"
+  },
+  {
+   "t": 315.8,
+   "d": 1.86,
+   "text": "exclusively and not really care about"
+  },
+  {
+   "t": 317.66,
+   "d": 1.5,
+   "text": "the others as much there's also like"
+  },
+  {
+   "t": 319.16,
+   "d": 1.26,
+   "text": "some awkward overlaps between these"
+  },
+  {
+   "t": 320.42,
+   "d": 1.38,
+   "text": "categories because this is a totalizing"
+  },
+  {
+   "t": 321.8,
+   "d": 1.26,
+   "text": "framework that came up with him like a"
+  },
+  {
+   "t": 323.06,
+   "d": 2.19,
+   "text": "couple of minutes on the fly in response"
+  },
+  {
+   "t": 325.25,
+   "d": 1.56,
+   "text": "to a question I heard last weekend in"
+  },
+  {
+   "t": 326.81,
+   "d": 3.39,
+   "text": "Canada so I'm kind of gonna ignore those"
+  },
+  {
+   "t": 330.2,
+   "d": 0.77,
+   "text": "as well"
+  },
+  {
+   "t": 330.97,
+   "d": 3.13,
+   "text": "so what is a genre because one of the"
+  },
+  {
+   "t": 334.1,
+   "d": 1.35,
+   "text": "things that I'm trying to do sort of as"
+  },
+  {
+   "t": 335.45,
+   "d": 1.56,
+   "text": "a researcher is come up with like sort"
+  },
+  {
+   "t": 337.01,
+   "d": 1.8,
+   "text": "of new kinds of play experiences and"
+  },
+  {
+   "t": 338.81,
+   "d": 1.32,
+   "text": "what that means in a lot of cases is"
+  },
+  {
+   "t": 340.13,
+   "d": 1.17,
+   "text": "coming up with new genres of play"
+  },
+  {
+   "t": 341.3,
+   "d": 1.32,
+   "text": "there's this one definition that I"
+  },
+  {
+   "t": 342.62,
+   "d": 1.47,
+   "text": "really like that I found super useful I"
+  },
+  {
+   "t": 344.09,
+   "d": 1.35,
+   "text": "originally got it from Kate I think Kate"
+  },
+  {
+   "t": 345.44,
+   "d": 1.2,
+   "text": "originally got it from Jonathan maybe"
+  },
+  {
+   "t": 346.64,
+   "d": 2.88,
+   "text": "and it's a collection of mutually"
+  },
+  {
+   "t": 349.52,
+   "d": 1.83,
+   "text": "supportive design patterns so basically"
+  },
+  {
+   "t": 351.35,
+   "d": 1.44,
+   "text": "like you have these design patterns that"
+  },
+  {
+   "t": 352.79,
+   "d": 1.17,
+   "text": "are all sort of reinforcing one another"
+  },
+  {
+   "t": 353.96,
+   "d": 1.77,
+   "text": "that sort of shore up the weaknesses in"
+  },
+  {
+   "t": 355.73,
+   "d": 1.68,
+   "text": "one another and as soon as you add like"
+  },
+  {
+   "t": 357.41,
+   "d": 1.29,
+   "text": "a couple of the design patterns that"
+  },
+  {
+   "t": 358.7,
+   "d": 1.53,
+   "text": "constitute a genre to your game or"
+  },
+  {
+   "t": 360.23,
+   "d": 1.14,
+   "text": "whatever it is you're designing it"
+  },
+  {
+   "t": 361.37,
+   "d": 1.68,
+   "text": "starts to make more sense to add"
+  },
+  {
+   "t": 363.05,
+   "d": 1.59,
+   "text": "basically all the rest of them a release"
+  },
+  {
+   "t": 364.64,
+   "d": 1.62,
+   "text": "most of the rest of them because of the"
+  },
+  {
+   "t": 366.26,
+   "d": 1.17,
+   "text": "ways in which they sort of naturally"
+  },
+  {
+   "t": 367.43,
+   "d": 0.78,
+   "text": "reinforce one another"
+  },
+  {
+   "t": 368.21,
+   "d": 1.59,
+   "text": "naturally patch over the holes and one"
+  },
+  {
+   "t": 369.8,
+   "d": 2.16,
+   "text": "another stuff like that and another way"
+  },
+  {
+   "t": 371.96,
+   "d": 1.65,
+   "text": "of phrasing this really is that it's"
+  },
+  {
+   "t": 373.61,
+   "d": 1.86,
+   "text": "onra is sort of an attractor in design"
+  },
+  {
+   "t": 375.47,
+   "d": 2.55,
+   "text": "space and what this means is that"
+  },
+  {
+   "t": 378.02,
+   "d": 2.94,
+   "text": "basically a lot of my work is like sort"
+  },
+  {
+   "t": 380.96,
+   "d": 1.44,
+   "text": "of trying to map out the contours of"
+  },
+  {
+   "t": 382.4,
+   "d": 2.37,
+   "text": "design space find the things that lead"
+  },
+  {
+   "t": 384.77,
+   "d": 1.59,
+   "text": "to like these sort of like black holes"
+  },
+  {
+   "t": 386.36,
+   "d": 1.47,
+   "text": "that you get pulled into naturally when"
+  },
+  {
+   "t": 387.83,
+   "d": 2.28,
+   "text": "you design things because when you find"
+  },
+  {
+   "t": 390.11,
+   "d": 1.77,
+   "text": "one of these attractors you happen to be"
+  },
+  {
+   "t": 391.88,
+   "d": 0.9,
+   "text": "sort of designing something that's in"
+  },
+  {
+   "t": 392.78,
+   "d": 0.33,
+   "text": "the neighbor"
+  },
+  {
+   "t": 393.11,
+   "d": 1.29,
+   "text": "and you find yourself being pulled"
+  },
+  {
+   "t": 394.4,
+   "d": 1.44,
+   "text": "indexer ibly in this design direction"
+  },
+  {
+   "t": 395.84,
+   "d": 2.04,
+   "text": "because it just makes sense based on the"
+  },
+  {
+   "t": 397.88,
+   "d": 0.9,
+   "text": "constraints of the problem you're"
+  },
+  {
+   "t": 398.78,
+   "d": 1.08,
+   "text": "working on and what you want to achieve"
+  },
+  {
+   "t": 399.86,
+   "d": 3.09,
+   "text": "is your design goals so I think what I"
+  },
+  {
+   "t": 402.95,
+   "d": 2.61,
+   "text": "found is sort of a new genre a new a new"
+  },
+  {
+   "t": 405.56,
+   "d": 2.1,
+   "text": "attractor in design space and I'm trying"
+  },
+  {
+   "t": 407.66,
+   "d": 1.77,
+   "text": "to sort of give it a name and that name"
+  },
+  {
+   "t": 409.43,
+   "d": 2.79,
+   "text": "is gardening so when I say gardening is"
+  },
+  {
+   "t": 412.22,
+   "d": 1.08,
+   "text": "a mode of play what I really mean is"
+  },
+  {
+   "t": 413.3,
+   "d": 1.2,
+   "text": "that there's sort of a class of play"
+  },
+  {
+   "t": 414.5,
+   "d": 2.28,
+   "text": "experiences that I have found to be"
+  },
+  {
+   "t": 416.78,
+   "d": 1.71,
+   "text": "similar across a wide variety of"
+  },
+  {
+   "t": 418.49,
+   "d": 1.65,
+   "text": "different kinds of games games that are"
+  },
+  {
+   "t": 420.14,
+   "d": 1.95,
+   "text": "superficially like not exactly the same"
+  },
+  {
+   "t": 422.09,
+   "d": 1.05,
+   "text": "thing they're not considered to be a"
+  },
+  {
+   "t": 423.14,
+   "d": 2.76,
+   "text": "genre in and of themselves but they all"
+  },
+  {
+   "t": 425.9,
+   "d": 1.56,
+   "text": "produce the same sort of experience in"
+  },
+  {
+   "t": 427.46,
+   "d": 1.95,
+   "text": "me of enjoying what I call gardening and"
+  },
+  {
+   "t": 429.41,
+   "d": 1.56,
+   "text": "I'm sort of going to try to like poke at"
+  },
+  {
+   "t": 430.97,
+   "d": 0.96,
+   "text": "that and figure out what exactly"
+  },
+  {
+   "t": 431.93,
+   "d": 4.08,
+   "text": "gardening is in this talk so there is a"
+  },
+  {
+   "t": 436.01,
+   "d": 1.74,
+   "text": "bunch of different games that produce"
+  },
+  {
+   "t": 437.75,
+   "d": 1.53,
+   "text": "these sorts of gardening experiences for"
+  },
+  {
+   "t": 439.28,
+   "d": 1.59,
+   "text": "me there's things like nakatsu may idle"
+  },
+  {
+   "t": 440.87,
+   "d": 2.43,
+   "text": "games in general and these introduced"
+  },
+  {
+   "t": 443.3,
+   "d": 1.56,
+   "text": "design patterns that are about like oh"
+  },
+  {
+   "t": 444.86,
+   "d": 2.19,
+   "text": "we have this sort of world that it's"
+  },
+  {
+   "t": 447.05,
+   "d": 2.01,
+   "text": "generating itself it's sort of working"
+  },
+  {
+   "t": 449.06,
+   "d": 1.17,
+   "text": "in the background the player doesn't"
+  },
+  {
+   "t": 450.23,
+   "d": 1.32,
+   "text": "necessarily need to look at it to for"
+  },
+  {
+   "t": 451.55,
+   "d": 1.41,
+   "text": "things to happen and it keeps on going"
+  },
+  {
+   "t": 452.96,
+   "d": 2.34,
+   "text": "no matter what we've got things like Sim"
+  },
+  {
+   "t": 455.3,
+   "d": 1.86,
+   "text": "City and like city sims in general and"
+  },
+  {
+   "t": 457.16,
+   "d": 1.95,
+   "text": "even other kinds of like more simulation"
+  },
+  {
+   "t": 459.11,
+   "d": 2.46,
+   "text": "II strategy ish games that are very much"
+  },
+  {
+   "t": 461.57,
+   "d": 3.15,
+   "text": "about like worlds that sort of develop"
+  },
+  {
+   "t": 464.72,
+   "d": 2.73,
+   "text": "and grow over time but these place the"
+  },
+  {
+   "t": 467.45,
+   "d": 1.29,
+   "text": "player more of a controlling sort of"
+  },
+  {
+   "t": 468.74,
+   "d": 1.47,
+   "text": "role and then you've got things like"
+  },
+  {
+   "t": 470.21,
+   "d": 2.28,
+   "text": "door fortress another sort of roguelike"
+  },
+  {
+   "t": 472.49,
+   "d": 2.01,
+   "text": "a roguelike each peripheral sorts of"
+  },
+  {
+   "t": 474.5,
+   "d": 1.74,
+   "text": "things that are also sort of like"
+  },
+  {
+   "t": 476.24,
+   "d": 0.87,
+   "text": "incorporating lots and lots of"
+  },
+  {
+   "t": 477.11,
+   "d": 1.35,
+   "text": "generative aspects and trying to sort of"
+  },
+  {
+   "t": 478.46,
+   "d": 1.14,
+   "text": "create these worlds that live and grow"
+  },
+  {
+   "t": 479.6,
+   "d": 4.68,
+   "text": "on their own so there's two main things"
+  },
+  {
+   "t": 484.28,
+   "d": 2.22,
+   "text": "that I sort of think of as being what"
+  },
+  {
+   "t": 486.5,
+   "d": 2.97,
+   "text": "constitutes gardening basically these"
+  },
+  {
+   "t": 489.47,
+   "d": 1.53,
+   "text": "are the things that I call nurturing and"
+  },
+  {
+   "t": 491.0,
+   "d": 1.59,
+   "text": "customization and these are sort of like"
+  },
+  {
+   "t": 492.59,
+   "d": 1.41,
+   "text": "that the pleasures of gardening play or"
+  },
+  {
+   "t": 494.0,
+   "d": 3.3,
+   "text": "whatever nurturing is sort of it's about"
+  },
+  {
+   "t": 497.3,
+   "d": 3.96,
+   "text": "like watching a system grow and sort of"
+  },
+  {
+   "t": 501.26,
+   "d": 1.77,
+   "text": "feeling like you have a hand and guiding"
+  },
+  {
+   "t": 503.03,
+   "d": 1.74,
+   "text": "the direction of its growth even though"
+  },
+  {
+   "t": 504.77,
+   "d": 1.56,
+   "text": "you don't have total control over its"
+  },
+  {
+   "t": 506.33,
+   "d": 2.28,
+   "text": "growth and this is something that you"
+  },
+  {
+   "t": 508.61,
+   "d": 1.86,
+   "text": "can see in a lot of idle games and a lot"
+  },
+  {
+   "t": 510.47,
+   "d": 1.5,
+   "text": "of things like a darkroom for instance"
+  },
+  {
+   "t": 511.97,
+   "d": 1.77,
+   "text": "and things like Animal Crossing and all"
+  },
+  {
+   "t": 513.74,
+   "d": 1.8,
+   "text": "sorts of like similar things like that"
+  },
+  {
+   "t": 515.54,
+   "d": 2.52,
+   "text": "and customization is sort of about like"
+  },
+  {
+   "t": 518.06,
+   "d": 1.77,
+   "text": "fussing over aesthetic decisions like"
+  },
+  {
+   "t": 519.83,
+   "d": 1.08,
+   "text": "sort of trying to leave the world better"
+  },
+  {
+   "t": 520.91,
+   "d": 2.6,
+   "text": "than you found it all that sort of thing"
+  },
+  {
+   "t": 523.51,
+   "d": 2.27,
+   "text": "now often these things"
+  },
+  {
+   "t": 525.78,
+   "d": 1.11,
+   "text": "aren't considered like sort of core"
+  },
+  {
+   "t": 526.89,
+   "d": 1.62,
+   "text": "aspects of game design they're often"
+  },
+  {
+   "t": 528.51,
+   "d": 1.35,
+   "text": "sort of like peripheral in the games"
+  },
+  {
+   "t": 529.86,
+   "d": 1.92,
+   "text": "that feature them so you don't come to a"
+  },
+  {
+   "t": 531.78,
+   "d": 3.69,
+   "text": "game necessarily for gardening dynamics"
+  },
+  {
+   "t": 535.47,
+   "d": 1.23,
+   "text": "for this nurturing or for this"
+  },
+  {
+   "t": 536.7,
+   "d": 1.74,
+   "text": "customization experience there are games"
+  },
+  {
+   "t": 538.44,
+   "d": 1.65,
+   "text": "that I think people play more for those"
+  },
+  {
+   "t": 540.09,
+   "d": 1.35,
+   "text": "reasons but they're not often featured"
+  },
+  {
+   "t": 541.44,
+   "d": 1.89,
+   "text": "as like the reason you would play a game"
+  },
+  {
+   "t": 543.33,
+   "d": 3.06,
+   "text": "and so I think what I'm sort of trying"
+  },
+  {
+   "t": 546.39,
+   "d": 3.93,
+   "text": "to get at here is that there's this"
+  },
+  {
+   "t": 550.32,
+   "d": 1.59,
+   "text": "problem with solipsism in a lot of games"
+  },
+  {
+   "t": 551.91,
+   "d": 1.83,
+   "text": "and this sort of is what prevents me"
+  },
+  {
+   "t": 553.74,
+   "d": 2.34,
+   "text": "from enjoying them there's this great"
+  },
+  {
+   "t": 556.08,
+   "d": 1.17,
+   "text": "Scott McCloud comic that sort of"
+  },
+  {
+   "t": 557.25,
+   "d": 1.08,
+   "text": "illustrates or well it's from"
+  },
+  {
+   "t": 558.33,
+   "d": 1.2,
+   "text": "understanding comics my Scott McCloud"
+  },
+  {
+   "t": 559.53,
+   "d": 1.38,
+   "text": "and sort of illustrates like what I mean"
+  },
+  {
+   "t": 560.91,
+   "d": 1.68,
+   "text": "by this he says when I was very young I"
+  },
+  {
+   "t": 562.59,
+   "d": 1.29,
+   "text": "had a recurrent daydream that the whole"
+  },
+  {
+   "t": 563.88,
+   "d": 1.59,
+   "text": "world was a show put on for my benefit"
+  },
+  {
+   "t": 565.47,
+   "d": 1.86,
+   "text": "that unless I was present to see things"
+  },
+  {
+   "t": 567.33,
+   "d": 2.49,
+   "text": "they just sort of ceased to exist and"
+  },
+  {
+   "t": 569.82,
+   "d": 1.59,
+   "text": "what this immediately reminds me of is"
+  },
+  {
+   "t": 571.41,
+   "d": 1.8,
+   "text": "this jiff that went around social media"
+  },
+  {
+   "t": 573.21,
+   "d": 1.59,
+   "text": "a couple weeks ago I think maybe a"
+  },
+  {
+   "t": 574.8,
+   "d": 2.43,
+   "text": "couple months ago now where it's sort of"
+  },
+  {
+   "t": 577.23,
+   "d": 1.59,
+   "text": "demonstrating this common performance"
+  },
+  {
+   "t": 578.82,
+   "d": 1.44,
+   "text": "optimization technique for 3d games"
+  },
+  {
+   "t": 580.26,
+   "d": 1.86,
+   "text": "called frisk and pulling or basically"
+  },
+  {
+   "t": 582.12,
+   "d": 2.43,
+   "text": "there's like the things that the player"
+  },
+  {
+   "t": 584.55,
+   "d": 1.98,
+   "text": "is look not looking at are not loaded in"
+  },
+  {
+   "t": 586.53,
+   "d": 0.9,
+   "text": "the world they're not being rendered"
+  },
+  {
+   "t": 587.43,
+   "d": 2.43,
+   "text": "they're sort of not being being real"
+  },
+  {
+   "t": 589.86,
+   "d": 2.85,
+   "text": "when you're not looking at them and so"
+  },
+  {
+   "t": 592.71,
+   "d": 1.58,
+   "text": "this is a very surface level sort of"
+  },
+  {
+   "t": 594.29,
+   "d": 2.23,
+   "text": "articulation of what is meant by the"
+  },
+  {
+   "t": 596.52,
+   "d": 2.43,
+   "text": "solipsism problem but I think you can"
+  },
+  {
+   "t": 598.95,
+   "d": 1.29,
+   "text": "see this in other kinds of game systems"
+  },
+  {
+   "t": 600.24,
+   "d": 2.22,
+   "text": "too where the world is often sort of"
+  },
+  {
+   "t": 602.46,
+   "d": 1.62,
+   "text": "bent around the player shaped for the"
+  },
+  {
+   "t": 604.08,
+   "d": 1.8,
+   "text": "player to such an extent that if the"
+  },
+  {
+   "t": 605.88,
+   "d": 1.26,
+   "text": "player is not looking at a thing that"
+  },
+  {
+   "t": 607.14,
+   "d": 1.05,
+   "text": "the player is not interacting with the"
+  },
+  {
+   "t": 608.19,
+   "d": 1.23,
+   "text": "thing right at this moment it might as"
+  },
+  {
+   "t": 609.42,
+   "d": 2.27,
+   "text": "well not exist"
+  },
+  {
+   "t": 611.94,
+   "d": 1.8,
+   "text": "so there's this great talk by Mick Jones"
+  },
+  {
+   "t": 613.74,
+   "d": 3.03,
+   "text": "from GDC 2016 I think that is sort of"
+  },
+  {
+   "t": 616.77,
+   "d": 1.29,
+   "text": "like it's about it's called forget"
+  },
+  {
+   "t": 618.06,
+   "d": 1.5,
+   "text": "protagonist writing NPCs the agency for"
+  },
+  {
+   "t": 619.56,
+   "d": 1.68,
+   "text": "80 days and Beyond it's a fantastic talk"
+  },
+  {
+   "t": 621.24,
+   "d": 1.29,
+   "text": "you should all go look at it and it's"
+  },
+  {
+   "t": 622.53,
+   "d": 1.02,
+   "text": "sort of trying to get it like the"
+  },
+  {
+   "t": 623.55,
+   "d": 1.98,
+   "text": "problem with salt ism and games and why"
+  },
+  {
+   "t": 625.53,
+   "d": 2.19,
+   "text": "this makes games less than they could"
+  },
+  {
+   "t": 627.72,
+   "d": 2.37,
+   "text": "otherwise be and they were sort of"
+  },
+  {
+   "t": 630.09,
+   "d": 1.89,
+   "text": "working on this game called eightydaze"
+  },
+  {
+   "t": 631.98,
+   "d": 1.95,
+   "text": "which is sort of a retelling of the the"
+  },
+  {
+   "t": 633.93,
+   "d": 1.59,
+   "text": "Jules Verne novel around the world in 80"
+  },
+  {
+   "t": 635.52,
+   "d": 2.37,
+   "text": "days the original sort of plot of around"
+  },
+  {
+   "t": 637.89,
+   "d": 1.32,
+   "text": "the world in 80 days follows this sort"
+  },
+  {
+   "t": 639.21,
+   "d": 1.26,
+   "text": "of rich white gentleman adventure"
+  },
+  {
+   "t": 640.47,
+   "d": 1.95,
+   "text": "protagonist as he travels around the"
+  },
+  {
+   "t": 642.42,
+   "d": 1.14,
+   "text": "world on a bet with his which white"
+  },
+  {
+   "t": 643.56,
+   "d": 1.47,
+   "text": "gentleman adventure protagonist friends"
+  },
+  {
+   "t": 645.03,
+   "d": 1.77,
+   "text": "and gets in all sorts of trouble along"
+  },
+  {
+   "t": 646.8,
+   "d": 1.5,
+   "text": "the way and runs into problems and has"
+  },
+  {
+   "t": 648.3,
+   "d": 1.29,
+   "text": "to sort of bail himself out of them and"
+  },
+  {
+   "t": 649.59,
+   "d": 2.4,
+   "text": "such what they wanted to do with this"
+  },
+  {
+   "t": 651.99,
+   "d": 2.04,
+   "text": "game though well hang on I'm getting"
+  },
+  {
+   "t": 654.03,
+   "d": 1.31,
+   "text": "ahead of myself"
+  },
+  {
+   "t": 655.34,
+   "d": 2.11,
+   "text": "this guy sort of sound like the ideal"
+  },
+  {
+   "t": 657.45,
+   "d": 1.48,
+   "text": "game protagonist in a lot of sense"
+  },
+  {
+   "t": 658.93,
+   "d": 2.43,
+   "text": "right like he's definitely a person who"
+  },
+  {
+   "t": 661.36,
+   "d": 2.1,
+   "text": "has the world at his disposal the"
+  },
+  {
+   "t": 663.46,
+   "d": 1.74,
+   "text": "world's sort of bending to his needs and"
+  },
+  {
+   "t": 665.2,
+   "d": 1.83,
+   "text": "like whatever he needs from the world he"
+  },
+  {
+   "t": 667.03,
+   "d": 2.72,
+   "text": "can find a way to get it basically and"
+  },
+  {
+   "t": 669.75,
+   "d": 2.2,
+   "text": "because the world is being shaped around"
+  },
+  {
+   "t": 671.95,
+   "d": 1.77,
+   "text": "him he makes for like sort of the ideal"
+  },
+  {
+   "t": 673.72,
+   "d": 1.62,
+   "text": "protagonist of an open-world game where"
+  },
+  {
+   "t": 675.34,
+   "d": 1.8,
+   "text": "the world is at the player's fingertips"
+  },
+  {
+   "t": 677.14,
+   "d": 1.26,
+   "text": "there's definitely like a strand of game"
+  },
+  {
+   "t": 678.4,
+   "d": 1.49,
+   "text": "design rhetoric that is pushing for"
+  },
+  {
+   "t": 679.89,
+   "d": 2.71,
+   "text": "games in which every the player can go"
+  },
+  {
+   "t": 682.6,
+   "d": 1.35,
+   "text": "anywhere and do anything and this is"
+  },
+  {
+   "t": 683.95,
+   "d": 2.91,
+   "text": "sort of the best thing possible and what"
+  },
+  {
+   "t": 686.86,
+   "d": 1.56,
+   "text": "make giant ogre's in your talk is that"
+  },
+  {
+   "t": 688.42,
+   "d": 1.17,
+   "text": "these sorts of games are more often than"
+  },
+  {
+   "t": 689.59,
+   "d": 1.41,
+   "text": "not basically entitlement simulators"
+  },
+  {
+   "t": 691.0,
+   "d": 1.68,
+   "text": "where like because the player can go"
+  },
+  {
+   "t": 692.68,
+   "d": 0.99,
+   "text": "anywhere because the player can do"
+  },
+  {
+   "t": 693.67,
+   "d": 0.99,
+   "text": "anything because the world doesn't"
+  },
+  {
+   "t": 694.66,
+   "d": 1.32,
+   "text": "really push back against the player or"
+  },
+  {
+   "t": 695.98,
+   "d": 1.11,
+   "text": "like sort of prevent the player from"
+  },
+  {
+   "t": 697.09,
+   "d": 0.99,
+   "text": "doing everything"
+  },
+  {
+   "t": 698.08,
+   "d": 3.33,
+   "text": "then the player sort of learns from this"
+  },
+  {
+   "t": 701.41,
+   "d": 2.55,
+   "text": "that the world exists for their for"
+  },
+  {
+   "t": 703.96,
+   "d": 2.07,
+   "text": "their disposal it exists to serve their"
+  },
+  {
+   "t": 706.03,
+   "d": 2.16,
+   "text": "needs to meet their needs whatever and"
+  },
+  {
+   "t": 708.19,
+   "d": 1.26,
+   "text": "what they wanted to do in 80 days is to"
+  },
+  {
+   "t": 709.45,
+   "d": 1.32,
+   "text": "sort of get away from this dynamic and"
+  },
+  {
+   "t": 710.77,
+   "d": 1.95,
+   "text": "to do that with the protagonist they had"
+  },
+  {
+   "t": 712.72,
+   "d": 1.44,
+   "text": "with the setting they had they had to"
+  },
+  {
+   "t": 714.16,
+   "d": 1.98,
+   "text": "sort of explicitly find ways to make the"
+  },
+  {
+   "t": 716.14,
+   "d": 3.39,
+   "text": "NPCs more powerful in some situations in"
+  },
+  {
+   "t": 719.53,
+   "d": 2.19,
+   "text": "the player to make NPCs who could sort"
+  },
+  {
+   "t": 721.72,
+   "d": 0.96,
+   "text": "of push back against what the player"
+  },
+  {
+   "t": 722.68,
+   "d": 1.74,
+   "text": "demands of them that have boundaries of"
+  },
+  {
+   "t": 724.42,
+   "d": 1.74,
+   "text": "their own that have lives outside of"
+  },
+  {
+   "t": 726.16,
+   "d": 1.38,
+   "text": "what the player sees of them and stuff"
+  },
+  {
+   "t": 727.54,
+   "d": 4.32,
+   "text": "like that so this sort of gets into like"
+  },
+  {
+   "t": 731.86,
+   "d": 1.8,
+   "text": "a common problem with procedural content"
+  },
+  {
+   "t": 733.66,
+   "d": 1.83,
+   "text": "generation I think which is that we have"
+  },
+  {
+   "t": 735.49,
+   "d": 1.83,
+   "text": "this sort of way of looking at PC G that"
+  },
+  {
+   "t": 737.32,
+   "d": 2.55,
+   "text": "is very much in service of the player in"
+  },
+  {
+   "t": 739.87,
+   "d": 0.93,
+   "text": "the sense of like we're going to"
+  },
+  {
+   "t": 740.8,
+   "d": 1.41,
+   "text": "generate a whole bunch of content and"
+  },
+  {
+   "t": 742.21,
+   "d": 1.77,
+   "text": "let the player sort of churn through it"
+  },
+  {
+   "t": 743.98,
+   "d": 1.56,
+   "text": "as fast as they can like they can sort"
+  },
+  {
+   "t": 745.54,
+   "d": 1.05,
+   "text": "of keep on generating more and more"
+  },
+  {
+   "t": 746.59,
+   "d": 1.5,
+   "text": "content and like we throw it away and"
+  },
+  {
+   "t": 748.09,
+   "d": 1.43,
+   "text": "that helps the game's replayability"
+  },
+  {
+   "t": 749.52,
+   "d": 2.05,
+   "text": "because there's always something new for"
+  },
+  {
+   "t": 751.57,
+   "d": 1.2,
+   "text": "them to look at there's always something"
+  },
+  {
+   "t": 752.77,
+   "d": 3.15,
+   "text": "new for them to do and there's sort of"
+  },
+  {
+   "t": 755.92,
+   "d": 1.47,
+   "text": "this interesting tweet that I like"
+  },
+  {
+   "t": 757.39,
+   "d": 2.73,
+   "text": "that's talking about like how 100% in a"
+  },
+  {
+   "t": 760.12,
+   "d": 1.17,
+   "text": "game and speed running a game can both"
+  },
+  {
+   "t": 761.29,
+   "d": 1.56,
+   "text": "be seen is sort of like expressions of"
+  },
+  {
+   "t": 762.85,
+   "d": 3.12,
+   "text": "this colonial impulse basically where we"
+  },
+  {
+   "t": 765.97,
+   "d": 2.37,
+   "text": "as players have a desire to understand"
+  },
+  {
+   "t": 768.34,
+   "d": 2.13,
+   "text": "to be completely controlling of and to"
+  },
+  {
+   "t": 770.47,
+   "d": 1.59,
+   "text": "sort of like take over these these tiny"
+  },
+  {
+   "t": 772.06,
+   "d": 2.67,
+   "text": "little game worlds and one thing that I"
+  },
+  {
+   "t": 774.73,
+   "d": 1.11,
+   "text": "really like about procedural content"
+  },
+  {
+   "t": 775.84,
+   "d": 1.71,
+   "text": "generation is that it enables us in many"
+  },
+  {
+   "t": 777.55,
+   "d": 1.47,
+   "text": "cases as designers to sort of subvert"
+  },
+  {
+   "t": 779.02,
+   "d": 1.86,
+   "text": "these tendencies to create things that"
+  },
+  {
+   "t": 780.88,
+   "d": 1.62,
+   "text": "can't be played to completion to create"
+  },
+  {
+   "t": 782.5,
+   "d": 1.77,
+   "text": "things that are sort of outside of the"
+  },
+  {
+   "t": 784.27,
+   "d": 1.71,
+   "text": "players grasp or that will go on without"
+  },
+  {
+   "t": 785.98,
+   "d": 2.28,
+   "text": "the player or whatever but they but put"
+  },
+  {
+   "t": 788.26,
+   "d": 1.02,
+   "text": "the same procedural content generation"
+  },
+  {
+   "t": 789.28,
+   "d": 1.64,
+   "text": "techniques can often in many cases"
+  },
+  {
+   "t": 790.92,
+   "d": 1.74,
+   "text": "used to prop up these sorts of like"
+  },
+  {
+   "t": 792.66,
+   "d": 2.16,
+   "text": "extractive destructive ways of playing"
+  },
+  {
+   "t": 794.82,
+   "d": 2.79,
+   "text": "and so this got me sort of thinking"
+  },
+  {
+   "t": 797.61,
+   "d": 1.38,
+   "text": "about what the role is of procedural"
+  },
+  {
+   "t": 798.99,
+   "d": 1.26,
+   "text": "content generation and games because I"
+  },
+  {
+   "t": 800.25,
+   "d": 1.86,
+   "text": "do a lot of sort of design work with PCG"
+  },
+  {
+   "t": 802.11,
+   "d": 2.01,
+   "text": "and I really want to like come up with"
+  },
+  {
+   "t": 804.12,
+   "d": 3.54,
+   "text": "new ways of playing with PCG and so I"
+  },
+  {
+   "t": 807.66,
+   "d": 1.65,
+   "text": "think one common sort of way of using"
+  },
+  {
+   "t": 809.31,
+   "d": 1.77,
+   "text": "PCG in games is like I said for this"
+  },
+  {
+   "t": 811.08,
+   "d": 2.91,
+   "text": "sort of like replayability sort of"
+  },
+  {
+   "t": 813.99,
+   "d": 1.68,
+   "text": "there's more content so you can keep on"
+  },
+  {
+   "t": 815.67,
+   "d": 0.96,
+   "text": "coming back to it and having new"
+  },
+  {
+   "t": 816.63,
+   "d": 1.32,
+   "text": "experiences again and again even though"
+  },
+  {
+   "t": 817.95,
+   "d": 0.78,
+   "text": "you've already played through it at one"
+  },
+  {
+   "t": 818.73,
+   "d": 1.92,
+   "text": "sort of thing this is how this happens"
+  },
+  {
+   "t": 820.65,
+   "d": 1.14,
+   "text": "in roguelikes a lot and roebling's have"
+  },
+  {
+   "t": 821.79,
+   "d": 0.93,
+   "text": "their own way of dealing with some of"
+  },
+  {
+   "t": 822.72,
+   "d": 1.59,
+   "text": "the problems that come up with this but"
+  },
+  {
+   "t": 824.31,
+   "d": 1.23,
+   "text": "it also comes up in things that I call"
+  },
+  {
+   "t": 825.54,
+   "d": 1.44,
+   "text": "mining games which include things like"
+  },
+  {
+   "t": 826.98,
+   "d": 1.74,
+   "text": "minecraft survival mode which are very"
+  },
+  {
+   "t": 828.72,
+   "d": 1.26,
+   "text": "much about sort of like collecting"
+  },
+  {
+   "t": 829.98,
+   "d": 2.19,
+   "text": "resources and sort of finding ways to"
+  },
+  {
+   "t": 832.17,
+   "d": 1.08,
+   "text": "survive and thrive"
+  },
+  {
+   "t": 833.25,
+   "d": 1.68,
+   "text": "based on the procedurally generated"
+  },
+  {
+   "t": 834.93,
+   "d": 1.47,
+   "text": "content in this valley procedural world"
+  },
+  {
+   "t": 836.4,
+   "d": 1.65,
+   "text": "minecraft is obviously a huge success"
+  },
+  {
+   "t": 838.05,
+   "d": 1.62,
+   "text": "for PC G and games lots of people play"
+  },
+  {
+   "t": 839.67,
+   "d": 1.2,
+   "text": "it lots of people enjoy it in lots of"
+  },
+  {
+   "t": 840.87,
+   "d": 2.16,
+   "text": "different ways but there's two different"
+  },
+  {
+   "t": 843.03,
+   "d": 0.93,
+   "text": "problems with this that I'm going to"
+  },
+  {
+   "t": 843.96,
+   "d": 1.38,
+   "text": "sort of highlight here and one of them"
+  },
+  {
+   "t": 845.34,
+   "d": 1.29,
+   "text": "is vote me all this so this is something"
+  },
+  {
+   "t": 846.63,
+   "d": 1.59,
+   "text": "that Kate has talked about a lot and I'm"
+  },
+  {
+   "t": 848.22,
+   "d": 1.2,
+   "text": "sure that many of you are familiar with"
+  },
+  {
+   "t": 849.42,
+   "d": 1.35,
+   "text": "it because you also have designed things"
+  },
+  {
+   "t": 850.77,
+   "d": 1.47,
+   "text": "that involve generation or generative"
+  },
+  {
+   "t": 852.24,
+   "d": 2.22,
+   "text": "sort of systems and this is the problem"
+  },
+  {
+   "t": 854.46,
+   "d": 2.28,
+   "text": "where basically you can generate as many"
+  },
+  {
+   "t": 856.74,
+   "d": 1.5,
+   "text": "mathematically technically distinct"
+  },
+  {
+   "t": 858.24,
+   "d": 1.8,
+   "text": "unique bowls of oatmeal as you want but"
+  },
+  {
+   "t": 860.04,
+   "d": 1.26,
+   "text": "the player is going to look at them in"
+  },
+  {
+   "t": 861.3,
+   "d": 2.34,
+   "text": "many cases and see a lot of oatmeal this"
+  },
+  {
+   "t": 863.64,
+   "d": 1.68,
+   "text": "is because the player is very good the"
+  },
+  {
+   "t": 865.32,
+   "d": 1.47,
+   "text": "human brain in general is very good at"
+  },
+  {
+   "t": 866.79,
+   "d": 1.41,
+   "text": "sort of detecting patterns in these"
+  },
+  {
+   "t": 868.2,
+   "d": 1.74,
+   "text": "large large amounts of generated content"
+  },
+  {
+   "t": 869.94,
+   "d": 3.99,
+   "text": "and if they can only like sort of see it"
+  },
+  {
+   "t": 873.93,
+   "d": 2.07,
+   "text": "so it's a perceptual uniqueness thing"
+  },
+  {
+   "t": 876.0,
+   "d": 1.65,
+   "text": "basically like if they can't see the"
+  },
+  {
+   "t": 877.65,
+   "d": 1.41,
+   "text": "differences that are meaningful to them"
+  },
+  {
+   "t": 879.06,
+   "d": 1.71,
+   "text": "then they sort of start to not see the"
+  },
+  {
+   "t": 880.77,
+   "d": 1.89,
+   "text": "differences at all and so we as"
+  },
+  {
+   "t": 882.66,
+   "d": 1.56,
+   "text": "designers need some way beyond"
+  },
+  {
+   "t": 884.22,
+   "d": 1.53,
+   "text": "mathematically larger numbers of"
+  },
+  {
+   "t": 885.75,
+   "d": 1.98,
+   "text": "possibilities to keep players invested"
+  },
+  {
+   "t": 887.73,
+   "d": 1.14,
+   "text": "to keep players interested in coming"
+  },
+  {
+   "t": 888.87,
+   "d": 1.91,
+   "text": "back to a game over and over again and"
+  },
+  {
+   "t": 890.78,
+   "d": 2.2,
+   "text": "the second problem is sort of"
+  },
+  {
+   "t": 892.98,
+   "d": 1.53,
+   "text": "colonialism right because you've got"
+  },
+  {
+   "t": 894.51,
+   "d": 1.05,
+   "text": "this sort of interesting world that"
+  },
+  {
+   "t": 895.56,
+   "d": 1.17,
+   "text": "we're generating for the player we sort"
+  },
+  {
+   "t": 896.73,
+   "d": 0.78,
+   "text": "of populate it with all these"
+  },
+  {
+   "t": 897.51,
+   "d": 1.17,
+   "text": "interesting things there's order in the"
+  },
+  {
+   "t": 898.68,
+   "d": 1.5,
+   "text": "walls of the caves there's two chests"
+  },
+  {
+   "t": 900.18,
+   "d": 1.44,
+   "text": "that you can open find treasures there's"
+  },
+  {
+   "t": 901.62,
+   "d": 1.56,
+   "text": "NPCs that have interesting lives and are"
+  },
+  {
+   "t": 903.18,
+   "d": 1.2,
+   "text": "going about their business in the world"
+  },
+  {
+   "t": 904.38,
+   "d": 1.65,
+   "text": "and whatever and so this is fantastic"
+  },
+  {
+   "t": 906.03,
+   "d": 1.17,
+   "text": "right the player loves to come into"
+  },
+  {
+   "t": 907.2,
+   "d": 1.92,
+   "text": "these worlds sort of do their thing but"
+  },
+  {
+   "t": 909.12,
+   "d": 1.59,
+   "text": "what happens is because of the dynamics"
+  },
+  {
+   "t": 910.71,
+   "d": 1.08,
+   "text": "of play on a game like Minecraft are"
+  },
+  {
+   "t": 911.79,
+   "d": 2.1,
+   "text": "fundamentally sort of extractive what"
+  },
+  {
+   "t": 913.89,
+   "d": 1.29,
+   "text": "happens as the player's presence tends"
+  },
+  {
+   "t": 915.18,
+   "d": 1.83,
+   "text": "to make the world worse over time you"
+  },
+  {
+   "t": 917.01,
+   "d": 1.5,
+   "text": "end up with a situation where like once"
+  },
+  {
+   "t": 918.51,
+   "d": 1.5,
+   "text": "all the NPC's are dead and the ore has"
+  },
+  {
+   "t": 920.01,
+   "d": 1.2,
+   "text": "been mined out and the chests have been"
+  },
+  {
+   "t": 921.21,
+   "d": 1.38,
+   "text": "opened and the puzzles of all been"
+  },
+  {
+   "t": 922.59,
+   "d": 1.09,
+   "text": "solved and traps have been clear"
+  },
+  {
+   "t": 923.68,
+   "d": 1.74,
+   "text": "and so on there's no reason to like to"
+  },
+  {
+   "t": 925.42,
+   "d": 1.41,
+   "text": "sort of keep on hanging out in that part"
+  },
+  {
+   "t": 926.83,
+   "d": 1.47,
+   "text": "of the world because it's been made sort"
+  },
+  {
+   "t": 928.3,
+   "d": 1.11,
+   "text": "of fundamentally worse and less"
+  },
+  {
+   "t": 929.41,
+   "d": 1.53,
+   "text": "interesting for the players presence and"
+  },
+  {
+   "t": 930.94,
+   "d": 2.54,
+   "text": "for the players interaction so"
+  },
+  {
+   "t": 933.48,
+   "d": 2.11,
+   "text": "procedural content in mining games is"
+  },
+  {
+   "t": 935.59,
+   "d": 1.68,
+   "text": "basically often used to sort of let the"
+  },
+  {
+   "t": 937.27,
+   "d": 1.11,
+   "text": "players keep on repeating these"
+  },
+  {
+   "t": 938.38,
+   "d": 1.53,
+   "text": "extractive dynamics forever and ever and"
+  },
+  {
+   "t": 939.91,
+   "d": 1.65,
+   "text": "ever because we can just always generate"
+  },
+  {
+   "t": 941.56,
+   "d": 1.8,
+   "text": "more world for them to do it in rather"
+  },
+  {
+   "t": 943.36,
+   "d": 1.41,
+   "text": "than sort of forcing them to face down"
+  },
+  {
+   "t": 944.77,
+   "d": 1.38,
+   "text": "the fact that they've made the place"
+  },
+  {
+   "t": 946.15,
+   "d": 2.85,
+   "text": "that they lived in a lot worse so"
+  },
+  {
+   "t": 949.0,
+   "d": 1.68,
+   "text": "gardening games are sort of like my"
+  },
+  {
+   "t": 950.68,
+   "d": 1.47,
+   "text": "attempt at solving some of the problems"
+  },
+  {
+   "t": 952.15,
+   "d": 2.46,
+   "text": "associated with PCG in in mining games"
+  },
+  {
+   "t": 954.61,
+   "d": 2.07,
+   "text": "roguelikes have their own solutions like"
+  },
+  {
+   "t": 956.68,
+   "d": 1.62,
+   "text": "I said to a lot of these problems they"
+  },
+  {
+   "t": 958.3,
+   "d": 3.9,
+   "text": "definitely sort of by by making players"
+  },
+  {
+   "t": 962.2,
+   "d": 2.01,
+   "text": "really attached to their character"
+  },
+  {
+   "t": 964.21,
+   "d": 2.04,
+   "text": "through the perma death thing they sort"
+  },
+  {
+   "t": 966.25,
+   "d": 1.56,
+   "text": "of take an end run around them in one"
+  },
+  {
+   "t": 967.81,
+   "d": 1.77,
+   "text": "direction and I find that to be a really"
+  },
+  {
+   "t": 969.58,
+   "d": 2.55,
+   "text": "sort of inspiring like way of solving"
+  },
+  {
+   "t": 972.13,
+   "d": 0.99,
+   "text": "sort of the problems that are associated"
+  },
+  {
+   "t": 973.12,
+   "d": 1.56,
+   "text": "with heavily generative games but I"
+  },
+  {
+   "t": 974.68,
+   "d": 1.23,
+   "text": "think there's also other ways to go"
+  },
+  {
+   "t": 975.91,
+   "d": 1.59,
+   "text": "about this and so gardening games are of"
+  },
+  {
+   "t": 977.5,
+   "d": 1.95,
+   "text": "interest to me and garden games are sort"
+  },
+  {
+   "t": 979.45,
+   "d": 1.26,
+   "text": "of what I'm posing as the anti mining"
+  },
+  {
+   "t": 980.71,
+   "d": 2.28,
+   "text": "games here Animal Crossing is sort of"
+  },
+  {
+   "t": 982.99,
+   "d": 1.59,
+   "text": "what I consider the canonical example of"
+  },
+  {
+   "t": 984.58,
+   "d": 2.34,
+   "text": "a gardening game it doesn't appear to"
+  },
+  {
+   "t": 986.92,
+   "d": 1.29,
+   "text": "use procedural content generation on the"
+  },
+  {
+   "t": 988.21,
+   "d": 1.77,
+   "text": "surface but it actually does the first"
+  },
+  {
+   "t": 989.98,
+   "d": 0.99,
+   "text": "thing you can notice about is that it"
+  },
+  {
+   "t": 990.97,
+   "d": 0.96,
+   "text": "actually uses procedural terrain"
+  },
+  {
+   "t": 991.93,
+   "d": 0.54,
+   "text": "generation"
+  },
+  {
+   "t": 992.47,
+   "d": 2.01,
+   "text": "unlike Minecraft though which lets you"
+  },
+  {
+   "t": 994.48,
+   "d": 1.11,
+   "text": "sort of generate more and more terrain"
+  },
+  {
+   "t": 995.59,
+   "d": 2.13,
+   "text": "indefinitely Animal Crossing want to"
+  },
+  {
+   "t": 997.72,
+   "d": 1.38,
+   "text": "strain generator exactly once which is"
+  },
+  {
+   "t": 999.1,
+   "d": 1.65,
+   "text": "basically at the start of town when you"
+  },
+  {
+   "t": 1000.75,
+   "d": 1.5,
+   "text": "sort of move in for the first time and"
+  },
+  {
+   "t": 1002.25,
+   "d": 2.51,
+   "text": "you've just now created your first town"
+  },
+  {
+   "t": 1004.76,
+   "d": 1.93,
+   "text": "it also generates this sort of very"
+  },
+  {
+   "t": 1006.69,
+   "d": 1.38,
+   "text": "tightly bounded world so instead of"
+  },
+  {
+   "t": 1008.07,
+   "d": 1.14,
+   "text": "going to the edge of the world and being"
+  },
+  {
+   "t": 1009.21,
+   "d": 1.23,
+   "text": "able to generate more chunks of content"
+  },
+  {
+   "t": 1010.44,
+   "d": 2.16,
+   "text": "you're stuck with what you have forever"
+  },
+  {
+   "t": 1012.6,
+   "d": 1.77,
+   "text": "and this sort of almost forces the"
+  },
+  {
+   "t": 1014.37,
+   "d": 3.33,
+   "text": "player to get to know the town to sort"
+  },
+  {
+   "t": 1017.7,
+   "d": 1.26,
+   "text": "of familiarize themselves with it and to"
+  },
+  {
+   "t": 1018.96,
+   "d": 1.08,
+   "text": "sort of like really form a connection"
+  },
+  {
+   "t": 1020.04,
+   "d": 1.77,
+   "text": "with it because if they were able to"
+  },
+  {
+   "t": 1021.81,
+   "d": 1.62,
+   "text": "sort of go on and generate more towns"
+  },
+  {
+   "t": 1023.43,
+   "d": 1.05,
+   "text": "and if they were encouraged to go on to"
+  },
+  {
+   "t": 1024.48,
+   "d": 1.05,
+   "text": "generate more towns whenever they got"
+  },
+  {
+   "t": 1025.53,
+   "d": 1.44,
+   "text": "bored with the one that they had there"
+  },
+  {
+   "t": 1026.97,
+   "d": 1.05,
+   "text": "would be no incentive to really like"
+  },
+  {
+   "t": 1028.02,
+   "d": 1.11,
+   "text": "stick around and form a relationship"
+  },
+  {
+   "t": 1029.13,
+   "d": 2.1,
+   "text": "with this one in particular what you can"
+  },
+  {
+   "t": 1031.23,
+   "d": 1.41,
+   "text": "see is that actually if you generate a"
+  },
+  {
+   "t": 1032.64,
+   "d": 1.29,
+   "text": "whole bunch of Animal Crossing towns and"
+  },
+  {
+   "t": 1033.93,
+   "d": 1.44,
+   "text": "place them side by side they don't"
+  },
+  {
+   "t": 1035.37,
+   "d": 1.5,
+   "text": "really look particularly distinct"
+  },
+  {
+   "t": 1036.87,
+   "d": 1.53,
+   "text": "there's a lot of similarities it's only"
+  },
+  {
+   "t": 1038.4,
+   "d": 1.41,
+   "text": "like five or six basic features really"
+  },
+  {
+   "t": 1039.81,
+   "d": 1.38,
+   "text": "and you can only cluster those in so"
+  },
+  {
+   "t": 1041.19,
+   "d": 1.08,
+   "text": "many different ways before they all"
+  },
+  {
+   "t": 1042.27,
+   "d": 1.11,
+   "text": "start to look really similar especially"
+  },
+  {
+   "t": 1043.38,
+   "d": 2.64,
+   "text": "in such a small world but at the same"
+  },
+  {
+   "t": 1046.02,
+   "d": 1.65,
+   "text": "time when you talk to a lot of Animal"
+  },
+  {
+   "t": 1047.67,
+   "d": 1.56,
+   "text": "Crossing players you'll tend to find"
+  },
+  {
+   "t": 1049.23,
+   "d": 0.72,
+   "text": "that they have a really strong"
+  },
+  {
+   "t": 1049.95,
+   "d": 1.89,
+   "text": "attachment to their town in particular"
+  },
+  {
+   "t": 1051.84,
+   "d": 2.49,
+   "text": "and because of this you get the sense"
+  },
+  {
+   "t": 1054.33,
+   "d": 1.02,
+   "text": "that there's something else going on"
+  },
+  {
+   "t": 1055.35,
+   "d": 1.02,
+   "text": "here that gets players attached"
+  },
+  {
+   "t": 1056.37,
+   "d": 1.59,
+   "text": "besides the uniqueness of the world and"
+  },
+  {
+   "t": 1057.96,
+   "d": 1.62,
+   "text": "what I think is going on here is that"
+  },
+  {
+   "t": 1059.58,
+   "d": 1.17,
+   "text": "the players had developed like a really"
+  },
+  {
+   "t": 1060.75,
+   "d": 1.41,
+   "text": "solid relationship with the world and"
+  },
+  {
+   "t": 1062.16,
+   "d": 1.77,
+   "text": "relationships like that take time and"
+  },
+  {
+   "t": 1063.93,
+   "d": 1.35,
+   "text": "energy and repeated interaction to sort"
+  },
+  {
+   "t": 1065.28,
+   "d": 2.61,
+   "text": "of create they can't just happen if you"
+  },
+  {
+   "t": 1067.89,
+   "d": 0.9,
+   "text": "will allow players to throw away"
+  },
+  {
+   "t": 1068.79,
+   "d": 1.32,
+   "text": "procedurally generated content like as"
+  },
+  {
+   "t": 1070.11,
+   "d": 1.41,
+   "text": "soon as they create it and they can't"
+  },
+  {
+   "t": 1071.52,
+   "d": 1.38,
+   "text": "really happen if you don't really give"
+  },
+  {
+   "t": 1072.9,
+   "d": 1.92,
+   "text": "players any incentive to to keep"
+  },
+  {
+   "t": 1074.82,
+   "d": 1.23,
+   "text": "engaging with a thing over and over"
+  },
+  {
+   "t": 1076.05,
+   "d": 1.29,
+   "text": "again to keep coming back to the same"
+  },
+  {
+   "t": 1077.34,
+   "d": 1.5,
+   "text": "sort of chunk of content over and over"
+  },
+  {
+   "t": 1078.84,
+   "d": 0.65,
+   "text": "again"
+  },
+  {
+   "t": 1079.49,
+   "d": 2.26,
+   "text": "so I'm sort of gonna stuff through a"
+  },
+  {
+   "t": 1081.75,
+   "d": 1.26,
+   "text": "couple of parallels between my name"
+  },
+  {
+   "t": 1083.01,
+   "d": 1.41,
+   "text": "gardening games to sort of highlight the"
+  },
+  {
+   "t": 1084.42,
+   "d": 1.35,
+   "text": "contrast between how they make use of"
+  },
+  {
+   "t": 1085.77,
+   "d": 1.59,
+   "text": "procedural generation or generative"
+  },
+  {
+   "t": 1087.36,
+   "d": 2.13,
+   "text": "methods in general in Minecraft you tend"
+  },
+  {
+   "t": 1089.49,
+   "d": 1.2,
+   "text": "to see that there's one large highly"
+  },
+  {
+   "t": 1090.69,
+   "d": 1.65,
+   "text": "visible generator and this is the"
+  },
+  {
+   "t": 1092.34,
+   "d": 2.73,
+   "text": "terrain generator in Minecraft you can"
+  },
+  {
+   "t": 1095.07,
+   "d": 0.9,
+   "text": "also see this in like the level"
+  },
+  {
+   "t": 1095.97,
+   "d": 1.55,
+   "text": "generator and spelunky things like that"
+  },
+  {
+   "t": 1097.52,
+   "d": 2.02,
+   "text": "gardening games sort of do the opposite"
+  },
+  {
+   "t": 1099.54,
+   "d": 2.49,
+   "text": "by using lots of many small largely"
+  },
+  {
+   "t": 1102.03,
+   "d": 1.44,
+   "text": "independent generative processes and"
+  },
+  {
+   "t": 1103.47,
+   "d": 1.47,
+   "text": "these include animal crossing things"
+  },
+  {
+   "t": 1104.94,
+   "d": 1.41,
+   "text": "like the process that places weeds in"
+  },
+  {
+   "t": 1106.35,
+   "d": 1.53,
+   "text": "the world over time the process that"
+  },
+  {
+   "t": 1107.88,
+   "d": 1.77,
+   "text": "places bugs and fish so that you can"
+  },
+  {
+   "t": 1109.65,
+   "d": 1.11,
+   "text": "sort of see different bugs and fish on"
+  },
+  {
+   "t": 1110.76,
+   "d": 1.74,
+   "text": "different days the process decides which"
+  },
+  {
+   "t": 1112.5,
+   "d": 1.2,
+   "text": "villagers are going to move in or move"
+  },
+  {
+   "t": 1113.7,
+   "d": 3.21,
+   "text": "away and when and by acting on the same"
+  },
+  {
+   "t": 1116.91,
+   "d": 2.61,
+   "text": "sort of shared procedural artifact these"
+  },
+  {
+   "t": 1119.52,
+   "d": 1.8,
+   "text": "processes evolve that artifact over time"
+  },
+  {
+   "t": 1121.32,
+   "d": 1.74,
+   "text": "rather than sort of allowing the player"
+  },
+  {
+   "t": 1123.06,
+   "d": 1.32,
+   "text": "to generate more of them whenever they"
+  },
+  {
+   "t": 1124.38,
+   "d": 1.14,
+   "text": "need more content and throw away the"
+  },
+  {
+   "t": 1125.52,
+   "d": 2.75,
+   "text": "stuff that was there before"
+  },
+  {
+   "t": 1128.27,
+   "d": 1.99,
+   "text": "minecraft and other mining games tend to"
+  },
+  {
+   "t": 1130.26,
+   "d": 1.26,
+   "text": "generate a large number of relatively"
+  },
+  {
+   "t": 1131.52,
+   "d": 1.68,
+   "text": "disposable artifacts this includes the"
+  },
+  {
+   "t": 1133.2,
+   "d": 1.26,
+   "text": "world jumps in Minecraft this includes"
+  },
+  {
+   "t": 1134.46,
+   "d": 1.47,
+   "text": "levels and spelunky this includes all"
+  },
+  {
+   "t": 1135.93,
+   "d": 2.76,
+   "text": "sorts of like procedural units of world"
+  },
+  {
+   "t": 1138.69,
+   "d": 1.71,
+   "text": "in games that tend to make you super to"
+  },
+  {
+   "t": 1140.4,
+   "d": 3.03,
+   "text": "fuel terrain versus in gardening games"
+  },
+  {
+   "t": 1143.43,
+   "d": 1.47,
+   "text": "you tend to see the adaptation of a"
+  },
+  {
+   "t": 1144.9,
+   "d": 1.77,
+   "text": "single seed artifact that's very gradual"
+  },
+  {
+   "t": 1146.67,
+   "d": 1.29,
+   "text": "and sort of happening in stages over"
+  },
+  {
+   "t": 1147.96,
+   "d": 2.61,
+   "text": "time in Animal Crossing cases the town"
+  },
+  {
+   "t": 1150.57,
+   "d": 1.53,
+   "text": "and like I said it's a small generative"
+  },
+  {
+   "t": 1152.1,
+   "d": 1.29,
+   "text": "processes that act on it and sort of"
+  },
+  {
+   "t": 1153.39,
+   "d": 2.4,
+   "text": "evolve it gradually to make it sort of"
+  },
+  {
+   "t": 1155.79,
+   "d": 3.36,
+   "text": "into this living growing thing in mining"
+  },
+  {
+   "t": 1159.15,
+   "d": 2.28,
+   "text": "games you tend to use generative methods"
+  },
+  {
+   "t": 1161.43,
+   "d": 0.69,
+   "text": "tend to be used to distribute"
+  },
+  {
+   "t": 1162.12,
+   "d": 1.98,
+   "text": "interesting content across space so you"
+  },
+  {
+   "t": 1164.1,
+   "d": 2.1,
+   "text": "see like there's far-flung sort of"
+  },
+  {
+   "t": 1166.2,
+   "d": 1.41,
+   "text": "dungeons in Minecraft and you have to"
+  },
+  {
+   "t": 1167.61,
+   "d": 1.62,
+   "text": "like go searching for them by generating"
+  },
+  {
+   "t": 1169.23,
+   "d": 1.56,
+   "text": "lots and lots of world chunks looking"
+  },
+  {
+   "t": 1170.79,
+   "d": 1.08,
+   "text": "around for these rare features and"
+  },
+  {
+   "t": 1171.87,
+   "d": 2.43,
+   "text": "finally finding one garden and games"
+  },
+  {
+   "t": 1174.3,
+   "d": 1.29,
+   "text": "tend to do the opposite by distributing"
+  },
+  {
+   "t": 1175.59,
+   "d": 2.79,
+   "text": "generative content across time this sort"
+  },
+  {
+   "t": 1178.38,
+   "d": 2.97,
+   "text": "of prevents the player from extracting"
+  },
+  {
+   "t": 1181.35,
+   "d": 2.19,
+   "text": "and using and sort of like churning"
+  },
+  {
+   "t": 1183.54,
+   "d": 1.32,
+   "text": "through the content as fast as they can"
+  },
+  {
+   "t": 1184.86,
+   "d": 1.35,
+   "text": "click as fast as they can interact with"
+  },
+  {
+   "t": 1186.21,
+   "d": 2.49,
+   "text": "the world and generate more of it what's"
+  },
+  {
+   "t": 1188.7,
+   "d": 1.17,
+   "text": "interesting about Animal Crossing"
+  },
+  {
+   "t": 1189.87,
+   "d": 1.26,
+   "text": "particular is that it actually sort of"
+  },
+  {
+   "t": 1191.13,
+   "d": 1.77,
+   "text": "like does this very specific thing where"
+  },
+  {
+   "t": 1192.9,
+   "d": 2.04,
+   "text": "even if you take extra diegetic actions"
+  },
+  {
+   "t": 1194.94,
+   "d": 1.86,
+   "text": "to sort of like violate this the sort of"
+  },
+  {
+   "t": 1196.8,
+   "d": 1.59,
+   "text": "integrity of the simulation to like"
+  },
+  {
+   "t": 1198.39,
+   "d": 2.07,
+   "text": "change the clock on the console or reset"
+  },
+  {
+   "t": 1200.46,
+   "d": 1.86,
+   "text": "the game without sort of like I'm saving"
+  },
+  {
+   "t": 1202.32,
+   "d": 1.59,
+   "text": "first then it does this sort of like"
+  },
+  {
+   "t": 1203.91,
+   "d": 2.49,
+   "text": "very I would say almost like it's a"
+  },
+  {
+   "t": 1206.4,
+   "d": 1.2,
+   "text": "violent interaction with the player I"
+  },
+  {
+   "t": 1207.6,
+   "d": 1.56,
+   "text": "really like it sort of tries to punish"
+  },
+  {
+   "t": 1209.16,
+   "d": 1.68,
+   "text": "you for for having done these things and"
+  },
+  {
+   "t": 1210.84,
+   "d": 2.28,
+   "text": "what I sort of read this as is the game"
+  },
+  {
+   "t": 1213.12,
+   "d": 3.18,
+   "text": "is like reacting to your violation of"
+  },
+  {
+   "t": 1216.3,
+   "d": 1.2,
+   "text": "the integrity of the simulation as a"
+  },
+  {
+   "t": 1217.5,
+   "d": 1.32,
+   "text": "kind of violence in and of itself and"
+  },
+  {
+   "t": 1218.82,
+   "d": 3.57,
+   "text": "trying to respond in kind almost another"
+  },
+  {
+   "t": 1222.39,
+   "d": 0.96,
+   "text": "way of phrasing this is to say that"
+  },
+  {
+   "t": 1223.35,
+   "d": 1.68,
+   "text": "generation tends to occur on demand and"
+  },
+  {
+   "t": 1225.03,
+   "d": 1.5,
+   "text": "in mining games and this is whenever the"
+  },
+  {
+   "t": 1226.53,
+   "d": 1.38,
+   "text": "player sort of requests more content by"
+  },
+  {
+   "t": 1227.91,
+   "d": 1.2,
+   "text": "traveling to an area that hasn't been"
+  },
+  {
+   "t": 1229.11,
+   "d": 1.77,
+   "text": "generated yet or sort of like going to"
+  },
+  {
+   "t": 1230.88,
+   "d": 3.0,
+   "text": "the edge of the world or whatever and in"
+  },
+  {
+   "t": 1233.88,
+   "d": 1.86,
+   "text": "gardening games generation tends to"
+  },
+  {
+   "t": 1235.74,
+   "d": 1.53,
+   "text": "occur on time an animal crossing this"
+  },
+  {
+   "t": 1237.27,
+   "d": 1.32,
+   "text": "makes use of the sort of real life"
+  },
+  {
+   "t": 1238.59,
+   "d": 1.77,
+   "text": "calendar and clock to drive when"
+  },
+  {
+   "t": 1240.36,
+   "d": 1.89,
+   "text": "generation occurs because things sort of"
+  },
+  {
+   "t": 1242.25,
+   "d": 2.19,
+   "text": "like evolve naturally and you can see"
+  },
+  {
+   "t": 1244.44,
+   "d": 1.2,
+   "text": "different things on different days and"
+  },
+  {
+   "t": 1245.64,
+   "d": 1.62,
+   "text": "all these things sort of compose very"
+  },
+  {
+   "t": 1247.26,
+   "d": 4.11,
+   "text": "nicely so there's this is this is making"
+  },
+  {
+   "t": 1251.37,
+   "d": 0.9,
+   "text": "gardening game sound pretty good"
+  },
+  {
+   "t": 1252.27,
+   "d": 2.37,
+   "text": "obviously and that's sort of the point"
+  },
+  {
+   "t": 1254.64,
+   "d": 2.46,
+   "text": "of the talk but at the same time I also"
+  },
+  {
+   "t": 1257.1,
+   "d": 1.98,
+   "text": "want to sort of address the the way of"
+  },
+  {
+   "t": 1259.08,
+   "d": 1.56,
+   "text": "looking at gardening itself as a kind of"
+  },
+  {
+   "t": 1260.64,
+   "d": 1.5,
+   "text": "colonialism or as a kind of like sort of"
+  },
+  {
+   "t": 1262.14,
+   "d": 1.38,
+   "text": "top-down controlling way of looking at"
+  },
+  {
+   "t": 1263.52,
+   "d": 2.55,
+   "text": "games there's things like rollercoaster"
+  },
+  {
+   "t": 1266.07,
+   "d": 1.29,
+   "text": "tycoon and sort of tycoon games in"
+  },
+  {
+   "t": 1267.36,
+   "d": 2.25,
+   "text": "general that are really sort of they"
+  },
+  {
+   "t": 1269.61,
+   "d": 1.47,
+   "text": "feel like gardening games in a lot of"
+  },
+  {
+   "t": 1271.08,
+   "d": 1.5,
+   "text": "ways in that you're sort of building up"
+  },
+  {
+   "t": 1272.58,
+   "d": 1.23,
+   "text": "the world you're making the world richer"
+  },
+  {
+   "t": 1273.81,
+   "d": 1.41,
+   "text": "and more interesting and such over time"
+  },
+  {
+   "t": 1275.22,
+   "d": 3.36,
+   "text": "but at the same time you're also sort of"
+  },
+  {
+   "t": 1278.58,
+   "d": 1.89,
+   "text": "using it and extracting from it to your"
+  },
+  {
+   "t": 1280.47,
+   "d": 2.61,
+   "text": "own ends all the same rollercoaster"
+  },
+  {
+   "t": 1283.08,
+   "d": 1.29,
+   "text": "tycoon is sort of a weird example here"
+  },
+  {
+   "t": 1284.37,
+   "d": 1.32,
+   "text": "because the world will not sort of like"
+  },
+  {
+   "t": 1285.69,
+   "d": 2.1,
+   "text": "grow or change particularly without the"
+  },
+  {
+   "t": 1287.79,
+   "d": 1.56,
+   "text": "players involvement but you can also see"
+  },
+  {
+   "t": 1289.35,
+   "d": 1.5,
+   "text": "this in games like sort of strategy"
+  },
+  {
+   "t": 1290.85,
+   "d": 1.79,
+   "text": "games stellaris is a big example here"
+  },
+  {
+   "t": 1292.64,
+   "d": 2.32,
+   "text": "where even though the world will sort of"
+  },
+  {
+   "t": 1294.96,
+   "d": 1.98,
+   "text": "evolve you're still sort of charged as"
+  },
+  {
+   "t": 1296.94,
+   "d": 1.17,
+   "text": "the player with extracting resources"
+  },
+  {
+   "t": 1298.11,
+   "d": 1.53,
+   "text": "from but extracting value from it and"
+  },
+  {
+   "t": 1299.64,
+   "d": 2.91,
+   "text": "sort of shaping it to your needs in"
+  },
+  {
+   "t": 1302.55,
+   "d": 1.26,
+   "text": "Animal Crossing you can actually see a"
+  },
+  {
+   "t": 1303.81,
+   "d": 1.5,
+   "text": "trend towards this kind of gardening and"
+  },
+  {
+   "t": 1305.31,
+   "d": 2.4,
+   "text": "gardening as colonial is a mode of play"
+  },
+  {
+   "t": 1307.71,
+   "d": 2.58,
+   "text": "over time where in newer games for"
+  },
+  {
+   "t": 1310.29,
+   "d": 1.11,
+   "text": "instance you're sort of position as the"
+  },
+  {
+   "t": 1311.4,
+   "d": 1.59,
+   "text": "mayor and and you know sort of position"
+  },
+  {
+   "t": 1312.99,
+   "d": 1.2,
+   "text": "of control over the town where is this"
+  },
+  {
+   "t": 1314.19,
+   "d": 1.02,
+   "text": "something that did not happen in the"
+  },
+  {
+   "t": 1315.21,
+   "d": 2.37,
+   "text": "previous installations in the series and"
+  },
+  {
+   "t": 1317.58,
+   "d": 2.46,
+   "text": "you also see a lot of things like the"
+  },
+  {
+   "t": 1320.04,
+   "d": 1.27,
+   "text": "fact that the newest"
+  },
+  {
+   "t": 1321.31,
+   "d": 1.32,
+   "text": "in game or at the newest Animal Crossing"
+  },
+  {
+   "t": 1322.63,
+   "d": 2.28,
+   "text": "I'm sorry which is the mobile game"
+  },
+  {
+   "t": 1324.91,
+   "d": 1.77,
+   "text": "pocket camp actually lets you spend leaf"
+  },
+  {
+   "t": 1326.68,
+   "d": 1.38,
+   "text": "tickets sort of this real many currency"
+  },
+  {
+   "t": 1328.06,
+   "d": 2.1,
+   "text": "to to bypass things like the timer's on"
+  },
+  {
+   "t": 1330.16,
+   "d": 1.62,
+   "text": "orchards and like fruit regrowing and"
+  },
+  {
+   "t": 1331.78,
+   "d": 1.59,
+   "text": "stuff like that and that's sort of"
+  },
+  {
+   "t": 1333.37,
+   "d": 1.35,
+   "text": "antithetical to the whole idea of a game"
+  },
+  {
+   "t": 1334.72,
+   "d": 1.23,
+   "text": "that's willing to make the player wait"
+  },
+  {
+   "t": 1335.95,
+   "d": 1.44,
+   "text": "that's willing to sort of let let the"
+  },
+  {
+   "t": 1337.39,
+   "d": 1.68,
+   "text": "world exist at his own thing and at its"
+  },
+  {
+   "t": 1339.07,
+   "d": 1.35,
+   "text": "own pace rather than sort of give the"
+  },
+  {
+   "t": 1340.42,
+   "d": 1.58,
+   "text": "players what they want immediately and"
+  },
+  {
+   "t": 1342.0,
+   "d": 1.87,
+   "text": "then of course Robert King has this"
+  },
+  {
+   "t": 1343.87,
+   "d": 1.98,
+   "text": "fantastic blog post about sort of slime"
+  },
+  {
+   "t": 1345.85,
+   "d": 2.31,
+   "text": "rancher and how slime rancher wants to"
+  },
+  {
+   "t": 1348.16,
+   "d": 1.29,
+   "text": "make you fall in love with the world it"
+  },
+  {
+   "t": 1349.45,
+   "d": 1.29,
+   "text": "wants you to have sort of this romance"
+  },
+  {
+   "t": 1350.74,
+   "d": 2.07,
+   "text": "what this is sort of alien alien"
+  },
+  {
+   "t": 1352.81,
+   "d": 1.86,
+   "text": "landscape but at the same time you're"
+  },
+  {
+   "t": 1354.67,
+   "d": 1.61,
+   "text": "also very much sort of tasked with"
+  },
+  {
+   "t": 1356.28,
+   "d": 2.02,
+   "text": "extracting value from it by sort of"
+  },
+  {
+   "t": 1358.3,
+   "d": 0.87,
+   "text": "building these increasingly"
+  },
+  {
+   "t": 1359.17,
+   "d": 2.16,
+   "text": "industrialized factory farms and getting"
+  },
+  {
+   "t": 1361.33,
+   "d": 1.53,
+   "text": "these slimes which are very cute till"
+  },
+  {
+   "t": 1362.86,
+   "d": 1.71,
+   "text": "sort of like breed with one another and"
+  },
+  {
+   "t": 1364.57,
+   "d": 2.55,
+   "text": "produce the right kinds of like sort of"
+  },
+  {
+   "t": 1367.12,
+   "d": 1.23,
+   "text": "quartz is what they're called that you"
+  },
+  {
+   "t": 1368.35,
+   "d": 1.59,
+   "text": "can ship back to earth for and sell for"
+  },
+  {
+   "t": 1369.94,
+   "d": 3.9,
+   "text": "a profit so you can also even see this"
+  },
+  {
+   "t": 1373.84,
+   "d": 1.29,
+   "text": "in things like farmville right where"
+  },
+  {
+   "t": 1375.13,
+   "d": 3.66,
+   "text": "like very much the dynamic of gardening"
+  },
+  {
+   "t": 1378.79,
+   "d": 1.26,
+   "text": "as colonialism is something that I think"
+  },
+  {
+   "t": 1380.05,
+   "d": 1.23,
+   "text": "you can even sort of split out into its"
+  },
+  {
+   "t": 1381.28,
+   "d": 1.02,
+   "text": "own thing which is probably called"
+  },
+  {
+   "t": 1382.3,
+   "d": 2.25,
+   "text": "firming games or something like that I"
+  },
+  {
+   "t": 1384.55,
+   "d": 2.7,
+   "text": "don't know exactly how to separate these"
+  },
+  {
+   "t": 1387.25,
+   "d": 1.11,
+   "text": "from gardening games and this has been a"
+  },
+  {
+   "t": 1388.36,
+   "d": 1.32,
+   "text": "source of annoyance to me for some time"
+  },
+  {
+   "t": 1389.68,
+   "d": 2.46,
+   "text": "now but it feels like there's a"
+  },
+  {
+   "t": 1392.14,
+   "d": 1.11,
+   "text": "meaningful distinction to be drawn"
+  },
+  {
+   "t": 1393.25,
+   "d": 1.59,
+   "text": "between games and which like sort of the"
+  },
+  {
+   "t": 1394.84,
+   "d": 1.65,
+   "text": "the world exists for its own sake and"
+  },
+  {
+   "t": 1396.49,
+   "d": 1.29,
+   "text": "sort of generates itself and sort of"
+  },
+  {
+   "t": 1397.78,
+   "d": 2.01,
+   "text": "like goes on in the background and is"
+  },
+  {
+   "t": 1399.79,
+   "d": 2.64,
+   "text": "not at the players disposal versus games"
+  },
+  {
+   "t": 1402.43,
+   "d": 2.16,
+   "text": "where some of the same things happen but"
+  },
+  {
+   "t": 1404.59,
+   "d": 1.29,
+   "text": "the player is sort of extracting value"
+  },
+  {
+   "t": 1405.88,
+   "d": 3.12,
+   "text": "from them and like using the world for"
+  },
+  {
+   "t": 1409.0,
+   "d": 3.18,
+   "text": "their own ends over time yeah so"
+  },
+  {
+   "t": 1412.18,
+   "d": 2.01,
+   "text": "basically gardening as a mode of play is"
+  },
+  {
+   "t": 1414.19,
+   "d": 2.88,
+   "text": "like the the thing that I'm trying to"
+  },
+  {
+   "t": 1417.07,
+   "d": 2.22,
+   "text": "define that it involves like a certain"
+  },
+  {
+   "t": 1419.29,
+   "d": 1.44,
+   "text": "class of generative games that are sort"
+  },
+  {
+   "t": 1420.73,
+   "d": 2.04,
+   "text": "of a new genre in and of themselves I"
+  },
+  {
+   "t": 1422.77,
+   "d": 1.47,
+   "text": "think you can sort of see inspiration"
+  },
+  {
+   "t": 1424.24,
+   "d": 1.11,
+   "text": "from a lot of different kinds of games"
+  },
+  {
+   "t": 1425.35,
+   "d": 1.59,
+   "text": "in garden and games and you can"
+  },
+  {
+   "t": 1426.94,
+   "d": 1.5,
+   "text": "definitely also sort of like see that"
+  },
+  {
+   "t": 1428.44,
+   "d": 5.66,
+   "text": "there's that there is sort of a deep"
+  },
+  {
+   "t": 1434.1,
+   "d": 2.32,
+   "text": "there's sort of a path away from the"
+  },
+  {
+   "t": 1436.42,
+   "d": 1.71,
+   "text": "sort of deep solecism of player centric"
+  },
+  {
+   "t": 1438.13,
+   "d": 2.73,
+   "text": "design of games that Center the player"
+  },
+  {
+   "t": 1440.86,
+   "d": 1.8,
+   "text": "of that shaped the world around the"
+  },
+  {
+   "t": 1442.66,
+   "d": 1.17,
+   "text": "player that sort of bend the world of"
+  },
+  {
+   "t": 1443.83,
+   "d": 1.02,
+   "text": "the players needs and are sort of"
+  },
+  {
+   "t": 1444.85,
+   "d": 1.68,
+   "text": "willing to do whatever they need to give"
+  },
+  {
+   "t": 1446.53,
+   "d": 1.98,
+   "text": "the player exactly what they want I"
+  },
+  {
+   "t": 1448.51,
+   "d": 1.5,
+   "text": "think there's also sort of a natural"
+  },
+  {
+   "t": 1450.01,
+   "d": 1.11,
+   "text": "alliance between"
+  },
+  {
+   "t": 1451.12,
+   "d": 2.13,
+   "text": "roguelike developers and gardening game"
+  },
+  {
+   "t": 1453.25,
+   "d": 1.05,
+   "text": "developers and that were"
+  },
+  {
+   "t": 1454.3,
+   "d": 1.05,
+   "text": "let's sort of really committed to the"
+  },
+  {
+   "t": 1455.35,
+   "d": 1.89,
+   "text": "development of games that make heavy use"
+  },
+  {
+   "t": 1457.24,
+   "d": 1.74,
+   "text": "of procedural content generation to"
+  },
+  {
+   "t": 1458.98,
+   "d": 2.7,
+   "text": "games that sort of are willing to so how"
+  },
+  {
+   "t": 1461.68,
+   "d": 1.47,
+   "text": "to say no to the player or resist the"
+  },
+  {
+   "t": 1463.15,
+   "d": 1.23,
+   "text": "player or push back against the player"
+  },
+  {
+   "t": 1464.38,
+   "d": 2.19,
+   "text": "and also we're sort of all committed to"
+  },
+  {
+   "t": 1466.57,
+   "d": 1.92,
+   "text": "this idea of games as worlds games as"
+  },
+  {
+   "t": 1468.49,
+   "d": 1.77,
+   "text": "things that can exist like in and of"
+  },
+  {
+   "t": 1470.26,
+   "d": 1.89,
+   "text": "themselves and go on existing and go on"
+  },
+  {
+   "t": 1472.15,
+   "d": 2.04,
+   "text": "existing and go on existing even if the"
+  },
+  {
+   "t": 1474.19,
+   "d": 1.08,
+   "text": "player doesn't necessarily care to"
+  },
+  {
+   "t": 1475.27,
+   "d": 1.71,
+   "text": "interact with them every day or like"
+  },
+  {
+   "t": 1476.98,
+   "d": 1.29,
+   "text": "play with it right this moment or"
+  },
+  {
+   "t": 1478.27,
+   "d": 2.67,
+   "text": "whatever so I'm hoping that I will be"
+  },
+  {
+   "t": 1480.94,
+   "d": 1.41,
+   "text": "able to sort of take some of the"
+  },
+  {
+   "t": 1482.35,
+   "d": 1.02,
+   "text": "inspiration that I've learned from"
+  },
+  {
+   "t": 1483.37,
+   "d": 2.16,
+   "text": "roguelikes and adapt them into sort of"
+  },
+  {
+   "t": 1485.53,
+   "d": 1.56,
+   "text": "exploring this new genre exploring this"
+  },
+  {
+   "t": 1487.09,
+   "d": 3.27,
+   "text": "new design space and that is what I am"
+  },
+  {
+   "t": 1490.36,
+   "d": 1.5,
+   "text": "going to do with these stuff that I'm"
+  },
+  {
+   "t": 1491.86,
+   "d": 2.97,
+   "text": "doing in the next sort of few years here"
+  },
+  {
+   "t": 1494.83,
+   "d": 1.8,
+   "text": "or at least the next year I don't have"
+  },
+  {
+   "t": 1496.63,
+   "d": 1.35,
+   "text": "details on this project yet but it's"
+  },
+  {
+   "t": 1497.98,
+   "d": 1.11,
+   "text": "called story gardens and it'll be great"
+  },
+  {
+   "t": 1499.09,
+   "d": 3.47,
+   "text": "ok so thank you"
+  },
+  {
+   "t": 1508.52,
+   "d": 2.32,
+   "text": "awesome we have a few minutes for"
+  },
+  {
+   "t": 1510.84,
+   "d": 1.02,
+   "text": "questions if you want to take some"
+  },
+  {
+   "t": 1511.86,
+   "d": 11.88,
+   "text": "questions hi max I had a it seemed like"
+  },
+  {
+   "t": 1523.74,
+   "d": 1.74,
+   "text": "an important part of what you think of"
+  },
+  {
+   "t": 1525.48,
+   "d": 1.38,
+   "text": "as a gardening game is that the world"
+  },
+  {
+   "t": 1526.86,
+   "d": 2.58,
+   "text": "continues to evolve when the player"
+  },
+  {
+   "t": 1529.44,
+   "d": 1.74,
+   "text": "isn't interacting with it do you think"
+  },
+  {
+   "t": 1531.18,
+   "d": 3.42,
+   "text": "that like real-time or kind of things"
+  },
+  {
+   "t": 1534.6,
+   "d": 1.53,
+   "text": "happening while you're physically not"
+  },
+  {
+   "t": 1536.13,
+   "d": 2.58,
+   "text": "you don't aren't running the game is"
+  },
+  {
+   "t": 1538.71,
+   "d": 2.1,
+   "text": "that an important part like an important"
+  },
+  {
+   "t": 1540.81,
+   "d": 1.47,
+   "text": "characteristic of this kind of game I"
+  },
+  {
+   "t": 1542.28,
+   "d": 1.35,
+   "text": "think so I don't think is essential"
+  },
+  {
+   "t": 1543.63,
+   "d": 2.07,
+   "text": "necessarily but it definitely feels like"
+  },
+  {
+   "t": 1545.7,
+   "d": 2.85,
+   "text": "it's sort of significant that the world"
+  },
+  {
+   "t": 1548.55,
+   "d": 1.2,
+   "text": "can do things without the player"
+  },
+  {
+   "t": 1549.75,
+   "d": 2.91,
+   "text": "initiating those things so epitaph is"
+  },
+  {
+   "t": 1552.66,
+   "d": 2.04,
+   "text": "it's an interesting example because it's"
+  },
+  {
+   "t": 1554.7,
+   "d": 0.96,
+   "text": "designed to sort of run in the"
+  },
+  {
+   "t": 1555.66,
+   "d": 1.38,
+   "text": "background as a browser tab while you"
+  },
+  {
+   "t": 1557.04,
+   "d": 1.35,
+   "text": "have other tabs open and are doing other"
+  },
+  {
+   "t": 1558.39,
+   "d": 3.39,
+   "text": "things and it plays best I feel like"
+  },
+  {
+   "t": 1561.78,
+   "d": 1.53,
+   "text": "when you have it in that situation but"
+  },
+  {
+   "t": 1563.31,
+   "d": 1.59,
+   "text": "also if you go away from from the"
+  },
+  {
+   "t": 1564.9,
+   "d": 1.65,
+   "text": "browser like close the browser and come"
+  },
+  {
+   "t": 1566.55,
+   "d": 1.53,
+   "text": "back to it that sort of like invalidates"
+  },
+  {
+   "t": 1568.08,
+   "d": 1.11,
+   "text": "the state of the world and sort of"
+  },
+  {
+   "t": 1569.19,
+   "d": 2.64,
+   "text": "creates a fresh world instead so I think"
+  },
+  {
+   "t": 1571.83,
+   "d": 2.43,
+   "text": "there's a compromise to be made between"
+  },
+  {
+   "t": 1574.26,
+   "d": 2.31,
+   "text": "like things that only exist while the"
+  },
+  {
+   "t": 1576.57,
+   "d": 1.56,
+   "text": "player is sort of at the console but not"
+  },
+  {
+   "t": 1578.13,
+   "d": 1.89,
+   "text": "necessarily like attending to it versus"
+  },
+  {
+   "t": 1580.02,
+   "d": 3.33,
+   "text": "things that totally exists like in"
+  },
+  {
+   "t": 1583.35,
+   "d": 1.29,
+   "text": "parallel with the world the real world"
+  },
+  {
+   "t": 1584.64,
+   "d": 1.47,
+   "text": "no matter what as long as the player"
+  },
+  {
+   "t": 1586.11,
+   "d": 3.36,
+   "text": "hasn't to continue I think this is kind"
+  },
+  {
+   "t": 1589.47,
+   "d": 2.64,
+   "text": "of implied in your talk but do you think"
+  },
+  {
+   "t": 1592.11,
+   "d": 3.15,
+   "text": "it's morally bad for players to exploit"
+  },
+  {
+   "t": 1595.26,
+   "d": 3.02,
+   "text": "the natural resources of a virtual space"
+  },
+  {
+   "t": 1598.28,
+   "d": 3.28,
+   "text": "so this is sort of something that I'm"
+  },
+  {
+   "t": 1601.56,
+   "d": 1.74,
+   "text": "not totally sure about myself I think"
+  },
+  {
+   "t": 1603.3,
+   "d": 1.92,
+   "text": "that it sort of entitlement games"
+  },
+  {
+   "t": 1605.22,
+   "d": 1.47,
+   "text": "argument or entitlement simulators"
+  },
+  {
+   "t": 1606.69,
+   "d": 1.98,
+   "text": "argument is that by allowing players to"
+  },
+  {
+   "t": 1608.67,
+   "d": 2.13,
+   "text": "sort of engage in these extruded"
+  },
+  {
+   "t": 1610.8,
+   "d": 1.38,
+   "text": "exploited them extractive dynamics"
+  },
+  {
+   "t": 1612.18,
+   "d": 1.26,
+   "text": "repeatedly it sort of teaches them"
+  },
+  {
+   "t": 1613.44,
+   "d": 2.94,
+   "text": "that's an okay way to exist which is"
+  },
+  {
+   "t": 1616.38,
+   "d": 2.04,
+   "text": "something that I'm not totally sure I'm"
+  },
+  {
+   "t": 1618.42,
+   "d": 3.24,
+   "text": "totally on board with but more broadly I"
+  },
+  {
+   "t": 1621.66,
+   "d": 1.59,
+   "text": "also think it only necessarily is like"
+  },
+  {
+   "t": 1623.25,
+   "d": 2.76,
+   "text": "the case in games where they're truck"
+  },
+  {
+   "t": 1626.01,
+   "d": 1.32,
+   "text": "where the game is trying to be a world"
+  },
+  {
+   "t": 1627.33,
+   "d": 1.62,
+   "text": "basically and not the other kinds of"
+  },
+  {
+   "t": 1628.95,
+   "d": 1.23,
+   "text": "games that I was sort of like talking"
+  },
+  {
+   "t": 1630.18,
+   "d": 1.92,
+   "text": "about as like contests or rituals or"
+  },
+  {
+   "t": 1632.1,
+   "d": 1.67,
+   "text": "like sort of the story types of games"
+  },
+  {
+   "t": 1633.77,
+   "d": 3.1,
+   "text": "there's also sort of like a weird"
+  },
+  {
+   "t": 1636.87,
+   "d": 2.01,
+   "text": "digression to go down where it's like do"
+  },
+  {
+   "t": 1638.88,
+   "d": 1.9,
+   "text": "you do you actually believe"
+  },
+  {
+   "t": 1640.78,
+   "d": 1.8,
+   "text": "it's a bad thing inherently or is it"
+  },
+  {
+   "t": 1642.58,
+   "d": 1.5,
+   "text": "just sort of like whether the player has"
+  },
+  {
+   "t": 1644.08,
+   "d": 1.38,
+   "text": "like sort of this lesson that they learn"
+  },
+  {
+   "t": 1645.46,
+   "d": 1.29,
+   "text": "from these sorts of dynamics that they"
+  },
+  {
+   "t": 1646.75,
+   "d": 1.98,
+   "text": "take with them into the real world and I"
+  },
+  {
+   "t": 1648.73,
+   "d": 1.47,
+   "text": "don't think that it's a morally bad"
+  },
+  {
+   "t": 1650.2,
+   "d": 2.28,
+   "text": "thing to exploit simulations like for it"
+  },
+  {
+   "t": 1652.48,
+   "d": 2.58,
+   "text": "for their own sake I'm more concerned"
+  },
+  {
+   "t": 1655.06,
+   "d": 3.69,
+   "text": "with like do players get enjoyment out"
+  },
+  {
+   "t": 1658.75,
+   "d": 1.29,
+   "text": "of these things and then sort of"
+  },
+  {
+   "t": 1660.04,
+   "d": 1.5,
+   "text": "translate that into like how they live"
+  },
+  {
+   "t": 1661.54,
+   "d": 11.4,
+   "text": "normally okay one more question that's"
+  },
+  {
+   "t": 1672.94,
+   "d": 1.71,
+   "text": "really interestingly lined up for me"
+  },
+  {
+   "t": 1674.65,
+   "d": 1.68,
+   "text": "with John woos talk from yesterday about"
+  },
+  {
+   "t": 1676.33,
+   "d": 2.79,
+   "text": "like non resource resources for the"
+  },
+  {
+   "t": 1679.12,
+   "d": 1.41,
+   "text": "person to manage and I was curious if"
+  },
+  {
+   "t": 1680.53,
+   "d": 2.4,
+   "text": "you had any thoughts about like whether"
+  },
+  {
+   "t": 1682.93,
+   "d": 1.59,
+   "text": "your garden would have a metric of like"
+  },
+  {
+   "t": 1684.52,
+   "d": 2.58,
+   "text": "beauty or something like that yeah so I"
+  },
+  {
+   "t": 1687.1,
+   "d": 1.2,
+   "text": "don't know that I thought about like"
+  },
+  {
+   "t": 1688.3,
+   "d": 1.5,
+   "text": "sort of metrics for things like that I"
+  },
+  {
+   "t": 1689.8,
+   "d": 3.78,
+   "text": "feel like I almost am sort of resistant"
+  },
+  {
+   "t": 1693.58,
+   "d": 1.32,
+   "text": "to the idea of measuring things like"
+  },
+  {
+   "t": 1694.9,
+   "d": 2.1,
+   "text": "that in like on an algorithmic or in a"
+  },
+  {
+   "t": 1697.0,
+   "d": 2.13,
+   "text": "simulation sort of level because it"
+  },
+  {
+   "t": 1699.13,
+   "d": 1.62,
+   "text": "feels like the world should exist for"
+  },
+  {
+   "t": 1700.75,
+   "d": 1.2,
+   "text": "its own sake and not as a thing do you"
+  },
+  {
+   "t": 1701.95,
+   "d": 1.29,
+   "text": "like sort of have a number that goes up"
+  },
+  {
+   "t": 1703.24,
+   "d": 3.33,
+   "text": "as it improved by the player but I don't"
+  },
+  {
+   "t": 1706.57,
+   "d": 0.99,
+   "text": "know it seems like there's also"
+  },
+  {
+   "t": 1707.56,
+   "d": 1.32,
+   "text": "interesting things to be done with like"
+  },
+  {
+   "t": 1708.88,
+   "d": 1.29,
+   "text": "what you're measuring and how you're"
+  },
+  {
+   "t": 1710.17,
+   "d": 1.5,
+   "text": "measuring it that can be used to sort of"
+  },
+  {
+   "t": 1711.67,
+   "d": 1.71,
+   "text": "like encourage different interesting"
+  },
+  {
+   "t": 1713.38,
+   "d": 1.89,
+   "text": "dynamics of play and I'm totally curious"
+  },
+  {
+   "t": 1715.27,
+   "d": 1.05,
+   "text": "to see if there's anything else in that"
+  },
+  {
+   "t": 1716.32,
+   "d": 2.19,
+   "text": "space that like measures unusual things"
+  },
+  {
+   "t": 1718.51,
+   "d": 1.59,
+   "text": "and sort of uses that to like reflect"
+  },
+  {
+   "t": 1720.1,
+   "d": 1.89,
+   "text": "back at the player what's interesting or"
+  },
+  {
+   "t": 1721.99,
+   "d": 1.14,
+   "text": "what they should do in the world or"
+  },
+  {
+   "t": 1723.13,
+   "d": 2.88,
+   "text": "something like that okay thank you so"
+  },
+  {
+   "t": 1726.01,
+   "d": 2.15,
+   "text": "much"
+  }
+ ]
+}

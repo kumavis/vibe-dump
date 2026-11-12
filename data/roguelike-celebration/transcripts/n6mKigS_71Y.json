@@ -1,0 +1,511 @@
+{
+ "id": "n6mKigS_71Y",
+ "url": "https://www.youtube.com/watch?v=n6mKigS_71Y",
+ "title": "Ray - Remixing the Layer Cake: Facilitating fan reinterpretation through Caves of Qud's modular data",
+ "speaker": "Ray",
+ "talk_title": "Remixing the Layer Cake: Facilitating fan reinterpretation through Caves of Qud's modular data",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 837,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Caves of Qud presents a broadly inspectable and extensible engine to inquisitive player-tinkerers. One accessible facet of this engine is its use of robust and modular data files. Much of the game’s content is written in XML files which are both processable to wiki editors and remixable to modders.\n\nIn this talk, Ray describes how this system works, their experience with it and the communities that interact with it, and how this practice might be replicable into future games.\n\nRay's slide repo: https://github.com/librarianmage/RogueCel2023",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Caves of Qud"
+  },
+  {
+   "start": 69,
+   "title": "Data-driven game architecture"
+  },
+  {
+   "start": 250,
+   "title": "Wiki pipeline and remapping"
+  },
+  {
+   "start": 473,
+   "title": "Modding and design tradeoffs"
+  },
+  {
+   "start": 637,
+   "title": "Resources and Q&A"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1600,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 5.64,
+   "text": "QRISTY: Let's see is there anything else important to note? Eh. No. You are not here to hear me talk."
+  },
+  {
+   "t": 5.64,
+   "d": 8.88,
+   "text": "You are here to hear our first talk in the block is from Ray who will be telling us about \"Remixing"
+  },
+  {
+   "t": 14.52,
+   "d": 6.12,
+   "text": "the Layer Cake: Facilitating fan reinterpretation through Caves of Qud's modular data files.\""
+  },
+  {
+   "t": 20.64,
+   "d": 4.36,
+   "text": "Ray studies math and computer science. When not dreaming about"
+  },
+  {
+   "t": 25.0,
+   "d": 3.72,
+   "text": "Caves of Qud, they might be found playing it instead."
+  },
+  {
+   "t": 28.72,
+   "d": 9.56,
+   "text": "Goals truly. Ray, welcome to the celebration. RAY: Hi. Thank you for coming my talk. As Qristy"
+  },
+  {
+   "t": 38.28,
+   "d": 5.6,
+   "text": "said this is \"Remixing the Layer Cake: Facilitating fan reinterpretation through"
+  },
+  {
+   "t": 43.88,
+   "d": 6.16,
+   "text": "Caves of Qud's modular data files.\" Well, you if you haven't heard of Caves of Qud, it is a"
+  },
+  {
+   "t": 50.04,
+   "d": 9.33,
+   "text": "possibility, it is a science fantasy and roguelike epic that is finally releasing in 2024. There"
+  },
+  {
+   "t": 59.37,
+   "d": 4.63,
+   "text": "is a lot I could say about it but what I am specifically going to be talking about is how"
+  },
+  {
+   "t": 64.0,
+   "d": 9.4,
+   "text": "it presents a broadly inspectable and extensible engine. Manipulating the game comes at about three"
+  },
+  {
+   "t": 73.4,
+   "d": 8.32,
+   "text": "different aspects depending on how you count. There is data files, C# scripting that sort of"
+  },
+  {
+   "t": 81.72,
+   "d": 7.24,
+   "text": "conforms to the interface the game provides and for the precise things you need to do,"
+  },
+  {
+   "t": 88.96,
+   "d": 7.96,
+   "text": "the game allows you to directly patch over but I am focusing on the data files specifically."
+  },
+  {
+   "t": 98.24,
+   "d": 9.28,
+   "text": "The data files in Caves of Qud are primarily XML. I would provide an example but if you have seen"
+  },
+  {
+   "t": 108.04,
+   "d": 9.6,
+   "text": "Mike Cook's talk yesterday it had an example of what you might see here. There is a little"
+  },
+  {
+   "t": 117.64,
+   "d": 8.0,
+   "text": "bit of JSON but that doesn't come with the same functionality. But the data files generally end"
+  },
+  {
+   "t": 125.64,
+   "d": 14.72,
+   "text": "up being like lists of like defining specific items such as like objects, et cetera, and the"
+  },
+  {
+   "t": 141.36,
+   "d": 9.96,
+   "text": "important part is that items sort of can inherit -- there is an inheritance tree of properties and"
+  },
+  {
+   "t": 152.08,
+   "d": 7.8,
+   "text": "aspects. You can also mix in things for objects. I am not going to touch on that but the really"
+  },
+  {
+   "t": 159.88,
+   "d": 10.92,
+   "text": "important part for modding is that you can merge your part that you define over -- you can sort of"
+  },
+  {
+   "t": 170.8,
+   "d": 12.76,
+   "text": "overlay it and sort of specifically rewrite precise parts of the data tree. And another"
+  },
+  {
+   "t": 183.56,
+   "d": 11.15,
+   "text": "important aspect of the system is that there are escape patches to scripting for functionality. It"
+  },
+  {
+   "t": 194.71,
+   "d": 9.37,
+   "text": "is mostly considered parts but you can attach these sort of -- you can attach these parts to"
+  },
+  {
+   "t": 205.92,
+   "d": 10.44,
+   "text": "specific objects and then they provide that action or whatever the part does. There is a"
+  },
+  {
+   "t": 216.36,
+   "d": 6.56,
+   "text": "lot that's defined in data files in Caves of Qud including game objects so items and creatures,"
+  },
+  {
+   "t": 222.92,
+   "d": 9.6,
+   "text": "conversations, quests, population tables which are like what the game uses to pick randomly for"
+  },
+  {
+   "t": 232.52,
+   "d": 9.48,
+   "text": "like picking random items and such. Or even like factions, books, precise things such as player"
+  },
+  {
+   "t": 242.0,
+   "d": 7.6,
+   "text": "presets and options to define your own custom genders and pronouns which I find pretty fun."
+  },
+  {
+   "t": 250.56,
+   "d": 5.36,
+   "text": "What does this get us? Specifically as a moder and someone that works on the wiki,"
+  },
+  {
+   "t": 255.92,
+   "d": 8.12,
+   "text": "I argue the system provides a strong capacity for reinterpretations which I am defining as the"
+  },
+  {
+   "t": 264.04,
+   "d": 13.8,
+   "text": "ability for players to parse, reuse and transform a game's data. For the wiki that's like taking"
+  },
+  {
+   "t": 277.84,
+   "d": 8.08,
+   "text": "the game's data files and moving that data to the wiki. So the specific pipeline is that we"
+  },
+  {
+   "t": 285.92,
+   "d": 7.28,
+   "text": "take the data files, it goes through a program called Hugades, not sure how to pronounce it,"
+  },
+  {
+   "t": 293.2,
+   "d": 10.0,
+   "text": "but to parse out specifically the game objects and upload them to the wiki through a program"
+  },
+  {
+   "t": 303.2,
+   "d": 16.88,
+   "text": "called the cud blueprint explorer. This makes keeping the game content on the wiki -- updated"
+  },
+  {
+   "t": 320.08,
+   "d": 9.88,
+   "text": "much more -- it makes it much more easy to keep it updated. The program will like find"
+  },
+  {
+   "t": 329.96,
+   "d": 9.52,
+   "text": "where like objects need to be updated and you can just upload them from there. Also because"
+  },
+  {
+   "t": 339.48,
+   "d": 9.68,
+   "text": "we sort of transform it through this process, on the wiki we use media wiki which is the wiki"
+  },
+  {
+   "t": 349.16,
+   "d": 10.92,
+   "text": "software a feature called cargo tables which let's us use the data on the wiki in sort of"
+  },
+  {
+   "t": 360.08,
+   "d": 12.08,
+   "text": "like a database style which allows searching and filtering and relating items together in"
+  },
+  {
+   "t": 373.04,
+   "d": 12.64,
+   "text": "ways that are not static. A complication for this process is what is convenient for a game ontology,"
+  },
+  {
+   "t": 386.2,
+   "d": 10.68,
+   "text": "what a game considers each individual item, is not necessarily how it works for -- like for a wiki."
+  },
+  {
+   "t": 396.88,
+   "d": 7.0,
+   "text": "Like there are three different doors that need different keys to unlock in the progression of"
+  },
+  {
+   "t": 403.88,
+   "d": 11.88,
+   "text": "the game, does it make sense for us to make each of these a separate page? There is also, like, an"
+  },
+  {
+   "t": 415.76,
+   "d": 10.96,
+   "text": "entire sheet of here are the overrides that we do which -- it is very convenient and it ameliorates"
+  },
+  {
+   "t": 426.72,
+   "d": 7.92,
+   "text": "a lot of the work but it still all requires work. Having an effective wiki requires work on behalf"
+  },
+  {
+   "t": 434.64,
+   "d": 10.16,
+   "text": "of the wiki team which in the Cud community are called the trash mugs. Writing a user presented"
+  },
+  {
+   "t": 444.8,
+   "d": 7.48,
+   "text": "prose and making sure all of the things we can't upload through the process are updated still"
+  },
+  {
+   "t": 452.28,
+   "d": 13.56,
+   "text": "requires work. It is very convenient. Still like it is not a -- it doesn't completely remove the"
+  },
+  {
+   "t": 465.84,
+   "d": 12.72,
+   "text": "user's -- like the gameplayer's involvement with the system. For modding, I would argue that this"
+  },
+  {
+   "t": 478.56,
+   "d": 7.56,
+   "text": "framework is very useful for modding because it is significantly more robust towards interface and"
+  },
+  {
+   "t": 486.12,
+   "d": 10.64,
+   "text": "game changes than a strictly scripting. It also allows for small changes to be only a couple lines"
+  },
+  {
+   "t": 496.76,
+   "d": 10.52,
+   "text": "of code. For instance, like, my favorite example of a short mod is one that makes -- there is an"
+  },
+  {
+   "t": 507.28,
+   "d": 7.56,
+   "text": "item in the game called trans kinetic cuffs that make trans kinetic the translate colors. That's"
+  },
+  {
+   "t": 514.84,
+   "d": 7.32,
+   "text": "like three lines more like four lines of code or XML to override that specific property. It"
+  },
+  {
+   "t": 522.16,
+   "d": 10.68,
+   "text": "also allows for modders to repurpose the parts I mentioned earlier. You can sort of take little"
+  },
+  {
+   "t": 532.84,
+   "d": 11.52,
+   "text": "bits and reuse them in your own way. If you recall Mike Cook's talk yesterday we sort of talked about"
+  },
+  {
+   "t": 544.36,
+   "d": 9.8,
+   "text": "that too. However, like for modding that's not always the easiest because like sometimes the way"
+  },
+  {
+   "t": 554.16,
+   "d": 10.08,
+   "text": "that parts are conceptualized doesn't work for the changes you are trying to do. The biggest example,"
+  },
+  {
+   "t": 565.08,
+   "d": 5.92,
+   "text": "the first example that comes to my mind is that there are rocket powered boots in the game and the"
+  },
+  {
+   "t": 571.0,
+   "d": 7.84,
+   "text": "functionality that lets you jump with them and like it leaves a trail of fire behind. That is"
+  },
+  {
+   "t": 578.84,
+   "d": 7.24,
+   "text": "considered one whole part. If you want to split it up, then you have to dip into C# which isn't"
+  },
+  {
+   "t": 586.64,
+   "d": 5.96,
+   "text": "the end of the world but it is less convenient. I think ultimately there is tension between power"
+  },
+  {
+   "t": 592.6,
+   "d": 10.0,
+   "text": "and comprehensibility for this system. How much do you want to make it like a programming language"
+  },
+  {
+   "t": 602.6,
+   "d": 8.04,
+   "text": "before like it is like a programming language? I will argue it is a programming language but it is"
+  },
+  {
+   "t": 610.64,
+   "d": 11.72,
+   "text": "much simpler than C#. But if you want to like do actions based on like what other mods there are,"
+  },
+  {
+   "t": 622.36,
+   "d": 12.6,
+   "text": "the state of the game, and so on, like, those can be more complicated to do than I think is like"
+  },
+  {
+   "t": 634.96,
+   "d": 8.64,
+   "text": "hypothetically possible. If you are interested in learning more about the system, all of these"
+  },
+  {
+   "t": 643.6,
+   "d": 8.0,
+   "text": "links are listed in the read me for the code for these slides. Specifically, I would check out the"
+  },
+  {
+   "t": 651.6,
+   "d": 12.84,
+   "text": "snap jaw mages wiki tutorial. It does a great job of walking through the specific data manipulation"
+  },
+  {
+   "t": 664.44,
+   "d": 7.04,
+   "text": "required to sort of create your own weapons. And the other thing I would want to point out is this"
+  },
+  {
+   "t": 671.48,
+   "d": 15.96,
+   "text": "next weekend we, the Discord community for Caves of Qud, me and one of the other community members,"
+  },
+  {
+   "t": 687.44,
+   "d": 8.56,
+   "text": "Lou, we are running a modding jam for Halloween if that's the kickstart that you need to get"
+  },
+  {
+   "t": 696.0,
+   "d": 10.28,
+   "text": "started. Yeah, Thank you for coming to my talk. QRISTY: Cool. Thank you so much. This is -- gosh,"
+  },
+  {
+   "t": 706.28,
+   "d": 10.24,
+   "text": "it sounds like so much fun. Monster jam. If you had told me two days ago, I would be excited"
+  },
+  {
+   "t": 716.52,
+   "d": 8.88,
+   "text": "about XML. You would have surprised me but now I am like oh, man, that sounds really cool."
+  },
+  {
+   "t": 725.4,
+   "d": 5.64,
+   "text": "RAY: XML is not the easiest to write but I think it is useful in this context."
+  },
+  {
+   "t": 731.04,
+   "d": 7.24,
+   "text": "QRISTY: Totally. We have one question. Which is can you explain"
+  },
+  {
+   "t": 738.28,
+   "d": 7.36,
+   "text": "more about what you mean by ontology? RAY: My ontology I am using it as sort of"
+  },
+  {
+   "t": 745.64,
+   "d": 14.64,
+   "text": "a broad word to mean how the game understands what is a thing so like in the example, like,"
+  },
+  {
+   "t": 760.28,
+   "d": 8.44,
+   "text": "each of the different doors is its own object defined in the game. The game refers to them"
+  },
+  {
+   "t": 768.72,
+   "d": 9.04,
+   "text": "as blueprints but is that necessarily what we want when presenting it as a concept to the"
+  },
+  {
+   "t": 778.4,
+   "d": 8.72,
+   "text": "user who might sort of conceptualize those as these are the three different doors -- you go"
+  },
+  {
+   "t": 787.12,
+   "d": 7.2,
+   "text": "through them in sequence. Basically I am talking about like how does the game conceptualize itself"
+  },
+  {
+   "t": 794.32,
+   "d": 6.12,
+   "text": "in like what is considered object, what even like possible categories of things there are,"
+  },
+  {
+   "t": 800.44,
+   "d": 7.44,
+   "text": "so like that list that I list of all the things defined in data, like defining those,"
+  },
+  {
+   "t": 807.88,
+   "d": 11.12,
+   "text": "all of that. I am not sure if that makes sense. QRISTY: So you would be like I want to modify the"
+  },
+  {
+   "t": 819.0,
+   "d": 3.96,
+   "text": "fire that comes off the rocket boots. I actually want to modify the rocket boots"
+  },
+  {
+   "t": 822.96,
+   "d": 6.04,
+   "text": "because that is the one thing all together. RAY: Yeah, basically. What the game considers"
+  },
+  {
+   "t": 829.0,
+   "d": 7.53,
+   "text": "discreet versus like the same thing. QRISTY: Cool. All right. Thanks, again. If"
+  },
+  {
+   "t": 836.53,
+   "d": 0.09,
+   "text": "you want to stick around until the end of this block we will have you in breakout room one,"
+  },
+  {
+   "t": 836.62,
+   "d": 1.57,
+   "text": "I Was a Teenage Gelatinous Cube. We have three other talks so don't go anywhere."
+  }
+ ]
+}

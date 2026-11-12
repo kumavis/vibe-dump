@@ -1,0 +1,3959 @@
+{
+ "id": "C6jR41fZjqM",
+ "url": "https://www.youtube.com/watch?v=C6jR41fZjqM",
+ "title": "Tyler Coleman: Finding your 80/20 Rule with Proc-Gen",
+ "speaker": "Tyler Coleman",
+ "talk_title": "Finding your 80/20 Rule with Proc-Gen",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 1839,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "The 80-20 rule means different things to different people, so let's talk about all of them! (not really) What we are going to chat about is how the \"80/20 rule\" applies to production time, design familiarity, and player expectations in procedural generation. Real takeaways in include: \"how polished is polished enough\" for generative systems, \"how granular should this system be\", and \"how much does the player think is actually generating versus static\", \"what does the community share in its experience\" and what games have excelled at these properties in gaming.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and context"
+  },
+  {
+   "start": 201,
+   "title": "Thinking in curves"
+  },
+  {
+   "start": 480,
+   "title": "Production and 80/20 time"
+  },
+  {
+   "start": 658,
+   "title": "Innovation and familiarity"
+  },
+  {
+   "start": 1214,
+   "title": "Content and the vocal minority"
+  },
+  {
+   "start": 1496,
+   "title": "Managing game meta"
+  },
+  {
+   "start": 1594,
+   "title": "Mathematical application"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5546,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 2.72,
+   "d": 3.16,
+   "text": "but next up we have a full talk from"
+  },
+  {
+   "t": 5.88,
+   "d": 2.92,
+   "text": "Tyler Coleman founder of retoric Gams"
+  },
+  {
+   "t": 8.8,
+   "d": 2.32,
+   "text": "developer of merchant space Merchant and"
+  },
+  {
+   "t": 11.12,
+   "d": 1.96,
+   "text": "Merchant guilds and a lecturer at"
+  },
+  {
+   "t": 13.08,
+   "d": 2.0,
+   "text": "University of Texas and University of"
+  },
+  {
+   "t": 15.08,
+   "d": 2.76,
+   "text": "California and a founder of luto systems"
+  },
+  {
+   "t": 17.84,
+   "d": 3.36,
+   "text": "who is here to talk about the 8020 rule"
+  },
+  {
+   "t": 21.2,
+   "d": 2.28,
+   "text": "which you may have heard of but is also"
+  },
+  {
+   "t": 23.48,
+   "d": 3.28,
+   "text": "extremely useful and applies to working"
+  },
+  {
+   "t": 26.76,
+   "d": 4.36,
+   "text": "with proen so next up welcome"
+  },
+  {
+   "t": 31.12,
+   "d": 1.84,
+   "text": "Tyler thanks"
+  },
+  {
+   "t": 32.96,
+   "d": 2.96,
+   "text": "Alexi uh yeah so uh I'm here to talk"
+  },
+  {
+   "t": 35.92,
+   "d": 2.44,
+   "text": "about the 8020 rule I assume most of you"
+  },
+  {
+   "t": 38.36,
+   "d": 2.76,
+   "text": "have heard of this before uh probably"
+  },
+  {
+   "t": 41.12,
+   "d": 3.0,
+   "text": "many different forms of it um but before"
+  },
+  {
+   "t": 44.12,
+   "d": 1.96,
+   "text": "we jump into it I want to talk first"
+  },
+  {
+   "t": 46.08,
+   "d": 1.8,
+   "text": "about why this is on my mind you know"
+  },
+  {
+   "t": 47.88,
+   "d": 2.2,
+   "text": "why it's a topic that I submitted a talk"
+  },
+  {
+   "t": 50.08,
+   "d": 1.52,
+   "text": "for and I've been thinking about for the"
+  },
+  {
+   "t": 51.6,
+   "d": 2.08,
+   "text": "past few years uh and to do that we're"
+  },
+  {
+   "t": 53.68,
+   "d": 1.2,
+   "text": "going to do a little bit of background"
+  },
+  {
+   "t": 54.88,
+   "d": 2.6,
+   "text": "history so I launched uh my one game"
+  },
+  {
+   "t": 57.48,
+   "d": 3.24,
+   "text": "Merchant in 2014 uh it's still gets"
+  },
+  {
+   "t": 60.72,
+   "d": 2.24,
+   "text": "updates once in a while uh and a few"
+  },
+  {
+   "t": 62.96,
+   "d": 1.64,
+   "text": "years ago we decided to try to make a"
+  },
+  {
+   "t": 64.6,
+   "d": 2.36,
+   "text": "multiplayer sequel so online multiplayer"
+  },
+  {
+   "t": 66.96,
+   "d": 2.2,
+   "text": "game uh I'm just going to share a couple"
+  },
+  {
+   "t": 69.16,
+   "d": 1.76,
+   "text": "seconds of a trailer just to illustrate"
+  },
+  {
+   "t": 70.92,
+   "d": 1.64,
+   "text": "if it plays"
+  },
+  {
+   "t": 72.56,
+   "d": 3.0,
+   "text": "hopefully"
+  },
+  {
+   "t": 77.28,
+   "d": 2.56,
+   "text": "um mostly just an excuse to share this"
+  },
+  {
+   "t": 79.84,
+   "d": 3.28,
+   "text": "awesome trailer"
+  },
+  {
+   "t": 108.4,
+   "d": 1.16,
+   "text": "so this is the important part of the"
+  },
+  {
+   "t": 109.56,
+   "d": 1.84,
+   "text": "trailer uh you'll see that this game is"
+  },
+  {
+   "t": 111.4,
+   "d": 2.0,
+   "text": "coming in"
+  },
+  {
+   "t": 113.4,
+   "d": 2.08,
+   "text": "2021 uh so now I'm going to show you a"
+  },
+  {
+   "t": 115.48,
+   "d": 3.8,
+   "text": "second version of this trailer"
+  },
+  {
+   "t": 146.46,
+   "d": 3.09,
+   "text": "[Music]"
+  },
+  {
+   "t": 150.48,
+   "d": 1.4,
+   "text": "so you'll see a very important part of"
+  },
+  {
+   "t": 151.88,
+   "d": 1.64,
+   "text": "this trailer which says that the game is"
+  },
+  {
+   "t": 153.52,
+   "d": 1.28,
+   "text": "coming in"
+  },
+  {
+   "t": 154.8,
+   "d": 2.4,
+   "text": "2024 um so if you will take away"
+  },
+  {
+   "t": 157.2,
+   "d": 2.08,
+   "text": "anything from me on this it's don't put"
+  },
+  {
+   "t": 159.28,
+   "d": 3.8,
+   "text": "coming year on any trailer ever um but"
+  },
+  {
+   "t": 163.08,
+   "d": 1.56,
+   "text": "this is why I've been thinking about"
+  },
+  {
+   "t": 164.64,
+   "d": 2.32,
+   "text": "this 820 Ru uh you know we originally"
+  },
+  {
+   "t": 166.96,
+   "d": 1.28,
+   "text": "decided hey we're going to add a couple"
+  },
+  {
+   "t": 168.24,
+   "d": 1.28,
+   "text": "things to a game that already exists"
+  },
+  {
+   "t": 169.52,
+   "d": 2.04,
+   "text": "adds multiplayer it'll be out in a year"
+  },
+  {
+   "t": 171.56,
+   "d": 1.32,
+   "text": "uh then we realized how much more we"
+  },
+  {
+   "t": 172.88,
+   "d": 1.96,
+   "text": "needed to add to do that and make it"
+  },
+  {
+   "t": 174.84,
+   "d": 2.12,
+   "text": "good uh so then we kept pushing it back"
+  },
+  {
+   "t": 176.96,
+   "d": 3.28,
+   "text": "pushing it back so no longer 2021 maybe"
+  },
+  {
+   "t": 180.24,
+   "d": 3.64,
+   "text": "2024 right who knows we'll see actually"
+  },
+  {
+   "t": 183.88,
+   "d": 2.84,
+   "text": "the good news is it is 2024 in fact it's"
+  },
+  {
+   "t": 186.72,
+   "d": 2.52,
+   "text": "Wednesday uh so just so you know if"
+  },
+  {
+   "t": 189.24,
+   "d": 1.72,
+   "text": "anything about this talk seems Rough"
+  },
+  {
+   "t": 190.96,
+   "d": 2.08,
+   "text": "Around the Edges it's not because I've"
+  },
+  {
+   "t": 193.04,
+   "d": 1.6,
+   "text": "been playing batra on my phone it's"
+  },
+  {
+   "t": 194.64,
+   "d": 2.56,
+   "text": "because I'm launching a game in two days"
+  },
+  {
+   "t": 197.2,
+   "d": 3.12,
+   "text": "um so with that said let's jump into it"
+  },
+  {
+   "t": 200.32,
+   "d": 1.92,
+   "text": "uh so I'm here to talk about the Paro"
+  },
+  {
+   "t": 202.24,
+   "d": 2.0,
+   "text": "principle um some of you have probably"
+  },
+  {
+   "t": 204.24,
+   "d": 1.8,
+   "text": "heard of it as this term you know 8020"
+  },
+  {
+   "t": 206.04,
+   "d": 2.32,
+   "text": "rule they're kind of interchangeable um"
+  },
+  {
+   "t": 208.36,
+   "d": 2.44,
+   "text": "so the idea here the original is that"
+  },
+  {
+   "t": 210.8,
+   "d": 2.68,
+   "text": "20% of the input creates 80% of the"
+  },
+  {
+   "t": 213.48,
+   "d": 1.88,
+   "text": "results uh you know this has been"
+  },
+  {
+   "t": 215.36,
+   "d": 2.56,
+   "text": "applied in a lot of different ways I"
+  },
+  {
+   "t": 217.92,
+   "d": 1.52,
+   "text": "like to just call it the 8020 rule I"
+  },
+  {
+   "t": 219.44,
+   "d": 2.96,
+   "text": "think it's more approachable that way um"
+  },
+  {
+   "t": 222.4,
+   "d": 1.92,
+   "text": "so like some of the versions that you"
+  },
+  {
+   "t": 224.32,
+   "d": 1.76,
+   "text": "maybe have seen before people talked"
+  },
+  {
+   "t": 226.08,
+   "d": 2.56,
+   "text": "about for this you know 20% of the input"
+  },
+  {
+   "t": 228.64,
+   "d": 2.88,
+   "text": "creates 80 of result 80% of the land is"
+  },
+  {
+   "t": 231.52,
+   "d": 2.0,
+   "text": "owned by 20% of the population the"
+  },
+  {
+   "t": 233.52,
+   "d": 3.2,
+   "text": "original form of this uh 20% of"
+  },
+  {
+   "t": 236.72,
+   "d": 2.0,
+   "text": "customers make most Revenue 20% of"
+  },
+  {
+   "t": 238.72,
+   "d": 2.52,
+   "text": "workers produce most results you know"
+  },
+  {
+   "t": 241.24,
+   "d": 2.84,
+   "text": "there's a lot of variations of this in"
+  },
+  {
+   "t": 244.08,
+   "d": 3.08,
+   "text": "software and production in business uh"
+  },
+  {
+   "t": 247.16,
+   "d": 1.04,
+   "text": "but I'm here to tell you that these"
+  },
+  {
+   "t": 248.2,
+   "d": 1.4,
+   "text": "versions are boring right we're not"
+  },
+  {
+   "t": 249.6,
+   "d": 2.36,
+   "text": "actually here to talk about these these"
+  },
+  {
+   "t": 251.96,
+   "d": 1.76,
+   "text": "are just big numbers that we don't care"
+  },
+  {
+   "t": 253.72,
+   "d": 2.68,
+   "text": "about uh we're actually here to have"
+  },
+  {
+   "t": 256.4,
+   "d": 1.76,
+   "text": "some fun and think of some interesting"
+  },
+  {
+   "t": 258.16,
+   "d": 2.6,
+   "text": "8020 rules that may apply in games uh so"
+  },
+  {
+   "t": 260.76,
+   "d": 1.92,
+   "text": "did you know that 20% of runs result in"
+  },
+  {
+   "t": 262.68,
+   "d": 3.24,
+   "text": "80% of the victories or 20% of chests"
+  },
+  {
+   "t": 265.92,
+   "d": 3.64,
+   "text": "provide 80% of the loop how about 20 80%"
+  },
+  {
+   "t": 269.56,
+   "d": 2.24,
+   "text": "of the damage reflected is from only 20%"
+  },
+  {
+   "t": 271.8,
+   "d": 1.32,
+   "text": "of the"
+  },
+  {
+   "t": 273.12,
+   "d": 3.68,
+   "text": "jam 20% Champions are used in 80% of the"
+  },
+  {
+   "t": 276.8,
+   "d": 3.04,
+   "text": "matches 80% of the map is for most for a"
+  },
+  {
+   "t": 279.84,
+   "d": 2.68,
+   "text": "small bit of perin right you know so"
+  },
+  {
+   "t": 282.52,
+   "d": 2.0,
+   "text": "there's a lot of versions of this and of"
+  },
+  {
+   "t": 284.52,
+   "d": 2.32,
+   "text": "course for any of these it's important"
+  },
+  {
+   "t": 286.84,
+   "d": 1.88,
+   "text": "to know the most important statistic on"
+  },
+  {
+   "t": 288.72,
+   "d": 2.24,
+   "text": "this screen is that these are all made"
+  },
+  {
+   "t": 290.96,
+   "d": 1.8,
+   "text": "up on the spot you know I'm not here to"
+  },
+  {
+   "t": 292.76,
+   "d": 2.16,
+   "text": "give you actual data this is not uh"
+  },
+  {
+   "t": 294.92,
+   "d": 2.6,
+   "text": "peer- reviewed studied uh this is me"
+  },
+  {
+   "t": 297.52,
+   "d": 1.76,
+   "text": "just saying that hey you know things"
+  },
+  {
+   "t": 299.28,
+   "d": 2.56,
+   "text": "don't always happen in a linear manner"
+  },
+  {
+   "t": 301.84,
+   "d": 2.2,
+   "text": "um so what I'm actually here to tell"
+  },
+  {
+   "t": 304.04,
+   "d": 3.2,
+   "text": "you it's not specific to numbers right"
+  },
+  {
+   "t": 307.24,
+   "d": 1.76,
+   "text": "it's not going to be 8020 as exact"
+  },
+  {
+   "t": 309.0,
+   "d": 1.52,
+   "text": "numbers I'm going to be rather"
+  },
+  {
+   "t": 310.52,
+   "d": 1.92,
+   "text": "apocryphal with that you know you can"
+  },
+  {
+   "t": 312.44,
+   "d": 1.56,
+   "text": "use any version of this I know a lot of"
+  },
+  {
+   "t": 314.0,
+   "d": 2.88,
+   "text": "people say 9010 8812 you kind of make"
+  },
+  {
+   "t": 316.88,
+   "d": 1.76,
+   "text": "your own number that you think fits with"
+  },
+  {
+   "t": 318.64,
+   "d": 3.0,
+   "text": "you uh because this is not a numerology"
+  },
+  {
+   "t": 321.64,
+   "d": 1.64,
+   "text": "talk right I'm not here to tell you that"
+  },
+  {
+   "t": 323.28,
+   "d": 2.12,
+   "text": "everything is exactly 8020 and that you"
+  },
+  {
+   "t": 325.4,
+   "d": 1.88,
+   "text": "should live your life by it what I'm"
+  },
+  {
+   "t": 327.28,
+   "d": 1.52,
+   "text": "actually here to tell you is you know"
+  },
+  {
+   "t": 328.8,
+   "d": 3.8,
+   "text": "this is linear bad curve"
+  },
+  {
+   "t": 332.6,
+   "d": 2.36,
+   "text": "good um"
+  },
+  {
+   "t": 334.96,
+   "d": 4.16,
+   "text": "so if we accept this premise uh the"
+  },
+  {
+   "t": 339.12,
+   "d": 1.76,
+   "text": "reason I think this is important and a"
+  },
+  {
+   "t": 340.88,
+   "d": 3.84,
+   "text": "top topic that is vital for games is we"
+  },
+  {
+   "t": 344.72,
+   "d": 2.28,
+   "text": "tend to think linearly you know when we"
+  },
+  {
+   "t": 347.0,
+   "d": 2.28,
+   "text": "think doing things when we think of the"
+  },
+  {
+   "t": 349.28,
+   "d": 1.6,
+   "text": "distribution of things we think in a"
+  },
+  {
+   "t": 350.88,
+   "d": 1.92,
+   "text": "very linear manner it's just the way our"
+  },
+  {
+   "t": 352.8,
+   "d": 3.04,
+   "text": "meat works right something happens today"
+  },
+  {
+   "t": 355.84,
+   "d": 1.76,
+   "text": "then tomorrow then the day after it's"
+  },
+  {
+   "t": 357.6,
+   "d": 2.4,
+   "text": "one day at a time right you you do the"
+  },
+  {
+   "t": 360.0,
+   "d": 1.64,
+   "text": "tutorial then you do level one then you"
+  },
+  {
+   "t": 361.64,
+   "d": 2.04,
+   "text": "do level two just one more level one"
+  },
+  {
+   "t": 363.68,
+   "d": 2.04,
+   "text": "more turn right very specific one at a"
+  },
+  {
+   "t": 365.72,
+   "d": 3.6,
+   "text": "time one after the other uh movement you"
+  },
+  {
+   "t": 369.32,
+   "d": 2.52,
+   "text": "know anything like this we have these"
+  },
+  {
+   "t": 371.84,
+   "d": 2.44,
+   "text": "very specific analogies and concepts of"
+  },
+  {
+   "t": 374.28,
+   "d": 2.76,
+   "text": "doing things in a very linear pattern uh"
+  },
+  {
+   "t": 377.04,
+   "d": 2.12,
+   "text": "but reality is more built on curves"
+  },
+  {
+   "t": 379.16,
+   "d": 2.72,
+   "text": "right a lot of data out there again"
+  },
+  {
+   "t": 381.88,
+   "d": 2.52,
+   "text": "apocryphal here I'm not saying all data"
+  },
+  {
+   "t": 384.4,
+   "d": 2.28,
+   "text": "uh but reality really does work in a lot"
+  },
+  {
+   "t": 386.68,
+   "d": 1.44,
+   "text": "of Curves you know there's plenty of"
+  },
+  {
+   "t": 388.12,
+   "d": 2.4,
+   "text": "Curves and non-uniform contributions in"
+  },
+  {
+   "t": 390.52,
+   "d": 2.64,
+   "text": "games in life in general in"
+  },
+  {
+   "t": 393.16,
+   "d": 2.84,
+   "text": "humanity um and so if we really want to"
+  },
+  {
+   "t": 396.0,
+   "d": 1.96,
+   "text": "represent reality if we want to work"
+  },
+  {
+   "t": 397.96,
+   "d": 2.2,
+   "text": "within reality uh I think it's important"
+  },
+  {
+   "t": 400.16,
+   "d": 2.68,
+   "text": "for us to understand how to work in"
+  },
+  {
+   "t": 402.84,
+   "d": 2.32,
+   "text": "curves and how to think in"
+  },
+  {
+   "t": 405.16,
+   "d": 2.32,
+   "text": "curves so how do we adapt how do we"
+  },
+  {
+   "t": 407.48,
+   "d": 2.56,
+   "text": "think in curves well unfortunately I"
+  },
+  {
+   "t": 410.04,
+   "d": 1.52,
+   "text": "don't have the perfect answer for you"
+  },
+  {
+   "t": 411.56,
+   "d": 1.56,
+   "text": "I'm going to try to give you some ideas"
+  },
+  {
+   "t": 413.12,
+   "d": 1.32,
+   "text": "on how to think in"
+  },
+  {
+   "t": 414.44,
+   "d": 2.52,
+   "text": "curves uh but you know going from just"
+  },
+  {
+   "t": 416.96,
+   "d": 2.04,
+   "text": "one day to then two days to then four"
+  },
+  {
+   "t": 419.0,
+   "d": 2.56,
+   "text": "days at a time time it's not a good of"
+  },
+  {
+   "t": 421.56,
+   "d": 2.04,
+   "text": "an expression and you know that's just"
+  },
+  {
+   "t": 423.6,
+   "d": 2.68,
+   "text": "one week at a time right so it's not"
+  },
+  {
+   "t": 426.28,
+   "d": 1.76,
+   "text": "going to be easy you know I don't think"
+  },
+  {
+   "t": 428.04,
+   "d": 2.48,
+   "text": "just saying think in curves suddenly"
+  },
+  {
+   "t": 430.52,
+   "d": 2.96,
+   "text": "everyone thinks in curves um but I do"
+  },
+  {
+   "t": 433.48,
+   "d": 2.36,
+   "text": "think if anyone could do it is this"
+  },
+  {
+   "t": 435.84,
+   "d": 2.52,
+   "text": "group right we already think in big"
+  },
+  {
+   "t": 438.36,
+   "d": 2.52,
+   "text": "interesting numbers there's a way here"
+  },
+  {
+   "t": 440.88,
+   "d": 3.24,
+   "text": "for us as rogu likee lovers uh to kind"
+  },
+  {
+   "t": 444.12,
+   "d": 2.28,
+   "text": "of adapt and to consider things and how"
+  },
+  {
+   "t": 446.4,
+   "d": 3.48,
+   "text": "things would work in curves also Alexi"
+  },
+  {
+   "t": 449.88,
+   "d": 2.08,
+   "text": "uh Scooby-Doo alignment chart for Rog"
+  },
+  {
+   "t": 451.96,
+   "d": 3.36,
+   "text": "likes just saying next year be a great"
+  },
+  {
+   "t": 455.32,
+   "d": 3.84,
+   "text": "talk uh okay so where can we think in"
+  },
+  {
+   "t": 459.16,
+   "d": 1.6,
+   "text": "curves this is going to be the majority"
+  },
+  {
+   "t": 460.76,
+   "d": 2.52,
+   "text": "of my talk the idea of hey if things are"
+  },
+  {
+   "t": 463.28,
+   "d": 2.36,
+   "text": "in curves where can we think about them"
+  },
+  {
+   "t": 465.64,
+   "d": 2.68,
+   "text": "in that way what areas can we apply this"
+  },
+  {
+   "t": 468.32,
+   "d": 2.44,
+   "text": "to game"
+  },
+  {
+   "t": 473.16,
+   "d": 2.04,
+   "text": "development so I'm going to cover four"
+  },
+  {
+   "t": 475.2,
+   "d": 0.92,
+   "text": "different"
+  },
+  {
+   "t": 476.12,
+   "d": 2.72,
+   "text": "areas um you know there's more than this"
+  },
+  {
+   "t": 478.84,
+   "d": 2.48,
+   "text": "this is just all I have time for uh the"
+  },
+  {
+   "t": 481.32,
+   "d": 1.24,
+   "text": "first one of course is just going to be"
+  },
+  {
+   "t": 482.56,
+   "d": 2.88,
+   "text": "the basic pero principle the uh idea"
+  },
+  {
+   "t": 485.44,
+   "d": 3.44,
+   "text": "that 80% of the outcomes are from 20% of"
+  },
+  {
+   "t": 488.88,
+   "d": 0.72,
+   "text": "the"
+  },
+  {
+   "t": 489.6,
+   "d": 1.96,
+   "text": "causes however the easiest way to look"
+  },
+  {
+   "t": 491.56,
+   "d": 1.84,
+   "text": "at this one for games is to talk"
+  },
+  {
+   "t": 493.4,
+   "d": 2.48,
+   "text": "production and talk the actual process"
+  },
+  {
+   "t": 495.88,
+   "d": 3.08,
+   "text": "of outcomes progress from 20% of the"
+  },
+  {
+   "t": 498.96,
+   "d": 3.8,
+   "text": "causes time um so this is just the idea"
+  },
+  {
+   "t": 502.76,
+   "d": 3.76,
+   "text": "that 80% of the work is done and 20% of"
+  },
+  {
+   "t": 506.52,
+   "d": 4.08,
+   "text": "the time so if you're most way there"
+  },
+  {
+   "t": 510.6,
+   "d": 1.92,
+   "text": "that means youve probably only spent 20%"
+  },
+  {
+   "t": 512.52,
+   "d": 3.0,
+   "text": "of the time needed to have it be done"
+  },
+  {
+   "t": 515.52,
+   "d": 2.76,
+   "text": "right so the other 20% of the work takes"
+  },
+  {
+   "t": 518.28,
+   "d": 2.76,
+   "text": "another 80% of the time um so this"
+  },
+  {
+   "t": 521.04,
+   "d": 2.8,
+   "text": "version of the 8020 rule you most often"
+  },
+  {
+   "t": 523.84,
+   "d": 2.12,
+   "text": "see it as like hey I got something"
+  },
+  {
+   "t": 525.96,
+   "d": 1.4,
+   "text": "working you know it took me a week to"
+  },
+  {
+   "t": 527.36,
+   "d": 2.12,
+   "text": "build a prototype it's going to take"
+  },
+  {
+   "t": 529.48,
+   "d": 2.08,
+   "text": "another four weeks to get it done you"
+  },
+  {
+   "t": 531.56,
+   "d": 1.52,
+   "text": "know how many of you have had this"
+  },
+  {
+   "t": 533.08,
+   "d": 2.88,
+   "text": "happen to you right and probably all"
+  },
+  {
+   "t": 535.96,
+   "d": 2.4,
+   "text": "hands go up you get a functioning"
+  },
+  {
+   "t": 538.36,
+   "d": 1.6,
+   "text": "version of something but really get it"
+  },
+  {
+   "t": 539.96,
+   "d": 2.44,
+   "text": "done it takes a few more weeks uh but"
+  },
+  {
+   "t": 542.4,
+   "d": 2.16,
+   "text": "I'm also I'm here to tell you we're not"
+  },
+  {
+   "t": 544.56,
+   "d": 2.28,
+   "text": "done yet you know if we're not speaking"
+  },
+  {
+   "t": 546.84,
+   "d": 2.88,
+   "text": "in linear terms uh then we also need to"
+  },
+  {
+   "t": 549.72,
+   "d": 2.0,
+   "text": "consider that taking one week and then"
+  },
+  {
+   "t": 551.72,
+   "d": 3.0,
+   "text": "four weeks is not actually done uh"
+  },
+  {
+   "t": 554.72,
+   "d": 1.16,
+   "text": "because when we're dealing with this"
+  },
+  {
+   "t": 555.88,
+   "d": 1.92,
+   "text": "approach we're also dealing with"
+  },
+  {
+   "t": 557.8,
+   "d": 2.68,
+   "text": "something that's very"
+  },
+  {
+   "t": 564.44,
+   "d": 3.16,
+   "text": "recursive so five weeks it's done proud"
+  },
+  {
+   "t": 567.6,
+   "d": 2.36,
+   "text": "of you you did a great job"
+  },
+  {
+   "t": 569.96,
+   "d": 3.28,
+   "text": "the thing is not really done right 20"
+  },
+  {
+   "t": 573.24,
+   "d": 2.64,
+   "text": "more weeks now it's actually really done"
+  },
+  {
+   "t": 575.88,
+   "d": 2.04,
+   "text": "good job the features in the levels done"
+  },
+  {
+   "t": 577.92,
+   "d": 3.44,
+   "text": "you can move on it's 25 weeks yeah not"
+  },
+  {
+   "t": 581.36,
+   "d": 2.6,
+   "text": "bad thing is 25 weeks to get it really"
+  },
+  {
+   "t": 583.96,
+   "d": 2.76,
+   "text": "done it's not really done so you still"
+  },
+  {
+   "t": 586.72,
+   "d": 1.08,
+   "text": "have to integrate it with everything"
+  },
+  {
+   "t": 587.8,
+   "d": 1.48,
+   "text": "else that's really done bringing"
+  },
+  {
+   "t": 589.28,
+   "d": 1.4,
+   "text": "everything together making sure it's a"
+  },
+  {
+   "t": 590.68,
+   "d": 2.84,
+   "text": "cohesive hole so you know that one week"
+  },
+  {
+   "t": 593.52,
+   "d": 1.6,
+   "text": "recursively it's just going to keep"
+  },
+  {
+   "t": 595.12,
+   "d": 2.6,
+   "text": "getting bigger and bigger um so you know"
+  },
+  {
+   "t": 597.72,
+   "d": 2.84,
+   "text": "that 125 weeks so proud of you you got"
+  },
+  {
+   "t": 600.56,
+   "d": 1.96,
+   "text": "everything together you really had it"
+  },
+  {
+   "t": 602.52,
+   "d": 2.2,
+   "text": "feel like a cohesive hole it's not"
+  },
+  {
+   "t": 604.72,
+   "d": 1.8,
+   "text": "really done though is it I mean there's"
+  },
+  {
+   "t": 606.52,
+   "d": 1.64,
+   "text": "always more things there's always things"
+  },
+  {
+   "t": 608.16,
+   "d": 2.84,
+   "text": "you can continue to work on you know I'm"
+  },
+  {
+   "t": 611.0,
+   "d": 1.28,
+   "text": "not trying to scare you off of"
+  },
+  {
+   "t": 612.28,
+   "d": 1.44,
+   "text": "development by saying this I'm not"
+  },
+  {
+   "t": 613.72,
+   "d": 2.04,
+   "text": "trying to say you know everything takes"
+  },
+  {
+   "t": 615.76,
+   "d": 2.76,
+   "text": "forever and run away from Game Dev but"
+  },
+  {
+   "t": 618.52,
+   "d": 1.64,
+   "text": "it is something that is helpful to"
+  },
+  {
+   "t": 620.16,
+   "d": 2.88,
+   "text": "understand that like really actually"
+  },
+  {
+   "t": 623.04,
+   "d": 2.64,
+   "text": "being done with something uh does take a"
+  },
+  {
+   "t": 625.68,
+   "d": 2.56,
+   "text": "long time uh and this one is the only"
+  },
+  {
+   "t": 628.24,
+   "d": 1.76,
+   "text": "one where I'd say this is these numbers"
+  },
+  {
+   "t": 630.0,
+   "d": 2.6,
+   "text": "are factually correct 100% real and no I"
+  },
+  {
+   "t": 632.6,
+   "d": 3.16,
+   "text": "won't be taking any questions on"
+  },
+  {
+   "t": 635.76,
+   "d": 2.2,
+   "text": "it so what can we do about this this"
+  },
+  {
+   "t": 637.96,
+   "d": 3.16,
+   "text": "8020 time this one's easy right just"
+  },
+  {
+   "t": 641.12,
+   "d": 1.44,
+   "text": "always assume it'll take longer than you"
+  },
+  {
+   "t": 642.56,
+   "d": 2.36,
+   "text": "think take that number multiply it by"
+  },
+  {
+   "t": 644.92,
+   "d": 2.84,
+   "text": "four then do it again right if you think"
+  },
+  {
+   "t": 647.76,
+   "d": 1.12,
+   "text": "something's going to take a month to be"
+  },
+  {
+   "t": 648.88,
+   "d": 1.24,
+   "text": "done it's probably actually going to"
+  },
+  {
+   "t": 650.12,
+   "d": 2.0,
+   "text": "take four months this is the ban of"
+  },
+  {
+   "t": 652.12,
+   "d": 2.16,
+   "text": "every game developer uh but it is the"
+  },
+  {
+   "t": 654.28,
+   "d": 1.44,
+   "text": "honest truth of working in a creative"
+  },
+  {
+   "t": 655.72,
+   "d": 2.52,
+   "text": "medium like"
+  },
+  {
+   "t": 658.24,
+   "d": 2.0,
+   "text": "games next up I want to talk about the"
+  },
+  {
+   "t": 660.24,
+   "d": 2.56,
+   "text": "Innovation approach the idea that uh a"
+  },
+  {
+   "t": 662.8,
+   "d": 1.36,
+   "text": "lot of people have coined especially in"
+  },
+  {
+   "t": 664.16,
+   "d": 1.92,
+   "text": "Creator spaces inventions and things"
+  },
+  {
+   "t": 666.08,
+   "d": 3.12,
+   "text": "like that you know products are 80%"
+  },
+  {
+   "t": 669.2,
+   "d": 2.72,
+   "text": "familiar 20% unique that all Innovations"
+  },
+  {
+   "t": 671.92,
+   "d": 1.8,
+   "text": "All Creations building upon this"
+  },
+  {
+   "t": 673.72,
+   "d": 2.76,
+   "text": "familiar space and it itself is just"
+  },
+  {
+   "t": 676.48,
+   "d": 2.16,
+   "text": "adding a small section of"
+  },
+  {
+   "t": 678.64,
+   "d": 3.16,
+   "text": "unique uh I like to think of this one as"
+  },
+  {
+   "t": 681.8,
+   "d": 2.0,
+   "text": "you know this classic phrase good artist"
+  },
+  {
+   "t": 683.8,
+   "d": 2.72,
+   "text": "borrow great artist steal what what it's"
+  },
+  {
+   "t": 686.52,
+   "d": 3.36,
+   "text": "really saying is great artist steal 80%"
+  },
+  {
+   "t": 689.88,
+   "d": 2.72,
+   "text": "so what is the 80% what do you steal um"
+  },
+  {
+   "t": 692.6,
+   "d": 1.88,
+   "text": "so the 80% when it comes to actually you"
+  },
+  {
+   "t": 694.48,
+   "d": 2.4,
+   "text": "know that 80% familiar uh that's what"
+  },
+  {
+   "t": 696.88,
+   "d": 1.52,
+   "text": "I'd call the foundation right this is"
+  },
+  {
+   "t": 698.4,
+   "d": 2.44,
+   "text": "the part of your project that is really"
+  },
+  {
+   "t": 700.84,
+   "d": 2.92,
+   "text": "just the structural Integrity upon which"
+  },
+  {
+   "t": 703.76,
+   "d": 2.24,
+   "text": "you build everything else uh in games"
+  },
+  {
+   "t": 706.0,
+   "d": 2.92,
+   "text": "that can mean you know control interface"
+  },
+  {
+   "t": 708.92,
+   "d": 2.28,
+   "text": "camera setup to your character uh you"
+  },
+  {
+   "t": 711.2,
+   "d": 2.24,
+   "text": "know just kind of the tropes the"
+  },
+  {
+   "t": 713.44,
+   "d": 2.16,
+   "text": "expectations the inheritance of your"
+  },
+  {
+   "t": 715.6,
+   "d": 1.96,
+   "text": "genre right this is the good part of"
+  },
+  {
+   "t": 717.56,
+   "d": 1.96,
+   "text": "tropes this is the the tropes that make"
+  },
+  {
+   "t": 719.52,
+   "d": 2.56,
+   "text": "the game more accessible um so you know"
+  },
+  {
+   "t": 722.08,
+   "d": 1.84,
+   "text": "these are the things that okay sure it's"
+  },
+  {
+   "t": 723.92,
+   "d": 2.28,
+   "text": "a silly stick but it helps me understand"
+  },
+  {
+   "t": 726.2,
+   "d": 2.24,
+   "text": "your world the framing is uh an"
+  },
+  {
+   "t": 728.44,
+   "d": 2.16,
+   "text": "important aspect so it helps you build"
+  },
+  {
+   "t": 730.6,
+   "d": 3.32,
+   "text": "that sort of house upon the"
+  },
+  {
+   "t": 734.2,
+   "d": 1.88,
+   "text": "foundation the part that makes your"
+  },
+  {
+   "t": 736.08,
+   "d": 3.32,
+   "text": "project unique is that other 20% right"
+  },
+  {
+   "t": 739.4,
+   "d": 1.52,
+   "text": "the thing that makes your game Stand Out"
+  },
+  {
+   "t": 740.92,
+   "d": 2.08,
+   "text": "is the 20% that you did different from"
+  },
+  {
+   "t": 743.0,
+   "d": 2.24,
+   "text": "every other game in your genre every"
+  },
+  {
+   "t": 745.24,
+   "d": 2.68,
+   "text": "other project in your"
+  },
+  {
+   "t": 747.92,
+   "d": 4.36,
+   "text": "space so so again 8020 magic numbers but"
+  },
+  {
+   "t": 752.28,
+   "d": 1.76,
+   "text": "what happens if you diverge from this"
+  },
+  {
+   "t": 754.04,
+   "d": 2.36,
+   "text": "right what if you say I'm just going to"
+  },
+  {
+   "t": 756.4,
+   "d": 1.68,
+   "text": "make everything familiar right I'm going"
+  },
+  {
+   "t": 758.08,
+   "d": 1.88,
+   "text": "to do 100% familiarity I'm going to do"
+  },
+  {
+   "t": 759.96,
+   "d": 1.48,
+   "text": "everything that's been done in that"
+  },
+  {
+   "t": 761.44,
+   "d": 2.24,
+   "text": "genre before I'm going to follow along"
+  },
+  {
+   "t": 763.68,
+   "d": 2.32,
+   "text": "the path that's well tread but when you"
+  },
+  {
+   "t": 766.0,
+   "d": 4.4,
+   "text": "do that you tend to get a name right uh"
+  },
+  {
+   "t": 770.4,
+   "d": 3.52,
+   "text": "clone like uh there's a lot of terms to"
+  },
+  {
+   "t": 773.92,
+   "d": 2.28,
+   "text": "describe games that are so similar to"
+  },
+  {
+   "t": 776.2,
+   "d": 2.48,
+   "text": "their predecessors they're so familiar"
+  },
+  {
+   "t": 778.68,
+   "d": 2.6,
+   "text": "you know they tend to get these labels"
+  },
+  {
+   "t": 781.28,
+   "d": 2.24,
+   "text": "uh it's not always a bad thing I'll say"
+  },
+  {
+   "t": 783.52,
+   "d": 1.6,
+   "text": "like as a professor I sometimes"
+  },
+  {
+   "t": 785.12,
+   "d": 1.48,
+   "text": "recommend this to students it's a great"
+  },
+  {
+   "t": 786.6,
+   "d": 1.52,
+   "text": "way to start out you know kind of cut"
+  },
+  {
+   "t": 788.12,
+   "d": 1.96,
+   "text": "your teeth on development when you have"
+  },
+  {
+   "t": 790.08,
+   "d": 2.76,
+   "text": "that blueprint set in front of you um"
+  },
+  {
+   "t": 792.84,
+   "d": 1.48,
+   "text": "but of course you know if you're doing"
+  },
+  {
+   "t": 794.32,
+   "d": 2.96,
+   "text": "it for financial reasons then it's"
+  },
+  {
+   "t": 797.28,
+   "d": 2.32,
+   "text": "legally and ethically dicey"
+  },
+  {
+   "t": 799.6,
+   "d": 2.64,
+   "text": "accreditation as we saw earlier with the"
+  },
+  {
+   "t": 802.24,
+   "d": 2.48,
+   "text": "uh defense of the Ancients talk you know"
+  },
+  {
+   "t": 804.72,
+   "d": 1.68,
+   "text": "it could be really challenging when you"
+  },
+  {
+   "t": 806.4,
+   "d": 2.92,
+   "text": "focus too much on that familiar um I"
+  },
+  {
+   "t": 809.32,
+   "d": 1.56,
+   "text": "always love the saying that like first"
+  },
+  {
+   "t": 810.88,
+   "d": 2.2,
+   "text": "game is innovative second is a clone"
+  },
+  {
+   "t": 813.08,
+   "d": 2.12,
+   "text": "third is a genre right at some point"
+  },
+  {
+   "t": 815.2,
+   "d": 1.72,
+   "text": "when enough Games come out where they're"
+  },
+  {
+   "t": 816.92,
+   "d": 1.96,
+   "text": "really expl exploring the same"
+  },
+  {
+   "t": 818.88,
+   "d": 2.4,
+   "text": "familiarity space you can start getting"
+  },
+  {
+   "t": 821.28,
+   "d": 1.76,
+   "text": "more granular about what makes each one"
+  },
+  {
+   "t": 823.04,
+   "d": 2.44,
+   "text": "unique and then you start seeing johnra"
+  },
+  {
+   "t": 825.48,
+   "d": 1.08,
+   "text": "up"
+  },
+  {
+   "t": 826.56,
+   "d": 1.76,
+   "text": "here uh but what about the other"
+  },
+  {
+   "t": 828.32,
+   "d": 1.8,
+   "text": "direction what if you avoid familiar say"
+  },
+  {
+   "t": 830.12,
+   "d": 2.52,
+   "text": "I want nothing in common with the other"
+  },
+  {
+   "t": 832.64,
+   "d": 2.68,
+   "text": "genres the other spaces so certainly"
+  },
+  {
+   "t": 835.32,
+   "d": 2.12,
+   "text": "this exists in games and you know any"
+  },
+  {
+   "t": 837.44,
+   "d": 1.72,
+   "text": "creative medium really kind of"
+  },
+  {
+   "t": 839.16,
+   "d": 2.32,
+   "text": "intentionally avoiding any sort of"
+  },
+  {
+   "t": 841.48,
+   "d": 2.76,
+   "text": "commonality to other products uh again I"
+  },
+  {
+   "t": 844.24,
+   "d": 2.08,
+   "text": "I think there's positives to this uh but"
+  },
+  {
+   "t": 846.32,
+   "d": 1.4,
+   "text": "you're definitely making a very specific"
+  },
+  {
+   "t": 847.72,
+   "d": 2.12,
+   "text": "type of product and whenever I think of"
+  },
+  {
+   "t": 849.84,
+   "d": 2.08,
+   "text": "this I tend to go with film and think"
+  },
+  {
+   "t": 851.92,
+   "d": 1.92,
+   "text": "about this idea of like a filmmaker's"
+  },
+  {
+   "t": 853.84,
+   "d": 2.4,
+   "text": "film right these are films that are very"
+  },
+  {
+   "t": 856.24,
+   "d": 1.92,
+   "text": "interesting you know they're definitely"
+  },
+  {
+   "t": 858.16,
+   "d": 1.36,
+   "text": "saying something they're doing a lot of"
+  },
+  {
+   "t": 859.52,
+   "d": 2.28,
+   "text": "cool stuff uh but they're just not"
+  },
+  {
+   "t": 861.8,
+   "d": 1.44,
+   "text": "broadly accessible right they didn't"
+  },
+  {
+   "t": 863.24,
+   "d": 2.36,
+   "text": "appeal to a large audience uh for"
+  },
+  {
+   "t": 865.6,
+   "d": 1.0,
+   "text": "whatever"
+  },
+  {
+   "t": 866.6,
+   "d": 2.6,
+   "text": "reason um I will also note on this one I"
+  },
+  {
+   "t": 869.2,
+   "d": 2.08,
+   "text": "think it's an important distinction uh"
+  },
+  {
+   "t": 871.28,
+   "d": 2.36,
+   "text": "what I'm going to call my Ted take is"
+  },
+  {
+   "t": 873.64,
+   "d": 2.96,
+   "text": "for creators like K waswa uh they"
+  },
+  {
+   "t": 876.6,
+   "d": 2.12,
+   "text": "weren't necessarily Niche or avanguard"
+  },
+  {
+   "t": 878.72,
+   "d": 2.2,
+   "text": "right they did a great job at figuring"
+  },
+  {
+   "t": 880.92,
+   "d": 1.76,
+   "text": "out what was unique about them"
+  },
+  {
+   "t": 882.68,
+   "d": 1.8,
+   "text": "unfortunately that language barrier and"
+  },
+  {
+   "t": 884.48,
+   "d": 2.4,
+   "text": "the inability to distribute into other"
+  },
+  {
+   "t": 886.88,
+   "d": 2.36,
+   "text": "areas made it so the language was part"
+  },
+  {
+   "t": 889.24,
+   "d": 1.6,
+   "text": "of their unique when it really shouldn't"
+  },
+  {
+   "t": 890.84,
+   "d": 2.28,
+   "text": "have been right the things that kosava"
+  },
+  {
+   "t": 893.12,
+   "d": 2.4,
+   "text": "was doing fantastic they were broadly"
+  },
+  {
+   "t": 895.52,
+   "d": 2.16,
+   "text": "accessible it was just hard for him to"
+  },
+  {
+   "t": 897.68,
+   "d": 2.8,
+   "text": "enter into other areas because of that"
+  },
+  {
+   "t": 900.48,
+   "d": 2.28,
+   "text": "um so you know take that for what it"
+  },
+  {
+   "t": 902.76,
+   "d": 3.04,
+   "text": "will uh I do think there are movies that"
+  },
+  {
+   "t": 905.8,
+   "d": 2.8,
+   "text": "are clearly built in this Avent guard"
+  },
+  {
+   "t": 908.6,
+   "d": 2.84,
+   "text": "unique space and others that just uh you"
+  },
+  {
+   "t": 911.44,
+   "d": 3.2,
+   "text": "know were stopped for other reasons so"
+  },
+  {
+   "t": 914.64,
+   "d": 1.92,
+   "text": "we talk film here obviously the next"
+  },
+  {
+   "t": 916.56,
+   "d": 1.92,
+   "text": "question is what's a game Maker's game"
+  },
+  {
+   "t": 918.48,
+   "d": 1.08,
+   "text": "you know these are my own personal"
+  },
+  {
+   "t": 919.56,
+   "d": 2.04,
+   "text": "examples and again I'm not putting a"
+  },
+  {
+   "t": 921.6,
+   "d": 1.56,
+   "text": "value statement on this I'm not saying"
+  },
+  {
+   "t": 923.16,
+   "d": 3.32,
+   "text": "these are lesser quality products uh I"
+  },
+  {
+   "t": 926.48,
+   "d": 1.8,
+   "text": "would love to know if I get points to be"
+  },
+  {
+   "t": 928.28,
+   "d": 2.24,
+   "text": "the first person to reference facade"
+  },
+  {
+   "t": 930.52,
+   "d": 4.32,
+   "text": "this year um maybe maybe not um but you"
+  },
+  {
+   "t": 934.84,
+   "d": 2.24,
+   "text": "know for any of these there's a pattern"
+  },
+  {
+   "t": 937.08,
+   "d": 2.32,
+   "text": "of these creative products that they're"
+  },
+  {
+   "t": 939.4,
+   "d": 1.28,
+   "text": "they're usually called ahead of their"
+  },
+  {
+   "t": 940.68,
+   "d": 1.28,
+   "text": "time they're praised for their"
+  },
+  {
+   "t": 941.96,
+   "d": 1.96,
+   "text": "exploration of the unique but they just"
+  },
+  {
+   "t": 943.92,
+   "d": 1.64,
+   "text": "struggle with accessibility to a broad"
+  },
+  {
+   "t": 945.56,
+   "d": 1.92,
+   "text": "audience because they're doing too many"
+  },
+  {
+   "t": 947.48,
+   "d": 1.76,
+   "text": "interesting new things they're exploring"
+  },
+  {
+   "t": 949.24,
+   "d": 2.84,
+   "text": "too much space at once um so you know"
+  },
+  {
+   "t": 952.08,
+   "d": 2.04,
+   "text": "this is also super subjective this is a"
+  },
+  {
+   "t": 954.12,
+   "d": 1.72,
+   "text": "great opportunity in chat like what is"
+  },
+  {
+   "t": 955.84,
+   "d": 1.76,
+   "text": "this game to you what is the game that"
+  },
+  {
+   "t": 957.6,
+   "d": 3.52,
+   "text": "like it almost intentionally avoids"
+  },
+  {
+   "t": 961.12,
+   "d": 2.56,
+   "text": "familiarity you know it inspires others"
+  },
+  {
+   "t": 963.68,
+   "d": 1.28,
+   "text": "but maybe it just didn't hit that"
+  },
+  {
+   "t": 964.96,
+   "d": 2.88,
+   "text": "audience in the same"
+  },
+  {
+   "t": 970.6,
+   "d": 2.6,
+   "text": "way another consideration in the space"
+  },
+  {
+   "t": 973.2,
+   "d": 2.72,
+   "text": "familiarity is theme uh some themes"
+  },
+  {
+   "t": 975.92,
+   "d": 3.0,
+   "text": "benefit from this more than others uh in"
+  },
+  {
+   "t": 978.92,
+   "d": 1.8,
+   "text": "my own personal experience in game"
+  },
+  {
+   "t": 980.72,
+   "d": 1.68,
+   "text": "development I've made a lot of games in"
+  },
+  {
+   "t": 982.4,
+   "d": 2.56,
+   "text": "the medieval fantasy space and it's"
+  },
+  {
+   "t": 984.96,
+   "d": 2.76,
+   "text": "really easy to hit 80% familiar with"
+  },
+  {
+   "t": 987.72,
+   "d": 2.0,
+   "text": "medieval fantasy right we have these"
+  },
+  {
+   "t": 989.72,
+   "d": 1.44,
+   "text": "sort of tropes we have these"
+  },
+  {
+   "t": 991.16,
+   "d": 2.48,
+   "text": "expectations where you can lean on them"
+  },
+  {
+   "t": 993.64,
+   "d": 2.4,
+   "text": "right uh even when you add stuff that is"
+  },
+  {
+   "t": 996.04,
+   "d": 2.56,
+   "text": "not reality like magic there's kind of a"
+  },
+  {
+   "t": 998.6,
+   "d": 2.44,
+   "text": "rule set that's known and understood and"
+  },
+  {
+   "t": 1001.04,
+   "d": 3.16,
+   "text": "trusted on the flip side of that though"
+  },
+  {
+   "t": 1004.2,
+   "d": 1.56,
+   "text": "it's really tricky to pull this off with"
+  },
+  {
+   "t": 1005.76,
+   "d": 1.88,
+   "text": "sci-fi something we realized when we"
+  },
+  {
+   "t": 1007.64,
+   "d": 2.52,
+   "text": "made space Merchant you know what is"
+  },
+  {
+   "t": 1010.16,
+   "d": 1.92,
+   "text": "your tachon disruptor rifle it's"
+  },
+  {
+   "t": 1012.08,
+   "d": 1.68,
+   "text": "probably going to be different from any"
+  },
+  {
+   "t": 1013.76,
+   "d": 2.48,
+   "text": "other game that has an item of the same"
+  },
+  {
+   "t": 1016.24,
+   "d": 1.6,
+   "text": "name right I like calling these"
+  },
+  {
+   "t": 1017.84,
+   "d": 1.76,
+   "text": "narrative grebles right because you're"
+  },
+  {
+   "t": 1019.6,
+   "d": 2.64,
+   "text": "adding tachon disruptor to Rifle so"
+  },
+  {
+   "t": 1022.24,
+   "d": 1.44,
+   "text": "you're you're trying your best to get"
+  },
+  {
+   "t": 1023.68,
+   "d": 1.64,
+   "text": "some of that familiarity everyone knows"
+  },
+  {
+   "t": 1025.32,
+   "d": 1.84,
+   "text": "what rifle is but then you're putting"
+  },
+  {
+   "t": 1027.16,
+   "d": 2.2,
+   "text": "your narrative gribling on it and kind"
+  },
+  {
+   "t": 1029.36,
+   "d": 2.56,
+   "text": "of giving it this funi spin so you're"
+  },
+  {
+   "t": 1031.92,
+   "d": 1.96,
+   "text": "doing your best to get some bit of"
+  },
+  {
+   "t": 1033.88,
+   "d": 2.92,
+   "text": "familiarity into"
+  },
+  {
+   "t": 1037.2,
+   "d": 2.6,
+   "text": "it uh another important concept of this"
+  },
+  {
+   "t": 1039.8,
+   "d": 1.72,
+   "text": "of the familiar and unique is once"
+  },
+  {
+   "t": 1041.52,
+   "d": 1.44,
+   "text": "you've made a game and you've sort of"
+  },
+  {
+   "t": 1042.96,
+   "d": 1.52,
+   "text": "set that Foundation where people"
+  },
+  {
+   "t": 1044.48,
+   "d": 1.84,
+   "text": "understand it you actually then are able"
+  },
+  {
+   "t": 1046.32,
+   "d": 1.92,
+   "text": "to explore different sets of unique"
+  },
+  {
+   "t": 1048.24,
+   "d": 2.24,
+   "text": "right now you've created 100% familiar"
+  },
+  {
+   "t": 1050.48,
+   "d": 2.08,
+   "text": "with a previous product so now what is"
+  },
+  {
+   "t": 1052.56,
+   "d": 2.12,
+   "text": "the 20% unique of your next product you"
+  },
+  {
+   "t": 1054.68,
+   "d": 2.64,
+   "text": "know what is your sequels unique uh and"
+  },
+  {
+   "t": 1057.32,
+   "d": 1.72,
+   "text": "for this I like to pick on the Sims I"
+  },
+  {
+   "t": 1059.04,
+   "d": 1.4,
+   "text": "think the Sims is a great example of"
+  },
+  {
+   "t": 1060.44,
+   "d": 2.68,
+   "text": "this because of the Decades of games the"
+  },
+  {
+   "t": 1063.12,
+   "d": 2.4,
+   "text": "long history of success that it's had so"
+  },
+  {
+   "t": 1065.52,
+   "d": 2.24,
+   "text": "like what is the same across all Sims"
+  },
+  {
+   "t": 1067.76,
+   "d": 2.44,
+   "text": "what's different so for the same the"
+  },
+  {
+   "t": 1070.2,
+   "d": 2.28,
+   "text": "easy and obvious here is the plumbob"
+  },
+  {
+   "t": 1072.48,
+   "d": 3.68,
+   "text": "right very little has changed still a"
+  },
+  {
+   "t": 1076.16,
+   "d": 2.28,
+   "text": "green shape right little bit prettier"
+  },
+  {
+   "t": 1078.44,
+   "d": 1.96,
+   "text": "shaders maybe but generally speaking"
+  },
+  {
+   "t": 1080.4,
+   "d": 2.16,
+   "text": "it's still the same that has become part"
+  },
+  {
+   "t": 1082.56,
+   "d": 2.08,
+   "text": "of the familiar consistent throughout"
+  },
+  {
+   "t": 1084.64,
+   "d": 1.0,
+   "text": "every"
+  },
+  {
+   "t": 1085.64,
+   "d": 2.56,
+   "text": "s uh what about the location though"
+  },
+  {
+   "t": 1088.2,
+   "d": 2.08,
+   "text": "right the map that you actually are on"
+  },
+  {
+   "t": 1090.28,
+   "d": 1.28,
+   "text": "this is something that they decided"
+  },
+  {
+   "t": 1091.56,
+   "d": 2.12,
+   "text": "early on is not something that needs to"
+  },
+  {
+   "t": 1093.68,
+   "d": 1.48,
+   "text": "be familiar right you don't need to"
+  },
+  {
+   "t": 1095.16,
+   "d": 1.68,
+   "text": "reuse the neighborhood from one game to"
+  },
+  {
+   "t": 1096.84,
+   "d": 1.88,
+   "text": "the other because the neighborhood even"
+  },
+  {
+   "t": 1098.72,
+   "d": 1.92,
+   "text": "if it does have character you know if"
+  },
+  {
+   "t": 1100.64,
+   "d": 1.4,
+   "text": "there are certain street names in"
+  },
+  {
+   "t": 1102.04,
+   "d": 2.68,
+   "text": "certain areas that can be unique each"
+  },
+  {
+   "t": 1104.72,
+   "d": 3.56,
+   "text": "game and still feel like a Sims game so"
+  },
+  {
+   "t": 1108.28,
+   "d": 1.36,
+   "text": "now you see something like Willow Creek"
+  },
+  {
+   "t": 1109.64,
+   "d": 1.32,
+   "text": "is a completely different experience"
+  },
+  {
+   "t": 1110.96,
+   "d": 1.32,
+   "text": "from the original"
+  },
+  {
+   "t": 1112.28,
+   "d": 2.44,
+   "text": "Sims uh what I'd love to know maybe if"
+  },
+  {
+   "t": 1114.72,
+   "d": 1.56,
+   "text": "anyone here worked on the Sims or knows"
+  },
+  {
+   "t": 1116.28,
+   "d": 2.24,
+   "text": "people who did is how much they knew"
+  },
+  {
+   "t": 1118.52,
+   "d": 1.48,
+   "text": "what was going to be"
+  },
+  {
+   "t": 1120.0,
+   "d": 2.04,
+   "text": "familiar because I think the most"
+  },
+  {
+   "t": 1122.04,
+   "d": 1.52,
+   "text": "interesting use case here and I"
+  },
+  {
+   "t": 1123.56,
+   "d": 2.56,
+   "text": "referenced them earlier is the Goths you"
+  },
+  {
+   "t": 1126.12,
+   "d": 1.28,
+   "text": "know these were characters that appeared"
+  },
+  {
+   "t": 1127.4,
+   "d": 2.0,
+   "text": "in The Sims they're very much built on a"
+  },
+  {
+   "t": 1129.4,
+   "d": 3.44,
+   "text": "familiar right they are uh The Adams"
+  },
+  {
+   "t": 1132.84,
+   "d": 2.6,
+   "text": "Family they are the monsters right they"
+  },
+  {
+   "t": 1135.44,
+   "d": 2.08,
+   "text": "they are built on this kind of familiar"
+  },
+  {
+   "t": 1137.52,
+   "d": 2.32,
+   "text": "Trope but they were so successful in the"
+  },
+  {
+   "t": 1139.84,
+   "d": 1.96,
+   "text": "first game you know they were so iconic"
+  },
+  {
+   "t": 1141.8,
+   "d": 1.6,
+   "text": "that they've now become part of the"
+  },
+  {
+   "t": 1143.4,
+   "d": 2.28,
+   "text": "familiar for all Future"
+  },
+  {
+   "t": 1145.68,
+   "d": 2.2,
+   "text": "Sims uh last thought on this with the"
+  },
+  {
+   "t": 1147.88,
+   "d": 2.68,
+   "text": "Sims is just in general with Maxis you"
+  },
+  {
+   "t": 1150.56,
+   "d": 1.52,
+   "text": "know they do a great job of having these"
+  },
+  {
+   "t": 1152.08,
+   "d": 1.72,
+   "text": "sort of what I like to call Game Dev"
+  },
+  {
+   "t": 1153.8,
+   "d": 2.28,
+   "text": "calling cards uh how many of you have"
+  },
+  {
+   "t": 1156.08,
+   "d": 3.68,
+   "text": "seen reticulating splines right so this"
+  },
+  {
+   "t": 1159.76,
+   "d": 2.8,
+   "text": "is one of many examples for Maxis but"
+  },
+  {
+   "t": 1162.56,
+   "d": 1.68,
+   "text": "they had these moments in their games"
+  },
+  {
+   "t": 1164.24,
+   "d": 2.6,
+   "text": "that became part of their familiar right"
+  },
+  {
+   "t": 1166.84,
+   "d": 2.6,
+   "text": "references to llamas and alpacas and"
+  },
+  {
+   "t": 1169.44,
+   "d": 1.48,
+   "text": "these very specific things that were"
+  },
+  {
+   "t": 1170.92,
+   "d": 2.6,
+   "text": "consistent across all of their games and"
+  },
+  {
+   "t": 1173.52,
+   "d": 4.56,
+   "text": "became a sort of identifier of their"
+  },
+  {
+   "t": 1178.12,
+   "d": 2.28,
+   "text": "familiar so for this I leave you the"
+  },
+  {
+   "t": 1180.4,
+   "d": 2.52,
+   "text": "question what is the 8020 of Rogue like"
+  },
+  {
+   "t": 1182.92,
+   "d": 1.84,
+   "text": "I'm totally jumping into you know what"
+  },
+  {
+   "t": 1184.76,
+   "d": 1.8,
+   "text": "our Berlin interpretation or what our"
+  },
+  {
+   "t": 1186.56,
+   "d": 1.92,
+   "text": "interpretation is here but what is that"
+  },
+  {
+   "t": 1188.48,
+   "d": 2.24,
+   "text": "80% that truly is the familiar for Rog"
+  },
+  {
+   "t": 1190.72,
+   "d": 2.08,
+   "text": "likee and what is the 20% that is going"
+  },
+  {
+   "t": 1192.8,
+   "d": 1.8,
+   "text": "to be the unique you know you can"
+  },
+  {
+   "t": 1194.6,
+   "d": 2.04,
+   "text": "probably find very consistently certain"
+  },
+  {
+   "t": 1196.64,
+   "d": 2.88,
+   "text": "things stay as 80%"
+  },
+  {
+   "t": 1199.52,
+   "d": 1.52,
+   "text": "certain things are consistently part of"
+  },
+  {
+   "t": 1201.04,
+   "d": 2.44,
+   "text": "the 20% uh you know it's going to differ"
+  },
+  {
+   "t": 1203.48,
+   "d": 2.64,
+   "text": "per game um but whenever you're creating"
+  },
+  {
+   "t": 1206.12,
+   "d": 1.88,
+   "text": "a game what you really have to ask is"
+  },
+  {
+   "t": 1208.0,
+   "d": 2.4,
+   "text": "like what is the 80% Familiar of my"
+  },
+  {
+   "t": 1210.4,
+   "d": 2.36,
+   "text": "genre of my space uh that I'm going to"
+  },
+  {
+   "t": 1212.76,
+   "d": 1.4,
+   "text": "build"
+  },
+  {
+   "t": 1214.16,
+   "d": 3.2,
+   "text": "upon uh next up I want to talk about the"
+  },
+  {
+   "t": 1217.36,
+   "d": 2.0,
+   "text": "vocal minority now I'm sure you all have"
+  },
+  {
+   "t": 1219.36,
+   "d": 1.96,
+   "text": "heard this phrase normally it refers to"
+  },
+  {
+   "t": 1221.32,
+   "d": 2.08,
+   "text": "an audience you know the the people"
+  },
+  {
+   "t": 1223.4,
+   "d": 2.6,
+   "text": "within a community uh that are creating"
+  },
+  {
+   "t": 1226.0,
+   "d": 3.48,
+   "text": "most of the conversation"
+  },
+  {
+   "t": 1230.0,
+   "d": 1.96,
+   "text": "but in this case I actually want to talk"
+  },
+  {
+   "t": 1231.96,
+   "d": 3.6,
+   "text": "about the vocal minority of content or"
+  },
+  {
+   "t": 1235.56,
+   "d": 1.2,
+   "text": "of"
+  },
+  {
+   "t": 1236.76,
+   "d": 3.84,
+   "text": "topic So 20% of your content is 80% of"
+  },
+  {
+   "t": 1240.6,
+   "d": 1.0,
+   "text": "your"
+  },
+  {
+   "t": 1241.6,
+   "d": 2.76,
+   "text": "conversation what parts of your game are"
+  },
+  {
+   "t": 1244.36,
+   "d": 1.12,
+   "text": "people going to spend the most time"
+  },
+  {
+   "t": 1245.48,
+   "d": 1.32,
+   "text": "talking about you know what are the"
+  },
+  {
+   "t": 1246.8,
+   "d": 1.64,
+   "text": "things that your discords and your"
+  },
+  {
+   "t": 1248.44,
+   "d": 2.24,
+   "text": "reddits and your bbs's are going to be"
+  },
+  {
+   "t": 1250.68,
+   "d": 3.64,
+   "text": "full of uh messages on um the big"
+  },
+  {
+   "t": 1254.32,
+   "d": 2.08,
+   "text": "question to ask of course of this is"
+  },
+  {
+   "t": 1256.4,
+   "d": 2.36,
+   "text": "which 20% Which part of my game which"
+  },
+  {
+   "t": 1258.76,
+   "d": 2.44,
+   "text": "pieces of my game are going to be the"
+  },
+  {
+   "t": 1261.2,
+   "d": 1.88,
+   "text": "thing that everyone is talking about"
+  },
+  {
+   "t": 1263.08,
+   "d": 3.72,
+   "text": "good or bad mind you unfortunately you"
+  },
+  {
+   "t": 1266.8,
+   "d": 2.0,
+   "text": "know I don't know the answer to this"
+  },
+  {
+   "t": 1268.8,
+   "d": 2.0,
+   "text": "there's no one answer that applies to"
+  },
+  {
+   "t": 1270.8,
+   "d": 2.16,
+   "text": "every game uh but I do have some"
+  },
+  {
+   "t": 1272.96,
+   "d": 1.72,
+   "text": "thoughts on this particular flavor of"
+  },
+  {
+   "t": 1274.68,
+   "d": 3.88,
+   "text": "8020 for games um first up your"
+  },
+  {
+   "t": 1278.56,
+   "d": 2.04,
+   "text": "foundation should be"
+  },
+  {
+   "t": 1280.6,
+   "d": 2.52,
+   "text": "quiet the silent majority of your"
+  },
+  {
+   "t": 1283.12,
+   "d": 1.48,
+   "text": "content should be your"
+  },
+  {
+   "t": 1284.6,
+   "d": 2.52,
+   "text": "foundation um because usually if it's"
+  },
+  {
+   "t": 1287.12,
+   "d": 2.92,
+   "text": "working no one's talking about it you"
+  },
+  {
+   "t": 1290.04,
+   "d": 2.64,
+   "text": "know if you even if you spent dozens of"
+  },
+  {
+   "t": 1292.68,
+   "d": 3.08,
+   "text": "hours you know dozens of months working"
+  },
+  {
+   "t": 1295.76,
+   "d": 1.52,
+   "text": "on your character controller and your"
+  },
+  {
+   "t": 1297.28,
+   "d": 1.6,
+   "text": "camera system to make sure that your"
+  },
+  {
+   "t": 1298.88,
+   "d": 2.44,
+   "text": "character always is centered correctly"
+  },
+  {
+   "t": 1301.32,
+   "d": 1.84,
+   "text": "and you know you figured out the right"
+  },
+  {
+   "t": 1303.16,
+   "d": 2.52,
+   "text": "key mapping for everything for your game"
+  },
+  {
+   "t": 1305.68,
+   "d": 2.28,
+   "text": "if it is familiar if it's part of kind"
+  },
+  {
+   "t": 1307.96,
+   "d": 2.08,
+   "text": "of the norm probably you're not going to"
+  },
+  {
+   "t": 1310.04,
+   "d": 1.84,
+   "text": "see a lot of conversations about it but"
+  },
+  {
+   "t": 1311.88,
+   "d": 1.16,
+   "text": "that's a good thing right it means"
+  },
+  {
+   "t": 1313.04,
+   "d": 1.52,
+   "text": "they're focusing on the unique they're"
+  },
+  {
+   "t": 1314.56,
+   "d": 1.56,
+   "text": "focusing on the things about your"
+  },
+  {
+   "t": 1316.12,
+   "d": 2.56,
+   "text": "product that really make you stand out"
+  },
+  {
+   "t": 1318.68,
+   "d": 1.04,
+   "text": "if they aren't talking about this"
+  },
+  {
+   "t": 1319.72,
+   "d": 4.28,
+   "text": "Foundation it's usually not uh positive"
+  },
+  {
+   "t": 1324.0,
+   "d": 3.08,
+   "text": "right um the reason I bring this up for"
+  },
+  {
+   "t": 1327.08,
+   "d": 1.64,
+   "text": "this conference in particular is I'm"
+  },
+  {
+   "t": 1328.72,
+   "d": 1.84,
+   "text": "really interested in thinking about what"
+  },
+  {
+   "t": 1330.56,
+   "d": 3.92,
+   "text": "is that 20% of content in a Rog likee or"
+  },
+  {
+   "t": 1334.48,
+   "d": 2.0,
+   "text": "procedural generated game what is"
+  },
+  {
+   "t": 1336.48,
+   "d": 1.88,
+   "text": "everyone talking"
+  },
+  {
+   "t": 1338.36,
+   "d": 4.08,
+   "text": "about um so it's a hard question to"
+  },
+  {
+   "t": 1342.44,
+   "d": 2.12,
+   "text": "answer it again it definitely differs"
+  },
+  {
+   "t": 1344.56,
+   "d": 3.12,
+   "text": "per game um but first and foremost the"
+  },
+  {
+   "t": 1347.68,
+   "d": 1.72,
+   "text": "idea of the non generative core the"
+  },
+  {
+   "t": 1349.4,
+   "d": 1.88,
+   "text": "piece of the game that is not generative"
+  },
+  {
+   "t": 1351.28,
+   "d": 2.32,
+   "text": "the things that kind of stay the same"
+  },
+  {
+   "t": 1353.6,
+   "d": 2.16,
+   "text": "something where if I play the game and"
+  },
+  {
+   "t": 1355.76,
+   "d": 1.76,
+   "text": "you play the game we have this common"
+  },
+  {
+   "t": 1357.52,
+   "d": 1.6,
+   "text": "threat we have things that happen that"
+  },
+  {
+   "t": 1359.12,
+   "d": 2.32,
+   "text": "are very similar uh for this section the"
+  },
+  {
+   "t": 1361.44,
+   "d": 2.64,
+   "text": "game I'd like to use as an example is"
+  },
+  {
+   "t": 1364.08,
+   "d": 2.92,
+   "text": "capes of cut so caves of cut as I'm sure"
+  },
+  {
+   "t": 1367.0,
+   "d": 2.4,
+   "text": "many of you know does a wonderful mix of"
+  },
+  {
+   "t": 1369.4,
+   "d": 2.76,
+   "text": "static content and generative content uh"
+  },
+  {
+   "t": 1372.16,
+   "d": 2.24,
+   "text": "so it it is a perfect example of a game"
+  },
+  {
+   "t": 1374.4,
+   "d": 2.4,
+   "text": "that potentially has content people"
+  },
+  {
+   "t": 1376.8,
+   "d": 1.8,
+   "text": "could talk about that is generated"
+  },
+  {
+   "t": 1378.6,
+   "d": 2.72,
+   "text": "versus content that is static um you"
+  },
+  {
+   "t": 1381.32,
+   "d": 2.44,
+   "text": "know and a lot of them are a mix so your"
+  },
+  {
+   "t": 1383.76,
+   "d": 2.2,
+   "text": "spine fruit leads to spine fruit jam it"
+  },
+  {
+   "t": 1385.96,
+   "d": 2.4,
+   "text": "always leads to a specific type of"
+  },
+  {
+   "t": 1388.36,
+   "d": 1.88,
+   "text": "damage resistance that will be variable"
+  },
+  {
+   "t": 1390.24,
+   "d": 2.72,
+   "text": "or regenerative uh you have things like"
+  },
+  {
+   "t": 1392.96,
+   "d": 1.48,
+   "text": "certain characters that are always"
+  },
+  {
+   "t": 1394.44,
+   "d": 2.8,
+   "text": "available um you know always potentially"
+  },
+  {
+   "t": 1397.24,
+   "d": 1.88,
+   "text": "there for you based on the the default"
+  },
+  {
+   "t": 1399.12,
+   "d": 1.96,
+   "text": "starting conditions so I asked Jason"
+  },
+  {
+   "t": 1401.08,
+   "d": 2.04,
+   "text": "about this a few days ago like hey what"
+  },
+  {
+   "t": 1403.12,
+   "d": 2.0,
+   "text": "are your fans talking about and he said"
+  },
+  {
+   "t": 1405.12,
+   "d": 3.4,
+   "text": "you know generally they see it as 50/50"
+  },
+  {
+   "t": 1408.52,
+   "d": 1.36,
+   "text": "you know some people love talking about"
+  },
+  {
+   "t": 1409.88,
+   "d": 1.44,
+   "text": "the characters and the things that are"
+  },
+  {
+   "t": 1411.32,
+   "d": 2.64,
+   "text": "kind of known and and really you know"
+  },
+  {
+   "t": 1413.96,
+   "d": 2.08,
+   "text": "showing love and care for certain NPCs"
+  },
+  {
+   "t": 1416.04,
+   "d": 2.04,
+   "text": "that are stic but of course the other"
+  },
+  {
+   "t": 1418.08,
+   "d": 1.84,
+   "text": "side of it is talking about the"
+  },
+  {
+   "t": 1419.92,
+   "d": 1.68,
+   "text": "generative systems and the things that"
+  },
+  {
+   "t": 1421.6,
+   "d": 1.6,
+   "text": "they bring"
+  },
+  {
+   "t": 1423.2,
+   "d": 2.88,
+   "text": "out um which brings me to the"
+  },
+  {
+   "t": 1426.08,
+   "d": 2.4,
+   "text": "artifacts so for the most part unless"
+  },
+  {
+   "t": 1428.48,
+   "d": 2.52,
+   "text": "you're in a Dev facing event like this"
+  },
+  {
+   "t": 1431.0,
+   "d": 1.16,
+   "text": "most of your players most of your"
+  },
+  {
+   "t": 1432.16,
+   "d": 1.2,
+   "text": "audience are going to be talking about"
+  },
+  {
+   "t": 1433.36,
+   "d": 1.68,
+   "text": "the artifact of the generative system"
+  },
+  {
+   "t": 1435.04,
+   "d": 3.12,
+   "text": "not the generative system itself uh and"
+  },
+  {
+   "t": 1438.16,
+   "d": 1.52,
+   "text": "just like anything else in this talk"
+  },
+  {
+   "t": 1439.68,
+   "d": 2.6,
+   "text": "they're probably talking about"
+  },
+  {
+   "t": 1442.28,
+   "d": 2.6,
+   "text": "20% um so for this like you know what"
+  },
+  {
+   "t": 1444.88,
+   "d": 2.32,
+   "text": "we're really looking at is when you're"
+  },
+  {
+   "t": 1447.2,
+   "d": 1.2,
+   "text": "generating systems when you're"
+  },
+  {
+   "t": 1448.4,
+   "d": 3.8,
+   "text": "generating Maps items whatever it may be"
+  },
+  {
+   "t": 1452.2,
+   "d": 1.36,
+   "text": "some portion of it is going to be"
+  },
+  {
+   "t": 1453.56,
+   "d": 1.4,
+   "text": "interesting enough that someone's going"
+  },
+  {
+   "t": 1454.96,
+   "d": 1.68,
+   "text": "to decide to talk about it you know to"
+  },
+  {
+   "t": 1456.64,
+   "d": 2.12,
+   "text": "go on a Discord to tweet whatever it may"
+  },
+  {
+   "t": 1458.76,
+   "d": 2.28,
+   "text": "be uh and usually it's the thing that"
+  },
+  {
+   "t": 1461.04,
+   "d": 3.36,
+   "text": "stands out right so to sort of steal the"
+  },
+  {
+   "t": 1464.4,
+   "d": 1.84,
+   "text": "bowls of oatmeal you know if you had"
+  },
+  {
+   "t": 1466.24,
+   "d": 3.28,
+   "text": "10,000 bowls of alphabet soup"
+  },
+  {
+   "t": 1469.52,
+   "d": 1.32,
+   "text": "the one that spells something is going"
+  },
+  {
+   "t": 1470.84,
+   "d": 1.44,
+   "text": "to be the one that someone talks about"
+  },
+  {
+   "t": 1472.28,
+   "d": 1.4,
+   "text": "right the one that does something unique"
+  },
+  {
+   "t": 1473.68,
+   "d": 1.76,
+   "text": "and interesting that really stands out"
+  },
+  {
+   "t": 1475.44,
+   "d": 2.96,
+   "text": "the right combination of randoms uh"
+  },
+  {
+   "t": 1478.4,
+   "d": 1.88,
+   "text": "that's going to be the one that becomes"
+  },
+  {
+   "t": 1480.28,
+   "d": 2.52,
+   "text": "part of that"
+  },
+  {
+   "t": 1483.2,
+   "d": 2.56,
+   "text": "conversation so as developers it's"
+  },
+  {
+   "t": 1485.76,
+   "d": 1.52,
+   "text": "really just important that we create"
+  },
+  {
+   "t": 1487.28,
+   "d": 1.92,
+   "text": "systems that allow for that 20% of"
+  },
+  {
+   "t": 1489.2,
+   "d": 2.84,
+   "text": "artifacts those weird unique those out"
+  },
+  {
+   "t": 1492.04,
+   "d": 3.52,
+   "text": "layers uh to be"
+  },
+  {
+   "t": 1495.56,
+   "d": 2.12,
+   "text": "possible it should also be noted The"
+  },
+  {
+   "t": 1497.68,
+   "d": 2.64,
+   "text": "Meta of your game is probably an"
+  },
+  {
+   "t": 1500.32,
+   "d": 2.12,
+   "text": "8020 uh so what I mean by this is you"
+  },
+  {
+   "t": 1502.44,
+   "d": 1.92,
+   "text": "know your best items your best character"
+  },
+  {
+   "t": 1504.36,
+   "d": 2.6,
+   "text": "your best combos you know this one above"
+  },
+  {
+   "t": 1506.96,
+   "d": 3.6,
+   "text": "and beyond beats everything else um you"
+  },
+  {
+   "t": 1510.56,
+   "d": 2.92,
+   "text": "know it's really annoying when only 20%"
+  },
+  {
+   "t": 1513.48,
+   "d": 1.8,
+   "text": "is in the meta or you know somewhere in"
+  },
+  {
+   "t": 1515.28,
+   "d": 2.32,
+   "text": "that range uh but I'm here to say that"
+  },
+  {
+   "t": 1517.6,
+   "d": 2.56,
+   "text": "that's fine and don't fight it"
+  },
+  {
+   "t": 1520.16,
+   "d": 2.04,
+   "text": "right it's I don't want to say"
+  },
+  {
+   "t": 1522.2,
+   "d": 2.36,
+   "text": "impossible but it is definitely sopian"
+  },
+  {
+   "t": 1524.56,
+   "d": 2.52,
+   "text": "to try to expand that to a larger"
+  },
+  {
+   "t": 1527.08,
+   "d": 2.24,
+   "text": "percent of your content uh certainly"
+  },
+  {
+   "t": 1529.32,
+   "d": 1.52,
+   "text": "many games try it you know your"
+  },
+  {
+   "t": 1530.84,
+   "d": 2.28,
+   "text": "character battle games like league and"
+  },
+  {
+   "t": 1533.12,
+   "d": 2.0,
+   "text": "OverWatch and things of that nature"
+  },
+  {
+   "t": 1535.12,
+   "d": 1.36,
+   "text": "certainly they want all of their"
+  },
+  {
+   "t": 1536.48,
+   "d": 1.68,
+   "text": "characters to be equally"
+  },
+  {
+   "t": 1538.16,
+   "d": 2.8,
+   "text": "represented um but I think it's"
+  },
+  {
+   "t": 1540.96,
+   "d": 1.48,
+   "text": "important to just have a meta that"
+  },
+  {
+   "t": 1542.44,
+   "d": 2.32,
+   "text": "people can find because people enjoy the"
+  },
+  {
+   "t": 1544.76,
+   "d": 2.68,
+   "text": "process of figuring that out uh and then"
+  },
+  {
+   "t": 1547.44,
+   "d": 2.2,
+   "text": "find ways to adapt it right for me"
+  },
+  {
+   "t": 1549.64,
+   "d": 1.6,
+   "text": "that's probably regular updates to the"
+  },
+  {
+   "t": 1551.24,
+   "d": 1.96,
+   "text": "game but that can also be game modes you"
+  },
+  {
+   "t": 1553.2,
+   "d": 2.48,
+   "text": "know special modifiers making it so the"
+  },
+  {
+   "t": 1555.68,
+   "d": 2.04,
+   "text": "meta is always changing for those who"
+  },
+  {
+   "t": 1557.72,
+   "d": 3.08,
+   "text": "like to this but trying to balance it so"
+  },
+  {
+   "t": 1560.8,
+   "d": 3.64,
+   "text": "it's a perfect spread uh in my opinion"
+  },
+  {
+   "t": 1564.44,
+   "d": 1.56,
+   "text": "is not worth"
+  },
+  {
+   "t": 1566.0,
+   "d": 2.56,
+   "text": "it uh the other part is that the 20%"
+  },
+  {
+   "t": 1568.56,
+   "d": 1.56,
+   "text": "here is subjective you know I'm saying"
+  },
+  {
+   "t": 1570.12,
+   "d": 2.4,
+   "text": "the 20% people talk about or are deeply"
+  },
+  {
+   "t": 1572.52,
+   "d": 1.84,
+   "text": "interested in that's going to differ for"
+  },
+  {
+   "t": 1574.36,
+   "d": 1.8,
+   "text": "player uh I've always loved the magic"
+  },
+  {
+   "t": 1576.16,
+   "d": 1.76,
+   "text": "the Gathering player profiles and for"
+  },
+  {
+   "t": 1577.92,
+   "d": 2.28,
+   "text": "this it's like which 20% of cards speak"
+  },
+  {
+   "t": 1580.2,
+   "d": 1.88,
+   "text": "to the Tammy speak to the spike you know"
+  },
+  {
+   "t": 1582.08,
+   "d": 1.8,
+   "text": "which which cards which areas are they"
+  },
+  {
+   "t": 1583.88,
+   "d": 1.44,
+   "text": "going to be most"
+  },
+  {
+   "t": 1585.32,
+   "d": 3.64,
+   "text": "into all right lastly math I'll I'll get"
+  },
+  {
+   "t": 1588.96,
+   "d": 1.32,
+   "text": "through this quickly I think I got a few"
+  },
+  {
+   "t": 1590.28,
+   "d": 1.8,
+   "text": "more minutes uh and this is what you're"
+  },
+  {
+   "t": 1592.08,
+   "d": 1.32,
+   "text": "all here for"
+  },
+  {
+   "t": 1593.4,
+   "d": 3.12,
+   "text": "anyway so 80% of the outcomes from 20%"
+  },
+  {
+   "t": 1596.52,
+   "d": 1.88,
+   "text": "of the causes when we're looking at this"
+  },
+  {
+   "t": 1598.4,
+   "d": 1.36,
+   "text": "as an actual Rogue like when we're"
+  },
+  {
+   "t": 1599.76,
+   "d": 2.0,
+   "text": "looking at actually generating content"
+  },
+  {
+   "t": 1601.76,
+   "d": 1.24,
+   "text": "you know this can mean a lot of things"
+  },
+  {
+   "t": 1603.0,
+   "d": 1.96,
+   "text": "this can be 80% of your damage comes"
+  },
+  {
+   "t": 1604.96,
+   "d": 2.44,
+   "text": "from only 20% of your attacks this is"
+  },
+  {
+   "t": 1607.4,
+   "d": 2.2,
+   "text": "your crit right this is your power move"
+  },
+  {
+   "t": 1609.6,
+   "d": 2.2,
+   "text": "your your special attack this is"
+  },
+  {
+   "t": 1611.8,
+   "d": 2.96,
+   "text": "breaking damage resistance armor break"
+  },
+  {
+   "t": 1614.76,
+   "d": 1.52,
+   "text": "you know having those special moments"
+  },
+  {
+   "t": 1616.28,
+   "d": 2.72,
+   "text": "from a very specific subset set of"
+  },
+  {
+   "t": 1619.0,
+   "d": 3.36,
+   "text": "attacks 80% of rewards coming from 20%"
+  },
+  {
+   "t": 1622.36,
+   "d": 2.24,
+   "text": "of your loot this is that boss chest"
+  },
+  {
+   "t": 1624.6,
+   "d": 1.6,
+   "text": "after defeating the boss in the region"
+  },
+  {
+   "t": 1626.2,
+   "d": 2.4,
+   "text": "this is that super secret hidden room"
+  },
+  {
+   "t": 1628.6,
+   "d": 1.68,
+   "text": "that has a chest that opens and just"
+  },
+  {
+   "t": 1630.28,
+   "d": 3.4,
+   "text": "drops 10,000 awesome items and of course"
+  },
+  {
+   "t": 1633.68,
+   "d": 2.2,
+   "text": "for any of these it's also recursive"
+  },
+  {
+   "t": 1635.88,
+   "d": 3.04,
+   "text": "right what I said before within that 80"
+  },
+  {
+   "t": 1638.92,
+   "d": 2.96,
+   "text": "within that 20 or additional 80s and 20s"
+  },
+  {
+   "t": 1641.88,
+   "d": 2.36,
+   "text": "uh I think ttrpgs do this wonderfully"
+  },
+  {
+   "t": 1644.24,
+   "d": 2.88,
+   "text": "you know D and D having a one and a 20"
+  },
+  {
+   "t": 1647.12,
+   "d": 2.88,
+   "text": "really saying these are special we have"
+  },
+  {
+   "t": 1650.0,
+   "d": 2.28,
+   "text": "set these aside to be special ensures"
+  },
+  {
+   "t": 1652.28,
+   "d": 1.36,
+   "text": "that you have those moments for that"
+  },
+  {
+   "t": 1653.64,
+   "d": 2.96,
+   "text": "sort of 8020 rule to apply uh I think"
+  },
+  {
+   "t": 1656.6,
+   "d": 1.88,
+   "text": "when doing random in games especially"
+  },
+  {
+   "t": 1658.48,
+   "d": 2.24,
+   "text": "digital ones uh it really helps to use a"
+  },
+  {
+   "t": 1660.72,
+   "d": 3.24,
+   "text": "buddy system never roll alone um what I"
+  },
+  {
+   "t": 1663.96,
+   "d": 2.2,
+   "text": "mean by that is just you know doing more"
+  },
+  {
+   "t": 1666.16,
+   "d": 1.88,
+   "text": "than one random at a time getting that"
+  },
+  {
+   "t": 1668.04,
+   "d": 2.12,
+   "text": "weighted distribution this ensures a"
+  },
+  {
+   "t": 1670.16,
+   "d": 3.6,
+   "text": "more interesting random uh layout uh you"
+  },
+  {
+   "t": 1673.76,
+   "d": 2.96,
+   "text": "know for ttrpgs maybe we could do 2d1"
+  },
+  {
+   "t": 1676.72,
+   "d": 1.48,
+   "text": "but I would say this is powered by the"
+  },
+  {
+   "t": 1678.2,
+   "d": 2.6,
+   "text": "apocalypse right uh what I do in a lot"
+  },
+  {
+   "t": 1680.8,
+   "d": 2.0,
+   "text": "of my games is I actually curve my"
+  },
+  {
+   "t": 1682.8,
+   "d": 3.16,
+   "text": "randoms using eings so I'm just doing a"
+  },
+  {
+   "t": 1685.96,
+   "d": 3.28,
+   "text": "basic lurp zero to one random and then I"
+  },
+  {
+   "t": 1689.24,
+   "d": 1.52,
+   "text": "apply an easing to give me a different"
+  },
+  {
+   "t": 1690.76,
+   "d": 1.96,
+   "text": "value uh rather than just having that"
+  },
+  {
+   "t": 1692.72,
+   "d": 1.8,
+   "text": "kind of even"
+  },
+  {
+   "t": 1694.52,
+   "d": 1.8,
+   "text": "distribution uh another place you can"
+  },
+  {
+   "t": 1696.32,
+   "d": 2.48,
+   "text": "apply this everybody knows this guy"
+  },
+  {
+   "t": 1698.8,
+   "d": 2.68,
+   "text": "everybody knows what he says um so this"
+  },
+  {
+   "t": 1701.48,
+   "d": 1.92,
+   "text": "is a classic example of you have an"
+  },
+  {
+   "t": 1703.4,
+   "d": 1.88,
+   "text": "opportunity here to give this person"
+  },
+  {
+   "t": 1705.28,
+   "d": 2.12,
+   "text": "many different things to say uh but if"
+  },
+  {
+   "t": 1707.4,
+   "d": 1.8,
+   "text": "you wait your Gram you can ensure that"
+  },
+  {
+   "t": 1709.2,
+   "d": 2.12,
+   "text": "that really fun special one is only"
+  },
+  {
+   "t": 1711.32,
+   "d": 2.64,
+   "text": "occurring you know n amount of"
+  },
+  {
+   "t": 1713.96,
+   "d": 3.6,
+   "text": "times uh lastly just don't do random uh"
+  },
+  {
+   "t": 1717.56,
+   "d": 1.68,
+   "text": "for our games we actually kind of"
+  },
+  {
+   "t": 1719.24,
+   "d": 1.52,
+   "text": "borrowed this idea from Clash Royale"
+  },
+  {
+   "t": 1720.76,
+   "d": 2.6,
+   "text": "that has this chest cycle uh you can"
+  },
+  {
+   "t": 1723.36,
+   "d": 1.56,
+   "text": "give the sense of random without"
+  },
+  {
+   "t": 1724.92,
+   "d": 1.72,
+   "text": "actually having a random system to"
+  },
+  {
+   "t": 1726.64,
+   "d": 1.72,
+   "text": "really ensure that that 8020 is coming"
+  },
+  {
+   "t": 1728.36,
+   "d": 1.56,
+   "text": "at a good cycle that you know that"
+  },
+  {
+   "t": 1729.92,
+   "d": 3.84,
+   "text": "rotation of good moments uh occurs at"
+  },
+  {
+   "t": 1733.76,
+   "d": 1.56,
+   "text": "the intervals you want it"
+  },
+  {
+   "t": 1735.32,
+   "d": 2.32,
+   "text": "to and again remember everything's"
+  },
+  {
+   "t": 1737.64,
+   "d": 0.92,
+   "text": "recursive"
+  },
+  {
+   "t": 1738.56,
+   "d": 1.52,
+   "text": "So within that there's a subset there's"
+  },
+  {
+   "t": 1740.08,
+   "d": 0.92,
+   "text": "a"
+  },
+  {
+   "t": 1741.0,
+   "d": 2.12,
+   "text": "subset um so with this I leave you my"
+  },
+  {
+   "t": 1743.12,
+   "d": 1.84,
+   "text": "final"
+  },
+  {
+   "t": 1744.96,
+   "d": 2.96,
+   "text": "thoughts uh is this dangerous am I"
+  },
+  {
+   "t": 1747.92,
+   "d": 3.04,
+   "text": "introducing dark patterns maybe uh I"
+  },
+  {
+   "t": 1750.96,
+   "d": 2.68,
+   "text": "think not treating this like one more"
+  },
+  {
+   "t": 1753.64,
+   "d": 2.0,
+   "text": "thing in your toolbox can be dangerous"
+  },
+  {
+   "t": 1755.64,
+   "d": 1.52,
+   "text": "right this is just one more way to"
+  },
+  {
+   "t": 1757.16,
+   "d": 3.44,
+   "text": "approach development um don't confident"
+  },
+  {
+   "t": 1760.6,
+   "d": 1.64,
+   "text": "think you always know what the 8020 is"
+  },
+  {
+   "t": 1762.24,
+   "d": 1.92,
+   "text": "going to be you know maybe you think"
+  },
+  {
+   "t": 1764.16,
+   "d": 1.36,
+   "text": "it's going to be this character it ends"
+  },
+  {
+   "t": 1765.52,
+   "d": 1.6,
+   "text": "up being something else this is really"
+  },
+  {
+   "t": 1767.12,
+   "d": 1.44,
+   "text": "just one more thing that discuss one"
+  },
+  {
+   "t": 1768.56,
+   "d": 2.32,
+   "text": "more way to plan but throw out anything"
+  },
+  {
+   "t": 1770.88,
+   "d": 3.6,
+   "text": "you get from it uh and lastly I leave"
+  },
+  {
+   "t": 1774.48,
+   "d": 2.16,
+   "text": "you with this you know I really said"
+  },
+  {
+   "t": 1776.64,
+   "d": 2.0,
+   "text": "8020 is important and everything is"
+  },
+  {
+   "t": 1778.64,
+   "d": 4.12,
+   "text": "secretly 8020 um so I want to thank you"
+  },
+  {
+   "t": 1782.76,
+   "d": 2.16,
+   "text": "for your time and uh hope to have a"
+  },
+  {
+   "t": 1784.92,
+   "d": 2.2,
+   "text": "great"
+  },
+  {
+   "t": 1787.24,
+   "d": 2.24,
+   "text": "conversation excellent thank you very"
+  },
+  {
+   "t": 1789.48,
+   "d": 3.32,
+   "text": "much uh and yeah I love it I have to say"
+  },
+  {
+   "t": 1792.8,
+   "d": 2.96,
+   "text": "to back up this talk um on the"
+  },
+  {
+   "t": 1795.76,
+   "d": 2.32,
+   "text": "development of night Andale for at least"
+  },
+  {
+   "t": 1798.08,
+   "d": 2.84,
+   "text": "all the time I was there the maxim was"
+  },
+  {
+   "t": 1800.92,
+   "d": 3.16,
+   "text": "80% generated 20% handcrafted was our"
+  },
+  {
+   "t": 1804.08,
+   "d": 2.84,
+   "text": "approach to PSAL generation and I also"
+  },
+  {
+   "t": 1806.92,
+   "d": 1.84,
+   "text": "know cuz I mentioned it in lectures that"
+  },
+  {
+   "t": 1808.76,
+   "d": 2.08,
+   "text": "in Assassin's Creed Odyssey they had a"
+  },
+  {
+   "t": 1810.84,
+   "d": 3.56,
+   "text": "generator for cutcenes and it was 20%"
+  },
+  {
+   "t": 1814.4,
+   "d": 2.4,
+   "text": "fully generated just like use it as is"
+  },
+  {
+   "t": 1816.8,
+   "d": 3.52,
+   "text": "80% required varying levels of uh hand"
+  },
+  {
+   "t": 1820.32,
+   "d": 4.68,
+   "text": "touching so not a numerology talk yeah"
+  },
+  {
+   "t": 1825.0,
+   "d": 3.12,
+   "text": "but got to say uh excellent well thank"
+  },
+  {
+   "t": 1828.12,
+   "d": 1.44,
+   "text": "you very much I believe that now it is"
+  },
+  {
+   "t": 1829.56,
+   "d": 2.48,
+   "text": "time for a numerology talk I've heard"
+  },
+  {
+   "t": 1832.04,
+   "d": 3.2,
+   "text": "but so perfect leadup couldn't ask for a"
+  },
+  {
+   "t": 1835.24,
+   "d": 2.24,
+   "text": "better transition so thank you very much"
+  },
+  {
+   "t": 1837.48,
+   "d": 3.0,
+   "text": "Tyler"
+  }
+ ]
+}

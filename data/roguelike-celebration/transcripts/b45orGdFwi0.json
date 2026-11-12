@@ -1,0 +1,4541 @@
+{
+ "id": "b45orGdFwi0",
+ "url": "https://www.youtube.com/watch?v=b45orGdFwi0",
+ "title": "John Harris - The Lost Roguelikes",
+ "speaker": "John Harris",
+ "talk_title": "The Lost Roguelikes",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1883,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "After Rogue became popular in the early days of the genre, a number of other games became popular in university computer rooms, games like Super Rogue, URogue and Advanced Rogue (sense a theme?) The talk would talk about and demonstrate these games live, thanks to the efforts of the Roguelike Preservation Society (which is itself now in need of preserving). Depending on time I might also demonstrate and talk about Larn, once a \"major roguelike\" that has fallen into obscurity these days, a game that takes a very different approach to roguelike concepts.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 178,
+   "title": "The Early Years of Roguelikes"
+  },
+  {
+   "start": 421,
+   "title": "Roguelike Restoration Project"
+  },
+  {
+   "start": 503,
+   "title": "Ultra Rogue"
+  },
+  {
+   "start": 592,
+   "title": "Larn"
+  },
+  {
+   "start": 692,
+   "title": "Commonalities"
+  },
+  {
+   "start": 795,
+   "title": "Magic Pools"
+  },
+  {
+   "start": 1049,
+   "title": "Fighter Types"
+  },
+  {
+   "start": 1232,
+   "title": "Cursed Items"
+  },
+  {
+   "start": 1326,
+   "title": "Monks"
+  },
+  {
+   "start": 1384,
+   "title": "Character Creation"
+  },
+  {
+   "start": 1459,
+   "title": "Lauren"
+  },
+  {
+   "start": 1466,
+   "title": "Imperfect Mazes"
+  },
+  {
+   "start": 1521,
+   "title": "Magic Scroll of Time"
+  },
+  {
+   "start": 1716,
+   "title": "Final Parting Thoughts"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5360,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.44,
+   "d": 1.76,
+   "text": "all right we've got"
+  },
+  {
+   "t": 5.2,
+   "d": 2.72,
+   "text": "one more talk this block"
+  },
+  {
+   "t": 7.92,
+   "d": 0.96,
+   "text": "and"
+  },
+  {
+   "t": 8.88,
+   "d": 2.08,
+   "text": "that is coming to you from"
+  },
+  {
+   "t": 10.96,
+   "d": 1.76,
+   "text": "john harris"
+  },
+  {
+   "t": 12.72,
+   "d": 2.4,
+   "text": "who is going to be giving us a tour of"
+  },
+  {
+   "t": 15.12,
+   "d": 3.04,
+   "text": "the lost roguelikes"
+  },
+  {
+   "t": 18.16,
+   "d": 1.92,
+   "text": "super excited about"
+  },
+  {
+   "t": 20.08,
+   "d": 2.64,
+   "text": "john are you ready"
+  },
+  {
+   "t": 22.72,
+   "d": 2.08,
+   "text": "i can't have uh"
+  },
+  {
+   "t": 24.8,
+   "d": 1.92,
+   "text": "yeah okay i'm going i won't be able to"
+  },
+  {
+   "t": 26.72,
+   "d": 2.0,
+   "text": "see you uh"
+  },
+  {
+   "t": 28.72,
+   "d": 3.04,
+   "text": "on a screen because i ha i'm screen"
+  },
+  {
+   "t": 31.76,
+   "d": 2.8,
+   "text": "sharing for the slides and gameplay"
+  },
+  {
+   "t": 34.56,
+   "d": 1.84,
+   "text": "yeah that's fine if if i need your"
+  },
+  {
+   "t": 36.4,
+   "d": 1.84,
+   "text": "attention i will start talking you can"
+  },
+  {
+   "t": 38.24,
+   "d": 1.2,
+   "text": "hear me right"
+  },
+  {
+   "t": 39.44,
+   "d": 1.92,
+   "text": "uh yes yes"
+  },
+  {
+   "t": 41.36,
+   "d": 1.76,
+   "text": "i'm coming at you from my friend's house"
+  },
+  {
+   "t": 43.12,
+   "d": 2.0,
+   "text": "by the way since he has a better room"
+  },
+  {
+   "t": 45.12,
+   "d": 0.72,
+   "text": "for"
+  },
+  {
+   "t": 45.84,
+   "d": 1.36,
+   "text": "streaming from"
+  },
+  {
+   "t": 47.2,
+   "d": 1.84,
+   "text": "so that's his collection of deadpool"
+  },
+  {
+   "t": 49.04,
+   "d": 2.08,
+   "text": "figures in the background"
+  },
+  {
+   "t": 51.12,
+   "d": 1.76,
+   "text": "um"
+  },
+  {
+   "t": 52.88,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 53.76,
+   "d": 1.76,
+   "text": "just just like i'm going to turn off the"
+  },
+  {
+   "t": 55.52,
+   "d": 2.72,
+   "text": "sound from the"
+  },
+  {
+   "t": 58.24,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 59.04,
+   "d": 0.88,
+   "text": "the"
+  },
+  {
+   "t": 59.92,
+   "d": 2.56,
+   "text": "the screen all right"
+  },
+  {
+   "t": 62.48,
+   "d": 1.12,
+   "text": "uh the"
+  },
+  {
+   "t": 63.6,
+   "d": 1.76,
+   "text": "i i thought the chat open in another"
+  },
+  {
+   "t": 65.36,
+   "d": 1.2,
+   "text": "window so"
+  },
+  {
+   "t": 66.56,
+   "d": 3.28,
+   "text": "all right so um and"
+  },
+  {
+   "t": 69.84,
+   "d": 3.04,
+   "text": "let's see i i need your you to tell me"
+  },
+  {
+   "t": 72.88,
+   "d": 3.44,
+   "text": "what how time is looking okay"
+  },
+  {
+   "t": 76.96,
+   "d": 2.32,
+   "text": "oh yes if if you're"
+  },
+  {
+   "t": 79.28,
+   "d": 3.36,
+   "text": "you want a five-minute warning uh yeah"
+  },
+  {
+   "t": 82.64,
+   "d": 3.44,
+   "text": "yeah because the the the slide projector"
+  },
+  {
+   "t": 86.08,
+   "d": 1.12,
+   "text": "has"
+  },
+  {
+   "t": 87.2,
+   "d": 2.56,
+   "text": "uh it's obscured the task bar so i can't"
+  },
+  {
+   "t": 89.76,
+   "d": 1.92,
+   "text": "do the time all right i'll jump in when"
+  },
+  {
+   "t": 91.68,
+   "d": 2.08,
+   "text": "you've got five minutes all right"
+  },
+  {
+   "t": 93.76,
+   "d": 2.48,
+   "text": "i talk is on the last frog legs i'm"
+  },
+  {
+   "t": 96.24,
+   "d": 1.44,
+   "text": "sorry by the way that the screen is"
+  },
+  {
+   "t": 97.68,
+   "d": 2.08,
+   "text": "framed like this uh just as far like my"
+  },
+  {
+   "t": 99.76,
+   "d": 1.68,
+   "text": "head"
+  },
+  {
+   "t": 101.44,
+   "d": 2.0,
+   "text": "um"
+  },
+  {
+   "t": 103.44,
+   "d": 2.32,
+   "text": "so the last rug likes uh that would be"
+  },
+  {
+   "t": 105.76,
+   "d": 2.0,
+   "text": "advanced rogue five fast playing"
+  },
+  {
+   "t": 107.76,
+   "d": 2.32,
+   "text": "advanced rogue seven got lots of classes"
+  },
+  {
+   "t": 110.08,
+   "d": 2.16,
+   "text": "super rogue it's quick to play and weird"
+  },
+  {
+   "t": 112.24,
+   "d": 1.6,
+   "text": "ultra rogue it's forgotten and"
+  },
+  {
+   "t": 113.84,
+   "d": 2.72,
+   "text": "influential and i just actually found a"
+  },
+  {
+   "t": 116.56,
+   "d": 2.08,
+   "text": "binary of it finally for the first time"
+  },
+  {
+   "t": 118.64,
+   "d": 2.0,
+   "text": "a couple days ago"
+  },
+  {
+   "t": 120.64,
+   "d": 2.16,
+   "text": "x-rag which is uh"
+  },
+  {
+   "t": 122.8,
+   "d": 2.16,
+   "text": "the the ultimate end of the advance"
+  },
+  {
+   "t": 124.96,
+   "d": 2.96,
+   "text": "rogue tree and larn which is very weird"
+  },
+  {
+   "t": 127.92,
+   "d": 2.32,
+   "text": "very different and awesome"
+  },
+  {
+   "t": 130.24,
+   "d": 2.4,
+   "text": "um okay so"
+  },
+  {
+   "t": 132.64,
+   "d": 2.4,
+   "text": "about this okay first who the heck am i"
+  },
+  {
+   "t": 135.04,
+   "d": 1.68,
+   "text": "i'm john harris"
+  },
+  {
+   "t": 136.72,
+   "d": 2.72,
+   "text": "right now to say them uh i wrote"
+  },
+  {
+   "t": 139.44,
+   "d": 2.56,
+   "text": "the the column at play a while back but"
+  },
+  {
+   "t": 142.0,
+   "d": 2.32,
+   "text": "uh for game set watch much of its"
+  },
+  {
+   "t": 144.32,
+   "d": 1.68,
+   "text": "compound in the book exploring roguelike"
+  },
+  {
+   "t": 146.0,
+   "d": 2.32,
+   "text": "games from crc press"
+  },
+  {
+   "t": 148.32,
+   "d": 1.36,
+   "text": "all right various weird books on games"
+  },
+  {
+   "t": 149.68,
+   "d": 1.44,
+   "text": "with story bundles some of which make"
+  },
+  {
+   "t": 151.12,
+   "d": 1.32,
+   "text": "their way to"
+  },
+  {
+   "t": 152.44,
+   "d": 2.2,
+   "text": "rodneylives.itch.io if you that sounds"
+  },
+  {
+   "t": 154.64,
+   "d": 2.16,
+   "text": "interesting to you one of these is we"
+  },
+  {
+   "t": 156.8,
+   "d": 1.6,
+   "text": "love mystery dungeon what i think you"
+  },
+  {
+   "t": 158.4,
+   "d": 1.92,
+   "text": "guys will really like this talk was"
+  },
+  {
+   "t": 160.32,
+   "d": 1.92,
+   "text": "almost on mystery dungeon but i also"
+  },
+  {
+   "t": 162.24,
+   "d": 2.0,
+   "text": "pitched do you wear the last rug like"
+  },
+  {
+   "t": 164.24,
+   "d": 2.64,
+   "text": "sunday like the uh uh i think it just"
+  },
+  {
+   "t": 166.88,
+   "d": 1.92,
+   "text": "barely edged it out"
+  },
+  {
+   "t": 168.8,
+   "d": 2.88,
+   "text": "and also at rodney lives on twitter"
+  },
+  {
+   "t": 171.68,
+   "d": 2.8,
+   "text": "warning voluminous i tweet a lot and"
+  },
+  {
+   "t": 174.48,
+   "d": 1.44,
+   "text": "there's my switch friend code if that"
+  },
+  {
+   "t": 175.92,
+   "d": 1.68,
+   "text": "isn't all interesting"
+  },
+  {
+   "t": 177.6,
+   "d": 0.8,
+   "text": "okay"
+  },
+  {
+   "t": 178.4,
+   "d": 0.72,
+   "text": "so"
+  },
+  {
+   "t": 179.12,
+   "d": 2.0,
+   "text": "the early years of roguelikes this is"
+  },
+  {
+   "t": 181.12,
+   "d": 3.44,
+   "text": "back in the days back in the day uh"
+  },
+  {
+   "t": 184.56,
+   "d": 1.68,
+   "text": "previous talk talked a bit about the"
+  },
+  {
+   "t": 186.24,
+   "d": 1.76,
+   "text": "plato games"
+  },
+  {
+   "t": 188.0,
+   "d": 2.96,
+   "text": "uh p edit five and d and d and a few"
+  },
+  {
+   "t": 190.96,
+   "d": 2.16,
+   "text": "others those aren't really roguelikes"
+  },
+  {
+   "t": 193.12,
+   "d": 1.6,
+   "text": "but they look a bit like them and"
+  },
+  {
+   "t": 194.72,
+   "d": 3.2,
+   "text": "underneath apple manor which has many of"
+  },
+  {
+   "t": 197.92,
+   "d": 2.88,
+   "text": "the major aspects of roguelikes though i"
+  },
+  {
+   "t": 200.8,
+   "d": 1.36,
+   "text": "still think"
+  },
+  {
+   "t": 202.16,
+   "d": 4.24,
+   "text": "that rogue is is like the best"
+  },
+  {
+   "t": 206.4,
+   "d": 2.24,
+   "text": "combining of all the different concepts"
+  },
+  {
+   "t": 208.64,
+   "d": 2.2,
+   "text": "into one game"
+  },
+  {
+   "t": 210.84,
+   "d": 3.64,
+   "text": "so uh you notice uh on this screen here"
+  },
+  {
+   "t": 214.48,
+   "d": 2.56,
+   "text": "i have four different"
+  },
+  {
+   "t": 217.04,
+   "d": 2.08,
+   "text": "uh i have three different uh colored"
+  },
+  {
+   "t": 219.12,
+   "d": 1.44,
+   "text": "things those are"
+  },
+  {
+   "t": 220.56,
+   "d": 2.72,
+   "text": "to indicate sort of the line lineage of"
+  },
+  {
+   "t": 223.28,
+   "d": 3.76,
+   "text": "these games um like moria for example"
+  },
+  {
+   "t": 227.04,
+   "d": 1.36,
+   "text": "there in green"
+  },
+  {
+   "t": 228.4,
+   "d": 3.84,
+   "text": "uh inspired eumoria later on 1988 in a"
+  },
+  {
+   "t": 232.24,
+   "d": 2.8,
+   "text": "1990 ang band"
+  },
+  {
+   "t": 235.04,
+   "d": 0.88,
+   "text": "and"
+  },
+  {
+   "t": 235.92,
+   "d": 3.2,
+   "text": "similarly hack there in red hat 1.0 gave"
+  },
+  {
+   "t": 239.12,
+   "d": 3.52,
+   "text": "rise to netac 1.3d and then netac 3.0"
+  },
+  {
+   "t": 242.64,
+   "d": 2.4,
+   "text": "and modern net hack today"
+  },
+  {
+   "t": 245.04,
+   "d": 1.68,
+   "text": "well rogue had"
+  },
+  {
+   "t": 246.72,
+   "d": 1.2,
+   "text": "a system"
+  },
+  {
+   "t": 247.92,
+   "d": 3.36,
+   "text": "at a line of these games too"
+  },
+  {
+   "t": 251.28,
+   "d": 3.68,
+   "text": "um and those kind of uh kind of petered"
+  },
+  {
+   "t": 254.96,
+   "d": 0.88,
+   "text": "out"
+  },
+  {
+   "t": 255.84,
+   "d": 1.2,
+   "text": "i don't think you can see it actually"
+  },
+  {
+   "t": 257.04,
+   "d": 2.8,
+   "text": "behind us a stream guard message but"
+  },
+  {
+   "t": 259.84,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 261.2,
+   "d": 3.04,
+   "text": "the the last one was in 1991 x rug down"
+  },
+  {
+   "t": 264.24,
+   "d": 1.76,
+   "text": "there but also advanced drugs super rug"
+  },
+  {
+   "t": 266.0,
+   "d": 1.6,
+   "text": "and ultra rugs these were all games that"
+  },
+  {
+   "t": 267.6,
+   "d": 2.64,
+   "text": "were played on college"
+  },
+  {
+   "t": 270.24,
+   "d": 1.52,
+   "text": "and they called it computer labs and"
+  },
+  {
+   "t": 271.76,
+   "d": 3.92,
+   "text": "mainframes in timeshare systems"
+  },
+  {
+   "t": 275.68,
+   "d": 0.8,
+   "text": "and"
+  },
+  {
+   "t": 276.48,
+   "d": 2.0,
+   "text": "they're not yeah they're not much talked"
+  },
+  {
+   "t": 278.48,
+   "d": 2.8,
+   "text": "about today which is a real shame"
+  },
+  {
+   "t": 281.28,
+   "d": 1.52,
+   "text": "so i'm here to try to introduce you to"
+  },
+  {
+   "t": 282.8,
+   "d": 1.84,
+   "text": "these games tell you how you can play"
+  },
+  {
+   "t": 284.64,
+   "d": 2.96,
+   "text": "them now and hopefully inspire you to"
+  },
+  {
+   "t": 287.6,
+   "d": 2.24,
+   "text": "to look them up so"
+  },
+  {
+   "t": 289.84,
+   "d": 2.16,
+   "text": "so let's talk about rogue a little bit"
+  },
+  {
+   "t": 292.0,
+   "d": 2.88,
+   "text": "uh just to recap each dungeon level it's"
+  },
+  {
+   "t": 294.88,
+   "d": 2.56,
+   "text": "a it's it's like in the standard in the"
+  },
+  {
+   "t": 297.44,
+   "d": 2.4,
+   "text": "old dandy mega dungeon style of a"
+  },
+  {
+   "t": 299.84,
+   "d": 2.8,
+   "text": "dungeon that starts like on a first"
+  },
+  {
+   "t": 302.64,
+   "d": 1.92,
+   "text": "level and then goes down and gets harder"
+  },
+  {
+   "t": 304.56,
+   "d": 1.68,
+   "text": "as you get deeper"
+  },
+  {
+   "t": 306.24,
+   "d": 2.0,
+   "text": "and each dungeon level in rug made of a"
+  },
+  {
+   "t": 308.24,
+   "d": 1.92,
+   "text": "three by three grid of rooms collected"
+  },
+  {
+   "t": 310.16,
+   "d": 2.64,
+   "text": "by connected by corridors"
+  },
+  {
+   "t": 312.8,
+   "d": 1.76,
+   "text": "uh you have to collect food found a way"
+  },
+  {
+   "t": 314.56,
+   "d": 2.16,
+   "text": "down to avoid starving to death"
+  },
+  {
+   "t": 316.72,
+   "d": 1.76,
+   "text": "uh yeah"
+  },
+  {
+   "t": 318.48,
+   "d": 1.52,
+   "text": "you find random items along the way that"
+  },
+  {
+   "t": 320.0,
+   "d": 1.44,
+   "text": "can be identified by either using them"
+  },
+  {
+   "t": 321.44,
+   "d": 2.72,
+   "text": "or by using scrolls of identify on them"
+  },
+  {
+   "t": 324.16,
+   "d": 1.36,
+   "text": "you have to maintain your hit points and"
+  },
+  {
+   "t": 325.52,
+   "d": 1.52,
+   "text": "strengths build experience to find and"
+  },
+  {
+   "t": 327.04,
+   "d": 1.92,
+   "text": "maintain good weapons and armor as you"
+  },
+  {
+   "t": 328.96,
+   "d": 1.36,
+   "text": "go"
+  },
+  {
+   "t": 330.32,
+   "d": 3.28,
+   "text": "you can't go upstairs until you obtain"
+  },
+  {
+   "t": 333.6,
+   "d": 1.76,
+   "text": "the amulet of yeondor which starts"
+  },
+  {
+   "t": 335.36,
+   "d": 1.52,
+   "text": "appearing in the dungeon at around level"
+  },
+  {
+   "t": 336.88,
+   "d": 2.96,
+   "text": "26. 26 is kind of the magic number of"
+  },
+  {
+   "t": 339.84,
+   "d": 1.76,
+   "text": "rogue by the way a lot of things in the"
+  },
+  {
+   "t": 341.6,
+   "d": 2.56,
+   "text": "game are centered around the number 26"
+  },
+  {
+   "t": 344.16,
+   "d": 2.4,
+   "text": "there are 26 kinds of monsters"
+  },
+  {
+   "t": 346.56,
+   "d": 2.64,
+   "text": "and 26 levels in the game it's it's very"
+  },
+  {
+   "t": 349.2,
+   "d": 3.84,
+   "text": "interesting uh yeah so"
+  },
+  {
+   "t": 353.04,
+   "d": 2.64,
+   "text": "this is a knock-up of a rogue-style"
+  },
+  {
+   "t": 355.68,
+   "d": 1.44,
+   "text": "level"
+  },
+  {
+   "t": 357.12,
+   "d": 3.44,
+   "text": "uh you know each of these grid uh grid"
+  },
+  {
+   "t": 360.56,
+   "d": 1.84,
+   "text": "sections on the screen these sectors can"
+  },
+  {
+   "t": 362.4,
+   "d": 1.84,
+   "text": "either contain a room or just like"
+  },
+  {
+   "t": 364.24,
+   "d": 2.88,
+   "text": "passageways or branching corridors"
+  },
+  {
+   "t": 367.12,
+   "d": 1.36,
+   "text": "and they're all connected and once"
+  },
+  {
+   "t": 368.48,
+   "d": 2.24,
+   "text": "you've seen a few of these types of"
+  },
+  {
+   "t": 370.72,
+   "d": 2.48,
+   "text": "levels you get a good feel of how the"
+  },
+  {
+   "t": 373.2,
+   "d": 1.68,
+   "text": "levels will be laid out you can start"
+  },
+  {
+   "t": 374.88,
+   "d": 1.6,
+   "text": "sort of predicting"
+  },
+  {
+   "t": 376.48,
+   "d": 2.72,
+   "text": "what uh what that your levels are going"
+  },
+  {
+   "t": 379.2,
+   "d": 2.72,
+   "text": "to be like as you explore them and get a"
+  },
+  {
+   "t": 381.92,
+   "d": 1.36,
+   "text": "sense of where there might be secret"
+  },
+  {
+   "t": 383.28,
+   "d": 2.4,
+   "text": "rooms which is important to the game in"
+  },
+  {
+   "t": 385.68,
+   "d": 2.16,
+   "text": "fact i bring all of this up right mind"
+  },
+  {
+   "t": 387.84,
+   "d": 2.08,
+   "text": "you up because"
+  },
+  {
+   "t": 389.92,
+   "d": 2.48,
+   "text": "all of these games except for lauren"
+  },
+  {
+   "t": 392.4,
+   "d": 1.6,
+   "text": "everything i've said so far mostly is"
+  },
+  {
+   "t": 394.0,
+   "d": 1.68,
+   "text": "pretty much true about"
+  },
+  {
+   "t": 395.68,
+   "d": 1.68,
+   "text": "uh there are they all use the rogue"
+  },
+  {
+   "t": 397.36,
+   "d": 2.24,
+   "text": "style level generation they're all mega"
+  },
+  {
+   "t": 399.6,
+   "d": 1.76,
+   "text": "dungeon style games where you go down"
+  },
+  {
+   "t": 401.36,
+   "d": 2.32,
+   "text": "and the game gets harder to go down"
+  },
+  {
+   "t": 403.68,
+   "d": 1.6,
+   "text": "the items that you're looking for might"
+  },
+  {
+   "t": 405.28,
+   "d": 2.24,
+   "text": "be different um the number of levels"
+  },
+  {
+   "t": 407.52,
+   "d": 2.16,
+   "text": "might be different ultra rogue that has"
+  },
+  {
+   "t": 409.68,
+   "d": 1.84,
+   "text": "100 levels"
+  },
+  {
+   "t": 411.52,
+   "d": 3.12,
+   "text": "like engman does um but"
+  },
+  {
+   "t": 414.64,
+   "d": 1.52,
+   "text": "once you've played rogue you have a good"
+  },
+  {
+   "t": 416.16,
+   "d": 1.92,
+   "text": "sense of how to proceed in the other"
+  },
+  {
+   "t": 418.08,
+   "d": 1.44,
+   "text": "games so"
+  },
+  {
+   "t": 419.52,
+   "d": 1.2,
+   "text": "these games were rescued from the"
+  },
+  {
+   "t": 420.72,
+   "d": 2.16,
+   "text": "security by uh called the roguelike"
+  },
+  {
+   "t": 422.88,
+   "d": 2.32,
+   "text": "restoration project which began in 2000"
+  },
+  {
+   "t": 425.2,
+   "d": 1.44,
+   "text": "by someone who"
+  },
+  {
+   "t": 426.64,
+   "d": 2.88,
+   "text": "identified on the website as indoor"
+  },
+  {
+   "t": 429.52,
+   "d": 2.0,
+   "text": "uh has a number of versions of rogue"
+  },
+  {
+   "t": 431.52,
+   "d": 2.32,
+   "text": "advanced rogue x-rays all these games on"
+  },
+  {
+   "t": 433.84,
+   "d": 1.36,
+   "text": "it"
+  },
+  {
+   "t": 435.2,
+   "d": 1.68,
+   "text": "also had a version of rogomatic which"
+  },
+  {
+   "t": 436.88,
+   "d": 2.96,
+   "text": "was uh early borg or automatic player"
+  },
+  {
+   "t": 439.84,
+   "d": 2.48,
+   "text": "with a computer program that itself"
+  },
+  {
+   "t": 442.32,
+   "d": 3.04,
+   "text": "played rogue and very well in fact"
+  },
+  {
+   "t": 445.36,
+   "d": 2.16,
+   "text": "uh if i remember correctly the little"
+  },
+  {
+   "t": 447.52,
+   "d": 2.4,
+   "text": "factoid it was created by the eventual"
+  },
+  {
+   "t": 449.92,
+   "d": 2.4,
+   "text": "founder of the the early internet search"
+  },
+  {
+   "t": 452.32,
+   "d": 1.68,
+   "text": "engine like us"
+  },
+  {
+   "t": 454.0,
+   "d": 2.0,
+   "text": "i think michael mullen i think his name"
+  },
+  {
+   "t": 456.0,
+   "d": 1.28,
+   "text": "is anyway i don't know what he's doing"
+  },
+  {
+   "t": 457.28,
+   "d": 1.36,
+   "text": "now"
+  },
+  {
+   "t": 458.64,
+   "d": 2.8,
+   "text": "anyway that's a few uh rescued binary"
+  },
+  {
+   "t": 461.44,
+   "d": 1.92,
+   "text": "versions of these games worked right up"
+  },
+  {
+   "t": 463.36,
+   "d": 2.32,
+   "text": "on that in 2006 i read about a couple of"
+  },
+  {
+   "t": 465.68,
+   "d": 2.0,
+   "text": "things from it back on app play long ago"
+  },
+  {
+   "t": 467.68,
+   "d": 2.64,
+   "text": "in the before times"
+  },
+  {
+   "t": 470.32,
+   "d": 1.84,
+   "text": "these days uh"
+  },
+  {
+   "t": 472.16,
+   "d": 2.16,
+   "text": "these games are being worked on and"
+  },
+  {
+   "t": 474.32,
+   "d": 1.84,
+   "text": "maintained by something called roguelike"
+  },
+  {
+   "t": 476.16,
+   "d": 2.24,
+   "text": "restoration project fork"
+  },
+  {
+   "t": 478.4,
+   "d": 3.44,
+   "text": "uh maintained by john elwyn edwards i"
+  },
+  {
+   "t": 481.84,
+   "d": 3.2,
+   "text": "put it says github name here but really"
+  },
+  {
+   "t": 485.04,
+   "d": 1.76,
+   "text": "it says i think the username on"
+  },
+  {
+   "t": 486.8,
+   "d": 3.04,
+   "text": "mercurial that's a mistake in the slide"
+  },
+  {
+   "t": 489.84,
+   "d": 2.8,
+   "text": "it started working on around 2012 and he"
+  },
+  {
+   "t": 492.64,
+   "d": 1.04,
+   "text": "could"
+  },
+  {
+   "t": 493.68,
+   "d": 0.88,
+   "text": "i"
+  },
+  {
+   "t": 494.56,
+   "d": 2.64,
+   "text": "continues to work on them to this day"
+  },
+  {
+   "t": 497.2,
+   "d": 1.52,
+   "text": "and these are the version of the game"
+  },
+  {
+   "t": 498.72,
+   "d": 1.52,
+   "text": "that i'll be showing off to you today if"
+  },
+  {
+   "t": 500.24,
+   "d": 2.56,
+   "text": "there is time"
+  },
+  {
+   "t": 502.8,
+   "d": 1.68,
+   "text": "uh he doesn't have a working version of"
+  },
+  {
+   "t": 504.48,
+   "d": 2.56,
+   "text": "ultra rogue i've been in contact with"
+  },
+  {
+   "t": 507.04,
+   "d": 2.56,
+   "text": "the creator of ultra rug herb chong who"
+  },
+  {
+   "t": 509.6,
+   "d": 2.32,
+   "text": "is still alive and"
+  },
+  {
+   "t": 511.92,
+   "d": 2.4,
+   "text": "in kicking and he is"
+  },
+  {
+   "t": 514.32,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 515.2,
+   "d": 2.48,
+   "text": "he found a copy of uh two an unreleased"
+  },
+  {
+   "t": 517.68,
+   "d": 1.76,
+   "text": "2.0 of the game that they were working"
+  },
+  {
+   "t": 519.44,
+   "d": 3.2,
+   "text": "on trying to get it working and release"
+  },
+  {
+   "t": 522.64,
+   "d": 0.88,
+   "text": "that"
+  },
+  {
+   "t": 523.52,
+   "d": 1.68,
+   "text": "and i wish him the best of luck in that"
+  },
+  {
+   "t": 525.2,
+   "d": 1.76,
+   "text": "and i hope"
+  },
+  {
+   "t": 526.96,
+   "d": 2.08,
+   "text": "i hope that he can bring that"
+  },
+  {
+   "t": 529.04,
+   "d": 1.84,
+   "text": "you know to the world and that it can"
+  },
+  {
+   "t": 530.88,
+   "d": 1.12,
+   "text": "he'll help"
+  },
+  {
+   "t": 532.0,
+   "d": 3.52,
+   "text": "maybe revive this game in the modern era"
+  },
+  {
+   "t": 535.52,
+   "d": 1.76,
+   "text": "uh he also has those versions of"
+  },
+  {
+   "t": 537.28,
+   "d": 2.88,
+   "text": "advanced rogue seven on the"
+  },
+  {
+   "t": 540.16,
+   "d": 1.04,
+   "text": "on a"
+  },
+  {
+   "t": 541.2,
+   "d": 2.16,
+   "text": "regulation project fork also doesn't"
+  },
+  {
+   "t": 543.36,
+   "d": 1.68,
+   "text": "quite work i'll be getting to that in a"
+  },
+  {
+   "t": 545.04,
+   "d": 2.4,
+   "text": "minute i had to fix a couple of bugs in"
+  },
+  {
+   "t": 547.44,
+   "d": 1.76,
+   "text": "this in order to get it working for you"
+  },
+  {
+   "t": 549.2,
+   "d": 1.52,
+   "text": "guys and i think there might still be"
+  },
+  {
+   "t": 550.72,
+   "d": 1.84,
+   "text": "some bugs i'll tell you about that in a"
+  },
+  {
+   "t": 552.56,
+   "d": 1.04,
+   "text": "minute"
+  },
+  {
+   "t": 553.6,
+   "d": 2.0,
+   "text": "anyway um"
+  },
+  {
+   "t": 555.6,
+   "d": 1.2,
+   "text": "let's see"
+  },
+  {
+   "t": 556.8,
+   "d": 1.2,
+   "text": "the yeah"
+  },
+  {
+   "t": 558.0,
+   "d": 1.92,
+   "text": "he makes available windows versions but"
+  },
+  {
+   "t": 559.92,
+   "d": 1.12,
+   "text": "he also"
+  },
+  {
+   "t": 561.04,
+   "d": 2.48,
+   "text": "has some issues with microsoft's"
+  },
+  {
+   "t": 563.52,
+   "d": 1.84,
+   "text": "registration requirement for visual"
+  },
+  {
+   "t": 565.36,
+   "d": 1.2,
+   "text": "studio"
+  },
+  {
+   "t": 566.56,
+   "d": 2.8,
+   "text": "so it looks like he won't be providing"
+  },
+  {
+   "t": 569.36,
+   "d": 2.0,
+   "text": "windows versions in the future and he"
+  },
+  {
+   "t": 571.36,
+   "d": 2.08,
+   "text": "doesn't supply uh binaries either he"
+  },
+  {
+   "t": 573.44,
+   "d": 2.32,
+   "text": "only supplies the source code let me go"
+  },
+  {
+   "t": 575.76,
+   "d": 1.28,
+   "text": "back yeah"
+  },
+  {
+   "t": 577.04,
+   "d": 2.96,
+   "text": "so i had to comp i uh compile these but"
+  },
+  {
+   "t": 580.0,
+   "d": 2.56,
+   "text": "i have and i'm making them available for"
+  },
+  {
+   "t": 582.56,
+   "d": 1.6,
+   "text": "you to download and play so you don't"
+  },
+  {
+   "t": 584.16,
+   "d": 2.16,
+   "text": "have to compile them yourself i will"
+  },
+  {
+   "t": 586.32,
+   "d": 2.0,
+   "text": "have the link later on"
+  },
+  {
+   "t": 588.32,
+   "d": 2.56,
+   "text": "um let's move on yeah i also hope to be"
+  },
+  {
+   "t": 590.88,
+   "d": 3.28,
+   "text": "showing you uh a version of larn"
+  },
+  {
+   "t": 594.16,
+   "d": 2.72,
+   "text": "which is another uh old roguelite game"
+  },
+  {
+   "t": 596.88,
+   "d": 1.92,
+   "text": "it's a very different one there's really"
+  },
+  {
+   "t": 598.8,
+   "d": 2.24,
+   "text": "no other game quite like large a very"
+  },
+  {
+   "t": 601.04,
+   "d": 1.28,
+   "text": "interesting"
+  },
+  {
+   "t": 602.32,
+   "d": 2.64,
+   "text": "game it takes the roguelike ideas and"
+  },
+  {
+   "t": 604.96,
+   "d": 2.72,
+   "text": "turns them around and makes something"
+  },
+  {
+   "t": 607.68,
+   "d": 2.88,
+   "text": "uh really unusual and special out of"
+  },
+  {
+   "t": 610.56,
+   "d": 1.84,
+   "text": "them it's not as hard as your standard"
+  },
+  {
+   "t": 612.4,
+   "d": 2.0,
+   "text": "roguelike it's still pretty difficult"
+  },
+  {
+   "t": 614.4,
+   "d": 1.84,
+   "text": "but there are so many weird and cool"
+  },
+  {
+   "t": 616.24,
+   "d": 2.24,
+   "text": "things about it and i hope to be able to"
+  },
+  {
+   "t": 618.48,
+   "d": 2.48,
+   "text": "uh talk to you about those but that"
+  },
+  {
+   "t": 620.96,
+   "d": 1.28,
+   "text": "depends on whether we can get to that"
+  },
+  {
+   "t": 622.24,
+   "d": 2.72,
+   "text": "slide in time so let's move on"
+  },
+  {
+   "t": 624.96,
+   "d": 2.72,
+   "text": "so uh it's about the source uh there is"
+  },
+  {
+   "t": 627.68,
+   "d": 2.88,
+   "text": "the url right there for"
+  },
+  {
+   "t": 630.56,
+   "d": 2.4,
+   "text": "the the files that i'm making available"
+  },
+  {
+   "t": 632.96,
+   "d": 2.48,
+   "text": "i will provide that in the breakout room"
+  },
+  {
+   "t": 635.44,
+   "d": 2.16,
+   "text": "after the talk"
+  },
+  {
+   "t": 637.6,
+   "d": 2.0,
+   "text": "okay so caveat"
+  },
+  {
+   "t": 639.6,
+   "d": 1.12,
+   "text": "it says here i've worked hard in the"
+  },
+  {
+   "t": 640.72,
+   "d": 1.36,
+   "text": "presentation and playing these games we"
+  },
+  {
+   "t": 642.08,
+   "d": 1.44,
+   "text": "try to be as accurate as possible even"
+  },
+  {
+   "t": 643.52,
+   "d": 0.96,
+   "text": "though they're the source diving to"
+  },
+  {
+   "t": 644.48,
+   "d": 1.44,
+   "text": "confirm some behaviors but these are"
+  },
+  {
+   "t": 645.92,
+   "d": 2.08,
+   "text": "complex games and a delight and weird"
+  },
+  {
+   "t": 648.0,
+   "d": 2.8,
+   "text": "behavior with mysterious causes"
+  },
+  {
+   "t": 650.8,
+   "d": 1.28,
+   "text": "on the inflation given this presentation"
+  },
+  {
+   "t": 652.08,
+   "d": 1.12,
+   "text": "no warranties are offered either"
+  },
+  {
+   "t": 653.2,
+   "d": 2.0,
+   "text": "expressed or implied this is especially"
+  },
+  {
+   "t": 655.2,
+   "d": 1.6,
+   "text": "true of the direction from a road five"
+  },
+  {
+   "t": 656.8,
+   "d": 1.92,
+   "text": "to average seven x rogue and early a rug"
+  },
+  {
+   "t": 658.72,
+   "d": 2.32,
+   "text": "to euro again so on time"
+  },
+  {
+   "t": 661.04,
+   "d": 2.64,
+   "text": "also i give dates or i gave dates"
+  },
+  {
+   "t": 663.68,
+   "d": 2.48,
+   "text": "earlier for these games but many of them"
+  },
+  {
+   "t": 666.16,
+   "d": 4.24,
+   "text": "were worked on for several years and"
+  },
+  {
+   "t": 670.4,
+   "d": 3.04,
+   "text": "uh so it's it's not really clear if some"
+  },
+  {
+   "t": 673.44,
+   "d": 2.4,
+   "text": "of these features originated in one game"
+  },
+  {
+   "t": 675.84,
+   "d": 2.72,
+   "text": "or were brought in for another game"
+  },
+  {
+   "t": 678.56,
+   "d": 2.32,
+   "text": "uh especially in regards to ultra rogue"
+  },
+  {
+   "t": 680.88,
+   "d": 1.44,
+   "text": "and hack"
+  },
+  {
+   "t": 682.32,
+   "d": 2.48,
+   "text": "which came out about the same year"
+  },
+  {
+   "t": 684.8,
+   "d": 2.0,
+   "text": "but sort of where"
+  },
+  {
+   "t": 686.8,
+   "d": 3.04,
+   "text": "were developed concurrently for a while"
+  },
+  {
+   "t": 689.84,
+   "d": 1.6,
+   "text": "so any case"
+  },
+  {
+   "t": 691.44,
+   "d": 1.04,
+   "text": "moving on"
+  },
+  {
+   "t": 692.48,
+   "d": 3.12,
+   "text": "uh so commonalities yeah most of these"
+  },
+  {
+   "t": 695.6,
+   "d": 2.4,
+   "text": "games are ultimately"
+  },
+  {
+   "t": 698.0,
+   "d": 2.48,
+   "text": "descendants of advanced rogue of which"
+  },
+  {
+   "t": 700.48,
+   "d": 2.16,
+   "text": "we have two versions"
+  },
+  {
+   "t": 702.64,
+   "d": 2.8,
+   "text": "uh ultra rogue branched off from 1.0"
+  },
+  {
+   "t": 705.44,
+   "d": 2.56,
+   "text": "which i'm not showing um and"
+  },
+  {
+   "t": 708.0,
+   "d": 1.84,
+   "text": "x-ray branched off from advanced rogue"
+  },
+  {
+   "t": 709.84,
+   "d": 1.44,
+   "text": "seven"
+  },
+  {
+   "t": 711.28,
+   "d": 2.24,
+   "text": "all these uh the original rogue only had"
+  },
+  {
+   "t": 713.52,
+   "d": 1.28,
+   "text": "stat i"
+  },
+  {
+   "t": 714.8,
+   "d": 1.76,
+   "text": "only have strength for a stat i'm"
+  },
+  {
+   "t": 716.56,
+   "d": 1.68,
+   "text": "tripping over my words"
+  },
+  {
+   "t": 718.24,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 719.28,
+   "d": 1.04,
+   "text": "let's see"
+  },
+  {
+   "t": 720.32,
+   "d": 1.76,
+   "text": "whereas all the other games have at"
+  },
+  {
+   "t": 722.08,
+   "d": 3.52,
+   "text": "least four or five of dnd six stats"
+  },
+  {
+   "t": 725.6,
+   "d": 3.12,
+   "text": "a couple of them have all six"
+  },
+  {
+   "t": 728.72,
+   "d": 2.0,
+   "text": "anyway um"
+  },
+  {
+   "t": 730.72,
+   "d": 2.32,
+   "text": "see a reg five successors have an extra"
+  },
+  {
+   "t": 733.04,
+   "d": 2.0,
+   "text": "category of item from beyond those in"
+  },
+  {
+   "t": 735.04,
+   "d": 2.24,
+   "text": "rogue which were potions and scrolls and"
+  },
+  {
+   "t": 737.28,
+   "d": 1.12,
+   "text": "such he also has something called"
+  },
+  {
+   "t": 738.4,
+   "d": 2.16,
+   "text": "miscellaneous magic"
+  },
+  {
+   "t": 740.56,
+   "d": 1.6,
+   "text": "which has some particularly powerful"
+  },
+  {
+   "t": 742.16,
+   "d": 2.4,
+   "text": "items in it um and also they can also be"
+  },
+  {
+   "t": 744.56,
+   "d": 1.76,
+   "text": "very dangerous items some of them can"
+  },
+  {
+   "t": 746.32,
+   "d": 1.76,
+   "text": "just kill you from using them so yet be"
+  },
+  {
+   "t": 748.08,
+   "d": 1.6,
+   "text": "very careful"
+  },
+  {
+   "t": 749.68,
+   "d": 2.96,
+   "text": "playing around with like bags of dust"
+  },
+  {
+   "t": 752.64,
+   "d": 2.0,
+   "text": "that might be dusty disappearance or it"
+  },
+  {
+   "t": 754.64,
+   "d": 2.8,
+   "text": "might be dust of choking"
+  },
+  {
+   "t": 757.44,
+   "d": 3.12,
+   "text": "um the ai and of the monsters in the"
+  },
+  {
+   "t": 760.56,
+   "d": 1.84,
+   "text": "games as it is"
+  },
+  {
+   "t": 762.4,
+   "d": 2.08,
+   "text": "advanced a bit beyond that from rogue"
+  },
+  {
+   "t": 764.48,
+   "d": 2.08,
+   "text": "now monsters are smart enough to run"
+  },
+  {
+   "t": 766.56,
+   "d": 1.68,
+   "text": "away from you if a fight isn't going"
+  },
+  {
+   "t": 768.24,
+   "d": 1.44,
+   "text": "well for them"
+  },
+  {
+   "t": 769.68,
+   "d": 1.68,
+   "text": "and they know enough not to bother if"
+  },
+  {
+   "t": 771.36,
+   "d": 1.2,
+   "text": "they're trapped in a corner they have"
+  },
+  {
+   "t": 772.56,
+   "d": 2.4,
+   "text": "enough awareness of their surroundings"
+  },
+  {
+   "t": 774.96,
+   "d": 1.84,
+   "text": "that if they see"
+  },
+  {
+   "t": 776.8,
+   "d": 2.64,
+   "text": "that they can't run away from you"
+  },
+  {
+   "t": 779.44,
+   "d": 1.76,
+   "text": "without getting trapped they'll just go"
+  },
+  {
+   "t": 781.2,
+   "d": 1.44,
+   "text": "ahead and fight you where they're"
+  },
+  {
+   "t": 782.64,
+   "d": 2.16,
+   "text": "standing"
+  },
+  {
+   "t": 784.8,
+   "d": 1.68,
+   "text": "but if they can find the loop of rooms"
+  },
+  {
+   "t": 786.48,
+   "d": 1.44,
+   "text": "to run through that you can just chase"
+  },
+  {
+   "t": 787.92,
+   "d": 1.6,
+   "text": "them forever and you'll never catch them"
+  },
+  {
+   "t": 789.52,
+   "d": 0.88,
+   "text": "it's"
+  },
+  {
+   "t": 790.4,
+   "d": 2.0,
+   "text": "it's really clever how how the monster"
+  },
+  {
+   "t": 792.4,
+   "d": 2.32,
+   "text": "they prevent this game"
+  },
+  {
+   "t": 794.72,
+   "d": 2.0,
+   "text": "uh there are also magic pools in these"
+  },
+  {
+   "t": 796.72,
+   "d": 1.6,
+   "text": "dungeons have you ever played rogue yeah"
+  },
+  {
+   "t": 798.32,
+   "d": 3.2,
+   "text": "that's it's not in those games it's"
+  },
+  {
+   "t": 801.52,
+   "d": 2.24,
+   "text": "uh it's some it's a spot in the diamond"
+  },
+  {
+   "t": 803.76,
+   "d": 2.88,
+   "text": "that you can stand on and dip items into"
+  },
+  {
+   "t": 806.64,
+   "d": 2.0,
+   "text": "and it could either bless them you can"
+  },
+  {
+   "t": 808.64,
+   "d": 1.04,
+   "text": "gain like"
+  },
+  {
+   "t": 809.68,
+   "d": 3.12,
+   "text": "pluses on them or it can curse them man"
+  },
+  {
+   "t": 812.8,
+   "d": 1.76,
+   "text": "it's just one of those things that later"
+  },
+  {
+   "t": 814.56,
+   "d": 2.48,
+   "text": "roguelikes tend to have and"
+  },
+  {
+   "t": 817.04,
+   "d": 1.84,
+   "text": "it's just like another way to trip up"
+  },
+  {
+   "t": 818.88,
+   "d": 2.72,
+   "text": "new players usually anyway"
+  },
+  {
+   "t": 821.6,
+   "d": 3.36,
+   "text": "i say anyway a lot yeah um"
+  },
+  {
+   "t": 824.96,
+   "d": 1.52,
+   "text": "all these games use the same weapon and"
+  },
+  {
+   "t": 826.48,
+   "d": 2.24,
+   "text": "armor from rogue although adventure egg"
+  },
+  {
+   "t": 828.72,
+   "d": 2.72,
+   "text": "5 has also added battle axes"
+  },
+  {
+   "t": 831.44,
+   "d": 3.36,
+   "text": "ultra rug adds lots of new things it's"
+  },
+  {
+   "t": 834.8,
+   "d": 2.88,
+   "text": "it's it's it's yeah"
+  },
+  {
+   "t": 837.68,
+   "d": 3.12,
+   "text": "i'm writing these lists here to try to"
+  },
+  {
+   "t": 840.8,
+   "d": 2.16,
+   "text": "to help if you decide to try to play"
+  },
+  {
+   "t": 842.96,
+   "d": 1.6,
+   "text": "these games you might it might be useful"
+  },
+  {
+   "t": 844.56,
+   "d": 1.36,
+   "text": "to know this"
+  },
+  {
+   "t": 845.92,
+   "d": 3.28,
+   "text": "rogue and its successor games all have"
+  },
+  {
+   "t": 849.2,
+   "d": 1.76,
+   "text": "these same weapons and they all have the"
+  },
+  {
+   "t": 850.96,
+   "d": 2.24,
+   "text": "same word of relative power levels"
+  },
+  {
+   "t": 853.2,
+   "d": 1.44,
+   "text": "it's not obvious when you're playing"
+  },
+  {
+   "t": 854.64,
+   "d": 3.04,
+   "text": "what that is so the weakest weapons are"
+  },
+  {
+   "t": 857.68,
+   "d": 2.08,
+   "text": "daggers and spears and the strongest"
+  },
+  {
+   "t": 859.76,
+   "d": 3.28,
+   "text": "weapons are two-handed swords and"
+  },
+  {
+   "t": 863.04,
+   "d": 1.84,
+   "text": "that gives you this here and the weakest"
+  },
+  {
+   "t": 864.88,
+   "d": 2.4,
+   "text": "armor is leather armor and the best"
+  },
+  {
+   "t": 867.28,
+   "d": 1.84,
+   "text": "armor is play armor"
+  },
+  {
+   "t": 869.12,
+   "d": 2.24,
+   "text": "so that's on this slide here you can see"
+  },
+  {
+   "t": 871.36,
+   "d": 1.52,
+   "text": "that later yeah"
+  },
+  {
+   "t": 872.88,
+   "d": 3.04,
+   "text": "so advanced rogue 582 is based on rogue"
+  },
+  {
+   "t": 875.92,
+   "d": 2.32,
+   "text": "by toy arnold and richmond"
+  },
+  {
+   "t": 878.24,
+   "d": 2.32,
+   "text": "it was headed by michael morgan and kid"
+  },
+  {
+   "t": 880.56,
+   "d": 2.32,
+   "text": "dawka it offers four character classes"
+  },
+  {
+   "t": 882.88,
+   "d": 1.28,
+   "text": "which is something that's not in rugged"
+  },
+  {
+   "t": 884.16,
+   "d": 2.72,
+   "text": "spider magician cleric and thief"
+  },
+  {
+   "t": 886.88,
+   "d": 1.52,
+   "text": "they actually don't play that"
+  },
+  {
+   "t": 888.4,
+   "d": 2.32,
+   "text": "differently from each other uh if you if"
+  },
+  {
+   "t": 890.72,
+   "d": 2.16,
+   "text": "you're going to play this this game you"
+  },
+  {
+   "t": 892.88,
+   "d": 1.76,
+   "text": "should know fighters have the easiest"
+  },
+  {
+   "t": 894.64,
+   "d": 2.96,
+   "text": "time because"
+  },
+  {
+   "t": 897.6,
+   "d": 1.68,
+   "text": "they start with a lot of strength and"
+  },
+  {
+   "t": 899.28,
+   "d": 2.24,
+   "text": "strength not only helps your"
+  },
+  {
+   "t": 901.52,
+   "d": 2.88,
+   "text": "uh your attack damage but also increases"
+  },
+  {
+   "t": 904.4,
+   "d": 1.84,
+   "text": "how much you can carry without taking"
+  },
+  {
+   "t": 906.24,
+   "d": 3.12,
+   "text": "suffering from food penalties"
+  },
+  {
+   "t": 909.36,
+   "d": 0.8,
+   "text": "so"
+  },
+  {
+   "t": 910.16,
+   "d": 1.84,
+   "text": "uh yeah yeah you should start out"
+  },
+  {
+   "t": 912.0,
+   "d": 1.92,
+   "text": "playing as fighters uh"
+  },
+  {
+   "t": 913.92,
+   "d": 1.2,
+   "text": "the other classes have their other"
+  },
+  {
+   "t": 915.12,
+   "d": 1.36,
+   "text": "advantages"
+  },
+  {
+   "t": 916.48,
+   "d": 1.68,
+   "text": "thieves can"
+  },
+  {
+   "t": 918.16,
+   "d": 2.24,
+   "text": "backstab sleeping creatures"
+  },
+  {
+   "t": 920.4,
+   "d": 2.0,
+   "text": "uh magicians if they start out with"
+  },
+  {
+   "t": 922.4,
+   "d": 2.24,
+   "text": "enough intelligence start out with an"
+  },
+  {
+   "t": 924.64,
+   "d": 2.56,
+   "text": "identify spell which changes the game"
+  },
+  {
+   "t": 927.2,
+   "d": 1.36,
+   "text": "tremendously"
+  },
+  {
+   "t": 928.56,
+   "d": 2.0,
+   "text": "if you can just cast identify from"
+  },
+  {
+   "t": 930.56,
+   "d": 1.28,
+   "text": "memory"
+  },
+  {
+   "t": 931.84,
+   "d": 1.84,
+   "text": "and not have to rely on scrolls it"
+  },
+  {
+   "t": 933.68,
+   "d": 1.76,
+   "text": "completely changes the whole nature of"
+  },
+  {
+   "t": 935.44,
+   "d": 1.44,
+   "text": "the game"
+  },
+  {
+   "t": 936.88,
+   "d": 2.88,
+   "text": "so if the item system in rogue having to"
+  },
+  {
+   "t": 939.76,
+   "d": 2.24,
+   "text": "identify things in popularity possibly"
+  },
+  {
+   "t": 942.0,
+   "d": 2.8,
+   "text": "suffer the effects of bad items"
+  },
+  {
+   "t": 944.8,
+   "d": 1.52,
+   "text": "causes you trouble"
+  },
+  {
+   "t": 946.32,
+   "d": 2.56,
+   "text": "then try a try a magician in one of"
+  },
+  {
+   "t": 948.88,
+   "d": 2.72,
+   "text": "these games and you'll find that it it"
+  },
+  {
+   "t": 951.6,
+   "d": 3.04,
+   "text": "it helps you out a bit yep"
+  },
+  {
+   "t": 954.64,
+   "d": 1.92,
+   "text": "um i should mention one thing about the"
+  },
+  {
+   "t": 956.56,
+   "d": 1.76,
+   "text": "game is that"
+  },
+  {
+   "t": 958.32,
+   "d": 1.84,
+   "text": "some of these games put you through a"
+  },
+  {
+   "t": 960.16,
+   "d": 1.76,
+   "text": "whole character creation phase before"
+  },
+  {
+   "t": 961.92,
+   "d": 2.0,
+   "text": "you play where you have to assign stat"
+  },
+  {
+   "t": 963.92,
+   "d": 1.92,
+   "text": "points to various"
+  },
+  {
+   "t": 965.84,
+   "d": 2.56,
+   "text": "to various attribute scores but this"
+  },
+  {
+   "t": 968.4,
+   "d": 2.72,
+   "text": "game it rolls for you gives you a set of"
+  },
+  {
+   "t": 971.12,
+   "d": 3.04,
+   "text": "stats and acts if you want to reroll"
+  },
+  {
+   "t": 974.16,
+   "d": 2.72,
+   "text": "as a result it's it's much faster to get"
+  },
+  {
+   "t": 976.88,
+   "d": 2.32,
+   "text": "started in advance rogue five than some"
+  },
+  {
+   "t": 979.2,
+   "d": 1.92,
+   "text": "of these other games"
+  },
+  {
+   "t": 981.12,
+   "d": 2.4,
+   "text": "uh you can you can be started and"
+  },
+  {
+   "t": 983.52,
+   "d": 1.44,
+   "text": "playing in less than a second if you"
+  },
+  {
+   "t": 984.96,
+   "d": 0.96,
+   "text": "want"
+  },
+  {
+   "t": 985.92,
+   "d": 1.68,
+   "text": "one of the things about roguelikes that"
+  },
+  {
+   "t": 987.6,
+   "d": 2.08,
+   "text": "i've found over the years that the"
+  },
+  {
+   "t": 989.68,
+   "d": 1.76,
+   "text": "longer it takes to get started playing"
+  },
+  {
+   "t": 991.44,
+   "d": 1.44,
+   "text": "the game"
+  },
+  {
+   "t": 992.88,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 993.76,
+   "d": 1.52,
+   "text": "the worse it is"
+  },
+  {
+   "t": 995.28,
+   "d": 1.84,
+   "text": "how to put it like um"
+  },
+  {
+   "t": 997.12,
+   "d": 1.92,
+   "text": "since these are games where if you die"
+  },
+  {
+   "t": 999.04,
+   "d": 2.64,
+   "text": "you have to start over your next game"
+  },
+  {
+   "t": 1001.68,
+   "d": 2.08,
+   "text": "all the time it the time you've been"
+  },
+  {
+   "t": 1003.76,
+   "d": 1.92,
+   "text": "playing it is sort of like"
+  },
+  {
+   "t": 1005.68,
+   "d": 2.64,
+   "text": "the ante about your take your bet in a"
+  },
+  {
+   "t": 1008.32,
+   "d": 2.08,
+   "text": "game of poker"
+  },
+  {
+   "t": 1010.4,
+   "d": 2.72,
+   "text": "um because if you die it's basically the"
+  },
+  {
+   "t": 1013.12,
+   "d": 1.6,
+   "text": "time of that game you've wasted you have"
+  },
+  {
+   "t": 1014.72,
+   "d": 2.0,
+   "text": "to you know hopefully playing the game"
+  },
+  {
+   "t": 1016.72,
+   "d": 2.16,
+   "text": "was fun but if you're really trying to"
+  },
+  {
+   "t": 1018.88,
+   "d": 1.12,
+   "text": "win"
+  },
+  {
+   "t": 1020.0,
+   "d": 1.92,
+   "text": "well you know you've lost all that"
+  },
+  {
+   "t": 1021.92,
+   "d": 1.6,
+   "text": "progress you have to start over so the"
+  },
+  {
+   "t": 1023.52,
+   "d": 2.64,
+   "text": "longer it takes to play through the game"
+  },
+  {
+   "t": 1026.16,
+   "d": 2.48,
+   "text": "sort of the"
+  },
+  {
+   "t": 1028.64,
+   "d": 2.08,
+   "text": "the higher the stakes are"
+  },
+  {
+   "t": 1030.72,
+   "d": 3.12,
+   "text": "so if you if it's a game in which"
+  },
+  {
+   "t": 1033.84,
+   "d": 2.4,
+   "text": "players are intended to to"
+  },
+  {
+   "t": 1036.24,
+   "d": 2.32,
+   "text": "learn a lot from death then you should"
+  },
+  {
+   "t": 1038.56,
+   "d": 1.68,
+   "text": "make death as painless possible it"
+  },
+  {
+   "t": 1040.24,
+   "d": 1.52,
+   "text": "should be as easy as possible to get"
+  },
+  {
+   "t": 1041.76,
+   "d": 2.64,
+   "text": "back into the game and get started again"
+  },
+  {
+   "t": 1044.4,
+   "d": 1.44,
+   "text": "anyway that's just some personal"
+  },
+  {
+   "t": 1045.84,
+   "d": 1.84,
+   "text": "philosophy there"
+  },
+  {
+   "t": 1047.68,
+   "d": 2.64,
+   "text": "uh there's this yeah fighter types i"
+  },
+  {
+   "t": 1050.32,
+   "d": 1.76,
+   "text": "already mentioned that magic yeah i've"
+  },
+  {
+   "t": 1052.08,
+   "d": 1.6,
+   "text": "already mentioned all this stuff"
+  },
+  {
+   "t": 1053.68,
+   "d": 1.52,
+   "text": "interesting about thieves they actually"
+  },
+  {
+   "t": 1055.2,
+   "d": 1.76,
+   "text": "end up by on the average with fewer hit"
+  },
+  {
+   "t": 1056.96,
+   "d": 1.44,
+   "text": "points than magicians which i was"
+  },
+  {
+   "t": 1058.4,
+   "d": 2.56,
+   "text": "surprised by"
+  },
+  {
+   "t": 1060.96,
+   "d": 2.08,
+   "text": "uh hemorrhoid monsters can find and use"
+  },
+  {
+   "t": 1063.04,
+   "d": 1.68,
+   "text": "the kind of weapons the player can have"
+  },
+  {
+   "t": 1064.72,
+   "d": 1.84,
+   "text": "it can make them unexpectedly dangerous"
+  },
+  {
+   "t": 1066.56,
+   "d": 2.0,
+   "text": "in fact i got one shot by a gnome on"
+  },
+  {
+   "t": 1068.56,
+   "d": 2.56,
+   "text": "level one before because the darn thing"
+  },
+  {
+   "t": 1071.12,
+   "d": 3.52,
+   "text": "found a two-handed sword"
+  },
+  {
+   "t": 1074.64,
+   "d": 2.8,
+   "text": "um and in dark corridors and rooms"
+  },
+  {
+   "t": 1077.44,
+   "d": 2.32,
+   "text": "kobolds with arrows or rocks they're"
+  },
+  {
+   "t": 1079.76,
+   "d": 1.52,
+   "text": "lethal because they can see you from a"
+  },
+  {
+   "t": 1081.28,
+   "d": 1.6,
+   "text": "distance"
+  },
+  {
+   "t": 1082.88,
+   "d": 0.8,
+   "text": "and"
+  },
+  {
+   "t": 1083.68,
+   "d": 1.28,
+   "text": "you not might not even know what"
+  },
+  {
+   "t": 1084.96,
+   "d": 1.6,
+   "text": "direction they're firing at you from and"
+  },
+  {
+   "t": 1086.56,
+   "d": 2.56,
+   "text": "you'll just die before"
+  },
+  {
+   "t": 1089.12,
+   "d": 2.64,
+   "text": "before you even see your assailant"
+  },
+  {
+   "t": 1091.76,
+   "d": 2.24,
+   "text": "it's a good idea on to if you find"
+  },
+  {
+   "t": 1094.0,
+   "d": 1.92,
+   "text": "missile weapons on the ground to pick"
+  },
+  {
+   "t": 1095.92,
+   "d": 2.72,
+   "text": "them up just so another monster can't"
+  },
+  {
+   "t": 1098.64,
+   "d": 2.24,
+   "text": "come across and find them and then throw"
+  },
+  {
+   "t": 1100.88,
+   "d": 2.24,
+   "text": "them at you later"
+  },
+  {
+   "t": 1103.12,
+   "d": 2.0,
+   "text": "into the thing about this game and its"
+  },
+  {
+   "t": 1105.12,
+   "d": 2.24,
+   "text": "successors is you can actually go back"
+  },
+  {
+   "t": 1107.36,
+   "d": 1.76,
+   "text": "up dungeon levels you don't have to go"
+  },
+  {
+   "t": 1109.12,
+   "d": 2.8,
+   "text": "all the way down until you find a relic"
+  },
+  {
+   "t": 1111.92,
+   "d": 1.52,
+   "text": "like the amulet at the end or before the"
+  },
+  {
+   "t": 1113.44,
+   "d": 2.16,
+   "text": "game will let you go back up you can go"
+  },
+  {
+   "t": 1115.6,
+   "d": 1.92,
+   "text": "up from level one explore the outside"
+  },
+  {
+   "t": 1117.52,
+   "d": 2.16,
+   "text": "world which is this"
+  },
+  {
+   "t": 1119.68,
+   "d": 2.08,
+   "text": "weird wilderness"
+  },
+  {
+   "t": 1121.76,
+   "d": 1.36,
+   "text": "it's"
+  },
+  {
+   "t": 1123.12,
+   "d": 2.0,
+   "text": "it's kind of surprising to find in a"
+  },
+  {
+   "t": 1125.12,
+   "d": 3.6,
+   "text": "game from 1984 1885."
+  },
+  {
+   "t": 1128.72,
+   "d": 2.0,
+   "text": "uh"
+  },
+  {
+   "t": 1130.72,
+   "d": 1.6,
+   "text": "i don't really know what purpose it"
+  },
+  {
+   "t": 1132.32,
+   "d": 1.28,
+   "text": "serves though i don't really know why"
+  },
+  {
+   "t": 1133.6,
+   "d": 2.16,
+   "text": "you should go out there but it's there"
+  },
+  {
+   "t": 1135.76,
+   "d": 1.28,
+   "text": "anyway"
+  },
+  {
+   "t": 1137.04,
+   "d": 2.48,
+   "text": "um experience levels are not as frequent"
+  },
+  {
+   "t": 1139.52,
+   "d": 2.0,
+   "text": "in these games in the original road you"
+  },
+  {
+   "t": 1141.52,
+   "d": 1.76,
+   "text": "have to fight more monsters before you"
+  },
+  {
+   "t": 1143.28,
+   "d": 2.32,
+   "text": "can get a level"
+  },
+  {
+   "t": 1145.6,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 1146.48,
+   "d": 1.36,
+   "text": "anyway"
+  },
+  {
+   "t": 1147.84,
+   "d": 1.28,
+   "text": "one of the reasons i want you to play"
+  },
+  {
+   "t": 1149.12,
+   "d": 1.12,
+   "text": "these games by the way as i mentioned"
+  },
+  {
+   "t": 1150.24,
+   "d": 1.52,
+   "text": "the bottom point here"
+  },
+  {
+   "t": 1151.76,
+   "d": 2.56,
+   "text": "is that i think games are kind of"
+  },
+  {
+   "t": 1154.32,
+   "d": 2.4,
+   "text": "dead if people aren't playing them"
+  },
+  {
+   "t": 1156.72,
+   "d": 2.56,
+   "text": "in the process of playing a game you"
+  },
+  {
+   "t": 1159.28,
+   "d": 2.88,
+   "text": "animate it you inhabit it it becomes"
+  },
+  {
+   "t": 1162.16,
+   "d": 2.88,
+   "text": "alive it exists as a thing"
+  },
+  {
+   "t": 1165.04,
+   "d": 4.96,
+   "text": "as long as you are experiencing it"
+  },
+  {
+   "t": 1170.56,
+   "d": 2.08,
+   "text": "and i hope yeah so"
+  },
+  {
+   "t": 1172.64,
+   "d": 1.68,
+   "text": "as long as people are playing them i"
+  },
+  {
+   "t": 1174.32,
+   "d": 1.52,
+   "text": "think that they won't they don't they're"
+  },
+  {
+   "t": 1175.84,
+   "d": 1.76,
+   "text": "not actually dead they're not actually"
+  },
+  {
+   "t": 1177.6,
+   "d": 1.2,
+   "text": "lost"
+  },
+  {
+   "t": 1178.8,
+   "d": 2.08,
+   "text": "so i i kind of that's what i'm that's"
+  },
+  {
+   "t": 1180.88,
+   "d": 2.88,
+   "text": "why i'm giving this talk i sort of want"
+  },
+  {
+   "t": 1183.76,
+   "d": 2.72,
+   "text": "i feel badly for them i want people to"
+  },
+  {
+   "t": 1186.48,
+   "d": 1.92,
+   "text": "experience them again"
+  },
+  {
+   "t": 1188.4,
+   "d": 1.12,
+   "text": "anyway"
+  },
+  {
+   "t": 1189.52,
+   "d": 1.6,
+   "text": "that's just me"
+  },
+  {
+   "t": 1191.12,
+   "d": 1.76,
+   "text": "uh so"
+  },
+  {
+   "t": 1192.88,
+   "d": 1.44,
+   "text": "i've compiled numbers in each of these"
+  },
+  {
+   "t": 1194.32,
+   "d": 1.36,
+   "text": "games just want to give you some idea of"
+  },
+  {
+   "t": 1195.68,
+   "d": 1.36,
+   "text": "what's in them"
+  },
+  {
+   "t": 1197.04,
+   "d": 2.08,
+   "text": "so advanced red five has 17 scrolls 10"
+  },
+  {
+   "t": 1199.12,
+   "d": 2.64,
+   "text": "armor 13 weapons 12 potions 24 rings 20"
+  },
+  {
+   "t": 1201.76,
+   "d": 2.4,
+   "text": "sticks 22 miscellaneous magic items 11"
+  },
+  {
+   "t": 1204.16,
+   "d": 4.56,
+   "text": "artifacts and 118 kinds of monsters"
+  },
+  {
+   "t": 1209.04,
+   "d": 2.24,
+   "text": "uh those sound like a lot but many of"
+  },
+  {
+   "t": 1211.28,
+   "d": 2.4,
+   "text": "these are easily outdone by its"
+  },
+  {
+   "t": 1213.68,
+   "d": 2.4,
+   "text": "successors"
+  },
+  {
+   "t": 1216.08,
+   "d": 1.36,
+   "text": "it's the thing about the game is that"
+  },
+  {
+   "t": 1217.44,
+   "d": 1.76,
+   "text": "some of rogue's worst items like the"
+  },
+  {
+   "t": 1219.2,
+   "d": 1.36,
+   "text": "potions of blindness confusion and"
+  },
+  {
+   "t": 1220.56,
+   "d": 2.96,
+   "text": "paralysis are not in these games"
+  },
+  {
+   "t": 1223.52,
+   "d": 1.92,
+   "text": "that's because"
+  },
+  {
+   "t": 1225.44,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 1226.32,
+   "d": 2.64,
+   "text": "miscellaneous items can be cursed and"
+  },
+  {
+   "t": 1228.96,
+   "d": 1.76,
+   "text": "not just equipment"
+  },
+  {
+   "t": 1230.72,
+   "d": 2.24,
+   "text": "generally in roguelikes"
+  },
+  {
+   "t": 1232.96,
+   "d": 3.12,
+   "text": "cursed items are just equipment items"
+  },
+  {
+   "t": 1236.08,
+   "d": 1.44,
+   "text": "and what's bad about them is that you"
+  },
+  {
+   "t": 1237.52,
+   "d": 1.84,
+   "text": "can't stop using them once you equip"
+  },
+  {
+   "t": 1239.36,
+   "d": 0.8,
+   "text": "them"
+  },
+  {
+   "t": 1240.16,
+   "d": 3.12,
+   "text": "but starting in these games you'll find"
+  },
+  {
+   "t": 1243.28,
+   "d": 2.16,
+   "text": "ordinary magic items like potions and"
+  },
+  {
+   "t": 1245.44,
+   "d": 1.76,
+   "text": "scrolls can be cursed too"
+  },
+  {
+   "t": 1247.2,
+   "d": 2.24,
+   "text": "and that can make a usually good item"
+  },
+  {
+   "t": 1249.44,
+   "d": 1.6,
+   "text": "have a bad effect"
+  },
+  {
+   "t": 1251.04,
+   "d": 2.24,
+   "text": "so the potion of blindness in advanced"
+  },
+  {
+   "t": 1253.28,
+   "d": 2.96,
+   "text": "rogue five is replaced by cursed potions"
+  },
+  {
+   "t": 1256.24,
+   "d": 1.68,
+   "text": "of c invisible"
+  },
+  {
+   "t": 1257.92,
+   "d": 1.76,
+   "text": "so you can identify as function as the"
+  },
+  {
+   "t": 1259.68,
+   "d": 1.68,
+   "text": "invisible but if you don't know what its"
+  },
+  {
+   "t": 1261.36,
+   "d": 2.48,
+   "text": "curse status is it can still be bad for"
+  },
+  {
+   "t": 1263.84,
+   "d": 1.84,
+   "text": "you you should probably keep that in"
+  },
+  {
+   "t": 1265.68,
+   "d": 1.36,
+   "text": "mind if you just try to try to play"
+  },
+  {
+   "t": 1267.04,
+   "d": 1.44,
+   "text": "these"
+  },
+  {
+   "t": 1268.48,
+   "d": 1.68,
+   "text": "so i played my first five games of"
+  },
+  {
+   "t": 1270.16,
+   "d": 3.04,
+   "text": "advent rug five and this is how i died"
+  },
+  {
+   "t": 1273.2,
+   "d": 1.44,
+   "text": "on each"
+  },
+  {
+   "t": 1274.64,
+   "d": 2.64,
+   "text": "uh three of the games i got killed by a"
+  },
+  {
+   "t": 1277.28,
+   "d": 1.92,
+   "text": "monster throwing things at me in the"
+  },
+  {
+   "t": 1279.2,
+   "d": 1.36,
+   "text": "dark so you should take that as an"
+  },
+  {
+   "t": 1280.56,
+   "d": 1.28,
+   "text": "indication"
+  },
+  {
+   "t": 1281.84,
+   "d": 1.6,
+   "text": "of what's going to be killing you if you"
+  },
+  {
+   "t": 1283.44,
+   "d": 1.28,
+   "text": "play this"
+  },
+  {
+   "t": 1284.72,
+   "d": 2.16,
+   "text": "so advanced rogue seven"
+  },
+  {
+   "t": 1286.88,
+   "d": 1.12,
+   "text": "there's"
+  },
+  {
+   "t": 1288.0,
+   "d": 2.4,
+   "text": "uh five more classes in this over"
+  },
+  {
+   "t": 1290.4,
+   "d": 1.92,
+   "text": "advanced rogue five druids are another"
+  },
+  {
+   "t": 1292.32,
+   "d": 2.32,
+   "text": "kind of bell caster assassin or chrome"
+  },
+  {
+   "t": 1294.64,
+   "d": 3.12,
+   "text": "like a super kind of thief"
+  },
+  {
+   "t": 1297.76,
+   "d": 2.72,
+   "text": "paladins and rangers are"
+  },
+  {
+   "t": 1300.48,
+   "d": 2.48,
+   "text": "composite characters that can both fight"
+  },
+  {
+   "t": 1302.96,
+   "d": 2.0,
+   "text": "and have magic spells"
+  },
+  {
+   "t": 1304.96,
+   "d": 1.6,
+   "text": "but they're both expected played by a"
+  },
+  {
+   "t": 1306.56,
+   "d": 1.76,
+   "text": "code of conduct"
+  },
+  {
+   "t": 1308.32,
+   "d": 2.0,
+   "text": "where if you see a sweeping monster"
+  },
+  {
+   "t": 1310.32,
+   "d": 2.48,
+   "text": "you're expected not to attack it"
+  },
+  {
+   "t": 1312.8,
+   "d": 1.12,
+   "text": "if you do"
+  },
+  {
+   "t": 1313.92,
+   "d": 1.76,
+   "text": "you have a chance of losing all of your"
+  },
+  {
+   "t": 1315.68,
+   "d": 1.52,
+   "text": "special power just becoming a straight"
+  },
+  {
+   "t": 1317.2,
+   "d": 1.76,
+   "text": "fighter from then on"
+  },
+  {
+   "t": 1318.96,
+   "d": 1.28,
+   "text": "and if you're used to playing in the"
+  },
+  {
+   "t": 1320.24,
+   "d": 1.36,
+   "text": "ordinary way"
+  },
+  {
+   "t": 1321.6,
+   "d": 1.92,
+   "text": "it's probably going to trip you up i"
+  },
+  {
+   "t": 1323.52,
+   "d": 2.32,
+   "text": "found that out several times"
+  },
+  {
+   "t": 1325.84,
+   "d": 0.88,
+   "text": "yeah"
+  },
+  {
+   "t": 1326.72,
+   "d": 1.84,
+   "text": "and then there are monks which are one"
+  },
+  {
+   "t": 1328.56,
+   "d": 2.16,
+   "text": "of those weird classes from dnd like"
+  },
+  {
+   "t": 1330.72,
+   "d": 3.68,
+   "text": "bards monks are a kind of fighter that"
+  },
+  {
+   "t": 1334.4,
+   "d": 1.92,
+   "text": "fight best without wearing weapons or"
+  },
+  {
+   "t": 1336.32,
+   "d": 1.52,
+   "text": "armor so"
+  },
+  {
+   "t": 1337.84,
+   "d": 2.32,
+   "text": "that can exempt them from having to find"
+  },
+  {
+   "t": 1340.16,
+   "d": 1.76,
+   "text": "equipment and improve them and protect"
+  },
+  {
+   "t": 1341.92,
+   "d": 2.08,
+   "text": "your equipment"
+  },
+  {
+   "t": 1344.0,
+   "d": 2.96,
+   "text": "uh but it also got certain drawbacks"
+  },
+  {
+   "t": 1346.96,
+   "d": 2.88,
+   "text": "like in fights enemy if your your your"
+  },
+  {
+   "t": 1349.84,
+   "d": 1.76,
+   "text": "opponents tend to hit you before you can"
+  },
+  {
+   "t": 1351.6,
+   "d": 1.44,
+   "text": "hit them"
+  },
+  {
+   "t": 1353.04,
+   "d": 1.92,
+   "text": "i'm not really sure why i think it has"
+  },
+  {
+   "t": 1354.96,
+   "d": 2.16,
+   "text": "to do with simulating"
+  },
+  {
+   "t": 1357.12,
+   "d": 2.64,
+   "text": "old advantage in the dragon's weird a"
+  },
+  {
+   "t": 1359.76,
+   "d": 3.04,
+   "text": "segment timing system which"
+  },
+  {
+   "t": 1362.8,
+   "d": 2.64,
+   "text": "that's not a talk in its own i'll just"
+  },
+  {
+   "t": 1365.44,
+   "d": 1.52,
+   "text": "i'll just"
+  },
+  {
+   "t": 1366.96,
+   "d": 2.08,
+   "text": "let that pass here um"
+  },
+  {
+   "t": 1369.04,
+   "d": 1.36,
+   "text": "let's see most classes are now"
+  },
+  {
+   "t": 1370.4,
+   "d": 1.68,
+   "text": "restricted and what equipment they can"
+  },
+  {
+   "t": 1372.08,
+   "d": 1.2,
+   "text": "use"
+  },
+  {
+   "t": 1373.28,
+   "d": 2.24,
+   "text": "you can't just find anything you can't"
+  },
+  {
+   "t": 1375.52,
+   "d": 1.44,
+   "text": "just use anything you find in the"
+  },
+  {
+   "t": 1376.96,
+   "d": 1.84,
+   "text": "dungeon floor anymore if you're not a"
+  },
+  {
+   "t": 1378.8,
+   "d": 1.52,
+   "text": "fighter type you can't use the best"
+  },
+  {
+   "t": 1380.32,
+   "d": 2.48,
+   "text": "weapons and armor"
+  },
+  {
+   "t": 1382.8,
+   "d": 2.64,
+   "text": "um this game has a complete character"
+  },
+  {
+   "t": 1385.44,
+   "d": 1.76,
+   "text": "creation phase unlike advanced rogue is"
+  },
+  {
+   "t": 1387.2,
+   "d": 2.0,
+   "text": "what takes longer to get started and"
+  },
+  {
+   "t": 1389.2,
+   "d": 2.24,
+   "text": "you're also thrown into a trading post"
+  },
+  {
+   "t": 1391.44,
+   "d": 2.0,
+   "text": "to buy your starting equipment"
+  },
+  {
+   "t": 1393.44,
+   "d": 1.68,
+   "text": "and you really have to otherwise you're"
+  },
+  {
+   "t": 1395.12,
+   "d": 1.84,
+   "text": "just going to start the game with"
+  },
+  {
+   "t": 1396.96,
+   "d": 2.48,
+   "text": "nothing not even food"
+  },
+  {
+   "t": 1399.44,
+   "d": 3.04,
+   "text": "so that's a bit annoying yeah"
+  },
+  {
+   "t": 1402.48,
+   "d": 2.48,
+   "text": "uh many of new items are in this many"
+  },
+  {
+   "t": 1404.96,
+   "d": 2.4,
+   "text": "streets from the uh the under the dragon"
+  },
+  {
+   "t": 1407.36,
+   "d": 1.52,
+   "text": "dm guide"
+  },
+  {
+   "t": 1408.88,
+   "d": 2.72,
+   "text": "are just key autumn's ointment"
+  },
+  {
+   "t": 1411.6,
+   "d": 1.84,
+   "text": "which can heal you multiple times like"
+  },
+  {
+   "t": 1413.44,
+   "d": 2.8,
+   "text": "the hill pops from shear into wanderer"
+  },
+  {
+   "t": 1416.24,
+   "d": 1.84,
+   "text": "monsters can now generate in groups and"
+  },
+  {
+   "t": 1418.08,
+   "d": 1.44,
+   "text": "you'll be encountering those a lot in"
+  },
+  {
+   "t": 1419.52,
+   "d": 1.52,
+   "text": "the early in the early stages of the"
+  },
+  {
+   "t": 1421.04,
+   "d": 0.8,
+   "text": "game"
+  },
+  {
+   "t": 1421.84,
+   "d": 1.36,
+   "text": "um"
+  },
+  {
+   "t": 1423.2,
+   "d": 1.84,
+   "text": "okay here's that but this is your five"
+  },
+  {
+   "t": 1425.04,
+   "d": 2.68,
+   "text": "minute warning wow i'm just i know"
+  },
+  {
+   "t": 1427.72,
+   "d": 1.96,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 1429.68,
+   "d": 1.84,
+   "text": "we've had some requests for lauren if"
+  },
+  {
+   "t": 1431.52,
+   "d": 2.08,
+   "text": "you want to skip ahead yeah let's go"
+  },
+  {
+   "t": 1433.6,
+   "d": 2.88,
+   "text": "ahead and play lauren a bit uh i've got"
+  },
+  {
+   "t": 1436.48,
+   "d": 1.44,
+   "text": "it right here"
+  },
+  {
+   "t": 1437.92,
+   "d": 1.76,
+   "text": "this is actually fairly far into the"
+  },
+  {
+   "t": 1439.68,
+   "d": 3.04,
+   "text": "game lauren has 13 dungeon levels"
+  },
+  {
+   "t": 1442.72,
+   "d": 0.96,
+   "text": "and"
+  },
+  {
+   "t": 1443.68,
+   "d": 2.16,
+   "text": "uh this is level eight it says question"
+  },
+  {
+   "t": 1445.84,
+   "d": 1.52,
+   "text": "mark because i felt on a couple of"
+  },
+  {
+   "t": 1447.36,
+   "d": 2.08,
+   "text": "levels and the game obscures what level"
+  },
+  {
+   "t": 1449.44,
+   "d": 1.36,
+   "text": "you're on"
+  },
+  {
+   "t": 1450.8,
+   "d": 2.32,
+   "text": "if you fall on a trap door"
+  },
+  {
+   "t": 1453.12,
+   "d": 2.96,
+   "text": "it it just it's just it doesn't let you"
+  },
+  {
+   "t": 1456.08,
+   "d": 2.0,
+   "text": "know how close you are to the surface"
+  },
+  {
+   "t": 1458.08,
+   "d": 0.96,
+   "text": "there"
+  },
+  {
+   "t": 1459.04,
+   "d": 2.0,
+   "text": "so this is lauren it's a weird game it's"
+  },
+  {
+   "t": 1461.04,
+   "d": 2.16,
+   "text": "the double generation is completely"
+  },
+  {
+   "t": 1463.2,
+   "d": 2.4,
+   "text": "different from rogue as you can see"
+  },
+  {
+   "t": 1465.6,
+   "d": 3.12,
+   "text": "it uses what i call imperfect mazes a"
+  },
+  {
+   "t": 1468.72,
+   "d": 1.68,
+   "text": "perfect maze"
+  },
+  {
+   "t": 1470.4,
+   "d": 2.48,
+   "text": "is a maze where from one point in the"
+  },
+  {
+   "t": 1472.88,
+   "d": 3.36,
+   "text": "middle to another there's only one route"
+  },
+  {
+   "t": 1476.24,
+   "d": 1.36,
+   "text": "and lauren"
+  },
+  {
+   "t": 1477.6,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 1478.4,
+   "d": 3.36,
+   "text": "netac and hack and super rogue they all"
+  },
+  {
+   "t": 1481.76,
+   "d": 2.4,
+   "text": "use perfect mazes sometimes"
+  },
+  {
+   "t": 1484.16,
+   "d": 1.36,
+   "text": "but the thing about perfect mazes is"
+  },
+  {
+   "t": 1485.52,
+   "d": 1.52,
+   "text": "that there's only one way to get one"
+  },
+  {
+   "t": 1487.04,
+   "d": 1.28,
+   "text": "place or another"
+  },
+  {
+   "t": 1488.32,
+   "d": 2.96,
+   "text": "you always have to go by the same spaces"
+  },
+  {
+   "t": 1491.28,
+   "d": 3.36,
+   "text": "to to navigate to navigate the terrain"
+  },
+  {
+   "t": 1494.64,
+   "d": 1.76,
+   "text": "whereas in an imperfect maze you have"
+  },
+  {
+   "t": 1496.4,
+   "d": 1.76,
+   "text": "choices you can"
+  },
+  {
+   "t": 1498.16,
+   "d": 2.72,
+   "text": "choose uh make decisions about which is"
+  },
+  {
+   "t": 1500.88,
+   "d": 1.92,
+   "text": "the best way to go so"
+  },
+  {
+   "t": 1502.8,
+   "d": 1.76,
+   "text": "without being forced to go the same way"
+  },
+  {
+   "t": 1504.56,
+   "d": 1.76,
+   "text": "every time"
+  },
+  {
+   "t": 1506.32,
+   "d": 1.84,
+   "text": "so just to see if i can find a monster"
+  },
+  {
+   "t": 1508.16,
+   "d": 2.88,
+   "text": "there's a book read the book"
+  },
+  {
+   "t": 1511.04,
+   "d": 4.8,
+   "text": "it oh it gave me the spell flood"
+  },
+  {
+   "t": 1516.32,
+   "d": 2.32,
+   "text": "uh that sounds dangerous just to be able"
+  },
+  {
+   "t": 1518.64,
+   "d": 3.28,
+   "text": "to summon water at a whim but"
+  },
+  {
+   "t": 1521.92,
+   "d": 1.6,
+   "text": "magic scroll of time work one of the"
+  },
+  {
+   "t": 1523.52,
+   "d": 2.24,
+   "text": "things about lawrence"
+  },
+  {
+   "t": 1525.76,
+   "d": 2.08,
+   "text": "it doesn't have a food system instead it"
+  },
+  {
+   "t": 1527.84,
+   "d": 1.52,
+   "text": "has a time limit"
+  },
+  {
+   "t": 1529.36,
+   "d": 3.04,
+   "text": "you have a time limit of 300 mobiles"
+  },
+  {
+   "t": 1532.4,
+   "d": 1.52,
+   "text": "in order to save your daughter from a"
+  },
+  {
+   "t": 1533.92,
+   "d": 1.84,
+   "text": "disease by anthroidis that she's"
+  },
+  {
+   "t": 1535.76,
+   "d": 1.28,
+   "text": "contracted"
+  },
+  {
+   "t": 1537.04,
+   "d": 2.8,
+   "text": "and ultimate goal of the game is to find"
+  },
+  {
+   "t": 1539.84,
+   "d": 2.0,
+   "text": "the potion of cured arthritis which is"
+  },
+  {
+   "t": 1541.84,
+   "d": 2.16,
+   "text": "at the bottom of the hardest"
+  },
+  {
+   "t": 1544.0,
+   "d": 1.28,
+   "text": "of the hardest dungeon there's two"
+  },
+  {
+   "t": 1545.28,
+   "d": 1.44,
+   "text": "dungeon there's a 10 level dungeon"
+  },
+  {
+   "t": 1546.72,
+   "d": 1.84,
+   "text": "that's the main one and a three level"
+  },
+  {
+   "t": 1548.56,
+   "d": 2.8,
+   "text": "volcano with super tough monsters in the"
+  },
+  {
+   "t": 1551.36,
+   "d": 3.04,
+   "text": "potion at the end of it"
+  },
+  {
+   "t": 1554.4,
+   "d": 2.96,
+   "text": "uh a mobile is 100 game turns"
+  },
+  {
+   "t": 1557.36,
+   "d": 2.88,
+   "text": "but a scroll of time warp will turn the"
+  },
+  {
+   "t": 1560.24,
+   "d": 2.72,
+   "text": "clock back in this case by one mobile"
+  },
+  {
+   "t": 1562.96,
+   "d": 2.08,
+   "text": "and give you more time to win the time"
+  },
+  {
+   "t": 1565.04,
+   "d": 2.0,
+   "text": "limit's not really very"
+  },
+  {
+   "t": 1567.04,
+   "d": 3.2,
+   "text": "oop there's a rose"
+  },
+  {
+   "t": 1570.24,
+   "d": 1.36,
+   "text": "killed it"
+  },
+  {
+   "t": 1571.6,
+   "d": 1.68,
+   "text": "uh a timer's not really much of a"
+  },
+  {
+   "t": 1573.28,
+   "d": 3.28,
+   "text": "problem um if you win the game then the"
+  },
+  {
+   "t": 1576.56,
+   "d": 1.6,
+   "text": "next time you play the game difficulty"
+  },
+  {
+   "t": 1578.16,
+   "d": 2.0,
+   "text": "goes up and if you've increased the"
+  },
+  {
+   "t": 1580.16,
+   "d": 1.84,
+   "text": "difficulty a few times the time might"
+  },
+  {
+   "t": 1582.0,
+   "d": 2.0,
+   "text": "get to be more of a problem i haven't"
+  },
+  {
+   "t": 1584.0,
+   "d": 1.6,
+   "text": "gotten that far so i can't tell you for"
+  },
+  {
+   "t": 1585.6,
+   "d": 1.28,
+   "text": "sure"
+  },
+  {
+   "t": 1586.88,
+   "d": 2.16,
+   "text": "uh magic potion another thing we're"
+  },
+  {
+   "t": 1589.04,
+   "d": 2.0,
+   "text": "thinking about lauren this is lauren hd"
+  },
+  {
+   "t": 1591.04,
+   "d": 3.2,
+   "text": "by the way which is a relatively modern"
+  },
+  {
+   "t": 1594.24,
+   "d": 2.32,
+   "text": "remake there are tons of versions of"
+  },
+  {
+   "t": 1596.56,
+   "d": 3.2,
+   "text": "lauren out there have been over a dozen"
+  },
+  {
+   "t": 1599.76,
+   "d": 1.44,
+   "text": "this is a game that people tend to"
+  },
+  {
+   "t": 1601.2,
+   "d": 2.08,
+   "text": "remake every so often"
+  },
+  {
+   "t": 1603.28,
+   "d": 1.12,
+   "text": "and"
+  },
+  {
+   "t": 1604.4,
+   "d": 2.64,
+   "text": "yeah it's it's you don't hear so much"
+  },
+  {
+   "t": 1607.04,
+   "d": 2.16,
+   "text": "about it but there are definitely people"
+  },
+  {
+   "t": 1609.2,
+   "d": 1.52,
+   "text": "that remember it"
+  },
+  {
+   "t": 1610.72,
+   "d": 2.4,
+   "text": "and we're influenced by it and it's so"
+  },
+  {
+   "t": 1613.12,
+   "d": 1.12,
+   "text": "different from other roguelike because"
+  },
+  {
+   "t": 1614.24,
+   "d": 1.68,
+   "text": "it thinks it's a time limit"
+  },
+  {
+   "t": 1615.92,
+   "d": 2.0,
+   "text": "there's things like there's a town level"
+  },
+  {
+   "t": 1617.92,
+   "d": 1.68,
+   "text": "some people say it's the first game of"
+  },
+  {
+   "t": 1619.6,
+   "d": 1.52,
+   "text": "the town level i'm not sure if it's it"
+  },
+  {
+   "t": 1621.12,
+   "d": 2.32,
+   "text": "or moria really that was"
+  },
+  {
+   "t": 1623.44,
+   "d": 2.88,
+   "text": "but in the town there is a trading place"
+  },
+  {
+   "t": 1626.32,
+   "d": 1.12,
+   "text": "that you can sell i don't find the"
+  },
+  {
+   "t": 1627.44,
+   "d": 1.52,
+   "text": "dungeon and it's an important source of"
+  },
+  {
+   "t": 1628.96,
+   "d": 1.12,
+   "text": "money"
+  },
+  {
+   "t": 1630.08,
+   "d": 1.6,
+   "text": "there is a store that you can buy the"
+  },
+  {
+   "t": 1631.68,
+   "d": 2.56,
+   "text": "ultra powerful lamps of death in which"
+  },
+  {
+   "t": 1634.24,
+   "d": 3.28,
+   "text": "one shot kill any monster"
+  },
+  {
+   "t": 1637.52,
+   "d": 1.28,
+   "text": "but"
+  },
+  {
+   "t": 1638.8,
+   "d": 1.68,
+   "text": "the hardest monsters"
+  },
+  {
+   "t": 1640.48,
+   "d": 2.4,
+   "text": "have a high evasiveness and it's hard to"
+  },
+  {
+   "t": 1642.88,
+   "d": 2.4,
+   "text": "hit them with it"
+  },
+  {
+   "t": 1645.28,
+   "d": 2.88,
+   "text": "it's also very expensive uh there's also"
+  },
+  {
+   "t": 1648.16,
+   "d": 1.76,
+   "text": "a college that you can spend time and"
+  },
+  {
+   "t": 1649.92,
+   "d": 2.32,
+   "text": "money in order to gain"
+  },
+  {
+   "t": 1652.24,
+   "d": 2.16,
+   "text": "uh to gain skills that can be useful in"
+  },
+  {
+   "t": 1654.4,
+   "d": 2.08,
+   "text": "the london exploration it can make help"
+  },
+  {
+   "t": 1656.48,
+   "d": 1.28,
+   "text": "you fight better and give you better"
+  },
+  {
+   "t": 1657.76,
+   "d": 2.4,
+   "text": "stats"
+  },
+  {
+   "t": 1660.16,
+   "d": 2.8,
+   "text": "anyway uh there's some money"
+  },
+  {
+   "t": 1662.96,
+   "d": 3.2,
+   "text": "oh gosh it is enchantress i hate uh okay"
+  },
+  {
+   "t": 1666.16,
+   "d": 2.56,
+   "text": "i'm gonna cast magic i got the lightning"
+  },
+  {
+   "t": 1668.72,
+   "d": 1.04,
+   "text": "bolt at her"
+  },
+  {
+   "t": 1669.76,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 1670.8,
+   "d": 2.24,
+   "text": "oh i t"
+  },
+  {
+   "t": 1673.04,
+   "d": 1.28,
+   "text": "doll cast"
+  },
+  {
+   "t": 1674.32,
+   "d": 1.84,
+   "text": "no casting is done"
+  },
+  {
+   "t": 1676.16,
+   "d": 5.64,
+   "text": "when you re yeah let me show you cast"
+  },
+  {
+   "t": 1682.08,
+   "d": 1.92,
+   "text": "hey"
+  },
+  {
+   "t": 1684.0,
+   "d": 2.88,
+   "text": "okay uh yeah"
+  },
+  {
+   "t": 1686.88,
+   "d": 2.16,
+   "text": "uh when you read books you learn spells"
+  },
+  {
+   "t": 1689.04,
+   "d": 2.0,
+   "text": "and the spells are on this list that"
+  },
+  {
+   "t": 1691.04,
+   "d": 1.92,
+   "text": "you've learned throughout the game"
+  },
+  {
+   "t": 1692.96,
+   "d": 1.28,
+   "text": "but you don't have to bring up the list"
+  },
+  {
+   "t": 1694.24,
+   "d": 2.64,
+   "text": "instead each spell has a three character"
+  },
+  {
+   "t": 1696.88,
+   "d": 2.88,
+   "text": "uh code you can just enter the code if"
+  },
+  {
+   "t": 1699.76,
+   "d": 3.44,
+   "text": "you want to cast the style quickly"
+  },
+  {
+   "t": 1703.84,
+   "d": 3.84,
+   "text": "um oh i don't want to"
+  },
+  {
+   "t": 1707.76,
+   "d": 2.16,
+   "text": "let's see any questions while we're"
+  },
+  {
+   "t": 1709.92,
+   "d": 2.0,
+   "text": "going through this"
+  },
+  {
+   "t": 1711.92,
+   "d": 2.64,
+   "text": "so you've got just about a minute left"
+  },
+  {
+   "t": 1714.56,
+   "d": 2.16,
+   "text": "yeah so if you have any"
+  },
+  {
+   "t": 1716.72,
+   "d": 2.88,
+   "text": "final parting thoughts"
+  },
+  {
+   "t": 1719.6,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 1720.48,
+   "d": 1.68,
+   "text": "yeah 30 minutes"
+  },
+  {
+   "t": 1722.16,
+   "d": 2.8,
+   "text": "i really planned a ton of things"
+  },
+  {
+   "t": 1724.96,
+   "d": 2.64,
+   "text": "but one of the things oh i got level 12."
+  },
+  {
+   "t": 1727.6,
+   "d": 2.8,
+   "text": "uh my slides are in the"
+  },
+  {
+   "t": 1730.4,
+   "d": 2.96,
+   "text": "in the dropbox in which i have the game"
+  },
+  {
+   "t": 1733.36,
+   "d": 2.08,
+   "text": "files and everything in every basically"
+  },
+  {
+   "t": 1735.44,
+   "d": 1.84,
+   "text": "everything i wanted to say in the slides"
+  },
+  {
+   "t": 1737.28,
+   "d": 2.16,
+   "text": "you wanted to page through them i also"
+  },
+  {
+   "t": 1739.44,
+   "d": 2.48,
+   "text": "have my notes which have a ton of"
+  },
+  {
+   "t": 1741.92,
+   "d": 2.4,
+   "text": "information that i've"
+  },
+  {
+   "t": 1744.32,
+   "d": 2.8,
+   "text": "that i discovered throughout the game"
+  },
+  {
+   "t": 1747.12,
+   "d": 3.04,
+   "text": "throughout my preparation for this talk"
+  },
+  {
+   "t": 1750.16,
+   "d": 2.96,
+   "text": "um and really i think you'll get the"
+  },
+  {
+   "t": 1753.12,
+   "d": 2.4,
+   "text": "information from that made probably more"
+  },
+  {
+   "t": 1755.52,
+   "d": 1.6,
+   "text": "effectively than if i"
+  },
+  {
+   "t": 1757.12,
+   "d": 2.64,
+   "text": "just spoke it aloud so"
+  },
+  {
+   "t": 1759.76,
+   "d": 1.12,
+   "text": "you can kind of think of it as like"
+  },
+  {
+   "t": 1760.88,
+   "d": 3.12,
+   "text": "another uh at play column if you if you"
+  },
+  {
+   "t": 1764.0,
+   "d": 3.12,
+   "text": "enjoyed that back in the time in the day"
+  },
+  {
+   "t": 1767.12,
+   "d": 2.24,
+   "text": "oh yeah if you want to drop those links"
+  },
+  {
+   "t": 1769.36,
+   "d": 2.08,
+   "text": "in the space hanger or"
+  },
+  {
+   "t": 1771.44,
+   "d": 2.08,
+   "text": "give them to us and we will distribute"
+  },
+  {
+   "t": 1773.52,
+   "d": 2.4,
+   "text": "them via twitter i'm not sure what you"
+  },
+  {
+   "t": 1775.92,
+   "d": 1.92,
+   "text": "what how to access the space hanger"
+  },
+  {
+   "t": 1777.84,
+   "d": 2.16,
+   "text": "actually that's fair we can we can talk"
+  },
+  {
+   "t": 1780.0,
+   "d": 1.84,
+   "text": "about it offline"
+  },
+  {
+   "t": 1781.84,
+   "d": 2.16,
+   "text": "all right but thank you for this i've"
+  },
+  {
+   "t": 1784.0,
+   "d": 2.24,
+   "text": "never i've never heard of lauren before"
+  },
+  {
+   "t": 1786.24,
+   "d": 3.2,
+   "text": "this talk and i'm totally fascinated"
+  },
+  {
+   "t": 1789.44,
+   "d": 1.12,
+   "text": "yeah"
+  },
+  {
+   "t": 1790.56,
+   "d": 3.84,
+   "text": "yeah it's it it's a cool game yeah yeah"
+  },
+  {
+   "t": 1794.4,
+   "d": 1.44,
+   "text": "i don't really know what else to say i'm"
+  },
+  {
+   "t": 1795.84,
+   "d": 2.32,
+   "text": "sorry for tipping over my word so much i"
+  },
+  {
+   "t": 1798.16,
+   "d": 1.44,
+   "text": "would have liked to have rehearsed this"
+  },
+  {
+   "t": 1799.6,
+   "d": 3.76,
+   "text": "more but i was discovering new things uh"
+  },
+  {
+   "t": 1803.36,
+   "d": 0.8,
+   "text": "like"
+  },
+  {
+   "t": 1804.16,
+   "d": 2.24,
+   "text": "just a couple of hours ago i was fixing"
+  },
+  {
+   "t": 1806.4,
+   "d": 2.0,
+   "text": "the a couple of bugs"
+  },
+  {
+   "t": 1808.4,
+   "d": 2.72,
+   "text": "advanced rogue seven that's nasty crash"
+  },
+  {
+   "t": 1811.12,
+   "d": 2.8,
+   "text": "bugs that just dropped the game to shell"
+  },
+  {
+   "t": 1813.92,
+   "d": 2.24,
+   "text": "just unexpectedly you just"
+  },
+  {
+   "t": 1816.16,
+   "d": 2.24,
+   "text": "immediately your game is over have a dos"
+  },
+  {
+   "t": 1818.4,
+   "d": 2.48,
+   "text": "prompt it's and something i want to make"
+  },
+  {
+   "t": 1820.88,
+   "d": 1.92,
+   "text": "sure the chat caught"
+  },
+  {
+   "t": 1822.8,
+   "d": 1.28,
+   "text": "because i watched your you know your"
+  },
+  {
+   "t": 1824.08,
+   "d": 2.72,
+   "text": "backup talk uh is that you actually went"
+  },
+  {
+   "t": 1826.8,
+   "d": 1.04,
+   "text": "in and"
+  },
+  {
+   "t": 1827.84,
+   "d": 2.56,
+   "text": "fixed bugs in these old games and like"
+  },
+  {
+   "t": 1830.4,
+   "d": 2.8,
+   "text": "submitted pull requests so that"
+  },
+  {
+   "t": 1833.2,
+   "d": 1.68,
+   "text": "we could we could so that they would be"
+  },
+  {
+   "t": 1834.88,
+   "d": 1.92,
+   "text": "playable again and i just think that's"
+  },
+  {
+   "t": 1836.8,
+   "d": 0.72,
+   "text": "like"
+  },
+  {
+   "t": 1837.52,
+   "d": 2.0,
+   "text": "so that's just what is so beautiful"
+  },
+  {
+   "t": 1839.52,
+   "d": 1.76,
+   "text": "about the roguelike community i just"
+  },
+  {
+   "t": 1841.28,
+   "d": 1.84,
+   "text": "thought that was really cool yeah"
+  },
+  {
+   "t": 1843.12,
+   "d": 2.56,
+   "text": "actually i haven't submitted uh but uh"
+  },
+  {
+   "t": 1845.68,
+   "d": 1.76,
+   "text": "or a bug report yet because i'm not sure"
+  },
+  {
+   "t": 1847.44,
+   "d": 3.12,
+   "text": "how to in mercurial which is where the"
+  },
+  {
+   "t": 1850.56,
+   "d": 1.92,
+   "text": "source co the sources are up and i don't"
+  },
+  {
+   "t": 1852.48,
+   "d": 2.0,
+   "text": "even know actually if that's meant to be"
+  },
+  {
+   "t": 1854.48,
+   "d": 1.28,
+   "text": "something that"
+  },
+  {
+   "t": 1855.76,
+   "d": 2.88,
+   "text": "a an end user can do i'm trying to"
+  },
+  {
+   "t": 1858.64,
+   "d": 1.76,
+   "text": "contact the person"
+  },
+  {
+   "t": 1860.4,
+   "d": 1.84,
+   "text": "who is maintaining them and hasn't found"
+  },
+  {
+   "t": 1862.24,
+   "d": 2.64,
+   "text": "a point of contact information yet if if"
+  },
+  {
+   "t": 1864.88,
+   "d": 3.44,
+   "text": "you're watching this let me know i might"
+  },
+  {
+   "t": 1868.32,
+   "d": 0.96,
+   "text": "um"
+  },
+  {
+   "t": 1869.28,
+   "d": 2.32,
+   "text": "rodney lives on twitter please get in"
+  },
+  {
+   "t": 1871.6,
+   "d": 2.48,
+   "text": "touch with me i can i fix these bugs i"
+  },
+  {
+   "t": 1874.08,
+   "d": 2.64,
+   "text": "can just give you the source files that"
+  },
+  {
+   "t": 1876.72,
+   "d": 2.64,
+   "text": "i hacked up or i i know what that's"
+  },
+  {
+   "t": 1879.36,
+   "d": 2.0,
+   "text": "calling the bugs i can tell you just get"
+  },
+  {
+   "t": 1881.36,
+   "d": 3.28,
+   "text": "in touch with me"
+  }
+ ]
+}

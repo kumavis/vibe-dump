@@ -1,0 +1,1115 @@
+{
+ "id": "Gk5uWXBANkA",
+ "url": "https://www.youtube.com/watch?v=Gk5uWXBANkA",
+ "title": "Jeff Olson - Alphaman: Developing and releasing a post-apocalyptic Roguelike game in the DOS days",
+ "speaker": "Jeff Olson",
+ "talk_title": "Alphaman: Developing and releasing a post-apocalyptic Roguelike game in the DOS days",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 1786,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "A retrospective of the challenges and rewards of developing Alphaman, a post-apocalyptic Roguelike game for DOS back before Windows or widespread internet use. Jeff talks about the challenges of programming with Microsoft QuickBasic while gearing the code for computers with 8088 microprocessors, with the intent to distribute on 3 ½” disks. He describes some of his motivation for the admittedly quirky aspects of Alphaman, and talks about some of the content and humor that did and didn’t stand up to the test of time after nearly 30 years. He also includes a plug for the GitHub site where Jamie Bainbridge put the source code (he's Jeff's hero for managing to successfully recompile Alphaman after nearly 30 years!) This provides a peek into the source code of a project that grew much larger than originally expected, requiring expanding the original clumsy QuickBasic code with QuickC modules, which themselves included embedded machine language code at places where computation speed needed to be increased. Kids these days have it so easy!",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3737,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 5.96,
+   "text": "QRISTY: And now it is my job to awkwardly transition to the last talk in our block"
+  },
+  {
+   "t": 5.96,
+   "d": 1.0,
+   "text": "today. We are going to now here from Jeff Olson. He is going to be telling us about \"Alphaman:"
+  },
+  {
+   "t": 6.96,
+   "d": 5.52,
+   "text": "Developing and releasing a post-apocalyptic Roguelike game in the DOS days when computers"
+  },
+  {
+   "t": 12.48,
+   "d": 7.04,
+   "text": "were slow, memory was scarce, and no one had ever heard of object-oriented code..\""
+  },
+  {
+   "t": 19.52,
+   "d": 6.16,
+   "text": "JEFF: Thank you so much. This Roguelike Celebration has been great. It has"
+  },
+  {
+   "t": 26.92,
+   "d": 7.12,
+   "text": "been a fantastic experience so far. I have loved the NetHack fireside this morning. Loved the music"
+  },
+  {
+   "t": 34.04,
+   "d": 4.52,
+   "text": "talks especially but it has been really great. So as Qristy said I am going to talk about my"
+  },
+  {
+   "t": 38.56,
+   "d": 10.52,
+   "text": "roguelike game Alphaman. I want to start off by acknowledging John Harris. His article includes"
+  },
+  {
+   "t": 49.08,
+   "d": 7.16,
+   "text": "more detail on the gameplay than I have time to present. It was also John who told me about this"
+  },
+  {
+   "t": 56.24,
+   "d": 7.4,
+   "text": "Roguelike Celebration and encouraged me to submit a proposal. John does have a book for"
+  },
+  {
+   "t": 63.64,
+   "d": 6.92,
+   "text": "sale. History of early roguelike games and you can find the link on the obelisk. I also include all"
+  },
+  {
+   "t": 70.56,
+   "d": 6.28,
+   "text": "the links in this talk I already posted on the obelisk as well so you can find them there."
+  },
+  {
+   "t": 77.44,
+   "d": 5.84,
+   "text": "So what is Alphaman? It is a relatively early roguelike. I released it in 1995 and"
+  },
+  {
+   "t": 83.28,
+   "d": 7.12,
+   "text": "started it in the '80s. It is science fiction rather than swords and sorcery and based on a"
+  },
+  {
+   "t": 90.4,
+   "d": 17.16,
+   "text": "couple paper and pencil games. In fact the name Alphaman came from metamorphic. From the start,"
+  },
+  {
+   "t": 107.56,
+   "d": 6.92,
+   "text": "Alphaman had an intentionally humorous nature. I didn't originally intend to release it. That"
+  },
+  {
+   "t": 114.48,
+   "d": 6.36,
+   "text": "happened years later. I wanted the game to look beautiful with colored ASCII characters. The view"
+  },
+  {
+   "t": 120.84,
+   "d": 6.36,
+   "text": "in the lower right is the top-down look at this two-dimensional world. I know it doesn't like much"
+  },
+  {
+   "t": 127.2,
+   "d": 7.08,
+   "text": "but compared to the kind of prison gray of most of the roguelikes this was positively stunning."
+  },
+  {
+   "t": 134.28,
+   "d": 5.32,
+   "text": "A disclaimer. Everyone of you is a better programmer than I was back then. My coding"
+  },
+  {
+   "t": 139.6,
+   "d": 9.92,
+   "text": "style was spaghetti coding at its best. There wasn't object oriented coding tools at that"
+  },
+  {
+   "t": 149.52,
+   "d": 8.88,
+   "text": "time and nothing event driven at least in terms of the PC I used. So Alphaman ran on"
+  },
+  {
+   "t": 158.4,
+   "d": 7.72,
+   "text": "the Microsoft DOS platform only. There was no mouse. No sound. No music. Pretty basic stuff."
+  },
+  {
+   "t": 167.2,
+   "d": 9.88,
+   "text": "These pictures represent modern roguelike games. This represents Alphaman. With none of the style"
+  },
+  {
+   "t": 177.76,
+   "d": 5.64,
+   "text": "or power of today's games or even the best games that were available when Alphaman was released."
+  },
+  {
+   "t": 183.4,
+   "d": 5.64,
+   "text": "I would argue this has a certain charm to it and that's why I am here to give this talk today."
+  },
+  {
+   "t": 189.04,
+   "d": 5.36,
+   "text": "Who was I when I started writing Alphaman? I was in my mid-20s working on a physics"
+  },
+  {
+   "t": 194.4,
+   "d": 7.44,
+   "text": "P MD at Cornell University. Truth be told, I included the picture on the last slide to try"
+  },
+  {
+   "t": 201.84,
+   "d": 8.32,
+   "text": "to make this picture look less darky. Spam was included in Alphaman as a food. I measured the"
+  },
+  {
+   "t": 210.16,
+   "d": 7.44,
+   "text": "thermal connectivity of spam and published it in 1993. That's the only piece of canned meat"
+  },
+  {
+   "t": 217.6,
+   "d": 8.32,
+   "text": "that was ever cooled to that temperature. I love to program. I got my first personal computer in"
+  },
+  {
+   "t": 225.92,
+   "d": 11.2,
+   "text": "the mid-80s and during graduate school I needed a creative outlet. I did haven't a lot of free"
+  },
+  {
+   "t": 237.12,
+   "d": 8.04,
+   "text": "time and because of that Alphaman was seven years in the making before I released it."
+  },
+  {
+   "t": 245.8,
+   "d": 5.2,
+   "text": "I want to put Alphaman in the context of other early roguelikes. I found this graphic when doing"
+  },
+  {
+   "t": 251.0,
+   "d": 7.4,
+   "text": "research. I was inspired to code Alphaman after playing Rogue. I wasn't affair of other science"
+  },
+  {
+   "t": 258.4,
+   "d": 12.6,
+   "text": "fiction roguelikes but I knew about the games. I knew about NetHack and Moria and ADOM and Angband."
+  },
+  {
+   "t": 273.24,
+   "d": 7.04,
+   "text": "Here is Alphaman. Influenced by no other games and influencing none. This was maybe a little sobering"
+  },
+  {
+   "t": 280.28,
+   "d": 6.24,
+   "text": "when I saw it but it is really not surprising. It was the only science fiction game in the group."
+  },
+  {
+   "t": 286.52,
+   "d": 5.48,
+   "text": "Because I really didn't have time to play all those other games, even though I read about"
+  },
+  {
+   "t": 292.0,
+   "d": 5.68,
+   "text": "them on the news group, I think my user interface was significantly different from the other games,"
+  },
+  {
+   "t": 297.68,
+   "d": 6.0,
+   "text": "so I think it is no surprise that I didn't influence any games that came later."
+  },
+  {
+   "t": 303.68,
+   "d": 6.72,
+   "text": "What was it like programming back then? Well, I started in 1988. I had an IBM XT computer. It"
+  },
+  {
+   "t": 310.4,
+   "d": 7.88,
+   "text": "had a big 10 megabyte hard drive and Microsoft disk operating supplies system. The monitor was"
+  },
+  {
+   "t": 318.28,
+   "d": 7.76,
+   "text": "80 characters across and 25 up and down with 16 colors. I used the Microsoft QuickBasic at the"
+  },
+  {
+   "t": 326.04,
+   "d": 10.04,
+   "text": "start. I wanted Alphaman to fit on a single floppy disk because I envisioned sending it"
+  },
+  {
+   "t": 336.08,
+   "d": 11.64,
+   "text": "through the mail and I wanted it playable on an 88 processor are no math-co because"
+  },
+  {
+   "t": 347.72,
+   "d": 10.68,
+   "text": "that was an ex pence -- expensive add on. By the time I released it Windows 95 was out."
+  },
+  {
+   "t": 367.04,
+   "d": 4.08,
+   "text": "Little bit about the Alphaman characters. The characters were randomly generated. The player"
+  },
+  {
+   "t": 371.12,
+   "d": 7.48,
+   "text": "had no options for assigning points for stats or mutations things like that. They were typical 3D6"
+  },
+  {
+   "t": 378.6,
+   "d": 13.4,
+   "text": "dungeon style stats with the specific statistics taken from metamorphosis alpha. Intelligence was"
+  },
+  {
+   "t": 392.0,
+   "d": 5.24,
+   "text": "pretty irrelevant. If I had eliminated it I would have had one more line in the character"
+  },
+  {
+   "t": 398.04,
+   "d": 6.84,
+   "text": "box to include something more interesting like picking up a third mutation or mutational defect"
+  },
+  {
+   "t": 404.88,
+   "d": 9.64,
+   "text": "down the road. Another regret is berries had to be identified and you would have to"
+  },
+  {
+   "t": 414.52,
+   "d": 5.2,
+   "text": "go to another page to see what it was and I should have changed the name on the screen."
+  },
+  {
+   "t": 420.28,
+   "d": 6.28,
+   "text": "Kind of a duh moment. As an Easter egg if you put Jeffrey Olson as the character name you"
+  },
+  {
+   "t": 426.56,
+   "d": 7.92,
+   "text": "got the highest stats and good starting items. This was my narcissistic way of getting at the"
+  },
+  {
+   "t": 434.48,
+   "d": 5.2,
+   "text": "top of everyone's border. This would have been funny if narcissistic behavior wasn't"
+  },
+  {
+   "t": 439.68,
+   "d": 18.4,
+   "text": "so relevant in this country. They were a little bit like your class"
+  },
+  {
+   "t": 458.08,
+   "d": 5.92,
+   "text": "in NetHack or something like that. On the right there is the list of the 17 physical mutations"
+  },
+  {
+   "t": 464.0,
+   "d": 6.4,
+   "text": "and the 13 mental mutations that were part of Alphaman. Most were modified versions of mutations"
+  },
+  {
+   "t": 470.4,
+   "d": 8.52,
+   "text": "included in gamma world. Tentacles was misspelled throughout Alphaman and it is good thing there is"
+  },
+  {
+   "t": 478.92,
+   "d": 10.0,
+   "text": "no auto correct because this had a 50% chance of going wrong. Some mutations like sonic attack or"
+  },
+  {
+   "t": 488.92,
+   "d": 13.6,
+   "text": "life leech. Some were always on tough exoskeleton or military genus. Quills would hit you and you"
+  },
+  {
+   "t": 502.52,
+   "d": 7.48,
+   "text": "could shoot them periodically as a range weapon. In terms of items, there were weapons and armor,"
+  },
+  {
+   "t": 510.0,
+   "d": 9.64,
+   "text": "of course. The fun items were mutated berries. They differed from potion and had varying degrees"
+  },
+  {
+   "t": 519.64,
+   "d": 8.72,
+   "text": "of ripeness. More ripe was more powerful. In some cases the red and violet berries would"
+  },
+  {
+   "t": 528.36,
+   "d": 7.84,
+   "text": "give a permanent effect. Changing dexterity, violet raises and red lowers it permanently"
+  },
+  {
+   "t": 536.2,
+   "d": 8.84,
+   "text": "whereas the others were temporarily. Berries could be thrown to blind creatures. They would"
+  },
+  {
+   "t": 547.56,
+   "d": 10.92,
+   "text": "ripen over time but there was a tech device that could ripen them quickly. The other type of fun"
+  },
+  {
+   "t": 558.48,
+   "d": 6.96,
+   "text": "items were the tech devices that replaced the magic items. Laser pistols and missile"
+  },
+  {
+   "t": 565.44,
+   "d": 9.84,
+   "text": "launchers and things like that. Some were force field generator and transmographer. And the tip"
+  },
+  {
+   "t": 575.28,
+   "d": 8.36,
+   "text": "O'Neill mask would blind you but the creatures ran away. Apparently I throughout the speaker"
+  },
+  {
+   "t": 583.64,
+   "d": 13.56,
+   "text": "of the house during the Reagan administration was -- and there were a bunch of useless items"
+  },
+  {
+   "t": 597.72,
+   "d": 7.92,
+   "text": "that just didn't do anything. In terms of gameplay, the top figure on the right there,"
+  },
+  {
+   "t": 605.64,
+   "d": 4.72,
+   "text": "sort of shows what I call the main map. This is the map of the world. With the character"
+  },
+  {
+   "t": 610.36,
+   "d": 5.52,
+   "text": "details to the right of that. So it is in the finger lakes of New York which is where I was in"
+  },
+  {
+   "t": 615.88,
+   "d": 7.32,
+   "text": "graduate school so a couple lakes and woods in the middle. One square on the main map corresponded"
+  },
+  {
+   "t": 623.2,
+   "d": 6.12,
+   "text": "to a local terrain map that's shown down on the bottom. Because of memory limitations, I wasn't"
+  },
+  {
+   "t": 629.32,
+   "d": 8.28,
+   "text": "able to store all those local maps so if I left a local terrain map and came back I would regenerate"
+  },
+  {
+   "t": 637.6,
+   "d": 5.64,
+   "text": "the local map based on a specific random number seed based on where you were in the main map."
+  },
+  {
+   "t": 645.44,
+   "d": 4.96,
+   "text": "There was a game overview within the game that was provided by tape recorders. I will talk more about"
+  },
+  {
+   "t": 652.32,
+   "d": 5.96,
+   "text": "the game overview in the next slide. But you would find a couple tape recorders, tech devices at the"
+  },
+  {
+   "t": 658.28,
+   "d": 5.52,
+   "text": "start of the game. One would give the overall mission and the next would give you a suggested"
+  },
+  {
+   "t": 663.8,
+   "d": 18.68,
+   "text": "main castle to start in. These tape recorder were an ohmage. And you would generally move around"
+  },
+  {
+   "t": 682.48,
+   "d": 6.48,
+   "text": "the local terrain map and the monsters were all upper and lowercase letters of varying colors. You"
+  },
+  {
+   "t": 688.96,
+   "d": 5.32,
+   "text": "would pick up items. This particular screen was pretty good. There was a yellow small tech device,"
+  },
+  {
+   "t": 694.28,
+   "d": 5.64,
+   "text": "a blue weapon and a shield. Usually you clear a screen of monsters before you move"
+  },
+  {
+   "t": 699.92,
+   "d": 5.44,
+   "text": "on. Otherwise you would get a crowd of freak -- creatures following you because the map wouldn't"
+  },
+  {
+   "t": 705.36,
+   "d": 10.52,
+   "text": "forget them. Another regret, my monster AI was simplistic. If there was one thing to change it"
+  },
+  {
+   "t": 717.32,
+   "d": 5.08,
+   "text": "would be to go back and work on the AI and have a little bit more variation among the different"
+  },
+  {
+   "t": 722.4,
+   "d": 6.6,
+   "text": "creatures to make them feel a little different. The thing I look back on and kind of wish I had"
+  },
+  {
+   "t": 729.0,
+   "d": 7.56,
+   "text": "done differently. Little bit more on the gameplay. Alphaman included fatigue and food and sleep."
+  },
+  {
+   "t": 736.56,
+   "d": 13.24,
+   "text": "I only included food because I found Spam and Beefaroni to be fun foods. Fatigue was an issue"
+  },
+  {
+   "t": 749.8,
+   "d": 10.4,
+   "text": "if you were carrying heavy items you would have to rest. It was necessary to sleep at night partly if"
+  },
+  {
+   "t": 760.2,
+   "d": 6.16,
+   "text": "you were outside at night your field of visibility would decrease over time until the dead of night"
+  },
+  {
+   "t": 766.36,
+   "d": 4.72,
+   "text": "you could only see the squares immediately adjacent to you but I also included the sleep"
+  },
+  {
+   "t": 771.08,
+   "d": 6.48,
+   "text": "pattern as a reminder to characters that they had a one-week time period to complete their mission."
+  },
+  {
+   "t": 778.44,
+   "d": 7.68,
+   "text": "It was easy to find places to sleep at night. The overall mission was to defeat the Grinch within a"
+  },
+  {
+   "t": 786.12,
+   "d": 4.8,
+   "text": "week. He was going to release a deadly nerve toxin and you had to visit five special main"
+  },
+  {
+   "t": 790.92,
+   "d": 5.44,
+   "text": "castles to do it. You could complete them in any order but the tape recorder provide a suggested"
+  },
+  {
+   "t": 796.36,
+   "d": 7.84,
+   "text": "order. There were random ruins and layers as well. There is a ruin on top where the character"
+  },
+  {
+   "t": 804.76,
+   "d": 7.24,
+   "text": "mapped out the level and is in a room with a stairway going up and one going down. Layers"
+  },
+  {
+   "t": 812.0,
+   "d": 6.8,
+   "text": "were fun. Good places to find stuff. -- lairs. In the center there were three small technical"
+  },
+  {
+   "t": 818.8,
+   "d": 12.0,
+   "text": "devices and three berries and a can of Beefaroni. Every creature was the same time so if it happened"
+  },
+  {
+   "t": 830.8,
+   "d": 5.64,
+   "text": "to be something you were really good at you could waltz in and get all the good stuff."
+  },
+  {
+   "t": 837.6,
+   "d": 6.36,
+   "text": "In terms of the main castles. The first four you had to get a pair of blue shade"
+  },
+  {
+   "t": 843.96,
+   "d": 9.6,
+   "text": "shoes from Elvis. You had to get rid of a bunch of Elvis impersonators first. You"
+  },
+  {
+   "t": 853.56,
+   "d": 10.52,
+   "text": "had to visit 1313 mockingbird lane which is the home of the monsters. Grandpa monster had a map"
+  },
+  {
+   "t": 864.08,
+   "d": 5.32,
+   "text": "showing the location of the invisible stronghold. Grandpa was really annoying and if he hit you,"
+  },
+  {
+   "t": 869.4,
+   "d": 4.6,
+   "text": "he turned you into a bat and you would reappear random and all the"
+  },
+  {
+   "t": 874.0,
+   "d": 6.32,
+   "text": "items you had were scattered across the level. You needed to get a radiation suit from Buzz"
+  },
+  {
+   "t": 880.32,
+   "d": 9.68,
+   "text": "Aldren and you needed gill gin's serum to protect you from the nerve toxin that"
+  },
+  {
+   "t": 890.0,
+   "d": 10.2,
+   "text": "permeated the castle. Gilligan's island was popular show in the late '60. Every"
+  },
+  {
+   "t": 900.2,
+   "d": 8.28,
+   "text": "turn he would break one of your items which it wasn't fun. Grandpa and Gilligan were easy to"
+  },
+  {
+   "t": 908.48,
+   "d": 15.04,
+   "text": "defeat if you knew the right secret, though. The fifth castle was Trump Casino. You needed to"
+  },
+  {
+   "t": 923.52,
+   "d": 6.8,
+   "text": "get Trump's presidential ID card. I would point out Alphaman was released five years before the"
+  },
+  {
+   "t": 930.32,
+   "d": 5.92,
+   "text": "Simpson episode where Lisa in the future makes a reference to Trump so this may make Alphaman"
+  },
+  {
+   "t": 936.24,
+   "d": 8.6,
+   "text": "the earliest prediction. Donald should have been orange in color. One of my friends though said"
+  },
+  {
+   "t": 946.84,
+   "d": 7.32,
+   "text": "he wasn't really orange back then. While you were in Trump casino all had the name appended to the"
+  },
+  {
+   "t": 954.16,
+   "d": 10.2,
+   "text": "front. This character was attacked by Trump asteroid and found a Trump grenade and radar"
+  },
+  {
+   "t": 964.36,
+   "d": 7.92,
+   "text": "detector and a Trump prosthetic leg. The final castle was the grinches stronghold. The stronghold"
+  },
+  {
+   "t": 972.28,
+   "d": 6.28,
+   "text": "was invisible and a radiation zone with toxic gas. The Grinch was extremely well protected."
+  },
+  {
+   "t": 979.16,
+   "d": 7.4,
+   "text": "Winning the game required thought and not just tech weapons. Alphaman had three different kinds"
+  },
+  {
+   "t": 986.56,
+   "d": 6.2,
+   "text": "of computers in it. They had clues about each of the castles including this one about the grinches."
+  },
+  {
+   "t": 993.36,
+   "d": 6.52,
+   "text": "The Grinch has a soft spot for roast beef. So I want to talk a little bit about the"
+  },
+  {
+   "t": 999.88,
+   "d": 7.12,
+   "text": "progression during the development of Alphaman. I started in 1988 and was just playing around"
+  },
+  {
+   "t": 1007.0,
+   "d": 4.78,
+   "text": "creating the first main map and playing with the colors and getting a keel for the ASCII characters"
+  },
+  {
+   "t": 1011.78,
+   "d": 6.3,
+   "text": "-- feel -- and starting to think of what data rays I would need. Early on I started running"
+  },
+  {
+   "t": 1018.08,
+   "d": 7.24,
+   "text": "into string variable issues with QuickBasic so I had to create my own makeshift string handler. It"
+  },
+  {
+   "t": 1025.32,
+   "d": 11.4,
+   "text": "was clumsy grabbing the strings and probably the ugliest part of the Alphaman coding. I learned if"
+  },
+  {
+   "t": 1036.72,
+   "d": 7.4,
+   "text": "you didn't have the math co-processor some things were slow. I got rid of all my signs and cosigns"
+  },
+  {
+   "t": 1044.12,
+   "d": 6.64,
+   "text": "and went to integer multiplication and when I could I went to bit shift to speed up the math"
+  },
+  {
+   "t": 1050.76,
+   "d": 10.28,
+   "text": "calculations. QuickBasic had a lot of code-size bloat. It was not compact executable code. It"
+  },
+  {
+   "t": 1061.04,
+   "d": 1.92,
+   "text": "quickly became too big to fit on a five and a quarter inch floppy. Fortunately the three and"
+  },
+  {
+   "t": 1062.96,
+   "d": 10.96,
+   "text": "a half inch diskettes came out but I had started adding modules that were compiled"
+  },
+  {
+   "t": 1073.92,
+   "d": 7.84,
+   "text": "in QuickC because it made more compact code and worked well with QuickBasic and allowed embedding"
+  },
+  {
+   "t": 1081.76,
+   "d": 6.88,
+   "text": "assembly code as well which really helped the size and speed in a few key places as well."
+  },
+  {
+   "t": 1088.64,
+   "d": 5.92,
+   "text": "I think I was working on Alphaman for about four years before I decided I wanted to release it as"
+  },
+  {
+   "t": 1094.56,
+   "d": 9.12,
+   "text": "shareware. You could play it as much as you want. I said if you like it consider sending me money."
+  },
+  {
+   "t": 1103.68,
+   "d": 6.56,
+   "text": "Ultimately I had about 30 paid registrations which put my effectively hourly wage well below that of"
+  },
+  {
+   "t": 1110.24,
+   "d": 10.32,
+   "text": "a Victorian era child labor but I have zero bitterness about this. I wish I had done what"
+  },
+  {
+   "t": 1120.56,
+   "d": 6.04,
+   "text": "the ADOM guy did which is he said, if you like this game, send me a postcard from where you are."
+  },
+  {
+   "t": 1127.28,
+   "d": 6.88,
+   "text": "I was really a lot more interested in meeting people than I was in getting $15 from them."
+  },
+  {
+   "t": 1134.16,
+   "d": 6.4,
+   "text": "So I had help along the way. I had a couple of play testers that played Alphaman a lot."
+  },
+  {
+   "t": 1140.56,
+   "d": 5.2,
+   "text": "Both of them were former roommates of mine at the University of Illinois. Greg Krol"
+  },
+  {
+   "t": 1145.76,
+   "d": 9.08,
+   "text": "was invaluable and clever. He would try all the hard challenging weird things and use the mental"
+  },
+  {
+   "t": 1154.84,
+   "d": 5.68,
+   "text": "mutation on his backpack to see if it would design great the things inside the backpack. I am sure he"
+  },
+  {
+   "t": 1160.52,
+   "d": 10.88,
+   "text": "crashed DOS several times. My other play tester was Peter Jessop and he was also invaluable. He"
+  },
+  {
+   "t": 1171.4,
+   "d": 5.44,
+   "text": "gave me a lot of good ideas for things to add to the game. He was a struggling actor fresh out of"
+  },
+  {
+   "t": 1176.84,
+   "d": 8.16,
+   "text": "college. He had a slow computer with no hard drive or math co-processor. I did eventually updated my"
+  },
+  {
+   "t": 1185.0,
+   "d": 8.68,
+   "text": "computer and I installed my math co-processor in his computer and installed my hard drive as well."
+  },
+  {
+   "t": 1193.68,
+   "d": 3.84,
+   "text": "He didn't have a slot for the hard drive so we had the run the ribbon cable out the back and the hard"
+  },
+  {
+   "t": 1197.52,
+   "d": 9.68,
+   "text": "drive lived in a shoe box. Now he does video game voiceover work including resident evil,"
+  },
+  {
+   "t": 1208.16,
+   "d": 12.64,
+   "text": "Skyrim and at least a dozen others. His IMDB link is here and I put it in the obelisk. He is"
+  },
+  {
+   "t": 1220.8,
+   "d": 5.84,
+   "text": "available for your game if you want a professional voiceover he is really good. Super nice guy. I"
+  },
+  {
+   "t": 1226.64,
+   "d": 4.24,
+   "text": "am going to give my email at the end of the talk and you can reach out and put -- I can put you in"
+  },
+  {
+   "t": 1230.88,
+   "d": 14.32,
+   "text": "touch. I have a few recommendations for coders. If possible, do it for your own enjoyment because"
+  },
+  {
+   "t": 1245.2,
+   "d": 6.96,
+   "text": "if you do your time is never wasted. Try to do something no one else has done before because"
+  },
+  {
+   "t": 1252.16,
+   "d": 4.92,
+   "text": "that's where your creativity is really going to be able to come out. Use as many play testers"
+  },
+  {
+   "t": 1257.08,
+   "d": 6.44,
+   "text": "you can get and accept their criticism and embrace their ideas and look for anything"
+  },
+  {
+   "t": 1263.52,
+   "d": 6.92,
+   "text": "in the game you don't like and change it. A lot of comment about completing and releasing"
+  },
+  {
+   "t": 1270.44,
+   "d": 7.04,
+   "text": "a complex game has similarities to competing a PhD thesis. It is all these lose ends and"
+  },
+  {
+   "t": 1277.48,
+   "d": 6.44,
+   "text": "all of the details that the last 10% takes as long as the first 90%. I would argue the mental"
+  },
+  {
+   "t": 1283.92,
+   "d": 5.36,
+   "text": "skills I developed and learned while juggling all those details in my head and on paper have"
+  },
+  {
+   "t": 1289.28,
+   "d": 7.72,
+   "text": "translated into real job skills as well. So there has been a recent Alphaman resurgence"
+  },
+  {
+   "t": 1297.0,
+   "d": 5.32,
+   "text": "or micro resurgence is probably more accurate. My son came across a YouTube video of someone taking"
+  },
+  {
+   "t": 1302.32,
+   "d": 7.88,
+   "text": "an Alphaman break in 2015. 10-15 years after I thought Alphaman had disappeared without a"
+  },
+  {
+   "t": 1310.2,
+   "d": 5.88,
+   "text": "trace. Astonishingly the guy in the never used the mutations, figured out the tech device,"
+  },
+  {
+   "t": 1318.2,
+   "d": 9.08,
+   "text": "he never did any of the things I thought made Alphaman fun. Jaime Bainbridge tracked me down"
+  },
+  {
+   "t": 1327.28,
+   "d": 7.88,
+   "text": "by my current work email, the CompuServe email I had embedded within Alphaman was"
+  },
+  {
+   "t": 1335.16,
+   "d": 7.16,
+   "text": "long gone and I gave Jaime my source code and he astonish panged to recompile it and released"
+  },
+  {
+   "t": 1342.32,
+   "d": 5.64,
+   "text": "the source code on GitHub with my blessing. If you want to see my spaghetti Frankenstein code"
+  },
+  {
+   "t": 1348.68,
+   "d": 8.2,
+   "text": "you can find it there. I acknowledged Harrison and the encouragement to give this talk. There"
+  },
+  {
+   "t": 1356.88,
+   "d": 9.44,
+   "text": "have been Alphaman discussions on the roguelike Subreddit. And while I was researching this talk,"
+  },
+  {
+   "t": 1366.32,
+   "d": 6.4,
+   "text": "I found a way to play online that did not need DOS box. Although it was really slow especially when"
+  },
+  {
+   "t": 1372.72,
+   "d": 7.44,
+   "text": "you go from one local train map to the next. Maybe they don't have a math co-processor."
+  },
+  {
+   "t": 1380.16,
+   "d": 8.16,
+   "text": "Who am I now that nearly 30 years has passed? I have been married for 30 years. I have three"
+  },
+  {
+   "t": 1388.32,
+   "d": 5.12,
+   "text": "children. Play soccer twice a week for fun and stress release and I play the trombone"
+  },
+  {
+   "t": 1393.44,
+   "d": 13.12,
+   "text": "for fun. In the picture I managed to combine the two of having a barbecue after soccer at"
+  },
+  {
+   "t": 1406.56,
+   "d": 9.0,
+   "text": "Stanford University and I think we are playing sweet home Alabama or hotel California. I also"
+  },
+  {
+   "t": 1415.56,
+   "d": 8.6,
+   "text": "have a job. I am a scientist at Lockheed Martin and develop devices called cryocoolers that cool"
+  },
+  {
+   "t": 1424.16,
+   "d": 7.24,
+   "text": "instruments on the spacecraft. That device in the top middle of the coworkers is going"
+  },
+  {
+   "t": 1431.4,
+   "d": 7.68,
+   "text": "to fly to Jupiter and it is cooling an infrared spectrometer that will determine what chemicals"
+  },
+  {
+   "t": 1439.08,
+   "d": 9.36,
+   "text": "are present on the moon in Jupiter. You can see the same components on the left side of"
+  },
+  {
+   "t": 1448.44,
+   "d": 7.16,
+   "text": "the instrument. I am pleased to say we just launched one of these on NASA's psyche mission"
+  },
+  {
+   "t": 1456.44,
+   "d": 9.44,
+   "text": "on October 13th. It is going to visit the largest metallic body in the solar system. I tested the"
+  },
+  {
+   "t": 1465.88,
+   "d": 6.84,
+   "text": "primary camera on the James web telescope and it is sending back beautiful photos from deep"
+  },
+  {
+   "t": 1472.72,
+   "d": 6.88,
+   "text": "space. I would like to end with a variation on Isaac Newton's famous quotation. If I have not"
+  },
+  {
+   "t": 1479.6,
+   "d": 6.76,
+   "text": "seen as far as others it is because giants are standing on my shoulders. One thing that was"
+  },
+  {
+   "t": 1486.36,
+   "d": 5.88,
+   "text": "gratifying reading the Reddit comments and other thing online is people said I remember that wacky"
+  },
+  {
+   "t": 1492.24,
+   "d": 6.12,
+   "text": "game Alphaman. It got me into roguelikes years ago. I hope some of you that are working on your"
+  },
+  {
+   "t": 1498.36,
+   "d": 6.2,
+   "text": "own games encountered Alphaman along the way and were inspired. In any case, I wish you all the"
+  },
+  {
+   "t": 1504.56,
+   "d": 6.6,
+   "text": "best of luck with your own endeavors. I included my email at the bottom. It is hard to tell from"
+  },
+  {
+   "t": 1511.16,
+   "d": 5.6,
+   "text": "the front but there is only one underscore in the email. I posted that on the obelisk as well. Feel"
+  },
+  {
+   "t": 1516.76,
+   "d": 5.68,
+   "text": "free to reach out to me if you would like. I really appreciate you listening to my talk and"
+  },
+  {
+   "t": 1522.44,
+   "d": 5.44,
+   "text": "letting me take this trip down memory lane and bringing a little closure to a game that brought"
+  },
+  {
+   "t": 1527.88,
+   "d": 9.44,
+   "text": "me a lot of enjoyment back many years ago. QRISTY: Must unmute to talk. Thank you so much."
+  },
+  {
+   "t": 1537.32,
+   "d": 9.92,
+   "text": "This was so great and interesting and so much fun. I love that you did not lead with hey,"
+  },
+  {
+   "t": 1547.24,
+   "d": 8.96,
+   "text": "I make space stuff. Just throw that in at the end. Whatever. I think we have time for"
+  },
+  {
+   "t": 1556.2,
+   "d": 7.44,
+   "text": "one or two questions. We have got a few. If you were to add a current pop culture"
+  },
+  {
+   "t": 1563.64,
+   "d": 6.48,
+   "text": "reference into the game, what would it be? JEFF: That's a great question. The Simpson's"
+  },
+  {
+   "t": 1570.12,
+   "d": 7.48,
+   "text": "comes to mind except it isn't current anymore. It is an excellent question."
+  },
+  {
+   "t": 1577.6,
+   "d": 8.44,
+   "text": "Maybe Seinfeld. No, that's not current. I no longer have my finger on the pulse of culture."
+  },
+  {
+   "t": 1587.6,
+   "d": 10.6,
+   "text": "QRISTY: We should point out that chat agrees your game dev advice is not dated, timeless,"
+  },
+  {
+   "t": 1598.2,
+   "d": 10.56,
+   "text": "and very important and things we should go re-read that slide a few times. I have"
+  },
+  {
+   "t": 1608.76,
+   "d": 4.96,
+   "text": "another question. Who else was in the castle of those who came in second?"
+  },
+  {
+   "t": 1613.72,
+   "d": 5.04,
+   "text": "JEFF: That's a great question. A lot of the humor in Alphaman did not survive the"
+  },
+  {
+   "t": 1618.76,
+   "d": 7.68,
+   "text": "test of time like references to Dan quail but the Chicago cubs were there, all nine,"
+  },
+  {
+   "t": 1627.52,
+   "d": 64.96,
+   "text": "because at that time they were Perennial losers. I think Mary decker and (lost audio)"
+  },
+  {
+   "t": 1693.16,
+   "d": 27.0,
+   "text": "JEFF: I had been programming games I could play on the computer and I was inspired by trying to"
+  },
+  {
+   "t": 1720.16,
+   "d": 6.96,
+   "text": "really create something I could control. It is what all coders want to do. Think of an idea and"
+  },
+  {
+   "t": 1727.12,
+   "d": 6.48,
+   "text": "sit down and make it work in your game. Rogue was what made be do the turn by turn base and"
+  },
+  {
+   "t": 1733.6,
+   "d": 7.72,
+   "text": "the other paper and pencil games are what made me want to do the science fiction version of"
+  },
+  {
+   "t": 1741.32,
+   "d": 8.12,
+   "text": "it. Beyond that, I didn't play a ton of computer games because back in those days computers were"
+  },
+  {
+   "t": 1749.44,
+   "d": 10.84,
+   "text": "not as readily available as they are now. QRISTY: Yeah, you talk about programming this"
+  },
+  {
+   "t": 1760.28,
+   "d": 8.44,
+   "text": "thing for it can run without a math code processor. Thanks again. This"
+  },
+  {
+   "t": 1768.72,
+   "d": 7.88,
+   "text": "was fabulous. If you want to talk more, you will be in breakout room screen four which"
+  },
+  {
+   "t": 1776.6,
+   "d": 5.12,
+   "text": "is My Big Fat Orc Wedding. JEFF: Awesome. Thank you so much."
+  }
+ ]
+}

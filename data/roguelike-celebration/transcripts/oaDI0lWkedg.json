@@ -1,0 +1,685 @@
+{
+ "id": "oaDI0lWkedg",
+ "url": "https://www.youtube.com/watch?v=oaDI0lWkedg",
+ "title": "Max Kreminski - Synthesizing Story Sifters",
+ "speaker": "Max Kreminski",
+ "talk_title": "Synthesizing Story Sifters",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 582,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nMax is a Computational Media PhD student in the Expressive Intelligence Studio at UC Santa Cruz. They design and build AI systems that support human creativity, especially in the context of storytelling. They also do a lot of other research in the areas of games and play, human-computer interaction, and procedural content generation. \n\nTheir previous Roguelike Celebration talks have focused on their ongoing efforts to make roguelikes and other simulation-driven games better at storytelling. Focusing on the issue of getting a game to understand the emergent stories it's producing, they discuss story sifting patterns as a way to recognize emergent microstories. Their latest work involves providing example situations to create sifting patterns, making it easy for developers but also allowing the player to act as a storytelling partner.\n\nFind them on Twitter: https://twitter.com/maxkreminski\nCheck out the Blaseball Sifter: https://github.com/mkremins/blaseball-sifter\nRead the full paper: https://mkremins.github.io/publications/Synthesifter_INT2020.pdf\nMax's 2019 Roguelike Celebration talk on story sifting: https://www.youtube.com/watch?v=BDcZSWHu8RQ\nMax's 2018 Roguelike Celebration talk on gardening as a mode of play: https://www.youtube.com/watch?v=TvlZinAvpwg\nMax's 2017 Roguelike Celebration on proc gen character arcs: https://www.youtube.com/watch?v=66O6WDcT8KY",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 30,
+   "title": "The Problem"
+  },
+  {
+   "start": 65,
+   "title": "Blaze"
+  },
+  {
+   "start": 83,
+   "title": "Micro Stories"
+  },
+  {
+   "start": 131,
+   "title": "Shifting Patterns"
+  },
+  {
+   "start": 147,
+   "title": "Felt"
+  },
+  {
+   "start": 190,
+   "title": "Not Join"
+  },
+  {
+   "start": 277,
+   "title": "Inductive Logic Programming"
+  },
+  {
+   "start": 345,
+   "title": "Example"
+  },
+  {
+   "start": 364,
+   "title": "Rules"
+  },
+  {
+   "start": 388,
+   "title": "Side Note"
+  },
+  {
+   "start": 399,
+   "title": "User Interface"
+  },
+  {
+   "start": 410,
+   "title": "Properties"
+  },
+  {
+   "start": 455,
+   "title": "Synthesistter"
+  },
+  {
+   "start": 517,
+   "title": "Future work"
+  },
+  {
+   "start": 565,
+   "title": "Outro"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1407,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.78,
+   "d": 1.0,
+   "text": "My name is Max Kreminski."
+  },
+  {
+   "t": 1.78,
+   "d": 3.05,
+   "text": "I am a computational media PhD student at UC Santa Cruz."
+  },
+  {
+   "t": 4.83,
+   "d": 4.42,
+   "text": "The thing I love about Roguelikes are the player stories."
+  },
+  {
+   "t": 9.25,
+   "d": 6.19,
+   "text": "I love Dwarf Fortress in particular and even a number that don't have the name murder in"
+  },
+  {
+   "t": 15.44,
+   "d": 1.0,
+   "text": "the title."
+  },
+  {
+   "t": 16.44,
+   "d": 4.56,
+   "text": "The great thing about the stories is their emergent nature."
+  },
+  {
+   "t": 21.0,
+   "d": 5.06,
+   "text": "As a player, you go into the game world, fumble around and die and the end result makes for"
+  },
+  {
+   "t": 26.06,
+   "d": 4.26,
+   "text": "a compelling story even though you nor the game are trying to create one."
+  },
+  {
+   "t": 30.32,
+   "d": 6.08,
+   "text": "Unfortunately, this kind of storytelling plays often off limits to novice players and it"
+  },
+  {
+   "t": 36.4,
+   "d": 4.28,
+   "text": "is hard to find the story in Roguelikes where there is so much going on and so much information"
+  },
+  {
+   "t": 40.68,
+   "d": 5.71,
+   "text": "in the UI and in the background."
+  },
+  {
+   "t": 46.39,
+   "d": 8.14,
+   "text": "It is hard to find the story bits that make the play compelling."
+  },
+  {
+   "t": 54.53,
+   "d": 5.34,
+   "text": "What if we can do something about this overwhelm and build a system that is able to identify"
+  },
+  {
+   "t": 59.87,
+   "d": 5.38,
+   "text": "the most compelling narrative stuff in the world and surface those for the player to"
+  },
+  {
+   "t": 65.25,
+   "d": 1.0,
+   "text": "see?"
+  },
+  {
+   "t": 66.25,
+   "d": 5.12,
+   "text": "And you can pull out the epic storeose of the sol HP o home run happening 8 minutes"
+  },
+  {
+   "t": 71.37,
+   "d": 7.05,
+   "text": "after being incinerated by a Rogue -- this is an example of a game I will be using in"
+  },
+  {
+   "t": 78.42,
+   "d": 6.01,
+   "text": "examples here."
+  },
+  {
+   "t": 84.43,
+   "d": 6.54,
+   "text": "We call these systems that can automatically identify the interesting narrative story sifters."
+  },
+  {
+   "t": 90.97,
+   "d": 3.23,
+   "text": "The process of story sifting is allowing the simulation to produce an overwhelming amount"
+  },
+  {
+   "t": 94.2,
+   "d": 6.77,
+   "text": "of content and start to filter it down into a chronicle of game events we can search in"
+  },
+  {
+   "t": 100.97,
+   "d": 5.87,
+   "text": "to find compelling sequences and pull them out to automatically surface them to the player"
+  },
+  {
+   "t": 106.84,
+   "d": 1.34,
+   "text": "as micro stories."
+  },
+  {
+   "t": 108.18,
+   "d": 7.67,
+   "text": "We have a micro story where character A starts the project, gives up and B comes along and"
+  },
+  {
+   "t": 115.85,
+   "d": 5.24,
+   "text": "talks about the project and A decides to resume work on the project."
+  },
+  {
+   "t": 121.09,
+   "d": 3.75,
+   "text": "The ideal here is to have a whole bunch of different story sifting patterns so you can"
+  },
+  {
+   "t": 124.84,
+   "d": 8.03,
+   "text": "pull out as many diverse micro stories as possible from what transpired in the simulation."
+  },
+  {
+   "t": 132.87,
+   "d": 6.15,
+   "text": "We use sifting patterns that specify groups of related events that make compelling building"
+  },
+  {
+   "t": 139.02,
+   "d": 1.54,
+   "text": "blocks."
+  },
+  {
+   "t": 140.56,
+   "d": 7.96,
+   "text": "You want a lot of these so we should make them as easy to author as possible as game"
+  },
+  {
+   "t": 148.52,
+   "d": 1.0,
+   "text": "developers."
+  },
+  {
+   "t": 149.52,
+   "d": 6.24,
+   "text": "There is a system called felt I worked on that is a domain specific language and this"
+  },
+  {
+   "t": 155.76,
+   "d": 2.31,
+   "text": "is a logic programming language based on data log."
+  },
+  {
+   "t": 158.07,
+   "d": 6.3,
+   "text": "You can see it divided into clauses and we have a sequence of events looking for event"
+  },
+  {
+   "t": 164.37,
+   "d": 2.02,
+   "text": "A and B, two events."
+  },
+  {
+   "t": 166.39,
+   "d": 9.29,
+   "text": "Each event has attributes and the same actor and this character has the trait impulseive"
+  },
+  {
+   "t": 175.68,
+   "d": 1.0,
+   "text": "and so on."
+  },
+  {
+   "t": 176.68,
+   "d": 3.23,
+   "text": "We have this non-join clause."
+  },
+  {
+   "t": 179.91,
+   "d": 4.96,
+   "text": "This saying we are looking for a sequence of two betrayals perpetrated by the same impulsive"
+  },
+  {
+   "t": 184.87,
+   "d": 8.05,
+   "text": "character."
+  },
+  {
+   "t": 192.92,
+   "d": 3.5,
+   "text": "You have to learn the language of the sifting syntax first."
+  },
+  {
+   "t": 196.42,
+   "d": 7.24,
+   "text": "It is not like Python or whatever but there is a lot of constraints you have to understand"
+  },
+  {
+   "t": 203.66,
+   "d": 3.54,
+   "text": "to write the story patterns and you have to learn the semantics."
+  },
+  {
+   "t": 207.2,
+   "d": 11.19,
+   "text": "This is implemented more like SQL than like Python or JavaScript which means the semantics"
+  },
+  {
+   "t": 218.39,
+   "d": 3.96,
+   "text": "are a bit non-intuitive."
+  },
+  {
+   "t": 222.35,
+   "d": 4.83,
+   "text": "On top of that you have to learn the relevant simulation concepts like an event type called"
+  },
+  {
+   "t": 227.18,
+   "d": 5.35,
+   "text": "betrayal or that that is stored in the event type and you might have to learn characters"
+  },
+  {
+   "t": 232.53,
+   "d": 2.91,
+   "text": "have traits like impulsive."
+  },
+  {
+   "t": 235.44,
+   "d": 8.21,
+   "text": "You have to learn this every simulation."
+  },
+  {
+   "t": 243.65,
+   "d": 4.4,
+   "text": "On top of that, you also have to remember to implement all the relevant constraints"
+  },
+  {
+   "t": 248.05,
+   "d": 1.88,
+   "text": "for the sequences you are looking for."
+  },
+  {
+   "t": 249.93,
+   "d": 5.71,
+   "text": "It is easy to forget to include an important rule that is obvious to you as a human as"
+  },
+  {
+   "t": 255.64,
+   "d": 7.73,
+   "text": "to why it matters when others don't but the computer is not able to infer automatically."
+  },
+  {
+   "t": 263.37,
+   "d": 5.09,
+   "text": "What if to make it even easier to write story sifting patterns we could point at some of"
+  },
+  {
+   "t": 268.46,
+   "d": 6.04,
+   "text": "the micro stories we want to match as examples and let the computer write the code that actually"
+  },
+  {
+   "t": 274.5,
+   "d": 3.24,
+   "text": "matches them."
+  },
+  {
+   "t": 277.74,
+   "d": 5.68,
+   "text": "This turns out to be programming synthesize when you have the computer writing the code"
+  },
+  {
+   "t": 283.42,
+   "d": 6.21,
+   "text": "and this is one of the hard problems of computer science because the real difficulty is you"
+  },
+  {
+   "t": 289.63,
+   "d": 3.73,
+   "text": "are searching a space of all the possible programs that could do the thing you want"
+  },
+  {
+   "t": 293.36,
+   "d": 4.94,
+   "text": "to do and the search space of possible Python functions is huge."
+  },
+  {
+   "t": 298.3,
+   "d": 4.25,
+   "text": "It is unbounded and it is really hard to find the particular Python function you are looking"
+  },
+  {
+   "t": 302.55,
+   "d": 1.62,
+   "text": "for in that space."
+  },
+  {
+   "t": 304.17,
+   "d": 3.52,
+   "text": "And on top of that, how do you specify what you are looking in terms of the behavior of"
+  },
+  {
+   "t": 307.69,
+   "d": 2.08,
+   "text": "the function you are trying to find?"
+  },
+  {
+   "t": 309.77,
+   "d": 5.2,
+   "text": "Fortunately for us, we are in a well defined program search base which is called inductive"
+  },
+  {
+   "t": 314.97,
+   "d": 4.55,
+   "text": "logic programming and I promise this is actually better and not work."
+  },
+  {
+   "t": 319.52,
+   "d": 9.08,
+   "text": "The thing about this is it helps when finding a logic program and classifies the difference"
+  },
+  {
+   "t": 328.6,
+   "d": 2.65,
+   "text": "between positive and negative."
+  },
+  {
+   "t": 331.25,
+   "d": 5.94,
+   "text": "Here are the event sequences we want to match and here are some that are similar but we"
+  },
+  {
+   "t": 337.19,
+   "d": 1.82,
+   "text": "don't want to match."
+  },
+  {
+   "t": 339.01,
+   "d": 3.98,
+   "text": "The computer's job is to find the logic program in this case a felt sifting pattern that accurately"
+  },
+  {
+   "t": 342.99,
+   "d": 7.61,
+   "text": "classifies the difference."
+  },
+  {
+   "t": 350.6,
+   "d": 4.02,
+   "text": "Let's say we want at a find stories of a weak hitter who is performing well and then fumbles"
+  },
+  {
+   "t": 354.62,
+   "d": 5.55,
+   "text": "at a pivotal moment that disrupts the game?"
+  },
+  {
+   "t": 360.17,
+   "d": 4.32,
+   "text": "We have to figure out the concept of weak hitter and fumble means."
+  },
+  {
+   "t": 364.49,
+   "d": 6.59,
+   "text": "We define them as rules and say here is what a weak hitter means."
+  },
+  {
+   "t": 371.08,
+   "d": 3.02,
+   "text": "A player is a weak hitter if they are a member of the batting line up and their rating is"
+  },
+  {
+   "t": 374.1,
+   "d": 1.07,
+   "text": "two stars or less."
+  },
+  {
+   "t": 375.17,
+   "d": 13.78,
+   "text": "It is pivotal if there is a hit with a runner on third base."
+  },
+  {
+   "t": 388.95,
+   "d": 3.37,
+   "text": "As a side note, there is actually, you can't say third base you have to say last base."
+  },
+  {
+   "t": 392.32,
+   "d": 5.96,
+   "text": "There is a much of falsehoods and this thread goes on for some time and you should check"
+  },
+  {
+   "t": 398.28,
+   "d": 1.15,
+   "text": "it out probably."
+  },
+  {
+   "t": 399.43,
+   "d": 4.17,
+   "text": "Any way once you have done that you can provide the user with an interface for selecting positive"
+  },
+  {
+   "t": 403.6,
+   "d": 1.28,
+   "text": "and negative examples."
+  },
+  {
+   "t": 404.88,
+   "d": 3.94,
+   "text": "Event sequences they are looking for versus ones that look similar but they are not trying"
+  },
+  {
+   "t": 408.82,
+   "d": 6.64,
+   "text": "to match and then pull out from each example a set of properties and these are yes/no questions"
+  },
+  {
+   "t": 415.46,
+   "d": 5.49,
+   "text": "about the event sequence and get a simple straightforward answers."
+  },
+  {
+   "t": 420.95,
+   "d": 5.37,
+   "text": "Does event three have the tag swing and miss?"
+  },
+  {
+   "t": 426.32,
+   "d": 3.71,
+   "text": "Is the batter for the first event the same as the second?"
+  },
+  {
+   "t": 430.03,
+   "d": 6.81,
+   "text": "Is event three pivotal as defined by the rules we defined earlier?"
+  },
+  {
+   "t": 436.84,
+   "d": 4.99,
+   "text": "Once you have the properties for all positive examples you can widow down to just the properties"
+  },
+  {
+   "t": 441.83,
+   "d": 7.16,
+   "text": "that apply for all the positive examples you have defineded and in the end you have a set"
+  },
+  {
+   "t": 448.99,
+   "d": 3.91,
+   "text": "of properties you can translate to a felt sifting story pattern directly such as the"
+  },
+  {
+   "t": 452.9,
+   "d": 2.79,
+   "text": "one on the right."
+  },
+  {
+   "t": 455.69,
+   "d": 4.63,
+   "text": "The definition of synthesize sifter is here."
+  },
+  {
+   "t": 460.32,
+   "d": 8.38,
+   "text": "On the left side you see a filter and searchable log of everything happening in the simulated"
+  },
+  {
+   "t": 468.7,
+   "d": 1.93,
+   "text": "world."
+  },
+  {
+   "t": 470.63,
+   "d": 3.03,
+   "text": "You can type in define certain events."
+  },
+  {
+   "t": 473.66,
+   "d": 6.35,
+   "text": "On the right-hand side is the positive events identified."
+  },
+  {
+   "t": 480.01,
+   "d": 7.58,
+   "text": "We also have a synthesize sifting pattern which a text box containing the sifting pattern"
+  },
+  {
+   "t": 487.59,
+   "d": 4.17,
+   "text": "that we decided as positive."
+  },
+  {
+   "t": 491.76,
+   "d": 5.03,
+   "text": "We have possible matches which are additional sequencing events that this synthesizing pattern"
+  },
+  {
+   "t": 496.79,
+   "d": 5.76,
+   "text": "needs and these can be added as positive or negative example do is further refine the"
+  },
+  {
+   "t": 502.55,
+   "d": 1.51,
+   "text": "sifting pattern definition."
+  },
+  {
+   "t": 504.06,
+   "d": 5.56,
+   "text": "Finally, we have negative examples and these are specifying sequence of events that are"
+  },
+  {
+   "t": 509.62,
+   "d": 6.21,
+   "text": "similar with some of the same properties but we want to exclude from consideration for"
+  },
+  {
+   "t": 515.83,
+   "d": 2.94,
+   "text": "whatever reason."
+  },
+  {
+   "t": 518.77,
+   "d": 1.49,
+   "text": "Now what?"
+  },
+  {
+   "t": 520.26,
+   "d": 8.26,
+   "text": "One thing we are doing is using these tools to write an artificial com commentator."
+  },
+  {
+   "t": 528.52,
+   "d": 6.9,
+   "text": "It is early days for this but you can follow along at this URL for the GitHub repo."
+  },
+  {
+   "t": 535.42,
+   "d": 7.81,
+   "text": "We are extending this to support more synthesizing stuff but provide additional tools for filtering"
+  },
+  {
+   "t": 543.23,
+   "d": 3.04,
+   "text": "and searching event logs."
+  },
+  {
+   "t": 546.27,
+   "d": 8.8,
+   "text": "I am excited about incorporating this work into a more powerful tool in the toolbox."
+  },
+  {
+   "t": 555.07,
+   "d": 11.43,
+   "text": "It helps you write code you can interpret or modify yourself which I think is very exciting."
+  },
+  {
+   "t": 566.5,
+   "d": 2.31,
+   "text": "If you want the details you can read this paper."
+  },
+  {
+   "t": 568.81,
+   "d": 1.6,
+   "text": "My website has a bunch more information."
+  },
+  {
+   "t": 570.41,
+   "d": 3.5,
+   "text": "I have worked on other story sifting stuff you can find there and you can hit me up on"
+  },
+  {
+   "t": 573.91,
+   "d": 3.85,
+   "text": "Twitter and I will be hanging around the conference for any other questions as desired."
+  },
+  {
+   "t": 577.76,
+   "d": 0.94,
+   "text": "Thank you."
+  }
+ ]
+}

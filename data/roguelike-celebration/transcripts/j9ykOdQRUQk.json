@@ -1,0 +1,510 @@
+{
+ "id": "j9ykOdQRUQk",
+ "url": "https://www.youtube.com/watch?v=j9ykOdQRUQk",
+ "title": "Rosalind Miles Chapman - Hungry Rogues: The evolution of roguelike hunger mechanics",
+ "speaker": "Rosalind Miles Chapman",
+ "talk_title": "Hungry Rogues: The evolution of roguelike hunger mechanics",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 535,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nRosalind is a queer indie game designer who likes crunchy overcomplicated games. In this lightning talk she discusses how early roguelikes used hunger to push the player ever onwards and prevent grinding, how some modern roguelikes have replaced that with other pace-setting systems and her proposed system for her upcoming game: Castle Cthulhu, which puts a horror twist on these anti-grinding pacing mechanics.\n\nFind her on Twitter: https://twitter.com/RosalyndMC",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 39,
+   "title": "Wait Hunger Mechanics?"
+  },
+  {
+   "start": 72,
+   "title": "Why Include a Hunger Mechanic"
+  },
+  {
+   "start": 140,
+   "title": "Hunger 101"
+  },
+  {
+   "start": 268,
+   "title": "Wandering Monsters"
+  },
+  {
+   "start": 399,
+   "title": "Castle Cthulhu"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1039,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.11,
+   "d": 5.43,
+   "text": "MODERATOR: I was so excited in the bar having a discussion about randomness and if that's"
+  },
+  {
+   "t": 5.54,
+   "d": 1.52,
+   "text": "not the Roguelike Celebration."
+  },
+  {
+   "t": 7.06,
+   "d": 4.93,
+   "text": "Without further ado, let's get into this and start with Rosalind Miles Chapman."
+  },
+  {
+   "t": 11.99,
+   "d": 8.43,
+   "text": ">> I am going to jump into it because 10 minutes isn't a lot of time."
+  },
+  {
+   "t": 20.42,
+   "d": 7.62,
+   "text": "My name is rosalind chaptan and you can find me on Twitter and play -- Chapman -- my games"
+  },
+  {
+   "t": 28.04,
+   "d": 3.4,
+   "text": "at that website."
+  },
+  {
+   "t": 31.44,
+   "d": 11.34,
+   "text": "I am going to talk about hunger mechanics in Roguelikes."
+  },
+  {
+   "t": 42.78,
+   "d": 5.89,
+   "text": "Some people who are only familiar with modern Roguelikes might be confused because hunger"
+  },
+  {
+   "t": 48.67,
+   "d": 7.0,
+   "text": "mechanics are a stable of old Roguelikes but they don't make it into a lot of newer Roguelikes"
+  },
+  {
+   "t": 55.67,
+   "d": 2.21,
+   "text": "in a conventional form."
+  },
+  {
+   "t": 57.88,
+   "d": 11.81,
+   "text": "Instead the sort of system and dynamics still exists but it comes in different forms than"
+  },
+  {
+   "t": 69.69,
+   "d": 3.74,
+   "text": "a traditional hunger mechanics."
+  },
+  {
+   "t": 73.43,
+   "d": 5.68,
+   "text": "Why do these games have hunger mechanics and what is a hunger mechanics?"
+  },
+  {
+   "t": 79.11,
+   "d": 5.63,
+   "text": "Roguelikes typically have this tension where the Roguelike protagonist gets stronger the"
+  },
+  {
+   "t": 84.74,
+   "d": 6.88,
+   "text": "more they explore or fight things and basically if you could grind this would be the best"
+  },
+  {
+   "t": 91.62,
+   "d": 5.69,
+   "text": "thing."
+  },
+  {
+   "t": 97.31,
+   "d": 11.44,
+   "text": "The the way you play the game isn't that fun because"
+  },
+  {
+   "t": 108.75,
+   "d": 9.72,
+   "text": "you are encouraged, if you had no time pressure, you would be encourage to ground them out"
+  },
+  {
+   "t": 118.47,
+   "d": 5.8,
+   "text": "as absolute as possible and never progressing anywhere until you have completely exhausted"
+  },
+  {
+   "t": 124.27,
+   "d": 1.87,
+   "text": "every resource."
+  },
+  {
+   "t": 126.14,
+   "d": 4.62,
+   "text": "What hunger does is turns time into a resource."
+  },
+  {
+   "t": 130.76,
+   "d": 6.91,
+   "text": "Now they are a strategic choice you have to weigh up against other options rather than"
+  },
+  {
+   "t": 137.67,
+   "d": 4.1,
+   "text": "a clearly optimal strategy."
+  },
+  {
+   "t": 141.77,
+   "d": 7.17,
+   "text": "The traditional hunger mechanics is hunger so they get hungry over time, get weaker,"
+  },
+  {
+   "t": 148.94,
+   "d": 4.07,
+   "text": "lose health and possibly just die."
+  },
+  {
+   "t": 153.01,
+   "d": 7.32,
+   "text": "You do this with items."
+  },
+  {
+   "t": 160.33,
+   "d": 5.69,
+   "text": "Typically your hunger can only go so positive so you want to keep items around so if your"
+  },
+  {
+   "t": 166.02,
+   "d": 9.07,
+   "text": "game as limited inventory that is another consideration."
+  },
+  {
+   "t": 175.09,
+   "d": 5.04,
+   "text": "In pixel Rogue there is a cornicopa idea that takes up the trinket slot and the trinket"
+  },
+  {
+   "t": 180.13,
+   "d": 6.08,
+   "text": "slot is cool and helpful but not having to do deal with the hunger mechanics is also"
+  },
+  {
+   "t": 186.21,
+   "d": 2.63,
+   "text": "really helpful."
+  },
+  {
+   "t": 188.84,
+   "d": 8.92,
+   "text": "It limits powerful options that take a long time like sleeping which can be effective"
+  },
+  {
+   "t": 197.76,
+   "d": 4.08,
+   "text": "but not the most fun to play."
+  },
+  {
+   "t": 201.84,
+   "d": 3.53,
+   "text": "That's what traditional hunger does."
+  },
+  {
+   "t": 205.37,
+   "d": 6.11,
+   "text": "More modern games have this same sort of time pressure approach but they are done in a very"
+  },
+  {
+   "t": 211.48,
+   "d": 1.76,
+   "text": "different way."
+  },
+  {
+   "t": 213.24,
+   "d": 4.6,
+   "text": "A lot of games have systems where you can't throw the explorer."
+  },
+  {
+   "t": 217.84,
+   "d": 6.53,
+   "text": "There is lots of mutually exclusive choices in where you travel."
+  },
+  {
+   "t": 224.37,
+   "d": 1.52,
+   "text": "Sorry."
+  },
+  {
+   "t": 225.89,
+   "d": 4.14,
+   "text": "There is a lot of mutually exclusive choices in where you travel."
+  },
+  {
+   "t": 230.03,
+   "d": 4.43,
+   "text": "If you go down one path, you can't go down the other path."
+  },
+  {
+   "t": 234.46,
+   "d": 7.65,
+   "text": "What is really need about these systems is they turn a previously invisible layer of"
+  },
+  {
+   "t": 242.11,
+   "d": 8.67,
+   "text": "strategy about how much do you push your luck of thorough exploration versus dwindling food"
+  },
+  {
+   "t": 250.78,
+   "d": 2.19,
+   "text": "and make it really explicit."
+  },
+  {
+   "t": 252.97,
+   "d": 4.48,
+   "text": "If I go down this path, I will face this challenge and get this reward."
+  },
+  {
+   "t": 257.45,
+   "d": 4.23,
+   "text": "If I go down this path, I will face that challenge and get that reward."
+  },
+  {
+   "t": 261.68,
+   "d": 1.87,
+   "text": "What does my run need right now?"
+  },
+  {
+   "t": 263.55,
+   "d": 5.27,
+   "text": "What does my run need in the future which is really neat."
+  },
+  {
+   "t": 268.82,
+   "d": 1.65,
+   "text": "Another way to do this is with monsters."
+  },
+  {
+   "t": 270.47,
+   "d": 9.58,
+   "text": "This is really common in bor -- board games that are Roguelike adjacent."
+  },
+  {
+   "t": 280.05,
+   "d": 11.57,
+   "text": "The only way this works is if the cost doesn't outweigh."
+  },
+  {
+   "t": 291.62,
+   "d": 5.71,
+   "text": "If monsters are threatening or don't give you anything, monsters can be a good way to"
+  },
+  {
+   "t": 297.33,
+   "d": 4.24,
+   "text": "push things forward and you can use monsters as a clock."
+  },
+  {
+   "t": 301.57,
+   "d": 6.01,
+   "text": "What's wonderful is there is a lot of counterplay and because combat is likely the most detailed"
+  },
+  {
+   "t": 307.58,
+   "d": 8.92,
+   "text": "system you can evade them and try to power through rather than just having sometimes"
+  },
+  {
+   "t": 316.5,
+   "d": 4.43,
+   "text": "players find it really arbitrary and there is a lot of really game field attached to"
+  },
+  {
+   "t": 320.93,
+   "d": 8.26,
+   "text": "a timer that just kills you so monsters can be a good way of avoiding the problems."
+  },
+  {
+   "t": 329.19,
+   "d": 7.59,
+   "text": "Sometimes the monsters break the normal rules like splunky but the point is still the same."
+  },
+  {
+   "t": 336.78,
+   "d": 1.84,
+   "text": "It is a thing that pushes the clock."
+  },
+  {
+   "t": 338.62,
+   "d": 2.74,
+   "text": "There is another unique ways people have done it."
+  },
+  {
+   "t": 341.36,
+   "d": 3.07,
+   "text": "There is difficulty scaling."
+  },
+  {
+   "t": 344.43,
+   "d": 6.87,
+   "text": "Basically an invisible inc everything in the game gets harder the longer you stick around."
+  },
+  {
+   "t": 351.3,
+   "d": 4.07,
+   "text": "It is kind of like the pure version of this."
+  },
+  {
+   "t": 355.37,
+   "d": 8.15,
+   "text": "It is remove everything else which is the absolute baseline essentials of the mechanics."
+  },
+  {
+   "t": 363.52,
+   "d": 11.56,
+   "text": "Games get harder everywhere by spending so much time."
+  },
+  {
+   "t": 375.08,
+   "d": 10.18,
+   "text": "There are other games that use a stress mechanic."
+  },
+  {
+   "t": 385.26,
+   "d": 6.57,
+   "text": "You can use some things to minimize stress gain but there is no way you will ever break"
+  },
+  {
+   "t": 391.83,
+   "d": 3.29,
+   "text": "even or net positive on these resources."
+  },
+  {
+   "t": 395.12,
+   "d": 3.96,
+   "text": "There are things that are dwindling and they put a hard cap on your run."
+  },
+  {
+   "t": 399.08,
+   "d": 3.99,
+   "text": "I am going to quickly talk about what I am going to try to do special in my game castle"
+  },
+  {
+   "t": 403.07,
+   "d": 1.0,
+   "text": "cthulhu."
+  },
+  {
+   "t": 404.07,
+   "d": 9.19,
+   "text": "I am going to have a bunch of haunts which are spooky effects that happen if you linger"
+  },
+  {
+   "t": 413.26,
+   "d": 5.92,
+   "text": "too long in this horrible castle that wants you dead."
+  },
+  {
+   "t": 419.18,
+   "d": 6.12,
+   "text": "Doors might randomly jam and force you to do a mini game."
+  },
+  {
+   "t": 425.3,
+   "d": 4.83,
+   "text": "Things might collapse office certain passageways."
+  },
+  {
+   "t": 430.13,
+   "d": 3.68,
+   "text": "An important part about the haunts is lots of horror games have used a similar system"
+  },
+  {
+   "t": 433.81,
+   "d": 7.47,
+   "text": "of when your character sees spooky stuff here is a list of bad things that can happen but"
+  },
+  {
+   "t": 441.28,
+   "d": 2.82,
+   "text": "they are usually very esthetic focused."
+  },
+  {
+   "t": 444.1,
+   "d": 3.18,
+   "text": "An important thing about haunts in this game is in order for them to serve that purpose"
+  },
+  {
+   "t": 447.28,
+   "d": 6.18,
+   "text": "is they can all kill you and screw with your map and spawn things that are dangerous and"
+  },
+  {
+   "t": 453.46,
+   "d": 3.64,
+   "text": "none of these are things you want."
+  },
+  {
+   "t": 457.1,
+   "d": 2.09,
+   "text": "They are bad things."
+  },
+  {
+   "t": 459.19,
+   "d": 11.21,
+   "text": "And I can tie it in thematically."
+  },
+  {
+   "t": 470.4,
+   "d": 4.75,
+   "text": "This is great flavor and I love it."
+  },
+  {
+   "t": 475.15,
+   "d": 13.6,
+   "text": "I don't know how much time I have left."
+  },
+  {
+   "t": 488.75,
+   "d": 9.2,
+   "text": "My name is Rosalind Chapman and you can play my games at the website and I would appreciate"
+  },
+  {
+   "t": 497.95,
+   "d": 2.45,
+   "text": "any questions."
+  },
+  {
+   "t": 500.4,
+   "d": 7.39,
+   "text": "MODERATOR: Is there a place people can find you to ask questions later on in the day?"
+  },
+  {
+   "t": 507.79,
+   "d": 1.76,
+   "text": "Want to pick a room?"
+  },
+  {
+   "t": 509.55,
+   "d": 8.85,
+   "text": ">> Later in the day, probably Twitter, but right now I am currently in the main area"
+  },
+  {
+   "t": 518.4,
+   "d": 5.59,
+   "text": "but might go off to run of the -- I haven't thought of."
+  },
+  {
+   "t": 523.99,
+   "d": 9.92,
+   "text": "People want me to make sure the drawings in the slides were lovely."
+  }
+ ]
+}

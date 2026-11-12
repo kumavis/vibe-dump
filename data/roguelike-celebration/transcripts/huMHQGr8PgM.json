@@ -1,0 +1,4219 @@
+{
+ "id": "huMHQGr8PgM",
+ "url": "https://www.youtube.com/watch?v=huMHQGr8PgM",
+ "title": "Arvi Teikari - Why Noita Became a Roguelite (and Why I Liked That a Lot)",
+ "speaker": "Arvi Teikari",
+ "talk_title": "Why Noita Became a Roguelite (and Why I Liked That a Lot)",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1825,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "I think it's relatively rare(?) for a game to start as not a roguelike/-lite and later become one, so I feel that Noita's case is an interesting look at the arguments that led into that. Also I think some smaller points about what kind of fun design roguelikes often appreciate can resonate well with the audience.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and setup"
+  },
+  {
+   "start": 69,
+   "title": "Overview of Noita"
+  },
+  {
+   "start": 223,
+   "title": "Development history"
+  },
+  {
+   "start": 518,
+   "title": "Iterating on game concepts"
+  },
+  {
+   "start": 736,
+   "title": "Design and technical hurdles"
+  },
+  {
+   "start": 1344,
+   "title": "Why the roguelite model works"
+  },
+  {
+   "start": 1772,
+   "title": "Naming and final thoughts"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4754,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.6,
+   "d": 4.08,
+   "text": "so next up we are kicking off with rv"
+  },
+  {
+   "t": 7.68,
+   "d": 3.44,
+   "text": "takari uh who is one of the developers"
+  },
+  {
+   "t": 11.12,
+   "d": 3.44,
+   "text": "of noita a finnish developer who uh is"
+  },
+  {
+   "t": 14.56,
+   "d": 1.84,
+   "text": "here to talk about why noida became a"
+  },
+  {
+   "t": 16.4,
+   "d": 1.2,
+   "text": "roguelike"
+  },
+  {
+   "t": 17.6,
+   "d": 2.08,
+   "text": "and why he liked that a lot so without"
+  },
+  {
+   "t": 19.68,
+   "d": 4.08,
+   "text": "further ado take it away rv"
+  },
+  {
+   "t": 24.08,
+   "d": 1.2,
+   "text": "hello"
+  },
+  {
+   "t": 25.28,
+   "d": 1.92,
+   "text": "everyone i'm arby"
+  },
+  {
+   "t": 27.2,
+   "d": 3.44,
+   "text": "uh i've completely forgotten how to set"
+  },
+  {
+   "t": 30.64,
+   "d": 2.32,
+   "text": "up my things from a month ago"
+  },
+  {
+   "t": 32.96,
+   "d": 1.52,
+   "text": "uh"
+  },
+  {
+   "t": 34.48,
+   "d": 1.36,
+   "text": "but yeah"
+  },
+  {
+   "t": 35.84,
+   "d": 2.0,
+   "text": "all right we're working on it find that"
+  },
+  {
+   "t": 37.84,
+   "d": 0.88,
+   "text": "share"
+  },
+  {
+   "t": 38.72,
+   "d": 0.88,
+   "text": "button"
+  },
+  {
+   "t": 39.6,
+   "d": 1.52,
+   "text": "oh yeah there's the screenshot oh yeah"
+  },
+  {
+   "t": 41.12,
+   "d": 1.2,
+   "text": "of course of course i'm not doing"
+  },
+  {
+   "t": 42.32,
+   "d": 4.0,
+   "text": "anything via obs on my own but instead"
+  },
+  {
+   "t": 46.32,
+   "d": 1.2,
+   "text": "here we go"
+  },
+  {
+   "t": 47.52,
+   "d": 2.56,
+   "text": "share screen"
+  },
+  {
+   "t": 50.08,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 50.88,
+   "d": 2.32,
+   "text": "okay don't show me these tips again"
+  },
+  {
+   "t": 53.2,
+   "d": 1.92,
+   "text": "there we go"
+  },
+  {
+   "t": 55.12,
+   "d": 2.88,
+   "text": "oh oh okay there we go all right you're"
+  },
+  {
+   "t": 58.0,
+   "d": 0.88,
+   "text": "good"
+  },
+  {
+   "t": 58.88,
+   "d": 0.8,
+   "text": "yeah"
+  },
+  {
+   "t": 59.68,
+   "d": 2.64,
+   "text": "uh and uh it's 30 minutes right so that"
+  },
+  {
+   "t": 62.32,
+   "d": 2.56,
+   "text": "i don't accidentally over yes 30 minutes"
+  },
+  {
+   "t": 64.88,
+   "d": 1.36,
+   "text": "and i will jump in as you're getting"
+  },
+  {
+   "t": 66.24,
+   "d": 1.52,
+   "text": "near the end to let you know"
+  },
+  {
+   "t": 67.76,
+   "d": 2.16,
+   "text": "okay excellent yep"
+  },
+  {
+   "t": 69.92,
+   "d": 2.88,
+   "text": "okay hello everyone as mentioned i'm avi"
+  },
+  {
+   "t": 72.8,
+   "d": 1.2,
+   "text": "and uh"
+  },
+  {
+   "t": 74.0,
+   "d": 2.96,
+   "text": "i was for a long time part of the"
+  },
+  {
+   "t": 76.96,
+   "d": 3.28,
+   "text": "nola games team developing noita"
+  },
+  {
+   "t": 80.24,
+   "d": 1.6,
+   "text": "which ended up being a roguelite but"
+  },
+  {
+   "t": 81.84,
+   "d": 2.4,
+   "text": "this wasn't always so and i will tell"
+  },
+  {
+   "t": 84.24,
+   "d": 3.04,
+   "text": "you this dark and stormy story of the"
+  },
+  {
+   "t": 87.28,
+   "d": 2.64,
+   "text": "development process of noida"
+  },
+  {
+   "t": 89.92,
+   "d": 1.6,
+   "text": "hopefully everything goes fine and you"
+  },
+  {
+   "t": 91.52,
+   "d": 0.8,
+   "text": "see"
+  },
+  {
+   "t": 92.32,
+   "d": 2.32,
+   "text": "what i see or not not what i see but"
+  },
+  {
+   "t": 94.64,
+   "d": 1.68,
+   "text": "what i want you to see"
+  },
+  {
+   "t": 96.32,
+   "d": 1.92,
+   "text": "uh the contents of this talk will be"
+  },
+  {
+   "t": 98.24,
+   "d": 2.96,
+   "text": "that i will quickly uh well introduce"
+  },
+  {
+   "t": 101.2,
+   "d": 1.04,
+   "text": "myself"
+  },
+  {
+   "t": 102.24,
+   "d": 2.0,
+   "text": "uh introduce noita"
+  },
+  {
+   "t": 104.24,
+   "d": 1.52,
+   "text": "so for people who haven't heard of it"
+  },
+  {
+   "t": 105.76,
+   "d": 1.12,
+   "text": "before"
+  },
+  {
+   "t": 106.88,
+   "d": 2.32,
+   "text": "uh go through kind of the development"
+  },
+  {
+   "t": 109.2,
+   "d": 3.04,
+   "text": "process quickly to explain kind of"
+  },
+  {
+   "t": 112.24,
+   "d": 3.28,
+   "text": "why it wasn't obvious that noida would"
+  },
+  {
+   "t": 115.52,
+   "d": 2.24,
+   "text": "become a roguelite"
+  },
+  {
+   "t": 117.76,
+   "d": 2.08,
+   "text": "uh and then"
+  },
+  {
+   "t": 119.84,
+   "d": 1.92,
+   "text": "then a couple of other things just kind"
+  },
+  {
+   "t": 121.76,
+   "d": 1.76,
+   "text": "of like what kind of"
+  },
+  {
+   "t": 123.52,
+   "d": 1.76,
+   "text": "issues"
+  },
+  {
+   "t": 125.28,
+   "d": 2.08,
+   "text": "affected this decision"
+  },
+  {
+   "t": 127.36,
+   "d": 1.68,
+   "text": "uh why"
+  },
+  {
+   "t": 129.04,
+   "d": 1.84,
+   "text": "we we chose to call it the roguelites"
+  },
+  {
+   "t": 130.88,
+   "d": 2.16,
+   "text": "and not the roguelike and finally"
+  },
+  {
+   "t": 133.04,
+   "d": 2.0,
+   "text": "why i was personally happy with this"
+  },
+  {
+   "t": 135.04,
+   "d": 2.08,
+   "text": "decision ultimately"
+  },
+  {
+   "t": 137.12,
+   "d": 1.28,
+   "text": "but yeah"
+  },
+  {
+   "t": 138.4,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 139.28,
+   "d": 0.88,
+   "text": "okay"
+  },
+  {
+   "t": 140.16,
+   "d": 1.04,
+   "text": "is there"
+  },
+  {
+   "t": 141.2,
+   "d": 1.84,
+   "text": "okay yeah there there is not actually a"
+  },
+  {
+   "t": 143.04,
+   "d": 2.16,
+   "text": "slide for what noise so i will explain"
+  },
+  {
+   "t": 145.2,
+   "d": 1.12,
+   "text": "it here"
+  },
+  {
+   "t": 146.32,
+   "d": 3.28,
+   "text": "uh noita is a roguelite platformer with"
+  },
+  {
+   "t": 149.6,
+   "d": 2.96,
+   "text": "the procedural terrain of instant not"
+  },
+  {
+   "t": 152.56,
+   "d": 2.08,
+   "text": "instant but like permadeath"
+  },
+  {
+   "t": 154.64,
+   "d": 2.8,
+   "text": "and uh all those all that jazz"
+  },
+  {
+   "t": 157.44,
+   "d": 1.12,
+   "text": "uh"
+  },
+  {
+   "t": 158.56,
+   "d": 2.0,
+   "text": "maybe kind of a spelunky like in the"
+  },
+  {
+   "t": 160.56,
+   "d": 2.32,
+   "text": "basic idea so that it's a platformer and"
+  },
+  {
+   "t": 162.88,
+   "d": 2.4,
+   "text": "you explore you go deeper into a cave"
+  },
+  {
+   "t": 165.28,
+   "d": 1.76,
+   "text": "and uh if you die"
+  },
+  {
+   "t": 167.04,
+   "d": 2.0,
+   "text": "you have to start again"
+  },
+  {
+   "t": 169.04,
+   "d": 2.08,
+   "text": "but with noita the kind of"
+  },
+  {
+   "t": 171.12,
+   "d": 1.6,
+   "text": "really big selling point is that the"
+  },
+  {
+   "t": 172.72,
+   "d": 3.2,
+   "text": "game has a pixel physics simulation kind"
+  },
+  {
+   "t": 175.92,
+   "d": 2.24,
+   "text": "of like those powder toys you might have"
+  },
+  {
+   "t": 178.16,
+   "d": 2.88,
+   "text": "uh played around with like 15 10 years"
+  },
+  {
+   "t": 181.04,
+   "d": 1.04,
+   "text": "ago"
+  },
+  {
+   "t": 182.08,
+   "d": 2.88,
+   "text": "so no innova every pixel"
+  },
+  {
+   "t": 184.96,
+   "d": 2.96,
+   "text": "is kind of simulated so to say so that"
+  },
+  {
+   "t": 187.92,
+   "d": 2.16,
+   "text": "in the game world all the pixels are"
+  },
+  {
+   "t": 190.08,
+   "d": 1.36,
+   "text": "made of different materials and the"
+  },
+  {
+   "t": 191.44,
+   "d": 1.92,
+   "text": "materials can interact with each other"
+  },
+  {
+   "t": 193.36,
+   "d": 1.2,
+   "text": "they can like"
+  },
+  {
+   "t": 194.56,
+   "d": 1.92,
+   "text": "there can be fire that can react with"
+  },
+  {
+   "t": 196.48,
+   "d": 1.6,
+   "text": "wood to"
+  },
+  {
+   "t": 198.08,
+   "d": 1.92,
+   "text": "lit the wood on fire and"
+  },
+  {
+   "t": 200.0,
+   "d": 2.8,
+   "text": "fire and water react so that the water"
+  },
+  {
+   "t": 202.8,
+   "d": 3.12,
+   "text": "becomes steam and puts out the fire"
+  },
+  {
+   "t": 205.92,
+   "d": 2.8,
+   "text": "there's a lot of like emergency in that"
+  },
+  {
+   "t": 208.72,
+   "d": 2.96,
+   "text": "system it's a very"
+  },
+  {
+   "t": 211.68,
+   "d": 2.4,
+   "text": "very kind of complicated but really cool"
+  },
+  {
+   "t": 214.08,
+   "d": 3.2,
+   "text": "looking and very granular system that we"
+  },
+  {
+   "t": 217.28,
+   "d": 1.44,
+   "text": "based the game around and that was"
+  },
+  {
+   "t": 218.72,
+   "d": 1.36,
+   "text": "actually the kind of"
+  },
+  {
+   "t": 220.08,
+   "d": 1.52,
+   "text": "initial"
+  },
+  {
+   "t": 221.6,
+   "d": 2.4,
+   "text": "thing for the whole game noita is"
+  },
+  {
+   "t": 224.0,
+   "d": 2.88,
+   "text": "finished and means which and yes when we"
+  },
+  {
+   "t": 226.88,
+   "d": 2.16,
+   "text": "were considering the name for the game"
+  },
+  {
+   "t": 229.04,
+   "d": 1.44,
+   "text": "uh we did"
+  },
+  {
+   "t": 230.48,
+   "d": 4.08,
+   "text": "like the the name sandwich was suggested"
+  },
+  {
+   "t": 234.56,
+   "d": 0.88,
+   "text": "uh"
+  },
+  {
+   "t": 235.44,
+   "d": 2.56,
+   "text": "and yeah i started working on neutral in"
+  },
+  {
+   "t": 238.0,
+   "d": 3.04,
+   "text": "originally in 2012 the rest of the team"
+  },
+  {
+   "t": 241.04,
+   "d": 1.52,
+   "text": "are petri poor"
+  },
+  {
+   "t": 242.56,
+   "d": 1.92,
+   "text": "who kind of came up with the idea and"
+  },
+  {
+   "t": 244.48,
+   "d": 1.44,
+   "text": "only hariola"
+  },
+  {
+   "t": 245.92,
+   "d": 2.64,
+   "text": "who joined yeah joined as well to the"
+  },
+  {
+   "t": 248.56,
+   "d": 2.8,
+   "text": "team kind of uh"
+  },
+  {
+   "t": 251.36,
+   "d": 2.24,
+   "text": "nearly the same time as me"
+  },
+  {
+   "t": 253.6,
+   "d": 2.16,
+   "text": "in 2012"
+  },
+  {
+   "t": 255.76,
+   "d": 2.56,
+   "text": "i helped petry"
+  },
+  {
+   "t": 258.32,
+   "d": 2.0,
+   "text": "with a"
+  },
+  {
+   "t": 260.32,
+   "d": 2.48,
+   "text": "small prototype of the idea that you can"
+  },
+  {
+   "t": 262.8,
+   "d": 4.48,
+   "text": "see here in 2012 here"
+  },
+  {
+   "t": 267.28,
+   "d": 2.32,
+   "text": "and that was sent for a kind of a i"
+  },
+  {
+   "t": 269.6,
+   "d": 2.48,
+   "text": "don't know competition event somewhere"
+  },
+  {
+   "t": 272.08,
+   "d": 1.92,
+   "text": "and it was just like one summer of"
+  },
+  {
+   "t": 274.0,
+   "d": 1.92,
+   "text": "polishing things a little bit"
+  },
+  {
+   "t": 275.92,
+   "d": 1.04,
+   "text": "uh"
+  },
+  {
+   "t": 276.96,
+   "d": 3.04,
+   "text": "and then in 2013 we started a proper"
+  },
+  {
+   "t": 280.0,
+   "d": 1.6,
+   "text": "development of a full game and that's"
+  },
+  {
+   "t": 281.6,
+   "d": 1.04,
+   "text": "when"
+  },
+  {
+   "t": 282.64,
+   "d": 3.04,
+   "text": "me and ollie kind of properly joined"
+  },
+  {
+   "t": 285.68,
+   "d": 2.64,
+   "text": "petri and only handled the coding"
+  },
+  {
+   "t": 288.32,
+   "d": 2.32,
+   "text": "battery maybe"
+  },
+  {
+   "t": 290.64,
+   "d": 1.76,
+   "text": "concentrated slightly more on the like"
+  },
+  {
+   "t": 292.4,
+   "d": 2.72,
+   "text": "systems and such only maybe concentrated"
+  },
+  {
+   "t": 295.12,
+   "d": 1.6,
+   "text": "slightly more on the like graphical"
+  },
+  {
+   "t": 296.72,
+   "d": 2.48,
+   "text": "coding like shaders and stuff but they"
+  },
+  {
+   "t": 299.2,
+   "d": 1.36,
+   "text": "shared a lot of"
+  },
+  {
+   "t": 300.56,
+   "d": 2.24,
+   "text": "a lot of jobs only for example"
+  },
+  {
+   "t": 302.8,
+   "d": 2.4,
+   "text": "implemented also the staining system and"
+  },
+  {
+   "t": 305.2,
+   "d": 1.28,
+   "text": "a lot of"
+  },
+  {
+   "t": 306.48,
+   "d": 2.24,
+   "text": "various things my job was kind of doing"
+  },
+  {
+   "t": 308.72,
+   "d": 2.08,
+   "text": "the non-programming things"
+  },
+  {
+   "t": 310.8,
+   "d": 3.84,
+   "text": "uh i did use lua scripting and xml files"
+  },
+  {
+   "t": 314.64,
+   "d": 2.56,
+   "text": "but mostly i was doing kind of enemy"
+  },
+  {
+   "t": 317.2,
+   "d": 2.0,
+   "text": "design spell design"
+  },
+  {
+   "t": 319.2,
+   "d": 2.48,
+   "text": "uh area design that kind of stuff and"
+  },
+  {
+   "t": 321.68,
+   "d": 2.72,
+   "text": "also doing the art when it wasn't kind"
+  },
+  {
+   "t": 324.4,
+   "d": 2.88,
+   "text": "of shader based"
+  },
+  {
+   "t": 327.28,
+   "d": 2.08,
+   "text": "and one of the also big things in noita"
+  },
+  {
+   "t": 329.36,
+   "d": 2.08,
+   "text": "that we introduced in i think"
+  },
+  {
+   "t": 331.44,
+   "d": 3.04,
+   "text": "2014 or something is the spell system"
+  },
+  {
+   "t": 334.48,
+   "d": 2.64,
+   "text": "you have magic wands that have slots and"
+  },
+  {
+   "t": 337.12,
+   "d": 2.64,
+   "text": "you put spells on those slots to combine"
+  },
+  {
+   "t": 339.76,
+   "d": 1.84,
+   "text": "different spells into"
+  },
+  {
+   "t": 341.6,
+   "d": 1.28,
+   "text": "new things"
+  },
+  {
+   "t": 342.88,
+   "d": 2.56,
+   "text": "uh it's kind of difficult to explain"
+  },
+  {
+   "t": 345.44,
+   "d": 2.16,
+   "text": "uh in a short time frame so i won't even"
+  },
+  {
+   "t": 347.6,
+   "d": 2.88,
+   "text": "try but i would say that in combination"
+  },
+  {
+   "t": 350.48,
+   "d": 2.88,
+   "text": "with the roguelite things"
+  },
+  {
+   "t": 353.36,
+   "d": 2.56,
+   "text": "uh and the pixel physics"
+  },
+  {
+   "t": 355.92,
+   "d": 2.96,
+   "text": "the variable customizable spell system"
+  },
+  {
+   "t": 358.88,
+   "d": 2.48,
+   "text": "or one system is kind of the third"
+  },
+  {
+   "t": 361.36,
+   "d": 2.32,
+   "text": "really big thing in noida"
+  },
+  {
+   "t": 363.68,
+   "d": 2.4,
+   "text": "but here here you can see kind of the"
+  },
+  {
+   "t": 366.08,
+   "d": 3.2,
+   "text": "history of we that we went through uh"
+  },
+  {
+   "t": 369.28,
+   "d": 2.16,
+   "text": "the very important big part is that"
+  },
+  {
+   "t": 371.44,
+   "d": 1.92,
+   "text": "obviously in"
+  },
+  {
+   "t": 373.36,
+   "d": 3.2,
+   "text": "1800s the niobium was first identified"
+  },
+  {
+   "t": 376.56,
+   "d": 2.0,
+   "text": "by charles hatchet"
+  },
+  {
+   "t": 378.56,
+   "d": 3.04,
+   "text": "in 2006 or so i don't remember the exact"
+  },
+  {
+   "t": 381.6,
+   "d": 3.44,
+   "text": "date petri porhob made a short game in i"
+  },
+  {
+   "t": 385.04,
+   "d": 2.8,
+   "text": "think seven days called bloody zombies"
+  },
+  {
+   "t": 387.84,
+   "d": 3.36,
+   "text": "which was a game where you had zombies"
+  },
+  {
+   "t": 391.2,
+   "d": 2.56,
+   "text": "and uh they were bloody and you had a"
+  },
+  {
+   "t": 393.76,
+   "d": 1.92,
+   "text": "lawn mower"
+  },
+  {
+   "t": 395.68,
+   "d": 2.0,
+   "text": "and you could mow those zombies down and"
+  },
+  {
+   "t": 397.68,
+   "d": 1.68,
+   "text": "they spurred a lot of blood and you"
+  },
+  {
+   "t": 399.36,
+   "d": 1.44,
+   "text": "could swim in the blood and it was"
+  },
+  {
+   "t": 400.8,
+   "d": 1.92,
+   "text": "actually kind of a puzzle platformer"
+  },
+  {
+   "t": 402.72,
+   "d": 1.2,
+   "text": "where you had to"
+  },
+  {
+   "t": 403.92,
+   "d": 2.16,
+   "text": "kill zombies to accumulate blood in"
+  },
+  {
+   "t": 406.08,
+   "d": 1.76,
+   "text": "order to swim"
+  },
+  {
+   "t": 407.84,
+   "d": 3.04,
+   "text": "to get into higher up places so it was a"
+  },
+  {
+   "t": 410.88,
+   "d": 2.0,
+   "text": "funny little idea but i think"
+  },
+  {
+   "t": 412.88,
+   "d": 3.52,
+   "text": "patrick kind of got the inspiration to"
+  },
+  {
+   "t": 416.4,
+   "d": 1.68,
+   "text": "make something with this pixel physics"
+  },
+  {
+   "t": 418.08,
+   "d": 1.76,
+   "text": "thing like make a take this pixel"
+  },
+  {
+   "t": 419.84,
+   "d": 2.4,
+   "text": "physics thing that has been in many"
+  },
+  {
+   "t": 422.24,
+   "d": 1.52,
+   "text": "browser toys"
+  },
+  {
+   "t": 423.76,
+   "d": 2.96,
+   "text": "and actually creates a full"
+  },
+  {
+   "t": 426.72,
+   "d": 2.88,
+   "text": "game out of it or around it"
+  },
+  {
+   "t": 429.6,
+   "d": 2.6,
+   "text": "uh and yeah i already mentioned 2012"
+  },
+  {
+   "t": 432.2,
+   "d": 2.6,
+   "text": "2013 those were the kind of"
+  },
+  {
+   "t": 434.8,
+   "d": 3.6,
+   "text": "times when the game went from"
+  },
+  {
+   "t": 438.4,
+   "d": 2.8,
+   "text": "this small idea small prototype into"
+  },
+  {
+   "t": 441.2,
+   "d": 2.0,
+   "text": "something that would eventually become"
+  },
+  {
+   "t": 443.2,
+   "d": 1.12,
+   "text": "an actual"
+  },
+  {
+   "t": 444.32,
+   "d": 1.84,
+   "text": "sorry actual game"
+  },
+  {
+   "t": 446.16,
+   "d": 3.84,
+   "text": "uh in 2016 or 17 we finally made the"
+  },
+  {
+   "t": 450.0,
+   "d": 2.16,
+   "text": "decision that okay this game will become"
+  },
+  {
+   "t": 452.16,
+   "d": 2.16,
+   "text": "a roguelite or roguelike"
+  },
+  {
+   "t": 454.32,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 455.12,
+   "d": 2.08,
+   "text": "there was there were several years of"
+  },
+  {
+   "t": 457.2,
+   "d": 1.6,
+   "text": "trying different things that i will go"
+  },
+  {
+   "t": 458.8,
+   "d": 1.44,
+   "text": "through next"
+  },
+  {
+   "t": 460.24,
+   "d": 3.04,
+   "text": "in 2019 we did the early access release"
+  },
+  {
+   "t": 463.28,
+   "d": 1.92,
+   "text": "also in 2017"
+  },
+  {
+   "t": 465.2,
+   "d": 3.04,
+   "text": "we made the first trailer for the game"
+  },
+  {
+   "t": 468.24,
+   "d": 4.32,
+   "text": "and in 2020 was the 1.0 release and"
+  },
+  {
+   "t": 472.56,
+   "d": 2.72,
+   "text": "earlier this year in the spring 2000"
+  },
+  {
+   "t": 475.28,
+   "d": 1.52,
+   "text": "2021"
+  },
+  {
+   "t": 476.8,
+   "d": 2.56,
+   "text": "we had the like final update the kind of"
+  },
+  {
+   "t": 479.36,
+   "d": 2.32,
+   "text": "final major content updates"
+  },
+  {
+   "t": 481.68,
+   "d": 1.36,
+   "text": "so the game was"
+  },
+  {
+   "t": 483.04,
+   "d": 0.96,
+   "text": "kind of"
+  },
+  {
+   "t": 484.0,
+   "d": 2.8,
+   "text": "first one gear in early access"
+  },
+  {
+   "t": 486.8,
+   "d": 2.96,
+   "text": "then half a year in active post release"
+  },
+  {
+   "t": 489.76,
+   "d": 3.92,
+   "text": "development and now it's kind of done"
+  },
+  {
+   "t": 493.68,
+   "d": 0.88,
+   "text": "to"
+  },
+  {
+   "t": 494.56,
+   "d": 1.52,
+   "text": "some extent"
+  },
+  {
+   "t": 496.08,
+   "d": 2.96,
+   "text": "and this year also started the"
+  },
+  {
+   "t": 499.04,
+   "d": 1.68,
+   "text": "or is starting"
+  },
+  {
+   "t": 500.72,
+   "d": 2.32,
+   "text": "the kind of a showcase of noita at the"
+  },
+  {
+   "t": 503.04,
+   "d": 2.56,
+   "text": "time video game museum in finland so if"
+  },
+  {
+   "t": 505.6,
+   "d": 2.72,
+   "text": "you ever come by finland and you visit"
+  },
+  {
+   "t": 508.32,
+   "d": 3.2,
+   "text": "tampere please go check out the"
+  },
+  {
+   "t": 511.52,
+   "d": 2.0,
+   "text": "the kind of exhibition it seems really"
+  },
+  {
+   "t": 513.52,
+   "d": 2.24,
+   "text": "cool and we will be going as a team to"
+  },
+  {
+   "t": 515.76,
+   "d": 2.56,
+   "text": "check it out later"
+  },
+  {
+   "t": 518.32,
+   "d": 0.8,
+   "text": "okay"
+  },
+  {
+   "t": 519.12,
+   "d": 2.24,
+   "text": "so as i mentioned notice identity"
+  },
+  {
+   "t": 521.36,
+   "d": 2.56,
+   "text": "changed quite quite a lot over that"
+  },
+  {
+   "t": 523.92,
+   "d": 4.32,
+   "text": "2012 to 2016 period"
+  },
+  {
+   "t": 528.24,
+   "d": 1.6,
+   "text": "uh"
+  },
+  {
+   "t": 529.84,
+   "d": 2.24,
+   "text": "as mentioned the original idea came up"
+  },
+  {
+   "t": 532.08,
+   "d": 1.84,
+   "text": "from this bloody zombies game that was"
+  },
+  {
+   "t": 533.92,
+   "d": 3.28,
+   "text": "basically a puzzle platformer but"
+  },
+  {
+   "t": 537.2,
+   "d": 1.6,
+   "text": "since the time"
+  },
+  {
+   "t": 538.8,
+   "d": 3.28,
+   "text": "i joined the team first in 2012 and then"
+  },
+  {
+   "t": 542.08,
+   "d": 3.2,
+   "text": "probably in 2013 the game was at one"
+  },
+  {
+   "t": 545.28,
+   "d": 1.12,
+   "text": "point"
+  },
+  {
+   "t": 546.4,
+   "d": 2.48,
+   "text": "like an arcade arena platformer where"
+  },
+  {
+   "t": 548.88,
+   "d": 1.76,
+   "text": "you were wizard who could make spells"
+  },
+  {
+   "t": 550.64,
+   "d": 2.64,
+   "text": "that transmuted materials into others so"
+  },
+  {
+   "t": 553.28,
+   "d": 1.76,
+   "text": "you had to kind of get through"
+  },
+  {
+   "t": 555.04,
+   "d": 2.64,
+   "text": "areas by kind of changing walls into"
+  },
+  {
+   "t": 557.68,
+   "d": 2.0,
+   "text": "acid to melt things and kill enemies"
+  },
+  {
+   "t": 559.68,
+   "d": 2.32,
+   "text": "stuff like that it was a very proof of"
+  },
+  {
+   "t": 562.0,
+   "d": 1.76,
+   "text": "concept thing but still"
+  },
+  {
+   "t": 563.76,
+   "d": 2.4,
+   "text": "then we tried to make a terraria-like"
+  },
+  {
+   "t": 566.16,
+   "d": 2.24,
+   "text": "survival crafting thing"
+  },
+  {
+   "t": 568.4,
+   "d": 2.0,
+   "text": "uh"
+  },
+  {
+   "t": 570.4,
+   "d": 2.08,
+   "text": "well and then we tried to make a god"
+  },
+  {
+   "t": 572.48,
+   "d": 2.32,
+   "text": "game kind of like black and white that"
+  },
+  {
+   "t": 574.8,
+   "d": 1.92,
+   "text": "many of you might have played or heard"
+  },
+  {
+   "t": 576.72,
+   "d": 1.28,
+   "text": "about where you"
+  },
+  {
+   "t": 578.0,
+   "d": 2.08,
+   "text": "guide a tribe as a god"
+  },
+  {
+   "t": 580.08,
+   "d": 3.2,
+   "text": "and you can make miracles to make the"
+  },
+  {
+   "t": 583.28,
+   "d": 1.84,
+   "text": "tribe believe in you more and you have"
+  },
+  {
+   "t": 585.12,
+   "d": 2.24,
+   "text": "to fight against other tribes"
+  },
+  {
+   "t": 587.36,
+   "d": 2.72,
+   "text": "both through the tribe fighting them"
+  },
+  {
+   "t": 590.08,
+   "d": 2.8,
+   "text": "themselves and you doing like"
+  },
+  {
+   "t": 592.88,
+   "d": 2.56,
+   "text": "magic to help them and there would also"
+  },
+  {
+   "t": 595.44,
+   "d": 3.28,
+   "text": "have been some like war war fortress"
+  },
+  {
+   "t": 598.72,
+   "d": 3.44,
+   "text": "like uh base building that kind of thing"
+  },
+  {
+   "t": 602.16,
+   "d": 1.68,
+   "text": "then at some point it was a space"
+  },
+  {
+   "t": 603.84,
+   "d": 2.4,
+   "text": "exploration rts game where we had"
+  },
+  {
+   "t": 606.24,
+   "d": 1.92,
+   "text": "implemented some rts elements for the"
+  },
+  {
+   "t": 608.16,
+   "d": 2.48,
+   "text": "god game implementation"
+  },
+  {
+   "t": 610.64,
+   "d": 1.52,
+   "text": "and uh"
+  },
+  {
+   "t": 612.16,
+   "d": 2.4,
+   "text": "when that didn't work out for reasons"
+  },
+  {
+   "t": 614.56,
+   "d": 1.84,
+   "text": "that i might explain"
+  },
+  {
+   "t": 616.4,
+   "d": 2.72,
+   "text": "uh later i'm not sure uh"
+  },
+  {
+   "t": 619.12,
+   "d": 2.0,
+   "text": "we kind of scrapped that idea and then"
+  },
+  {
+   "t": 621.12,
+   "d": 2.0,
+   "text": "went for this maybe if you control a"
+  },
+  {
+   "t": 623.12,
+   "d": 1.36,
+   "text": "single person or just a couple of"
+  },
+  {
+   "t": 624.48,
+   "d": 2.72,
+   "text": "persons it's in space so that characters"
+  },
+  {
+   "t": 627.2,
+   "d": 2.56,
+   "text": "can fly so the path finding is easier so"
+  },
+  {
+   "t": 629.76,
+   "d": 1.68,
+   "text": "it's a sci-fi"
+  },
+  {
+   "t": 631.44,
+   "d": 2.88,
+   "text": "exploration thing with mouse control"
+  },
+  {
+   "t": 634.32,
+   "d": 2.0,
+   "text": "that didn't work out either i don't"
+  },
+  {
+   "t": 636.32,
+   "d": 2.16,
+   "text": "remember exactly why maybe it just"
+  },
+  {
+   "t": 638.48,
+   "d": 2.48,
+   "text": "wasn't as fun as fun to play as with"
+  },
+  {
+   "t": 640.96,
+   "d": 1.04,
+   "text": "hoped"
+  },
+  {
+   "t": 642.0,
+   "d": 1.84,
+   "text": "so at one point we also went for a"
+  },
+  {
+   "t": 643.84,
+   "d": 2.48,
+   "text": "fallout like post-apocalyptic sci-fi"
+  },
+  {
+   "t": 646.32,
+   "d": 1.76,
+   "text": "survival adventure kind of returning"
+  },
+  {
+   "t": 648.08,
+   "d": 1.92,
+   "text": "back to that terraria but without the"
+  },
+  {
+   "t": 650.0,
+   "d": 2.72,
+   "text": "crafting and more about exploration"
+  },
+  {
+   "t": 652.72,
+   "d": 1.12,
+   "text": "and uh"
+  },
+  {
+   "t": 653.84,
+   "d": 1.44,
+   "text": "yeah"
+  },
+  {
+   "t": 655.28,
+   "d": 3.6,
+   "text": "this also had a bunch of design issues"
+  },
+  {
+   "t": 658.88,
+   "d": 4.32,
+   "text": "uh so from there we went"
+  },
+  {
+   "t": 663.2,
+   "d": 1.92,
+   "text": "already pretty close to the eventual"
+  },
+  {
+   "t": 665.12,
+   "d": 2.0,
+   "text": "roguelite implementation but with still"
+  },
+  {
+   "t": 667.12,
+   "d": 1.6,
+   "text": "the kind of uh"
+  },
+  {
+   "t": 668.72,
+   "d": 2.4,
+   "text": "some shades of terraria we tried a thing"
+  },
+  {
+   "t": 671.12,
+   "d": 1.76,
+   "text": "where we have lights and you have"
+  },
+  {
+   "t": 672.88,
+   "d": 1.76,
+   "text": "checkpoints and when you die you don't"
+  },
+  {
+   "t": 674.64,
+   "d": 2.24,
+   "text": "start over but instead you respond from"
+  },
+  {
+   "t": 676.88,
+   "d": 2.16,
+   "text": "a checkpoint we try to do like a"
+  },
+  {
+   "t": 679.04,
+   "d": 1.84,
+   "text": "continuous open world thing where you"
+  },
+  {
+   "t": 680.88,
+   "d": 2.72,
+   "text": "can explore freely in all directions"
+  },
+  {
+   "t": 683.6,
+   "d": 1.6,
+   "text": "we tried a couple of different things"
+  },
+  {
+   "t": 685.2,
+   "d": 2.56,
+   "text": "with it with this open world thing but"
+  },
+  {
+   "t": 687.76,
+   "d": 2.88,
+   "text": "by that point we were already kind of uh"
+  },
+  {
+   "t": 690.64,
+   "d": 3.52,
+   "text": "slowly diverging towards this roguelite"
+  },
+  {
+   "t": 694.16,
+   "d": 1.28,
+   "text": "approach"
+  },
+  {
+   "t": 695.44,
+   "d": 2.24,
+   "text": "and ultimately we had a design meeting"
+  },
+  {
+   "t": 697.68,
+   "d": 1.84,
+   "text": "where we kind of discussed do we want to"
+  },
+  {
+   "t": 699.52,
+   "d": 2.32,
+   "text": "do an open world thing or do we want to"
+  },
+  {
+   "t": 701.84,
+   "d": 3.04,
+   "text": "do a roguelike or roguelike and decided"
+  },
+  {
+   "t": 704.88,
+   "d": 1.92,
+   "text": "in favor of roguelites"
+  },
+  {
+   "t": 706.8,
+   "d": 1.92,
+   "text": "uh because of"
+  },
+  {
+   "t": 708.72,
+   "d": 2.0,
+   "text": "mostly designed reasons and also"
+  },
+  {
+   "t": 710.72,
+   "d": 1.84,
+   "text": "partially because of"
+  },
+  {
+   "t": 712.56,
+   "d": 2.56,
+   "text": "how um at that point we had already"
+  },
+  {
+   "t": 715.12,
+   "d": 2.08,
+   "text": "spent several years developing the game"
+  },
+  {
+   "t": 717.2,
+   "d": 2.24,
+   "text": "and we hadn't had a very clear idea of"
+  },
+  {
+   "t": 719.44,
+   "d": 2.4,
+   "text": "what the scope of the game would be and"
+  },
+  {
+   "t": 721.84,
+   "d": 2.64,
+   "text": "it felt like a roguelite would have a"
+  },
+  {
+   "t": 724.48,
+   "d": 2.96,
+   "text": "much more manageable scope than an open"
+  },
+  {
+   "t": 727.44,
+   "d": 2.08,
+   "text": "world adventure game"
+  },
+  {
+   "t": 729.52,
+   "d": 2.96,
+   "text": "it's just the word open world implies"
+  },
+  {
+   "t": 732.48,
+   "d": 3.84,
+   "text": "a large scope so yeah"
+  },
+  {
+   "t": 736.32,
+   "d": 2.16,
+   "text": "so to go to those design troubles the"
+  },
+  {
+   "t": 738.48,
+   "d": 1.52,
+   "text": "reasons why"
+  },
+  {
+   "t": 740.0,
+   "d": 3.44,
+   "text": "we ended up changing the ideas over and"
+  },
+  {
+   "t": 743.44,
+   "d": 3.44,
+   "text": "over uh i'll actually start with this"
+  },
+  {
+   "t": 746.88,
+   "d": 2.0,
+   "text": "the granularity and dynamicness of the"
+  },
+  {
+   "t": 748.88,
+   "d": 0.88,
+   "text": "world"
+  },
+  {
+   "t": 749.76,
+   "d": 2.24,
+   "text": "because it affected many of those"
+  },
+  {
+   "t": 752.0,
+   "d": 3.2,
+   "text": "early attempts especially the god game"
+  },
+  {
+   "t": 755.2,
+   "d": 2.32,
+   "text": "thing because in a game where you"
+  },
+  {
+   "t": 757.52,
+   "d": 1.84,
+   "text": "control a tribe of people and those"
+  },
+  {
+   "t": 759.36,
+   "d": 2.24,
+   "text": "people have their your own ais and their"
+  },
+  {
+   "t": 761.6,
+   "d": 1.52,
+   "text": "own logic"
+  },
+  {
+   "t": 763.12,
+   "d": 3.2,
+   "text": "kind of as mentioned dwarf fortress like"
+  },
+  {
+   "t": 766.32,
+   "d": 1.12,
+   "text": "approach"
+  },
+  {
+   "t": 767.44,
+   "d": 2.4,
+   "text": "the ai has to be pretty nice especially"
+  },
+  {
+   "t": 769.84,
+   "d": 2.08,
+   "text": "the pathfinding has to be pretty nice"
+  },
+  {
+   "t": 771.92,
+   "d": 2.08,
+   "text": "and when you have a system where every"
+  },
+  {
+   "t": 774.0,
+   "d": 2.48,
+   "text": "pixel is simulated every pixel can be"
+  },
+  {
+   "t": 776.48,
+   "d": 2.64,
+   "text": "dislocated and rearranged and there can"
+  },
+  {
+   "t": 779.12,
+   "d": 2.32,
+   "text": "be sand falling and water pouring in"
+  },
+  {
+   "t": 781.44,
+   "d": 1.36,
+   "text": "different places"
+  },
+  {
+   "t": 782.8,
+   "d": 1.2,
+   "text": "making"
+  },
+  {
+   "t": 784.0,
+   "d": 0.84,
+   "text": "a"
+  },
+  {
+   "t": 784.84,
+   "d": 2.84,
+   "text": "robust uh pathfinding system that"
+  },
+  {
+   "t": 787.68,
+   "d": 3.12,
+   "text": "doesn't slow down hugely"
+  },
+  {
+   "t": 790.8,
+   "d": 3.2,
+   "text": "is not trivial only did the most work on"
+  },
+  {
+   "t": 794.0,
+   "d": 2.88,
+   "text": "the pathfinding and uh did a really"
+  },
+  {
+   "t": 796.88,
+   "d": 2.56,
+   "text": "really great job on making it"
+  },
+  {
+   "t": 799.44,
+   "d": 1.36,
+   "text": "kind of uh"
+  },
+  {
+   "t": 800.8,
+   "d": 1.84,
+   "text": "effective for what we wanted to do but"
+  },
+  {
+   "t": 802.64,
+   "d": 2.64,
+   "text": "we ended up realizing that especially"
+  },
+  {
+   "t": 805.28,
+   "d": 2.08,
+   "text": "with the tribe system where the members"
+  },
+  {
+   "t": 807.36,
+   "d": 2.16,
+   "text": "of the tribe have to use ladders to"
+  },
+  {
+   "t": 809.52,
+   "d": 2.16,
+   "text": "climb up or something like that making a"
+  },
+  {
+   "t": 811.68,
+   "d": 2.56,
+   "text": "good pathfinding system was basically"
+  },
+  {
+   "t": 814.24,
+   "d": 2.0,
+   "text": "maybe not impossible but"
+  },
+  {
+   "t": 816.24,
+   "d": 2.48,
+   "text": "too much so that's why we went for the"
+  },
+  {
+   "t": 818.72,
+   "d": 1.68,
+   "text": "sci-fi thing where you have a jet pack"
+  },
+  {
+   "t": 820.4,
+   "d": 2.16,
+   "text": "so we don't have to worry about climbing"
+  },
+  {
+   "t": 822.56,
+   "d": 1.2,
+   "text": "but still"
+  },
+  {
+   "t": 823.76,
+   "d": 2.32,
+   "text": "it was difficult and at that point after"
+  },
+  {
+   "t": 826.08,
+   "d": 1.92,
+   "text": "that point we actually gave up as far as"
+  },
+  {
+   "t": 828.0,
+   "d": 2.56,
+   "text": "i remember on the ai for a long time and"
+  },
+  {
+   "t": 830.56,
+   "d": 2.08,
+   "text": "only after years when we were already"
+  },
+  {
+   "t": 832.64,
+   "d": 2.96,
+   "text": "already in the roguelite phase uh we"
+  },
+  {
+   "t": 835.6,
+   "d": 2.56,
+   "text": "revisited the ai to create kind of"
+  },
+  {
+   "t": 838.16,
+   "d": 2.0,
+   "text": "something that would fit our needs at"
+  },
+  {
+   "t": 840.16,
+   "d": 1.92,
+   "text": "that point"
+  },
+  {
+   "t": 842.08,
+   "d": 1.92,
+   "text": "uh but also"
+  },
+  {
+   "t": 844.0,
+   "d": 1.12,
+   "text": "just like"
+  },
+  {
+   "t": 845.12,
+   "d": 2.96,
+   "text": "gameplay feedback was was difficult when"
+  },
+  {
+   "t": 848.08,
+   "d": 1.6,
+   "text": "the game when the game world is so"
+  },
+  {
+   "t": 849.68,
+   "d": 2.32,
+   "text": "dynamic there could be a lot of random"
+  },
+  {
+   "t": 852.0,
+   "d": 2.8,
+   "text": "accidents happening everywhere whether"
+  },
+  {
+   "t": 854.8,
+   "d": 1.84,
+   "text": "because of bugs because of ai doing"
+  },
+  {
+   "t": 856.64,
+   "d": 2.56,
+   "text": "stuff because of emir emergent systems"
+  },
+  {
+   "t": 859.2,
+   "d": 2.64,
+   "text": "uh because of random reactions of"
+  },
+  {
+   "t": 861.84,
+   "d": 2.4,
+   "text": "materials it was difficult to create a"
+  },
+  {
+   "t": 864.24,
+   "d": 1.28,
+   "text": "game world"
+  },
+  {
+   "t": 865.52,
+   "d": 1.36,
+   "text": "that felt"
+  },
+  {
+   "t": 866.88,
+   "d": 2.08,
+   "text": "uh that utilized this"
+  },
+  {
+   "t": 868.96,
+   "d": 2.48,
+   "text": "dynamicness in a good way while not"
+  },
+  {
+   "t": 871.44,
+   "d": 2.64,
+   "text": "being too random too erratic and that"
+  },
+  {
+   "t": 874.08,
+   "d": 2.72,
+   "text": "was obviously something that we kind of"
+  },
+  {
+   "t": 876.8,
+   "d": 1.84,
+   "text": "fought with"
+  },
+  {
+   "t": 878.64,
+   "d": 2.88,
+   "text": "all the way through the development"
+  },
+  {
+   "t": 881.52,
+   "d": 1.68,
+   "text": "and also"
+  },
+  {
+   "t": 883.2,
+   "d": 2.48,
+   "text": "because the game world was kind of fully"
+  },
+  {
+   "t": 885.68,
+   "d": 2.64,
+   "text": "deformable fully destroyable it was"
+  },
+  {
+   "t": 888.32,
+   "d": 2.24,
+   "text": "difficult to implement systems that were"
+  },
+  {
+   "t": 890.56,
+   "d": 1.28,
+   "text": "very"
+  },
+  {
+   "t": 891.84,
+   "d": 2.4,
+   "text": "gamey so to say for example in many"
+  },
+  {
+   "t": 894.24,
+   "d": 2.16,
+   "text": "roguelikes in many games"
+  },
+  {
+   "t": 896.4,
+   "d": 2.0,
+   "text": "you might have destructible terrain but"
+  },
+  {
+   "t": 898.4,
+   "d": 1.44,
+   "text": "you might have"
+  },
+  {
+   "t": 899.84,
+   "d": 1.84,
+   "text": "just to give an example in spelunky it's"
+  },
+  {
+   "t": 901.68,
+   "d": 1.6,
+   "text": "not like you have destructible terrain"
+  },
+  {
+   "t": 903.28,
+   "d": 2.24,
+   "text": "but when you get into the end of an area"
+  },
+  {
+   "t": 905.52,
+   "d": 3.84,
+   "text": "you go into this kind of transition room"
+  },
+  {
+   "t": 909.36,
+   "d": 2.16,
+   "text": "from which you go into a new area and"
+  },
+  {
+   "t": 911.52,
+   "d": 2.72,
+   "text": "that new area is"
+  },
+  {
+   "t": 914.24,
+   "d": 2.8,
+   "text": "again like full and"
+  },
+  {
+   "t": 917.04,
+   "d": 1.68,
+   "text": "inhabited by enemies and traps and"
+  },
+  {
+   "t": 918.72,
+   "d": 0.96,
+   "text": "whatever"
+  },
+  {
+   "t": 919.68,
+   "d": 0.8,
+   "text": "so"
+  },
+  {
+   "t": 920.48,
+   "d": 1.68,
+   "text": "in noita"
+  },
+  {
+   "t": 922.16,
+   "d": 2.16,
+   "text": "especially because we came to the"
+  },
+  {
+   "t": 924.32,
+   "d": 2.96,
+   "text": "roguelite approach from the open world"
+  },
+  {
+   "t": 927.28,
+   "d": 1.84,
+   "text": "idea there were several"
+  },
+  {
+   "t": 929.12,
+   "d": 2.24,
+   "text": "even the very first terraria-like idea"
+  },
+  {
+   "t": 931.36,
+   "d": 2.24,
+   "text": "supported this concept of an open world"
+  },
+  {
+   "t": 933.6,
+   "d": 1.44,
+   "text": "and we implemented"
+  },
+  {
+   "t": 935.04,
+   "d": 2.48,
+   "text": "like a seamless con continually"
+  },
+  {
+   "t": 937.52,
+   "d": 2.56,
+   "text": "generated world and that worked really"
+  },
+  {
+   "t": 940.08,
+   "d": 1.68,
+   "text": "badly with this"
+  },
+  {
+   "t": 941.76,
+   "d": 2.08,
+   "text": "concept of having this static more"
+  },
+  {
+   "t": 943.84,
+   "d": 1.28,
+   "text": "game-like"
+  },
+  {
+   "t": 945.12,
+   "d": 1.84,
+   "text": "transition areas"
+  },
+  {
+   "t": 946.96,
+   "d": 3.44,
+   "text": "and we needed many of these"
+  },
+  {
+   "t": 950.4,
+   "d": 2.44,
+   "text": "systems we tried to implement"
+  },
+  {
+   "t": 952.84,
+   "d": 2.52,
+   "text": "struggled with"
+  },
+  {
+   "t": 955.36,
+   "d": 3.36,
+   "text": "everything being so dynamic"
+  },
+  {
+   "t": 958.72,
+   "d": 2.24,
+   "text": "then to go to the early part of that i"
+  },
+  {
+   "t": 960.96,
+   "d": 1.12,
+   "text": "skipped"
+  },
+  {
+   "t": 962.08,
+   "d": 2.72,
+   "text": "the pixel physics themselves kind of"
+  },
+  {
+   "t": 964.8,
+   "d": 2.32,
+   "text": "posed a problem in that because the"
+  },
+  {
+   "t": 967.12,
+   "d": 1.68,
+   "text": "pixel physics were the thing that"
+  },
+  {
+   "t": 968.8,
+   "d": 2.16,
+   "text": "separated noise from any anything else"
+  },
+  {
+   "t": 970.96,
+   "d": 2.0,
+   "text": "or most other things"
+  },
+  {
+   "t": 972.96,
+   "d": 2.64,
+   "text": "uh we really wanted to display those"
+  },
+  {
+   "t": 975.6,
+   "d": 2.4,
+   "text": "that those pixel physics as well as"
+  },
+  {
+   "t": 978.0,
+   "d": 2.48,
+   "text": "possible and uh it turned out to be"
+  },
+  {
+   "t": 980.48,
+   "d": 1.76,
+   "text": "surprisingly difficult to show that"
+  },
+  {
+   "t": 982.24,
+   "d": 1.52,
+   "text": "because"
+  },
+  {
+   "t": 983.76,
+   "d": 1.92,
+   "text": "the easiest way to show that hey we have"
+  },
+  {
+   "t": 985.68,
+   "d": 2.08,
+   "text": "pixel physics everything is simulated is"
+  },
+  {
+   "t": 987.76,
+   "d": 2.16,
+   "text": "to burn things to destroy things to"
+  },
+  {
+   "t": 989.92,
+   "d": 2.8,
+   "text": "explode create like"
+  },
+  {
+   "t": 992.72,
+   "d": 2.48,
+   "text": "huge explosions destroy everything and"
+  },
+  {
+   "t": 995.2,
+   "d": 2.64,
+   "text": "that's fun for a moment"
+  },
+  {
+   "t": 997.84,
+   "d": 3.2,
+   "text": "and it's a very easy system to showcase"
+  },
+  {
+   "t": 1001.04,
+   "d": 1.84,
+   "text": "hey this is what we can do"
+  },
+  {
+   "t": 1002.88,
+   "d": 1.68,
+   "text": "but it becomes boring very quickly"
+  },
+  {
+   "t": 1004.56,
+   "d": 1.68,
+   "text": "because once you have destroyed"
+  },
+  {
+   "t": 1006.24,
+   "d": 1.76,
+   "text": "everything there's nothing to see and if"
+  },
+  {
+   "t": 1008.0,
+   "d": 2.96,
+   "text": "you can just destroy everything either"
+  },
+  {
+   "t": 1010.96,
+   "d": 2.72,
+   "text": "it's a constant danger to yourself so"
+  },
+  {
+   "t": 1013.68,
+   "d": 2.24,
+   "text": "you kill yourself very easily which in a"
+  },
+  {
+   "t": 1015.92,
+   "d": 1.84,
+   "text": "non-roguelite game"
+  },
+  {
+   "t": 1017.76,
+   "d": 1.52,
+   "text": "is maybe not the best"
+  },
+  {
+   "t": 1019.28,
+   "d": 1.84,
+   "text": "uh or even in a rogue-like game it's"
+  },
+  {
+   "t": 1021.12,
+   "d": 2.4,
+   "text": "maybe not the best also if you can just"
+  },
+  {
+   "t": 1023.52,
+   "d": 2.48,
+   "text": "if it's not a danger to yourself you can"
+  },
+  {
+   "t": 1026.0,
+   "d": 3.6,
+   "text": "just destroy everything and then"
+  },
+  {
+   "t": 1030.24,
+   "d": 2.32,
+   "text": "the game"
+  },
+  {
+   "t": 1037.2,
+   "d": 1.92,
+   "text": "than gamepl everything"
+  },
+  {
+   "t": 1039.12,
+   "d": 2.48,
+   "text": "and even in the in that very first"
+  },
+  {
+   "t": 1041.6,
+   "d": 2.16,
+   "text": "arcade arena with our platformer we"
+  },
+  {
+   "t": 1043.76,
+   "d": 1.52,
+   "text": "noticed that"
+  },
+  {
+   "t": 1045.28,
+   "d": 2.48,
+   "text": "transmuting everything into acid"
+  },
+  {
+   "t": 1047.76,
+   "d": 2.72,
+   "text": "and dissolving everything was the most"
+  },
+  {
+   "t": 1050.48,
+   "d": 2.48,
+   "text": "fun way to play but also the most boring"
+  },
+  {
+   "t": 1052.96,
+   "d": 1.76,
+   "text": "because it meant that every arena was"
+  },
+  {
+   "t": 1054.72,
+   "d": 3.44,
+   "text": "just like a melted down pile of garbage"
+  },
+  {
+   "t": 1058.16,
+   "d": 2.56,
+   "text": "at the end of every level so"
+  },
+  {
+   "t": 1060.72,
+   "d": 2.64,
+   "text": "this was a big issue"
+  },
+  {
+   "t": 1063.36,
+   "d": 3.36,
+   "text": "also the reactions the kind of obviously"
+  },
+  {
+   "t": 1066.72,
+   "d": 1.92,
+   "text": "something like wood burning"
+  },
+  {
+   "t": 1068.64,
+   "d": 1.44,
+   "text": "it's a very"
+  },
+  {
+   "t": 1070.08,
+   "d": 2.72,
+   "text": "uh gamifiable"
+  },
+  {
+   "t": 1072.8,
+   "d": 2.24,
+   "text": "reaction but there are many reactions"
+  },
+  {
+   "t": 1075.04,
+   "d": 2.88,
+   "text": "that are interesting in those themselves"
+  },
+  {
+   "t": 1077.92,
+   "d": 1.12,
+   "text": "that don't"
+  },
+  {
+   "t": 1079.04,
+   "d": 3.2,
+   "text": "maybe uh integrate into gameplay very"
+  },
+  {
+   "t": 1082.24,
+   "d": 2.08,
+   "text": "well for example uh"
+  },
+  {
+   "t": 1084.32,
+   "d": 2.32,
+   "text": "ice freezing in cold temperature in"
+  },
+  {
+   "t": 1086.64,
+   "d": 2.08,
+   "text": "contact with snow is something that"
+  },
+  {
+   "t": 1088.72,
+   "d": 2.96,
+   "text": "makes sense it's cool to have but"
+  },
+  {
+   "t": 1091.68,
+   "d": 1.36,
+   "text": "how to make an interesting gameplay"
+  },
+  {
+   "t": 1093.04,
+   "d": 2.72,
+   "text": "thing out of that or"
+  },
+  {
+   "t": 1095.76,
+   "d": 2.0,
+   "text": "just like sand pouring down how do you"
+  },
+  {
+   "t": 1097.76,
+   "d": 1.76,
+   "text": "make that interesting from a gameplay"
+  },
+  {
+   "t": 1099.52,
+   "d": 2.24,
+   "text": "perspective uh"
+  },
+  {
+   "t": 1101.76,
+   "d": 1.84,
+   "text": "apart from like very"
+  },
+  {
+   "t": 1103.6,
+   "d": 3.28,
+   "text": "niche situations"
+  },
+  {
+   "t": 1107.76,
+   "d": 1.76,
+   "text": "there were we wanted to have different"
+  },
+  {
+   "t": 1109.52,
+   "d": 2.0,
+   "text": "kind of magical interactions as well we"
+  },
+  {
+   "t": 1111.52,
+   "d": 1.52,
+   "text": "really wanted to have a lot of different"
+  },
+  {
+   "t": 1113.04,
+   "d": 1.28,
+   "text": "interactions"
+  },
+  {
+   "t": 1114.32,
+   "d": 1.76,
+   "text": "uh"
+  },
+  {
+   "t": 1116.08,
+   "d": 1.68,
+   "text": "for example you could have sodium and if"
+  },
+  {
+   "t": 1117.76,
+   "d": 2.48,
+   "text": "you combine sodium with water the sodium"
+  },
+  {
+   "t": 1120.24,
+   "d": 1.12,
+   "text": "explodes"
+  },
+  {
+   "t": 1121.36,
+   "d": 2.08,
+   "text": "all these different things"
+  },
+  {
+   "t": 1123.44,
+   "d": 1.68,
+   "text": "or having like a"
+  },
+  {
+   "t": 1125.12,
+   "d": 2.24,
+   "text": "fungal soil and if you pour water under"
+  },
+  {
+   "t": 1127.36,
+   "d": 1.84,
+   "text": "the fungal soil it starts sprouting"
+  },
+  {
+   "t": 1129.2,
+   "d": 1.2,
+   "text": "mushrooms"
+  },
+  {
+   "t": 1130.4,
+   "d": 2.8,
+   "text": "we had a lot of these ideas that were"
+  },
+  {
+   "t": 1133.2,
+   "d": 3.2,
+   "text": "interesting but only a very small part"
+  },
+  {
+   "t": 1136.4,
+   "d": 0.88,
+   "text": "of them"
+  },
+  {
+   "t": 1137.28,
+   "d": 2.08,
+   "text": "very small kind of set of them"
+  },
+  {
+   "t": 1139.36,
+   "d": 1.04,
+   "text": "were"
+  },
+  {
+   "t": 1140.4,
+   "d": 1.84,
+   "text": "immediately interesting from a gameplay"
+  },
+  {
+   "t": 1142.24,
+   "d": 1.6,
+   "text": "perspective so we had to constantly"
+  },
+  {
+   "t": 1143.84,
+   "d": 1.6,
+   "text": "answer this question"
+  },
+  {
+   "t": 1145.44,
+   "d": 2.4,
+   "text": "how do we make the gameplay such that"
+  },
+  {
+   "t": 1147.84,
+   "d": 1.76,
+   "text": "the player actually sees all this cool"
+  },
+  {
+   "t": 1149.6,
+   "d": 3.92,
+   "text": "stuff that we have behind the scenes"
+  },
+  {
+   "t": 1153.52,
+   "d": 3.6,
+   "text": "also emergent systems where"
+  },
+  {
+   "t": 1157.12,
+   "d": 3.44,
+   "text": "where difficulty just in the sense of"
+  },
+  {
+   "t": 1160.56,
+   "d": 1.44,
+   "text": "how do we"
+  },
+  {
+   "t": 1162.0,
+   "d": 3.04,
+   "text": "again how do we take this pixel physics"
+  },
+  {
+   "t": 1165.04,
+   "d": 1.04,
+   "text": "thing"
+  },
+  {
+   "t": 1166.08,
+   "d": 0.8,
+   "text": "and"
+  },
+  {
+   "t": 1166.88,
+   "d": 2.4,
+   "text": "not only in terms of reactions and just"
+  },
+  {
+   "t": 1169.28,
+   "d": 2.32,
+   "text": "the like gameplay being fun"
+  },
+  {
+   "t": 1171.6,
+   "d": 2.4,
+   "text": "how do we implement systems that work"
+  },
+  {
+   "t": 1174.0,
+   "d": 2.96,
+   "text": "within the pixel physics simulation that"
+  },
+  {
+   "t": 1176.96,
+   "d": 2.8,
+   "text": "create interesting gameplay decisions"
+  },
+  {
+   "t": 1179.76,
+   "d": 1.68,
+   "text": "because"
+  },
+  {
+   "t": 1181.44,
+   "d": 1.36,
+   "text": "in this kind of a system where"
+  },
+  {
+   "t": 1182.8,
+   "d": 2.24,
+   "text": "everything is so granular and dynamic"
+  },
+  {
+   "t": 1185.04,
+   "d": 2.0,
+   "text": "it's very easy for things to be kind of"
+  },
+  {
+   "t": 1187.04,
+   "d": 3.44,
+   "text": "random and beyond the kind of well you"
+  },
+  {
+   "t": 1190.48,
+   "d": 1.76,
+   "text": "can have lava you can pour water and"
+  },
+  {
+   "t": 1192.24,
+   "d": 3.36,
+   "text": "lava to maybe harden the"
+  },
+  {
+   "t": 1195.6,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 1196.4,
+   "d": 2.32,
+   "text": "harden the lava into rock to make"
+  },
+  {
+   "t": 1198.72,
+   "d": 2.72,
+   "text": "yourself a platform or pour water on"
+  },
+  {
+   "t": 1201.44,
+   "d": 3.04,
+   "text": "fire to put the fire out or set wood on"
+  },
+  {
+   "t": 1204.48,
+   "d": 2.56,
+   "text": "fire to make yourself a passage there's"
+  },
+  {
+   "t": 1207.04,
+   "d": 3.04,
+   "text": "these again these very simple basic"
+  },
+  {
+   "t": 1210.08,
+   "d": 2.56,
+   "text": "interactions that make sense and are in"
+  },
+  {
+   "t": 1212.64,
+   "d": 2.56,
+   "text": "many games and or also work in this game"
+  },
+  {
+   "t": 1215.2,
+   "d": 2.48,
+   "text": "but beyond that how do we"
+  },
+  {
+   "t": 1217.68,
+   "d": 1.52,
+   "text": "what kind of systems can we have in the"
+  },
+  {
+   "t": 1219.2,
+   "d": 2.88,
+   "text": "game that work seamlessly with other"
+  },
+  {
+   "t": 1222.08,
+   "d": 2.4,
+   "text": "systems that are interesting that affect"
+  },
+  {
+   "t": 1224.48,
+   "d": 1.84,
+   "text": "the gameplay and that the player will"
+  },
+  {
+   "t": 1226.32,
+   "d": 4.48,
+   "text": "actually meaningfully be able to utilize"
+  },
+  {
+   "t": 1232.64,
+   "d": 1.84,
+   "text": "and yeah and finally"
+  },
+  {
+   "t": 1234.48,
+   "d": 1.92,
+   "text": "finally there's the"
+  },
+  {
+   "t": 1236.4,
+   "d": 2.4,
+   "text": "workload especially before we went for"
+  },
+  {
+   "t": 1238.8,
+   "d": 1.52,
+   "text": "the road like implementation i mentioned"
+  },
+  {
+   "t": 1240.32,
+   "d": 2.08,
+   "text": "about the open world"
+  },
+  {
+   "t": 1242.4,
+   "d": 1.2,
+   "text": "system"
+  },
+  {
+   "t": 1243.6,
+   "d": 1.68,
+   "text": "if you make an open world game you're"
+  },
+  {
+   "t": 1245.28,
+   "d": 1.84,
+   "text": "basically saying that hey i want to make"
+  },
+  {
+   "t": 1247.12,
+   "d": 2.72,
+   "text": "a game where you can do anything you can"
+  },
+  {
+   "t": 1249.84,
+   "d": 2.0,
+   "text": "become the king you can destroy the"
+  },
+  {
+   "t": 1251.84,
+   "d": 2.4,
+   "text": "whole world you can create a satellite"
+  },
+  {
+   "t": 1254.24,
+   "d": 2.32,
+   "text": "that goes in orbits and i don't know"
+  },
+  {
+   "t": 1256.56,
+   "d": 1.84,
+   "text": "like it's the workload increases"
+  },
+  {
+   "t": 1258.4,
+   "d": 1.68,
+   "text": "exponentially very quickly when you"
+  },
+  {
+   "t": 1260.08,
+   "d": 2.56,
+   "text": "start working on a open world thing with"
+  },
+  {
+   "t": 1262.64,
+   "d": 1.52,
+   "text": "so much dynamicness and all these"
+  },
+  {
+   "t": 1264.16,
+   "d": 1.76,
+   "text": "emergent systems overlapping and blah"
+  },
+  {
+   "t": 1265.92,
+   "d": 1.28,
+   "text": "blah blah"
+  },
+  {
+   "t": 1267.2,
+   "d": 1.76,
+   "text": "and uh"
+  },
+  {
+   "t": 1268.96,
+   "d": 2.48,
+   "text": "of course this idea of making an open"
+  },
+  {
+   "t": 1271.44,
+   "d": 2.16,
+   "text": "world game is very"
+  },
+  {
+   "t": 1273.6,
+   "d": 1.2,
+   "text": "um"
+  },
+  {
+   "t": 1274.8,
+   "d": 2.24,
+   "text": "it's very exciting it gives a lot of"
+  },
+  {
+   "t": 1277.04,
+   "d": 1.28,
+   "text": "inspiration"
+  },
+  {
+   "t": 1278.32,
+   "d": 0.8,
+   "text": "but"
+  },
+  {
+   "t": 1279.12,
+   "d": 2.16,
+   "text": "it's very feature creepy"
+  },
+  {
+   "t": 1281.28,
+   "d": 2.08,
+   "text": "and uh just to give a"
+  },
+  {
+   "t": 1283.36,
+   "d": 2.0,
+   "text": "small anecdote there's"
+  },
+  {
+   "t": 1285.36,
+   "d": 2.0,
+   "text": "sorry there was the blacksmithing system"
+  },
+  {
+   "t": 1287.36,
+   "d": 1.12,
+   "text": "where"
+  },
+  {
+   "t": 1288.48,
+   "d": 1.84,
+   "text": "uh we thought it would be cool if you"
+  },
+  {
+   "t": 1290.32,
+   "d": 2.72,
+   "text": "could dig a sword-shaped hole in the"
+  },
+  {
+   "t": 1293.04,
+   "d": 1.52,
+   "text": "ground and pour"
+  },
+  {
+   "t": 1294.56,
+   "d": 3.52,
+   "text": "molten metal into that hole and when the"
+  },
+  {
+   "t": 1298.08,
+   "d": 3.12,
+   "text": "metal set you would get like a sword"
+  },
+  {
+   "t": 1301.2,
+   "d": 1.36,
+   "text": "shaped thing and the game would"
+  },
+  {
+   "t": 1302.56,
+   "d": 2.24,
+   "text": "recognize that and give you a sword so"
+  },
+  {
+   "t": 1304.8,
+   "d": 1.2,
+   "text": "you could like uh"
+  },
+  {
+   "t": 1306.0,
+   "d": 1.84,
+   "text": "smith your own swords"
+  },
+  {
+   "t": 1307.84,
+   "d": 2.8,
+   "text": "there's a really really really cool idea"
+  },
+  {
+   "t": 1310.64,
+   "d": 1.68,
+   "text": "but"
+  },
+  {
+   "t": 1312.32,
+   "d": 1.36,
+   "text": "implementing that"
+  },
+  {
+   "t": 1313.68,
+   "d": 2.32,
+   "text": "without it being feasible without it"
+  },
+  {
+   "t": 1316.0,
+   "d": 2.8,
+   "text": "being broken even just the thing of how"
+  },
+  {
+   "t": 1318.8,
+   "d": 1.28,
+   "text": "do you dig"
+  },
+  {
+   "t": 1320.08,
+   "d": 2.4,
+   "text": "one pixel wide holes in the game where"
+  },
+  {
+   "t": 1322.48,
+   "d": 2.08,
+   "text": "every pixel is simulated how do you make"
+  },
+  {
+   "t": 1324.56,
+   "d": 2.0,
+   "text": "that in a way that is not completely"
+  },
+  {
+   "t": 1326.56,
+   "d": 2.24,
+   "text": "annoying in every single way turned out"
+  },
+  {
+   "t": 1328.8,
+   "d": 3.6,
+   "text": "to be a huge hassle so just the workload"
+  },
+  {
+   "t": 1332.4,
+   "d": 1.92,
+   "text": "keeping ourselves"
+  },
+  {
+   "t": 1334.32,
+   "d": 1.28,
+   "text": "uh"
+  },
+  {
+   "t": 1335.6,
+   "d": 0.96,
+   "text": "sane"
+  },
+  {
+   "t": 1336.56,
+   "d": 2.64,
+   "text": "during this about eight year progress"
+  },
+  {
+   "t": 1339.2,
+   "d": 3.44,
+   "text": "turned out to be a design problem"
+  },
+  {
+   "t": 1342.64,
+   "d": 2.2,
+   "text": "so uh"
+  },
+  {
+   "t": 1344.84,
+   "d": 2.68,
+   "text": "finally uh i guess i just want to give a"
+  },
+  {
+   "t": 1347.52,
+   "d": 2.08,
+   "text": "couple of couple more examples of these"
+  },
+  {
+   "t": 1349.6,
+   "d": 1.76,
+   "text": "design problems kind of like what was"
+  },
+  {
+   "t": 1351.36,
+   "d": 2.72,
+   "text": "the problem with every all of these"
+  },
+  {
+   "t": 1354.08,
+   "d": 2.72,
+   "text": "pre roguelike things just to kind of"
+  },
+  {
+   "t": 1356.8,
+   "d": 1.92,
+   "text": "more easily express why we ended up"
+  },
+  {
+   "t": 1358.72,
+   "d": 2.24,
+   "text": "going with the roguelite so i already"
+  },
+  {
+   "t": 1360.96,
+   "d": 1.68,
+   "text": "mentioned from the arcade arena wizard"
+  },
+  {
+   "t": 1362.64,
+   "d": 1.6,
+   "text": "platformer it was a very proof of"
+  },
+  {
+   "t": 1364.24,
+   "d": 2.32,
+   "text": "concept thing it had a very simple"
+  },
+  {
+   "t": 1366.56,
+   "d": 2.56,
+   "text": "answer to everything just make like melt"
+  },
+  {
+   "t": 1369.12,
+   "d": 2.16,
+   "text": "everything with acid it was this was"
+  },
+  {
+   "t": 1371.28,
+   "d": 2.08,
+   "text": "very far from being anything sensible"
+  },
+  {
+   "t": 1373.36,
+   "d": 1.92,
+   "text": "the terraria-like survival had the"
+  },
+  {
+   "t": 1375.28,
+   "d": 1.44,
+   "text": "problem where"
+  },
+  {
+   "t": 1376.72,
+   "d": 2.64,
+   "text": "you kind of wanted to have items kind of"
+  },
+  {
+   "t": 1379.36,
+   "d": 2.32,
+   "text": "abstract items that are not part of the"
+  },
+  {
+   "t": 1381.68,
+   "d": 1.6,
+   "text": "physics simulation"
+  },
+  {
+   "t": 1383.28,
+   "d": 1.92,
+   "text": "you kind of want to have that more"
+  },
+  {
+   "t": 1385.2,
+   "d": 2.4,
+   "text": "abstract layer of gameplay which"
+  },
+  {
+   "t": 1387.6,
+   "d": 2.08,
+   "text": "ended up not showcasing the physics"
+  },
+  {
+   "t": 1389.68,
+   "d": 2.08,
+   "text": "simulation as well as possible it would"
+  },
+  {
+   "t": 1391.76,
+   "d": 1.6,
+   "text": "have been difficult to do that and it"
+  },
+  {
+   "t": 1393.36,
+   "d": 2.4,
+   "text": "had the open world issue of"
+  },
+  {
+   "t": 1395.76,
+   "d": 1.92,
+   "text": "all the possibilities going in every"
+  },
+  {
+   "t": 1397.68,
+   "d": 1.28,
+   "text": "direction"
+  },
+  {
+   "t": 1398.96,
+   "d": 2.4,
+   "text": "then was the guard game that one had the"
+  },
+  {
+   "t": 1401.36,
+   "d": 2.88,
+   "text": "issue of pathfinding ai"
+  },
+  {
+   "t": 1404.24,
+   "d": 2.16,
+   "text": "the granularity of the game how do we"
+  },
+  {
+   "t": 1406.4,
+   "d": 2.56,
+   "text": "make the tribe not get stuck in"
+  },
+  {
+   "t": 1408.96,
+   "d": 2.24,
+   "text": "everything how do we make the gameplay"
+  },
+  {
+   "t": 1411.2,
+   "d": 1.76,
+   "text": "actually interesting and not too prone"
+  },
+  {
+   "t": 1412.96,
+   "d": 2.56,
+   "text": "to random accidents that just spoil all"
+  },
+  {
+   "t": 1415.52,
+   "d": 1.76,
+   "text": "the ideas you have"
+  },
+  {
+   "t": 1417.28,
+   "d": 1.92,
+   "text": "also just kind of"
+  },
+  {
+   "t": 1419.2,
+   "d": 2.4,
+   "text": "if if you fight other tribes do the"
+  },
+  {
+   "t": 1421.6,
+   "d": 2.24,
+   "text": "other tribes have their own bases are do"
+  },
+  {
+   "t": 1423.84,
+   "d": 1.44,
+   "text": "they need to build something do they"
+  },
+  {
+   "t": 1425.28,
+   "d": 1.68,
+   "text": "need ai themselves"
+  },
+  {
+   "t": 1426.96,
+   "d": 2.24,
+   "text": "how do we handle if the different tribes"
+  },
+  {
+   "t": 1429.2,
+   "d": 1.6,
+   "text": "are attacking and they're like mountains"
+  },
+  {
+   "t": 1430.8,
+   "d": 2.72,
+   "text": "in the way how do we handle them like"
+  },
+  {
+   "t": 1433.52,
+   "d": 2.4,
+   "text": "scaling those mountains there's a lot of"
+  },
+  {
+   "t": 1435.92,
+   "d": 1.04,
+   "text": "issues"
+  },
+  {
+   "t": 1436.96,
+   "d": 2.4,
+   "text": "and that was the space exploration rts i"
+  },
+  {
+   "t": 1439.36,
+   "d": 1.6,
+   "text": "i don't even remember what the problems"
+  },
+  {
+   "t": 1440.96,
+   "d": 2.08,
+   "text": "here were but probably something similar"
+  },
+  {
+   "t": 1443.04,
+   "d": 1.68,
+   "text": "to the previous one"
+  },
+  {
+   "t": 1444.72,
+   "d": 2.0,
+   "text": "and all again the open world like what"
+  },
+  {
+   "t": 1446.72,
+   "d": 1.68,
+   "text": "is this game about can you move between"
+  },
+  {
+   "t": 1448.4,
+   "d": 1.92,
+   "text": "planets if you need to move between"
+  },
+  {
+   "t": 1450.32,
+   "d": 2.48,
+   "text": "planets do we need to generate different"
+  },
+  {
+   "t": 1452.8,
+   "d": 1.84,
+   "text": "biomes in different planets blah blah"
+  },
+  {
+   "t": 1454.64,
+   "d": 2.72,
+   "text": "blah there's a lot of issues like that"
+  },
+  {
+   "t": 1457.36,
+   "d": 1.64,
+   "text": "then was the fallout like"
+  },
+  {
+   "t": 1459.0,
+   "d": 1.96,
+   "text": "post-apocalyptic thing"
+  },
+  {
+   "t": 1460.96,
+   "d": 1.92,
+   "text": "oh no six-minute warning"
+  },
+  {
+   "t": 1462.88,
+   "d": 1.44,
+   "text": "uh"
+  },
+  {
+   "t": 1464.32,
+   "d": 1.76,
+   "text": "which had the just"
+  },
+  {
+   "t": 1466.08,
+   "d": 2.24,
+   "text": "more of the same for example we had"
+  },
+  {
+   "t": 1468.32,
+   "d": 1.44,
+   "text": "buildings and we thought it would be"
+  },
+  {
+   "t": 1469.76,
+   "d": 1.76,
+   "text": "cool if you could go into the building"
+  },
+  {
+   "t": 1471.52,
+   "d": 1.2,
+   "text": "so they would be kind of on the"
+  },
+  {
+   "t": 1472.72,
+   "d": 1.12,
+   "text": "background"
+  },
+  {
+   "t": 1473.84,
+   "d": 1.84,
+   "text": "then we had to solve what if you destroy"
+  },
+  {
+   "t": 1475.68,
+   "d": 1.68,
+   "text": "the ground below the building do they"
+  },
+  {
+   "t": 1477.36,
+   "d": 2.32,
+   "text": "suddenly become physical do they"
+  },
+  {
+   "t": 1479.68,
+   "d": 2.0,
+   "text": "collapse how do they collapse"
+  },
+  {
+   "t": 1481.68,
+   "d": 2.96,
+   "text": "yeah like all these"
+  },
+  {
+   "t": 1484.64,
+   "d": 2.4,
+   "text": "we were constantly battling with"
+  },
+  {
+   "t": 1487.04,
+   "d": 1.44,
+   "text": "uh so"
+  },
+  {
+   "t": 1488.48,
+   "d": 1.36,
+   "text": "finally we ended up going with the"
+  },
+  {
+   "t": 1489.84,
+   "d": 1.84,
+   "text": "roguelite because we thought this would"
+  },
+  {
+   "t": 1491.68,
+   "d": 2.72,
+   "text": "solve many of these issues"
+  },
+  {
+   "t": 1494.4,
+   "d": 2.72,
+   "text": "so first of all a roguelite had the"
+  },
+  {
+   "t": 1497.12,
+   "d": 2.88,
+   "text": "assumption of some random factors a road"
+  },
+  {
+   "t": 1500.0,
+   "d": 2.0,
+   "text": "light kind of allows for some random"
+  },
+  {
+   "t": 1502.0,
+   "d": 1.84,
+   "text": "things happening sometimes you're lucky"
+  },
+  {
+   "t": 1503.84,
+   "d": 1.52,
+   "text": "you get good items"
+  },
+  {
+   "t": 1505.36,
+   "d": 2.48,
+   "text": "that's okay sometimes everything goes"
+  },
+  {
+   "t": 1507.84,
+   "d": 2.16,
+   "text": "badly and you can either"
+  },
+  {
+   "t": 1510.0,
+   "d": 2.32,
+   "text": "challenge yourself to figure out a way"
+  },
+  {
+   "t": 1512.32,
+   "d": 2.16,
+   "text": "out of those predic"
+  },
+  {
+   "t": 1514.48,
+   "d": 1.68,
+   "text": "bad situations or"
+  },
+  {
+   "t": 1516.16,
+   "d": 1.92,
+   "text": "you die but maybe you die in a hilarious"
+  },
+  {
+   "t": 1518.08,
+   "d": 1.6,
+   "text": "way and that's fun"
+  },
+  {
+   "t": 1519.68,
+   "d": 2.24,
+   "text": "so the destruct destruction suddenly"
+  },
+  {
+   "t": 1521.92,
+   "d": 2.48,
+   "text": "became kind of a nice thing where we"
+  },
+  {
+   "t": 1524.4,
+   "d": 1.52,
+   "text": "could give the player a lot of"
+  },
+  {
+   "t": 1525.92,
+   "d": 1.76,
+   "text": "destructive abilities but because of the"
+  },
+  {
+   "t": 1527.68,
+   "d": 1.6,
+   "text": "permadeath"
+  },
+  {
+   "t": 1529.28,
+   "d": 1.76,
+   "text": "you could easily kill yourself and that"
+  },
+  {
+   "t": 1531.04,
+   "d": 2.16,
+   "text": "was kind of part of the idea of the game"
+  },
+  {
+   "t": 1533.2,
+   "d": 1.04,
+   "text": "so the"
+  },
+  {
+   "t": 1534.24,
+   "d": 2.16,
+   "text": "destruction suddenly was kind of"
+  },
+  {
+   "t": 1536.4,
+   "d": 2.48,
+   "text": "self-balancing in a way uh you could"
+  },
+  {
+   "t": 1538.88,
+   "d": 1.68,
+   "text": "sometimes see really cool destruction"
+  },
+  {
+   "t": 1540.56,
+   "d": 1.6,
+   "text": "and there's still a lot of cool"
+  },
+  {
+   "t": 1542.16,
+   "d": 1.84,
+   "text": "destruction things in the game but you"
+  },
+  {
+   "t": 1544.0,
+   "d": 1.52,
+   "text": "don't really want to use those unless"
+  },
+  {
+   "t": 1545.52,
+   "d": 2.08,
+   "text": "you are prepared"
+  },
+  {
+   "t": 1547.6,
+   "d": 1.84,
+   "text": "uh although"
+  },
+  {
+   "t": 1549.44,
+   "d": 2.32,
+   "text": "while there's there was the assumption"
+  },
+  {
+   "t": 1551.76,
+   "d": 1.84,
+   "text": "that roguelites have some"
+  },
+  {
+   "t": 1553.6,
+   "d": 2.64,
+   "text": "randomness we definitely spent a lot of"
+  },
+  {
+   "t": 1556.24,
+   "d": 2.24,
+   "text": "time time trying to limit insta kill"
+  },
+  {
+   "t": 1558.48,
+   "d": 2.4,
+   "text": "things where you can just like get"
+  },
+  {
+   "t": 1560.88,
+   "d": 2.56,
+   "text": "screwed over by a random thing we"
+  },
+  {
+   "t": 1563.44,
+   "d": 1.92,
+   "text": "actually had like a"
+  },
+  {
+   "t": 1565.36,
+   "d": 1.76,
+   "text": "design board on the"
+  },
+  {
+   "t": 1567.12,
+   "d": 2.16,
+   "text": "wall of the office with kind of like"
+  },
+  {
+   "t": 1569.28,
+   "d": 1.68,
+   "text": "pluses and minuses of different"
+  },
+  {
+   "t": 1570.96,
+   "d": 2.24,
+   "text": "additions and how they affect the insta"
+  },
+  {
+   "t": 1573.2,
+   "d": 2.8,
+   "text": "kill cleanliness of the game"
+  },
+  {
+   "t": 1576.0,
+   "d": 3.04,
+   "text": "uh also there's the bonus of"
+  },
+  {
+   "t": 1579.04,
+   "d": 1.52,
+   "text": "not having to show everything on a"
+  },
+  {
+   "t": 1580.56,
+   "d": 2.0,
+   "text": "single run we could hide a lot of things"
+  },
+  {
+   "t": 1582.56,
+   "d": 2.88,
+   "text": "in the game world we could have these"
+  },
+  {
+   "t": 1585.44,
+   "d": 1.68,
+   "text": "different emerging things different"
+  },
+  {
+   "t": 1587.12,
+   "d": 1.52,
+   "text": "things of the"
+  },
+  {
+   "t": 1588.64,
+   "d": 2.64,
+   "text": "material reactions and stuff and many of"
+  },
+  {
+   "t": 1591.28,
+   "d": 1.68,
+   "text": "those could actually be pretty obscure"
+  },
+  {
+   "t": 1592.96,
+   "d": 2.24,
+   "text": "so that they actually turn up pretty"
+  },
+  {
+   "t": 1595.2,
+   "d": 2.24,
+   "text": "rarely and that wasn't as much of a"
+  },
+  {
+   "t": 1597.44,
+   "d": 1.6,
+   "text": "problem because we could assume that the"
+  },
+  {
+   "t": 1599.04,
+   "d": 2.0,
+   "text": "player will do a lot of different runs"
+  },
+  {
+   "t": 1601.04,
+   "d": 1.44,
+   "text": "where they will be trying different"
+  },
+  {
+   "t": 1602.48,
+   "d": 0.88,
+   "text": "things"
+  },
+  {
+   "t": 1603.36,
+   "d": 1.12,
+   "text": "so"
+  },
+  {
+   "t": 1604.48,
+   "d": 2.08,
+   "text": "even if it takes a long time for them to"
+  },
+  {
+   "t": 1606.56,
+   "d": 2.24,
+   "text": "see a specific interaction"
+  },
+  {
+   "t": 1608.8,
+   "d": 0.96,
+   "text": "uh"
+  },
+  {
+   "t": 1609.76,
+   "d": 1.68,
+   "text": "that could be maybe more fine if they"
+  },
+  {
+   "t": 1611.44,
+   "d": 2.08,
+   "text": "are still enjoying the game and then it"
+  },
+  {
+   "t": 1613.52,
+   "d": 2.32,
+   "text": "can actually be this like nice thing"
+  },
+  {
+   "t": 1615.84,
+   "d": 2.24,
+   "text": "where someone says oh oh"
+  },
+  {
+   "t": 1618.08,
+   "d": 3.68,
+   "text": "sorry oh i tried this random thing uh"
+  },
+  {
+   "t": 1621.76,
+   "d": 1.76,
+   "text": "and it did this surprising thing that i"
+  },
+  {
+   "t": 1623.52,
+   "d": 1.92,
+   "text": "had never seen before that's cool and"
+  },
+  {
+   "t": 1625.44,
+   "d": 2.24,
+   "text": "reported it to other players and thus"
+  },
+  {
+   "t": 1627.68,
+   "d": 1.68,
+   "text": "make the game seem more mysterious and"
+  },
+  {
+   "t": 1629.36,
+   "d": 1.2,
+   "text": "cool"
+  },
+  {
+   "t": 1630.56,
+   "d": 2.32,
+   "text": "uh and the messiness of the world was"
+  },
+  {
+   "t": 1632.88,
+   "d": 2.64,
+   "text": "maybe also less okay we didn't have to"
+  },
+  {
+   "t": 1635.52,
+   "d": 4.16,
+   "text": "have like player controlled ai agents"
+  },
+  {
+   "t": 1639.68,
+   "d": 2.24,
+   "text": "we only had to solve the movement for a"
+  },
+  {
+   "t": 1641.92,
+   "d": 2.56,
+   "text": "single character that you control"
+  },
+  {
+   "t": 1644.48,
+   "d": 1.92,
+   "text": "uh we didn't have to solve this how do"
+  },
+  {
+   "t": 1646.4,
+   "d": 2.64,
+   "text": "you dig a single pixel hole in a"
+  },
+  {
+   "t": 1649.04,
+   "d": 2.4,
+   "text": "specific shape we tried that we tried to"
+  },
+  {
+   "t": 1651.44,
+   "d": 2.0,
+   "text": "make base building at one point and it"
+  },
+  {
+   "t": 1653.44,
+   "d": 2.08,
+   "text": "was very difficult to implement so the"
+  },
+  {
+   "t": 1655.52,
+   "d": 1.6,
+   "text": "roguelike approach"
+  },
+  {
+   "t": 1657.12,
+   "d": 2.48,
+   "text": "uh sold par some of that by saying that"
+  },
+  {
+   "t": 1659.6,
+   "d": 2.08,
+   "text": "hey let's not have that at all in the"
+  },
+  {
+   "t": 1661.68,
+   "d": 2.56,
+   "text": "game and let's just concentrate on the"
+  },
+  {
+   "t": 1664.24,
+   "d": 2.0,
+   "text": "platforming and going forward going"
+  },
+  {
+   "t": 1666.24,
+   "d": 3.36,
+   "text": "deeper into the game uh"
+  },
+  {
+   "t": 1669.6,
+   "d": 1.92,
+   "text": "well also there was this maybe"
+  },
+  {
+   "t": 1671.52,
+   "d": 2.08,
+   "text": "controversial thing of roguelites"
+  },
+  {
+   "t": 1673.6,
+   "d": 1.84,
+   "text": "roguelikes where"
+  },
+  {
+   "t": 1675.44,
+   "d": 2.32,
+   "text": "uh there's the assumption of the player"
+  },
+  {
+   "t": 1677.76,
+   "d": 1.76,
+   "text": "having to do some experimentation we"
+  },
+  {
+   "t": 1679.52,
+   "d": 1.52,
+   "text": "could maybe"
+  },
+  {
+   "t": 1681.04,
+   "d": 2.08,
+   "text": "include some things that require the"
+  },
+  {
+   "t": 1683.12,
+   "d": 2.64,
+   "text": "player to experiment for example the one"
+  },
+  {
+   "t": 1685.76,
+   "d": 1.6,
+   "text": "system i mentioned"
+  },
+  {
+   "t": 1687.36,
+   "d": 3.2,
+   "text": "uh two minutes okay uh the one system"
+  },
+  {
+   "t": 1690.56,
+   "d": 2.16,
+   "text": "where you can kind of"
+  },
+  {
+   "t": 1692.72,
+   "d": 2.64,
+   "text": "you there's a lot of depth to it and the"
+  },
+  {
+   "t": 1695.36,
+   "d": 1.68,
+   "text": "assumption is that you find the death"
+  },
+  {
+   "t": 1697.04,
+   "d": 2.48,
+   "text": "yourself or look up at wiki so that was"
+  },
+  {
+   "t": 1699.52,
+   "d": 1.84,
+   "text": "also something that lessened the"
+  },
+  {
+   "t": 1701.36,
+   "d": 1.92,
+   "text": "workload for us"
+  },
+  {
+   "t": 1703.28,
+   "d": 1.6,
+   "text": "uh"
+  },
+  {
+   "t": 1704.88,
+   "d": 1.68,
+   "text": "and also i also already mentioned"
+  },
+  {
+   "t": 1706.56,
+   "d": 2.48,
+   "text": "sometimes very good and powerful runs"
+  },
+  {
+   "t": 1709.04,
+   "d": 1.92,
+   "text": "uh also rogue lights have this virtual"
+  },
+  {
+   "t": 1710.96,
+   "d": 1.76,
+   "text": "skill thing that we considered a lot"
+  },
+  {
+   "t": 1712.72,
+   "d": 2.16,
+   "text": "during the developments where"
+  },
+  {
+   "t": 1714.88,
+   "d": 0.96,
+   "text": "uh"
+  },
+  {
+   "t": 1715.84,
+   "d": 2.08,
+   "text": "instead of having these unlocks and"
+  },
+  {
+   "t": 1717.92,
+   "d": 1.92,
+   "text": "getting more powerful items over a long"
+  },
+  {
+   "t": 1719.84,
+   "d": 1.92,
+   "text": "period of time time and increasing the"
+  },
+  {
+   "t": 1721.76,
+   "d": 2.32,
+   "text": "destruction all the time on every run"
+  },
+  {
+   "t": 1724.08,
+   "d": 1.52,
+   "text": "you increase your knowledge of the game"
+  },
+  {
+   "t": 1725.6,
+   "d": 2.56,
+   "text": "and that works really well with the like"
+  },
+  {
+   "t": 1728.16,
+   "d": 3.04,
+   "text": "dynamicness and emergent systems"
+  },
+  {
+   "t": 1731.2,
+   "d": 1.44,
+   "text": "uh"
+  },
+  {
+   "t": 1732.64,
+   "d": 2.16,
+   "text": "okay i don't have time to mention why i"
+  },
+  {
+   "t": 1734.8,
+   "d": 4.32,
+   "text": "like this but it all comes down to uh"
+  },
+  {
+   "t": 1739.12,
+   "d": 1.92,
+   "text": "i had a lot of fun designing enemies and"
+  },
+  {
+   "t": 1741.04,
+   "d": 3.36,
+   "text": "spells and perks and areas for this"
+  },
+  {
+   "t": 1744.4,
+   "d": 2.0,
+   "text": "but at the same time we could actually"
+  },
+  {
+   "t": 1746.4,
+   "d": 1.6,
+   "text": "go forward with the development of the"
+  },
+  {
+   "t": 1748.0,
+   "d": 2.24,
+   "text": "game that was that's kind of the"
+  },
+  {
+   "t": 1750.24,
+   "d": 3.36,
+   "text": "nutshell of it uh i liked the roguelite"
+  },
+  {
+   "t": 1753.6,
+   "d": 2.4,
+   "text": "approach because it gave us gave me"
+  },
+  {
+   "t": 1756.0,
+   "d": 2.16,
+   "text": "more freedom to do the stuff i wanted to"
+  },
+  {
+   "t": 1758.16,
+   "d": 3.36,
+   "text": "do without having to worry as much about"
+  },
+  {
+   "t": 1761.52,
+   "d": 2.16,
+   "text": "everything balancing perfectly because"
+  },
+  {
+   "t": 1763.68,
+   "d": 3.68,
+   "text": "we could have that slightly randomness"
+  },
+  {
+   "t": 1767.36,
+   "d": 1.92,
+   "text": "i can't believe that took exactly 30"
+  },
+  {
+   "t": 1769.28,
+   "d": 2.88,
+   "text": "minutes oh and final thing exactly"
+  },
+  {
+   "t": 1772.16,
+   "d": 2.08,
+   "text": "yeah i want to say one more thing which"
+  },
+  {
+   "t": 1774.24,
+   "d": 1.28,
+   "text": "is that"
+  },
+  {
+   "t": 1775.52,
+   "d": 1.92,
+   "text": "uh the reason why the game is a"
+  },
+  {
+   "t": 1777.44,
+   "d": 3.12,
+   "text": "roguelite and not roguelike is because"
+  },
+  {
+   "t": 1780.56,
+   "d": 3.28,
+   "text": "our team was very aware of games"
+  },
+  {
+   "t": 1783.84,
+   "d": 2.32,
+   "text": "uh that are called traditional"
+  },
+  {
+   "t": 1786.16,
+   "d": 1.84,
+   "text": "roguelikes like nethack and dungeon"
+  },
+  {
+   "t": 1788.0,
+   "d": 4.08,
+   "text": "crawl and uh adam and angband and"
+  },
+  {
+   "t": 1792.08,
+   "d": 1.6,
+   "text": "ivan"
+  },
+  {
+   "t": 1793.68,
+   "d": 1.6,
+   "text": "stuff stuff like that"
+  },
+  {
+   "t": 1795.28,
+   "d": 2.88,
+   "text": "and we kind of wanted to underline this"
+  },
+  {
+   "t": 1798.16,
+   "d": 1.52,
+   "text": "difference between"
+  },
+  {
+   "t": 1799.68,
+   "d": 4.0,
+   "text": "uh ascii graphics turn based permadeath"
+  },
+  {
+   "t": 1803.68,
+   "d": 1.12,
+   "text": "uh"
+  },
+  {
+   "t": 1804.8,
+   "d": 3.44,
+   "text": "top-down roguelikes and then these more"
+  },
+  {
+   "t": 1808.24,
+   "d": 2.72,
+   "text": "action-based spelunky binding of isaac"
+  },
+  {
+   "t": 1810.96,
+   "d": 1.12,
+   "text": "kind of things"
+  },
+  {
+   "t": 1812.08,
+   "d": 2.48,
+   "text": "we kind of wanted to honor these"
+  },
+  {
+   "t": 1814.56,
+   "d": 2.16,
+   "text": "originators of the genre"
+  },
+  {
+   "t": 1816.72,
+   "d": 2.16,
+   "text": "yeah calling noise roguelike okay there"
+  },
+  {
+   "t": 1818.88,
+   "d": 1.84,
+   "text": "we go amazing yes"
+  },
+  {
+   "t": 1820.72,
+   "d": 1.84,
+   "text": "great i mean yes we basically got a"
+  },
+  {
+   "t": 1822.56,
+   "d": 2.08,
+   "text": "little q a in as well thank you so much"
+  },
+  {
+   "t": 1824.64,
+   "d": 2.56,
+   "text": "rv"
+  }
+ ]
+}

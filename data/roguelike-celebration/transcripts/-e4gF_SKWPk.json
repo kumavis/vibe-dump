@@ -1,0 +1,829 @@
+{
+ "id": "-e4gF_SKWPk",
+ "url": "https://www.youtube.com/watch?v=-e4gF_SKWPk",
+ "title": "Lee Tusman - Lower Dimensional Dungeons",
+ "speaker": "Lee Tusman",
+ "talk_title": "Lower Dimensional Dungeons",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 718,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nLee Tusman is a New York-based new media artist and educator interested in the application of the radical ethos of collectives and DIY culture to the creation of, aesthetics, and open-source distribution methods of digital culture. He works in code, collage, sound and text.  His artistic output includes interactive media, video art, net art, experimental videogames, sound art, websites, twitter bots and micro-power radio stations. His work has been shown at museums, galleries, artist-run spaces and virtual environments. He studied at Brandeis University and received his MFA at UCLA in Design Media Arts. He is Assistant Professor of New Media and Computer Science at Purchase College.\n\nIn this lightning talk he discusses the concept of lower-dimensional dungeons and:\n- How creating a one-dimensional roguelike is a beginner-friendly approach to making your first (or later) roguelike game\n- A history of other one-dimensional dungeons including Santiago Zapata's tweet-roguelikes, Line Wobbler (a dungeon crawl but not a roguelike), one-dimensional roguelike Cosmic Crown, branching narrative as a form of 1d, 1dimensional chess variants, and a few other 1dimensional action games\n- His own examples of one-dimensional roguelikes and design considerations, coding approaches\n- Pointers for directions things can go, demake ideas for turning other 2d roguelikes into 1d\n\nFind him on Twitter: https://twitter.com/2sman2sman\nSantiago Zapata's work: https://slashie.net/\nLine Wobbler: https://wobblylabs.com/projects/wobbler",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 50,
+   "title": "Lee Tusman"
+  },
+  {
+   "start": 140,
+   "title": "Cosmic Crown"
+  },
+  {
+   "start": 230,
+   "title": "URL Hunter"
+  },
+  {
+   "start": 285,
+   "title": "Line Wobbler"
+  },
+  {
+   "start": 335,
+   "title": "Rogue 280"
+  },
+  {
+   "start": 380,
+   "title": "Rogue 280 v2"
+  },
+  {
+   "start": 425,
+   "title": "Stutterstep"
+  },
+  {
+   "start": 480,
+   "title": "OneDimensional Dungeon"
+  },
+  {
+   "start": 580,
+   "title": "Hunt the Wimpy"
+  },
+  {
+   "start": 630,
+   "title": "Chess Variants"
+  },
+  {
+   "start": 670,
+   "title": "Outro"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1585,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.8,
+   "d": 1.0,
+   "text": "EMCEE: Cool."
+  },
+  {
+   "t": 1.8,
+   "d": 1.0,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 2.8,
+   "d": 1.0,
+   "text": "Great."
+  },
+  {
+   "t": 3.8,
+   "d": 4.7,
+   "text": "Our next set of talks is a long block of lightning talks and that's going to be our last block"
+  },
+  {
+   "t": 8.5,
+   "d": 1.95,
+   "text": "of talks for the day."
+  },
+  {
+   "t": 10.45,
+   "d": 1.53,
+   "text": "Afterwards we will go into unconferencing."
+  },
+  {
+   "t": 11.98,
+   "d": 7.92,
+   "text": "We have a lot of great talks."
+  },
+  {
+   "t": 19.9,
+   "d": 4.13,
+   "text": "Feel free to grab a drink of water or something if you want."
+  },
+  {
+   "t": 24.03,
+   "d": 8.32,
+   "text": "This has been a long block of talk but to get a little extra time for the lightning"
+  },
+  {
+   "t": 32.35,
+   "d": 3.05,
+   "text": "talks why don't we kick them off."
+  },
+  {
+   "t": 35.4,
+   "d": 10.13,
+   "text": "I am going to follow Alexei's structure of having the speaker introduce themselves."
+  },
+  {
+   "t": 45.53,
+   "d": 3.23,
+   "text": "Our first speaker is Lee Tusman."
+  },
+  {
+   "t": 48.76,
+   "d": 1.85,
+   "text": ">> Hello."
+  },
+  {
+   "t": 50.61,
+   "d": 5.18,
+   "text": "Hope you can hear me and see me and my slides."
+  },
+  {
+   "t": 55.79,
+   "d": 1.5,
+   "text": "My name is Lee Tusman."
+  },
+  {
+   "t": 57.29,
+   "d": 5.53,
+   "text": "I am an artist and an educator, a programmer, I make games."
+  },
+  {
+   "t": 62.82,
+   "d": 6.42,
+   "text": "I am involved in one of the co-organizers along with a team of other collective that"
+  },
+  {
+   "t": 69.24,
+   "d": 5.28,
+   "text": "organizers at baby castles, a video game art space in New York."
+  },
+  {
+   "t": 74.52,
+   "d": 6.88,
+   "text": "And this is a lightning talk on lower-dimensional dungeons."
+  },
+  {
+   "t": 81.4,
+   "d": 8.26,
+   "text": "This is a talk primarily dealing with Roguelikes and dungeon crawlers that are one dimensional."
+  },
+  {
+   "t": 89.66,
+   "d": 11.12,
+   "text": "It is an overview of the field but it is not necessarily comprehensive."
+  },
+  {
+   "t": 100.78,
+   "d": 8.5,
+   "text": "I will describe their mechanics and my other caveat is I love simplicity and that I can"
+  },
+  {
+   "t": 109.28,
+   "d": 5.14,
+   "text": "quickly understand the underlying structures and systems of lower dimensional dungeons."
+  },
+  {
+   "t": 114.42,
+   "d": 10.61,
+   "text": "I am an educator and a lot of what I do as an educator is try to break things down into"
+  },
+  {
+   "t": 125.03,
+   "d": 3.24,
+   "text": "their smaller parts."
+  },
+  {
+   "t": 128.27,
+   "d": 4.34,
+   "text": "Thinking about one dimensional dungeons is one way I have been able to strip down the"
+  },
+  {
+   "t": 132.61,
+   "d": 4.22,
+   "text": "genre ge procedural generation into their innermost parts."
+  },
+  {
+   "t": 136.83,
+   "d": 7.37,
+   "text": "I want to say about how I came upon the idea of the one dimensional dungeons."
+  },
+  {
+   "t": 144.2,
+   "d": 5.47,
+   "text": "This is a came called cosmic crown."
+  },
+  {
+   "t": 149.67,
+   "d": 6.17,
+   "text": "I originally found this on iOS though you can play it on the web on Itch and I think"
+  },
+  {
+   "t": 155.84,
+   "d": 2.92,
+   "text": "there is an Android package as well."
+  },
+  {
+   "t": 158.76,
+   "d": 1.81,
+   "text": "This game as beautiful graphics."
+  },
+  {
+   "t": 160.57,
+   "d": 5.79,
+   "text": "I am just going to move ahead and hit play so you can see a little bit of what the gameplay"
+  },
+  {
+   "t": 166.36,
+   "d": 2.03,
+   "text": "is like."
+  },
+  {
+   "t": 168.39,
+   "d": 2.71,
+   "text": "In this one-dimensional game you can see you are at the bottom and you can move forward"
+  },
+  {
+   "t": 171.1,
+   "d": 3.91,
+   "text": "or one space at a time or two."
+  },
+  {
+   "t": 175.01,
+   "d": 6.12,
+   "text": "There is a lightning bolt which disrupts and stops machinery from working and at the end"
+  },
+  {
+   "t": 181.13,
+   "d": 4.43,
+   "text": "is the crown which is basically how you descend."
+  },
+  {
+   "t": 185.56,
+   "d": 3.01,
+   "text": "The way I got into this was I was looking to play Roguelikes and reading about them"
+  },
+  {
+   "t": 188.57,
+   "d": 7.83,
+   "text": "and not coming from a background in dungeons and dragons or RPG and I found the UI of memorizing"
+  },
+  {
+   "t": 196.4,
+   "d": 7.94,
+   "text": "a million keys as hard to wrap my mind around and inventory as well."
+  },
+  {
+   "t": 204.34,
+   "d": 6.17,
+   "text": "I was attracted to this game's simplicity where it was still surprising and emergent"
+  },
+  {
+   "t": 210.51,
+   "d": 6.64,
+   "text": "gameplay mechanics and yet I could focus on that alone and understanding the system and"
+  },
+  {
+   "t": 217.15,
+   "d": 9.25,
+   "text": "enjoying still like kind of the emergent gameplay that happens and really being able to focus"
+  },
+  {
+   "t": 226.4,
+   "d": 6.95,
+   "text": "on that and understand how that worked."
+  },
+  {
+   "t": 233.35,
+   "d": 2.42,
+   "text": "Maybe you are thinking OK that's not ASCII."
+  },
+  {
+   "t": 235.77,
+   "d": 4.95,
+   "text": "You know, I prefer a different kind of dungeon crawler so I am going to jump to something"
+  },
+  {
+   "t": 240.72,
+   "d": 1.0,
+   "text": "else."
+  },
+  {
+   "t": 241.72,
+   "d": 3.68,
+   "text": "This is Corey Johnson's URL hunter."
+  },
+  {
+   "t": 245.4,
+   "d": 5.15,
+   "text": "It might be difficult for you to see this on a small screen or on you be or however"
+  },
+  {
+   "t": 250.55,
+   "d": 6.76,
+   "text": "you are watching it if it is after the conference as well but in this game, you are an O and"
+  },
+  {
+   "t": 257.31,
+   "d": 2.52,
+   "text": "there is little As that you are hunting."
+  },
+  {
+   "t": 259.83,
+   "d": 6.47,
+   "text": "It is in the URL bar and if you can peak your eyes in there are As returning around."
+  },
+  {
+   "t": 266.3,
+   "d": 1.48,
+   "text": "This isn't turn-base."
+  },
+  {
+   "t": 267.78,
+   "d": 4.03,
+   "text": "It isn't a Roguelike but it is one dimensional."
+  },
+  {
+   "t": 271.81,
+   "d": 9.31,
+   "text": "This let's you upend some of the conventions of these kinds of genres and kind of try different"
+  },
+  {
+   "t": 281.12,
+   "d": 3.73,
+   "text": "kind of experiments and this is why I think I love it is in the Ural -- URL bar."
+  },
+  {
+   "t": 284.85,
+   "d": 13.19,
+   "text": "It reminded me of my favorite game which is line wobbler."
+  },
+  {
+   "t": 298.04,
+   "d": 7.04,
+   "text": "Your controller is a spring you can move forward and backward and it is not procedurally generated"
+  },
+  {
+   "t": 305.08,
+   "d": 1.35,
+   "text": "or turn-based."
+  },
+  {
+   "t": 306.43,
+   "d": 2.15,
+   "text": "Each level has been premade."
+  },
+  {
+   "t": 308.58,
+   "d": 7.77,
+   "text": "You are controlling the green light and are trying to get to the flashing light at each"
+  },
+  {
+   "t": 316.35,
+   "d": 1.79,
+   "text": "level of the dungeon."
+  },
+  {
+   "t": 318.14,
+   "d": 5.34,
+   "text": "You have different kinds of motion and ways to attack and get through different obstacles."
+  },
+  {
+   "t": 323.48,
+   "d": 4.29,
+   "text": "It is a beautiful, fluid game and has been an inspiration for me when thinking through"
+  },
+  {
+   "t": 327.77,
+   "d": 6.48,
+   "text": "one dimensional dungeons and I love how it up ends conventions."
+  },
+  {
+   "t": 334.25,
+   "d": 6.03,
+   "text": "I hope it inspires people to make hardware Roguelikes."
+  },
+  {
+   "t": 340.28,
+   "d": 3.01,
+   "text": "This is going in another direction."
+  },
+  {
+   "t": 343.29,
+   "d": 4.34,
+   "text": "This one is definitely an ASCII Roguelike."
+  },
+  {
+   "t": 347.63,
+   "d": 4.9,
+   "text": "Santiago spoke three years ago talking about the conventions and challenging the conventions"
+  },
+  {
+   "t": 352.53,
+   "d": 2.99,
+   "text": "of Roguelikes."
+  },
+  {
+   "t": 355.52,
+   "d": 6.16,
+   "text": "This is Rogue 280 which was written in 280 characters."
+  },
+  {
+   "t": 361.68,
+   "d": 3.0,
+   "text": "Our familiar at symbol and you have hp and the level."
+  },
+  {
+   "t": 364.68,
+   "d": 1.7,
+   "text": "You can see the stairs there."
+  },
+  {
+   "t": 366.38,
+   "d": 6.31,
+   "text": "There are monsters though they are invisible and that's probably because he wrote the entire"
+  },
+  {
+   "t": 372.69,
+   "d": 4.27,
+   "text": "game in just 280 characters."
+  },
+  {
+   "t": 376.96,
+   "d": 3.14,
+   "text": "He updated this and made a second version."
+  },
+  {
+   "t": 380.1,
+   "d": 5.78,
+   "text": "This is Rogue 280 V2 and now you can see more terrain."
+  },
+  {
+   "t": 385.88,
+   "d": 7.51,
+   "text": "The monsters are invisible but maybe there is tall grass we are seeing."
+  },
+  {
+   "t": 393.39,
+   "d": 5.9,
+   "text": "There is plus minus alters you can pray at by walking on to them which increases your"
+  },
+  {
+   "t": 399.29,
+   "d": 2.7,
+   "text": "HP."
+  },
+  {
+   "t": 401.99,
+   "d": 2.38,
+   "text": "You can hit monsters still but they invisible."
+  },
+  {
+   "t": 404.37,
+   "d": 2.87,
+   "text": "I love the constraint here."
+  },
+  {
+   "t": 407.24,
+   "d": 8.76,
+   "text": "It is such a convention of working on games for years and years and working with these"
+  },
+  {
+   "t": 416.0,
+   "d": 5.77,
+   "text": "kinds of constraints let's you build something much more rapidly that can still delight and"
+  },
+  {
+   "t": 421.77,
+   "d": 5.72,
+   "text": "challenge you and let's you play with these ideas of emergence and procedural generation."
+  },
+  {
+   "t": 427.49,
+   "d": 3.93,
+   "text": "This is stutter step."
+  },
+  {
+   "t": 431.42,
+   "d": 2.13,
+   "text": "This was created for Lutem."
+  },
+  {
+   "t": 433.55,
+   "d": 2.35,
+   "text": "He said it took him a day."
+  },
+  {
+   "t": 435.9,
+   "d": 7.69,
+   "text": "Even though you are moving along a single horizontal dimension, when you pick up an"
+  },
+  {
+   "t": 443.59,
+   "d": 9.59,
+   "text": "item and we see the back splashes which are a staff and the brackets are a shield."
+  },
+  {
+   "t": 453.18,
+   "d": 5.91,
+   "text": "You are moving along the two dimensions and you are picking up and attacking monsters"
+  },
+  {
+   "t": 459.09,
+   "d": 7.14,
+   "text": "for example but your UI is along this other dimension which I think is a really interesting"
+  },
+  {
+   "t": 466.23,
+   "d": 1.0,
+   "text": "approach."
+  },
+  {
+   "t": 467.23,
+   "d": 1.4,
+   "text": "There is lava."
+  },
+  {
+   "t": 468.63,
+   "d": 2.99,
+   "text": "And you have med packs."
+  },
+  {
+   "t": 471.62,
+   "d": 10.6,
+   "text": "I think it was a smart way of dealing with this interface and with constraint."
+  },
+  {
+   "t": 482.22,
+   "d": 2.34,
+   "text": "This is my own one dimensional Roguelike."
+  },
+  {
+   "t": 484.56,
+   "d": 2.3,
+   "text": "This is called one dimensional dungeon."
+  },
+  {
+   "t": 486.86,
+   "d": 1.46,
+   "text": "The name says it all."
+  },
+  {
+   "t": 488.32,
+   "d": 5.93,
+   "text": "It is inspired by Rogue and I was trying to collapse Rogue do you know a two dimensional"
+  },
+  {
+   "t": 494.25,
+   "d": 1.94,
+   "text": "minimal constraint system."
+  },
+  {
+   "t": 496.19,
+   "d": 8.79,
+   "text": "You have the kinds of monsters and bats and rats and hobgoblins and snakes."
+  },
+  {
+   "t": 504.98,
+   "d": 2.71,
+   "text": "And, you know, you are moving in the two dimensions."
+  },
+  {
+   "t": 507.69,
+   "d": 3.7,
+   "text": "There is gold and potions that you can pick up."
+  },
+  {
+   "t": 511.39,
+   "d": 5.78,
+   "text": "When you hit a toad for example, you hallucinate which you can see happening."
+  },
+  {
+   "t": 517.17,
+   "d": 6.16,
+   "text": "If you get attacked by a floating eye it renders you blind for a few turns."
+  },
+  {
+   "t": 523.33,
+   "d": 3.97,
+   "text": "This was really, you know, me trying to work within constraints."
+  },
+  {
+   "t": 527.3,
+   "d": 3.39,
+   "text": "It is not just a coffee break Roguelike."
+  },
+  {
+   "t": 530.69,
+   "d": 2.03,
+   "text": "It is an espresso Roguelike."
+  },
+  {
+   "t": 532.72,
+   "d": 8.23,
+   "text": "This is a game you can play 2-3 minutes and try to get a high score and work out of the"
+  },
+  {
+   "t": 540.95,
+   "d": 1.0,
+   "text": "dungeon."
+  },
+  {
+   "t": 541.95,
+   "d": 7.62,
+   "text": "It came with me building a game without using a library or other engine but building it"
+  },
+  {
+   "t": 549.57,
+   "d": 7.25,
+   "text": "from scratch using my own know how and a lot of the fun for me was in building it this"
+  },
+  {
+   "t": 556.82,
+   "d": 5.34,
+   "text": "way still having a lot of delight I still play this game a lot but doing it with this"
+  },
+  {
+   "t": 562.16,
+   "d": 2.9,
+   "text": "kind of minimal constraints."
+  },
+  {
+   "t": 565.06,
+   "d": 6.37,
+   "text": "One thing fun to build into this is I made it so you can play along the vertical orientation."
+  },
+  {
+   "t": 571.43,
+   "d": 5.04,
+   "text": "For example, you can hit a button to switch to the vertical or choose flip-flop mode and"
+  },
+  {
+   "t": 576.47,
+   "d": 6.41,
+   "text": "each level it switches to a different orientation."
+  },
+  {
+   "t": 582.88,
+   "d": 5.37,
+   "text": "The next one dimensional Roguelike I made is called hunt the whimpus."
+  },
+  {
+   "t": 588.25,
+   "d": 6.18,
+   "text": "This is on a BBC micro bit controller."
+  },
+  {
+   "t": 594.43,
+   "d": 6.07,
+   "text": "I programmed this in TypeScript but the micro bit can be programmed with a block like a"
+  },
+  {
+   "t": 600.5,
+   "d": 5.98,
+   "text": "block editor so it is exciting to dove tail with what Kate was saying about the different"
+  },
+  {
+   "t": 606.48,
+   "d": 6.95,
+   "text": "tools and different visual programming environments and different ways to program and make it"
+  },
+  {
+   "t": 613.43,
+   "d": 1.0,
+   "text": "work."
+  },
+  {
+   "t": 614.43,
+   "d": 4.97,
+   "text": "I created these little not ASCII but icons to represent the player, the whimpus here"
+  },
+  {
+   "t": 619.4,
+   "d": 4.4,
+   "text": "as I call it and the slime pits."
+  },
+  {
+   "t": 623.8,
+   "d": 2.91,
+   "text": "It is a one dimensional dungeon in a loop."
+  },
+  {
+   "t": 626.71,
+   "d": 5.26,
+   "text": "Here is the code or part of the code."
+  },
+  {
+   "t": 631.97,
+   "d": 4.89,
+   "text": "Before I go, I want to mention since a lot of people that are into the rested and Roguelikes"
+  },
+  {
+   "t": 636.86,
+   "d": 2.57,
+   "text": "are really interested in chess."
+  },
+  {
+   "t": 639.43,
+   "d": 3.35,
+   "text": "Chess is obviously turn base as well."
+  },
+  {
+   "t": 642.78,
+   "d": 8.91,
+   "text": "There is a history of chess variance and this is one of many one dimensional chess variations."
+  },
+  {
+   "t": 651.69,
+   "d": 6.47,
+   "text": "There is one my Martin Gardner a puzzle designer."
+  },
+  {
+   "t": 658.16,
+   "d": 7.22,
+   "text": "This is another way to explore constraint and not procedural generation so much as emergent"
+  },
+  {
+   "t": 665.38,
+   "d": 3.98,
+   "text": "gameplay with kind of minimal rule sets."
+  },
+  {
+   "t": 669.36,
+   "d": 1.0,
+   "text": "I think that's it."
+  },
+  {
+   "t": 670.36,
+   "d": 2.11,
+   "text": "I am out of time."
+  },
+  {
+   "t": 672.47,
+   "d": 5.17,
+   "text": "These slides and my notes are available at cutly/dungeon."
+  },
+  {
+   "t": 677.64,
+   "d": 6.86,
+   "text": "You are welcome to message me either on the conference mud or here is my website/Twitter"
+  },
+  {
+   "t": 684.5,
+   "d": 1.0,
+   "text": "and Instagram."
+  },
+  {
+   "t": 685.5,
+   "d": 3.3,
+   "text": "I would love to see further exploration of one dimensional Roguelikes and procedural"
+  },
+  {
+   "t": 688.8,
+   "d": 1.47,
+   "text": "generation."
+  },
+  {
+   "t": 690.27,
+   "d": 1.04,
+   "text": "Thanks so much."
+  },
+  {
+   "t": 691.31,
+   "d": 3.73,
+   "text": "EMCEE: That was wonderful."
+  },
+  {
+   "t": 695.04,
+   "d": 5.25,
+   "text": "That was a whirlwind."
+  },
+  {
+   "t": 700.29,
+   "d": 5.63,
+   "text": "I definitely want to go play the URL game because I have seen pictures of it but never"
+  },
+  {
+   "t": 705.92,
+   "d": 3.43,
+   "text": "got a chance to play it."
+  },
+  {
+   "t": 709.35,
+   "d": 1.0,
+   "text": "Cool."
+  },
+  {
+   "t": 710.35,
+   "d": 6.33,
+   "text": "We will be hanging out in the space."
+  },
+  {
+   "t": 716.68,
+   "d": 0.82,
+   "text": ">> Definitely."
+  }
+ ]
+}

@@ -1,0 +1,1630 @@
+{
+ "id": "LoPxtQq0ut4",
+ "url": "https://www.youtube.com/watch?v=LoPxtQq0ut4",
+ "title": "Cassie Stuurman - Slime Molds",
+ "speaker": "Cassie Stuurman",
+ "talk_title": "Slime Molds",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 887,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Cassie Stuurman talks all about your favorite Nethack food, slime molds\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 46,
+   "title": "A Slimey Legacy"
+  },
+  {
+   "start": 91,
+   "title": "Why slime molds?"
+  },
+  {
+   "start": 199,
+   "title": "What is a slime mold?"
+  },
+  {
+   "start": 274,
+   "title": "Slime mold life cycle"
+  },
+  {
+   "start": 331,
+   "title": "Slime Mold Behaviour"
+  },
+  {
+   "start": 343,
+   "title": "Solving Mazes?"
+  },
+  {
+   "start": 392,
+   "title": "Slime Mold Path Finding"
+  },
+  {
+   "start": 435,
+   "title": "Slime Mold: Memory"
+  },
+  {
+   "start": 590,
+   "title": "Pet Slime Mold"
+  },
+  {
+   "start": 691,
+   "title": "Slime Mold Hunt 2"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2217,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 7.17,
+   "text": "perfect hello everyone thanks for coming"
+  },
+  {
+   "t": 7.17,
+   "d": 2.57,
+   "text": "out to see my talk about slime molds I"
+  },
+  {
+   "t": 9.74,
+   "d": 2.23,
+   "text": "really do appreciate having the"
+  },
+  {
+   "t": 11.97,
+   "d": 2.79,
+   "text": "opportunity to have people listen to me"
+  },
+  {
+   "t": 14.76,
+   "d": 4.11,
+   "text": "talk about Simon ISM and I thought this"
+  },
+  {
+   "t": 18.87,
+   "d": 1.29,
+   "text": "would be a really good venue for it"
+  },
+  {
+   "t": 20.16,
+   "d": 1.56,
+   "text": "considering how much they crop up in"
+  },
+  {
+   "t": 21.72,
+   "d": 1.71,
+   "text": "different roguelikes"
+  },
+  {
+   "t": 23.43,
+   "d": 2.52,
+   "text": "my name is Cassie Thurman I'm an earth"
+  },
+  {
+   "t": 25.95,
+   "d": 2.85,
+   "text": "and planetary scientist and I titled"
+  },
+  {
+   "t": 28.8,
+   "d": 1.92,
+   "text": "this talk slime molds I love story"
+  },
+  {
+   "t": 30.72,
+   "d": 4.23,
+   "text": "because I really love slime molds and I"
+  },
+  {
+   "t": 34.95,
+   "d": 2.76,
+   "text": "like to think that they feel the same"
+  },
+  {
+   "t": 37.71,
+   "d": 2.61,
+   "text": "way about me too and I hope I hope that"
+  },
+  {
+   "t": 40.32,
+   "d": 2.64,
+   "text": "by the end of this talk you also learn"
+  },
+  {
+   "t": 42.96,
+   "d": 5.1,
+   "text": "to love slime molds so there's a very"
+  },
+  {
+   "t": 48.06,
+   "d": 2.4,
+   "text": "long history of slime molds showing up"
+  },
+  {
+   "t": 50.46,
+   "d": 1.08,
+   "text": "in roguelikes"
+  },
+  {
+   "t": 51.54,
+   "d": 2.46,
+   "text": "geek culture and other kinds of video"
+  },
+  {
+   "t": 54.0,
+   "d": 3.9,
+   "text": "games the first reference to slime molds"
+  },
+  {
+   "t": 57.9,
+   "d": 2.01,
+   "text": "in any video game that I know of was in"
+  },
+  {
+   "t": 59.91,
+   "d": 2.7,
+   "text": "rogue when you drink a potion of see"
+  },
+  {
+   "t": 62.61,
+   "d": 1.98,
+   "text": "invisible you'll get the message saying"
+  },
+  {
+   "t": 64.59,
+   "d": 2.07,
+   "text": "that it tastes like slime mold juice"
+  },
+  {
+   "t": 66.66,
+   "d": 3.09,
+   "text": "it's obviously also a cosmos Bowl in"
+  },
+  {
+   "t": 69.75,
+   "d": 2.85,
+   "text": "nethack it shows up an egg band various"
+  },
+  {
+   "t": 72.6,
+   "d": 2.64,
+   "text": "other roguelikes sometimes it's"
+  },
+  {
+   "t": 75.24,
+   "d": 2.22,
+   "text": "something you can eat like in that hack"
+  },
+  {
+   "t": 77.46,
+   "d": 1.95,
+   "text": "sometimes it's something you can fight"
+  },
+  {
+   "t": 79.41,
+   "d": 2.42,
+   "text": "sometimes you are the slime mold and"
+  },
+  {
+   "t": 81.83,
+   "d": 3.24,
+   "text": "sometimes it's buried deep in an obscure"
+  },
+  {
+   "t": 85.07,
+   "d": 2.98,
+   "text": "character or monster description in the"
+  },
+  {
+   "t": 88.05,
+   "d": 4.74,
+   "text": "in the documentation so this raises the"
+  },
+  {
+   "t": 92.79,
+   "d": 3.09,
+   "text": "question of why our slime molds a thing"
+  },
+  {
+   "t": 95.88,
+   "d": 2.73,
+   "text": "and broke likes and I had the"
+  },
+  {
+   "t": 98.61,
+   "d": 2.72,
+   "text": "opportunity to talk to Glenn Wickman and"
+  },
+  {
+   "t": 101.33,
+   "d": 3.1,
+   "text": "he told me the story of how slime molds"
+  },
+  {
+   "t": 104.43,
+   "d": 3.66,
+   "text": "became a thing and broke he told me that"
+  },
+  {
+   "t": 108.09,
+   "d": 2.64,
+   "text": "on the drainpipe behind the dining hall"
+  },
+  {
+   "t": 110.73,
+   "d": 2.85,
+   "text": "dining hall at UC Santa Cruz"
+  },
+  {
+   "t": 113.58,
+   "d": 2.25,
+   "text": "there was a slime mold a purple and"
+  },
+  {
+   "t": 115.83,
+   "d": 1.77,
+   "text": "white slime mold I have no idea they"
+  },
+  {
+   "t": 117.6,
+   "d": 1.95,
+   "text": "never identified it but I imagine it"
+  },
+  {
+   "t": 119.55,
+   "d": 0.99,
+   "text": "looks something like that one right"
+  },
+  {
+   "t": 120.54,
+   "d": 3.78,
+   "text": "there and Michael Tuohy and Glenn"
+  },
+  {
+   "t": 124.32,
+   "d": 1.5,
+   "text": "Wickman were studying at UC Santa Cruz"
+  },
+  {
+   "t": 125.82,
+   "d": 2.49,
+   "text": "when they started making rope and it"
+  },
+  {
+   "t": 128.31,
+   "d": 2.4,
+   "text": "became a running joke within the science"
+  },
+  {
+   "t": 130.71,
+   "d": 1.82,
+   "text": "department there to include slime"
+  },
+  {
+   "t": 132.53,
+   "d": 1.59,
+   "text": "references and things and this is how"
+  },
+  {
+   "t": 134.12,
+   "d": 3.81,
+   "text": "its found itself in rogue and we have"
+  },
+  {
+   "t": 137.93,
+   "d": 2.46,
+   "text": "done to become a cosmos table in nethack"
+  },
+  {
+   "t": 140.39,
+   "d": 2.78,
+   "text": "the idea being that it was a"
+  },
+  {
+   "t": 143.17,
+   "d": 1.87,
+   "text": "customizable food that would appear in"
+  },
+  {
+   "t": 145.04,
+   "d": 3.42,
+   "text": "the game they called it a slime mold to"
+  },
+  {
+   "t": 148.46,
+   "d": 2.22,
+   "text": "encourage players to change it and the"
+  },
+  {
+   "t": 150.68,
+   "d": 1.95,
+   "text": "options to something that wasn't a slime"
+  },
+  {
+   "t": 152.63,
+   "d": 1.83,
+   "text": "mold because they the implication here"
+  },
+  {
+   "t": 154.46,
+   "d": 1.35,
+   "text": "is that slime molds are gross and"
+  },
+  {
+   "t": 155.81,
+   "d": 3.39,
+   "text": "undesirable and I one of the goals for"
+  },
+  {
+   "t": 159.2,
+   "d": 1.44,
+   "text": "my talk is to convince e that slime"
+  },
+  {
+   "t": 160.64,
+   "d": 2.37,
+   "text": "molds are not gross and not undesirable"
+  },
+  {
+   "t": 163.01,
+   "d": 2.1,
+   "text": "and that the default customizable food"
+  },
+  {
+   "t": 165.11,
+   "d": 1.83,
+   "text": "option for new hack is just fine the way"
+  },
+  {
+   "t": 166.94,
+   "d": 7.08,
+   "text": "it is so can you eat slime molds yes you"
+  },
+  {
+   "t": 174.02,
+   "d": 1.2,
+   "text": "can they're edible"
+  },
+  {
+   "t": 175.22,
+   "d": 2.22,
+   "text": "they are absolutely harmless to humans"
+  },
+  {
+   "t": 177.44,
+   "d": 2.22,
+   "text": "pets and plants some people consider"
+  },
+  {
+   "t": 179.66,
+   "d": 2.67,
+   "text": "them a pest in their garden they like to"
+  },
+  {
+   "t": 182.33,
+   "d": 2.85,
+   "text": "grow on mulch but other people don't"
+  },
+  {
+   "t": 185.18,
+   "d": 3.39,
+   "text": "think they're pests historically they've"
+  },
+  {
+   "t": 188.57,
+   "d": 2.37,
+   "text": "been eaten in Mexico as a food to fry"
+  },
+  {
+   "t": 190.94,
+   "d": 3.35,
+   "text": "and a pan kind of like scrambled eggs so"
+  },
+  {
+   "t": 194.29,
+   "d": 2.2,
+   "text": "I've never eaten one but you could if"
+  },
+  {
+   "t": 196.49,
+   "d": 5.4,
+   "text": "you really wanted to I want a really"
+  },
+  {
+   "t": 201.89,
+   "d": 1.5,
+   "text": "long time without knowing what a slime"
+  },
+  {
+   "t": 203.39,
+   "d": 2.07,
+   "text": "mold was I just would encounter in the"
+  },
+  {
+   "t": 205.46,
+   "d": 1.86,
+   "text": "hack all the time but I think most"
+  },
+  {
+   "t": 207.32,
+   "d": 3.5,
+   "text": "people have never really questioned a"
+  },
+  {
+   "t": 210.82,
+   "d": 2.11,
+   "text": "part of the reason I think is because"
+  },
+  {
+   "t": 212.93,
+   "d": 1.02,
+   "text": "it's kind of complicated"
+  },
+  {
+   "t": 213.95,
+   "d": 2.7,
+   "text": "they are protests they are not plants"
+  },
+  {
+   "t": 216.65,
+   "d": 1.98,
+   "text": "they are not fungus they're not animals"
+  },
+  {
+   "t": 218.63,
+   "d": 1.71,
+   "text": "that they sometimes exhibit"
+  },
+  {
+   "t": 220.34,
+   "d": 3.15,
+   "text": "characteristics similar to organisms in"
+  },
+  {
+   "t": 223.49,
+   "d": 3.48,
+   "text": "other kingdoms protists are unicellular"
+  },
+  {
+   "t": 226.97,
+   "d": 2.67,
+   "text": "organisms without any tissue like algae"
+  },
+  {
+   "t": 229.64,
+   "d": 5.01,
+   "text": "and within slime molds over the past"
+  },
+  {
+   "t": 234.65,
+   "d": 1.68,
+   "text": "several decades they used to think all"
+  },
+  {
+   "t": 236.33,
+   "d": 1.38,
+   "text": "that slime molds are really similar to"
+  },
+  {
+   "t": 237.71,
+   "d": 1.86,
+   "text": "each other but the more they look the"
+  },
+  {
+   "t": 239.57,
+   "d": 1.92,
+   "text": "more more different they are some people"
+  },
+  {
+   "t": 241.49,
+   "d": 2.13,
+   "text": "argue these up to six different kinds of"
+  },
+  {
+   "t": 243.62,
+   "d": 1.64,
+   "text": "slime molds but there's two main ones"
+  },
+  {
+   "t": 245.26,
+   "d": 2.14,
+   "text": "we're gonna be focusing on the"
+  },
+  {
+   "t": 247.4,
+   "d": 2.16,
+   "text": "plasmodial slime molds also called"
+  },
+  {
+   "t": 249.56,
+   "d": 2.63,
+   "text": "true slime molds in this talk and"
+  },
+  {
+   "t": 252.19,
+   "d": 2.14,
+   "text": "plasmodial slime molds are extra cool"
+  },
+  {
+   "t": 254.33,
+   "d": 2.09,
+   "text": "because they can form the largest"
+  },
+  {
+   "t": 256.42,
+   "d": 3.97,
+   "text": "unicellular organisms on Earth it's one"
+  },
+  {
+   "t": 260.39,
+   "d": 1.77,
+   "text": "cell but the largest ones have been"
+  },
+  {
+   "t": 262.16,
+   "d": 2.36,
+   "text": "recorded up to two meters in"
+  },
+  {
+   "t": 264.52,
+   "d": 3.18,
+   "text": "sighs that's taller than I am"
+  },
+  {
+   "t": 267.7,
+   "d": 2.52,
+   "text": "and it's it's technically one cell but"
+  },
+  {
+   "t": 270.22,
+   "d": 1.89,
+   "text": "it has up to thousands of nuclei within"
+  },
+  {
+   "t": 272.11,
+   "d": 5.13,
+   "text": "it so slime molds when they're happy and"
+  },
+  {
+   "t": 277.24,
+   "d": 2.01,
+   "text": "healthy and there's lots of food to go"
+  },
+  {
+   "t": 279.25,
+   "d": 2.04,
+   "text": "around explore their environment at a"
+  },
+  {
+   "t": 281.29,
+   "d": 2.16,
+   "text": "rate of somewhere between one to ten"
+  },
+  {
+   "t": 283.45,
+   "d": 2.82,
+   "text": "millimeters an hour they look for food"
+  },
+  {
+   "t": 286.27,
+   "d": 2.37,
+   "text": "like bacteria and different kinds of"
+  },
+  {
+   "t": 288.64,
+   "d": 4.86,
+   "text": "fungi but if they find food is scarce"
+  },
+  {
+   "t": 293.5,
+   "d": 2.94,
+   "text": "things get a little different so this is"
+  },
+  {
+   "t": 296.44,
+   "d": 1.95,
+   "text": "a very simplified slime mold lifecycle"
+  },
+  {
+   "t": 298.39,
+   "d": 3.36,
+   "text": "if they find food is scarce different"
+  },
+  {
+   "t": 301.75,
+   "d": 2.88,
+   "text": "simultaneity coalesce this is where we"
+  },
+  {
+   "t": 304.63,
+   "d": 2.64,
+   "text": "get the amoebic forms that can grow to"
+  },
+  {
+   "t": 307.27,
+   "d": 3.03,
+   "text": "very large sizes with many different"
+  },
+  {
+   "t": 310.3,
+   "d": 4.32,
+   "text": "nuclei once they've grown and they are"
+  },
+  {
+   "t": 314.62,
+   "d": 1.92,
+   "text": "satisfied I don't know exactly what"
+  },
+  {
+   "t": 316.54,
+   "d": 1.65,
+   "text": "triggers the next step but they turn"
+  },
+  {
+   "t": 318.19,
+   "d": 2.88,
+   "text": "into fruiting bodies where they release"
+  },
+  {
+   "t": 321.07,
+   "d": 1.47,
+   "text": "spores of themselves clones of"
+  },
+  {
+   "t": 322.54,
+   "d": 1.83,
+   "text": "themselves and these spread to faraway"
+  },
+  {
+   "t": 324.37,
+   "d": 1.89,
+   "text": "regions the slime mold then"
+  },
+  {
+   "t": 326.26,
+   "d": 3.03,
+   "text": "unfortunately dies but its offspring"
+  },
+  {
+   "t": 329.29,
+   "d": 4.08,
+   "text": "will live on my favorite thing about"
+  },
+  {
+   "t": 333.37,
+   "d": 1.62,
+   "text": "slime molds is that even though they're"
+  },
+  {
+   "t": 334.99,
+   "d": 2.34,
+   "text": "very simple creatures they can exhibit"
+  },
+  {
+   "t": 337.33,
+   "d": 2.01,
+   "text": "some complex behavior which I'm gonna"
+  },
+  {
+   "t": 339.34,
+   "d": 3.47,
+   "text": "show you some examples of them right now"
+  },
+  {
+   "t": 342.81,
+   "d": 2.05,
+   "text": "some of you might have seen this study"
+  },
+  {
+   "t": 344.86,
+   "d": 3.15,
+   "text": "before it was done in 2000 where they"
+  },
+  {
+   "t": 348.01,
+   "d": 2.34,
+   "text": "found that slime molds can solve mazes"
+  },
+  {
+   "t": 350.35,
+   "d": 3.51,
+   "text": "much like a scientist would put a rat or"
+  },
+  {
+   "t": 353.86,
+   "d": 1.5,
+   "text": "mouse and a maze and it would solve the"
+  },
+  {
+   "t": 355.36,
+   "d": 3.84,
+   "text": "maze scientists put slime old enemies"
+  },
+  {
+   "t": 359.2,
+   "d": 1.83,
+   "text": "and they put food sources at the"
+  },
+  {
+   "t": 361.03,
+   "d": 2.24,
+   "text": "beginning and the end of the maze I"
+  },
+  {
+   "t": 363.27,
+   "d": 2.62,
+   "text": "don't know if this is cheating or not"
+  },
+  {
+   "t": 365.89,
+   "d": 1.74,
+   "text": "but the slime mold then filled up the"
+  },
+  {
+   "t": 367.63,
+   "d": 4.41,
+   "text": "entire maze and shrunk down to find the"
+  },
+  {
+   "t": 372.04,
+   "d": 2.16,
+   "text": "shortest path between the two different"
+  },
+  {
+   "t": 374.2,
+   "d": 1.83,
+   "text": "food sources essentially solving the"
+  },
+  {
+   "t": 376.03,
+   "d": 1.86,
+   "text": "maze here's a video of what that might"
+  },
+  {
+   "t": 377.89,
+   "d": 1.5,
+   "text": "look like you can see the Simon cells"
+  },
+  {
+   "t": 379.39,
+   "d": 2.1,
+   "text": "all the space they didn't give it that"
+  },
+  {
+   "t": 381.49,
+   "d": 1.88,
+   "text": "much time to shrink down but you can see"
+  },
+  {
+   "t": 383.37,
+   "d": 7.89,
+   "text": "the answer is right there well done"
+  },
+  {
+   "t": 393.18,
+   "d": 3.19,
+   "text": "this idea that slime molds can find the"
+  },
+  {
+   "t": 396.37,
+   "d": 1.38,
+   "text": "shortest path between different food"
+  },
+  {
+   "t": 397.75,
+   "d": 3.57,
+   "text": "sources has been expanded to studies"
+  },
+  {
+   "t": 401.32,
+   "d": 2.52,
+   "text": "where they would place food in the same"
+  },
+  {
+   "t": 403.84,
+   "d": 3.99,
+   "text": "pattern as subway stations with train"
+  },
+  {
+   "t": 407.83,
+   "d": 1.74,
+   "text": "stations different cities and they would"
+  },
+  {
+   "t": 409.57,
+   "d": 1.5,
+   "text": "try to get this line mold to look like"
+  },
+  {
+   "t": 411.07,
+   "d": 2.49,
+   "text": "highway systems or rail systems here's a"
+  },
+  {
+   "t": 413.56,
+   "d": 3.42,
+   "text": "study in 2010 where scientists made the"
+  },
+  {
+   "t": 416.98,
+   "d": 2.19,
+   "text": "pattern of the Tokyo subway system and"
+  },
+  {
+   "t": 419.17,
+   "d": 2.28,
+   "text": "they argued that the slime old paths"
+  },
+  {
+   "t": 421.45,
+   "d": 1.73,
+   "text": "between all the different food sources"
+  },
+  {
+   "t": 423.18,
+   "d": 5.49,
+   "text": "resembled the actual Tokyo rail system"
+  },
+  {
+   "t": 429.03,
+   "d": 2.26,
+   "text": "whether or not you're convinced I don't"
+  },
+  {
+   "t": 431.29,
+   "d": 2.07,
+   "text": "know if I'm finally during break and we"
+  },
+  {
+   "t": 433.36,
+   "d": 3.84,
+   "text": "can talk about another super cool thing"
+  },
+  {
+   "t": 437.2,
+   "d": 1.86,
+   "text": "about slime molds you wouldn't expect"
+  },
+  {
+   "t": 439.06,
+   "d": 2.13,
+   "text": "something without a brain or a nervous"
+  },
+  {
+   "t": 441.19,
+   "d": 3.27,
+   "text": "system to have some kind of memory but"
+  },
+  {
+   "t": 444.46,
+   "d": 1.89,
+   "text": "slime molds do have a sort of spatial"
+  },
+  {
+   "t": 446.35,
+   "d": 2.49,
+   "text": "memory anywhere that they've been they"
+  },
+  {
+   "t": 448.84,
+   "d": 2.51,
+   "text": "leave a residue and if a slime mold"
+  },
+  {
+   "t": 451.35,
+   "d": 1.96,
+   "text": "encounters that kind of residue that"
+  },
+  {
+   "t": 453.31,
+   "d": 1.47,
+   "text": "will not go there again it will not"
+  },
+  {
+   "t": 454.78,
+   "d": 2.16,
+   "text": "cross that path this relates to the idea"
+  },
+  {
+   "t": 456.94,
+   "d": 3.06,
+   "text": "that slime molds exist they shrink down"
+  },
+  {
+   "t": 460.0,
+   "d": 1.98,
+   "text": "to form efficient pads between food"
+  },
+  {
+   "t": 461.98,
+   "d": 3.36,
+   "text": "sources so if a slime mold finds a spot"
+  },
+  {
+   "t": 465.34,
+   "d": 1.2,
+   "text": "where there is no slime mold"
+  },
+  {
+   "t": 466.54,
+   "d": 1.29,
+   "text": "but a slime molds been there it knows"
+  },
+  {
+   "t": 467.83,
+   "d": 3.6,
+   "text": "there's not going to be any food the"
+  },
+  {
+   "t": 471.43,
+   "d": 3.33,
+   "text": "spatial memory has been used to for"
+  },
+  {
+   "t": 474.76,
+   "d": 3.93,
+   "text": "slime molds into this u-shaped trap the"
+  },
+  {
+   "t": 478.69,
+   "d": 3.21,
+   "text": "the you trap is used in robotics this is"
+  },
+  {
+   "t": 481.9,
+   "d": 1.11,
+   "text": "my understanding I don't know anything"
+  },
+  {
+   "t": 483.01,
+   "d": 1.98,
+   "text": "about robotics but it's used as a test"
+  },
+  {
+   "t": 484.99,
+   "d": 1.98,
+   "text": "of autonomous navigation and they found"
+  },
+  {
+   "t": 486.97,
+   "d": 1.56,
+   "text": "that the slime mold could escape the u"
+  },
+  {
+   "t": 488.53,
+   "d": 3.53,
+   "text": "trap using this spatial memory feature"
+  },
+  {
+   "t": 492.06,
+   "d": 8.56,
+   "text": "interestingly simultaneity scientists"
+  },
+  {
+   "t": 500.62,
+   "d": 2.73,
+   "text": "took a slime mold and put it in what was"
+  },
+  {
+   "t": 503.35,
+   "d": 1.74,
+   "text": "essentially a slime mold torture chamber"
+  },
+  {
+   "t": 505.09,
+   "d": 3.39,
+   "text": "where for 10 minutes of every hour it"
+  },
+  {
+   "t": 508.48,
+   "d": 3.06,
+   "text": "switched from being a warm moist slime"
+  },
+  {
+   "t": 511.54,
+   "d": 2.91,
+   "text": "mold paradise to a very cold dry harsh"
+  },
+  {
+   "t": 514.45,
+   "d": 3.81,
+   "text": "environment for the slime molds with the"
+  },
+  {
+   "t": 518.26,
+   "d": 2.07,
+   "text": "environmental switch came a change in"
+  },
+  {
+   "t": 520.33,
+   "d": 1.89,
+   "text": "states for the slime mold it went from"
+  },
+  {
+   "t": 522.22,
+   "d": 1.21,
+   "text": "being very high-energy"
+  },
+  {
+   "t": 523.43,
+   "d": 2.37,
+   "text": "moving to a much slower lower-energy"
+  },
+  {
+   "t": 525.8,
+   "d": 2.73,
+   "text": "slime mold and they found that even"
+  },
+  {
+   "t": 528.53,
+   "d": 2.07,
+   "text": "after they removed that stimulus the"
+  },
+  {
+   "t": 530.6,
+   "d": 1.68,
+   "text": "slime mold kept alternating States every"
+  },
+  {
+   "t": 532.28,
+   "d": 3.33,
+   "text": "hour and I'm not really I'm not sure why"
+  },
+  {
+   "t": 535.61,
+   "d": 2.01,
+   "text": "I'm not sure that's well understood why"
+  },
+  {
+   "t": 537.62,
+   "d": 3.96,
+   "text": "the sign molds can do that I could talk"
+  },
+  {
+   "t": 541.58,
+   "d": 1.86,
+   "text": "about different Studies on slime molds"
+  },
+  {
+   "t": 543.44,
+   "d": 2.76,
+   "text": "all day but unfortunately I don't have"
+  },
+  {
+   "t": 546.2,
+   "d": 1.47,
+   "text": "the time for that I do encourage you to"
+  },
+  {
+   "t": 547.67,
+   "d": 2.34,
+   "text": "go and research these topics on your own"
+  },
+  {
+   "t": 550.01,
+   "d": 2.07,
+   "text": "slime molds have been used in bio"
+  },
+  {
+   "t": 552.08,
+   "d": 2.72,
+   "text": "computers and even to make different"
+  },
+  {
+   "t": 554.8,
+   "d": 2.95,
+   "text": "logic gates you see on the bottom right"
+  },
+  {
+   "t": 557.75,
+   "d": 4.62,
+   "text": "a chip with a set of tubes and the idea"
+  },
+  {
+   "t": 562.37,
+   "d": 1.14,
+   "text": "being that you can put slime mold"
+  },
+  {
+   "t": 563.51,
+   "d": 2.34,
+   "text": "through these tubes and there's two"
+  },
+  {
+   "t": 565.85,
+   "d": 3.06,
+   "text": "inputs to outputs the final can go into"
+  },
+  {
+   "t": 568.91,
+   "d": 3.9,
+   "text": "a tube and either not leave through any"
+  },
+  {
+   "t": 572.81,
+   "d": 1.38,
+   "text": "of the outputs leave through one of the"
+  },
+  {
+   "t": 574.19,
+   "d": 1.02,
+   "text": "outputs really through both of the"
+  },
+  {
+   "t": 575.21,
+   "d": 2.22,
+   "text": "outputs and you can make different kinds"
+  },
+  {
+   "t": 577.43,
+   "d": 1.53,
+   "text": "of logic with that but like I said"
+  },
+  {
+   "t": 578.96,
+   "d": 2.97,
+   "text": "before the slime molds only move one to"
+  },
+  {
+   "t": 581.93,
+   "d": 3.33,
+   "text": "ten millimeters an hour so it's not very"
+  },
+  {
+   "t": 585.26,
+   "d": 6.24,
+   "text": "efficient but you could do it so um I"
+  },
+  {
+   "t": 591.5,
+   "d": 1.14,
+   "text": "want to spend the rest of my talk"
+  },
+  {
+   "t": 592.64,
+   "d": 3.57,
+   "text": "talking about real life slime molds in"
+  },
+  {
+   "t": 596.21,
+   "d": 2.31,
+   "text": "case you are motivated by your new"
+  },
+  {
+   "t": 598.52,
+   "d": 1.77,
+   "text": "knowledge of slime molds to go out and"
+  },
+  {
+   "t": 600.29,
+   "d": 1.8,
+   "text": "find one yourselves and take care of it"
+  },
+  {
+   "t": 602.09,
+   "d": 3.39,
+   "text": "as your home you will need a large mason"
+  },
+  {
+   "t": 605.48,
+   "d": 4.53,
+   "text": "jar like like this one here you'll need"
+  },
+  {
+   "t": 610.01,
+   "d": 1.77,
+   "text": "some kind of food source oatmeal will do"
+  },
+  {
+   "t": 611.78,
+   "d": 2.55,
+   "text": "a damp paper towel a fruit cup container"
+  },
+  {
+   "t": 614.33,
+   "d": 2.97,
+   "text": "or some other small can like object and"
+  },
+  {
+   "t": 617.3,
+   "d": 1.41,
+   "text": "of course you're going to need a slime"
+  },
+  {
+   "t": 618.71,
+   "d": 5.67,
+   "text": "mold so this is me I think in August or"
+  },
+  {
+   "t": 624.38,
+   "d": 2.43,
+   "text": "September and Joaquin Miller Park trying"
+  },
+  {
+   "t": 626.81,
+   "d": 2.67,
+   "text": "to go on a slime mold hunt it took me a"
+  },
+  {
+   "t": 629.48,
+   "d": 1.44,
+   "text": "couple hours because it had been really"
+  },
+  {
+   "t": 630.92,
+   "d": 1.98,
+   "text": "dry around that time but I did"
+  },
+  {
+   "t": 632.9,
+   "d": 2.61,
+   "text": "eventually find a slime mold to to make"
+  },
+  {
+   "t": 635.51,
+   "d": 2.75,
+   "text": "my pet for the purposes of this talk"
+  },
+  {
+   "t": 638.26,
+   "d": 2.37,
+   "text": "like I said earlier they really like"
+  },
+  {
+   "t": 640.63,
+   "d": 3.88,
+   "text": "multi areas areas that are moist so"
+  },
+  {
+   "t": 644.51,
+   "d": 2.73,
+   "text": "underneath logs or if it's been raining"
+  },
+  {
+   "t": 647.24,
+   "d": 2.61,
+   "text": "lately and places where they don't have"
+  },
+  {
+   "t": 649.85,
+   "d": 2.13,
+   "text": "to see a lot of light those are your"
+  },
+  {
+   "t": 651.98,
+   "d": 2.1,
+   "text": "best candidates to find a slime mold"
+  },
+  {
+   "t": 654.08,
+   "d": 2.46,
+   "text": "this one here we found on a log"
+  },
+  {
+   "t": 656.54,
+   "d": 2.58,
+   "text": "that was rotting and where the slime"
+  },
+  {
+   "t": 659.12,
+   "d": 2.25,
+   "text": "mold was the biggest there was some SAP"
+  },
+  {
+   "t": 661.37,
+   "d": 2.07,
+   "text": "coming out of the tree so it had that"
+  },
+  {
+   "t": 663.44,
+   "d": 2.48,
+   "text": "there's just sweet sugary food source to"
+  },
+  {
+   "t": 665.92,
+   "d": 4.9,
+   "text": "sustain itself unfortunately in between"
+  },
+  {
+   "t": 670.82,
+   "d": 1.92,
+   "text": "finding that original slime mold and"
+  },
+  {
+   "t": 672.74,
+   "d": 5.76,
+   "text": "this talk it died it turns out slime"
+  },
+  {
+   "t": 678.5,
+   "d": 5.79,
+   "text": "molds need air so make sure you make"
+  },
+  {
+   "t": 684.29,
+   "d": 1.44,
+   "text": "sure you poke holes in the top of your"
+  },
+  {
+   "t": 685.73,
+   "d": 7.08,
+   "text": "jar yeah Bob suffocated but these are"
+  },
+  {
+   "t": 692.81,
+   "d": 4.2,
+   "text": "pictures of my second attempt I call him"
+  },
+  {
+   "t": 697.01,
+   "d": 2.67,
+   "text": "slimy the second and these pictures are"
+  },
+  {
+   "t": 699.68,
+   "d": 1.56,
+   "text": "actually from 6:00 a.m. this morning I'd"
+  },
+  {
+   "t": 701.24,
+   "d": 2.49,
+   "text": "like to thank Josh and Johnny sitting"
+  },
+  {
+   "t": 703.73,
+   "d": 1.26,
+   "text": "over there on the floor for coming out"
+  },
+  {
+   "t": 704.99,
+   "d": 1.98,
+   "text": "with me - Joaquin Miller Park - honey I"
+  },
+  {
+   "t": 706.97,
+   "d": 5.1,
+   "text": "knew slime mold so you can hang out with"
+  },
+  {
+   "t": 712.07,
+   "d": 2.37,
+   "text": "this slime mold during break later 3"
+  },
+  {
+   "t": 714.44,
+   "d": 2.97,
+   "text": "o'clock in the kitchen area I guess they"
+  },
+  {
+   "t": 717.41,
+   "d": 3.66,
+   "text": "are edible I would prefer you didn't try"
+  },
+  {
+   "t": 721.07,
+   "d": 1.65,
+   "text": "to eat my slime mold but we are gonna"
+  },
+  {
+   "t": 722.72,
+   "d": 3.21,
+   "text": "have slime mold cupcakes for you they"
+  },
+  {
+   "t": 725.93,
+   "d": 4.59,
+   "text": "are vegan just like slime molds are but"
+  },
+  {
+   "t": 730.52,
+   "d": 1.41,
+   "text": "I think they might violate gluten-free"
+  },
+  {
+   "t": 731.93,
+   "d": 5.66,
+   "text": "conduct in summary slime molds are"
+  },
+  {
+   "t": 737.59,
+   "d": 2.98,
+   "text": "harmless intelligent and beautiful"
+  },
+  {
+   "t": 740.57,
+   "d": 2.28,
+   "text": "creatures and I hope that you have a"
+  },
+  {
+   "t": 742.85,
+   "d": 4.16,
+   "text": "newfound appreciation for them thank you"
+  },
+  {
+   "t": 748.28,
+   "d": 3.12,
+   "text": "[Applause]"
+  },
+  {
+   "t": 752.55,
+   "d": 3.0,
+   "text": "questions"
+  },
+  {
+   "t": 767.25,
+   "d": 3.03,
+   "text": "do they have like any kind of inherent"
+  },
+  {
+   "t": 770.28,
+   "d": 3.99,
+   "text": "flavor properties you'd have to try for"
+  },
+  {
+   "t": 774.27,
+   "d": 5.1,
+   "text": "yourself would it be fair to say that"
+  },
+  {
+   "t": 779.37,
+   "d": 1.71,
+   "text": "you're aspiring to start a protest"
+  },
+  {
+   "t": 781.08,
+   "d": 7.05,
+   "text": "movement with within the roguelike"
+  },
+  {
+   "t": 788.13,
+   "d": 4.83,
+   "text": "community at least besides eating them"
+  },
+  {
+   "t": 792.96,
+   "d": 2.37,
+   "text": "is there anything else any benefits to"
+  },
+  {
+   "t": 795.33,
+   "d": 1.92,
+   "text": "foraging them like you use them for dyes"
+  },
+  {
+   "t": 797.25,
+   "d": 3.57,
+   "text": "or medicines or anything like that they"
+  },
+  {
+   "t": 800.82,
+   "d": 2.63,
+   "text": "make great pets"
+  },
+  {
+   "t": 812.24,
+   "d": 2.52,
+   "text": "hey can you crossbreed them for like"
+  },
+  {
+   "t": 814.76,
+   "d": 3.65,
+   "text": "prismatic coloring or enhance strength I"
+  },
+  {
+   "t": 818.41,
+   "d": 2.44,
+   "text": "mean the coloring is real this drinks"
+  },
+  {
+   "t": 820.85,
+   "d": 1.74,
+   "text": "maybe not so much but like they look"
+  },
+  {
+   "t": 822.59,
+   "d": 1.98,
+   "text": "cool when you mix of him that's a really"
+  },
+  {
+   "t": 824.57,
+   "d": 6.03,
+   "text": "good idea and I encourage you to try do"
+  },
+  {
+   "t": 830.6,
+   "d": 3.81,
+   "text": "they need much exercise they're kind of"
+  },
+  {
+   "t": 834.41,
+   "d": 2.22,
+   "text": "moving all the time I really think"
+  },
+  {
+   "t": 836.63,
+   "d": 2.96,
+   "text": "they're moving as fast as they can"
+  },
+  {
+   "t": 845.78,
+   "d": 1.98,
+   "text": "are you going to lead us on assign mold"
+  },
+  {
+   "t": 847.76,
+   "d": 1.92,
+   "text": "hunt if anyone wants to go slime mold"
+  },
+  {
+   "t": 849.68,
+   "d": 1.26,
+   "text": "hunting with me now is a really great"
+  },
+  {
+   "t": 850.94,
+   "d": 4.58,
+   "text": "time because of all the rain I'm serious"
+  },
+  {
+   "t": 855.52,
+   "d": 3.4,
+   "text": "so if I'm gonna customize my spy slime"
+  },
+  {
+   "t": 858.92,
+   "d": 2.04,
+   "text": "mold to be a specific kind of slime mold"
+  },
+  {
+   "t": 860.96,
+   "d": 2.28,
+   "text": "like these are a kind that you recommend"
+  },
+  {
+   "t": 863.24,
+   "d": 1.83,
+   "text": "that would be especially wonderful yes"
+  },
+  {
+   "t": 865.07,
+   "d": 3.36,
+   "text": "my favorite slime mold is called the dog"
+  },
+  {
+   "t": 868.43,
+   "d": 3.33,
+   "text": "vomit slime mold it's fluorescent yellow"
+  },
+  {
+   "t": 871.76,
+   "d": 3.48,
+   "text": "and commonly found in gardens this may"
+  },
+  {
+   "t": 875.24,
+   "d": 2.43,
+   "text": "be a kind of dog vomit slime mold if you"
+  },
+  {
+   "t": 877.67,
+   "d": 4.11,
+   "text": "want to check it out later all right"
+  },
+  {
+   "t": 881.78,
+   "d": 2.96,
+   "text": "thank you so much"
+  }
+ ]
+}

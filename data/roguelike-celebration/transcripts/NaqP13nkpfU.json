@@ -1,0 +1,550 @@
+{
+ "id": "NaqP13nkpfU",
+ "url": "https://www.youtube.com/watch?v=NaqP13nkpfU",
+ "title": "Andrew Doull - Roguelike Radio 2011-present",
+ "speaker": "Andrew Doull",
+ "talk_title": "Roguelike Radio 2011-present",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-02-09",
+ "duration_s": 842,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "The history of Roguelike Radio, a podcast about roguelikes which has been running since 2011.",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1778,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 12.96,
+   "d": 6.48,
+   "text": "ALEXEI: Welcoming to the stage Andrew Doull. Developed Unangband, an Angband"
+  },
+  {
+   "t": 19.44,
+   "d": 5.44,
+   "text": "variant; wrote ASCII dreams, a roguelike developer blog; cofounded Roguelike Radio;"
+  },
+  {
+   "t": 26.24,
+   "d": 5.2,
+   "text": "coined the term Procedural Content Generation; since then a board game and TTRPG designer."
+  },
+  {
+   "t": 32.08,
+   "d": 18.48,
+   "text": "Welcome all of the way from Australia I believe. ANDREW: Can you hear me? Welcome to \"Roguelike"
+  },
+  {
+   "t": 50.56,
+   "d": 4.24,
+   "text": "Radio 2011present.\" A podcast where all participants are wonderful people and go"
+  },
+  {
+   "t": 54.8,
+   "d": 6.32,
+   "text": "on to have amazing lives. Kawa asked me to do a lightning talk but I am not sure what to say"
+  },
+  {
+   "t": 61.68,
+   "d": 7.76,
+   "text": "so this is mostly to point out our existing body of work and it is there. I am going to"
+  },
+  {
+   "t": 69.44,
+   "d": 5.84,
+   "text": "warn you as the speaker of New Zealand English I will talk about 20% faster than any human would"
+  },
+  {
+   "t": 75.28,
+   "d": 5.04,
+   "text": "do. So I will get through these slides in well under 10 minutes. That's fine unless you are"
+  },
+  {
+   "t": 80.32,
+   "d": 6.4,
+   "text": "the transcription teams because you are probably one of those sickos who listen to podcast at 250"
+  },
+  {
+   "t": 86.72,
+   "d": 13.28,
+   "text": "speed. Today I want to talk about how this worked out from 2011 to the present day."
+  },
+  {
+   "t": 100.0,
+   "d": 5.04,
+   "text": "We begin with a question I feel like I have been forced to answer many times. Why is this a thing"
+  },
+  {
+   "t": 105.04,
+   "d": 6.48,
+   "text": "that should obviously exist which is not being made? There is an Angband variant with dungeon"
+  },
+  {
+   "t": 111.52,
+   "d": 12.4,
+   "text": "that feel reals. Software TTRPG using realistic rocket physics. This is an entirely selfish"
+  },
+  {
+   "t": 123.92,
+   "d": 7.84,
+   "text": "project but looks impressive because it has kept going. It is just a consequence of ongoing work,"
+  },
+  {
+   "t": 131.76,
+   "d": 6.48,
+   "text": "support from the community, and occasional big picture and steering oversight. Unlike many other"
+  },
+  {
+   "t": 138.24,
+   "d": 9.28,
+   "text": "projects I have worked on, I have collaborated with many, Darren gray and then many who have"
+  },
+  {
+   "t": 147.52,
+   "d": 5.44,
+   "text": "come on the show as Panelists and members of the broader community and volunteers. We"
+  },
+  {
+   "t": 152.96,
+   "d": 7.12,
+   "text": "started auspiciously, literally. The problem being somewhere long enough is you get live through the"
+  },
+  {
+   "t": 160.08,
+   "d": 5.92,
+   "text": "consequences of predictions. I want you to cast your mind back to 2011 and think about what you"
+  },
+  {
+   "t": 166.0,
+   "d": 9.76,
+   "text": "were doing. I was being a fear a fulltime father father of twins. Podcasts got me through a lot of"
+  },
+  {
+   "t": 175.76,
+   "d": 7.2,
+   "text": "sleepless nights. I tried to remember where you were in 2011 representing the green line."
+  },
+  {
+   "t": 187.52,
+   "d": 7.76,
+   "text": "I position this against the board of picture of roguelites. The present -day space feels"
+  },
+  {
+   "t": 195.28,
+   "d": 5.04,
+   "text": "like individual developers and collaborators each working on a fantasy heartbreaker to steal a turn"
+  },
+  {
+   "t": 200.32,
+   "d": 4.72,
+   "text": "from the tabletop roleplay community. Sometimes those games would get released. I released mine,"
+  },
+  {
+   "t": 205.04,
+   "d": 8.0,
+   "text": "unAngband. The seven day roguelike commutation starts what I term the roguelike renaissance."
+  },
+  {
+   "t": 216.0,
+   "d": 6.72,
+   "text": "Coffee break roguelikes. There is a real story to be told here by a better scholar than me."
+  },
+  {
+   "t": 222.72,
+   "d": 11.2,
+   "text": "The Xbox 360 release of splunky to the Slay the Spire release. And then followed by roguelikes"
+  },
+  {
+   "t": 233.92,
+   "d": 5.44,
+   "text": "appearing in much greater quantities on Steam. The first radio correlates with the indie scene"
+  },
+  {
+   "t": 239.36,
+   "d": 11.52,
+   "text": "but is indebted to this. And finally the rogue apocalypse. Let's talk about each episode."
+  },
+  {
+   "t": 258.48,
+   "d": 7.6,
+   "text": "Episodes run slightly longer than 60 minutes and come out after being recorded and edited. We have"
+  },
+  {
+   "t": 266.08,
+   "d": 5.36,
+   "text": "not had as far as I am aware anyone giving us a game for free. We have been given games."
+  },
+  {
+   "t": 273.92,
+   "d": 5.44,
+   "text": "I don't have time to list all the topics we have covered but luckily roguelikeradio.com has a list"
+  },
+  {
+   "t": 279.36,
+   "d": 8.64,
+   "text": "of all prior episodes. These titles usually convey the topic being covered. Be aware the"
+  },
+  {
+   "t": 288.0,
+   "d": 4.56,
+   "text": "feed has a size limit meaning the oldest episodes are not available on the feed and you have to"
+  },
+  {
+   "t": 292.56,
+   "d": 7.6,
+   "text": "go to the website to get them. Managing the feed has been the most technical part of the process."
+  },
+  {
+   "t": 301.28,
+   "d": 10.8,
+   "text": "It turns out roguelikes take a lot of time to play. This is a democratizing process. We will"
+  },
+  {
+   "t": 312.08,
+   "d": 10.48,
+   "text": "get a knowledgeable volunteer from the community to talk about the game occasionally. All I am"
+  },
+  {
+   "t": 322.56,
+   "d": 4.88,
+   "text": "interested in when I am hosting the show is that you have something interesting to say."
+  },
+  {
+   "t": 327.44,
+   "d": 7.76,
+   "text": "That's why I choose not to introduce guests with backgrounds that may convey authority. We are all"
+  },
+  {
+   "t": 335.2,
+   "d": 8.96,
+   "text": "the same symbol. We welcome English as a speech language, speech impediment, people of color"
+  },
+  {
+   "t": 344.16,
+   "d": 7.36,
+   "text": "and the LGBTQIA plus community and we never get enough. Did I mention roguelikes take a lot of"
+  },
+  {
+   "t": 351.52,
+   "d": 7.04,
+   "text": "time to play. We don't like the conversation topics. There is plenty of games we haven't"
+  },
+  {
+   "t": 358.56,
+   "d": 7.84,
+   "text": "covered. Amega is the most egregious example. When you have a long game, people end up playing it for"
+  },
+  {
+   "t": 366.4,
+   "d": 8.16,
+   "text": "a long time and know a lot about the game. There is something about repeatedly pulling an unarmed"
+  },
+  {
+   "t": 374.56,
+   "d": 7.44,
+   "text": "band machine that is reflected by the real world. Games will test sets of rules. I had the pleasure"
+  },
+  {
+   "t": 382.0,
+   "d": 6.0,
+   "text": "of working a libertarian who produces games under cutting this thesis framing the power"
+  },
+  {
+   "t": 388.0,
+   "d": 8.0,
+   "text": "of collective action. And speaking of lies here is some statistics. I have never understood what is"
+  },
+  {
+   "t": 396.0,
+   "d": 5.6,
+   "text": "suspiciously secret about these numbers but I want to put numbers out there because I believe people"
+  },
+  {
+   "t": 401.6,
+   "d": 37.2,
+   "text": "should be transparent about this thing. My number one piece of advice about recording a pod cost is"
+  },
+  {
+   "t": 438.8,
+   "d": 8.56,
+   "text": "if you spend money on one thing spend it on the software. You want client side. We use about 30"
+  },
+  {
+   "t": 447.36,
+   "d": 14.16,
+   "text": "seconds of audio that is not in our control. You want a room that has soft furnishing. Microphones"
+  },
+  {
+   "t": 463.52,
+   "d": 6.0,
+   "text": "are never an issue. We recorded five people using a headset in the middle of a wooden table. The"
+  },
+  {
+   "t": 469.52,
+   "d": 6.32,
+   "text": "editor is equalizing volumes and separating talk and cleanup. I spend a lot of time removing audio"
+  },
+  {
+   "t": 475.84,
+   "d": 16.16,
+   "text": "reduction and lip smacks. We manually level things now. I just wanted to pick out a few highlights."
+  },
+  {
+   "t": 496.24,
+   "d": 3.84,
+   "text": "The episode for design trying designing for visually impaired was important for me because"
+  },
+  {
+   "t": 500.08,
+   "d": 9.28,
+   "text": "I have a family member who is blind and we did an episode on using a screen reader. We"
+  },
+  {
+   "t": 511.12,
+   "d": 8.0,
+   "text": "listened to voice recordings and threaded into the show. Editing has been a challenge. The binding"
+  },
+  {
+   "t": 519.12,
+   "d": 5.12,
+   "text": "of the episode is almost completely reiterated because I started the interview and did the intro"
+  },
+  {
+   "t": 524.24,
+   "d": 5.04,
+   "text": "introduction halfway through the conversation. I really shouldn't be the person doing this. I"
+  },
+  {
+   "t": 530.8,
+   "d": 7.84,
+   "text": "smack my lips and I overrun other speakers. I am not saying this in a self-deprecating manner but"
+  },
+  {
+   "t": 538.64,
+   "d": 6.96,
+   "text": "because I have edited so many episodes I know where my weaknesses are. For every episode I"
+  },
+  {
+   "t": 545.6,
+   "d": 6.8,
+   "text": "don't appear in is a highlight not just for me but for you the listener as well. The biggest"
+  },
+  {
+   "t": 552.4,
+   "d": 10.24,
+   "text": "highlight as a community was being right. We knew there was something special about roguelikes. It"
+  },
+  {
+   "t": 562.64,
+   "d": 5.04,
+   "text": "took the seven day roguelike competition and talented insiders and outsiders and a lot of"
+  },
+  {
+   "t": 567.68,
+   "d": 6.24,
+   "text": "effort and discussion from people that had been around since Rogue was written. We fucking won."
+  },
+  {
+   "t": 573.92,
+   "d": 11.36,
+   "text": "Roguelikes have taken over. And we got grumpy and made slides with the word like apocalypse. We are"
+  },
+  {
+   "t": 585.28,
+   "d": 13.92,
+   "text": "at the Roguelike Celebration so let's celebrate. ALEXEI: We have some time for questions"
+  },
+  {
+   "t": 599.2,
+   "d": 7.04,
+   "text": "if people want to get those up. ANDREW: I have a question slide on"
+  },
+  {
+   "t": 606.24,
+   "d": 5.2,
+   "text": "the wrong screen of my presentation. I am just going to see if Kawa can get through to me."
+  },
+  {
+   "t": 615.04,
+   "d": 6.8,
+   "text": "ALEXEI: It is great. We like to have lis historic talks about Roguelike Celebration because one of"
+  },
+  {
+   "t": 621.84,
+   "d": 4.88,
+   "text": "the things I love about roguelikes is it holds on to its history and so much exist in a form"
+  },
+  {
+   "t": 626.72,
+   "d": 5.44,
+   "text": "that can be connected. And people stay in the scene so long. We can talk to people who were"
+  },
+  {
+   "t": 632.16,
+   "d": 10.24,
+   "text": "involved and Roguelike Radio has had so many guests. Giving we are living in a time when"
+  },
+  {
+   "t": 642.4,
+   "d": 6.32,
+   "text": "talking about what a roguelike is has taken another turn of just like everything is a"
+  },
+  {
+   "t": 648.72,
+   "d": 6.0,
+   "text": "roguelike now. It felt like a good time to do a retrospective so Thank you for taking on the task."
+  },
+  {
+   "t": 655.6,
+   "d": 5.36,
+   "text": "ALEXEI: Thank you for inviting me and forcing me to do this. I realize I had gone even faster"
+  },
+  {
+   "t": 660.96,
+   "d": 8.56,
+   "text": "than I had planned which is the downside for this but that's absolutely fine. Thanks as"
+  },
+  {
+   "t": 669.52,
+   "d": 6.96,
+   "text": "well. You have been a guest on the show. And we have had a large number of guests. Much like the"
+  },
+  {
+   "t": 676.48,
+   "d": 4.64,
+   "text": "episodes I started to put together a list of every guests and realized it was too tall of a"
+  },
+  {
+   "t": 681.12,
+   "d": 7.04,
+   "text": "task. We have just had so many people on the show and it has been largely enjoyable. I know Darren"
+  },
+  {
+   "t": 688.16,
+   "d": 9.12,
+   "text": "presented at the Roguelike Celebration as well. ALEXEI: I will let you in on a secret when we are"
+  },
+  {
+   "t": 697.28,
+   "d": 4.8,
+   "text": "trying to figure out who to invite to Roguelike Celebration looking at who appeared on an episode"
+  },
+  {
+   "t": 702.08,
+   "d": 10.63,
+   "text": "of Roguelike Radio is a handy checklist to look for inspiration for sourcing Roguelike Radio"
+  },
+  {
+   "t": 712.71,
+   "d": 5.45,
+   "text": "since you have done a great job of finding people with interesting work willing to talk about it."
+  },
+  {
+   "t": 718.16,
+   "d": 11.28,
+   "text": "ANDREW: And we are back. The hiatus we had was not intentional. I am working"
+  },
+  {
+   "t": 729.44,
+   "d": 4.64,
+   "text": "full time and my interest has largely moved elsewhere from roguelikes but"
+  },
+  {
+   "t": 735.44,
+   "d": 5.04,
+   "text": "nothing is stopping anyone from watching this recording episode and sending it to us and say"
+  },
+  {
+   "t": 740.48,
+   "d": 4.96,
+   "text": "I want to appear on the show. I have something burning to talk about. You were wrong with"
+  },
+  {
+   "t": 745.44,
+   "d": 11.04,
+   "text": "what you said about Python in 2013 or whatever. ALEXEI: And you talked about your ethos of we are"
+  },
+  {
+   "t": 756.48,
+   "d": 5.84,
+   "text": "all just at signs and something that's important to Roguelike Celebration and someone who has had"
+  },
+  {
+   "t": 762.32,
+   "d": 5.92,
+   "text": "a lot of games that didn't ship and there is stuff as a game developer and in the roguelike community"
+  },
+  {
+   "t": 768.24,
+   "d": 5.12,
+   "text": "where you have people that are knowledgeable and dedicated but don't have big name games."
+  },
+  {
+   "t": 773.36,
+   "d": 7.28,
+   "text": "It is just very hard. A lot of conferences put a lot of weight on your accolades and so I think it"
+  },
+  {
+   "t": 780.64,
+   "d": 6.32,
+   "text": "is really great that Roguelike Radio and we try to do this too where we are all here because we know"
+  },
+  {
+   "t": 786.96,
+   "d": 4.72,
+   "text": "interesting things and want to talk about them. ANDREW: Your number one qualification is you"
+  },
+  {
+   "t": 791.68,
+   "d": 6.24,
+   "text": "played the game we want to talk about and have something to say. We don't put weight"
+  },
+  {
+   "t": 797.92,
+   "d": 4.96,
+   "text": "on how you have been here forever. Or you are the first person to come on the scene"
+  },
+  {
+   "t": 802.88,
+   "d": 4.32,
+   "text": "as long as you have something you want to say you are more than invited on the show."
+  },
+  {
+   "t": 807.2,
+   "d": 5.84,
+   "text": "ALEXEI: Excellent. That's coming up on time. This has been a really nice way"
+  },
+  {
+   "t": 813.04,
+   "d": 4.64,
+   "text": "to end our Saturday. Thank you so much and Thank you for making the time zones work to"
+  },
+  {
+   "t": 817.68,
+   "d": 4.96,
+   "text": "be able to present live. I think it is fully Sunday for you. You have a full day ahead."
+  },
+  {
+   "t": 823.36,
+   "d": 3.92,
+   "text": "ANDREW: We are in the future which is why I am working on science fiction now."
+  },
+  {
+   "t": 828.72,
+   "d": 7.44,
+   "text": "ALEXEI: Thank you so much. If you didn't know, Roguelike Radio is back. Go listen and look"
+  },
+  {
+   "t": 836.16,
+   "d": 5.36,
+   "text": "through the backlog. There is just a wealth of great stuff there. Excellent. Wonderful. OK."
+  }
+ ]
+}

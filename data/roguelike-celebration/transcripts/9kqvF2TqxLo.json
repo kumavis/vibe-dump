@@ -1,0 +1,1310 @@
+{
+ "id": "9kqvF2TqxLo",
+ "url": "https://www.youtube.com/watch?v=9kqvF2TqxLo",
+ "title": "Florence Smith Nicholls - Roll for Reminiscence: Procedural Keepsake Games",
+ "speaker": "Florence Smith Nicholls",
+ "talk_title": "Roll for Reminiscence: Procedural Keepsake Games",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2025-11-20",
+ "duration_s": 582,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "The term keepsake game, coined by designer Shing Yin Khor, refers to games in which the gameplay process itself produces an artefact. In this presentation I will introduce keepsake games and reflect on the potential for procedural systems to be designed to produce keepsakes through prompting cumulative creative acts by a player. In particular, the interplay between digital and analogue PCG and keepsakes will be explored through a series of case studies; the digital keepsake game ArchaeOS that I co-developed, a series of hybrid keepsake games produced during a workshop I ran at the Dagstuhl computer science seminar, and an academic study I conducted on player recordings. This talk will provide examples of how and why keepsake games provide memorable gameplay experiences, and will be applicable to both players and designers interested in the overlaps between TTRPG and digital game design.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 1799,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 3.0,
+   "text": "Our"
+  },
+  {
+   "t": 10.16,
+   "d": 2.16,
+   "text": "final talk of this morning's slot is"
+  },
+  {
+   "t": 12.32,
+   "d": 2.4,
+   "text": "from Florence Smith. Hey Florence,"
+  },
+  {
+   "t": 14.72,
+   "d": 2.8,
+   "text": "welcome back. HD, researcher at Queen"
+  },
+  {
+   "t": 17.52,
+   "d": 2.4,
+   "text": "Mary University focusing on video game"
+  },
+  {
+   "t": 19.92,
+   "d": 1.68,
+   "text": "archaeology and here to talk about"
+  },
+  {
+   "t": 21.6,
+   "d": 1.92,
+   "text": "procedural keepsake games. It's very"
+  },
+  {
+   "t": 23.52,
+   "d": 1.92,
+   "text": "exciting."
+  },
+  {
+   "t": 25.44,
+   "d": 2.24,
+   "text": ">> Thanks very much. Um, and thank you for"
+  },
+  {
+   "t": 27.68,
+   "d": 1.84,
+   "text": "having me. um very excited to be back"
+  },
+  {
+   "t": 29.52,
+   "d": 2.88,
+   "text": "here again. Um yeah, so today I'm going"
+  },
+  {
+   "t": 32.4,
+   "d": 2.08,
+   "text": "to be talking about procedural keepsake"
+  },
+  {
+   "t": 34.48,
+   "d": 2.0,
+   "text": "games."
+  },
+  {
+   "t": 36.48,
+   "d": 1.92,
+   "text": "And just a little bit about me first of"
+  },
+  {
+   "t": 38.4,
+   "d": 3.12,
+   "text": "all. Um so I'm currently doing a PhD in"
+  },
+  {
+   "t": 41.52,
+   "d": 2.64,
+   "text": "video game archaeology. Um I'm actually"
+  },
+  {
+   "t": 44.16,
+   "d": 2.56,
+   "text": "at the stage of writing my thesis now."
+  },
+  {
+   "t": 46.72,
+   "d": 1.84,
+   "text": "So in the scary stage, but it's going"
+  },
+  {
+   "t": 48.56,
+   "d": 3.04,
+   "text": "well. Um but before I did that, I"
+  },
+  {
+   "t": 51.6,
+   "d": 1.6,
+   "text": "actually worked as an archaeologist for"
+  },
+  {
+   "t": 53.2,
+   "d": 2.4,
+   "text": "many years. So that kind of like is sort"
+  },
+  {
+   "t": 55.6,
+   "d": 2.0,
+   "text": "of why I ended up doing this combination"
+  },
+  {
+   "t": 57.6,
+   "d": 2.8,
+   "text": "of video games and archaeology. Um also"
+  },
+  {
+   "t": 60.4,
+   "d": 2.4,
+   "text": "worked on the game Saltzy Chronicles um"
+  },
+  {
+   "t": 62.8,
+   "d": 2.48,
+   "text": "as a story tech and I've done some"
+  },
+  {
+   "t": 65.28,
+   "d": 1.84,
+   "text": "curatorial work um with the British"
+  },
+  {
+   "t": 67.12,
+   "d": 1.68,
+   "text": "Library. Um so all of these things have"
+  },
+  {
+   "t": 68.8,
+   "d": 4.08,
+   "text": "kind of contributed to my practice."
+  },
+  {
+   "t": 72.88,
+   "d": 1.68,
+   "text": "First of all, let's define what is a"
+  },
+  {
+   "t": 74.56,
+   "d": 3.28,
+   "text": "keepsake game. So, uh, Shingur actually,"
+  },
+  {
+   "t": 77.84,
+   "d": 3.04,
+   "text": "um, coined, um, this term and, um, they"
+  },
+  {
+   "t": 80.88,
+   "d": 1.76,
+   "text": "define it as games that produce"
+  },
+  {
+   "t": 82.64,
+   "d": 1.68,
+   "text": "beautiful, memorable artifacts through"
+  },
+  {
+   "t": 84.32,
+   "d": 2.08,
+   "text": "the process of playing the game. And"
+  },
+  {
+   "t": 86.4,
+   "d": 1.2,
+   "text": "they see this as really being a"
+  },
+  {
+   "t": 87.6,
+   "d": 1.36,
+   "text": "collaboration between them as the"
+  },
+  {
+   "t": 88.96,
+   "d": 2.0,
+   "text": "designer and the players who create the"
+  },
+  {
+   "t": 90.96,
+   "d": 3.2,
+   "text": "keepsake. And arguably, keepsake games"
+  },
+  {
+   "t": 94.16,
+   "d": 1.84,
+   "text": "in one form or another have existed for"
+  },
+  {
+   "t": 96.0,
+   "d": 1.92,
+   "text": "a long time. Um, but I find this"
+  },
+  {
+   "t": 97.92,
+   "d": 1.76,
+   "text": "definition really helpful for me in"
+  },
+  {
+   "t": 99.68,
+   "d": 2.24,
+   "text": "thinking about um, these kinds of games"
+  },
+  {
+   "t": 101.92,
+   "d": 4.0,
+   "text": "and why I'm interested in them."
+  },
+  {
+   "t": 105.92,
+   "d": 2.8,
+   "text": "And um Shing has um of course made lots"
+  },
+  {
+   "t": 108.72,
+   "d": 2.0,
+   "text": "of keepsake games including for example"
+  },
+  {
+   "t": 110.72,
+   "d": 2.24,
+   "text": "a mending um which is a game which"
+  },
+  {
+   "t": 112.96,
+   "d": 2.32,
+   "text": "involves um embroidery on a map. Uh"
+  },
+  {
+   "t": 115.28,
+   "d": 2.64,
+   "text": "Shing also um designed the uh t-shirt"
+  },
+  {
+   "t": 117.92,
+   "d": 1.84,
+   "text": "for this year's Rogike celebrations."
+  },
+  {
+   "t": 119.76,
+   "d": 3.52,
+   "text": "That's a really nice link as well. Um"
+  },
+  {
+   "t": 123.28,
+   "d": 1.92,
+   "text": "and another example of a keepsake game"
+  },
+  {
+   "t": 125.2,
+   "d": 2.32,
+   "text": "is Luminary. Um and this is a game in"
+  },
+  {
+   "t": 127.52,
+   "d": 2.96,
+   "text": "which um a scarf is knitted um according"
+  },
+  {
+   "t": 130.48,
+   "d": 1.6,
+   "text": "to different choices that are made in a"
+  },
+  {
+   "t": 132.08,
+   "d": 2.64,
+   "text": "twine game. So, this is a really"
+  },
+  {
+   "t": 134.72,
+   "d": 2.24,
+   "text": "interesting example, I think, of um kind"
+  },
+  {
+   "t": 136.96,
+   "d": 2.88,
+   "text": "of a digital game that is then like um"
+  },
+  {
+   "t": 139.84,
+   "d": 1.92,
+   "text": "kind of like working in tandem with kind"
+  },
+  {
+   "t": 141.76,
+   "d": 2.16,
+   "text": "of an analog keepsake. I'm really"
+  },
+  {
+   "t": 143.92,
+   "d": 2.0,
+   "text": "interested in this digital analog um"
+  },
+  {
+   "t": 145.92,
+   "d": 3.52,
+   "text": "kind of hybrid space."
+  },
+  {
+   "t": 149.44,
+   "d": 1.6,
+   "text": "And so today I'm just going to quickly"
+  },
+  {
+   "t": 151.04,
+   "d": 2.08,
+   "text": "go through a few case studies of um"
+  },
+  {
+   "t": 153.12,
+   "d": 2.08,
+   "text": "keepsake games that I've worked on,"
+  },
+  {
+   "t": 155.2,
+   "d": 2.08,
+   "text": "specifically procedural keepsake games"
+  },
+  {
+   "t": 157.28,
+   "d": 2.0,
+   "text": "because I think that there's um really a"
+  },
+  {
+   "t": 159.28,
+   "d": 1.92,
+   "text": "lot of potential in thinking about kind"
+  },
+  {
+   "t": 161.2,
+   "d": 1.44,
+   "text": "of different types of procedural"
+  },
+  {
+   "t": 162.64,
+   "d": 2.0,
+   "text": "systems, whether they be analog or"
+  },
+  {
+   "t": 164.64,
+   "d": 2.56,
+   "text": "digital and analog and digital keepsakes"
+  },
+  {
+   "t": 167.2,
+   "d": 2.96,
+   "text": "as well. Um because keepsakes keepsake"
+  },
+  {
+   "t": 170.16,
+   "d": 2.48,
+   "text": "games as they exist often do involve um"
+  },
+  {
+   "t": 172.64,
+   "d": 2.4,
+   "text": "some kind of analog kind of uh"
+  },
+  {
+   "t": 175.04,
+   "d": 1.92,
+   "text": "procedural generation whether that be"
+  },
+  {
+   "t": 176.96,
+   "d": 2.4,
+   "text": "kind of uh dice rolls or kind of uh"
+  },
+  {
+   "t": 179.36,
+   "d": 2.32,
+   "text": "drawing cards or something like that."
+  },
+  {
+   "t": 181.68,
+   "d": 1.44,
+   "text": "But anyway, first of all, I'm going to"
+  },
+  {
+   "t": 183.12,
+   "d": 2.64,
+   "text": "talk about Archios uh which is a digital"
+  },
+  {
+   "t": 185.76,
+   "d": 2.56,
+   "text": "keepsake game."
+  },
+  {
+   "t": 188.32,
+   "d": 2.16,
+   "text": "And Archios um I worked on this in my"
+  },
+  {
+   "t": 190.48,
+   "d": 3.2,
+   "text": "cook um and this was a submission to the"
+  },
+  {
+   "t": 193.68,
+   "d": 2.8,
+   "text": "Internet Archive disc jam. Um, the"
+  },
+  {
+   "t": 196.48,
+   "d": 1.6,
+   "text": "Internet Archive ran this jam in which"
+  },
+  {
+   "t": 198.08,
+   "d": 1.84,
+   "text": "they wanted people to use kind of um,"
+  },
+  {
+   "t": 199.92,
+   "d": 1.6,
+   "text": "assets from their own archive which I"
+  },
+  {
+   "t": 201.52,
+   "d": 1.6,
+   "text": "thought was really cool and a lot of"
+  },
+  {
+   "t": 203.12,
+   "d": 1.68,
+   "text": "them were kind of from the '9s I"
+  },
+  {
+   "t": 204.8,
+   "d": 1.76,
+   "text": "believe. Um, so it had a very specific"
+  },
+  {
+   "t": 206.56,
+   "d": 1.92,
+   "text": "aesthetic that was a really fun kind of"
+  },
+  {
+   "t": 208.48,
+   "d": 2.32,
+   "text": "design constraint and also encourage"
+  },
+  {
+   "t": 210.8,
+   "d": 1.52,
+   "text": "people to look through their archive um,"
+  },
+  {
+   "t": 212.32,
+   "d": 2.88,
+   "text": "and kind of reuse the material."
+  },
+  {
+   "t": 215.2,
+   "d": 2.32,
+   "text": "And at the time I was um, also reading a"
+  },
+  {
+   "t": 217.52,
+   "d": 2.56,
+   "text": "book by Tel Calino called the castle of"
+  },
+  {
+   "t": 220.08,
+   "d": 2.08,
+   "text": "cross destinies and in this book people"
+  },
+  {
+   "t": 222.16,
+   "d": 2.4,
+   "text": "can only communicate via tarot cards."
+  },
+  {
+   "t": 224.56,
+   "d": 2.48,
+   "text": "And that got me really thinking about um"
+  },
+  {
+   "t": 227.04,
+   "d": 2.4,
+   "text": "could we create a game in which uh you"
+  },
+  {
+   "t": 229.44,
+   "d": 1.84,
+   "text": "as the player are interpreting these"
+  },
+  {
+   "t": 231.28,
+   "d": 2.8,
+   "text": "kind of uh obscure digital artifacts um"
+  },
+  {
+   "t": 234.08,
+   "d": 2.4,
+   "text": "and using these uh strange tarot cards"
+  },
+  {
+   "t": 236.48,
+   "d": 3.04,
+   "text": "as like an interpretation aid. Um and so"
+  },
+  {
+   "t": 239.52,
+   "d": 1.92,
+   "text": "this is what we did using um assets from"
+  },
+  {
+   "t": 241.44,
+   "d": 2.88,
+   "text": "the internet archive. um you'd get three"
+  },
+  {
+   "t": 244.32,
+   "d": 1.6,
+   "text": "different artifacts and then you'd be"
+  },
+  {
+   "t": 245.92,
+   "d": 2.8,
+   "text": "kind of dealt um randomly uh kind of"
+  },
+  {
+   "t": 248.72,
+   "d": 1.52,
+   "text": "three different cards you can see on the"
+  },
+  {
+   "t": 250.24,
+   "d": 1.36,
+   "text": "screen here and then you have a free"
+  },
+  {
+   "t": 251.6,
+   "d": 1.52,
+   "text": "text box where you can like write in"
+  },
+  {
+   "t": 253.12,
+   "d": 2.56,
+   "text": "your interpretation and then at the end"
+  },
+  {
+   "t": 255.68,
+   "d": 3.2,
+   "text": "um you get a kind of Zen PDF which"
+  },
+  {
+   "t": 258.88,
+   "d": 3.12,
+   "text": "functions as a digital keepsake um and"
+  },
+  {
+   "t": 262.0,
+   "d": 2.8,
+   "text": "this is available now online um on it."
+  },
+  {
+   "t": 264.8,
+   "d": 1.52,
+   "text": "It's freely available so you can go and"
+  },
+  {
+   "t": 266.32,
+   "d": 2.0,
+   "text": "try it out for yourself. It's very much"
+  },
+  {
+   "t": 268.32,
+   "d": 1.68,
+   "text": "I think at the proof of concept stage at"
+  },
+  {
+   "t": 270.0,
+   "d": 1.28,
+   "text": "the minute. I think we definitely want"
+  },
+  {
+   "t": 271.28,
+   "d": 3.84,
+   "text": "to kind of um uh add in more cards. Um"
+  },
+  {
+   "t": 275.12,
+   "d": 1.92,
+   "text": "this is just kind of one example of um a"
+  },
+  {
+   "t": 277.04,
+   "d": 3.12,
+   "text": "digital keepsake game."
+  },
+  {
+   "t": 280.16,
+   "d": 2.48,
+   "text": "And the second example is Ascending,"
+  },
+  {
+   "t": 282.64,
+   "d": 3.44,
+   "text": "which is a digital analog keepsake game."
+  },
+  {
+   "t": 286.08,
+   "d": 2.72,
+   "text": "And Ascending was made um with a group"
+  },
+  {
+   "t": 288.8,
+   "d": 2.4,
+   "text": "of people at the Dougl seminar. I ran a"
+  },
+  {
+   "t": 291.2,
+   "d": 3.12,
+   "text": "session on PCG keepsake games. And we"
+  },
+  {
+   "t": 294.32,
+   "d": 1.28,
+   "text": "were really interested in looking at"
+  },
+  {
+   "t": 295.6,
+   "d": 2.56,
+   "text": "kind of um existing procedural systems"
+  },
+  {
+   "t": 298.16,
+   "d": 4.32,
+   "text": "and then using them um uh to as prompts"
+  },
+  {
+   "t": 302.48,
+   "d": 2.8,
+   "text": "for some kind of keepsake game. And in"
+  },
+  {
+   "t": 305.28,
+   "d": 2.08,
+   "text": "this instance um we used Wateroo's"
+  },
+  {
+   "t": 307.36,
+   "d": 2.08,
+   "text": "medieval fantasy city generator which is"
+  },
+  {
+   "t": 309.44,
+   "d": 1.36,
+   "text": "brilliant and I'd encourage you to look"
+  },
+  {
+   "t": 310.8,
+   "d": 2.48,
+   "text": "that up on it as well especially because"
+  },
+  {
+   "t": 313.28,
+   "d": 1.92,
+   "text": "it um you can kind of like play with it"
+  },
+  {
+   "t": 315.2,
+   "d": 2.96,
+   "text": "in browser so it's very easy to use. Um"
+  },
+  {
+   "t": 318.16,
+   "d": 1.84,
+   "text": "and so this is partly why we wanted to"
+  },
+  {
+   "t": 320.0,
+   "d": 1.76,
+   "text": "use it um as part of our game because"
+  },
+  {
+   "t": 321.76,
+   "d": 3.28,
+   "text": "you know it's freely available. Um"
+  },
+  {
+   "t": 325.04,
+   "d": 1.76,
+   "text": "um the idea is that a player will kind"
+  },
+  {
+   "t": 326.8,
+   "d": 2.24,
+   "text": "of like generate a city that um appeals"
+  },
+  {
+   "t": 329.04,
+   "d": 2.88,
+   "text": "to them and then we'll write a postcard"
+  },
+  {
+   "t": 331.92,
+   "d": 1.92,
+   "text": "based on an imagined visit to this"
+  },
+  {
+   "t": 333.84,
+   "d": 1.44,
+   "text": "place. So it's kind of interesting in"
+  },
+  {
+   "t": 335.28,
+   "d": 2.08,
+   "text": "that um you're looking at this 2D"
+  },
+  {
+   "t": 337.36,
+   "d": 1.84,
+   "text": "schematic map but like trying to imagine"
+  },
+  {
+   "t": 339.2,
+   "d": 1.44,
+   "text": "well what is it actually like to be in"
+  },
+  {
+   "t": 340.64,
+   "d": 2.64,
+   "text": "this space? What does wine hall mean in"
+  },
+  {
+   "t": 343.28,
+   "d": 1.76,
+   "text": "terms of this whole area you know to the"
+  },
+  {
+   "t": 345.04,
+   "d": 2.72,
+   "text": "north of this river for example. Um, so"
+  },
+  {
+   "t": 347.76,
+   "d": 2.16,
+   "text": "that was really fun to play around with"
+  },
+  {
+   "t": 349.92,
+   "d": 2.72,
+   "text": "and um, yeah, this is also on it. Um,"
+  },
+  {
+   "t": 352.64,
+   "d": 1.92,
+   "text": "you can download it now and the actual"
+  },
+  {
+   "t": 354.56,
+   "d": 2.16,
+   "text": "instructional part of the keepsake is in"
+  },
+  {
+   "t": 356.72,
+   "d": 1.6,
+   "text": "the form of a zen. So that was also a"
+  },
+  {
+   "t": 358.32,
+   "d": 3.6,
+   "text": "really nice constraint for us."
+  },
+  {
+   "t": 361.92,
+   "d": 2.32,
+   "text": "And finally, um, I want to talk about a"
+  },
+  {
+   "t": 364.24,
+   "d": 2.24,
+   "text": "player study that I did um, as part of"
+  },
+  {
+   "t": 366.48,
+   "d": 2.4,
+   "text": "my PhD on a game called Nothing Beside"
+  },
+  {
+   "t": 368.88,
+   "d": 1.84,
+   "text": "Remains"
+  },
+  {
+   "t": 370.72,
+   "d": 2.4,
+   "text": "and also worked on this in Mike Cook."
+  },
+  {
+   "t": 373.12,
+   "d": 3.36,
+   "text": "Um, and this is a game um that uh has a"
+  },
+  {
+   "t": 376.48,
+   "d": 1.84,
+   "text": "procedurally generated ruined village in"
+  },
+  {
+   "t": 378.32,
+   "d": 1.68,
+   "text": "it. You can see the image on the left"
+  },
+  {
+   "t": 380.0,
+   "d": 2.0,
+   "text": "there. Um, it's very much a kind of"
+  },
+  {
+   "t": 382.0,
+   "d": 2.56,
+   "text": "abstract 2D asi style game in which you"
+  },
+  {
+   "t": 384.56,
+   "d": 2.16,
+   "text": "are exploring this ruin village. You"
+  },
+  {
+   "t": 386.72,
+   "d": 1.12,
+   "text": "don't really know what happened to it."
+  },
+  {
+   "t": 387.84,
+   "d": 2.08,
+   "text": "Um, there's no real end goal or win"
+  },
+  {
+   "t": 389.92,
+   "d": 1.6,
+   "text": "state. You just kind of bump into"
+  },
+  {
+   "t": 391.52,
+   "d": 2.48,
+   "text": "objects, read the description, and"
+  },
+  {
+   "t": 394.0,
+   "d": 2.4,
+   "text": "implicitly the goal is to interpret what"
+  },
+  {
+   "t": 396.4,
+   "d": 2.72,
+   "text": "happened to this place. And I was very"
+  },
+  {
+   "t": 399.12,
+   "d": 1.6,
+   "text": "interested in this game in terms of"
+  },
+  {
+   "t": 400.72,
+   "d": 1.52,
+   "text": "thinking about um environmental"
+  },
+  {
+   "t": 402.24,
+   "d": 1.92,
+   "text": "storytelling. Um because I think"
+  },
+  {
+   "t": 404.16,
+   "d": 1.52,
+   "text": "environmental storytelling is very"
+  },
+  {
+   "t": 405.68,
+   "d": 1.28,
+   "text": "archeological because it's about"
+  },
+  {
+   "t": 406.96,
+   "d": 2.64,
+   "text": "interpreting kind of material remains in"
+  },
+  {
+   "t": 409.6,
+   "d": 3.28,
+   "text": "a um a game in an imagined past. Um and"
+  },
+  {
+   "t": 412.88,
+   "d": 2.8,
+   "text": "so the idea of the study was to um"
+  },
+  {
+   "t": 415.68,
+   "d": 1.36,
+   "text": "basically we got a lot of people to play"
+  },
+  {
+   "t": 417.04,
+   "d": 2.16,
+   "text": "the game and fill in an online form. We"
+  },
+  {
+   "t": 419.2,
+   "d": 1.36,
+   "text": "asked them what do you think happened in"
+  },
+  {
+   "t": 420.56,
+   "d": 2.64,
+   "text": "this place? Um and so through this kind"
+  },
+  {
+   "t": 423.2,
+   "d": 2.32,
+   "text": "of qualitative methodology came up with"
+  },
+  {
+   "t": 425.52,
+   "d": 1.44,
+   "text": "this theory of an archeological game"
+  },
+  {
+   "t": 426.96,
+   "d": 2.0,
+   "text": "world mental model. I won't go into that"
+  },
+  {
+   "t": 428.96,
+   "d": 1.28,
+   "text": "all [clears throat] um all now because I"
+  },
+  {
+   "t": 430.24,
+   "d": 2.4,
+   "text": "definitely don't have time. But a thing"
+  },
+  {
+   "t": 432.64,
+   "d": 1.92,
+   "text": "I wanted to reflect on a little bit is"
+  },
+  {
+   "t": 434.56,
+   "d": 1.76,
+   "text": "um we also asked people about different"
+  },
+  {
+   "t": 436.32,
+   "d": 1.52,
+   "text": "ways they might record their gameplay"
+  },
+  {
+   "t": 437.84,
+   "d": 2.24,
+   "text": "experience. Um and this was really great"
+  },
+  {
+   "t": 440.08,
+   "d": 1.12,
+   "text": "because we got a lot of really"
+  },
+  {
+   "t": 441.2,
+   "d": 2.08,
+   "text": "interesting answers about how people"
+  },
+  {
+   "t": 443.28,
+   "d": 1.52,
+   "text": "talked about how they made a map or they"
+  },
+  {
+   "t": 444.8,
+   "d": 2.08,
+   "text": "took screenshots. And so these different"
+  },
+  {
+   "t": 446.88,
+   "d": 1.6,
+   "text": "recording methods had different"
+  },
+  {
+   "t": 448.48,
+   "d": 2.4,
+   "text": "affordances. they could allow for"
+  },
+  {
+   "t": 450.88,
+   "d": 2.32,
+   "text": "interpretation, communication, personal"
+  },
+  {
+   "t": 453.2,
+   "d": 2.08,
+   "text": "expression, and often it was very much"
+  },
+  {
+   "t": 455.28,
+   "d": 1.12,
+   "text": "about like scaffolding their"
+  },
+  {
+   "t": 456.4,
+   "d": 1.92,
+   "text": "interpretations. And I think this kind"
+  },
+  {
+   "t": 458.32,
+   "d": 2.08,
+   "text": "of comes back to um the idea of"
+  },
+  {
+   "t": 460.4,
+   "d": 2.4,
+   "text": "keepsakes being a record in a way of a"
+  },
+  {
+   "t": 462.8,
+   "d": 3.44,
+   "text": "kind of like gameplay process. Um and so"
+  },
+  {
+   "t": 466.24,
+   "d": 1.92,
+   "text": "this is where I see kind of um kind of"
+  },
+  {
+   "t": 468.16,
+   "d": 2.0,
+   "text": "the link there."
+  },
+  {
+   "t": 470.16,
+   "d": 2.88,
+   "text": "And also as part of this study um came"
+  },
+  {
+   "t": 473.04,
+   "d": 1.84,
+   "text": "up with this idea of archeological game"
+  },
+  {
+   "t": 474.88,
+   "d": 2.4,
+   "text": "world affordances. Um, so these are kind"
+  },
+  {
+   "t": 477.28,
+   "d": 3.28,
+   "text": "of qualities um that spur a player to um"
+  },
+  {
+   "t": 480.56,
+   "d": 2.4,
+   "text": "interpret more or to kind of expand on"
+  },
+  {
+   "t": 482.96,
+   "d": 2.16,
+   "text": "an existing interpretation"
+  },
+  {
+   "t": 485.12,
+   "d": 2.24,
+   "text": "and these are things like in congruity,"
+  },
+  {
+   "t": 487.36,
+   "d": 1.92,
+   "text": "ambiguity."
+  },
+  {
+   "t": 489.28,
+   "d": 1.68,
+   "text": "And um I feel that there's a lot of"
+  },
+  {
+   "t": 490.96,
+   "d": 2.16,
+   "text": "parallels here with procedural content"
+  },
+  {
+   "t": 493.12,
+   "d": 1.92,
+   "text": "generation because something I'm really"
+  },
+  {
+   "t": 495.04,
+   "d": 2.8,
+   "text": "interested in is um the uncanny nature"
+  },
+  {
+   "t": 497.84,
+   "d": 2.88,
+   "text": "or like texture of you know PCG that can"
+  },
+  {
+   "t": 500.72,
+   "d": 1.68,
+   "text": "happen whether that be through"
+  },
+  {
+   "t": 502.4,
+   "d": 1.92,
+   "text": "repetitions, glitches, all kinds of"
+  },
+  {
+   "t": 504.32,
+   "d": 2.4,
+   "text": "different things. Um, and so I think"
+  },
+  {
+   "t": 506.72,
+   "d": 2.64,
+   "text": "that there's um, really great potential"
+  },
+  {
+   "t": 509.36,
+   "d": 2.0,
+   "text": "here for kind of exploring that in terms"
+  },
+  {
+   "t": 511.36,
+   "d": 1.76,
+   "text": "of thinking about keepsake games and"
+  },
+  {
+   "t": 513.12,
+   "d": 1.6,
+   "text": "getting people to record their gameplay"
+  },
+  {
+   "t": 514.72,
+   "d": 2.88,
+   "text": "process or produce something um, some"
+  },
+  {
+   "t": 517.6,
+   "d": 1.44,
+   "text": "kind of artifact which may be an"
+  },
+  {
+   "t": 519.04,
+   "d": 3.36,
+   "text": "interpretation of what they're finding."
+  },
+  {
+   "t": 522.4,
+   "d": 1.36,
+   "text": "Um, so if you're interested in that"
+  },
+  {
+   "t": 523.76,
+   "d": 2.72,
+   "text": "work, it is available now online. Um,"
+  },
+  {
+   "t": 526.48,
+   "d": 2.4,
+   "text": "and yeah, I guess I've kind of just uh"
+  },
+  {
+   "t": 528.88,
+   "d": 1.68,
+   "text": "put forward a few things to think about."
+  },
+  {
+   "t": 530.56,
+   "d": 1.92,
+   "text": "Um, but I'm really interested in this"
+  },
+  {
+   "t": 532.48,
+   "d": 1.44,
+   "text": "space and if you want to talk to me more"
+  },
+  {
+   "t": 533.92,
+   "d": 4.36,
+   "text": "about it, please do. Thank you."
+  },
+  {
+   "t": 539.2,
+   "d": 2.32,
+   "text": ">> Excellent. Thank you so much. And yeah,"
+  },
+  {
+   "t": 541.52,
+   "d": 1.52,
+   "text": "I'm so glad I think that having this"
+  },
+  {
+   "t": 543.04,
+   "d": 2.48,
+   "text": "next to the behavioral science of stuff"
+  },
+  {
+   "t": 545.52,
+   "d": 2.64,
+   "text": "talk and and having Shins shared like"
+  },
+  {
+   "t": 548.16,
+   "d": 2.48,
+   "text": "there's so many great connections of"
+  },
+  {
+   "t": 550.64,
+   "d": 3.04,
+   "text": "ideas already even when we're only like"
+  },
+  {
+   "t": 553.68,
+   "d": 1.68,
+   "text": "now two hours into the start of Brooklyn"
+  },
+  {
+   "t": 555.36,
+   "d": 2.16,
+   "text": "celebration."
+  },
+  {
+   "t": 557.52,
+   "d": 2.24,
+   "text": ">> Um, yeah. and like super active"
+  },
+  {
+   "t": 559.76,
+   "d": 4.0,
+   "text": "discussion in in chat. Um fun to have"
+  },
+  {
+   "t": 563.76,
+   "d": 2.08,
+   "text": "lots of people uh who are familiar with"
+  },
+  {
+   "t": 565.84,
+   "d": 1.6,
+   "text": "this work talking about it. So yes,"
+  },
+  {
+   "t": 567.44,
+   "d": 1.84,
+   "text": "thank you so much, Florence. And um"
+  },
+  {
+   "t": 569.28,
+   "d": 1.92,
+   "text": "yeah, definitely recommend people check"
+  },
+  {
+   "t": 571.2,
+   "d": 2.16,
+   "text": "out the article that you link because as"
+  },
+  {
+   "t": 573.36,
+   "d": 1.2,
+   "text": "people in chat were saying, it's very"
+  },
+  {
+   "t": 574.56,
+   "d": 1.92,
+   "text": "readable. Don't get intimidated by it"
+  },
+  {
+   "t": 576.48,
+   "d": 2.56,
+   "text": "being a bit academic. It's uh"
+  },
+  {
+   "t": 579.04,
+   "d": 3.32,
+   "text": ">> Oh, that's great. Thank you. [laughter]"
+  }
+ ]
+}

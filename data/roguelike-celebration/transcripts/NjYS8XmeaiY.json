@@ -1,0 +1,2456 @@
+{
+ "id": "NjYS8XmeaiY",
+ "url": "https://www.youtube.com/watch?v=NjYS8XmeaiY",
+ "title": "Leigh Alexander - McMansions of Hell: Roguelikes and Reality TV",
+ "speaker": "Leigh Alexander",
+ "talk_title": "McMansions of Hell: Roguelikes and Reality TV",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 2212,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Reality TV shows are actually constructed realities with their own emergent narrative systems. In this talk, Leigh shares how she is working with her teammate Brian Bucklew (Caves of Qud) to translate the language volumes and behaviors of mid-2000s \"celebreality\" shows set in McMansions, into a generative story environment with Macintosh-inspired B&W graphics.\n\nAre all reality shows actually roguelikes? Absolutely, and Leigh also shares some fun examples of how the world of PCG connects to the age of character-driven social media and performance, microcelebrity and the contemporary reality TV renaissance.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Lee"
+  },
+  {
+   "start": 66,
+   "title": "Career background"
+  },
+  {
+   "start": 143,
+   "title": "The McMansion project"
+  },
+  {
+   "start": 326,
+   "title": "Constructed reality"
+  },
+  {
+   "start": 432,
+   "title": "Game demonstration"
+  },
+  {
+   "start": 748,
+   "title": "Gameplay experiments"
+  },
+  {
+   "start": 977,
+   "title": "Reality show dynamics"
+  },
+  {
+   "start": 1282,
+   "title": "Technical development"
+  },
+  {
+   "start": 1624,
+   "title": "Writing for generation"
+  },
+  {
+   "start": 1964,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 5173,
+ "trimmed": {
+  "segments": 2,
+  "words": 13
+ },
+ "segments": [
+  {
+   "t": 6.36,
+   "d": 3.5,
+   "text": "Leigh Alexander is a writer and narrative designer focused on"
+  },
+  {
+   "t": 9.87,
+   "d": 3.14,
+   "text": "generative story systems, digital society and the future."
+  },
+  {
+   "t": 13.0,
+   "d": 3.19,
+   "text": "She won the 2019 award for Best Writing in a Video Game from the"
+  },
+  {
+   "t": 16.2,
+   "d": 3.79,
+   "text": "Writers Guild of Great Britain for Reigns: Her Majesty, and her"
+  },
+  {
+   "t": 19.99,
+   "d": 2.63,
+   "text": "speculative fiction has been published in Slate and the"
+  },
+  {
+   "t": 22.62,
+   "d": 1.0,
+   "text": "Verge."
+  },
+  {
+   "t": 23.62,
+   "d": 1.55,
+   "text": "She is currently designing games about intimacy"
+  },
+  {
+   "t": 25.17,
+   "d": 2.92,
+   "text": "and relationships, and consults with teams of all sizes on"
+  },
+  {
+   "t": 28.09,
+   "d": 1.0,
+   "text": "narrative design."
+  },
+  {
+   "t": 29.09,
+   "d": 1.46,
+   "text": "Her work often draws her ten years as a"
+  },
+  {
+   "t": 30.55,
+   "d": 3.44,
+   "text": "journalist and critic on games and virtual worlds, and she"
+  },
+  {
+   "t": 33.99,
+   "d": 2.6,
+   "text": "frequently speaks about storytelling in design, online"
+  },
+  {
+   "t": 36.59,
+   "d": 1.47,
+   "text": "culture and arts in technology."
+  },
+  {
+   "t": 38.06,
+   "d": 3.56,
+   "text": "More of her projects are at leighalexander.net."
+  },
+  {
+   "t": 41.62,
+   "d": 5.64,
+   "text": "It is also Leigh's birthday but very sadly, Leigh came down with the flu and isn't feeling"
+  },
+  {
+   "t": 47.26,
+   "d": 6.73,
+   "text": "well so we are going to play a recording for Leigh so she can rest her voice and then do"
+  },
+  {
+   "t": 53.99,
+   "d": 2.89,
+   "text": "text Q&A at the end."
+  },
+  {
+   "t": 56.88,
+   "d": 5.71,
+   "text": "Let's bring up Leigh's talk."
+  },
+  {
+   "t": 62.59,
+   "d": 5.3,
+   "text": "LEIGH: Hi."
+  },
+  {
+   "t": 67.89,
+   "d": 4.47,
+   "text": "This is a recording of a talk for Roguelike Celebration 2023."
+  },
+  {
+   "t": 72.36,
+   "d": 2.59,
+   "text": "It is called \"McMansions of Hell: Roguelikes and Reality TV.\""
+  },
+  {
+   "t": 74.95,
+   "d": 3.93,
+   "text": "It is about a hobby project I made with my colleague Brian Bucklew."
+  },
+  {
+   "t": 78.88,
+   "d": 4.66,
+   "text": "My fame is Leigh Alexander I am a narrative designer and I have been a game developer"
+  },
+  {
+   "t": 83.54,
+   "d": 5.46,
+   "text": "since about 2016 but been in the industry for longer."
+  },
+  {
+   "t": 89.0,
+   "d": 2.08,
+   "text": "First I worked as a game journalists."
+  },
+  {
+   "t": 91.08,
+   "d": 2.64,
+   "text": "Hopefully none of you remember my lost years."
+  },
+  {
+   "t": 93.72,
+   "d": 2.24,
+   "text": "It is a huge honor to be here."
+  },
+  {
+   "t": 95.96,
+   "d": 3.95,
+   "text": "I have been interested in roguelikes and generative technology all my life."
+  },
+  {
+   "t": 99.91,
+   "d": 2.62,
+   "text": "I think my favorite growing up was this one."
+  },
+  {
+   "t": 102.53,
+   "d": 2.42,
+   "text": "This is on Macintosh."
+  },
+  {
+   "t": 104.95,
+   "d": 3.04,
+   "text": "I work on all kinds of things."
+  },
+  {
+   "t": 107.99,
+   "d": 8.27,
+   "text": "Big things, indie, PC, console, mobile, but probably the most awarded project I worked"
+  },
+  {
+   "t": 116.26,
+   "d": 7.32,
+   "text": "on during my career was Reins her majesty and this is out on mobile PC and Switch."
+  },
+  {
+   "t": 123.58,
+   "d": 5.85,
+   "text": "We used a procedural system in this game to tell choice driven card based series about"
+  },
+  {
+   "t": 129.43,
+   "d": 5.96,
+   "text": "the life of a skean queen balancing statistical power in an environment where she has to be"
+  },
+  {
+   "t": 135.39,
+   "d": 1.37,
+   "text": "pleasing to everyone."
+  },
+  {
+   "t": 136.76,
+   "d": 6.53,
+   "text": "This is kind of where I got this spreadsheet bug super bad."
+  },
+  {
+   "t": 143.29,
+   "d": 6.03,
+   "text": "I am here today to share currently experimental project with my colleague Brian Bucklew."
+  },
+  {
+   "t": 149.32,
+   "d": 6.89,
+   "text": "Many of you will know Brian from Caves of Qud as well as generally his, you know, ongoing"
+  },
+  {
+   "t": 156.21,
+   "d": 1.52,
+   "text": "support were this community."
+  },
+  {
+   "t": 157.73,
+   "d": 6.26,
+   "text": "His humane attitude to technology and I think a lot of people in attendance have a lot to"
+  },
+  {
+   "t": 163.99,
+   "d": 2.16,
+   "text": "thank him for."
+  },
+  {
+   "t": 166.15,
+   "d": 9.78,
+   "text": "The working title of our project is McMansion."
+  },
+  {
+   "t": 175.93,
+   "d": 7.53,
+   "text": "McMansion is a generative celebrity murder game inspired by reality shows of the Y2K"
+  },
+  {
+   "t": 183.46,
+   "d": 7.5,
+   "text": "where eccentric celebrities and often aspiring celebrealities would be confined to a California"
+  },
+  {
+   "t": 190.96,
+   "d": 10.66,
+   "text": "McMansion usually on VH1 and MTV and the emotions and conflict and drama that emerged would"
+  },
+  {
+   "t": 201.62,
+   "d": 8.71,
+   "text": "give us an interesting and humane look into unexpected and bizarre aspects of fame."
+  },
+  {
+   "t": 210.33,
+   "d": 6.33,
+   "text": "McMansion pays tribute to this heyday of reality TV."
+  },
+  {
+   "t": 216.66,
+   "d": 9.41,
+   "text": "Shows like flavor of love, rock of love, tool academy, beauty and the geek, charm school."
+  },
+  {
+   "t": 226.07,
+   "d": 4.45,
+   "text": "The characters are always confined to a mansion or similar space."
+  },
+  {
+   "t": 230.52,
+   "d": 5.33,
+   "text": "They have objectives to pursue like winning the heart of Brett Michaels or being chosen"
+  },
+  {
+   "t": 235.85,
+   "d": 5.97,
+   "text": "to be in a band or reforming themselves and proving they have changed."
+  },
+  {
+   "t": 241.82,
+   "d": 7.2,
+   "text": "All the while while they pursue these objectives they are consciously displaying the extreme"
+  },
+  {
+   "t": 249.02,
+   "d": 3.8,
+   "text": "behaviors that might lead to fame."
+  },
+  {
+   "t": 252.82,
+   "d": 6.11,
+   "text": "These McMansion hells with the perfect roguelike dungeon setting to me."
+  },
+  {
+   "t": 258.93,
+   "d": 7.97,
+   "text": "You may notice we are working with the aesthetics of the late '90s Macintosh for adventure games"
+  },
+  {
+   "t": 266.9,
+   "d": 3.66,
+   "text": "because scara rab made a permanent mark in my brain."
+  },
+  {
+   "t": 270.56,
+   "d": 13.29,
+   "text": "I grow up with a tool called world builder with varying degrees of competency and that's"
+  },
+  {
+   "t": 283.85,
+   "d": 6.24,
+   "text": "how I first got the sensation of being lost in a system where success was random and got"
+  },
+  {
+   "t": 290.09,
+   "d": 3.83,
+   "text": "hooked on this dopamine hit early on."
+  },
+  {
+   "t": 293.92,
+   "d": 5.35,
+   "text": "We chose this mostly because I really like it and to do something like this has been"
+  },
+  {
+   "t": 299.27,
+   "d": 7.85,
+   "text": "a long time dream of mine but if I stretch myself I can say these kinds of Macintosh"
+  },
+  {
+   "t": 307.12,
+   "d": 7.89,
+   "text": "adventures were spatial and constructed realities with these impeccable clear window displays"
+  },
+  {
+   "t": 315.01,
+   "d": 5.68,
+   "text": "and legible menus so the UI and game design were part of the same experience."
+  },
+  {
+   "t": 320.69,
+   "d": 4.13,
+   "text": "To me, that's a good metaphor for vintage reality games too."
+  },
+  {
+   "t": 324.82,
+   "d": 2.21,
+   "text": "Did that work?"
+  },
+  {
+   "t": 327.03,
+   "d": 7.44,
+   "text": "With McMansion, Brian and I wanted to work with how celebrity culture within constructed"
+  },
+  {
+   "t": 334.47,
+   "d": 4.0,
+   "text": "reality can create these fund funny and kind of alien juxtapositions."
+  },
+  {
+   "t": 338.47,
+   "d": 13.34,
+   "text": "It is an interesting time in culture to be thinking about the individual as a character."
+  },
+  {
+   "t": 351.81,
+   "d": 5.1,
+   "text": "These days we all have the chance to sudden become a main character whether we consent"
+  },
+  {
+   "t": 356.91,
+   "d": 1.79,
+   "text": "or not."
+  },
+  {
+   "t": 358.7,
+   "d": 5.65,
+   "text": "We are all created second versions of ourselves online and performing together in the constructed"
+  },
+  {
+   "t": 364.35,
+   "d": 1.51,
+   "text": "reality of social media."
+  },
+  {
+   "t": 365.86,
+   "d": 7.85,
+   "text": "You know which causes weird norms to emerge specifically around the a signation of blame."
+  },
+  {
+   "t": 373.71,
+   "d": 5.69,
+   "text": "We decided to start tinkering with the idea of what if one of these vintage McMansion"
+  },
+  {
+   "t": 379.4,
+   "d": 4.24,
+   "text": "reality TV shows was a generative murder experience."
+  },
+  {
+   "t": 383.64,
+   "d": 5.76,
+   "text": "We went pretty much straight to murder because as soon as we started stimulating, you know,"
+  },
+  {
+   "t": 389.4,
+   "d": 4.89,
+   "text": "celebrity behavior in a constructed reality, it became clear to us that what we think of"
+  },
+  {
+   "t": 394.29,
+   "d": 7.48,
+   "text": "as celebrity behavior is inherently so unhinged it isn't a stretch."
+  },
+  {
+   "t": 401.77,
+   "d": 4.39,
+   "text": "Granted right foe we are in a place where we started out tinkering around with the idea"
+  },
+  {
+   "t": 406.16,
+   "d": 8.06,
+   "text": "the player is solving the murder and have increasingly started shifting toward the realization"
+  },
+  {
+   "t": 414.22,
+   "d": 2.19,
+   "text": "the player is doing the murders."
+  },
+  {
+   "t": 416.41,
+   "d": 6.5,
+   "text": "But what you will see is loosely about crime solving for now."
+  },
+  {
+   "t": 422.91,
+   "d": 5.25,
+   "text": "Without further ado, I will take you a minute to show you the project and then we will look"
+  },
+  {
+   "t": 428.16,
+   "d": 3.91,
+   "text": "under the hood and talk a little bit more about it."
+  },
+  {
+   "t": 432.07,
+   "d": 4.6,
+   "text": "I am really just kind of going to wing it with this baby here today."
+  },
+  {
+   "t": 436.67,
+   "d": 1.0,
+   "text": "Bear with me."
+  },
+  {
+   "t": 437.67,
+   "d": 5.34,
+   "text": "As you know like anything generative sometimes it is going to produce tremendous serendipity"
+  },
+  {
+   "t": 443.01,
+   "d": 3.09,
+   "text": "right away and sometimes it won't."
+  },
+  {
+   "t": 446.1,
+   "d": 4.74,
+   "text": "Depending on where in the world you are from and how old you are you may not know a lot"
+  },
+  {
+   "t": 450.84,
+   "d": 1.0,
+   "text": "of these celebrities."
+  },
+  {
+   "t": 451.84,
+   "d": 6.23,
+   "text": "For now, I deliberately chose ones that were part of the boom in self-exposure mansion"
+  },
+  {
+   "t": 458.07,
+   "d": 6.12,
+   "text": "shows in the Y2Ks because I think that's when we started forging this vocabulary for celebrities"
+  },
+  {
+   "t": 464.19,
+   "d": 6.19,
+   "text": "who were on TV playing larger than life versions of their real selves which is what all of"
+  },
+  {
+   "t": 470.38,
+   "d": 2.67,
+   "text": "us do now online from day to day."
+  },
+  {
+   "t": 473.05,
+   "d": 5.85,
+   "text": "Some of these characters kind of created the mold, you know, for what it is to be a reality"
+  },
+  {
+   "t": 478.9,
+   "d": 3.86,
+   "text": "star, so I am kind of paying tribute to them there."
+  },
+  {
+   "t": 482.76,
+   "d": 3.1,
+   "text": "This is my fault."
+  },
+  {
+   "t": 485.86,
+   "d": 1.75,
+   "text": "Let's reload."
+  },
+  {
+   "t": 487.61,
+   "d": 3.51,
+   "text": "Let's see."
+  },
+  {
+   "t": 491.12,
+   "d": 5.63,
+   "text": "I thought I disabled my blockers and stuff but sometimes things are just -- all right."
+  },
+  {
+   "t": 496.75,
+   "d": 4.12,
+   "text": "Here we are outside the McMansion."
+  },
+  {
+   "t": 500.87,
+   "d": 1.79,
+   "text": "You can see auntly bars up here."
+  },
+  {
+   "t": 502.66,
+   "d": 1.47,
+   "text": "These currently don't do anything."
+  },
+  {
+   "t": 504.13,
+   "d": 1.04,
+   "text": "-- we have."
+  },
+  {
+   "t": 505.17,
+   "d": 4.73,
+   "text": "Reins is another project that dented by brain and I like the idea of balancing statistics"
+  },
+  {
+   "t": 509.9,
+   "d": 1.0,
+   "text": "towards outcomes."
+  },
+  {
+   "t": 510.9,
+   "d": 8.23,
+   "text": "The map of the mansion is the same every time we generate it."
+  },
+  {
+   "t": 519.13,
+   "d": 5.85,
+   "text": "But the images will be somewhat randomly generated and the set of celebrities that appears in"
+  },
+  {
+   "t": 524.98,
+   "d": 2.46,
+   "text": "the house will be different each time."
+  },
+  {
+   "t": 527.44,
+   "d": 4.37,
+   "text": "I will, after we do a demo, explain how that works."
+  },
+  {
+   "t": 531.81,
+   "d": 3.79,
+   "text": "We got Will Smith here."
+  },
+  {
+   "t": 535.6,
+   "d": 6.65,
+   "text": "MC Hammer arrives from the living room and Will climbs into his lap."
+  },
+  {
+   "t": 542.25,
+   "d": 9.73,
+   "text": "Liza munela arrive from the kitchen and Liza and Will fall silent."
+  },
+  {
+   "t": 551.98,
+   "d": 3.53,
+   "text": "Here is a living room with a glass table."
+  },
+  {
+   "t": 555.51,
+   "d": 5.5,
+   "text": "We have an item system in here that Brian is working on developing further."
+  },
+  {
+   "t": 561.01,
+   "d": 5.92,
+   "text": "No sooner have we encountered Tiffany Pollard and Jessica Simpson at the swimming pool but"
+  },
+  {
+   "t": 566.93,
+   "d": 7.38,
+   "text": "we heard the sound of broken glass coming from the bedroom."
+  },
+  {
+   "t": 574.31,
+   "d": 2.65,
+   "text": "Will is giving me a creepy feeling."
+  },
+  {
+   "t": 576.96,
+   "d": 2.13,
+   "text": "I happen to know where the bathroom is."
+  },
+  {
+   "t": 579.09,
+   "d": 5.87,
+   "text": "Currently the map is generated the same way each time but it could be cool, you know,"
+  },
+  {
+   "t": 584.96,
+   "d": 5.29,
+   "text": "have to have increasingly generative and bizarre McMansions with increasingly improbable architecture."
+  },
+  {
+   "t": 590.25,
+   "d": 6.15,
+   "text": "We have Steve Harvey who wants to know if we are familiar with the accountability process."
+  },
+  {
+   "t": 596.4,
+   "d": 2.37,
+   "text": "Steve is concerned about axle Rose."
+  },
+  {
+   "t": 598.77,
+   "d": 3.32,
+   "text": "Let's see what's going on in the bathroom."
+  },
+  {
+   "t": 602.09,
+   "d": 9.03,
+   "text": "It is the blood splattered corpse of Sherlock Holmes."
+  },
+  {
+   "t": 611.12,
+   "d": 5.03,
+   "text": "What happens with this game is one of the celebrities is assigned to be the murderer"
+  },
+  {
+   "t": 616.15,
+   "d": 1.0,
+   "text": "every turn."
+  },
+  {
+   "t": 617.15,
+   "d": 4.56,
+   "text": "And they will kill another celebrity as long as we leave them alone together."
+  },
+  {
+   "t": 621.71,
+   "d": 4.46,
+   "text": "So let's go see who is dead in the bedroom."
+  },
+  {
+   "t": 626.17,
+   "d": 1.0,
+   "text": "Steve, no."
+  },
+  {
+   "t": 627.17,
+   "d": 1.0,
+   "text": "Wow."
+  },
+  {
+   "t": 628.17,
+   "d": 2.76,
+   "text": "Do you think Axle Rose did it?"
+  },
+  {
+   "t": 630.93,
+   "d": 3.96,
+   "text": "Steve was wanting to talk about accountability with Axle just a minute ago."
+  },
+  {
+   "t": 634.89,
+   "d": 1.6,
+   "text": "It is Axle?"
+  },
+  {
+   "t": 636.49,
+   "d": 1.6,
+   "text": "What's he doing?"
+  },
+  {
+   "t": 638.09,
+   "d": 1.43,
+   "text": "Is he going to kill me too?"
+  },
+  {
+   "t": 639.52,
+   "d": 1.75,
+   "text": "No, he is attempting to flirt with me."
+  },
+  {
+   "t": 641.27,
+   "d": 2.6,
+   "text": "Let's get out of here."
+  },
+  {
+   "t": 643.87,
+   "d": 6.24,
+   "text": "Axle is showing appreciation for Liza Minnelli."
+  },
+  {
+   "t": 650.11,
+   "d": 6.74,
+   "text": "In the kitchen we see Ellen DeGeneres trying to do product demonstration with a knife and"
+  },
+  {
+   "t": 656.85,
+   "d": 1.44,
+   "text": "cutting board."
+  },
+  {
+   "t": 658.29,
+   "d": 8.56,
+   "text": "All these things are murder weapons or items that will eventually be associated with the"
+  },
+  {
+   "t": 666.85,
+   "d": 6.18,
+   "text": "method of the murder because figuring out who had opportunity and motive is important"
+  },
+  {
+   "t": 673.03,
+   "d": 5.32,
+   "text": "but also who had a murder weapon."
+  },
+  {
+   "t": 678.35,
+   "d": 6.06,
+   "text": "So Axel is following them around and wants to play a game."
+  },
+  {
+   "t": 684.41,
+   "d": 9.82,
+   "text": "I am suspecting Axel of being the murderer because he was the only one alone."
+  },
+  {
+   "t": 694.23,
+   "d": 6.24,
+   "text": "Michael Phelps reports to me that Hammer and Liza were making out and that's probably why"
+  },
+  {
+   "t": 700.47,
+   "d": 6.68,
+   "text": "Jessica Simpson went toward the voyeur."
+  },
+  {
+   "t": 707.15,
+   "d": 3.29,
+   "text": "Hammer keeps talking over Ellen and Jessica."
+  },
+  {
+   "t": 710.44,
+   "d": 2.18,
+   "text": "Jessica doesn't want to be left out."
+  },
+  {
+   "t": 712.62,
+   "d": 5.2,
+   "text": "You see that they have -- let's get this over with."
+  },
+  {
+   "t": 717.82,
+   "d": 4.59,
+   "text": "You can accuse someone of murder which we will do."
+  },
+  {
+   "t": 722.41,
+   "d": 1.34,
+   "text": "And we were right."
+  },
+  {
+   "t": 723.75,
+   "d": 5.15,
+   "text": "Yeah, at this point, in this particular instance, it was easy to tell who the murderer was because"
+  },
+  {
+   "t": 728.9,
+   "d": 4.96,
+   "text": "no one else was alone with poor Steve but let's run another instance and see what they"
+  },
+  {
+   "t": 733.86,
+   "d": 2.24,
+   "text": "do."
+  },
+  {
+   "t": 736.1,
+   "d": 4.91,
+   "text": "The more you pay attention to their little behaviors there is always this kind of organic"
+  },
+  {
+   "t": 741.01,
+   "d": 5.81,
+   "text": "harmony in their extreme behaviors and the way that they, you know, interact."
+  },
+  {
+   "t": 746.82,
+   "d": 2.06,
+   "text": "-- in the house."
+  },
+  {
+   "t": 748.88,
+   "d": 1.0,
+   "text": "Here we are."
+  },
+  {
+   "t": 749.88,
+   "d": 5.53,
+   "text": "We have a new mansion exterior with the dithering."
+  },
+  {
+   "t": 755.41,
+   "d": 3.31,
+   "text": "Here we have Jenna Colins a famous UK reality TV star."
+  },
+  {
+   "t": 758.72,
+   "d": 6.07,
+   "text": "MC Hammer, Mario Lopez."
+  },
+  {
+   "t": 764.79,
+   "d": 5.23,
+   "text": "Jenna is being awkward."
+  },
+  {
+   "t": 770.02,
+   "d": 7.66,
+   "text": "MC hammer would like to avoid a Mario and Jenna."
+  },
+  {
+   "t": 777.68,
+   "d": 1.6,
+   "text": "Kamala Harris arrives from the kitchen."
+  },
+  {
+   "t": 779.28,
+   "d": 3.95,
+   "text": "We have a next of celebrities, politicians."
+  },
+  {
+   "t": 783.23,
+   "d": 5.34,
+   "text": "Oh, the sound of broken glass comes from the kitchen."
+  },
+  {
+   "t": 788.57,
+   "d": 3.2,
+   "text": "Bridget Nelson is here in the living room."
+  },
+  {
+   "t": 791.77,
+   "d": 6.65,
+   "text": "She was on the surreal life which was one of the original celebrity mansion shows."
+  },
+  {
+   "t": 798.42,
+   "d": 2.76,
+   "text": "I wonder if she is the murderer."
+  },
+  {
+   "t": 801.18,
+   "d": 2.58,
+   "text": "Where did we hear the breaking glass?"
+  },
+  {
+   "t": 803.76,
+   "d": 4.62,
+   "text": "Oh, no, Guy."
+  },
+  {
+   "t": 808.38,
+   "d": 6.57,
+   "text": "It will list any bodies or items when you use the look."
+  },
+  {
+   "t": 814.95,
+   "d": 4.58,
+   "text": "Gweneth and others are hanging out in the bedroom."
+  },
+  {
+   "t": 819.53,
+   "d": 2.67,
+   "text": "Kim is being awkward and acts above it all."
+  },
+  {
+   "t": 822.2,
+   "d": 8.04,
+   "text": "I met her once and she was one of the most beautiful and gracious people I have ever"
+  },
+  {
+   "t": 830.24,
+   "d": 2.9,
+   "text": "seen in my life."
+  },
+  {
+   "t": 833.14,
+   "d": 2.17,
+   "text": "It was astonishing."
+  },
+  {
+   "t": 835.31,
+   "d": 4.85,
+   "text": "I wonder since no one is in the bathroom now."
+  },
+  {
+   "t": 840.16,
+   "d": 2.82,
+   "text": "Probably have only a couple more minutes to do this."
+  },
+  {
+   "t": 842.98,
+   "d": 2.5,
+   "text": "So let's just see."
+  },
+  {
+   "t": 845.48,
+   "d": 1.81,
+   "text": "Cisco wants a vegan menu."
+  },
+  {
+   "t": 847.29,
+   "d": 3.18,
+   "text": "I am going to accuse Kamala Harris."
+  },
+  {
+   "t": 850.47,
+   "d": 2.27,
+   "text": "Kamala is not the murderer."
+  },
+  {
+   "t": 852.74,
+   "d": 9.34,
+   "text": "We maybe need to wait for another person to die because then we would know who it is."
+  },
+  {
+   "t": 862.08,
+   "d": 3.61,
+   "text": "But basically this is sort of all you do right now."
+  },
+  {
+   "t": 865.69,
+   "d": 1.64,
+   "text": "Watch the celebrities interact."
+  },
+  {
+   "t": 867.33,
+   "d": 2.23,
+   "text": "Sounds like a scuffle in the swimming pool."
+  },
+  {
+   "t": 869.56,
+   "d": 5.68,
+   "text": "Now we are Greg to solve it because Lindsey Lohan is the only one here."
+  },
+  {
+   "t": 875.24,
+   "d": 4.77,
+   "text": "Lindsey Lohan has killed MC Hammer with a pool noodle."
+  },
+  {
+   "t": 880.01,
+   "d": 1.9,
+   "text": "Sorry, Lindsey."
+  },
+  {
+   "t": 881.91,
+   "d": 3.59,
+   "text": "We probably have a couple more minutes."
+  },
+  {
+   "t": 885.5,
+   "d": 6.16,
+   "text": "Let me generate another instance and see who comes."
+  },
+  {
+   "t": 891.66,
+   "d": 5.03,
+   "text": "Funny things happen with certain celebrities following each other and complaining about"
+  },
+  {
+   "t": 896.69,
+   "d": 10.04,
+   "text": "each other right now we figured this is about watching them interact and noting the movement"
+  },
+  {
+   "t": 906.73,
+   "d": 6.45,
+   "text": "of items and make accusations but I think it would be fun if you as the player could"
+  },
+  {
+   "t": 913.18,
+   "d": 5.52,
+   "text": "interact with the items and potentially kill the celebrities yourself."
+  },
+  {
+   "t": 918.7,
+   "d": 6.59,
+   "text": "Gweneth says hell yeah we are talking now."
+  },
+  {
+   "t": 925.29,
+   "d": 4.41,
+   "text": "Gweneth says who is single and she is here to party."
+  },
+  {
+   "t": 929.7,
+   "d": 5.28,
+   "text": "Cody want to know why don't any of the Windows open."
+  },
+  {
+   "t": 934.98,
+   "d": 5.69,
+   "text": "Rudy Giuliani says someone stole his medication and New York is not going to be hanging out"
+  },
+  {
+   "t": 940.67,
+   "d": 1.87,
+   "text": "with Rudy Giuliani."
+  },
+  {
+   "t": 942.54,
+   "d": 6.11,
+   "text": "We find Gweneth deep in conversation with Colby as Ellen arrives from the kitchen."
+  },
+  {
+   "t": 948.65,
+   "d": 6.73,
+   "text": "Jenny McCarthy is talking to Ezra Miller about energy fields."
+  },
+  {
+   "t": 955.38,
+   "d": 3.38,
+   "text": "Fox molder is here and Ezra is the third wheel."
+  },
+  {
+   "t": 958.76,
+   "d": 5.58,
+   "text": "He has had a rough couple of years."
+  },
+  {
+   "t": 964.34,
+   "d": 2.89,
+   "text": "Jenny says we are not all getting out of here alive."
+  },
+  {
+   "t": 967.23,
+   "d": 7.56,
+   "text": "Colby is developing an inappropriate fixation on Ezra."
+  },
+  {
+   "t": 974.79,
+   "d": 3.15,
+   "text": "That's the experiment we have so far."
+  },
+  {
+   "t": 977.94,
+   "d": 3.67,
+   "text": "I am going to show more of it in a little bit."
+  },
+  {
+   "t": 981.61,
+   "d": 5.95,
+   "text": "But before I go on, I want to talk a little bit about why we are working in this genre"
+  },
+  {
+   "t": 987.56,
+   "d": 5.02,
+   "text": "and why it is so exciting to me as a creator."
+  },
+  {
+   "t": 992.58,
+   "d": 4.26,
+   "text": "Why reality and why the Y2K era McMansions?"
+  },
+  {
+   "t": 996.84,
+   "d": 5.52,
+   "text": "We all have our things and one of my as a narrative focused game designer is something"
+  },
+  {
+   "t": 1002.36,
+   "d": 7.4,
+   "text": "I call constructed reality and to me that means contain simulation of spaces with systems"
+  },
+  {
+   "t": 1009.76,
+   "d": 1.59,
+   "text": "and rules."
+  },
+  {
+   "t": 1011.35,
+   "d": 5.02,
+   "text": "Sometimes these rules are explicitly games and game mechanics and sometimes not but they"
+  },
+  {
+   "t": 1016.37,
+   "d": 7.15,
+   "text": "are rules of some kind implemented to encourage social narrative to emerge."
+  },
+  {
+   "t": 1023.52,
+   "d": 5.57,
+   "text": "I think this idea of constructed reality is more relevant now than ever when thanks to"
+  },
+  {
+   "t": 1029.09,
+   "d": 4.53,
+   "text": "pandemic and social media and algorithms we are living increasingly as projections if"
+  },
+  {
+   "t": 1033.62,
+   "d": 7.32,
+   "text": "a digital simulation and abstracted from the one-to-one and all kind of playing characters"
+  },
+  {
+   "t": 1040.94,
+   "d": 5.86,
+   "text": "in this space online whether everything is systems and game driven now or not and whether"
+  },
+  {
+   "t": 1046.8,
+   "d": 3.27,
+   "text": "we have agreed to participate or not."
+  },
+  {
+   "t": 1050.07,
+   "d": 6.46,
+   "text": "I think that's a lot of why murder mysteries and thrillers are enjoying such a huge renaissance"
+  },
+  {
+   "t": 1056.53,
+   "d": 3.63,
+   "text": "right now on streaming platforms."
+  },
+  {
+   "t": 1060.16,
+   "d": 5.6,
+   "text": "Thrillers and mysteries are also rule-driven constructed realities about how well you can"
+  },
+  {
+   "t": 1065.76,
+   "d": 4.44,
+   "text": "trust how someone presents themselves and who you think is responsible for a crime and"
+  },
+  {
+   "t": 1070.2,
+   "d": 1.0,
+   "text": "why."
+  },
+  {
+   "t": 1071.2,
+   "d": 4.41,
+   "text": "I think that kind of thing is just valuable for us all to practice."
+  },
+  {
+   "t": 1075.61,
+   "d": 10.01,
+   "text": "Studying credibility and intention in these exaggerated real worlds where we are all performing."
+  },
+  {
+   "t": 1085.62,
+   "d": 6.33,
+   "text": "Reality shows and social media are about modeling conflict in simulated environments like we"
+  },
+  {
+   "t": 1091.95,
+   "d": 2.34,
+   "text": "do on Twitter and reality TV."
+  },
+  {
+   "t": 1094.29,
+   "d": 8.26,
+   "text": "I know we had Florence Smith Nicholls talk about how the Love Island is a roguelike and"
+  },
+  {
+   "t": 1102.55,
+   "d": 4.09,
+   "text": "I couldn't agree."
+  },
+  {
+   "t": 1106.64,
+   "d": 5.64,
+   "text": "I haven't seen it yet otherwise I would be citing from it."
+  },
+  {
+   "t": 1112.28,
+   "d": 5.12,
+   "text": "We have contestants trapped in a paradise limbo circumstance and not allowed to have"
+  },
+  {
+   "t": 1117.4,
+   "d": 6.21,
+   "text": "devices or pen and paper or anything that might intervene on the core mechanic of talking"
+  },
+  {
+   "t": 1123.61,
+   "d": 5.25,
+   "text": "to one another in an attempt to match with someone they can go all of the way to the"
+  },
+  {
+   "t": 1128.86,
+   "d": 2.38,
+   "text": "end of the simulation with."
+  },
+  {
+   "t": 1131.24,
+   "d": 5.12,
+   "text": "Every week they do challenges that are designed to be disruptive to the social bonds they"
+  },
+  {
+   "t": 1136.36,
+   "d": 1.04,
+   "text": "already have."
+  },
+  {
+   "t": 1137.4,
+   "d": 4.37,
+   "text": "And the producers will, you know, sometimes introduce fluffy, you know, swimsuit whip"
+  },
+  {
+   "t": 1141.77,
+   "d": 7.29,
+   "text": "cream competitions and when couples are starting to get along, that's when they reveal fan"
+  },
+  {
+   "t": 1149.06,
+   "d": 5.21,
+   "text": "tweets about their relationships and make them guess what's being said, or reveal things"
+  },
+  {
+   "t": 1154.27,
+   "d": 5.37,
+   "text": "from people's past to intentionally kind of mess with their perception and the social"
+  },
+  {
+   "t": 1159.64,
+   "d": 1.0,
+   "text": "dynamics."
+  },
+  {
+   "t": 1160.64,
+   "d": 4.02,
+   "text": "This is a system that sometimes generates some truly hilarious results."
+  },
+  {
+   "t": 1164.66,
+   "d": 6.0,
+   "text": "You know, caveat of course, human beings are not simply content generation engines."
+  },
+  {
+   "t": 1170.66,
+   "d": 5.37,
+   "text": "People often say that reality TV is exploitive and you know obviously there are ethical issues."
+  },
+  {
+   "t": 1176.03,
+   "d": 1.34,
+   "text": "This is just really recently."
+  },
+  {
+   "t": 1177.37,
+   "d": 2.54,
+   "text": "I could find a hundred more headlines like this."
+  },
+  {
+   "t": 1179.91,
+   "d": 5.97,
+   "text": "But I want to point out there is exploitation all over entertainment for example."
+  },
+  {
+   "t": 1185.88,
+   "d": 5.41,
+   "text": "Like the video game industry is an inhumane capitalist machine that acts as a de facto"
+  },
+  {
+   "t": 1191.29,
+   "d": 3.5,
+   "text": "advertising of the military complex."
+  },
+  {
+   "t": 1194.79,
+   "d": 10.03,
+   "text": "So when people are like reality TV is trashy and stupid, I am like you are role-playing"
+  },
+  {
+   "t": 1204.82,
+   "d": 5.58,
+   "text": "as an elf and having sex with bears so I don't know if it helps."
+  },
+  {
+   "t": 1210.4,
+   "d": 4.63,
+   "text": "Again, not denying that there can be problems when we are creating these kinds of simulations"
+  },
+  {
+   "t": 1215.03,
+   "d": 4.64,
+   "text": "and putting people into high stress situation for the sake of games but we do that all over"
+  },
+  {
+   "t": 1219.67,
+   "d": 3.78,
+   "text": "the industry and ratify it easier a lot of the times."
+  },
+  {
+   "t": 1223.45,
+   "d": 6.26,
+   "text": "I think a lot of the prejudices against reality TV have to do with it being stuff that girls"
+  },
+  {
+   "t": 1229.71,
+   "d": 1.6,
+   "text": "like."
+  },
+  {
+   "t": 1231.31,
+   "d": 5.56,
+   "text": "And also, I don't think we need to assume particularly in the era of reality shows that"
+  },
+  {
+   "t": 1236.87,
+   "d": 5.36,
+   "text": "Brian and I are citing in this project, that, you know, we have to take the participants"
+  },
+  {
+   "t": 1242.23,
+   "d": 4.07,
+   "text": "agency away to this extent and assume they are just so stupid they don't know what they're"
+  },
+  {
+   "t": 1246.3,
+   "d": 3.4,
+   "text": "doing and how they are being used."
+  },
+  {
+   "t": 1249.7,
+   "d": 5.74,
+   "text": "People always say it is problematic for people to be famous for being famous but I actually"
+  },
+  {
+   "t": 1255.44,
+   "d": 6.95,
+   "text": "think it takes a type of courage and generosity to reveal some of your worst aspects in public"
+  },
+  {
+   "t": 1262.39,
+   "d": 6.55,
+   "text": "and to characterize yourself and basically be a character for other people in this way."
+  },
+  {
+   "t": 1268.94,
+   "d": 3.99,
+   "text": "I think it gets a lot more interesting to me when you think of celebrity culture and"
+  },
+  {
+   "t": 1272.93,
+   "d": 6.3,
+   "text": "reality show culture and micro celebrity culture as a form of game protagonist that occurs"
+  },
+  {
+   "t": 1279.23,
+   "d": 3.76,
+   "text": "in a constructed reality."
+  },
+  {
+   "t": 1282.99,
+   "d": 4.36,
+   "text": "Now where bet you you kind of want to see some spreadsheets because there is interesting"
+  },
+  {
+   "t": 1287.35,
+   "d": 5.71,
+   "text": "stuff Brian did that enables us to make this simulation."
+  },
+  {
+   "t": 1293.06,
+   "d": 3.24,
+   "text": "So the game itself is a simple JavaScript engine."
+  },
+  {
+   "t": 1296.3,
+   "d": 5.7,
+   "text": "It is partially used as a practical experiment in Svelte and there is an API that enables"
+  },
+  {
+   "t": 1302.0,
+   "d": 5.9,
+   "text": "real-time querying and we use this for the content and styling and presentation of things"
+  },
+  {
+   "t": 1307.9,
+   "d": 5.7,
+   "text": "like the procedural input and the boot screen sequence that you may have seen."
+  },
+  {
+   "t": 1313.6,
+   "d": 3.01,
+   "text": "So advertise -- this is what Brian sent me on Discord when I asked about it."
+  },
+  {
+   "t": 1316.61,
+   "d": 6.81,
+   "text": "This isn't the language I speak but some of you will probably know what it means."
+  },
+  {
+   "t": 1323.42,
+   "d": 9.8,
+   "text": "In addition, all the images offer rooms are generated randomly via a procedurally generated"
+  },
+  {
+   "t": 1333.22,
+   "d": 3.4,
+   "text": "query."
+  },
+  {
+   "t": 1336.62,
+   "d": 5.56,
+   "text": "The raw images are then post processed on the client side in plain JavaScript using"
+  },
+  {
+   "t": 1342.18,
+   "d": 5.43,
+   "text": "simple monochrome which is how we get that harmonious vintage Macintosh effect we both"
+  },
+  {
+   "t": 1347.61,
+   "d": 1.74,
+   "text": "like so much."
+  },
+  {
+   "t": 1349.35,
+   "d": 5.51,
+   "text": "One important thing to note is at scale API cost for this would become pretty high and"
+  },
+  {
+   "t": 1354.86,
+   "d": 4.26,
+   "text": "we are also just pulling images off a search engine with no consideration of provenance"
+  },
+  {
+   "t": 1359.12,
+   "d": 6.73,
+   "text": "and those are things we would have to do differently if we wanted to do something like this at"
+  },
+  {
+   "t": 1365.85,
+   "d": 1.8,
+   "text": "scale."
+  },
+  {
+   "t": 1367.65,
+   "d": 2.38,
+   "text": "Who wants to see a spreadsheet?"
+  },
+  {
+   "t": 1370.03,
+   "d": 2.88,
+   "text": "Let's do that."
+  },
+  {
+   "t": 1372.91,
+   "d": 1.03,
+   "text": "So let me see."
+  },
+  {
+   "t": 1373.94,
+   "d": 4.42,
+   "text": "For the spreadsheet itself, I know all my narrative people in the audience will be happy"
+  },
+  {
+   "t": 1378.36,
+   "d": 1.0,
+   "text": "to see this."
+  },
+  {
+   "t": 1379.36,
+   "d": 4.29,
+   "text": "We are still experimental a lot with this so not every tab is relevant."
+  },
+  {
+   "t": 1383.65,
+   "d": 7.48,
+   "text": "But starting here, looking at the rooms tab, and let's blow this up so you can see it."
+  },
+  {
+   "t": 1391.13,
+   "d": 1.73,
+   "text": "Yeah."
+  },
+  {
+   "t": 1394.6,
+   "d": 1.0,
+   "text": "Rooms tab."
+  },
+  {
+   "t": 1395.6,
+   "d": 4.68,
+   "text": "We list every room in the house and these are the search strings that we use to, you"
+  },
+  {
+   "t": 1400.28,
+   "d": 1.21,
+   "text": "know, query."
+  },
+  {
+   "t": 1401.49,
+   "d": 7.7,
+   "text": "All of our bathrooms are like expensive toilet dark 1990s toilet mansion bathroom."
+  },
+  {
+   "t": 1409.19,
+   "d": 5.08,
+   "text": "You notice I am using the term cocaine decor and I think that's a known architectural term"
+  },
+  {
+   "t": 1414.27,
+   "d": 7.93,
+   "text": "and by a known person cocaine decor on Twitter."
+  },
+  {
+   "t": 1422.2,
+   "d": 7.59,
+   "text": "They do tributes to all kinds of lavish, Chrome intensive architecture which I thought was"
+  },
+  {
+   "t": 1429.79,
+   "d": 6.08,
+   "text": "really good for the McMansion vibe and celebrity culture in general."
+  },
+  {
+   "t": 1435.87,
+   "d": 5.85,
+   "text": "Basically the directional orientation of the rooms to each other doesn't currently change."
+  },
+  {
+   "t": 1441.72,
+   "d": 4.14,
+   "text": "We were able to set how each room is adjacent to each other."
+  },
+  {
+   "t": 1445.86,
+   "d": 6.39,
+   "text": "Then you can see what type of objects may potentially be generated in that room and"
+  },
+  {
+   "t": 1452.25,
+   "d": 4.77,
+   "text": "then how they change after the murder occurs."
+  },
+  {
+   "t": 1457.02,
+   "d": 2.2,
+   "text": "That is how we generate the mansion."
+  },
+  {
+   "t": 1459.22,
+   "d": 4.8,
+   "text": "Now let's look at what celebrities are in here."
+  },
+  {
+   "t": 1464.02,
+   "d": 5.7,
+   "text": "My one weird trick, you may notice something familiar about these columns, one of my weird"
+  },
+  {
+   "t": 1469.72,
+   "d": 4.77,
+   "text": "tricks for labor saving with you have to create a large volume of content is to create some"
+  },
+  {
+   "t": 1474.49,
+   "d": 5.31,
+   "text": "kind of category for yourself even if they are totally arbitrarily."
+  },
+  {
+   "t": 1479.8,
+   "d": 5.79,
+   "text": "I used the Pokémon elemental table to inform how each celebrity would act."
+  },
+  {
+   "t": 1485.59,
+   "d": 7.39,
+   "text": "It helped me think about what is a steel behavior, what is a fire behavior."
+  },
+  {
+   "t": 1492.98,
+   "d": 5.21,
+   "text": "Ozzy Osbourne."
+  },
+  {
+   "t": 1498.19,
+   "d": 7.55,
+   "text": "And then I just arbitrarily assigned combinations of elements to each celebrity based on pretty"
+  },
+  {
+   "t": 1505.74,
+   "d": 3.16,
+   "text": "much what type of Pokémon I thought they would be."
+  },
+  {
+   "t": 1508.9,
+   "d": 4.38,
+   "text": "We have Brett Michaels is poison and rock."
+  },
+  {
+   "t": 1513.28,
+   "d": 2.51,
+   "text": "Steve Harvey who we met in the house."
+  },
+  {
+   "t": 1515.79,
+   "d": 5.05,
+   "text": "He is poison grass because I find that I only watch him when I am stoned."
+  },
+  {
+   "t": 1520.84,
+   "d": 4.9,
+   "text": "And I have given Leo DiCaprio ice and water because that's my favorite film of his."
+  },
+  {
+   "t": 1525.74,
+   "d": 5.98,
+   "text": "Elon Musk is here and he is a normal bug."
+  },
+  {
+   "t": 1531.72,
+   "d": 6.32,
+   "text": "The point is this helped me to create some kind of matrix to inform my ideas which to"
+  },
+  {
+   "t": 1538.04,
+   "d": 4.38,
+   "text": "me is just a lot easier than generating hundreds of unique lines."
+  },
+  {
+   "t": 1542.42,
+   "d": 1.68,
+   "text": "We got a lot in here, I think."
+  },
+  {
+   "t": 1544.1,
+   "d": 2.8,
+   "text": "We have done a fair bit of work on this."
+  },
+  {
+   "t": 1546.9,
+   "d": 3.25,
+   "text": "And it made it easier -- yeah, there is a bunch of celebrities here."
+  },
+  {
+   "t": 1550.15,
+   "d": 3.23,
+   "text": "Maybe not as many as I thought but it is easier than starting from a complete blank."
+  },
+  {
+   "t": 1553.38,
+   "d": 6.36,
+   "text": "The elements importantly inform the behaviors as well."
+  },
+  {
+   "t": 1559.74,
+   "d": 1.07,
+   "text": "Like here is a normal behavior."
+  },
+  {
+   "t": 1560.81,
+   "d": 1.77,
+   "text": "Here is a fire behavior."
+  },
+  {
+   "t": 1562.58,
+   "d": 1.78,
+   "text": "Here is a water behavior."
+  },
+  {
+   "t": 1564.36,
+   "d": 3.34,
+   "text": "Especially if you are like me and into tarot and woo-woo stuff and associate elements are"
+  },
+  {
+   "t": 1567.7,
+   "d": 9.57,
+   "text": "feeling and behaviors giving this narrative made it easier to populate the spreadsheet"
+  },
+  {
+   "t": 1577.27,
+   "d": 3.34,
+   "text": "in a more detail intensive and robust way."
+  },
+  {
+   "t": 1580.61,
+   "d": 5.81,
+   "text": "You can see in this spreadsheet we have done quite a lot of behaviors and I don't think"
+  },
+  {
+   "t": 1586.42,
+   "d": 5.55,
+   "text": "I can have just written all of this so quickly if we had not been using the elemental table"
+  },
+  {
+   "t": 1591.97,
+   "d": 3.59,
+   "text": "to organize it which is cool."
+  },
+  {
+   "t": 1595.56,
+   "d": 4.62,
+   "text": "Ambient behaviors are the meat on it bone and this is how the system generates behavior"
+  },
+  {
+   "t": 1600.18,
+   "d": 7.83,
+   "text": "and interactions for each celebrity in the house."
+  },
+  {
+   "t": 1608.01,
+   "d": 4.1,
+   "text": "I can have them interact using these nickname fields."
+  },
+  {
+   "t": 1612.11,
+   "d": 4.47,
+   "text": "There is a couple huge takeaways I want to emphasize."
+  },
+  {
+   "t": 1616.58,
+   "d": 5.39,
+   "text": "I hand wrote every line of these and hand tweak them and that's why they tend to work"
+  },
+  {
+   "t": 1621.97,
+   "d": 2.65,
+   "text": "pretty well together every time they are generated."
+  },
+  {
+   "t": 1624.62,
+   "d": 5.54,
+   "text": "I point this out because people, and probably no one here attending this particular conference"
+  },
+  {
+   "t": 1630.16,
+   "d": 4.48,
+   "text": "is going to have this opinion, but you know, all over social media, I see conversations"
+  },
+  {
+   "t": 1634.64,
+   "d": 5.14,
+   "text": "where people tend to make like blanket statements that generative tech is bad for writers."
+  },
+  {
+   "t": 1639.78,
+   "d": 13.19,
+   "text": "And corporate AI is bad for the economy no one is saying otherwise."
+  },
+  {
+   "t": 1652.97,
+   "d": 6.44,
+   "text": "For me, the generative process is a way for me to have this componentized relationship"
+  },
+  {
+   "t": 1659.41,
+   "d": 1.69,
+   "text": "to my own work."
+  },
+  {
+   "t": 1661.1,
+   "d": 5.9,
+   "text": "I don't have to tell anybody here this but working in a generative mode is not actually"
+  },
+  {
+   "t": 1667.0,
+   "d": 7.49,
+   "text": "labor saving and in fact it might be more difficult and complex to, you know, componentize"
+  },
+  {
+   "t": 1674.49,
+   "d": 4.39,
+   "text": "the things that you need in a way that will function for you renewably than it would be"
+  },
+  {
+   "t": 1678.88,
+   "d": 2.22,
+   "text": "to write something linear."
+  },
+  {
+   "t": 1681.1,
+   "d": 2.98,
+   "text": "This is generative because I want it to be."
+  },
+  {
+   "t": 1684.08,
+   "d": 4.92,
+   "text": "This is made the way it is because we think it is fun."
+  },
+  {
+   "t": 1689.0,
+   "d": 5.83,
+   "text": "That's how it works and another important thing I want to emphasize -- I guess these"
+  },
+  {
+   "t": 1694.83,
+   "d": 5.78,
+   "text": "are other old behaviors that I was -- you know, I divide them."
+  },
+  {
+   "t": 1700.61,
+   "d": 5.56,
+   "text": "Each element needs to have a quote, question, two and three person interaction, positive"
+  },
+  {
+   "t": 1706.17,
+   "d": 5.62,
+   "text": "and negative in addition to the elemental table using this arbitrary matrix to make"
+  },
+  {
+   "t": 1711.79,
+   "d": 6.28,
+   "text": "sure that I, you know, it helped me fill in the content categories and make sure content"
+  },
+  {
+   "t": 1718.07,
+   "d": 2.68,
+   "text": "types were evenly distributed."
+  },
+  {
+   "t": 1720.75,
+   "d": 4.97,
+   "text": "If you are going to do something with a lot of content component in a spreadsheet, you"
+  },
+  {
+   "t": 1725.72,
+   "d": 4.71,
+   "text": "should come up with the organizational matrix beforehand even if it is totally arbitrarily"
+  },
+  {
+   "t": 1730.43,
+   "d": 5.69,
+   "text": "because that can help you ensure coverage from the beginning of all the topics, tags"
+  },
+  {
+   "t": 1736.12,
+   "d": 3.18,
+   "text": "or keywords that you feel you need to hit."
+  },
+  {
+   "t": 1739.3,
+   "d": 2.44,
+   "text": "Here is some old ones."
+  },
+  {
+   "t": 1741.74,
+   "d": 2.93,
+   "text": "Celebreality sobbing loudly."
+  },
+  {
+   "t": 1744.67,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 1745.67,
+   "d": 1.0,
+   "text": "Flying."
+  },
+  {
+   "t": 1746.67,
+   "d": 1.9,
+   "text": "Furiously meditates."
+  },
+  {
+   "t": 1748.57,
+   "d": 11.1,
+   "text": "A lot of these Pokémon elements go naturally with celebrity behavior."
+  },
+  {
+   "t": 1759.67,
+   "d": 4.44,
+   "text": "Final we, we have a tab with the murder announcements."
+  },
+  {
+   "t": 1764.11,
+   "d": 4.96,
+   "text": "If you are not in a room and you hear someone be killed, it will tell you where that's happening"
+  },
+  {
+   "t": 1769.07,
+   "d": 3.28,
+   "text": "so that you can investigate."
+  },
+  {
+   "t": 1772.35,
+   "d": 4.31,
+   "text": "Another thing I really want to emphasize about this spreadsheet is you will notice every"
+  },
+  {
+   "t": 1776.66,
+   "d": 2.96,
+   "text": "tab of this is incompletely plain language."
+  },
+  {
+   "t": 1779.62,
+   "d": 5.08,
+   "text": "Anything I do in the tools is updated in the instance immediately."
+  },
+  {
+   "t": 1784.7,
+   "d": 4.92,
+   "text": "It is a zero latency iterative process for me."
+  },
+  {
+   "t": 1789.62,
+   "d": 4.12,
+   "text": "If you want to do anything good from a content standpoint with spreadsheets and generative"
+  },
+  {
+   "t": 1793.74,
+   "d": 5.41,
+   "text": "tech you need to prioritize minimizing the latency."
+  },
+  {
+   "t": 1799.15,
+   "d": 6.91,
+   "text": "Everything is legible, plain language, and quickly testable and you can push it to the"
+  },
+  {
+   "t": 1806.06,
+   "d": 3.23,
+   "text": "build and test it quickly without zero latency."
+  },
+  {
+   "t": 1809.29,
+   "d": 5.43,
+   "text": "There is no reason we got to stay pushing full builds."
+  },
+  {
+   "t": 1814.72,
+   "d": 2.41,
+   "text": "You know, in order to see if content is working."
+  },
+  {
+   "t": 1817.13,
+   "d": 3.77,
+   "text": "We need to have that zero latency process so you can tweak something without having"
+  },
+  {
+   "t": 1820.9,
+   "d": 5.31,
+   "text": "to learn code and watch it populate in the instance you are working with."
+  },
+  {
+   "t": 1826.21,
+   "d": 10.83,
+   "text": "I also work that way on Reins and assigning statistical values, statistical movement,"
+  },
+  {
+   "t": 1837.04,
+   "d": 4.61,
+   "text": "how the content was connected to other pieces of content."
+  },
+  {
+   "t": 1841.65,
+   "d": 5.38,
+   "text": "I was able to work pretty independently even though I don't have a technical background"
+  },
+  {
+   "t": 1847.03,
+   "d": 4.9,
+   "text": "and immediately test it in an instance so I could see."
+  },
+  {
+   "t": 1851.93,
+   "d": 5.94,
+   "text": "Obviously with you are making content you simply can't tell how it will perform in the"
+  },
+  {
+   "t": 1857.87,
+   "d": 3.35,
+   "text": "UI and context from looking at it on a spreadsheet."
+  },
+  {
+   "t": 1861.22,
+   "d": 6.43,
+   "text": "Going back and forth from the content input to the instance without latency is super important."
+  },
+  {
+   "t": 1867.65,
+   "d": 4.86,
+   "text": "I think that's why reins her majesty is the only game I have gotten writing awards for"
+  },
+  {
+   "t": 1872.51,
+   "d": 6.41,
+   "text": "because I had a tool set that enabled me to do my best work."
+  },
+  {
+   "t": 1878.92,
+   "d": 5.39,
+   "text": "Yeah, even though this is just kind of like experiment that Brian and I kick around in"
+  },
+  {
+   "t": 1884.31,
+   "d": 9.11,
+   "text": "our spare time, which doesn't tend to be copious."
+  },
+  {
+   "t": 1893.42,
+   "d": 3.91,
+   "text": "The slot machine wheels of my eyes have locked into my favorite generative instance."
+  },
+  {
+   "t": 1897.33,
+   "d": 2.76,
+   "text": "This is a dream project were me."
+  },
+  {
+   "t": 1900.09,
+   "d": 7.14,
+   "text": "I have to take time to thank Brian for his generosity and support and mentorship of me"
+  },
+  {
+   "t": 1907.23,
+   "d": 3.9,
+   "text": "with this project and around a lot of different things that he helps me with."
+  },
+  {
+   "t": 1911.13,
+   "d": 4.21,
+   "text": "I am sure I am not the only one in this community who owes him thanks."
+  },
+  {
+   "t": 1915.34,
+   "d": 4.62,
+   "text": "A couple years ago I reached out to him to ask if he would be willing to teach me more"
+  },
+  {
+   "t": 1919.96,
+   "d": 4.79,
+   "text": "about how all this stuff works and how I as a narrative designer could better understand"
+  },
+  {
+   "t": 1924.75,
+   "d": 6.44,
+   "text": "spreadsheets for back end generative tool and work in a way that was accessible to coder"
+  },
+  {
+   "t": 1931.19,
+   "d": 1.05,
+   "text": "like him."
+  },
+  {
+   "t": 1932.24,
+   "d": 4.73,
+   "text": "Even though we have completely different backgrounds and I don't think Brian's thing is normally"
+  },
+  {
+   "t": 1936.97,
+   "d": 7.17,
+   "text": "celebrity culture we just vibed and work well together and understand each other on fundamental"
+  },
+  {
+   "t": 1944.14,
+   "d": 5.61,
+   "text": "things so to me there is another lesson and that is to reach out to people who admire"
+  },
+  {
+   "t": 1949.75,
+   "d": 4.79,
+   "text": "especially if they have skills that you joust just don't and see what you can learn."
+  },
+  {
+   "t": 1954.54,
+   "d": 5.99,
+   "text": "If you are a crunchy generative coder maybe find a writer to work when who is obsessed"
+  },
+  {
+   "t": 1960.53,
+   "d": 4.16,
+   "text": "with some kind of storyteller you know nothing about."
+  },
+  {
+   "t": 1964.69,
+   "d": 8.84,
+   "text": "And make sure the tools are enabling that low latency process is some of my best takeaways"
+  },
+  {
+   "t": 1973.53,
+   "d": 2.65,
+   "text": "for you today from this."
+  },
+  {
+   "t": 1976.18,
+   "d": 1.34,
+   "text": "You never know what can happen."
+  },
+  {
+   "t": 1977.52,
+   "d": 7.3,
+   "text": "I hope you will look at reality shows as fun generative systems of human behavior and think"
+  },
+  {
+   "t": 1984.82,
+   "d": 6.83,
+   "text": "about what kind of constructed realities most interest you in a generative context."
+  },
+  {
+   "t": 1991.65,
+   "d": 4.66,
+   "text": "I will love to meet anybody who wants to talk about this more."
+  },
+  {
+   "t": 1996.31,
+   "d": 3.69,
+   "text": "And Thank you so much for your time and interest here today."
+  },
+  {
+   "t": 2000.0,
+   "d": 5.41,
+   "text": "And especially thanks to the Roguelike Celebration team for all their hard work and the labor"
+  },
+  {
+   "t": 2005.41,
+   "d": 2.41,
+   "text": "of love that this event is."
+  },
+  {
+   "t": 2007.82,
+   "d": 2.93,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 2010.75,
+   "d": 1.47,
+   "text": "ALEXEI: Excellent."
+  },
+  {
+   "t": 2012.22,
+   "d": 1.47,
+   "text": "Thank you."
+  },
+  {
+   "t": 2013.69,
+   "d": 1.63,
+   "text": "I am here in person."
+  },
+  {
+   "t": 2015.32,
+   "d": 5.26,
+   "text": "Leigh is in text chat recovering from sickness but has been enjoying all of this."
+  },
+  {
+   "t": 2020.58,
+   "d": 7.69,
+   "text": "I know we are a bit late but started NetHack late so we are going to ask one silly question"
+  },
+  {
+   "t": 2028.27,
+   "d": 6.41,
+   "text": "that's been top voted and one not entirely silly question and I will read out the answers."
+  },
+  {
+   "t": 2034.68,
+   "d": 5.52,
+   "text": "Let's start with the non-silly question of with this category method, do you use it to"
+  },
+  {
+   "t": 2040.2,
+   "d": 2.93,
+   "text": "link bits of content together or inspire links?"
+  },
+  {
+   "t": 2043.13,
+   "d": 4.93,
+   "text": "Is there somewhere that people could go to understand that technique better?"
+  },
+  {
+   "t": 2048.06,
+   "d": 2.06,
+   "text": "People found are really interesting."
+  },
+  {
+   "t": 2050.12,
+   "d": 2.41,
+   "text": "Is the answer ask Brian."
+  },
+  {
+   "t": 2052.53,
+   "d": 4.94,
+   "text": "If you respond, Leigh, I will read out the response and be your voice."
+  },
+  {
+   "t": 2057.47,
+   "d": 9.37,
+   "text": "That kind of category method that you showed."
+  },
+  {
+   "t": 2066.84,
+   "d": 5.48,
+   "text": "Do you use it to link bits of content or inspire links?"
+  },
+  {
+   "t": 2072.32,
+   "d": 6.56,
+   "text": "Is there somewhere people could make find places to understand that content category"
+  },
+  {
+   "t": 2078.88,
+   "d": 4.61,
+   "text": "linking system better?"
+  },
+  {
+   "t": 2083.49,
+   "d": 6.65,
+   "text": "LEIGH: So sorry I couldn't give the talk live."
+  },
+  {
+   "t": 2090.14,
+   "d": 7.35,
+   "text": "In my case it was sort of arbitrary but because I was working on a project about broadly systematizing"
+  },
+  {
+   "t": 2097.49,
+   "d": 5.02,
+   "text": "behavior for the purpose of orienting certain characters against others I was like let's"
+  },
+  {
+   "t": 2102.51,
+   "d": 6.13,
+   "text": "use the Pokémon table because it is a sophisticated table of types with affinities and oppositions"
+  },
+  {
+   "t": 2108.64,
+   "d": 3.8,
+   "text": "and that was something I thought would be relevant for a game about celebrity relationships."
+  },
+  {
+   "t": 2112.44,
+   "d": 3.51,
+   "text": "And then from there, it was really nice."
+  },
+  {
+   "t": 2115.95,
+   "d": 6.2,
+   "text": "You know, you can make certain associations with grass and with rock or darkness and then"
+  },
+  {
+   "t": 2122.15,
+   "d": 1.0,
+   "text": "that kind of made it easier."
+  },
+  {
+   "t": 2123.15,
+   "d": 7.29,
+   "text": "There was something there that was broad but piqued my imagination."
+  },
+  {
+   "t": 2130.44,
+   "d": 4.38,
+   "text": "I guess think of other games you play and how they organize information and kind a way"
+  },
+  {
+   "t": 2134.82,
+   "d": 5.12,
+   "text": "to translate your content body into that context would be my advice."
+  },
+  {
+   "t": 2139.94,
+   "d": 6.72,
+   "text": "ALEXEI: It reminded me of Emily Short and the venom and associations like that."
+  },
+  {
+   "t": 2146.66,
+   "d": 1.0,
+   "text": "Excellent."
+  },
+  {
+   "t": 2147.66,
+   "d": 6.14,
+   "text": "The one silly question we will ask you before letting you rest is what Pokémon types are"
+  },
+  {
+   "t": 2153.8,
+   "d": 1.0,
+   "text": "you?"
+  },
+  {
+   "t": 2154.8,
+   "d": 1.94,
+   "text": "LEIGH: Oh, my gosh."
+  },
+  {
+   "t": 2156.74,
+   "d": 8.26,
+   "text": "Like I want to say like physic fairy but I think I would probably be like one of the"
+  },
+  {
+   "t": 2165.0,
+   "d": 3.84,
+   "text": "-- probably just be a grass Pokémon."
+  },
+  {
+   "t": 2168.84,
+   "d": 2.31,
+   "text": "Possible."
+  },
+  {
+   "t": 2171.15,
+   "d": 4.26,
+   "text": "I like Bulbasaur."
+  },
+  {
+   "t": 2175.41,
+   "d": 4.13,
+   "text": "Some weird type that nobody likes to use and has a terrible character design."
+  },
+  {
+   "t": 2179.54,
+   "d": 3.33,
+   "text": "One of those."
+  },
+  {
+   "t": 2182.87,
+   "d": 3.4,
+   "text": "ALEXEI: Just a grass fairy."
+  },
+  {
+   "t": 2186.27,
+   "d": 1.0,
+   "text": "Wonderful."
+  },
+  {
+   "t": 2187.27,
+   "d": 2.52,
+   "text": "LEIGH: Grass fairy sounds about right for me."
+  },
+  {
+   "t": 2189.79,
+   "d": 1.0,
+   "text": "ALEXEI: Excellent."
+  },
+  {
+   "t": 2190.79,
+   "d": 1.0,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 2191.79,
+   "d": 1.0,
+   "text": "Happy birthday."
+  },
+  {
+   "t": 2192.79,
+   "d": 1.0,
+   "text": "LEIGH: Thank you."
+  },
+  {
+   "t": 2193.79,
+   "d": 5.63,
+   "text": "I know I am sick on my birthday but it has been such an honor to be here."
+  },
+  {
+   "t": 2199.42,
+   "d": 4.87,
+   "text": "I am so grateful for everyone having me and thanks to everybody who works on this conference"
+  },
+  {
+   "t": 2204.29,
+   "d": 1.99,
+   "text": "everything they have done to make it wonderful."
+  },
+  {
+   "t": 2206.28,
+   "d": 2.78,
+   "text": "I hope the rest of the day goes well."
+  },
+  {
+   "t": 2209.06,
+   "d": 1.16,
+   "text": "Thank you so much, everyone."
+  },
+  {
+   "t": 2210.22,
+   "d": 1.0,
+   "text": "ALEXEI: Thanks."
+  },
+  {
+   "t": 2211.22,
+   "d": 1.0,
+   "text": "All right."
+  }
+ ]
+}

@@ -1,0 +1,755 @@
+{
+ "id": "OzCGTXakbjE",
+ "url": "https://www.youtube.com/watch?v=OzCGTXakbjE",
+ "title": "Clarissa Littler - (roughly) a hundred days of poetry in partnership",
+ "speaker": "Clarissa Littler",
+ "talk_title": "(roughly) a hundred days of poetry in partnership",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 773,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nClarissa is an ex-physicist, ex-computer scientist working on phenomenology and the computational humanities when they're not teaching games programming to youth. They discusses their project of writing poetry in conjunction with a poetry form generator, how getting better at poetry and improving the generator go hand in hand, and leads into bigger musings about procgen as a tool for tying computation into the humanities and helping us think about what makes an art form.\n\nFind them on Twitter: https://twitter.com/clarissaAdjoint",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "<Untitled Chapter 1>"
+  },
+  {
+   "start": 12,
+   "title": "Background about Me"
+  },
+  {
+   "start": 50,
+   "title": "Motivation"
+  },
+  {
+   "start": 381,
+   "title": "Signal Functions"
+  },
+  {
+   "start": 512,
+   "title": "Rhyming"
+  },
+  {
+   "start": 530,
+   "title": "Generate Rhymes"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1730,
+ "trimmed": {
+  "segments": 7,
+  "words": 36
+ },
+ "segments": [
+  {
+   "t": 1.98,
+   "d": 4.58,
+   "text": ">> Hi, my name is Clarissa Littler also known as left_adjoint in a lot of the weird and"
+  },
+  {
+   "t": 6.56,
+   "d": 1.8,
+   "text": "small parts of the internet."
+  },
+  {
+   "t": 8.36,
+   "d": 7.56,
+   "text": "Just a little background about me and this talk."
+  },
+  {
+   "t": 15.92,
+   "d": 4.79,
+   "text": "My background is scatter shot."
+  },
+  {
+   "t": 20.71,
+   "d": 5.2,
+   "text": "Mathematics and for the last few years I have been working in education like the intersection"
+  },
+  {
+   "t": 25.91,
+   "d": 2.08,
+   "text": "of computation and the arts."
+  },
+  {
+   "t": 27.99,
+   "d": 4.46,
+   "text": "This talk is about a Proc Gen poetry project I worked on."
+  },
+  {
+   "t": 32.45,
+   "d": 8.57,
+   "text": "We will talk about poetry, things I have tried and what I mean by partnership and what are"
+  },
+  {
+   "t": 41.02,
+   "d": 5.91,
+   "text": "some of the lessons I have learned and how has this project gone and what kind of things"
+  },
+  {
+   "t": 46.93,
+   "d": 2.97,
+   "text": "do I think can be done with it still."
+  },
+  {
+   "t": 49.9,
+   "d": 5.49,
+   "text": "The motivation here is that, well, I love poetry."
+  },
+  {
+   "t": 55.39,
+   "d": 6.7,
+   "text": "I love reading it and I love writing it but I often find that I get sort of stuck in writing"
+  },
+  {
+   "t": 62.09,
+   "d": 7.09,
+   "text": "poetry so that it is kind of a little seeming and similar voices and line shapes Etc."
+  },
+  {
+   "t": 69.18,
+   "d": 5.02,
+   "text": "Why not work on a Proc Gen project to help me break out of that, feel a little more creative,"
+  },
+  {
+   "t": 74.2,
+   "d": 5.66,
+   "text": "have more fun with it and think harder about kind of what makes poetry poetry."
+  },
+  {
+   "t": 79.86,
+   "d": 3.53,
+   "text": "So the goal isn't to generate poetry."
+  },
+  {
+   "t": 83.39,
+   "d": 5.78,
+   "text": "The goal is to generate shapes of poetry and by shape I mean like the form, the layout"
+  },
+  {
+   "t": 89.17,
+   "d": 7.3,
+   "text": "on the page, the shape of the lines, the structure, the meter, all of those things."
+  },
+  {
+   "t": 96.47,
+   "d": 2.99,
+   "text": "That's what I mean by shape."
+  },
+  {
+   "t": 99.46,
+   "d": 8.0,
+   "text": "And so first caveat you say is I am only talking about anglo phonic poetry because that's all"
+  },
+  {
+   "t": 107.46,
+   "d": 1.0,
+   "text": "I know."
+  },
+  {
+   "t": 108.46,
+   "d": 5.83,
+   "text": "I will throw that out because poetry is different in different languages."
+  },
+  {
+   "t": 114.29,
+   "d": 4.99,
+   "text": "The base unit of English poetry is the syllable."
+  },
+  {
+   "t": 119.28,
+   "d": 8.29,
+   "text": "Poetry comes in a huge array of forms and rebellions against form and different styles"
+  },
+  {
+   "t": 127.57,
+   "d": 9.62,
+   "text": "so we need not just one generator but a whole family of them.Ch the simplest generator just"
+  },
+  {
+   "t": 137.19,
+   "d": 9.84,
+   "text": "generates blocks of lines, stanzas, and randomly generate their sizes and length of lines as"
+  },
+  {
+   "t": 147.03,
+   "d": 2.55,
+   "text": "variations around some mean."
+  },
+  {
+   "t": 149.58,
+   "d": 4.87,
+   "text": "And, you know, this is an example of that first attempt."
+  },
+  {
+   "t": 154.45,
+   "d": 2.95,
+   "text": "The dashes represent syllables."
+  },
+  {
+   "t": 157.4,
+   "d": 8.21,
+   "text": "The visual reminder count of how many that is and here is the poem that corresponds to"
+  },
+  {
+   "t": 165.61,
+   "d": 1.09,
+   "text": "that."
+  },
+  {
+   "t": 166.7,
+   "d": 4.47,
+   "text": "Nilism in the end times."
+  },
+  {
+   "t": 171.17,
+   "d": 4.76,
+   "text": "We are intentional and becoming more hollow by the hour."
+  },
+  {
+   "t": 175.93,
+   "d": 4.92,
+   "text": "I don't know when we stopped believing we had a future but I think too many are proud"
+  },
+  {
+   "t": 180.85,
+   "d": 6.88,
+   "text": "of seeing the end at hand and sneering they are not surprised but when we survived 10,000"
+  },
+  {
+   "t": 187.73,
+   "d": 9.46,
+   "text": "years, who did you help live?"
+  },
+  {
+   "t": 197.19,
+   "d": 8.4,
+   "text": "The very first program."
+  },
+  {
+   "t": 205.59,
+   "d": 10.32,
+   "text": "When I started working on this there was this shape and this is what I wrote."
+  },
+  {
+   "t": 215.91,
+   "d": 4.7,
+   "text": "If I had been in the garden that day and I had seen eve before her first bite I would"
+  },
+  {
+   "t": 220.61,
+   "d": 6.43,
+   "text": "have grabbed on tight and told her don't stop no matter what he says because he talk about"
+  },
+  {
+   "t": 227.04,
+   "d": 7.03,
+   "text": "eve's foolishness of sin but never talk about how scary and terrifying it must feel to defy"
+  },
+  {
+   "t": 234.07,
+   "d": 6.05,
+   "text": "God and the only family you knew to take a snake's word that it could be better than"
+  },
+  {
+   "t": 240.12,
+   "d": 1.43,
+   "text": "this."
+  },
+  {
+   "t": 241.55,
+   "d": 1.0,
+   "text": "This is OK."
+  },
+  {
+   "t": 242.55,
+   "d": 6.55,
+   "text": "A few lines of code, gets you thinking and produces something inline with what a lot"
+  },
+  {
+   "t": 249.1,
+   "d": 4.41,
+   "text": "of modern free verse is but such a tiny sliver of what poetry can be."
+  },
+  {
+   "t": 253.51,
+   "d": 9.09,
+   "text": "We have got to go deeper which means arbitrary -- generate lines by arbitrary function of"
+  },
+  {
+   "t": 262.6,
+   "d": 1.84,
+   "text": "line and stanza number."
+  },
+  {
+   "t": 264.44,
+   "d": 5.9,
+   "text": "We can generate random functions from pre-made pieces, pre-determined pieces and just add"
+  },
+  {
+   "t": 270.34,
+   "d": 5.16,
+   "text": "them together and so you can, you know, you can add a bunch of waves together and have"
+  },
+  {
+   "t": 275.5,
+   "d": 7.02,
+   "text": "a series and if you do that, well, you get something that kind of looks like this."
+  },
+  {
+   "t": 282.52,
+   "d": 8.27,
+   "text": "It is smooth, it's organic, it varies and yet it doesn't feel too regular or too artificially"
+  },
+  {
+   "t": 290.79,
+   "d": 9.65,
+   "text": "janky and the poem I wrote that corresponds to this I worship the moon and the stars."
+  },
+  {
+   "t": 300.44,
+   "d": 5.47,
+   "text": "I lose myself in the sacred void that swims within the synergy and the infinite wholely"
+  },
+  {
+   "t": 305.91,
+   "d": 1.71,
+   "text": "beyond our comprehension."
+  },
+  {
+   "t": 307.62,
+   "d": 7.83,
+   "text": "I was taught to worship a rightious God and his jealously intertwineded with love cruelty."
+  },
+  {
+   "t": 315.45,
+   "d": 5.34,
+   "text": "A God I tried to love and a father I wanted to please and a distant listeninger holding"
+  },
+  {
+   "t": 320.79,
+   "d": 1.31,
+   "text": "every thought captive."
+  },
+  {
+   "t": 322.1,
+   "d": 3.19,
+   "text": "I was trapped and alone and emptied out."
+  },
+  {
+   "t": 325.29,
+   "d": 1.87,
+   "text": "A vessel."
+  },
+  {
+   "t": 327.16,
+   "d": 1.93,
+   "text": "Nothing can grow."
+  },
+  {
+   "t": 329.09,
+   "d": 5.18,
+   "text": "Nothing can build itself back up because nothing is really ever just nothing and the vacuum"
+  },
+  {
+   "t": 334.27,
+   "d": 6.0,
+   "text": "pulses with life and the universe is never empty but is full of creation, breathing in"
+  },
+  {
+   "t": 340.27,
+   "d": 6.83,
+   "text": "and out, rising, falling, being, nothing is ever lost or wasted and all the time I mourn"
+  },
+  {
+   "t": 347.1,
+   "d": 5.39,
+   "text": "is an endless fabric of space."
+  },
+  {
+   "t": 352.49,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 353.49,
+   "d": 5.14,
+   "text": "You know, we can do things like that and what about white space and indentation?"
+  },
+  {
+   "t": 358.63,
+   "d": 3.61,
+   "text": "The first thing I tried was generate indentation separately."
+  },
+  {
+   "t": 362.24,
+   "d": 1.0,
+   "text": "That's all right."
+  },
+  {
+   "t": 363.24,
+   "d": 2.82,
+   "text": "But it is not modern poetry."
+  },
+  {
+   "t": 366.06,
+   "d": 6.74,
+   "text": "Modern poetry tends to treat the line as a unit and the page as an interleaving of text"
+  },
+  {
+   "t": 372.8,
+   "d": 7.06,
+   "text": "and white space so while the idea had to do that is to basically expand our functions"
+  },
+  {
+   "t": 379.86,
+   "d": 3.57,
+   "text": "to be things that I am calling signal functions."
+  },
+  {
+   "t": 383.43,
+   "d": 6.24,
+   "text": "They take on different values over the course of a line and where the line, where they are"
+  },
+  {
+   "t": 389.67,
+   "d": 3.73,
+   "text": "greater equal to 0 that should be a syllable and where they are less than 0 that should"
+  },
+  {
+   "t": 393.4,
+   "d": 8.2,
+   "text": "be a space so again doing waves of amplitudes and frequencies and we can get something like"
+  },
+  {
+   "t": 401.6,
+   "d": 5.4,
+   "text": "this which is also an interesting, right?"
+  },
+  {
+   "t": 407.0,
+   "d": 4.44,
+   "text": "It is an interesting set of shapes, the dashes are still syllables."
+  },
+  {
+   "t": 411.44,
+   "d": 6.53,
+   "text": "I put the pipes in so that you can read the spaces easier for myself, really, and you"
+  },
+  {
+   "t": 417.97,
+   "d": 5.82,
+   "text": "know, you get something that kind of reminds me of, I don't know, a poet I look like olana"
+  },
+  {
+   "t": 423.79,
+   "d": 1.32,
+   "text": "Celtic Davis."
+  },
+  {
+   "t": 425.11,
+   "d": 5.46,
+   "text": "Someone who takes classic forms, deconstructs them and rips apart line structure and breaks"
+  },
+  {
+   "t": 430.57,
+   "d": 5.35,
+   "text": "it into pieces in her poetry."
+  },
+  {
+   "t": 435.92,
+   "d": 6.17,
+   "text": "Going further, we have talked about it is just free verse so far but meter is a super"
+  },
+  {
+   "t": 442.09,
+   "d": 20.98,
+   "text": "important part of poetry and in English poetry, metre is a defined as two-syllable feet."
+  },
+  {
+   "t": 463.07,
+   "d": 7.53,
+   "text": "And the iambic line is five per line and that's what Shakespeare is famous for writing in."
+  },
+  {
+   "t": 470.6,
+   "d": 17.49,
+   "text": "This is generating a mixture of I ams and trokeies and pureics and that's kind of neat"
+  },
+  {
+   "t": 488.09,
+   "d": 6.47,
+   "text": "and produces something that looks like this which is weird and broken and yet you can"
+  },
+  {
+   "t": 494.56,
+   "d": 6.59,
+   "text": "find of do something fun with it by leaning into the broken use of space and just let"
+  },
+  {
+   "t": 501.15,
+   "d": 2.71,
+   "text": "that be part of the poetry itself."
+  },
+  {
+   "t": 503.86,
+   "d": 7.13,
+   "text": "I put underscores to emphasize the weird empty space it generated but then there is another"
+  },
+  {
+   "t": 510.99,
+   "d": 2.76,
+   "text": "thing that's interesting and that's rhyming."
+  },
+  {
+   "t": 513.75,
+   "d": 10.14,
+   "text": "Rhyming is a historical part of English poetry and not as common but it is super -- it is"
+  },
+  {
+   "t": 523.89,
+   "d": 5.76,
+   "text": "a huge part of the history of poetry in this language."
+  },
+  {
+   "t": 529.65,
+   "d": 5.13,
+   "text": "The easiest thing you can do is to generate rhymes essentially by a grab bag."
+  },
+  {
+   "t": 534.78,
+   "d": 3.14,
+   "text": "Like you figure out how many different rhyme endings you want."
+  },
+  {
+   "t": 537.92,
+   "d": 4.74,
+   "text": "You want it to be somewhat proportional to the size of the poem."
+  },
+  {
+   "t": 542.66,
+   "d": 4.55,
+   "text": "You don't want more than say half the number of lines of the poem to be different rhyming"
+  },
+  {
+   "t": 547.21,
+   "d": 1.81,
+   "text": "schemes."
+  },
+  {
+   "t": 549.02,
+   "d": 6.72,
+   "text": "And then just randomly assign from the grab bag, you know, to each line."
+  },
+  {
+   "t": 555.74,
+   "d": 3.06,
+   "text": "And that can produce some kind of natural looking things."
+  },
+  {
+   "t": 558.8,
+   "d": 6.97,
+   "text": "It can also do weird things like this where every line ends in the same sound which is"
+  },
+  {
+   "t": 565.77,
+   "d": 4.81,
+   "text": "weird but I mean the whole point of this project is to be weird and creative and do things"
+  },
+  {
+   "t": 570.58,
+   "d": 2.53,
+   "text": "you wouldn't normally do so I did it."
+  },
+  {
+   "t": 573.11,
+   "d": 2.61,
+   "text": "It is strange."
+  },
+  {
+   "t": 575.72,
+   "d": 6.4,
+   "text": "I did slant rhymes and stuff to try and like ease a little bit of the monotony and, you"
+  },
+  {
+   "t": 582.12,
+   "d": 7.78,
+   "text": "know, I kind of made it work and that's cool."
+  },
+  {
+   "t": 589.9,
+   "d": 5.23,
+   "text": "Kind of trying to wrap up here, you know, you can do a lot starting with very little"
+  },
+  {
+   "t": 595.13,
+   "d": 4.96,
+   "text": "because you are not trying to make something that mimics, you know, great poets."
+  },
+  {
+   "t": 600.09,
+   "d": 4.34,
+   "text": "What you are doing is trying to make something that helps you write poetry differently than"
+  },
+  {
+   "t": 604.43,
+   "d": 4.08,
+   "text": "you would and the threshold for that is actually not super high."
+  },
+  {
+   "t": 608.51,
+   "d": 6.12,
+   "text": "However, as you get more creative with it, and as you do weirder things, you are pushing"
+  },
+  {
+   "t": 614.63,
+   "d": 5.11,
+   "text": "yourself to do more creative and weird things too and that's kind of the partnership and"
+  },
+  {
+   "t": 619.74,
+   "d": 5.33,
+   "text": "this iteration of I try things and I am like OK, but I want more and I figure out how to"
+  },
+  {
+   "t": 625.07,
+   "d": 7.87,
+   "text": "code more things I want and, you know, there is also kind of this sweet spot between freedom"
+  },
+  {
+   "t": 632.94,
+   "d": 2.9,
+   "text": "and constraint like combining a bunch of the different things."
+  },
+  {
+   "t": 635.84,
+   "d": 4.53,
+   "text": "Stresses are rhyming starts to feel overconstrained."
+  },
+  {
+   "t": 640.37,
+   "d": 7.05,
+   "text": "It is more like solving a puzzle than writing poetry which is a useful exercise but not"
+  },
+  {
+   "t": 647.42,
+   "d": 5.79,
+   "text": "something I would want to build things to publish out of."
+  },
+  {
+   "t": 653.21,
+   "d": 3.38,
+   "text": "This all just felt really good also."
+  },
+  {
+   "t": 656.59,
+   "d": 3.28,
+   "text": "And so what's left?"
+  },
+  {
+   "t": 659.87,
+   "d": 1.0,
+   "text": "So much."
+  },
+  {
+   "t": 660.87,
+   "d": 4.71,
+   "text": "There is an entire constraint handling system I wasn't pleased with so I didn't include"
+  },
+  {
+   "t": 665.58,
+   "d": 5.88,
+   "text": "it in this."
+  },
+  {
+   "t": 671.46,
+   "d": 5.0,
+   "text": "Different stanzas are rotations of each other and there is other symmetries you can do in"
+  },
+  {
+   "t": 676.46,
+   "d": 1.17,
+   "text": "structure."
+  },
+  {
+   "t": 677.63,
+   "d": 7.16,
+   "text": "It is sort of concrete poetry which is this form meet content approach which, you know,"
+  },
+  {
+   "t": 684.79,
+   "d": 7.62,
+   "text": "I might end up needing to do in something like P5 or like latach."
+  },
+  {
+   "t": 692.41,
+   "d": 12.69,
+   "text": "I will write a specific language describing sort of the structure of concrete poetry and"
+  },
+  {
+   "t": 705.1,
+   "d": 9.0,
+   "text": "then compile like basically generate an AST in this language and compile that to a latech"
+  },
+  {
+   "t": 714.1,
+   "d": 11.85,
+   "text": "code based off one of the packages and fill that in and compile to PDF and get freaky"
+  },
+  {
+   "t": 725.95,
+   "d": 5.29,
+   "text": "formatted thing that would be really unique."
+  },
+  {
+   "t": 731.24,
+   "d": 4.78,
+   "text": "Also, this whole thing needs a whole lot more work on UI."
+  },
+  {
+   "t": 736.02,
+   "d": 6.09,
+   "text": "This is a bunch of common list code that is kind of just meant for me to read but it is"
+  },
+  {
+   "t": 742.11,
+   "d": 1.76,
+   "text": "still available up on GitHub."
+  },
+  {
+   "t": 743.87,
+   "d": 5.63,
+   "text": "And lastly, I kind of want to take some of the thinks I have done in algorithmic music"
+  },
+  {
+   "t": 749.5,
+   "d": 8.39,
+   "text": "and patterns and generation from patterns in, you know, and apply it to poetry as well."
+  },
+  {
+   "t": 757.89,
+   "d": 2.72,
+   "text": "Yeah, that's my talk."
+  },
+  {
+   "t": 760.61,
+   "d": 4.73,
+   "text": "I really appreciate the opportunity to give it and thank you so much on this last slide"
+  },
+  {
+   "t": 765.34,
+   "d": 4.49,
+   "text": "you can see how to find the repository and find me on the internet."
+  },
+  {
+   "t": 769.83,
+   "d": 1.0,
+   "text": "Enjoy the rest of the conference."
+  }
+ ]
+}

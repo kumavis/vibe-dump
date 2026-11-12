@@ -1,0 +1,4835 @@
+{
+ "id": "jd7K0EmkvPk",
+ "url": "https://www.youtube.com/watch?v=jd7K0EmkvPk",
+ "title": "Jim Shepard - Storytelling, World Building, and You",
+ "speaker": "Jim Shepard",
+ "talk_title": "Storytelling, World Building, and You",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-10",
+ "duration_s": 1900,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Jim Shepard's talk from the Roguelike Celebration 2018 - http://roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to narrative"
+  },
+  {
+   "start": 86,
+   "title": "Overcoming storytelling fear"
+  },
+  {
+   "start": 141,
+   "title": "The problem with walls of text"
+  },
+  {
+   "start": 223,
+   "title": "Better methods for narrative"
+  },
+  {
+   "start": 264,
+   "title": "Optional content strategies"
+  },
+  {
+   "start": 326,
+   "title": "Audio and voice integration"
+  },
+  {
+   "start": 346,
+   "title": "Storytelling through gameplay"
+  },
+  {
+   "start": 400,
+   "title": "Visuals and environment cues"
+  },
+  {
+   "start": 602,
+   "title": "Flavor text in item design"
+  },
+  {
+   "start": 662,
+   "title": "Case study: Tangledeep"
+  },
+  {
+   "start": 870,
+   "title": "Perspective in narrative"
+  },
+  {
+   "start": 1039,
+   "title": "Writing character dialogue"
+  },
+  {
+   "start": 1074,
+   "title": "The technique of borrowing"
+  },
+  {
+   "start": 1395,
+   "title": "Q&A: Balancing functionality"
+  },
+  {
+   "start": 1545,
+   "title": "Q&A: Executing plot twists"
+  },
+  {
+   "start": 1556,
+   "title": "Q&A: Character development"
+  },
+  {
+   "start": 1588,
+   "title": "Q&A: Researching storytelling"
+  },
+  {
+   "start": 1778,
+   "title": "Q&A: Environment crafting"
+  },
+  {
+   "start": 1793,
+   "title": "Referencing previous talks"
+  },
+  {
+   "start": 1820,
+   "title": "Closing remarks"
+  },
+  {
+   "start": 1846,
+   "title": "Charity initiative"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6987,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.36,
+   "d": 1.13,
+   "text": "[Applause]"
+  },
+  {
+   "t": 1.49,
+   "d": 2.2,
+   "text": "hey what's up storytelling and you"
+  },
+  {
+   "t": 3.69,
+   "d": 1.95,
+   "text": "telling stories in your game even if you"
+  },
+  {
+   "t": 5.64,
+   "d": 2.4,
+   "text": "don't work good I think that a lot of"
+  },
+  {
+   "t": 8.04,
+   "d": 2.16,
+   "text": "people who are reflect developers have"
+  },
+  {
+   "t": 10.2,
+   "d": 1.86,
+   "text": "cool stories they want to tell in their"
+  },
+  {
+   "t": 12.06,
+   "d": 1.95,
+   "text": "game but at the same time there's a fear"
+  },
+  {
+   "t": 14.01,
+   "d": 2.91,
+   "text": "of doing it wrong there's some obstacles"
+  },
+  {
+   "t": 16.92,
+   "d": 2.37,
+   "text": "to doing it right so let's see I've got"
+  },
+  {
+   "t": 19.29,
+   "d": 0.96,
+   "text": "some experience"
+  },
+  {
+   "t": 20.25,
+   "d": 1.83,
+   "text": "I'm Jim I make games about crushing"
+  },
+  {
+   "t": 22.08,
+   "d": 1.47,
+   "text": "monsters and taking their stuff I've"
+  },
+  {
+   "t": 23.55,
+   "d": 1.38,
+   "text": "been doing this for a while"
+  },
+  {
+   "t": 24.93,
+   "d": 2.46,
+   "text": "dungeon man's is my pride and joy tangle"
+  },
+  {
+   "t": 27.39,
+   "d": 1.56,
+   "text": "deep is Andrews pride and joy but I'm"
+  },
+  {
+   "t": 28.95,
+   "d": 1.65,
+   "text": "also proud and joyful to be part of it"
+  },
+  {
+   "t": 30.6,
+   "d": 1.62,
+   "text": "that's what I do and there's a"
+  },
+  {
+   "t": 32.22,
+   "d": 3.21,
+   "text": "switchboard coming out in N+ 30 days"
+  },
+  {
+   "t": 35.43,
+   "d": 2.04,
+   "text": "which n being when big n decides they're"
+  },
+  {
+   "t": 37.47,
+   "d": 1.38,
+   "text": "gonna ship it so we've been giving it to"
+  },
+  {
+   "t": 38.85,
+   "d": 1.08,
+   "text": "Nintendo they've been telling us to eat"
+  },
+  {
+   "t": 39.93,
+   "d": 3.06,
+   "text": "but eventually we're gonna ship it"
+  },
+  {
+   "t": 42.99,
+   "d": 1.62,
+   "text": "it's gonna rule and you can play it so"
+  },
+  {
+   "t": 44.61,
+   "d": 2.43,
+   "text": "cool so we're gonna do is talk about not"
+  },
+  {
+   "t": 47.04,
+   "d": 2.43,
+   "text": "a click or do i alright we're talk"
+  },
+  {
+   "t": 49.47,
+   "d": 2.31,
+   "text": "about stories the objective here or the"
+  },
+  {
+   "t": 51.78,
+   "d": 1.62,
+   "text": "purpose is that we're going to learn how"
+  },
+  {
+   "t": 53.4,
+   "d": 2.25,
+   "text": "to discuss how to tell these stories in"
+  },
+  {
+   "t": 55.65,
+   "d": 1.86,
+   "text": "roguelikes using the tools we already"
+  },
+  {
+   "t": 57.51,
+   "d": 2.16,
+   "text": "have things we already do in roguelikes"
+  },
+  {
+   "t": 59.67,
+   "d": 1.65,
+   "text": "when we make them and play them I'm"
+  },
+  {
+   "t": 61.32,
+   "d": 1.2,
+   "text": "gonna show you some things that have"
+  },
+  {
+   "t": 62.52,
+   "d": 1.77,
+   "text": "already shipped real products stuff"
+  },
+  {
+   "t": 64.29,
+   "d": 1.26,
+   "text": "that's abstract theory that I've been"
+  },
+  {
+   "t": 65.55,
+   "d": 2.1,
+   "text": "thinking about in practicing and the"
+  },
+  {
+   "t": 67.65,
+   "d": 1.41,
+   "text": "reason this is important is because it"
+  },
+  {
+   "t": 69.06,
+   "d": 2.64,
+   "text": "brings more of your signature and"
+  },
+  {
+   "t": 71.7,
+   "d": 3.27,
+   "text": "passion into the game that sounds"
+  },
+  {
+   "t": 74.97,
+   "d": 2.04,
+   "text": "highfalutin but I I believe it right if"
+  },
+  {
+   "t": 77.01,
+   "d": 3.03,
+   "text": "you if you have the the the the fire and"
+  },
+  {
+   "t": 80.04,
+   "d": 2.43,
+   "text": "the lust of dedication to make a game of"
+  },
+  {
+   "t": 82.47,
+   "d": 2.25,
+   "text": "your own the more of you that can go"
+  },
+  {
+   "t": 84.72,
+   "d": 1.59,
+   "text": "into that better and I think you can get"
+  },
+  {
+   "t": 86.31,
+   "d": 2.37,
+   "text": "some of that from storytelling so what"
+  },
+  {
+   "t": 88.68,
+   "d": 2.34,
+   "text": "is storytelling I who carries academic"
+  },
+  {
+   "t": 91.02,
+   "d": 1.35,
+   "text": "description suck and we're not gonna do"
+  },
+  {
+   "t": 92.37,
+   "d": 3.57,
+   "text": "them know what I'm thinking is this your"
+  },
+  {
+   "t": 95.94,
+   "d": 1.71,
+   "text": "you're in the shower or you're on the"
+  },
+  {
+   "t": 97.65,
+   "d": 1.71,
+   "text": "bus or you're driving somewhere and"
+  },
+  {
+   "t": 99.36,
+   "d": 1.47,
+   "text": "you've got this cool thing in your head"
+  },
+  {
+   "t": 100.83,
+   "d": 2.37,
+   "text": "you've got this barbarian making a"
+  },
+  {
+   "t": 103.2,
+   "d": 1.41,
+   "text": "choice between two things he doesn't"
+  },
+  {
+   "t": 104.61,
+   "d": 2.01,
+   "text": "understand or you've got these two"
+  },
+  {
+   "t": 106.62,
+   "d": 2.52,
+   "text": "dueling princesses fighting for the fate"
+  },
+  {
+   "t": 109.14,
+   "d": 1.11,
+   "text": "of something and they want to save"
+  },
+  {
+   "t": 110.25,
+   "d": 2.03,
+   "text": "bloodshed but one of them has to die or"
+  },
+  {
+   "t": 112.28,
+   "d": 1.75,
+   "text": "exploring a mountain climbing and you"
+  },
+  {
+   "t": 114.03,
+   "d": 2.19,
+   "text": "had this crazy story in your head and"
+  },
+  {
+   "t": 116.22,
+   "d": 1.98,
+   "text": "you try to tell it to somebody and it's"
+  },
+  {
+   "t": 118.2,
+   "d": 1.53,
+   "text": "like bad bad but then the guy with the"
+  },
+  {
+   "t": 119.73,
+   "d": 1.71,
+   "text": "sword bed.but and it doesn't come out"
+  },
+  {
+   "t": 121.44,
+   "d": 1.23,
+   "text": "right it's like when you're thinking"
+  },
+  {
+   "t": 122.67,
+   "d": 2.22,
+   "text": "about a song and you can hear it in your"
+  },
+  {
+   "t": 124.89,
+   "d": 2.61,
+   "text": "head and then you try to to sing it or"
+  },
+  {
+   "t": 127.5,
+   "d": 1.62,
+   "text": "to hum it or to play it any really"
+  },
+  {
+   "t": 129.12,
+   "d": 1.23,
+   "text": "aren't a musician yet and it sounds like"
+  },
+  {
+   "t": 130.35,
+   "d": 1.77,
+   "text": "that kazoo version of Jurassic Park like"
+  },
+  {
+   "t": 132.12,
+   "d": 0.98,
+   "text": "it just doesn't"
+  },
+  {
+   "t": 133.1,
+   "d": 1.44,
+   "text": "right and you know that feeling and it"
+  },
+  {
+   "t": 134.54,
+   "d": 3.57,
+   "text": "sucks so it's a skill you have to"
+  },
+  {
+   "t": 138.11,
+   "d": 1.83,
+   "text": "practice but there's ways to do it in"
+  },
+  {
+   "t": 139.94,
+   "d": 1.26,
+   "text": "the games we already make and I think"
+  },
+  {
+   "t": 141.2,
+   "d": 1.95,
+   "text": "that we can make that happen here so the"
+  },
+  {
+   "t": 143.15,
+   "d": 1.83,
+   "text": "first thing in storytelling in a game is"
+  },
+  {
+   "t": 144.98,
+   "d": 2.52,
+   "text": "putting the words in front of the player"
+  },
+  {
+   "t": 147.5,
+   "d": 2.82,
+   "text": "right and what we want to do is make"
+  },
+  {
+   "t": 150.32,
+   "d": 1.44,
+   "text": "sure the information is in a way they"
+  },
+  {
+   "t": 151.76,
+   "d": 2.13,
+   "text": "can retain and they choose to retain"
+  },
+  {
+   "t": 153.89,
+   "d": 2.76,
+   "text": "right because you can show them stuff"
+  },
+  {
+   "t": 156.65,
+   "d": 1.17,
+   "text": "they can keep and maybe they don't want"
+  },
+  {
+   "t": 157.82,
+   "d": 1.89,
+   "text": "to but it's important to show those"
+  },
+  {
+   "t": 159.71,
+   "d": 1.8,
+   "text": "stuff in a way that they can appreciate"
+  },
+  {
+   "t": 161.51,
+   "d": 1.74,
+   "text": "and like because if you have a great"
+  },
+  {
+   "t": 163.25,
+   "d": 2.46,
+   "text": "story it falls apart if you show it"
+  },
+  {
+   "t": 165.71,
+   "d": 2.04,
+   "text": "wrong and if you have it just okay story"
+  },
+  {
+   "t": 167.75,
+   "d": 2.22,
+   "text": "it'll grow on the player if you present"
+  },
+  {
+   "t": 169.97,
+   "d": 2.1,
+   "text": "it in a way that's fun because we know"
+  },
+  {
+   "t": 172.07,
+   "d": 2.82,
+   "text": "our players have a little bit of brain"
+  },
+  {
+   "t": 174.89,
+   "d": 2.55,
+   "text": "sauce and they create the story while"
+  },
+  {
+   "t": 177.44,
+   "d": 1.83,
+   "text": "they play and they're part of it so we"
+  },
+  {
+   "t": 179.27,
+   "d": 1.59,
+   "text": "kind of have respect for the player and"
+  },
+  {
+   "t": 180.86,
+   "d": 1.77,
+   "text": "said look you know we're gonna spell a"
+  },
+  {
+   "t": 182.63,
+   "d": 1.02,
+   "text": "lot of stuff out for you but not"
+  },
+  {
+   "t": 183.65,
+   "d": 2.28,
+   "text": "everything in a game or life we have"
+  },
+  {
+   "t": 185.93,
+   "d": 1.44,
+   "text": "ASCII symbols everywhere like you do a"
+  },
+  {
+   "t": 187.37,
+   "d": 1.26,
+   "text": "lot of the mental lifting new players"
+  },
+  {
+   "t": 188.63,
+   "d": 2.67,
+   "text": "right so we're cool with that we're"
+  },
+  {
+   "t": 191.3,
+   "d": 1.44,
+   "text": "gonna show you stuff in a format that"
+  },
+  {
+   "t": 192.74,
+   "d": 1.83,
+   "text": "works along that way so here's some"
+  },
+  {
+   "t": 194.57,
+   "d": 1.65,
+   "text": "stuff that already exists in the world"
+  },
+  {
+   "t": 196.22,
+   "d": 2.58,
+   "text": "of gaming and the worst is the wall of"
+  },
+  {
+   "t": 198.8,
+   "d": 2.43,
+   "text": "text I mean this happens all over the"
+  },
+  {
+   "t": 201.23,
+   "d": 0.27,
+   "text": "place"
+  },
+  {
+   "t": 201.5,
+   "d": 2.67,
+   "text": "I love castle of the winds right it"
+  },
+  {
+   "t": 204.17,
+   "d": 2.7,
+   "text": "rules but you know that was made back in"
+  },
+  {
+   "t": 206.87,
+   "d": 1.83,
+   "text": "the old century when maybe that's all"
+  },
+  {
+   "t": 208.7,
+   "d": 1.26,
+   "text": "the guy could do it's like I'm gonna"
+  },
+  {
+   "t": 209.96,
+   "d": 2.97,
+   "text": "write a story about King lifts of lifts"
+  },
+  {
+   "t": 212.93,
+   "d": 2.79,
+   "text": "Kwanza and and it's a lot of words right"
+  },
+  {
+   "t": 215.72,
+   "d": 1.41,
+   "text": "and I'm sure you care because actually"
+  },
+  {
+   "t": 217.13,
+   "d": 1.32,
+   "text": "this is like one of the last encounters"
+  },
+  {
+   "t": 218.45,
+   "d": 0.93,
+   "text": "so you're either it's 3:00 in the"
+  },
+  {
+   "t": 219.38,
+   "d": 1.47,
+   "text": "morning you're almost asleep or you"
+  },
+  {
+   "t": 220.85,
+   "d": 1.74,
+   "text": "really give a crap but it's a lot of"
+  },
+  {
+   "t": 222.59,
+   "d": 2.55,
+   "text": "words and they go on and on and on and"
+  },
+  {
+   "t": 225.14,
+   "d": 1.86,
+   "text": "so many games do this and it just throw"
+  },
+  {
+   "t": 227.0,
+   "d": 2.73,
+   "text": "stuff at you and it's so hard to"
+  },
+  {
+   "t": 229.73,
+   "d": 1.59,
+   "text": "maintain and to keep and even if you"
+  },
+  {
+   "t": 231.32,
+   "d": 1.41,
+   "text": "want to care sometimes you're like God"
+  },
+  {
+   "t": 232.73,
+   "d": 1.98,
+   "text": "dang it just keep going anyway it"
+  },
+  {
+   "t": 234.71,
+   "d": 1.83,
+   "text": "doesn't work right so the problem with"
+  },
+  {
+   "t": 236.54,
+   "d": 2.13,
+   "text": "this first of all is it's dense and it's"
+  },
+  {
+   "t": 238.67,
+   "d": 2.22,
+   "text": "rigid I'm throwing this information at"
+  },
+  {
+   "t": 240.89,
+   "d": 2.4,
+   "text": "you in the way that I choose for you to"
+  },
+  {
+   "t": 243.29,
+   "d": 2.67,
+   "text": "get it and you don't get a way to you"
+  },
+  {
+   "t": 245.96,
+   "d": 1.38,
+   "text": "don't have a way as a player to sort of"
+  },
+  {
+   "t": 247.34,
+   "d": 2.55,
+   "text": "make it your own right isn't that a lot"
+  },
+  {
+   "t": 249.89,
+   "d": 1.32,
+   "text": "of room for imagination when we're just"
+  },
+  {
+   "t": 251.21,
+   "d": 1.44,
+   "text": "throw-in the wallet X you here's what's"
+  },
+  {
+   "t": 252.65,
+   "d": 1.74,
+   "text": "up and players see it as an obstacle"
+  },
+  {
+   "t": 254.39,
+   "d": 2.76,
+   "text": "even somebody who likes games when they"
+  },
+  {
+   "t": 257.15,
+   "d": 1.47,
+   "text": "see like three paragraphs or something"
+  },
+  {
+   "t": 258.62,
+   "d": 1.95,
+   "text": "something primal their lizard brain goes"
+  },
+  {
+   "t": 260.57,
+   "d": 2.46,
+   "text": "know when they want to skip it right so"
+  },
+  {
+   "t": 263.03,
+   "d": 2.19,
+   "text": "that's too bad we won't do that there's"
+  },
+  {
+   "t": 265.22,
+   "d": 1.39,
+   "text": "something better which is the option"
+  },
+  {
+   "t": 266.61,
+   "d": 2.61,
+   "text": "of putting books or notes or something"
+  },
+  {
+   "t": 269.22,
+   "d": 2.18,
+   "text": "to read in the game right so this is"
+  },
+  {
+   "t": 271.4,
+   "d": 2.26,
+   "text": "this is the best screenshot of Elder"
+  },
+  {
+   "t": 273.66,
+   "d": 1.8,
+   "text": "Scrolls that exists and Elder Scrolls"
+  },
+  {
+   "t": 275.46,
+   "d": 1.86,
+   "text": "does this all the time they have lots of"
+  },
+  {
+   "t": 277.32,
+   "d": 1.2,
+   "text": "books to read and that's cool so there's"
+  },
+  {
+   "t": 278.52,
+   "d": 2.19,
+   "text": "all sorts of books you can find in elder"
+  },
+  {
+   "t": 280.71,
+   "d": 1.23,
+   "text": "scrolls that you pick up and they've got"
+  },
+  {
+   "t": 281.94,
+   "d": 2.49,
+   "text": "optional content whatever man if you"
+  },
+  {
+   "t": 284.43,
+   "d": 1.44,
+   "text": "want to read that that's cool and that's"
+  },
+  {
+   "t": 285.87,
+   "d": 2.13,
+   "text": "something for you that you can do on"
+  },
+  {
+   "t": 288.0,
+   "d": 2.16,
+   "text": "your own time so you find a book you"
+  },
+  {
+   "t": 290.16,
+   "d": 1.74,
+   "text": "choosing to read it I have a friend in"
+  },
+  {
+   "t": 291.9,
+   "d": 2.22,
+   "text": "this room one name but it's told me one"
+  },
+  {
+   "t": 294.12,
+   "d": 1.62,
+   "text": "of his favorite experiences is putting"
+  },
+  {
+   "t": 295.74,
+   "d": 2.34,
+   "text": "on the VR crap in Skyrim teleporting to"
+  },
+  {
+   "t": 298.08,
+   "d": 2.16,
+   "text": "the top of a spire in a wintry wind and"
+  },
+  {
+   "t": 300.24,
+   "d": 2.46,
+   "text": "reading books in that VR world how cool"
+  },
+  {
+   "t": 302.7,
+   "d": 2.7,
+   "text": "is that right that's neat and and it's"
+  },
+  {
+   "t": 305.4,
+   "d": 1.44,
+   "text": "called it they can meander a bit from"
+  },
+  {
+   "t": 306.84,
+   "d": 2.01,
+   "text": "the core story they're optional but if"
+  },
+  {
+   "t": 308.85,
+   "d": 2.79,
+   "text": "you put mandatory plot information in"
+  },
+  {
+   "t": 311.64,
+   "d": 2.58,
+   "text": "these books players may not read them"
+  },
+  {
+   "t": 314.22,
+   "d": 1.95,
+   "text": "right and so that's not so good"
+  },
+  {
+   "t": 316.17,
+   "d": 2.43,
+   "text": "also if you don't word good writing"
+  },
+  {
+   "t": 318.6,
+   "d": 1.32,
+   "text": "books is scary right if you're gonna"
+  },
+  {
+   "t": 319.92,
+   "d": 1.11,
+   "text": "write a bunch of paragraphs of"
+  },
+  {
+   "t": 321.03,
+   "d": 1.77,
+   "text": "information that is if you're I don't"
+  },
+  {
+   "t": 322.8,
+   "d": 1.29,
+   "text": "write write well it's kind of tough to"
+  },
+  {
+   "t": 324.09,
+   "d": 2.16,
+   "text": "do so maybe this isn't the best and then"
+  },
+  {
+   "t": 326.25,
+   "d": 1.17,
+   "text": "there's also oh by the way"
+  },
+  {
+   "t": 327.42,
+   "d": 2.82,
+   "text": "Jupiter hell just went into beta you can"
+  },
+  {
+   "t": 330.24,
+   "d": 2.01,
+   "text": "find it on Steam and this is a product"
+  },
+  {
+   "t": 332.25,
+   "d": 1.98,
+   "text": "of our dear friend Cornell who can't be"
+  },
+  {
+   "t": 334.23,
+   "d": 1.77,
+   "text": "here today because he's a ghost actually"
+  },
+  {
+   "t": 336.0,
+   "d": 2.13,
+   "text": "because he's in Poland and he came to"
+  },
+  {
+   "t": 338.13,
+   "d": 1.68,
+   "text": "pax right that was his one Ameri trip"
+  },
+  {
+   "t": 339.81,
+   "d": 1.83,
+   "text": "for the year he went to pax show off his"
+  },
+  {
+   "t": 341.64,
+   "d": 1.5,
+   "text": "game he should be here now he's really"
+  },
+  {
+   "t": 343.14,
+   "d": 2.22,
+   "text": "cool he's working very hard it's when I"
+  },
+  {
+   "t": 345.36,
+   "d": 0.87,
+   "text": "advertise for him"
+  },
+  {
+   "t": 346.23,
+   "d": 3.39,
+   "text": "so yeah also back to work we can put"
+  },
+  {
+   "t": 349.62,
+   "d": 2.1,
+   "text": "words in front of the player using audio"
+  },
+  {
+   "t": 351.72,
+   "d": 1.41,
+   "text": "log now this is pricey right this is"
+  },
+  {
+   "t": 353.13,
+   "d": 1.73,
+   "text": "something that maybe is out of our reach"
+  },
+  {
+   "t": 354.86,
+   "d": 1.75,
+   "text": "it's cool because the information"
+  },
+  {
+   "t": 356.61,
+   "d": 1.17,
+   "text": "doesn't get in the way of gameplay"
+  },
+  {
+   "t": 357.78,
+   "d": 2.16,
+   "text": "you're playing doom and you listen to"
+  },
+  {
+   "t": 359.94,
+   "d": 1.23,
+   "text": "some recording and you can still like"
+  },
+  {
+   "t": 361.17,
+   "d": 1.26,
+   "text": "blast monsters while somebody's talking"
+  },
+  {
+   "t": 362.43,
+   "d": 2.88,
+   "text": "about doom stuff it's it's there and you"
+  },
+  {
+   "t": 365.31,
+   "d": 1.38,
+   "text": "can hear it this is a screenshot from"
+  },
+  {
+   "t": 366.69,
+   "d": 2.76,
+   "text": "Horizon it's an awesome game and you"
+  },
+  {
+   "t": 369.45,
+   "d": 1.44,
+   "text": "search for audio logs that can be neat"
+  },
+  {
+   "t": 370.89,
+   "d": 1.35,
+   "text": "there's like a shiny thing and I go and"
+  },
+  {
+   "t": 372.24,
+   "d": 2.01,
+   "text": "you look at it with your little focusing"
+  },
+  {
+   "t": 374.25,
+   "d": 3.12,
+   "text": "thing and somebody tells a story and you"
+  },
+  {
+   "t": 377.37,
+   "d": 1.5,
+   "text": "can keep playing and that's great it's"
+  },
+  {
+   "t": 378.87,
+   "d": 3.03,
+   "text": "really cool voice is an awesome way to"
+  },
+  {
+   "t": 381.9,
+   "d": 1.02,
+   "text": "add life to your characters and"
+  },
+  {
+   "t": 382.92,
+   "d": 1.95,
+   "text": "adventure and it's totally practical and"
+  },
+  {
+   "t": 384.87,
+   "d": 1.47,
+   "text": "affordable if you're an indie to have"
+  },
+  {
+   "t": 386.34,
+   "d": 2.01,
+   "text": "married to a video actor and you have to"
+  },
+  {
+   "t": 388.35,
+   "d": 1.32,
+   "text": "hang out with your clan girl on speed"
+  },
+  {
+   "t": 389.67,
+   "d": 2.19,
+   "text": "dial if that's your case then yeah use"
+  },
+  {
+   "t": 391.86,
+   "d": 3.24,
+   "text": "voice but I started this talk with the"
+  },
+  {
+   "t": 395.1,
+   "d": 1.8,
+   "text": "idea of we're talking about stories and"
+  },
+  {
+   "t": 396.9,
+   "d": 1.32,
+   "text": "roguelikes"
+  },
+  {
+   "t": 398.22,
+   "d": 2.91,
+   "text": "already have and what we have is this"
+  },
+  {
+   "t": 401.13,
+   "d": 1.11,
+   "text": "right"
+  },
+  {
+   "t": 402.24,
+   "d": 1.8,
+   "text": "that is our canvas for telling stories"
+  },
+  {
+   "t": 404.04,
+   "d": 2.76,
+   "text": "so here's what shows up it's one of"
+  },
+  {
+   "t": 406.8,
+   "d": 2.82,
+   "text": "these what is this anybody it's a dog"
+  },
+  {
+   "t": 409.62,
+   "d": 2.22,
+   "text": "it's a wolf right it's a wolf because D"
+  },
+  {
+   "t": 411.84,
+   "d": 2.43,
+   "text": "is for dog dog oh and waltzer canines"
+  },
+  {
+   "t": 414.27,
+   "d": 1.71,
+   "text": "and that's the letter we use for that if"
+  },
+  {
+   "t": 415.98,
+   "d": 1.68,
+   "text": "you didn't know and here comes a wolf"
+  },
+  {
+   "t": 417.66,
+   "d": 1.38,
+   "text": "it's gonna attack you and oh it deals"
+  },
+  {
+   "t": 419.04,
+   "d": 1.53,
+   "text": "four damage with sharp canines right"
+  },
+  {
+   "t": 420.57,
+   "d": 1.32,
+   "text": "that's a wolf they got teeth everywhere"
+  },
+  {
+   "t": 421.89,
+   "d": 2.76,
+   "text": "and they use them to bite you that's"
+  },
+  {
+   "t": 424.65,
+   "d": 1.74,
+   "text": "what they do and then oh you attack back"
+  },
+  {
+   "t": 426.39,
+   "d": 1.17,
+   "text": "and he was his be steel cutting the"
+  },
+  {
+   "t": 427.56,
+   "d": 1.14,
+   "text": "dodge out of the way cuz they're wolves"
+  },
+  {
+   "t": 428.7,
+   "d": 1.92,
+   "text": "maybe even whatever but then you hit him"
+  },
+  {
+   "t": 430.62,
+   "d": 2.1,
+   "text": "and he do a whole bunch of damage yeah"
+  },
+  {
+   "t": 432.72,
+   "d": 2.55,
+   "text": "and then it Howl's mournfully and dies"
+  },
+  {
+   "t": 435.27,
+   "d": 3.06,
+   "text": "right this is combat with a wolf this is"
+  },
+  {
+   "t": 438.33,
+   "d": 1.17,
+   "text": "this is that pretty much what what"
+  },
+  {
+   "t": 439.5,
+   "d": 1.08,
+   "text": "happens in the game when you are"
+  },
+  {
+   "t": 440.58,
+   "d": 3.51,
+   "text": "fighting wolves um that D can be a lot a"
+  },
+  {
+   "t": 444.09,
+   "d": 3.18,
+   "text": "wolf be an alpha wolf a winter wolf"
+  },
+  {
+   "t": 447.27,
+   "d": 2.31,
+   "text": "right dire well what is a dire anything"
+  },
+  {
+   "t": 449.58,
+   "d": 2.79,
+   "text": "that is a type of animal that I think"
+  },
+  {
+   "t": 452.37,
+   "d": 1.74,
+   "text": "only exists in fantasy right are there"
+  },
+  {
+   "t": 454.11,
+   "d": 1.59,
+   "text": "real dire boars like I'm an island"
+  },
+  {
+   "t": 455.7,
+   "d": 1.41,
+   "text": "somewhere I don't know but like you not"
+  },
+  {
+   "t": 457.11,
+   "d": 1.83,
+   "text": "me tire right that's cool so it sells a"
+  },
+  {
+   "t": 458.94,
+   "d": 2.04,
+   "text": "bit of like this is a fierce monster"
+  },
+  {
+   "t": 460.98,
+   "d": 2.13,
+   "text": "right so here comes this one it's what"
+  },
+  {
+   "t": 463.11,
+   "d": 5.25,
+   "text": "is this alright it's a cleric the hell"
+  },
+  {
+   "t": 468.36,
+   "d": 1.5,
+   "text": "is a cleric I've never seen a cleric"
+  },
+  {
+   "t": 469.86,
+   "d": 2.31,
+   "text": "well I have now so bring it on let's go"
+  },
+  {
+   "t": 472.17,
+   "d": 3.0,
+   "text": "fight it shows up and oh what moulton"
+  },
+  {
+   "t": 475.17,
+   "d": 2.64,
+   "text": "slashers this vist glogg has molten"
+  },
+  {
+   "t": 477.81,
+   "d": 1.8,
+   "text": "slashers I don't know what's going on"
+  },
+  {
+   "t": 479.61,
+   "d": 2.31,
+   "text": "I got slashed multiple E that's bad ok"
+  },
+  {
+   "t": 481.92,
+   "d": 2.25,
+   "text": "well I'm gonna head back and like what"
+  },
+  {
+   "t": 484.17,
+   "d": 2.1,
+   "text": "deflected phasic chitin what even is"
+  },
+  {
+   "t": 486.27,
+   "d": 2.82,
+   "text": "that like holy cow so something's up"
+  },
+  {
+   "t": 489.09,
+   "d": 1.23,
+   "text": "like this is a monster it's only doing"
+  },
+  {
+   "t": 490.32,
+   "d": 1.47,
+   "text": "for damage I guess I'm fine but whoa"
+  },
+  {
+   "t": 491.79,
+   "d": 1.92,
+   "text": "this has got molten slashers and it's"
+  },
+  {
+   "t": 493.71,
+   "d": 1.95,
+   "text": "phasing and I'm gonna hit it and you'll"
+  },
+  {
+   "t": 495.66,
+   "d": 1.89,
+   "text": "whole bunch of damage and it died it"
+  },
+  {
+   "t": 497.55,
+   "d": 3.84,
+   "text": "kiters all the rashes all for"
+  },
+  {
+   "t": 501.39,
+   "d": 4.23,
+   "text": "ask a woman and it's gone right well"
+  },
+  {
+   "t": 505.62,
+   "d": 2.43,
+   "text": "what okay that information just happened"
+  },
+  {
+   "t": 508.05,
+   "d": 1.74,
+   "text": "to me while I was playing right it's in"
+  },
+  {
+   "t": 509.79,
+   "d": 2.04,
+   "text": "the combat log you have to do that to to"
+  },
+  {
+   "t": 511.83,
+   "d": 2.1,
+   "text": "fight a monster and win it's happening"
+  },
+  {
+   "t": 513.93,
+   "d": 2.13,
+   "text": "to you while you're playing so a blerg"
+  },
+  {
+   "t": 516.06,
+   "d": 1.77,
+   "text": "is one okay it's a de Klerk there's like"
+  },
+  {
+   "t": 517.83,
+   "d": 2.73,
+   "text": "a glorious cinder out of it apex cleric"
+  },
+  {
+   "t": 520.56,
+   "d": 1.32,
+   "text": "I bet it's really tall and then there's"
+  },
+  {
+   "t": 521.88,
+   "d": 1.32,
+   "text": "like what the hell like there's a whole"
+  },
+  {
+   "t": 523.2,
+   "d": 2.64,
+   "text": "bunch of things that glue could be right"
+  },
+  {
+   "t": 525.84,
+   "d": 1.62,
+   "text": "so you're fighting words"
+  },
+  {
+   "t": 527.46,
+   "d": 1.5,
+   "text": "oh no it's clerks and you're fighting"
+  },
+  {
+   "t": 528.96,
+   "d": 1.36,
+   "text": "them in a town or"
+  },
+  {
+   "t": 530.32,
+   "d": 2.76,
+   "text": "and it sounds on fire right if this is"
+  },
+  {
+   "t": 533.08,
+   "d": 1.98,
+   "text": "happening to you okay cool this is"
+  },
+  {
+   "t": 535.06,
+   "d": 1.59,
+   "text": "gameplay you're doing this and the"
+  },
+  {
+   "t": 536.65,
+   "d": 1.38,
+   "text": "townspeople are burnin aiding and like"
+  },
+  {
+   "t": 538.03,
+   "d": 1.11,
+   "text": "there's gloves everywhere and you're"
+  },
+  {
+   "t": 539.14,
+   "d": 1.5,
+   "text": "you're trying to get out and you're the"
+  },
+  {
+   "t": 540.64,
+   "d": 1.77,
+   "text": "one and you know what this is ten"
+  },
+  {
+   "t": 542.41,
+   "d": 2.4,
+   "text": "million billion jillion times better"
+  },
+  {
+   "t": 544.81,
+   "d": 3.3,
+   "text": "than this right cuz this has happened in"
+  },
+  {
+   "t": 548.11,
+   "d": 2.82,
+   "text": "so many games right the Pratt survivor"
+  },
+  {
+   "t": 550.93,
+   "d": 2.61,
+   "text": "of the village of Drona says come on"
+  },
+  {
+   "t": 553.54,
+   "d": 2.28,
+   "text": "right and if you know everything I"
+  },
+  {
+   "t": 555.82,
+   "d": 2.4,
+   "text": "showed you is so practical if you are"
+  },
+  {
+   "t": 558.22,
+   "d": 1.65,
+   "text": "anybody who is a hobby roguelike dev"
+  },
+  {
+   "t": 559.87,
+   "d": 2.58,
+   "text": "don't do this the hell with you if you"
+  },
+  {
+   "t": 562.45,
+   "d": 1.89,
+   "text": "do this right you can make this cool"
+  },
+  {
+   "t": 564.34,
+   "d": 2.01,
+   "text": "fight scene happening here and this is"
+  },
+  {
+   "t": 566.35,
+   "d": 1.77,
+   "text": "gameplay anyway don't make a puppy cave"
+  },
+  {
+   "t": 568.12,
+   "d": 2.25,
+   "text": "make a town on fire right the monsters"
+  },
+  {
+   "t": 570.37,
+   "d": 2.55,
+   "text": "are just as easy it's the same series of"
+  },
+  {
+   "t": 572.92,
+   "d": 1.83,
+   "text": "tutorial steps but there's theme and"
+  },
+  {
+   "t": 574.75,
+   "d": 3.0,
+   "text": "story to it and you get it for free it's"
+  },
+  {
+   "t": 577.75,
+   "d": 1.35,
+   "text": "part of the game you don't need this"
+  },
+  {
+   "t": 579.1,
+   "d": 1.29,
+   "text": "ridiculous wall of text so what I'm"
+  },
+  {
+   "t": 580.39,
+   "d": 1.89,
+   "text": "going to ask you to do is use the"
+  },
+  {
+   "t": 582.28,
+   "d": 2.91,
+   "text": "gameplay to show the player a story that"
+  },
+  {
+   "t": 585.19,
+   "d": 2.07,
+   "text": "is happening with them at the center and"
+  },
+  {
+   "t": 587.26,
+   "d": 2.46,
+   "text": "do not leave gameplay to tell them a"
+  },
+  {
+   "t": 589.72,
+   "d": 1.26,
+   "text": "story that is happening to them while"
+  },
+  {
+   "t": 590.98,
+   "d": 3.09,
+   "text": "they watch it's it's sure don't tell I"
+  },
+  {
+   "t": 594.07,
+   "d": 1.14,
+   "text": "think everyone has heard that it's"
+  },
+  {
+   "t": 595.21,
+   "d": 1.47,
+   "text": "important their lives now you've heard"
+  },
+  {
+   "t": 596.68,
+   "d": 2.16,
+   "text": "it again and we can do it right this"
+  },
+  {
+   "t": 598.84,
+   "d": 1.38,
+   "text": "isn't fancy this isn't special this is"
+  },
+  {
+   "t": 600.22,
+   "d": 1.29,
+   "text": "the tools we already have the stuff we"
+  },
+  {
+   "t": 601.51,
+   "d": 4.2,
+   "text": "do okay pop quiz what's this it's sword"
+  },
+  {
+   "t": 605.71,
+   "d": 2.94,
+   "text": "it's a long sword cool okay and and what"
+  },
+  {
+   "t": 608.65,
+   "d": 2.43,
+   "text": "is it uh it's a one-handed sword great"
+  },
+  {
+   "t": 611.08,
+   "d": 1.41,
+   "text": "we know this we've seen this in games"
+  },
+  {
+   "t": 612.49,
+   "d": 1.65,
+   "text": "you've seen item cards and games pick it"
+  },
+  {
+   "t": 614.14,
+   "d": 2.94,
+   "text": "up what do great where select name is"
+  },
+  {
+   "t": 617.08,
+   "d": 1.14,
+   "text": "awesome I know everything you need to"
+  },
+  {
+   "t": 618.22,
+   "d": 1.86,
+   "text": "know about the sword I'm gonna put it in"
+  },
+  {
+   "t": 620.08,
+   "d": 4.2,
+   "text": "so many monsters and yeah and well okay"
+  },
+  {
+   "t": 624.28,
+   "d": 1.98,
+   "text": "there's the flavor text oh are you"
+  },
+  {
+   "t": 626.26,
+   "d": 2.55,
+   "text": "kidding me we know it is a long now we"
+  },
+  {
+   "t": 628.81,
+   "d": 1.77,
+   "text": "know it's a weapon wait did we just"
+  },
+  {
+   "t": 630.58,
+   "d": 3.18,
+   "text": "settle this why do you write this"
+  },
+  {
+   "t": 633.76,
+   "d": 1.62,
+   "text": "developer why do you do this and it"
+  },
+  {
+   "t": 635.38,
+   "d": 1.47,
+   "text": "feels like we're checking off a checkbox"
+  },
+  {
+   "t": 636.85,
+   "d": 2.67,
+   "text": "right oh well I made an item it needs to"
+  },
+  {
+   "t": 639.52,
+   "d": 3.63,
+   "text": "have a text okay here's one right you're"
+  },
+  {
+   "t": 643.15,
+   "d": 1.47,
+   "text": "wasting your own time the players"
+  },
+  {
+   "t": 644.62,
+   "d": 1.32,
+   "text": "reading time you're reading to disk"
+  },
+  {
+   "t": 645.94,
+   "d": 1.65,
+   "text": "space and and if you're localizing this"
+  },
+  {
+   "t": 647.59,
+   "d": 2.07,
+   "text": "god help you but you're wasting money"
+  },
+  {
+   "t": 649.66,
+   "d": 0.99,
+   "text": "for that right cause somebody's"
+  },
+  {
+   "t": 650.65,
+   "d": 1.41,
+   "text": "translating to that like oh great like"
+  },
+  {
+   "t": 652.06,
+   "d": 1.2,
+   "text": "they probably just pulled it out of like"
+  },
+  {
+   "t": 653.26,
+   "d": 2.25,
+   "text": "some prepackaged BS item description"
+  },
+  {
+   "t": 655.51,
+   "d": 1.2,
+   "text": "thing but they still charge you for word"
+  },
+  {
+   "t": 656.71,
+   "d": 1.77,
+   "text": "and and that's something you don't want"
+  },
+  {
+   "t": 658.48,
+   "d": 2.76,
+   "text": "to do so we've got this space let's use"
+  },
+  {
+   "t": 661.24,
+   "d": 1.65,
+   "text": "it to tell our story right"
+  },
+  {
+   "t": 662.89,
+   "d": 1.59,
+   "text": "here's Ford if I'm gonna go over each of"
+  },
+  {
+   "t": 664.48,
+   "d": 0.87,
+   "text": "these and there's a lot of words sorry"
+  },
+  {
+   "t": 665.35,
+   "d": 1.83,
+   "text": "here's the first one great weapons are"
+  },
+  {
+   "t": 667.18,
+   "d": 1.47,
+   "text": "forged with Sten vien steel but this"
+  },
+  {
+   "t": 668.65,
+   "d": 2.4,
+   "text": "will have to suffice until then what"
+  },
+  {
+   "t": 671.05,
+   "d": 1.8,
+   "text": "does that mean it not that much but now"
+  },
+  {
+   "t": 672.85,
+   "d": 1.62,
+   "text": "you've seen the word Sten vien right and"
+  },
+  {
+   "t": 674.47,
+   "d": 0.9,
+   "text": "just happened to you while you're"
+  },
+  {
+   "t": 675.37,
+   "d": 1.59,
+   "text": "playing and so if you find something"
+  },
+  {
+   "t": 676.96,
+   "d": 1.92,
+   "text": "like hey a Sten being plate mail or I"
+  },
+  {
+   "t": 678.88,
+   "d": 2.04,
+   "text": "got if you see the word again a Sten"
+  },
+  {
+   "t": 680.92,
+   "d": 2.73,
+   "text": "being Gollum oh okay you know there's"
+  },
+  {
+   "t": 683.65,
+   "d": 1.59,
+   "text": "something cool about that and you can"
+  },
+  {
+   "t": 685.24,
+   "d": 1.5,
+   "text": "pepper you're early items with this"
+  },
+  {
+   "t": 686.74,
+   "d": 1.35,
+   "text": "because the early item so have much to"
+  },
+  {
+   "t": 688.09,
+   "d": 2.31,
+   "text": "say so why not foreshadow a bit okay"
+  },
+  {
+   "t": 690.4,
+   "d": 2.07,
+   "text": "this next one here the history of"
+  },
+  {
+   "t": 692.47,
+   "d": 2.37,
+   "text": "Nations is rich so often in blood tools"
+  },
+  {
+   "t": 694.84,
+   "d": 1.53,
+   "text": "such as these are the quill like whole"
+  },
+  {
+   "t": 696.37,
+   "d": 1.83,
+   "text": "that's so over rock but you know what if"
+  },
+  {
+   "t": 698.2,
+   "d": 1.86,
+   "text": "you're making an overwrought game if"
+  },
+  {
+   "t": 700.06,
+   "d": 1.53,
+   "text": "you're doing Final Fantasy Tactics style"
+  },
+  {
+   "t": 701.59,
+   "d": 1.56,
+   "text": "like Ivelisse like drama drama drama"
+  },
+  {
+   "t": 703.15,
+   "d": 1.91,
+   "text": "everybody hangs themselves like cool"
+  },
+  {
+   "t": 705.06,
+   "d": 3.22,
+   "text": "that is that is a chance to help sell"
+  },
+  {
+   "t": 708.28,
+   "d": 1.53,
+   "text": "that without cutscenes with a dialogue"
+  },
+  {
+   "t": 709.81,
+   "d": 2.52,
+   "text": "it's right there in the item comedy"
+  },
+  {
+   "t": 712.33,
+   "d": 3.03,
+   "text": "answer Comic Sans like haha if you're"
+  },
+  {
+   "t": 715.36,
+   "d": 1.38,
+   "text": "making a silly game who would do that"
+  },
+  {
+   "t": 716.74,
+   "d": 1.56,
+   "text": "but you could and then you've got this"
+  },
+  {
+   "t": 718.3,
+   "d": 1.68,
+   "text": "thing and now what's interesting though"
+  },
+  {
+   "t": 719.98,
+   "d": 2.73,
+   "text": "is the word you would do what you can to"
+  },
+  {
+   "t": 722.71,
+   "d": 1.68,
+   "text": "keep the business and point at the rats"
+  },
+  {
+   "t": 724.39,
+   "d": 2.16,
+   "text": "a second person and I'll get into the"
+  },
+  {
+   "t": 726.55,
+   "d": 0.87,
+   "text": "difference between third second first"
+  },
+  {
+   "t": 727.42,
+   "d": 2.4,
+   "text": "person why it matters for us but that is"
+  },
+  {
+   "t": 729.82,
+   "d": 1.86,
+   "text": "something that that actually matters"
+  },
+  {
+   "t": 731.68,
+   "d": 2.91,
+   "text": "right and then the last one here I know"
+  },
+  {
+   "t": 734.59,
+   "d": 1.2,
+   "text": "it's a training weapon but it's still a"
+  },
+  {
+   "t": 735.79,
+   "d": 1.02,
+   "text": "whole bunch of sharp and pointy metal"
+  },
+  {
+   "t": 736.81,
+   "d": 3.36,
+   "text": "I'll make it work right who is saying"
+  },
+  {
+   "t": 740.17,
+   "d": 0.42,
+   "text": "that"
+  },
+  {
+   "t": 740.59,
+   "d": 2.61,
+   "text": "so Andrew gave me a gift he let me get"
+  },
+  {
+   "t": 743.2,
+   "d": 1.47,
+   "text": "away with trying something entangled EEP"
+  },
+  {
+   "t": 744.67,
+   "d": 1.86,
+   "text": "and I think it worked I think the fans"
+  },
+  {
+   "t": 746.53,
+   "d": 2.22,
+   "text": "dig it I I like it so that counts right"
+  },
+  {
+   "t": 748.75,
+   "d": 2.25,
+   "text": "the tangle deep is a story about Mariah"
+  },
+  {
+   "t": 751.0,
+   "d": 3.3,
+   "text": "Mariah is the heroine she has 12"
+  },
+  {
+   "t": 754.3,
+   "d": 1.62,
+   "text": "different jobs and costumes things you"
+  },
+  {
+   "t": 755.92,
+   "d": 1.23,
+   "text": "can be but you're still playing this"
+  },
+  {
+   "t": 757.15,
+   "d": 1.35,
+   "text": "care you can name her whatever but it's"
+  },
+  {
+   "t": 758.5,
+   "d": 2.25,
+   "text": "a story about her and her explanation to"
+  },
+  {
+   "t": 760.75,
+   "d": 1.44,
+   "text": "tangle tee and the monster she crushes"
+  },
+  {
+   "t": 762.19,
+   "d": 2.43,
+   "text": "in the thing she explores you learn"
+  },
+  {
+   "t": 764.62,
+   "d": 2.19,
+   "text": "about her through the items you pick up"
+  },
+  {
+   "t": 766.81,
+   "d": 2.55,
+   "text": "right everything you find has some"
+  },
+  {
+   "t": 769.36,
+   "d": 1.65,
+   "text": "flavor text and they're all written in"
+  },
+  {
+   "t": 771.01,
+   "d": 2.82,
+   "text": "her thoughts about the item there's a"
+  },
+  {
+   "t": 773.83,
+   "d": 1.38,
+   "text": "whole bunch of stuff right as you"
+  },
+  {
+   "t": 775.21,
+   "d": 3.21,
+   "text": "continue to move forward you find more"
+  },
+  {
+   "t": 778.42,
+   "d": 1.86,
+   "text": "interesting gear and some of it is stuff"
+  },
+  {
+   "t": 780.28,
+   "d": 1.71,
+   "text": "she expected to find anyway okay she"
+  },
+  {
+   "t": 781.99,
+   "d": 2.31,
+   "text": "knew as an adventurer she's gonna find a"
+  },
+  {
+   "t": 784.3,
+   "d": 1.41,
+   "text": "better sword it happens to everybody"
+  },
+  {
+   "t": 785.71,
+   "d": 1.59,
+   "text": "right unless they die so she's got this"
+  },
+  {
+   "t": 787.3,
+   "d": 1.41,
+   "text": "and she's excited okay cool"
+  },
+  {
+   "t": 788.71,
+   "d": 2.01,
+   "text": "this is gonna happen then whoa crazy"
+  },
+  {
+   "t": 790.72,
+   "d": 1.98,
+   "text": "magic like I don't understand"
+  },
+  {
+   "t": 792.7,
+   "d": 2.27,
+   "text": "right what she's learning she's curious"
+  },
+  {
+   "t": 794.97,
+   "d": 1.44,
+   "text": "she's curious about these things he has"
+  },
+  {
+   "t": 796.41,
+   "d": 1.98,
+   "text": "questions and so you can see that in her"
+  },
+  {
+   "t": 798.39,
+   "d": 1.65,
+   "text": "and then she's you know other things"
+  },
+  {
+   "t": 800.04,
+   "d": 2.28,
+   "text": "show up and it's like oh wow okay that's"
+  },
+  {
+   "t": 802.32,
+   "d": 1.53,
+   "text": "weird like this is a curved sword maybe"
+  },
+  {
+   "t": 803.85,
+   "d": 1.35,
+   "text": "he hasn't seen before like wow that's"
+  },
+  {
+   "t": 805.2,
+   "d": 1.53,
+   "text": "really something like well this wears"
+  },
+  {
+   "t": 806.73,
+   "d": 2.85,
+   "text": "really curvy like you know and and it's"
+  },
+  {
+   "t": 809.58,
+   "d": 1.11,
+   "text": "it's kind of it's a tongue-in-cheek"
+  },
+  {
+   "t": 810.69,
+   "d": 1.98,
+   "text": "chuckle whatever but it's it's a thread"
+  },
+  {
+   "t": 812.67,
+   "d": 1.38,
+   "text": "that runs through your game and doesn't"
+  },
+  {
+   "t": 814.05,
+   "d": 3.75,
+   "text": "require you to to leave the gameplay"
+  },
+  {
+   "t": 817.8,
+   "d": 3.03,
+   "text": "space to to get it right it's something"
+  },
+  {
+   "t": 820.83,
+   "d": 1.58,
+   "text": "that happens to you while you're playing"
+  },
+  {
+   "t": 822.41,
+   "d": 1.93,
+   "text": "there's a whole bunch of words here also"
+  },
+  {
+   "t": 824.34,
+   "d": 3.15,
+   "text": "but you find Scrolls and Mariah is"
+  },
+  {
+   "t": 827.49,
+   "d": 1.8,
+   "text": "learning to read the scroll language"
+  },
+  {
+   "t": 829.29,
+   "d": 1.38,
+   "text": "right she's learning to translate runes"
+  },
+  {
+   "t": 830.67,
+   "d": 2.82,
+   "text": "so in many cases the yellow stuff is the"
+  },
+  {
+   "t": 833.49,
+   "d": 2.82,
+   "text": "rune translation so the first to work in"
+  },
+  {
+   "t": 836.31,
+   "d": 3.09,
+   "text": "a rhyme the next to dolt she doesn't"
+  },
+  {
+   "t": 839.4,
+   "d": 1.68,
+   "text": "understand the words like dirt fold and"
+  },
+  {
+   "t": 841.08,
+   "d": 1.38,
+   "text": "fat wet splash and she's getting and"
+  },
+  {
+   "t": 842.46,
+   "d": 2.64,
+   "text": "wrong and there's a hack there because"
+  },
+  {
+   "t": 845.1,
+   "d": 1.44,
+   "text": "this is about if you can't weren't good"
+  },
+  {
+   "t": 846.54,
+   "d": 2.28,
+   "text": "if you can't make something that works"
+  },
+  {
+   "t": 848.82,
+   "d": 2.07,
+   "text": "sheet around it like I was trying to"
+  },
+  {
+   "t": 850.89,
+   "d": 1.35,
+   "text": "make rhymes for all the scrolls I'm like"
+  },
+  {
+   "t": 852.24,
+   "d": 1.65,
+   "text": "I don't know toxic like what turns a"
+  },
+  {
+   "t": 853.89,
+   "d": 3.09,
+   "text": "toxic like Bach sick like I did nothing"
+  },
+  {
+   "t": 856.98,
+   "d": 2.25,
+   "text": "right I mean it up shows a word so is it"
+  },
+  {
+   "t": 859.23,
+   "d": 2.19,
+   "text": "well why not just does not do it and you"
+  },
+  {
+   "t": 861.42,
+   "d": 1.77,
+   "text": "have that license to do it and and so"
+  },
+  {
+   "t": 863.19,
+   "d": 1.53,
+   "text": "getting around that it also made the"
+  },
+  {
+   "t": 864.72,
+   "d": 1.17,
+   "text": "character a little more interesting"
+  },
+  {
+   "t": 865.89,
+   "d": 1.53,
+   "text": "because she's trying to figure stuff out"
+  },
+  {
+   "t": 867.42,
+   "d": 4.83,
+   "text": "and she's not quite there yet so I want"
+  },
+  {
+   "t": 872.25,
+   "d": 3.0,
+   "text": "to talk about flavor in items and the"
+  },
+  {
+   "t": 875.25,
+   "d": 2.31,
+   "text": "third second first person which I think"
+  },
+  {
+   "t": 877.56,
+   "d": 2.46,
+   "text": "is is useful and good the third person"
+  },
+  {
+   "t": 880.02,
+   "d": 2.13,
+   "text": "is we see a lot the armor is incredibly"
+  },
+  {
+   "t": 882.15,
+   "d": 1.11,
+   "text": "ornate and flickers with arcane"
+  },
+  {
+   "t": 883.26,
+   "d": 1.74,
+   "text": "potential okay you've seen this when you"
+  },
+  {
+   "t": 885.0,
+   "d": 1.76,
+   "text": "pick up a fancy armor of magic whatever"
+  },
+  {
+   "t": 886.76,
+   "d": 2.86,
+   "text": "second person there's a narrator"
+  },
+  {
+   "t": 889.62,
+   "d": 2.13,
+   "text": "separate from the game you're reading"
+  },
+  {
+   "t": 891.75,
+   "d": 3.6,
+   "text": "the text but the voice is from someone"
+  },
+  {
+   "t": 895.35,
+   "d": 1.17,
+   "text": "who's talking to you"
+  },
+  {
+   "t": 896.52,
+   "d": 2.28,
+   "text": "and that's actually separate from the"
+  },
+  {
+   "t": 898.8,
+   "d": 1.77,
+   "text": "game itself right so there's that"
+  },
+  {
+   "t": 900.57,
+   "d": 1.26,
+   "text": "narrator who's delivering you"
+  },
+  {
+   "t": 901.83,
+   "d": 1.41,
+   "text": "information it's maybe the dungeon"
+  },
+  {
+   "t": 903.24,
+   "d": 2.1,
+   "text": "master feeling or that there's a story"
+  },
+  {
+   "t": 905.34,
+   "d": 1.71,
+   "text": "being told and there's that presence so"
+  },
+  {
+   "t": 907.05,
+   "d": 3.63,
+   "text": "when it talks to you do this that feels"
+  },
+  {
+   "t": 910.68,
+   "d": 1.29,
+   "text": "a little different than sticking to"
+  },
+  {
+   "t": 911.97,
+   "d": 1.95,
+   "text": "third-person now a lot of us myself"
+  },
+  {
+   "t": 913.92,
+   "d": 2.85,
+   "text": "included mix third and second person by"
+  },
+  {
+   "t": 916.77,
+   "d": 2.04,
+   "text": "accident maybe I think consistency is"
+  },
+  {
+   "t": 918.81,
+   "d": 1.83,
+   "text": "better I know in my future project I"
+  },
+  {
+   "t": 920.64,
+   "d": 2.34,
+   "text": "will pick one and roll with it because"
+  },
+  {
+   "t": 922.98,
+   "d": 1.56,
+   "text": "it really can change if you stick with"
+  },
+  {
+   "t": 924.54,
+   "d": 1.35,
+   "text": "it and go with it right it can change"
+  },
+  {
+   "t": 925.89,
+   "d": 1.29,
+   "text": "the tone of what's going on but"
+  },
+  {
+   "t": 927.18,
+   "d": 1.14,
+   "text": "first-person"
+  },
+  {
+   "t": 928.32,
+   "d": 2.67,
+   "text": "first person item text anything is"
+  },
+  {
+   "t": 930.99,
+   "d": 1.56,
+   "text": "possible with first person come right"
+  },
+  {
+   "t": 932.55,
+   "d": 1.98,
+   "text": "like you can do so much so the armor is"
+  },
+  {
+   "t": 934.53,
+   "d": 1.29,
+   "text": "incredible I can feel the latent power"
+  },
+  {
+   "t": 935.82,
+   "d": 1.53,
+   "text": "within coursing over every ornate little"
+  },
+  {
+   "t": 937.35,
+   "d": 1.2,
+   "text": "carving well that's the other things"
+  },
+  {
+   "t": 938.55,
+   "d": 2.22,
+   "text": "they're written but you'll also got like"
+  },
+  {
+   "t": 940.77,
+   "d": 2.43,
+   "text": "stinks so happy the magic it better be"
+  },
+  {
+   "t": 943.2,
+   "d": 1.8,
+   "text": "amazing cuz I can't move in it and that"
+  },
+  {
+   "t": 945.0,
+   "d": 1.38,
+   "text": "talks about your character like what did"
+  },
+  {
+   "t": 946.38,
+   "d": 1.35,
+   "text": "you just find this magic treasure in"
+  },
+  {
+   "t": 947.73,
+   "d": 1.2,
+   "text": "here you're complaining that's too heavy"
+  },
+  {
+   "t": 948.93,
+   "d": 1.92,
+   "text": "like come on but if that's your"
+  },
+  {
+   "t": 950.85,
+   "d": 1.5,
+   "text": "character and that's what you're selling"
+  },
+  {
+   "t": 952.35,
+   "d": 2.46,
+   "text": "okay and then you've got all the looks"
+  },
+  {
+   "t": 954.81,
+   "d": 2.01,
+   "text": "mail of a true sage blade and the"
+  },
+  {
+   "t": 956.82,
+   "d": 1.53,
+   "text": "seconds get okay cool guy whatever but"
+  },
+  {
+   "t": 958.35,
+   "d": 1.92,
+   "text": "if you're if your character is pompous"
+  },
+  {
+   "t": 960.27,
+   "d": 1.98,
+   "text": "and full of themselves and hey now you"
+  },
+  {
+   "t": 962.25,
+   "d": 1.59,
+   "text": "know what a sage blade is right you're"
+  },
+  {
+   "t": 963.84,
+   "d": 1.08,
+   "text": "just giving this to the player while"
+  },
+  {
+   "t": 964.92,
+   "d": 2.28,
+   "text": "they find out or Wow"
+  },
+  {
+   "t": 967.2,
+   "d": 1.8,
+   "text": "right this is someone who's just like"
+  },
+  {
+   "t": 969.0,
+   "d": 1.53,
+   "text": "awesome I'm here to crush monsters and"
+  },
+  {
+   "t": 970.53,
+   "d": 1.2,
+   "text": "get lutes and they're there murder-hobos"
+  },
+  {
+   "t": 971.73,
+   "d": 2.25,
+   "text": "want to get rich and you're saying this"
+  },
+  {
+   "t": 973.98,
+   "d": 3.09,
+   "text": "is happening in the game anyway all of"
+  },
+  {
+   "t": 977.07,
+   "d": 1.92,
+   "text": "that stuff the information about the"
+  },
+  {
+   "t": 978.99,
+   "d": 1.5,
+   "text": "armor the real critical stuff it's"
+  },
+  {
+   "t": 980.49,
+   "d": 2.04,
+   "text": "called like ornate plate you can see the"
+  },
+  {
+   "t": 982.53,
+   "d": 2.25,
+   "text": "stats on it plus two magic versus"
+  },
+  {
+   "t": 984.78,
+   "d": 1.56,
+   "text": "rabbits and all this other stuff so that"
+  },
+  {
+   "t": 986.34,
+   "d": 1.41,
+   "text": "information is there you see a picture"
+  },
+  {
+   "t": 987.75,
+   "d": 2.7,
+   "text": "of armor if you have sprites and if you"
+  },
+  {
+   "t": 990.45,
+   "d": 1.62,
+   "text": "don't you know what's armor because it"
+  },
+  {
+   "t": 992.07,
+   "d": 1.5,
+   "text": "says armor on it and it goes in the"
+  },
+  {
+   "t": 993.57,
+   "d": 3.24,
+   "text": "armor slot so that flavor text doesn't"
+  },
+  {
+   "t": 996.81,
+   "d": 1.77,
+   "text": "need to just say like it's a fancy armor"
+  },
+  {
+   "t": 998.58,
+   "d": 2.22,
+   "text": "I mean it could but it can also do more"
+  },
+  {
+   "t": 1000.8,
+   "d": 1.8,
+   "text": "and it's space that you're gonna use"
+  },
+  {
+   "t": 1002.6,
+   "d": 1.74,
+   "text": "anyway and the player is gonna read it"
+  },
+  {
+   "t": 1004.34,
+   "d": 2.79,
+   "text": "anyway so these are the those are the"
+  },
+  {
+   "t": 1007.13,
+   "d": 2.52,
+   "text": "two things that I think anyone can do"
+  },
+  {
+   "t": 1009.65,
+   "d": 2.07,
+   "text": "wicked right now your project at home"
+  },
+  {
+   "t": 1011.72,
+   "d": 1.59,
+   "text": "and your laptop you can make this work"
+  },
+  {
+   "t": 1013.31,
+   "d": 1.62,
+   "text": "you can start trying it if it suits you"
+  },
+  {
+   "t": 1014.93,
+   "d": 0.6,
+   "text": "cool"
+  },
+  {
+   "t": 1015.53,
+   "d": 2.16,
+   "text": "I wanted up some some more stuff I feel"
+  },
+  {
+   "t": 1017.69,
+   "d": 1.17,
+   "text": "like this talk was gonna go forever I"
+  },
+  {
+   "t": 1018.86,
+   "d": 1.8,
+   "text": "have a couple things what the hell time"
+  },
+  {
+   "t": 1020.66,
+   "d": 0.48,
+   "text": "are we"
+  },
+  {
+   "t": 1021.14,
+   "d": 4.53,
+   "text": "I feel like 15 minutes all right cool so"
+  },
+  {
+   "t": 1025.67,
+   "d": 2.61,
+   "text": "I wrote a thing about now your next one"
+  },
+  {
+   "t": 1028.28,
+   "d": 2.94,
+   "text": "is just saying okay do this I just said"
+  },
+  {
+   "t": 1031.22,
+   "d": 1.77,
+   "text": "this out loud don't waste space really"
+  },
+  {
+   "t": 1032.99,
+   "d": 1.08,
+   "text": "that's the important thing"
+  },
+  {
+   "t": 1034.07,
+   "d": 2.37,
+   "text": "don't waste space to just check off your"
+  },
+  {
+   "t": 1036.44,
+   "d": 1.62,
+   "text": "official RPG development boxes you've"
+  },
+  {
+   "t": 1038.06,
+   "d": 1.55,
+   "text": "got the space to use things do it"
+  },
+  {
+   "t": 1039.61,
+   "d": 2.11,
+   "text": "dialogues write dialogues a character"
+  },
+  {
+   "t": 1041.72,
+   "d": 2.24,
+   "text": "voice last thing I want to touch on"
+  },
+  {
+   "t": 1043.96,
+   "d": 1.78,
+   "text": "don't mean all that stuff it's just"
+  },
+  {
+   "t": 1045.74,
+   "d": 1.23,
+   "text": "saying there's there's two different"
+  },
+  {
+   "t": 1046.97,
+   "d": 3.69,
+   "text": "types you've got talking to monsters in"
+  },
+  {
+   "t": 1050.66,
+   "d": 1.44,
+   "text": "critical encounters talking to"
+  },
+  {
+   "t": 1052.1,
+   "d": 1.56,
+   "text": "shopkeepers even right because there's"
+  },
+  {
+   "t": 1053.66,
+   "d": 1.29,
+   "text": "some words there and and they don't"
+  },
+  {
+   "t": 1054.95,
+   "d": 1.53,
+   "text": "necessarily even have to mean anything"
+  },
+  {
+   "t": 1056.48,
+   "d": 2.34,
+   "text": "but they're a chance to see more about"
+  },
+  {
+   "t": 1058.82,
+   "d": 1.47,
+   "text": "your character and see more about the"
+  },
+  {
+   "t": 1060.29,
+   "d": 0.55,
+   "text": "world you"
+  },
+  {
+   "t": 1060.84,
+   "d": 2.22,
+   "text": "learn about dirt beat here and and"
+  },
+  {
+   "t": 1063.06,
+   "d": 3.06,
+   "text": "Mariah has like 3e like I'm a hero sort"
+  },
+  {
+   "t": 1066.12,
+   "d": 1.59,
+   "text": "of responses and all of them are just"
+  },
+  {
+   "t": 1067.71,
+   "d": 1.77,
+   "text": "like plucky young adventurer right none"
+  },
+  {
+   "t": 1069.48,
+   "d": 2.04,
+   "text": "of them are smartass and none of them"
+  },
+  {
+   "t": 1071.52,
+   "d": 1.29,
+   "text": "are whatever she's just like I'm a"
+  },
+  {
+   "t": 1072.81,
+   "d": 3.18,
+   "text": "plucky young adventurer the trick here"
+  },
+  {
+   "t": 1075.99,
+   "d": 1.83,
+   "text": "is first of all it's tough if you're a"
+  },
+  {
+   "t": 1077.82,
+   "d": 1.38,
+   "text": "newbie right if you don't write a lot of"
+  },
+  {
+   "t": 1079.2,
+   "d": 3.74,
+   "text": "stuff character dialog can be daunting"
+  },
+  {
+   "t": 1082.94,
+   "d": 2.95,
+   "text": "you you want to say the right thing or"
+  },
+  {
+   "t": 1085.89,
+   "d": 1.71,
+   "text": "the funny thing or the interesting thing"
+  },
+  {
+   "t": 1087.6,
+   "d": 1.5,
+   "text": "and you you've read about getting it"
+  },
+  {
+   "t": 1089.1,
+   "d": 0.75,
+   "text": "right it's fine"
+  },
+  {
+   "t": 1089.85,
+   "d": 3.78,
+   "text": "don't despair and just do it do it a lot"
+  },
+  {
+   "t": 1093.63,
+   "d": 1.62,
+   "text": "and I'll show you a trick that I think"
+  },
+  {
+   "t": 1095.25,
+   "d": 2.01,
+   "text": "might help you and this the important"
+  },
+  {
+   "t": 1097.26,
+   "d": 3.93,
+   "text": "information comes first flavor second so"
+  },
+  {
+   "t": 1101.19,
+   "d": 2.4,
+   "text": "if you have a dialogue that's a shop you"
+  },
+  {
+   "t": 1103.59,
+   "d": 2.34,
+   "text": "have to address it as a shop before you"
+  },
+  {
+   "t": 1105.93,
+   "d": 1.5,
+   "text": "go on about how the guy only sells"
+  },
+  {
+   "t": 1107.43,
+   "d": 2.25,
+   "text": "fluffy things or how he's from space or"
+  },
+  {
+   "t": 1109.68,
+   "d": 1.71,
+   "text": "whatever like the important part is this"
+  },
+  {
+   "t": 1111.39,
+   "d": 2.67,
+   "text": "is a store the dialogue has to get the"
+  },
+  {
+   "t": 1114.06,
+   "d": 2.64,
+   "text": "information across or else the fun"
+  },
+  {
+   "t": 1116.7,
+   "d": 1.59,
+   "text": "things you add or the flavor you add"
+  },
+  {
+   "t": 1118.29,
+   "d": 1.71,
+   "text": "becomes confusion because they want to"
+  },
+  {
+   "t": 1120.0,
+   "d": 1.5,
+   "text": "get to the the real thing first and then"
+  },
+  {
+   "t": 1121.5,
+   "d": 2.25,
+   "text": "the sauce comes on top really you don't"
+  },
+  {
+   "t": 1123.75,
+   "d": 2.67,
+   "text": "like give someone a brick of salt with"
+  },
+  {
+   "t": 1126.42,
+   "d": 1.5,
+   "text": "chicken sprinkled on top right you want"
+  },
+  {
+   "t": 1127.92,
+   "d": 1.35,
+   "text": "to make sure the meat is there first"
+  },
+  {
+   "t": 1129.27,
+   "d": 2.91,
+   "text": "and the spice goes on second say"
+  },
+  {
+   "t": 1132.18,
+   "d": 2.1,
+   "text": "everything you need to say but no more"
+  },
+  {
+   "t": 1134.28,
+   "d": 2.16,
+   "text": "or less right so what that means is we"
+  },
+  {
+   "t": 1136.44,
+   "d": 1.83,
+   "text": "always say well don't use a lot of words"
+  },
+  {
+   "t": 1138.27,
+   "d": 1.86,
+   "text": "and then try to be concise unless your"
+  },
+  {
+   "t": 1140.13,
+   "d": 0.81,
+   "text": "characters wordy"
+  },
+  {
+   "t": 1140.94,
+   "d": 2.04,
+   "text": "and if that's the case do it right"
+  },
+  {
+   "t": 1142.98,
+   "d": 1.89,
+   "text": "commit because you know rules are made"
+  },
+  {
+   "t": 1144.87,
+   "d": 1.53,
+   "text": "to be broken so the idea of like well I"
+  },
+  {
+   "t": 1146.4,
+   "d": 2.28,
+   "text": "want to consist I want to concise and"
+  },
+  {
+   "t": 1148.68,
+   "d": 2.04,
+   "text": "want just the information unless you're"
+  },
+  {
+   "t": 1150.72,
+   "d": 1.56,
+   "text": "talking to like a mad scientist or some"
+  },
+  {
+   "t": 1152.28,
+   "d": 1.86,
+   "text": "some Looney tune who's gonna go on and"
+  },
+  {
+   "t": 1154.14,
+   "d": 2.1,
+   "text": "on about stuff do it then in that case"
+  },
+  {
+   "t": 1156.24,
+   "d": 2.76,
+   "text": "make that character happen inconsistent"
+  },
+  {
+   "t": 1159.0,
+   "d": 3.21,
+   "text": "voice this is the bedrock this will make"
+  },
+  {
+   "t": 1162.21,
+   "d": 1.17,
+   "text": "your characters work and be memorable"
+  },
+  {
+   "t": 1163.38,
+   "d": 2.04,
+   "text": "whether it's the hero or a shopkeeper or"
+  },
+  {
+   "t": 1165.42,
+   "d": 1.32,
+   "text": "a villain or whatever this is the"
+  },
+  {
+   "t": 1166.74,
+   "d": 1.56,
+   "text": "consistent voice is the trek and here's"
+  },
+  {
+   "t": 1168.3,
+   "d": 1.44,
+   "text": "what I'm gonna give to you a powerful"
+  },
+  {
+   "t": 1169.74,
+   "d": 2.97,
+   "text": "technique for character write dialog for"
+  },
+  {
+   "t": 1172.71,
+   "d": 2.73,
+   "text": "rookies step 1 think about an existing"
+  },
+  {
+   "t": 1175.44,
+   "d": 2.25,
+   "text": "fictional character right someone from"
+  },
+  {
+   "t": 1177.69,
+   "d": 2.01,
+   "text": "any fiction whether it's your favorite"
+  },
+  {
+   "t": 1179.7,
+   "d": 3.81,
+   "text": "animu or video game or a movie or a book"
+  },
+  {
+   "t": 1183.51,
+   "d": 1.92,
+   "text": "or a comic book whatever like think"
+  },
+  {
+   "t": 1185.43,
+   "d": 1.8,
+   "text": "about somebody that you know well and"
+  },
+  {
+   "t": 1187.23,
+   "d": 2.52,
+   "text": "just rip them off entirely steal them"
+  },
+  {
+   "t": 1189.75,
+   "d": 2.58,
+   "text": "like it's yours now it's yours now and"
+  },
+  {
+   "t": 1192.33,
+   "d": 1.44,
+   "text": "nobody can stop you"
+  },
+  {
+   "t": 1193.77,
+   "d": 0.22,
+   "text": "right"
+  },
+  {
+   "t": 1193.99,
+   "d": 2.49,
+   "text": "this is your thing so so now you have"
+  },
+  {
+   "t": 1196.48,
+   "d": 1.47,
+   "text": "this character in your head and you know"
+  },
+  {
+   "t": 1197.95,
+   "d": 1.29,
+   "text": "that's your character you're gonna steal"
+  },
+  {
+   "t": 1199.24,
+   "d": 2.55,
+   "text": "him 100% but the trick is that it"
+  },
+  {
+   "t": 1201.79,
+   "d": 3.12,
+   "text": "doesn't have to align with the character"
+  },
+  {
+   "t": 1204.91,
+   "d": 1.17,
+   "text": "you're writing for and here's an example"
+  },
+  {
+   "t": 1206.08,
+   "d": 2.22,
+   "text": "I'll give you you have a blacksmith"
+  },
+  {
+   "t": 1208.3,
+   "d": 1.59,
+   "text": "right you've got this you've got this"
+  },
+  {
+   "t": 1209.89,
+   "d": 2.12,
+   "text": "young blacksmith she just finished"
+  },
+  {
+   "t": 1212.01,
+   "d": 2.71,
+   "text": "blacksmith academy boot camp and she's"
+  },
+  {
+   "t": 1214.72,
+   "d": 1.89,
+   "text": "really good hammering things but she's"
+  },
+  {
+   "t": 1216.61,
+   "d": 2.76,
+   "text": "also if she wants to grow she wants to"
+  },
+  {
+   "t": 1219.37,
+   "d": 1.62,
+   "text": "get better and she's excited about"
+  },
+  {
+   "t": 1220.99,
+   "d": 1.8,
+   "text": "metalworking and she's excited with a"
+  },
+  {
+   "t": 1222.79,
+   "d": 1.86,
+   "text": "history of armor and so what Who am I"
+  },
+  {
+   "t": 1224.65,
+   "d": 3.03,
+   "text": "gonna slap onto her Deckard Cain right"
+  },
+  {
+   "t": 1227.68,
+   "d": 1.65,
+   "text": "I'll pull the old man from diabla very"
+  },
+  {
+   "t": 1229.33,
+   "d": 2.4,
+   "text": "wild and listen like that guy I'll pull"
+  },
+  {
+   "t": 1231.73,
+   "d": 1.89,
+   "text": "him and put him unto her and it doesn't"
+  },
+  {
+   "t": 1233.62,
+   "d": 1.53,
+   "text": "mean she talks in an old man voice about"
+  },
+  {
+   "t": 1235.15,
+   "d": 2.52,
+   "text": "and then walks with a cane but Deckard"
+  },
+  {
+   "t": 1237.67,
+   "d": 3.54,
+   "text": "Cain also is like history is important"
+  },
+  {
+   "t": 1241.21,
+   "d": 1.44,
+   "text": "to victory just as much as strength is"
+  },
+  {
+   "t": 1242.65,
+   "d": 2.94,
+   "text": "and it's worth it to be patient and all"
+  },
+  {
+   "t": 1245.59,
+   "d": 1.56,
+   "text": "I get excited about riddles and puzzles"
+  },
+  {
+   "t": 1247.15,
+   "d": 2.07,
+   "text": "and that character has a million zillion"
+  },
+  {
+   "t": 1249.22,
+   "d": 2.91,
+   "text": "lines written for them you can just take"
+  },
+  {
+   "t": 1252.13,
+   "d": 2.19,
+   "text": "that right it's yours now and then you"
+  },
+  {
+   "t": 1254.32,
+   "d": 1.32,
+   "text": "could put it on your other character and"
+  },
+  {
+   "t": 1255.64,
+   "d": 1.47,
+   "text": "use it as resource and this is a crutch"
+  },
+  {
+   "t": 1257.11,
+   "d": 2.61,
+   "text": "or this is a crutch because we want to"
+  },
+  {
+   "t": 1259.72,
+   "d": 2.01,
+   "text": "have our own characters in our head but"
+  },
+  {
+   "t": 1261.73,
+   "d": 1.62,
+   "text": "fleshing them out is difficult and when"
+  },
+  {
+   "t": 1263.35,
+   "d": 1.65,
+   "text": "you again when you you picture a pretty"
+  },
+  {
+   "t": 1265.0,
+   "d": 1.44,
+   "text": "song and then you try to sing it and it"
+  },
+  {
+   "t": 1266.44,
+   "d": 1.23,
+   "text": "just sounds like a bunch of whistling"
+  },
+  {
+   "t": 1267.67,
+   "d": 1.26,
+   "text": "farts and it's like well that's not what"
+  },
+  {
+   "t": 1268.93,
+   "d": 2.64,
+   "text": "I wanted to do if you do this you can"
+  },
+  {
+   "t": 1271.57,
+   "d": 2.61,
+   "text": "focus and train I still do this and I"
+  },
+  {
+   "t": 1274.18,
+   "d": 1.53,
+   "text": "guess I'm using a little more advanced"
+  },
+  {
+   "t": 1275.71,
+   "d": 3.66,
+   "text": "technique here is shara the antagonist I"
+  },
+  {
+   "t": 1279.37,
+   "d": 1.38,
+   "text": "would never say villain the antagonist"
+  },
+  {
+   "t": 1280.75,
+   "d": 2.79,
+   "text": "of tangled if she ends up working"
+  },
+  {
+   "t": 1283.54,
+   "d": 1.59,
+   "text": "against you in a number of ways and I"
+  },
+  {
+   "t": 1285.13,
+   "d": 2.3,
+   "text": "thought of two characters that I kind of"
+  },
+  {
+   "t": 1287.43,
+   "d": 2.74,
+   "text": "mix and more of a fight to be a match"
+  },
+  {
+   "t": 1290.17,
+   "d": 2.82,
+   "text": "for how she thinks and talks and the"
+  },
+  {
+   "t": 1292.99,
+   "d": 2.04,
+   "text": "first one is Jaina Proudmoore from"
+  },
+  {
+   "t": 1295.03,
+   "d": 1.32,
+   "text": "Warcraft right all I ever wanted to do"
+  },
+  {
+   "t": 1296.35,
+   "d": 1.5,
+   "text": "was study ol Jana and that like crazy"
+  },
+  {
+   "t": 1297.85,
+   "d": 2.55,
+   "text": "new murder Jana but the one from before"
+  },
+  {
+   "t": 1300.4,
+   "d": 3.12,
+   "text": "who is you know she's an idealist"
+  },
+  {
+   "t": 1303.52,
+   "d": 2.31,
+   "text": "she thinks that that there's a way to do"
+  },
+  {
+   "t": 1305.83,
+   "d": 1.56,
+   "text": "the right thing without being terrible"
+  },
+  {
+   "t": 1307.39,
+   "d": 2.01,
+   "text": "she's excited about studying and"
+  },
+  {
+   "t": 1309.4,
+   "d": 2.91,
+   "text": "learning and she wants to she wants to"
+  },
+  {
+   "t": 1312.31,
+   "d": 1.74,
+   "text": "find out more about this and that and it"
+  },
+  {
+   "t": 1314.05,
+   "d": 2.07,
+   "text": "drives her but she's also got a bit of"
+  },
+  {
+   "t": 1316.12,
+   "d": 1.56,
+   "text": "iron in here she'll do what she has to"
+  },
+  {
+   "t": 1317.68,
+   "d": 3.42,
+   "text": "do right so that's part of her but alone"
+  },
+  {
+   "t": 1321.1,
+   "d": 2.61,
+   "text": "it's too nice so we need a bad guy and"
+  },
+  {
+   "t": 1323.71,
+   "d": 1.53,
+   "text": "this is this is vain solid or from the"
+  },
+  {
+   "t": 1325.24,
+   "d": 1.63,
+   "text": "best final fantasy which is 12"
+  },
+  {
+   "t": 1326.87,
+   "d": 2.28,
+   "text": "and he is the bad guy in that one and"
+  },
+  {
+   "t": 1329.15,
+   "d": 3.54,
+   "text": "this guy um he can be ruthless he thinks"
+  },
+  {
+   "t": 1332.69,
+   "d": 1.47,
+   "text": "he's doing the right thing he is driven"
+  },
+  {
+   "t": 1334.16,
+   "d": 2.64,
+   "text": "like a Mack truck to get that done but"
+  },
+  {
+   "t": 1336.8,
+   "d": 1.35,
+   "text": "he's also moved by things he doesn't"
+  },
+  {
+   "t": 1338.15,
+   "d": 1.98,
+   "text": "entirely understand there's this"
+  },
+  {
+   "t": 1340.13,
+   "d": 1.53,
+   "text": "ridiculous ghost who hangs out with him"
+  },
+  {
+   "t": 1341.66,
+   "d": 1.41,
+   "text": "just goes boo when he tries to do"
+  },
+  {
+   "t": 1343.07,
+   "d": 1.11,
+   "text": "something that the ghost doesn't want"
+  },
+  {
+   "t": 1344.18,
+   "d": 2.55,
+   "text": "the ghost is just like don't and so he's"
+  },
+  {
+   "t": 1346.73,
+   "d": 1.68,
+   "text": "kind of guided by voices in his head a"
+  },
+  {
+   "t": 1348.41,
+   "d": 2.01,
+   "text": "little bit toward a purpose and"
+  },
+  {
+   "t": 1350.42,
+   "d": 1.83,
+   "text": "something similar happens to shark so"
+  },
+  {
+   "t": 1352.25,
+   "d": 1.59,
+   "text": "those do things together or what I"
+  },
+  {
+   "t": 1353.84,
+   "d": 2.52,
+   "text": "thought about when I was writing"
+  },
+  {
+   "t": 1356.36,
+   "d": 2.28,
+   "text": "dialogue for her in the discussions you"
+  },
+  {
+   "t": 1358.64,
+   "d": 1.71,
+   "text": "have with her alright I took them"
+  },
+  {
+   "t": 1360.35,
+   "d": 0.87,
+   "text": "they're mine now"
+  },
+  {
+   "t": 1361.22,
+   "d": 1.8,
+   "text": "right there took them and use those"
+  },
+  {
+   "t": 1363.02,
+   "d": 2.4,
+   "text": "things and built this character I think"
+  },
+  {
+   "t": 1365.42,
+   "d": 2.61,
+   "text": "that stuff work for you so we have you"
+  },
+  {
+   "t": 1368.03,
+   "d": 2.79,
+   "text": "know borrow completely and entirely from"
+  },
+  {
+   "t": 1370.82,
+   "d": 1.38,
+   "text": "other characters for your dialogue right"
+  },
+  {
+   "t": 1372.2,
+   "d": 2.82,
+   "text": "use the space given to you in your own"
+  },
+  {
+   "t": 1375.02,
+   "d": 2.43,
+   "text": "gameplay in the combat log in the item"
+  },
+  {
+   "t": 1377.45,
+   "d": 1.44,
+   "text": "descriptions like it's all there players"
+  },
+  {
+   "t": 1378.89,
+   "d": 1.83,
+   "text": "agree to anyway use that stuff and avoid"
+  },
+  {
+   "t": 1380.72,
+   "d": 2.1,
+   "text": "walls of text if you want deliver"
+  },
+  {
+   "t": 1382.82,
+   "d": 1.8,
+   "text": "information and you can tell your"
+  },
+  {
+   "t": 1384.62,
+   "d": 1.35,
+   "text": "stories and you don't have to be great"
+  },
+  {
+   "t": 1385.97,
+   "d": 1.26,
+   "text": "at it right you can use those little"
+  },
+  {
+   "t": 1387.23,
+   "d": 1.86,
+   "text": "bits and pieces to make a story happen"
+  },
+  {
+   "t": 1389.09,
+   "d": 1.62,
+   "text": "we have respect for the player they'll"
+  },
+  {
+   "t": 1390.71,
+   "d": 2.4,
+   "text": "fill in the gaps and then you'll get"
+  },
+  {
+   "t": 1393.11,
+   "d": 1.44,
+   "text": "better at it the more you do it it's a"
+  },
+  {
+   "t": 1394.55,
+   "d": 1.89,
+   "text": "skill like any other and I think I'm at"
+  },
+  {
+   "t": 1396.44,
+   "d": 2.4,
+   "text": "a time that's pretty much it although"
+  },
+  {
+   "t": 1398.84,
+   "d": 1.56,
+   "text": "maybe not do I have time for questions"
+  },
+  {
+   "t": 1400.4,
+   "d": 2.28,
+   "text": "I have time for questions please"
+  },
+  {
+   "t": 1402.68,
+   "d": 1.08,
+   "text": "somebody have a question what do you got"
+  },
+  {
+   "t": 1403.76,
+   "d": 2.73,
+   "text": "anybody just raise your hand no that's"
+  },
+  {
+   "t": 1406.49,
+   "d": 1.29,
+   "text": "cool no questions hey there's somebody"
+  },
+  {
+   "t": 1407.78,
+   "d": 4.92,
+   "text": "you serve in the chair I really"
+  },
+  {
+   "t": 1412.7,
+   "d": 6.54,
+   "text": "appreciate this keep going there's a"
+  },
+  {
+   "t": 1419.24,
+   "d": 7.32,
+   "text": "microphone for you would you recommend"
+  },
+  {
+   "t": 1426.56,
+   "d": 3.83,
+   "text": "here's what would you recommend for"
+  },
+  {
+   "t": 1430.39,
+   "d": 3.52,
+   "text": "maybe more like experienced writers kind"
+  },
+  {
+   "t": 1433.91,
+   "d": 1.74,
+   "text": "of let's say you don't want to overwhelm"
+  },
+  {
+   "t": 1435.65,
+   "d": 2.48,
+   "text": "like every time I see magic cards"
+  },
+  {
+   "t": 1438.13,
+   "d": 3.7,
+   "text": "they'll have like the functional text"
+  },
+  {
+   "t": 1441.83,
+   "d": 1.23,
+   "text": "and then the flavor text below it in"
+  },
+  {
+   "t": 1443.06,
+   "d": 2.04,
+   "text": "italics or something right let's say I"
+  },
+  {
+   "t": 1445.1,
+   "d": 1.98,
+   "text": "don't want to let's say the players"
+  },
+  {
+   "t": 1447.08,
+   "d": 2.07,
+   "text": "going through a bunch of weapons like in"
+  },
+  {
+   "t": 1449.15,
+   "d": 1.38,
+   "text": "an inventory I don't want to overwhelm"
+  },
+  {
+   "t": 1450.53,
+   "d": 2.49,
+   "text": "the user with text would you recommend"
+  },
+  {
+   "t": 1453.02,
+   "d": 3.99,
+   "text": "trying to write it in such a way that"
+  },
+  {
+   "t": 1457.01,
+   "d": 3.07,
+   "text": "you give it the character but you still"
+  },
+  {
+   "t": 1460.08,
+   "d": 2.91,
+   "text": "like present the functionality as well"
+  },
+  {
+   "t": 1462.99,
+   "d": 2.22,
+   "text": "or is that like could it be done do you"
+  },
+  {
+   "t": 1465.21,
+   "d": 1.41,
+   "text": "recommend it what are your thoughts on"
+  },
+  {
+   "t": 1466.62,
+   "d": 2.1,
+   "text": "that I would do functionality first and"
+  },
+  {
+   "t": 1468.72,
+   "d": 1.5,
+   "text": "make it completely separate from the"
+  },
+  {
+   "t": 1470.22,
+   "d": 1.95,
+   "text": "flavor like the magic cards do and so"
+  },
+  {
+   "t": 1472.17,
+   "d": 1.65,
+   "text": "entangle deeps case the item cards have"
+  },
+  {
+   "t": 1473.82,
+   "d": 2.55,
+   "text": "like clear stat information crystal"
+  },
+  {
+   "t": 1476.37,
+   "d": 1.95,
+   "text": "clear blue colors and pretty lights and"
+  },
+  {
+   "t": 1478.32,
+   "d": 2.07,
+   "text": "all that stuff and then underneath it in"
+  },
+  {
+   "t": 1480.39,
+   "d": 3.33,
+   "text": "a different color is the flavor text you"
+  },
+  {
+   "t": 1483.72,
+   "d": 2.1,
+   "text": "you you'll be overwhelmed I guess if you"
+  },
+  {
+   "t": 1485.82,
+   "d": 1.32,
+   "text": "read everything and I would hope the"
+  },
+  {
+   "t": 1487.14,
+   "d": 2.1,
+   "text": "players do is they pick up stuff but"
+  },
+  {
+   "t": 1489.24,
+   "d": 1.38,
+   "text": "what kind of prevents that from being"
+  },
+  {
+   "t": 1490.62,
+   "d": 1.5,
+   "text": "too much of a problem is the weapons are"
+  },
+  {
+   "t": 1492.12,
+   "d": 2.34,
+   "text": "themed if you start finding and using"
+  },
+  {
+   "t": 1494.46,
+   "d": 2.46,
+   "text": "claws right claws of the wild child"
+  },
+  {
+   "t": 1496.92,
+   "d": 2.52,
+   "text": "class weapon and they're a little more"
+  },
+  {
+   "t": 1499.44,
+   "d": 2.73,
+   "text": "furious and beastial and Mariah kind of"
+  },
+  {
+   "t": 1502.17,
+   "d": 2.43,
+   "text": "realizes man she's she cold blood killer"
+  },
+  {
+   "t": 1504.6,
+   "d": 1.41,
+   "text": "right she's and she's well vernian"
+  },
+  {
+   "t": 1506.01,
+   "d": 1.56,
+   "text": "people down with his claws and she"
+  },
+  {
+   "t": 1507.57,
+   "d": 1.14,
+   "text": "didn't think she was gonna be that way"
+  },
+  {
+   "t": 1508.71,
+   "d": 1.65,
+   "text": "but maybe she has to be that way and"
+  },
+  {
+   "t": 1510.36,
+   "d": 1.59,
+   "text": "because there's a theme through the"
+  },
+  {
+   "t": 1511.95,
+   "d": 2.73,
+   "text": "weapons you you you see players who are"
+  },
+  {
+   "t": 1514.68,
+   "d": 1.41,
+   "text": "like wow well the next claws gonna talk"
+  },
+  {
+   "t": 1516.09,
+   "d": 1.71,
+   "text": "more about like just claw things right"
+  },
+  {
+   "t": 1517.8,
+   "d": 1.38,
+   "text": "and you can see that this one looked"
+  },
+  {
+   "t": 1519.18,
+   "d": 2.04,
+   "text": "forward to so there's a lot of"
+  },
+  {
+   "t": 1521.22,
+   "d": 1.95,
+   "text": "information none of its critical but"
+  },
+  {
+   "t": 1523.17,
+   "d": 1.14,
+   "text": "you're reading it anyway when you're"
+  },
+  {
+   "t": 1524.31,
+   "d": 1.41,
+   "text": "playing and you know what some players"
+  },
+  {
+   "t": 1525.72,
+   "d": 1.26,
+   "text": "are not just gonna care about it that's"
+  },
+  {
+   "t": 1526.98,
+   "d": 2.49,
+   "text": "fine they don't have to but it's there"
+  },
+  {
+   "t": 1529.47,
+   "d": 2.28,
+   "text": "and it doesn't get in the way so if"
+  },
+  {
+   "t": 1531.75,
+   "d": 1.23,
+   "text": "you're an experienced writer and you"
+  },
+  {
+   "t": 1532.98,
+   "d": 1.08,
+   "text": "feel like you know what this item"
+  },
+  {
+   "t": 1534.06,
+   "d": 2.1,
+   "text": "doesn't deserve much text you're"
+  },
+  {
+   "t": 1536.16,
+   "d": 1.44,
+   "text": "probably right go with your gut but I"
+  },
+  {
+   "t": 1537.6,
+   "d": 1.35,
+   "text": "think there's an opportunity there if"
+  },
+  {
+   "t": 1538.95,
+   "d": 2.16,
+   "text": "you want it to put some some life into"
+  },
+  {
+   "t": 1541.11,
+   "d": 2.28,
+   "text": "it so think of your question anyway else"
+  },
+  {
+   "t": 1543.39,
+   "d": 4.23,
+   "text": "uh with the microphone okay so I've got"
+  },
+  {
+   "t": 1547.62,
+   "d": 2.85,
+   "text": "a character who the player thinks they"
+  },
+  {
+   "t": 1550.47,
+   "d": 2.16,
+   "text": "understands right they and the player"
+  },
+  {
+   "t": 1552.63,
+   "d": 2.16,
+   "text": "thinks they know what motivates them but"
+  },
+  {
+   "t": 1554.79,
+   "d": 1.95,
+   "text": "then they have a backstory and hidden in"
+  },
+  {
+   "t": 1556.74,
+   "d": 2.34,
+   "text": "the backstory is a little twist oh right"
+  },
+  {
+   "t": 1559.08,
+   "d": 2.34,
+   "text": "so I'm not sure how to like convey that"
+  },
+  {
+   "t": 1561.42,
+   "d": 1.62,
+   "text": "to the player though like I'm not sure"
+  },
+  {
+   "t": 1563.04,
+   "d": 1.2,
+   "text": "how to present to the player the"
+  },
+  {
+   "t": 1564.24,
+   "d": 1.65,
+   "text": "backstory that they'll eventually learn"
+  },
+  {
+   "t": 1565.89,
+   "d": 1.32,
+   "text": "throughout the course the game maybe"
+  },
+  {
+   "t": 1567.21,
+   "d": 2.67,
+   "text": "right right which will hopefully at the"
+  },
+  {
+   "t": 1569.88,
+   "d": 2.19,
+   "text": "end twist and then inform the player why"
+  },
+  {
+   "t": 1572.07,
+   "d": 2.01,
+   "text": "the character is actually doing cool"
+  },
+  {
+   "t": 1574.08,
+   "d": 2.91,
+   "text": "cool have you and so the question was"
+  },
+  {
+   "t": 1576.99,
+   "d": 1.44,
+   "text": "about I have a character with a"
+  },
+  {
+   "t": 1578.43,
+   "d": 1.56,
+   "text": "backstory that's got a twist at some"
+  },
+  {
+   "t": 1579.99,
+   "d": 2.22,
+   "text": "point and you want to sell that the"
+  },
+  {
+   "t": 1582.21,
+   "d": 1.8,
+   "text": "information first to like make you carry"
+  },
+  {
+   "t": 1584.01,
+   "d": 1.26,
+   "text": "then the twist and the tryst only"
+  },
+  {
+   "t": 1585.27,
+   "d": 1.41,
+   "text": "matters if you know what's being twisted"
+  },
+  {
+   "t": 1586.68,
+   "d": 1.17,
+   "text": "right so if you don't get that initial"
+  },
+  {
+   "t": 1587.85,
+   "d": 3.09,
+   "text": "part you can't tell I would ask you have"
+  },
+  {
+   "t": 1590.94,
+   "d": 2.2,
+   "text": "you played the first original Bioshock"
+  },
+  {
+   "t": 1593.14,
+   "d": 2.61,
+   "text": "okay so I'm no kidding like as a"
+  },
+  {
+   "t": 1595.75,
+   "d": 1.44,
+   "text": "research project its homework for you"
+  },
+  {
+   "t": 1597.19,
+   "d": 2.22,
+   "text": "that game has one of the best versions"
+  },
+  {
+   "t": 1599.41,
+   "d": 1.92,
+   "text": "of that like you think you know you"
+  },
+  {
+   "t": 1601.33,
+   "d": 1.17,
+   "text": "think you know you think you know oh you"
+  },
+  {
+   "t": 1602.5,
+   "d": 1.56,
+   "text": "didn't know and then the Mike gets"
+  },
+  {
+   "t": 1604.06,
+   "d": 1.56,
+   "text": "trapped on your face and it's totally"
+  },
+  {
+   "t": 1605.62,
+   "d": 2.34,
+   "text": "crazy and it feels good it's part of the"
+  },
+  {
+   "t": 1607.96,
+   "d": 1.32,
+   "text": "story and then you get to keep playing"
+  },
+  {
+   "t": 1609.28,
+   "d": 1.65,
+   "text": "right because it's kind of like a change"
+  },
+  {
+   "t": 1610.93,
+   "d": 1.47,
+   "text": "that happens and then it drives the rest"
+  },
+  {
+   "t": 1612.4,
+   "d": 1.29,
+   "text": "of your story"
+  },
+  {
+   "t": 1613.69,
+   "d": 2.1,
+   "text": "that's good homework for you I think the"
+  },
+  {
+   "t": 1615.79,
+   "d": 2.13,
+   "text": "way that they do that is in that game"
+  },
+  {
+   "t": 1617.92,
+   "d": 1.38,
+   "text": "they have a lot of other people talking"
+  },
+  {
+   "t": 1619.3,
+   "d": 2.28,
+   "text": "to you and giving you kind of noblets of"
+  },
+  {
+   "t": 1621.58,
+   "d": 2.34,
+   "text": "who you are because of that which you"
+  },
+  {
+   "t": 1623.92,
+   "d": 1.92,
+   "text": "could do through things you find in"
+  },
+  {
+   "t": 1625.84,
+   "d": 1.29,
+   "text": "people you talk to they can tell you"
+  },
+  {
+   "t": 1627.13,
+   "d": 1.35,
+   "text": "about this and that the other thing in"
+  },
+  {
+   "t": 1628.48,
+   "d": 2.16,
+   "text": "small bites and you don't really need to"
+  },
+  {
+   "t": 1630.64,
+   "d": 1.56,
+   "text": "sell like the whole life story the play"
+  },
+  {
+   "t": 1632.2,
+   "d": 1.2,
+   "text": "or just the pertinent parts that are"
+  },
+  {
+   "t": 1633.4,
+   "d": 1.11,
+   "text": "gonna get stomped on with the twist"
+  },
+  {
+   "t": 1634.51,
+   "d": 1.77,
+   "text": "happens so pick those important things"
+  },
+  {
+   "t": 1636.28,
+   "d": 2.22,
+   "text": "and work on them and I think you'll see"
+  },
+  {
+   "t": 1638.5,
+   "d": 2.04,
+   "text": "that Bioshock doesn't really well I'm"
+  },
+  {
+   "t": 1640.54,
+   "d": 1.86,
+   "text": "sure it's like 31 cents on Steam you"
+  },
+  {
+   "t": 1642.4,
+   "d": 1.44,
+   "text": "know every other month right and then"
+  },
+  {
+   "t": 1643.84,
+   "d": 1.56,
+   "text": "grab it and it's it's a first-person"
+  },
+  {
+   "t": 1645.4,
+   "d": 3.15,
+   "text": "shooter it is like a not permit Desmond"
+  },
+  {
+   "t": 1648.55,
+   "d": 2.04,
+   "text": "like real-time but I mean whatever"
+  },
+  {
+   "t": 1650.59,
+   "d": 3.3,
+   "text": "stomach choke that down right and and go"
+  },
+  {
+   "t": 1653.89,
+   "d": 2.64,
+   "text": "through or or take the CliffsNotes and"
+  },
+  {
+   "t": 1656.53,
+   "d": 1.83,
+   "text": "watch like Let's Plays and YouTube's of"
+  },
+  {
+   "t": 1658.36,
+   "d": 1.77,
+   "text": "the pertinent parts and any if you"
+  },
+  {
+   "t": 1660.13,
+   "d": 1.53,
+   "text": "really want to bath you could but I"
+  },
+  {
+   "t": 1661.66,
+   "d": 1.02,
+   "text": "think playing it's a better experience"
+  },
+  {
+   "t": 1662.68,
+   "d": 2.46,
+   "text": "so so yeah that's there for you"
+  },
+  {
+   "t": 1665.14,
+   "d": 1.92,
+   "text": "cool I think we have time for maybe two"
+  },
+  {
+   "t": 1667.06,
+   "d": 2.55,
+   "text": "more I don't know yeah show me what you"
+  },
+  {
+   "t": 1669.61,
+   "d": 0.93,
+   "text": "got yes"
+  },
+  {
+   "t": 1670.54,
+   "d": 4.32,
+   "text": "either closest to me yeah I had a quick"
+  },
+  {
+   "t": 1674.86,
+   "d": 2.73,
+   "text": "question about understanding the greater"
+  },
+  {
+   "t": 1677.59,
+   "d": 2.4,
+   "text": "scheme of a story should I be able to"
+  },
+  {
+   "t": 1679.99,
+   "d": 2.64,
+   "text": "tell a full story or like read on all"
+  },
+  {
+   "t": 1682.63,
+   "d": 1.77,
+   "text": "that abstract stuff like the power of"
+  },
+  {
+   "t": 1684.4,
+   "d": 1.98,
+   "text": "myth by John Campbell or any of that to"
+  },
+  {
+   "t": 1686.38,
+   "d": 2.82,
+   "text": "understand how do write flavor text well"
+  },
+  {
+   "t": 1689.2,
+   "d": 2.88,
+   "text": "uh you're saying should you research"
+  },
+  {
+   "t": 1692.08,
+   "d": 3.48,
+   "text": "other stuff I'm asking greater more"
+  },
+  {
+   "t": 1695.56,
+   "d": 1.43,
+   "text": "abstract understanding like"
+  },
+  {
+   "t": 1696.99,
+   "d": 1.84,
+   "text": "understanding like what the hero's"
+  },
+  {
+   "t": 1698.83,
+   "d": 1.38,
+   "text": "journey is or like what that's all about"
+  },
+  {
+   "t": 1700.21,
+   "d": 3.26,
+   "text": "that sort of thing oh I see well okay um"
+  },
+  {
+   "t": 1703.47,
+   "d": 1.66,
+   "text": "if I think I understand your question"
+  },
+  {
+   "t": 1705.13,
+   "d": 1.62,
+   "text": "part of it is yes absolutely research"
+  },
+  {
+   "t": 1706.75,
+   "d": 1.41,
+   "text": "stuff for that if you if you want to"
+  },
+  {
+   "t": 1708.16,
+   "d": 1.68,
+   "text": "learn about that the twelve steps of the"
+  },
+  {
+   "t": 1709.84,
+   "d": 1.59,
+   "text": "story and the the long dark night of the"
+  },
+  {
+   "t": 1711.43,
+   "d": 1.26,
+   "text": "soul and that whole journey I think"
+  },
+  {
+   "t": 1712.69,
+   "d": 2.04,
+   "text": "that's cool I think it's actually I"
+  },
+  {
+   "t": 1714.73,
+   "d": 1.74,
+   "text": "don't know well enough to teach it so"
+  },
+  {
+   "t": 1716.47,
+   "d": 0.96,
+   "text": "maybe I don't know well enough at all"
+  },
+  {
+   "t": 1717.43,
+   "d": 1.44,
+   "text": "like if you can't explain it simply you"
+  },
+  {
+   "t": 1718.87,
+   "d": 1.14,
+   "text": "don't know it I believe that is"
+  },
+  {
+   "t": 1720.01,
+   "d": 1.35,
+   "text": "unfortunately true in my case"
+  },
+  {
+   "t": 1721.36,
+   "d": 3.09,
+   "text": "but I do think that you need to say okay"
+  },
+  {
+   "t": 1724.45,
+   "d": 0.83,
+   "text": "well what what"
+  },
+  {
+   "t": 1725.28,
+   "d": 1.74,
+   "text": "is really important and one of its fluff"
+  },
+  {
+   "t": 1727.02,
+   "d": 1.68,
+   "text": "and the important part stays critical"
+  },
+  {
+   "t": 1728.7,
+   "d": 1.62,
+   "text": "path the fluff supports it that's on the"
+  },
+  {
+   "t": 1730.32,
+   "d": 2.19,
+   "text": "other side and if you want to say that"
+  },
+  {
+   "t": 1732.51,
+   "d": 1.35,
+   "text": "journey happens to you then you also"
+  },
+  {
+   "t": 1733.86,
+   "d": 1.5,
+   "text": "have a game even a procedurally"
+  },
+  {
+   "t": 1735.36,
+   "d": 1.98,
+   "text": "generated roguelike has like acts and"
+  },
+  {
+   "t": 1737.34,
+   "d": 1.53,
+   "text": "phases and you go from here to here to"
+  },
+  {
+   "t": 1738.87,
+   "d": 2.16,
+   "text": "here or get the levels in the dungeon so"
+  },
+  {
+   "t": 1741.03,
+   "d": 2.07,
+   "text": "you can use those markers to create"
+  },
+  {
+   "t": 1743.1,
+   "d": 2.52,
+   "text": "these these these changes in the hero"
+  },
+  {
+   "t": 1745.62,
+   "d": 2.28,
+   "text": "and how they think and how they act and"
+  },
+  {
+   "t": 1747.9,
+   "d": 1.86,
+   "text": "how they respond to things can change -"
+  },
+  {
+   "t": 1749.76,
+   "d": 1.77,
+   "text": "you could set up here for instance if"
+  },
+  {
+   "t": 1751.53,
+   "d": 2.42,
+   "text": "somebody's being corrupted or becoming"
+  },
+  {
+   "t": 1753.95,
+   "d": 2.02,
+   "text": "changing your attitude you can change"
+  },
+  {
+   "t": 1755.97,
+   "d": 1.17,
+   "text": "the way they respond to the same"
+  },
+  {
+   "t": 1757.14,
+   "d": 1.47,
+   "text": "shopkeeper right you can just in your"
+  },
+  {
+   "t": 1758.61,
+   "d": 1.29,
+   "text": "codes a well here's the responses once"
+  },
+  {
+   "t": 1759.9,
+   "d": 1.77,
+   "text": "they like the toolbox meter goes like to"
+  },
+  {
+   "t": 1761.67,
+   "d": 1.5,
+   "text": "here now there are toolbox and they're"
+  },
+  {
+   "t": 1763.17,
+   "d": 2.52,
+   "text": "gonna say these mean things instead you"
+  },
+  {
+   "t": 1765.69,
+   "d": 2.04,
+   "text": "can do that right and so that lets you"
+  },
+  {
+   "t": 1767.73,
+   "d": 1.65,
+   "text": "have that character take a trip and"
+  },
+  {
+   "t": 1769.38,
+   "d": 1.59,
+   "text": "again it's just sort of while you're"
+  },
+  {
+   "t": 1770.97,
+   "d": 2.64,
+   "text": "playing you experience that did I come"
+  },
+  {
+   "t": 1773.61,
+   "d": 0.5,
+   "text": "close"
+  },
+  {
+   "t": 1774.11,
+   "d": 2.05,
+   "text": "we'll talk after if you want you can bug"
+  },
+  {
+   "t": 1776.16,
+   "d": 1.74,
+   "text": "me afterwards all right thank you and"
+  },
+  {
+   "t": 1777.9,
+   "d": 4.11,
+   "text": "user so beyond telling part of the story"
+  },
+  {
+   "t": 1782.01,
+   "d": 1.41,
+   "text": "through the environment what kind of"
+  },
+  {
+   "t": 1783.42,
+   "d": 2.01,
+   "text": "process do you like for crafting the"
+  },
+  {
+   "t": 1785.43,
+   "d": 3.87,
+   "text": "environment to begin with I gave a talk"
+  },
+  {
+   "t": 1789.3,
+   "d": 2.28,
+   "text": "on that actually and I can't do it in 30"
+  },
+  {
+   "t": 1791.58,
+   "d": 3.12,
+   "text": "seconds but everything matters for for"
+  },
+  {
+   "t": 1794.7,
+   "d": 1.74,
+   "text": "the environment the monster names the"
+  },
+  {
+   "t": 1796.44,
+   "d": 2.43,
+   "text": "item names the places you go the way"
+  },
+  {
+   "t": 1798.87,
+   "d": 1.89,
+   "text": "that you get there the there's so much"
+  },
+  {
+   "t": 1800.76,
+   "d": 1.5,
+   "text": "that you can do in tone like every"
+  },
+  {
+   "t": 1802.26,
+   "d": 1.53,
+   "text": "single step of what you do in the game"
+  },
+  {
+   "t": 1803.79,
+   "d": 2.13,
+   "text": "can build a setting and I think settings"
+  },
+  {
+   "t": 1805.92,
+   "d": 2.79,
+   "text": "differ from story right oh sorry sorry"
+  },
+  {
+   "t": 1808.71,
+   "d": 5.04,
+   "text": "okay where's the talk the interrupts"
+  },
+  {
+   "t": 1813.75,
+   "d": 3.18,
+   "text": "right I think the last rogue cell here"
+  },
+  {
+   "t": 1816.93,
+   "d": 1.83,
+   "text": "on this very stage although I stood over"
+  },
+  {
+   "t": 1818.76,
+   "d": 1.86,
+   "text": "here like the time I found that out too"
+  },
+  {
+   "t": 1820.62,
+   "d": 2.16,
+   "text": "but that's on the internet for it you"
+  },
+  {
+   "t": 1822.78,
+   "d": 1.8,
+   "text": "can find last year's talk I talked about"
+  },
+  {
+   "t": 1824.58,
+   "d": 1.32,
+   "text": "that and then the one before I talked"
+  },
+  {
+   "t": 1825.9,
+   "d": 1.83,
+   "text": "about last last time a story telling the"
+  },
+  {
+   "t": 1827.73,
+   "d": 1.2,
+   "text": "one before the difference we're telling"
+  },
+  {
+   "t": 1828.93,
+   "d": 0.99,
+   "text": "it was a surprise storytelling"
+  },
+  {
+   "t": 1829.92,
+   "d": 2.46,
+   "text": "persistence and the one before that was"
+  },
+  {
+   "t": 1832.38,
+   "d": 3.27,
+   "text": "tone so I will sell you the DVD for like"
+  },
+  {
+   "t": 1835.65,
+   "d": 2.37,
+   "text": "nine hundred no it won't but yeah but"
+  },
+  {
+   "t": 1838.02,
+   "d": 1.5,
+   "text": "please look it up and then also I'll be"
+  },
+  {
+   "t": 1839.52,
+   "d": 1.8,
+   "text": "happy to answer questions like in detail"
+  },
+  {
+   "t": 1841.32,
+   "d": 0.87,
+   "text": "later if you like"
+  },
+  {
+   "t": 1842.19,
+   "d": 3.42,
+   "text": "thanks so cool we had a time yep cool oh"
+  },
+  {
+   "t": 1845.61,
+   "d": 1.71,
+   "text": "wait one more thing this is happening"
+  },
+  {
+   "t": 1847.32,
+   "d": 2.07,
+   "text": "again I do this every year and I would"
+  },
+  {
+   "t": 1849.39,
+   "d": 2.75,
+   "text": "like you to help with this if you could"
+  },
+  {
+   "t": 1852.14,
+   "d": 3.19,
+   "text": "this is happening the way this works is"
+  },
+  {
+   "t": 1855.33,
+   "d": 1.56,
+   "text": "people in the real world"
+  },
+  {
+   "t": 1856.89,
+   "d": 1.86,
+   "text": "go out and do something to donate to"
+  },
+  {
+   "t": 1858.75,
+   "d": 2.13,
+   "text": "fight hunger you most obviously it's"
+  },
+  {
+   "t": 1860.88,
+   "d": 1.29,
+   "text": "like buying one of those $10 bags of"
+  },
+  {
+   "t": 1862.17,
+   "d": 1.68,
+   "text": "food at a grocery store that's the"
+  },
+  {
+   "t": 1863.85,
+   "d": 1.23,
+   "text": "easiest way to do it but if you can do"
+  },
+  {
+   "t": 1865.08,
+   "d": 1.71,
+   "text": "something to put at least $10 into some"
+  },
+  {
+   "t": 1866.79,
+   "d": 2.33,
+   "text": "way to fight hunger around Thanksgiving"
+  },
+  {
+   "t": 1869.12,
+   "d": 2.44,
+   "text": "email that receipt a picture of it your"
+  },
+  {
+   "t": 1871.56,
+   "d": 2.88,
+   "text": "actual proof of altruism to hunger clock"
+  },
+  {
+   "t": 1874.44,
+   "d": 1.05,
+   "text": "it under the tongue and then a key"
+  },
+  {
+   "t": 1875.49,
+   "d": 1.74,
+   "text": "happens to you write a game key of your"
+  },
+  {
+   "t": 1877.23,
+   "d": 1.59,
+   "text": "choice among what we have or maybe a"
+  },
+  {
+   "t": 1878.82,
+   "d": 1.53,
+   "text": "random key or maybe a bunch of keys if"
+  },
+  {
+   "t": 1880.35,
+   "d": 2.07,
+   "text": "you win a d20 roll also we get some"
+  },
+  {
+   "t": 1882.42,
+   "d": 1.59,
+   "text": "fiction from developers who write cool"
+  },
+  {
+   "t": 1884.01,
+   "d": 3.03,
+   "text": "things and I am doing this again if you"
+  },
+  {
+   "t": 1887.04,
+   "d": 2.1,
+   "text": "want to help me please tell me and then"
+  },
+  {
+   "t": 1889.14,
+   "d": 1.38,
+   "text": "contact me to talk here or whatever"
+  },
+  {
+   "t": 1890.52,
+   "d": 1.11,
+   "text": "because I need some support for this"
+  },
+  {
+   "t": 1891.63,
+   "d": 2.19,
+   "text": "I'll explain that to you should you come"
+  },
+  {
+   "t": 1893.82,
+   "d": 1.59,
+   "text": "by I wanna help stop the hunger clock I"
+  },
+  {
+   "t": 1895.41,
+   "d": 2.07,
+   "text": "will talk to you thank you very much for"
+  },
+  {
+   "t": 1897.48,
+   "d": 1.2,
+   "text": "your time I hope you enjoyed this"
+  },
+  {
+   "t": 1898.68,
+   "d": 2.61,
+   "text": "[Applause]"
+  }
+ ]
+}

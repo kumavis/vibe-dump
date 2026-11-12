@@ -1,0 +1,2601 @@
+{
+ "id": "G5rq5ei2Lec",
+ "url": "https://www.youtube.com/watch?v=G5rq5ei2Lec",
+ "title": "Tim Keenan - Curated Narratives in ProcGen Games",
+ "speaker": "Tim Keenan",
+ "talk_title": "Curated Narratives in ProcGen Games",
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 1091,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Tim Keenan talks about melding curated narrative into the roguelike structure.\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 21,
+   "title": "Who is Tim Keenan"
+  },
+  {
+   "start": 73,
+   "title": "Why curate narrative"
+  },
+  {
+   "start": 145,
+   "title": "Cohesive design"
+  },
+  {
+   "start": 212,
+   "title": "Roguelike problems"
+  },
+  {
+   "start": 243,
+   "title": "Metapresence"
+  },
+  {
+   "start": 313,
+   "title": "Uniqueness"
+  },
+  {
+   "start": 548,
+   "title": "constrained narrative"
+  },
+  {
+   "start": 567,
+   "title": "pandemic story"
+  },
+  {
+   "start": 643,
+   "title": "Questions"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 3867,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 2.85,
+   "text": "guessing so this is a really boring"
+  },
+  {
+   "t": 2.85,
+   "d": 2.88,
+   "text": "slide melding curated narrative into the"
+  },
+  {
+   "t": 5.73,
+   "d": 2.13,
+   "text": "roguelike structure which is a fancy way"
+  },
+  {
+   "t": 7.86,
+   "d": 3.51,
+   "text": "for me to say that curated narrative"
+  },
+  {
+   "t": 11.37,
+   "d": 1.95,
+   "text": "like you would think writing a book or"
+  },
+  {
+   "t": 13.32,
+   "d": 1.26,
+   "text": "writing a screenplay or anything like"
+  },
+  {
+   "t": 14.58,
+   "d": 3.0,
+   "text": "that actually has a place in roguelikes"
+  },
+  {
+   "t": 17.58,
+   "d": 2.01,
+   "text": "and that's basically what I'm gonna kind"
+  },
+  {
+   "t": 19.59,
+   "d": 1.23,
+   "text": "of justify and hopefully if I hit this"
+  },
+  {
+   "t": 20.82,
+   "d": 2.67,
+   "text": "is oh there we go so who the heck am I"
+  },
+  {
+   "t": 23.49,
+   "d": 1.92,
+   "text": "my name is Tim Keenan I made a game"
+  },
+  {
+   "t": 25.41,
+   "d": 2.58,
+   "text": "called dusk errs thank you"
+  },
+  {
+   "t": 27.99,
+   "d": 3.33,
+   "text": "Wow cool this is my audience right it's"
+  },
+  {
+   "t": 31.32,
+   "d": 3.81,
+   "text": "just like yeah so dusk errs is if you"
+  },
+  {
+   "t": 35.13,
+   "d": 2.01,
+   "text": "haven't heard of it it is a game where"
+  },
+  {
+   "t": 37.14,
+   "d": 1.92,
+   "text": "you pilot drones into derelict"
+  },
+  {
+   "t": 39.06,
+   "d": 1.95,
+   "text": "spaceships to try and figure out why"
+  },
+  {
+   "t": 41.01,
+   "d": 1.5,
+   "text": "everybody's dead"
+  },
+  {
+   "t": 42.51,
+   "d": 2.34,
+   "text": "and so I felt when I was making this"
+  },
+  {
+   "t": 44.85,
+   "d": 1.83,
+   "text": "game a big part of that was that"
+  },
+  {
+   "t": 46.68,
+   "d": 1.74,
+   "text": "atmosphere right like why is everybody"
+  },
+  {
+   "t": 48.42,
+   "d": 3.18,
+   "text": "dead and I feel in general curated"
+  },
+  {
+   "t": 51.6,
+   "d": 3.9,
+   "text": "narrative is important because when I"
+  },
+  {
+   "t": 55.5,
+   "d": 1.95,
+   "text": "read a book like that that author in"
+  },
+  {
+   "t": 57.45,
+   "d": 2.22,
+   "text": "theory can write a really good story and"
+  },
+  {
+   "t": 59.67,
+   "d": 2.25,
+   "text": "I can take that in and that's what"
+  },
+  {
+   "t": 61.92,
+   "d": 2.85,
+   "text": "they're really good at but I know that a"
+  },
+  {
+   "t": 64.77,
+   "d": 1.62,
+   "text": "lot of us here in the games industry"
+  },
+  {
+   "t": 66.39,
+   "d": 2.16,
+   "text": "feel kind of like the little brother to"
+  },
+  {
+   "t": 68.55,
+   "d": 1.98,
+   "text": "a lot of other industries and so the"
+  },
+  {
+   "t": 70.53,
+   "d": 2.22,
+   "text": "response that one would get would be why"
+  },
+  {
+   "t": 72.75,
+   "d": 2.61,
+   "text": "bother right because the player story is"
+  },
+  {
+   "t": 75.36,
+   "d": 1.71,
+   "text": "king and I love the player story and"
+  },
+  {
+   "t": 77.07,
+   "d": 1.53,
+   "text": "there's nothing wrong with that but like"
+  },
+  {
+   "t": 78.6,
+   "d": 3.21,
+   "text": "yeah thank you but like so like why not"
+  },
+  {
+   "t": 81.81,
+   "d": 2.34,
+   "text": "have no story and then have me explore"
+  },
+  {
+   "t": 84.15,
+   "d": 2.34,
+   "text": "this world and do my own things and not"
+  },
+  {
+   "t": 86.49,
+   "d": 3.39,
+   "text": "ever have you know a cutscene interrupt"
+  },
+  {
+   "t": 89.88,
+   "d": 2.01,
+   "text": "me or a QuickTime event or whatever and"
+  },
+  {
+   "t": 91.89,
+   "d": 1.77,
+   "text": "to be fair I'm not talking about any of"
+  },
+  {
+   "t": 93.66,
+   "d": 3.0,
+   "text": "that stuff but so this is kind of the"
+  },
+  {
+   "t": 96.66,
+   "d": 3.06,
+   "text": "you know the the shrug off of curated"
+  },
+  {
+   "t": 99.72,
+   "d": 1.62,
+   "text": "narrative and the thing that I would say"
+  },
+  {
+   "t": 101.34,
+   "d": 1.17,
+   "text": "is the reason you would want to curate a"
+  },
+  {
+   "t": 102.51,
+   "d": 1.44,
+   "text": "narrative in a roguelike is the same way"
+  },
+  {
+   "t": 103.95,
+   "d": 1.44,
+   "text": "you would want to curate a narrative in"
+  },
+  {
+   "t": 105.39,
+   "d": 2.7,
+   "text": "any game right if you see the value in"
+  },
+  {
+   "t": 108.09,
+   "d": 1.56,
+   "text": "that I see that it gives you these like"
+  },
+  {
+   "t": 109.65,
+   "d": 2.82,
+   "text": "midterm and long-term goals it gives you"
+  },
+  {
+   "t": 112.47,
+   "d": 1.77,
+   "text": "mystery it gives you like this"
+  },
+  {
+   "t": 114.24,
+   "d": 2.7,
+   "text": "compelling question hopefully like what"
+  },
+  {
+   "t": 116.94,
+   "d": 1.89,
+   "text": "happened to everybody and hopefully that"
+  },
+  {
+   "t": 118.83,
+   "d": 3.0,
+   "text": "is something that adds instead of"
+  },
+  {
+   "t": 121.83,
+   "d": 1.74,
+   "text": "subtracts from the experience so"
+  },
+  {
+   "t": 123.57,
+   "d": 1.77,
+   "text": "something where you can go and explore"
+  },
+  {
+   "t": 125.34,
+   "d": 1.59,
+   "text": "all these derelict spaceships and never"
+  },
+  {
+   "t": 126.93,
+   "d": 2.04,
+   "text": "ever wonder what happened everybody"
+  },
+  {
+   "t": 128.97,
+   "d": 3.03,
+   "text": "because who cares they're not my family"
+  },
+  {
+   "t": 132.0,
+   "d": 0.85,
+   "text": "like there"
+  },
+  {
+   "t": 132.85,
+   "d": 3.09,
+   "text": "whatever or if you do care or you've"
+  },
+  {
+   "t": 135.94,
+   "d": 2.19,
+   "text": "been playing for 10 20 hours and then"
+  },
+  {
+   "t": 138.13,
+   "d": 1.8,
+   "text": "all of a sudden you're just like hmm hey"
+  },
+  {
+   "t": 139.93,
+   "d": 1.2,
+   "text": "you know what I haven't run into anybody"
+  },
+  {
+   "t": 141.13,
+   "d": 1.68,
+   "text": "what's going on here then you could"
+  },
+  {
+   "t": 142.81,
+   "d": 1.61,
+   "text": "actually start paying attention to that"
+  },
+  {
+   "t": 144.42,
+   "d": 5.23,
+   "text": "so this all goes into this notion and my"
+  },
+  {
+   "t": 149.65,
+   "d": 1.83,
+   "text": "GDC talk I talked a lot about cohesive"
+  },
+  {
+   "t": 151.48,
+   "d": 1.47,
+   "text": "design and I think the reason that"
+  },
+  {
+   "t": 152.95,
+   "d": 1.92,
+   "text": "people don't like curated narrative and"
+  },
+  {
+   "t": 154.87,
+   "d": 1.5,
+   "text": "roguelikes is because it's either done"
+  },
+  {
+   "t": 156.37,
+   "d": 1.43,
+   "text": "poorly or"
+  },
+  {
+   "t": 157.8,
+   "d": 3.76,
+   "text": "poorly so the and that's a really rude"
+  },
+  {
+   "t": 161.56,
+   "d": 2.79,
+   "text": "way of saying that basically they're not"
+  },
+  {
+   "t": 164.35,
+   "d": 1.71,
+   "text": "thinking about how to integrate that"
+  },
+  {
+   "t": 166.06,
+   "d": 1.32,
+   "text": "into the structure and I'm not saying I"
+  },
+  {
+   "t": 167.38,
+   "d": 1.74,
+   "text": "did it right I'm saying I tried to do"
+  },
+  {
+   "t": 169.12,
+   "d": 1.47,
+   "text": "and I'm going to show you what we did I"
+  },
+  {
+   "t": 170.59,
+   "d": 1.77,
+   "text": "don't think we nailed it by any stretch"
+  },
+  {
+   "t": 172.36,
+   "d": 1.29,
+   "text": "of the imagination because my steam"
+  },
+  {
+   "t": 173.65,
+   "d": 2.1,
+   "text": "forums are not filled with people being"
+  },
+  {
+   "t": 175.75,
+   "d": 1.8,
+   "text": "like wow you really nailed the story in"
+  },
+  {
+   "t": 177.55,
+   "d": 3.99,
+   "text": "this one but I think that we we tried so"
+  },
+  {
+   "t": 181.54,
+   "d": 1.89,
+   "text": "this analogy is really weird this is in"
+  },
+  {
+   "t": 183.43,
+   "d": 2.52,
+   "text": "Finding Nemo when all the fish swim in"
+  },
+  {
+   "t": 185.95,
+   "d": 2.16,
+   "text": "the same direction and basically the net"
+  },
+  {
+   "t": 188.11,
+   "d": 1.59,
+   "text": "goes down and they have to cut it loose"
+  },
+  {
+   "t": 189.7,
+   "d": 2.58,
+   "text": "and so my analogy here is is that if"
+  },
+  {
+   "t": 192.28,
+   "d": 2.67,
+   "text": "your story is ten of these fish it could"
+  },
+  {
+   "t": 194.95,
+   "d": 1.68,
+   "text": "be swimming in any direction not really"
+  },
+  {
+   "t": 196.63,
+   "d": 1.71,
+   "text": "helping the game or it could be swimming"
+  },
+  {
+   "t": 198.34,
+   "d": 1.98,
+   "text": "up and really working against it and so"
+  },
+  {
+   "t": 200.32,
+   "d": 2.4,
+   "text": "the thought is is that if everything is"
+  },
+  {
+   "t": 202.72,
+   "d": 1.26,
+   "text": "driving in the same direction"
+  },
+  {
+   "t": 203.98,
+   "d": 2.07,
+   "text": "that's what's powerful so you want your"
+  },
+  {
+   "t": 206.05,
+   "d": 1.71,
+   "text": "story your curated story to be"
+  },
+  {
+   "t": 207.76,
+   "d": 2.64,
+   "text": "integrated in a very organic way into"
+  },
+  {
+   "t": 210.4,
+   "d": 1.47,
+   "text": "the roguelike structure so how do you do"
+  },
+  {
+   "t": 211.87,
+   "d": 1.86,
+   "text": "that so let's talk about a couple"
+  },
+  {
+   "t": 213.73,
+   "d": 2.16,
+   "text": "problems that the roguelikes have with"
+  },
+  {
+   "t": 215.89,
+   "d": 2.01,
+   "text": "this kind of narrative curated thing"
+  },
+  {
+   "t": 217.9,
+   "d": 2.43,
+   "text": "that I saw one of them is the repetitive"
+  },
+  {
+   "t": 220.33,
+   "d": 2.49,
+   "text": "nature of a roguelike right you you do a"
+  },
+  {
+   "t": 222.82,
+   "d": 1.41,
+   "text": "thing you die you do a thing you die"
+  },
+  {
+   "t": 224.23,
+   "d": 3.03,
+   "text": "right so if I have this long-winded"
+  },
+  {
+   "t": 227.26,
+   "d": 2.52,
+   "text": "intro cutscene and then you have to go"
+  },
+  {
+   "t": 229.78,
+   "d": 1.35,
+   "text": "through that every time you play that"
+  },
+  {
+   "t": 231.13,
+   "d": 1.74,
+   "text": "would obviously suck and then the other"
+  },
+  {
+   "t": 232.87,
+   "d": 1.35,
+   "text": "way that you can do that is like oh we"
+  },
+  {
+   "t": 234.22,
+   "d": 1.89,
+   "text": "have the long intro scene and then I"
+  },
+  {
+   "t": 236.11,
+   "d": 2.25,
+   "text": "don't have that again but it's as if it"
+  },
+  {
+   "t": 238.36,
+   "d": 1.98,
+   "text": "happened but you just remember it but I"
+  },
+  {
+   "t": 240.34,
+   "d": 2.39,
+   "text": "was trying to go further than that so"
+  },
+  {
+   "t": 242.73,
+   "d": 3.25,
+   "text": "what we did and now I get to bring up"
+  },
+  {
+   "t": 245.98,
+   "d": 3.9,
+   "text": "Jim's meta presents yes"
+  },
+  {
+   "t": 249.88,
+   "d": 2.82,
+   "text": "meta presents I had no idea I had meta"
+  },
+  {
+   "t": 252.7,
+   "d": 2.0,
+   "text": "presence I feel like a guru right now"
+  },
+  {
+   "t": 254.7,
+   "d": 2.44,
+   "text": "but basically what we are but I decided"
+  },
+  {
+   "t": 257.14,
+   "d": 2.37,
+   "text": "I am one of the people that didn't yell"
+  },
+  {
+   "t": 259.51,
+   "d": 2.43,
+   "text": "out because I'm a coward that is one of"
+  },
+  {
+   "t": 261.94,
+   "d": 2.1,
+   "text": "those like all right forget persistence"
+  },
+  {
+   "t": 264.04,
+   "d": 1.84,
+   "text": "in in roguelikes however"
+  },
+  {
+   "t": 265.88,
+   "d": 1.95,
+   "text": "I am fine with it when it has nothing to"
+  },
+  {
+   "t": 267.83,
+   "d": 1.71,
+   "text": "do with gameplay I am one of those Oh"
+  },
+  {
+   "t": 269.54,
+   "d": 2.1,
+   "text": "the first time I wanted to be just as"
+  },
+  {
+   "t": 271.64,
+   "d": 1.71,
+   "text": "challenged as I you know and the last"
+  },
+  {
+   "t": 273.35,
+   "d": 2.1,
+   "text": "time or whatever so what we tried to do"
+  },
+  {
+   "t": 275.45,
+   "d": 1.35,
+   "text": "is make the narrative persistent in the"
+  },
+  {
+   "t": 276.8,
+   "d": 2.88,
+   "text": "game so when you find when you find logs"
+  },
+  {
+   "t": 279.68,
+   "d": 1.98,
+   "text": "and you find out information we don't"
+  },
+  {
+   "t": 281.66,
+   "d": 2.34,
+   "text": "pretend like you're you died and you my"
+  },
+  {
+   "t": 284.0,
+   "d": 2.28,
+   "text": "back we do a lot of weird sci-fi stuff"
+  },
+  {
+   "t": 286.28,
+   "d": 2.1,
+   "text": "with you know that probably no one's"
+  },
+  {
+   "t": 288.38,
+   "d": 1.32,
+   "text": "paying attention to but you know meta"
+  },
+  {
+   "t": 289.7,
+   "d": 1.2,
+   "text": "verses and stuff like that where like"
+  },
+  {
+   "t": 290.9,
+   "d": 2.46,
+   "text": "you actually still keep those logs so"
+  },
+  {
+   "t": 293.36,
+   "d": 1.92,
+   "text": "you are still going and you are still"
+  },
+  {
+   "t": 295.28,
+   "d": 1.38,
+   "text": "remembering that and what he's talking"
+  },
+  {
+   "t": 296.66,
+   "d": 2.34,
+   "text": "about with the player remembers I don't"
+  },
+  {
+   "t": 299.0,
+   "d": 1.38,
+   "text": "want to fake the phone can be like well"
+  },
+  {
+   "t": 300.38,
+   "d": 1.83,
+   "text": "the player remembers but the person I'm"
+  },
+  {
+   "t": 302.21,
+   "d": 2.1,
+   "text": "playing isn't the person you're playing"
+  },
+  {
+   "t": 304.31,
+   "d": 1.86,
+   "text": "in dusters is you you're behind the"
+  },
+  {
+   "t": 306.17,
+   "d": 2.01,
+   "text": "command line you're on the keyboard so I"
+  },
+  {
+   "t": 308.18,
+   "d": 1.29,
+   "text": "wanted it to be you so I wanted to"
+  },
+  {
+   "t": 309.47,
+   "d": 1.41,
+   "text": "acknowledge the fact that you still know"
+  },
+  {
+   "t": 310.88,
+   "d": 3.03,
+   "text": "everything that you knew before another"
+  },
+  {
+   "t": 313.91,
+   "d": 1.62,
+   "text": "problem is that the story isn't unique"
+  },
+  {
+   "t": 315.53,
+   "d": 1.59,
+   "text": "to you this is what's written this is"
+  },
+  {
+   "t": 317.12,
+   "d": 1.68,
+   "text": "this shows how old I am this is the"
+  },
+  {
+   "t": 318.8,
+   "d": 2.46,
+   "text": "first thing that came to mind was simply"
+  },
+  {
+   "t": 321.26,
+   "d": 1.68,
+   "text": "resistible since this is an 80 song I"
+  },
+  {
+   "t": 322.94,
+   "d": 1.77,
+   "text": "don't know if anybody here as old as me"
+  },
+  {
+   "t": 324.71,
+   "d": 3.81,
+   "text": "but the story is not unique to you right"
+  },
+  {
+   "t": 328.52,
+   "d": 2.22,
+   "text": "the problem is is is it like I don't"
+  },
+  {
+   "t": 330.74,
+   "d": 1.8,
+   "text": "want to go through and be like at the"
+  },
+  {
+   "t": 332.54,
+   "d": 1.56,
+   "text": "watercooler and be like oh yeah did the"
+  },
+  {
+   "t": 334.1,
+   "d": 1.59,
+   "text": "bridge blow up at the exact second that"
+  },
+  {
+   "t": 335.69,
+   "d": 1.59,
+   "text": "you were walking by because the dragon"
+  },
+  {
+   "t": 337.28,
+   "d": 1.53,
+   "text": "flew under like that's not as fun that's"
+  },
+  {
+   "t": 338.81,
+   "d": 1.32,
+   "text": "what we love about roguelikes we love"
+  },
+  {
+   "t": 340.13,
+   "d": 1.74,
+   "text": "that procedural generation we love that"
+  },
+  {
+   "t": 341.87,
+   "d": 2.28,
+   "text": "unique thing I am the special snowflake"
+  },
+  {
+   "t": 344.15,
+   "d": 3.27,
+   "text": "right and so how do we attack this right"
+  },
+  {
+   "t": 347.42,
+   "d": 2.43,
+   "text": "so what we did was we tried to make the"
+  },
+  {
+   "t": 349.85,
+   "d": 2.01,
+   "text": "narrative more procedural and by this I"
+  },
+  {
+   "t": 351.86,
+   "d": 3.3,
+   "text": "don't mean the like holy grail of like a"
+  },
+  {
+   "t": 355.16,
+   "d": 2.1,
+   "text": "computer is writing the story and it's"
+  },
+  {
+   "t": 357.26,
+   "d": 2.7,
+   "text": "an awesome story like someday we'll get"
+  },
+  {
+   "t": 359.96,
+   "d": 2.34,
+   "text": "there and then many of us will probably"
+  },
+  {
+   "t": 362.3,
+   "d": 2.49,
+   "text": "be out of a job but for now it's like"
+  },
+  {
+   "t": 364.79,
+   "d": 1.77,
+   "text": "how do you integrate that so what we did"
+  },
+  {
+   "t": 366.56,
+   "d": 2.79,
+   "text": "was we tried to tie the story into the"
+  },
+  {
+   "t": 369.35,
+   "d": 1.89,
+   "text": "procedural elements of the game so for"
+  },
+  {
+   "t": 371.24,
+   "d": 2.28,
+   "text": "example a lot of this game is about"
+  },
+  {
+   "t": 373.52,
+   "d": 1.74,
+   "text": "existential risk and why everybody's"
+  },
+  {
+   "t": 375.26,
+   "d": 2.1,
+   "text": "dead right so what we did was like one"
+  },
+  {
+   "t": 377.36,
+   "d": 1.68,
+   "text": "example was is that one theory was that"
+  },
+  {
+   "t": 379.04,
+   "d": 1.8,
+   "text": "maybe it was this weird cosmic event"
+  },
+  {
+   "t": 380.84,
+   "d": 2.22,
+   "text": "that happened so one of the objectives"
+  },
+  {
+   "t": 383.06,
+   "d": 1.86,
+   "text": "that you had as you uncovered all these"
+  },
+  {
+   "t": 384.92,
+   "d": 2.76,
+   "text": "logs was to find a very old derelict and"
+  },
+  {
+   "t": 387.68,
+   "d": 2.19,
+   "text": "bring it to a research station so that"
+  },
+  {
+   "t": 389.87,
+   "d": 1.53,
+   "text": "you could compare it to the data that"
+  },
+  {
+   "t": 391.4,
+   "d": 2.1,
+   "text": "they had from more recent Darrel X or"
+  },
+  {
+   "t": 393.5,
+   "d": 1.74,
+   "text": "something like that and so what's really"
+  },
+  {
+   "t": 395.24,
+   "d": 1.74,
+   "text": "cool about this is is that on one run"
+  },
+  {
+   "t": 396.98,
+   "d": 2.55,
+   "text": "you might find a research station"
+  },
+  {
+   "t": 399.53,
+   "d": 1.83,
+   "text": "be like oh my god this is this is great"
+  },
+  {
+   "t": 401.36,
+   "d": 1.86,
+   "text": "now I'm gonna mark that on this map and"
+  },
+  {
+   "t": 403.22,
+   "d": 1.71,
+   "text": "if now I'm gonna try and find the other"
+  },
+  {
+   "t": 404.93,
+   "d": 2.16,
+   "text": "piece of this puzzle and while I'm going"
+  },
+  {
+   "t": 407.09,
+   "d": 1.35,
+   "text": "through the universe I'm gonna try and"
+  },
+  {
+   "t": 408.44,
+   "d": 1.2,
+   "text": "find all the upgrades I need to"
+  },
+  {
+   "t": 409.64,
+   "d": 2.34,
+   "text": "commandeer an old ship right but another"
+  },
+  {
+   "t": 411.98,
+   "d": 1.05,
+   "text": "time when you're playing through it"
+  },
+  {
+   "t": 413.03,
+   "d": 1.35,
+   "text": "might be the opposite either you don't"
+  },
+  {
+   "t": 414.38,
+   "d": 1.59,
+   "text": "find that or you find the really old"
+  },
+  {
+   "t": 415.97,
+   "d": 1.71,
+   "text": "ship and now all of a sudden you're like"
+  },
+  {
+   "t": 417.68,
+   "d": 2.7,
+   "text": "oh man if I can commandeer this and you"
+  },
+  {
+   "t": 420.38,
+   "d": 1.35,
+   "text": "do it correctly now you're cruising"
+  },
+  {
+   "t": 421.73,
+   "d": 1.11,
+   "text": "through the system looking for this"
+  },
+  {
+   "t": 422.84,
+   "d": 2.85,
+   "text": "research station on this on this ship"
+  },
+  {
+   "t": 425.69,
+   "d": 1.74,
+   "text": "that might not be ideal to cruise around"
+  },
+  {
+   "t": 427.43,
+   "d": 1.95,
+   "text": "in and so these are ways that look with"
+  },
+  {
+   "t": 429.38,
+   "d": 1.71,
+   "text": "the same exact story you're getting two"
+  },
+  {
+   "t": 431.09,
+   "d": 2.85,
+   "text": "different experiences another thing that"
+  },
+  {
+   "t": 433.94,
+   "d": 2.43,
+   "text": "kind of happens with this is this really"
+  },
+  {
+   "t": 436.37,
+   "d": 2.58,
+   "text": "cool word apathy Neah which is basically"
+  },
+  {
+   "t": 438.95,
+   "d": 2.19,
+   "text": "us looking at clouds and being like okay"
+  },
+  {
+   "t": 441.14,
+   "d": 1.41,
+   "text": "instead of that just being a random"
+  },
+  {
+   "t": 442.55,
+   "d": 3.81,
+   "text": "thing oh that's a unicorn right so the"
+  },
+  {
+   "t": 446.36,
+   "d": 1.95,
+   "text": "idea is that sometimes we make sense out"
+  },
+  {
+   "t": 448.31,
+   "d": 2.58,
+   "text": "of random data and we can use this to"
+  },
+  {
+   "t": 450.89,
+   "d": 1.53,
+   "text": "our advantage rimworld does this better"
+  },
+  {
+   "t": 452.42,
+   "d": 3.39,
+   "text": "than anything I think but so one thing"
+  },
+  {
+   "t": 455.81,
+   "d": 1.71,
+   "text": "we decided to do is what if we put the"
+  },
+  {
+   "t": 457.52,
+   "d": 2.46,
+   "text": "logs out of order like does that change"
+  },
+  {
+   "t": 459.98,
+   "d": 2.4,
+   "text": "your perception of this stuff and it"
+  },
+  {
+   "t": 462.38,
+   "d": 2.25,
+   "text": "turns out it might so what we did was we"
+  },
+  {
+   "t": 464.63,
+   "d": 3.42,
+   "text": "had one of the one of the existential"
+  },
+  {
+   "t": 468.05,
+   "d": 2.57,
+   "text": "risks was gray goo which is basically"
+  },
+  {
+   "t": 470.62,
+   "d": 2.71,
+   "text": "nanomachines replicating and forever and"
+  },
+  {
+   "t": 473.33,
+   "d": 2.52,
+   "text": "then everything ends up being goo so"
+  },
+  {
+   "t": 475.85,
+   "d": 2.97,
+   "text": "what we did was we made a log where one"
+  },
+  {
+   "t": 478.82,
+   "d": 2.25,
+   "text": "scientist was complaining that there was"
+  },
+  {
+   "t": 481.07,
+   "d": 2.31,
+   "text": "a dead rat that like half of it was"
+  },
+  {
+   "t": 483.38,
+   "d": 1.95,
+   "text": "gelatinous material and that it was near"
+  },
+  {
+   "t": 485.33,
+   "d": 1.62,
+   "text": "a replicator and so something might be"
+  },
+  {
+   "t": 486.95,
+   "d": 2.91,
+   "text": "going awry and another log was two"
+  },
+  {
+   "t": 489.86,
+   "d": 3.0,
+   "text": "operators seemingly not not you know"
+  },
+  {
+   "t": 492.86,
+   "d": 1.89,
+   "text": "continual but complaining that like"
+  },
+  {
+   "t": 494.75,
+   "d": 1.95,
+   "text": "every time an animal or anything dies on"
+  },
+  {
+   "t": 496.7,
+   "d": 1.95,
+   "text": "a space station they get a call from a"
+  },
+  {
+   "t": 498.65,
+   "d": 1.83,
+   "text": "scientist being like replicators are"
+  },
+  {
+   "t": 500.48,
+   "d": 1.35,
+   "text": "going crazy and everyone's gonna die"
+  },
+  {
+   "t": 501.83,
+   "d": 3.51,
+   "text": "right so we have made a website and we"
+  },
+  {
+   "t": 505.34,
+   "d": 2.07,
+   "text": "gave a survey and when you can load the"
+  },
+  {
+   "t": 507.41,
+   "d": 1.35,
+   "text": "website up it gives you those two logs"
+  },
+  {
+   "t": 508.76,
+   "d": 2.49,
+   "text": "in random order right and we just asked"
+  },
+  {
+   "t": 511.25,
+   "d": 2.04,
+   "text": "how concerning is this dead rat and so"
+  },
+  {
+   "t": 513.29,
+   "d": 1.74,
+   "text": "the people that read the scientists"
+  },
+  {
+   "t": 515.03,
+   "d": 1.35,
+   "text": "complaining and then the two operators"
+  },
+  {
+   "t": 516.38,
+   "d": 2.01,
+   "text": "making fun of them they were like that's"
+  },
+  {
+   "t": 518.39,
+   "d": 1.53,
+   "text": "a concern because they're not listening"
+  },
+  {
+   "t": 519.92,
+   "d": 1.56,
+   "text": "to him and the people that were like oh"
+  },
+  {
+   "t": 521.48,
+   "d": 1.62,
+   "text": "they were making fun of these scientists"
+  },
+  {
+   "t": 523.1,
+   "d": 1.56,
+   "text": "on here's the lame scientist that's"
+  },
+  {
+   "t": 524.66,
+   "d": 1.59,
+   "text": "complaining about it that's not really"
+  },
+  {
+   "t": 526.25,
+   "d": 2.73,
+   "text": "as much of a concern so the idea is is"
+  },
+  {
+   "t": 528.98,
+   "d": 1.86,
+   "text": "that like by shifting around the order"
+  },
+  {
+   "t": 530.84,
+   "d": 1.09,
+   "text": "that you guys read things"
+  },
+  {
+   "t": 531.93,
+   "d": 1.38,
+   "text": "in the events and the order that they"
+  },
+  {
+   "t": 533.31,
+   "d": 1.38,
+   "text": "happen you can start to change their"
+  },
+  {
+   "t": 534.69,
+   "d": 1.83,
+   "text": "perception of it even though the curated"
+  },
+  {
+   "t": 536.52,
+   "d": 1.68,
+   "text": "narrative is the same you're integrating"
+  },
+  {
+   "t": 538.2,
+   "d": 1.77,
+   "text": "it into the structure really well to be"
+  },
+  {
+   "t": 539.97,
+   "d": 1.5,
+   "text": "completely fair as more and more people"
+  },
+  {
+   "t": 541.47,
+   "d": 1.44,
+   "text": "took this these numbers started just"
+  },
+  {
+   "t": 542.91,
+   "d": 1.56,
+   "text": "kind of going all over the place so I'm"
+  },
+  {
+   "t": 544.47,
+   "d": 1.71,
+   "text": "making it like this is some brilliant"
+  },
+  {
+   "t": 546.18,
+   "d": 2.07,
+   "text": "research and it's not at all"
+  },
+  {
+   "t": 548.25,
+   "d": 3.69,
+   "text": "small asterik so another another problem"
+  },
+  {
+   "t": 551.94,
+   "d": 1.53,
+   "text": "is is that the narrative starts to feel"
+  },
+  {
+   "t": 553.47,
+   "d": 2.52,
+   "text": "constrained right like oh I know that"
+  },
+  {
+   "t": 555.99,
+   "d": 2.64,
+   "text": "there's I've got to find a derelict an"
+  },
+  {
+   "t": 558.63,
+   "d": 1.32,
+   "text": "old derelict and bring it to a research"
+  },
+  {
+   "t": 559.95,
+   "d": 2.19,
+   "text": "station and that's all I have to do and"
+  },
+  {
+   "t": 562.14,
+   "d": 1.08,
+   "text": "even though I know there's plenty of"
+  },
+  {
+   "t": 563.22,
+   "d": 2.04,
+   "text": "other world to explore I'm so focused on"
+  },
+  {
+   "t": 565.26,
+   "d": 2.67,
+   "text": "that so the way that we handled that was"
+  },
+  {
+   "t": 567.93,
+   "d": 2.31,
+   "text": "by making multiple branching storylines"
+  },
+  {
+   "t": 570.24,
+   "d": 2.25,
+   "text": "that you could attack if you want or not"
+  },
+  {
+   "t": 572.49,
+   "d": 1.89,
+   "text": "so at the same time that you were doing"
+  },
+  {
+   "t": 574.38,
+   "d": 3.15,
+   "text": "that you stumbled on to this idea that"
+  },
+  {
+   "t": 577.53,
+   "d": 1.62,
+   "text": "maybe there was a pandemic that happened"
+  },
+  {
+   "t": 579.15,
+   "d": 2.07,
+   "text": "and so what they wanted the idea was is"
+  },
+  {
+   "t": 581.22,
+   "d": 2.55,
+   "text": "that to lure one of these alien"
+  },
+  {
+   "t": 583.77,
+   "d": 2.52,
+   "text": "creatures into your docking bay and scan"
+  },
+  {
+   "t": 586.29,
+   "d": 1.95,
+   "text": "it and that requires you to have certain"
+  },
+  {
+   "t": 588.24,
+   "d": 1.89,
+   "text": "upgrades and you know certain conditions"
+  },
+  {
+   "t": 590.13,
+   "d": 1.56,
+   "text": "met as do all the other things that you"
+  },
+  {
+   "t": 591.69,
+   "d": 2.46,
+   "text": "would have to do so now when you start"
+  },
+  {
+   "t": 594.15,
+   "d": 1.5,
+   "text": "your game instead of being like I gotta"
+  },
+  {
+   "t": 595.65,
+   "d": 1.68,
+   "text": "find I got to go to a and then I got to"
+  },
+  {
+   "t": 597.33,
+   "d": 1.77,
+   "text": "go to B and then I gotta go see it's"
+  },
+  {
+   "t": 599.1,
+   "d": 2.31,
+   "text": "like there's a lot of different things"
+  },
+  {
+   "t": 601.41,
+   "d": 1.77,
+   "text": "to do and it might be that on your run"
+  },
+  {
+   "t": 603.18,
+   "d": 1.62,
+   "text": "you feel really lucky cuz you landed in"
+  },
+  {
+   "t": 604.8,
+   "d": 2.1,
+   "text": "a system that happens to have something"
+  },
+  {
+   "t": 606.9,
+   "d": 1.59,
+   "text": "that works really well for the pandemic"
+  },
+  {
+   "t": 608.49,
+   "d": 2.19,
+   "text": "thing and on your next round oh my god"
+  },
+  {
+   "t": 610.68,
+   "d": 1.56,
+   "text": "there's an old derelict so I'm gonna I'm"
+  },
+  {
+   "t": 612.24,
+   "d": 2.07,
+   "text": "gonna try and accomplish the what is"
+  },
+  {
+   "t": 614.31,
+   "d": 1.71,
+   "text": "essentially achievements I basically"
+  },
+  {
+   "t": 616.02,
+   "d": 1.47,
+   "text": "took like achievements and like built"
+  },
+  {
+   "t": 617.49,
+   "d": 2.49,
+   "text": "them into the story but that way you"
+  },
+  {
+   "t": 619.98,
+   "d": 2.28,
+   "text": "always feel like there's lots to do and"
+  },
+  {
+   "t": 622.26,
+   "d": 3.06,
+   "text": "the ordering and all that stuff like all"
+  },
+  {
+   "t": 625.32,
+   "d": 1.32,
+   "text": "that stuff being a really weird way to"
+  },
+  {
+   "t": 626.64,
+   "d": 2.43,
+   "text": "end that sentence but I think you get I"
+  },
+  {
+   "t": 629.07,
+   "d": 1.5,
+   "text": "hope you get what I'm saying is is that"
+  },
+  {
+   "t": 630.57,
+   "d": 2.19,
+   "text": "like you can take these curated bits and"
+  },
+  {
+   "t": 632.76,
+   "d": 1.62,
+   "text": "integrate them into the structure while"
+  },
+  {
+   "t": 634.38,
+   "d": 2.01,
+   "text": "still having really cool prose and"
+  },
+  {
+   "t": 636.39,
+   "d": 1.2,
+   "text": "really cool stories that were written"
+  },
+  {
+   "t": 637.59,
+   "d": 2.16,
+   "text": "out but then some what feel like each"
+  },
+  {
+   "t": 639.75,
+   "d": 2.46,
+   "text": "player has a unique experience with them"
+  },
+  {
+   "t": 642.21,
+   "d": 5.16,
+   "text": "but yeah so that's the idea I don't know"
+  },
+  {
+   "t": 647.37,
+   "d": 1.38,
+   "text": "how long it took and I don't know if we"
+  },
+  {
+   "t": 648.75,
+   "d": 1.86,
+   "text": "have time for questions I'm guessing we"
+  },
+  {
+   "t": 650.61,
+   "d": 2.12,
+   "text": "do"
+  },
+  {
+   "t": 653.15,
+   "d": 16.31,
+   "text": "I guess I keep this one that was fast"
+  },
+  {
+   "t": 669.46,
+   "d": 3.76,
+   "text": "so so we have time for maybe one or two"
+  },
+  {
+   "t": 673.22,
+   "d": 2.79,
+   "text": "questions anyone have a question they"
+  },
+  {
+   "t": 676.01,
+   "d": 6.41,
+   "text": "want to ask yes"
+  },
+  {
+   "t": 689.71,
+   "d": 3.63,
+   "text": "I think it's a great concept I'm curious"
+  },
+  {
+   "t": 693.34,
+   "d": 1.8,
+   "text": "how you plan to use it in your future"
+  },
+  {
+   "t": 695.14,
+   "d": 1.98,
+   "text": "work are you gonna like did you like it"
+  },
+  {
+   "t": 697.12,
+   "d": 1.32,
+   "text": "and you're gonna do it again in the next"
+  },
+  {
+   "t": 698.44,
+   "d": 2.37,
+   "text": "game how will you change your approach"
+  },
+  {
+   "t": 700.81,
+   "d": 3.12,
+   "text": "from dusk errs and yeah where you're"
+  },
+  {
+   "t": 703.93,
+   "d": 1.83,
+   "text": "gonna take this so I actually really"
+  },
+  {
+   "t": 705.76,
+   "d": 1.35,
+   "text": "loved this approach because it was just"
+  },
+  {
+   "t": 707.11,
+   "d": 1.83,
+   "text": "it was really fun for me I'm a"
+  },
+  {
+   "t": 708.94,
+   "d": 1.53,
+   "text": "storyteller and so for me to be able to"
+  },
+  {
+   "t": 710.47,
+   "d": 1.53,
+   "text": "tell a story but not feel like I'm"
+  },
+  {
+   "t": 712.0,
+   "d": 2.22,
+   "text": "putting everybody on Rails and like kind"
+  },
+  {
+   "t": 714.22,
+   "d": 1.26,
+   "text": "of have my cake and eat it too"
+  },
+  {
+   "t": 715.48,
+   "d": 2.49,
+   "text": "I think if I had to be completely honest"
+  },
+  {
+   "t": 717.97,
+   "d": 1.59,
+   "text": "with myself one of the ways that I think"
+  },
+  {
+   "t": 719.56,
+   "d": 1.86,
+   "text": "it might have failed is the fact that we"
+  },
+  {
+   "t": 721.42,
+   "d": 2.19,
+   "text": "had all these storylines and I felt like"
+  },
+  {
+   "t": 723.61,
+   "d": 1.65,
+   "text": "bringing them all back to the singular"
+  },
+  {
+   "t": 725.26,
+   "d": 2.73,
+   "text": "point would kind of ruin it because then"
+  },
+  {
+   "t": 727.99,
+   "d": 1.29,
+   "text": "that would be like oh the game is over"
+  },
+  {
+   "t": 729.28,
+   "d": 1.74,
+   "text": "which it's a roguelike so I felt that"
+  },
+  {
+   "t": 731.02,
+   "d": 1.53,
+   "text": "worked against the structure but I do"
+  },
+  {
+   "t": 732.55,
+   "d": 1.59,
+   "text": "know a lot of players really rallied"
+  },
+  {
+   "t": 734.14,
+   "d": 1.62,
+   "text": "against that they wanted to have that"
+  },
+  {
+   "t": 735.76,
+   "d": 1.47,
+   "text": "button on the end where they were like"
+  },
+  {
+   "t": 737.23,
+   "d": 2.52,
+   "text": "ah that was the thing that did it and so"
+  },
+  {
+   "t": 739.75,
+   "d": 1.62,
+   "text": "I didn't bring I brought each storyline"
+  },
+  {
+   "t": 741.37,
+   "d": 1.65,
+   "text": "to a sense of closure but I didn't wrap"
+  },
+  {
+   "t": 743.02,
+   "d": 1.98,
+   "text": "them all up nicely and that's an"
+  },
+  {
+   "t": 745.0,
+   "d": 2.46,
+   "text": "artistic thing I can't blame myself for"
+  },
+  {
+   "t": 747.46,
+   "d": 1.32,
+   "text": "that I don't think that was wrong but I"
+  },
+  {
+   "t": 748.78,
+   "d": 1.83,
+   "text": "definitely know that the community like"
+  },
+  {
+   "t": 750.61,
+   "d": 2.13,
+   "text": "I think would have preferred us to do"
+  },
+  {
+   "t": 752.74,
+   "d": 1.68,
+   "text": "something where there was a resolution"
+  },
+  {
+   "t": 754.42,
+   "d": 1.77,
+   "text": "so I think if I was going to do it again"
+  },
+  {
+   "t": 756.19,
+   "d": 2.79,
+   "text": "I might I might try that and then if it"
+  },
+  {
+   "t": 758.98,
+   "d": 1.95,
+   "text": "doesn't work out then just own it but"
+  },
+  {
+   "t": 760.93,
+   "d": 1.62,
+   "text": "some people aren't gonna like it but I"
+  },
+  {
+   "t": 762.55,
+   "d": 2.04,
+   "text": "think that would be I don't from what"
+  },
+  {
+   "t": 764.59,
+   "d": 1.44,
+   "text": "the community was saying I feel like"
+  },
+  {
+   "t": 766.03,
+   "d": 3.86,
+   "text": "that would have been a fun thing to do"
+  },
+  {
+   "t": 775.22,
+   "d": 2.89,
+   "text": "since you can assume that the player is"
+  },
+  {
+   "t": 778.11,
+   "d": 1.95,
+   "text": "going to play the game multiple times"
+  },
+  {
+   "t": 780.06,
+   "d": 2.34,
+   "text": "and die multiple times have you"
+  },
+  {
+   "t": 782.4,
+   "d": 2.94,
+   "text": "experimented at all with or how did you"
+  },
+  {
+   "t": 785.34,
+   "d": 3.48,
+   "text": "actually integrate the story like is are"
+  },
+  {
+   "t": 788.82,
+   "d": 1.83,
+   "text": "there parts that will just never show up"
+  },
+  {
+   "t": 790.65,
+   "d": 2.04,
+   "text": "due to random generation and you have to"
+  },
+  {
+   "t": 792.69,
+   "d": 1.47,
+   "text": "play multiple times to get at all or did"
+  },
+  {
+   "t": 794.16,
+   "d": 2.01,
+   "text": "you throw it all try to throw everything"
+  },
+  {
+   "t": 796.17,
+   "d": 2.07,
+   "text": "in there as part of the mechanic yes so"
+  },
+  {
+   "t": 798.24,
+   "d": 2.85,
+   "text": "I kind of fault and maybe this is what"
+  },
+  {
+   "t": 801.09,
+   "d": 1.62,
+   "text": "Ben was talking about with like you know"
+  },
+  {
+   "t": 802.71,
+   "d": 2.22,
+   "text": "chaos I kind of enjoy that in the"
+  },
+  {
+   "t": 804.93,
+   "d": 2.37,
+   "text": "randomness so I didn't I feel like there"
+  },
+  {
+   "t": 807.3,
+   "d": 2.55,
+   "text": "was a real pressure for me to start the"
+  },
+  {
+   "t": 809.85,
+   "d": 1.8,
+   "text": "game out with like this learning curve"
+  },
+  {
+   "t": 811.65,
+   "d": 2.46,
+   "text": "where you know this earlier systems were"
+  },
+  {
+   "t": 814.11,
+   "d": 1.86,
+   "text": "a lot easier and then later systems were"
+  },
+  {
+   "t": 815.97,
+   "d": 2.1,
+   "text": "a lot harder and then maybe make it that"
+  },
+  {
+   "t": 818.07,
+   "d": 2.46,
+   "text": "they got these beats and the thing I"
+  },
+  {
+   "t": 820.53,
+   "d": 2.46,
+   "text": "found personally was the more random I"
+  },
+  {
+   "t": 822.99,
+   "d": 1.38,
+   "text": "made it every now and then there was a"
+  },
+  {
+   "t": 824.37,
+   "d": 2.22,
+   "text": "bad case right where like someone would"
+  },
+  {
+   "t": 826.59,
+   "d": 1.65,
+   "text": "be upset because it was too hard too"
+  },
+  {
+   "t": 828.24,
+   "d": 1.71,
+   "text": "earlier they got things in a random"
+  },
+  {
+   "t": 829.95,
+   "d": 1.89,
+   "text": "order but the more I embraced it the"
+  },
+  {
+   "t": 831.84,
+   "d": 1.5,
+   "text": "more that brings out better player"
+  },
+  {
+   "t": 833.34,
+   "d": 2.61,
+   "text": "stories so like when your second system"
+  },
+  {
+   "t": 835.95,
+   "d": 2.61,
+   "text": "is really hard like that is exciting"
+  },
+  {
+   "t": 838.56,
+   "d": 1.74,
+   "text": "because it's like the last two times the"
+  },
+  {
+   "t": 840.3,
+   "d": 1.5,
+   "text": "last time I played it the second system"
+  },
+  {
+   "t": 841.8,
+   "d": 1.95,
+   "text": "was easy and I just assumed that right"
+  },
+  {
+   "t": 843.75,
+   "d": 1.11,
+   "text": "and now all of a sudden there was this"
+  },
+  {
+   "t": 844.86,
+   "d": 1.44,
+   "text": "one run where it was like really hard"
+  },
+  {
+   "t": 846.3,
+   "d": 1.8,
+   "text": "but I gone through and I barely had like"
+  },
+  {
+   "t": 848.1,
+   "d": 1.29,
+   "text": "only had two drones left and I thought I"
+  },
+  {
+   "t": 849.39,
+   "d": 1.68,
+   "text": "was gonna die and I think that's when"
+  },
+  {
+   "t": 851.07,
+   "d": 1.59,
+   "text": "dusters and a lot of roguelike sort of"
+  },
+  {
+   "t": 852.66,
+   "d": 1.65,
+   "text": "like brilliance is when you're at that"
+  },
+  {
+   "t": 854.31,
+   "d": 1.83,
+   "text": "point where you're like I'm gonna die"
+  },
+  {
+   "t": 856.14,
+   "d": 1.77,
+   "text": "and you figure out some clever way to"
+  },
+  {
+   "t": 857.91,
+   "d": 3.69,
+   "text": "get past it and then quickly die but you"
+  },
+  {
+   "t": 861.6,
+   "d": 3.75,
+   "text": "you have that story where you survived"
+  },
+  {
+   "t": 865.35,
+   "d": 1.65,
+   "text": "right and I think it's the same way with"
+  },
+  {
+   "t": 867.0,
+   "d": 2.4,
+   "text": "the story so I actually had a secondary"
+  },
+  {
+   "t": 869.4,
+   "d": 4.47,
+   "text": "backbone story that was more not related"
+  },
+  {
+   "t": 873.87,
+   "d": 1.23,
+   "text": "to what you were doing and I was gonna"
+  },
+  {
+   "t": 875.1,
+   "d": 1.71,
+   "text": "dole them out in order to kind of give"
+  },
+  {
+   "t": 876.81,
+   "d": 2.34,
+   "text": "you the gist of this weird place we were"
+  },
+  {
+   "t": 879.15,
+   "d": 2.19,
+   "text": "taking you and then we just were like"
+  },
+  {
+   "t": 881.34,
+   "d": 1.98,
+   "text": "everything that we randomized is fun"
+  },
+  {
+   "t": 883.32,
+   "d": 1.47,
+   "text": "what if we randomized these things and"
+  },
+  {
+   "t": 884.79,
+   "d": 1.59,
+   "text": "this was a linear story and that this"
+  },
+  {
+   "t": 886.38,
+   "d": 3.02,
+   "text": "was scary to me because and then I"
+  },
+  {
+   "t": 889.4,
+   "d": 2.38,
+   "text": "shuffled the papers and I gave it to one"
+  },
+  {
+   "t": 891.78,
+   "d": 1.68,
+   "text": "person and I did it and I gave it to"
+  },
+  {
+   "t": 893.46,
+   "d": 1.59,
+   "text": "another and they had completely"
+  },
+  {
+   "t": 895.05,
+   "d": 1.32,
+   "text": "different interpretations of what was"
+  },
+  {
+   "t": 896.37,
+   "d": 3.48,
+   "text": "going on and I was like I love it so and"
+  },
+  {
+   "t": 899.85,
+   "d": 1.5,
+   "text": "this is part of why we make roguelikes"
+  },
+  {
+   "t": 901.35,
+   "d": 1.95,
+   "text": "right is it just sit on the our forums"
+  },
+  {
+   "t": 903.3,
+   "d": 1.62,
+   "text": "and be like wait what happened like you"
+  },
+  {
+   "t": 904.92,
+   "d": 3.99,
+   "text": "did what why did you do that"
+  },
+  {
+   "t": 908.91,
+   "d": 2.91,
+   "text": "that's so cool and weird and so to hear"
+  },
+  {
+   "t": 911.82,
+   "d": 1.44,
+   "text": "different people with different theories"
+  },
+  {
+   "t": 913.26,
+   "d": 2.46,
+   "text": "about what's going on is part of the fun"
+  },
+  {
+   "t": 915.72,
+   "d": 2.16,
+   "text": "so that was that was really exciting for"
+  },
+  {
+   "t": 917.88,
+   "d": 2.16,
+   "text": "me I hope that answers the question a"
+  },
+  {
+   "t": 920.04,
+   "d": 4.53,
+   "text": "little bit yeah and and then I the one"
+  },
+  {
+   "t": 924.57,
+   "d": 1.5,
+   "text": "last thing I wanted to add is is that"
+  },
+  {
+   "t": 926.07,
+   "d": 2.57,
+   "text": "another part of this game like kind of"
+  },
+  {
+   "t": 928.64,
+   "d": 2.35,
+   "text": "leading from what you were saying is is"
+  },
+  {
+   "t": 930.99,
+   "d": 1.5,
+   "text": "that I didn't want to force anybody into"
+  },
+  {
+   "t": 932.49,
+   "d": 1.5,
+   "text": "my story if they didn't want to"
+  },
+  {
+   "t": 933.99,
+   "d": 2.13,
+   "text": "so you wander about and you might"
+  },
+  {
+   "t": 936.12,
+   "d": 1.62,
+   "text": "stumble upon a log that's really"
+  },
+  {
+   "t": 937.74,
+   "d": 1.44,
+   "text": "interesting or and you can just ignore"
+  },
+  {
+   "t": 939.18,
+   "d": 2.58,
+   "text": "it and if you do then that's fine you"
+  },
+  {
+   "t": 941.76,
+   "d": 1.53,
+   "text": "can go around and play with all these"
+  },
+  {
+   "t": 943.29,
+   "d": 1.59,
+   "text": "ships but if you don't you could be like"
+  },
+  {
+   "t": 944.88,
+   "d": 2.37,
+   "text": "oh my god there's a military conspiracy"
+  },
+  {
+   "t": 947.25,
+   "d": 1.68,
+   "text": "going on right now next time I see a"
+  },
+  {
+   "t": 948.93,
+   "d": 2.37,
+   "text": "military ship I'm gonna beeline for it"
+  },
+  {
+   "t": 951.3,
+   "d": 2.04,
+   "text": "you know and that factors into your"
+  },
+  {
+   "t": 953.34,
+   "d": 5.21,
+   "text": "strategy I'm curious since most of these"
+  },
+  {
+   "t": 958.55,
+   "d": 2.14,
+   "text": "story elements and stuff sort of"
+  },
+  {
+   "t": 960.69,
+   "d": 0.96,
+   "text": "happened in the past and you're"
+  },
+  {
+   "t": 961.65,
+   "d": 2.04,
+   "text": "recovering the logs from them is there"
+  },
+  {
+   "t": 963.69,
+   "d": 2.19,
+   "text": "any anything that you would think to do"
+  },
+  {
+   "t": 965.88,
+   "d": 1.65,
+   "text": "differently if you were encountering"
+  },
+  {
+   "t": 967.53,
+   "d": 1.92,
+   "text": "these things in real time as they were"
+  },
+  {
+   "t": 969.45,
+   "d": 1.95,
+   "text": "happening and like how that would"
+  },
+  {
+   "t": 971.4,
+   "d": 1.83,
+   "text": "necessarily affect the approach yeah"
+  },
+  {
+   "t": 973.23,
+   "d": 1.14,
+   "text": "that would affect the approach a lot"
+  },
+  {
+   "t": 974.37,
+   "d": 1.8,
+   "text": "right because that would mean that your"
+  },
+  {
+   "t": 976.17,
+   "d": 2.85,
+   "text": "actions would be having direct hopefully"
+  },
+  {
+   "t": 979.02,
+   "d": 2.19,
+   "text": "would be having direct consequence with"
+  },
+  {
+   "t": 981.21,
+   "d": 2.34,
+   "text": "them so and this is really interesting"
+  },
+  {
+   "t": 983.55,
+   "d": 1.77,
+   "text": "like everything is like Domino's right"
+  },
+  {
+   "t": 985.32,
+   "d": 1.65,
+   "text": "like everything really affects itself so"
+  },
+  {
+   "t": 986.97,
+   "d": 1.89,
+   "text": "sometimes when I'm designing a game I'd"
+  },
+  {
+   "t": 988.86,
+   "d": 2.16,
+   "text": "make these decisions on purpose like I"
+  },
+  {
+   "t": 991.02,
+   "d": 2.13,
+   "text": "made I was like I didn't want to have n"
+  },
+  {
+   "t": 993.15,
+   "d": 1.95,
+   "text": "pieces because to me one of the pillars"
+  },
+  {
+   "t": 995.1,
+   "d": 1.8,
+   "text": "emotional pillars of this game was is"
+  },
+  {
+   "t": 996.9,
+   "d": 1.38,
+   "text": "that you were isolated and this felt"
+  },
+  {
+   "t": 998.28,
+   "d": 2.49,
+   "text": "real to you and so if there was an NPC"
+  },
+  {
+   "t": 1000.77,
+   "d": 1.71,
+   "text": "that was talking inherently you would"
+  },
+  {
+   "t": 1002.48,
+   "d": 2.61,
+   "text": "know it wasn't real because our AI just"
+  },
+  {
+   "t": 1005.09,
+   "d": 3.0,
+   "text": "isn't that good so that's why I wanted"
+  },
+  {
+   "t": 1008.09,
+   "d": 2.49,
+   "text": "you to find the logs so if you were that"
+  },
+  {
+   "t": 1010.58,
+   "d": 1.8,
+   "text": "was a conscious decision so if it wasn't"
+  },
+  {
+   "t": 1012.38,
+   "d": 2.55,
+   "text": "logs and this was like current day if"
+  },
+  {
+   "t": 1014.93,
+   "d": 2.37,
+   "text": "one of my pillars wasn't realism that"
+  },
+  {
+   "t": 1017.3,
+   "d": 2.04,
+   "text": "would be much better right because then"
+  },
+  {
+   "t": 1019.34,
+   "d": 1.56,
+   "text": "all of a sudden the player in the back"
+  },
+  {
+   "t": 1020.9,
+   "d": 1.17,
+   "text": "of their mind is like that's okay I'm in"
+  },
+  {
+   "t": 1022.07,
+   "d": 1.47,
+   "text": "this fantasy world but then you would"
+  },
+  {
+   "t": 1023.54,
+   "d": 1.83,
+   "text": "have to take that stuff into account"
+  },
+  {
+   "t": 1025.37,
+   "d": 3.03,
+   "text": "what we did due to a small degree was it"
+  },
+  {
+   "t": 1028.4,
+   "d": 2.1,
+   "text": "did matter we had in the logs built in"
+  },
+  {
+   "t": 1030.5,
+   "d": 2.13,
+   "text": "like a little like markup language so"
+  },
+  {
+   "t": 1032.63,
+   "d": 1.8,
+   "text": "that we could replace things so that if"
+  },
+  {
+   "t": 1034.43,
+   "d": 2.52,
+   "text": "you found a spaceship that had a doctor"
+  },
+  {
+   "t": 1036.95,
+   "d": 1.41,
+   "text": "that had done some famous thing or"
+  },
+  {
+   "t": 1038.36,
+   "d": 1.74,
+   "text": "something or it was doing research and"
+  },
+  {
+   "t": 1040.1,
+   "d": 1.26,
+   "text": "you wanted to know the result of"
+  },
+  {
+   "t": 1041.36,
+   "d": 2.88,
+   "text": "then we would insert the ship name and"
+  },
+  {
+   "t": 1044.24,
+   "d": 2.04,
+   "text": "then that would be procedurally placed"
+  },
+  {
+   "t": 1046.28,
+   "d": 2.1,
+   "text": "somewhere in the world and so you would"
+  },
+  {
+   "t": 1048.38,
+   "d": 1.56,
+   "text": "have to go find that so we started doing"
+  },
+  {
+   "t": 1049.94,
+   "d": 1.59,
+   "text": "things like that so that your actions"
+  },
+  {
+   "t": 1051.53,
+   "d": 2.01,
+   "text": "and the procedural nature was more"
+  },
+  {
+   "t": 1053.54,
+   "d": 1.89,
+   "text": "current and I think that was really cool"
+  },
+  {
+   "t": 1055.43,
+   "d": 2.22,
+   "text": "and what we had to accept was the fact"
+  },
+  {
+   "t": 1057.65,
+   "d": 3.21,
+   "text": "that when you started over again it was"
+  },
+  {
+   "t": 1060.86,
+   "d": 1.89,
+   "text": "sort of like a Metaverse idea so weary"
+  },
+  {
+   "t": 1062.75,
+   "d": 2.46,
+   "text": "replaced that with a new ship name and"
+  },
+  {
+   "t": 1065.21,
+   "d": 1.83,
+   "text": "you had to recognize that that and that"
+  },
+  {
+   "t": 1067.04,
+   "d": 1.38,
+   "text": "was a little trip to for people when"
+  },
+  {
+   "t": 1068.42,
+   "d": 1.17,
+   "text": "they go back and they'd be like I'm look"
+  },
+  {
+   "t": 1069.59,
+   "d": 1.8,
+   "text": "wait I'm looking for the what and they"
+  },
+  {
+   "t": 1071.39,
+   "d": 1.68,
+   "text": "that started to realize that like things"
+  },
+  {
+   "t": 1073.07,
+   "d": 2.01,
+   "text": "were changing slightly but that was also"
+  },
+  {
+   "t": 1075.08,
+   "d": 1.32,
+   "text": "really fun because then that would"
+  },
+  {
+   "t": 1076.4,
+   "d": 2.55,
+   "text": "change where it was and how it was so we"
+  },
+  {
+   "t": 1078.95,
+   "d": 1.11,
+   "text": "started to play a little bit with that"
+  },
+  {
+   "t": 1080.06,
+   "d": 1.2,
+   "text": "but definitely the fact that everything"
+  },
+  {
+   "t": 1081.26,
+   "d": 3.42,
+   "text": "was had already happened was a benefit a"
+  },
+  {
+   "t": 1084.68,
+   "d": 2.7,
+   "text": "huge benefit yeah awesome"
+  },
+  {
+   "t": 1087.38,
+   "d": 2.84,
+   "text": "thank you thank you"
+  }
+ ]
+}

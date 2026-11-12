@@ -1,0 +1,80 @@
+Todd Furmanski- Mysty Roguelikes: 1st Person Point&Click Paradigms with Realtime Graphics/Simulation
+Speaker: Todd Furmanski
+https://www.youtube.com/watch?v=ST6s_8ekeOg
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Introduction to paradigms
+
+[0:00:00] EMCEE: That sounds super cool. I think I may have seen those. Well, thank you so much. Hopefully you will stick around the social space and chat with people. Next up we have Todd who is a researcher with a focus in interactive environments. Take it away. TODD FURMANSKI: Thank you. Can everybody hear me? I have no good way of seeing. EMCEE: We can hear you, yes. TODD FURMANSKI: I will be talking mainly about my experiments with combining what people consider two different paradigms of gameplay. Both considered archaic but having potential.
+
+[0:01:03] Just for some history and context about Myst.
+
+## Context of Myst and Rogue
+
+[0:01:10] It was originally released in 1993 and helped popularize CD-ROMs. It was the best selling MAC-PC game of the 1990s and unseated by the Sims. The user navigated by going through a series of still images. You clicked to see where you wanted to go. Forward or left or right. You know, it was not in real-time although eventually a real-time version of it was released later. The fact it was made by two people and was the best selling game of the decade and used cutting edge graphics has a little to do on my thoughts on scoping your project properly.
+
+[0:02:16] In Myst, encounters were scripted and the graphics were state-of-the-art at the time and it was impossible to die and very hard to lose. At a glance, this doesn't seem to have much in common with Rogue which uses procedural graphics, ASCII graphics and helped coin the term permadeath. Here are other images of like on the island itself you go to different other worlds or they call them ages. There is a cup talk -- couple documentaries about how they created the space and it was a relatively new things for people unless you worked in aircraft or worked designing
+
+[0:03:22] automobiles. Why?
+
+## Design philosophy
+
+[0:03:26] Well, a common thing I find I discovered about myself is I love looking at old technical disciplines that passed and were often defined by technical limitations. They were enabled by the CD-ROM but also disabled. They had to figure ways to add images and audio quickly. You know, real-time graphics were a pipe dream at that point at the fidelity they were rendering at. But now, decades later, what do these often considered obsolete disciplines look like when such limitations were nonexistent and anyone who made a Roguelike know what I am talking about. The sky is the limit for simulation. I worked on a lot of multi-year large scale projects.
+
+[0:04:28] I worked with all sorts of games and a lot of them are 3D immersive worlds but for this particular project there is a lot of things I am tired of obsessing over. 3D animation I love and real-time animation is hard. It is like an Achilles racing a tortoise. You are going to make something that doesn't look goofy. I don't want to spend three weeks having a character learn to lean over and pick up an object and show it to you when you can write in text pick up this object. Performance was a key obsession. I want to make it run 60 FPS now. I didn't want to have performance coming in and budding that always constant priority for development.
+
+[0:05:28] Also, we are going to try to make games more accessible and teaching people how to use a 16-button joy stick controller is harder than it sounds. What I want to obsess over is procedural content world generation. I love playing with digitally imagery. I love playing with how do you have a computer render things in ways people might not have thought of before. And I am really curious about elegant interfaces. Maybe simple. Simple doesn't mean easy. A lot of this started with mentioning Proc Gen but in 2014 I created a work called forska
+
+## Demo of Forska
+
+[0:06:18] which is the Swedish record for research. It was my own implementations of procedural content generation and experiments in user interface and all sorts of things like that. I will do a little bit of a live demo. This is Forska and using it image by image. This is actually a real-time space. I am just telling it whenever the user clicks to grab an image and load it in and add a post-processing filter to it. I was looking at instead of going image by image and Myst had a sprawling graphic list to choose from. I can just click on the fly. I can go into the this tree's shadow. If I am bored and I want to go to this far island I can click on there.
+
+[0:07:21] I tag giant glowing magenta portals which lead to other islands which have their own different sets of terrain and the like. One problem with large sprawling open ended world is if you walk at the same rate you are always bored if you are walking to a far away place or if you are close it is hard to move and pick up something close or interact with a desk.
+
+## Systems and aesthetics
+
+[0:08:30] Indeed within forska a lot of things I played with didn't overlap in the actual scene but I wanted a way of playing with all three. I love playing with AI but I didn't have a place for the AI to live. I wanted to place with post-processing but I needed a space to render so forska gave me a wilderness to try those things. And again, it can generate a static image from real-time scene graph. All of this is working within unity. And clicking ray cast to a point on the map and place the camera where it hits a valid spot. Instead of having do to everything in a 60th of a second, I have, you know, fractions of a second which run any simulation, AI, anything like that.
+
+[0:09:36] The brothers who worked on Myst talk about their target was 1-2 second and that is coming from IBM saying the user needs to have a second to click on something. Why not beholden to that and having multiple themes without streaming or multithreading is just really, really liberating. One element is visual aesthetics. For the longest time everything looked alike because everybody drawing a polygon on the screen exhausted everybody. With all of the computing power we had I felt there was more we could do. This is an image of Forska and later Roguelikes without any post-processing on. What if you want to make it look like a Roman mosaic?
+
+[0:10:36] Or like an oil painting? Or if you know, you are really old school and want ASCII graphics because it works are Rogue? This one is one of my ideas that I know the path leads to madness although given some of the earlier talks I mob in good company. Given the 3D space, what if that's all running but all you see is a textual description? In this dynamic space you can have an image where then interaction with a simple parser to examine the world, a words worth a thousand pictures. That's something when I look at ways of graphics, text can be one of the best graphics ever. I can play with other methods and printed out apps I can probably sell at REI or camping
+
+[0:11:40] or wilderness store. I can have outbound books of various islands which helped me gauge how well procedural content generation systems worked. And, you know, abstracting the space is nothing new for Rogues themselves. They, you know, that's it. I have seen people freak out by the letter D knowing it is a dragon. Don't get me started on ampersands.
+
+## Unity experimentation
+
+[0:12:14] Let me go -- I am being bold. Let me just make sure this is still running. Let me make sure you can see this. This is the map running in unity. Right now I am playing with a Roman mosaic look but if I go into the camera I can swatch around and it a rabbit hole but a fun rabbit hole to fall down. This is what the straight rendered image looks like. Then I can add in a mosaic effect. If I want to separate the background from the foreground I will add it at the field. Let's say if I want to have an overlay and I can blend these.
+
+[0:13:27] These are either things I found on the web to implement or writing my own graphics and overlaying them. Unity is just a lot of pretty good about testing the things on the fly. Again, I can kind of hit the limits of legibility but that's again, another fun half the trace. I wanted to generate spaces so Forska ended up being a place where I could do that.
+
+## Simulation and pathfinding
+
+[0:14:14] This was one way I found to help get around Kate Compton's 10,000 bowls of oat meals is to add topics or multiple possibilities. I was looking at different types of geology. I can have a glacier one and even that would end up making -- if I had four types of geology and four types of general island shape that multiply together and you get more bang for your buck. One of the benefits of not real-time graphics is even though I am rendering static images, we would default and update every second it is still dynamic space and it is changing lighting and time of day is trivial.
+
+[0:15:15] Whether lighting and all that stuff is fun to play with whereas back in the day, you would have to render a 3D image and it would take hours and days depending. Having to call one up in a fraction of a second is a powerful and a lot of fun to play with. Given the space I am in, I was trying to figure out ways to lead players to points of interests. You end getting automatic switch backs for free. This portal leads to various ruins. You see switch back going up the mountainside.
+
+[0:16:16] Adding a little noise makes sure it is not too straight. When you are on the ground, it adds a nice element of contrast even if it is noon on a snowy landscape. This gives you something to walk on to and follow especially since I like the painter effects. There is another element of contrast along with adding things like line finding.
+
+## Interface and game tension
+
+[0:16:55] User interface and again that's something I am looking at again. A lot of it is pick your poison. It is hard. Everybody is going to tell you it is hard. If anybody who says it is easy is lying. A lot of it is pick your poison. If you want to use a PlayStation or Xbox controller to show someone how to do something as mundane as picking up an object. Mobile is its own set of poison. It is just a flat piece of lab run sapphire. Up to you about how dense or minimal but having no interface is as bad as having no interface sometimes. Trying to adapt a lot. In Forska I did play with connect and do VR test. I don't have too much time and maybe I can talk about that later on.
+
+[0:17:57] Rogue as well -- as going back to one of the first talks about how computers really are just machines that think they are running paper tape through it and Rogue still has a lot of that element to it. Again, there are some people who wouldn't use anything else but again you have to make a lot of decisions about how you use your interface so I wanted a space where I could play with a lot of these things. This was just a short little beginning of me trying to add a very minimal Roguelike where you have items, text, and adding in agents. This stream is slow. I can probably end up showing that as well. I will share someclipse later on.
+
+[0:18:57] This is just the beginning of adding in 2D models or 3D sprites and hiding seems and making it mesh better with the environment. Field of view is something that gets front and center when you are dealing with first-person camera. Combining the turn-base system is one thing Myst shares. You get weird elements of tension where there is literally dozens of possibility actions you can make. You come to point where the next action you will take will mean your life or death.
+
+[0:20:03] But you have as much time as you want to make that decision. No pressure. Go make a cup of coffee or something. Maybe you can find that use for that spare coupon you found or the bottle cap you found in the trash pile maybe that will do something. Somebody asked what the game you are going it make with this and that throws for a loop.
+
+## Future project goals
+
+[0:20:33] I am trying spall -- smaller experiments to test things. I am doing this dungeon crawler. As a proof of concept, this is just fewer questions to ask. If I want to get the UI right I don't want to be distracted trying it make a very different game. I want to make a procedural generated game. The monter is procedurally generated so you need to be as informed and stupid as a typical scary movie character. Maybe you should go to the basement? Maybe bullets will work on that vampire you can only see in mirrors. I still like using walk simulators and experimenting with panaramic renders. Imagine rendering a spherical or cube mapped scene in real-time and you only update your
+
+[0:21:40] position when you click. And again, you saw text heavy renders of a 3D space and whether that's going to be a cleaver scene graph or a machine agent describing an image you can't see. It is a lot to think about. In short, you know, I use post-processing to hide a lot of graphical shortcomings or annoyances not having to deal with animation frees up if I am working on a hobby project. It doesn't necessarily make things easier. Just possible. Think about where you want to work on and strengths and weaknesses. Like any good Rogue player, pick your battles. I mean there is a lot of inspiration and lessons from the past and when you combine them with modern techniques sometimes it feels like martial art training where you are waring
+
+[0:22:42] weights and take them off and the possibilities become endless. My Cat is trying to sabotage my computer equipment but here is a picture. Thank you very much and thank you for letting me talk. EMCEE: Thanks so much. That was wonderful. It is super cool. Lots of people in the chat were talking about how good it looks and coming up with ideas for sorts of games you could make with it. >> Excellent. EMCEE: Let's see if there are questions.
+
+## Q&A and closing
+
+[0:23:26] EMCEE: >> Machine learning I have a love-hate relationship with. So much is the interface of the procedure but how you want to work with it. I have seen amazing things done with machine learning. I have tried a lot of things like the style transfers. I often find machine learning is almost like something that 3D prints something in marble but if you want to make a car that car won't drive. You have a perfectly looking marble car but it won't be able to drive. Working with something afterwards is always tricky to me. It is definitely something I am looking at and again, force was built to house. If I do do machine learning, I can let lose in the space and let it run free. But, yeah, it is definitely on my list. I have a series of machine learning links for image generation, agent behavior, and
+
+[0:24:31] I mean, yeah, there is definitely a lot to look at there. EMCEE: Someone else wants to know what your cats names are. >> The silver one is -- and the other is Matilda. They aren't related. EMCEE: There are not any other questions but great talk in the chat. I am sure people would love to talk about your fun ideas if you hangout in the social space. >> I might go to the procedural library? EMCEE: The Proc Gen library. >> The Proc Gen library and take questions.

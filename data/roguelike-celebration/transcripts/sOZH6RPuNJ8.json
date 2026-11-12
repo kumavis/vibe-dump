@@ -1,0 +1,3570 @@
+{
+ "id": "sOZH6RPuNJ8",
+ "url": "https://www.youtube.com/watch?v=sOZH6RPuNJ8",
+ "title": "Nic Junius: Braided Narratives: Or How I Learned to Stop Worrying and Love Linear Stories",
+ "speaker": "Nic Junius",
+ "talk_title": "Braided Narratives: Or How I Learned to Stop Worrying and Love Linear Stories",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 2017,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "Creating dynamic, interactive narratives is hard, in no small part because of the massive amount of authoring effort they can require. I explore both where this authoring burden comes from and look at an approach to narrative design which avoids the exponential explosion of writing: braided narratives. Rather than every storyline or quest being its own fractal tree, we can wrap linear plots around each other to achieve dynamism through pacing instead of choice. Join me in this twisty adventure!",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and background"
+  },
+  {
+   "start": 125,
+   "title": "The problem of combinatorics"
+  },
+  {
+   "start": 596,
+   "title": "Defining braided narratives"
+  },
+  {
+   "start": 1166,
+   "title": "Case study: Hades"
+  },
+  {
+   "start": 1503,
+   "title": "Case study: Fire Emblem"
+  },
+  {
+   "start": 1766,
+   "title": "Conclusion and final thoughts"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4139,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.2,
+   "d": 4.48,
+   "text": "so I am going to bring up Nick uh who is"
+  },
+  {
+   "t": 7.68,
+   "d": 2.32,
+   "text": "going to talk about braided narratives"
+  },
+  {
+   "t": 10.0,
+   "d": 2.72,
+   "text": "or how I learn to stop worrying and love"
+  },
+  {
+   "t": 12.72,
+   "d": 4.64,
+   "text": "linear stories um Nick received a PhD in"
+  },
+  {
+   "t": 17.36,
+   "d": 2.2,
+   "text": "computational media studying AI"
+  },
+  {
+   "t": 19.56,
+   "d": 2.0,
+   "text": "narrative design and theater and is"
+  },
+  {
+   "t": 21.56,
+   "d": 2.68,
+   "text": "currently a narrative designer at CCP"
+  },
+  {
+   "t": 24.24,
+   "d": 3.16,
+   "text": "games you know for Eve online amongst"
+  },
+  {
+   "t": 27.4,
+   "d": 3.24,
+   "text": "others and uh Nick I'm going to let you"
+  },
+  {
+   "t": 30.64,
+   "d": 1.8,
+   "text": "take it"
+  },
+  {
+   "t": 32.44,
+   "d": 2.24,
+   "text": "away great thank"
+  },
+  {
+   "t": 34.68,
+   "d": 4.48,
+   "text": "you um yes as I was just introduced um"
+  },
+  {
+   "t": 39.16,
+   "d": 4.0,
+   "text": "hi everyone I'm Nick Junius and I am"
+  },
+  {
+   "t": 43.16,
+   "d": 2.84,
+   "text": "mostly here to talk to you about how"
+  },
+  {
+   "t": 46.0,
+   "d": 2.68,
+   "text": "linear stories and highly systemic"
+  },
+  {
+   "t": 48.68,
+   "d": 2.72,
+   "text": "design are in fact um complimentary"
+  },
+  {
+   "t": 51.4,
+   "d": 2.36,
+   "text": "approaches to telling complex"
+  },
+  {
+   "t": 53.76,
+   "d": 2.04,
+   "text": "interactive narratives in spite of what"
+  },
+  {
+   "t": 55.8,
+   "d": 1.84,
+   "text": "it might appear on the"
+  },
+  {
+   "t": 57.64,
+   "d": 5.12,
+   "text": "surface so as you just heard um I have a"
+  },
+  {
+   "t": 62.76,
+   "d": 3.24,
+   "text": "PhD in computational media I just"
+  },
+  {
+   "t": 66.0,
+   "d": 3.44,
+   "text": "graduated um two months ago and my"
+  },
+  {
+   "t": 69.44,
+   "d": 2.92,
+   "text": "research generally focused on developing"
+  },
+  {
+   "t": 72.36,
+   "d": 1.96,
+   "text": "narrative and AI systems taking"
+  },
+  {
+   "t": 74.32,
+   "d": 2.16,
+   "text": "inspiration from theatrical"
+  },
+  {
+   "t": 76.48,
+   "d": 3.8,
+   "text": "acting and that all built towards"
+  },
+  {
+   "t": 80.28,
+   "d": 2.76,
+   "text": "creating Dynamic playable scenes between"
+  },
+  {
+   "t": 83.04,
+   "d": 2.48,
+   "text": "human and AI controlled characters"
+  },
+  {
+   "t": 85.52,
+   "d": 3.6,
+   "text": "without having to like branch and create"
+  },
+  {
+   "t": 89.12,
+   "d": 2.12,
+   "text": "alternate timelines and everything the"
+  },
+  {
+   "t": 91.24,
+   "d": 1.44,
+   "text": "way a lot of more traditional"
+  },
+  {
+   "t": 92.68,
+   "d": 2.96,
+   "text": "interactive narratives function and I"
+  },
+  {
+   "t": 95.64,
+   "d": 2.6,
+   "text": "talked a tiny bit about my visual novel"
+  },
+  {
+   "t": 98.24,
+   "d": 1.92,
+   "text": "project here trackx and snow at last"
+  },
+  {
+   "t": 100.16,
+   "d": 2.08,
+   "text": "year's Rog like"
+  },
+  {
+   "t": 102.24,
+   "d": 4.24,
+   "text": "celebration and now I work at CCP games"
+  },
+  {
+   "t": 106.48,
+   "d": 2.16,
+   "text": "doing narrative design and the main"
+  },
+  {
+   "t": 108.64,
+   "d": 2.48,
+   "text": "thing I am currently responsible for is"
+  },
+  {
+   "t": 111.12,
+   "d": 2.84,
+   "text": "creating unique names in our database"
+  },
+  {
+   "t": 113.96,
+   "d": 3.08,
+   "text": "for every single celestial object in the"
+  },
+  {
+   "t": 117.04,
+   "d": 4.0,
+   "text": "universe just a small minor t"
+  },
+  {
+   "t": 121.04,
+   "d": 4.2,
+   "text": "ask and so sort of the outline of this"
+  },
+  {
+   "t": 125.24,
+   "d": 3.76,
+   "text": "talk is going to be going to start with"
+  },
+  {
+   "t": 129.0,
+   "d": 2.56,
+   "text": "The Inspirations and sort of where I got"
+  },
+  {
+   "t": 131.56,
+   "d": 3.96,
+   "text": "the idea for braided narrative since if"
+  },
+  {
+   "t": 135.52,
+   "d": 1.48,
+   "text": "if you have been around me at all you"
+  },
+  {
+   "t": 137.0,
+   "d": 3.16,
+   "text": "know that I kind of have a thing against"
+  },
+  {
+   "t": 140.16,
+   "d": 2.8,
+   "text": "branching narrative as like the default"
+  },
+  {
+   "t": 142.96,
+   "d": 4.96,
+   "text": "everybody goes to for making interactive"
+  },
+  {
+   "t": 147.92,
+   "d": 2.0,
+   "text": "stories and then kind of coming from"
+  },
+  {
+   "t": 149.92,
+   "d": 1.8,
+   "text": "from that"
+  },
+  {
+   "t": 151.72,
+   "d": 4.44,
+   "text": "um what the problem of combinatorics is"
+  },
+  {
+   "t": 156.16,
+   "d": 1.6,
+   "text": "especially if you're not familiar with"
+  },
+  {
+   "t": 157.76,
+   "d": 3.0,
+   "text": "interactive narrative design in"
+  },
+  {
+   "t": 160.76,
+   "d": 3.8,
+   "text": "general and really hammering on the"
+  },
+  {
+   "t": 164.56,
+   "d": 3.6,
+   "text": "point that it is scary to make an"
+  },
+  {
+   "t": 168.16,
+   "d": 2.56,
+   "text": "interactive narrative once you start"
+  },
+  {
+   "t": 170.72,
+   "d": 2.52,
+   "text": "having to spin up tons and tons of"
+  },
+  {
+   "t": 173.24,
+   "d": 2.24,
+   "text": "variations at some point to take into"
+  },
+  {
+   "t": 175.48,
+   "d": 2.12,
+   "text": "account all of these alternate realities"
+  },
+  {
+   "t": 177.6,
+   "d": 3.52,
+   "text": "you're creating and"
+  },
+  {
+   "t": 181.12,
+   "d": 2.12,
+   "text": "building all of that based on what you"
+  },
+  {
+   "t": 183.24,
+   "d": 4.2,
+   "text": "want to allow players to"
+  },
+  {
+   "t": 187.6,
+   "d": 3.52,
+   "text": "change and so I'm kind of positioning"
+  },
+  {
+   "t": 191.12,
+   "d": 1.96,
+   "text": "this idea of like a braided narrative"
+  },
+  {
+   "t": 193.08,
+   "d": 2.52,
+   "text": "structure as an alternative to this"
+  },
+  {
+   "t": 195.6,
+   "d": 4.28,
+   "text": "fractally branching tree of plot"
+  },
+  {
+   "t": 199.88,
+   "d": 2.72,
+   "text": "lines and I want to talk about some of"
+  },
+  {
+   "t": 202.6,
+   "d": 3.12,
+   "text": "the like highlevel details of it and why"
+  },
+  {
+   "t": 205.72,
+   "d": 2.76,
+   "text": "we might want to do something like this"
+  },
+  {
+   "t": 208.48,
+   "d": 2.4,
+   "text": "if it fits into how we want to approach"
+  },
+  {
+   "t": 210.88,
+   "d": 1.92,
+   "text": "telling a story in the first"
+  },
+  {
+   "t": 212.8,
+   "d": 3.48,
+   "text": "place and then to start wrapping up I"
+  },
+  {
+   "t": 216.28,
+   "d": 3.12,
+   "text": "want to discuss a couple of examples of"
+  },
+  {
+   "t": 219.4,
+   "d": 2.88,
+   "text": "existing braided narratives and games"
+  },
+  {
+   "t": 222.28,
+   "d": 3.2,
+   "text": "one of those being super Giants Hades"
+  },
+  {
+   "t": 225.48,
+   "d": 2.8,
+   "text": "which I have some history with and I and"
+  },
+  {
+   "t": 228.28,
+   "d": 2.08,
+   "text": "this was actually the impetus for me"
+  },
+  {
+   "t": 230.36,
+   "d": 2.52,
+   "text": "making this talk in the first place was"
+  },
+  {
+   "t": 232.88,
+   "d": 2.08,
+   "text": "coming back to this game three years"
+  },
+  {
+   "t": 234.96,
+   "d": 2.72,
+   "text": "later and realizing wow they have a lot"
+  },
+  {
+   "t": 237.68,
+   "d": 3.4,
+   "text": "of very linear but very well put"
+  },
+  {
+   "t": 241.08,
+   "d": 2.64,
+   "text": "together narratives to make this feel"
+  },
+  {
+   "t": 243.72,
+   "d": 2.88,
+   "text": "like a very Dynamic experience even if"
+  },
+  {
+   "t": 246.6,
+   "d": 2.32,
+   "text": "every individual piece of it is actually"
+  },
+  {
+   "t": 248.92,
+   "d": 2.0,
+   "text": "surprisingly"
+  },
+  {
+   "t": 250.92,
+   "d": 3.2,
+   "text": "linear and second I want to talk about"
+  },
+  {
+   "t": 254.12,
+   "d": 2.08,
+   "text": "my current Obsession or re"
+  },
+  {
+   "t": 256.2,
+   "d": 2.72,
+   "text": "Obsession which is Fire Emblem three"
+  },
+  {
+   "t": 258.92,
+   "d": 3.64,
+   "text": "houses and how this game in particular"
+  },
+  {
+   "t": 262.56,
+   "d": 2.0,
+   "text": "but sort of the Fire Emblem Series in"
+  },
+  {
+   "t": 264.56,
+   "d": 1.4,
+   "text": "general"
+  },
+  {
+   "t": 265.96,
+   "d": 4.28,
+   "text": "handles dealing with combinatorics and"
+  },
+  {
+   "t": 270.24,
+   "d": 2.28,
+   "text": "containing the fact that they have a"
+  },
+  {
+   "t": 272.52,
+   "d": 3.28,
+   "text": "very systemic game but also are telling"
+  },
+  {
+   "t": 275.8,
+   "d": 3.44,
+   "text": "fairly linear and often very character"
+  },
+  {
+   "t": 279.24,
+   "d": 2.6,
+   "text": "heavy stories within this highly"
+  },
+  {
+   "t": 281.84,
+   "d": 1.72,
+   "text": "systemic game"
+  },
+  {
+   "t": 283.56,
+   "d": 3.28,
+   "text": "structure and then finally do a little"
+  },
+  {
+   "t": 286.84,
+   "d": 2.28,
+   "text": "wrapup of what braided narratives are"
+  },
+  {
+   "t": 289.12,
+   "d": 3.52,
+   "text": "including some issues such as the major"
+  },
+  {
+   "t": 292.64,
+   "d": 1.72,
+   "text": "elephant in the room that I won't talk"
+  },
+  {
+   "t": 294.36,
+   "d": 2.88,
+   "text": "about right now but if you are familiar"
+  },
+  {
+   "t": 297.24,
+   "d": 2.88,
+   "text": "with either of these examples you might"
+  },
+  {
+   "t": 300.12,
+   "d": 2.12,
+   "text": "have an idea of what this elephant might"
+  },
+  {
+   "t": 302.24,
+   "d": 1.92,
+   "text": "look"
+  },
+  {
+   "t": 304.16,
+   "d": 2.04,
+   "text": "like"
+  },
+  {
+   "t": 306.2,
+   "d": 2.96,
+   "text": "so one of the main Inspirations for me"
+  },
+  {
+   "t": 309.16,
+   "d": 3.8,
+   "text": "in general is my time as a playwright"
+  },
+  {
+   "t": 312.96,
+   "d": 2.4,
+   "text": "and this has colored a lot of how I"
+  },
+  {
+   "t": 315.36,
+   "d": 1.52,
+   "text": "approach narrative design and sort of"
+  },
+  {
+   "t": 316.88,
+   "d": 2.8,
+   "text": "why I'm less interested in how do we do"
+  },
+  {
+   "t": 319.68,
+   "d": 3.28,
+   "text": "branching narratives better and more how"
+  },
+  {
+   "t": 322.96,
+   "d": 3.04,
+   "text": "we look at or how we design in"
+  },
+  {
+   "t": 326.0,
+   "d": 2.24,
+   "text": "alternative ways to make stories"
+  },
+  {
+   "t": 328.24,
+   "d": 2.48,
+   "text": "interactive rather than just do the"
+  },
+  {
+   "t": 330.72,
+   "d": 1.32,
+   "text": "default of"
+  },
+  {
+   "t": 332.04,
+   "d": 2.6,
+   "text": "branching and my experience as a"
+  },
+  {
+   "t": 334.64,
+   "d": 2.52,
+   "text": "playwright has tended to be that I"
+  },
+  {
+   "t": 337.16,
+   "d": 2.48,
+   "text": "create the structures and sort of bound"
+  },
+  {
+   "t": 339.64,
+   "d": 3.96,
+   "text": "the possibility space of what a story is"
+  },
+  {
+   "t": 343.6,
+   "d": 2.76,
+   "text": "and then I hand it off to a production"
+  },
+  {
+   "t": 346.36,
+   "d": 3.16,
+   "text": "to fill in all the gaps flesh it out and"
+  },
+  {
+   "t": 349.52,
+   "d": 3.4,
+   "text": "bring the entire story to life while"
+  },
+  {
+   "t": 352.92,
+   "d": 1.52,
+   "text": "adding their own ideas and"
+  },
+  {
+   "t": 354.44,
+   "d": 3.0,
+   "text": "interpretations to what I wrote in the"
+  },
+  {
+   "t": 357.44,
+   "d": 2.72,
+   "text": "first place which is in fact a very"
+  },
+  {
+   "t": 360.16,
+   "d": 3.48,
+   "text": "interactive process by itself and there"
+  },
+  {
+   "t": 363.64,
+   "d": 1.84,
+   "text": "is very little like traditional"
+  },
+  {
+   "t": 365.48,
+   "d": 2.84,
+   "text": "structural branching in"
+  },
+  {
+   "t": 368.32,
+   "d": 4.76,
+   "text": "this and like I hinted at a little bit"
+  },
+  {
+   "t": 373.08,
+   "d": 2.72,
+   "text": "um I wrote a paper about Hades a few"
+  },
+  {
+   "t": 375.8,
+   "d": 0.76,
+   "text": "years"
+  },
+  {
+   "t": 376.56,
+   "d": 3.92,
+   "text": "ago and likened the way the progression"
+  },
+  {
+   "t": 380.48,
+   "d": 1.16,
+   "text": "through Hades"
+  },
+  {
+   "t": 381.64,
+   "d": 5.28,
+   "text": "Works to a theatral production where you"
+  },
+  {
+   "t": 386.92,
+   "d": 1.64,
+   "text": "start off and you're doing a cold read"
+  },
+  {
+   "t": 388.56,
+   "d": 1.56,
+   "text": "it's really bad you really know what"
+  },
+  {
+   "t": 390.12,
+   "d": 3.8,
+   "text": "you're doing and then once you practiced"
+  },
+  {
+   "t": 393.92,
+   "d": 2.48,
+   "text": "a bit more you're in sort of this"
+  },
+  {
+   "t": 396.4,
+   "d": 2.2,
+   "text": "rehearsal process and learning the game"
+  },
+  {
+   "t": 398.6,
+   "d": 2.48,
+   "text": "and learning your role in the game and"
+  },
+  {
+   "t": 401.08,
+   "d": 1.76,
+   "text": "getting better and more consistent and"
+  },
+  {
+   "t": 402.84,
+   "d": 2.08,
+   "text": "actually getting through the entire"
+  },
+  {
+   "t": 404.92,
+   "d": 1.88,
+   "text": "game's level"
+  },
+  {
+   "t": 406.8,
+   "d": 2.76,
+   "text": "structure before you have this sort of"
+  },
+  {
+   "t": 409.56,
+   "d": 2.24,
+   "text": "opening night moment when the credits"
+  },
+  {
+   "t": 411.8,
+   "d": 5.64,
+   "text": "roll and you're now performing for"
+  },
+  {
+   "t": 417.8,
+   "d": 2.2,
+   "text": "real and there's a bunch of n in this"
+  },
+  {
+   "t": 420.0,
+   "d": 3.96,
+   "text": "Rog like and don't worry about that um"
+  },
+  {
+   "t": 423.96,
+   "d": 1.12,
+   "text": "and then"
+  },
+  {
+   "t": 425.08,
+   "d": 2.12,
+   "text": "finally one of the other things like as"
+  },
+  {
+   "t": 427.2,
+   "d": 2.52,
+   "text": "a writer and a narrative designer it at"
+  },
+  {
+   "t": 429.72,
+   "d": 2.8,
+   "text": "some point with anything interactive"
+  },
+  {
+   "t": 432.52,
+   "d": 2.72,
+   "text": "narrative regardless of how complicated"
+  },
+  {
+   "t": 435.24,
+   "d": 3.16,
+   "text": "the systems in place you're working with"
+  },
+  {
+   "t": 438.4,
+   "d": 3.2,
+   "text": "are someone has to write the damn thing"
+  },
+  {
+   "t": 441.6,
+   "d": 4.28,
+   "text": "someone has to put the pen to paper and"
+  },
+  {
+   "t": 445.88,
+   "d": 2.2,
+   "text": "write the actual content you are putting"
+  },
+  {
+   "t": 448.08,
+   "d": 3.76,
+   "text": "into the game whether it's linear or"
+  },
+  {
+   "t": 451.84,
+   "d": 1.92,
+   "text": "some sort of dynamic"
+  },
+  {
+   "t": 453.76,
+   "d": 2.76,
+   "text": "system at some point you still have to"
+  },
+  {
+   "t": 456.52,
+   "d": 1.96,
+   "text": "write it kind of no matter"
+  },
+  {
+   "t": 458.48,
+   "d": 3.32,
+   "text": "what and looking at all of"
+  },
+  {
+   "t": 461.8,
+   "d": 3.52,
+   "text": "this we get into this problem of well if"
+  },
+  {
+   "t": 465.32,
+   "d": 2.24,
+   "text": "we if we're making this interactive and"
+  },
+  {
+   "t": 467.56,
+   "d": 3.08,
+   "text": "factoring in like what our players are"
+  },
+  {
+   "t": 470.64,
+   "d": 3.16,
+   "text": "doing this is going to start"
+  },
+  {
+   "t": 473.8,
+   "d": 4.28,
+   "text": "breeding some fractally branching"
+  },
+  {
+   "t": 478.08,
+   "d": 3.6,
+   "text": "structures which they can be very pretty"
+  },
+  {
+   "t": 481.68,
+   "d": 4.28,
+   "text": "as as shown here but in terms of"
+  },
+  {
+   "t": 485.96,
+   "d": 2.72,
+   "text": "authoring your narratives this quickly"
+  },
+  {
+   "t": 488.68,
+   "d": 1.44,
+   "text": "becomes"
+  },
+  {
+   "t": 490.12,
+   "d": 3.6,
+   "text": "untenable whether you're doing static"
+  },
+  {
+   "t": 493.72,
+   "d": 3.68,
+   "text": "linear stories to factor in every single"
+  },
+  {
+   "t": 497.4,
+   "d": 3.0,
+   "text": "thing you're having your players do and"
+  },
+  {
+   "t": 500.4,
+   "d": 3.2,
+   "text": "tracking or even when you're"
+  },
+  {
+   "t": 503.6,
+   "d": 2.8,
+   "text": "writing in a dynamic way and piecing"
+  },
+  {
+   "t": 506.4,
+   "d": 2.2,
+   "text": "everything together at some point you"
+  },
+  {
+   "t": 508.6,
+   "d": 1.68,
+   "text": "will hit wall"
+  },
+  {
+   "t": 510.28,
+   "d": 3.0,
+   "text": "related to just the amount of branching"
+  },
+  {
+   "t": 513.28,
+   "d": 2.96,
+   "text": "anybody can do at some"
+  },
+  {
+   "t": 516.24,
+   "d": 2.4,
+   "text": "point"
+  },
+  {
+   "t": 518.64,
+   "d": 2.56,
+   "text": "and we can definitely build tools to"
+  },
+  {
+   "t": 521.2,
+   "d": 2.52,
+   "text": "ease this and make"
+  },
+  {
+   "t": 523.72,
+   "d": 2.52,
+   "text": "authoring a lot of narrative more"
+  },
+  {
+   "t": 526.24,
+   "d": 4.24,
+   "text": "approachable and easier in a dynamic way"
+  },
+  {
+   "t": 530.48,
+   "d": 3.32,
+   "text": "but really where that sort of system"
+  },
+  {
+   "t": 533.8,
+   "d": 3.88,
+   "text": "authoring and authoring in a less purely"
+  },
+  {
+   "t": 537.68,
+   "d": 3.24,
+   "text": "linear traditional way happens once that"
+  },
+  {
+   "t": 540.92,
+   "d": 2.8,
+   "text": "become it's hard to know where that"
+  },
+  {
+   "t": 543.72,
+   "d": 2.24,
+   "text": "actually becomes easier than just"
+  },
+  {
+   "t": 545.96,
+   "d": 1.84,
+   "text": "writing everything by"
+  },
+  {
+   "t": 547.8,
+   "d": 2.68,
+   "text": "hand and we have this problem that"
+  },
+  {
+   "t": 550.48,
+   "d": 3.8,
+   "text": "writing a story of any kind is a very"
+  },
+  {
+   "t": 554.28,
+   "d": 4.4,
+   "text": "hard task writing dynamically writing in"
+  },
+  {
+   "t": 558.68,
+   "d": 3.0,
+   "text": "a branching way that is able to respond"
+  },
+  {
+   "t": 561.68,
+   "d": 2.96,
+   "text": "to people doing things that you will"
+  },
+  {
+   "t": 564.64,
+   "d": 3.48,
+   "text": "never predict is even"
+  },
+  {
+   "t": 568.12,
+   "d": 2.76,
+   "text": "harder so we tend to end up in a"
+  },
+  {
+   "t": 570.88,
+   "d": 2.72,
+   "text": "situation where the combinatorial"
+  },
+  {
+   "t": 573.6,
+   "d": 2.8,
+   "text": "possibilities available in a game or our"
+  },
+  {
+   "t": 576.4,
+   "d": 3.08,
+   "text": "system design call for a very robust"
+  },
+  {
+   "t": 579.48,
+   "d": 2.12,
+   "text": "systemic approach to authoring"
+  },
+  {
+   "t": 581.6,
+   "d": 3.72,
+   "text": "narratives which often requires more"
+  },
+  {
+   "t": 585.32,
+   "d": 2.52,
+   "text": "effort than writing our traditional"
+  },
+  {
+   "t": 587.84,
+   "d": 3.24,
+   "text": "scenes or just simply that approach"
+  },
+  {
+   "t": 591.08,
+   "d": 2.72,
+   "text": "requires more content than is reasonable"
+  },
+  {
+   "t": 593.8,
+   "d": 3.0,
+   "text": "to write in the first"
+  },
+  {
+   "t": 596.8,
+   "d": 3.36,
+   "text": "place and this is where braided"
+  },
+  {
+   "t": 600.16,
+   "d": 2.96,
+   "text": "narrative structure comes in so first I"
+  },
+  {
+   "t": 603.12,
+   "d": 3.0,
+   "text": "want to talk about and explore like what"
+  },
+  {
+   "t": 606.12,
+   "d": 3.2,
+   "text": "a braided narrative structure"
+  },
+  {
+   "t": 609.32,
+   "d": 4.56,
+   "text": "is and begin with what a braid itself is"
+  },
+  {
+   "t": 613.88,
+   "d": 2.68,
+   "text": "and a braid is a number of individual"
+  },
+  {
+   "t": 616.56,
+   "d": 3.48,
+   "text": "strands of material that is Twisted"
+  },
+  {
+   "t": 620.04,
+   "d": 2.88,
+   "text": "together flowing in a shared Direction"
+  },
+  {
+   "t": 622.92,
+   "d": 3.08,
+   "text": "while still separating at points and not"
+  },
+  {
+   "t": 626.0,
+   "d": 3.52,
+   "text": "becoming one single Mass"
+  },
+  {
+   "t": 629.52,
+   "d": 2.4,
+   "text": "and all of this creates something"
+  },
+  {
+   "t": 631.92,
+   "d": 2.0,
+   "text": "stronger than any of the individual"
+  },
+  {
+   "t": 633.92,
+   "d": 3.72,
+   "text": "strands by themselves would be while"
+  },
+  {
+   "t": 637.64,
+   "d": 2.76,
+   "text": "still being flexible and"
+  },
+  {
+   "t": 640.4,
+   "d": 2.24,
+   "text": "malleable and all of these properties"
+  },
+  {
+   "t": 642.64,
+   "d": 1.72,
+   "text": "are useful for"
+  },
+  {
+   "t": 644.36,
+   "d": 4.76,
+   "text": "storylines as well as yarn rope and"
+  },
+  {
+   "t": 649.12,
+   "d": 3.0,
+   "text": "hair and in a braided narrative"
+  },
+  {
+   "t": 652.12,
+   "d": 3.28,
+   "text": "structure we want each of our individual"
+  },
+  {
+   "t": 655.4,
+   "d": 2.84,
+   "text": "story lines to work together without"
+  },
+  {
+   "t": 658.24,
+   "d": 2.24,
+   "text": "being completely observed absorbed by"
+  },
+  {
+   "t": 660.48,
+   "d": 1.52,
+   "text": "the larger"
+  },
+  {
+   "t": 662.0,
+   "d": 3.08,
+   "text": "structure that is the central plot of"
+  },
+  {
+   "t": 665.08,
+   "d": 4.2,
+   "text": "our game or other"
+  },
+  {
+   "t": 669.28,
+   "d": 3.24,
+   "text": "experience and so what is the definition"
+  },
+  {
+   "t": 672.52,
+   "d": 3.28,
+   "text": "of rated narrative well here it is it is"
+  },
+  {
+   "t": 675.8,
+   "d": 2.52,
+   "text": "a narrative structure made up of"
+  },
+  {
+   "t": 678.32,
+   "d": 2.36,
+   "text": "individual linear storylines whose"
+  },
+  {
+   "t": 680.68,
+   "d": 2.0,
+   "text": "progression is controlled by both"
+  },
+  {
+   "t": 682.68,
+   "d": 3.28,
+   "text": "independent and shared State"
+  },
+  {
+   "t": 685.96,
+   "d": 2.48,
+   "text": "conditions and let's break this down a"
+  },
+  {
+   "t": 688.44,
+   "d": 2.92,
+   "text": "little bit and make it more approachable"
+  },
+  {
+   "t": 691.36,
+   "d": 3.48,
+   "text": "so we start with a set of linear stories"
+  },
+  {
+   "t": 694.84,
+   "d": 3.08,
+   "text": "in these ideally we have shared"
+  },
+  {
+   "t": 697.92,
+   "d": 4.36,
+   "text": "casts overlapping complimentary themes"
+  },
+  {
+   "t": 702.28,
+   "d": 1.44,
+   "text": "which we can"
+  },
+  {
+   "t": 703.72,
+   "d": 2.64,
+   "text": "explore and by making linear stories"
+  },
+  {
+   "t": 706.36,
+   "d": 2.6,
+   "text": "we're trying to constrain the total"
+  },
+  {
+   "t": 708.96,
+   "d": 5.28,
+   "text": "possible authorial burden to something"
+  },
+  {
+   "t": 714.24,
+   "d": 3.52,
+   "text": "approximately order and linear time for"
+  },
+  {
+   "t": 717.76,
+   "d": 2.36,
+   "text": "the computer scientists in the audience"
+  },
+  {
+   "t": 720.12,
+   "d": 2.88,
+   "text": "audence and that's not to say there is"
+  },
+  {
+   "t": 723.0,
+   "d": 2.6,
+   "text": "this is getting rid of the authorial"
+  },
+  {
+   "t": 725.6,
+   "d": 2.84,
+   "text": "burden because you can put an infinite"
+  },
+  {
+   "t": 728.44,
+   "d": 3.44,
+   "text": "amount of time into any individual piece"
+  },
+  {
+   "t": 731.88,
+   "d": 2.2,
+   "text": "of a linear story and this is why"
+  },
+  {
+   "t": 734.08,
+   "d": 2.76,
+   "text": "writing a novel is also"
+  },
+  {
+   "t": 736.84,
+   "d": 1.52,
+   "text": "hard"
+  },
+  {
+   "t": 738.36,
+   "d": 3.8,
+   "text": "but broadly speaking it's significantly"
+  },
+  {
+   "t": 742.16,
+   "d": 3.12,
+   "text": "more contained to say write a single"
+  },
+  {
+   "t": 745.28,
+   "d": 1.64,
+   "text": "story line"
+  },
+  {
+   "t": 746.92,
+   "d": 4.6,
+   "text": "without five 10 10 100 variations of"
+  },
+  {
+   "t": 751.52,
+   "d": 3.0,
+   "text": "every single piece of"
+  },
+  {
+   "t": 756.2,
+   "d": 4.96,
+   "text": "it then um yeah then"
+  },
+  {
+   "t": 761.16,
+   "d": 4.2,
+   "text": "doing yeah than being"
+  },
+  {
+   "t": 765.36,
+   "d": 5.0,
+   "text": "um wow lost my train of thought"
+  },
+  {
+   "t": 770.76,
+   "d": 3.12,
+   "text": "um yeah so that's that's why linear"
+  },
+  {
+   "t": 773.88,
+   "d": 2.08,
+   "text": "structures"
+  },
+  {
+   "t": 775.96,
+   "d": 3.92,
+   "text": "um and how we can"
+  },
+  {
+   "t": 779.88,
+   "d": 1.88,
+   "text": "sort of"
+  },
+  {
+   "t": 781.76,
+   "d": 1.64,
+   "text": "bring"
+  },
+  {
+   "t": 783.4,
+   "d": 4.4,
+   "text": "this branching and variability back into"
+  },
+  {
+   "t": 787.8,
+   "d": 1.88,
+   "text": "these linear"
+  },
+  {
+   "t": 789.68,
+   "d": 3.56,
+   "text": "narratives is by giving them some unique"
+  },
+  {
+   "t": 793.24,
+   "d": 1.96,
+   "text": "requirements for progressing and"
+  },
+  {
+   "t": 795.2,
+   "d": 2.56,
+   "text": "advancing their storylines"
+  },
+  {
+   "t": 797.76,
+   "d": 2.36,
+   "text": "generally and This Is Us leaning a"
+  },
+  {
+   "t": 800.12,
+   "d": 2.12,
+   "text": "little bit back towards the"
+  },
+  {
+   "t": 802.24,
+   "d": 2.88,
+   "text": "combinatorial fractal"
+  },
+  {
+   "t": 805.12,
+   "d": 3.28,
+   "text": "tree if every story line progresses"
+  },
+  {
+   "t": 808.4,
+   "d": 1.2,
+   "text": "under its own condition conditions we"
+  },
+  {
+   "t": 809.6,
+   "d": 2.64,
+   "text": "lean too hard back into"
+  },
+  {
+   "t": 812.24,
+   "d": 3.36,
+   "text": "that so while we still will need to be"
+  },
+  {
+   "t": 815.6,
+   "d": 2.52,
+   "text": "authoring our bespoke gates and"
+  },
+  {
+   "t": 818.12,
+   "d": 1.48,
+   "text": "progression"
+  },
+  {
+   "t": 819.6,
+   "d": 3.04,
+   "text": "conditions we are still trying to make"
+  },
+  {
+   "t": 822.64,
+   "d": 1.8,
+   "text": "something linear it's just when do you"
+  },
+  {
+   "t": 824.44,
+   "d": 3.0,
+   "text": "see something or when you see something"
+  },
+  {
+   "t": 827.44,
+   "d": 3.8,
+   "text": "is now the important part rather than"
+  },
+  {
+   "t": 831.24,
+   "d": 1.8,
+   "text": "having to Branch"
+  },
+  {
+   "t": 833.04,
+   "d": 3.96,
+   "text": "everything based on anything the player"
+  },
+  {
+   "t": 837.0,
+   "d": 4.68,
+   "text": "does and this Independence and these"
+  },
+  {
+   "t": 841.68,
+   "d": 2.0,
+   "text": "different approaches to progression or"
+  },
+  {
+   "t": 843.68,
+   "d": 3.68,
+   "text": "how we keep these storylines feeling"
+  },
+  {
+   "t": 847.36,
+   "d": 2.8,
+   "text": "unique and still a little bit separate"
+  },
+  {
+   "t": 850.16,
+   "d": 1.72,
+   "text": "in this larger rated"
+  },
+  {
+   "t": 851.88,
+   "d": 5.72,
+   "text": "structure but again to bring us back to"
+  },
+  {
+   "t": 857.6,
+   "d": 4.0,
+   "text": "um containing this combinatorial"
+  },
+  {
+   "t": 861.6,
+   "d": 3.68,
+   "text": "explosion we also want to overlap our"
+  },
+  {
+   "t": 865.28,
+   "d": 2.52,
+   "text": "progression conditions to make our story"
+  },
+  {
+   "t": 867.8,
+   "d": 2.16,
+   "text": "lines flow in that same"
+  },
+  {
+   "t": 869.96,
+   "d": 3.08,
+   "text": "direction and share momentum and"
+  },
+  {
+   "t": 873.04,
+   "d": 3.64,
+   "text": "timeliness instead of just branching off"
+  },
+  {
+   "t": 876.68,
+   "d": 3.6,
+   "text": "into random places and never having"
+  },
+  {
+   "t": 880.28,
+   "d": 2.76,
+   "text": "anything cohesive to come back"
+  },
+  {
+   "t": 883.04,
+   "d": 6.28,
+   "text": "to plus these common points of or these"
+  },
+  {
+   "t": 889.32,
+   "d": 1.36,
+   "text": "common"
+  },
+  {
+   "t": 890.68,
+   "d": 2.24,
+   "text": "conditionals encourage or allow us to"
+  },
+  {
+   "t": 892.92,
+   "d": 2.4,
+   "text": "encourage our players to draw further"
+  },
+  {
+   "t": 895.32,
+   "d": 1.68,
+   "text": "connections"
+  },
+  {
+   "t": 897.0,
+   "d": 2.96,
+   "text": "between these story lines we auth in"
+  },
+  {
+   "t": 899.96,
+   "d": 2.32,
+   "text": "whether or not we're making those"
+  },
+  {
+   "t": 902.28,
+   "d": 1.56,
+   "text": "connections"
+  },
+  {
+   "t": 903.84,
+   "d": 2.52,
+   "text": "explicit and each of these elements"
+  },
+  {
+   "t": 906.36,
+   "d": 2.56,
+   "text": "comes together TR to create this braided"
+  },
+  {
+   "t": 908.92,
+   "d": 2.04,
+   "text": "narrative"
+  },
+  {
+   "t": 910.96,
+   "d": 2.28,
+   "text": "structure and now that I've explained"
+  },
+  {
+   "t": 913.24,
+   "d": 2.64,
+   "text": "some of the structure let's talk about"
+  },
+  {
+   "t": 915.88,
+   "d": 2.08,
+   "text": "how we conditionally progress these"
+  },
+  {
+   "t": 917.96,
+   "d": 3.12,
+   "text": "linear stories and how to choose"
+  },
+  {
+   "t": 921.08,
+   "d": 2.76,
+   "text": "our different independent independent"
+  },
+  {
+   "t": 923.84,
+   "d": 3.44,
+   "text": "variables and this makes me sound very"
+  },
+  {
+   "t": 927.28,
+   "d": 2.88,
+   "text": "scientific and very authoritative when I"
+  },
+  {
+   "t": 930.16,
+   "d": 1.32,
+   "text": "talk like"
+  },
+  {
+   "t": 931.48,
+   "d": 3.2,
+   "text": "this these conditionals are how we"
+  },
+  {
+   "t": 934.68,
+   "d": 3.72,
+   "text": "basically are pacing delivery of our"
+  },
+  {
+   "t": 938.4,
+   "d": 3.08,
+   "text": "stories and making explicit structural"
+  },
+  {
+   "t": 941.48,
+   "d": 2.92,
+   "text": "connections between our story lines so"
+  },
+  {
+   "t": 944.4,
+   "d": 3.68,
+   "text": "starting from the end and moving"
+  },
+  {
+   "t": 948.08,
+   "d": 2.32,
+   "text": "backwards"
+  },
+  {
+   "t": 950.4,
+   "d": 4.4,
+   "text": "um these shared states are often"
+  },
+  {
+   "t": 954.8,
+   "d": 2.92,
+   "text": "reserved for basically just the major"
+  },
+  {
+   "t": 957.72,
+   "d": 2.08,
+   "text": "beats of a central story so if you"
+  },
+  {
+   "t": 959.8,
+   "d": 2.32,
+   "text": "haven't reached a certain point we will"
+  },
+  {
+   "t": 962.12,
+   "d": 1.68,
+   "text": "not keep"
+  },
+  {
+   "t": 963.8,
+   "d": 3.48,
+   "text": "throwing additional Side Stories at you"
+  },
+  {
+   "t": 967.28,
+   "d": 2.4,
+   "text": "until you've gone past some place in the"
+  },
+  {
+   "t": 969.68,
+   "d": 1.2,
+   "text": "central"
+  },
+  {
+   "t": 970.88,
+   "d": 3.16,
+   "text": "storyline and this allows events within"
+  },
+  {
+   "t": 974.04,
+   "d": 2.48,
+   "text": "our Central plot to have Direct effects"
+  },
+  {
+   "t": 976.52,
+   "d": 3.04,
+   "text": "and even be referenced in other story"
+  },
+  {
+   "t": 979.56,
+   "d": 3.0,
+   "text": "lines without having to set up a bunch"
+  },
+  {
+   "t": 982.56,
+   "d": 3.92,
+   "text": "of extra fractally"
+  },
+  {
+   "t": 986.48,
+   "d": 3.72,
+   "text": "branching um plot lines or events or"
+  },
+  {
+   "t": 990.2,
+   "d": 3.72,
+   "text": "write tons and tons and tons more"
+  },
+  {
+   "t": 993.92,
+   "d": 3.84,
+   "text": "content to deal with people arriving"
+  },
+  {
+   "t": 997.76,
+   "d": 1.68,
+   "text": "somewhere without having Advanced a"
+  },
+  {
+   "t": 999.44,
+   "d": 2.68,
+   "text": "different part of the game State"
+  },
+  {
+   "t": 1002.12,
+   "d": 2.92,
+   "text": "enough we can simply just pause"
+  },
+  {
+   "t": 1005.04,
+   "d": 2.28,
+   "text": "progressing some of these stories at any"
+  },
+  {
+   "t": 1007.32,
+   "d": 3.56,
+   "text": "points and be done with"
+  },
+  {
+   "t": 1010.92,
+   "d": 3.04,
+   "text": "it a player then naturally can run out"
+  },
+  {
+   "t": 1013.96,
+   "d": 2.16,
+   "text": "of story lines to progress and be forced"
+  },
+  {
+   "t": 1016.12,
+   "d": 3.28,
+   "text": "to move the central plot forward"
+  },
+  {
+   "t": 1019.4,
+   "d": 1.52,
+   "text": "Wards"
+  },
+  {
+   "t": 1020.92,
+   "d": 2.28,
+   "text": "and and this is a little bit backwards"
+  },
+  {
+   "t": 1023.2,
+   "d": 2.44,
+   "text": "and how I'm presenting it but having"
+  },
+  {
+   "t": 1025.64,
+   "d": 0.96,
+   "text": "these"
+  },
+  {
+   "t": 1026.6,
+   "d": 2.0,
+   "text": "independent ways of progressing the"
+  },
+  {
+   "t": 1028.6,
+   "d": 4.2,
+   "text": "story can help us Pace out how we're"
+  },
+  {
+   "t": 1032.8,
+   "d": 2.72,
+   "text": "delivering our narrative to our players"
+  },
+  {
+   "t": 1035.52,
+   "d": 3.96,
+   "text": "between these major plot"
+  },
+  {
+   "t": 1039.48,
+   "d": 2.76,
+   "text": "beats so doing this we're basically"
+  },
+  {
+   "t": 1042.24,
+   "d": 4.16,
+   "text": "tying our storyline progressions into"
+  },
+  {
+   "t": 1046.4,
+   "d": 3.12,
+   "text": "other game systems to help reward people"
+  },
+  {
+   "t": 1049.52,
+   "d": 1.96,
+   "text": "for engaging with parts of the other"
+  },
+  {
+   "t": 1051.48,
+   "d": 3.6,
+   "text": "parts of the game and to avoid just"
+  },
+  {
+   "t": 1055.08,
+   "d": 2.48,
+   "text": "going here here is every single piece of"
+  },
+  {
+   "t": 1057.56,
+   "d": 2.56,
+   "text": "narrative you can possibly see at this"
+  },
+  {
+   "t": 1060.12,
+   "d": 3.4,
+   "text": "point it is up to you to do everything"
+  },
+  {
+   "t": 1063.52,
+   "d": 2.88,
+   "text": "and Pace it"
+  },
+  {
+   "t": 1066.88,
+   "d": 2.84,
+   "text": "yourself and so in in"
+  },
+  {
+   "t": 1069.72,
+   "d": 2.64,
+   "text": "truth these"
+  },
+  {
+   "t": 1072.36,
+   "d": 1.84,
+   "text": "conditionals or to use these"
+  },
+  {
+   "t": 1074.2,
+   "d": 2.28,
+   "text": "conditionals as part of narrative pacing"
+  },
+  {
+   "t": 1076.48,
+   "d": 2.08,
+   "text": "we need a little bit of extra than just"
+  },
+  {
+   "t": 1078.56,
+   "d": 0.96,
+   "text": "pure"
+  },
+  {
+   "t": 1079.52,
+   "d": 2.04,
+   "text": "pure um"
+  },
+  {
+   "t": 1081.56,
+   "d": 4.16,
+   "text": "pure if statements alone to do this kind"
+  },
+  {
+   "t": 1085.72,
+   "d": 1.4,
+   "text": "of pacing"
+  },
+  {
+   "t": 1087.12,
+   "d": 4.24,
+   "text": "of you only see a certain amount of new"
+  },
+  {
+   "t": 1091.36,
+   "d": 2.0,
+   "text": "story at any given"
+  },
+  {
+   "t": 1093.36,
+   "d": 3.52,
+   "text": "point and this this additional structure"
+  },
+  {
+   "t": 1096.88,
+   "d": 1.88,
+   "text": "can take the form of a cap on the number"
+  },
+  {
+   "t": 1098.76,
+   "d": 2.48,
+   "text": "of new units of Story released to a"
+  },
+  {
+   "t": 1101.24,
+   "d": 3.0,
+   "text": "player at any given point in Hades case"
+  },
+  {
+   "t": 1104.24,
+   "d": 1.56,
+   "text": "this tends to be"
+  },
+  {
+   "t": 1105.8,
+   "d": 3.64,
+   "text": "around maximum of three new story events"
+  },
+  {
+   "t": 1109.44,
+   "d": 2.12,
+   "text": "per run of the"
+  },
+  {
+   "t": 1111.56,
+   "d": 2.92,
+   "text": "game or otherwise just limiting the"
+  },
+  {
+   "t": 1114.48,
+   "d": 2.04,
+   "text": "player's ability to access additional"
+  },
+  {
+   "t": 1116.52,
+   "d": 3.24,
+   "text": "units of story just at will whenever"
+  },
+  {
+   "t": 1119.76,
+   "d": 2.0,
+   "text": "they feel"
+  },
+  {
+   "t": 1121.76,
+   "d": 2.48,
+   "text": "like and all these conditions in"
+  },
+  {
+   "t": 1124.24,
+   "d": 2.24,
+   "text": "additional structure around these"
+  },
+  {
+   "t": 1126.48,
+   "d": 2.92,
+   "text": "individual linear narratives enables us"
+  },
+  {
+   "t": 1129.4,
+   "d": 2.92,
+   "text": "to instead of only having them run in"
+  },
+  {
+   "t": 1132.32,
+   "d": 3.72,
+   "text": "parallel to each other to each other we"
+  },
+  {
+   "t": 1136.04,
+   "d": 2.36,
+   "text": "can braid them together into a self-"
+  },
+  {
+   "t": 1138.4,
+   "d": 3.08,
+   "text": "reference ing self-reinforcing structure"
+  },
+  {
+   "t": 1141.48,
+   "d": 1.68,
+   "text": "which helps Pace out a player's"
+  },
+  {
+   "t": 1143.16,
+   "d": 1.6,
+   "text": "experience of the"
+  },
+  {
+   "t": 1144.76,
+   "d": 2.88,
+   "text": "narrative while also reducing some of"
+  },
+  {
+   "t": 1147.64,
+   "d": 3.4,
+   "text": "the potential for practically branching"
+  },
+  {
+   "t": 1151.04,
+   "d": 2.64,
+   "text": "storylines and the resulting author the"
+  },
+  {
+   "t": 1153.68,
+   "d": 1.96,
+   "text": "resulting authoring"
+  },
+  {
+   "t": 1155.64,
+   "d": 3.28,
+   "text": "burden of the combinatorial aspects of"
+  },
+  {
+   "t": 1158.92,
+   "d": 3.24,
+   "text": "interactive narrative without entirely"
+  },
+  {
+   "t": 1162.16,
+   "d": 3.16,
+   "text": "giving up our dynamism and variability"
+  },
+  {
+   "t": 1165.32,
+   "d": 2.12,
+   "text": "and"
+  },
+  {
+   "t": 1167.44,
+   "d": 2.32,
+   "text": "reactivity and this this brings me to"
+  },
+  {
+   "t": 1169.76,
+   "d": 4.4,
+   "text": "Super Giants Hades and the way it limits"
+  },
+  {
+   "t": 1174.16,
+   "d": 2.28,
+   "text": "its narrative progression via the Run"
+  },
+  {
+   "t": 1176.44,
+   "d": 4.28,
+   "text": "BCE run based structure like I mentioned"
+  },
+  {
+   "t": 1180.72,
+   "d": 1.84,
+   "text": "so Hades is a Rog likee where you play"
+  },
+  {
+   "t": 1182.56,
+   "d": 2.92,
+   "text": "as zagas attempting to escape Hades both"
+  },
+  {
+   "t": 1185.48,
+   "d": 3.84,
+   "text": "the place and your father to reach the"
+  },
+  {
+   "t": 1189.32,
+   "d": 1.68,
+   "text": "surface you need to fight your way"
+  },
+  {
+   "t": 1191.0,
+   "d": 2.84,
+   "text": "through Tartarus Asphodel elisium and"
+  },
+  {
+   "t": 1193.84,
+   "d": 1.44,
+   "text": "across"
+  },
+  {
+   "t": 1195.28,
+   "d": 2.72,
+   "text": "sticks and as a result the game's"
+  },
+  {
+   "t": 1198.0,
+   "d": 1.72,
+   "text": "narrative progression all flows through"
+  },
+  {
+   "t": 1199.72,
+   "d": 3.44,
+   "text": "the structure of running through the"
+  },
+  {
+   "t": 1203.16,
+   "d": 2.24,
+   "text": "underworld where you have opportunities"
+  },
+  {
+   "t": 1205.4,
+   "d": 2.04,
+   "text": "to gather resources and speak to"
+  },
+  {
+   "t": 1207.44,
+   "d": 1.4,
+   "text": "characters you otherwise wouldn't be"
+  },
+  {
+   "t": 1208.84,
+   "d": 2.88,
+   "text": "able to like the"
+  },
+  {
+   "t": 1212.4,
+   "d": 3.4,
+   "text": "Olympians and reaching the surface and"
+  },
+  {
+   "t": 1215.8,
+   "d": 3.36,
+   "text": "defeating Hades is the sole condition to"
+  },
+  {
+   "t": 1219.16,
+   "d": 2.76,
+   "text": "advance The Game Central plot the player"
+  },
+  {
+   "t": 1221.92,
+   "d": 2.6,
+   "text": "must reach to the surface and beat their"
+  },
+  {
+   "t": 1224.52,
+   "d": 2.84,
+   "text": "father in combat 10 times and then the"
+  },
+  {
+   "t": 1227.36,
+   "d": 2.4,
+   "text": "credits roll"
+  },
+  {
+   "t": 1229.76,
+   "d": 2.48,
+   "text": "the difficulty in structure of the game"
+  },
+  {
+   "t": 1232.24,
+   "d": 5.2,
+   "text": "generally means you won't get the entire"
+  },
+  {
+   "t": 1237.44,
+   "d": 2.48,
+   "text": "Central story of the game in your first"
+  },
+  {
+   "t": 1239.92,
+   "d": 2.92,
+   "text": "10 runs though there is nothing"
+  },
+  {
+   "t": 1242.84,
+   "d": 2.24,
+   "text": "explicitly in the game stopping that"
+  },
+  {
+   "t": 1245.08,
+   "d": 2.16,
+   "text": "from"
+  },
+  {
+   "t": 1247.24,
+   "d": 2.36,
+   "text": "happening you will die a lot to reach"
+  },
+  {
+   "t": 1249.6,
+   "d": 2.68,
+   "text": "the surface especially early on and this"
+  },
+  {
+   "t": 1252.28,
+   "d": 3.56,
+   "text": "is where Hades Side Stories come in as a"
+  },
+  {
+   "t": 1255.84,
+   "d": 3.6,
+   "text": "way of pacing the whole experience"
+  },
+  {
+   "t": 1259.44,
+   "d": 3.4,
+   "text": "as well as just giving people more than"
+  },
+  {
+   "t": 1262.84,
+   "d": 3.32,
+   "text": "purely mechanical reasons to continue"
+  },
+  {
+   "t": 1266.16,
+   "d": 3.04,
+   "text": "playing after they see the game's"
+  },
+  {
+   "t": 1269.2,
+   "d": 4.36,
+   "text": "credits because there are myths abound"
+  },
+  {
+   "t": 1273.56,
+   "d": 3.56,
+   "text": "to see new interpretations of and tons"
+  },
+  {
+   "t": 1277.12,
+   "d": 3.0,
+   "text": "and tons of messy relationships to find"
+  },
+  {
+   "t": 1280.12,
+   "d": 2.16,
+   "text": "out about and maybe even do a little bit"
+  },
+  {
+   "t": 1282.28,
+   "d": 2.04,
+   "text": "of"
+  },
+  {
+   "t": 1284.32,
+   "d": 3.8,
+   "text": "healing which ties into the game's"
+  },
+  {
+   "t": 1288.12,
+   "d": 1.6,
+   "text": "extens"
+  },
+  {
+   "t": 1289.72,
+   "d": 3.64,
+   "text": "cast and basically everybody in the"
+  },
+  {
+   "t": 1293.36,
+   "d": 2.68,
+   "text": "entire game has some kind of storyline"
+  },
+  {
+   "t": 1296.04,
+   "d": 1.48,
+   "text": "associated with"
+  },
+  {
+   "t": 1297.52,
+   "d": 3.08,
+   "text": "them for the Olympians there's always a"
+  },
+  {
+   "t": 1300.6,
+   "d": 2.88,
+   "text": "degree of distance considering you don't"
+  },
+  {
+   "t": 1303.48,
+   "d": 1.68,
+   "text": "really have conversations with them"
+  },
+  {
+   "t": 1305.16,
+   "d": 1.64,
+   "text": "they're just leaving you effectively"
+  },
+  {
+   "t": 1306.8,
+   "d": 1.08,
+   "text": "like"
+  },
+  {
+   "t": 1307.88,
+   "d": 3.36,
+   "text": "voicemails as you progress via the Boon"
+  },
+  {
+   "t": 1311.24,
+   "d": 2.72,
+   "text": "they're giving you which give you um"
+  },
+  {
+   "t": 1313.96,
+   "d": 4.12,
+   "text": "some Buffs to Buffs and new abilities in"
+  },
+  {
+   "t": 1318.08,
+   "d": 2.48,
+   "text": "the games combat"
+  },
+  {
+   "t": 1320.56,
+   "d": 3.56,
+   "text": "system the denisons of the underworld"
+  },
+  {
+   "t": 1324.12,
+   "d": 2.72,
+   "text": "however can have some rather intricate"
+  },
+  {
+   "t": 1326.84,
+   "d": 2.84,
+   "text": "and lengthy stories reinterpreting and"
+  },
+  {
+   "t": 1329.68,
+   "d": 3.88,
+   "text": "extending their myths that the game is"
+  },
+  {
+   "t": 1333.56,
+   "d": 1.56,
+   "text": "drawing"
+  },
+  {
+   "t": 1335.12,
+   "d": 2.64,
+   "text": "from and each of these story lines is"
+  },
+  {
+   "t": 1337.76,
+   "d": 2.72,
+   "text": "gated by both some obvious conditionals"
+  },
+  {
+   "t": 1340.48,
+   "d": 2.84,
+   "text": "like nectar and Ambrosia filling up"
+  },
+  {
+   "t": 1343.32,
+   "d": 2.84,
+   "text": "everyone's relationship meter and"
+  },
+  {
+   "t": 1346.16,
+   "d": 2.0,
+   "text": "getting new lines of dialogue in the"
+  },
+  {
+   "t": 1348.16,
+   "d": 0.92,
+   "text": "process"
+  },
+  {
+   "t": 1349.08,
+   "d": 3.6,
+   "text": "a very traditional obvious way of doing"
+  },
+  {
+   "t": 1352.68,
+   "d": 3.52,
+   "text": "this but more and more of these"
+  },
+  {
+   "t": 1356.2,
+   "d": 2.32,
+   "text": "conditionals can include if they've been"
+  },
+  {
+   "t": 1358.52,
+   "d": 2.84,
+   "text": "spoken to a certain number of"
+  },
+  {
+   "t": 1361.36,
+   "d": 3.28,
+   "text": "times hitting certain break points on"
+  },
+  {
+   "t": 1364.64,
+   "d": 2.08,
+   "text": "the number of runs you've"
+  },
+  {
+   "t": 1366.72,
+   "d": 3.44,
+   "text": "done or other even less obvious"
+  },
+  {
+   "t": 1370.16,
+   "d": 2.12,
+   "text": "conditions tied into the games"
+  },
+  {
+   "t": 1372.28,
+   "d": 2.04,
+   "text": "difficulty customization"
+  },
+  {
+   "t": 1374.32,
+   "d": 3.44,
+   "text": "system and importantly all of these are"
+  },
+  {
+   "t": 1377.76,
+   "d": 1.76,
+   "text": "completely indep dependent of where you"
+  },
+  {
+   "t": 1379.52,
+   "d": 3.4,
+   "text": "are in the main story you can burn"
+  },
+  {
+   "t": 1382.92,
+   "d": 2.2,
+   "text": "through the story and then have barely"
+  },
+  {
+   "t": 1385.12,
+   "d": 3.56,
+   "text": "progressed any of these characters plots"
+  },
+  {
+   "t": 1388.68,
+   "d": 4.12,
+   "text": "or you can experience most of these or"
+  },
+  {
+   "t": 1392.8,
+   "d": 2.68,
+   "text": "progress at least most of them before"
+  },
+  {
+   "t": 1395.48,
+   "d": 1.76,
+   "text": "you ever get close to seeing the credits"
+  },
+  {
+   "t": 1397.24,
+   "d": 3.72,
+   "text": "just depending on how successful you are"
+  },
+  {
+   "t": 1400.96,
+   "d": 2.36,
+   "text": "at escaping the"
+  },
+  {
+   "t": 1403.32,
+   "d": 2.32,
+   "text": "underworld and the trick of the gamees"
+  },
+  {
+   "t": 1405.64,
+   "d": 2.64,
+   "text": "rated narrative is that you don't have"
+  },
+  {
+   "t": 1408.28,
+   "d": 2.4,
+   "text": "the opportunity to advance characters"
+  },
+  {
+   "t": 1410.68,
+   "d": 3.36,
+   "text": "individual plot lines at will at any"
+  },
+  {
+   "t": 1414.04,
+   "d": 2.88,
+   "text": "given point you only ever have a subset"
+  },
+  {
+   "t": 1416.92,
+   "d": 3.44,
+   "text": "of the cast accessible on a given escape"
+  },
+  {
+   "t": 1420.36,
+   "d": 2.56,
+   "text": "attempt and even if they do appear you"
+  },
+  {
+   "t": 1422.92,
+   "d": 2.72,
+   "text": "might not have the resources or"
+  },
+  {
+   "t": 1425.64,
+   "d": 2.76,
+   "text": "fulfilled other conditions to progress"
+  },
+  {
+   "t": 1428.4,
+   "d": 2.16,
+   "text": "their"
+  },
+  {
+   "t": 1431.08,
+   "d": 3.24,
+   "text": "storylines and what ultimately this"
+  },
+  {
+   "t": 1434.32,
+   "d": 2.88,
+   "text": "means is that even after dozens upon"
+  },
+  {
+   "t": 1437.2,
+   "d": 3.32,
+   "text": "dozens of hours of play and numerous"
+  },
+  {
+   "t": 1440.52,
+   "d": 2.36,
+   "text": "successful runs post credits you will"
+  },
+  {
+   "t": 1442.88,
+   "d": 2.8,
+   "text": "probably find out that there is somehow"
+  },
+  {
+   "t": 1445.68,
+   "d": 2.2,
+   "text": "yet more to a character's story or"
+  },
+  {
+   "t": 1447.88,
+   "d": 2.16,
+   "text": "relationships than you"
+  },
+  {
+   "t": 1450.04,
+   "d": 3.32,
+   "text": "thought and from a player's perspective"
+  },
+  {
+   "t": 1453.36,
+   "d": 2.36,
+   "text": "what are the effects of this braided"
+  },
+  {
+   "t": 1455.72,
+   "d": 2.48,
+   "text": "narrative structure in a game like"
+  },
+  {
+   "t": 1458.2,
+   "d": 2.72,
+   "text": "Hades not every player will trigger the"
+  },
+  {
+   "t": 1460.92,
+   "d": 2.08,
+   "text": "conditions for a particular narrative to"
+  },
+  {
+   "t": 1463.0,
+   "d": 3.36,
+   "text": "begin or advance in the same place and"
+  },
+  {
+   "t": 1466.36,
+   "d": 1.8,
+   "text": "this means that playing Hades as a group"
+  },
+  {
+   "t": 1468.16,
+   "d": 1.64,
+   "text": "can be a lot of"
+  },
+  {
+   "t": 1469.8,
+   "d": 3.08,
+   "text": "fun excuse me as you compare notes about"
+  },
+  {
+   "t": 1472.88,
+   "d": 2.16,
+   "text": "which characters you've met at any given"
+  },
+  {
+   "t": 1475.04,
+   "d": 4.16,
+   "text": "point and often they won't be the"
+  },
+  {
+   "t": 1479.28,
+   "d": 2.88,
+   "text": "same also almost regardless of where you"
+  },
+  {
+   "t": 1482.16,
+   "d": 3.08,
+   "text": "are in hades's narrative there will be"
+  },
+  {
+   "t": 1485.24,
+   "d": 2.32,
+   "text": "at least someone to get to know better"
+  },
+  {
+   "t": 1487.56,
+   "d": 1.96,
+   "text": "and you will have progressed somebody's"
+  },
+  {
+   "t": 1489.52,
+   "d": 1.4,
+   "text": "Side"
+  },
+  {
+   "t": 1490.92,
+   "d": 2.36,
+   "text": "Story and this helps ease the"
+  },
+  {
+   "t": 1493.28,
+   "d": 3.2,
+   "text": "frustration of losing a run since at"
+  },
+  {
+   "t": 1496.48,
+   "d": 3.16,
+   "text": "minimum you get to chat with"
+  },
+  {
+   "t": 1499.64,
+   "d": 4.68,
+   "text": "one of the other Denis of the House of"
+  },
+  {
+   "t": 1504.32,
+   "d": 3.72,
+   "text": "Hades and to switch gears into a totally"
+  },
+  {
+   "t": 1508.04,
+   "d": 3.36,
+   "text": "different genre with Fire Emblem three"
+  },
+  {
+   "t": 1511.4,
+   "d": 4.04,
+   "text": "houses this is a tactics RPG and dating"
+  },
+  {
+   "t": 1515.44,
+   "d": 3.68,
+   "text": "simulator which heavily utilizes sprayed"
+  },
+  {
+   "t": 1519.12,
+   "d": 3.08,
+   "text": "narrative structure in a different"
+  },
+  {
+   "t": 1522.2,
+   "d": 3.44,
+   "text": "way as you become the head of a class at"
+  },
+  {
+   "t": 1525.64,
+   "d": 2.24,
+   "text": "the officers Academy teaching your"
+  },
+  {
+   "t": 1527.88,
+   "d": 1.24,
+   "text": "students"
+  },
+  {
+   "t": 1529.12,
+   "d": 4.84,
+   "text": "how to fight at all surviving a war and"
+  },
+  {
+   "t": 1533.96,
+   "d": 2.32,
+   "text": "especially building and strengthening"
+  },
+  {
+   "t": 1536.28,
+   "d": 1.56,
+   "text": "your relationships"
+  },
+  {
+   "t": 1537.84,
+   "d": 2.24,
+   "text": "together three houses Central plot"
+  },
+  {
+   "t": 1540.08,
+   "d": 2.52,
+   "text": "progresses independent of every other"
+  },
+  {
+   "t": 1542.6,
+   "d": 1.0,
+   "text": "narrative"
+  },
+  {
+   "t": 1543.6,
+   "d": 4.84,
+   "text": "system though it has a fairly Major"
+  },
+  {
+   "t": 1548.44,
+   "d": 3.4,
+   "text": "Impact on if you can progress certain"
+  },
+  {
+   "t": 1551.84,
+   "d": 2.4,
+   "text": "relationships at"
+  },
+  {
+   "t": 1554.24,
+   "d": 2.36,
+   "text": "all and the braid narrative structure"
+  },
+  {
+   "t": 1556.6,
+   "d": 2.48,
+   "text": "comes from how three house uses its"
+  },
+  {
+   "t": 1559.08,
+   "d": 3.4,
+   "text": "character Side Stories to fill in gaps"
+  },
+  {
+   "t": 1562.48,
+   "d": 2.4,
+   "text": "left by the four different routes"
+  },
+  {
+   "t": 1564.88,
+   "d": 2.52,
+   "text": "through the game's support system and if"
+  },
+  {
+   "t": 1567.4,
+   "d": 1.96,
+   "text": "you're not familiar characters in Fire"
+  },
+  {
+   "t": 1569.36,
+   "d": 2.56,
+   "text": "Emblem strengthen their relationships by"
+  },
+  {
+   "t": 1571.92,
+   "d": 1.88,
+   "text": "fighting next to each other and"
+  },
+  {
+   "t": 1573.8,
+   "d": 2.64,
+   "text": "subsequently get more effective at"
+  },
+  {
+   "t": 1576.44,
+   "d": 3.8,
+   "text": "fighting together as their relationship"
+  },
+  {
+   "t": 1580.24,
+   "d": 3.52,
+   "text": "improves and flowing from that the"
+  },
+  {
+   "t": 1583.76,
+   "d": 2.04,
+   "text": "stronger a relationship between"
+  },
+  {
+   "t": 1585.8,
+   "d": 2.0,
+   "text": "characters the more scenes they will"
+  },
+  {
+   "t": 1587.8,
+   "d": 3.84,
+   "text": "have to explore extra facets of their"
+  },
+  {
+   "t": 1591.64,
+   "d": 2.64,
+   "text": "relationship and then on top of this"
+  },
+  {
+   "t": 1594.28,
+   "d": 2.64,
+   "text": "three houses add character"
+  },
+  {
+   "t": 1596.92,
+   "d": 3.12,
+   "text": "recruitment to the support system so you"
+  },
+  {
+   "t": 1600.04,
+   "d": 3.76,
+   "text": "end up with a game with a very large"
+  },
+  {
+   "t": 1603.8,
+   "d": 4.92,
+   "text": "cast which can have massive combinations"
+  },
+  {
+   "t": 1608.72,
+   "d": 3.04,
+   "text": "of character narratives through its four"
+  },
+  {
+   "t": 1611.76,
+   "d": 2.68,
+   "text": "roots depending on who has been"
+  },
+  {
+   "t": 1614.44,
+   "d": 2.16,
+   "text": "recruited at any given point and this"
+  },
+  {
+   "t": 1616.6,
+   "d": 2.56,
+   "text": "might sound like a recipe for for one of"
+  },
+  {
+   "t": 1619.16,
+   "d": 3.92,
+   "text": "these combinatorial fractal tree"
+  },
+  {
+   "t": 1623.08,
+   "d": 2.44,
+   "text": "explosions well character supports and"
+  },
+  {
+   "t": 1625.52,
+   "d": 4.16,
+   "text": "their scenes are mutual so there's no"
+  },
+  {
+   "t": 1629.68,
+   "d": 3.2,
+   "text": "directionality in a relationship graph"
+  },
+  {
+   "t": 1632.88,
+   "d": 2.96,
+   "text": "everybody just has one scene together or"
+  },
+  {
+   "t": 1635.84,
+   "d": 2.16,
+   "text": "one set of scenes"
+  },
+  {
+   "t": 1638.0,
+   "d": 2.52,
+   "text": "together and going back to the"
+  },
+  {
+   "t": 1640.52,
+   "d": 2.64,
+   "text": "definition of braided narrative"
+  },
+  {
+   "t": 1643.16,
+   "d": 2.56,
+   "text": "structure these support conversations"
+  },
+  {
+   "t": 1645.72,
+   "d": 1.64,
+   "text": "themselves are written in a completely"
+  },
+  {
+   "t": 1647.36,
+   "d": 1.32,
+   "text": "linear way"
+  },
+  {
+   "t": 1648.68,
+   "d": 2.36,
+   "text": "the conditions for triggering them are"
+  },
+  {
+   "t": 1651.04,
+   "d": 3.44,
+   "text": "also almost entirely if they have been"
+  },
+  {
+   "t": 1654.48,
+   "d": 2.4,
+   "text": "fighting and spending enough time"
+  },
+  {
+   "t": 1656.88,
+   "d": 3.72,
+   "text": "together to hit the next break point in"
+  },
+  {
+   "t": 1660.6,
+   "d": 3.2,
+   "text": "the support system the one exception the"
+  },
+  {
+   "t": 1663.8,
+   "d": 6.08,
+   "text": "game throws into this whole highly"
+  },
+  {
+   "t": 1669.88,
+   "d": 4.52,
+   "text": "systemic um what's the word utility"
+  },
+  {
+   "t": 1674.4,
+   "d": 2.56,
+   "text": "esque"
+  },
+  {
+   "t": 1676.96,
+   "d": 3.88,
+   "text": "system if is that some of the support"
+  },
+  {
+   "t": 1680.84,
+   "d": 2.32,
+   "text": "conversations are gated behind the main"
+  },
+  {
+   "t": 1683.16,
+   "d": 2.16,
+   "text": "narrative's"
+  },
+  {
+   "t": 1685.32,
+   "d": 3.08,
+   "text": "progression and you need to hit certain"
+  },
+  {
+   "t": 1688.4,
+   "d": 3.28,
+   "text": "narrative beats for or to be able to"
+  },
+  {
+   "t": 1691.68,
+   "d": 5.0,
+   "text": "access these last few conversations with"
+  },
+  {
+   "t": 1696.68,
+   "d": 3.4,
+   "text": "people and what effect does this have on"
+  },
+  {
+   "t": 1700.08,
+   "d": 3.16,
+   "text": "the player experience so time with"
+  },
+  {
+   "t": 1703.24,
+   "d": 2.4,
+   "text": "characters is very important and the"
+  },
+  {
+   "t": 1705.64,
+   "d": 2.6,
+   "text": "more time everybody spends together the"
+  },
+  {
+   "t": 1708.24,
+   "d": 1.52,
+   "text": "more effective they'll"
+  },
+  {
+   "t": 1709.76,
+   "d": 2.92,
+   "text": "become and the more you will be able to"
+  },
+  {
+   "t": 1712.68,
+   "d": 2.24,
+   "text": "learn about them so there's this"
+  },
+  {
+   "t": 1714.92,
+   "d": 2.64,
+   "text": "positive feedback loop of if you use a"
+  },
+  {
+   "t": 1717.56,
+   "d": 1.4,
+   "text": "character more you will get more"
+  },
+  {
+   "t": 1718.96,
+   "d": 2.28,
+   "text": "information about them and it will be"
+  },
+  {
+   "t": 1721.24,
+   "d": 2.12,
+   "text": "easier and more rewarding to continue to"
+  },
+  {
+   "t": 1723.36,
+   "d": 3.64,
+   "text": "use them into the"
+  },
+  {
+   "t": 1727.16,
+   "d": 3.92,
+   "text": "future and while not all characters"
+  },
+  {
+   "t": 1731.08,
+   "d": 3.04,
+   "text": "participate in a three houses route"
+  },
+  {
+   "t": 1734.12,
+   "d": 4.4,
+   "text": "equally due to not being able to author"
+  },
+  {
+   "t": 1738.52,
+   "d": 4.6,
+   "text": "scenes for an arbitrary number of"
+  },
+  {
+   "t": 1743.12,
+   "d": 3.6,
+   "text": "characters the support system means the"
+  },
+  {
+   "t": 1746.72,
+   "d": 3.0,
+   "text": "details of each of your roots will"
+  },
+  {
+   "t": 1749.72,
+   "d": 1.68,
+   "text": "change a lot depending on who you"
+  },
+  {
+   "t": 1751.4,
+   "d": 3.68,
+   "text": "recruit and who you spend time with and"
+  },
+  {
+   "t": 1755.08,
+   "d": 1.96,
+   "text": "similar to Hades there's a very good"
+  },
+  {
+   "t": 1757.04,
+   "d": 3.6,
+   "text": "chance your experience of any single"
+  },
+  {
+   "t": 1760.64,
+   "d": 2.12,
+   "text": "Fire Emblem three houses route will be"
+  },
+  {
+   "t": 1762.76,
+   "d": 5.68,
+   "text": "very different than someone else's"
+  },
+  {
+   "t": 1768.68,
+   "d": 0.96,
+   "text": "and"
+  },
+  {
+   "t": 1769.64,
+   "d": 3.28,
+   "text": "so let's talk about the elephants in the"
+  },
+  {
+   "t": 1772.92,
+   "d": 2.88,
+   "text": "room both the games I talk about here"
+  },
+  {
+   "t": 1775.8,
+   "d": 1.8,
+   "text": "have an obscene amount of writing in"
+  },
+  {
+   "t": 1777.6,
+   "d": 3.04,
+   "text": "them and it's a huge reason why you can"
+  },
+  {
+   "t": 1780.64,
+   "d": 2.72,
+   "text": "sync hundreds upon hundreds of hours"
+  },
+  {
+   "t": 1783.36,
+   "d": 2.4,
+   "text": "into them and still not see everything"
+  },
+  {
+   "t": 1785.76,
+   "d": 1.24,
+   "text": "they have to"
+  },
+  {
+   "t": 1787.0,
+   "d": 3.12,
+   "text": "offer so as much as I talk up this idea"
+  },
+  {
+   "t": 1790.12,
+   "d": 1.56,
+   "text": "that braided narrative structure helps"
+  },
+  {
+   "t": 1791.68,
+   "d": 1.64,
+   "text": "reduce the authoring"
+  },
+  {
+   "t": 1793.32,
+   "d": 2.12,
+   "text": "burden someone's the last to write"
+  },
+  {
+   "t": 1795.44,
+   "d": 4.84,
+   "text": "everything and your authoring burden"
+  },
+  {
+   "t": 1800.28,
+   "d": 2.6,
+   "text": "still increases as the rest of the game"
+  },
+  {
+   "t": 1802.88,
+   "d": 1.76,
+   "text": "scope"
+  },
+  {
+   "t": 1804.64,
+   "d": 3.0,
+   "text": "increases"
+  },
+  {
+   "t": 1808.08,
+   "d": 4.36,
+   "text": "but these problems don't mean that a"
+  },
+  {
+   "t": 1812.44,
+   "d": 2.36,
+   "text": "braided narrative structure requires"
+  },
+  {
+   "t": 1814.8,
+   "d": 3.84,
+   "text": "multiple books worth of narrative to"
+  },
+  {
+   "t": 1818.64,
+   "d": 3.8,
+   "text": "function I joked a little earlier about"
+  },
+  {
+   "t": 1822.44,
+   "d": 2.08,
+   "text": "writing linear narratives"
+  },
+  {
+   "t": 1824.52,
+   "d": 4.24,
+   "text": "being in order n amount"
+  },
+  {
+   "t": 1828.76,
+   "d": 2.24,
+   "text": "or a linear amount of authoring effort"
+  },
+  {
+   "t": 1831.0,
+   "d": 3.04,
+   "text": "and while this obviously isn't 100%"
+  },
+  {
+   "t": 1834.04,
+   "d": 3.84,
+   "text": "true the authoring effort for braided"
+  },
+  {
+   "t": 1837.88,
+   "d": 2.52,
+   "text": "narratives generally"
+  },
+  {
+   "t": 1840.4,
+   "d": 3.04,
+   "text": "scales as you might expect"
+  },
+  {
+   "t": 1843.44,
+   "d": 3.24,
+   "text": "writing or as you might expect the way"
+  },
+  {
+   "t": 1846.68,
+   "d": 2.16,
+   "text": "that writing linear stories scales up"
+  },
+  {
+   "t": 1848.84,
+   "d": 3.64,
+   "text": "rather than writing these highly"
+  },
+  {
+   "t": 1852.48,
+   "d": 3.44,
+   "text": "branching structures or having to figure"
+  },
+  {
+   "t": 1855.92,
+   "d": 2.84,
+   "text": "out every single piece"
+  },
+  {
+   "t": 1858.76,
+   "d": 4.68,
+   "text": "of your Dynamic systems"
+  },
+  {
+   "t": 1864.28,
+   "d": 4.48,
+   "text": "coverage and using other game"
+  },
+  {
+   "t": 1868.76,
+   "d": 3.56,
+   "text": "systems helps us tie these narratives"
+  },
+  {
+   "t": 1872.32,
+   "d": 2.24,
+   "text": "together without losing their individual"
+  },
+  {
+   "t": 1874.56,
+   "d": 3.44,
+   "text": "identities so character relationships"
+  },
+  {
+   "t": 1878.0,
+   "d": 4.2,
+   "text": "and storylines in general can be tied"
+  },
+  {
+   "t": 1882.2,
+   "d": 3.72,
+   "text": "into progressing via games combat"
+  },
+  {
+   "t": 1885.92,
+   "d": 2.12,
+   "text": "mechanics or basically anything that"
+  },
+  {
+   "t": 1888.04,
+   "d": 3.64,
+   "text": "isn't just purely a narrative only"
+  },
+  {
+   "t": 1891.68,
+   "d": 3.88,
+   "text": "system and this can make the entire game"
+  },
+  {
+   "t": 1895.56,
+   "d": 3.16,
+   "text": "at a certain point feel like everything"
+  },
+  {
+   "t": 1898.72,
+   "d": 1.52,
+   "text": "matters to the"
+  },
+  {
+   "t": 1900.24,
+   "d": 4.28,
+   "text": "narrative even if these systems don't"
+  },
+  {
+   "t": 1904.52,
+   "d": 2.24,
+   "text": "talk to each other very"
+  },
+  {
+   "t": 1906.76,
+   "d": 2.52,
+   "text": "frequently and in"
+  },
+  {
+   "t": 1909.28,
+   "d": 2.04,
+   "text": "turn"
+  },
+  {
+   "t": 1911.32,
+   "d": 3.56,
+   "text": "we can kind of encourage players to"
+  },
+  {
+   "t": 1914.88,
+   "d": 1.0,
+   "text": "focus"
+  },
+  {
+   "t": 1915.88,
+   "d": 2.56,
+   "text": "on the narrative aspect"
+  },
+  {
+   "t": 1918.44,
+   "d": 1.44,
+   "text": "of every single thing they're doing"
+  },
+  {
+   "t": 1919.88,
+   "d": 3.96,
+   "text": "rather than focusing exclusively on like"
+  },
+  {
+   "t": 1923.84,
+   "d": 2.56,
+   "text": "mechanical"
+  },
+  {
+   "t": 1926.4,
+   "d": 3.36,
+   "text": "optimizations and I'm slightly over time"
+  },
+  {
+   "t": 1929.76,
+   "d": 3.32,
+   "text": "but we can more easily tie our story"
+  },
+  {
+   "t": 1933.08,
+   "d": 3.2,
+   "text": "lines in themes and events together when"
+  },
+  {
+   "t": 1936.28,
+   "d": 0.84,
+   "text": "we"
+  },
+  {
+   "t": 1937.12,
+   "d": 3.12,
+   "text": "have explicit story beats to intersect"
+  },
+  {
+   "t": 1940.24,
+   "d": 3.28,
+   "text": "with and author"
+  },
+  {
+   "t": 1944.08,
+   "d": 4.04,
+   "text": "them or sorry whether we expit have"
+  },
+  {
+   "t": 1948.12,
+   "d": 2.0,
+   "text": "story beats intersect when we author"
+  },
+  {
+   "t": 1950.12,
+   "d": 3.36,
+   "text": "them or naturally have this emerge out"
+  },
+  {
+   "t": 1953.48,
+   "d": 4.08,
+   "text": "of just when people encounter these"
+  },
+  {
+   "t": 1957.56,
+   "d": 2.24,
+   "text": "narratives"
+  },
+  {
+   "t": 1959.8,
+   "d": 3.4,
+   "text": "um and we get this via interlacing these"
+  },
+  {
+   "t": 1963.2,
+   "d": 2.76,
+   "text": "linear narrative structures together"
+  },
+  {
+   "t": 1965.96,
+   "d": 2.76,
+   "text": "rather than having to again fractally"
+  },
+  {
+   "t": 1968.72,
+   "d": 2.24,
+   "text": "Branch everything so the braided"
+  },
+  {
+   "t": 1970.96,
+   "d": 1.76,
+   "text": "narrative structure allows us as"
+  },
+  {
+   "t": 1972.72,
+   "d": 2.52,
+   "text": "designers to add even more hooks to our"
+  },
+  {
+   "t": 1975.24,
+   "d": 3.4,
+   "text": "story lines for players to grab onto to"
+  },
+  {
+   "t": 1978.64,
+   "d": 2.72,
+   "text": "and find connections between in ways"
+  },
+  {
+   "t": 1981.36,
+   "d": 2.32,
+   "text": "that we never would have"
+  },
+  {
+   "t": 1983.68,
+   "d": 3.76,
+   "text": "expected and they can explore everything"
+  },
+  {
+   "t": 1987.44,
+   "d": 3.68,
+   "text": "that we've done and twisted together in"
+  },
+  {
+   "t": 1991.12,
+   "d": 2.12,
+   "text": "ways we probably couldn't"
+  },
+  {
+   "t": 1993.24,
+   "d": 2.56,
+   "text": "predict so thank you to Rog like"
+  },
+  {
+   "t": 1995.8,
+   "d": 3.76,
+   "text": "celebration for having me give this talk"
+  },
+  {
+   "t": 1999.56,
+   "d": 3.72,
+   "text": "um you can find me at Quake full tals on"
+  },
+  {
+   "t": 2003.28,
+   "d": 2.52,
+   "text": "all of the various social media"
+  },
+  {
+   "t": 2005.8,
+   "d": 4.96,
+   "text": "sites um this is my website link and my"
+  },
+  {
+   "t": 2010.76,
+   "d": 2.96,
+   "text": "itch page thank"
+  },
+  {
+   "t": 2013.72,
+   "d": 5.08,
+   "text": "you awesome thank you so much Nick"
+  }
+ ]
+}

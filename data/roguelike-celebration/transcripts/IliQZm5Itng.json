@@ -1,0 +1,2176 @@
+{
+ "id": "IliQZm5Itng",
+ "url": "https://www.youtube.com/watch?v=IliQZm5Itng",
+ "title": "Scott Burger- The Data Science of Roguelikes",
+ "speaker": "Scott Burger",
+ "talk_title": "The Data Science of Roguelikes",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 1979,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "Data science explorations of the roguelike genre. Where is the best data? How do we get it? Where is the genre now and where is it going? How are player's attention spans evolving? In this talk we'll deep dive data strategy, what we can learn from the data, and how best to improve it.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and background"
+  },
+  {
+   "start": 125,
+   "title": "Talk objectives"
+  },
+  {
+   "start": 254,
+   "title": "Data sourcing challenges"
+  },
+  {
+   "start": 467,
+   "title": "Steam data extraction"
+  },
+  {
+   "start": 627,
+   "title": "Genre growth and trends"
+  },
+  {
+   "start": 863,
+   "title": "Key driving games"
+  },
+  {
+   "start": 996,
+   "title": "Analyzing steam tags"
+  },
+  {
+   "start": 1203,
+   "title": "Mathematical game similarity"
+  },
+  {
+   "start": 1495,
+   "title": "The need for nuanced search"
+  },
+  {
+   "start": 1700,
+   "title": "Player engagement analysis"
+  },
+  {
+   "start": 1832,
+   "title": "Conclusion and takeaways"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4501,
+ "trimmed": {
+  "segments": 42,
+  "words": 364
+ },
+ "segments": [
+  {
+   "t": 7.64,
+   "d": 1.0,
+   "text": "You are here in this particular instance to here Scott Burger tell us all about -- hello."
+  },
+  {
+   "t": 25.3,
+   "d": 1.0,
+   "text": "SCOTT: Thank you, Qristy, for hosting this session, and thanks to the wonderful organizers"
+  },
+  {
+   "t": 28.96,
+   "d": 1.0,
+   "text": "for the Roguelike Con in general."
+  },
+  {
+   "t": 42.62,
+   "d": 1.0,
+   "text": "Welcome to The Data Science of Roguelikes All sorts of fun deep dives of tables of data,"
+  },
+  {
+   "t": 43.62,
+   "d": 1.0,
+   "text": "visualizations and stuff like that."
+  },
+  {
+   "t": 44.62,
+   "d": 4.63,
+   "text": "We have 30 minutes and let me start my timer real quick so I don't go over."
+  },
+  {
+   "t": 49.25,
+   "d": 3.07,
+   "text": "And let's just jump right in."
+  },
+  {
+   "t": 52.32,
+   "d": 1.24,
+   "text": "So a little bit about me."
+  },
+  {
+   "t": 53.56,
+   "d": 1.0,
+   "text": "Hello."
+  },
+  {
+   "t": 54.56,
+   "d": 1.37,
+   "text": "I am Scott."
+  },
+  {
+   "t": 55.93,
+   "d": 1.0,
+   "text": "He/him."
+  },
+  {
+   "t": 56.93,
+   "d": 2.39,
+   "text": "I am a Seattle data person."
+  },
+  {
+   "t": 59.32,
+   "d": 3.78,
+   "text": "Data analytics and machine learning and data science."
+  },
+  {
+   "t": 63.1,
+   "d": 6.35,
+   "text": "Like all data science in the Seattle world I have done my time at Microsoft and tableau"
+  },
+  {
+   "t": 69.45,
+   "d": 4.82,
+   "text": "and Qualtrics down."
+  },
+  {
+   "t": 74.27,
+   "d": 13.71,
+   "text": "I fly small airplanes and have a masters in physics from University of London college."
+  },
+  {
+   "t": 87.98,
+   "d": 3.35,
+   "text": "I race bikes when I can as best as I can."
+  },
+  {
+   "t": 91.33,
+   "d": 6.46,
+   "text": "I wrote a book on machine learning with the programming language R. If you have ever wanted"
+  },
+  {
+   "t": 97.79,
+   "d": 3.85,
+   "text": "to get into it from that angle, you have 200 pages of resource there."
+  },
+  {
+   "t": 101.64,
+   "d": 6.19,
+   "text": "I have a roguelike podcast that I do with three other friends of mine who we just passed"
+  },
+  {
+   "t": 107.83,
+   "d": 3.8,
+   "text": "our one-year anniversary of hosting the show."
+  },
+  {
+   "t": 111.63,
+   "d": 5.74,
+   "text": "And I am an adult student of the cello and I play with my wife who is very patient to"
+  },
+  {
+   "t": 117.37,
+   "d": 8.35,
+   "text": "accompany me on the piano whenever I have recitals and stuff coming up."
+  },
+  {
+   "t": 125.72,
+   "d": 3.89,
+   "text": "You didn't come here to listen to me but what the talk is about."
+  },
+  {
+   "t": 129.61,
+   "d": 4.61,
+   "text": "First I will start what this talk is not about."
+  },
+  {
+   "t": 134.22,
+   "d": 6.1,
+   "text": "If you are coming to this recording out of the blue, and you are like I really like data"
+  },
+  {
+   "t": 140.32,
+   "d": 5.21,
+   "text": "science, video games, but I don't know what this whole roguelike space is about."
+  },
+  {
+   "t": 145.53,
+   "d": 5.23,
+   "text": "That I think is the one thing I am not going to be talking about here."
+  },
+  {
+   "t": 150.76,
+   "d": 5.71,
+   "text": "I think in this general space, I think the attendees for the past, what is it?"
+  },
+  {
+   "t": 156.47,
+   "d": 1.0,
+   "text": "4.5 hours?"
+  },
+  {
+   "t": 157.47,
+   "d": 4.14,
+   "text": "Probably have a good indication of what roguelike games are."
+  },
+  {
+   "t": 161.61,
+   "d": 4.01,
+   "text": "But we will talk about the data of this ecosystem."
+  },
+  {
+   "t": 165.62,
+   "d": 8.85,
+   "text": "Just to talk about the podcast, we just did a near two hour podcast on the topic so I"
+  },
+  {
+   "t": 174.47,
+   "d": 6.39,
+   "text": "think what has been said, you know, if you are interested, go and hunt down that episode."
+  },
+  {
+   "t": 180.86,
+   "d": 1.0,
+   "text": "What is this talk about?"
+  },
+  {
+   "t": 181.86,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 182.86,
+   "d": 1.0,
+   "text": "Talked about what it isn't about."
+  },
+  {
+   "t": 183.86,
+   "d": 1.0,
+   "text": "What is it about?"
+  },
+  {
+   "t": 184.86,
+   "d": 6.71,
+   "text": "It is a little bit of hacking, programming, little bit of data visualization and cool"
+  },
+  {
+   "t": 191.57,
+   "d": 9.77,
+   "text": "graphs, it is a little bit about market analytics as well but overall we have three objectives"
+  },
+  {
+   "t": 201.34,
+   "d": 1.0,
+   "text": "for this talk."
+  },
+  {
+   "t": 202.34,
+   "d": 4.66,
+   "text": "One, where do we go to find these rogue-style games?"
+  },
+  {
+   "t": 207.0,
+   "d": 5.55,
+   "text": "Where can we go and how can we build good datasets to explore this stuff?"
+  },
+  {
+   "t": 212.55,
+   "d": 3.92,
+   "text": "And lastly, what can we learn from the data as well?"
+  },
+  {
+   "t": 216.47,
+   "d": 6.27,
+   "text": "That's our three main objectives for the next 25 minutes we will say."
+  },
+  {
+   "t": 222.74,
+   "d": 2.58,
+   "text": "And we are here to talk about roguelike games."
+  },
+  {
+   "t": 225.32,
+   "d": 10.02,
+   "text": "Everything from goofy, slot machine rogues, to dungeon-based rat punchers, to ensemble"
+  },
+  {
+   "t": 235.34,
+   "d": 7.39,
+   "text": "alien space management games, to things that like a strong password generators."
+  },
+  {
+   "t": 242.73,
+   "d": 4.23,
+   "text": "These all exist in roughly the same universe of stuff and we will be looking at all of"
+  },
+  {
+   "t": 246.96,
+   "d": 4.0,
+   "text": "the data from each end of the spectrum and everything in between."
+  },
+  {
+   "t": 250.96,
+   "d": 5.7,
+   "text": "But in order to do that, first, we are going to need data."
+  },
+  {
+   "t": 256.66,
+   "d": 1.41,
+   "text": "Blowup -- lots of data."
+  },
+  {
+   "t": 258.07,
+   "d": 6.71,
+   "text": "There is many places in which to search for data about those rogue-type games."
+  },
+  {
+   "t": 264.78,
+   "d": 4.42,
+   "text": "A good place to start is maybe the temporal of the roguelike."
+  },
+  {
+   "t": 269.2,
+   "d": 9.17,
+   "text": "Maybe a lot of viewers and watchers have heard of this assignment this site judicially tabulates"
+  },
+  {
+   "t": 278.37,
+   "d": 7.77,
+   "text": "data from the rogue basin Wikipedia that coalesces it down into a tabular format with lots of"
+  },
+  {
+   "t": 286.14,
+   "d": 1.72,
+   "text": "fun things to explore."
+  },
+  {
+   "t": 287.86,
+   "d": 5.81,
+   "text": "The two types of data we are interested in -- data we are interested in is fact data."
+  },
+  {
+   "t": 293.67,
+   "d": 6.76,
+   "text": "Things that are independent variables and we can glum on to learn more about."
+  },
+  {
+   "t": 300.43,
+   "d": 2.62,
+   "text": "And things like metadata."
+  },
+  {
+   "t": 303.05,
+   "d": 2.38,
+   "text": "What are things about that data?"
+  },
+  {
+   "t": 305.43,
+   "d": 7.26,
+   "text": "For example a fact data instance might be DSS and Dwarf Fortress and NetHack and the"
+  },
+  {
+   "t": 312.69,
+   "d": 7.96,
+   "text": "metadata around it would be the pipe that it is, what kind of theme that it is."
+  },
+  {
+   "t": 320.65,
+   "d": 3.96,
+   "text": "In this screenshot here, we have lots of interesting data to think about already."
+  },
+  {
+   "t": 324.61,
+   "d": 6.19,
+   "text": "We have things like average ratings, we have things like number of ratings with DCSF having"
+  },
+  {
+   "t": 330.8,
+   "d": 4.48,
+   "text": "26, 19 for Dwarf Fortress and so on down the line."
+  },
+  {
+   "t": 335.28,
+   "d": 5.27,
+   "text": "With hyper rogue T-shirt here, on there."
+  },
+  {
+   "t": 340.55,
+   "d": 2.28,
+   "text": "Just a quick shout-out."
+  },
+  {
+   "t": 342.83,
+   "d": 1.09,
+   "text": "On here as well."
+  },
+  {
+   "t": 343.92,
+   "d": 7.26,
+   "text": "We have lots of things to explore from just one particular example space."
+  },
+  {
+   "t": 351.18,
+   "d": 4.71,
+   "text": "But there is lots of example spaces with which we can find this data from."
+  },
+  {
+   "t": 355.89,
+   "d": 4.21,
+   "text": "Another one many people know of is itch.io."
+  },
+  {
+   "t": 360.1,
+   "d": 6.39,
+   "text": "Here if we go type in the tag roguelike up here in the upper left."
+  },
+  {
+   "t": 366.49,
+   "d": 6.78,
+   "text": "We will get something that's like 10,000 results of data which is pretty good."
+  },
+  {
+   "t": 373.27,
+   "d": 4.48,
+   "text": "That's a good solid meaty dataset to start building stuff off of."
+  },
+  {
+   "t": 377.75,
+   "d": 8.54,
+   "text": "From here, we can kind of see from the top level, things like genre, survival, actions,"
+  },
+  {
+   "t": 386.29,
+   "d": 1.1,
+   "text": "platforms they are available on."
+  },
+  {
+   "t": 387.39,
+   "d": 1.05,
+   "text": "This is all good stuff."
+  },
+  {
+   "t": 388.44,
+   "d": 4.68,
+   "text": "We want to try to get this into a nice, boring Excel table that we can make pretty pictures"
+  },
+  {
+   "t": 393.12,
+   "d": 1.37,
+   "text": "out of."
+  },
+  {
+   "t": 394.49,
+   "d": 8.11,
+   "text": "If we click on any of these we can get status, rating, author, various genres and tags to"
+  },
+  {
+   "t": 402.6,
+   "d": 4.66,
+   "text": "something that looks like this where we have something like when was it last updated, what's"
+  },
+  {
+   "t": 407.26,
+   "d": 5.81,
+   "text": "the current status, average session length, languages."
+  },
+  {
+   "t": 413.07,
+   "d": 4.08,
+   "text": "There is a lot of data here and it varies from game to game."
+  },
+  {
+   "t": 417.15,
+   "d": 4.51,
+   "text": "I am sure there is lots of people that had to deal with free form text input data and"
+  },
+  {
+   "t": 421.66,
+   "d": 5.92,
+   "text": "consistency therein."
+  },
+  {
+   "t": 427.58,
+   "d": 8.27,
+   "text": "One of the hinders with the itch.io platform is getting access to the data and saying for"
+  },
+  {
+   "t": 435.85,
+   "d": 8.26,
+   "text": "all 10,000 games give me all that and dump it into an Excel spreadsheet for me, please."
+  },
+  {
+   "t": 444.11,
+   "d": 5.78,
+   "text": "Even with my data hunting abilities I have found it very difficult if not impossible"
+  },
+  {
+   "t": 449.89,
+   "d": 1.06,
+   "text": "to do so."
+  },
+  {
+   "t": 450.95,
+   "d": 6.28,
+   "text": "That's not to say it couldn't be done but there is not really a good appear application"
+  },
+  {
+   "t": 457.23,
+   "d": 10.02,
+   "text": "programming interface or API to go in and extract this data into a nice clean data."
+  },
+  {
+   "t": 467.25,
+   "d": 2.99,
+   "text": "Let's briefly talk about the mobile space."
+  },
+  {
+   "t": 470.24,
+   "d": 5.75,
+   "text": "For all my complaints about the itch data back end, if we go into Google Play and hunt"
+  },
+  {
+   "t": 475.99,
+   "d": 4.84,
+   "text": "for roguelikes this is kind of it for what we see."
+  },
+  {
+   "t": 480.83,
+   "d": 1.54,
+   "text": "Is there more?"
+  },
+  {
+   "t": 482.37,
+   "d": 6.12,
+   "text": "We have things like rating data, price data, but I was kind of shocked that there wasn't"
+  },
+  {
+   "t": 488.49,
+   "d": 1.7,
+   "text": "much more?"
+  },
+  {
+   "t": 490.19,
+   "d": 3.02,
+   "text": "Clicking around, oh, well, clicking on individual games."
+  },
+  {
+   "t": 493.21,
+   "d": 1.87,
+   "text": "We have ratings and downloads."
+  },
+  {
+   "t": 495.08,
+   "d": 1.21,
+   "text": "This is all good stuff."
+  },
+  {
+   "t": 496.29,
+   "d": 2.6,
+   "text": "Descriptions last updated."
+  },
+  {
+   "t": 498.89,
+   "d": 2.52,
+   "text": "The tags don't include roguelike curiously."
+  },
+  {
+   "t": 501.41,
+   "d": 3.2,
+   "text": "That's a fun interesting element."
+  },
+  {
+   "t": 504.61,
+   "d": 1.74,
+   "text": "But we have things like user reviews as well."
+  },
+  {
+   "t": 506.35,
+   "d": 1.66,
+   "text": "This is all interesting stuff."
+  },
+  {
+   "t": 508.01,
+   "d": 6.53,
+   "text": "If we thought the itch data was locked down mobile data is even more locked down."
+  },
+  {
+   "t": 514.54,
+   "d": 5.74,
+   "text": "Getting access through this walled garden for data might actually be impossible from"
+  },
+  {
+   "t": 520.28,
+   "d": 8.37,
+   "text": "what I can tell unless you have a good way to build a web data scraper that doesn't get"
+  },
+  {
+   "t": 528.65,
+   "d": 2.82,
+   "text": "you banned immediately."
+  },
+  {
+   "t": 531.47,
+   "d": 8.21,
+   "text": "All this is point to the last logical discussion, for Steam, everyone's favorite platform for"
+  },
+  {
+   "t": 539.68,
+   "d": 1.02,
+   "text": "finding games."
+  },
+  {
+   "t": 540.7,
+   "d": 7.12,
+   "text": "Here we go do the great thing of hunting through the tag categories and find the things that"
+  },
+  {
+   "t": 547.82,
+   "d": 1.0,
+   "text": "say roguelike."
+  },
+  {
+   "t": 548.82,
+   "d": 3.57,
+   "text": "Open up that can of worms and see what games fall out of it."
+  },
+  {
+   "t": 552.39,
+   "d": 2.66,
+   "text": "We have lots of good stuff."
+  },
+  {
+   "t": 555.05,
+   "d": 11.99,
+   "text": "Rating categories, tags involving things like action roguelikes, lots of games listed and"
+  },
+  {
+   "t": 567.04,
+   "d": 2.75,
+   "text": "other subgenres."
+  },
+  {
+   "t": 569.79,
+   "d": 1.0,
+   "text": "Lots of good data."
+  },
+  {
+   "t": 570.79,
+   "d": 1.16,
+   "text": "That's all great."
+  },
+  {
+   "t": 571.95,
+   "d": 6.88,
+   "text": "The power here is the application programming interface, the API that allows us to say if"
+  },
+  {
+   "t": 578.83,
+   "d": 6.22,
+   "text": "we have a list of games that we want all this data for, give me the data, please."
+  },
+  {
+   "t": 585.05,
+   "d": 1.97,
+   "text": "And that beautiful data looks like this."
+  },
+  {
+   "t": 587.02,
+   "d": 6.73,
+   "text": "This is what raw API data export for a traditional roguelike game looks like."
+  },
+  {
+   "t": 593.75,
+   "d": 1.72,
+   "text": "Isn't this beautiful?"
+  },
+  {
+   "t": 595.47,
+   "d": 7.85,
+   "text": "We have all sorts of things in here like what type of data entity it is, name, steam app"
+  },
+  {
+   "t": 603.32,
+   "d": 7.0,
+   "text": "IDs and all sorts of fun stuff but this is unintelligible garbage nonsense in this way."
+  },
+  {
+   "t": 610.32,
+   "d": 12.4,
+   "text": "Wok we can put this into parsers and pull stuff out like total, total number of reviews,"
+  },
+  {
+   "t": 622.72,
+   "d": 1.17,
+   "text": "how many achievements it has."
+  },
+  {
+   "t": 623.89,
+   "d": 1.77,
+   "text": "All sorts of fun things."
+  },
+  {
+   "t": 625.66,
+   "d": 7.12,
+   "text": "The way we go about building the dataset we will be talking about today is kind of in"
+  },
+  {
+   "t": 632.78,
+   "d": 2.63,
+   "text": "three major steps."
+  },
+  {
+   "t": 635.41,
+   "d": 1.46,
+   "text": "Source code will be linked later."
+  },
+  {
+   "t": 636.87,
+   "d": 5.8,
+   "text": "I can drop notes over the obelisk if we are interested in deep diving."
+  },
+  {
+   "t": 642.67,
+   "d": 5.47,
+   "text": "We happen the functions go hit the Steam API and pull down the data."
+  },
+  {
+   "t": 648.14,
+   "d": 12.46,
+   "text": "We have snap shots of what it looked like in March, June and the most recent one is"
+  },
+  {
+   "t": 660.6,
+   "d": 2.59,
+   "text": "October 4th."
+  },
+  {
+   "t": 663.19,
+   "d": 9.02,
+   "text": "We are pulling the main metadata like release dates, review counts, all tags associated,"
+  },
+  {
+   "t": 672.21,
+   "d": 8.08,
+   "text": "review data, how many hours were being played by users and as we will get to tagged data"
+  },
+  {
+   "t": 680.29,
+   "d": 3.31,
+   "text": "in terms of key value pairs so all sorts of great things."
+  },
+  {
+   "t": 683.6,
+   "d": 1.55,
+   "text": "Here is what the data looks like."
+  },
+  {
+   "t": 685.15,
+   "d": 1.06,
+   "text": "Isn't this beautiful?"
+  },
+  {
+   "t": 686.21,
+   "d": 4.33,
+   "text": "Who doesn't love look at spreadsheets."
+  },
+  {
+   "t": 690.54,
+   "d": 6.55,
+   "text": "We have the name of the game, release dates, dictionary tag data, total review, it goes"
+  },
+  {
+   "t": 697.09,
+   "d": 4.4,
+   "text": "on for column and columns but you are not here to look at tables."
+  },
+  {
+   "t": 701.49,
+   "d": 2.76,
+   "text": "You are here to look at pretty pictures and things."
+  },
+  {
+   "t": 704.25,
+   "d": 3.99,
+   "text": "That's why I am here and we are all here."
+  },
+  {
+   "t": 708.24,
+   "d": 2.73,
+   "text": "But first let's just -- well, there is pretty pictures in here."
+  },
+  {
+   "t": 710.97,
+   "d": 5.19,
+   "text": "The first thing you do with any good tabular dataset is look at summary statistics."
+  },
+  {
+   "t": 716.16,
+   "d": 7.41,
+   "text": "In the Steam ecosystem there are six major categories of rogue-type tags that we can"
+  },
+  {
+   "t": 723.57,
+   "d": 1.57,
+   "text": "look at."
+  },
+  {
+   "t": 725.14,
+   "d": 4.72,
+   "text": "Games tagged with roguelike which is about 6,000."
+  },
+  {
+   "t": 729.86,
+   "d": 5.33,
+   "text": "Games tagged with roguelike which is around 4-5,000."
+  },
+  {
+   "t": 735.19,
+   "d": 1.62,
+   "text": "Action roguelike games 3700."
+  },
+  {
+   "t": 736.81,
+   "d": 9.37,
+   "text": "And here is where we see kind of a major shelf of game tags and application rates."
+  },
+  {
+   "t": 746.18,
+   "d": 2.65,
+   "text": "Roguelike deck builders, 400."
+  },
+  {
+   "t": 748.83,
+   "d": 3.0,
+   "text": "Traditional roguelikes, 326."
+  },
+  {
+   "t": 751.83,
+   "d": 3.95,
+   "text": "And roguevania 475."
+  },
+  {
+   "t": 755.78,
+   "d": 2.66,
+   "text": "These are not end all be all tags."
+  },
+  {
+   "t": 758.44,
+   "d": 2.42,
+   "text": "They can exist in multiple ways."
+  },
+  {
+   "t": 760.86,
+   "d": 10.0,
+   "text": "You can tag the game as roguelike and roguelite and all these things."
+  },
+  {
+   "t": 770.86,
+   "d": 6.39,
+   "text": "Because you can have things that span multiple categories here, there is about 7, 870 rogue"
+  },
+  {
+   "t": 777.25,
+   "d": 6.37,
+   "text": "style games across all these different tagged genres."
+  },
+  {
+   "t": 783.62,
+   "d": 1.0,
+   "text": "This is great."
+  },
+  {
+   "t": 784.62,
+   "d": 6.99,
+   "text": "This gives us an all up view picture of different tag types, different realms of the data that"
+  },
+  {
+   "t": 791.61,
+   "d": 2.96,
+   "text": "we might be playing in, but show me graphs."
+  },
+  {
+   "t": 794.57,
+   "d": 2.77,
+   "text": "I want to see stuff of how this evolving over time."
+  },
+  {
+   "t": 797.34,
+   "d": 5.75,
+   "text": "What we are seeing on the left the blue curve is the total number of games that have been"
+  },
+  {
+   "t": 803.09,
+   "d": 10.21,
+   "text": "released in this whole dataset and on the right is the games tagged as tradition roguelike."
+  },
+  {
+   "t": 813.3,
+   "d": 8.78,
+   "text": "We are seeing games that were -- the tag system was introduced later but games that have any"
+  },
+  {
+   "t": 822.08,
+   "d": 6.73,
+   "text": "rogue-style tag applied first started showing up around 2010 and increasing and increasing."
+  },
+  {
+   "t": 828.81,
+   "d": 6.96,
+   "text": "Since 2019, there has been an electric pace of game development of rogue games being released"
+  },
+  {
+   "t": 835.77,
+   "d": 2.45,
+   "text": "in general on Steam over time."
+  },
+  {
+   "t": 838.22,
+   "d": 2.54,
+   "text": "We see that reflected in the traditional roguelike space as well."
+  },
+  {
+   "t": 840.76,
+   "d": 6.78,
+   "text": "We had a bump of activity in 2017 and since 2019 it has been taking off nonstop."
+  },
+  {
+   "t": 847.54,
+   "d": 4.21,
+   "text": "I think we are in a pretty good place to be as either fans of the genre to have lots of"
+  },
+  {
+   "t": 851.75,
+   "d": 5.96,
+   "text": "options to play or as developers to learn from other people's things and to be able"
+  },
+  {
+   "t": 857.71,
+   "d": 5.89,
+   "text": "to see how things are evolving and what games are pushing the trend and envelope speaking"
+  },
+  {
+   "t": 863.6,
+   "d": 4.03,
+   "text": "of which key driving games."
+  },
+  {
+   "t": 867.63,
+   "d": 4.3,
+   "text": "This is a busy chart with a lot going on."
+  },
+  {
+   "t": 871.93,
+   "d": 5.19,
+   "text": "On the X axis we have games release dates so what year were they released."
+  },
+  {
+   "t": 877.12,
+   "d": 4.81,
+   "text": "On the Y axis we have how many total reviews those games have."
+  },
+  {
+   "t": 881.93,
+   "d": 3.88,
+   "text": "The different colors are just ways to separate different games."
+  },
+  {
+   "t": 885.81,
+   "d": 2.76,
+   "text": "So each game name is a different color on here."
+  },
+  {
+   "t": 888.57,
+   "d": 1.42,
+   "text": "That's just what the color signifies."
+  },
+  {
+   "t": 889.99,
+   "d": 6.35,
+   "text": "But the size of the dot here is something we can use with the tag data to show what"
+  },
+  {
+   "t": 896.34,
+   "d": 5.49,
+   "text": "proportion of the games' total tags are any of those six rogue categories."
+  },
+  {
+   "t": 901.83,
+   "d": 2.07,
+   "text": "Rogueness all up score."
+  },
+  {
+   "t": 903.9,
+   "d": 8.0,
+   "text": "A bigger circle means more rogue-y and a smaller score is less of that proportion."
+  },
+  {
+   "t": 911.9,
+   "d": 6.22,
+   "text": "What we see here is the FTL binding of Isaac big players."
+  },
+  {
+   "t": 918.12,
+   "d": 5.5,
+   "text": "This is for games with more than 10,000 reviews otherwise this chart would be a lot busier."
+  },
+  {
+   "t": 923.62,
+   "d": 6.64,
+   "text": "FTL binding of Isaacs, early stage."
+  },
+  {
+   "t": 930.26,
+   "d": 1.46,
+   "text": "Binding of Isaac rebirth."
+  },
+  {
+   "t": 931.72,
+   "d": 5.23,
+   "text": "Big Titan."
+  },
+  {
+   "t": 936.95,
+   "d": 2.98,
+   "text": "Don't starve together is way up here at the top."
+  },
+  {
+   "t": 939.93,
+   "d": 2.15,
+   "text": "Over 400,000 reviews."
+  },
+  {
+   "t": 942.08,
+   "d": 2.14,
+   "text": "There is some interesting stuff behind that."
+  },
+  {
+   "t": 944.22,
+   "d": 10.05,
+   "text": "But we have things like dead cell Slay the Spire"
+  },
+  {
+   "t": 954.27,
+   "d": 5.75,
+   "text": "and if we split it out by traditional roguelikes, we have kind of a different picture."
+  },
+  {
+   "t": 960.02,
+   "d": 7.52,
+   "text": "We have things like dread more, Tomb, Caves of Qud being major leaders early on and since"
+  },
+  {
+   "t": 967.54,
+   "d": 3.67,
+   "text": "then it is not that there hasn't been a major leader in the category on Steam, there has"
+  },
+  {
+   "t": 971.21,
+   "d": 2.92,
+   "text": "just been a lot of stuff being developed."
+  },
+  {
+   "t": 974.13,
+   "d": 10.23,
+   "text": "Cog mine, Jupiter hell, desktop dungeons with curious about its review date changing there,"
+  },
+  {
+   "t": 984.36,
+   "d": 2.18,
+   "text": "we have some games just -- yeah."
+  },
+  {
+   "t": 986.54,
+   "d": 4.46,
+   "text": "Like we were seeing earlier, just a lot of development of new stuff here in the more"
+  },
+  {
+   "t": 991.0,
+   "d": 1.82,
+   "text": "recent years as well."
+  },
+  {
+   "t": 992.82,
+   "d": 3.29,
+   "text": "An interesting space to be in."
+  },
+  {
+   "t": 996.11,
+   "d": 4.03,
+   "text": "We have talked a little bit about Steam tags."
+  },
+  {
+   "t": 1000.14,
+   "d": 2.76,
+   "text": "Let's do a little bit of the deep dive here."
+  },
+  {
+   "t": 1002.9,
+   "d": 4.12,
+   "text": "Steam tags for those that don't know are kind of a controversial topic."
+  },
+  {
+   "t": 1007.02,
+   "d": 2.57,
+   "text": "Let's walk through how they work."
+  },
+  {
+   "t": 1009.59,
+   "d": 8.24,
+   "text": "If you come to a game store page you pite see popular user defined tags for this product."
+  },
+  {
+   "t": 1017.83,
+   "d": 3.49,
+   "text": "If you click the plus button you will have even more in fact."
+  },
+  {
+   "t": 1021.32,
+   "d": 5.17,
+   "text": "Typically games have about a maximum of 20 tags that can be applied."
+  },
+  {
+   "t": 1026.49,
+   "d": 6.06,
+   "text": "You might say these seem randomly ordered."
+  },
+  {
+   "t": 1032.55,
+   "d": 2.34,
+   "text": "They just seem jumbled around."
+  },
+  {
+   "t": 1034.89,
+   "d": 6.04,
+   "text": "These are things users can vote on to say I think this game is a top-down shooter click"
+  },
+  {
+   "t": 1040.93,
+   "d": 1.91,
+   "text": "and add that."
+  },
+  {
+   "t": 1042.84,
+   "d": 4.28,
+   "text": "And devs can also change those around as well."
+  },
+  {
+   "t": 1047.12,
+   "d": 2.56,
+   "text": "They have some input authority on there."
+  },
+  {
+   "t": 1049.68,
+   "d": 1.34,
+   "text": "How are these sorted?"
+  },
+  {
+   "t": 1051.02,
+   "d": 4.84,
+   "text": "Well if we do our favorite thing and look at the source code behind the page we see"
+  },
+  {
+   "t": 1055.86,
+   "d": 4.48,
+   "text": "this tagged data is organized by count."
+  },
+  {
+   "t": 1060.34,
+   "d": 7.18,
+   "text": "So we have in the Steam store just what seems like a random grab bag of tags are actually"
+  },
+  {
+   "t": 1067.52,
+   "d": 4.07,
+   "text": "ordered by the frequency at which they reply."
+  },
+  {
+   "t": 1071.59,
+   "d": 2.07,
+   "text": "Space count 118."
+  },
+  {
+   "t": 1073.66,
+   "d": 1.0,
+   "text": "Stealth count 113."
+  },
+  {
+   "t": 1074.66,
+   "d": 2.06,
+   "text": "Following the trend down the line."
+  },
+  {
+   "t": 1076.72,
+   "d": 4.03,
+   "text": "A little more human readable format here."
+  },
+  {
+   "t": 1080.75,
+   "d": 1.34,
+   "text": "This is how the data is ordered."
+  },
+  {
+   "t": 1082.09,
+   "d": 5.72,
+   "text": "This is where Steam tags provide a lot of interesting data for us to explore and lots"
+  },
+  {
+   "t": 1087.81,
+   "d": 4.3,
+   "text": "of things for us to gripe about."
+  },
+  {
+   "t": 1092.11,
+   "d": 4.19,
+   "text": "One thing to explore here, we kind of touched on it a little bit earlier about rogue-y-ness"
+  },
+  {
+   "t": 1096.3,
+   "d": 1.0,
+   "text": "value."
+  },
+  {
+   "t": 1097.3,
+   "d": 7.25,
+   "text": "What proportion of all these tags are things related to the rogue realm?"
+  },
+  {
+   "t": 1104.55,
+   "d": 6.97,
+   "text": "Action Roguelike, roguelite, several tags being applied if we add up and divide by the"
+  },
+  {
+   "t": 1111.52,
+   "d": 8.24,
+   "text": "total number of counts that gives us a proportionality score and we can see this laid down in a histogram."
+  },
+  {
+   "t": 1119.76,
+   "d": 6.76,
+   "text": "This is showing us the top chart are all rogue games that aren't traditional roguelikes,"
+  },
+  {
+   "t": 1126.52,
+   "d": 4.58,
+   "text": "not explicitly tagged as such, and the one on the bottom are for only traditional roguelikes."
+  },
+  {
+   "t": 1131.1,
+   "d": 7.74,
+   "text": "We are seeing this rogue proportionality score laid out on the X axis and the frequency of"
+  },
+  {
+   "t": 1138.84,
+   "d": 4.25,
+   "text": "how many games fall into that sort of bin on the Y axis."
+  },
+  {
+   "t": 1143.09,
+   "d": 5.91,
+   "text": "This shows us how many games are falling within a certain band of that proportionality."
+  },
+  {
+   "t": 1149.0,
+   "d": 5.17,
+   "text": "In plain English the top part is saying for games not explicitly tagged as traditional"
+  },
+  {
+   "t": 1154.17,
+   "d": 9.61,
+   "text": "roguelike that rogue-y-ness can be as low as .1% all of the way up to 40% or higher"
+  },
+  {
+   "t": 1163.78,
+   "d": 1.44,
+   "text": "percent."
+  },
+  {
+   "t": 1165.22,
+   "d": 3.43,
+   "text": "This top histogram here is pretty spread out."
+  },
+  {
+   "t": 1168.65,
+   "d": 2.38,
+   "text": "It is kind of wide."
+  },
+  {
+   "t": 1171.03,
+   "d": 5.05,
+   "text": "Traditional roguelikes are a bit more narrow, little more constrained where those values"
+  },
+  {
+   "t": 1176.08,
+   "d": 1.0,
+   "text": "are."
+  },
+  {
+   "t": 1177.08,
+   "d": 4.77,
+   "text": "We see the middle chunky part of the traditional roguelike one is maybe a little off to the"
+  },
+  {
+   "t": 1181.85,
+   "d": 5.02,
+   "text": "right from where the main body of non-traditional roguelike gales are."
+  },
+  {
+   "t": 1186.87,
+   "d": 4.78,
+   "text": "Curiously we see some traditional roguelike games that are over indexed by having more"
+  },
+  {
+   "t": 1191.65,
+   "d": 6.37,
+   "text": "than 60% of their tag as rogue base which may not be surprising or may be but is very"
+  },
+  {
+   "t": 1198.02,
+   "d": 5.45,
+   "text": "infrequent as we see from the data."
+  },
+  {
+   "t": 1203.47,
+   "d": 5.81,
+   "text": "Steam tags controversy comes with going into the store and saying I would like one roguelike,"
+  },
+  {
+   "t": 1209.28,
+   "d": 1.0,
+   "text": "please."
+  },
+  {
+   "t": 1210.28,
+   "d": 1.28,
+   "text": "Steam says great."
+  },
+  {
+   "t": 1211.56,
+   "d": 3.52,
+   "text": "You want roguelikes, we got them for you."
+  },
+  {
+   "t": 1215.08,
+   "d": 9.88,
+   "text": "But sometimes the breadth of our genre kind of offers a hindrance with the area of Steam"
+  },
+  {
+   "t": 1224.96,
+   "d": 1.92,
+   "text": "tags specifically."
+  },
+  {
+   "t": 1226.88,
+   "d": 6.12,
+   "text": "On one hand you might get something as real-time action oriented is don't starve together and"
+  },
+  {
+   "t": 1233.0,
+   "d": 4.44,
+   "text": "on the other hand, you might get something as turn-based and slow RPG burn as Caves of"
+  },
+  {
+   "t": 1237.44,
+   "d": 1.55,
+   "text": "Qud."
+  },
+  {
+   "t": 1238.99,
+   "d": 5.86,
+   "text": "Steam will say these are both roguelikes even though one is maybe quote-unquote more than"
+  },
+  {
+   "t": 1244.85,
+   "d": 1.0,
+   "text": "the other."
+  },
+  {
+   "t": 1245.85,
+   "d": 4.02,
+   "text": "There is a lot of air quotes going on here."
+  },
+  {
+   "t": 1249.87,
+   "d": 8.54,
+   "text": "What we can do is say let's look at the distribution of each game's tags and the frequency, and"
+  },
+  {
+   "t": 1258.41,
+   "d": 1.0,
+   "text": "we will do some math."
+  },
+  {
+   "t": 1259.41,
+   "d": 5.85,
+   "text": "This thing on the right is saying we will do path to see how similar these are."
+  },
+  {
+   "t": 1265.26,
+   "d": 7.63,
+   "text": "For Caves of Qud and don't starve together, we have all the different tags between the"
+  },
+  {
+   "t": 1272.89,
+   "d": 1.54,
+   "text": "two."
+  },
+  {
+   "t": 1274.43,
+   "d": 6.81,
+   "text": "The proportionalities for each tag for peach each game."
+  },
+  {
+   "t": 1281.24,
+   "d": 5.09,
+   "text": "Don't starve together 1.5%."
+  },
+  {
+   "t": 1286.33,
+   "d": 2.96,
+   "text": "Caves of Qud doesn't have that tag."
+  },
+  {
+   "t": 1289.29,
+   "d": 6.06,
+   "text": "The end result for this is that well, comparing these two, we only have a few categories that"
+  },
+  {
+   "t": 1295.35,
+   "d": 2.29,
+   "text": "even line up remotely."
+  },
+  {
+   "t": 1297.64,
+   "d": 4.9,
+   "text": "By doing that hand wavy math from before we can turn the handle on our math crank and"
+  },
+  {
+   "t": 1302.54,
+   "d": 1.27,
+   "text": "get out a number."
+  },
+  {
+   "t": 1303.81,
+   "d": 7.64,
+   "text": "That number is that these are according to that particular math calculation 18.3% similar."
+  },
+  {
+   "t": 1311.45,
+   "d": 1.76,
+   "text": "Great."
+  },
+  {
+   "t": 1313.21,
+   "d": 1.47,
+   "text": "How does that rank against the rest of them?"
+  },
+  {
+   "t": 1314.68,
+   "d": 7.15,
+   "text": "I am glad you asked because what if instead we compared some other games that may be on"
+  },
+  {
+   "t": 1321.83,
+   "d": 2.59,
+   "text": "the face of it might be more similar to each other."
+  },
+  {
+   "t": 1324.42,
+   "d": 4.61,
+   "text": "Let's compare to survivor like games of the rogue universe."
+  },
+  {
+   "t": 1329.03,
+   "d": 6.18,
+   "text": "Bone raiser minions on the top and on the bottom maybe you have heard of it called Vampire"
+  },
+  {
+   "t": 1335.21,
+   "d": 3.16,
+   "text": "Survivors."
+  },
+  {
+   "t": 1338.37,
+   "d": 3.14,
+   "text": "Our assumption is these games should be roughly similar."
+  },
+  {
+   "t": 1341.51,
+   "d": 3.81,
+   "text": "There are some categories that don't line up and that's totally fine."
+  },
+  {
+   "t": 1345.32,
+   "d": 5.39,
+   "text": "I wouldn't expect all categories to line up every time."
+  },
+  {
+   "t": 1350.71,
+   "d": 4.26,
+   "text": "These games are 96% similar."
+  },
+  {
+   "t": 1354.97,
+   "d": 5.47,
+   "text": "If someone is coming to platform and hunting for something, they might be expecting something"
+  },
+  {
+   "t": 1360.44,
+   "d": 3.67,
+   "text": "more similar to the thing they might be looking for."
+  },
+  {
+   "t": 1364.11,
+   "d": 7.91,
+   "text": "Just for funsie let's compare these two."
+  },
+  {
+   "t": 1372.02,
+   "d": 4.3,
+   "text": "Not a whole lot of category overlap but there is some."
+  },
+  {
+   "t": 1376.32,
+   "d": 2.91,
+   "text": "15% similar."
+  },
+  {
+   "t": 1379.23,
+   "d": 7.73,
+   "text": "Likewise if we can shattered pixel dungeon up at the top here to the bottom probably"
+  },
+  {
+   "t": 1386.96,
+   "d": 1.72,
+   "text": "similar."
+  },
+  {
+   "t": 1388.68,
+   "d": 7.64,
+   "text": "This one has more categories that aren't aligned but the ones that do align well."
+  },
+  {
+   "t": 1396.32,
+   "d": 5.96,
+   "text": "Dungeon crawler 10% and 6% is pretty good alignment compared to mystery dungeon which"
+  },
+  {
+   "t": 1402.28,
+   "d": 4.59,
+   "text": "is 0% and 5% for shattered pixel dungeon."
+  },
+  {
+   "t": 1406.87,
+   "d": 1.04,
+   "text": "The score here is 80%."
+  },
+  {
+   "t": 1407.91,
+   "d": 1.94,
+   "text": "That's pretty good."
+  },
+  {
+   "t": 1409.85,
+   "d": 11.56,
+   "text": "If someone was like I am looking for a game like the tales but more recent you might suggest"
+  },
+  {
+   "t": 1421.41,
+   "d": 5.96,
+   "text": "shattered pixel dungeon with a pretty good degree of confidence."
+  },
+  {
+   "t": 1427.37,
+   "d": 4.6,
+   "text": "We have the original rogue on Steam, what games are the most similar according to this"
+  },
+  {
+   "t": 1431.97,
+   "d": 2.89,
+   "text": "hand wavy mathematical approach?"
+  },
+  {
+   "t": 1434.86,
+   "d": 2.27,
+   "text": "This is by no means a quality metric."
+  },
+  {
+   "t": 1437.13,
+   "d": 7.22,
+   "text": "This is very much a sterile mathematical metric to say yeah, I mean, you have stats and math"
+  },
+  {
+   "t": 1444.35,
+   "d": 1.02,
+   "text": "and all that good stuff."
+  },
+  {
+   "t": 1445.37,
+   "d": 1.5,
+   "text": "It is just going to output a number."
+  },
+  {
+   "t": 1446.87,
+   "d": 5.5,
+   "text": "Let's see what games are most similar just for this entertainment purpose."
+  },
+  {
+   "t": 1452.37,
+   "d": 6.04,
+   "text": "Well we have games in the 60% that line up to rogue following the methodology that we"
+  },
+  {
+   "t": 1458.41,
+   "d": 1.76,
+   "text": "have just been doing."
+  },
+  {
+   "t": 1460.17,
+   "d": 4.54,
+   "text": "We have games roughly in the 70-ish percent area that line up."
+  },
+  {
+   "t": 1464.71,
+   "d": 2.46,
+   "text": "These are things we roughly expect."
+  },
+  {
+   "t": 1467.17,
+   "d": 13.16,
+   "text": "As well as the top ones with mid boss, your, dead zone, and the number one, bring it in"
+  },
+  {
+   "t": 1480.33,
+   "d": 5.82,
+   "text": "for number one, the most similar game to rogue on Steam according to this methodology and"
+  },
+  {
+   "t": 1486.15,
+   "d": 7.46,
+   "text": "we will say caver ought, Sorbus. 79%."
+  },
+  {
+   "t": 1493.61,
+   "d": 1.75,
+   "text": "Congrats."
+  },
+  {
+   "t": 1495.36,
+   "d": 5.41,
+   "text": "I think what's missing in the Steam ecosystem is a nuanced search."
+  },
+  {
+   "t": 1500.77,
+   "d": 6.02,
+   "text": "When you go to Steam and say I would like a roguelike game, click, we have a whole list"
+  },
+  {
+   "t": 1506.79,
+   "d": 7.11,
+   "text": "of things that can span the whole broad genre that I am talking about, what I am envisioning"
+  },
+  {
+   "t": 1513.9,
+   "d": 9.55,
+   "text": "with this great UI mock up, I am envisioning something you click on the tag and the slider"
+  },
+  {
+   "t": 1523.45,
+   "d": 11.22,
+   "text": "underneath lets you say I would like a game with a proportionality of roguelike, and hacking"
+  },
+  {
+   "t": 1534.67,
+   "d": 4.6,
+   "text": "maybe in the 25%, and robots, yeah, I want something that's like pretty robot-driven."
+  },
+  {
+   "t": 1539.27,
+   "d": 4.8,
+   "text": "There is a few games I can think of off the top of my head that satisfy this criteria"
+  },
+  {
+   "t": 1544.07,
+   "d": 4.86,
+   "text": "but I am interested in the ones I don't know of that satisfy that criteria and that would"
+  },
+  {
+   "t": 1548.93,
+   "d": 7.86,
+   "text": "help us find similar games and help for discoverability and give nuance to the search."
+  },
+  {
+   "t": 1556.79,
+   "d": 5.92,
+   "text": "It doesn't say tag nuisance search but nuance search."
+  },
+  {
+   "t": 1562.71,
+   "d": 5.28,
+   "text": "If the Steam lab people want to put together experiment, I think this one would be ripe"
+  },
+  {
+   "t": 1567.99,
+   "d": 2.29,
+   "text": "for experimentation."
+  },
+  {
+   "t": 1570.28,
+   "d": 2.44,
+   "text": "Continuing on a little more with Steam tags."
+  },
+  {
+   "t": 1572.72,
+   "d": 2.45,
+   "text": "The verbiage is specific."
+  },
+  {
+   "t": 1575.17,
+   "d": 1.72,
+   "text": "Let me read."
+  },
+  {
+   "t": 1576.89,
+   "d": 6.9,
+   "text": "This is saying across the Y axis is the release date but of all rogue games released on steam"
+  },
+  {
+   "t": 1583.79,
+   "d": 8.84,
+   "text": "in 2023, the average percent of proportional roguelike tags applied was 4%."
+  },
+  {
+   "t": 1592.63,
+   "d": 4.51,
+   "text": "And for Action Roguelikes, the red curve, is 3.9%."
+  },
+  {
+   "t": 1597.14,
+   "d": 2.68,
+   "text": "And roguelites was 3.7%."
+  },
+  {
+   "t": 1599.82,
+   "d": 7.0,
+   "text": "This is an evolution of the tag proportionality over time."
+  },
+  {
+   "t": 1606.82,
+   "d": 7.18,
+   "text": "Another way to look at it is by snapshot data but that's hard to keep it refreshed so release"
+  },
+  {
+   "t": 1614.0,
+   "d": 1.0,
+   "text": "date is an intermediary."
+  },
+  {
+   "t": 1615.0,
+   "d": 9.82,
+   "text": "The amount of games that had roguelike as the main tag applied, very common early on,"
+  },
+  {
+   "t": 1624.82,
+   "d": 6.81,
+   "text": "but that's kind of come down some and equal with roguelike tags as well as action rogue"
+  },
+  {
+   "t": 1631.63,
+   "d": 7.09,
+   "text": "tags and these are converging into a similar clustered space where, again, this is for"
+  },
+  {
+   "t": 1638.72,
+   "d": 6.64,
+   "text": "all games picture, things like roguelike deck builders traditional roguelikes and roguevanias"
+  },
+  {
+   "t": 1645.36,
+   "d": 2.43,
+   "text": "are not as commonly used."
+  },
+  {
+   "t": 1647.79,
+   "d": 6.42,
+   "text": "I think the prevailing wisdom is you can either use a roguelike deckbuilder tag specifically"
+  },
+  {
+   "t": 1654.21,
+   "d": 7.68,
+   "text": "and only or more commonly you can say my game is a roguelike tag and a deckbuilder tag and"
+  },
+  {
+   "t": 1661.89,
+   "d": 2.68,
+   "text": "in that case there is lots of overlap of genres."
+  },
+  {
+   "t": 1664.57,
+   "d": 7.73,
+   "text": "If we split it out by traditional roguelikes, we can see oh, roguelike and traditional roguelike"
+  },
+  {
+   "t": 1672.3,
+   "d": 4.89,
+   "text": "unsurprisingly are pretty tightly correlated with each other over time."
+  },
+  {
+   "t": 1677.19,
+   "d": 5.3,
+   "text": "2019 had something interesting happen where there was something where someone over indexed"
+  },
+  {
+   "t": 1682.49,
+   "d": 5.98,
+   "text": "and had a lot more of their tags for roguelike versus traditional but that's OK."
+  },
+  {
+   "t": 1688.47,
+   "d": 6.47,
+   "text": "But what's interesting here is to show that we have a lot more spread out or uniform distribution"
+  },
+  {
+   "t": 1694.94,
+   "d": 5.34,
+   "text": "of these numbers versus very clustered from before."
+  },
+  {
+   "t": 1700.28,
+   "d": 1.89,
+   "text": "Really quickly about how long people are playing games."
+  },
+  {
+   "t": 1702.17,
+   "d": 3.39,
+   "text": "I only have a few more minutes but let's speed run this."
+  },
+  {
+   "t": 1705.56,
+   "d": 4.48,
+   "text": "If we look at review data, we can see how long people have been playing the game at"
+  },
+  {
+   "t": 1710.04,
+   "d": 4.02,
+   "text": "review time and we can bucket those by how many games."
+  },
+  {
+   "t": 1714.06,
+   "d": 5.43,
+   "text": "What we are seeing here on the X axis is the median percentile of play time for a given"
+  },
+  {
+   "t": 1719.49,
+   "d": 1.0,
+   "text": "game."
+  },
+  {
+   "t": 1720.49,
+   "d": 3.6,
+   "text": "We are seeing how many games have that percentile value."
+  },
+  {
+   "t": 1724.09,
+   "d": 6.65,
+   "text": "The orange curve is just a running sum and gives us a good way to say principle let's"
+  },
+  {
+   "t": 1730.74,
+   "d": 4.04,
+   "text": "say the 80% is a good cut off value."
+  },
+  {
+   "t": 1734.78,
+   "d": 3.91,
+   "text": "How long are people playing rogue games for all types?"
+  },
+  {
+   "t": 1738.69,
+   "d": 6.47,
+   "text": "Roughly that comes down to about 20-ish hours on average but in this case more on median."
+  },
+  {
+   "t": 1745.16,
+   "d": 3.66,
+   "text": "How does that compare for traditional rogues?"
+  },
+  {
+   "t": 1748.82,
+   "d": 4.94,
+   "text": "Traditional erosion is a little higher 31 hours."
+  },
+  {
+   "t": 1753.76,
+   "d": 7.55,
+   "text": "Which is a 40% longer time of engagement for traditional roguelikes than other types of"
+  },
+  {
+   "t": 1761.31,
+   "d": 2.47,
+   "text": "games in this space."
+  },
+  {
+   "t": 1763.78,
+   "d": 10.58,
+   "text": "We can break it out by looking at the 10th, 50th, and 90th percentile values for each"
+  },
+  {
+   "t": 1774.36,
+   "d": 1.06,
+   "text": "release date."
+  },
+  {
+   "t": 1775.42,
+   "d": 9.03,
+   "text": "And we can see how people generally are playing these games over time."
+  },
+  {
+   "t": 1784.45,
+   "d": 4.36,
+   "text": "We can see how the data evolves compared to the average middle line."
+  },
+  {
+   "t": 1788.81,
+   "d": 4.07,
+   "text": "And we can see how do those lines compare."
+  },
+  {
+   "t": 1792.88,
+   "d": 5.96,
+   "text": "Unsurprisingly the 10th percentile of play times throughout time is about 5-6 hours."
+  },
+  {
+   "t": 1798.84,
+   "d": 8.92,
+   "text": "People are spending 30-ish hours for the median play time and the 90th percentile is about"
+  },
+  {
+   "t": 1807.76,
+   "d": 1.0,
+   "text": "140 hours."
+  },
+  {
+   "t": 1808.76,
+   "d": 2.73,
+   "text": "We have some dedicated folks."
+  },
+  {
+   "t": 1811.49,
+   "d": 3.32,
+   "text": "How does this compare with traditional?"
+  },
+  {
+   "t": 1814.81,
+   "d": 1.0,
+   "text": "Little higher."
+  },
+  {
+   "t": 1815.81,
+   "d": 5.43,
+   "text": "10th percentile people engaging is about 9 compared to 5."
+  },
+  {
+   "t": 1821.24,
+   "d": 2.57,
+   "text": "45 compared to 30."
+  },
+  {
+   "t": 1823.81,
+   "d": 3.91,
+   "text": "300 compared to 137 so almost double that sense."
+  },
+  {
+   "t": 1827.72,
+   "d": 4.87,
+   "text": "A very different level of engagement picture."
+  },
+  {
+   "t": 1832.59,
+   "d": 4.09,
+   "text": "In the last couple minutes here, what are takeaways from all this data?"
+  },
+  {
+   "t": 1836.68,
+   "d": 2.3,
+   "text": "We have seen a lot of stuff."
+  },
+  {
+   "t": 1838.98,
+   "d": 2.62,
+   "text": "I think the number one take away is it is a good time to be a fan and developer of the"
+  },
+  {
+   "t": 1841.6,
+   "d": 1.75,
+   "text": "genre."
+  },
+  {
+   "t": 1843.35,
+   "d": 6.24,
+   "text": "We have a lot of stuff to engage with and learn from."
+  },
+  {
+   "t": 1849.59,
+   "d": 4.09,
+   "text": "I think if I had a wish list from Itch it would be can have some more data?"
+  },
+  {
+   "t": 1853.68,
+   "d": 9.39,
+   "text": "I would love to ache the Steam dataset and add Itch data to make it more robust but that's"
+  },
+  {
+   "t": 1863.07,
+   "d": 4.91,
+   "text": "hard to do if there is no API and I don't want to punish the servers are web scraping"
+  },
+  {
+   "t": 1867.98,
+   "d": 2.16,
+   "text": "as much as I can."
+  },
+  {
+   "t": 1870.14,
+   "d": 4.03,
+   "text": "And provide counts for how many tags that are being applied."
+  },
+  {
+   "t": 1874.17,
+   "d": 3.4,
+   "text": "I think as we have seen that's a useful thing."
+  },
+  {
+   "t": 1877.57,
+   "d": 2.92,
+   "text": "Mobile game data space, anything would be great."
+  },
+  {
+   "t": 1880.49,
+   "d": 1.0,
+   "text": "Honestly."
+  },
+  {
+   "t": 1881.49,
+   "d": 1.47,
+   "text": "APIs of any kind."
+  },
+  {
+   "t": 1882.96,
+   "d": 4.21,
+   "text": "But it is such a black box it is almost not even worth talking about."
+  },
+  {
+   "t": 1887.17,
+   "d": 1.69,
+   "text": "Steam, more refinement."
+  },
+  {
+   "t": 1888.86,
+   "d": 4.64,
+   "text": "I think we need more tools to refine the searches that we are after."
+  },
+  {
+   "t": 1893.5,
+   "d": 6.89,
+   "text": "Roguelike games are a varied space and setting limits on the proportionality of a tag we"
+  },
+  {
+   "t": 1900.39,
+   "d": 2.77,
+   "text": "have would be helpful."
+  },
+  {
+   "t": 1903.16,
+   "d": 1.7,
+   "text": "And for people to hunt for roguelikes specifically."
+  },
+  {
+   "t": 1904.86,
+   "d": 4.43,
+   "text": "I think that's a specific big part of this community."
+  },
+  {
+   "t": 1909.29,
+   "d": 5.46,
+   "text": "If we are hunting by only roguelikes, yeah, we are going to get drowned out by more commercially"
+  },
+  {
+   "t": 1914.75,
+   "d": 10.42,
+   "text": "successful games but voting or actively seeking out these tags is a good benefit."
+  },
+  {
+   "t": 1925.17,
+   "d": 3.57,
+   "text": "This is just the tip of the iceberg."
+  },
+  {
+   "t": 1928.74,
+   "d": 4.9,
+   "text": "There is some stuff in here that we haven't even remotely talked about yet."
+  },
+  {
+   "t": 1933.64,
+   "d": 3.44,
+   "text": "And some stuff we probably shouldn't touch with a 10-foot pole."
+  },
+  {
+   "t": 1937.08,
+   "d": 4.65,
+   "text": "That's the touch of the analytics ice berg."
+  },
+  {
+   "t": 1941.73,
+   "d": 4.48,
+   "text": "If you want to connect and talk more on data."
+  },
+  {
+   "t": 1946.21,
+   "d": 6.31,
+   "text": "@ me on Mastodon or the podcast."
+  },
+  {
+   "t": 1952.52,
+   "d": 2.18,
+   "text": "Reach out to the podcast."
+  },
+  {
+   "t": 1954.7,
+   "d": 5.68,
+   "text": "I have a data science blog of video game analytics like this."
+  },
+  {
+   "t": 1960.38,
+   "d": 5.14,
+   "text": "Maybe I will drop the links and lastly thank you."
+  },
+  {
+   "t": 1965.52,
+   "d": 1.03,
+   "text": "Thanks to the organizers."
+  },
+  {
+   "t": 1966.55,
+   "d": 6.64,
+   "text": "Thank you, everyone, for creating such a rich game space."
+  },
+  {
+   "t": 1973.19,
+   "d": 1.92,
+   "text": "This whole area and ecosystem wouldn't exist without someone else."
+  },
+  {
+   "t": 1975.12,
+   "d": 1.0,
+   "text": "So Thank you."
+  }
+ ],
+ "note": "re-timed 3 segment(s) next to the start/end of the talk from the auto-generated track: the manual timing there was compressed (up to 32 s off the audio)"
+}

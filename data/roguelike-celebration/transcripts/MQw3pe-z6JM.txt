@@ -1,0 +1,60 @@
+Florence Smith Nicholls- Another Stupid Date: Love Island as a Roguelike
+Speaker: Florence Smith Nicholls
+https://www.youtube.com/watch?v=MQw3pe-z6JM
+Year: 2023   Kind: talk   Captions: manual (en)
+
+## Introduction
+
+[0:00:10] I don't want to take more time away from the next talk which is one of the ones I am most excited about to be honest. Let's welcome Florence Smith Nicholls. FLORENCE: Hello. ALEXEI: Want to get right into it? FLORENCE: I can just go for it. Welcome to Another Stupid Date: Love Island as a Roguelike.
+
+## Love Island as a roguelike
+
+[0:00:34] I am your host, Florence Smith Nicholls and I am a PhD researchers in games AI specifically archeology approaches to procedural generation content. Today I am going to be talking about reality TV and let's play Love Island because it is a game. The way it works is you get couples and even though honestly an at symbol doesn't have a gender in love island there are two genders, men and women, and heterosexual couples. I represent this with these abstract symbols. As you expect, a lot of tension in Love Island comes from the idea that islanders want to explore their connection. This happens in our version. Equal wants to join in with divide and plus because they are all bonding over their love of the Ed Sheren album. They want to get with alpha.
+
+[0:01:37] And then sons start a romance and then they get a chance to enter the house and break up a couple and what happens? We get the recoupling ritual that Love Island has. If you watch, you know the order in which people get to choose which person they want to couple up with is important. In this case, they decide they want to be with omega and that leads the at sign to get what they want which is to be of alpha. The moon saves equals. They can still be around even with a divide and plus. And then our sun and the coffin do end up together but sadly that does mean umbrella is dumped and that's permadeath in Love Island. That's the end of the game for the umbrella. This is essentially the core game loop of Love Island. As you can kind of see with each run or week, the dating landscape changes each time.
+
+[0:02:42] It is through this I wanted to show in kind of a simple way how the core game mechanics of Love Island feel like a roguelike to me. In that spirit, I want you to vote for your favorite couple so you can scan this QR Code or go to Menti and at the end I will reveal the winner. Don't worry, this is on other slides in case you miss it right now. I am going to go through a few themes which I think are interesting to think about in
+
+## Archetypes and curation
+
+[0:03:15] comparing Love Island with roguelikes. First of all is archetypes. In Love Island and many reality TV shows you get archetype characters. It could be the every man, the joker, the girl next door or maybe the vixen. As you can see from the headline a lot of these are gendered and become toxic and I think that's a useful thing to think about in general in terms of how we use archetypes in different media forms including roguelikes and games in general. Of course, with roguelikes they are influenced by TTRPG and that's why you have different class and things like this. Love Island is heavily edited so in that sense the content generated is highly curated. A good example of this is Love Island's spin off of the main show that happens everything week. It is kind of like usually the more lighthearted stuff which is kind of interesting enough
+
+[0:04:16] to get into the unseen bits which maybe not as many people watch on a Sunday evening. But it is somehow isn't interesting enough to be in the canonical Love Island. It is interesting there are different degrees of curation.
+
+## Retellings and narratives
+
+[0:04:29] I thought an interesting comparison would be Bad News. I won't go into too much detail about what this is I am sure lots in the community know about it but it has a simulation of an American town and here is a picture of James Ryan acting as the wizard which is a role where he would curate in real-time how an actor would sort of reacting to a participant. And then I can also identify what I called, oh I have hosted retellings in terms of Love Island and Blaze ball as well. The term retellings is an instrument for critique of an interactive fair TV. It is the idea if players are motivated to retell their gameplay experience, then that is an indicator they found something interesting or memorable. Love Island tries to generate this itself through the spin off show and after each week
+
+[0:05:33] they will have a panel of people to talk about the previous week's activities. And I think an interesting example of like an official game round up is the Blaseball round up and Blaseball being this brilliant horror baseball simulation game that's my kind of short summary of that. And like I think it is really interesting how it is kind of this taxonomy of different eras and how you can see in both these examples they both lend themselves well to different types of retellings but especially hosted retellings. Kind of related to retellings, something I found in research looking at procedural generation
+
+## Glitches in systems
+
+[0:06:23] architectural storytelling is players are compelled to reflect on their experience with glitches because it is unexpected and weird things that happen. There are so many examples of glitches and roguelikes especially in Dwarf Fortress one I picked is the example of an artifact that showed like a history -- an entire history of the world and not only that but several versions of itself which is almost fractal in nature. The was like a mind warping kind of glitch that happened that I think is really cool. You get glitches in Love Island which makes sense because there is a high turnover of content and it is inevitable you will get the weird editing glitches. On the screen you can see the contestant in the foreground and background at the same time. If you look this up, there is a few articles about this online. People found it funny or interesting.
+
+[0:07:24] Yeah. I think, again, good example of similarity between the two. I have kind of mentioned audience participation and the most obvious example is people can
+
+## Audience participation
+
+[0:07:36] vote for their favorite couples on the island but also social media plays a huge role in the editing of Love Island to the extent a social media team is on site in New York where it is filmed informing the editing in real-time. I didn't realize this until recently. I think a good comparison with this is the game necrocracy because they had a bespoke conspiracy board tool allowing players to visualize their own ideas of what a was happening and this got the developers and writers to inform the weekly live game design. I had to give a shout-out to cuboid which is the AI host of the reality TV show and has a vision by Lee Alexander who is giving a talk about reality TV and roguelikes which
+
+[0:08:37] I am looking forward to so it seemed appropriate to shout-out. A kind of stylistic device of reality TV and specifically Love Island is the confessional.
+
+## Confessionals and voyeurism
+
+[0:08:49] It is this thing where they will cut away to an islander giving their perspective on events happening because it is like recorded at a different time. In the case of Love Island it is in a specific physical place within the set of Love Island and the beach home. I found the Intimate behavior of this is interesting. You know things that others don't know. And I was trying to think about how this might translate to a digital game and I think it is quite difficult to imagine that especially because the heightened voyeurism of reality TV in general is because these are real people and that's also high risk. It is not to be taken for granted but I think the kind of interesting comparison in terms of the intimate setting is the installation of bad news as you can see in this picture.
+
+[0:09:50] I think the confessional would lend well to live game design or kind of hybrid game design as well.
+
+## Uniqueness and authenticity
+
+[0:10:00] And conceptual uniqueness. Something that is a concern for roguelikes and reality TV is conceptual uniqueness. You will generate a lot of content and will it be interesting and with roguelikes is the replayability still there? This is something that is actually funny and I have talked about in this YouTube video with the writers of Love Island. Given for the fact at the beginning of the series there was a lot of controversy around the lack of racial diversity on Love Island and maybe arguably that's better there is still limited diversity in lots of other ways, right? This is seen as a reason some people are getting bored with the format and a concern for game design as well. It is interesting to kind of compare this so maybe games like boyfriend dungeon and Hades which do for sure have the possibility for queer relationships but in the case of
+
+[0:11:03] Hades that's been critiqued as not having much diversity as well. I wanted to end on kind of the irony of this like phrase that gets used a lot in reality TV and especially Love Island where if a contestant is seen as being fake they will get accused of playing the game which is so ironic because they are all playing a game. That's kind of the point. This kind of links in with a quote from a book which I love called Patricia wants to cuddle which if you like reality TV encrypted you should read this book. One of the characters says this line which is about a reality TV show that's in the book and she says it is just everything fake about the real world elucidate, exaggerated and laid bare and what I find compelling about reality TV is there is almost an honesty to the fakeness and the fact it shows how constructed ideas about relationships are and forms and
+
+[0:12:11] I think that's an interesting thing to reflect on how we approach simulations in roguelikes and other games as well.
+
+## Results and conclusion
+
+[0:12:21] And now, hopefully, I will find the result if I can get this to work on my phone. But while I am doing that, I also recently found out that there is going to be a new version of Love Island called Love Island Gales which I think is funny given the nature of this talk. And getting this to work. Our result is... I think that the winner is sun and coffin. Clearly you all love a forbidden romance is what we have learned from this. Thank you very much for watching my talk. ALEXEI: Thank you. That was wonderful. Yes, and I love the element of like you captured with sun and coffin. If it is a strong culturally metaphor it doesn't matter if it is just a coffin and a sun. I have feels about this. -- metaphor. FLORENCE: I am happy that was the result.
+
+[0:13:22] It would be interesting to do it again and see if the result changes. ALEXEI: Did you have a guess of who you thought would be the favorite? FLORENCE: I think I assumed maybe that one. ALEXEI: I voted for the at sign. FLORENCE: It would be interesting to see if you changed -- you could change the narrative so easily, right? Suddenly, oh, the coffin is the villain. Maybe people would really like that. ALEXEI: Maybe they like the spooky vibe of a coffin for Halloween. FLORENCE: True. It is Halloween.

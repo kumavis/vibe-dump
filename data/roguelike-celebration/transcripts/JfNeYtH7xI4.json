@@ -1,0 +1,4248 @@
+{
+ "id": "JfNeYtH7xI4",
+ "url": "https://www.youtube.com/watch?v=JfNeYtH7xI4",
+ "title": "Ezra Szanton - Building Synergy Networks for better Roguelike Deckbuilders",
+ "speaker": "Ezra Szanton",
+ "talk_title": "Building Synergy Networks for better Roguelike Deckbuilders",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2025-11-14",
+ "duration_s": 1840,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Roguelike Deckbuilders live or die on the quality of the drafting decisions they present. When a player chooses between 3 cards, what is going through their head? This talk is about how to achieve deep but accessible drafting decisions which result in memorable games that excite players. Synergy Networks are a helpful lens for creating sets of cards that achieve these aims. Modeling the synergies between cards as a network allows us to use ideas from network theory like path length, density and hubs. Digressions will include characteristics of synergies, broad types of synergies useful for brainstorming, and why anti-synergy is just as important as synergy itself. This talk is informed by my work designing Hellscaper and Mr Magpie's Harmless Card Game, two roguelike deckbuilders.\n\nLinks for more detail on Depth:\nhttps://cdn.aaai.org/ocs/ws/ws0340/15142-68464-1-PB.pdf\nhttps://gamedesignadvance.com/?p=3124\n\n\nLink to the mentioned talk on metrics-driven development for Slay the Spire:\nhttps://www.youtube.com/watch?v=7rqfbvnO_H0",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to speaker"
+  },
+  {
+   "start": 120,
+   "title": "Defining synergy networks"
+  },
+  {
+   "start": 257,
+   "title": "Improvisation and depth"
+  },
+  {
+   "start": 394,
+   "title": "The network model"
+  },
+  {
+   "start": 575,
+   "title": "Common design failures"
+  },
+  {
+   "start": 765,
+   "title": "Building healthy networks"
+  },
+  {
+   "start": 845,
+   "title": "Utilizing card categories"
+  },
+  {
+   "start": 960,
+   "title": "Designing for skill levels"
+  },
+  {
+   "start": 1121,
+   "title": "Synergy brainstorming"
+  },
+  {
+   "start": 1294,
+   "title": "Anti-synergy design"
+  },
+  {
+   "start": 1435,
+   "title": "Reusing network nodes"
+  },
+  {
+   "start": 1492,
+   "title": "Key takeaways and future"
+  },
+  {
+   "start": 1625,
+   "title": "Q&A and conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5993,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 9.68,
+   "d": 4.24,
+   "text": "This is uh Ezra Zantin who is a game"
+  },
+  {
+   "t": 13.92,
+   "d": 1.6,
+   "text": "designer and programmer with creative"
+  },
+  {
+   "t": 15.52,
+   "d": 1.68,
+   "text": "interests including horror games,"
+  },
+  {
+   "t": 17.2,
+   "d": 1.68,
+   "text": "journaling games, and rogike deck"
+  },
+  {
+   "t": 18.88,
+   "d": 2.56,
+   "text": "builders. Who uh Ezra loves the feeling"
+  },
+  {
+   "t": 21.44,
+   "d": 1.52,
+   "text": "of improvising on the spot while"
+  },
+  {
+   "t": 22.96,
+   "d": 2.08,
+   "text": "drafting and obsessed with designing"
+  },
+  {
+   "t": 25.04,
+   "d": 2.24,
+   "text": "games that give players that experience."
+  },
+  {
+   "t": 27.28,
+   "d": 1.6,
+   "text": "made a tile placement deck builder"
+  },
+  {
+   "t": 28.88,
+   "d": 2.0,
+   "text": "called Hellscaper and currently working"
+  },
+  {
+   "t": 30.88,
+   "d": 2.08,
+   "text": "on a horror comedy deck builder called"
+  },
+  {
+   "t": 32.96,
+   "d": 3.52,
+   "text": "Mr. Magpie's Harmless Card Game and Ezra"
+  },
+  {
+   "t": 36.48,
+   "d": 3.76,
+   "text": "is here to talk about building synergy"
+  },
+  {
+   "t": 40.24,
+   "d": 1.84,
+   "text": "networks for rogike deck builders which"
+  },
+  {
+   "t": 42.08,
+   "d": 2.08,
+   "text": "is a very interesting concept. So,"
+  },
+  {
+   "t": 44.16,
+   "d": 1.36,
+   "text": "welcome Ezra. Hello."
+  },
+  {
+   "t": 45.52,
+   "d": 2.32,
+   "text": ">> Hello. Hi. It's [snorts] really great to"
+  },
+  {
+   "t": 47.84,
+   "d": 1.68,
+   "text": "be here. I love the Rogike celebration."
+  },
+  {
+   "t": 49.52,
+   "d": 2.0,
+   "text": "I always watch all the videos and it's"
+  },
+  {
+   "t": 51.52,
+   "d": 3.2,
+   "text": "cool to be in one. Um, so yeah, as Lexi"
+  },
+  {
+   "t": 54.72,
+   "d": 1.92,
+   "text": "said, I'm talking about synergy networks"
+  },
+  {
+   "t": 56.64,
+   "d": 4.0,
+   "text": "and rogike deck builders. Um, I'm Ezra."
+  },
+  {
+   "t": 60.64,
+   "d": 3.28,
+   "text": "I have made a lot of games and my"
+  },
+  {
+   "t": 63.92,
+   "d": 1.92,
+   "text": "favorite type of game to make right now"
+  },
+  {
+   "t": 65.84,
+   "d": 3.2,
+   "text": "is a rogike deck builder. So, this is um"
+  },
+  {
+   "t": 69.04,
+   "d": 2.64,
+   "text": "Hellscaper, the tile placement deck"
+  },
+  {
+   "t": 71.68,
+   "d": 2.48,
+   "text": "builder rogike. Um, Mr. Magpie's"
+  },
+  {
+   "t": 74.16,
+   "d": 1.84,
+   "text": "harmless card game, which is a push your"
+  },
+  {
+   "t": 76.0,
+   "d": 2.24,
+   "text": "luck deck builder rogike, which actually"
+  },
+  {
+   "t": 78.24,
+   "d": 3.2,
+   "text": "started its life as explicitly what if"
+  },
+  {
+   "t": 81.44,
+   "d": 2.56,
+   "text": "party house was on a grid. Um, so it's"
+  },
+  {
+   "t": 84.0,
+   "d": 1.44,
+   "text": "really cool to be talking right after"
+  },
+  {
+   "t": 85.44,
+   "d": 3.44,
+   "text": "John. Um, and uh, yeah, it's since"
+  },
+  {
+   "t": 88.88,
+   "d": 2.96,
+   "text": "evolved into that. Plus, it also has"
+  },
+  {
+   "t": 91.84,
+   "d": 1.36,
+   "text": "this creepy puppet that you're playing"
+  },
+  {
+   "t": 93.2,
+   "d": 1.76,
+   "text": "against. Um, kind of getting at what"
+  },
+  {
+   "t": 94.96,
+   "d": 1.44,
+   "text": "Alexi was talking about earlier about"
+  },
+  {
+   "t": 96.4,
+   "d": 2.64,
+   "text": "like if you're going to blame somebody,"
+  },
+  {
+   "t": 99.04,
+   "d": 1.76,
+   "text": "do you blame a guy in the computer?"
+  },
+  {
+   "t": 100.8,
+   "d": 1.2,
+   "text": "you're like, you definitely blame this"
+  },
+  {
+   "t": 102.0,
+   "d": 2.32,
+   "text": "thing sitting across from you. Um, and"
+  },
+  {
+   "t": 104.32,
+   "d": 2.16,
+   "text": "I've also done contract work on Slumber"
+  },
+  {
+   "t": 106.48,
+   "d": 3.68,
+   "text": "Realm, which is a dice drafting rogike"
+  },
+  {
+   "t": 110.16,
+   "d": 2.0,
+   "text": "um, made by Brian Cronin, who's also a"
+  },
+  {
+   "t": 112.16,
+   "d": 2.24,
+   "text": "Rogike Celebration alum. Um, and then"
+  },
+  {
+   "t": 114.4,
+   "d": 1.68,
+   "text": "I've made a lot of prototypes that have"
+  },
+  {
+   "t": 116.08,
+   "d": 1.84,
+   "text": "never seen the light of day that are all"
+  },
+  {
+   "t": 117.92,
+   "d": 2.96,
+   "text": "Rogike deck builders. So the thing I"
+  },
+  {
+   "t": 120.88,
+   "d": 2.0,
+   "text": "want to share with you today is this"
+  },
+  {
+   "t": 122.88,
+   "d": 3.36,
+   "text": "mental model, this lens that I use when"
+  },
+  {
+   "t": 126.24,
+   "d": 1.76,
+   "text": "uh designing these games that I find to"
+  },
+  {
+   "t": 128.0,
+   "d": 3.36,
+   "text": "be very helpful um to make them. So uh"
+  },
+  {
+   "t": 131.36,
+   "d": 1.92,
+   "text": "that's Synergy Networks. We're going to"
+  },
+  {
+   "t": 133.28,
+   "d": 3.84,
+   "text": "talk about a toy game example um to sort"
+  },
+  {
+   "t": 137.12,
+   "d": 2.16,
+   "text": "of motivate and give some concrete"
+  },
+  {
+   "t": 139.28,
+   "d": 2.4,
+   "text": "examples about it. Um we're going to"
+  },
+  {
+   "t": 141.68,
+   "d": 3.12,
+   "text": "talk about what makes a good synergy"
+  },
+  {
+   "t": 144.8,
+   "d": 2.24,
+   "text": "network for some definition of good that"
+  },
+  {
+   "t": 147.04,
+   "d": 2.4,
+   "text": "we're about to come up with."
+  },
+  {
+   "t": 149.44,
+   "d": 1.6,
+   "text": "And then we're going to talk about how"
+  },
+  {
+   "t": 151.04,
+   "d": 2.32,
+   "text": "to build these networks both in a"
+  },
+  {
+   "t": 153.36,
+   "d": 2.24,
+   "text": "succinct way in terms of the text on the"
+  },
+  {
+   "t": 155.6,
+   "d": 3.92,
+   "text": "cards and um for all skill levels. So"
+  },
+  {
+   "t": 159.52,
+   "d": 4.4,
+   "text": "from beginner to intermediate to expert"
+  },
+  {
+   "t": 163.92,
+   "d": 1.76,
+   "text": "during this talk I'm assuming that we"
+  },
+  {
+   "t": 165.68,
+   "d": 2.8,
+   "text": "share these design goals. Um if we do"
+  },
+  {
+   "t": 168.48,
+   "d": 1.84,
+   "text": "then this talk should be useful to you"
+  },
+  {
+   "t": 170.32,
+   "d": 2.24,
+   "text": "even if you're not making exactly a"
+  },
+  {
+   "t": 172.56,
+   "d": 2.0,
+   "text": "rogike deck builder. Um, if we don't"
+  },
+  {
+   "t": 174.56,
+   "d": 1.68,
+   "text": "share these, then I hope the talk will"
+  },
+  {
+   "t": 176.24,
+   "d": 1.28,
+   "text": "still be interesting, but you probably"
+  },
+  {
+   "t": 177.52,
+   "d": 1.44,
+   "text": "don't want to follow the things I'm"
+  },
+  {
+   "t": 178.96,
+   "d": 3.12,
+   "text": "about to say. Um, so those goals are"
+  },
+  {
+   "t": 182.08,
+   "d": 3.04,
+   "text": "improvisational play. I love the feeling"
+  },
+  {
+   "t": 185.12,
+   "d": 2.56,
+   "text": "of like kind of improvising with the"
+  },
+  {
+   "t": 187.68,
+   "d": 2.16,
+   "text": "game, taking what the game is giving me"
+  },
+  {
+   "t": 189.84,
+   "d": 3.6,
+   "text": "and making the best of it. Um, that's as"
+  },
+  {
+   "t": 193.44,
+   "d": 2.72,
+   "text": "opposed to being able to have a strategy"
+  },
+  {
+   "t": 196.16,
+   "d": 1.52,
+   "text": "going into the game. That would not be"
+  },
+  {
+   "t": 197.68,
+   "d": 2.72,
+   "text": "improvisational play. Um, and then"
+  },
+  {
+   "t": 200.4,
+   "d": 3.28,
+   "text": "depth. Uh depth is, you know, how long a"
+  },
+  {
+   "t": 203.68,
+   "d": 2.24,
+   "text": "player can play and still keep learning."
+  },
+  {
+   "t": 205.92,
+   "d": 3.68,
+   "text": "How many skill levels there are. Um how"
+  },
+  {
+   "t": 209.6,
+   "d": 2.96,
+   "text": "long someone could describe an optimal"
+  },
+  {
+   "t": 212.56,
+   "d": 2.4,
+   "text": "way to play um like or how long they"
+  },
+  {
+   "t": 214.96,
+   "d": 2.24,
+   "text": "would need to take to describe that. Um"
+  },
+  {
+   "t": 217.2,
+   "d": 2.16,
+   "text": "that's sort of a simplified version of"
+  },
+  {
+   "t": 219.36,
+   "d": 3.28,
+   "text": "depth. I find um Frank Lance's treatment"
+  },
+  {
+   "t": 222.64,
+   "d": 2.32,
+   "text": "of the subject really interesting and"
+  },
+  {
+   "t": 224.96,
+   "d": 2.16,
+   "text": "illuminating. I've left some links in"
+  },
+  {
+   "t": 227.12,
+   "d": 2.16,
+   "text": "the corner of this screen uh to some of"
+  },
+  {
+   "t": 229.28,
+   "d": 1.68,
+   "text": "his articles. I think we could probably"
+  },
+  {
+   "t": 230.96,
+   "d": 1.52,
+   "text": "share that in the description for the"
+  },
+  {
+   "t": 232.48,
+   "d": 2.24,
+   "text": "YouTube video later as well. Um, but I"
+  },
+  {
+   "t": 234.72,
+   "d": 1.28,
+   "text": "recommend taking a look at those if"
+  },
+  {
+   "t": 236.0,
+   "d": 2.72,
+   "text": "you're curious. Um, and then the last uh"
+  },
+  {
+   "t": 238.72,
+   "d": 2.56,
+   "text": "bullet point here is generating stories."
+  },
+  {
+   "t": 241.28,
+   "d": 1.44,
+   "text": "I find that to be a really important"
+  },
+  {
+   "t": 242.72,
+   "d": 2.48,
+   "text": "thing in these kind of games to be able"
+  },
+  {
+   "t": 245.2,
+   "d": 1.44,
+   "text": "to tell your friends about the build"
+  },
+  {
+   "t": 246.64,
+   "d": 1.84,
+   "text": "that you just made. Um, those kind of"
+  },
+  {
+   "t": 248.48,
+   "d": 3.04,
+   "text": "stories. But, um, this lens of synergy"
+  },
+  {
+   "t": 251.52,
+   "d": 1.6,
+   "text": "networks isn't the best way to get at"
+  },
+  {
+   "t": 253.12,
+   "d": 1.36,
+   "text": "that. So, I'm not going to be talking"
+  },
+  {
+   "t": 254.48,
+   "d": 1.92,
+   "text": "about it as much, but it's kind of there"
+  },
+  {
+   "t": 256.4,
+   "d": 2.88,
+   "text": "in the background."
+  },
+  {
+   "t": 259.28,
+   "d": 2.8,
+   "text": "So, this is a screenshot from our"
+  },
+  {
+   "t": 262.08,
+   "d": 2.4,
+   "text": "Discord for Mr. Magpie's harmless card"
+  },
+  {
+   "t": 264.48,
+   "d": 2.4,
+   "text": "game. And I was really happy to see this"
+  },
+  {
+   "t": 266.88,
+   "d": 3.04,
+   "text": "happen because what this is is a new"
+  },
+  {
+   "t": 269.92,
+   "d": 1.68,
+   "text": "player came into our Discord and asked"
+  },
+  {
+   "t": 271.6,
+   "d": 2.88,
+   "text": "for tips. And this is our probably the"
+  },
+  {
+   "t": 274.48,
+   "d": 1.52,
+   "text": "best player at the game, but definitely"
+  },
+  {
+   "t": 276.0,
+   "d": 2.16,
+   "text": "better than me. This person's able to"
+  },
+  {
+   "t": 278.16,
+   "d": 2.96,
+   "text": "beat the game many times in a row. Um,"
+  },
+  {
+   "t": 281.12,
+   "d": 2.8,
+   "text": "and I, you know, can usually beat it"
+  },
+  {
+   "t": 283.92,
+   "d": 1.52,
+   "text": "once, but probably not many times in a"
+  },
+  {
+   "t": 285.44,
+   "d": 2.88,
+   "text": "row. Uh so this person was saying gave"
+  },
+  {
+   "t": 288.32,
+   "d": 2.08,
+   "text": "like some highle strategy tips then"
+  },
+  {
+   "t": 290.4,
+   "d": 2.0,
+   "text": "basically said um it's hard to give"
+  },
+  {
+   "t": 292.4,
+   "d": 1.92,
+   "text": "general advice. You can't shoot for one"
+  },
+  {
+   "t": 294.32,
+   "d": 1.52,
+   "text": "thing every time. You have to roll with"
+  },
+  {
+   "t": 295.84,
+   "d": 2.88,
+   "text": "the punches. And that was music to my"
+  },
+  {
+   "t": 298.72,
+   "d": 2.0,
+   "text": "eyeballs seeing that because that's"
+  },
+  {
+   "t": 300.72,
+   "d": 1.52,
+   "text": "exactly what I was going for is that"
+  },
+  {
+   "t": 302.24,
+   "d": 3.04,
+   "text": "improvisational play and depth. Um even"
+  },
+  {
+   "t": 305.28,
+   "d": 1.44,
+   "text": "from a really advanced player they"
+  },
+  {
+   "t": 306.72,
+   "d": 1.52,
+   "text": "hadn't found some strategy that they"
+  },
+  {
+   "t": 308.24,
+   "d": 2.64,
+   "text": "could use every time. Um so this talk is"
+  },
+  {
+   "t": 310.88,
+   "d": 3.44,
+   "text": "sort of how do we get there?"
+  },
+  {
+   "t": 314.32,
+   "d": 1.44,
+   "text": "This is the toy game we're going to be"
+  },
+  {
+   "t": 315.76,
+   "d": 1.92,
+   "text": "talking about. Let's call it Alpha"
+  },
+  {
+   "t": 317.68,
+   "d": 2.48,
+   "text": "Bolatro. And in Alpha Bolatro, there's"
+  },
+  {
+   "t": 320.16,
+   "d": 2.72,
+   "text": "just cards with letters on them and then"
+  },
+  {
+   "t": 322.88,
+   "d": 2.08,
+   "text": "a certain number of points and you have"
+  },
+  {
+   "t": 324.96,
+   "d": 4.24,
+   "text": "to get over X points to win a round. Um,"
+  },
+  {
+   "t": 329.2,
+   "d": 2.56,
+   "text": "so this first version of it is very"
+  },
+  {
+   "t": 331.76,
+   "d": 1.6,
+   "text": "simple and it wouldn't make a very good"
+  },
+  {
+   "t": 333.36,
+   "d": 2.96,
+   "text": "game because um, each one just has a set"
+  },
+  {
+   "t": 336.32,
+   "d": 2.08,
+   "text": "number of points. So if you have the"
+  },
+  {
+   "t": 338.4,
+   "d": 2.48,
+   "text": "choice between A and B, you would always"
+  },
+  {
+   "t": 340.88,
+   "d": 3.28,
+   "text": "take A. um A is strictly better than B"
+  },
+  {
+   "t": 344.16,
+   "d": 2.56,
+   "text": "and B is strictly better than C in this"
+  },
+  {
+   "t": 346.72,
+   "d": 3.12,
+   "text": "version of it. Um so we want some way"
+  },
+  {
+   "t": 349.84,
+   "d": 2.24,
+   "text": "for the cards to change their value"
+  },
+  {
+   "t": 352.08,
+   "d": 1.84,
+   "text": "based on the game state. That's what's"
+  },
+  {
+   "t": 353.92,
+   "d": 1.84,
+   "text": "going to make those drafting decisions"
+  },
+  {
+   "t": 355.76,
+   "d": 1.68,
+   "text": "interesting. So that you have to"
+  },
+  {
+   "t": 357.44,
+   "d": 2.16,
+   "text": "actually decide and the player has to"
+  },
+  {
+   "t": 359.6,
+   "d": 2.56,
+   "text": "evaluate the game state to see which"
+  },
+  {
+   "t": 362.16,
+   "d": 2.96,
+   "text": "ones are going to be good in that state."
+  },
+  {
+   "t": 365.12,
+   "d": 1.28,
+   "text": "And you can do that a lot of different"
+  },
+  {
+   "t": 366.4,
+   "d": 2.4,
+   "text": "ways. You could do it based on the"
+  },
+  {
+   "t": 368.8,
+   "d": 2.0,
+   "text": "environment that you're in. You could do"
+  },
+  {
+   "t": 370.8,
+   "d": 1.92,
+   "text": "it based on what enemies are coming up."
+  },
+  {
+   "t": 372.72,
+   "d": 1.68,
+   "text": "Those could all be ways to fluctuate the"
+  },
+  {
+   "t": 374.4,
+   "d": 2.64,
+   "text": "value of the cards. But um we already"
+  },
+  {
+   "t": 377.04,
+   "d": 1.68,
+   "text": "have the concept of a deck of cards"
+  },
+  {
+   "t": 378.72,
+   "d": 1.76,
+   "text": "because we're making a rogike deck"
+  },
+  {
+   "t": 380.48,
+   "d": 3.2,
+   "text": "builder. So let's try to make the cards"
+  },
+  {
+   "t": 383.68,
+   "d": 1.84,
+   "text": "change their value based on the other"
+  },
+  {
+   "t": 385.52,
+   "d": 2.48,
+   "text": "cards that you have in your deck. And if"
+  },
+  {
+   "t": 388.0,
+   "d": 1.84,
+   "text": "you do that, that's basically what"
+  },
+  {
+   "t": 389.84,
+   "d": 2.72,
+   "text": "synergy is. Synergy is when two cards"
+  },
+  {
+   "t": 392.56,
+   "d": 1.6,
+   "text": "are worth more than the sum of their"
+  },
+  {
+   "t": 394.16,
+   "d": 3.2,
+   "text": "cards. And for the purpose of this talk,"
+  },
+  {
+   "t": 397.36,
+   "d": 2.4,
+   "text": "we're going to talk about synergy as"
+  },
+  {
+   "t": 399.76,
+   "d": 3.36,
+   "text": "existing between two cards. So if we"
+  },
+  {
+   "t": 403.12,
+   "d": 3.84,
+   "text": "change A to be three points plus one"
+  },
+  {
+   "t": 406.96,
+   "d": 1.76,
+   "text": "point for every B that you have in your"
+  },
+  {
+   "t": 408.72,
+   "d": 3.68,
+   "text": "deck, then A and B would have a synergy"
+  },
+  {
+   "t": 412.4,
+   "d": 3.76,
+   "text": "of one because A and A is worth three, B"
+  },
+  {
+   "t": 416.16,
+   "d": 2.0,
+   "text": "is worth two. Together they would be"
+  },
+  {
+   "t": 418.16,
+   "d": 1.92,
+   "text": "worth five except there's this extra"
+  },
+  {
+   "t": 420.08,
+   "d": 1.84,
+   "text": "thing, the synergy that's adding one"
+  },
+  {
+   "t": 421.92,
+   "d": 2.24,
+   "text": "more on top of that."
+  },
+  {
+   "t": 424.16,
+   "d": 3.44,
+   "text": "So we can zoom out a little bit and turn"
+  },
+  {
+   "t": 427.6,
+   "d": 3.92,
+   "text": "this into a network. Um, so there's"
+  },
+  {
+   "t": 431.52,
+   "d": 2.08,
+   "text": "still A, B, and C. They're still worth"
+  },
+  {
+   "t": 433.6,
+   "d": 2.0,
+   "text": "three, two, and one points. And you can"
+  },
+  {
+   "t": 435.6,
+   "d": 2.96,
+   "text": "see the synergy between A and B is"
+  },
+  {
+   "t": 438.56,
+   "d": 2.16,
+   "text": "represented as that line in a network."
+  },
+  {
+   "t": 440.72,
+   "d": 2.56,
+   "text": "You call it an edge between the two um"
+  },
+  {
+   "t": 443.28,
+   "d": 2.48,
+   "text": "nodes of A and B. And it's just saying"
+  },
+  {
+   "t": 445.76,
+   "d": 1.68,
+   "text": "that they have a synergy together of"
+  },
+  {
+   "t": 447.44,
+   "d": 2.56,
+   "text": "one. But we can also tell by looking at"
+  },
+  {
+   "t": 450.0,
+   "d": 1.84,
+   "text": "this that C is kind of looking lonely"
+  },
+  {
+   "t": 451.84,
+   "d": 1.92,
+   "text": "over there. and you'd never really take"
+  },
+  {
+   "t": 453.76,
+   "d": 2.16,
+   "text": "C because it's only worth one point."
+  },
+  {
+   "t": 455.92,
+   "d": 1.36,
+   "text": "It's never going to be better than A or"
+  },
+  {
+   "t": 457.28,
+   "d": 4.0,
+   "text": "B. So, we could change that by adding a"
+  },
+  {
+   "t": 461.28,
+   "d": 2.8,
+   "text": "edge between B and C that has a synergy"
+  },
+  {
+   "t": 464.08,
+   "d": 3.52,
+   "text": "of two. So, now if you have no cards at"
+  },
+  {
+   "t": 467.6,
+   "d": 1.6,
+   "text": "all, it's still best to take A because"
+  },
+  {
+   "t": 469.2,
+   "d": 2.4,
+   "text": "it's the most draw points. But if you"
+  },
+  {
+   "t": 471.6,
+   "d": 2.32,
+   "text": "already have C in your deck, then it's"
+  },
+  {
+   "t": 473.92,
+   "d": 2.56,
+   "text": "actually better to take B. And if you"
+  },
+  {
+   "t": 476.48,
+   "d": 2.24,
+   "text": "had three B's in your deck, then it"
+  },
+  {
+   "t": 478.72,
+   "d": 1.92,
+   "text": "would be better to take C because of the"
+  },
+  {
+   "t": 480.64,
+   "d": 2.88,
+   "text": "synergy between them. So by changing"
+  },
+  {
+   "t": 483.52,
+   "d": 2.88,
+   "text": "this network, you can make it um correct"
+  },
+  {
+   "t": 486.4,
+   "d": 1.84,
+   "text": "to take different cards in different"
+  },
+  {
+   "t": 488.24,
+   "d": 1.92,
+   "text": "situations."
+  },
+  {
+   "t": 490.16,
+   "d": 2.88,
+   "text": "We zoom out even farther. This is a"
+  },
+  {
+   "t": 493.04,
+   "d": 2.4,
+   "text": "slightly larger synergy network. And the"
+  },
+  {
+   "t": 495.44,
+   "d": 3.2,
+   "text": "dots are all cards. And in this talk,"
+  },
+  {
+   "t": 498.64,
+   "d": 2.48,
+   "text": "I'm going to be saying the word card to"
+  },
+  {
+   "t": 501.12,
+   "d": 1.92,
+   "text": "mean basically anything that you would"
+  },
+  {
+   "t": 503.04,
+   "d": 2.56,
+   "text": "be drafting. It could be dice or jokers"
+  },
+  {
+   "t": 505.6,
+   "d": 2.72,
+   "text": "or whatever it is. Um the the thing that"
+  },
+  {
+   "t": 508.32,
+   "d": 1.04,
+   "text": "you're drafting in the game. I'll just"
+  },
+  {
+   "t": 509.36,
+   "d": 2.16,
+   "text": "say cards. And then the edges are still"
+  },
+  {
+   "t": 511.52,
+   "d": 4.08,
+   "text": "the synergy between those cards. Um, and"
+  },
+  {
+   "t": 515.6,
+   "d": 3.12,
+   "text": "you can draw networks like this. So, um,"
+  },
+  {
+   "t": 518.72,
+   "d": 2.4,
+   "text": "this might be a drafting decision. The"
+  },
+  {
+   "t": 521.12,
+   "d": 1.92,
+   "text": "red points would be cards you're"
+  },
+  {
+   "t": 523.04,
+   "d": 2.56,
+   "text": "choosing between. And now as a player,"
+  },
+  {
+   "t": 525.6,
+   "d": 1.84,
+   "text": "you're thinking, okay, which one of"
+  },
+  {
+   "t": 527.44,
+   "d": 1.52,
+   "text": "these do I want to take based on the"
+  },
+  {
+   "t": 528.96,
+   "d": 2.8,
+   "text": "other things that I already have? Um,"
+  },
+  {
+   "t": 531.76,
+   "d": 3.12,
+   "text": "and I'm not saying that players have"
+  },
+  {
+   "t": 534.88,
+   "d": 2.48,
+   "text": "this exact image in their head. I doubt"
+  },
+  {
+   "t": 537.36,
+   "d": 2.24,
+   "text": "that that would be true. Um, but if you"
+  },
+  {
+   "t": 539.6,
+   "d": 1.44,
+   "text": "played these kind of deck builder games"
+  },
+  {
+   "t": 541.04,
+   "d": 2.96,
+   "text": "before, you do have a sense when you're"
+  },
+  {
+   "t": 544.0,
+   "d": 2.0,
+   "text": "making this decision that you know"
+  },
+  {
+   "t": 546.0,
+   "d": 1.92,
+   "text": "generally these cards are good with"
+  },
+  {
+   "t": 547.92,
+   "d": 1.76,
+   "text": "these other cards. This card is really"
+  },
+  {
+   "t": 549.68,
+   "d": 1.92,
+   "text": "good with this. If I had that card, I"
+  },
+  {
+   "t": 551.6,
+   "d": 1.44,
+   "text": "really want to have this card to go with"
+  },
+  {
+   "t": 553.04,
+   "d": 3.44,
+   "text": "it. And that thought process, that"
+  },
+  {
+   "t": 556.48,
+   "d": 2.0,
+   "text": "mental model that you build up and then"
+  },
+  {
+   "t": 558.48,
+   "d": 3.12,
+   "text": "use over time is basically the synergy"
+  },
+  {
+   "t": 561.6,
+   "d": 1.84,
+   "text": "network. And it's useful for us as"
+  },
+  {
+   "t": 563.44,
+   "d": 2.24,
+   "text": "designers to have a more explicit"
+  },
+  {
+   "t": 565.68,
+   "d": 1.52,
+   "text": "version of it that we can look at and"
+  },
+  {
+   "t": 567.2,
+   "d": 2.72,
+   "text": "talk about because it helps us talk to"
+  },
+  {
+   "t": 569.92,
+   "d": 2.0,
+   "text": "each other about problems that can come"
+  },
+  {
+   "t": 571.92,
+   "d": 2.16,
+   "text": "up based off of what the network might"
+  },
+  {
+   "t": 574.08,
+   "d": 1.76,
+   "text": "look like."
+  },
+  {
+   "t": 575.84,
+   "d": 2.48,
+   "text": "One problem is that the network could be"
+  },
+  {
+   "t": 578.32,
+   "d": 3.12,
+   "text": "too sparse. Um, this happens a lot when"
+  },
+  {
+   "t": 581.44,
+   "d": 1.84,
+   "text": "you start making a game, right? Because"
+  },
+  {
+   "t": 583.28,
+   "d": 1.92,
+   "text": "there's no synergy magically added to"
+  },
+  {
+   "t": 585.2,
+   "d": 1.04,
+   "text": "your game. You have to add that"
+  },
+  {
+   "t": 586.24,
+   "d": 2.4,
+   "text": "yourself. So it might be sparse to begin"
+  },
+  {
+   "t": 588.64,
+   "d": 3.12,
+   "text": "with and you can add more synergies to"
+  },
+  {
+   "t": 591.76,
+   "d": 1.92,
+   "text": "connect the graph the network a little"
+  },
+  {
+   "t": 593.68,
+   "d": 3.28,
+   "text": "bit more. Um so this happens at the"
+  },
+  {
+   "t": 596.96,
+   "d": 2.08,
+   "text": "beginning but it can also weirdly sneak"
+  },
+  {
+   "t": 599.04,
+   "d": 3.2,
+   "text": "in at the end of a game towards the end."
+  },
+  {
+   "t": 602.24,
+   "d": 2.32,
+   "text": "um which is that players can realize"
+  },
+  {
+   "t": 604.56,
+   "d": 2.32,
+   "text": "that while there are a lot of synergies"
+  },
+  {
+   "t": 606.88,
+   "d": 3.44,
+   "text": "between the cards, some of them are way"
+  },
+  {
+   "t": 610.32,
+   "d": 1.92,
+   "text": "more valuable than others to the extent"
+  },
+  {
+   "t": 612.24,
+   "d": 2.32,
+   "text": "where they actually ignore most of the"
+  },
+  {
+   "t": 614.56,
+   "d": 1.84,
+   "text": "synergies that are there and then it's"
+  },
+  {
+   "t": 616.4,
+   "d": 1.92,
+   "text": "sparse in practice because in the"
+  },
+  {
+   "t": 618.32,
+   "d": 1.52,
+   "text": "player's mind they're not thinking about"
+  },
+  {
+   "t": 619.84,
+   "d": 2.4,
+   "text": "all the synergies."
+  },
+  {
+   "t": 622.24,
+   "d": 2.96,
+   "text": "So for instance, if you have the um"
+  },
+  {
+   "t": 625.2,
+   "d": 2.32,
+   "text": "enemy power curve or the number of"
+  },
+  {
+   "t": 627.52,
+   "d": 1.2,
+   "text": "points you have to get or whatever the"
+  },
+  {
+   "t": 628.72,
+   "d": 1.12,
+   "text": "thing is that you're trying to the"
+  },
+  {
+   "t": 629.84,
+   "d": 2.16,
+   "text": "challenge you're trying to meet, if that"
+  },
+  {
+   "t": 632.0,
+   "d": 3.04,
+   "text": "is going up at a higher order polomial"
+  },
+  {
+   "t": 635.04,
+   "d": 2.8,
+   "text": "than some of your synergies, that can"
+  },
+  {
+   "t": 637.84,
+   "d": 2.08,
+   "text": "end up I mean this can work if you"
+  },
+  {
+   "t": 639.92,
+   "d": 1.84,
+   "text": "balance it really carefully, but if you"
+  },
+  {
+   "t": 641.76,
+   "d": 2.16,
+   "text": "end up in this sparse zone over to the"
+  },
+  {
+   "t": 643.92,
+   "d": 2.64,
+   "text": "right of the screen, um it can make it"
+  },
+  {
+   "t": 646.56,
+   "d": 2.0,
+   "text": "so that players will just ignore all the"
+  },
+  {
+   "t": 648.56,
+   "d": 2.88,
+   "text": "linear synergies and they just go for"
+  },
+  {
+   "t": 651.44,
+   "d": 1.68,
+   "text": "the synergies that put them on that"
+  },
+  {
+   "t": 653.12,
+   "d": 1.68,
+   "text": "power curve that they know will let them"
+  },
+  {
+   "t": 654.8,
+   "d": 1.6,
+   "text": "beat the game because if they don't do"
+  },
+  {
+   "t": 656.4,
+   "d": 1.68,
+   "text": "that they lose. So the game is telling"
+  },
+  {
+   "t": 658.08,
+   "d": 1.68,
+   "text": "them, hey, this is all you have to care"
+  },
+  {
+   "t": 659.76,
+   "d": 3.2,
+   "text": "about. So um the synergy network can be"
+  },
+  {
+   "t": 662.96,
+   "d": 3.28,
+   "text": "too sparse. It can also be too connected"
+  },
+  {
+   "t": 666.24,
+   "d": 3.92,
+   "text": "in a specific way. So this is um if the"
+  },
+  {
+   "t": 670.16,
+   "d": 2.16,
+   "text": "if the cards are too siloed, if there"
+  },
+  {
+   "t": 672.32,
+   "d": 2.96,
+   "text": "are clusters of synergy that are really"
+  },
+  {
+   "t": 675.28,
+   "d": 2.72,
+   "text": "strong within the cluster and not many"
+  },
+  {
+   "t": 678.0,
+   "d": 1.52,
+   "text": "connections out of the cluster to other"
+  },
+  {
+   "t": 679.52,
+   "d": 2.72,
+   "text": "ones. um you get these silos. So for"
+  },
+  {
+   "t": 682.24,
+   "d": 3.44,
+   "text": "instance in alphabatro let's say we made"
+  },
+  {
+   "t": 685.68,
+   "d": 2.48,
+   "text": "the vowels have synergy with all the"
+  },
+  {
+   "t": 688.16,
+   "d": 2.48,
+   "text": "other vowels and the consonants have"
+  },
+  {
+   "t": 690.64,
+   "d": 2.16,
+   "text": "synergy with all the other consonants."
+  },
+  {
+   "t": 692.8,
+   "d": 2.16,
+   "text": "Now once you start taking vowels, you"
+  },
+  {
+   "t": 694.96,
+   "d": 1.76,
+   "text": "never want to take any consonants"
+  },
+  {
+   "t": 696.72,
+   "d": 1.36,
+   "text": "because you know that they're not going"
+  },
+  {
+   "t": 698.08,
+   "d": 1.76,
+   "text": "to be nearly as good for you as the"
+  },
+  {
+   "t": 699.84,
+   "d": 1.68,
+   "text": "other vowels since they all synergize"
+  },
+  {
+   "t": 701.52,
+   "d": 2.64,
+   "text": "together. And that can be bad because"
+  },
+  {
+   "t": 704.16,
+   "d": 1.84,
+   "text": "now once you choose one of these"
+  },
+  {
+   "t": 706.0,
+   "d": 1.52,
+   "text": "strategies, you kind of put your"
+  },
+  {
+   "t": 707.52,
+   "d": 1.84,
+   "text": "blinders on and you're just ignoring all"
+  },
+  {
+   "t": 709.36,
+   "d": 1.68,
+   "text": "of the ones outside of it. And that"
+  },
+  {
+   "t": 711.04,
+   "d": 2.32,
+   "text": "makes the game less deep. And it in some"
+  },
+  {
+   "t": 713.36,
+   "d": 1.44,
+   "text": "rare cases, it can also make it less"
+  },
+  {
+   "t": 714.8,
+   "d": 2.0,
+   "text": "improvisational because you can kind of"
+  },
+  {
+   "t": 716.8,
+   "d": 1.68,
+   "text": "choose ahead of time, I'm going to go"
+  },
+  {
+   "t": 718.48,
+   "d": 2.88,
+   "text": "for this strategy and it can work. Um,"
+  },
+  {
+   "t": 721.36,
+   "d": 1.44,
+   "text": "this happened to me when I was making"
+  },
+  {
+   "t": 722.8,
+   "d": 2.48,
+   "text": "Hellscaper because um, it was a tile"
+  },
+  {
+   "t": 725.28,
+   "d": 2.0,
+   "text": "placement game. So I was trying to work"
+  },
+  {
+   "t": 727.28,
+   "d": 2.4,
+   "text": "on both making the tile placement fun"
+  },
+  {
+   "t": 729.68,
+   "d": 3.6,
+   "text": "and the drafting fun. And um I designed"
+  },
+  {
+   "t": 733.28,
+   "d": 2.4,
+   "text": "the sets of cards the in these silos,"
+  },
+  {
+   "t": 735.68,
+   "d": 2.4,
+   "text": "these builds. Like I added all the fire"
+  },
+  {
+   "t": 738.08,
+   "d": 1.76,
+   "text": "cards and then all the monster cards."
+  },
+  {
+   "t": 739.84,
+   "d": 1.2,
+   "text": "And the monsters were all really good"
+  },
+  {
+   "t": 741.04,
+   "d": 1.36,
+   "text": "with each other and the fire cards were"
+  },
+  {
+   "t": 742.4,
+   "d": 1.68,
+   "text": "all really good with each other. But"
+  },
+  {
+   "t": 744.08,
+   "d": 2.16,
+   "text": "once I did that, the the gameplay was"
+  },
+  {
+   "t": 746.24,
+   "d": 1.28,
+   "text": "fun because they had been thoughtfully"
+  },
+  {
+   "t": 747.52,
+   "d": 2.64,
+   "text": "designed to go together. But it wasn't"
+  },
+  {
+   "t": 750.16,
+   "d": 2.56,
+   "text": "very fun to draft the game because once"
+  },
+  {
+   "t": 752.72,
+   "d": 1.44,
+   "text": "you realized that there were these sort"
+  },
+  {
+   "t": 754.16,
+   "d": 1.92,
+   "text": "of like five different builds that you"
+  },
+  {
+   "t": 756.08,
+   "d": 1.84,
+   "text": "could do, then you would just sort of"
+  },
+  {
+   "t": 757.92,
+   "d": 1.92,
+   "text": "take one card that looked good and then"
+  },
+  {
+   "t": 759.84,
+   "d": 2.16,
+   "text": "go down that path and it wasn't as deep"
+  },
+  {
+   "t": 762.0,
+   "d": 1.28,
+   "text": "anymore because you were just focusing"
+  },
+  {
+   "t": 763.28,
+   "d": 2.32,
+   "text": "on that path."
+  },
+  {
+   "t": 765.6,
+   "d": 2.64,
+   "text": "So if you avoid both the sparse case and"
+  },
+  {
+   "t": 768.24,
+   "d": 1.92,
+   "text": "the silo case, you get this healthy"
+  },
+  {
+   "t": 770.16,
+   "d": 2.1,
+   "text": "network which is well connected and it"
+  },
+  {
+   "t": 772.26,
+   "d": 1.02,
+   "text": "[clears throat] has some clusters"
+  },
+  {
+   "t": 773.28,
+   "d": 1.6,
+   "text": "because you still want buildarounds and"
+  },
+  {
+   "t": 774.88,
+   "d": 1.68,
+   "text": "things like that, but the clusters are"
+  },
+  {
+   "t": 776.56,
+   "d": 1.36,
+   "text": "weak enough and they're connected to"
+  },
+  {
+   "t": 777.92,
+   "d": 3.12,
+   "text": "each other in a way that um players can"
+  },
+  {
+   "t": 781.04,
+   "d": 1.68,
+   "text": "still think about well maybe it's worth"
+  },
+  {
+   "t": 782.72,
+   "d": 1.6,
+   "text": "branching out into this or maybe I"
+  },
+  {
+   "t": 784.32,
+   "d": 1.76,
+   "text": "should pivot into this other strategy"
+  },
+  {
+   "t": 786.08,
+   "d": 1.76,
+   "text": "because there are those pivot points"
+  },
+  {
+   "t": 787.84,
+   "d": 2.24,
+   "text": "between the clusters. And the rest of"
+  },
+  {
+   "t": 790.08,
+   "d": 2.16,
+   "text": "the talk is going to be about uh getting"
+  },
+  {
+   "t": 792.24,
+   "d": 3.12,
+   "text": "the game to this point."
+  },
+  {
+   "t": 795.36,
+   "d": 2.32,
+   "text": "Um, as a quick aside, I've been playing"
+  },
+  {
+   "t": 797.68,
+   "d": 2.96,
+   "text": "a little fast and loose with what these"
+  },
+  {
+   "t": 800.64,
+   "d": 2.32,
+   "text": "lines, these edges really mean. We"
+  },
+  {
+   "t": 802.96,
+   "d": 1.6,
+   "text": "started off with them being just a"
+  },
+  {
+   "t": 804.56,
+   "d": 2.48,
+   "text": "numeric value. Then we talked about they"
+  },
+  {
+   "t": 807.04,
+   "d": 1.84,
+   "text": "could be like linear or quadratic or"
+  },
+  {
+   "t": 808.88,
+   "d": 2.64,
+   "text": "things like that. Um, from now on, I'm"
+  },
+  {
+   "t": 811.52,
+   "d": 2.24,
+   "text": "going to be talking about them as the"
+  },
+  {
+   "t": 813.76,
+   "d": 2.64,
+   "text": "win percentage increase that you get"
+  },
+  {
+   "t": 816.4,
+   "d": 2.08,
+   "text": "from having both of the cards on either"
+  },
+  {
+   "t": 818.48,
+   "d": 3.04,
+   "text": "side of the edge. Um the reason is that"
+  },
+  {
+   "t": 821.52,
+   "d": 1.52,
+   "text": "it makes everything a lot cleaner to"
+  },
+  {
+   "t": 823.04,
+   "d": 3.52,
+   "text": "talk about and it sort of um unifies a"
+  },
+  {
+   "t": 826.56,
+   "d": 2.24,
+   "text": "lot of the um other things we're about"
+  },
+  {
+   "t": 828.8,
+   "d": 2.96,
+   "text": "to discuss. So from now on, picture this"
+  },
+  {
+   "t": 831.76,
+   "d": 2.32,
+   "text": "as each node has like a number"
+  },
+  {
+   "t": 834.08,
+   "d": 1.84,
+   "text": "associated with it of the win percentage"
+  },
+  {
+   "t": 835.92,
+   "d": 1.76,
+   "text": "you might get like its strength in the"
+  },
+  {
+   "t": 837.68,
+   "d": 2.48,
+   "text": "game generally and then every line going"
+  },
+  {
+   "t": 840.16,
+   "d": 1.76,
+   "text": "out from it is the win percentage"
+  },
+  {
+   "t": 841.92,
+   "d": 1.68,
+   "text": "increase you would get by combining it"
+  },
+  {
+   "t": 843.6,
+   "d": 3.28,
+   "text": "with another card that you have."
+  },
+  {
+   "t": 846.88,
+   "d": 2.08,
+   "text": "The main thing that's working against us"
+  },
+  {
+   "t": 848.96,
+   "d": 1.28,
+   "text": "when we're trying to make this healthy"
+  },
+  {
+   "t": 850.24,
+   "d": 3.36,
+   "text": "network is um the amount of text you"
+  },
+  {
+   "t": 853.6,
+   "d": 2.32,
+   "text": "have to play with on a card. Basically,"
+  },
+  {
+   "t": 855.92,
+   "d": 1.68,
+   "text": "you don't want the text to be too wordy"
+  },
+  {
+   "t": 857.6,
+   "d": 2.32,
+   "text": "because players get bored easily. Um and"
+  },
+  {
+   "t": 859.92,
+   "d": 1.76,
+   "text": "also it's just not very fun to read like"
+  },
+  {
+   "t": 861.68,
+   "d": 2.8,
+   "text": "a huge block of text. Um if we had as"
+  },
+  {
+   "t": 864.48,
+   "d": 2.16,
+   "text": "much text as we wanted, we could specify"
+  },
+  {
+   "t": 866.64,
+   "d": 2.24,
+   "text": "each of these edges with a line of text."
+  },
+  {
+   "t": 868.88,
+   "d": 1.6,
+   "text": "We could say like this card is good this"
+  },
+  {
+   "t": 870.48,
+   "d": 1.28,
+   "text": "thing and this thing and this thing for"
+  },
+  {
+   "t": 871.76,
+   "d": 1.76,
+   "text": "all of these different reasons. But"
+  },
+  {
+   "t": 873.52,
+   "d": 2.24,
+   "text": "because we don't, we have to rely more"
+  },
+  {
+   "t": 875.76,
+   "d": 2.64,
+   "text": "on categories. So like this um smiley"
+  },
+  {
+   "t": 878.4,
+   "d": 2.72,
+   "text": "face joker from Boltro, it um gives you"
+  },
+  {
+   "t": 881.12,
+   "d": 2.0,
+   "text": "a bonus if you play face cards. And face"
+  },
+  {
+   "t": 883.12,
+   "d": 1.92,
+   "text": "cards are a category in the game. And"
+  },
+  {
+   "t": 885.04,
+   "d": 1.36,
+   "text": "other things do other things with face"
+  },
+  {
+   "t": 886.4,
+   "d": 2.8,
+   "text": "cards. So it starts to have this um"
+  },
+  {
+   "t": 889.2,
+   "d": 2.08,
+   "text": "effect on the network that's broader"
+  },
+  {
+   "t": 891.28,
+   "d": 1.6,
+   "text": "than you would expect for the amount of"
+  },
+  {
+   "t": 892.88,
+   "d": 2.08,
+   "text": "text on the card."
+  },
+  {
+   "t": 894.96,
+   "d": 2.16,
+   "text": "Um in general, categories are basically"
+  },
+  {
+   "t": 897.12,
+   "d": 2.64,
+   "text": "the way to build these things up in a"
+  },
+  {
+   "t": 899.76,
+   "d": 3.04,
+   "text": "succinct manner. So in alphabatro we had"
+  },
+  {
+   "t": 902.8,
+   "d": 2.48,
+   "text": "our vowels and we had our consonants but"
+  },
+  {
+   "t": 905.28,
+   "d": 1.6,
+   "text": "you could also have something like piano"
+  },
+  {
+   "t": 906.88,
+   "d": 3.04,
+   "text": "notes which um are you know include some"
+  },
+  {
+   "t": 909.92,
+   "d": 2.16,
+   "text": "vowels and some consonants but not all"
+  },
+  {
+   "t": 912.08,
+   "d": 2.0,
+   "text": "of them. So now you're sort of slicing"
+  },
+  {
+   "t": 914.08,
+   "d": 1.68,
+   "text": "up the content in these different"
+  },
+  {
+   "t": 915.76,
+   "d": 1.92,
+   "text": "categories and because they're not"
+  },
+  {
+   "t": 917.68,
+   "d": 1.44,
+   "text": "overlapping you're getting those"
+  },
+  {
+   "t": 919.12,
+   "d": 1.84,
+   "text": "connections between the clusters that's"
+  },
+  {
+   "t": 920.96,
+   "d": 2.48,
+   "text": "so important. And it doesn't have to be"
+  },
+  {
+   "t": 923.44,
+   "d": 2.08,
+   "text": "just the identities of the cards that"
+  },
+  {
+   "t": 925.52,
+   "d": 2.24,
+   "text": "are these categories. It can also be"
+  },
+  {
+   "t": 927.76,
+   "d": 2.96,
+   "text": "related to their effects. So, um, in"
+  },
+  {
+   "t": 930.72,
+   "d": 2.0,
+   "text": "addition to the explicit categories of"
+  },
+  {
+   "t": 932.72,
+   "d": 2.72,
+   "text": "like this type and this other type, you"
+  },
+  {
+   "t": 935.44,
+   "d": 2.72,
+   "text": "could also have some cards that say do"
+  },
+  {
+   "t": 938.16,
+   "d": 2.0,
+   "text": "blank and then another set of cards that"
+  },
+  {
+   "t": 940.16,
+   "d": 2.0,
+   "text": "say when blank happens, you gain some"
+  },
+  {
+   "t": 942.16,
+   "d": 3.12,
+   "text": "benefit or, you know, create a FU token"
+  },
+  {
+   "t": 945.28,
+   "d": 2.4,
+   "text": "as one category and then use a FU token"
+  },
+  {
+   "t": 947.68,
+   "d": 1.52,
+   "text": "to do some benefit as a different"
+  },
+  {
+   "t": 949.2,
+   "d": 2.96,
+   "text": "category. And now you have these sets of"
+  },
+  {
+   "t": 952.16,
+   "d": 2.24,
+   "text": "cards that talk to each other, but"
+  },
+  {
+   "t": 954.4,
+   "d": 2.0,
+   "text": "they're split up in different ways so"
+  },
+  {
+   "t": 956.4,
+   "d": 1.76,
+   "text": "that they again don't cluster up too"
+  },
+  {
+   "t": 958.16,
+   "d": 1.36,
+   "text": "much, but they are connecting a lot of"
+  },
+  {
+   "t": 959.52,
+   "d": 2.56,
+   "text": "the network together."
+  },
+  {
+   "t": 962.08,
+   "d": 2.16,
+   "text": "An important thing to think about while"
+  },
+  {
+   "t": 964.24,
+   "d": 2.8,
+   "text": "you're designing this is the experience"
+  },
+  {
+   "t": 967.04,
+   "d": 2.4,
+   "text": "for each level of player. So, you want"
+  },
+  {
+   "t": 969.44,
+   "d": 2.08,
+   "text": "beginners to be able to start climbing"
+  },
+  {
+   "t": 971.52,
+   "d": 1.84,
+   "text": "that skill curve pretty quick, but you"
+  },
+  {
+   "t": 973.36,
+   "d": 2.56,
+   "text": "also want to be very deep and have your"
+  },
+  {
+   "t": 975.92,
+   "d": 2.0,
+   "text": "expert players have more things they can"
+  },
+  {
+   "t": 977.92,
+   "d": 2.56,
+   "text": "realize over time. So there's this"
+  },
+  {
+   "t": 980.48,
+   "d": 2.0,
+   "text": "learning curve where some types of"
+  },
+  {
+   "t": 982.48,
+   "d": 2.4,
+   "text": "synergies are easier to figure out than"
+  },
+  {
+   "t": 984.88,
+   "d": 2.88,
+   "text": "others. Um these are some examples from"
+  },
+  {
+   "t": 987.76,
+   "d": 2.96,
+   "text": "Slay the Spire. So explicit call outs"
+  },
+  {
+   "t": 990.72,
+   "d": 1.84,
+   "text": "are basically the most obvious thing you"
+  },
+  {
+   "t": 992.56,
+   "d": 2.32,
+   "text": "can do. Perfected strike is a perfect"
+  },
+  {
+   "t": 994.88,
+   "d": 2.88,
+   "text": "example. Um it literally says it gets"
+  },
+  {
+   "t": 997.76,
+   "d": 1.76,
+   "text": "additional damage for every card"
+  },
+  {
+   "t": 999.52,
+   "d": 2.32,
+   "text": "containing strike. And strike is a basic"
+  },
+  {
+   "t": 1001.84,
+   "d": 1.36,
+   "text": "card in your sharding deck. And also"
+  },
+  {
+   "t": 1003.2,
+   "d": 1.68,
+   "text": "they look the same. So it's like really"
+  },
+  {
+   "t": 1004.88,
+   "d": 1.92,
+   "text": "obvious that these cards are meant to go"
+  },
+  {
+   "t": 1006.8,
+   "d": 1.36,
+   "text": "together. And I think a lot of new"
+  },
+  {
+   "t": 1008.16,
+   "d": 1.68,
+   "text": "players play with this card and they"
+  },
+  {
+   "t": 1009.84,
+   "d": 2.0,
+   "text": "feel good about it and that's great. And"
+  },
+  {
+   "t": 1011.84,
+   "d": 2.4,
+   "text": "you know expert players might poo this a"
+  },
+  {
+   "t": 1014.24,
+   "d": 1.84,
+   "text": "little bit. I went through a phase in my"
+  },
+  {
+   "t": 1016.08,
+   "d": 2.16,
+   "text": "design process where I sort of pooed it"
+  },
+  {
+   "t": 1018.24,
+   "d": 2.0,
+   "text": "and I was like this isn't really"
+  },
+  {
+   "t": 1020.24,
+   "d": 1.44,
+   "text": "important or like this isn't very"
+  },
+  {
+   "t": 1021.68,
+   "d": 3.12,
+   "text": "interesting. But it it is important and"
+  },
+  {
+   "t": 1024.8,
+   "d": 1.76,
+   "text": "expert players you know even if they"
+  },
+  {
+   "t": 1026.56,
+   "d": 1.76,
+   "text": "think it's a little bit basic or"
+  },
+  {
+   "t": 1028.32,
+   "d": 2.08,
+   "text": "something they can just ignore it and"
+  },
+  {
+   "t": 1030.4,
+   "d": 1.36,
+   "text": "they can focus on the other stuff. But"
+  },
+  {
+   "t": 1031.76,
+   "d": 1.76,
+   "text": "the new players do need this and it's"
+  },
+  {
+   "t": 1033.52,
+   "d": 1.52,
+   "text": "important to get them on board and"
+  },
+  {
+   "t": 1035.04,
+   "d": 1.76,
+   "text": "realizing what kinds of synergies you"
+  },
+  {
+   "t": 1036.8,
+   "d": 2.24,
+   "text": "might have in your game. Um, an"
+  },
+  {
+   "t": 1039.04,
+   "d": 2.56,
+   "text": "intermediate step would be things are"
+  },
+  {
+   "t": 1041.6,
+   "d": 2.16,
+   "text": "connected to each other but through some"
+  },
+  {
+   "t": 1043.76,
+   "d": 2.16,
+   "text": "intermediate thing. For instance,"
+  },
+  {
+   "t": 1045.92,
+   "d": 2.24,
+   "text": "inflame gives you two strength. Well,"
+  },
+  {
+   "t": 1048.16,
+   "d": 1.76,
+   "text": "okay, nothing on inflame is saying that"
+  },
+  {
+   "t": 1049.92,
+   "d": 2.96,
+   "text": "it's good to strike, but strength says"
+  },
+  {
+   "t": 1052.88,
+   "d": 2.24,
+   "text": "it gives um additional damage whenever"
+  },
+  {
+   "t": 1055.12,
+   "d": 3.68,
+   "text": "you attack. So now um there's this"
+  },
+  {
+   "t": 1058.8,
+   "d": 1.6,
+   "text": "linkage where like inflame is giving you"
+  },
+  {
+   "t": 1060.4,
+   "d": 1.2,
+   "text": "strength. Strength is saying it's good"
+  },
+  {
+   "t": 1061.6,
+   "d": 1.76,
+   "text": "with attacks. So inflame is good with"
+  },
+  {
+   "t": 1063.36,
+   "d": 2.4,
+   "text": "attacks. Um but it wasn't quite as"
+  },
+  {
+   "t": 1065.76,
+   "d": 2.0,
+   "text": "explicit as before. It wasn't as obvious"
+  },
+  {
+   "t": 1067.76,
+   "d": 1.84,
+   "text": "as perfected strike, but it's still"
+  },
+  {
+   "t": 1069.6,
+   "d": 2.0,
+   "text": "somewhere in the middle. And then on the"
+  },
+  {
+   "t": 1071.6,
+   "d": 2.56,
+   "text": "far end of being obscure, there's"
+  },
+  {
+   "t": 1074.16,
+   "d": 2.24,
+   "text": "consequences that arise as a natural"
+  },
+  {
+   "t": 1076.4,
+   "d": 3.28,
+   "text": "result of the game play. So acrobatics"
+  },
+  {
+   "t": 1079.68,
+   "d": 3.2,
+   "text": "lets you draw extra cards and slice is a"
+  },
+  {
+   "t": 1082.88,
+   "d": 1.52,
+   "text": "card that deals some damage, but it"
+  },
+  {
+   "t": 1084.4,
+   "d": 2.24,
+   "text": "costs zero. So, these cards are good"
+  },
+  {
+   "t": 1086.64,
+   "d": 2.4,
+   "text": "together because um when you're drawing"
+  },
+  {
+   "t": 1089.04,
+   "d": 1.76,
+   "text": "a lot of cards, you might not have the"
+  },
+  {
+   "t": 1090.8,
+   "d": 1.68,
+   "text": "resources to play all of them. But if"
+  },
+  {
+   "t": 1092.48,
+   "d": 1.52,
+   "text": "something costs zero, you can definitely"
+  },
+  {
+   "t": 1094.0,
+   "d": 2.16,
+   "text": "play it. So, these cards are good"
+  },
+  {
+   "t": 1096.16,
+   "d": 2.56,
+   "text": "together due to a result of like how the"
+  },
+  {
+   "t": 1098.72,
+   "d": 2.48,
+   "text": "game is played. I don't know, maybe some"
+  },
+  {
+   "t": 1101.2,
+   "d": 1.6,
+   "text": "advanced players would realize that"
+  },
+  {
+   "t": 1102.8,
+   "d": 2.72,
+   "text": "quickly. Um but in general, you have to"
+  },
+  {
+   "t": 1105.52,
+   "d": 1.2,
+   "text": "kind of play the game to figure this"
+  },
+  {
+   "t": 1106.72,
+   "d": 3.36,
+   "text": "out. Um, and this synergy is pretty"
+  },
+  {
+   "t": 1110.08,
+   "d": 2.0,
+   "text": "subtle to the point where I don't think"
+  },
+  {
+   "t": 1112.08,
+   "d": 2.48,
+   "text": "most players would call this a synergy,"
+  },
+  {
+   "t": 1114.56,
+   "d": 2.8,
+   "text": "but for our purposes of is there some"
+  },
+  {
+   "t": 1117.36,
+   "d": 1.84,
+   "text": "win percentage increase when you have"
+  },
+  {
+   "t": 1119.2,
+   "d": 2.0,
+   "text": "these two cards together, it absolutely"
+  },
+  {
+   "t": 1121.2,
+   "d": 2.0,
+   "text": "counts."
+  },
+  {
+   "t": 1123.2,
+   "d": 2.16,
+   "text": "This is a cheat sheet that I use"
+  },
+  {
+   "t": 1125.36,
+   "d": 2.0,
+   "text": "sometimes to go down like, okay, I need"
+  },
+  {
+   "t": 1127.36,
+   "d": 1.76,
+   "text": "to add some more categories. I need to"
+  },
+  {
+   "t": 1129.12,
+   "d": 1.68,
+   "text": "add some more synergies to my game."
+  },
+  {
+   "t": 1130.8,
+   "d": 2.24,
+   "text": "Like, uh, what are some ideas? Um, and"
+  },
+  {
+   "t": 1133.04,
+   "d": 1.92,
+   "text": "I'm listed them here from obvious to"
+  },
+  {
+   "t": 1134.96,
+   "d": 3.2,
+   "text": "obscure. Um, and as we go on the right"
+  },
+  {
+   "t": 1138.16,
+   "d": 1.52,
+   "text": "side, I'm going to be building up like"
+  },
+  {
+   "t": 1139.68,
+   "d": 1.84,
+   "text": "what a player's mental model might be as"
+  },
+  {
+   "t": 1141.52,
+   "d": 2.64,
+   "text": "they're realizing these things. Um,"
+  },
+  {
+   "t": 1144.16,
+   "d": 1.68,
+   "text": "explicit callouts we just talked about"
+  },
+  {
+   "t": 1145.84,
+   "d": 2.56,
+   "text": "that's um, you're saying this thing is"
+  },
+  {
+   "t": 1148.4,
+   "d": 1.28,
+   "text": "good with this other thing or this"
+  },
+  {
+   "t": 1149.68,
+   "d": 2.32,
+   "text": "category of thing. Um, resource"
+  },
+  {
+   "t": 1152.0,
+   "d": 2.48,
+   "text": "generation and use that's this thing"
+  },
+  {
+   "t": 1154.48,
+   "d": 1.76,
+   "text": "generates a fire token and these things"
+  },
+  {
+   "t": 1156.24,
+   "d": 2.32,
+   "text": "use fire tokens. Um, those are synergies"
+  },
+  {
+   "t": 1158.56,
+   "d": 3.52,
+   "text": "together. Chains of events. This is like"
+  },
+  {
+   "t": 1162.08,
+   "d": 2.8,
+   "text": "um you know this card heals you and then"
+  },
+  {
+   "t": 1164.88,
+   "d": 2.0,
+   "text": "another card says when you are healed"
+  },
+  {
+   "t": 1166.88,
+   "d": 2.8,
+   "text": "draw a card. Um and chains of events can"
+  },
+  {
+   "t": 1169.68,
+   "d": 1.6,
+   "text": "sometimes be like loops or infinite"
+  },
+  {
+   "t": 1171.28,
+   "d": 2.72,
+   "text": "loops, things like that. Um"
+  },
+  {
+   "t": 1174.0,
+   "d": 1.84,
+   "text": "multiplicative relationships. This is"
+  },
+  {
+   "t": 1175.84,
+   "d": 2.24,
+   "text": "getting towards the more obscure side of"
+  },
+  {
+   "t": 1178.08,
+   "d": 2.48,
+   "text": "things. Um a really obvious example of"
+  },
+  {
+   "t": 1180.56,
+   "d": 1.92,
+   "text": "this would be the chips and molt in"
+  },
+  {
+   "t": 1182.48,
+   "d": 2.72,
+   "text": "Bellatro. Literally you are multiplying"
+  },
+  {
+   "t": 1185.2,
+   "d": 2.4,
+   "text": "them together to get your score. So, by"
+  },
+  {
+   "t": 1187.6,
+   "d": 2.24,
+   "text": "the very nature of the game, all of your"
+  },
+  {
+   "t": 1189.84,
+   "d": 2.16,
+   "text": "chips cards and all of your malt cards"
+  },
+  {
+   "t": 1192.0,
+   "d": 1.44,
+   "text": "have synergy with each other because"
+  },
+  {
+   "t": 1193.44,
+   "d": 1.76,
+   "text": "they're worth more than some of their"
+  },
+  {
+   "t": 1195.2,
+   "d": 1.76,
+   "text": "parts since they're multiplied together"
+  },
+  {
+   "t": 1196.96,
+   "d": 4.0,
+   "text": "instead of added together. Um, a more uh"
+  },
+  {
+   "t": 1200.96,
+   "d": 1.68,
+   "text": "strange example might be something like"
+  },
+  {
+   "t": 1202.64,
+   "d": 2.32,
+   "text": "poison where in a lot of games there's"
+  },
+  {
+   "t": 1204.96,
+   "d": 1.44,
+   "text": "like you deal a certain amount of poison"
+  },
+  {
+   "t": 1206.4,
+   "d": 3.2,
+   "text": "and it decays over time. that's actually"
+  },
+  {
+   "t": 1209.6,
+   "d": 2.48,
+   "text": "multiplicative with itself because you"
+  },
+  {
+   "t": 1212.08,
+   "d": 1.44,
+   "text": "have a certain amount of damage, but"
+  },
+  {
+   "t": 1213.52,
+   "d": 1.68,
+   "text": "also the damage is related to how many"
+  },
+  {
+   "t": 1215.2,
+   "d": 2.48,
+   "text": "turns it's going to be applied. So, um"
+  },
+  {
+   "t": 1217.68,
+   "d": 2.08,
+   "text": "it has sort of an n squ divided by two"
+  },
+  {
+   "t": 1219.76,
+   "d": 1.52,
+   "text": "thing going on and that is"
+  },
+  {
+   "t": 1221.28,
+   "d": 2.88,
+   "text": "multiplicative with itself. Um, finally,"
+  },
+  {
+   "t": 1224.16,
+   "d": 1.36,
+   "text": "benefiting from the same gameplay"
+  },
+  {
+   "t": 1225.52,
+   "d": 2.24,
+   "text": "choice. This is way on the end of"
+  },
+  {
+   "t": 1227.76,
+   "d": 2.56,
+   "text": "obscure, but it's something like, um,"
+  },
+  {
+   "t": 1230.32,
+   "d": 2.8,
+   "text": "let's say in Alphabatro, we instituted a"
+  },
+  {
+   "t": 1233.12,
+   "d": 1.6,
+   "text": "rule where at the beginning of your"
+  },
+  {
+   "t": 1234.72,
+   "d": 1.76,
+   "text": "turn, you would declare yourself to be"
+  },
+  {
+   "t": 1236.48,
+   "d": 2.88,
+   "text": "either a poet or a scholar. And some of"
+  },
+  {
+   "t": 1239.36,
+   "d": 2.16,
+   "text": "your cards would say you get a benefit"
+  },
+  {
+   "t": 1241.52,
+   "d": 1.68,
+   "text": "if you've chosen to be a poet, and some"
+  },
+  {
+   "t": 1243.2,
+   "d": 1.36,
+   "text": "of them say you get a benefit if you've"
+  },
+  {
+   "t": 1244.56,
+   "d": 1.92,
+   "text": "chosen to be a scholar. This is just an"
+  },
+  {
+   "t": 1246.48,
+   "d": 2.4,
+   "text": "observation that um cards that are"
+  },
+  {
+   "t": 1248.88,
+   "d": 1.6,
+   "text": "either one or the other of those things"
+  },
+  {
+   "t": 1250.48,
+   "d": 1.68,
+   "text": "would all have synergy within"
+  },
+  {
+   "t": 1252.16,
+   "d": 1.36,
+   "text": "themselves. You wouldn't want to split"
+  },
+  {
+   "t": 1253.52,
+   "d": 1.68,
+   "text": "it up too much because they're all"
+  },
+  {
+   "t": 1255.2,
+   "d": 1.52,
+   "text": "getting the benefit of you choosing that"
+  },
+  {
+   "t": 1256.72,
+   "d": 2.32,
+   "text": "thing. Um that sounds like a really"
+  },
+  {
+   "t": 1259.04,
+   "d": 2.8,
+   "text": "contrived example, but it does come up."
+  },
+  {
+   "t": 1261.84,
+   "d": 2.16,
+   "text": "Um in Mr. Magpie's harmless card game,"
+  },
+  {
+   "t": 1264.0,
+   "d": 2.4,
+   "text": "for instance, um some of the perks in"
+  },
+  {
+   "t": 1266.4,
+   "d": 3.2,
+   "text": "the game, which are like our jokers, um"
+  },
+  {
+   "t": 1269.6,
+   "d": 2.4,
+   "text": "give you a bonus if you flip cards up in"
+  },
+  {
+   "t": 1272.0,
+   "d": 2.32,
+   "text": "sort of a checkerboard pattern, and some"
+  },
+  {
+   "t": 1274.32,
+   "d": 1.92,
+   "text": "of them give you a bonus if you flip"
+  },
+  {
+   "t": 1276.24,
+   "d": 1.6,
+   "text": "them up from right to left, which"
+  },
+  {
+   "t": 1277.84,
+   "d": 1.68,
+   "text": "incentivizes you to not do them in a"
+  },
+  {
+   "t": 1279.52,
+   "d": 3.12,
+   "text": "checkerboard pattern. So, um it's a"
+  },
+  {
+   "t": 1282.64,
+   "d": 2.0,
+   "text": "little bit better if you have all cars"
+  },
+  {
+   "t": 1284.64,
+   "d": 2.56,
+   "text": "that are, you know, um incentivizing you"
+  },
+  {
+   "t": 1287.2,
+   "d": 2.08,
+   "text": "to do one or the other of those things,"
+  },
+  {
+   "t": 1289.28,
+   "d": 1.28,
+   "text": "but it's pretty subtle. That's pretty"
+  },
+  {
+   "t": 1290.56,
+   "d": 2.0,
+   "text": "obscure and probably um only more"
+  },
+  {
+   "t": 1292.56,
+   "d": 2.88,
+   "text": "advanced players start to realize that."
+  },
+  {
+   "t": 1295.44,
+   "d": 2.16,
+   "text": "In addition to synergies, anti-inergies"
+  },
+  {
+   "t": 1297.6,
+   "d": 2.32,
+   "text": "are also very important. Players don't"
+  },
+  {
+   "t": 1299.92,
+   "d": 1.84,
+   "text": "like to think about anti-inergies as"
+  },
+  {
+   "t": 1301.76,
+   "d": 2.8,
+   "text": "much. I don't think it's as exciting to"
+  },
+  {
+   "t": 1304.56,
+   "d": 1.6,
+   "text": "realize that two cards are worse"
+  },
+  {
+   "t": 1306.16,
+   "d": 1.84,
+   "text": "together than you thought as opposed to"
+  },
+  {
+   "t": 1308.0,
+   "d": 1.28,
+   "text": "realizing that they're better than you"
+  },
+  {
+   "t": 1309.28,
+   "d": 3.12,
+   "text": "thought. Um so this is really a tool for"
+  },
+  {
+   "t": 1312.4,
+   "d": 3.52,
+   "text": "us as designers to call some of the"
+  },
+  {
+   "t": 1315.92,
+   "d": 2.88,
+   "text": "synergy network down. um and also just"
+  },
+  {
+   "t": 1318.8,
+   "d": 1.68,
+   "text": "add some more depth for players to"
+  },
+  {
+   "t": 1320.48,
+   "d": 2.24,
+   "text": "realize over time. The reason I've"
+  },
+  {
+   "t": 1322.72,
+   "d": 2.16,
+   "text": "crossed out explicit downside here is"
+  },
+  {
+   "t": 1324.88,
+   "d": 2.0,
+   "text": "that the point of the explicit"
+  },
+  {
+   "t": 1326.88,
+   "d": 2.4,
+   "text": "synergies, this explicit callouts is"
+  },
+  {
+   "t": 1329.28,
+   "d": 1.84,
+   "text": "really to get new players excited about"
+  },
+  {
+   "t": 1331.12,
+   "d": 2.56,
+   "text": "the game. So, um because downsides"
+  },
+  {
+   "t": 1333.68,
+   "d": 2.4,
+   "text": "aren't really exciting, um it doesn't"
+  },
+  {
+   "t": 1336.08,
+   "d": 1.76,
+   "text": "really make sense to have explicit"
+  },
+  {
+   "t": 1337.84,
+   "d": 1.76,
+   "text": "downsides. So, most of these things are"
+  },
+  {
+   "t": 1339.6,
+   "d": 2.64,
+   "text": "towards the obscure end. Um, compounding"
+  },
+  {
+   "t": 1342.24,
+   "d": 3.2,
+   "text": "downside is when something by itself is"
+  },
+  {
+   "t": 1345.44,
+   "d": 1.44,
+   "text": "not too bad, but if you have a lot of"
+  },
+  {
+   "t": 1346.88,
+   "d": 2.0,
+   "text": "it, it starts to become a problem. So,"
+  },
+  {
+   "t": 1348.88,
+   "d": 3.2,
+   "text": "like, um, cards that deal you damage,"
+  },
+  {
+   "t": 1352.08,
+   "d": 1.84,
+   "text": "sometimes that's like, you know, one of"
+  },
+  {
+   "t": 1353.92,
+   "d": 1.44,
+   "text": "them is okay, but if you have too many"
+  },
+  {
+   "t": 1355.36,
+   "d": 2.08,
+   "text": "of them, it starts to be a problem. Uh,"
+  },
+  {
+   "t": 1357.44,
+   "d": 3.04,
+   "text": "using the same resource, this is like if"
+  },
+  {
+   "t": 1360.48,
+   "d": 1.6,
+   "text": "um you have a lot of cards that cost a"
+  },
+  {
+   "t": 1362.08,
+   "d": 1.52,
+   "text": "lot of mana, you're probably not going"
+  },
+  {
+   "t": 1363.6,
+   "d": 1.6,
+   "text": "to be able to play all of them. So,"
+  },
+  {
+   "t": 1365.2,
+   "d": 1.84,
+   "text": "since they're using the same resource,"
+  },
+  {
+   "t": 1367.04,
+   "d": 2.0,
+   "text": "um, it's bad to have too much of them."
+  },
+  {
+   "t": 1369.04,
+   "d": 2.72,
+   "text": "diminishing returns is um something like"
+  },
+  {
+   "t": 1371.76,
+   "d": 2.64,
+   "text": "defense where you only really need"
+  },
+  {
+   "t": 1374.4,
+   "d": 1.44,
+   "text": "enough defense to defend against"
+  },
+  {
+   "t": 1375.84,
+   "d": 1.68,
+   "text": "whatever is attacking you and anything"
+  },
+  {
+   "t": 1377.52,
+   "d": 2.56,
+   "text": "above that is not useful. So you would"
+  },
+  {
+   "t": 1380.08,
+   "d": 1.76,
+   "text": "want to not have too many defense cards."
+  },
+  {
+   "t": 1381.84,
+   "d": 1.36,
+   "text": "You want to mix it up and have some"
+  },
+  {
+   "t": 1383.2,
+   "d": 2.56,
+   "text": "other cards as well. And then promoting"
+  },
+  {
+   "t": 1385.76,
+   "d": 1.92,
+   "text": "conflicting gameplay choices, that's"
+  },
+  {
+   "t": 1387.68,
+   "d": 2.48,
+   "text": "just the opposite of um promoting"
+  },
+  {
+   "t": 1390.16,
+   "d": 3.28,
+   "text": "benefiting the same uh gameplay choice."
+  },
+  {
+   "t": 1393.44,
+   "d": 1.92,
+   "text": "And you can see here that like basically"
+  },
+  {
+   "t": 1395.36,
+   "d": 2.8,
+   "text": "these anti-ynergies are taking away"
+  },
+  {
+   "t": 1398.16,
+   "d": 2.72,
+   "text": "edges from the synergy network um in our"
+  },
+  {
+   "t": 1400.88,
+   "d": 1.36,
+   "text": "players mental model that we're"
+  },
+  {
+   "t": 1402.24,
+   "d": 3.6,
+   "text": "picturing here. Um and another just"
+  },
+  {
+   "t": 1405.84,
+   "d": 3.12,
+   "text": "little pedantic note here um the the"
+  },
+  {
+   "t": 1408.96,
+   "d": 3.52,
+   "text": "lines that we're using are really um if"
+  },
+  {
+   "t": 1412.48,
+   "d": 2.24,
+   "text": "we were completely mathematically"
+  },
+  {
+   "t": 1414.72,
+   "d": 2.88,
+   "text": "correct every edge would be fully"
+  },
+  {
+   "t": 1417.6,
+   "d": 1.52,
+   "text": "connected or sorry every node would be"
+  },
+  {
+   "t": 1419.12,
+   "d": 2.32,
+   "text": "fully connected to every other node um"
+  },
+  {
+   "t": 1421.44,
+   "d": 1.52,
+   "text": "and a lot of them would just be near"
+  },
+  {
+   "t": 1422.96,
+   "d": 2.0,
+   "text": "zero or a little bit negative. Um, so"
+  },
+  {
+   "t": 1424.96,
+   "d": 1.28,
+   "text": "when I'm drawing these, really we're"
+  },
+  {
+   "t": 1426.24,
+   "d": 2.24,
+   "text": "talking about when they're positive win"
+  },
+  {
+   "t": 1428.48,
+   "d": 1.68,
+   "text": "percentage increases above a certain"
+  },
+  {
+   "t": 1430.16,
+   "d": 1.76,
+   "text": "point. We're kind of thresholding it"
+  },
+  {
+   "t": 1431.92,
+   "d": 1.84,
+   "text": "because that lines up closer to what"
+  },
+  {
+   "t": 1433.76,
+   "d": 1.12,
+   "text": "players are going to be thinking about"
+  },
+  {
+   "t": 1434.88,
+   "d": 2.4,
+   "text": "when they're playing the game."
+  },
+  {
+   "t": 1437.28,
+   "d": 1.44,
+   "text": "Now that we understand about synergy"
+  },
+  {
+   "t": 1438.72,
+   "d": 1.44,
+   "text": "networks, there's a couple fun things"
+  },
+  {
+   "t": 1440.16,
+   "d": 2.24,
+   "text": "that we can do to mix it up. So for"
+  },
+  {
+   "t": 1442.4,
+   "d": 2.56,
+   "text": "instance, card packs, uh, Starvaders"
+  },
+  {
+   "t": 1444.96,
+   "d": 2.32,
+   "text": "does this, uh, Super Autos does this."
+  },
+  {
+   "t": 1447.28,
+   "d": 2.24,
+   "text": "Actually, um, Party House also does this"
+  },
+  {
+   "t": 1449.52,
+   "d": 2.8,
+   "text": "with the randomized, uh, game mode, um,"
+  },
+  {
+   "t": 1452.32,
+   "d": 2.96,
+   "text": "where you're adding in different nodes"
+  },
+  {
+   "t": 1455.28,
+   "d": 1.68,
+   "text": "and these nodes together, what are they"
+  },
+  {
+   "t": 1456.96,
+   "d": 1.36,
+   "text": "doing? And these other nodes together,"
+  },
+  {
+   "t": 1458.32,
+   "d": 1.52,
+   "text": "what are they doing? They're sort of"
+  },
+  {
+   "t": 1459.84,
+   "d": 2.32,
+   "text": "giving players a chance to learn a new"
+  },
+  {
+   "t": 1462.16,
+   "d": 2.32,
+   "text": "synergy network out of the same cards"
+  },
+  {
+   "t": 1464.48,
+   "d": 1.84,
+   "text": "due to um, the other cards that are"
+  },
+  {
+   "t": 1466.32,
+   "d": 2.4,
+   "text": "around them in the pool. Uh, new"
+  },
+  {
+   "t": 1468.72,
+   "d": 1.84,
+   "text": "characters are similar for this where"
+  },
+  {
+   "t": 1470.56,
+   "d": 1.52,
+   "text": "like in Slay the Spire, there's a base"
+  },
+  {
+   "t": 1472.08,
+   "d": 2.0,
+   "text": "set of cards and then additional cards"
+  },
+  {
+   "t": 1474.08,
+   "d": 2.4,
+   "text": "are added in for each character. Um,"
+  },
+  {
+   "t": 1476.48,
+   "d": 1.92,
+   "text": "rules change is another way to do this."
+  },
+  {
+   "t": 1478.4,
+   "d": 2.16,
+   "text": "Like in Dicey Dungeons, um, the"
+  },
+  {
+   "t": 1480.56,
+   "d": 1.44,
+   "text": "characters use pretty much the same"
+  },
+  {
+   "t": 1482.0,
+   "d": 1.76,
+   "text": "equipment across them. Some there's some"
+  },
+  {
+   "t": 1483.76,
+   "d": 2.24,
+   "text": "slight differences, but, um, really the"
+  },
+  {
+   "t": 1486.0,
+   "d": 1.92,
+   "text": "rules of the game change, and that"
+  },
+  {
+   "t": 1487.92,
+   "d": 2.32,
+   "text": "changes how you evaluate the different,"
+  },
+  {
+   "t": 1490.24,
+   "d": 3.28,
+   "text": "um, equipment. So, um,"
+  },
+  {
+   "t": 1493.52,
+   "d": 1.92,
+   "text": "yeah. Uh, in terms of takeaways,"
+  },
+  {
+   "t": 1495.44,
+   "d": 2.56,
+   "text": "categories are your friend. Find lots of"
+  },
+  {
+   "t": 1498.0,
+   "d": 1.76,
+   "text": "ways to slice up your card set in"
+  },
+  {
+   "t": 1499.76,
+   "d": 2.24,
+   "text": "different ways. Uh, make sure to include"
+  },
+  {
+   "t": 1502.0,
+   "d": 2.96,
+   "text": "synergies from obvious to obscure so you"
+  },
+  {
+   "t": 1504.96,
+   "d": 1.52,
+   "text": "can support all these different levels"
+  },
+  {
+   "t": 1506.48,
+   "d": 3.04,
+   "text": "of play. Um, make sure your network's"
+  },
+  {
+   "t": 1509.52,
+   "d": 1.6,
+   "text": "not too sparse, but it's also not"
+  },
+  {
+   "t": 1511.12,
+   "d": 2.32,
+   "text": "siloed. Um, and when you're thinking"
+  },
+  {
+   "t": 1513.44,
+   "d": 1.68,
+   "text": "about the sparseness, make sure that"
+  },
+  {
+   "t": 1515.12,
+   "d": 2.48,
+   "text": "you're accounting for goal scaling and"
+  },
+  {
+   "t": 1517.6,
+   "d": 2.4,
+   "text": "players sort of discounting the not very"
+  },
+  {
+   "t": 1520.0,
+   "d": 2.0,
+   "text": "powerful or synergies that won't let"
+  },
+  {
+   "t": 1522.0,
+   "d": 4.72,
+   "text": "them win the game. Um, uh, so that's my"
+  },
+  {
+   "t": 1526.72,
+   "d": 1.76,
+   "text": "talk. Basically, there's a little bit of"
+  },
+  {
+   "t": 1528.48,
+   "d": 2.64,
+   "text": "future work I want to suggest anyone"
+  },
+  {
+   "t": 1531.12,
+   "d": 1.92,
+   "text": "here to um run with if they're"
+  },
+  {
+   "t": 1533.04,
+   "d": 2.24,
+   "text": "interested. Um building synergy networks"
+  },
+  {
+   "t": 1535.28,
+   "d": 1.84,
+   "text": "using analytics. I think this would be"
+  },
+  {
+   "t": 1537.12,
+   "d": 2.56,
+   "text": "totally fascinating to try to build this"
+  },
+  {
+   "t": 1539.68,
+   "d": 3.04,
+   "text": "up um analytically to be like, okay,"
+  },
+  {
+   "t": 1542.72,
+   "d": 1.36,
+   "text": "players are taking these two cards"
+  },
+  {
+   "t": 1544.08,
+   "d": 1.28,
+   "text": "together and when they do that, they"
+  },
+  {
+   "t": 1545.36,
+   "d": 1.84,
+   "text": "have this win percentage. Um and you"
+  },
+  {
+   "t": 1547.2,
+   "d": 1.84,
+   "text": "could mathematically create the synergy"
+  },
+  {
+   "t": 1549.04,
+   "d": 2.08,
+   "text": "network and maybe use it to diagnose"
+  },
+  {
+   "t": 1551.12,
+   "d": 2.64,
+   "text": "whether um the game is acting the way"
+  },
+  {
+   "t": 1553.76,
+   "d": 1.84,
+   "text": "you want it to. We're going to try doing"
+  },
+  {
+   "t": 1555.6,
+   "d": 1.84,
+   "text": "that in Mr. Magpie's harmless card game."
+  },
+  {
+   "t": 1557.44,
+   "d": 1.68,
+   "text": "We haven't set it up yet. Um, and also"
+  },
+  {
+   "t": 1559.12,
+   "d": 1.76,
+   "text": "I'm not a statistician, so if anyone"
+  },
+  {
+   "t": 1560.88,
+   "d": 2.0,
+   "text": "else wanted to give it a go, I would be"
+  },
+  {
+   "t": 1562.88,
+   "d": 2.64,
+   "text": "all for it. Um, synergies between three"
+  },
+  {
+   "t": 1565.52,
+   "d": 2.0,
+   "text": "or more cards. This talk basically"
+  },
+  {
+   "t": 1567.52,
+   "d": 2.16,
+   "text": "assumed that synergy only existed"
+  },
+  {
+   "t": 1569.68,
+   "d": 2.08,
+   "text": "between two cards at a time, which is a"
+  },
+  {
+   "t": 1571.76,
+   "d": 1.76,
+   "text": "bit of a simplification because"
+  },
+  {
+   "t": 1573.52,
+   "d": 2.48,
+   "text": "sometimes there's like combos where if"
+  },
+  {
+   "t": 1576.0,
+   "d": 1.2,
+   "text": "you have three cards, they're really"
+  },
+  {
+   "t": 1577.2,
+   "d": 1.84,
+   "text": "good together, but on their own, any two"
+  },
+  {
+   "t": 1579.04,
+   "d": 1.52,
+   "text": "of them aren't that good. So, I'd be"
+  },
+  {
+   "t": 1580.56,
+   "d": 1.12,
+   "text": "curious to see what anyone did with"
+  },
+  {
+   "t": 1581.68,
+   "d": 2.16,
+   "text": "that. And then, um, this is the most"
+  },
+  {
+   "t": 1583.84,
+   "d": 1.84,
+   "text": "exciting thing to me. if someone could"
+  },
+  {
+   "t": 1585.68,
+   "d": 3.04,
+   "text": "use a real world network as the content"
+  },
+  {
+   "t": 1588.72,
+   "d": 2.0,
+   "text": "for a road like deck builder. So either"
+  },
+  {
+   "t": 1590.72,
+   "d": 1.92,
+   "text": "maybe like Wikipedia pages and the links"
+  },
+  {
+   "t": 1592.64,
+   "d": 2.16,
+   "text": "between them, Google maps and like the"
+  },
+  {
+   "t": 1594.8,
+   "d": 2.96,
+   "text": "distances between cities or IMDb and"
+  },
+  {
+   "t": 1597.76,
+   "d": 2.0,
+   "text": "actors and movies that they're part of."
+  },
+  {
+   "t": 1599.76,
+   "d": 2.96,
+   "text": "Um I think that would be really cool and"
+  },
+  {
+   "t": 1602.72,
+   "d": 1.84,
+   "text": "it would give you a way to make a game"
+  },
+  {
+   "t": 1604.56,
+   "d": 2.16,
+   "text": "like this without making all the content"
+  },
+  {
+   "t": 1606.72,
+   "d": 1.84,
+   "text": "because it would be exist for you in the"
+  },
+  {
+   "t": 1608.56,
+   "d": 2.88,
+   "text": "real world and have um mental models for"
+  },
+  {
+   "t": 1611.44,
+   "d": 2.72,
+   "text": "players to piggyback off of already. Um,"
+  },
+  {
+   "t": 1614.16,
+   "d": 2.08,
+   "text": "I think the hard part of this would be"
+  },
+  {
+   "t": 1616.24,
+   "d": 2.08,
+   "text": "finding a rule set that allows you to"
+  },
+  {
+   "t": 1618.32,
+   "d": 2.16,
+   "text": "translate the qualities of that network"
+  },
+  {
+   "t": 1620.48,
+   "d": 1.76,
+   "text": "into the game in a way that would make"
+  },
+  {
+   "t": 1622.24,
+   "d": 1.6,
+   "text": "sense. But I think if you could do it,"
+  },
+  {
+   "t": 1623.84,
+   "d": 2.32,
+   "text": "it would be really interesting."
+  },
+  {
+   "t": 1626.16,
+   "d": 2.24,
+   "text": "Um, so that's my talk. Thank you very"
+  },
+  {
+   "t": 1628.4,
+   "d": 2.88,
+   "text": "much for coming. Um, I'm Ezra Zantin."
+  },
+  {
+   "t": 1631.28,
+   "d": 1.92,
+   "text": "You can find me everywhere on the"
+  },
+  {
+   "t": 1633.2,
+   "d": 1.36,
+   "text": "internet with that. It's a very unique"
+  },
+  {
+   "t": 1634.56,
+   "d": 1.6,
+   "text": "name. Um, this is my email,"
+  },
+  {
+   "t": 1636.16,
+   "d": 1.6,
+   "text": "esraanyahoo.com."
+  },
+  {
+   "t": 1637.76,
+   "d": 1.76,
+   "text": "Um, please message me if you want to"
+  },
+  {
+   "t": 1639.52,
+   "d": 1.12,
+   "text": "chat. I'm also going to be in the"
+  },
+  {
+   "t": 1640.64,
+   "d": 3.04,
+   "text": "breakout rooms here in a little bit. Um,"
+  },
+  {
+   "t": 1643.68,
+   "d": 1.84,
+   "text": "and yeah, to chat about any of this"
+  },
+  {
+   "t": 1645.52,
+   "d": 1.68,
+   "text": "stuff, I love talking about it,"
+  },
+  {
+   "t": 1647.2,
+   "d": 2.48,
+   "text": "obviously. Um, and also if you want to"
+  },
+  {
+   "t": 1649.68,
+   "d": 1.12,
+   "text": "do more than chat, if you want to hire"
+  },
+  {
+   "t": 1650.8,
+   "d": 1.76,
+   "text": "me to do some contract work, I love"
+  },
+  {
+   "t": 1652.56,
+   "d": 1.76,
+   "text": "working on these kind of games. So,"
+  },
+  {
+   "t": 1654.32,
+   "d": 1.84,
+   "text": "yeah, hit me up. And I think we might"
+  },
+  {
+   "t": 1656.16,
+   "d": 2.48,
+   "text": "have a couple minutes for Q&A here."
+  },
+  {
+   "t": 1658.64,
+   "d": 1.52,
+   "text": ">> Yeah, thank you so much. This is going"
+  },
+  {
+   "t": 1660.16,
+   "d": 1.6,
+   "text": "to be such a useful reference talk. I"
+  },
+  {
+   "t": 1661.76,
+   "d": 1.84,
+   "text": "really appreciate it. Um, and one thing"
+  },
+  {
+   "t": 1663.6,
+   "d": 2.24,
+   "text": "I also just want to mention because, uh,"
+  },
+  {
+   "t": 1665.84,
+   "d": 1.92,
+   "text": "I don't know if you've seen it, but it's"
+  },
+  {
+   "t": 1667.76,
+   "d": 1.76,
+   "text": "probably good. So the slightest spire"
+  },
+  {
+   "t": 1669.52,
+   "d": 2.16,
+   "text": "team did a talk called metrics div"
+  },
+  {
+   "t": 1671.68,
+   "d": 2.0,
+   "text": "metrics driven design and balance. Yeah."
+  },
+  {
+   "t": 1673.68,
+   "d": 1.36,
+   "text": "Where they talk about they literally"
+  },
+  {
+   "t": 1675.04,
+   "d": 1.44,
+   "text": "were using analytics. I don't think they"
+  },
+  {
+   "t": 1676.48,
+   "d": 1.92,
+   "text": "took the step of then doing the synergy"
+  },
+  {
+   "t": 1678.4,
+   "d": 2.64,
+   "text": "web but like it's a known fact that"
+  },
+  {
+   "t": 1681.04,
+   "d": 2.0,
+   "text": "analytics was a big part of slice fire"
+  },
+  {
+   "t": 1683.04,
+   "d": 1.68,
+   "text": "and how they got the balance that they"
+  },
+  {
+   "t": 1684.72,
+   "d": 1.68,
+   "text": "do and they think about win rates and"
+  },
+  {
+   "t": 1686.4,
+   "d": 1.04,
+   "text": "stuff like that."
+  },
+  {
+   "t": 1687.44,
+   "d": 1.36,
+   "text": ">> Yeah definitely."
+  },
+  {
+   "t": 1688.8,
+   "d": 2.0,
+   "text": ">> Yeah. We do have one question so I want"
+  },
+  {
+   "t": 1690.8,
+   "d": 1.44,
+   "text": "to make sure to answer that from"
+  },
+  {
+   "t": 1692.24,
+   "d": 3.28,
+   "text": "Grogpod. Hey Grogpod. uh how much from"
+  },
+  {
+   "t": 1695.52,
+   "d": 3.2,
+   "text": "graph or network theory should or can be"
+  },
+  {
+   "t": 1698.72,
+   "d": 2.4,
+   "text": "used for the synergy design versus the"
+  },
+  {
+   "t": 1701.12,
+   "d": 2.8,
+   "text": "more just like design by feel um where"
+  },
+  {
+   "t": 1703.92,
+   "d": 2.24,
+   "text": "is that kind of balance point between"
+  },
+  {
+   "t": 1706.16,
+   "d": 4.32,
+   "text": "the hardcore the math and the like gut"
+  },
+  {
+   "t": 1710.48,
+   "d": 1.68,
+   "text": ">> yeah I would consider that to be an open"
+  },
+  {
+   "t": 1712.16,
+   "d": 1.68,
+   "text": "question I'm using this a little bit"
+  },
+  {
+   "t": 1713.84,
+   "d": 2.08,
+   "text": "loosey goosey like I didn't use any real"
+  },
+  {
+   "t": 1715.92,
+   "d": 2.16,
+   "text": "math in my talk it's kind of more a"
+  },
+  {
+   "t": 1718.08,
+   "d": 1.6,
+   "text": "design lens that I used to think about"
+  },
+  {
+   "t": 1719.68,
+   "d": 3.36,
+   "text": "it but I do think that it could work"
+  },
+  {
+   "t": 1723.04,
+   "d": 2.0,
+   "text": "with like actual real math underlying it"
+  },
+  {
+   "t": 1725.04,
+   "d": 1.52,
+   "text": "and I would really encourage anyone to"
+  },
+  {
+   "t": 1726.56,
+   "d": 1.84,
+   "text": "try it if they're interested."
+  },
+  {
+   "t": 1728.4,
+   "d": 2.32,
+   "text": ">> I'm also uh curious when you've been"
+  },
+  {
+   "t": 1730.72,
+   "d": 2.08,
+   "text": "applying this kind of concept yourself"
+  },
+  {
+   "t": 1732.8,
+   "d": 2.48,
+   "text": "at what stages in development like do"
+  },
+  {
+   "t": 1735.28,
+   "d": 2.16,
+   "text": "you start out really early on building"
+  },
+  {
+   "t": 1737.44,
+   "d": 1.84,
+   "text": "kind of a here's a type of shape of"
+  },
+  {
+   "t": 1739.28,
+   "d": 2.16,
+   "text": "Synergy graph I'd like is it a kind of"
+  },
+  {
+   "t": 1741.44,
+   "d": 2.32,
+   "text": "check point now and then or something"
+  },
+  {
+   "t": 1743.76,
+   "d": 1.84,
+   "text": "kind of near the end like when when do"
+  },
+  {
+   "t": 1745.6,
+   "d": 3.28,
+   "text": "you go from kind of traditional design"
+  },
+  {
+   "t": 1748.88,
+   "d": 1.68,
+   "text": "to like let me lay this out into a"
+  },
+  {
+   "t": 1750.56,
+   "d": 1.04,
+   "text": "synergy web?"
+  },
+  {
+   "t": 1751.6,
+   "d": 3.04,
+   "text": ">> Yeah. Um, it's been in the past for me"
+  },
+  {
+   "t": 1754.64,
+   "d": 1.92,
+   "text": "like more of a check where I'm like,"
+  },
+  {
+   "t": 1756.56,
+   "d": 3.04,
+   "text": "\"Okay, is this feeling the way I want it"
+  },
+  {
+   "t": 1759.6,
+   "d": 2.56,
+   "text": "to? And if not, like what are the ways"
+  },
+  {
+   "t": 1762.16,
+   "d": 1.52,
+   "text": "that it's failing? And should I add more"
+  },
+  {
+   "t": 1763.68,
+   "d": 1.76,
+   "text": "or should I weaken them or whatever it"
+  },
+  {
+   "t": 1765.44,
+   "d": 4.48,
+   "text": "is?\" Um, I think that going forward, I"
+  },
+  {
+   "t": 1769.92,
+   "d": 1.44,
+   "text": "might try to do it earlier in the"
+  },
+  {
+   "t": 1771.36,
+   "d": 2.08,
+   "text": "process. Um, like I was saying about"
+  },
+  {
+   "t": 1773.44,
+   "d": 3.12,
+   "text": "building in mechanics that have those"
+  },
+  {
+   "t": 1776.56,
+   "d": 2.0,
+   "text": "natural multiplicative effects is a"
+  },
+  {
+   "t": 1778.56,
+   "d": 2.24,
+   "text": "really easy way to get some of these"
+  },
+  {
+   "t": 1780.8,
+   "d": 1.92,
+   "text": "things going in a simple way that"
+  },
+  {
+   "t": 1782.72,
+   "d": 2.32,
+   "text": "players can understand. Um, so Mr."
+  },
+  {
+   "t": 1785.04,
+   "d": 2.24,
+   "text": "Magpies Promise card game has the like"
+  },
+  {
+   "t": 1787.28,
+   "d": 3.68,
+   "text": "multiplier and money thing. Um, that"
+  },
+  {
+   "t": 1790.96,
+   "d": 2.8,
+   "text": "helps a lot with that. Um, but I wasn't"
+  },
+  {
+   "t": 1793.76,
+   "d": 1.44,
+   "text": "explicitly thinking about this when I"
+  },
+  {
+   "t": 1795.2,
+   "d": 1.44,
+   "text": "came up with that. It was more like the"
+  },
+  {
+   "t": 1796.64,
+   "d": 1.28,
+   "text": "launcher does this. I'm curious about"
+  },
+  {
+   "t": 1797.92,
+   "d": 1.84,
+   "text": "how it would work in our game. And then"
+  },
+  {
+   "t": 1799.76,
+   "d": 1.12,
+   "text": ">> yeah,"
+  },
+  {
+   "t": 1800.88,
+   "d": 1.68,
+   "text": ">> uh it went from there. Yeah."
+  },
+  {
+   "t": 1802.56,
+   "d": 2.0,
+   "text": ">> Yeah, that makes a lot of sense. And I"
+  },
+  {
+   "t": 1804.56,
+   "d": 1.92,
+   "text": "it's often a useful design exercise to"
+  },
+  {
+   "t": 1806.48,
+   "d": 1.68,
+   "text": "apply things to other games you like. So"
+  },
+  {
+   "t": 1808.16,
+   "d": 1.52,
+   "text": "I could totally see it's like I've done"
+  },
+  {
+   "t": 1809.68,
+   "d": 1.76,
+   "text": "that. I did a Stardy Valley where I'm"
+  },
+  {
+   "t": 1811.44,
+   "d": 2.16,
+   "text": "like, let me graph out the progression"
+  },
+  {
+   "t": 1813.6,
+   "d": 1.28,
+   "text": "of Stardy Valley because I'm working on"
+  },
+  {
+   "t": 1814.88,
+   "d": 1.28,
+   "text": "a progression system and I like how"
+  },
+  {
+   "t": 1816.16,
+   "d": 2.4,
+   "text": "theirs feels. So it makes sense to"
+  },
+  {
+   "t": 1818.56,
+   "d": 1.36,
+   "text": "sometimes take a different game and"
+  },
+  {
+   "t": 1819.92,
+   "d": 2.08,
+   "text": "break it down into a format like this."
+  },
+  {
+   "t": 1822.0,
+   "d": 1.76,
+   "text": ">> Yeah, exactly."
+  },
+  {
+   "t": 1823.76,
+   "d": 1.28,
+   "text": ">> Okay. Well, excellent. Thank you so"
+  },
+  {
+   "t": 1825.04,
+   "d": 1.6,
+   "text": "much. This is a fantastic talk. So,"
+  },
+  {
+   "t": 1826.64,
+   "d": 1.2,
+   "text": "thank you for coming to the preview"
+  },
+  {
+   "t": 1827.84,
+   "d": 1.36,
+   "text": "event. I'm really glad we get this one"
+  },
+  {
+   "t": 1829.2,
+   "d": 3.36,
+   "text": "in our own vault uh for reference and"
+  },
+  {
+   "t": 1832.56,
+   "d": 1.36,
+   "text": "hopefully we'll see you around during"
+  },
+  {
+   "t": 1833.92,
+   "d": 0.96,
+   "text": "the main event."
+  },
+  {
+   "t": 1834.88,
+   "d": 1.36,
+   "text": ">> Yeah, I'll definitely be there and I'll"
+  },
+  {
+   "t": 1836.24,
+   "d": 1.28,
+   "text": "be around in the breakout rooms after"
+  },
+  {
+   "t": 1837.52,
+   "d": 0.8,
+   "text": "this."
+  },
+  {
+   "t": 1838.32,
+   "d": 3.76,
+   "text": ">> Excellent. Thank you."
+  }
+ ]
+}

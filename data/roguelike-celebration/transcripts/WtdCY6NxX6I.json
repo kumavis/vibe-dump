@@ -1,0 +1,1324 @@
+{
+ "id": "WtdCY6NxX6I",
+ "url": "https://www.youtube.com/watch?v=WtdCY6NxX6I",
+ "title": "Andrea Roberts - Designing a Roguelike for People Who've Never Played Roguelikes",
+ "speaker": "Andrea Roberts",
+ "talk_title": "Designing a Roguelike for People Who've Never Played Roguelikes",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1860,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nAndrea is the co-founder of Wonderbelly Games, a tiny indie studio that just released their critically acclaimed debut: a bouncy physics-based roguelike called Roundguard. Before that, she spent a decade in Narrative, UX, and Game Design at Microsoft. She splits her days between making games and raising her four-year-old, and on any given afternoon, Andrea may be a princess, a triceratops, or a triceratops-princess.\n\nIn this talk she discusses how her team approached making Roundguard accessible to an audience that's unfamiliar with roguelikes -- handling the difficulty curve, presenting player options around difficulty, modifying tone and friendliness to create a feeling of chill -- while still sticking strong to the principles at the heart of roguelikes that make them so special.\n\nFind her on Twitter: https://twitter.com/TanookiFruit\nRoundguard: https://store.steampowered.com/app/848030/Roundguard/",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 36,
+   "title": "Designing for new players"
+  },
+  {
+   "start": 175,
+   "title": "The heart of the genre"
+  },
+  {
+   "start": 284,
+   "title": "Challenging assumptions"
+  },
+  {
+   "start": 442,
+   "title": "Onboarding strategies"
+  },
+  {
+   "start": 554,
+   "title": "Safety nets and testing"
+  },
+  {
+   "start": 686,
+   "title": "Pacing game complexity"
+  },
+  {
+   "start": 855,
+   "title": "Welcoming tone and death"
+  },
+  {
+   "start": 1048,
+   "title": "Player choice and tuning"
+  },
+  {
+   "start": 1201,
+   "title": "Scoring and advanced mechanics"
+  },
+  {
+   "start": 1440,
+   "title": "Results and fan feedback"
+  },
+  {
+   "start": 1539,
+   "title": "The value of learning"
+  },
+  {
+   "start": 1658,
+   "title": "Q&A and closing"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4232,
+ "trimmed": {
+  "segments": 3,
+  "words": 58
+ },
+ "segments": [
+  {
+   "t": 1.12,
+   "d": 5.2,
+   "text": "MODERATOR: And next up we are going to be joined by a wonderful speaker from last"
+  },
+  {
+   "t": 6.32,
+   "d": 7.84,
+   "text": "year Andrea Roberts who is the co-founder of games and just released their debuted of a"
+  },
+  {
+   "t": 14.16,
+   "d": 4.48,
+   "text": "physical space called Roundguard which we got to play last year. If you haven't played it,"
+  },
+  {
+   "t": 18.64,
+   "d": 5.84,
+   "text": "try Roundguard out and before that she spent a decade in narrative at game design and Microsoft"
+  },
+  {
+   "t": 24.48,
+   "d": 6.32,
+   "text": "and splits her time between raising her 4-year-old and making games and at any time she might be a"
+  },
+  {
+   "t": 30.8,
+   "d": 11.2,
+   "text": "Triceratopss or any other. We have a video. >> Hi, I am going to talk about designing"
+  },
+  {
+   "t": 42.0,
+   "d": 2.24,
+   "text": "a Roguelike for people who have never played a Roguelike."
+  },
+  {
+   "t": 46.56,
+   "d": 4.71,
+   "text": "Earlier this year, we shipped Roundguard. Roundguard is a bouncy Dungeon Crawl Stone"
+  },
+  {
+   "t": 51.27,
+   "d": 7.69,
+   "text": "Souper with pin ball physics where you shoot your character into a dudgeon and survive against the"
+  },
+  {
+   "t": 58.96,
+   "d": 4.88,
+   "text": "constant threat of permadeath trying to make to the bottom of a procedurally generates dudgeon."
+  },
+  {
+   "t": 70.24,
+   "d": 4.8,
+   "text": "When we started making the game, we knew we needed to make round work for people new to Roguelikes."
+  },
+  {
+   "t": 77.12,
+   "d": 8.32,
+   "text": "We had this inspiration from peggle which is a casual game with broad audience. We wanted those"
+  },
+  {
+   "t": 85.44,
+   "d": 7.76,
+   "text": "people to find the game and feel welcome in it. We knew a lot of them may not be comfortable with"
+  },
+  {
+   "t": 93.2,
+   "d": 15.6,
+   "text": "Roguelikes. Also, when we started making the game and we know their audience is there but they are"
+  },
+  {
+   "t": 108.8,
+   "d": 6.48,
+   "text": "less comfortable with Roguelike fundamentals than the PC audience. On top of that, I have a very"
+  },
+  {
+   "t": 115.28,
+   "d": 6.48,
+   "text": "personal reason and that was, you know, before we started working on Roundguard about a year before,"
+  },
+  {
+   "t": 122.48,
+   "d": 6.24,
+   "text": "I had become a new mom. And my experience with gaming really changed at that point."
+  },
+  {
+   "t": 129.68,
+   "d": 5.44,
+   "text": "You know, I really loved these big epic RPGs. I played a ton of strategy simulation games"
+  },
+  {
+   "t": 136.16,
+   "d": 6.56,
+   "text": "and I was having a really hard time finding the time to do that anymore. That's when I found"
+  },
+  {
+   "t": 142.72,
+   "d": 7.2,
+   "text": "Roguelikes. I wasn't really familiar with the genre before but I learned I could get that real"
+  },
+  {
+   "t": 149.92,
+   "d": 5.92,
+   "text": "strategic doubt I was looking for in the short play sessions. Sit down, play for 35-45 minutes,"
+  },
+  {
+   "t": 156.56,
+   "d": 6.16,
+   "text": "die and then stop. If it took me another week or so before I found the time again to get a play"
+  },
+  {
+   "t": 162.72,
+   "d": 5.84,
+   "text": "session in, I wasn't coming in in the middle of a big epic storyline or inventory management mess. I"
+  },
+  {
+   "t": 168.56,
+   "d": 4.96,
+   "text": "had to remember I was starting fresh. I love the feeling and wanted to bring that to more people."
+  },
+  {
+   "t": 175.2,
+   "d": 5.76,
+   "text": "So, I knew my goal was to make a Roguelike that captures the heart of the genre while making it"
+  },
+  {
+   "t": 180.96,
+   "d": 5.68,
+   "text": "accessible to folks who don't play Roguelikes which begs who is is heart of the genre?"
+  },
+  {
+   "t": 193.2,
+   "d": 9.68,
+   "text": "I see this as serving the goal of learning. Real, true deep learning where players are"
+  },
+  {
+   "t": 204.24,
+   "d": 7.28,
+   "text": "discovering for themselves the underlying rules of the games that they are practicing and failing"
+  },
+  {
+   "t": 212.56,
+   "d": 8.08,
+   "text": "because failure is an important part of learning but they are continuing to hone their mastery and"
+  },
+  {
+   "t": 220.64,
+   "d": 4.48,
+   "text": "understanding of these systems so that they can improvise in the face of whatever the generator"
+  },
+  {
+   "t": 225.12,
+   "d": 8.64,
+   "text": "shows at them. My initial assumptions about what I want to do to make a Roguelike more accessible"
+  },
+  {
+   "t": 233.76,
+   "d": 6.24,
+   "text": "to a broader audience might have been make the game easier or more tutorials to get them through"
+  },
+  {
+   "t": 240.0,
+   "d": 8.4,
+   "text": "the game. Looking at it as this heart of learning, you know, I really needed to protect that"
+  },
+  {
+   "t": 248.4,
+   "d": 7.28,
+   "text": "part of the experience so that reframed my goal to say I am trying to encourage learning and more"
+  },
+  {
+   "t": 255.68,
+   "d": 3.92,
+   "text": "than anything, I am trying not to interfere with learning. I don't want to interrupt the player"
+  },
+  {
+   "t": 259.6,
+   "d": 3.84,
+   "text": "and give them the answer when they are about to figure it out. I want to have faith in people"
+  },
+  {
+   "t": 263.44,
+   "d": 4.56,
+   "text": "that they can learn and give them space to experiment and I don't want to give them a"
+  },
+  {
+   "t": 268.0,
+   "d": 6.08,
+   "text": "false sense of progress with some kind of grain to win mechanics. I want them to come away at the end"
+  },
+  {
+   "t": 274.08,
+   "d": 7.76,
+   "text": "of the experience feeling like they beat the game because of the learning that they made themselves."
+  },
+  {
+   "t": 284.16,
+   "d": 5.76,
+   "text": "OK. What did we to make Roundguard more accessible to people who were not used to Roguelikes?"
+  },
+  {
+   "t": 291.2,
+   "d": 4.24,
+   "text": "We tried to identify those assumptions that came along with the genre and the"
+  },
+  {
+   "t": 295.44,
+   "d": 6.08,
+   "text": "things that maybe these players were not comfortable with and didn't know to expect."
+  },
+  {
+   "t": 302.4,
+   "d": 4.24,
+   "text": "We thought about how we were pacing the complexity for them as they were getting into"
+  },
+  {
+   "t": 306.64,
+   "d": 5.44,
+   "text": "the game. We needed to keep the tone welcoming and encouraging throughout and we had the player"
+  },
+  {
+   "t": 312.08,
+   "d": 4.4,
+   "text": "choices for how to tune the experience and that challenge level for themselves."
+  },
+  {
+   "t": 318.88,
+   "d": 5.6,
+   "text": "First up, identifying genre assumptions. By this, I mean that the source of things you say."
+  },
+  {
+   "t": 324.48,
+   "d": 5.44,
+   "text": "Everybody knows this coming into a Roguelike. Because Roguelikes are about learning, so much"
+  },
+  {
+   "t": 329.92,
+   "d": 5.36,
+   "text": "of that difficulty is in what you already have, you know, you are understanding in your head."
+  },
+  {
+   "t": 336.48,
+   "d": 4.24,
+   "text": "And so, as players come in who are really comfortable with Roguelikes, they"
+  },
+  {
+   "t": 340.72,
+   "d": 5.28,
+   "text": "already have a lot of things they know to expect. That means for players who are new to the game,"
+  },
+  {
+   "t": 347.28,
+   "d": 3.36,
+   "text": "the game is going to be harder for them because there are all these things they"
+  },
+  {
+   "t": 350.64,
+   "d": 4.48,
+   "text": "haven't learned by playing at the Roguelikes. I wanted to be really Cognizant of that."
+  },
+  {
+   "t": 357.6,
+   "d": 6.32,
+   "text": "What were some of the assumptions we started with? Well, you know, players, and enemies trade damage"
+  },
+  {
+   "t": 363.92,
+   "d": 5.04,
+   "text": "when they come into collision and are in range. There are complications to that behavior but"
+  },
+  {
+   "t": 368.96,
+   "d": 7.12,
+   "text": "that's the basics. Of course, health management over time is really important. You are taking"
+  },
+  {
+   "t": 376.08,
+   "d": 4.32,
+   "text": "damage from all these enemies. We are never healing you up at the end of a turn or board."
+  },
+  {
+   "t": 381.36,
+   "d": 5.2,
+   "text": "You need to be paying attention to our health and the health opportunities on the board and making"
+  },
+  {
+   "t": 386.56,
+   "d": 8.0,
+   "text": "sure you are balancing that all all your actions. We thought these were basic things to learn and we"
+  },
+  {
+   "t": 394.56,
+   "d": 6.24,
+   "text": "thought something that we can just drop people in the system and they will figure it out quickly but"
+  },
+  {
+   "t": 401.44,
+   "d": 9.12,
+   "text": "it turned that was an assumption. As we started with the first player test, we had an early"
+  },
+  {
+   "t": 410.56,
+   "d": 5.92,
+   "text": "procedural demo and we let people get in and were seeing challenges with the basic concepts."
+  },
+  {
+   "t": 418.64,
+   "d": 3.44,
+   "text": "When you think about it, it is not really that surprising. There are lots of games out there"
+  },
+  {
+   "t": 422.08,
+   "d": 4.16,
+   "text": "where the player is actually avoiding most of the damage coming from enemies."
+  },
+  {
+   "t": 427.6,
+   "d": 5.04,
+   "text": "Long form health management isn't important in a lot of games. In a lot of games you are healed"
+  },
+  {
+   "t": 432.64,
+   "d": 7.2,
+   "text": "up after every encounter or major points. It is not something that everybody is used to thinking"
+  },
+  {
+   "t": 439.84,
+   "d": 6.16,
+   "text": "about. We made a slight tweak to our demo and here is a screenshot of the earliest prototypes."
+  },
+  {
+   "t": 447.44,
+   "d": 7.92,
+   "text": "So we stilled -- still dropped in and introduced this tutorial character the book keeper. She pops"
+  },
+  {
+   "t": 455.36,
+   "d": 8.08,
+   "text": "in and says when you hit a monster, they hit you back so heal up with the red health potions over"
+  },
+  {
+   "t": 463.44,
+   "d": 5.6,
+   "text": "there. That helped bring more folks on board. We were able to get past this initial step."
+  },
+  {
+   "t": 470.8,
+   "d": 6.16,
+   "text": "There were still people struggling and there is a lot going on when you drop somebody right into"
+  },
+  {
+   "t": 476.96,
+   "d": 6.0,
+   "text": "a Roguelike. You know, right now, there is, you know, I have got my hero and I have got my skills"
+  },
+  {
+   "t": 482.96,
+   "d": 6.32,
+   "text": "and there are different monster types because the demo experience was procedural like"
+  },
+  {
+   "t": 490.4,
+   "d": 4.24,
+   "text": "depending on when you are playing on new monster types coming in with different status effects and"
+  },
+  {
+   "t": 496.32,
+   "d": 6.08,
+   "text": "all kinds of complications. It was overwhelming for a lot of people and they were not really able"
+  },
+  {
+   "t": 502.4,
+   "d": 8.8,
+   "text": "to process the information. I needed to recognize that for some people, like these were real"
+  },
+  {
+   "t": 511.2,
+   "d": 5.28,
+   "text": "fundamentals they needed to learn before they can get past the focus of the game and needed complete"
+  },
+  {
+   "t": 516.48,
+   "d": 11.04,
+   "text": "focus to understand that. We finally made a very, you know, step-by-step tutorial. It is short."
+  },
+  {
+   "t": 527.52,
+   "d": 4.72,
+   "text": "Right at the beginning of the game where we really walk you through, hey, enemies have attack,"
+  },
+  {
+   "t": 532.24,
+   "d": 4.8,
+   "text": "when you hit them, they hit you back, you will take damage and heal up with health potions."
+  },
+  {
+   "t": 539.28,
+   "d": 7.2,
+   "text": "And once we saw people get through this quick tutorial we saw everybody getting through the"
+  },
+  {
+   "t": 546.48,
+   "d": 5.84,
+   "text": "basic concepts and they were able to move through the game and get into the deeper systems."
+  },
+  {
+   "t": 555.52,
+   "d": 7.28,
+   "text": "After this quick tutorial or at the end there is an introduction to skill. We teach you one"
+  },
+  {
+   "t": 562.8,
+   "d": 4.88,
+   "text": "skill from each class and tells you skills are really important and drop you into the system"
+  },
+  {
+   "t": 567.68,
+   "d": 5.6,
+   "text": "and let you play around with it. It turns out in Roundguard skills are really important. They"
+  },
+  {
+   "t": 573.28,
+   "d": 4.96,
+   "text": "are really the most important way for you to deal with that health damage tradeoff."
+  },
+  {
+   "t": 580.56,
+   "d": 6.96,
+   "text": "For a lot of players, you know, that little skill was great. Playing with skills is a lot of fun."
+  },
+  {
+   "t": 587.52,
+   "d": 6.32,
+   "text": "They got into it and never needed help. We still saw a few people struggling with the concept."
+  },
+  {
+   "t": 595.12,
+   "d": 6.4,
+   "text": "Built into the system was a little safety net. We are watching you. If you go for a couple boards"
+  },
+  {
+   "t": 601.52,
+   "d": 5.68,
+   "text": "and are not using your skills then that little tutorial character pops up and says remember"
+  },
+  {
+   "t": 607.2,
+   "d": 4.72,
+   "text": "skills. They are super important. They are the difference between life and death in this game."
+  },
+  {
+   "t": 619.92,
+   "d": 9.2,
+   "text": "I was looking for things new players needed so they could be at the same base level as everybody"
+  },
+  {
+   "t": 629.12,
+   "d": 6.88,
+   "text": "else and enjoy the rest of the system. At first I worried I was spoiling a learning opportunity"
+  },
+  {
+   "t": 636.0,
+   "d": 8.72,
+   "text": "but I learned everybody coming in with the expectations from other roguelikes they know"
+  },
+  {
+   "t": 644.72,
+   "d": 5.36,
+   "text": "the concepts. This isn't the fun part of the game. The fun part is seeing the rest of the systems and"
+  },
+  {
+   "t": 650.08,
+   "d": 17.92,
+   "text": "how they unfold. And then drop them into the game system but keep an eye on them and for players"
+  },
+  {
+   "t": 668.56,
+   "d": 20.24,
+   "text": "struggling we built in a couple safety Nets. Key to all of this is the testing of assumptions."
+  },
+  {
+   "t": 690.0,
+   "d": 6.48,
+   "text": "Now players need to learn about status effects and adding new bash behaviors and all of this. --"
+  },
+  {
+   "t": 696.48,
+   "d": 8.98,
+   "text": "behaviors. This possibility space is exciting but it be overwhelm and that can be a turn"
+  },
+  {
+   "t": 705.46,
+   "d": 5.98,
+   "text": "off for some players. They can miss important concepts in all that overload. We really need"
+  },
+  {
+   "t": 711.44,
+   "d": 4.4,
+   "text": "to think about how we wanted to balance rolling out that complexity through that experience."
+  },
+  {
+   "t": 721.2,
+   "d": 7.36,
+   "text": "We did the natural choice of the deeper you go the more you encounter complications."
+  },
+  {
+   "t": 732.96,
+   "d": 6.16,
+   "text": "Because of the structure of a Roguelikes you will see the beginning part most. You will die, repeat"
+  },
+  {
+   "t": 739.12,
+   "d": 7.44,
+   "text": "and keep going over the first tor territory and I want to make sure that territory stays fresh"
+  },
+  {
+   "t": 748.0,
+   "d": 5.04,
+   "text": "for experienced players but for the new players coming in isn't completely overwhelming them."
+  },
+  {
+   "t": 755.12,
+   "d": 5.84,
+   "text": "To solve this challenge, we ended up holding on to some of these complications"
+  },
+  {
+   "t": 762.0,
+   "d": 5.52,
+   "text": "and unlocking them as we saw players provering they understand the game and are ready for more."
+  },
+  {
+   "t": 770.32,
+   "d": 6.96,
+   "text": "As players got deeper into the dudgeon, and proved they were able to survive, when you make"
+  },
+  {
+   "t": 777.28,
+   "d": 8.56,
+   "text": "it halfway through one, you unlock this and it is key to the system. It appears on every board."
+  },
+  {
+   "t": 798.16,
+   "d": 6.4,
+   "text": "As you beat the act 2 boss you unlock chaos rooms and changes how the procedural generator builds"
+  },
+  {
+   "t": 804.56,
+   "d": 6.32,
+   "text": "out the map. Once you beat the final game then you start to unlock relics which let"
+  },
+  {
+   "t": 810.88,
+   "d": 5.44,
+   "text": "you change the fundamental rules of the game. As you keep going further and further into the game,"
+  },
+  {
+   "t": 817.84,
+   "d": 6.4,
+   "text": "we keep pushing more experiences back into the generator to really grow and"
+  },
+  {
+   "t": 824.24,
+   "d": 7.36,
+   "text": "complicate the game. We want to make sure as we push new things into the generator"
+  },
+  {
+   "t": 831.6,
+   "d": 7.84,
+   "text": "it wasn't just about making the game harder. We didn't want to feel like you were punished"
+  },
+  {
+   "t": 841.92,
+   "d": 7.92,
+   "text": "but it is more about recognizing you have all of the tools. We see you and want to give you more"
+  },
+  {
+   "t": 849.84,
+   "d": 8.24,
+   "text": "opportunities and more complicated experiences to express what you have learned. Rolling out"
+  },
+  {
+   "t": 858.08,
+   "d": 6.64,
+   "text": "complexity. We held back some complications. We checked in on players to see they were proving"
+  },
+  {
+   "t": 864.72,
+   "d": 5.12,
+   "text": "they had learned enough and they could handle more and we added more to the procedural generator."
+  },
+  {
+   "t": 873.2,
+   "d": 6.48,
+   "text": "Throughout the game we want to keep this welcoming and am -- encouraging tone. We have a cute and"
+  },
+  {
+   "t": 879.68,
+   "d": 9.36,
+   "text": "cheerful look to the game. A broad sense of humor and cast. One of the challenges is permadeath."
+  },
+  {
+   "t": 890.0,
+   "d": 5.04,
+   "text": "For a lot of players who are not comfortable with Roguelikes permadeath is a really scary word."
+  },
+  {
+   "t": 896.64,
+   "d": 5.81,
+   "text": "But that feeling of failure and need to repeat is a core part of the experience. How do we make"
+  },
+  {
+   "t": 902.45,
+   "d": 2.59,
+   "text": "people feel like it is OK to fail, really, is a core part of the learning experience?"
+  },
+  {
+   "t": 914.88,
+   "d": 6.16,
+   "text": "One of the things we did was in our narrative structure of the game. At a meta level, Roundguard"
+  },
+  {
+   "t": 921.04,
+   "d": 5.68,
+   "text": "takes place in this sort of play/theater framing. There is a curtain and host who"
+  },
+  {
+   "t": 926.72,
+   "d": 13.6,
+   "text": "show up and an audience who clap when they do well. When you die, the host comes up"
+  },
+  {
+   "t": 940.32,
+   "d": 8.08,
+   "text": "with the message of no worries, just a bad run and we will reset the stage and get you started over."
+  },
+  {
+   "t": 950.16,
+   "d": 9.36,
+   "text": "We want to lower the stakes for you. This isn't a life or death moment. This is just practice"
+  },
+  {
+   "t": 959.52,
+   "d": 12.8,
+   "text": "and a bunch of people having fun in a theater. At the death moment you have an opportunity"
+  },
+  {
+   "t": 972.32,
+   "d": 8.48,
+   "text": "to win a token you can take forward with you on your next run. It is not really run changing"
+  },
+  {
+   "t": 980.8,
+   "d": 4.8,
+   "text": "but it is a little something to give you, you know, an idea of how you might strategize"
+  },
+  {
+   "t": 986.24,
+   "d": 3.6,
+   "text": "and more than anything it is sense of hope that the next run can go different."
+  },
+  {
+   "t": 993.84,
+   "d": 14.8,
+   "text": "We launched with these elements. I really hate the feeling of losing all of my progress. The thing"
+  },
+  {
+   "t": 1008.64,
+   "d": 7.28,
+   "text": "was, it is like, you haven't lost your progress. So we want to think about how could we celebrate"
+  },
+  {
+   "t": 1015.92,
+   "d": 9.12,
+   "text": "what you have done so far in the game. We did a UI overhaul where we put up front and center every"
+  },
+  {
+   "t": 1025.04,
+   "d": 7.44,
+   "text": "run where you put up all the unlocks. Here are the relics you unlocked and mastered and here is"
+  },
+  {
+   "t": 1032.48,
+   "d": 7.84,
+   "text": "how far you have come in your progression on score. We want to remind players that there"
+  },
+  {
+   "t": 1040.32,
+   "d": 15.68,
+   "text": "is so much we have learned along the way. Being opening is telling players it is OK to fail. We"
+  },
+  {
+   "t": 1056.0,
+   "d": 5.92,
+   "text": "tried to lower the stakes and encouraging players to try again by giving them a little something"
+  },
+  {
+   "t": 1062.96,
+   "d": 5.36,
+   "text": "and we try to celebrate their accomplishments and remind them of how much they have accomplished."
+  },
+  {
+   "t": 1071.84,
+   "d": 6.0,
+   "text": "Finally we want to give the player the choices on how they want to tune the game. Difficulty"
+  },
+  {
+   "t": 1077.84,
+   "d": 6.72,
+   "text": "is subjective. For new players these foundational concepts are very basic to Roguelikes and may be"
+  },
+  {
+   "t": 1085.2,
+   "d": 5.84,
+   "text": "challenging to them and they may need to practice. Some players are coming in wanting a relaxing game"
+  },
+  {
+   "t": 1091.04,
+   "d": 5.36,
+   "text": "to chill with and others want an intense challenge and people have different capabilities and"
+  },
+  {
+   "t": 1096.4,
+   "d": 5.12,
+   "text": "interest they want to engage with and as a designer I can't predict all of these and give you"
+  },
+  {
+   "t": 1101.52,
+   "d": 6.32,
+   "text": "the perfect game but I can give you tools so you can make the game more like what it is you want."
+  },
+  {
+   "t": 1109.2,
+   "d": 5.28,
+   "text": "One of the ways we gave players choices is a basic way many games do and we give you"
+  },
+  {
+   "t": 1114.48,
+   "d": 7.04,
+   "text": "three different classes. The warrior, Rogue and the wizard. We specifically kept in mind"
+  },
+  {
+   "t": 1121.52,
+   "d": 8.4,
+   "text": "the types of players I wanted these classes to target. The warrior is the simplest and"
+  },
+  {
+   "t": 1129.92,
+   "d": 3.92,
+   "text": "the most straightforward. He is a great intro character and smashes his face into things and"
+  },
+  {
+   "t": 1133.84,
+   "d": 6.72,
+   "text": "gets things done and the Rogue is more about control and precision and then the wizard"
+  },
+  {
+   "t": 1140.56,
+   "d": 7.36,
+   "text": "really introduces more complex skills that are difficult to control and creates new challenges."
+  },
+  {
+   "t": 1149.92,
+   "d": 10.96,
+   "text": "I thought everybody had these base assumptions about what each RPG class/archetype is like but"
+  },
+  {
+   "t": 1160.88,
+   "d": 5.6,
+   "text": "of course that turned out to be an assumption. You know, I was seeing people play in the game"
+  },
+  {
+   "t": 1168.0,
+   "d": 7.36,
+   "text": "who say started with the warrior, and we put him front and center as an intro character"
+  },
+  {
+   "t": 1176.24,
+   "d": 4.48,
+   "text": "but, you know, they played that first experience and came away saying this game isn't complicated"
+  },
+  {
+   "t": 1180.72,
+   "d": 4.72,
+   "text": "enough for me. They didn't realize they made that choice in picking that class."
+  },
+  {
+   "t": 1186.56,
+   "d": 4.64,
+   "text": "So recently in an update, we tried to clarify that and we just added a"
+  },
+  {
+   "t": 1191.2,
+   "d": 4.16,
+   "text": "little complexity meter so you understand that this is a choice that you are making."
+  },
+  {
+   "t": 1199.92,
+   "d": 4.96,
+   "text": "Throughout the game, we have got this score system. Early on when you were playing Roundguard"
+  },
+  {
+   "t": 1204.88,
+   "d": 6.48,
+   "text": "you are thinking about survival. It is, you know, kill the monsters, keep your health up and survive"
+  },
+  {
+   "t": 1211.36,
+   "d": 5.6,
+   "text": "to the bottom and you can beat the game. But as you start to really get into the game and"
+  },
+  {
+   "t": 1216.96,
+   "d": 4.64,
+   "text": "understand the scoring system you learn that you could beat the game better with a better score"
+  },
+  {
+   "t": 1222.56,
+   "d": 12.72,
+   "text": "and the scareb is really key to this. It moves around peg to peg between each shot and once"
+  },
+  {
+   "t": 1235.28,
+   "d": 6.24,
+   "text": "you hit it anything you hit afterwards the points are multiplied. A good score run becomes all about"
+  },
+  {
+   "t": 1241.52,
+   "d": 11.44,
+   "text": "chasing this. As you think about chasing the scareb it is like how do I hit it with a skill"
+  },
+  {
+   "t": 1252.96,
+   "d": 7.68,
+   "text": "before hitting the rest of the board? Sometimes it goads you into press your luck choices where"
+  },
+  {
+   "t": 1260.64,
+   "d": 4.4,
+   "text": "it is like I really should be going for this health over here but I got to get the scarab."
+  },
+  {
+   "t": 1266.4,
+   "d": 5.92,
+   "text": "As you start the play that way, the game naturally becomes more difficult without us doing changes to"
+  },
+  {
+   "t": 1272.32,
+   "d": 6.64,
+   "text": "the game system because of the extra complications and weird places that the scarab can take you."
+  },
+  {
+   "t": 1282.16,
+   "d": 3.84,
+   "text": "Finally, when you beat the game, you start to unlock these relics."
+  },
+  {
+   "t": 1287.12,
+   "d": 5.28,
+   "text": "Every relic touches on a core system of the game and changes the fundamental rules."
+  },
+  {
+   "t": 1293.04,
+   "d": 5.36,
+   "text": "For example, here is the relic of instinct. Heroes are shielded if you launch within two seconds."
+  },
+  {
+   "t": 1300.8,
+   "d": 4.4,
+   "text": "There are relics that change how status effects work, how enemies respond, how the"
+  },
+  {
+   "t": 1305.2,
+   "d": 6.72,
+   "text": "map is generated and how gravity works and all the different relics as you click them you can layer"
+  },
+  {
+   "t": 1311.92,
+   "d": 16.72,
+   "text": "on as many as you want. There is also a key relic. The mercy relic is for people who are struggling"
+  },
+  {
+   "t": 1328.64,
+   "d": 13.68,
+   "text": "with the challenge level of the game. Gold sources are reduced and you can still beat the game."
+  },
+  {
+   "t": 1346.4,
+   "d": 5.68,
+   "text": "We wanted the mercy relic to be there as a tool for players who are feeling frustrated and wanted"
+  },
+  {
+   "t": 1353.44,
+   "d": 5.12,
+   "text": "training wheels to let them get more comfortable with the game. We found it was helpful for kids"
+  },
+  {
+   "t": 1359.92,
+   "d": 5.52,
+   "text": "and we wanted to make sure the communication around the mercy relic was respectful and"
+  },
+  {
+   "t": 1365.44,
+   "d": 4.72,
+   "text": "people never felt like they were less than for never chosen to take on the mercy relic."
+  },
+  {
+   "t": 1371.68,
+   "d": 6.16,
+   "text": "This is one of my favorite pieces of fan feedback we got in which this kid says"
+  },
+  {
+   "t": 1378.64,
+   "d": 5.44,
+   "text": "I rescued the king, meaning beat the game, and mastered mercy. I love that pride that is there."
+  },
+  {
+   "t": 1386.64,
+   "d": 5.44,
+   "text": "That was important that, you know, I didn't want people to feel like we were talking down to them"
+  },
+  {
+   "t": 1392.08,
+   "d": 9.28,
+   "text": "by offering them the nursey relic. However, in the wild, we saw some people having some trouble"
+  },
+  {
+   "t": 1401.36,
+   "d": 4.32,
+   "text": "with the communication around the mercy relic. I watched streamers who came in and when they"
+  },
+  {
+   "t": 1405.68,
+   "d": 8.32,
+   "text": "first found the mercy relic they found more potion and better stats and equipped it but"
+  },
+  {
+   "t": 1414.0,
+   "d": 6.48,
+   "text": "without understanding they were putting on easy mode. So I worry they are going to come away with"
+  },
+  {
+   "t": 1420.48,
+   "d": 7.04,
+   "text": "the wrong understanding of what the game can be. After some debate, we added in this update"
+  },
+  {
+   "t": 1427.52,
+   "d": 5.52,
+   "text": "the word easy mode up front. You know, I want to make sure we are staying respectful about our"
+  },
+  {
+   "t": 1433.04,
+   "d": 7.6,
+   "text": "communication but extremely clear so people know when they are making that choice. I am giving the"
+  },
+  {
+   "t": 1440.64,
+   "d": 5.84,
+   "text": "players choices. It is about understanding our balance is never going to be perfect so we will"
+  },
+  {
+   "t": 1446.48,
+   "d": 6.88,
+   "text": "give them tools to control it themselves. And you know, I wanted to keep the tone respectful"
+  },
+  {
+   "t": 1453.36,
+   "d": 7.2,
+   "text": "throughout. Respectful of whatever challenge level you are looking for. I also learn it is important"
+  },
+  {
+   "t": 1460.56,
+   "d": 5.36,
+   "text": "to be clear so people understand when they are making a choice and what that choice means."
+  },
+  {
+   "t": 1468.72,
+   "d": 4.64,
+   "text": "So we did all these things to make Roundguard more accessible to players who were not"
+  },
+  {
+   "t": 1473.36,
+   "d": 5.92,
+   "text": "comfortable with Roguelikes and how did we do? We heard a lot of stores from not a gamers."
+  },
+  {
+   "t": 1479.28,
+   "d": 4.96,
+   "text": "My name is not a gamer. Her first experience with a Roguelike and she screamed with joy"
+  },
+  {
+   "t": 1484.24,
+   "d": 4.72,
+   "text": "when things went well for her in the game. We heard from Roguelike skeptics."
+  },
+  {
+   "t": 1495.28,
+   "d": 3.44,
+   "text": "It is an amazing addictive game and I don't normally like pebble."
+  },
+  {
+   "t": 1501.44,
+   "d": 5.6,
+   "text": "We heard from families. I love my son is learning about stats and RPG elements. It has"
+  },
+  {
+   "t": 1509.6,
+   "d": 10.64,
+   "text": "been our family's quarantine savior. My wife and son play it every morning. My 8 year old,"
+  },
+  {
+   "t": 1521.44,
+   "d": 4.32,
+   "text": "I take turns with my 8 year old. We played for three hours and haven't beaten the act 2 boss"
+  },
+  {
+   "t": 1525.76,
+   "d": 7.28,
+   "text": "but it is such a chill and fun game. We heard so many stories from families who have been"
+  },
+  {
+   "t": 1533.04,
+   "d": 4.64,
+   "text": "playing together and having a lot of fun. That was really something that was exciting for me."
+  },
+  {
+   "t": 1540.48,
+   "d": 8.64,
+   "text": "Why is this worth it? I am definitely not here making the argument that everybody needs to, you"
+  },
+  {
+   "t": 1549.12,
+   "d": 6.08,
+   "text": "know, make a less complicated or more accessible Roguelike. I love the Roguelikes that exist out"
+  },
+  {
+   "t": 1555.2,
+   "d": 6.8,
+   "text": "there but I think we all agree Roguelikes are awesome and bringing that love to more people"
+  },
+  {
+   "t": 1562.0,
+   "d": 6.32,
+   "text": "is a great thing. And it turns out that Roguelikes have a ton of utility for people who maybe aren't"
+  },
+  {
+   "t": 1568.32,
+   "d": 6.0,
+   "text": "familiar with them. You know, like I said, as a parent, I found this real appreciation for their"
+  },
+  {
+   "t": 1574.32,
+   "d": 5.36,
+   "text": "short play session. I heard from a lot of parents how much they were enjoying for their kids this"
+  },
+  {
+   "t": 1579.68,
+   "d": 4.88,
+   "text": "process of, you know, the repetition and practice and learning that came along with the Roguelike."
+  },
+  {
+   "t": 1585.92,
+   "d": 5.92,
+   "text": "And really this, you know, this joy of learning is such an important goal to share with people."
+  },
+  {
+   "t": 1593.2,
+   "d": 5.6,
+   "text": "We have this really fun experience a couple weeks ago on our steam forum. Someone came in"
+  },
+  {
+   "t": 1598.8,
+   "d": 6.72,
+   "text": "and was asking questions about the game and wanted answers and we gave them a few but we also talked"
+  },
+  {
+   "t": 1605.52,
+   "d": 5.84,
+   "text": "to them a little bit about our philosophy of you can learn this stuff once you try a little bit"
+  },
+  {
+   "t": 1611.36,
+   "d": 5.28,
+   "text": "more come back and tell us how it goes. They did come back and a few days later and said"
+  },
+  {
+   "t": 1617.2,
+   "d": 4.72,
+   "text": "I admit the more I play the game the more I understand how much fun it is to discover. I"
+  },
+  {
+   "t": 1625.68,
+   "d": 6.24,
+   "text": "really love this story. This is success to me. Roguelike designers and players and were"
+  },
+  {
+   "t": 1631.92,
+   "d": 8.88,
+   "text": "gauged in this dialogue about the process of learning. We are experimenting with the joy"
+  },
+  {
+   "t": 1640.8,
+   "d": 10.48,
+   "text": "of exploration and finding comfort in failure and the grit to keep practicing. These are beautiful"
+  },
+  {
+   "t": 1651.28,
+   "d": 5.76,
+   "text": "values we are all spreading as a Roguelike community and I think that's really special."
+  },
+  {
+   "t": 1660.0,
+   "d": 5.36,
+   "text": "Thank you for listening. If you are interested in learning more about the game or want to chat with"
+  },
+  {
+   "t": 1665.36,
+   "d": 5.56,
+   "text": "me here is more information. MODERATOR: Wow."
+  },
+  {
+   "t": 1678.4,
+   "d": 10.0,
+   "text": "I am overly emotional. I feel like I can't do my emcee job. We have Andrea live"
+  },
+  {
+   "t": 1691.36,
+   "d": 4.8,
+   "text": "in the field. >> Glad you felt it too."
+  },
+  {
+   "t": 1696.16,
+   "d": 16.64,
+   "text": "MODERATOR: It is perfect for this idea. >> That was one of the things I loved about"
+  },
+  {
+   "t": 1712.8,
+   "d": 7.28,
+   "text": "coming to the Roguelike Celebration last year. These are amazing people and this is such a cool"
+  },
+  {
+   "t": 1720.08,
+   "d": 6.48,
+   "text": "thing we are doing. Thank you for having me. MODERATOR: It is an absolute pleasure for us."
+  },
+  {
+   "t": 1728.0,
+   "d": 4.4,
+   "text": "One question since I think we have time for one. How did you test Roundguard? Send it"
+  },
+  {
+   "t": 1732.4,
+   "d": 8.32,
+   "text": "to friends? Watch people play person? >> We did a bunch of things but from the"
+  },
+  {
+   "t": 1740.72,
+   "d": 6.96,
+   "text": "beginning, a month or two, we brought it around in the Seattle area. We have the"
+  },
+  {
+   "t": 1747.68,
+   "d": 8.96,
+   "text": "Seattle indy community where they host show and tell sessions with other designers and"
+  },
+  {
+   "t": 1757.84,
+   "d": 4.24,
+   "text": "just other people. It is often in a place that is successful to the public so we have"
+  },
+  {
+   "t": 1763.2,
+   "d": 6.0,
+   "text": "all kinds of people coming up and kids and everything. We just regularly got it"
+  },
+  {
+   "t": 1769.2,
+   "d": 4.8,
+   "text": "out there and brought it to lots of events and things and looked at people over their"
+  },
+  {
+   "t": 1774.0,
+   "d": 4.96,
+   "text": "shoulders and asked them how things were going and yeah, learned a lot."
+  },
+  {
+   "t": 1779.84,
+   "d": 3.36,
+   "text": "MODERATOR: One other question I think is a really good question:"
+  },
+  {
+   "t": 1783.2,
+   "d": 17.36,
+   "text": "Is the tutorial for Roundguard competeable? >> Yeah, I think that's a really great point."
+  },
+  {
+   "t": 1800.56,
+   "d": 8.08,
+   "text": "Something maybe we didn't nail as well as I would have liked to. The tutorial is repeatable but you"
+  },
+  {
+   "t": 1808.64,
+   "d": 8.32,
+   "text": "need start another safe slot. We have places where we remind you about things and you can hover over"
+  },
+  {
+   "t": 1817.76,
+   "d": 10.0,
+   "text": "to get the description but yeah, I guess because of UI and time constraints we never got a great"
+  },
+  {
+   "t": 1828.48,
+   "d": 5.28,
+   "text": "push the button to play the tutorial. MODERATOR: Last super fast question."
+  },
+  {
+   "t": 1835.04,
+   "d": 4.24,
+   "text": "Can you die in the tutorial? >> You cannot die in the tutorial. There"
+  },
+  {
+   "t": 1839.28,
+   "d": 6.32,
+   "text": "are cushions all along the button. No spikes. MODERATOR: Excellent. Thank you so much. Hopefully"
+  },
+  {
+   "t": 1845.6,
+   "d": 3.52,
+   "text": "people find you around. >> I think I will go"
+  },
+  {
+   "t": 1849.12,
+   "d": 9.36,
+   "text": "over to the e showcase hall. MODERATOR: Everyone go check that out. Thanks,"
+  },
+  {
+   "t": 1858.48,
+   "d": 0.53,
+   "text": "Andea. We are heading into break time. This is again an unstructured break. Half an hour and feel"
+  },
+  {
+   "t": 1859.01,
+   "d": 1.1,
+   "text": "free to wonder around the space and figure how to transmogify yourself and change your color. There"
+  }
+ ],
+ "note": "manual track runs past the end of the video and there is no English auto-generated (en-orig) track to align it with; cut at the video's duration only, so text squeezed in just before the end is unchecked"
+}

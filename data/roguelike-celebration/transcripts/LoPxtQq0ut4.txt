@@ -1,0 +1,62 @@
+Cassie Stuurman - Slime Molds
+Speaker: Cassie Stuurman
+https://www.youtube.com/watch?v=LoPxtQq0ut4
+Year: 2017   Kind: talk   Captions: auto (en)
+
+## Intro
+
+[0:00:00] perfect hello everyone thanks for coming out to see my talk about slime molds I really do appreciate having the opportunity to have people listen to me talk about Simon ISM and I thought this would be a really good venue for it considering how much they crop up in different roguelikes my name is Cassie Thurman I'm an earth and planetary scientist and I titled this talk slime molds I love story because I really love slime molds and I like to think that they feel the same way about me too and I hope I hope that by the end of this talk you also learn to love slime molds so there's a very
+
+## A Slimey Legacy
+
+[0:00:48] long history of slime molds showing up in roguelikes geek culture and other kinds of video games the first reference to slime molds in any video game that I know of was in rogue when you drink a potion of see invisible you'll get the message saying that it tastes like slime mold juice it's obviously also a cosmos Bowl in nethack it shows up an egg band various other roguelikes sometimes it's something you can eat like in that hack sometimes it's something you can fight sometimes you are the slime mold and sometimes it's buried deep in an obscure character or monster description in the in the documentation so this raises the
+
+## Why slime molds?
+
+[0:01:32] question of why our slime molds a thing and broke likes and I had the opportunity to talk to Glenn Wickman and he told me the story of how slime molds became a thing and broke he told me that on the drainpipe behind the dining hall dining hall at UC Santa Cruz there was a slime mold a purple and white slime mold I have no idea they never identified it but I imagine it looks something like that one right there and Michael Tuohy and Glenn Wickman were studying at UC Santa Cruz when they started making rope and it became a running joke within the science department there to include slime references and things and this is how its found itself in rogue and we have done to become a cosmos table in nethack the idea being that it was a customizable food that would appear in the game they called it a slime mold to encourage players to change it and the options to something that wasn't a slime mold because they the implication here
+
+[0:02:34] is that slime molds are gross and undesirable and I one of the goals for my talk is to convince e that slime molds are not gross and not undesirable and that the default customizable food option for new hack is just fine the way it is so can you eat slime molds yes you can they're edible they are absolutely harmless to humans pets and plants some people consider them a pest in their garden they like to grow on mulch but other people don't think they're pests historically they've been eaten in Mexico as a food to fry and a pan kind of like scrambled eggs so I've never eaten one but you could if you really wanted to I want a really
+
+## What is a slime mold?
+
+[0:03:21] long time without knowing what a slime mold was I just would encounter in the hack all the time but I think most people have never really questioned a part of the reason I think is because it's kind of complicated they are protests they are not plants they are not fungus they're not animals that they sometimes exhibit characteristics similar to organisms in other kingdoms protists are unicellular organisms without any tissue like algae and within slime molds over the past several decades they used to think all that slime molds are really similar to each other but the more they look the more more different they are some people argue these up to six different kinds of slime molds but there's two main ones we're gonna be focusing on the plasmodial slime molds also called true slime molds in this talk and plasmodial slime molds are extra cool because they can form the largest unicellular organisms on Earth it's one cell but the largest ones have been
+
+[0:04:22] recorded up to two meters in sighs that's taller than I am and it's it's technically one cell but it has up to thousands of nuclei within it so slime molds when they're happy and
+
+## Slime mold life cycle
+
+[0:04:37] healthy and there's lots of food to go around explore their environment at a rate of somewhere between one to ten millimeters an hour they look for food like bacteria and different kinds of fungi but if they find food is scarce things get a little different so this is a very simplified slime mold lifecycle if they find food is scarce different simultaneity coalesce this is where we get the amoebic forms that can grow to very large sizes with many different nuclei once they've grown and they are satisfied I don't know exactly what triggers the next step but they turn into fruiting bodies where they release spores of themselves clones of themselves and these spread to faraway regions the slime mold then unfortunately dies but its offspring will live on my favorite thing about
+
+## Slime Mold Behaviour
+
+[0:05:33] slime molds is that even though they're very simple creatures they can exhibit some complex behavior which I'm gonna show you some examples of them right now some of you might have seen this study
+
+## Solving Mazes?
+
+[0:05:44] before it was done in 2000 where they found that slime molds can solve mazes much like a scientist would put a rat or mouse and a maze and it would solve the maze scientists put slime old enemies and they put food sources at the beginning and the end of the maze I don't know if this is cheating or not but the slime mold then filled up the entire maze and shrunk down to find the shortest path between the two different food sources essentially solving the maze here's a video of what that might look like you can see the Simon cells all the space they didn't give it that much time to shrink down but you can see the answer is right there well done
+
+## Slime Mold Path Finding
+
+[0:06:33] this idea that slime molds can find the shortest path between different food sources has been expanded to studies where they would place food in the same pattern as subway stations with train stations different cities and they would try to get this line mold to look like highway systems or rail systems here's a study in 2010 where scientists made the pattern of the Tokyo subway system and they argued that the slime old paths between all the different food sources resembled the actual Tokyo rail system whether or not you're convinced I don't know if I'm finally during break and we can talk about another super cool thing
+
+## Slime Mold: Memory
+
+[0:07:17] about slime molds you wouldn't expect something without a brain or a nervous system to have some kind of memory but slime molds do have a sort of spatial memory anywhere that they've been they leave a residue and if a slime mold encounters that kind of residue that will not go there again it will not cross that path this relates to the idea that slime molds exist they shrink down to form efficient pads between food sources so if a slime mold finds a spot where there is no slime mold but a slime molds been there it knows there's not going to be any food the spatial memory has been used to for slime molds into this u-shaped trap the the you trap is used in robotics this is my understanding I don't know anything about robotics but it's used as a test of autonomous navigation and they found that the slime mold could escape the u trap using this spatial memory feature interestingly simultaneity scientists
+
+[0:08:20] took a slime mold and put it in what was essentially a slime mold torture chamber where for 10 minutes of every hour it switched from being a warm moist slime mold paradise to a very cold dry harsh environment for the slime molds with the environmental switch came a change in states for the slime mold it went from being very high-energy moving to a much slower lower-energy slime mold and they found that even after they removed that stimulus the slime mold kept alternating States every hour and I'm not really I'm not sure why I'm not sure that's well understood why the sign molds can do that I could talk about different Studies on slime molds all day but unfortunately I don't have the time for that I do encourage you to go and research these topics on your own slime molds have been used in bio computers and even to make different logic gates you see on the bottom right a chip with a set of tubes and the idea
+
+[0:09:22] being that you can put slime mold through these tubes and there's two inputs to outputs the final can go into a tube and either not leave through any of the outputs leave through one of the outputs really through both of the outputs and you can make different kinds of logic with that but like I said before the slime molds only move one to ten millimeters an hour so it's not very efficient but you could do it so um I
+
+## Pet Slime Mold
+
+[0:09:51] want to spend the rest of my talk talking about real life slime molds in case you are motivated by your new knowledge of slime molds to go out and find one yourselves and take care of it as your home you will need a large mason jar like like this one here you'll need some kind of food source oatmeal will do a damp paper towel a fruit cup container or some other small can like object and of course you're going to need a slime mold so this is me I think in August or September and Joaquin Miller Park trying to go on a slime mold hunt it took me a couple hours because it had been really dry around that time but I did eventually find a slime mold to to make my pet for the purposes of this talk like I said earlier they really like multi areas areas that are moist so underneath logs or if it's been raining lately and places where they don't have to see a lot of light those are your
+
+[0:10:51] best candidates to find a slime mold this one here we found on a log that was rotting and where the slime mold was the biggest there was some SAP coming out of the tree so it had that there's just sweet sugary food source to sustain itself unfortunately in between finding that original slime mold and this talk it died it turns out slime molds need air so make sure you make sure you poke holes in the top of your jar yeah Bob suffocated but these are
+
+## Slime Mold Hunt 2
+
+[0:11:32] pictures of my second attempt I call him slimy the second and these pictures are actually from 6:00 a.m. this morning I'd like to thank Josh and Johnny sitting over there on the floor for coming out with me - Joaquin Miller Park - honey I knew slime mold so you can hang out with this slime mold during break later 3 o'clock in the kitchen area I guess they are edible I would prefer you didn't try to eat my slime mold but we are gonna have slime mold cupcakes for you they are vegan just like slime molds are but I think they might violate gluten-free conduct in summary slime molds are harmless intelligent and beautiful creatures and I hope that you have a newfound appreciation for them thank you [Applause] questions
+
+[0:12:47] do they have like any kind of inherent flavor properties you'd have to try for yourself would it be fair to say that you're aspiring to start a protest movement with within the roguelike community at least besides eating them is there anything else any benefits to foraging them like you use them for dyes or medicines or anything like that they make great pets hey can you crossbreed them for like prismatic coloring or enhance strength I mean the coloring is real this drinks maybe not so much but like they look cool when you mix of him that's a really good idea and I encourage you to try do
+
+[0:13:50] they need much exercise they're kind of moving all the time I really think they're moving as fast as they can are you going to lead us on assign mold hunt if anyone wants to go slime mold hunting with me now is a really great time because of all the rain I'm serious so if I'm gonna customize my spy slime mold to be a specific kind of slime mold like these are a kind that you recommend that would be especially wonderful yes my favorite slime mold is called the dog vomit slime mold it's fluorescent yellow and commonly found in gardens this may be a kind of dog vomit slime mold if you want to check it out later all right thank you so much

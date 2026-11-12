@@ -1,0 +1,66 @@
+Evan Ovadia - ASCII, Sprites, and Symbolic Graphics
+Speaker: Evan Ovadia
+https://www.youtube.com/watch?v=Xwa1KbXqeGQ
+Year: 2019   Kind: talk   Captions: auto (en)
+
+## Introduction
+
+[0:00:00] all right hello fellow roguelike ears I'm super excited to be here I'm gonna tell you a story about the inspiration that took me on a whirlwind adventure to realize and discover my own personal holy grail of roguelike graphics once I figure out how to advance the slide so
+
+## The journey and agenda
+
+[0:00:18] this talk is gonna come in two parts I'm gonna tell you about the journey and making in send Ian Falls and its graphics layer Domino and then I'm gonna tell you about the benefits of a ski sprites and the symbolic approach so I hope you come away with a new appreciation of a ski sprites and how much more there is to explore so a
+
+## Inspiration and ASCII
+
+[0:00:38] little bit about me I make programming languages and roguelike things and I think the most important thing to know about me is that I and not an artist I am terrible at art ironically this is a talk about art so take everything I say with a huge grain of salt asteroid of salt a comet of salt salt comment so with my art skills I was naturally drawn to developing roguelikes ASCII was the perfect medium for me life was great and then I saw this on the 8 on site I'm like whoa dude what is this is this like some sort like new a-tom 4.0 kind of thing like this is cool you can do ASCII and 3d that's amazing and I was inspired like I had to try making something like this so I hacked together
+
+## Developing the Domino concept
+
+[0:01:15] a program that would generate some 3d character meshes and eventually I had something like this now don't be distracted by the pentagonal tiling and the elevation that's how to talk for next year but look at the little uh bad sign this jumping around that's a 3d at sign and it's got a little shadow it looks pretty neat but I could tell like something was missing and years later it occurred to me that I could put it on a little domino tile thing he actually kind of looked really good and of course with any new graphics project you had to add particle systems right gotta add a fire effect you can't just not add a fire effect but something was still wrong tasks even seem to fit somehow with everything around it and I was thinking maybe I could use Unicode characters and it actually kind of worked like there was something about Unicode characters that at least I'm not familiar with that kind of worked with the rest of the tiles and then I was thinking what if I went full symbolic and then an ominous Thunder boomed in the distance so I found a font editing
+
+## Implementing the graphics
+
+[0:02:15] program called bird font and I traced this fancy-looking D it might sound like it's hard to trace fonts and you know add curves and stuff but it's actually just the pen tool like any regular graphics program the symbol took less than a minute to trace i'ma pause for a bit and let that sink in it took him less than a minute to trace that really pretty symbol and I am NOT an artist so I hope you can see the implications of something like this and actually worked really well it really seemed to fit with the rest of the tiles and then my friend Kevin Navarro made a tool called lift which could generate way better meshes than the tool I hacked together and it gave us outline meshes so left yes your left as well on the left is without meshes without outline meshes and on the right is without my meshes and it turned out really well so let's give it a hand to Kevin actually his outlines made this work it was ready so we named it Domino
+
+## Indian Falls game
+
+[0:03:09] and then in the 7d RL I used Domino to make this game called Indian Falls where you can time travel to work with your past self in combat my favorite part was on Thursday when I found a nice set of icons that I was allowed to trace and I brought them into the game in under 30 minutes I had someone taking the most frustrating challenging thing about game development for me our work and reduce it to just a half hour of tracing it was almost as prettiest sprites and it was almost as easy as ASCII so let's take a
+
+## Comparing graphics approaches
+
+[0:03:37] step back down put this in context I think we found just the tip of the iceberg Domino is just one approach what if there are other ways to combine the good parts of ASCII and sprites to show you what I mean let's talk about what makes ASCII great what makes sprite great and I'll talk about where Domino does well and where it falls flat let's decompose what's good about each of these and maybe we can figure out new ways to combine things into something even better I think the seven most important differences are the learning curve the beauty how it can evoke imagination the clarity of what you're presenting how much information you can present design efficiency which is like how fast you can bring a new graphic into the game and the reusability of those graphics so with the learning curve there's obviously three demons at a table there's a stool over there there's some person in a bed like you can tell that just by look and that's really the power of sprites but with ASCII as much as I love ASCII we have to learn what these letters mean what's the T what are those quote things are they friends or the enemies are the objects are they food can I eat them we don't really know and you've all seen it most people look at roguelikes and just see noise they don't know what they're looking at it's intimidating ASCII
+
+[0:04:39] requires you to learn before you can have fun of course once you learn it ASCII is amazing but until you get to that point it's kind of hard to play
+
+## Aesthetics and beauty
+
+[0:04:46] I think Domino landed somewhere between ASCII and sprites on learning a cloud doesn't really tell you that something's a goblin but it also doesn't require you to learn before you can play all you need to know as a player is that it's scary it's an enemy life goes on so let's talk about the beauty aspect sprites are beautiful just look at angle D it is one of the best beautiful games I've ever seen but not all sprites are beautiful without an artist you'll be using sprite sheets and eventually your sprite sheet won't have something you want and reaching for other sprite sheets is kind of dangerous because their art styles will clash and look like this let's not forget ASCII can be really beautiful too baroque did an amazing job with artwork and I gotta mention cog mine which supports ASCII with beautiful colors and animations the beginning of ASCII will probably never catch up the sprites but Wow like brogue and bind to get really close in my personal opinion Domino looks almost as good as sprites and especially considering my art skills I think it's it pretty well here so in the
+
+## Imagination and symbolism
+
+[0:05:45] imagination ASCII games rely on your imagination which is way better than any graphics card I think there's some new ones here though just switching to ASCII isn't enough to evoke imagination I don't feel it as much in randomly generated levels as much as say this town Torino or the tower of eternal flames where the floor and wall colors flickered - hands up waving fire I think switching to ASCII is the first step but I think one has to give a tiny bit of extra detail like just enough to trigger imagination also with ASCII I can throw in an orange M called an ambling sham blurr and IVA vocht a different image in each of your minds and I think there's power in that and in send Ian Falls no symbol tried to look like what it is for example the Goblin symbol doesn't look like the Goblin it's a claw hopefully just enough to trigger imagination but stepping back I'm not actually sure it works quite yet I suspect there's too much distracting detail in color for the imagination to really kick and hopefully someone here can tell me what the secret sauce is for evoke imagination and we can figure out how to bring it into Domino let's talk about clarity these
+
+## Clarity and information
+
+[0:06:42] two images show the exact same situation on the right you can see that sprites are beautiful and on the left you can see the ASCII gives you a much more accurate picture of the situation it's a lot easier to tell what's going on just looking at the ASCII and since Domino is symbols and they didn't have to be humanoid that let me focus on the distinguishing characteristics of each creature I think that it made it much clearer what was going on in a given scene and look in the center at the level where the stairs are objects like stairs trees tables chairs and so on they're not backed by a domino and that makes it easier to add a glance to figure out okay what do I actually have to pay attention to in this scene what is an enemy what am I scared of a frame I think I'm gonna did pretty well here although I do suspect the heights of the dominoes and the pentagonal terrain kind of sacrificed some clarity for beauty so let's talk about the information here you can see that two of the characters are holding swords they're writing sword attacks and one of the characters here is using the gun right you can't really show that kind of detail with ASCII in Domino these little symbols about the characters they sacrifice a little bit of clarity but they show that extra
+
+[0:07:42] information and I saved the most
+
+## Efficiency and reuse
+
+[0:07:45] important two aspects for last with ASCII when I throw on my ambling sham blur I don't need to draw it in 20 different poses like I would with the sprite I just type in the ASCII code in the color and I'm done and with ASCII you don't defend time thinking about whether the art fits with the rest of your game it just kind of does I think Domino really shined here it takes very little time to bring a new symbol into the game design efficiency is super important for roguelikes if we can get graphics out of the way we can focus more time what makes roguelikes really great gameplay in storyline and other things of course let's talk about reusability when I make a goblin sprite I can't really reuse it for much it's a goblin and changing the color is kind of harder than you think but we can reuse symbols with different colors all day long we can have a light blue claw and a dark blue background an orange claw and a red background anything ASCII is also super reusable we can reuse any letter with any color any background color all day long right for example a green oh as an orc purple oh isn't our chieftain and so on I think this is also incredibly the more we can reuse our symbols the
+
+[0:08:46] more time we can spend on the important things like gameplay and story so those
+
+## Conclusion and wrap-up
+
+[0:08:50] are the seven main differences between these graphical schemes I think Domino found a really nice balance but I'm sure there's many other local Maxo many other local maxima out there that we can discover there's a lot more I could talk about like all these things so feel free to ask me now or at lunch later today online that's the end of my talk I hope you all enjoyed it and are inspired to make the next generation of interesting looking burglars thank you and enjoy the rest of celebration [Laughter] [Music]
+
+## Q&A session
+
+[0:09:21] cool weave I'm for a question or two if you want to take questions I got asked about that tiling pattern show that again that's beautiful it's a non-periodic is it I mean what is it this that's a question this is pentagonal pattern number nine it turns out there's like thirteen or fourteen different ways you can tile up the Pentagon's as long as they're not perfectly you know perfect sides are all equal Pentagon's and it turns out you can actually generalize any repeating group of polygons like this as long as you can find a group that tiles with them I can't really show with the mouse that easily but um there's certain repeating groups of eight Pentagon's and yeah eight Pentagon's and that group tiles in a 2d fashion and inside that
+
+[0:10:21] group of eight you can identify which tile in the eight and it turns out with that pattern you can use a ton of combinations of different polygons it's definitely repeating pattern yeah yes dinner graph it was a data structure was a hash map of a tuple of three integers group X group Y an indexing group and then the value of that hash map was the tile itself ooh we have time for maybe one more question great and do you want to set up your computer of all video discussion hi have you considered using audio to combine with your iconography well there was audio Indians just basic like you know
+
+[0:11:22] sword sounds spear sounds if swords and spears make sounds but nothing past that do you have any interesting ideas there what one sound / gleeful that's interesting yeah I can imagine using that as such as like you know when a certain Goblin comes onto the screen for the first time you play a sound draw attention to that that's a good idea let's let's talk well thank you so much

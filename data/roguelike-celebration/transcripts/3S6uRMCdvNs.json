@@ -1,0 +1,4122 @@
+{
+ "id": "3S6uRMCdvNs",
+ "url": "https://www.youtube.com/watch?v=3S6uRMCdvNs",
+ "title": "Eric Billingsley- Scoped-down design: Making a tiny roguelike",
+ "speaker": "Eric Billingsley",
+ "talk_title": "Scoped-down design: Making a tiny roguelike",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 1902,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "How can we make games that are simple and focused, but still dynamic and varied?\n\nIn this talk I'll go over the process of designing my roguelike, Into Ruins -- how I took inspiration from one of my favourite games (Brogue), and how the technical & creative restrictions of developing for the PICO-8 fantasy console led me to some interesting design decisions that gave the game its own flavour.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 44,
+   "title": "Designing for Pico-8"
+  },
+  {
+   "start": 142,
+   "title": "Pico-8 constraints"
+  },
+  {
+   "start": 258,
+   "title": "Code and limitations"
+  },
+  {
+   "start": 382,
+   "title": "Influences and inspiration"
+  },
+  {
+   "start": 462,
+   "title": "Learning from Brogue"
+  },
+  {
+   "start": 655,
+   "title": "Designing by simplifying"
+  },
+  {
+   "start": 773,
+   "title": "Removing doors"
+  },
+  {
+   "start": 855,
+   "title": "Removing character levels"
+  },
+  {
+   "start": 993,
+   "title": "Combining item types"
+  },
+  {
+   "start": 1215,
+   "title": "Staves and wands"
+  },
+  {
+   "start": 1319,
+   "title": "Light and stealth"
+  },
+  {
+   "start": 1486,
+   "title": "Stairs vs. holes"
+  },
+  {
+   "start": 1737,
+   "title": "Conclusion and takeaways"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5989,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.99,
+   "d": 3.12,
+   "text": "[Music]"
+  },
+  {
+   "t": 5.68,
+   "d": 4.08,
+   "text": "next up we have Eric Billings leag hello"
+  },
+  {
+   "t": 9.76,
+   "d": 3.56,
+   "text": "hi so you are a Indie developer based in"
+  },
+  {
+   "t": 13.32,
+   "d": 1.76,
+   "text": "Ottawa Canada Phil"
+  },
+  {
+   "t": 15.08,
+   "d": 2.44,
+   "text": "Canadian who's always loved making games"
+  },
+  {
+   "t": 17.52,
+   "d": 1.8,
+   "text": "and started as a kid with tools like"
+  },
+  {
+   "t": 19.32,
+   "d": 2.6,
+   "text": "click and play since ENT entering the"
+  },
+  {
+   "t": 21.92,
+   "d": 2.24,
+   "text": "industry Eric's worked on titles like"
+  },
+  {
+   "t": 24.16,
+   "d": 2.68,
+   "text": "tunic and cuphead and released his own"
+  },
+  {
+   "t": 26.84,
+   "d": 2.08,
+   "text": "commercial titles spring Falls and star"
+  },
+  {
+   "t": 28.92,
+   "d": 2.8,
+   "text": "twine he also helps run monthly showand"
+  },
+  {
+   "t": 31.72,
+   "d": 2.12,
+   "text": "tell meetups with local group dirty"
+  },
+  {
+   "t": 33.84,
+   "d": 2.16,
+   "text": "rectangles and lately he's been making"
+  },
+  {
+   "t": 36.0,
+   "d": 2.16,
+   "text": "small games for the Pico 8 including the"
+  },
+  {
+   "t": 38.16,
+   "d": 1.6,
+   "text": "rug like inter ruins which I believe"
+  },
+  {
+   "t": 39.76,
+   "d": 2.8,
+   "text": "you're going to talk about now uh yeah"
+  },
+  {
+   "t": 42.56,
+   "d": 1.2,
+   "text": "thank you for the"
+  },
+  {
+   "t": 43.76,
+   "d": 4.08,
+   "text": "introduction um so hi welcome to my talk"
+  },
+  {
+   "t": 47.84,
+   "d": 3.16,
+   "text": "uh uh this is a scope down design uh"
+  },
+  {
+   "t": 51.0,
+   "d": 2.08,
+   "text": "making a tiny Rog"
+  },
+  {
+   "t": 53.08,
+   "d": 4.32,
+   "text": "leg um so hi hello uh my name is Eric"
+  },
+  {
+   "t": 57.4,
+   "d": 3.32,
+   "text": "Bingley um I release games under the"
+  },
+  {
+   "t": 60.72,
+   "d": 2.68,
+   "text": "name sparse Game Dev which is kind of a"
+  },
+  {
+   "t": 63.4,
+   "d": 2.48,
+   "text": "weird name I know um I've been working"
+  },
+  {
+   "t": 65.88,
+   "d": 3.12,
+   "text": "in the games industry since 2009 uh"
+  },
+  {
+   "t": 69.0,
+   "d": 1.52,
+   "text": "though I started making games as a kid"
+  },
+  {
+   "t": 70.52,
+   "d": 1.64,
+   "text": "like Alexi mentioned uh when I first got"
+  },
+  {
+   "t": 72.16,
+   "d": 0.88,
+   "text": "into the"
+  },
+  {
+   "t": 73.04,
+   "d": 3.88,
+   "text": "industry um I was working in on some AAA"
+  },
+  {
+   "t": 76.92,
+   "d": 2.24,
+   "text": "stuff um and I've worked on some bigger"
+  },
+  {
+   "t": 79.16,
+   "d": 3.08,
+   "text": "Indie titles and I've also released a a"
+  },
+  {
+   "t": 82.24,
+   "d": 3.64,
+   "text": "couple of my own commercial games um so"
+  },
+  {
+   "t": 85.88,
+   "d": 2.0,
+   "text": "none of these games are Rog leges so"
+  },
+  {
+   "t": 87.88,
+   "d": 2.44,
+   "text": "what what am I talking about here um"
+  },
+  {
+   "t": 90.32,
+   "d": 2.48,
+   "text": "this talk is about a different game uh"
+  },
+  {
+   "t": 92.8,
+   "d": 3.2,
+   "text": "called into ruins which is a rogue Lake"
+  },
+  {
+   "t": 96.0,
+   "d": 2.4,
+   "text": "um and it's also going to be about how"
+  },
+  {
+   "t": 98.4,
+   "d": 2.0,
+   "text": "much I love the game"
+  },
+  {
+   "t": 100.4,
+   "d": 1.96,
+   "text": "brogue uh and it's also going to be"
+  },
+  {
+   "t": 102.36,
+   "d": 2.16,
+   "text": "about some basic strategies for"
+  },
+  {
+   "t": 104.52,
+   "d": 2.48,
+   "text": "simplifying A Game's design um and how"
+  },
+  {
+   "t": 107.0,
+   "d": 2.2,
+   "text": "they can lead to interesting choices and"
+  },
+  {
+   "t": 109.2,
+   "d": 2.68,
+   "text": "how I think they did in the case of this"
+  },
+  {
+   "t": 111.88,
+   "d": 3.0,
+   "text": "game um some disclaimers I'm going to be"
+  },
+  {
+   "t": 114.88,
+   "d": 2.44,
+   "text": "comparing my game to brogue a lot um but"
+  },
+  {
+   "t": 117.32,
+   "d": 1.32,
+   "text": "I don't think my game is better than"
+  },
+  {
+   "t": 118.64,
+   "d": 2.28,
+   "text": "brog and brog is a masterpiece and one"
+  },
+  {
+   "t": 120.92,
+   "d": 2.76,
+   "text": "of my favorite games of all time um and"
+  },
+  {
+   "t": 123.68,
+   "d": 2.92,
+   "text": "also this is mostly a design Focus talk"
+  },
+  {
+   "t": 126.6,
+   "d": 1.48,
+   "text": "uh but there's going to be just a little"
+  },
+  {
+   "t": 128.08,
+   "d": 2.44,
+   "text": "bit of technical stuff um mostly going"
+  },
+  {
+   "t": 130.52,
+   "d": 3.44,
+   "text": "over the limitations of the p8 platform"
+  },
+  {
+   "t": 133.96,
+   "d": 2.92,
+   "text": "because that had a big impact on uh what"
+  },
+  {
+   "t": 136.88,
+   "d": 4.04,
+   "text": "the game became and the design of"
+  },
+  {
+   "t": 140.92,
+   "d": 4.24,
+   "text": "it um so what is inter ruins what is it"
+  },
+  {
+   "t": 145.16,
+   "d": 3.12,
+   "text": "um inter runes is a traditional Rog like"
+  },
+  {
+   "t": 148.28,
+   "d": 3.04,
+   "text": "for the pico8 fantasy cono"
+  },
+  {
+   "t": 151.32,
+   "d": 2.56,
+   "text": "um it's also my first Rog like and my"
+  },
+  {
+   "t": 153.88,
+   "d": 2.52,
+   "text": "first p8 game so I was kind of diving"
+  },
+  {
+   "t": 156.4,
+   "d": 2.04,
+   "text": "into the deep end a bit with this"
+  },
+  {
+   "t": 158.44,
+   "d": 3.6,
+   "text": "one and the the goal of the game is to"
+  },
+  {
+   "t": 162.04,
+   "d": 2.4,
+   "text": "get to depth 16 and retrieve the wings"
+  },
+  {
+   "t": 164.44,
+   "d": 3.24,
+   "text": "of yendor so pretty standard roog likee"
+  },
+  {
+   "t": 167.68,
+   "d": 3.6,
+   "text": "stuff um it has hex grids as you can see"
+  },
+  {
+   "t": 171.28,
+   "d": 2.92,
+   "text": "from the gift there um I like hex GDs"
+  },
+  {
+   "t": 174.2,
+   "d": 2.24,
+   "text": "they're cool um and it also has"
+  },
+  {
+   "t": 176.44,
+   "d": 2.56,
+   "text": "isometric I I say isometric I guess it's"
+  },
+  {
+   "t": 179.0,
+   "d": 2.2,
+   "text": "nearly is symetric not maybe that's not"
+  },
+  {
+   "t": 181.2,
+   "d": 2.32,
+   "text": "technically right uh pixel art uh that's"
+  },
+  {
+   "t": 183.52,
+   "d": 3.04,
+   "text": "animated um so from a presentation"
+  },
+  {
+   "t": 186.56,
+   "d": 2.28,
+   "text": "perspective that's that's what the game"
+  },
+  {
+   "t": 188.84,
+   "d": 2.68,
+   "text": "is um what is"
+  },
+  {
+   "t": 191.52,
+   "d": 3.96,
+   "text": "pico8 pico8 is a fantasy console um"
+  },
+  {
+   "t": 195.48,
+   "d": 2.6,
+   "text": "inspired by older 8bit systems so it's"
+  },
+  {
+   "t": 198.08,
+   "d": 3.24,
+   "text": "not like a real system or device that"
+  },
+  {
+   "t": 201.32,
+   "d": 2.92,
+   "text": "existed it's a program that you run and"
+  },
+  {
+   "t": 204.24,
+   "d": 2.52,
+   "text": "you can load cartridges uh like virtual"
+  },
+  {
+   "t": 206.76,
+   "d": 2.32,
+   "text": "cartridges that were made by people and"
+  },
+  {
+   "t": 209.08,
+   "d": 3.44,
+   "text": "play games um and other other things um"
+  },
+  {
+   "t": 212.52,
+   "d": 2.16,
+   "text": "it was created by Joseph white also"
+  },
+  {
+   "t": 214.68,
+   "d": 1.68,
+   "text": "known as"
+  },
+  {
+   "t": 216.36,
+   "d": 2.44,
+   "text": "Zep and it has everything you need built"
+  },
+  {
+   "t": 218.8,
+   "d": 2.16,
+   "text": "in to make games with it so it has like"
+  },
+  {
+   "t": 220.96,
+   "d": 3.4,
+   "text": "a it has a code editor and it also has a"
+  },
+  {
+   "t": 224.36,
+   "d": 3.16,
+   "text": "Sprite editor and it has a tracker for"
+  },
+  {
+   "t": 227.52,
+   "d": 2.8,
+   "text": "making music and sounds um and all all"
+  },
+  {
+   "t": 230.32,
+   "d": 3.52,
+   "text": "of this is very cute and fun to work"
+  },
+  {
+   "t": 233.84,
+   "d": 3.84,
+   "text": "with it also has uh built-in tools or bu"
+  },
+  {
+   "t": 237.68,
+   "d": 2.12,
+   "text": "a built-in tool called splore which you"
+  },
+  {
+   "t": 239.8,
+   "d": 1.44,
+   "text": "can use to explore things other people"
+  },
+  {
+   "t": 241.24,
+   "d": 2.48,
+   "text": "have made um and like see featured games"
+  },
+  {
+   "t": 243.72,
+   "d": 1.16,
+   "text": "and that kind of thing which is really"
+  },
+  {
+   "t": 244.88,
+   "d": 2.84,
+   "text": "cool um it has a really nice"
+  },
+  {
+   "t": 247.72,
+   "d": 2.0,
+   "text": "Community um and it has a lot of"
+  },
+  {
+   "t": 249.72,
+   "d": 2.04,
+   "text": "technical restrictions that give games a"
+  },
+  {
+   "t": 251.76,
+   "d": 2.56,
+   "text": "common feel so you you open up a p8 game"
+  },
+  {
+   "t": 254.32,
+   "d": 2.76,
+   "text": "and it feels like a p8 game uh so what"
+  },
+  {
+   "t": 257.08,
+   "d": 1.28,
+   "text": "are those"
+  },
+  {
+   "t": 258.36,
+   "d": 2.96,
+   "text": "restrictions um it has a really small"
+  },
+  {
+   "t": 261.32,
+   "d": 1.88,
+   "text": "resolution so everything looks really"
+  },
+  {
+   "t": 263.2,
+   "d": 3.12,
+   "text": "chunky um it has a very limited Sprite"
+  },
+  {
+   "t": 266.32,
+   "d": 2.24,
+   "text": "sheet as well so uh what you see to the"
+  },
+  {
+   "t": 268.56,
+   "d": 2.52,
+   "text": "right that's all of the art in my"
+  },
+  {
+   "t": 271.08,
+   "d": 2.84,
+   "text": "game um you can only use 16"
+  },
+  {
+   "t": 273.92,
+   "d": 3.4,
+   "text": "colors um and there are four channels of"
+  },
+  {
+   "t": 277.32,
+   "d": 1.52,
+   "text": "audio that you can set to different"
+  },
+  {
+   "t": 278.84,
+   "d": 3.4,
+   "text": "waveforms to make sounds and"
+  },
+  {
+   "t": 282.24,
+   "d": 3.04,
+   "text": "music um it also has limited memory and"
+  },
+  {
+   "t": 285.28,
+   "d": 3.4,
+   "text": "CPU usage which is kind of neat because"
+  },
+  {
+   "t": 288.68,
+   "d": 1.88,
+   "text": "uh it means that the games run the same"
+  },
+  {
+   "t": 290.56,
+   "d": 1.96,
+   "text": "on different devices and it also means"
+  },
+  {
+   "t": 292.52,
+   "d": 2.08,
+   "text": "that they can run on some pretty lowend"
+  },
+  {
+   "t": 294.6,
+   "d": 1.44,
+   "text": "devices which is"
+  },
+  {
+   "t": 296.04,
+   "d": 3.8,
+   "text": "cool um and there's a limit on the size"
+  },
+  {
+   "t": 299.84,
+   "d": 2.68,
+   "text": "that your code can be so this is this is"
+  },
+  {
+   "t": 302.52,
+   "d": 3.04,
+   "text": "like the big restriction because um if"
+  },
+  {
+   "t": 305.56,
+   "d": 1.36,
+   "text": "you're talking about a Sprite sheet you"
+  },
+  {
+   "t": 306.92,
+   "d": 1.56,
+   "text": "look at you look at your Sprites and you"
+  },
+  {
+   "t": 308.48,
+   "d": 3.16,
+   "text": "say okay I I'm want to use dedicate a"
+  },
+  {
+   "t": 311.64,
+   "d": 1.28,
+   "text": "quarter of this Sprite sheet to my"
+  },
+  {
+   "t": 312.92,
+   "d": 2.04,
+   "text": "enemies and each one is 8 by eight and"
+  },
+  {
+   "t": 314.96,
+   "d": 1.28,
+   "text": "it has four frames of Animation that"
+  },
+  {
+   "t": 316.24,
+   "d": 1.56,
+   "text": "means I can have 16 enemies and it's"
+  },
+  {
+   "t": 317.8,
+   "d": 2.76,
+   "text": "really easy to like say easy but it's"
+  },
+  {
+   "t": 320.56,
+   "d": 2.04,
+   "text": "easier at least to to reason about that"
+  },
+  {
+   "t": 322.6,
+   "d": 2.68,
+   "text": "and plan that out it's a lot harder to"
+  },
+  {
+   "t": 325.28,
+   "d": 2.84,
+   "text": "look at your enem enemies and say I"
+  },
+  {
+   "t": 328.12,
+   "d": 1.92,
+   "text": "think it's going to take this many lines"
+  },
+  {
+   "t": 330.04,
+   "d": 2.6,
+   "text": "of code to implement pathing or some"
+  },
+  {
+   "t": 332.64,
+   "d": 2.64,
+   "text": "other system that your game needs so um"
+  },
+  {
+   "t": 335.28,
+   "d": 1.84,
+   "text": "the the code size thing is is tricky"
+  },
+  {
+   "t": 337.12,
+   "d": 2.2,
+   "text": "it's it's kind of like solving a puzzle"
+  },
+  {
+   "t": 339.32,
+   "d": 2.04,
+   "text": "as you make your game um I found that"
+  },
+  {
+   "t": 341.36,
+   "d": 2.12,
+   "text": "like halfway through development anytime"
+  },
+  {
+   "t": 343.48,
+   "d": 1.52,
+   "text": "I wanted to add something new I had to"
+  },
+  {
+   "t": 345.0,
+   "d": 1.64,
+   "text": "go in and rework what I already had in"
+  },
+  {
+   "t": 346.64,
+   "d": 3.16,
+   "text": "order to make it fit uh which can be"
+  },
+  {
+   "t": 349.8,
+   "d": 3.2,
+   "text": "frustrating but it's also satisfying and"
+  },
+  {
+   "t": 353.0,
+   "d": 2.96,
+   "text": "uh the upside to all these restrictions"
+  },
+  {
+   "t": 355.96,
+   "d": 3.0,
+   "text": "are that the games are really small and"
+  },
+  {
+   "t": 358.96,
+   "d": 2.04,
+   "text": "uh one cool thing about p8 is the games"
+  },
+  {
+   "t": 361.0,
+   "d": 3.8,
+   "text": "can be encoded into the low entropy bits"
+  },
+  {
+   "t": 364.8,
+   "d": 2.4,
+   "text": "of an image of the cartridge uh"
+  },
+  {
+   "t": 367.2,
+   "d": 3.2,
+   "text": "so this picture here of the cartridge is"
+  },
+  {
+   "t": 370.4,
+   "d": 3.56,
+   "text": "the game pcoa can open up that image and"
+  },
+  {
+   "t": 373.96,
+   "d": 3.28,
+   "text": "run it um which is neat that's not quite"
+  },
+  {
+   "t": 377.24,
+   "d": 2.6,
+   "text": "true my game is actually two cartridges"
+  },
+  {
+   "t": 379.84,
+   "d": 1.48,
+   "text": "but it's the same"
+  },
+  {
+   "t": 381.32,
+   "d": 2.04,
+   "text": "idea um I wanted to mention some other"
+  },
+  {
+   "t": 383.36,
+   "d": 2.48,
+   "text": "games before I get going with the talk"
+  },
+  {
+   "t": 385.84,
+   "d": 4.28,
+   "text": "uh pork like by Christian mayeski"
+  },
+  {
+   "t": 390.12,
+   "d": 2.64,
+   "text": "and Cur curse of the Lich King by Johan"
+  },
+  {
+   "t": 392.76,
+   "d": 2.2,
+   "text": "Pates uh so these are both Rogue leges"
+  },
+  {
+   "t": 394.96,
+   "d": 2.68,
+   "text": "for the Pico 8 uh they also have kind of"
+  },
+  {
+   "t": 397.64,
+   "d": 1.2,
+   "text": "a simplified design and they're"
+  },
+  {
+   "t": 398.84,
+   "d": 2.52,
+   "text": "excellent games um and these are kind of"
+  },
+  {
+   "t": 401.36,
+   "d": 2.12,
+   "text": "the two games I looked at and was like"
+  },
+  {
+   "t": 403.48,
+   "d": 1.6,
+   "text": "okay I think what I'm trying to do is"
+  },
+  {
+   "t": 405.08,
+   "d": 3.52,
+   "text": "possible on the p8 um and pork like"
+  },
+  {
+   "t": 408.6,
+   "d": 2.16,
+   "text": "Christian actually has a entire YouTube"
+  },
+  {
+   "t": 410.76,
+   "d": 2.48,
+   "text": "series that's a tutorial on how to make"
+  },
+  {
+   "t": 413.24,
+   "d": 2.4,
+   "text": "this game so if you want to get into uh"
+  },
+  {
+   "t": 415.64,
+   "d": 1.96,
+   "text": "roik development on the p8 that's a"
+  },
+  {
+   "t": 417.6,
+   "d": 2.88,
+   "text": "really great place to start"
+  },
+  {
+   "t": 420.48,
+   "d": 1.84,
+   "text": "uh so check that out um I also wanted to"
+  },
+  {
+   "t": 422.32,
+   "d": 2.6,
+   "text": "mention Pixel Dungeon uh by OLG doia"
+  },
+  {
+   "t": 424.92,
+   "d": 3.6,
+   "text": "which is uh another Rog like that is"
+  },
+  {
+   "t": 428.52,
+   "d": 2.48,
+   "text": "based heavily on brogue um so a lot of"
+  },
+  {
+   "t": 431.0,
+   "d": 3.48,
+   "text": "people uh who play my game will say this"
+  },
+  {
+   "t": 434.48,
+   "d": 2.36,
+   "text": "is a lot like Pixel Dungeon and I think"
+  },
+  {
+   "t": 436.84,
+   "d": 1.32,
+   "text": "that's because they both have kind of a"
+  },
+  {
+   "t": 438.16,
+   "d": 2.76,
+   "text": "common ancestor but Pixel Dungeon uh"
+  },
+  {
+   "t": 440.92,
+   "d": 2.88,
+   "text": "it's on PC and mobile it has cool pixel"
+  },
+  {
+   "t": 443.8,
+   "d": 1.84,
+   "text": "art it's also a very excellent"
+  },
+  {
+   "t": 445.64,
+   "d": 4.16,
+   "text": "game um and then of course uh brogue"
+  },
+  {
+   "t": 449.8,
+   "d": 2.64,
+   "text": "Rogue is was the biggest influence uh"
+  },
+  {
+   "t": 452.44,
+   "d": 2.52,
+   "text": "for me on this project created by Brian"
+  },
+  {
+   "t": 454.96,
+   "d": 2.08,
+   "text": "Walker who has actually done a couple"
+  },
+  {
+   "t": 457.04,
+   "d": 1.44,
+   "text": "different talks at this conference"
+  },
+  {
+   "t": 458.48,
+   "d": 2.08,
+   "text": "before um I'll have links to those at"
+  },
+  {
+   "t": 460.56,
+   "d": 0.96,
+   "text": "the end of the"
+  },
+  {
+   "t": 461.52,
+   "d": 2.64,
+   "text": "talk um and so what is it that that"
+  },
+  {
+   "t": 464.16,
+   "d": 1.88,
+   "text": "makes brog"
+  },
+  {
+   "t": 466.04,
+   "d": 2.68,
+   "text": "special uh so brog is sort of a modern"
+  },
+  {
+   "t": 468.72,
+   "d": 2.16,
+   "text": "reimagining of the original Rogue you"
+  },
+  {
+   "t": 470.88,
+   "d": 1.8,
+   "text": "can see it has kind of like these single"
+  },
+  {
+   "t": 472.68,
+   "d": 1.72,
+   "text": "screen dungeons like the original Rogue"
+  },
+  {
+   "t": 474.4,
+   "d": 4.28,
+   "text": "did uh there's no classes so um it has"
+  },
+  {
+   "t": 478.68,
+   "d": 2.28,
+   "text": "this really cool system system where uh"
+  },
+  {
+   "t": 480.96,
+   "d": 1.56,
+   "text": "you the way you you build your"
+  },
+  {
+   "t": 482.52,
+   "d": 2.52,
+   "text": "characters you kind of find random"
+  },
+  {
+   "t": 485.04,
+   "d": 1.68,
+   "text": "equipment and then you also find these"
+  },
+  {
+   "t": 486.72,
+   "d": 2.88,
+   "text": "Scrolls of Enchantment and when you when"
+  },
+  {
+   "t": 489.6,
+   "d": 1.72,
+   "text": "you use those you apply them to one of"
+  },
+  {
+   "t": 491.32,
+   "d": 1.4,
+   "text": "your pieces of equipment and power it up"
+  },
+  {
+   "t": 492.72,
+   "d": 2.36,
+   "text": "so it's like as you're going you pick"
+  },
+  {
+   "t": 495.08,
+   "d": 1.44,
+   "text": "which pieces of equipment you want to"
+  },
+  {
+   "t": 496.52,
+   "d": 1.76,
+   "text": "want to keep and you choose which ones"
+  },
+  {
+   "t": 498.28,
+   "d": 3.08,
+   "text": "to invest uh this resource into and you"
+  },
+  {
+   "t": 501.36,
+   "d": 2.04,
+   "text": "build your character that way and uh"
+  },
+  {
+   "t": 503.4,
+   "d": 1.0,
+   "text": "that's really flexible it's like you're"
+  },
+  {
+   "t": 504.4,
+   "d": 2.56,
+   "text": "building a class as you go and it also"
+  },
+  {
+   "t": 506.96,
+   "d": 1.84,
+   "text": "means that there's like a lot of variety"
+  },
+  {
+   "t": 508.8,
+   "d": 2.12,
+   "text": "from to run and how it plays out which"
+  },
+  {
+   "t": 510.92,
+   "d": 2.96,
+   "text": "is cool um it also has a lot of"
+  },
+  {
+   "t": 513.88,
+   "d": 2.52,
+   "text": "different unique monster abilities um so"
+  },
+  {
+   "t": 516.4,
+   "d": 2.2,
+   "text": "there's not that many monsters in the"
+  },
+  {
+   "t": 518.6,
+   "d": 2.08,
+   "text": "game but uh they all have something kind"
+  },
+  {
+   "t": 520.68,
+   "d": 2.16,
+   "text": "of special about them which is which is"
+  },
+  {
+   "t": 522.84,
+   "d": 2.04,
+   "text": "neat because it's it means that uh"
+  },
+  {
+   "t": 524.88,
+   "d": 2.52,
+   "text": "there's a lot of variety but also that"
+  },
+  {
+   "t": 527.4,
+   "d": 1.76,
+   "text": "there's not as much to learn like once"
+  },
+  {
+   "t": 529.16,
+   "d": 2.72,
+   "text": "you've played the game enough times you"
+  },
+  {
+   "t": 531.88,
+   "d": 1.76,
+   "text": "you sort of you're familiar with the"
+  },
+  {
+   "t": 533.64,
+   "d": 1.12,
+   "text": "different monsters and you know what to"
+  },
+  {
+   "t": 534.76,
+   "d": 3.12,
+   "text": "expect for the most part which is cool"
+  },
+  {
+   "t": 537.88,
+   "d": 1.96,
+   "text": "um it also has a lot of trans Arcy so it"
+  },
+  {
+   "t": 539.84,
+   "d": 2.4,
+   "text": "tells you a lot about what the monsters"
+  },
+  {
+   "t": 542.24,
+   "d": 1.96,
+   "text": "can do what your equipment can do what"
+  },
+  {
+   "t": 544.2,
+   "d": 1.8,
+   "text": "the stats are and all that and so you"
+  },
+  {
+   "t": 546.0,
+   "d": 2.2,
+   "text": "don't need to look it up and then"
+  },
+  {
+   "t": 548.2,
+   "d": 3.4,
+   "text": "external Source or anything like"
+  },
+  {
+   "t": 551.6,
+   "d": 2.88,
+   "text": "that um and then it also has this"
+  },
+  {
+   "t": 554.48,
+   "d": 1.92,
+   "text": "concept of machine rooms which is I"
+  },
+  {
+   "t": 556.4,
+   "d": 2.52,
+   "text": "think core to brogue but not something I"
+  },
+  {
+   "t": 558.92,
+   "d": 3.0,
+   "text": "even attempted to put into my game uh"
+  },
+  {
+   "t": 561.92,
+   "d": 2.12,
+   "text": "because it I knew it would just would"
+  },
+  {
+   "t": 564.04,
+   "d": 2.12,
+   "text": "take too much code um but the machine"
+  },
+  {
+   "t": 566.16,
+   "d": 3.0,
+   "text": "rooms are basically uh puzzles that are"
+  },
+  {
+   "t": 569.16,
+   "d": 2.28,
+   "text": "integrated into the dungeon levels and"
+  },
+  {
+   "t": 571.44,
+   "d": 3.0,
+   "text": "when you solve them it opens up a room"
+  },
+  {
+   "t": 574.44,
+   "d": 2.36,
+   "text": "and uh there's in the room there's a"
+  },
+  {
+   "t": 576.8,
+   "d": 1.16,
+   "text": "bunch of different pieces of equipment"
+  },
+  {
+   "t": 577.96,
+   "d": 1.4,
+   "text": "but you're only allowed to take one of"
+  },
+  {
+   "t": 579.36,
+   "d": 1.56,
+   "text": "them so this is another way that the"
+  },
+  {
+   "t": 580.92,
+   "d": 2.48,
+   "text": "game kind of gives you flexibility in"
+  },
+  {
+   "t": 583.4,
+   "d": 2.56,
+   "text": "designing your character"
+  },
+  {
+   "t": 585.96,
+   "d": 2.92,
+   "text": "builds it also has like really organic"
+  },
+  {
+   "t": 588.88,
+   "d": 2.16,
+   "text": "feeling and pretty level generation like"
+  },
+  {
+   "t": 591.04,
+   "d": 1.64,
+   "text": "I this cave system on the right looks"
+  },
+  {
+   "t": 592.68,
+   "d": 1.44,
+   "text": "really cool with this big open pit and"
+  },
+  {
+   "t": 594.12,
+   "d": 2.12,
+   "text": "the water um and it has a lot of"
+  },
+  {
+   "t": 596.24,
+   "d": 2.4,
+   "text": "interactions with the environment so"
+  },
+  {
+   "t": 598.64,
+   "d": 2.28,
+   "text": "things can catch on fire there's gases"
+  },
+  {
+   "t": 600.92,
+   "d": 2.08,
+   "text": "that can kind of spread out um and"
+  },
+  {
+   "t": 603.0,
+   "d": 1.96,
+   "text": "there's traps um so all of this makes"
+  },
+  {
+   "t": 604.96,
+   "d": 2.12,
+   "text": "for really Dynamic gameplay and like a"
+  },
+  {
+   "t": 607.08,
+   "d": 2.48,
+   "text": "lot of tactics which is a lot of fun"
+  },
+  {
+   "t": 609.56,
+   "d": 1.84,
+   "text": "like positioning is really important and"
+  },
+  {
+   "t": 611.4,
+   "d": 1.56,
+   "text": "kind of looking at what's around you and"
+  },
+  {
+   "t": 612.96,
+   "d": 1.96,
+   "text": "and uh choosing a course of action based"
+  },
+  {
+   "t": 614.92,
+   "d": 1.68,
+   "text": "on"
+  },
+  {
+   "t": 616.6,
+   "d": 2.64,
+   "text": "that and I think it's just a generally a"
+  },
+  {
+   "t": 619.24,
+   "d": 2.84,
+   "text": "beautiful well-designed game um so it"
+  },
+  {
+   "t": 622.08,
+   "d": 2.68,
+   "text": "was natural for me uh making my first"
+  },
+  {
+   "t": 624.76,
+   "d": 1.64,
+   "text": "Rog like with no experience making"
+  },
+  {
+   "t": 626.4,
+   "d": 1.8,
+   "text": "something in the genre to kind of look"
+  },
+  {
+   "t": 628.2,
+   "d": 2.0,
+   "text": "to my favorite game in the genre for"
+  },
+  {
+   "t": 630.2,
+   "d": 2.32,
+   "text": "inspiration and I sort so I sort of like"
+  },
+  {
+   "t": 632.52,
+   "d": 3.48,
+   "text": "used this game as sort of a reference"
+  },
+  {
+   "t": 636.0,
+   "d": 2.92,
+   "text": "point when I was making my game um but I"
+  },
+  {
+   "t": 638.92,
+   "d": 1.92,
+   "text": "also wanted to do something unique I"
+  },
+  {
+   "t": 640.84,
+   "d": 2.64,
+   "text": "didn't want to just make Rogue again so"
+  },
+  {
+   "t": 643.48,
+   "d": 1.6,
+   "text": "and I I knew that because I was working"
+  },
+  {
+   "t": 645.08,
+   "d": 3.24,
+   "text": "on the p8 and also because I wanted to"
+  },
+  {
+   "t": 648.32,
+   "d": 1.68,
+   "text": "finish this game in a reasonable amount"
+  },
+  {
+   "t": 650.0,
+   "d": 2.52,
+   "text": "of time I would need to simplify my"
+  },
+  {
+   "t": 652.52,
+   "d": 1.72,
+   "text": "design quite a quite a"
+  },
+  {
+   "t": 654.24,
+   "d": 3.08,
+   "text": "bit so how how do you do that how do you"
+  },
+  {
+   "t": 657.32,
+   "d": 3.72,
+   "text": "take a design and make it simpler"
+  },
+  {
+   "t": 661.6,
+   "d": 2.48,
+   "text": "um so you're thinking of adding another"
+  },
+  {
+   "t": 664.08,
+   "d": 2.0,
+   "text": "system to your"
+  },
+  {
+   "t": 666.08,
+   "d": 2.68,
+   "text": "game uh ask yourself do I really need"
+  },
+  {
+   "t": 668.76,
+   "d": 2.88,
+   "text": "the system uh even if it's like a given"
+  },
+  {
+   "t": 671.64,
+   "d": 1.88,
+   "text": "for the genre that you're working in ask"
+  },
+  {
+   "t": 673.52,
+   "d": 2.12,
+   "text": "the question maybe especially if it is"
+  },
+  {
+   "t": 675.64,
+   "d": 1.96,
+   "text": "because uh I think there's a lot of"
+  },
+  {
+   "t": 677.6,
+   "d": 2.0,
+   "text": "things where we just kind of assume that"
+  },
+  {
+   "t": 679.6,
+   "d": 1.2,
+   "text": "we need them we don't even think about"
+  },
+  {
+   "t": 680.8,
+   "d": 2.44,
+   "text": "it uh we say this is this type of game"
+  },
+  {
+   "t": 683.24,
+   "d": 1.76,
+   "text": "it means it needs this and we don't"
+  },
+  {
+   "t": 685.0,
+   "d": 2.4,
+   "text": "examine the question and maybe you do"
+  },
+  {
+   "t": 687.4,
+   "d": 2.16,
+   "text": "but it maybe you do need it maybe you"
+  },
+  {
+   "t": 689.56,
+   "d": 1.52,
+   "text": "don't and it's nice to at least think"
+  },
+  {
+   "t": 691.08,
+   "d": 1.32,
+   "text": "about those questions maybe they'll lead"
+  },
+  {
+   "t": 692.4,
+   "d": 2.64,
+   "text": "you something lead you somewhere"
+  },
+  {
+   "t": 695.04,
+   "d": 2.0,
+   "text": "interesting um ask yourself does this"
+  },
+  {
+   "t": 697.04,
+   "d": 2.56,
+   "text": "add to the game and even if it does add"
+  },
+  {
+   "t": 699.6,
+   "d": 1.88,
+   "text": "to the game is it worth the time"
+  },
+  {
+   "t": 701.48,
+   "d": 1.56,
+   "text": "developing it and this is a real"
+  },
+  {
+   "t": 703.04,
+   "d": 1.6,
+   "text": "question like we have limited time maybe"
+  },
+  {
+   "t": 704.64,
+   "d": 2.04,
+   "text": "you don't want to spend uh two years"
+  },
+  {
+   "t": 706.68,
+   "d": 1.2,
+   "text": "working on your Rogue like you have to"
+  },
+  {
+   "t": 707.88,
+   "d": 3.84,
+   "text": "pick and choose which systems you put"
+  },
+  {
+   "t": 711.72,
+   "d": 3.08,
+   "text": "in uh ask yourself even if it would add"
+  },
+  {
+   "t": 714.8,
+   "d": 1.76,
+   "text": "something would it take away something"
+  },
+  {
+   "t": 716.56,
+   "d": 2.16,
+   "text": "as well like would it distract from the"
+  },
+  {
+   "t": 718.72,
+   "d": 1.48,
+   "text": "El elements that are the core of your"
+  },
+  {
+   "t": 720.2,
+   "d": 2.12,
+   "text": "game is this part of the core of your"
+  },
+  {
+   "t": 722.32,
+   "d": 2.4,
+   "text": "game or not and if it's not maybe you"
+  },
+  {
+   "t": 724.72,
+   "d": 1.68,
+   "text": "don't need it and maybe it's taking away"
+  },
+  {
+   "t": 726.4,
+   "d": 2.32,
+   "text": "attention from where you really want the"
+  },
+  {
+   "t": 728.72,
+   "d": 2.48,
+   "text": "focus of the game to"
+  },
+  {
+   "t": 731.2,
+   "d": 2.64,
+   "text": "be and would not having this give your"
+  },
+  {
+   "t": 733.84,
+   "d": 2.24,
+   "text": "game something unique would it add"
+  },
+  {
+   "t": 736.08,
+   "d": 1.92,
+   "text": "something different to your environments"
+  },
+  {
+   "t": 738.0,
+   "d": 2.68,
+   "text": "or have add some kind of unique gameplay"
+  },
+  {
+   "t": 740.68,
+   "d": 2.24,
+   "text": "thing that you haven't seen before or"
+  },
+  {
+   "t": 742.92,
+   "d": 3.12,
+   "text": "just you know uh add some something"
+  },
+  {
+   "t": 746.04,
+   "d": 1.16,
+   "text": "maybe it's a piece of World building"
+  },
+  {
+   "t": 747.2,
+   "d": 2.52,
+   "text": "that comes out of this all things to"
+  },
+  {
+   "t": 749.72,
+   "d": 3.4,
+   "text": "think about um and when not having this"
+  },
+  {
+   "t": 753.12,
+   "d": 1.48,
+   "text": "thing like think through if you didn't"
+  },
+  {
+   "t": 754.6,
+   "d": 2.36,
+   "text": "have this element would that lead you to"
+  },
+  {
+   "t": 756.96,
+   "d": 2.04,
+   "text": "make other decisions in terms of design"
+  },
+  {
+   "t": 759.0,
+   "d": 2.36,
+   "text": "that are interesting maybe it would lead"
+  },
+  {
+   "t": 761.36,
+   "d": 1.24,
+   "text": "you to make some compromises that you're"
+  },
+  {
+   "t": 762.6,
+   "d": 2.24,
+   "text": "not happy with but maybe it would open"
+  },
+  {
+   "t": 764.84,
+   "d": 1.64,
+   "text": "up some new possibilities that you"
+  },
+  {
+   "t": 766.48,
+   "d": 1.36,
+   "text": "wouldn't have thought of if you hadn't"
+  },
+  {
+   "t": 767.84,
+   "d": 4.24,
+   "text": "like taken this line of of"
+  },
+  {
+   "t": 772.08,
+   "d": 2.2,
+   "text": "Investigation uh so here's some examples"
+  },
+  {
+   "t": 774.28,
+   "d": 2.32,
+   "text": "from inter ruins uh the first one is uh"
+  },
+  {
+   "t": 776.6,
+   "d": 2.8,
+   "text": "my game doesn't have doors in it"
+  },
+  {
+   "t": 779.4,
+   "d": 3.16,
+   "text": "uh doors are really hard they affect"
+  },
+  {
+   "t": 782.56,
+   "d": 1.52,
+   "text": "lots of different systems like they"
+  },
+  {
+   "t": 784.08,
+   "d": 2.52,
+   "text": "affect your they affect field of view"
+  },
+  {
+   "t": 786.6,
+   "d": 3.48,
+   "text": "they affect enemy Ai and pathing you"
+  },
+  {
+   "t": 790.08,
+   "d": 1.8,
+   "text": "have to think about like if I throw this"
+  },
+  {
+   "t": 791.88,
+   "d": 2.48,
+   "text": "item at the door what happens it's just"
+  },
+  {
+   "t": 794.36,
+   "d": 2.68,
+   "text": "really there's all these edge cases"
+  },
+  {
+   "t": 797.04,
+   "d": 2.4,
+   "text": "um and if I was trying to make a"
+  },
+  {
+   "t": 799.44,
+   "d": 1.36,
+   "text": "simplified design I didn't want to have"
+  },
+  {
+   "t": 800.8,
+   "d": 2.08,
+   "text": "to deal with those so I decided to just"
+  },
+  {
+   "t": 802.88,
+   "d": 2.36,
+   "text": "not have doors um my levels are pretty"
+  },
+  {
+   "t": 805.24,
+   "d": 2.92,
+   "text": "small anyway and I thought maybe having"
+  },
+  {
+   "t": 808.16,
+   "d": 1.24,
+   "text": "doors there would just make them feel"
+  },
+  {
+   "t": 809.4,
+   "d": 2.08,
+   "text": "even more claustrophobic so this kind of"
+  },
+  {
+   "t": 811.48,
+   "d": 1.2,
+   "text": "opens things"
+  },
+  {
+   "t": 812.68,
+   "d": 2.32,
+   "text": "up um it kind of makes for more a"
+  },
+  {
+   "t": 815.0,
+   "d": 2.16,
+   "text": "dynamic gameplay because it means that"
+  },
+  {
+   "t": 817.16,
+   "d": 1.68,
+   "text": "sort of enemies can spot you from other"
+  },
+  {
+   "t": 818.84,
+   "d": 2.52,
+   "text": "rooms uh you can be engaged in combat"
+  },
+  {
+   "t": 821.36,
+   "d": 1.28,
+   "text": "and it'll kind of spill over from room"
+  },
+  {
+   "t": 822.64,
+   "d": 2.6,
+   "text": "to room so it kind of uh it kind of"
+  },
+  {
+   "t": 825.24,
+   "d": 1.92,
+   "text": "makes each floor of the dungeon feel"
+  },
+  {
+   "t": 827.16,
+   "d": 1.68,
+   "text": "sort of like one big arena which is kind"
+  },
+  {
+   "t": 828.84,
+   "d": 1.4,
+   "text": "of what I was going"
+  },
+  {
+   "t": 830.24,
+   "d": 2.6,
+   "text": "for um and also it fits well"
+  },
+  {
+   "t": 832.84,
+   "d": 1.56,
+   "text": "aesthetically with with the look of the"
+  },
+  {
+   "t": 834.4,
+   "d": 2.32,
+   "text": "game because I'm going for these really"
+  },
+  {
+   "t": 836.72,
+   "d": 3.28,
+   "text": "old crumbled uh dungeons"
+  },
+  {
+   "t": 840.0,
+   "d": 2.32,
+   "text": "uh where like the walls are crumbling"
+  },
+  {
+   "t": 842.32,
+   "d": 2.28,
+   "text": "and there's holes everywhere and the"
+  },
+  {
+   "t": 844.6,
+   "d": 2.52,
+   "text": "only thing remaining is stuff made of"
+  },
+  {
+   "t": 847.12,
+   "d": 2.6,
+   "text": "stone like the uh the bricks and the"
+  },
+  {
+   "t": 849.72,
+   "d": 2.88,
+   "text": "statues that haven't rotted away so I"
+  },
+  {
+   "t": 852.6,
+   "d": 2.68,
+   "text": "think that worked well for atmosphere as"
+  },
+  {
+   "t": 855.28,
+   "d": 2.72,
+   "text": "well um here's another example character"
+  },
+  {
+   "t": 858.0,
+   "d": 3.16,
+   "text": "levels uh brog actually already did this"
+  },
+  {
+   "t": 861.16,
+   "d": 3.04,
+   "text": "um so when brog launched it did have a"
+  },
+  {
+   "t": 864.2,
+   "d": 1.8,
+   "text": "character level system you would get XP"
+  },
+  {
+   "t": 866.0,
+   "d": 1.36,
+   "text": "as you kill monsters and you would get"
+  },
+  {
+   "t": 867.36,
+   "d": 3.08,
+   "text": "stronger and then and part way or at a"
+  },
+  {
+   "t": 870.44,
+   "d": 1.32,
+   "text": "certain point it was removed from the"
+  },
+  {
+   "t": 871.76,
+   "d": 1.24,
+   "text": "game which I don't think you see that"
+  },
+  {
+   "t": 873.0,
+   "d": 2.12,
+   "text": "too often like a patch just like"
+  },
+  {
+   "t": 875.12,
+   "d": 1.68,
+   "text": "stripping out a system from a game and"
+  },
+  {
+   "t": 876.8,
+   "d": 2.84,
+   "text": "and making it stronger so so what does"
+  },
+  {
+   "t": 879.64,
+   "d": 3.92,
+   "text": "removing levels do um for your game well"
+  },
+  {
+   "t": 883.56,
+   "d": 2.4,
+   "text": "you you do lose a bit of that feeling of"
+  },
+  {
+   "t": 885.96,
+   "d": 2.72,
+   "text": "your character like growing in power as"
+  },
+  {
+   "t": 888.68,
+   "d": 2.4,
+   "text": "you kill monsters that's kind of a"
+  },
+  {
+   "t": 891.08,
+   "d": 3.12,
+   "text": "compromise there um but in in the case"
+  },
+  {
+   "t": 894.2,
+   "d": 3.56,
+   "text": "of of uh of in our case anyway uh we"
+  },
+  {
+   "t": 897.76,
+   "d": 1.68,
+   "text": "already have like"
+  },
+  {
+   "t": 899.44,
+   "d": 2.6,
+   "text": "another another way to progress your"
+  },
+  {
+   "t": 902.04,
+   "d": 1.8,
+   "text": "character which is uh in my game they're"
+  },
+  {
+   "t": 903.84,
+   "d": 2.4,
+   "text": "the orbs of power it's the equivalent of"
+  },
+  {
+   "t": 906.24,
+   "d": 2.04,
+   "text": "the Scrolls of Enchantment and brogue"
+  },
+  {
+   "t": 908.28,
+   "d": 3.72,
+   "text": "and so uh if we remove the character"
+  },
+  {
+   "t": 912.0,
+   "d": 2.64,
+   "text": "leveling it just puts more focus on this"
+  },
+  {
+   "t": 914.64,
+   "d": 1.96,
+   "text": "progression mechanic we already have uh"
+  },
+  {
+   "t": 916.6,
+   "d": 2.0,
+   "text": "so it makes those decisions for what you"
+  },
+  {
+   "t": 918.6,
+   "d": 2.76,
+   "text": "power up even more meaningful and it"
+  },
+  {
+   "t": 921.36,
+   "d": 1.96,
+   "text": "also means that there's more variation"
+  },
+  {
+   "t": 923.32,
+   "d": 2.16,
+   "text": "uh between the builds because they don't"
+  },
+  {
+   "t": 925.48,
+   "d": 4.44,
+   "text": "all scale in this common way"
+  },
+  {
+   "t": 929.92,
+   "d": 1.8,
+   "text": "uh it also puts more focus on stealth"
+  },
+  {
+   "t": 931.72,
+   "d": 2.36,
+   "text": "play and allows you to run away from"
+  },
+  {
+   "t": 934.08,
+   "d": 1.56,
+   "text": "Monsters"
+  },
+  {
+   "t": 935.64,
+   "d": 3.4,
+   "text": "um so if you're in combat and it's"
+  },
+  {
+   "t": 939.04,
+   "d": 1.72,
+   "text": "getting particularly nasty maybe you can"
+  },
+  {
+   "t": 940.76,
+   "d": 1.36,
+   "text": "run away and jump down a pit or"
+  },
+  {
+   "t": 942.12,
+   "d": 3.2,
+   "text": "something um because the player isn't"
+  },
+  {
+   "t": 945.32,
+   "d": 3.12,
+   "text": "thinking about you know I I really don't"
+  },
+  {
+   "t": 948.44,
+   "d": 3.0,
+   "text": "want to engage in this encounter but if"
+  },
+  {
+   "t": 951.44,
+   "d": 2.04,
+   "text": "I don't I I'll miss out on XP and I'll"
+  },
+  {
+   "t": 953.48,
+   "d": 1.48,
+   "text": "be behind because they don't have to"
+  },
+  {
+   "t": 954.96,
+   "d": 2.52,
+   "text": "make that decision it means that they"
+  },
+  {
+   "t": 957.48,
+   "d": 1.92,
+   "text": "have way more options it means that more"
+  },
+  {
+   "t": 959.4,
+   "d": 2.76,
+   "text": "builds are viable um and I think that's"
+  },
+  {
+   "t": 962.16,
+   "d": 1.92,
+   "text": "a good thing for the"
+  },
+  {
+   "t": 964.08,
+   "d": 4.44,
+   "text": "game it also means that uh I can kind of"
+  },
+  {
+   "t": 968.52,
+   "d": 2.44,
+   "text": "keep using my enemies longer from the"
+  },
+  {
+   "t": 970.96,
+   "d": 1.72,
+   "text": "early game I can take those early game"
+  },
+  {
+   "t": 972.68,
+   "d": 3.04,
+   "text": "enemies and plop them on later levels"
+  },
+  {
+   "t": 975.72,
+   "d": 1.08,
+   "text": "and there's still a challenge for the"
+  },
+  {
+   "t": 976.8,
+   "d": 2.0,
+   "text": "player which is really helpful in my"
+  },
+  {
+   "t": 978.8,
+   "d": 2.48,
+   "text": "case because I can only have like 14"
+  },
+  {
+   "t": 981.28,
+   "d": 4.16,
+   "text": "enemies um so maybe if I can use goblins"
+  },
+  {
+   "t": 985.44,
+   "d": 1.64,
+   "text": "on the lower depths but just maybe have"
+  },
+  {
+   "t": 987.08,
+   "d": 2.88,
+   "text": "bigger groups of goblins um that's a win"
+  },
+  {
+   "t": 989.96,
+   "d": 2.28,
+   "text": "it's"
+  },
+  {
+   "t": 992.44,
+   "d": 2.2,
+   "text": "good uh What are some other ways that we"
+  },
+  {
+   "t": 994.64,
+   "d": 2.92,
+   "text": "can simplify"
+  },
+  {
+   "t": 998.64,
+   "d": 2.16,
+   "text": "designs uh so so you're thinking of"
+  },
+  {
+   "t": 1000.8,
+   "d": 2.36,
+   "text": "adding not one but two different systems"
+  },
+  {
+   "t": 1003.16,
+   "d": 1.04,
+   "text": "to your"
+  },
+  {
+   "t": 1004.2,
+   "d": 2.84,
+   "text": "game uh ask yourself can one of these"
+  },
+  {
+   "t": 1007.04,
+   "d": 2.4,
+   "text": "systems do the job of the other"
+  },
+  {
+   "t": 1009.44,
+   "d": 2.68,
+   "text": "one and if it can would that be easier"
+  },
+  {
+   "t": 1012.12,
+   "d": 2.2,
+   "text": "to implement would it be easier for"
+  },
+  {
+   "t": 1014.32,
+   "d": 2.52,
+   "text": "players to understand um this often is"
+  },
+  {
+   "t": 1016.84,
+   "d": 2.24,
+   "text": "true if if if there are already familiar"
+  },
+  {
+   "t": 1019.08,
+   "d": 1.28,
+   "text": "with something and they see it again in"
+  },
+  {
+   "t": 1020.36,
+   "d": 2.12,
+   "text": "a different context they can make that"
+  },
+  {
+   "t": 1022.48,
+   "d": 4.24,
+   "text": "connection of how it should work um"
+  },
+  {
+   "t": 1026.72,
+   "d": 2.2,
+   "text": "would would this open up new gameplay"
+  },
+  {
+   "t": 1028.92,
+   "d": 2.56,
+   "text": "gameplay possibilities um and if they"
+  },
+  {
+   "t": 1031.48,
+   "d": 1.96,
+   "text": "can't quite be combined with the way"
+  },
+  {
+   "t": 1033.44,
+   "d": 1.96,
+   "text": "they're currently designed can you"
+  },
+  {
+   "t": 1035.4,
+   "d": 2.04,
+   "text": "change a little bit what your goals are"
+  },
+  {
+   "t": 1037.44,
+   "d": 2.24,
+   "text": "or just kind of massage the way one of"
+  },
+  {
+   "t": 1039.68,
+   "d": 2.04,
+   "text": "them Works to make it mostly cover the"
+  },
+  {
+   "t": 1041.72,
+   "d": 1.4,
+   "text": "basis of what the other one does think"
+  },
+  {
+   "t": 1043.12,
+   "d": 1.96,
+   "text": "about like if you did that what would"
+  },
+  {
+   "t": 1045.08,
+   "d": 2.56,
+   "text": "the consequences of that be um and maybe"
+  },
+  {
+   "t": 1047.64,
+   "d": 2.32,
+   "text": "that will maybe that won't work out but"
+  },
+  {
+   "t": 1049.96,
+   "d": 2.32,
+   "text": "it's good to examine that and maybe it"
+  },
+  {
+   "t": 1052.28,
+   "d": 1.68,
+   "text": "will also lead you to some some"
+  },
+  {
+   "t": 1053.96,
+   "d": 1.0,
+   "text": "different things and maybe it will"
+  },
+  {
+   "t": 1054.96,
+   "d": 3.08,
+   "text": "affect a lot of things in your"
+  },
+  {
+   "t": 1058.04,
+   "d": 2.8,
+   "text": "design uh so here's a really basic"
+  },
+  {
+   "t": 1060.84,
+   "d": 2.12,
+   "text": "example uh these ones I'm going to be"
+  },
+  {
+   "t": 1062.96,
+   "d": 2.68,
+   "text": "kind of comparing to Bogue a bit so uh"
+  },
+  {
+   "t": 1065.64,
+   "d": 1.84,
+   "text": "Bogue has both well like a lot of bro"
+  },
+  {
+   "t": 1067.48,
+   "d": 2.72,
+   "text": "leges it has both potions and Scrolls uh"
+  },
+  {
+   "t": 1070.2,
+   "d": 2.08,
+   "text": "potions are things that you can either"
+  },
+  {
+   "t": 1072.28,
+   "d": 1.72,
+   "text": "drink and they have an effect on you or"
+  },
+  {
+   "t": 1074.0,
+   "d": 1.64,
+   "text": "you can throw them and they have an"
+  },
+  {
+   "t": 1075.64,
+   "d": 2.72,
+   "text": "effect on the environment or on what"
+  },
+  {
+   "t": 1078.36,
+   "d": 2.48,
+   "text": "whatever you threw it at um and scrolls"
+  },
+  {
+   "t": 1080.84,
+   "d": 2.64,
+   "text": "are a thing that you can read them and"
+  },
+  {
+   "t": 1083.48,
+   "d": 2.2,
+   "text": "they have a magical effect and then once"
+  },
+  {
+   "t": 1085.68,
+   "d": 1.16,
+   "text": "you read them they're they're they're"
+  },
+  {
+   "t": 1086.84,
+   "d": 3.6,
+   "text": "like a one use item um so if you think"
+  },
+  {
+   "t": 1090.44,
+   "d": 2.08,
+   "text": "about it like drinking a potion and"
+  },
+  {
+   "t": 1092.52,
+   "d": 2.84,
+   "text": "using a scroll is very similar action so"
+  },
+  {
+   "t": 1095.36,
+   "d": 2.8,
+   "text": "I decided to combine these two concepts"
+  },
+  {
+   "t": 1098.16,
+   "d": 3.4,
+   "text": "together into something I called"
+  },
+  {
+   "t": 1101.56,
+   "d": 3.48,
+   "text": "orbs so um all orbs can be used or"
+  },
+  {
+   "t": 1105.04,
+   "d": 2.24,
+   "text": "thrown so if you look at the the"
+  },
+  {
+   "t": 1107.28,
+   "d": 2.2,
+   "text": "animation on the right there you can see"
+  },
+  {
+   "t": 1109.48,
+   "d": 3.2,
+   "text": "um the player finds a black orb and"
+  },
+  {
+   "t": 1112.68,
+   "d": 1.6,
+   "text": "throws it and it turns out it's an orb"
+  },
+  {
+   "t": 1114.28,
+   "d": 2.24,
+   "text": "of fire and it sets the enemy and the"
+  },
+  {
+   "t": 1116.52,
+   "d": 1.92,
+   "text": "environment on fire um if you were to"
+  },
+  {
+   "t": 1118.44,
+   "d": 2.12,
+   "text": "use that instead then the player would"
+  },
+  {
+   "t": 1120.56,
+   "d": 2.0,
+   "text": "burst into flames and fire would spread"
+  },
+  {
+   "t": 1122.56,
+   "d": 3.4,
+   "text": "around them um but what does it actually"
+  },
+  {
+   "t": 1125.96,
+   "d": 2.52,
+   "text": "mean to use an orb like diagetic I think"
+  },
+  {
+   "t": 1128.48,
+   "d": 1.24,
+   "text": "this is kind of an aside I just think"
+  },
+  {
+   "t": 1129.72,
+   "d": 1.92,
+   "text": "it's it's an interesting question I"
+  },
+  {
+   "t": 1131.64,
+   "d": 2.72,
+   "text": "initially wanted the verb to be to eat I"
+  },
+  {
+   "t": 1134.36,
+   "d": 1.76,
+   "text": "thought it'd be funny if you were if you"
+  },
+  {
+   "t": 1136.12,
+   "d": 2.36,
+   "text": "were eating the orbs um but when when I"
+  },
+  {
+   "t": 1138.48,
+   "d": 1.08,
+   "text": "thought about it a bit it didn't really"
+  },
+  {
+   "t": 1139.56,
+   "d": 1.92,
+   "text": "make sense that you would like consume"
+  },
+  {
+   "t": 1141.48,
+   "d": 1.88,
+   "text": "something and then it would power up a"
+  },
+  {
+   "t": 1143.36,
+   "d": 2.44,
+   "text": "piece of equipment or identify something"
+  },
+  {
+   "t": 1145.8,
+   "d": 3.4,
+   "text": "so I I decided to scrap that and just"
+  },
+  {
+   "t": 1149.2,
+   "d": 1.52,
+   "text": "like leave it up to the imagination of"
+  },
+  {
+   "t": 1150.72,
+   "d": 2.44,
+   "text": "the player so what you're actually doing"
+  },
+  {
+   "t": 1153.16,
+   "d": 2.32,
+   "text": "I I'm not really sure maybe it depends"
+  },
+  {
+   "t": 1155.48,
+   "d": 3.44,
+   "text": "on which orb I don't know it doesn't"
+  },
+  {
+   "t": 1158.92,
+   "d": 2.44,
+   "text": "really matter um and so the other thing"
+  },
+  {
+   "t": 1161.36,
+   "d": 2.4,
+   "text": "about combining these two categories is"
+  },
+  {
+   "t": 1163.76,
+   "d": 3.52,
+   "text": "uh because we have very few items like I"
+  },
+  {
+   "t": 1167.28,
+   "d": 2.2,
+   "text": "I think I only have orbs in total in the"
+  },
+  {
+   "t": 1169.48,
+   "d": 2.64,
+   "text": "game um because I'm restricted in the"
+  },
+  {
+   "t": 1172.12,
+   "d": 2.0,
+   "text": "number of Sprites and the number of"
+  },
+  {
+   "t": 1174.12,
+   "d": 3.28,
+   "text": "behaviors I can have coded in um"
+  },
+  {
+   "t": 1177.4,
+   "d": 1.52,
+   "text": "combining these two categories makes the"
+  },
+  {
+   "t": 1178.92,
+   "d": 1.52,
+   "text": "identification game more interesting"
+  },
+  {
+   "t": 1180.44,
+   "d": 1.76,
+   "text": "because now we have eight differently"
+  },
+  {
+   "t": 1182.2,
+   "d": 1.68,
+   "text": "colored things and we have to try them"
+  },
+  {
+   "t": 1183.88,
+   "d": 2.48,
+   "text": "out and it takes longer to figure out"
+  },
+  {
+   "t": 1186.36,
+   "d": 2.56,
+   "text": "which ones are which because if we had I"
+  },
+  {
+   "t": 1188.92,
+   "d": 2.08,
+   "text": "think if we had like two categories with"
+  },
+  {
+   "t": 1191.0,
+   "d": 1.76,
+   "text": "four each it would be a lot easier to"
+  },
+  {
+   "t": 1192.76,
+   "d": 2.44,
+   "text": "narrow that down maybe that's less"
+  },
+  {
+   "t": 1195.2,
+   "d": 2.88,
+   "text": "interesting um this is another example"
+  },
+  {
+   "t": 1198.08,
+   "d": 2.24,
+   "text": "here of an orb where so there's an orb"
+  },
+  {
+   "t": 1200.32,
+   "d": 2.92,
+   "text": "of data which normally you would use to"
+  },
+  {
+   "t": 1203.24,
+   "d": 3.12,
+   "text": "uh identify your equipment but if I"
+  },
+  {
+   "t": 1206.36,
+   "d": 2.72,
+   "text": "throw it at this Goblin we can see that"
+  },
+  {
+   "t": 1209.08,
+   "d": 1.56,
+   "text": "the goblin is named Fluffy and you can"
+  },
+  {
+   "t": 1210.64,
+   "d": 3.44,
+   "text": "also see the goblin"
+  },
+  {
+   "t": 1214.32,
+   "d": 3.0,
+   "text": "stats uh another example is staves and"
+  },
+  {
+   "t": 1217.32,
+   "d": 2.48,
+   "text": "Wands so in brog brog has both of these"
+  },
+  {
+   "t": 1219.8,
+   "d": 2.44,
+   "text": "Concepts that staves are basically like"
+  },
+  {
+   "t": 1222.24,
+   "d": 1.68,
+   "text": "adding a spell to your character you get"
+  },
+  {
+   "t": 1223.92,
+   "d": 2.8,
+   "text": "it and then you it charges back over"
+  },
+  {
+   "t": 1226.72,
+   "d": 2.6,
+   "text": "time and you can use it to cast spells"
+  },
+  {
+   "t": 1229.32,
+   "d": 2.64,
+   "text": "and you can power it up with your"
+  },
+  {
+   "t": 1231.96,
+   "d": 3.24,
+   "text": "orbs um and then wands are more like you"
+  },
+  {
+   "t": 1235.2,
+   "d": 1.52,
+   "text": "you get them and they have a limited"
+  },
+  {
+   "t": 1236.72,
+   "d": 2.44,
+   "text": "charge they don't they don't recharge"
+  },
+  {
+   "t": 1239.16,
+   "d": 1.28,
+   "text": "and once they're out of charges you"
+  },
+  {
+   "t": 1240.44,
+   "d": 1.84,
+   "text": "would normally throw them away you can"
+  },
+  {
+   "t": 1242.28,
+   "d": 1.64,
+   "text": "power them up to get back some charges"
+  },
+  {
+   "t": 1243.92,
+   "d": 1.76,
+   "text": "but nor they're not usually like a core"
+  },
+  {
+   "t": 1245.68,
+   "d": 1.68,
+   "text": "part of your character"
+  },
+  {
+   "t": 1247.36,
+   "d": 2.44,
+   "text": "build um so I decided to combine these"
+  },
+  {
+   "t": 1249.8,
+   "d": 2.76,
+   "text": "two concepts together into staves but"
+  },
+  {
+   "t": 1252.56,
+   "d": 2.76,
+   "text": "but different um so the staves in my"
+  },
+  {
+   "t": 1255.32,
+   "d": 2.92,
+   "text": "game don't recharge on their own uh they"
+  },
+  {
+   "t": 1258.24,
+   "d": 2.4,
+   "text": "don't recharge over time um but you can"
+  },
+  {
+   "t": 1260.64,
+   "d": 2.12,
+   "text": "still charge them up with the orbs so if"
+  },
+  {
+   "t": 1262.76,
+   "d": 1.6,
+   "text": "you use an orb on it it will fully"
+  },
+  {
+   "t": 1264.36,
+   "d": 2.76,
+   "text": "recharge and also gain a charge and you"
+  },
+  {
+   "t": 1267.12,
+   "d": 2.4,
+   "text": "can also charge them with specialized"
+  },
+  {
+   "t": 1269.52,
+   "d": 2.56,
+   "text": "equipment that you find um there's an"
+  },
+  {
+   "t": 1272.08,
+   "d": 1.72,
+   "text": "amulet of wisdom and a cloak of wisdom"
+  },
+  {
+   "t": 1273.8,
+   "d": 2.52,
+   "text": "and if you have those then when you go"
+  },
+  {
+   "t": 1276.32,
+   "d": 2.0,
+   "text": "down a level in the dungeon it recharges"
+  },
+  {
+   "t": 1278.32,
+   "d": 0.8,
+   "text": "your"
+  },
+  {
+   "t": 1279.12,
+   "d": 3.28,
+   "text": "staves um so what what this does is um"
+  },
+  {
+   "t": 1282.4,
+   "d": 1.92,
+   "text": "it means that depending on your build"
+  },
+  {
+   "t": 1284.32,
+   "d": 0.96,
+   "text": "you would use these items really"
+  },
+  {
+   "t": 1285.28,
+   "d": 1.24,
+   "text": "differently so if you're playing like a"
+  },
+  {
+   "t": 1286.52,
+   "d": 3.8,
+   "text": "melee build you would uh probably just"
+  },
+  {
+   "t": 1290.32,
+   "d": 1.56,
+   "text": "use all the charges and then throw it"
+  },
+  {
+   "t": 1291.88,
+   "d": 2.32,
+   "text": "away and if you were playing a magic"
+  },
+  {
+   "t": 1294.2,
+   "d": 2.4,
+   "text": "build you would be willing to invest uh"
+  },
+  {
+   "t": 1296.6,
+   "d": 2.48,
+   "text": "those orbs of power into the staves and"
+  },
+  {
+   "t": 1299.08,
+   "d": 1.8,
+   "text": "keep recharging them and if you happen"
+  },
+  {
+   "t": 1300.88,
+   "d": 2.68,
+   "text": "to find the equipment that lets you"
+  },
+  {
+   "t": 1303.56,
+   "d": 1.84,
+   "text": "recharge them as you go then maybe you"
+  },
+  {
+   "t": 1305.4,
+   "d": 1.44,
+   "text": "could have a bunch of different staves"
+  },
+  {
+   "t": 1306.84,
+   "d": 2.88,
+   "text": "that all recharge at once um and get a"
+  },
+  {
+   "t": 1309.72,
+   "d": 1.96,
+   "text": "powerful build that way um so there's a"
+  },
+  {
+   "t": 1311.68,
+   "d": 2.88,
+   "text": "lot of different options um that come"
+  },
+  {
+   "t": 1314.56,
+   "d": 1.8,
+   "text": "from just this one category of item"
+  },
+  {
+   "t": 1316.36,
+   "d": 3.48,
+   "text": "which I think is really cool"
+  },
+  {
+   "t": 1319.84,
+   "d": 1.72,
+   "text": "um and now here's a more like system"
+  },
+  {
+   "t": 1321.56,
+   "d": 4.16,
+   "text": "based one so uh again in brog there's"
+  },
+  {
+   "t": 1325.72,
+   "d": 3.88,
+   "text": "both light and stealth so uh"
+  },
+  {
+   "t": 1329.6,
+   "d": 2.4,
+   "text": "there's on your dungeon levels there's"
+  },
+  {
+   "t": 1332.0,
+   "d": 1.84,
+   "text": "uh areas that are brightly illuminated"
+  },
+  {
+   "t": 1333.84,
+   "d": 1.48,
+   "text": "there's areas that have like patches of"
+  },
+  {
+   "t": 1335.32,
+   "d": 1.76,
+   "text": "darkness and as you go down the dungeon"
+  },
+  {
+   "t": 1337.08,
+   "d": 3.28,
+   "text": "it gets gradually darker and darker and"
+  },
+  {
+   "t": 1340.36,
+   "d": 2.12,
+   "text": "there's also a stealth system where you"
+  },
+  {
+   "t": 1342.48,
+   "d": 4.04,
+   "text": "have a stealth range and uh enemies that"
+  },
+  {
+   "t": 1346.52,
+   "d": 1.12,
+   "text": "are within that stealth range have a"
+  },
+  {
+   "t": 1347.64,
+   "d": 2.56,
+   "text": "chance the spot you each turn um but"
+  },
+  {
+   "t": 1350.2,
+   "d": 2.12,
+   "text": "it's a little bit hard to reason about"
+  },
+  {
+   "t": 1352.32,
+   "d": 1.96,
+   "text": "what that stealth range is as you move"
+  },
+  {
+   "t": 1354.28,
+   "d": 2.08,
+   "text": "around the dungeon because it's it's"
+  },
+  {
+   "t": 1356.36,
+   "d": 3.64,
+   "text": "calculated based on uh the the how how"
+  },
+  {
+   "t": 1360.0,
+   "d": 1.72,
+   "text": "much light is in the tiing which is not"
+  },
+  {
+   "t": 1361.72,
+   "d": 2.28,
+   "text": "always easy to tell and also based on"
+  },
+  {
+   "t": 1364.0,
+   "d": 3.84,
+   "text": "the Last Action you took so there's like"
+  },
+  {
+   "t": 1367.84,
+   "d": 2.08,
+   "text": "a there's a thing you can turn on that"
+  },
+  {
+   "t": 1369.92,
+   "d": 2.8,
+   "text": "adds an overlay um which shows you this"
+  },
+  {
+   "t": 1372.72,
+   "d": 1.68,
+   "text": "steth range which helps a little bit but"
+  },
+  {
+   "t": 1374.4,
+   "d": 1.24,
+   "text": "I wanted to go in a different direction"
+  },
+  {
+   "t": 1375.64,
+   "d": 2.04,
+   "text": "with this so I asked the question like"
+  },
+  {
+   "t": 1377.68,
+   "d": 2.6,
+   "text": "what if light and stealth are the same"
+  },
+  {
+   "t": 1380.28,
+   "d": 1.68,
+   "text": "um instead of having a separate stealth"
+  },
+  {
+   "t": 1381.96,
+   "d": 1.76,
+   "text": "range what if I just use light to"
+  },
+  {
+   "t": 1383.72,
+   "d": 2.92,
+   "text": "determine visibility um so this means"
+  },
+  {
+   "t": 1386.64,
+   "d": 1.92,
+   "text": "the enemy is see in almost the same way"
+  },
+  {
+   "t": 1388.56,
+   "d": 3.28,
+   "text": "the player does um so I think that's a"
+  },
+  {
+   "t": 1391.84,
+   "d": 2.28,
+   "text": "little easier to reason about um if"
+  },
+  {
+   "t": 1394.12,
+   "d": 1.48,
+   "text": "you're if you're standing in the light"
+  },
+  {
+   "t": 1395.6,
+   "d": 2.64,
+   "text": "then they have a chance to spot you um"
+  },
+  {
+   "t": 1398.24,
+   "d": 2.2,
+   "text": "and um that also means they can kind of"
+  },
+  {
+   "t": 1400.44,
+   "d": 1.64,
+   "text": "see you from across the map which is a"
+  },
+  {
+   "t": 1402.08,
+   "d": 1.0,
+   "text": "little"
+  },
+  {
+   "t": 1403.08,
+   "d": 3.04,
+   "text": "interesting um and it also affected sort"
+  },
+  {
+   "t": 1406.12,
+   "d": 2.88,
+   "text": "of the way that I design my stealth"
+  },
+  {
+   "t": 1409.0,
+   "d": 2.56,
+   "text": "system because well now instead of"
+  },
+  {
+   "t": 1411.56,
+   "d": 2.16,
+   "text": "having an item like a cloak of stealth"
+  },
+  {
+   "t": 1413.72,
+   "d": 1.68,
+   "text": "that makes it harder for enemies to spot"
+  },
+  {
+   "t": 1415.4,
+   "d": 3.24,
+   "text": "you I have items which allow you to see"
+  },
+  {
+   "t": 1418.64,
+   "d": 2.04,
+   "text": "further into the darkness um so what"
+  },
+  {
+   "t": 1420.68,
+   "d": 3.12,
+   "text": "this does is it uh first of all gives"
+  },
+  {
+   "t": 1423.8,
+   "d": 1.48,
+   "text": "you more map awareness in general but"
+  },
+  {
+   "t": 1425.28,
+   "d": 2.08,
+   "text": "the big thing it does is it allows you"
+  },
+  {
+   "t": 1427.36,
+   "d": 3.76,
+   "text": "to play more effectively in the dark um"
+  },
+  {
+   "t": 1431.12,
+   "d": 3.28,
+   "text": "so now you can uh like instead of using"
+  },
+  {
+   "t": 1434.4,
+   "d": 1.76,
+   "text": "the items that give you light you can"
+  },
+  {
+   "t": 1436.16,
+   "d": 1.32,
+   "text": "not use those you can stay in the dark"
+  },
+  {
+   "t": 1437.48,
+   "d": 2.16,
+   "text": "more often and play stealthy that way"
+  },
+  {
+   "t": 1439.64,
+   "d": 2.4,
+   "text": "you can throw items at torches to knock"
+  },
+  {
+   "t": 1442.04,
+   "d": 1.76,
+   "text": "them over so you don't have to go into"
+  },
+  {
+   "t": 1443.8,
+   "d": 1.76,
+   "text": "the light and you can sneak by enemies"
+  },
+  {
+   "t": 1445.56,
+   "d": 1.12,
+   "text": "there's all these different options that"
+  },
+  {
+   "t": 1446.68,
+   "d": 1.88,
+   "text": "open"
+  },
+  {
+   "t": 1448.56,
+   "d": 3.64,
+   "text": "up um and I think uh the result of this"
+  },
+  {
+   "t": 1452.2,
+   "d": 2.08,
+   "text": "maybe is that uh stealth is a little bit"
+  },
+  {
+   "t": 1454.28,
+   "d": 1.76,
+   "text": "overpowered in the game um but the"
+  },
+  {
+   "t": 1456.04,
+   "d": 1.48,
+   "text": "interesting thing is you can tweak this"
+  },
+  {
+   "t": 1457.52,
+   "d": 2.16,
+   "text": "really easily just by having more things"
+  },
+  {
+   "t": 1459.68,
+   "d": 3.16,
+   "text": "cast light um like you could have an"
+  },
+  {
+   "t": 1462.84,
+   "d": 3.28,
+   "text": "enemy that carries a torch around um and"
+  },
+  {
+   "t": 1466.12,
+   "d": 3.16,
+   "text": "I have it so that uh when you cast"
+  },
+  {
+   "t": 1469.28,
+   "d": 2.92,
+   "text": "certain or use certain staves it"
+  },
+  {
+   "t": 1472.2,
+   "d": 1.16,
+   "text": "eliminates your character for your turn"
+  },
+  {
+   "t": 1473.36,
+   "d": 1.16,
+   "text": "and enemies can spot you and that kind"
+  },
+  {
+   "t": 1474.52,
+   "d": 3.0,
+   "text": "of thing so um it's really dependent on"
+  },
+  {
+   "t": 1477.52,
+   "d": 2.24,
+   "text": "on the light and that that makes it I"
+  },
+  {
+   "t": 1479.76,
+   "d": 2.0,
+   "text": "think pretty Dynamic and and intuitive"
+  },
+  {
+   "t": 1481.76,
+   "d": 3.12,
+   "text": "for the player as well"
+  },
+  {
+   "t": 1484.88,
+   "d": 5.4,
+   "text": "um and this is the big one so"
+  },
+  {
+   "t": 1490.28,
+   "d": 2.56,
+   "text": "um so stairs and holes this might seem"
+  },
+  {
+   "t": 1492.84,
+   "d": 3.2,
+   "text": "kind of silly um but uh this was like a"
+  },
+  {
+   "t": 1496.04,
+   "d": 2.84,
+   "text": "big thing for the game um so again in"
+  },
+  {
+   "t": 1498.88,
+   "d": 1.48,
+   "text": "brogue there's"
+  },
+  {
+   "t": 1500.36,
+   "d": 2.56,
+   "text": "a so it has stairs like a normal Rog"
+  },
+  {
+   "t": 1502.92,
+   "d": 1.76,
+   "text": "like you can go to the stairs and go"
+  },
+  {
+   "t": 1504.68,
+   "d": 1.24,
+   "text": "down to the lower level and that's the"
+  },
+  {
+   "t": 1505.92,
+   "d": 1.52,
+   "text": "normal way that you get around the"
+  },
+  {
+   "t": 1507.44,
+   "d": 2.96,
+   "text": "dungeon and progress um but it also has"
+  },
+  {
+   "t": 1510.4,
+   "d": 2.24,
+   "text": "these big open chasms that you can"
+  },
+  {
+   "t": 1512.64,
+   "d": 3.84,
+   "text": "choose to to jump down if you want um"
+  },
+  {
+   "t": 1516.48,
+   "d": 1.84,
+   "text": "and brog these these hurt you quite a"
+  },
+  {
+   "t": 1518.32,
+   "d": 2.2,
+   "text": "lot um and so you normally only do it"
+  },
+  {
+   "t": 1520.52,
+   "d": 2.24,
+   "text": "when you're desperate um but I wanted to"
+  },
+  {
+   "t": 1522.76,
+   "d": 2.6,
+   "text": "ask the question what if this was the"
+  },
+  {
+   "t": 1525.36,
+   "d": 3.8,
+   "text": "only way to progress like do we need"
+  },
+  {
+   "t": 1529.16,
+   "d": 1.52,
+   "text": "stairs"
+  },
+  {
+   "t": 1530.68,
+   "d": 3.6,
+   "text": "um and and this was a really big deal um"
+  },
+  {
+   "t": 1534.28,
+   "d": 1.96,
+   "text": "so"
+  },
+  {
+   "t": 1536.24,
+   "d": 2.52,
+   "text": "uh this led to like all of these"
+  },
+  {
+   "t": 1538.76,
+   "d": 3.52,
+   "text": "different cascading design decisions um"
+  },
+  {
+   "t": 1542.28,
+   "d": 2.2,
+   "text": "so if we don't have stairs and you have"
+  },
+  {
+   "t": 1544.48,
+   "d": 2.32,
+   "text": "to jump down these pits I didn't want"
+  },
+  {
+   "t": 1546.8,
+   "d": 2.12,
+   "text": "you to always be hurting the player"
+  },
+  {
+   "t": 1548.92,
+   "d": 1.16,
+   "text": "anytime they're going down a level that"
+  },
+  {
+   "t": 1550.08,
+   "d": 2.44,
+   "text": "felt really mean so I added an item"
+  },
+  {
+   "t": 1552.52,
+   "d": 2.44,
+   "text": "called the orb of gravity um when you"
+  },
+  {
+   "t": 1554.96,
+   "d": 1.72,
+   "text": "use the orb of gravity it gives you a"
+  },
+  {
+   "t": 1556.68,
+   "d": 3.56,
+   "text": "slowfall uh status which ticks down and"
+  },
+  {
+   "t": 1560.24,
+   "d": 1.72,
+   "text": "as long as you have that running you can"
+  },
+  {
+   "t": 1561.96,
+   "d": 2.08,
+   "text": "safely descend without hurting"
+  },
+  {
+   "t": 1564.04,
+   "d": 2.52,
+   "text": "yourself um so if you think about it"
+  },
+  {
+   "t": 1566.56,
+   "d": 2.36,
+   "text": "what that really does it it acts like a"
+  },
+  {
+   "t": 1568.92,
+   "d": 2.56,
+   "text": "like the H like the hunger meter uh in"
+  },
+  {
+   "t": 1571.48,
+   "d": 1.28,
+   "text": "another rug like it's sort of a"
+  },
+  {
+   "t": 1572.76,
+   "d": 1.8,
+   "text": "replacement for the Hunger meter because"
+  },
+  {
+   "t": 1574.56,
+   "d": 3.36,
+   "text": "it adds this pressure to keep going um"
+  },
+  {
+   "t": 1577.92,
+   "d": 1.24,
+   "text": "you have to make progress you have to"
+  },
+  {
+   "t": 1579.16,
+   "d": 2.08,
+   "text": "get down the hole before it runs out and"
+  },
+  {
+   "t": 1581.24,
+   "d": 1.56,
+   "text": "you have to find more of these things so"
+  },
+  {
+   "t": 1582.8,
+   "d": 1.84,
+   "text": "that you don't end up hurting"
+  },
+  {
+   "t": 1584.64,
+   "d": 1.72,
+   "text": "yourself so I think that's really"
+  },
+  {
+   "t": 1586.36,
+   "d": 1.68,
+   "text": "interesting it's not super obvious that"
+  },
+  {
+   "t": 1588.04,
+   "d": 3.84,
+   "text": "it does that but I think it does um the"
+  },
+  {
+   "t": 1591.88,
+   "d": 1.6,
+   "text": "other thing about this is it means now"
+  },
+  {
+   "t": 1593.48,
+   "d": 3.2,
+   "text": "you can't go back up um sounds simple"
+  },
+  {
+   "t": 1596.68,
+   "d": 2.56,
+   "text": "but it has a lot of effects on on the"
+  },
+  {
+   "t": 1599.24,
+   "d": 1.84,
+   "text": "gameplay"
+  },
+  {
+   "t": 1601.08,
+   "d": 3.68,
+   "text": "um it affects uh the way that I designed"
+  },
+  {
+   "t": 1604.76,
+   "d": 1.36,
+   "text": "the items it affects Inventory"
+  },
+  {
+   "t": 1606.12,
+   "d": 2.2,
+   "text": "management because now you can't just"
+  },
+  {
+   "t": 1608.32,
+   "d": 1.36,
+   "text": "leave something behind and return to it"
+  },
+  {
+   "t": 1609.68,
+   "d": 1.76,
+   "text": "later you have to decide what items you"
+  },
+  {
+   "t": 1611.44,
+   "d": 1.24,
+   "text": "want to bring with you before you jump"
+  },
+  {
+   "t": 1612.68,
+   "d": 1.64,
+   "text": "down"
+  },
+  {
+   "t": 1614.32,
+   "d": 3.36,
+   "text": "um so certain items like uh like uh the"
+  },
+  {
+   "t": 1617.68,
+   "d": 3.0,
+   "text": "the wisdom cloak I mentioned earlier um"
+  },
+  {
+   "t": 1620.68,
+   "d": 1.72,
+   "text": "and also I did this for basically all of"
+  },
+  {
+   "t": 1622.4,
+   "d": 1.88,
+   "text": "the passive effects in the game they"
+  },
+  {
+   "t": 1624.28,
+   "d": 1.52,
+   "text": "don't just happen over time they only"
+  },
+  {
+   "t": 1625.8,
+   "d": 2.44,
+   "text": "happen uh when you jump down and I"
+  },
+  {
+   "t": 1628.24,
+   "d": 1.56,
+   "text": "wouldn't be able to do this if you could"
+  },
+  {
+   "t": 1629.8,
+   "d": 1.16,
+   "text": "go back up again because then you could"
+  },
+  {
+   "t": 1630.96,
+   "d": 2.12,
+   "text": "just go up and down and keep activating"
+  },
+  {
+   "t": 1633.08,
+   "d": 0.96,
+   "text": "the"
+  },
+  {
+   "t": 1634.04,
+   "d": 3.44,
+   "text": "item um so the big thing that this does"
+  },
+  {
+   "t": 1637.48,
+   "d": 2.36,
+   "text": "is it means that uh because it only"
+  },
+  {
+   "t": 1639.84,
+   "d": 1.88,
+   "text": "activates when you go down there's no"
+  },
+  {
+   "t": 1641.72,
+   "d": 1.68,
+   "text": "incentive to just wait around for your"
+  },
+  {
+   "t": 1643.4,
+   "d": 2.44,
+   "text": "stuff to recharge um you always have to"
+  },
+  {
+   "t": 1645.84,
+   "d": 2.32,
+   "text": "make progress in order for things to"
+  },
+  {
+   "t": 1648.16,
+   "d": 2.64,
+   "text": "happen uh which I think really uh"
+  },
+  {
+   "t": 1650.8,
+   "d": 2.0,
+   "text": "strengthened uh the design of the game"
+  },
+  {
+   "t": 1652.8,
+   "d": 2.56,
+   "text": "and the way these items"
+  },
+  {
+   "t": 1655.36,
+   "d": 2.72,
+   "text": "worked it also affects level generation"
+  },
+  {
+   "t": 1658.08,
+   "d": 1.44,
+   "text": "because now we we need to have these"
+  },
+  {
+   "t": 1659.52,
+   "d": 2.2,
+   "text": "holes on every floor and we know that"
+  },
+  {
+   "t": 1661.72,
+   "d": 1.12,
+   "text": "the player is always going to be on the"
+  },
+  {
+   "t": 1662.84,
+   "d": 2.0,
+   "text": "lookout for them"
+  },
+  {
+   "t": 1664.84,
+   "d": 1.92,
+   "text": "um and so it kind of affects the"
+  },
+  {
+   "t": 1666.76,
+   "d": 3.2,
+   "text": "Aesthetics of the levels it also um I'm"
+  },
+  {
+   "t": 1669.96,
+   "d": 2.4,
+   "text": "actually generating the next depth"
+  },
+  {
+   "t": 1672.36,
+   "d": 2.04,
+   "text": "differently depending on which hole you"
+  },
+  {
+   "t": 1674.4,
+   "d": 1.68,
+   "text": "jump down we don't need to get into that"
+  },
+  {
+   "t": 1676.08,
+   "d": 2.2,
+   "text": "too much but it's sort of interesting"
+  },
+  {
+   "t": 1678.28,
+   "d": 1.48,
+   "text": "um just to make it feel more like a"
+  },
+  {
+   "t": 1679.76,
+   "d": 1.44,
+   "text": "cohesive"
+  },
+  {
+   "t": 1681.2,
+   "d": 3.16,
+   "text": "dungeon um and it also got integrated"
+  },
+  {
+   "t": 1684.36,
+   "d": 3.4,
+   "text": "into uh the story of the game so the"
+  },
+  {
+   "t": 1687.76,
+   "d": 3.56,
+   "text": "game opens up with uh the player looking"
+  },
+  {
+   "t": 1691.32,
+   "d": 3.04,
+   "text": "into this uh open Chasm this cave and"
+  },
+  {
+   "t": 1694.36,
+   "d": 1.76,
+   "text": "feeling like a call from it and feeling"
+  },
+  {
+   "t": 1696.12,
+   "d": 2.16,
+   "text": "like they they need to go down and"
+  },
+  {
+   "t": 1698.28,
+   "d": 4.0,
+   "text": "explore um and it also the the item"
+  },
+  {
+   "t": 1702.28,
+   "d": 2.48,
+   "text": "you're looking for uh the wings of"
+  },
+  {
+   "t": 1704.76,
+   "d": 2.28,
+   "text": "yendor is a method of Escape because"
+  },
+  {
+   "t": 1707.04,
+   "d": 2.12,
+   "text": "it's you don't have a way to go up"
+  },
+  {
+   "t": 1709.16,
+   "d": 2.76,
+   "text": "otherwise um so cutting stairs from the"
+  },
+  {
+   "t": 1711.92,
+   "d": 2.12,
+   "text": "game really for me I made this decision"
+  },
+  {
+   "t": 1714.04,
+   "d": 2.16,
+   "text": "early on and it really defined what the"
+  },
+  {
+   "t": 1716.2,
+   "d": 3.28,
+   "text": "game became um it would be a completely"
+  },
+  {
+   "t": 1719.48,
+   "d": 2.32,
+   "text": "different game if I had stairs in it and"
+  },
+  {
+   "t": 1721.8,
+   "d": 1.44,
+   "text": "I think it's really interesting that"
+  },
+  {
+   "t": 1723.24,
+   "d": 1.8,
+   "text": "just cutting one feature can can lead"
+  },
+  {
+   "t": 1725.04,
+   "d": 3.4,
+   "text": "you to all these different places um and"
+  },
+  {
+   "t": 1728.44,
+   "d": 2.28,
+   "text": "and affect like the design so much and"
+  },
+  {
+   "t": 1730.72,
+   "d": 2.36,
+   "text": "even not just like the gameplay but the"
+  },
+  {
+   "t": 1733.08,
+   "d": 2.84,
+   "text": "themes uh and"
+  },
+  {
+   "t": 1735.92,
+   "d": 2.24,
+   "text": "everything um so so what are some"
+  },
+  {
+   "t": 1738.16,
+   "d": 4.16,
+   "text": "takeaways uh did I learn from from this"
+  },
+  {
+   "t": 1742.32,
+   "d": 2.0,
+   "text": "um like I said cutting or combining"
+  },
+  {
+   "t": 1744.32,
+   "d": 2.92,
+   "text": "features often leads you to unexpected"
+  },
+  {
+   "t": 1747.24,
+   "d": 2.44,
+   "text": "places uh having fewer things forces you"
+  },
+  {
+   "t": 1749.68,
+   "d": 2.92,
+   "text": "to really tune the systems you have and"
+  },
+  {
+   "t": 1752.6,
+   "d": 1.56,
+   "text": "think about how they interact together"
+  },
+  {
+   "t": 1754.16,
+   "d": 1.64,
+   "text": "so when we're designing a Rog like you"
+  },
+  {
+   "t": 1755.8,
+   "d": 1.6,
+   "text": "always want to have different"
+  },
+  {
+   "t": 1757.4,
+   "d": 3.32,
+   "text": "interacting systems um that's what leads"
+  },
+  {
+   "t": 1760.72,
+   "d": 1.6,
+   "text": "to sort of the unexpect unexpected"
+  },
+  {
+   "t": 1762.32,
+   "d": 2.44,
+   "text": "Behavior but if you have like a thousand"
+  },
+  {
+   "t": 1764.76,
+   "d": 1.32,
+   "text": "different things in your game you're"
+  },
+  {
+   "t": 1766.08,
+   "d": 1.92,
+   "text": "probably not going to be thinking"
+  },
+  {
+   "t": 1768.0,
+   "d": 2.6,
+   "text": "about all of the combinations right so"
+  },
+  {
+   "t": 1770.6,
+   "d": 1.28,
+   "text": "you'll end up having some things that"
+  },
+  {
+   "t": 1771.88,
+   "d": 1.92,
+   "text": "feel more separate from each other I"
+  },
+  {
+   "t": 1773.8,
+   "d": 1.84,
+   "text": "think uh having fewer things forces you"
+  },
+  {
+   "t": 1775.64,
+   "d": 2.68,
+   "text": "to really think about this and what you"
+  },
+  {
+   "t": 1778.32,
+   "d": 2.32,
+   "text": "end up with generally is a more kind of"
+  },
+  {
+   "t": 1780.64,
+   "d": 2.76,
+   "text": "focused and cohesive design in the"
+  },
+  {
+   "t": 1783.4,
+   "d": 2.24,
+   "text": "end um and having fewer things can make"
+  },
+  {
+   "t": 1785.64,
+   "d": 2.0,
+   "text": "games easier to learn and understand for"
+  },
+  {
+   "t": 1787.64,
+   "d": 2.0,
+   "text": "players maybe this is obvious I don't"
+  },
+  {
+   "t": 1789.64,
+   "d": 3.56,
+   "text": "know um but restrictions can also be"
+  },
+  {
+   "t": 1793.2,
+   "d": 1.48,
+   "text": "inspiring and fun to work with I had a"
+  },
+  {
+   "t": 1794.68,
+   "d": 2.72,
+   "text": "lot of fun uh learning how to use p8 and"
+  },
+  {
+   "t": 1797.4,
+   "d": 2.24,
+   "text": "games for it and there's a lot of other"
+  },
+  {
+   "t": 1799.64,
+   "d": 1.12,
+   "text": "kind of projects that have similar"
+  },
+  {
+   "t": 1800.76,
+   "d": 1.68,
+   "text": "restrictions so if you want to play"
+  },
+  {
+   "t": 1802.44,
+   "d": 1.12,
+   "text": "around with these things I would"
+  },
+  {
+   "t": 1803.56,
+   "d": 2.16,
+   "text": "recommend it it's it's really fun um and"
+  },
+  {
+   "t": 1805.72,
+   "d": 3.92,
+   "text": "it leads you to uh to things you might"
+  },
+  {
+   "t": 1809.64,
+   "d": 1.68,
+   "text": "not have thought of"
+  },
+  {
+   "t": 1811.32,
+   "d": 2.8,
+   "text": "otherwise um and simpler games are"
+  },
+  {
+   "t": 1814.12,
+   "d": 2.0,
+   "text": "easier and faster to make so you can"
+  },
+  {
+   "t": 1816.12,
+   "d": 2.44,
+   "text": "move on with your life uh like I said we"
+  },
+  {
+   "t": 1818.56,
+   "d": 3.08,
+   "text": "have we have limited time um maybe you"
+  },
+  {
+   "t": 1821.64,
+   "d": 1.68,
+   "text": "don't want to spend tons of time working"
+  },
+  {
+   "t": 1823.32,
+   "d": 1.12,
+   "text": "on your Rog like maybe you want to get"
+  },
+  {
+   "t": 1824.44,
+   "d": 1.76,
+   "text": "to another project maybe you just want"
+  },
+  {
+   "t": 1826.2,
+   "d": 1.92,
+   "text": "to have more free time and spend less"
+  },
+  {
+   "t": 1828.12,
+   "d": 2.76,
+   "text": "time on this game um if you make your"
+  },
+  {
+   "t": 1830.88,
+   "d": 4.72,
+   "text": "game simpler it will be faster to make"
+  },
+  {
+   "t": 1835.6,
+   "d": 2.8,
+   "text": "probably and uh simple games are"
+  },
+  {
+   "t": 1838.4,
+   "d": 2.08,
+   "text": "beautiful uh this is this is a"
+  },
+  {
+   "t": 1840.48,
+   "d": 1.76,
+   "text": "subjective thing obviously but I think"
+  },
+  {
+   "t": 1842.24,
+   "d": 3.08,
+   "text": "if you can kind of achieve that that Rog"
+  },
+  {
+   "t": 1845.32,
+   "d": 2.24,
+   "text": "likee magic of having interacting"
+  },
+  {
+   "t": 1847.56,
+   "d": 2.48,
+   "text": "systems which cause like unexpected"
+  },
+  {
+   "t": 1850.04,
+   "d": 1.64,
+   "text": "things to happen and put you in"
+  },
+  {
+   "t": 1851.68,
+   "d": 1.4,
+   "text": "situations you didn't realize were"
+  },
+  {
+   "t": 1853.08,
+   "d": 1.92,
+   "text": "possible um if you can do that with"
+  },
+  {
+   "t": 1855.0,
+   "d": 2.56,
+   "text": "fewer elements it's just all the more"
+  },
+  {
+   "t": 1857.56,
+   "d": 2.04,
+   "text": "striking I"
+  },
+  {
+   "t": 1859.6,
+   "d": 2.56,
+   "text": "think um so that that's all I've got uh"
+  },
+  {
+   "t": 1862.16,
+   "d": 1.88,
+   "text": "here are some links you can follow me on"
+  },
+  {
+   "t": 1864.04,
+   "d": 2.88,
+   "text": "Maston or visit my website um I did a"
+  },
+  {
+   "t": 1866.92,
+   "d": 2.0,
+   "text": "write up on the level generation in the"
+  },
+  {
+   "t": 1868.92,
+   "d": 2.12,
+   "text": "game and also how I kind of crammed it"
+  },
+  {
+   "t": 1871.04,
+   "d": 3.12,
+   "text": "into a p8 cartridge um so you can check"
+  },
+  {
+   "t": 1874.16,
+   "d": 2.36,
+   "text": "that out on the Lexa forums uh you"
+  },
+  {
+   "t": 1876.52,
+   "d": 1.4,
+   "text": "should go play brog if you haven't it's"
+  },
+  {
+   "t": 1877.92,
+   "d": 1.96,
+   "text": "a really excellent game um and you"
+  },
+  {
+   "t": 1879.88,
+   "d": 2.76,
+   "text": "should check out uh Brian's talks at"
+  },
+  {
+   "t": 1882.64,
+   "d": 1.68,
+   "text": "previous Road like"
+  },
+  {
+   "t": 1884.32,
+   "d": 3.92,
+   "text": "celebrations um and try out p8"
+  },
+  {
+   "t": 1888.24,
+   "d": 1.92,
+   "text": "thanks that was wonderful Eric and it's"
+  },
+  {
+   "t": 1890.16,
+   "d": 1.96,
+   "text": "also it's very uh kind of you to be"
+  },
+  {
+   "t": 1892.12,
+   "d": 2.12,
+   "text": "telling people to go play broke I think"
+  },
+  {
+   "t": 1894.24,
+   "d": 4.64,
+   "text": "also go play Eric's cam like it's"
+  },
+  {
+   "t": 1898.88,
+   "d": 4.6,
+   "text": "beautiful um so thank you very much"
+  }
+ ]
+}

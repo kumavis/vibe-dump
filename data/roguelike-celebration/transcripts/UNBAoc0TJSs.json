@@ -1,0 +1,660 @@
+{
+ "id": "UNBAoc0TJSs",
+ "url": "https://www.youtube.com/watch?v=UNBAoc0TJSs",
+ "title": "Tyriq Plummer - Scrubbin' Trubble: The Journey to Multiplayer Roguelikery",
+ "speaker": "Tyriq Plummer",
+ "talk_title": "Scrubbin' Trubble: The Journey to Multiplayer Roguelikery",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-02-09",
+ "duration_s": 1109,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "In this lightning talk, Tyriq will lay out the foundational goals of Scrubbin' Trubble's multiplayer experience - the most ambitious experiment yet in his pursuit of that White Whale \"Semi-synchronous Co-operative Multiplayer Turn-Based Roguelike\" - and the technical and design challenges faced along the way to realizing those goals (there have been many).",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2303,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 41.82,
+   "d": 43.22,
+   "text": "TYRIQ: Can you hear me? Good news, everyone. I exist. Today I am going to be talking about"
+  },
+  {
+   "t": 85.04,
+   "d": 16.08,
+   "text": "scrubbin trubble which is a game I am working on. This is a lightning talk. There is a lot to talk"
+  },
+  {
+   "t": 101.12,
+   "d": 5.52,
+   "text": "about. But hopefully I am definitely not going to be able to get to all of it but hopefully it will"
+  },
+  {
+   "t": 106.64,
+   "d": 12.64,
+   "text": "encourage discussion and pique interest. This is a traditional roguelike and traditional-ish"
+  },
+  {
+   "t": 119.28,
+   "d": 6.08,
+   "text": "meaning sing rusynchronous and turn base and not real-time. And doesn't make such a big deal about"
+  },
+  {
+   "t": 125.36,
+   "d": 13.6,
+   "text": "whose turn it is. Everything exists and operates in the same modality, same space. So the central"
+  },
+  {
+   "t": 138.96,
+   "d": 5.44,
+   "text": "con seat of the game is experiment to see if we can make a roguelike that still has the pacing of"
+  },
+  {
+   "t": 144.4,
+   "d": 5.04,
+   "text": "a traditional turn-base roguelike but just with multiple players. The other thing that Scrubbin'"
+  },
+  {
+   "t": 149.44,
+   "d": 10.0,
+   "text": "Trubble is -- our friend formed Odd Object and wanted to work on something straightforward that"
+  },
+  {
+   "t": 159.44,
+   "d": 10.64,
+   "text": "we could use to figure out how the heck a game studio runs. We decided to make this game. The"
+  },
+  {
+   "t": 170.08,
+   "d": 6.64,
+   "text": "last thing Scrubbin' trubble is an evolution of something I had a proof of concept of called clean"
+  },
+  {
+   "t": 176.72,
+   "d": 15.2,
+   "text": "sweep. And I gave a talk on this. If you want you can check out that talk. Don't do that now,"
+  },
+  {
+   "t": 191.92,
+   "d": 7.2,
+   "text": "though, because that would be rude. I am talking. Basically to give an overview, the way that Clean"
+  },
+  {
+   "t": 199.12,
+   "d": 10.24,
+   "text": "Sweep worked and handled multiplayers is players could act fully independently and enemies would"
+  },
+  {
+   "t": 209.36,
+   "d": 6.4,
+   "text": "act based on which player they were targeting. If an anomie is targeting player one then player two"
+  },
+  {
+   "t": 215.76,
+   "d": 14.8,
+   "text": "can move freely. We can have multiple players and enemies coexisting in the same space operating on"
+  },
+  {
+   "t": 230.56,
+   "d": 7.52,
+   "text": "their own sort of turn schedule. It was fairly fun with two players. But there were still a"
+  },
+  {
+   "t": 238.08,
+   "d": 5.6,
+   "text": "lot of uncertainty, questions that we needed to answer if we wanted to make it into a full game,"
+  },
+  {
+   "t": 243.68,
+   "d": 11.44,
+   "text": "and expand it into something commercially viable. Questions we would have had to answer pretty fun"
+  },
+  {
+   "t": 255.12,
+   "d": 5.68,
+   "text": "with two players but does it work well with three or more? We did a little testing but"
+  },
+  {
+   "t": 260.8,
+   "d": 8.4,
+   "text": "didn't have a ton of it is definitely fun with three or more players. Clean Sweep was"
+  },
+  {
+   "t": 269.2,
+   "d": 5.2,
+   "text": "local multiplayer only and I wanted to implement online and I have never done net code before so"
+  },
+  {
+   "t": 274.4,
+   "d": 6.0,
+   "text": "that would be a journey. And design things like the awkward inventory management and make it"
+  },
+  {
+   "t": 280.4,
+   "d": 11.36,
+   "text": "pretty and more marketable with art. This is the mission for Scrubbin' Trubble. We wanted to retain"
+  },
+  {
+   "t": 291.76,
+   "d": 28.16,
+   "text": "turn synchronicity and also make keep it snappy. Sometimes with roguelikes you have to think hard"
+  },
+  {
+   "t": 319.92,
+   "d": 6.16,
+   "text": "about what you will do next for quite a long time. And we wanted to keep things more streamlined than"
+  },
+  {
+   "t": 326.08,
+   "d": 7.92,
+   "text": "that to keep the pace going. We wanted to have like a streamline easy to use interface. Limited"
+  },
+  {
+   "t": 334.0,
+   "d": 6.16,
+   "text": "decision space so players could observe the game field and resolve their actions quickly and have"
+  },
+  {
+   "t": 340.16,
+   "d": 5.84,
+   "text": "a clearly readable game state to encourage that and we wanted runs to be relatively quick. This"
+  },
+  {
+   "t": 346.0,
+   "d": 8.0,
+   "text": "isn't a huge adventure game. It is really just experiment for the mechanic itself and to that"
+  },
+  {
+   "t": 354.0,
+   "d": 5.12,
+   "text": "end we wanted to keep things relatively tight and also just a game that people can hop in"
+  },
+  {
+   "t": 359.12,
+   "d": 7.76,
+   "text": "with their friends, you know, n afternoon. Let's do a few ones and call it a day. And to that end,"
+  },
+  {
+   "t": 366.88,
+   "d": 7.92,
+   "text": "we wanted to keep the play time relatively short. To achieve all of those, going in,"
+  },
+  {
+   "t": 374.8,
+   "d": 5.76,
+   "text": "I knew these were things we would need to have small inventories so you would not to have do"
+  },
+  {
+   "t": 380.56,
+   "d": 8.32,
+   "text": "menu diving and be overwhelmed with choice. Distinct and unique enemies. We don't want a"
+  },
+  {
+   "t": 388.88,
+   "d": 5.84,
+   "text": "bunch of variance on what does the purple of this enemy do as opposed to the red version."
+  },
+  {
+   "t": 394.72,
+   "d": 5.68,
+   "text": "All that sort of thing. We wanted you to be able to take a quick look at the game state and be"
+  },
+  {
+   "t": 400.4,
+   "d": 6.32,
+   "text": "like I know what these things do and I know what my voices are and be able to execute relatively"
+  },
+  {
+   "t": 406.72,
+   "d": 8.08,
+   "text": "quickly to keep the game moving along. Similarly, to show threatened enemy zones and actions so you"
+  },
+  {
+   "t": 414.8,
+   "d": 6.96,
+   "text": "can be able to make informed decisions quickly. Small stages with explicit goals will help focus"
+  },
+  {
+   "t": 421.76,
+   "d": 5.44,
+   "text": "player attention to encourage people sticking close another and working together as opposed"
+  },
+  {
+   "t": 427.2,
+   "d": 8.88,
+   "text": "to massive sprawling maps where players go off on their own and it ends feeling like a game where"
+  },
+  {
+   "t": 436.08,
+   "d": 11.84,
+   "text": "you might encounter other players. It became apparent we would have to limit overly complex"
+  },
+  {
+   "t": 447.92,
+   "d": 6.4,
+   "text": "cascading effects because otherwise that's another reason that the gameplay could really"
+  },
+  {
+   "t": 454.32,
+   "d": 6.0,
+   "text": "like come to a stop quickly. Oh, a bunch of stuff just happened, and now we need to parse"
+  },
+  {
+   "t": 460.88,
+   "d": 7.04,
+   "text": "all of the things that just occurred. That can be sometimes difficult. These were our goals going"
+  },
+  {
+   "t": 467.92,
+   "d": 10.16,
+   "text": "into the game and we started working October 2024 right as Roguelike Celebration 2024 was happening."
+  },
+  {
+   "t": 481.28,
+   "d": 6.24,
+   "text": "Encouraging. A lot of great information. This was imminently useful to the stuff we are going to be"
+  },
+  {
+   "t": 487.52,
+   "d": 13.2,
+   "text": "doing. One of the talks was from NecroDancer dev about how they handled net code for the online"
+  },
+  {
+   "t": 500.72,
+   "d": 6.56,
+   "text": "version of crypt of the necro dancer. I was like this is perfect. We will copy what they did and"
+  },
+  {
+   "t": 507.28,
+   "d": 6.0,
+   "text": "everything is going to be perfectly fine. I spent the next two months banging my head against the"
+  },
+  {
+   "t": 513.28,
+   "d": 8.48,
+   "text": "wall trying to figure out how to do rollback code. Again, me never having done net code before, maybe"
+  },
+  {
+   "t": 521.76,
+   "d": 5.84,
+   "text": "shouldn't have done that. But it was a little stuff. Ended up not working. Ended up scrapping"
+  },
+  {
+   "t": 527.6,
+   "d": 7.68,
+   "text": "it and realizing I guess most online games don't need rollback. That seems like a pretty specific"
+  },
+  {
+   "t": 536.4,
+   "d": 5.44,
+   "text": "use case of technology for a pretty specific subset of games. I didn't know that at the"
+  },
+  {
+   "t": 541.84,
+   "d": 8.32,
+   "text": "time. Ended up rolling it back to now the game works entirely based in like lock step with the"
+  },
+  {
+   "t": 550.16,
+   "d": 5.52,
+   "text": "server. Clients send their action to the server and wait for conformation from the server before"
+  },
+  {
+   "t": 557.04,
+   "d": 7.68,
+   "text": "applying events to the game world. Everything is simulated on the client side so the server"
+  },
+  {
+   "t": 564.72,
+   "d": 5.44,
+   "text": "doesn't need to send game state. That does mean it is important for us to make sure that the game"
+  },
+  {
+   "t": 571.12,
+   "d": 9.28,
+   "text": "operates in a very deterministic way. Internet is just faster than I thought it was. After all this,"
+  },
+  {
+   "t": 580.4,
+   "d": 10.8,
+   "text": "finally got internet and Nethack and reimplemented the prototype of Clean Sweep we had in terms of"
+  },
+  {
+   "t": 591.2,
+   "d": 6.0,
+   "text": "the way multiplayer worked. All of the questions of does it work for three or more players and how"
+  },
+  {
+   "t": 597.2,
+   "d": 7.36,
+   "text": "to keep the pace and stuff up, turns out it just didn't work. The question does this work with 3-4"
+  },
+  {
+   "t": 604.56,
+   "d": 6.8,
+   "text": "players that was one of the questions we had and the answer is no. It was too fast, too chaotic,"
+  },
+  {
+   "t": 611.36,
+   "d": 7.76,
+   "text": "too unpredictable. The goal was to have it be like players would be able to cooperate"
+  },
+  {
+   "t": 619.12,
+   "d": 4.88,
+   "text": "with one another and slow down when they needed to on their own pace. That wasn't a thing that"
+  },
+  {
+   "t": 624.0,
+   "d": 7.12,
+   "text": "happened. In order to cooperate, players needed to be constantly talking and telegraphic everyone"
+  },
+  {
+   "t": 631.12,
+   "d": 5.84,
+   "text": "of their actions. There was a lot of frequent toe stepping on actions. One player would move while"
+  },
+  {
+   "t": 636.96,
+   "d": 4.08,
+   "text": "another player was targeting an enemy that was targeting that player and they would go out of"
+  },
+  {
+   "t": 641.04,
+   "d": 11.68,
+   "text": "sync as they confirmed the action. It was a bit of a mess. Fortunately, due to my incredible skill of"
+  },
+  {
+   "t": 652.72,
+   "d": 6.32,
+   "text": "crippling self-doubt and not believing in myself, I kind of had a feeling this might be the case."
+  },
+  {
+   "t": 659.04,
+   "d": 5.44,
+   "text": "I had a feeling this might not work out so I had built in a contingency plan where if we needed to"
+  },
+  {
+   "t": 664.48,
+   "d": 12.48,
+   "text": "pivot we could. There was a mechanic where players would be able to cue up actions to be executed"
+  },
+  {
+   "t": 676.96,
+   "d": 7.84,
+   "text": "simultaneously when another player confirmed their action and we made that the central mechanic as"
+  },
+  {
+   "t": 684.8,
+   "d": 10.4,
+   "text": "opposed to auxiliary. Now whenever a player cues up an action, it waits until all players"
+  },
+  {
+   "t": 695.2,
+   "d": 9.36,
+   "text": "within the same combat zone all have their actions queued up. I thought this might be the case. It"
+  },
+  {
+   "t": 704.56,
+   "d": 5.76,
+   "text": "was a relatively easy pivot to make. But there was a lot of other knock on effects we had to"
+  },
+  {
+   "t": 710.32,
+   "d": 7.6,
+   "text": "deal with after that. This also, unfortunately, sort of scrapped one of our initial major goals"
+  },
+  {
+   "t": 717.92,
+   "d": 4.64,
+   "text": "which is players will be able to take turns out needing to wait for anybody else. You definitely"
+  },
+  {
+   "t": 722.56,
+   "d": 6.72,
+   "text": "need to wait for other players to confirm their turns now. But you only need to do so within a"
+  },
+  {
+   "t": 729.28,
+   "d": 7.12,
+   "text": "limited area around you which we call the combat zone. Combat zones defined by who is fighting"
+  },
+  {
+   "t": 736.4,
+   "d": 6.96,
+   "text": "who. If you have a player who is in combat or two players who are in combat with a particular enemy"
+  },
+  {
+   "t": 743.36,
+   "d": 5.84,
+   "text": "or whatever the case may be, those two players, as long as they are nearby and fighting the same"
+  },
+  {
+   "t": 749.2,
+   "d": 5.57,
+   "text": "enemies all mixed together, they will need to wait for each other to confirm actions. If there"
+  },
+  {
+   "t": 754.77,
+   "d": 5.39,
+   "text": "is another player off in a different level and not part of that combat they can operate freely"
+  },
+  {
+   "t": 760.16,
+   "d": 8.96,
+   "text": "and don't need to wait for anybody. They can just run around. This ended up working better"
+  },
+  {
+   "t": 769.12,
+   "d": 8.24,
+   "text": "because now players -- it makes things easier and cooperation easier because you don't need to be"
+  },
+  {
+   "t": 777.36,
+   "d": 7.2,
+   "text": "in the constant communication you were before. You can just see what other players are planning to do"
+  },
+  {
+   "t": 784.56,
+   "d": 5.76,
+   "text": "and you can still plan more complex scenario but it is a lot easier because the game automatically"
+  },
+  {
+   "t": 790.32,
+   "d": 5.28,
+   "text": "slows down when it makes sense to slow down. Here is like a little video example of the way"
+  },
+  {
+   "t": 795.6,
+   "d": 5.92,
+   "text": "the game works. You can see the player is moving freely at the start, independently running around,"
+  },
+  {
+   "t": 801.52,
+   "d": 6.72,
+   "text": "once they get into the combat, the game stops and waits for everybody to confirm their turns."
+  },
+  {
+   "t": 808.24,
+   "d": 8.48,
+   "text": "You can see here the outlined area is the defined combat zone. Any player outside of that area will"
+  },
+  {
+   "t": 816.72,
+   "d": 8.08,
+   "text": "be able to move freely of their own accord not waiting for anybody else. Consequences like I"
+  },
+  {
+   "t": 824.8,
+   "d": 6.96,
+   "text": "said it is easier for players to coordinate and combat has definitive start and end points."
+  },
+  {
+   "t": 834.32,
+   "d": 6.24,
+   "text": "You can see the area you are fighting in and when combat ends all the guys are dead or whatever the"
+  },
+  {
+   "t": 840.56,
+   "d": 6.16,
+   "text": "case may be and that's the end of combat and you are free to move again which let's us do"
+  },
+  {
+   "t": 846.72,
+   "d": 15.92,
+   "text": "fun things like have end of fight quips where we can pop up a close call or if you finish an entire"
+  },
+  {
+   "t": 862.64,
+   "d": 7.44,
+   "text": "combat encounter without taking damage you get a score bonus at the end of the level. There are new"
+  },
+  {
+   "t": 870.08,
+   "d": 6.4,
+   "text": "hurdles with this such as how do we define combat zones and what are the edge cases? Defining all"
+  },
+  {
+   "t": 876.48,
+   "d": 5.68,
+   "text": "these different ways and like OK those players are kind of close enough, should they be in the"
+  },
+  {
+   "t": 882.16,
+   "d": 3.36,
+   "text": "same combat zone even though they are fighting different enemies and they are on opposite sides."
+  },
+  {
+   "t": 888.24,
+   "d": 5.44,
+   "text": "Keeping the turn snappy is more important now because you are waiting for other players to"
+  },
+  {
+   "t": 893.68,
+   "d": 6.48,
+   "text": "finish their turn. We definitely don't want it to be where one player is resolving what they"
+  },
+  {
+   "t": 900.16,
+   "d": 6.8,
+   "text": "need to do in half a second and another player is thinking about stuff for a minute and holding up"
+  },
+  {
+   "t": 906.96,
+   "d": 10.4,
+   "text": "the entire combat. A player in a combat zone if they are being targeted by any enemy and try to"
+  },
+  {
+   "t": 917.36,
+   "d": 17.84,
+   "text": "involve the least amount of space. You can see the bleacher with the white hat on, and the pod"
+  },
+  {
+   "t": 935.2,
+   "d": 9.2,
+   "text": "person to the left is not in that fight. They can move freely but if they get into that area you can"
+  },
+  {
+   "t": 944.4,
+   "d": 6.08,
+   "text": "see suddenly they are all in the same zone and the turns are being queued up and waited for and that"
+  },
+  {
+   "t": 950.48,
+   "d": 7.04,
+   "text": "sort of thing. There are a couple other things we are going to sort of outside of this just main"
+  },
+  {
+   "t": 957.52,
+   "d": 6.24,
+   "text": "sort of gameplay loop we are doing with regards to multiplayer. One of them is players vote on"
+  },
+  {
+   "t": 963.76,
+   "d": 4.24,
+   "text": "which stage to go to next. So the way the game works is it takes place all in the same house."
+  },
+  {
+   "t": 968.72,
+   "d": 5.28,
+   "text": "Each level you are going from one room to another selecting which room you want to go to try to keep"
+  },
+  {
+   "t": 974.0,
+   "d": 6.72,
+   "text": "the ground. It is a cleaning theme base game. You trying to clean the house and keep the grime in"
+  },
+  {
+   "t": 980.72,
+   "d": 7.68,
+   "text": "each room to a certain level so they don't become overrun. Between each level you are voting on"
+  },
+  {
+   "t": 988.4,
+   "d": 5.92,
+   "text": "which stage to go to next. There is leveling up and the different leveling up abilities."
+  },
+  {
+   "t": 994.32,
+   "d": 17.12,
+   "text": "Some lean in on the sinner -- synergy. You might take this level of ability and call all our allies"
+  },
+  {
+   "t": 1011.44,
+   "d": 5.6,
+   "text": "to come close to you before you use a healing potion on yourself so everyone benefits. There is"
+  },
+  {
+   "t": 1017.04,
+   "d": 5.28,
+   "text": "other ways of healing in the game such as cleaning up other propers you might want other players"
+  },
+  {
+   "t": 1022.32,
+   "d": 9.44,
+   "text": "nearby for and that sort of thing. And lastly, game overs only occur in the event of a TPK on a"
+  },
+  {
+   "t": 1031.76,
+   "d": 7.28,
+   "text": "floor. Fallen PCs return on the next floor but if you die, for each player you die, it is a really"
+  },
+  {
+   "t": 1039.04,
+   "d": 6.16,
+   "text": "big score personality that grows. You still want to not die this being mostly a score-based game"
+  },
+  {
+   "t": 1045.92,
+   "d": 7.68,
+   "text": "but if you do die, as long as it is not a full party wipe, you will be able to come back on the"
+  },
+  {
+   "t": 1053.6,
+   "d": 5.2,
+   "text": "next floor and keep playing with your friends, and you can just encourage them from the sidelines."
+  },
+  {
+   "t": 1058.8,
+   "d": 9.12,
+   "text": "You can exit levels at any point. If somebody dies and you are in a tough spot, you can leave"
+  },
+  {
+   "t": 1067.92,
+   "d": 7.76,
+   "text": "the level, take the penalty, and go to the next floor with friends and back in action. I think"
+  },
+  {
+   "t": 1075.68,
+   "d": 7.52,
+   "text": "I am out of time. That's the end of the talk. There is a lot more I could talk about but --"
+  }
+ ]
+}

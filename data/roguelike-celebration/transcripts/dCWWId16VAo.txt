@@ -1,0 +1,52 @@
+Joseph Hewitt: Magic in Game Design: (Mis)Directing the Player's Attention
+Speaker: Joseph Hewitt
+https://www.youtube.com/watch?v=dCWWId16VAo
+Year: 2024   Kind: talk   Captions: manual (en)
+
+## Introduction
+
+[0:00:03] donut deca behind me. Next up we unfortunately have to play a prerecorded talk because our speaker had a last minute emergency come up. Wishing Joe the best but thankfully was able to provide us with a recording so we can share this. Next up is Joseph Hewitt who is GearHead, Dungeon Monkey, and DeadCold. I am originally from Newfoundland but have been living in South Korea since last century. In addition to programming, I'm also a cartoonist. Founder @ Retora Games, They are going to talk about magic. Let's queue up that talk. JOE: Hi, there. My name is Joseph Hewitt. I am the developer of Gear Head, dungeon monkey and a
+
+## Magic and game design
+
+[0:01:02] bunch of other projects which you probably have never heard of. Today I am going to talk about magic and game development. What is magic? Magic is illusion. It is the act of making your audience see something that didn't happen or to conversely to not see something that did happen. As the great philosopher said who are you going to believe? Me or your lying eyes. Magic is especially applicable to computer games because after all want is a computer game. A computer game is an illusion. A computer game is nothing but an extremely large number when viewed at certain instances. With this number, people can experience the illusion of ad venturing in a fantasy world,
+
+[0:02:08] piloting a robot, working on a farm or marrying a dude named Sebastian. This is all make believe and an illusion. Being able to craft an illusion is particularly relevant to roguelike development especially in terms of procedural generational. Procedural generation is conjuring new worlds from thin air making up stuff that did not exist before and technically does not exist now. I am going to tell you about four of the principles of stage magic. Attention, misdirection, simulation, and performance and show how these can be applied to game development. To do this, I am going to do
+
+## The card trick demonstration
+
+[0:03:14] the stupidiest card trick in the world. This card trick is so easy and so stupid that you can even program a computer to do it. I am going to ask you to bear with me and play along because I am about to do something that's absolutely ludicrously impossible. I am going to read your mind. I have this perfectly normal deck of playing cards as you can see. I shuffle them. And then I draw a hand of eight cards like that. I have this hand of eight cards. I lay them on the table face down. Doesn't matter which cards they are. Any cards will do. In a second I will flip over the cards and show them to you. What I want you to do is choose one card and remember it. Focus on your card. The problem
+
+[0:04:24] with this trick is people often forget which card they picked. Got it? All right. Right now, I take the cards back and I shuffle them. I want you to think about the card you picked. Think really loud because, you know, your thoughts have to reach me all of the way over here in Korea. I take one card, randomly selected from the hand, and I discard it. That card gets placed face down on the table. Then I drive a wooden stake through the card, douse it with gasoline, set it on fire, and scatter the ashes in the Tawai River. That may seem like overkill but as you all know if something is worth doing it is worth doing right. I then lay the remaining seven cards on the table
+
+[0:05:31] face up. At this point, you will see that the card picked is the card I removed. Whoa. So right now, half of you are going how did he do that, and the other half are going he is right, that is the world's stupidest card trick and that's OK. Let's start with the first principle
+
+## Directing player attention
+
+[0:05:58] of magic. Attention. A magician focuses the audience's attention on what the magician wants the audience to see. I asked you to concentrate on just one card in this trick. To focus on that one card. This is because if you focused on two cards, if you remembered any other card in that deck, the trick would not have worked. Attention has probably the most application to game design because it is UI programming, user interface. What do you want the player to know? What do you want the player do? You have to direct the player's attention to let them know what they are supposed to know and let them do what they are supposed to do. You give them the tools to interact with this
+
+[0:07:03] information and students require a mechanic and the players miss that because they didn't draw their attention to it in the way they should have. Be aware of your player's attention and point that attention where you want it. Attention and direction are like two sides of the same car.
+
+## Using misdirection
+
+[0:07:52] See what I did there? This is when you get the audience to look over there while you are doing something nefarious with your left hand. In the case of the world's stupidest card trick, I use misdirection to distract you while I swap out the original eight card hand with a completely separate eight card hand that I had prepared before doing the trick. If we were doing it face to face. In the digital version I also used misdirection when telling you the story about, you know,staking the card and burning it and throwing it in the river. The practical practice of that story is to give you time to forget all the other cards you might have seen when I turned them all over so you only remember the one card that you were focused on. I hate to
+
+[0:08:52] give you spoilers for a nine-year-old game but one title that uses misdirection brilliantly is undertail. At the beginning of the game the player is led to think this will be a normal JRPG type adventure when in fact as you get later into the game you realize it is a completely different sort of thing. Misdirection is a lot of fun in game design. You can use it to lead to player astray. You can use it to setup surprises and big reveals. You get the player used to a certain rhythm and then you break the expectation and do something unexpected. You are like I never saw that coming. Of course, you didn't. I was leading your attention in one direction while I was planning something nefarious something else. It can be used to obfuscate the game maw mechanicss you want
+
+[0:10:00] to be serious. Usual in a game we want to give the player all the information but not always. Sometimes you might like to keep a little bit of that information secret. So, you know, the player thinks everything is going the way they think it is going but it is not. It is going to way you think it is going because you are the magician and the game designer. That's misdirection. The third
+
+## Simulation and suspension
+
+[0:10:34] one. Simulation. This is a big one I could have done the entire talk on simulation and now I am speaking so quickly I kind of regret I didn't do it all on simulation. What is simulation? It is the idea that in magic at least, it is the idea that what we are seeing is some kind of obelisk reality. Of course it isn't. We just covered that. What you are seeing is what the magician wants you to see. It is the same in a computer program. Getting back to the world's stupidest card trick. From the beginning to the end of the trick, I was lying to you. I was lying. That's what magicians do. I was creating a false reality to replace the actual reality that was happening. When I drew a
+
+[0:11:35] hand of eight cards, I said oh, these could be any cards. That was a lie. I had prepared the eight cards beforehand. I substituted them in for the cards for the deck. When I was discarding a card from the original hand it wasn't the original hand. It was the secondhand of cards. I was lying to you. I told you this would be the card you picked. That was a lie. The secondhand of cards were all different from the firsthand of cards. But your mind, you have a mental simulation of the world and you believe things are real. Because of this mental simulation, you assume that the cards that I am telling you oh, yeah, these are the cards that were just on the table are actually the cards that were just on the table. We do this a lot in daily life. Your brain fills
+
+[0:12:37] in gaps in information when you don't have perfect knowledge or perception of the world around you. There is an important point for game design. You may have heard the phrase suspension of disbelief. When you are creating a game world, you want to player to suspend their disbelief and buy into the illusion you are creating. And this is an important point. The player, just like you, knows that it is a lie. The player is working with you. It is the player's imagination that is doing a lot of the heavy lifting to build this game world. Because they want to be entertained. Nobody in the audience, as far as I know, actually believes I can read your mind. I don't look like the kind of guy who can read your mind. But many of you bought into that lie because you wanted to
+
+[0:13:41] be entertained and I hope I did entertain you that. Look at games like blood born or amanika where very little concrete information is given but the player still constructs this elaborate fantasy world from the little scraps of information that they get while playing. That is the power of simulation. You want to have points in the game that stimulate the imagination and let the player do a little bit of the heavy lifting for you. The last point performance.
+
+## Performance and conclusion
+
+[0:14:29] As game developers we are programmers. Many of us are programmers. We tend to look at things as technical problems. This is not always the best way to look at it. The presentation, the way drew something can be ad important as what you are doing. Many of the greatest magicians in the world don't have any great tricks. They do tricks that are very easy to figure out. But their performance elevates the tricks to a new level. So, yeah. One of the main things thinking about stage magic and game design is you have to keep the player in your mind at all times. You are thinking what do I want the player to experience? How can I give them this esthetic experience?
+
+[0:15:31] And that's all the time I have for today. Thank you very much. Remember, don't believe everything you see but have fun game design. ALEXEI: I wanted a card trick and pre-recorded

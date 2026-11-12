@@ -1,0 +1,80 @@
+Zeno Rogue - The best genre for a non-Euclidean game
+Speaker: Zeno Rogue
+https://www.youtube.com/watch?v=wOlSws-OI2o
+Year: 2025   Kind: talk   Captions: manual (en)
+
+## Introduction to geometry
+
+[0:00:10] ZENO: Thank for the introduction. We will be talking about this is actually a hot commodity.'
+
+## Defining non-Euclidean space
+
+[0:00:58] People use this work and it is conflicting. I don't want to talk about these interpretations because that's a basic thing. What kind of shapes do we see in Rogue? In this one shape that is basically the most common here. It is the rectangle. These are also rectangles. The whole level is based on a rectangle. Now the question is are the rectangles existing. Do rectangles exist?
+
+[0:02:13] What does a rectangle actually mean? A rectangle is a shape that has four right angles and four straight edges. Exactly right angles and edges. What Euclidean did was he wanted to systematize there the geometry at this time. His idea was to like introduce like the mother of mathematics. He started with very simple statement and more complex. He said postulates which are simple statements like the space should be the same everywhere and in every direction.
+
+[0:03:22] He still proved things. Like parallel rectangles exist. What he did is he added postulates which says rectangles do exist. He didn't formulate it this way but rectangles is like the most special thing. Rectangles do exist. The meaning of this is postulates 1-4 are all true but still rectangles do not exist. We have something which looks a bit like a square grid. If you look at it
+
+[0:04:40] is not actually square. So, yes, it is most visible if you look at the poles. Here we see that this these vertical edges are not straight lines. They are more like curves. A sphere is an example of space which is also the same at every point and in every direction. It didn't actually satisfy all of the reasons. It depends on how it is defined but it was not like the answer. But it is good way to introduce it. We have the origin and it is basically the opposite
+
+## Visualizing hyperbolic shapes
+
+[0:05:53] of spherical. Spherical and hyperbolic are the opposite. What do I mean by doing the opposite? Here is the Euclidean using hexagons. We could have rectangles here but you could draw rectangles on this because here we only show hexagons. We can replace this with hexagons. We get this soccerball with the shapes. If you want to obtain -- we do the opposite. You could actually do something like
+
+[0:07:03] this. We will try to do this. You get a section like this it is infinite. What I show isn't like trying to play games. The format comes with the link. We use projections for this. Right? This could be a bit similar to the make of the projection. So when we show him, you can use for example the projection which is quite nice because it changes the relative scales of
+
+[0:08:03] things but the shapes are correct. All these that you see on the screen are actually of the same size but the shapes are correct and the angles are mostly correct. This is a hyperbolic Honeycomb. It looks a bit like Minecraft. You have these cubes but they are hyperbolic and not actually cubes. The angles aren't 92 degrees but 72 degrees. It is like. That's an introduction to hyperbolic.
+
+## History of HyperRogue
+
+[0:09:25] Now let's talk about HyperRogue. This started in 1998 and there was a video that looked like what I am showing on the screen here. I wanted to make a hyperbolic game. I wanted to make something like a first person but I didn't know how to use make games. I tried a hyperbolic act and it looked like not what I am showing on the screen but similar. It was quite complicated. I learned about hyperbolic model. This is like a very nice model for doing hyperbolic computation. It is similar to
+
+[0:10:35] what you would do if you were doing like 3D engine for Euclidean metric. This is also quite similar in that idea. And then I learned about this hyperbolic encapsulation. This seemed to be quite good to make a roguelike on. Before that, I only anyhow about the ones like this which had only these which are too large. This was not enough. This is starting to look great. You basically
+
+[0:11:37] made it. It looked like this. We talk about this hyperbolic plane, we collect some of these, and you can kill this monster in one hit. But like this -- it is like a blast and yes, and I found this was -- like I planted more stuff in this. I invented this very simple game and I found it very cool and just used it. And people also liked it very much. And then for the -- in 2012, I wanted to make something from this prototype. What I did was to add multiple lens. Not only did you have
+
+[0:12:45] this that I showed before but we have other ones with differentials. And then also graphics and music. This was released on Steam and it was quite important because the community for this game was built on these Steam forums. We didn't have this then but it was important. Also in 2015, I met my wife so she had idea to use this engine for early but also for doing some like research
+
+[0:13:53] using some of the things we did for this research with us were so used to back in the game. Two dimensional graphics here. So we can play this year. These hyperbolic tricks were done with this engine. And cross bow and so on. HyperRogue has over 60 lens now. That's
+
+[0:14:57] the history of HyperRogue. Let's move to the -- it seems like roguelike and hypergolic geometry
+
+## Why roguelikes and geometry
+
+[0:15:09] is a great match. When roguelike elements did it matter for HyperRogue? What matters the most is you move and fight like in rogue. Let's explain why that is so. Let's checked this here. We are attacked my monsters. If you attacked one of them the other would attack us. And if we fight to escape, this helps. So we can actually stand on the hectogon and this has the extra direction. We
+
+[0:16:15] step here and we can defeat them. This seems to be what makes this game cool. And another important thing which I cannot talk about yet is this thing. If we look at how many we have in 50 cells it is like -- it grows very fast. It actually grows exponentially. Sometimes you can find on the internet some videos about what are the biggest games. They will mention something like no man's sky or something. 20 digits is the size of the universe these guys are basically small
+
+[0:17:30] compared to hyperbolic because of this exponential growth. And of course, since we have this infinite world procedural generation is crucial. That's important. This is also used in the scientific applications they mentioned. One other fun thing is the [indiscernible] of this needs to travel. This is controversial in traditional roguelikes. They commonly have this travel feature which makes the game more fun but it is controversial. Some people don't like it very much. That doesn't feel like it would be better if you had auto travel. And so this is not only -- but navigational
+
+[0:18:38] challenges. We find some specific points in this. We have procedural generation and these extremely
+
+## Roguelike design philosophy
+
+[0:19:02] cool exploration combat system and how to make it a great game and all kinds of approach. Roguelikes are associated with mastery so the game should be a challenge but you also have -- the idea is to simulate an immersive complex world and they are like very different approaches. And there complexity, more experimentation, and like lots of games are based on this approach. For me as a designer, I am more into this mastery direction. I want the game to be like a challenge. I don't like
+
+[0:20:16] [indiscernible] for example. But this non-linear is a great match to have like -- infinite world so in order to have something which makes this work in a world that is actually infinite. The idea is we call it a sandbox and when it gets harder the game becomes harder. I don't know how many we have from this ice land but it makes the land difficult. If you move to another land, it is still at 0, so it will still be easy. Also these high scores unlock stuff so that's how it
+
+[0:21:18] works. Similar to Dwarf Fortress or Caves of Qud but it is related to complex mathematics and kind of a different simulation. HyperRogue has no hit points or collective rows. Some people think that rogues are defined by collective rows but here it is not really character growth -- character growth. There is no resource management. There are so classes. This is still an adventure and makes it a bit like a game. But on the other hand, everything is like there is some -- there is
+
+[0:22:19] no hit points but I have seen an interpretation of hit points which according to which hit points is that they don't and on roguelikes this positioning is explicit. The character doesn't grow but the world gets progression and advanced so some players say something like this and I think this is a nice way to doing this. The HyperRogue takes variety from having lots of special modes like for example you can play in this game with different tiling. The large generation has been
+
+[0:23:26] transformed to also work in many other tiling's. And yeah, OK. That is all for this which makes it more like a game. And so it is also this -- more like a roguelike generator. The next thing I want to talk about is a special consistency. What I mean by that is non-modality and this space is consistent. -- spatial. For example, we have these shops and they aren't part of the map and you can do lots of cools things based on that. Like steal from shops and things like that. There are many violations of for example, we have violations of these because it is unclear whether
+
+[0:24:34] the enemy will follow through the stairs. This allows us to do this in a fun way. We have the stairs here and they allow us to have a new structure of the world which is especially consistent. I think that is quite fun. The next element is simple graphics. Simple graphics is next with the ASCII for prototyping. The developers use pixel art but here in my opinion this doesn't fit the intentional method because pixels are squares and there are no squares or
+
+[0:25:42] rectangles. This pixel would have to be weirdly shaped and so on. You also need to write some kind of image for this. The next thing I want to show is the screenshot of this slater's sea. I think
+
+## Technical and community aspects
+
+[0:26:15] this screenshot is quite interesting because this has this map in the lower part of the screen. And it has the map of the whole level which is like -- it seems like in roguelikes when I am playing roguelikes I want like the screenshots shows to see the whole level. And I think others aren't like that often. And at some point, I had an idea that maybe it would be possible to combine and to use this into one view. Something which shows my character isn't in but I can also see in the bigger part of the level. And this let's us get this effect. There are also other projections.
+
+[0:27:32] People prefer to play rogues like this with many projections. OK. Experimental games, low production values, I guess improvements contribute to code assets and so on. For experimental games it is easier to market them if there are roguelikes. It is not clear how to find a community of players. There is also permadeaths. It is quite -- you have HyperRogue but it is not really -- I have no time to talk about this. I will skip this.
+
+## Future projects and conclusions
+
+[0:28:40] We have hyperbolic versions of puzzles like Sokoban, and mine sweeper, and Sudoku. And we have hyperbolica which is working with the Sims and mini games. And there is this hypermine project which is the idea to make hyperbolic Minecraft. And then of course this is Open Source so it is possible to join this project. I think it is quite interesting it is like the initial action game but they make different decisions. There is rogue Viz collection which is
+
+[0:29:43] like a connection of games and we have even more. And there is metroidinia and the idea is to make as many as possible -- so for example, [indiscernible] generation. And there is also a book about the making of these games so this could be interesting if you want to make a game of your own. So that's all. HAYLEE: Thank you so much. What's the name of your metroidinia? Or is that in process? ZENO: It is not really named. It could
+
+[0:30:47] switch. Follow me on social media and I will post on it from time to time.

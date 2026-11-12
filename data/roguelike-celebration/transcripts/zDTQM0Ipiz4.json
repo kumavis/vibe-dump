@@ -1,0 +1,4232 @@
+{
+ "id": "zDTQM0Ipiz4",
+ "url": "https://www.youtube.com/watch?v=zDTQM0Ipiz4",
+ "title": "Jason Grinblat - Markov by Candelight",
+ "speaker": "Jason Grinblat",
+ "talk_title": "Markov by Candelight",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1648,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nMarkov text generators are hilarious, poetic, and surprisingly creative. But they haven't found much of a home in games. In this talk, Jason Grinblat teaches you to build your own Markov text generator. He then walks through a design experiment in which he uses Markov text to procedurally generate in-game lore books for his roguelike/RPG, Caves of Qud. He explains how he moves beyond \"just a generator\" and weaves a game mechanic around the text generation: players can research generated books at an in-game library and learn meaningful secrets that they can act upon in the game world.\n\nJason Grinblat is co-founder, designer, writer, and gameplay programmer for Freehold Games, the tiny studio behind Sproggiwood and Caves of Qud. Their mission is to build imaginative games that involve offbeat settings, interesting tactical situations, and a whole lot of emergence in the tradition of the roguelike genre.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to Markov chains"
+  },
+  {
+   "start": 145,
+   "title": "Lore in Caves of Qud"
+  },
+  {
+   "start": 262,
+   "title": "How Markov chains work"
+  },
+  {
+   "start": 495,
+   "title": "Building the source corpus"
+  },
+  {
+   "start": 653,
+   "title": "Generating books and text"
+  },
+  {
+   "start": 815,
+   "title": "Procedural title generation"
+  },
+  {
+   "start": 1064,
+   "title": "Weaving mechanics into text"
+  },
+  {
+   "start": 1272,
+   "title": "Math and future development"
+  },
+  {
+   "start": 1416,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4961,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 11.52,
+   "d": 1.36,
+   "text": "my name is jason grinblatt"
+  },
+  {
+   "t": 12.88,
+   "d": 1.44,
+   "text": "and i'm half of the core team of"
+  },
+  {
+   "t": 14.32,
+   "d": 2.16,
+   "text": "freehold games we work on a roguelike"
+  },
+  {
+   "t": 16.48,
+   "d": 1.44,
+   "text": "called caves of cud"
+  },
+  {
+   "t": 17.92,
+   "d": 2.4,
+   "text": "and with that out of the way let's read"
+  },
+  {
+   "t": 20.32,
+   "d": 11.52,
+   "text": "some texts written by robots"
+  },
+  {
+   "t": 42.19,
+   "d": 5.81,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 48.0,
+   "d": 2.4,
+   "text": "okay so these are written by markov text"
+  },
+  {
+   "t": 50.4,
+   "d": 1.84,
+   "text": "generators and i love markov text"
+  },
+  {
+   "t": 52.24,
+   "d": 0.8,
+   "text": "generators"
+  },
+  {
+   "t": 53.04,
+   "d": 1.44,
+   "text": "i love the way that they produce"
+  },
+  {
+   "t": 54.48,
+   "d": 1.6,
+   "text": "sentences that would never be written by"
+  },
+  {
+   "t": 56.08,
+   "d": 1.2,
+   "text": "humans"
+  },
+  {
+   "t": 57.28,
+   "d": 1.76,
+   "text": "i love how they produce these this"
+  },
+  {
+   "t": 59.04,
+   "d": 1.44,
+   "text": "well-formed english that's sort of"
+  },
+  {
+   "t": 60.48,
+   "d": 1.68,
+   "text": "semantically nonsensical"
+  },
+  {
+   "t": 62.16,
+   "d": 1.76,
+   "text": "and that you to make sense of them your"
+  },
+  {
+   "t": 63.92,
+   "d": 2.08,
+   "text": "brain imposes a context that"
+  },
+  {
+   "t": 66.0,
+   "d": 2.32,
+   "text": "really wasn't intended by the generator"
+  },
+  {
+   "t": 68.32,
+   "d": 0.72,
+   "text": "um"
+  },
+  {
+   "t": 69.04,
+   "d": 1.12,
+   "text": "the way they work is that they"
+  },
+  {
+   "t": 70.16,
+   "d": 1.92,
+   "text": "essentially just rearrange text from a"
+  },
+  {
+   "t": 72.08,
+   "d": 1.2,
+   "text": "source corpus"
+  },
+  {
+   "t": 73.28,
+   "d": 3.2,
+   "text": "so if we go back here this sentence was"
+  },
+  {
+   "t": 76.48,
+   "d": 1.92,
+   "text": "actually generated from a corpus of the"
+  },
+  {
+   "t": 78.4,
+   "d": 1.76,
+   "text": "puppet documentation puppet is system"
+  },
+  {
+   "t": 80.16,
+   "d": 1.44,
+   "text": "administration software"
+  },
+  {
+   "t": 81.6,
+   "d": 2.08,
+   "text": "um combined with the assorted works of"
+  },
+  {
+   "t": 83.68,
+   "d": 2.96,
+   "text": "hp lovecraft um"
+  },
+  {
+   "t": 86.64,
+   "d": 2.56,
+   "text": "as was this one as well and then this"
+  },
+  {
+   "t": 89.2,
+   "d": 1.68,
+   "text": "one was generated from"
+  },
+  {
+   "t": 90.88,
+   "d": 1.92,
+   "text": "these aggregated linkedin recruiter"
+  },
+  {
+   "t": 92.8,
+   "d": 1.92,
+   "text": "emails combined with"
+  },
+  {
+   "t": 94.72,
+   "d": 3.6,
+   "text": "personal anecdotes of drug use from"
+  },
+  {
+   "t": 98.84,
+   "d": 1.96,
+   "text": "arrowwood.com"
+  },
+  {
+   "t": 100.8,
+   "d": 1.76,
+   "text": "yeah so the reason they're called markov"
+  },
+  {
+   "t": 102.56,
+   "d": 1.44,
+   "text": "text generators is that they're based on"
+  },
+  {
+   "t": 104.0,
+   "d": 1.84,
+   "text": "these mathematical models"
+  },
+  {
+   "t": 105.84,
+   "d": 1.44,
+   "text": "called markov chains which were"
+  },
+  {
+   "t": 107.28,
+   "d": 2.24,
+   "text": "developed by a russian mathematician"
+  },
+  {
+   "t": 109.52,
+   "d": 3.52,
+   "text": "named um andre markov and like i said i"
+  },
+  {
+   "t": 113.04,
+   "d": 1.6,
+   "text": "really love them for a while now i've"
+  },
+  {
+   "t": 114.64,
+   "d": 0.64,
+   "text": "wanted to"
+  },
+  {
+   "t": 115.28,
+   "d": 2.0,
+   "text": "get them into our game caves of cuds"
+  },
+  {
+   "t": 117.28,
+   "d": 1.6,
+   "text": "somehow and so today i'm going to be"
+  },
+  {
+   "t": 118.88,
+   "d": 1.6,
+   "text": "telling you about a design experiment"
+  },
+  {
+   "t": 120.48,
+   "d": 2.16,
+   "text": "where i did just that"
+  },
+  {
+   "t": 122.64,
+   "d": 2.88,
+   "text": "so on our quest toward a procedural"
+  },
+  {
+   "t": 125.52,
+   "d": 1.36,
+   "text": "library in caves of cod i'm going to"
+  },
+  {
+   "t": 126.88,
+   "d": 1.52,
+   "text": "tell you a little bit about the role of"
+  },
+  {
+   "t": 128.4,
+   "d": 0.72,
+   "text": "knowledge"
+  },
+  {
+   "t": 129.12,
+   "d": 1.84,
+   "text": "in caves of cod i'm going to show you"
+  },
+  {
+   "t": 130.96,
+   "d": 1.68,
+   "text": "how markov text generators work because"
+  },
+  {
+   "t": 132.64,
+   "d": 1.68,
+   "text": "they're really simple"
+  },
+  {
+   "t": 134.32,
+   "d": 1.68,
+   "text": "i'm going to show you how i generated"
+  },
+  {
+   "t": 136.0,
+   "d": 1.76,
+   "text": "procedural books and then i'm going to"
+  },
+  {
+   "t": 137.76,
+   "d": 1.52,
+   "text": "talk a little bit about how i try to"
+  },
+  {
+   "t": 139.28,
+   "d": 1.36,
+   "text": "move beyond a generator and actually"
+  },
+  {
+   "t": 140.64,
+   "d": 1.2,
+   "text": "weave a game mechanic"
+  },
+  {
+   "t": 141.84,
+   "d": 3.44,
+   "text": "around the generated text"
+  },
+  {
+   "t": 145.28,
+   "d": 1.76,
+   "text": "okay so caves of cud what is case"
+  },
+  {
+   "t": 147.04,
+   "d": 1.2,
+   "text": "because some of you might know some of"
+  },
+  {
+   "t": 148.24,
+   "d": 1.28,
+   "text": "you probably don't though so"
+  },
+  {
+   "t": 149.52,
+   "d": 2.24,
+   "text": "it's an open world far future science"
+  },
+  {
+   "t": 151.76,
+   "d": 1.04,
+   "text": "fantasy"
+  },
+  {
+   "t": 152.8,
+   "d": 2.72,
+   "text": "um roguelike rpg sort of into the"
+  },
+  {
+   "t": 155.52,
+   "d": 2.56,
+   "text": "tradition of new wave science fiction"
+  },
+  {
+   "t": 158.08,
+   "d": 2.0,
+   "text": "um the tagline is chiseled through"
+  },
+  {
+   "t": 160.08,
+   "d": 1.28,
+   "text": "layers of thousand-year-old"
+  },
+  {
+   "t": 161.36,
+   "d": 1.6,
+   "text": "civilizations"
+  },
+  {
+   "t": 162.96,
+   "d": 2.72,
+   "text": "so if you could imagine for me if you"
+  },
+  {
+   "t": 165.68,
+   "d": 0.4,
+   "text": "will"
+  },
+  {
+   "t": 166.08,
+   "d": 3.04,
+   "text": "that you're a lore seeker in a wild and"
+  },
+  {
+   "t": 169.12,
+   "d": 1.12,
+   "text": "savage world"
+  },
+  {
+   "t": 170.24,
+   "d": 1.68,
+   "text": "you've just come to the outskirts of"
+  },
+  {
+   "t": 171.92,
+   "d": 1.76,
+   "text": "this land called cud"
+  },
+  {
+   "t": 173.68,
+   "d": 3.04,
+   "text": "where an irradiated jungle strangles"
+  },
+  {
+   "t": 176.72,
+   "d": 2.0,
+   "text": "chrome steeples and rusted rusted"
+  },
+  {
+   "t": 178.72,
+   "d": 1.28,
+   "text": "archways to the"
+  },
+  {
+   "t": 180.0,
+   "d": 2.4,
+   "text": "to the earth you've heard tell even"
+  },
+  {
+   "t": 182.4,
+   "d": 1.6,
+   "text": "though it's a wild world you've heard"
+  },
+  {
+   "t": 184.0,
+   "d": 1.36,
+   "text": "tell that there are pockets of"
+  },
+  {
+   "t": 185.36,
+   "d": 1.84,
+   "text": "civilization that are trying to"
+  },
+  {
+   "t": 187.2,
+   "d": 1.6,
+   "text": "resurrect knowledge from the seeds of"
+  },
+  {
+   "t": 188.8,
+   "d": 1.12,
+   "text": "the past so"
+  },
+  {
+   "t": 189.92,
+   "d": 1.92,
+   "text": "there's the mayor of a mushroom village"
+  },
+  {
+   "t": 191.84,
+   "d": 1.84,
+   "text": "who happens to be an albino ape"
+  },
+  {
+   "t": 193.68,
+   "d": 2.88,
+   "text": "and he has a collection of rare books"
+  },
+  {
+   "t": 196.56,
+   "d": 1.28,
+   "text": "and there's a clan of"
+  },
+  {
+   "t": 197.84,
+   "d": 1.44,
+   "text": "cave bears who are called the"
+  },
+  {
+   "t": 199.28,
+   "d": 2.16,
+   "text": "barathomites and they're trying to"
+  },
+  {
+   "t": 201.44,
+   "d": 2.56,
+   "text": "resurrect the meticul meticulously"
+  },
+  {
+   "t": 204.0,
+   "d": 1.68,
+   "text": "resurrect the glory of ancient"
+  },
+  {
+   "t": 205.68,
+   "d": 1.04,
+   "text": "technology"
+  },
+  {
+   "t": 206.72,
+   "d": 2.16,
+   "text": "but greater than all deep in the salt"
+  },
+  {
+   "t": 208.88,
+   "d": 1.84,
+   "text": "desert there's a"
+  },
+  {
+   "t": 210.72,
+   "d": 2.72,
+   "text": "sect of machine worshipers who are who"
+  },
+  {
+   "t": 213.44,
+   "d": 1.76,
+   "text": "have built a cathedral and they're their"
+  },
+  {
+   "t": 215.2,
+   "d": 2.24,
+   "text": "founding cuds first library in"
+  },
+  {
+   "t": 217.44,
+   "d": 3.28,
+   "text": "500 years and so spurred on by your"
+  },
+  {
+   "t": 220.72,
+   "d": 2.96,
+   "text": "your love of knowledge um you you quest"
+  },
+  {
+   "t": 223.68,
+   "d": 1.76,
+   "text": "over to the library"
+  },
+  {
+   "t": 225.44,
+   "d": 3.28,
+   "text": "so i really wanted this library to feel"
+  },
+  {
+   "t": 228.72,
+   "d": 1.6,
+   "text": "like this ancient place that"
+  },
+  {
+   "t": 230.32,
+   "d": 2.64,
+   "text": "that was a collection of texts from"
+  },
+  {
+   "t": 232.96,
+   "d": 1.44,
+   "text": "across the ages so"
+  },
+  {
+   "t": 234.4,
+   "d": 1.92,
+   "text": "you know the authors are gone the"
+  },
+  {
+   "t": 236.32,
+   "d": 1.84,
+   "text": "context is lost"
+  },
+  {
+   "t": 238.16,
+   "d": 1.36,
+   "text": "things like lingual drift and"
+  },
+  {
+   "t": 239.52,
+   "d": 1.84,
+   "text": "transliteration of brenda render to the"
+  },
+  {
+   "t": 241.36,
+   "d": 0.88,
+   "text": "text either"
+  },
+  {
+   "t": 242.24,
+   "d": 3.2,
+   "text": "indecipherable or only semi-decipherable"
+  },
+  {
+   "t": 245.44,
+   "d": 2.24,
+   "text": "the meaning is fractured and fleeting"
+  },
+  {
+   "t": 247.68,
+   "d": 1.68,
+   "text": "you're you're reading words that whose"
+  },
+  {
+   "t": 249.36,
+   "d": 1.28,
+   "text": "meanings you don't know and you're"
+  },
+  {
+   "t": 250.64,
+   "d": 1.28,
+   "text": "reading about things that you may have"
+  },
+  {
+   "t": 251.92,
+   "d": 0.88,
+   "text": "only heard of as"
+  },
+  {
+   "t": 252.8,
+   "d": 2.64,
+   "text": "myths as a child and i realize this sort"
+  },
+  {
+   "t": 255.44,
+   "d": 0.8,
+   "text": "of weird"
+  },
+  {
+   "t": 256.24,
+   "d": 2.4,
+   "text": "fractured text is a perfect fit for"
+  },
+  {
+   "t": 258.64,
+   "d": 3.36,
+   "text": "markov generated text"
+  },
+  {
+   "t": 262.4,
+   "d": 2.32,
+   "text": "so let's talk a little bit about markov"
+  },
+  {
+   "t": 264.72,
+   "d": 1.68,
+   "text": "chains all right so"
+  },
+  {
+   "t": 266.4,
+   "d": 1.36,
+   "text": "they're a probabilistic model for"
+  },
+  {
+   "t": 267.76,
+   "d": 2.16,
+   "text": "describing a series of states"
+  },
+  {
+   "t": 269.92,
+   "d": 2.72,
+   "text": "um the important property about them is"
+  },
+  {
+   "t": 272.64,
+   "d": 1.6,
+   "text": "that the next state depends only on the"
+  },
+  {
+   "t": 274.24,
+   "d": 1.68,
+   "text": "current state not on all the previous"
+  },
+  {
+   "t": 275.92,
+   "d": 2.16,
+   "text": "states and this short memory property of"
+  },
+  {
+   "t": 278.08,
+   "d": 0.72,
+   "text": "the chain"
+  },
+  {
+   "t": 278.8,
+   "d": 2.56,
+   "text": "is allowed what is what allows it to"
+  },
+  {
+   "t": 281.36,
+   "d": 0.72,
+   "text": "walk through your"
+  },
+  {
+   "t": 282.08,
+   "d": 2.0,
+   "text": "corpus and generate this interesting"
+  },
+  {
+   "t": 284.08,
+   "d": 1.76,
+   "text": "varied text"
+  },
+  {
+   "t": 285.84,
+   "d": 2.24,
+   "text": "so for text generators the states are"
+  },
+  {
+   "t": 288.08,
+   "d": 2.08,
+   "text": "sequences of words"
+  },
+  {
+   "t": 290.16,
+   "d": 2.4,
+   "text": "and like i mentioned markov chains are"
+  },
+  {
+   "t": 292.56,
+   "d": 1.6,
+   "text": "built from a source corpus"
+  },
+  {
+   "t": 294.16,
+   "d": 1.84,
+   "text": "and that corpus can be anything from you"
+  },
+  {
+   "t": 296.0,
+   "d": 2.08,
+   "text": "know multiple books like in the case of"
+  },
+  {
+   "t": 298.08,
+   "d": 1.12,
+   "text": "the assorted works of"
+  },
+  {
+   "t": 299.2,
+   "d": 2.0,
+   "text": "h.b lovecraft or it could be a single"
+  },
+  {
+   "t": 301.2,
+   "d": 1.12,
+   "text": "sentence so"
+  },
+  {
+   "t": 302.32,
+   "d": 1.2,
+   "text": "i'm going to show you how to build a"
+  },
+  {
+   "t": 303.52,
+   "d": 1.76,
+   "text": "chain from this sentence just the cat"
+  },
+  {
+   "t": 305.28,
+   "d": 1.52,
+   "text": "isn't sleeping but the cat is"
+  },
+  {
+   "t": 306.8,
+   "d": 1.76,
+   "text": "definitely the cat isn't sleeping but"
+  },
+  {
+   "t": 308.56,
+   "d": 2.64,
+   "text": "the cat is definitely not listening"
+  },
+  {
+   "t": 311.2,
+   "d": 2.0,
+   "text": "so the way you build the chain you"
+  },
+  {
+   "t": 313.2,
+   "d": 1.6,
+   "text": "basically build the chain one piece at a"
+  },
+  {
+   "t": 314.8,
+   "d": 0.64,
+   "text": "time"
+  },
+  {
+   "t": 315.44,
+   "d": 1.92,
+   "text": "and each of the pieces is called an"
+  },
+  {
+   "t": 317.36,
+   "d": 2.8,
+   "text": "n-gram an n-gram is just a series of n"
+  },
+  {
+   "t": 320.16,
+   "d": 2.32,
+   "text": "units and in this case the the units are"
+  },
+  {
+   "t": 322.48,
+   "d": 1.28,
+   "text": "words"
+  },
+  {
+   "t": 323.76,
+   "d": 1.92,
+   "text": "i'm also going to call it a prefix"
+  },
+  {
+   "t": 325.68,
+   "d": 1.52,
+   "text": "because i'm going to be talking about it"
+  },
+  {
+   "t": 327.2,
+   "d": 0.48,
+   "text": "in the"
+  },
+  {
+   "t": 327.68,
+   "d": 1.68,
+   "text": "context of the word that immediately"
+  },
+  {
+   "t": 329.36,
+   "d": 3.2,
+   "text": "follows it which will be the suffix"
+  },
+  {
+   "t": 332.56,
+   "d": 2.16,
+   "text": "so the number of units in your engram or"
+  },
+  {
+   "t": 334.72,
+   "d": 1.52,
+   "text": "the number of words in your engram in"
+  },
+  {
+   "t": 336.24,
+   "d": 1.92,
+   "text": "our case is called the order"
+  },
+  {
+   "t": 338.16,
+   "d": 3.36,
+   "text": "and the order is a property of the chain"
+  },
+  {
+   "t": 341.52,
+   "d": 2.32,
+   "text": "and you can vary the order to change"
+  },
+  {
+   "t": 343.84,
+   "d": 2.48,
+   "text": "how predictable the text is that you end"
+  },
+  {
+   "t": 346.32,
+   "d": 1.68,
+   "text": "up generating so if your order is big"
+  },
+  {
+   "t": 348.0,
+   "d": 0.48,
+   "text": "enough"
+  },
+  {
+   "t": 348.48,
+   "d": 1.6,
+   "text": "you would just reproduce the text that"
+  },
+  {
+   "t": 350.08,
+   "d": 1.68,
+   "text": "was originally in your corpus"
+  },
+  {
+   "t": 351.76,
+   "d": 1.92,
+   "text": "and for the for the text generator i"
+  },
+  {
+   "t": 353.68,
+   "d": 2.0,
+   "text": "wrote for caves of cut and for the"
+  },
+  {
+   "t": 355.68,
+   "d": 1.36,
+   "text": "example i'm going to show you here the"
+  },
+  {
+   "t": 357.04,
+   "d": 1.92,
+   "text": "order is two"
+  },
+  {
+   "t": 358.96,
+   "d": 2.32,
+   "text": "okay so so what do we do so the first"
+  },
+  {
+   "t": 361.28,
+   "d": 1.52,
+   "text": "thing we do for building the chain we're"
+  },
+  {
+   "t": 362.8,
+   "d": 0.8,
+   "text": "going to"
+  },
+  {
+   "t": 363.6,
+   "d": 2.08,
+   "text": "basically look at the first engram the"
+  },
+  {
+   "t": 365.68,
+   "d": 2.08,
+   "text": "first prefix which is the cat"
+  },
+  {
+   "t": 367.76,
+   "d": 1.52,
+   "text": "and we're going to put it into a"
+  },
+  {
+   "t": 369.28,
+   "d": 1.84,
+   "text": "dictionary a dictionary is just a list"
+  },
+  {
+   "t": 371.12,
+   "d": 1.68,
+   "text": "of key and value pairs"
+  },
+  {
+   "t": 372.8,
+   "d": 2.96,
+   "text": "so the key is going to be the the engram"
+  },
+  {
+   "t": 375.76,
+   "d": 0.88,
+   "text": "the prefix"
+  },
+  {
+   "t": 376.64,
+   "d": 3.28,
+   "text": "and the suffix is going to be a list or"
+  },
+  {
+   "t": 379.92,
+   "d": 1.36,
+   "text": "sorry the value of the"
+  },
+  {
+   "t": 381.28,
+   "d": 1.52,
+   "text": "the pair is going to be a list"
+  },
+  {
+   "t": 382.8,
+   "d": 1.84,
+   "text": "containing the suffix so in this case"
+  },
+  {
+   "t": 384.64,
+   "d": 1.04,
+   "text": "the cat"
+  },
+  {
+   "t": 385.68,
+   "d": 3.2,
+   "text": "and the the list containing isn't which"
+  },
+  {
+   "t": 388.88,
+   "d": 1.6,
+   "text": "is the suffix then we just increment"
+  },
+  {
+   "t": 390.48,
+   "d": 1.68,
+   "text": "through the sentence so the next prefix"
+  },
+  {
+   "t": 392.16,
+   "d": 0.56,
+   "text": "is cat"
+  },
+  {
+   "t": 392.72,
+   "d": 2.64,
+   "text": "isn't we add that to the dictionary we"
+  },
+  {
+   "t": 395.36,
+   "d": 2.24,
+   "text": "look at what the suffix is it's sleeping"
+  },
+  {
+   "t": 397.6,
+   "d": 2.88,
+   "text": "we add that to the to the value we do it"
+  },
+  {
+   "t": 400.48,
+   "d": 1.76,
+   "text": "again for isn't sleeping notice that the"
+  },
+  {
+   "t": 402.24,
+   "d": 1.28,
+   "text": "comma was actually"
+  },
+  {
+   "t": 403.52,
+   "d": 2.56,
+   "text": "retained in our processing that that's"
+  },
+  {
+   "t": 406.08,
+   "d": 1.28,
+   "text": "actually sort of important"
+  },
+  {
+   "t": 407.36,
+   "d": 3.36,
+   "text": "we'll get to that sleeping butt"
+  },
+  {
+   "t": 410.72,
+   "d": 1.84,
+   "text": "but though we keep going and then we get"
+  },
+  {
+   "t": 412.56,
+   "d": 1.68,
+   "text": "to the cat so the cat we've actually"
+  },
+  {
+   "t": 414.24,
+   "d": 1.28,
+   "text": "encountered already"
+  },
+  {
+   "t": 415.52,
+   "d": 2.24,
+   "text": "so what we do now is that we append the"
+  },
+  {
+   "t": 417.76,
+   "d": 1.68,
+   "text": "new suffix is"
+  },
+  {
+   "t": 419.44,
+   "d": 2.56,
+   "text": "to the list that was already the value"
+  },
+  {
+   "t": 422.0,
+   "d": 0.8,
+   "text": "of the entry"
+  },
+  {
+   "t": 422.8,
+   "d": 2.72,
+   "text": "for the cat so now the cat has a list"
+  },
+  {
+   "t": 425.52,
+   "d": 1.68,
+   "text": "containing two suffixes"
+  },
+  {
+   "t": 427.2,
+   "d": 2.56,
+   "text": "isn't and is then we do it for the rest"
+  },
+  {
+   "t": 429.76,
+   "d": 1.44,
+   "text": "of the sentence"
+  },
+  {
+   "t": 431.2,
+   "d": 1.76,
+   "text": "the same way until we process the whole"
+  },
+  {
+   "t": 432.96,
+   "d": 2.64,
+   "text": "sentence the way we actually generate"
+  },
+  {
+   "t": 435.6,
+   "d": 0.4,
+   "text": "text"
+  },
+  {
+   "t": 436.0,
+   "d": 3.44,
+   "text": "is we choose a prefix to start with so"
+  },
+  {
+   "t": 439.44,
+   "d": 1.6,
+   "text": "let's choose the cat"
+  },
+  {
+   "t": 441.04,
+   "d": 2.72,
+   "text": "and then we randomly choose from among"
+  },
+  {
+   "t": 443.76,
+   "d": 0.88,
+   "text": "the suffixes"
+  },
+  {
+   "t": 444.64,
+   "d": 2.72,
+   "text": "in its list that is associated with the"
+  },
+  {
+   "t": 447.36,
+   "d": 0.8,
+   "text": "prefix"
+  },
+  {
+   "t": 448.16,
+   "d": 1.76,
+   "text": "we randomly choose one of them so you"
+  },
+  {
+   "t": 449.92,
+   "d": 1.52,
+   "text": "know in this case we're going to"
+  },
+  {
+   "t": 451.44,
+   "d": 1.12,
+   "text": "randomly choose"
+  },
+  {
+   "t": 452.56,
+   "d": 2.4,
+   "text": "is which is the second one and then to"
+  },
+  {
+   "t": 454.96,
+   "d": 1.76,
+   "text": "generate the next word we do the same"
+  },
+  {
+   "t": 456.72,
+   "d": 1.12,
+   "text": "thing we just increment"
+  },
+  {
+   "t": 457.84,
+   "d": 1.84,
+   "text": "we push the incrementer along so now"
+  },
+  {
+   "t": 459.68,
+   "d": 1.52,
+   "text": "we're going to look up cat is"
+  },
+  {
+   "t": 461.2,
+   "d": 3.28,
+   "text": "in our dictionary and we find definitely"
+  },
+  {
+   "t": 464.48,
+   "d": 1.52,
+   "text": "is the next word and so we add"
+  },
+  {
+   "t": 466.0,
+   "d": 1.52,
+   "text": "definitely and then we do it with is"
+  },
+  {
+   "t": 467.52,
+   "d": 0.72,
+   "text": "definitely"
+  },
+  {
+   "t": 468.24,
+   "d": 1.84,
+   "text": "and for the rest of the words because"
+  },
+  {
+   "t": 470.08,
+   "d": 1.6,
+   "text": "there's only one word in each of these"
+  },
+  {
+   "t": 471.68,
+   "d": 1.68,
+   "text": "lists it's deterministic and the"
+  },
+  {
+   "t": 473.36,
+   "d": 1.36,
+   "text": "the sentence we end up getting is the"
+  },
+  {
+   "t": 474.72,
+   "d": 2.32,
+   "text": "cat is definitely not listening"
+  },
+  {
+   "t": 477.04,
+   "d": 4.16,
+   "text": "so they're see here they're"
+  },
+  {
+   "t": 481.2,
+   "d": 2.48,
+   "text": "they're really simple markup chains um"
+  },
+  {
+   "t": 483.68,
+   "d": 0.64,
+   "text": "to build"
+  },
+  {
+   "t": 484.32,
+   "d": 2.96,
+   "text": "and sort of the the complexity and what"
+  },
+  {
+   "t": 487.28,
+   "d": 1.44,
+   "text": "makes them interesting is really the"
+  },
+  {
+   "t": 488.72,
+   "d": 1.92,
+   "text": "clever arrangement of the corpus"
+  },
+  {
+   "t": 490.64,
+   "d": 1.76,
+   "text": "the clever choice of a corpus rather"
+  },
+  {
+   "t": 492.4,
+   "d": 1.52,
+   "text": "than the rules of actually generating"
+  },
+  {
+   "t": 493.92,
+   "d": 1.84,
+   "text": "the text"
+  },
+  {
+   "t": 495.76,
+   "d": 2.08,
+   "text": "so to talk about a little bit about"
+  },
+  {
+   "t": 497.84,
+   "d": 1.44,
+   "text": "books and caves of cuds so"
+  },
+  {
+   "t": 499.28,
+   "d": 2.08,
+   "text": "we actually already have a concept of"
+  },
+  {
+   "t": 501.36,
+   "d": 2.24,
+   "text": "books in in caves of cut"
+  },
+  {
+   "t": 503.6,
+   "d": 1.92,
+   "text": "there are dozens of static books in"
+  },
+  {
+   "t": 505.52,
+   "d": 1.12,
+   "text": "their games so"
+  },
+  {
+   "t": 506.64,
+   "d": 2.0,
+   "text": "there are things like journals parables"
+  },
+  {
+   "t": 508.64,
+   "d": 1.36,
+   "text": "sacred texts"
+  },
+  {
+   "t": 510.0,
+   "d": 3.92,
+   "text": "histories books are like objects in the"
+  },
+  {
+   "t": 513.92,
+   "d": 1.76,
+   "text": "game you can walk up to them you can"
+  },
+  {
+   "t": 515.68,
+   "d": 1.04,
+   "text": "pick them up you can"
+  },
+  {
+   "t": 516.72,
+   "d": 2.0,
+   "text": "interact with them you could read their"
+  },
+  {
+   "t": 518.72,
+   "d": 1.92,
+   "text": "description every object in the game is"
+  },
+  {
+   "t": 520.64,
+   "d": 0.88,
+   "text": "a description"
+  },
+  {
+   "t": 521.52,
+   "d": 1.36,
+   "text": "the one unique thing you can do with"
+  },
+  {
+   "t": 522.88,
+   "d": 1.52,
+   "text": "books is that you could also read them"
+  },
+  {
+   "t": 524.4,
+   "d": 1.2,
+   "text": "so we have this"
+  },
+  {
+   "t": 525.6,
+   "d": 2.4,
+   "text": "read menu and if you're familiar with"
+  },
+  {
+   "t": 528.0,
+   "d": 1.6,
+   "text": "say like the elder scrolls games and"
+  },
+  {
+   "t": 529.6,
+   "d": 1.36,
+   "text": "they have in-game books that you could"
+  },
+  {
+   "t": 530.96,
+   "d": 0.88,
+   "text": "read the"
+  },
+  {
+   "t": 531.84,
+   "d": 1.28,
+   "text": "you know lore about the world they're"
+  },
+  {
+   "t": 533.12,
+   "d": 1.84,
+   "text": "similar sort of inspired by that"
+  },
+  {
+   "t": 534.96,
+   "d": 1.76,
+   "text": "like i said they're mostly static some"
+  },
+  {
+   "t": 536.72,
+   "d": 1.92,
+   "text": "of them have some procedural elements"
+  },
+  {
+   "t": 538.64,
+   "d": 2.32,
+   "text": "this one for example the corpus callos"
+  },
+  {
+   "t": 540.96,
+   "d": 0.88,
+   "text": "is a"
+  },
+  {
+   "t": 541.84,
+   "d": 2.56,
+   "text": "it's a book of procedural cures for"
+  },
+  {
+   "t": 544.4,
+   "d": 1.44,
+   "text": "diseases in the game so you can get"
+  },
+  {
+   "t": 545.84,
+   "d": 1.76,
+   "text": "diseases in the game and then each game"
+  },
+  {
+   "t": 547.6,
+   "d": 1.76,
+   "text": "the the cure is actually procedurally"
+  },
+  {
+   "t": 549.36,
+   "d": 1.6,
+   "text": "generated so you have to reference this"
+  },
+  {
+   "t": 550.96,
+   "d": 0.72,
+   "text": "manual"
+  },
+  {
+   "t": 551.68,
+   "d": 1.44,
+   "text": "instead of just looking up the caves on"
+  },
+  {
+   "t": 553.12,
+   "d": 2.0,
+   "text": "the caves of cod wiki"
+  },
+  {
+   "t": 555.12,
+   "d": 3.28,
+   "text": "um okay so when i started to think about"
+  },
+  {
+   "t": 558.4,
+   "d": 2.4,
+   "text": "building a corpus for caves of cud and"
+  },
+  {
+   "t": 560.8,
+   "d": 1.2,
+   "text": "like what text i wanted to"
+  },
+  {
+   "t": 562.0,
+   "d": 2.56,
+   "text": "include you know we have all these"
+  },
+  {
+   "t": 564.56,
+   "d": 1.92,
+   "text": "static in-game books so the first thing"
+  },
+  {
+   "t": 566.48,
+   "d": 0.32,
+   "text": "i"
+  },
+  {
+   "t": 566.8,
+   "d": 1.92,
+   "text": "definitely knew i wanted to include were"
+  },
+  {
+   "t": 568.72,
+   "d": 2.0,
+   "text": "all the static books that i had written"
+  },
+  {
+   "t": 570.72,
+   "d": 2.64,
+   "text": "we also have things like npc dialogue"
+  },
+  {
+   "t": 573.36,
+   "d": 1.2,
+   "text": "quest text we have"
+  },
+  {
+   "t": 574.56,
+   "d": 1.92,
+   "text": "every description on every object in the"
+  },
+  {
+   "t": 576.48,
+   "d": 2.4,
+   "text": "game we have descriptions for skills"
+  },
+  {
+   "t": 578.88,
+   "d": 1.76,
+   "text": "and then we also have the case of helps"
+  },
+  {
+   "t": 580.64,
+   "d": 1.68,
+   "text": "file help files so"
+  },
+  {
+   "t": 582.32,
+   "d": 1.6,
+   "text": "this is really kind of funny because it"
+  },
+  {
+   "t": 583.92,
+   "d": 1.84,
+   "text": "produces this weird meta reality where"
+  },
+  {
+   "t": 585.76,
+   "d": 1.28,
+   "text": "you could find books in the game that"
+  },
+  {
+   "t": 587.04,
+   "d": 3.84,
+   "text": "are sort of talking about caves of cod"
+  },
+  {
+   "t": 590.88,
+   "d": 2.8,
+   "text": "um so that's on the caves of cut side i"
+  },
+  {
+   "t": 593.68,
+   "d": 1.6,
+   "text": "also wanted to add some"
+  },
+  {
+   "t": 595.28,
+   "d": 2.32,
+   "text": "you know like i said the the sort of"
+  },
+  {
+   "t": 597.6,
+   "d": 1.28,
+   "text": "what ends up being interesting about a"
+  },
+  {
+   "t": 598.88,
+   "d": 1.6,
+   "text": "markov chain is often the just the"
+  },
+  {
+   "t": 600.48,
+   "d": 1.92,
+   "text": "clever arrangement of the corpus"
+  },
+  {
+   "t": 602.4,
+   "d": 1.76,
+   "text": "so i want to i went on to project"
+  },
+  {
+   "t": 604.16,
+   "d": 1.76,
+   "text": "gutenberg and i found some public domain"
+  },
+  {
+   "t": 605.92,
+   "d": 0.72,
+   "text": "works"
+  },
+  {
+   "t": 606.64,
+   "d": 1.12,
+   "text": "you know there's this book called the"
+  },
+  {
+   "t": 607.76,
+   "d": 1.76,
+   "text": "machinery of the universe mechanical"
+  },
+  {
+   "t": 609.52,
+   "d": 1.84,
+   "text": "concepts of physical phenomenon"
+  },
+  {
+   "t": 611.36,
+   "d": 2.4,
+   "text": "it's a 19th century physics book it was"
+  },
+  {
+   "t": 613.76,
+   "d": 0.72,
+   "text": "written by"
+  },
+  {
+   "t": 614.48,
+   "d": 3.04,
+   "text": "amos emerson dolbear whose name i think"
+  },
+  {
+   "t": 617.52,
+   "d": 1.36,
+   "text": "was procedurally generated"
+  },
+  {
+   "t": 618.88,
+   "d": 2.16,
+   "text": "um"
+  },
+  {
+   "t": 622.32,
+   "d": 1.92,
+   "text": "and this this book kind of matches the"
+  },
+  {
+   "t": 624.24,
+   "d": 1.52,
+   "text": "tone of caves of cud"
+  },
+  {
+   "t": 625.76,
+   "d": 1.12,
+   "text": "um there's another book called"
+  },
+  {
+   "t": 626.88,
+   "d": 1.84,
+   "text": "zoological mythology or the legends of"
+  },
+  {
+   "t": 628.72,
+   "d": 2.64,
+   "text": "animals another 19th century book"
+  },
+  {
+   "t": 631.36,
+   "d": 2.0,
+   "text": "so i included excerpts of these such"
+  },
+  {
+   "t": 633.36,
+   "d": 1.92,
+   "text": "that they made up about half the corpus"
+  },
+  {
+   "t": 635.28,
+   "d": 0.72,
+   "text": "and then"
+  },
+  {
+   "t": 636.0,
+   "d": 1.52,
+   "text": "caves of cud made up the other half of"
+  },
+  {
+   "t": 637.52,
+   "d": 3.36,
+   "text": "the corpus so caves of cut"
+  },
+  {
+   "t": 640.96,
+   "d": 1.92,
+   "text": "caves of cud there's actually like about"
+  },
+  {
+   "t": 642.88,
+   "d": 2.0,
+   "text": "45 000 words in caves that cut which is"
+  },
+  {
+   "t": 644.88,
+   "d": 1.92,
+   "text": "like on the order of a small novel"
+  },
+  {
+   "t": 646.8,
+   "d": 2.72,
+   "text": "and so then i had about 45 000 words of"
+  },
+  {
+   "t": 649.52,
+   "d": 0.64,
+   "text": "you know from"
+  },
+  {
+   "t": 650.16,
+   "d": 1.28,
+   "text": "from these excerpts when the public"
+  },
+  {
+   "t": 651.44,
+   "d": 2.72,
+   "text": "domain works okay so let's actually"
+  },
+  {
+   "t": 654.16,
+   "d": 1.76,
+   "text": "generate some text so here's how i"
+  },
+  {
+   "t": 655.92,
+   "d": 1.76,
+   "text": "generated the text"
+  },
+  {
+   "t": 657.68,
+   "d": 3.04,
+   "text": "um as the chain as i actually build the"
+  },
+  {
+   "t": 660.72,
+   "d": 1.6,
+   "text": "chain in the manner i sold"
+  },
+  {
+   "t": 662.32,
+   "d": 3.36,
+   "text": "showed you earlier i keep a i keep a"
+  },
+  {
+   "t": 665.68,
+   "d": 1.84,
+   "text": "separate list of all the words that"
+  },
+  {
+   "t": 667.52,
+   "d": 2.0,
+   "text": "actually start sentences or i'm sorry"
+  },
+  {
+   "t": 669.52,
+   "d": 1.84,
+   "text": "other prefixes that start sentences i"
+  },
+  {
+   "t": 671.36,
+   "d": 1.52,
+   "text": "keep those in a separate list"
+  },
+  {
+   "t": 672.88,
+   "d": 1.84,
+   "text": "and then when i actually okay so for"
+  },
+  {
+   "t": 674.72,
+   "d": 1.84,
+   "text": "example in the original this the sample"
+  },
+  {
+   "t": 676.56,
+   "d": 1.04,
+   "text": "sentence i showed you"
+  },
+  {
+   "t": 677.6,
+   "d": 2.24,
+   "text": "the cat isn't sleeping the cat i would"
+  },
+  {
+   "t": 679.84,
+   "d": 2.08,
+   "text": "add that to a separate sentence"
+  },
+  {
+   "t": 681.92,
+   "d": 2.0,
+   "text": "um to actually generate a sentence i"
+  },
+  {
+   "t": 683.92,
+   "d": 1.04,
+   "text": "would i pick"
+  },
+  {
+   "t": 684.96,
+   "d": 2.24,
+   "text": "from those candidate starting prefixes"
+  },
+  {
+   "t": 687.2,
+   "d": 1.04,
+   "text": "randomly"
+  },
+  {
+   "t": 688.24,
+   "d": 2.72,
+   "text": "i i pick one and then i right we choose"
+  },
+  {
+   "t": 690.96,
+   "d": 1.76,
+   "text": "an engram from that list of random then"
+  },
+  {
+   "t": 692.72,
+   "d": 2.0,
+   "text": "we walk the chain until i until we hit a"
+  },
+  {
+   "t": 694.72,
+   "d": 0.56,
+   "text": "period"
+  },
+  {
+   "t": 695.28,
+   "d": 1.44,
+   "text": "and what i mean by walk the chain is"
+  },
+  {
+   "t": 696.72,
+   "d": 1.52,
+   "text": "that we just go through that process of"
+  },
+  {
+   "t": 698.24,
+   "d": 1.68,
+   "text": "generating text like i showed you"
+  },
+  {
+   "t": 699.92,
+   "d": 2.16,
+   "text": "of generating the next word and we go"
+  },
+  {
+   "t": 702.08,
+   "d": 1.28,
+   "text": "until we hit a period"
+  },
+  {
+   "t": 703.36,
+   "d": 1.76,
+   "text": "there's like an extra rule in there"
+  },
+  {
+   "t": 705.12,
+   "d": 1.6,
+   "text": "about like if you go 50 words and you"
+  },
+  {
+   "t": 706.72,
+   "d": 1.6,
+   "text": "don't have a period like then terminate"
+  },
+  {
+   "t": 708.32,
+   "d": 2.96,
+   "text": "but that actually very rarely happens"
+  },
+  {
+   "t": 711.28,
+   "d": 1.6,
+   "text": "and then very simply to generate a"
+  },
+  {
+   "t": 712.88,
+   "d": 2.08,
+   "text": "paragraph you just generate three to six"
+  },
+  {
+   "t": 714.96,
+   "d": 0.8,
+   "text": "sentences"
+  },
+  {
+   "t": 715.76,
+   "d": 2.64,
+   "text": "and to generate a book we generate eight"
+  },
+  {
+   "t": 718.4,
+   "d": 1.68,
+   "text": "to thirty paragraphs"
+  },
+  {
+   "t": 720.08,
+   "d": 2.0,
+   "text": "and then we rely we had written some"
+  },
+  {
+   "t": 722.08,
+   "d": 1.92,
+   "text": "formatting tools for our static books"
+  },
+  {
+   "t": 724.0,
+   "d": 1.76,
+   "text": "and we just rely on those in the auto"
+  },
+  {
+   "t": 725.76,
+   "d": 1.6,
+   "text": "formatting to make the books look good"
+  },
+  {
+   "t": 727.36,
+   "d": 0.56,
+   "text": "so"
+  },
+  {
+   "t": 727.92,
+   "d": 2.0,
+   "text": "here's an example of a procedurally"
+  },
+  {
+   "t": 729.92,
+   "d": 1.6,
+   "text": "generated book in case of cod"
+  },
+  {
+   "t": 731.52,
+   "d": 2.0,
+   "text": "i'll just read the first sentence for"
+  },
+  {
+   "t": 733.52,
+   "d": 2.16,
+   "text": "ages the civilizations of the cloneling"
+  },
+  {
+   "t": 735.68,
+   "d": 2.08,
+   "text": "are comprised of skull-sized hexagonal"
+  },
+  {
+   "t": 737.76,
+   "d": 2.48,
+   "text": "pyramids of polish chrome"
+  },
+  {
+   "t": 740.24,
+   "d": 3.76,
+   "text": "okay um some ones some some examples"
+  },
+  {
+   "t": 744.0,
+   "d": 1.28,
+   "text": "that i really like here"
+  },
+  {
+   "t": 745.28,
+   "d": 2.32,
+   "text": "clan lacrae sigil is a river just north"
+  },
+  {
+   "t": 747.6,
+   "d": 1.84,
+   "text": "of the glacial rivers flowing over the"
+  },
+  {
+   "t": 749.44,
+   "d": 3.28,
+   "text": "bones of a canyon dweller"
+  },
+  {
+   "t": 752.72,
+   "d": 2.32,
+   "text": "um press l and scroll around to revel at"
+  },
+  {
+   "t": 755.04,
+   "d": 1.6,
+   "text": "the black blood for their children's"
+  },
+  {
+   "t": 756.64,
+   "d": 2.08,
+   "text": "return to the idol of abort guru and"
+  },
+  {
+   "t": 758.72,
+   "d": 1.6,
+   "text": "skulking around it and built a temple"
+  },
+  {
+   "t": 760.32,
+   "d": 1.76,
+   "text": "there"
+  },
+  {
+   "t": 762.08,
+   "d": 1.52,
+   "text": "and some of them are like particularly"
+  },
+  {
+   "t": 763.6,
+   "d": 2.08,
+   "text": "poetic so this one i like it's"
+  },
+  {
+   "t": 765.68,
+   "d": 2.24,
+   "text": "titus and like interest drinks of water"
+  },
+  {
+   "t": 767.92,
+   "d": 2.32,
+   "text": "azure and flaking silver of water"
+  },
+  {
+   "t": 770.24,
+   "d": 1.92,
+   "text": "but there is a quasar of red metal that"
+  },
+  {
+   "t": 772.16,
+   "d": 2.24,
+   "text": "gently undulates when scene by day and"
+  },
+  {
+   "t": 774.4,
+   "d": 1.84,
+   "text": "gloomy by night the sun goes round and"
+  },
+  {
+   "t": 776.24,
+   "d": 2.56,
+   "text": "round and bits the worlds"
+  },
+  {
+   "t": 778.8,
+   "d": 3.12,
+   "text": "so this is this was a lot of fun like it"
+  },
+  {
+   "t": 781.92,
+   "d": 1.68,
+   "text": "was especially fun for me to write the"
+  },
+  {
+   "t": 783.6,
+   "d": 1.76,
+   "text": "generator and have it generate text"
+  },
+  {
+   "t": 785.36,
+   "d": 2.0,
+   "text": "based on the corpus that i had written"
+  },
+  {
+   "t": 787.36,
+   "d": 1.84,
+   "text": "and i started thinking like you know"
+  },
+  {
+   "t": 789.2,
+   "d": 1.92,
+   "text": "who's the author of this text is it me"
+  },
+  {
+   "t": 791.12,
+   "d": 2.8,
+   "text": "is it the generator and emily short who"
+  },
+  {
+   "t": 793.92,
+   "d": 1.36,
+   "text": "you know kate mentioned in her last talk"
+  },
+  {
+   "t": 795.28,
+   "d": 1.12,
+   "text": "this person in the"
+  },
+  {
+   "t": 796.4,
+   "d": 1.76,
+   "text": "procedural text in interactive fiction"
+  },
+  {
+   "t": 798.16,
+   "d": 1.6,
+   "text": "world i had a chance to talk to her at"
+  },
+  {
+   "t": 799.76,
+   "d": 1.12,
+   "text": "gdc this year"
+  },
+  {
+   "t": 800.88,
+   "d": 1.44,
+   "text": "and she told me about this fictional"
+  },
+  {
+   "t": 802.32,
+   "d": 1.2,
+   "text": "travel guide that she had written the"
+  },
+  {
+   "t": 803.52,
+   "d": 1.68,
+   "text": "annals of the paraguays which is really"
+  },
+  {
+   "t": 805.2,
+   "d": 1.28,
+   "text": "cool you should check it out"
+  },
+  {
+   "t": 806.48,
+   "d": 1.52,
+   "text": "and she i like the way she put it she"
+  },
+  {
+   "t": 808.0,
+   "d": 1.36,
+   "text": "felt like it was a collaboration with"
+  },
+  {
+   "t": 809.36,
+   "d": 1.52,
+   "text": "between her and the generator which i"
+  },
+  {
+   "t": 810.88,
+   "d": 1.36,
+   "text": "thought was sort of a nice way to put"
+  },
+  {
+   "t": 812.24,
+   "d": 0.44,
+   "text": "the"
+  },
+  {
+   "t": 812.68,
+   "d": 3.16,
+   "text": "the whole enterprise"
+  },
+  {
+   "t": 815.84,
+   "d": 2.32,
+   "text": "okay so so how i generated book titles"
+  },
+  {
+   "t": 818.16,
+   "d": 1.68,
+   "text": "titles are actually more difficult than"
+  },
+  {
+   "t": 819.84,
+   "d": 1.04,
+   "text": "text because"
+  },
+  {
+   "t": 820.88,
+   "d": 1.44,
+   "text": "whereas the text that i wanted to"
+  },
+  {
+   "t": 822.32,
+   "d": 2.16,
+   "text": "generate looked pretty similar to the"
+  },
+  {
+   "t": 824.48,
+   "d": 2.24,
+   "text": "text to the corpus text i was using"
+  },
+  {
+   "t": 826.72,
+   "d": 2.88,
+   "text": "titles have some additional structure um"
+  },
+  {
+   "t": 829.6,
+   "d": 0.72,
+   "text": "so"
+  },
+  {
+   "t": 830.32,
+   "d": 1.76,
+   "text": "a bad title you know like if i just"
+  },
+  {
+   "t": 832.08,
+   "d": 2.08,
+   "text": "generate a fragment of text"
+  },
+  {
+   "t": 834.16,
+   "d": 1.92,
+   "text": "from the from the chain you get"
+  },
+  {
+   "t": 836.08,
+   "d": 1.6,
+   "text": "something like at the foot of a sickly"
+  },
+  {
+   "t": 837.68,
+   "d": 1.92,
+   "text": "tree until and that's kind of like a"
+  },
+  {
+   "t": 839.6,
+   "d": 3.36,
+   "text": "crappy title so my first idea was to"
+  },
+  {
+   "t": 842.96,
+   "d": 0.64,
+   "text": "design"
+  },
+  {
+   "t": 843.6,
+   "d": 2.4,
+   "text": "title like templates and walk the chain"
+  },
+  {
+   "t": 846.0,
+   "d": 1.36,
+   "text": "and fill them in"
+  },
+  {
+   "t": 847.36,
+   "d": 2.08,
+   "text": "so what i mean by a title like template"
+  },
+  {
+   "t": 849.44,
+   "d": 2.16,
+   "text": "things like the blank of blank as in the"
+  },
+  {
+   "t": 851.6,
+   "d": 1.04,
+   "text": "winds of change"
+  },
+  {
+   "t": 852.64,
+   "d": 3.12,
+   "text": "or on blank like on sentimentality these"
+  },
+  {
+   "t": 855.76,
+   "d": 0.32,
+   "text": "are"
+  },
+  {
+   "t": 856.08,
+   "d": 2.0,
+   "text": "templates that i felt would make pretty"
+  },
+  {
+   "t": 858.08,
+   "d": 2.48,
+   "text": "good uh titles"
+  },
+  {
+   "t": 860.56,
+   "d": 2.96,
+   "text": "um so it sort of worked here let's go"
+  },
+  {
+   "t": 863.52,
+   "d": 0.48,
+   "text": "back here"
+  },
+  {
+   "t": 864.0,
+   "d": 1.92,
+   "text": "it worked like i wrote some rules to"
+  },
+  {
+   "t": 865.92,
+   "d": 1.92,
+   "text": "like match the prefixes"
+  },
+  {
+   "t": 867.84,
+   "d": 3.28,
+   "text": "in the um in the chain to"
+  },
+  {
+   "t": 871.12,
+   "d": 2.32,
+   "text": "my templates and then walk through them"
+  },
+  {
+   "t": 873.44,
+   "d": 1.04,
+   "text": "when i you know"
+  },
+  {
+   "t": 874.48,
+   "d": 1.92,
+   "text": "kind of spent some time walking through"
+  },
+  {
+   "t": 876.4,
+   "d": 1.84,
+   "text": "them and it generated pretty good titles"
+  },
+  {
+   "t": 878.24,
+   "d": 1.44,
+   "text": "but there's actually a bug in the code"
+  },
+  {
+   "t": 879.68,
+   "d": 1.68,
+   "text": "and i noticed that it was generating a"
+  },
+  {
+   "t": 881.36,
+   "d": 1.68,
+   "text": "lot of titles that"
+  },
+  {
+   "t": 883.04,
+   "d": 2.48,
+   "text": "were not of that form were kind of"
+  },
+  {
+   "t": 885.52,
+   "d": 1.36,
+   "text": "slipping through but they were really"
+  },
+  {
+   "t": 886.88,
+   "d": 1.2,
+   "text": "good titles anyway"
+  },
+  {
+   "t": 888.08,
+   "d": 1.52,
+   "text": "and so that led me to my second idea"
+  },
+  {
+   "t": 889.6,
+   "d": 1.52,
+   "text": "which is a much better idea"
+  },
+  {
+   "t": 891.12,
+   "d": 2.32,
+   "text": "which is i generate a fragment of text"
+  },
+  {
+   "t": 893.44,
+   "d": 1.6,
+   "text": "like by walking the chain two to five"
+  },
+  {
+   "t": 895.04,
+   "d": 0.8,
+   "text": "times"
+  },
+  {
+   "t": 895.84,
+   "d": 3.92,
+   "text": "oh what happened it went"
+  },
+  {
+   "t": 899.76,
+   "d": 3.28,
+   "text": "okay um yeah"
+  },
+  {
+   "t": 903.04,
+   "d": 3.28,
+   "text": "so here we go okay i generate a fragment"
+  },
+  {
+   "t": 906.32,
+   "d": 0.8,
+   "text": "of"
+  },
+  {
+   "t": 907.12,
+   "d": 1.44,
+   "text": "text by walking the chain two to five"
+  },
+  {
+   "t": 908.56,
+   "d": 2.0,
+   "text": "times and then i just shave undesirable"
+  },
+  {
+   "t": 910.56,
+   "d": 1.44,
+   "text": "words off the beginning and end of the"
+  },
+  {
+   "t": 912.0,
+   "d": 2.72,
+   "text": "text so examples of undesirable starting"
+  },
+  {
+   "t": 914.72,
+   "d": 1.36,
+   "text": "words are things like were"
+  },
+  {
+   "t": 916.08,
+   "d": 2.48,
+   "text": "though them him like pronouns"
+  },
+  {
+   "t": 918.56,
+   "d": 1.28,
+   "text": "conjunctions"
+  },
+  {
+   "t": 919.84,
+   "d": 2.8,
+   "text": "some bad ending words or this were every"
+  },
+  {
+   "t": 922.64,
+   "d": 0.48,
+   "text": "and"
+  },
+  {
+   "t": 923.12,
+   "d": 1.44,
+   "text": "there are actually not too many you know"
+  },
+  {
+   "t": 924.56,
+   "d": 1.12,
+   "text": "there's something like keep a static"
+  },
+  {
+   "t": 925.68,
+   "d": 2.08,
+   "text": "list of 30 words that you just shave off"
+  },
+  {
+   "t": 927.76,
+   "d": 1.12,
+   "text": "the the start and end"
+  },
+  {
+   "t": 928.88,
+   "d": 1.52,
+   "text": "and then you end up with a title like at"
+  },
+  {
+   "t": 930.4,
+   "d": 1.52,
+   "text": "the foot of a sickly tree"
+  },
+  {
+   "t": 931.92,
+   "d": 1.12,
+   "text": "that's actually a pretty interesting"
+  },
+  {
+   "t": 933.04,
+   "d": 1.84,
+   "text": "title right and it's just the bad title"
+  },
+  {
+   "t": 934.88,
+   "d": 2.24,
+   "text": "with until shaved off the end"
+  },
+  {
+   "t": 937.12,
+   "d": 2.56,
+   "text": "so that that method was a lot more"
+  },
+  {
+   "t": 939.68,
+   "d": 1.52,
+   "text": "productive"
+  },
+  {
+   "t": 941.2,
+   "d": 2.64,
+   "text": "so here are some examples an advanced"
+  },
+  {
+   "t": 943.84,
+   "d": 0.88,
+   "text": "rate"
+  },
+  {
+   "t": 944.72,
+   "d": 1.28,
+   "text": "an arm's length from a priest"
+  },
+  {
+   "t": 946.0,
+   "d": 2.88,
+   "text": "exclamation point"
+  },
+  {
+   "t": 950.48,
+   "d": 2.56,
+   "text": "here here are some of my favorite ones"
+  },
+  {
+   "t": 953.04,
+   "d": 1.12,
+   "text": "that one's kind of"
+  },
+  {
+   "t": 954.16,
+   "d": 2.72,
+   "text": "weird and cool"
+  },
+  {
+   "t": 962.32,
+   "d": 2.48,
+   "text": "like i've said before i want this book"
+  },
+  {
+   "t": 964.8,
+   "d": 5.04,
+   "text": "to exist in real life"
+  },
+  {
+   "t": 971.76,
+   "d": 3.04,
+   "text": "yeah okay so"
+  },
+  {
+   "t": 974.8,
+   "d": 3.92,
+   "text": "um so if any of you here for kate's last"
+  },
+  {
+   "t": 978.72,
+   "d": 3.36,
+   "text": "talk um you know she actually in in in"
+  },
+  {
+   "t": 982.08,
+   "d": 1.84,
+   "text": "her generator blog post that she talked"
+  },
+  {
+   "t": 983.92,
+   "d": 1.92,
+   "text": "about so you want to build a generator"
+  },
+  {
+   "t": 985.84,
+   "d": 2.8,
+   "text": "she talks about this this um idea of"
+  },
+  {
+   "t": 988.64,
+   "d": 1.28,
+   "text": "character fullness which is"
+  },
+  {
+   "t": 989.92,
+   "d": 1.52,
+   "text": "if you've spent any time writing"
+  },
+  {
+   "t": 991.44,
+   "d": 1.36,
+   "text": "procedural concepts you're probably"
+  },
+  {
+   "t": 992.8,
+   "d": 1.92,
+   "text": "familiar with the idea of sameness this"
+  },
+  {
+   "t": 994.72,
+   "d": 0.64,
+   "text": "idea that"
+  },
+  {
+   "t": 995.36,
+   "d": 1.52,
+   "text": "you might be generating things that are"
+  },
+  {
+   "t": 996.88,
+   "d": 1.6,
+   "text": "technically different by"
+  },
+  {
+   "t": 998.48,
+   "d": 1.6,
+   "text": "by you know some technical definition"
+  },
+  {
+   "t": 1000.08,
+   "d": 1.52,
+   "text": "but as far as how"
+  },
+  {
+   "t": 1001.6,
+   "d": 2.32,
+   "text": "humans perceive them they kind of get"
+  },
+  {
+   "t": 1003.92,
+   "d": 0.96,
+   "text": "lost and"
+  },
+  {
+   "t": 1004.88,
+   "d": 2.24,
+   "text": "melded together and so this quality of"
+  },
+  {
+   "t": 1007.12,
+   "d": 1.04,
+   "text": "being able to be like"
+  },
+  {
+   "t": 1008.16,
+   "d": 2.48,
+   "text": "meaningfully perceived as different by a"
+  },
+  {
+   "t": 1010.64,
+   "d": 1.92,
+   "text": "human or by a player or reader"
+  },
+  {
+   "t": 1012.56,
+   "d": 1.92,
+   "text": "is you know cheerfulness and so i wanted"
+  },
+  {
+   "t": 1014.48,
+   "d": 1.92,
+   "text": "to make sure my books were characterful"
+  },
+  {
+   "t": 1016.4,
+   "d": 2.24,
+   "text": "so i did a few things to add character"
+  },
+  {
+   "t": 1018.64,
+   "d": 0.88,
+   "text": "like"
+  },
+  {
+   "t": 1019.52,
+   "d": 1.52,
+   "text": "one one of the things ten percent of the"
+  },
+  {
+   "t": 1021.04,
+   "d": 2.32,
+   "text": "time i include author authors notes or"
+  },
+  {
+   "t": 1023.36,
+   "d": 0.88,
+   "text": "editor notes"
+  },
+  {
+   "t": 1024.24,
+   "d": 2.08,
+   "text": "and all an author's note is it's the"
+  },
+  {
+   "t": 1026.32,
+   "d": 1.92,
+   "text": "word authors note and then a randomly"
+  },
+  {
+   "t": 1028.24,
+   "d": 1.12,
+   "text": "generated sentence"
+  },
+  {
+   "t": 1029.36,
+   "d": 3.44,
+   "text": "so for example you get like"
+  },
+  {
+   "t": 1036.08,
+   "d": 1.84,
+   "text": "that's what the editor wants you to know"
+  },
+  {
+   "t": 1037.92,
+   "d": 1.28,
+   "text": "okay"
+  },
+  {
+   "t": 1039.2,
+   "d": 2.16,
+   "text": "um five percent of the time i generate a"
+  },
+  {
+   "t": 1041.36,
+   "d": 1.84,
+   "text": "tone and it's just ten times as big"
+  },
+  {
+   "t": 1043.2,
+   "d": 2.0,
+   "text": "as a normal book that's all it is and"
+  },
+  {
+   "t": 1045.2,
+   "d": 1.36,
+   "text": "then twenty percent of the time i add"
+  },
+  {
+   "t": 1046.56,
+   "d": 1.92,
+   "text": "some title modifiers so there's things"
+  },
+  {
+   "t": 1048.48,
+   "d": 0.72,
+   "text": "like"
+  },
+  {
+   "t": 1049.2,
+   "d": 3.44,
+   "text": "nth edition or colon on a bridge"
+  },
+  {
+   "t": 1052.64,
+   "d": 4.08,
+   "text": "or this one's my personal favorite title"
+  },
+  {
+   "t": 1064.4,
+   "d": 3.6,
+   "text": "okay so um so we got the generated text"
+  },
+  {
+   "t": 1068.0,
+   "d": 0.8,
+   "text": "working pretty good"
+  },
+  {
+   "t": 1068.8,
+   "d": 2.88,
+   "text": "that was cool we really wanted to evoke"
+  },
+  {
+   "t": 1071.68,
+   "d": 1.36,
+   "text": "the experience of like"
+  },
+  {
+   "t": 1073.04,
+   "d": 2.16,
+   "text": "coming to a library and sifting through"
+  },
+  {
+   "t": 1075.2,
+   "d": 1.68,
+   "text": "tattered tomes and really like"
+  },
+  {
+   "t": 1076.88,
+   "d": 1.36,
+   "text": "researching something that was"
+  },
+  {
+   "t": 1078.24,
+   "d": 1.84,
+   "text": "meaningful in the in the game"
+  },
+  {
+   "t": 1080.08,
+   "d": 4.16,
+   "text": "world so you know i had this idea where"
+  },
+  {
+   "t": 1084.24,
+   "d": 2.4,
+   "text": "we have all these like procedurally you"
+  },
+  {
+   "t": 1086.64,
+   "d": 1.28,
+   "text": "know caves of cut as a rogue like there"
+  },
+  {
+   "t": 1087.92,
+   "d": 1.28,
+   "text": "are many aspects of the game that are"
+  },
+  {
+   "t": 1089.2,
+   "d": 1.28,
+   "text": "procedurally generated"
+  },
+  {
+   "t": 1090.48,
+   "d": 2.0,
+   "text": "and i thought like we could write some"
+  },
+  {
+   "t": 1092.48,
+   "d": 1.12,
+   "text": "war about"
+  },
+  {
+   "t": 1093.6,
+   "d": 1.44,
+   "text": "those procedural elements and then"
+  },
+  {
+   "t": 1095.04,
+   "d": 1.84,
+   "text": "inject them into the markov chain and"
+  },
+  {
+   "t": 1096.88,
+   "d": 2.0,
+   "text": "then when the text was actually you know"
+  },
+  {
+   "t": 1098.88,
+   "d": 1.68,
+   "text": "we when we would generate text"
+  },
+  {
+   "t": 1100.56,
+   "d": 2.24,
+   "text": "occasionally it would hit onto these"
+  },
+  {
+   "t": 1102.8,
+   "d": 1.28,
+   "text": "lore elements and then"
+  },
+  {
+   "t": 1104.08,
+   "d": 1.6,
+   "text": "like insert a piece of lore into the"
+  },
+  {
+   "t": 1105.68,
+   "d": 1.84,
+   "text": "books"
+  },
+  {
+   "t": 1107.52,
+   "d": 3.52,
+   "text": "so as a proof of concept we did we"
+  },
+  {
+   "t": 1111.04,
+   "d": 2.0,
+   "text": "we did this with the you know the piece"
+  },
+  {
+   "t": 1113.04,
+   "d": 1.84,
+   "text": "of procedural information we were going"
+  },
+  {
+   "t": 1114.88,
+   "d": 0.96,
+   "text": "to use"
+  },
+  {
+   "t": 1115.84,
+   "d": 2.24,
+   "text": "was the location of this artifact pistol"
+  },
+  {
+   "t": 1118.08,
+   "d": 1.76,
+   "text": "called the ruin of house eisner"
+  },
+  {
+   "t": 1119.84,
+   "d": 2.72,
+   "text": "so the pistol is placed on a random"
+  },
+  {
+   "t": 1122.56,
+   "d": 0.4,
+   "text": "world"
+  },
+  {
+   "t": 1122.96,
+   "d": 3.2,
+   "text": "a random map on on cut surface one of"
+  },
+  {
+   "t": 1126.16,
+   "d": 0.96,
+   "text": "eighteen thousand"
+  },
+  {
+   "t": 1127.12,
+   "d": 2.24,
+   "text": "so like this is the world map for caves"
+  },
+  {
+   "t": 1129.36,
+   "d": 3.2,
+   "text": "of cub it's 80 by 25 tiles and each tile"
+  },
+  {
+   "t": 1132.56,
+   "d": 1.76,
+   "text": "is three by three maps so there's 18"
+  },
+  {
+   "t": 1134.32,
+   "d": 1.04,
+   "text": "000."
+  },
+  {
+   "t": 1135.36,
+   "d": 3.52,
+   "text": "um so i"
+  },
+  {
+   "t": 1138.88,
+   "d": 1.6,
+   "text": "i did some you know when i built the"
+  },
+  {
+   "t": 1140.48,
+   "d": 1.92,
+   "text": "chain from the case of cud corpus i did"
+  },
+  {
+   "t": 1142.4,
+   "d": 1.36,
+   "text": "some frequency analysis"
+  },
+  {
+   "t": 1143.76,
+   "d": 2.32,
+   "text": "and i made this observation which in"
+  },
+  {
+   "t": 1146.08,
+   "d": 1.92,
+   "text": "retrospect is really obvious but it"
+  },
+  {
+   "t": 1148.0,
+   "d": 1.36,
+   "text": "actually took me a lot of thinking"
+  },
+  {
+   "t": 1149.36,
+   "d": 1.52,
+   "text": "before i got there which is that"
+  },
+  {
+   "t": 1150.88,
+   "d": 3.12,
+   "text": "a prefixes how often a prefix occurs"
+  },
+  {
+   "t": 1154.0,
+   "d": 2.24,
+   "text": "in the corpus very closely matches how"
+  },
+  {
+   "t": 1156.24,
+   "d": 1.04,
+   "text": "often it occurs"
+  },
+  {
+   "t": 1157.28,
+   "d": 2.32,
+   "text": "in generated text at least in the way i"
+  },
+  {
+   "t": 1159.6,
+   "d": 1.68,
+   "text": "was generating text"
+  },
+  {
+   "t": 1161.28,
+   "d": 1.52,
+   "text": "so hold on to that we'll get back to"
+  },
+  {
+   "t": 1162.8,
+   "d": 2.16,
+   "text": "that i'll show you how i use that um"
+  },
+  {
+   "t": 1164.96,
+   "d": 2.96,
+   "text": "but common prefixes are things like in"
+  },
+  {
+   "t": 1167.92,
+   "d": 0.56,
+   "text": "the"
+  },
+  {
+   "t": 1168.48,
+   "d": 2.64,
+   "text": "with the of the to the these are the"
+  },
+  {
+   "t": 1171.12,
+   "d": 1.12,
+   "text": "these are the prefixes"
+  },
+  {
+   "t": 1172.24,
+   "d": 2.0,
+   "text": "of order two that were most common in"
+  },
+  {
+   "t": 1174.24,
+   "d": 2.48,
+   "text": "the in the chain"
+  },
+  {
+   "t": 1176.72,
+   "d": 3.76,
+   "text": "okay so i i wrote a secret generator"
+  },
+  {
+   "t": 1180.48,
+   "d": 1.36,
+   "text": "that basically"
+  },
+  {
+   "t": 1181.84,
+   "d": 2.96,
+   "text": "it generates english secrets about the"
+  },
+  {
+   "t": 1184.8,
+   "d": 1.28,
+   "text": "location of the pistol"
+  },
+  {
+   "t": 1186.08,
+   "d": 2.24,
+   "text": "and that's all the secrets take the form"
+  },
+  {
+   "t": 1188.32,
+   "d": 1.2,
+   "text": "of distances from"
+  },
+  {
+   "t": 1189.52,
+   "d": 2.48,
+   "text": "static landmarks in the in the world of"
+  },
+  {
+   "t": 1192.0,
+   "d": 0.56,
+   "text": "cud"
+  },
+  {
+   "t": 1192.56,
+   "d": 1.6,
+   "text": "so there are things like eight pairs"
+  },
+  {
+   "t": 1194.16,
+   "d": 2.24,
+   "text": "things north of the six days stilt"
+  },
+  {
+   "t": 1196.4,
+   "d": 2.48,
+   "text": "east of joppa's some six parasance and a"
+  },
+  {
+   "t": 1198.88,
+   "d": 1.84,
+   "text": "parasang is a unit of measurement that's"
+  },
+  {
+   "t": 1200.72,
+   "d": 1.04,
+   "text": "equal to about"
+  },
+  {
+   "t": 1201.76,
+   "d": 3.2,
+   "text": "one world map tile so"
+  },
+  {
+   "t": 1204.96,
+   "d": 2.88,
+   "text": "um the secrets then are prefaced with"
+  },
+  {
+   "t": 1207.84,
+   "d": 1.68,
+   "text": "one of those cabin prefixes"
+  },
+  {
+   "t": 1209.52,
+   "d": 2.24,
+   "text": "to the in you know in the with the and"
+  },
+  {
+   "t": 1211.76,
+   "d": 1.52,
+   "text": "they take the form of like this is an"
+  },
+  {
+   "t": 1213.28,
+   "d": 1.52,
+   "text": "example of a secret to the masterwork"
+  },
+  {
+   "t": 1214.8,
+   "d": 2.08,
+   "text": "pistol i buried east of joppa some six"
+  },
+  {
+   "t": 1216.88,
+   "d": 1.76,
+   "text": "parasance"
+  },
+  {
+   "t": 1218.64,
+   "d": 2.16,
+   "text": "and then i embedded the secrets in the"
+  },
+  {
+   "t": 1220.8,
+   "d": 1.52,
+   "text": "corpus"
+  },
+  {
+   "t": 1222.32,
+   "d": 2.16,
+   "text": "and then right so i actually put them in"
+  },
+  {
+   "t": 1224.48,
+   "d": 1.84,
+   "text": "the corpus and then i added some special"
+  },
+  {
+   "t": 1226.32,
+   "d": 1.92,
+   "text": "processing rules to the chain so that"
+  },
+  {
+   "t": 1228.24,
+   "d": 2.08,
+   "text": "when the chain's getting constructed"
+  },
+  {
+   "t": 1230.32,
+   "d": 2.24,
+   "text": "it doesn't crack these secret secrets"
+  },
+  {
+   "t": 1232.56,
+   "d": 1.04,
+   "text": "apart into"
+  },
+  {
+   "t": 1233.6,
+   "d": 2.4,
+   "text": "into units of two words and instead"
+  },
+  {
+   "t": 1236.0,
+   "d": 0.88,
+   "text": "ingest them"
+  },
+  {
+   "t": 1236.88,
+   "d": 3.28,
+   "text": "as the whole secret so here's an example"
+  },
+  {
+   "t": 1240.16,
+   "d": 0.56,
+   "text": "of"
+  },
+  {
+   "t": 1240.72,
+   "d": 1.76,
+   "text": "you know the form it finally took i'll"
+  },
+  {
+   "t": 1242.48,
+   "d": 2.16,
+   "text": "just read the highlighted part"
+  },
+  {
+   "t": 1244.64,
+   "d": 2.0,
+   "text": "the ambrosia which belongs to the other"
+  },
+  {
+   "t": 1246.64,
+   "d": 1.68,
+   "text": "which gives different properties to the"
+  },
+  {
+   "t": 1248.32,
+   "d": 2.0,
+   "text": "famous revolver ruin of house eisner"
+  },
+  {
+   "t": 1250.32,
+   "d": 1.84,
+   "text": "which i hid somewhere north of joppa"
+  },
+  {
+   "t": 1252.16,
+   "d": 2.88,
+   "text": "about 12 paris things so you know a"
+  },
+  {
+   "t": 1255.04,
+   "d": 1.36,
+   "text": "savvy player can"
+  },
+  {
+   "t": 1256.4,
+   "d": 2.16,
+   "text": "go to the library do some research and"
+  },
+  {
+   "t": 1258.56,
+   "d": 2.0,
+   "text": "find a north south secret"
+  },
+  {
+   "t": 1260.56,
+   "d": 1.6,
+   "text": "cross-reference it with an east rest"
+  },
+  {
+   "t": 1262.16,
+   "d": 1.92,
+   "text": "secret and they're able to locate"
+  },
+  {
+   "t": 1264.08,
+   "d": 1.44,
+   "text": "you know narrow down the location of the"
+  },
+  {
+   "t": 1265.52,
+   "d": 1.68,
+   "text": "pistol to one of the world map tiles"
+  },
+  {
+   "t": 1267.2,
+   "d": 2.08,
+   "text": "which is just mind maps so like"
+  },
+  {
+   "t": 1269.28,
+   "d": 1.2,
+   "text": "you know an amount that you can"
+  },
+  {
+   "t": 1270.48,
+   "d": 2.32,
+   "text": "reasonably explore"
+  },
+  {
+   "t": 1272.8,
+   "d": 1.84,
+   "text": "so if we go back to our frequency"
+  },
+  {
+   "t": 1274.64,
+   "d": 2.24,
+   "text": "analysis we know a couple of things"
+  },
+  {
+   "t": 1276.88,
+   "d": 2.32,
+   "text": "that we can combine to get a formula for"
+  },
+  {
+   "t": 1279.2,
+   "d": 1.2,
+   "text": "you know that might"
+  },
+  {
+   "t": 1280.4,
+   "d": 2.4,
+   "text": "yield some useful information so we know"
+  },
+  {
+   "t": 1282.8,
+   "d": 1.6,
+   "text": "the size of an average book we know that"
+  },
+  {
+   "t": 1284.4,
+   "d": 2.56,
+   "text": "just from the way we generate books"
+  },
+  {
+   "t": 1286.96,
+   "d": 1.68,
+   "text": "we know how often one of our hooks"
+  },
+  {
+   "t": 1288.64,
+   "d": 1.84,
+   "text": "appears per book and"
+  },
+  {
+   "t": 1290.48,
+   "d": 2.4,
+   "text": "by hooks we mean the common prefixes"
+  },
+  {
+   "t": 1292.88,
+   "d": 1.28,
+   "text": "that we use like to the"
+  },
+  {
+   "t": 1294.16,
+   "d": 2.08,
+   "text": "in the and we know that because of our"
+  },
+  {
+   "t": 1296.24,
+   "d": 1.12,
+   "text": "observation that"
+  },
+  {
+   "t": 1297.36,
+   "d": 2.4,
+   "text": "however often it appears in the corpus"
+  },
+  {
+   "t": 1299.76,
+   "d": 1.36,
+   "text": "it's going to appear with about that"
+  },
+  {
+   "t": 1301.12,
+   "d": 1.92,
+   "text": "frequency in the generated text"
+  },
+  {
+   "t": 1303.04,
+   "d": 2.08,
+   "text": "we also know how many suffixes each of"
+  },
+  {
+   "t": 1305.12,
+   "d": 1.6,
+   "text": "those hooks have so if we look in the"
+  },
+  {
+   "t": 1306.72,
+   "d": 0.72,
+   "text": "chain"
+  },
+  {
+   "t": 1307.44,
+   "d": 2.24,
+   "text": "at one of the prefixes like in the we"
+  },
+  {
+   "t": 1309.68,
+   "d": 2.0,
+   "text": "could look at the how large its list is"
+  },
+  {
+   "t": 1311.68,
+   "d": 1.44,
+   "text": "of suffixes and it'll be"
+  },
+  {
+   "t": 1313.12,
+   "d": 2.72,
+   "text": "like you know some 100 maybe suffixes"
+  },
+  {
+   "t": 1315.84,
+   "d": 1.2,
+   "text": "and"
+  },
+  {
+   "t": 1317.04,
+   "d": 1.92,
+   "text": "by playing with those variables it turns"
+  },
+  {
+   "t": 1318.96,
+   "d": 1.36,
+   "text": "out we can control the seq"
+  },
+  {
+   "t": 1320.32,
+   "d": 3.12,
+   "text": "the frequency that um the secrets appear"
+  },
+  {
+   "t": 1323.44,
+   "d": 1.28,
+   "text": "in the book so"
+  },
+  {
+   "t": 1324.72,
+   "d": 2.4,
+   "text": "you know the math turns out to be you"
+  },
+  {
+   "t": 1327.12,
+   "d": 1.6,
+   "text": "know the desired number of secrets per"
+  },
+  {
+   "t": 1328.72,
+   "d": 0.56,
+   "text": "book"
+  },
+  {
+   "t": 1329.28,
+   "d": 1.92,
+   "text": "times the average number of suffixes per"
+  },
+  {
+   "t": 1331.2,
+   "d": 1.84,
+   "text": "hook over the number of hooks per book"
+  },
+  {
+   "t": 1333.04,
+   "d": 0.56,
+   "text": "and so"
+  },
+  {
+   "t": 1333.6,
+   "d": 2.4,
+   "text": "for caves of cotton the feel i was going"
+  },
+  {
+   "t": 1336.0,
+   "d": 1.44,
+   "text": "for i decided that"
+  },
+  {
+   "t": 1337.44,
+   "d": 2.48,
+   "text": "i wanted a secret on average about every"
+  },
+  {
+   "t": 1339.92,
+   "d": 2.08,
+   "text": "four books every four books you peruse"
+  },
+  {
+   "t": 1342.0,
+   "d": 1.2,
+   "text": "you could also find books in other"
+  },
+  {
+   "t": 1343.2,
+   "d": 1.6,
+   "text": "encounters outside of the library you"
+  },
+  {
+   "t": 1344.8,
+   "d": 1.2,
+   "text": "could find them on like"
+  },
+  {
+   "t": 1346.0,
+   "d": 2.0,
+   "text": "book merchants and scattered throughout"
+  },
+  {
+   "t": 1348.0,
+   "d": 2.16,
+   "text": "the world"
+  },
+  {
+   "t": 1350.16,
+   "d": 2.88,
+   "text": "okay so that was the proof of concept"
+  },
+  {
+   "t": 1353.04,
+   "d": 1.6,
+   "text": "some future work um"
+  },
+  {
+   "t": 1354.64,
+   "d": 1.92,
+   "text": "i would like to add more fluidity to the"
+  },
+  {
+   "t": 1356.56,
+   "d": 1.2,
+   "text": "secret generation"
+  },
+  {
+   "t": 1357.76,
+   "d": 2.16,
+   "text": "so right now you know because they have"
+  },
+  {
+   "t": 1359.92,
+   "d": 1.52,
+   "text": "the secrets have to take the form of"
+  },
+  {
+   "t": 1361.44,
+   "d": 1.28,
+   "text": "well-formed english"
+  },
+  {
+   "t": 1362.72,
+   "d": 2.56,
+   "text": "to get really meaningfully ingested by"
+  },
+  {
+   "t": 1365.28,
+   "d": 1.68,
+   "text": "the chain and then you know"
+  },
+  {
+   "t": 1366.96,
+   "d": 2.16,
+   "text": "spit out through by the generator i have"
+  },
+  {
+   "t": 1369.12,
+   "d": 1.76,
+   "text": "to spend a lot of time like crafting"
+  },
+  {
+   "t": 1370.88,
+   "d": 1.36,
+   "text": "what like this"
+  },
+  {
+   "t": 1372.24,
+   "d": 2.24,
+   "text": "the secret generator from the piece of"
+  },
+  {
+   "t": 1374.48,
+   "d": 2.16,
+   "text": "lore and you know there are all sorts of"
+  },
+  {
+   "t": 1376.64,
+   "d": 2.24,
+   "text": "procedural things in caves of cud that"
+  },
+  {
+   "t": 1378.88,
+   "d": 1.84,
+   "text": "could be secrets i would like to have"
+  },
+  {
+   "t": 1380.72,
+   "d": 2.0,
+   "text": "some generalized way to turn those into"
+  },
+  {
+   "t": 1382.72,
+   "d": 1.12,
+   "text": "secrets"
+  },
+  {
+   "t": 1383.84,
+   "d": 2.24,
+   "text": "um i would like to experiment with more"
+  },
+  {
+   "t": 1386.08,
+   "d": 1.12,
+   "text": "kapoor you know"
+  },
+  {
+   "t": 1387.2,
+   "d": 1.52,
+   "text": "put some more interesting books from"
+  },
+  {
+   "t": 1388.72,
+   "d": 1.84,
+   "text": "project gutenberg or maybe"
+  },
+  {
+   "t": 1390.56,
+   "d": 2.88,
+   "text": "um divide the the caves of cud text into"
+  },
+  {
+   "t": 1393.44,
+   "d": 0.64,
+   "text": "separate"
+  },
+  {
+   "t": 1394.08,
+   "d": 1.92,
+   "text": "corpora so that they could be a little"
+  },
+  {
+   "t": 1396.0,
+   "d": 1.6,
+   "text": "more thematic"
+  },
+  {
+   "t": 1397.6,
+   "d": 1.36,
+   "text": "i would also like i kind of like the"
+  },
+  {
+   "t": 1398.96,
+   "d": 1.6,
+   "text": "idea of generating thematic paragraphs"
+  },
+  {
+   "t": 1400.56,
+   "d": 0.4,
+   "text": "so"
+  },
+  {
+   "t": 1400.96,
+   "d": 1.52,
+   "text": "adding a little more sophistication"
+  },
+  {
+   "t": 1402.48,
+   "d": 1.6,
+   "text": "beyond just generating"
+  },
+  {
+   "t": 1404.08,
+   "d": 2.4,
+   "text": "x sentences to have a paragraph you know"
+  },
+  {
+   "t": 1406.48,
+   "d": 1.36,
+   "text": "do something so that i can have"
+  },
+  {
+   "t": 1407.84,
+   "d": 3.76,
+   "text": "more thematic paragraphs or books"
+  },
+  {
+   "t": 1411.6,
+   "d": 2.08,
+   "text": "uh and that's it i'm jason gribble at"
+  },
+  {
+   "t": 1413.68,
+   "d": 1.84,
+   "text": "tacomania on twitter are there any"
+  },
+  {
+   "t": 1415.52,
+   "d": 1.44,
+   "text": "questions"
+  },
+  {
+   "t": 1416.96,
+   "d": 2.24,
+   "text": "yes"
+  },
+  {
+   "t": 1426.8,
+   "d": 2.24,
+   "text": "it's just one so jim asked when you're"
+  },
+  {
+   "t": 1429.04,
+   "d": 0.96,
+   "text": "grabbing the"
+  },
+  {
+   "t": 1430.0,
+   "d": 2.24,
+   "text": "when you're grabbing the engrams um how"
+  },
+  {
+   "t": 1432.24,
+   "d": 1.36,
+   "text": "do you generate"
+  },
+  {
+   "t": 1433.6,
+   "d": 1.76,
+   "text": "when you generate the next words is it"
+  },
+  {
+   "t": 1435.36,
+   "d": 1.6,
+   "text": "always just one word at a time or is it"
+  },
+  {
+   "t": 1436.96,
+   "d": 0.88,
+   "text": "multiple words and"
+  },
+  {
+   "t": 1437.84,
+   "d": 1.36,
+   "text": "it's just the way i do it it's just one"
+  },
+  {
+   "t": 1439.2,
+   "d": 2.0,
+   "text": "word at a time"
+  },
+  {
+   "t": 1441.2,
+   "d": 2.4,
+   "text": "yes so you've talked about searching it"
+  },
+  {
+   "t": 1443.6,
+   "d": 1.12,
+   "text": "sounds like you had the titles"
+  },
+  {
+   "t": 1444.72,
+   "d": 2.8,
+   "text": "after the fact have you thought about um"
+  },
+  {
+   "t": 1447.52,
+   "d": 1.2,
+   "text": "like"
+  },
+  {
+   "t": 1448.72,
+   "d": 2.0,
+   "text": "waiting waiting words by the proximity"
+  },
+  {
+   "t": 1450.72,
+   "d": 2.4,
+   "text": "to other words somehow so that you could"
+  },
+  {
+   "t": 1453.12,
+   "d": 2.24,
+   "text": "uh design your title and then pick words"
+  },
+  {
+   "t": 1455.36,
+   "d": 1.2,
+   "text": "that are sort of related to the title to"
+  },
+  {
+   "t": 1456.56,
+   "d": 2.48,
+   "text": "be slightly"
+  },
+  {
+   "t": 1463.12,
+   "d": 1.92,
+   "text": "if i've thought about waiting the taking"
+  },
+  {
+   "t": 1465.04,
+   "d": 1.68,
+   "text": "the generating a title and then waiting"
+  },
+  {
+   "t": 1466.72,
+   "d": 1.52,
+   "text": "the words that appear in the title to"
+  },
+  {
+   "t": 1468.24,
+   "d": 0.48,
+   "text": "sort of"
+  },
+  {
+   "t": 1468.72,
+   "d": 2.4,
+   "text": "see the text that comes in the book yeah"
+  },
+  {
+   "t": 1471.12,
+   "d": 1.28,
+   "text": "i mean um"
+  },
+  {
+   "t": 1472.4,
+   "d": 1.76,
+   "text": "i i had some thoughts around you know"
+  },
+  {
+   "t": 1474.16,
+   "d": 1.36,
+   "text": "just kind of we didn't get to that but"
+  },
+  {
+   "t": 1475.52,
+   "d": 1.52,
+   "text": "that's an interesting idea or doing the"
+  },
+  {
+   "t": 1477.04,
+   "d": 1.12,
+   "text": "opposite maybe like"
+  },
+  {
+   "t": 1478.16,
+   "d": 1.92,
+   "text": "generating some text and then generating"
+  },
+  {
+   "t": 1480.08,
+   "d": 1.28,
+   "text": "a title based on that text"
+  },
+  {
+   "t": 1481.36,
+   "d": 2.96,
+   "text": "that would be interesting too"
+  },
+  {
+   "t": 1485.12,
+   "d": 2.16,
+   "text": "either in your yep or in your corpus as"
+  },
+  {
+   "t": 1487.28,
+   "d": 1.12,
+   "text": "a meaningful"
+  },
+  {
+   "t": 1488.4,
+   "d": 3.28,
+   "text": "uh uh"
+  },
+  {
+   "t": 1491.68,
+   "d": 2.16,
+   "text": "so we have dial so the question was if i"
+  },
+  {
+   "t": 1493.84,
+   "d": 2.16,
+   "text": "considered dialogue in the game"
+  },
+  {
+   "t": 1496.0,
+   "d": 2.08,
+   "text": "or elsewhere as as meaningful in the"
+  },
+  {
+   "t": 1498.08,
+   "d": 1.52,
+   "text": "corpus so"
+  },
+  {
+   "t": 1499.6,
+   "d": 1.84,
+   "text": "are you so we do have dialogue because i"
+  },
+  {
+   "t": 1501.44,
+   "d": 1.44,
+   "text": "use the dialer are you asking"
+  },
+  {
+   "t": 1502.88,
+   "d": 2.96,
+   "text": "if it was meaningful did you put"
+  },
+  {
+   "t": 1505.84,
+   "d": 1.76,
+   "text": "dialogue in your purpose"
+  },
+  {
+   "t": 1507.6,
+   "d": 2.08,
+   "text": "and did you generate dialogue for using"
+  },
+  {
+   "t": 1509.68,
+   "d": 0.96,
+   "text": "the game"
+  },
+  {
+   "t": 1510.64,
+   "d": 2.08,
+   "text": "oh okay yeah so i might not have"
+  },
+  {
+   "t": 1512.72,
+   "d": 1.04,
+   "text": "listened but we did"
+  },
+  {
+   "t": 1513.76,
+   "d": 2.72,
+   "text": "use the games dialogue npc dialogue yeah"
+  },
+  {
+   "t": 1516.48,
+   "d": 0.64,
+   "text": "i did"
+  },
+  {
+   "t": 1517.12,
+   "d": 2.8,
+   "text": "to put into the corpus we didn't then"
+  },
+  {
+   "t": 1519.92,
+   "d": 0.88,
+   "text": "use"
+  },
+  {
+   "t": 1520.8,
+   "d": 2.24,
+   "text": "the generator to generate dialogue we"
+  },
+  {
+   "t": 1523.04,
+   "d": 1.44,
+   "text": "haven't done that yet the dialogue is"
+  },
+  {
+   "t": 1524.48,
+   "d": 1.44,
+   "text": "all pretty like handwritten so"
+  },
+  {
+   "t": 1525.92,
+   "d": 2.24,
+   "text": "um but the dialogue contains some"
+  },
+  {
+   "t": 1528.16,
+   "d": 1.2,
+   "text": "interesting"
+  },
+  {
+   "t": 1529.36,
+   "d": 1.76,
+   "text": "um information about the game and it's"
+  },
+  {
+   "t": 1531.12,
+   "d": 1.2,
+   "text": "also interesting because it's from the"
+  },
+  {
+   "t": 1532.32,
+   "d": 1.6,
+   "text": "perspective of people who live in the"
+  },
+  {
+   "t": 1533.92,
+   "d": 0.64,
+   "text": "world"
+  },
+  {
+   "t": 1534.56,
+   "d": 2.72,
+   "text": "and that often makes for good um"
+  },
+  {
+   "t": 1537.28,
+   "d": 1.68,
+   "text": "generated texts"
+  },
+  {
+   "t": 1538.96,
+   "d": 4.88,
+   "text": "yeah yes"
+  },
+  {
+   "t": 1553.84,
+   "d": 3.2,
+   "text": "well it wouldn't so to"
+  },
+  {
+   "t": 1557.04,
+   "d": 3.12,
+   "text": "okay so the question was if i'm using if"
+  },
+  {
+   "t": 1560.16,
+   "d": 0.72,
+   "text": "i'm using"
+  },
+  {
+   "t": 1560.88,
+   "d": 3.04,
+   "text": "um dialogue as part of the corpus then"
+  },
+  {
+   "t": 1563.92,
+   "d": 1.84,
+   "text": "there's the possibility that if"
+  },
+  {
+   "t": 1565.76,
+   "d": 1.68,
+   "text": "mpc says something or maybe just the way"
+  },
+  {
+   "t": 1567.44,
+   "d": 1.76,
+   "text": "that chain or you know the generator"
+  },
+  {
+   "t": 1569.2,
+   "d": 1.04,
+   "text": "combines text"
+  },
+  {
+   "t": 1570.24,
+   "d": 2.8,
+   "text": "that i'll give some false information um"
+  },
+  {
+   "t": 1573.04,
+   "d": 0.96,
+   "text": "the i mean"
+  },
+  {
+   "t": 1574.0,
+   "d": 1.68,
+   "text": "the way it turns out is that the false"
+  },
+  {
+   "t": 1575.68,
+   "d": 1.52,
+   "text": "information it gives is like it'll say"
+  },
+  {
+   "t": 1577.2,
+   "d": 2.08,
+   "text": "something up completely absurd like the"
+  },
+  {
+   "t": 1579.28,
+   "d": 2.16,
+   "text": "ruin of house eisner is like a"
+  },
+  {
+   "t": 1581.44,
+   "d": 1.52,
+   "text": "floating butterfly or something like"
+  },
+  {
+   "t": 1582.96,
+   "d": 1.92,
+   "text": "it'll just say it's it's rare for it to"
+  },
+  {
+   "t": 1584.88,
+   "d": 1.2,
+   "text": "generate something that could be"
+  },
+  {
+   "t": 1586.08,
+   "d": 1.36,
+   "text": "interpreted as right"
+  },
+  {
+   "t": 1587.44,
+   "d": 3.6,
+   "text": "and actually be wrong um so yeah we i"
+  },
+  {
+   "t": 1591.04,
+   "d": 0.4,
+   "text": "didn't"
+  },
+  {
+   "t": 1591.44,
+   "d": 1.52,
+   "text": "i didn't give as much consideration to"
+  },
+  {
+   "t": 1592.96,
+   "d": 1.84,
+   "text": "that but i also i mean i kind of like"
+  },
+  {
+   "t": 1594.8,
+   "d": 1.76,
+   "text": "the idea of some misinformation as long"
+  },
+  {
+   "t": 1596.56,
+   "d": 1.44,
+   "text": "as it doesn't look too much like the"
+  },
+  {
+   "t": 1598.0,
+   "d": 0.96,
+   "text": "right answer"
+  },
+  {
+   "t": 1598.96,
+   "d": 2.16,
+   "text": "um"
+  },
+  {
+   "t": 1604.32,
+   "d": 2.4,
+   "text": "uh i think most players so we added this"
+  },
+  {
+   "t": 1606.72,
+   "d": 1.36,
+   "text": "fairly recently because it's a pretty"
+  },
+  {
+   "t": 1608.08,
+   "d": 0.64,
+   "text": "new feature"
+  },
+  {
+   "t": 1608.72,
+   "d": 1.52,
+   "text": "we actually don't have the library in"
+  },
+  {
+   "t": 1610.24,
+   "d": 1.76,
+   "text": "yet but we do have procedural books that"
+  },
+  {
+   "t": 1612.0,
+   "d": 1.76,
+   "text": "you could find in various encounters"
+  },
+  {
+   "t": 1613.76,
+   "d": 1.28,
+   "text": "the players are just like kind of"
+  },
+  {
+   "t": 1615.04,
+   "d": 1.52,
+   "text": "confused they like read it and like"
+  },
+  {
+   "t": 1616.56,
+   "d": 1.44,
+   "text": "don't know what to say because the the"
+  },
+  {
+   "t": 1618.0,
+   "d": 2.72,
+   "text": "lore of the world itself is sort of like"
+  },
+  {
+   "t": 1620.72,
+   "d": 1.6,
+   "text": "there's a lot it's shrouded in mystery"
+  },
+  {
+   "t": 1622.32,
+   "d": 1.52,
+   "text": "and so people are reading these texts"
+  },
+  {
+   "t": 1623.84,
+   "d": 1.6,
+   "text": "and like what is going on"
+  },
+  {
+   "t": 1625.44,
+   "d": 2.88,
+   "text": "that's been that's mostly been thought"
+  },
+  {
+   "t": 1628.32,
+   "d": 0.88,
+   "text": "okay"
+  },
+  {
+   "t": 1629.2,
+   "d": 12.64,
+   "text": "thank you"
+  },
+  {
+   "t": 1647.84,
+   "d": 2.08,
+   "text": "you"
+  }
+ ]
+}

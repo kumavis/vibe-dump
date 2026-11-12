@@ -1,0 +1,2566 @@
+{
+ "id": "BjqZdMW8U9Q",
+ "url": "https://www.youtube.com/watch?v=BjqZdMW8U9Q",
+ "title": "Professor \"Prof\" Brown - Why do I even like roguelikes? An exploration of player motivation",
+ "speaker": "Professor \"Prof\" Brown",
+ "talk_title": "Why do I even like roguelikes? An exploration of player motivation",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 2129,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nProf has been a game designer in the industry for over a decade, working both in AAA (Insomniac, Bungie) and as an indie (Hyper Light Drifter). They love gameplay systems and mentoring mid career game designers.\n\nTheir talk is a personal deep dive in exploring why she like roguelikes in terms of player motivations, why some roguelikes stick to me like glue and others bounce off, and how we can think about what makes up a roguelike by their player-facing qualities. \n\nFollow them on Twitter: https://twitter.com/wertle\nQuantic Foundry Motivation Profile: https://apps.quanticfoundry.com/surveys/start/gamerprofile/\nSlide deck: https://drive.google.com/file/d/1DKxcMAWbIp-pyipVl9i0li1lxEfSm45C/view\nWill Lisa like *Hades*? https://docs.google.com/forms/d/e/1FAIpQLSelpyQV6eGVEfV9i66D0iDHX-NHOSrBN7hC03O_qRkTC9l2AA/viewform",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 28,
+   "title": "Defining the dissonance"
+  },
+  {
+   "start": 260,
+   "title": "Player motivation models"
+  },
+  {
+   "start": 455,
+   "title": "Action motivation"
+  },
+  {
+   "start": 750,
+   "title": "Mastery and strategy"
+  },
+  {
+   "start": 1035,
+   "title": "Achievement and progression"
+  },
+  {
+   "start": 1228,
+   "title": "Immersion and narrative"
+  },
+  {
+   "start": 1360,
+   "title": "Creativity and discovery"
+  },
+  {
+   "start": 1578,
+   "title": "Conclusion and Q&A"
+  },
+  {
+   "start": 1742,
+   "title": "Speaker Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 5236,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.82,
+   "d": 9.77,
+   "text": "I would like to introduce Lisa Brown who is a game designer in the decade working at AA"
+  },
+  {
+   "t": 10.59,
+   "d": 2.86,
+   "text": "and as an indy an games."
+  },
+  {
+   "t": 13.45,
+   "d": 5.04,
+   "text": "She loves game systems and mentoring mid-career game designers which means I ask talk to you"
+  },
+  {
+   "t": 18.49,
+   "d": 1.17,
+   "text": "later."
+  },
+  {
+   "t": 19.66,
+   "d": 2.36,
+   "text": "Welcome, Lisa."
+  },
+  {
+   "t": 22.02,
+   "d": 1.49,
+   "text": "It is fantastic to have you."
+  },
+  {
+   "t": 23.51,
+   "d": 3.79,
+   "text": "We will be playing a video and having time for questions after."
+  },
+  {
+   "t": 27.3,
+   "d": 1.0,
+   "text": "Take it away."
+  },
+  {
+   "t": 28.3,
+   "d": 1.0,
+   "text": "Oh, we are missing audio from this video."
+  },
+  {
+   "t": 29.3,
+   "d": 1.0,
+   "text": "Oh, it is going to work."
+  },
+  {
+   "t": 30.3,
+   "d": 1.0,
+   "text": "Thank you for coming to my talk."
+  },
+  {
+   "t": 31.3,
+   "d": 1.0,
+   "text": ">> My name is Lisa Brown and I have worked on many a game in my career and life."
+  },
+  {
+   "t": 32.3,
+   "d": 1.0,
+   "text": "In fact, I remember the first time I even heard the phrase Roguelike."
+  },
+  {
+   "t": 33.3,
+   "d": 1.0,
+   "text": "I had had always loved games and I was a fledge linking designer at the time."
+  },
+  {
+   "t": 34.3,
+   "d": 1.0,
+   "text": "I was curious to learn more and asked about what is Roguelike?"
+  },
+  {
+   "t": 35.3,
+   "d": 1.0,
+   "text": "What does it mean?"
+  },
+  {
+   "t": 36.3,
+   "d": 1.0,
+   "text": "Several folks explained it in several ways."
+  },
+  {
+   "t": 37.3,
+   "d": 1.0,
+   "text": "They said a Roguelike was a game that was really hard where you failed all of the time."
+  },
+  {
+   "t": 38.3,
+   "d": 1.0,
+   "text": ">> It is me again."
+  },
+  {
+   "t": 39.3,
+   "d": 1.0,
+   "text": "Your friendly emcee."
+  },
+  {
+   "t": 40.3,
+   "d": 1.0,
+   "text": "We are figuring this out for the first time."
+  },
+  {
+   "t": 41.3,
+   "d": 1.0,
+   "text": "You might have noticed it is super quiet."
+  },
+  {
+   "t": 42.3,
+   "d": 1.0,
+   "text": "We are going to try to tart again."
+  },
+  {
+   "t": 43.3,
+   "d": 1.0,
+   "text": ">> Greetings, friends."
+  },
+  {
+   "t": 44.3,
+   "d": 1.0,
+   "text": "Welcome to Roguelike Celebration and thank you for coming to tie mock why do I even like"
+  },
+  {
+   "t": 45.3,
+   "d": 1.0,
+   "text": "Roguelikes."
+  },
+  {
+   "t": 46.3,
+   "d": 1.0,
+   "text": "My name is Lisa Brown and I am a game designer."
+  },
+  {
+   "t": 47.3,
+   "d": 1.58,
+   "text": "I have worked on many a game in my career, mostly action combat games, and I have played"
+  },
+  {
+   "t": 48.88,
+   "d": 1.5,
+   "text": "many a game in my life."
+  },
+  {
+   "t": 50.38,
+   "d": 2.38,
+   "text": "I love all sorts of games."
+  },
+  {
+   "t": 52.76,
+   "d": 5.43,
+   "text": "Roguelikes, however, are a special love of mine and something I would consider a pretty"
+  },
+  {
+   "t": 58.19,
+   "d": 2.83,
+   "text": "recent love at that."
+  },
+  {
+   "t": 61.02,
+   "d": 3.43,
+   "text": "In fact, I remember the first time I even heard the phrase Roguelike."
+  },
+  {
+   "t": 64.45,
+   "d": 5.66,
+   "text": "I had always loved games and I was a fledge link game designer at the time so I was curious"
+  },
+  {
+   "t": 70.11,
+   "d": 7.89,
+   "text": "to learn more and I asked around and several of the different folks explained it to me"
+  },
+  {
+   "t": 78.0,
+   "d": 1.21,
+   "text": "in similar ways."
+  },
+  {
+   "t": 79.21,
+   "d": 1.0,
+   "text": "Here is what they said."
+  },
+  {
+   "t": 80.21,
+   "d": 5.52,
+   "text": "They said a Roguelike was a game that was really hard where you failed all of the time,"
+  },
+  {
+   "t": 85.73,
+   "d": 6.42,
+   "text": "one where you explored procedural and random dudgeons and there was permadeath so if you"
+  },
+  {
+   "t": 92.15,
+   "d": 4.67,
+   "text": "died you lost all your progress and had to start all over."
+  },
+  {
+   "t": 96.82,
+   "d": 3.65,
+   "text": "I remember listening to this at the time and thinking wow."
+  },
+  {
+   "t": 100.47,
+   "d": 2.47,
+   "text": "That sounds variable -- terrible."
+  },
+  {
+   "t": 102.94,
+   "d": 6.26,
+   "text": "I wrote off Roguelikes for years as something I probably wouldn't like."
+  },
+  {
+   "t": 109.2,
+   "d": 2.66,
+   "text": "I didn't try any."
+  },
+  {
+   "t": 111.86,
+   "d": 3.94,
+   "text": "Fast forward to now and I turns out I really, really like Roguelikes and in fact they are"
+  },
+  {
+   "t": 115.8,
+   "d": 3.85,
+   "text": "one of my favorite type of games."
+  },
+  {
+   "t": 119.65,
+   "d": 5.4,
+   "text": "Nuclear thrown, slay the spire, and loot rascals are three of my favorites and the ones that"
+  },
+  {
+   "t": 125.05,
+   "d": 1.66,
+   "text": "got me."
+  },
+  {
+   "t": 126.71,
+   "d": 2.4,
+   "text": "I put many hours into them."
+  },
+  {
+   "t": 129.11,
+   "d": 5.95,
+   "text": "They kept me way up past my bed time with just one more run type of situation and I"
+  },
+  {
+   "t": 135.06,
+   "d": 1.74,
+   "text": "love them a lot."
+  },
+  {
+   "t": 136.8,
+   "d": 1.81,
+   "text": "Why did this dissonance happen?"
+  },
+  {
+   "t": 138.61,
+   "d": 6.47,
+   "text": "Why was there this opposite reaction when these games were described to me?"
+  },
+  {
+   "t": 145.08,
+   "d": 1.22,
+   "text": "That's the goal of the talk."
+  },
+  {
+   "t": 146.3,
+   "d": 3.1,
+   "text": "I want to answer several questions."
+  },
+  {
+   "t": 149.4,
+   "d": 9.1,
+   "text": "Why do I like Roguelikes and why are they so sticky for me?"
+  },
+  {
+   "t": 158.5,
+   "d": 3.14,
+   "text": "There are ones that really grab me."
+  },
+  {
+   "t": 161.64,
+   "d": 4.42,
+   "text": "Second, why do I like some Roguelikes but not others?"
+  },
+  {
+   "t": 166.06,
+   "d": 5.45,
+   "text": "Why, for example, do I have hundreds of hours put in a nuclear thrown but enter the gungeon"
+  },
+  {
+   "t": 171.51,
+   "d": 2.9,
+   "text": "just bounced off me."
+  },
+  {
+   "t": 174.41,
+   "d": 4.54,
+   "text": "And number three, is there a way I could have described these games better to help past"
+  },
+  {
+   "t": 178.95,
+   "d": 4.7,
+   "text": "Lisa bet a better understanding of the game experience?"
+  },
+  {
+   "t": 183.65,
+   "d": 8.21,
+   "text": "This is an introspective journey and hopefully you will learn something along the way."
+  },
+  {
+   "t": 191.86,
+   "d": 6.84,
+   "text": "Awhile back on Twitter, I went and asked Roguelike players to describe what they have heard about"
+  },
+  {
+   "t": 198.7,
+   "d": 4.94,
+   "text": "a Roguelike to someone who had never played."
+  },
+  {
+   "t": 203.64,
+   "d": 7.28,
+   "text": "I encouraged them to describe it in their own wordsment"
+  },
+  {
+   "t": 210.92,
+   "d": 2.11,
+   "text": "run-based having to try again"
+  },
+  {
+   "t": 213.03,
+   "d": 7.7,
+   "text": "and again, randomness, procedural generation, perma death/only having one chance, some people"
+  },
+  {
+   "t": 220.73,
+   "d": 7.61,
+   "text": "mentioned a limited carryover progression, and exploring the unknown came up a lot."
+  },
+  {
+   "t": 228.34,
+   "d": 2.0,
+   "text": "And here is the thing."
+  },
+  {
+   "t": 230.34,
+   "d": 7.65,
+   "text": "These descriptions were focusing on the mechanics and features of the game themselves but that"
+  },
+  {
+   "t": 237.99,
+   "d": 1.88,
+   "text": "wasn't enough for past Lisa."
+  },
+  {
+   "t": 239.87,
+   "d": 1.61,
+   "text": "There was a dissonance there."
+  },
+  {
+   "t": 241.48,
+   "d": 8.86,
+   "text": "For this exploration instead I am going to be looking at players and I want to understand"
+  },
+  {
+   "t": 250.34,
+   "d": 6.76,
+   "text": "the motivations of the players who like roguelikes and see if there is something that explains"
+  },
+  {
+   "t": 257.1,
+   "d": 5.78,
+   "text": "why I love these games."
+  },
+  {
+   "t": 262.88,
+   "d": 3.96,
+   "text": "I am a professional game designer so player motivations come up in my industry."
+  },
+  {
+   "t": 266.84,
+   "d": 6.78,
+   "text": "This is ways of thinking about why players play games and what motivations are they fulfilling"
+  },
+  {
+   "t": 273.62,
+   "d": 1.37,
+   "text": "when they play games."
+  },
+  {
+   "t": 274.99,
+   "d": 5.59,
+   "text": "There is lots of different models but today I will focus on the quantic foundry gamer"
+  },
+  {
+   "t": 280.58,
+   "d": 2.4,
+   "text": "motivation model."
+  },
+  {
+   "t": 282.98,
+   "d": 9.03,
+   "text": "It isn't perfect but does a good job of defining player motivations."
+  },
+  {
+   "t": 292.01,
+   "d": 2.99,
+   "text": "They break it down into six primaries."
+  },
+  {
+   "t": 295.0,
+   "d": 7.81,
+   "text": "Action, social, mastery, achievement, immersion, creativity and there is two secondary motivations"
+  },
+  {
+   "t": 302.81,
+   "d": 1.75,
+   "text": "for each one."
+  },
+  {
+   "t": 304.56,
+   "d": 7.0,
+   "text": "For example, if you have a high social score then those players are motivated by playing"
+  },
+  {
+   "t": 311.56,
+   "d": 5.92,
+   "text": "with other humans and maybe they have a particularly high community score, they might prefer more"
+  },
+  {
+   "t": 317.48,
+   "d": 5.24,
+   "text": "cooperative games or games with a robust clan system and for them that's a big reason why"
+  },
+  {
+   "t": 322.72,
+   "d": 2.74,
+   "text": "they even play games."
+  },
+  {
+   "t": 325.46,
+   "d": 2.16,
+   "text": "I went on and took their survey."
+  },
+  {
+   "t": 327.62,
+   "d": 6.15,
+   "text": "It is a, you know, a self-directed survey and like if you have taken a big 0 or ocean"
+  },
+  {
+   "t": 333.77,
+   "d": 1.0,
+   "text": "profile."
+  },
+  {
+   "t": 334.77,
+   "d": 2.18,
+   "text": "It is setup in a similar way."
+  },
+  {
+   "t": 336.95,
+   "d": 5.51,
+   "text": "You answer questions about preferences and give them answers of games you like and so"
+  },
+  {
+   "t": 342.46,
+   "d": 1.37,
+   "text": "on."
+  },
+  {
+   "t": 343.83,
+   "d": 2.56,
+   "text": "Here are my scores."
+  },
+  {
+   "t": 346.39,
+   "d": 2.14,
+   "text": "These are percentiles, basically."
+  },
+  {
+   "t": 348.53,
+   "d": 5.42,
+   "text": "It is a percentile rank across the motivations."
+  },
+  {
+   "t": 353.95,
+   "d": 6.66,
+   "text": "That means these are basically how strong your motivations are relative to other gamers."
+  },
+  {
+   "t": 360.61,
+   "d": 5.09,
+   "text": "One thing I don't like about how this is displayed is if you look at this what do you think is"
+  },
+  {
+   "t": 365.7,
+   "d": 1.51,
+   "text": "my most extreme scores?"
+  },
+  {
+   "t": 367.21,
+   "d": 7.75,
+   "text": "At a glance, you think action is high, excitement, challenge and completion are up there."
+  },
+  {
+   "t": 374.96,
+   "d": 4.66,
+   "text": "But in truth, my most extreme scores are the ones that are really low."
+  },
+  {
+   "t": 379.62,
+   "d": 3.69,
+   "text": "Immersion, creativity, story, power and strategy."
+  },
+  {
+   "t": 383.31,
+   "d": 4.11,
+   "text": "The reason is these scores, this is a spectrum."
+  },
+  {
+   "t": 387.42,
+   "d": 3.69,
+   "text": "If you have a low score in something, it doesn't mean you lack that thing."
+  },
+  {
+   "t": 391.11,
+   "d": 3.56,
+   "text": "It just means a different end of the spectrum motivates you."
+  },
+  {
+   "t": 394.67,
+   "d": 7.54,
+   "text": "I redid my visualization here like this to show how they fall on a spectrum."
+  },
+  {
+   "t": 402.21,
+   "d": 4.46,
+   "text": "Basically, if you are in the middle it is like oh, yeah, take it or leave it."
+  },
+  {
+   "t": 406.67,
+   "d": 1.88,
+   "text": "I could go one way or the other."
+  },
+  {
+   "t": 408.55,
+   "d": 3.26,
+   "text": "The further you are to either end the stronger your opinion is."
+  },
+  {
+   "t": 411.81,
+   "d": 5.34,
+   "text": "If you are a00 -- a hundred action and if that game is not pumping adrenaline into your"
+  },
+  {
+   "t": 417.15,
+   "d": 1.88,
+   "text": "veins you are not into it."
+  },
+  {
+   "t": 419.03,
+   "d": 6.21,
+   "text": "But zero action any stress in the game and you are not interested in it."
+  },
+  {
+   "t": 425.24,
+   "d": 2.59,
+   "text": "Very extreme scores."
+  },
+  {
+   "t": 427.83,
+   "d": 7.98,
+   "text": "When I looked at the scores I had a hypothesis that the action, mastery and achievement motivations"
+  },
+  {
+   "t": 435.81,
+   "d": 2.43,
+   "text": "would probably be most relevant to my love of Roguelikes."
+  },
+  {
+   "t": 438.24,
+   "d": 8.57,
+   "text": "I am going to skip talking about social because that's more to do with multiplayer and I will"
+  },
+  {
+   "t": 446.81,
+   "d": 3.04,
+   "text": "go into those low-scoring motivations in the talk later."
+  },
+  {
+   "t": 449.85,
+   "d": 6.51,
+   "text": "I will start with action, mastery and achievement and see what we see."
+  },
+  {
+   "t": 456.36,
+   "d": 9.53,
+   "text": "First up is action which its secondary motivations excitement and destruction."
+  },
+  {
+   "t": 465.89,
+   "d": 5.42,
+   "text": "I have a slightly high action score meaning I like jumping into the fray and being surrounded"
+  },
+  {
+   "t": 471.31,
+   "d": 5.34,
+   "text": "by trauma and I appreciate calmer and slower space games and I have a slight preference"
+  },
+  {
+   "t": 476.65,
+   "d": 4.1,
+   "text": "for the dramatic stuff."
+  },
+  {
+   "t": 480.75,
+   "d": 5.19,
+   "text": "I like fast-pace games, intensity, and have a desire to be surprised."
+  },
+  {
+   "t": 485.94,
+   "d": 3.1,
+   "text": "Destruction is pretty in the middle."
+  },
+  {
+   "t": 489.04,
+   "d": 1.28,
+   "text": "I am neutral on chaos."
+  },
+  {
+   "t": 490.32,
+   "d": 3.93,
+   "text": "I appreciate a well-done explosion but I can take it or leave it."
+  },
+  {
+   "t": 494.25,
+   "d": 4.93,
+   "text": "It isn't a huge factor in deciding what games I want to play."
+  },
+  {
+   "t": 499.18,
+   "d": 4.22,
+   "text": "And this all tracks really well with nuclear thrown of cous course because nuclear thrown"
+  },
+  {
+   "t": 503.4,
+   "d": 5.05,
+   "text": "is a high action Twitch thrown game and guns and explosions."
+  },
+  {
+   "t": 508.45,
+   "d": 3.26,
+   "text": "This makes sense here."
+  },
+  {
+   "t": 511.71,
+   "d": 1.36,
+   "text": "What about these two?"
+  },
+  {
+   "t": 513.07,
+   "d": 5.37,
+   "text": "Slay the spire and loot rascals are turn-based games and not action."
+  },
+  {
+   "t": 518.44,
+   "d": 5.64,
+   "text": "But even though they are not pure action these games have qualities that appear to the action"
+  },
+  {
+   "t": 524.08,
+   "d": 2.05,
+   "text": "motivation."
+  },
+  {
+   "t": 526.13,
+   "d": 7.14,
+   "text": "In particular, these things -- drama, a fast pace like a fast failure loop, and a feeling"
+  },
+  {
+   "t": 533.27,
+   "d": 7.09,
+   "text": "of intensity, and an opportunity to improvise and be surprised."
+  },
+  {
+   "t": 540.36,
+   "d": 4.21,
+   "text": "For drama, what I mean is in these games the stakes are really against you."
+  },
+  {
+   "t": 544.57,
+   "d": 1.99,
+   "text": "Lethality is really high."
+  },
+  {
+   "t": 546.56,
+   "d": 1.18,
+   "text": "There is no freebies."
+  },
+  {
+   "t": 547.74,
+   "d": 5.59,
+   "text": "Any enemy can be dangerous, even the humble maggot and you often feel overwhelmed and"
+  },
+  {
+   "t": 553.33,
+   "d": 4.2,
+   "text": "like you have to be on your toes and that's very satisfying to me."
+  },
+  {
+   "t": 557.53,
+   "d": 6.29,
+   "text": "For pacing, I find these games have fast failure loops meaning the speed at when you get back"
+  },
+  {
+   "t": 563.82,
+   "d": 4.24,
+   "text": "into the game after a failure is very fast."
+  },
+  {
+   "t": 568.06,
+   "d": 2.68,
+   "text": "Slower failure loops make a game less sticky for me."
+  },
+  {
+   "t": 570.74,
+   "d": 3.88,
+   "text": "I think this is one of the reasons enter the guneon didn't stick for me."
+  },
+  {
+   "t": 574.62,
+   "d": 6.03,
+   "text": "If you compare the time it takes from when you die to get back into the action here is"
+  },
+  {
+   "t": 580.65,
+   "d": 9.3,
+   "text": "nuclear thrown."
+  },
+  {
+   "t": 589.95,
+   "d": 1.0,
+   "text": "And you are in."
+  },
+  {
+   "t": 590.95,
+   "d": 3.23,
+   "text": "That's like five seconds."
+  },
+  {
+   "t": 594.18,
+   "d": 10.22,
+   "text": "Enter the Guneon has a lot long performance at death."
+  },
+  {
+   "t": 604.4,
+   "d": 7.21,
+   "text": "-- longer."
+  },
+  {
+   "t": 611.61,
+   "d": 2.7,
+   "text": "That's at least over 10 seconds."
+  },
+  {
+   "t": 614.31,
+   "d": 2.61,
+   "text": "That for me makes the game less sticky."
+  },
+  {
+   "t": 616.92,
+   "d": 4.02,
+   "text": "I need that fast-loop."
+  },
+  {
+   "t": 620.94,
+   "d": 2.02,
+   "text": "This isn't limited to Roguelikes to me."
+  },
+  {
+   "t": 622.96,
+   "d": 5.65,
+   "text": "This is why I love games like celeste where I have enough time to register what I did"
+  },
+  {
+   "t": 628.61,
+   "d": 13.11,
+   "text": "wrong, what I need to do, and I am back in the action."
+  },
+  {
+   "t": 641.72,
+   "d": 3.03,
+   "text": "The intensity is the outcome of your decisions."
+  },
+  {
+   "t": 644.75,
+   "d": 5.7,
+   "text": "Nuclear thrown is an action game and you are always seeing the resultoffs the decision"
+  },
+  {
+   "t": 650.45,
+   "d": 1.18,
+   "text": "you make."
+  },
+  {
+   "t": 651.63,
+   "d": 7.74,
+   "text": "For something like slay the spire, this happens when it pop up, I see my hand and register"
+  },
+  {
+   "t": 659.37,
+   "d": 2.48,
+   "text": "if I am in trouble."
+  },
+  {
+   "t": 661.85,
+   "d": 6.16,
+   "text": "In loot rascals it is watching it play out and hoping I made the right engagement."
+  },
+  {
+   "t": 668.01,
+   "d": 10.93,
+   "text": "In the original Rogue there is not enough"
+  },
+  {
+   "t": 678.94,
+   "d": 4.06,
+   "text": "intensity watching the outcome."
+  },
+  {
+   "t": 683.0,
+   "d": 5.03,
+   "text": "When you are in combat, you have a text description of what's going on but you have to pay attention"
+  },
+  {
+   "t": 688.03,
+   "d": 6.22,
+   "text": "to your health to really understand like what's happening and how in trouble you are."
+  },
+  {
+   "t": 694.25,
+   "d": 2.21,
+   "text": "It doesn't register as quickly for me."
+  },
+  {
+   "t": 696.46,
+   "d": 4.29,
+   "text": "I think that's why this game bounced for me."
+  },
+  {
+   "t": 700.75,
+   "d": 4.81,
+   "text": "And lastly, there is inprovisation and the desire to be surprised."
+  },
+  {
+   "t": 705.56,
+   "d": 7.36,
+   "text": "This is where the randomness can fulfill this."
+  },
+  {
+   "t": 712.92,
+   "d": 6.17,
+   "text": "I want to emphasize and react."
+  },
+  {
+   "t": 719.09,
+   "d": 5.0,
+   "text": "If I get a relic in the middle of my run that can make me rethink the entire build that's"
+  },
+  {
+   "t": 724.09,
+   "d": 3.95,
+   "text": "a satisfying experiment."
+  },
+  {
+   "t": 728.04,
+   "d": 6.18,
+   "text": "Let's add action motivations to the ongoing list of Lisa's Roguelike motivation list."
+  },
+  {
+   "t": 734.22,
+   "d": 5.59,
+   "text": "Drama where the stakes are not in your favor."
+  },
+  {
+   "t": 739.81,
+   "d": 4.37,
+   "text": "An intensity in the performance of seeing the outcome of your decisions."
+  },
+  {
+   "t": 744.18,
+   "d": 6.46,
+   "text": "The desire to be surprised and employ -- improvise to the situation at hand."
+  },
+  {
+   "t": 750.64,
+   "d": 4.7,
+   "text": "Next up is mastery and challenge and strategy."
+  },
+  {
+   "t": 755.34,
+   "d": 6.56,
+   "text": "I felt like these descriptions are in tune with Roguelikes because it is about challenge"
+  },
+  {
+   "t": 761.9,
+   "d": 6.06,
+   "text": "and progression but digging into my own results yielded a couple surprises."
+  },
+  {
+   "t": 767.96,
+   "d": 8.13,
+   "text": "My mastery motivation is middle low meaning I prefer to be spontaneous but don't mind"
+  },
+  {
+   "t": 776.09,
+   "d": 1.67,
+   "text": "death and complexity."
+  },
+  {
+   "t": 777.76,
+   "d": 7.25,
+   "text": "My challenge score is slightly above the middle meaning I like a mix of skill-based learning"
+  },
+  {
+   "t": 785.01,
+   "d": 3.05,
+   "text": "but also quick to learn and straightforward."
+  },
+  {
+   "t": 788.06,
+   "d": 8.41,
+   "text": "And I have an ex tremely low strategy play with reactive game line and low cognitive"
+  },
+  {
+   "t": 796.47,
+   "d": 3.49,
+   "text": "load."
+  },
+  {
+   "t": 799.96,
+   "d": 10.54,
+   "text": "React decision making challenge a portion of short time horizons."
+  },
+  {
+   "t": 810.5,
+   "d": 8.96,
+   "text": "With react decisions, this is how the desire for spontaneity and the depth of mastery mixes"
+  },
+  {
+   "t": 819.46,
+   "d": 1.0,
+   "text": "together."
+  },
+  {
+   "t": 820.46,
+   "d": 6.22,
+   "text": "I prefer Roguelikes that give me a small number of meaningful decisions to make."
+  },
+  {
+   "t": 826.68,
+   "d": 6.07,
+   "text": "Nuclear thrown is when I level up, beat a level, and get to choose mean a mutation."
+  },
+  {
+   "t": 832.75,
+   "d": 6.7,
+   "text": "In slay the spire it is me choosing my card at the end of com about."
+  },
+  {
+   "t": 839.45,
+   "d": 4.71,
+   "text": "And in loot rascals it is choosing and fiddling with the layout of my attack and defense cards"
+  },
+  {
+   "t": 844.16,
+   "d": 1.58,
+   "text": "every time I get a new drop."
+  },
+  {
+   "t": 845.74,
+   "d": 5.03,
+   "text": "This is enough to make me feel like I am improviseing and reacting to the current situation and"
+  },
+  {
+   "t": 850.77,
+   "d": 5.52,
+   "text": "making strategic choices without a lot of cognitive load."
+  },
+  {
+   "t": 856.29,
+   "d": 5.72,
+   "text": "Games like FTL bounced off me because they have a higher cognitive load and I can't keep"
+  },
+  {
+   "t": 862.01,
+   "d": 3.89,
+   "text": "up with that because my strategy score is low."
+  },
+  {
+   "t": 865.9,
+   "d": 4.8,
+   "text": "These are great games but this is the reason they didn't stick for me."
+  },
+  {
+   "t": 870.7,
+   "d": 5.05,
+   "text": "My middling challenge score means I appreciate challenge but only if it serves my goals."
+  },
+  {
+   "t": 875.75,
+   "d": 4.66,
+   "text": "I don't like difficulty for difficulty sake but I am happy to put in the work to master"
+  },
+  {
+   "t": 880.41,
+   "d": 2.35,
+   "text": "a challenge if the brings me closer to my goal."
+  },
+  {
+   "t": 882.76,
+   "d": 5.35,
+   "text": "For example, in slay the spire, I had zero interest in doing ascensions once I learned"
+  },
+  {
+   "t": 888.11,
+   "d": 3.04,
+   "text": "you don't get any benefit out of them."
+  },
+  {
+   "t": 891.15,
+   "d": 5.82,
+   "text": "I only did ascension one because you get more elites and more helpful relics."
+  },
+  {
+   "t": 896.97,
+   "d": 3.54,
+   "text": "I don't feel like I am missing out by not trying to get to ascension 20."
+  },
+  {
+   "t": 900.51,
+   "d": 3.87,
+   "text": "That doesn't fulfill my motivations."
+  },
+  {
+   "t": 904.38,
+   "d": 5.1,
+   "text": "For short time horizons this comes from my low strategy score and it is pretty key in"
+  },
+  {
+   "t": 909.48,
+   "d": 3.25,
+   "text": "distinguishing Roguelikes I love and Roguelikes I don't."
+  },
+  {
+   "t": 912.73,
+   "d": 5.76,
+   "text": "A short time horizon means I don't have to wait too long to see the results of my decision"
+  },
+  {
+   "t": 918.49,
+   "d": 5.18,
+   "text": "and it means I can understand the end goal easily so I can judge my progress along it."
+  },
+  {
+   "t": 923.67,
+   "d": 6.93,
+   "text": "With a lower cognitive load, I don't want to hold too much in my brain at once."
+  },
+  {
+   "t": 930.6,
+   "d": 9.23,
+   "text": "A long time horizon example would be 4X game strategy games like the crusader king series."
+  },
+  {
+   "t": 939.83,
+   "d": 6.17,
+   "text": "Games where the results of your decisions take a long time to cook and play out."
+  },
+  {
+   "t": 946.0,
+   "d": 5.08,
+   "text": "If you have a high strategy score, you probably like these games but I can't, for me, my score"
+  },
+  {
+   "t": 951.08,
+   "d": 3.38,
+   "text": "is so low I can't even play a 4X game."
+  },
+  {
+   "t": 954.46,
+   "d": 1.89,
+   "text": "It is so intense."
+  },
+  {
+   "t": 956.35,
+   "d": 5.23,
+   "text": "And the Roguelikes I love, the time horizons are ultra short and clearly visible."
+  },
+  {
+   "t": 961.58,
+   "d": 4.39,
+   "text": "When you die in nuclear thrown you see exactly where you are along the track, how close you"
+  },
+  {
+   "t": 965.97,
+   "d": 2.05,
+   "text": "got to the thrown."
+  },
+  {
+   "t": 968.02,
+   "d": 5.47,
+   "text": "In slay the spire, they layout the tracks clearly for you so you know how far you have"
+  },
+  {
+   "t": 973.49,
+   "d": 4.3,
+   "text": "to get and you can judge how close you are to the goal."
+  },
+  {
+   "t": 977.79,
+   "d": 2.97,
+   "text": "In loot rascals there is five sections."
+  },
+  {
+   "t": 980.76,
+   "d": 6.09,
+   "text": "When you beat one, it is clear how far you are and how far you have to go and I use this"
+  },
+  {
+   "t": 986.85,
+   "d": 4.13,
+   "text": "as a bases for making decisions."
+  },
+  {
+   "t": 990.98,
+   "d": 4.21,
+   "text": "I think this is a factor why games like into the breach bounced for me."
+  },
+  {
+   "t": 995.19,
+   "d": 1.74,
+   "text": "They have slightly longer time horizons."
+  },
+  {
+   "t": 996.93,
+   "d": 6.08,
+   "text": "It is not a ton but into the breach you have to think several moves ahead and even though"
+  },
+  {
+   "t": 1003.01,
+   "d": 6.52,
+   "text": "that's not much longer, again, my strategy score is so slow that anything requiring me"
+  },
+  {
+   "t": 1009.53,
+   "d": 4.62,
+   "text": "to hold too much in my brain just bounces for me."
+  },
+  {
+   "t": 1014.15,
+   "d": 1.44,
+   "text": "Let's add those to our list."
+  },
+  {
+   "t": 1015.59,
+   "d": 4.84,
+   "text": "I like reactive decision making, meaningful discussions between a small number of choices"
+  },
+  {
+   "t": 1020.43,
+   "d": 5.42,
+   "text": "on a regular basis, and I like challenge only if it serves my goals and I don't care for"
+  },
+  {
+   "t": 1025.85,
+   "d": 4.39,
+   "text": "difficulty for difficulty sake and I need short time horizons."
+  },
+  {
+   "t": 1030.24,
+   "d": 5.58,
+   "text": "A low time between making meaningful decisions and seeing the results."
+  },
+  {
+   "t": 1035.82,
+   "d": 6.98,
+   "text": "Next on our list is the achievement motivation and it is secondary completion and power."
+  },
+  {
+   "t": 1042.8,
+   "d": 6.49,
+   "text": "I have a low-ish achievement score meaning I have a pretty relaxed attitude towards in-game"
+  },
+  {
+   "t": 1049.29,
+   "d": 1.0,
+   "text": "achievements."
+  },
+  {
+   "t": 1050.29,
+   "d": 2.03,
+   "text": "I care about some of them but not all of them."
+  },
+  {
+   "t": 1052.32,
+   "d": 4.47,
+   "text": "I like to checkboxs but only boxes are care about."
+  },
+  {
+   "t": 1056.79,
+   "d": 4.55,
+   "text": "I have a higher completion score which means I am task-oriented."
+  },
+  {
+   "t": 1061.34,
+   "d": 5.26,
+   "text": "I love completing tasks and doing quests and stuff like that."
+  },
+  {
+   "t": 1066.6,
+   "d": 2.79,
+   "text": "My power score surprised me because it is very low."
+  },
+  {
+   "t": 1069.39,
+   "d": 5.26,
+   "text": "It surprised me because power is all about progression and getting stronger like starting"
+  },
+  {
+   "t": 1074.65,
+   "d": 6.81,
+   "text": "week and getting stronger which sounds pretty integral to a Roguelike."
+  },
+  {
+   "t": 1081.46,
+   "d": 5.57,
+   "text": "Low power scores prefer flat progression and low playing field."
+  },
+  {
+   "t": 1087.03,
+   "d": 5.98,
+   "text": "The more I thought about it I think it means my desire for completion that drives me to"
+  },
+  {
+   "t": 1093.01,
+   "d": 1.0,
+   "text": "gain power."
+  },
+  {
+   "t": 1094.01,
+   "d": 4.32,
+   "text": "I don't get implicit joy just from the act of leveling up."
+  },
+  {
+   "t": 1098.33,
+   "d": 4.82,
+   "text": "This tracks with other games too and reminds me of my world of war craft days where when"
+  },
+  {
+   "t": 1103.15,
+   "d": 5.41,
+   "text": "I hit the level cap I wouldn't notice it."
+  },
+  {
+   "t": 1108.56,
+   "d": 4.25,
+   "text": "Meanwhile I had a friend who calculated the most efficient way to gain XP and was off"
+  },
+  {
+   "t": 1112.81,
+   "d": 4.44,
+   "text": "killing bores for a week straight just to hit the cap."
+  },
+  {
+   "t": 1117.25,
+   "d": 5.07,
+   "text": "My motivation wasn't to gain power but was to complete those tasks and I think this holds"
+  },
+  {
+   "t": 1122.32,
+   "d": 1.67,
+   "text": "true in Roguelikes."
+  },
+  {
+   "t": 1123.99,
+   "d": 8.05,
+   "text": "In root rascals, you have these requests and getting them gets you more powerful upgrades"
+  },
+  {
+   "t": 1132.04,
+   "d": 5.59,
+   "text": "but for me it is how those up grades help me achieve the goal and the fact I love doing"
+  },
+  {
+   "t": 1137.63,
+   "d": 4.36,
+   "text": "quests and that's why I am motivated to do them."
+  },
+  {
+   "t": 1141.99,
+   "d": 5.93,
+   "text": "I think these can be summarized in just a high satisfaction with short runs is really"
+  },
+  {
+   "t": 1147.92,
+   "d": 4.27,
+   "text": "motivated by those achievement scores."
+  },
+  {
+   "t": 1152.19,
+   "d": 7.34,
+   "text": "Basically, I care about achievement in terms of what the task at hand is which is the run."
+  },
+  {
+   "t": 1159.53,
+   "d": 4.91,
+   "text": "I don't really care about losing power because the power score is low so failure doesn't"
+  },
+  {
+   "t": 1164.44,
+   "d": 2.36,
+   "text": "sting."
+  },
+  {
+   "t": 1166.8,
+   "d": 3.84,
+   "text": "I don't feel like I was so close to the perfect build and able to lose it all."
+  },
+  {
+   "t": 1170.64,
+   "d": 9.91,
+   "text": "I am able to redirect to a new task and that motivates me."
+  },
+  {
+   "t": 1180.55,
+   "d": 5.02,
+   "text": "I think Roguelikes with shorter runs feel better even if that means you are dying a"
+  },
+  {
+   "t": 1185.57,
+   "d": 1.47,
+   "text": "lot."
+  },
+  {
+   "t": 1187.04,
+   "d": 4.15,
+   "text": "I think the game, the story goes on, has a really interesting way of satisfying this"
+  },
+  {
+   "t": 1191.19,
+   "d": 1.63,
+   "text": "motivation for me."
+  },
+  {
+   "t": 1192.82,
+   "d": 6.48,
+   "text": "In your first run of the game, you don't die often but whenever you loop you take away"
+  },
+  {
+   "t": 1199.3,
+   "d": 2.73,
+   "text": "a bunch of your upgrades and stats."
+  },
+  {
+   "t": 1202.03,
+   "d": 3.84,
+   "text": "You get to keep some but they remove a bunch."
+  },
+  {
+   "t": 1205.87,
+   "d": 4.54,
+   "text": "This is interesting because it means you get a frequency power reset it is just not due"
+  },
+  {
+   "t": 1210.41,
+   "d": 3.44,
+   "text": "to death -- frequent."
+  },
+  {
+   "t": 1213.85,
+   "d": 2.08,
+   "text": "Let's add that on to the list."
+  },
+  {
+   "t": 1215.93,
+   "d": 5.73,
+   "text": "The achievement motivation makes me desire these short and frequent runs, I have a visceral"
+  },
+  {
+   "t": 1221.66,
+   "d": 5.49,
+   "text": "satisfaction with frequent clean slates and new tasks at hand."
+  },
+  {
+   "t": 1227.15,
+   "d": 3.91,
+   "text": "Now I want to look at my extreme scores."
+  },
+  {
+   "t": 1231.06,
+   "d": 4.72,
+   "text": "While I do feel like action, mastery, and achievement are definitely the most aligned"
+  },
+  {
+   "t": 1235.78,
+   "d": 10.26,
+   "text": "with Roguelikes, my motivation and immersion are why I like othersment let's look at immersion"
+  },
+  {
+   "t": 1246.04,
+   "d": 4.05,
+   "text": "and fantasy and story."
+  },
+  {
+   "t": 1250.09,
+   "d": 6.88,
+   "text": "My immersion score is extremely low which surprised me."
+  },
+  {
+   "t": 1256.97,
+   "d": 6.29,
+   "text": "With Roguelikes I am way more grounded into the mechanics of the game."
+  },
+  {
+   "t": 1263.26,
+   "d": 6.94,
+   "text": "For fantasy, I appreciate world building as a wrapper but I am not looking to lose myself"
+  },
+  {
+   "t": 1270.2,
+   "d": 2.94,
+   "text": "and become someone else when I play a Roguelike."
+  },
+  {
+   "t": 1273.14,
+   "d": 4.39,
+   "text": "When I play slay had spire I don't care about the iron clad as a character."
+  },
+  {
+   "t": 1277.53,
+   "d": 5.23,
+   "text": "It is just a placeholder to ground me to the mechanics."
+  },
+  {
+   "t": 1282.76,
+   "d": 13.69,
+   "text": "For story, overarching narrative and narratives are not really a factor."
+  },
+  {
+   "t": 1296.45,
+   "d": 1.98,
+   "text": "Road not taken is an interesting one, for example."
+  },
+  {
+   "t": 1298.43,
+   "d": 4.74,
+   "text": "These scores might make it sound like I hate story and don't care about characters but"
+  },
+  {
+   "t": 1303.17,
+   "d": 5.52,
+   "text": "this is more to do with what motivates me to keep playing the game."
+  },
+  {
+   "t": 1308.69,
+   "d": 5.26,
+   "text": "In road not taken, which is an amazing game from spry fox and like what if triple town"
+  },
+  {
+   "t": 1313.95,
+   "d": 7.77,
+   "text": "were a Roguelike but the whole game is a metaphor with the creator's struggle for the decision"
+  },
+  {
+   "t": 1321.72,
+   "d": 5.96,
+   "text": "to not have children and comes through strongly in the characters, the quest, the world."
+  },
+  {
+   "t": 1327.68,
+   "d": 6.47,
+   "text": "I felt really emotionally attached to my character and emotionally invested in their motivations."
+  },
+  {
+   "t": 1334.15,
+   "d": 5.4,
+   "text": "The problem was that the first time I died I was done."
+  },
+  {
+   "t": 1339.55,
+   "d": 6.33,
+   "text": "I never played this game again because it was emotionally traumatizing for me."
+  },
+  {
+   "t": 1345.88,
+   "d": 4.22,
+   "text": "This bounced hard for me but if you have really high immersion scores you might want to check"
+  },
+  {
+   "t": 1350.1,
+   "d": 3.13,
+   "text": "this game out because it might really click for you."
+  },
+  {
+   "t": 1353.23,
+   "d": 1.94,
+   "text": "All right."
+  },
+  {
+   "t": 1355.17,
+   "d": 5.63,
+   "text": "Narrative for me as a wrapper only I am way more grounded in the mechanics."
+  },
+  {
+   "t": 1360.8,
+   "d": 8.43,
+   "text": "So the last one I am going to look at today is creativity with design and discovery."
+  },
+  {
+   "t": 1369.23,
+   "d": 2.93,
+   "text": "This is probably my most extreme score."
+  },
+  {
+   "t": 1372.16,
+   "d": 2.88,
+   "text": "My creativity score is low."
+  },
+  {
+   "t": 1375.04,
+   "d": 2.28,
+   "text": "This doesn't mean I am not creative."
+  },
+  {
+   "t": 1377.32,
+   "d": 4.79,
+   "text": "It means in the games I enjoy, I don't really have a need to experiment within the game"
+  },
+  {
+   "t": 1382.11,
+   "d": 3.04,
+   "text": "world, I accept the world as it is."
+  },
+  {
+   "t": 1385.15,
+   "d": 11.94,
+   "text": "I have an extremely low design experience."
+  },
+  {
+   "t": 1397.09,
+   "d": 3.61,
+   "text": "When I make builds in a Roguelike it isn't because I am trying to express who I am as"
+  },
+  {
+   "t": 1400.7,
+   "d": 1.0,
+   "text": "a person."
+  },
+  {
+   "t": 1401.7,
+   "d": 4.35,
+   "text": "I am doing it to achieve my goal so it needs to be simple."
+  },
+  {
+   "t": 1406.05,
+   "d": 3.11,
+   "text": "And interestingly, I have a low discovery score."
+  },
+  {
+   "t": 1409.16,
+   "d": 7.04,
+   "text": "This means I prefer fully exposed rule sets and minimum unknown variables and understand"
+  },
+  {
+   "t": 1416.2,
+   "d": 4.48,
+   "text": "the game space so I can learn how to operate in it."
+  },
+  {
+   "t": 1420.68,
+   "d": 10.17,
+   "text": "My hypothesis is I am a game designer professionally so I do all this stuff in my job and I do"
+  },
+  {
+   "t": 1430.85,
+   "d": 1.88,
+   "text": "these things for a living."
+  },
+  {
+   "t": 1432.73,
+   "d": 5.09,
+   "text": "Basically, I don't want these in my games because it makes me game feel like work."
+  },
+  {
+   "t": 1437.82,
+   "d": 3.71,
+   "text": "At least that's my theory."
+  },
+  {
+   "t": 1441.53,
+   "d": 8.53,
+   "text": "To summarize how this manifests I can say I want exposed rulesets, simple practical"
+  },
+  {
+   "t": 1450.06,
+   "d": 6.29,
+   "text": "builds and exploration for me feels like work."
+  },
+  {
+   "t": 1456.35,
+   "d": 4.45,
+   "text": "My extreme desire for exposed rule sets is probably games like slay the spire and loot"
+  },
+  {
+   "t": 1460.8,
+   "d": 2.3,
+   "text": "rascals are so sticky."
+  },
+  {
+   "t": 1463.1,
+   "d": 3.44,
+   "text": "Things like showing intent."
+  },
+  {
+   "t": 1466.54,
+   "d": 5.15,
+   "text": "In loot rascals they explain the math behind the combat."
+  },
+  {
+   "t": 1471.69,
+   "d": 4.32,
+   "text": "Randomness is fine as long as it is part of a ruleset I can lock up front."
+  },
+  {
+   "t": 1476.01,
+   "d": 6.46,
+   "text": "When I make a build in a Roguelike it because I am improviseing and reacting and making"
+  },
+  {
+   "t": 1482.47,
+   "d": 1.85,
+   "text": "choices to help reach my goal."
+  },
+  {
+   "t": 1484.32,
+   "d": 6.38,
+   "text": "I am not interested in expressing who I am through a build and I need them to be simple."
+  },
+  {
+   "t": 1490.7,
+   "d": 6.07,
+   "text": "One reason I bounced off Rogue legacy was at the end of a run before you start a new"
+  },
+  {
+   "t": 1496.77,
+   "d": 3.5,
+   "text": "one, you have to make these decisions in the skill tree up front."
+  },
+  {
+   "t": 1500.27,
+   "d": 2.48,
+   "text": "It was very distracting for me."
+  },
+  {
+   "t": 1502.75,
+   "d": 3.05,
+   "text": "You might be thinking, Lisa, this is not a complicated skill tree."
+  },
+  {
+   "t": 1505.8,
+   "d": 6.31,
+   "text": "It has lot like four layers but you have to understand this is an extreme score for me"
+  },
+  {
+   "t": 1512.11,
+   "d": 3.91,
+   "text": "so anything more I can hold in my head and I bounce."
+  },
+  {
+   "t": 1516.02,
+   "d": 5.39,
+   "text": "I need four things to choose from and I want to see the strategic impact of my decisions"
+  },
+  {
+   "t": 1521.41,
+   "d": 4.98,
+   "text": "immediately and anything more I get tired."
+  },
+  {
+   "t": 1526.39,
+   "d": 2.69,
+   "text": "And lastly, exploration is work to me."
+  },
+  {
+   "t": 1529.08,
+   "d": 1.88,
+   "text": "I don't want to be bothered discovering the unknown."
+  },
+  {
+   "t": 1530.96,
+   "d": 3.32,
+   "text": "It is tiring and distracting and doesn't fulfill me."
+  },
+  {
+   "t": 1534.28,
+   "d": 3.71,
+   "text": "I think this is one reason I didn't enjoy the original Rogue."
+  },
+  {
+   "t": 1537.99,
+   "d": 2.62,
+   "text": "Rogue is heavy on exploration."
+  },
+  {
+   "t": 1540.61,
+   "d": 3.55,
+   "text": "You get potions and scrolls and don't know what they do."
+  },
+  {
+   "t": 1544.16,
+   "d": 6.39,
+   "text": "When you encounter an enemy you don't know what it is capable of and have to figure it"
+  },
+  {
+   "t": 1550.55,
+   "d": 8.03,
+   "text": "out through the combat but if you have a high discovery score and never played the original"
+  },
+  {
+   "t": 1558.58,
+   "d": 3.71,
+   "text": "Rogue you should give it a try because it might be for you."
+  },
+  {
+   "t": 1562.29,
+   "d": 1.56,
+   "text": "All right."
+  },
+  {
+   "t": 1563.85,
+   "d": 3.39,
+   "text": "So I want exposed rulesets."
+  },
+  {
+   "t": 1567.24,
+   "d": 3.28,
+   "text": "Simple, practical builds."
+  },
+  {
+   "t": 1570.52,
+   "d": 2.73,
+   "text": "Small number of choices."
+  },
+  {
+   "t": 1573.25,
+   "d": 1.37,
+   "text": "Exploration for me is work."
+  },
+  {
+   "t": 1574.62,
+   "d": 2.52,
+   "text": "I can't be bothered with discovering the unknown."
+  },
+  {
+   "t": 1577.14,
+   "d": 1.74,
+   "text": "We did it."
+  },
+  {
+   "t": 1578.88,
+   "d": 6.96,
+   "text": "We looked at all of the scores and this is how it affects my enjoyment of Roguelikes."
+  },
+  {
+   "t": 1585.84,
+   "d": 5.38,
+   "text": "I like games with drama, intensity, a fast pace and I have an opportunity to improvise"
+  },
+  {
+   "t": 1591.22,
+   "d": 3.37,
+   "text": "but within a known ruleset."
+  },
+  {
+   "t": 1594.59,
+   "d": 5.29,
+   "text": "I prefer reactive decisions and like challenges."
+  },
+  {
+   "t": 1599.88,
+   "d": 5.08,
+   "text": "My runs needs to be short and frequent and narrative is great but it can't distract me"
+  },
+  {
+   "t": 1604.96,
+   "d": 3.41,
+   "text": "from the maw mechanics."
+  },
+  {
+   "t": 1608.37,
+   "d": 7.56,
+   "text": "I need sows the decisions right away."
+  },
+  {
+   "t": 1615.93,
+   "d": 6.11,
+   "text": "Maybe if I had Roguelikes explained to me on these terms I might have clicked easier."
+  },
+  {
+   "t": 1622.04,
+   "d": 1.59,
+   "text": "Who can say?"
+  },
+  {
+   "t": 1623.63,
+   "d": 3.18,
+   "text": "What's the point of all this?"
+  },
+  {
+   "t": 1626.81,
+   "d": 1.0,
+   "text": "Don't get me wrong."
+  },
+  {
+   "t": 1627.81,
+   "d": 4.43,
+   "text": "I would love it if we could start tagging games by player motivations but I don't expect"
+  },
+  {
+   "t": 1632.24,
+   "d": 1.31,
+   "text": "that to happen."
+  },
+  {
+   "t": 1633.55,
+   "d": 6.79,
+   "text": "They are probably a bit much to expect the general game playing audience to adopt."
+  },
+  {
+   "t": 1640.34,
+   "d": 5.63,
+   "text": "But this self-analysis can help me ask the right questions to figure out if a Roguelike"
+  },
+  {
+   "t": 1645.97,
+   "d": 3.98,
+   "text": "is going to click with me."
+  },
+  {
+   "t": 1649.95,
+   "d": 2.41,
+   "text": "Let's end with experiment on that note."
+  },
+  {
+   "t": 1652.36,
+   "d": 1.28,
+   "text": "Let's talk about Hades."
+  },
+  {
+   "t": 1653.64,
+   "d": 3.2,
+   "text": "I haven't played it yet."
+  },
+  {
+   "t": 1656.84,
+   "d": 1.11,
+   "text": "Seems good."
+  },
+  {
+   "t": 1657.95,
+   "d": 1.09,
+   "text": "My friends love it."
+  },
+  {
+   "t": 1659.04,
+   "d": 3.74,
+   "text": "It has rave reviews but will it stick with me?"
+  },
+  {
+   "t": 1662.78,
+   "d": 3.75,
+   "text": "Will I play it so much it becomes a problem?"
+  },
+  {
+   "t": 1666.53,
+   "d": 5.66,
+   "text": "That's where I ask you people who have played Hades to think about the questions."
+  },
+  {
+   "t": 1672.19,
+   "d": 2.0,
+   "text": "How short is are the time horizons?"
+  },
+  {
+   "t": 1674.19,
+   "d": 2.26,
+   "text": "How fast is the failure loop?"
+  },
+  {
+   "t": 1676.45,
+   "d": 11.13,
+   "text": "How fast is the time between decisions?"
+  },
+  {
+   "t": 1687.58,
+   "d": 1.64,
+   "text": "Is exploration low?"
+  },
+  {
+   "t": 1689.22,
+   "d": 5.35,
+   "text": "Are there a minimum amount of unknown variables?"
+  },
+  {
+   "t": 1694.57,
+   "d": 1.97,
+   "text": "I have setup a survey you can take."
+  },
+  {
+   "t": 1696.54,
+   "d": 5.57,
+   "text": "I can put the link in the chat and you can give me your analysis of Hades and after I"
+  },
+  {
+   "t": 1702.11,
+   "d": 4.25,
+   "text": "get a good enough of responses I will play the game and see if the experience lines up"
+  },
+  {
+   "t": 1706.36,
+   "d": 1.89,
+   "text": "with those outcomes."
+  },
+  {
+   "t": 1708.25,
+   "d": 3.71,
+   "text": "I want to thank you for coming to my talk."
+  },
+  {
+   "t": 1711.96,
+   "d": 4.38,
+   "text": "I will have a link for the slides available."
+  },
+  {
+   "t": 1716.34,
+   "d": 4.72,
+   "text": "You can follow me on Twitter @Wertle."
+  },
+  {
+   "t": 1721.06,
+   "d": 8.11,
+   "text": "And check out the gamer motivation profile survey on the quantic foundry site and look"
+  },
+  {
+   "t": 1729.17,
+   "d": 4.49,
+   "text": "at the articles on the topic because it is a fascinating subject."
+  },
+  {
+   "t": 1733.66,
+   "d": 8.79,
+   "text": "Again, thank you and enjoy the rest of the Roguelike Celebration celebration."
+  },
+  {
+   "t": 1742.45,
+   "d": 2.84,
+   "text": "MODERATOR: Fantastic talk, Lisa."
+  },
+  {
+   "t": 1745.29,
+   "d": 2.77,
+   "text": "LISA BROWN: We did it."
+  },
+  {
+   "t": 1748.06,
+   "d": 1.11,
+   "text": "Thank you."
+  },
+  {
+   "t": 1749.17,
+   "d": 4.19,
+   "text": "MODERATOR: I know you have been in the chat and have seen how much people are joining"
+  },
+  {
+   "t": 1753.36,
+   "d": 1.0,
+   "text": "it."
+  },
+  {
+   "t": 1754.36,
+   "d": 1.9,
+   "text": "The final point about Hades is fantastic."
+  },
+  {
+   "t": 1756.26,
+   "d": 8.1,
+   "text": "MODERATOR: I have heard there is romance and you can pet a dog which is all I need to be"
+  },
+  {
+   "t": 1764.36,
+   "d": 2.93,
+   "text": "sold."
+  },
+  {
+   "t": 1767.29,
+   "d": 3.61,
+   "text": "Taking a look at the speaker questions the top rated is asking if you would like to introduce"
+  },
+  {
+   "t": 1770.9,
+   "d": 1.32,
+   "text": "yourself a little bit."
+  },
+  {
+   "t": 1772.22,
+   "d": 2.12,
+   "text": "LISA BROWN: I am Lisa."
+  },
+  {
+   "t": 1774.34,
+   "d": 2.39,
+   "text": "I am a game designer."
+  },
+  {
+   "t": 1776.73,
+   "d": 4.06,
+   "text": "I like bird watching and I have a Cat."
+  },
+  {
+   "t": 1780.79,
+   "d": 1.83,
+   "text": "MODERATOR: Show us the Cat!"
+  },
+  {
+   "t": 1782.62,
+   "d": 6.65,
+   "text": "LISA BROWN: No, I have been a game designer for over 10 years in all spaces."
+  },
+  {
+   "t": 1789.27,
+   "d": 2.75,
+   "text": "Triple A, indy, academic stuff."
+  },
+  {
+   "t": 1792.02,
+   "d": 7.77,
+   "text": "So, yeah, I am a big fan of like deep dive player psychology stuff like this in my work."
+  },
+  {
+   "t": 1799.79,
+   "d": 5.85,
+   "text": "I had always wanted to like, just like dig in and do like a self-introspection thing"
+  },
+  {
+   "t": 1805.64,
+   "d": 4.86,
+   "text": "which I think it would be great if others have different scores could do this talk only"
+  },
+  {
+   "t": 1810.5,
+   "d": 1.0,
+   "text": "with their scores."
+  },
+  {
+   "t": 1811.5,
+   "d": 2.93,
+   "text": "I would love to see what comes up."
+  },
+  {
+   "t": 1814.43,
+   "d": 5.13,
+   "text": "MODERATOR: We have unconferencing sessions so if anyone wants to take one to discuss"
+  },
+  {
+   "t": 1819.56,
+   "d": 3.69,
+   "text": "their player motivations I think that would be fun."
+  },
+  {
+   "t": 1823.25,
+   "d": 1.14,
+   "text": "Another question."
+  },
+  {
+   "t": 1824.39,
+   "d": 2.8,
+   "text": "Were you thinking about the questions in terms of Roguelikes-only?"
+  },
+  {
+   "t": 1827.19,
+   "d": 2.16,
+   "text": "Or all games?"
+  },
+  {
+   "t": 1829.35,
+   "d": 3.24,
+   "text": "LISA BROWN: For this specifically, I was thinking just about Roguelikes."
+  },
+  {
+   "t": 1832.59,
+   "d": 6.96,
+   "text": "I was wanting to dig into specifically Roguelikes."
+  },
+  {
+   "t": 1839.55,
+   "d": 7.54,
+   "text": "For example, I am playing spirit fear and I love it and that is a low-action game."
+  },
+  {
+   "t": 1847.09,
+   "d": 1.4,
+   "text": "It is very different."
+  },
+  {
+   "t": 1848.49,
+   "d": 2.1,
+   "text": "Very heavy on narrative."
+  },
+  {
+   "t": 1850.59,
+   "d": 2.92,
+   "text": "It is very different motivations it serves."
+  },
+  {
+   "t": 1853.51,
+   "d": 1.46,
+   "text": "Definitely was trying to focus."
+  },
+  {
+   "t": 1854.97,
+   "d": 6.67,
+   "text": "I think that's one of the flaws of this model is it can be very broad so I find it helpful"
+  },
+  {
+   "t": 1861.64,
+   "d": 4.5,
+   "text": "to sort of have a game in mind, or a set of games in mind when taking it."
+  },
+  {
+   "t": 1866.14,
+   "d": 1.73,
+   "text": "MODERATOR: That's very interesting."
+  },
+  {
+   "t": 1867.87,
+   "d": 5.28,
+   "text": "I have used quantic foundry before and I had never thought about specializing in that."
+  },
+  {
+   "t": 1873.15,
+   "d": 1.0,
+   "text": "That's really cool."
+  },
+  {
+   "t": 1874.15,
+   "d": 2.29,
+   "text": "I know there is a question on the board of can we take the quiz ourselves."
+  },
+  {
+   "t": 1876.44,
+   "d": 6.6,
+   "text": "LISA BROWN: Yes, I put the link in the chat and I will put it again just in case."
+  },
+  {
+   "t": 1883.04,
+   "d": 6.39,
+   "text": "MODERATOR: Also, we will try for tomorrow, if nothing else, or put the link on a note"
+  },
+  {
+   "t": 1889.43,
+   "d": 1.2,
+   "text": "wall somewhere."
+  },
+  {
+   "t": 1890.63,
+   "d": 6.16,
+   "text": "We will try and stick it up somewhere where people can find it and probably tweet it."
+  },
+  {
+   "t": 1896.79,
+   "d": 2.73,
+   "text": "MODERATOR: Another question."
+  },
+  {
+   "t": 1899.52,
+   "d": 5.17,
+   "text": "What Roguelikes would you say is highly expressive that fulfills the opposite of the practical"
+  },
+  {
+   "t": 1904.69,
+   "d": 1.0,
+   "text": "build idea?"
+  },
+  {
+   "t": 1905.69,
+   "d": 1.0,
+   "text": "Good question from hypergardens."
+  },
+  {
+   "t": 1906.69,
+   "d": 5.39,
+   "text": "LISA BROWN: I have no idea because I wouldn't have enjoyed it so I wouldn't have played"
+  },
+  {
+   "t": 1912.08,
+   "d": 1.0,
+   "text": "it."
+  },
+  {
+   "t": 1913.08,
+   "d": 5.87,
+   "text": "I wouldn't know off the top of my head but it has got to be out there."
+  },
+  {
+   "t": 1918.95,
+   "d": 6.8,
+   "text": "The exploration and expressiveness tend to go well together because there is so much"
+  },
+  {
+   "t": 1925.75,
+   "d": 3.43,
+   "text": "like you digging in."
+  },
+  {
+   "t": 1929.18,
+   "d": 3.84,
+   "text": "Kawa says things like NetHack might be good for that."
+  },
+  {
+   "t": 1933.02,
+   "d": 4.34,
+   "text": "MODERATOR: Kawa has an interesting point."
+  },
+  {
+   "t": 1937.36,
+   "d": 5.49,
+   "text": "I replaced my legs with treads and not because I thought it was the best build but I can"
+  },
+  {
+   "t": 1942.85,
+   "d": 1.71,
+   "text": "have teg legs!"
+  },
+  {
+   "t": 1944.56,
+   "d": 5.55,
+   "text": "LISA BROWN: I think that's probably a good -- yeah."
+  },
+  {
+   "t": 1950.11,
+   "d": 17.04,
+   "text": "LISA BROWN: People do want to see the Cat if it is available."
+  },
+  {
+   "t": 1967.15,
+   "d": 1.9,
+   "text": "The Cat is asleep."
+  },
+  {
+   "t": 1969.05,
+   "d": 3.99,
+   "text": "MODERATOR: If you played Dungeon Crawl Stone Soup how would you rate it?"
+  },
+  {
+   "t": 1973.04,
+   "d": 3.46,
+   "text": "LISA BROWN: I have not."
+  },
+  {
+   "t": 1976.5,
+   "d": 1.77,
+   "text": "Someone tell me would I like it."
+  },
+  {
+   "t": 1978.27,
+   "d": 7.37,
+   "text": "Here is my cat."
+  },
+  {
+   "t": 1985.64,
+   "d": 1.48,
+   "text": "But I don't know."
+  },
+  {
+   "t": 1987.12,
+   "d": 3.18,
+   "text": "That's sort of why I am interested in this."
+  },
+  {
+   "t": 1990.3,
+   "d": 1.0,
+   "text": "Would I like it?"
+  },
+  {
+   "t": 1991.3,
+   "d": 1.26,
+   "text": "I don't know."
+  },
+  {
+   "t": 1992.56,
+   "d": 1.17,
+   "text": "You tell me."
+  },
+  {
+   "t": 1993.73,
+   "d": 1.25,
+   "text": "I haven't played it."
+  },
+  {
+   "t": 1994.98,
+   "d": 1.27,
+   "text": "It is always like that."
+  },
+  {
+   "t": 1996.25,
+   "d": 3.9,
+   "text": "Whenever I start a Roguelike I am like is this going to be one of those?"
+  },
+  {
+   "t": 2000.15,
+   "d": 4.36,
+   "text": "One that I am going to eat my life for the next six months?"
+  },
+  {
+   "t": 2004.51,
+   "d": 3.62,
+   "text": "Or is this going to be one I play and think it is interesting and move on?"
+  },
+  {
+   "t": 2008.13,
+   "d": 1.26,
+   "text": "You never know."
+  },
+  {
+   "t": 2009.39,
+   "d": 5.35,
+   "text": "MODERATOR: DCSS is interesting because there is a lot of variability where I play as an"
+  },
+  {
+   "t": 2014.74,
+   "d": 8.94,
+   "text": "octopus or Cat because that's fun but also I then find it fulfilling I play a fighter"
+  },
+  {
+   "t": 2023.68,
+   "d": 2.59,
+   "text": "over and over until I can get that orb."
+  },
+  {
+   "t": 2026.27,
+   "d": 2.74,
+   "text": "It is interesting some games have inside it."
+  },
+  {
+   "t": 2029.01,
+   "d": 3.69,
+   "text": "You can play DCSS as someone who wants expressiveness."
+  },
+  {
+   "t": 2032.7,
+   "d": 4.91,
+   "text": "LISA BROWN: People are saying they suspect I wouldn't like it."
+  },
+  {
+   "t": 2037.61,
+   "d": 3.17,
+   "text": "MODERATOR: You can't like all of them."
+  },
+  {
+   "t": 2040.78,
+   "d": 3.23,
+   "text": "LISA BROWN: No, that's fine."
+  },
+  {
+   "t": 2044.01,
+   "d": 3.87,
+   "text": "LISA BROWN: Any other burning questions?"
+  },
+  {
+   "t": 2047.88,
+   "d": 2.57,
+   "text": "We have two minutes."
+  },
+  {
+   "t": 2050.45,
+   "d": 5.15,
+   "text": "But in the meantime, I think what I really want to point out with the talk is there is"
+  },
+  {
+   "t": 2055.6,
+   "d": 3.26,
+   "text": "nothing wrong with these games because I don't like them."
+  },
+  {
+   "t": 2058.86,
+   "d": 3.3,
+   "text": "They just don't serve me."
+  },
+  {
+   "t": 2062.16,
+   "d": 3.91,
+   "text": "I think we can get lost in that sometimes being like oh, this is a good game/this is"
+  },
+  {
+   "t": 2066.07,
+   "d": 1.9,
+   "text": "a bad game."
+  },
+  {
+   "t": 2067.97,
+   "d": 4.67,
+   "text": "You have to play this to understand what these games are all about but there are so many"
+  },
+  {
+   "t": 2072.64,
+   "d": 5.74,
+   "text": "different reasons that people play games that, you know, it is more about the player than"
+  },
+  {
+   "t": 2078.38,
+   "d": 6.47,
+   "text": "the game and that's why even really great games that I know are well-designed and critically"
+  },
+  {
+   "t": 2084.85,
+   "d": 4.71,
+   "text": "acclaimed like FTL in the breach I don't like."
+  },
+  {
+   "t": 2089.56,
+   "d": 1.36,
+   "text": "That's nothing wrong with the game."
+  },
+  {
+   "t": 2090.92,
+   "d": 4.42,
+   "text": "They are serving a different motivation which is fine because there are plenty of players"
+  },
+  {
+   "t": 2095.34,
+   "d": 1.86,
+   "text": "with that motivation that need to be served."
+  },
+  {
+   "t": 2097.2,
+   "d": 4.36,
+   "text": "MODERATOR: I think that's a beautiful point to make at the beginning of this Roguelikes"
+  },
+  {
+   "t": 2101.56,
+   "d": 1.0,
+   "text": "celebration."
+  },
+  {
+   "t": 2102.56,
+   "d": 6.2,
+   "text": "One thing that designs us is we are not going to get hard core into what is and isn't a"
+  },
+  {
+   "t": 2108.76,
+   "d": 6.33,
+   "text": "Roguelike because there are so many games that fulfill difference nieces and the Roguelike"
+  },
+  {
+   "t": 2115.09,
+   "d": 2.48,
+   "text": "genre can make so many people happy."
+  },
+  {
+   "t": 2117.57,
+   "d": 1.0,
+   "text": "Wonderful find point."
+  },
+  {
+   "t": 2118.57,
+   "d": 1.26,
+   "text": "Thank you so much, Lisa."
+  },
+  {
+   "t": 2119.83,
+   "d": 6.41,
+   "text": "Wertle is your username and hopefully people can find you and ask you more questions."
+  },
+  {
+   "t": 2126.24,
+   "d": 1.73,
+   "text": "LISA BROWN: Thank you."
+  },
+  {
+   "t": 2127.97,
+   "d": 0.94,
+   "text": "Goodbye."
+  }
+ ]
+}

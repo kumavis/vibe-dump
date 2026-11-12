@@ -1,0 +1,1724 @@
+{
+ "id": "db6S2lgTWmI",
+ "url": "https://www.youtube.com/watch?v=db6S2lgTWmI",
+ "title": "Ivy Melinda - A flower in the garden: Cultivating a community for Caves of Qud",
+ "speaker": "Ivy Melinda",
+ "talk_title": "A flower in the garden: Cultivating a community for Caves of Qud",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1840,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nIvy is a 35 year old, first time community manager for Caves of Qud. She likes weird shit and has a spider plant sitting on my windowsill that whispers dark influence into her ear when she sleeps.\n\nIn this talk she shares her own journey into community management and the positivity, potential, love, and benefits of a strongly engaged community. With special guest Eva Problems!\n\nFind her on Twitter: https://twitter.com/a_plantgirl\nCheck out the Caves of Qud Discord server: https://discord.gg/cavesofqud",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 31,
+   "title": "Talk overview"
+  },
+  {
+   "start": 108,
+   "title": "Game design foundations"
+  },
+  {
+   "start": 439,
+   "title": "Social ecology of gaming"
+  },
+  {
+   "start": 520,
+   "title": "Personal journey"
+  },
+  {
+   "start": 933,
+   "title": "Fan creations to canon"
+  },
+  {
+   "start": 1044,
+   "title": "Character and theme building"
+  },
+  {
+   "start": 1105,
+   "title": "Fan art showcase"
+  },
+  {
+   "start": 1155,
+   "title": "Evolution of the world"
+  },
+  {
+   "start": 1198,
+   "title": "Community activities"
+  },
+  {
+   "start": 1230,
+   "title": "Modding and community impact"
+  },
+  {
+   "start": 1308,
+   "title": "Conclusion"
+  },
+  {
+   "start": 1346,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3707,
+ "trimmed": {
+  "segments": 1,
+  "words": 1
+ },
+ "segments": [
+  {
+   "t": 0.99,
+   "d": 1.0,
+   "text": "EMCEE: Thank you so much."
+  },
+  {
+   "t": 1.99,
+   "d": 1.0,
+   "text": "We have to let you go."
+  },
+  {
+   "t": 2.99,
+   "d": 1.65,
+   "text": "I promise I will subscribe to your Twitch after the break."
+  },
+  {
+   "t": 4.64,
+   "d": 1.0,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 5.64,
+   "d": 1.64,
+   "text": "I feel like we know who should be emceeing next year."
+  },
+  {
+   "t": 7.28,
+   "d": 10.79,
+   "text": "With that, we will move on to our next speaker which is a recorded video from Ivy Melinda"
+  },
+  {
+   "t": 18.07,
+   "d": 6.13,
+   "text": "which is appropriate given that Gra mentioned Ivy and her work."
+  },
+  {
+   "t": 24.2,
+   "d": 6.88,
+   "text": "35 year old and first time community manager for Caves of Qud and likes weird shit and"
+  },
+  {
+   "t": 31.08,
+   "d": 6.87,
+   "text": "has a spider plant sitting on her window seal that whispers dark influences into her ear"
+  },
+  {
+   "t": 37.95,
+   "d": 1.29,
+   "text": "while she speaks."
+  },
+  {
+   "t": 39.24,
+   "d": 1.72,
+   "text": "Let's roll that video."
+  },
+  {
+   "t": 40.96,
+   "d": 1.0,
+   "text": ">> Hello."
+  },
+  {
+   "t": 41.96,
+   "d": 5.57,
+   "text": "I am Ivy Melinda and I have been the community manager for Caves of Qud since May of 2018."
+  },
+  {
+   "t": 47.53,
+   "d": 5.54,
+   "text": "I have seen the discord server grow from half a dozen people to over 3,000 between then"
+  },
+  {
+   "t": 53.07,
+   "d": 1.28,
+   "text": "and now."
+  },
+  {
+   "t": 54.35,
+   "d": 7.23,
+   "text": "I find conceptualizing as what I do as management to be officious and overselling my actual"
+  },
+  {
+   "t": 61.58,
+   "d": 4.01,
+   "text": "role which is that of care and cultivation."
+  },
+  {
+   "t": 65.59,
+   "d": 4.13,
+   "text": "With this talk, I intend to show how games create rooms for players to create their own"
+  },
+  {
+   "t": 69.72,
+   "d": 5.73,
+   "text": "narratives and how the communities that form around games can have profound impact on people"
+  },
+  {
+   "t": 75.45,
+   "d": 5.54,
+   "text": "using myself as an example and the third part of my talk is going to hopefully illustrate"
+  },
+  {
+   "t": 80.99,
+   "d": 6.55,
+   "text": "ways community, narrative and growth can all intertwine to form something lasting and meaningful."
+  },
+  {
+   "t": 87.54,
+   "d": 5.75,
+   "text": "It will be a series of slides containing fan creations above and beyond fan creations that"
+  },
+  {
+   "t": 93.29,
+   "d": 2.94,
+   "text": "have interspersed in parts one and two."
+  },
+  {
+   "t": 96.23,
+   "d": 5.53,
+   "text": "This talk is intended to demonstrate rather than instruct as there is no real one-size-fits-all"
+  },
+  {
+   "t": 101.76,
+   "d": 3.65,
+   "text": "recipe for a healthy community."
+  },
+  {
+   "t": 105.41,
+   "d": 4.68,
+   "text": "But let's look at the ingredients."
+  },
+  {
+   "t": 110.09,
+   "d": 4.55,
+   "text": "I want to layout the foundation of what I want to talk about by first talking about"
+  },
+  {
+   "t": 114.64,
+   "d": 6.24,
+   "text": "how Caves of Qud provides room to be much, much more than a purely mechanical experience."
+  },
+  {
+   "t": 120.88,
+   "d": 5.34,
+   "text": "I am sure since you are here you know a little bit about Caves of Qud so I am only going"
+  },
+  {
+   "t": 126.22,
+   "d": 3.57,
+   "text": "to briefly touch on the basic elements of the game."
+  },
+  {
+   "t": 129.79,
+   "d": 3.68,
+   "text": "The first one is Proc Gen history."
+  },
+  {
+   "t": 133.47,
+   "d": 7.09,
+   "text": "If you played Dwarf Fortress you probably already know about how Proc Gen history can"
+  },
+  {
+   "t": 140.56,
+   "d": 6.22,
+   "text": "leave room to -- for players to create their own stories."
+  },
+  {
+   "t": 146.78,
+   "d": 8.75,
+   "text": "There are a few very famous let's play along the lines but to break it down further essentially"
+  },
+  {
+   "t": 155.53,
+   "d": 14.87,
+   "text": "what procedurally generated history is is it is a narrative built from jigsaw pieces"
+  },
+  {
+   "t": 170.4,
+   "d": 8.03,
+   "text": "selected from a bag blindly and crammed together in the hope of creating a coherent narrative."
+  },
+  {
+   "t": 178.43,
+   "d": 12.27,
+   "text": "In Caves of Qud is it the Sultan history and you can find statues around that talk about"
+  },
+  {
+   "t": 190.7,
+   "d": 11.24,
+   "text": "how they may have driven their carriage off the road and saved at the last minute by a"
+  },
+  {
+   "t": 201.94,
+   "d": 6.71,
+   "text": "band of worms and forever indebted to them."
+  },
+  {
+   "t": 208.65,
+   "d": 5.06,
+   "text": "The second thing Qud has to offer is pros."
+  },
+  {
+   "t": 213.71,
+   "d": 13.19,
+   "text": "It the purplest pros I have ever seen and on top of that, I think it is the most -- it"
+  },
+  {
+   "t": 226.9,
+   "d": 3.35,
+   "text": "is very attentive and descriptive and evocative."
+  },
+  {
+   "t": 230.25,
+   "d": 7.14,
+   "text": "It is well written and it is written with care."
+  },
+  {
+   "t": 237.39,
+   "d": 6.22,
+   "text": "Jason cares a lot about this game and he has poured his soul into the writing and it really"
+  },
+  {
+   "t": 243.61,
+   "d": 3.79,
+   "text": "shows."
+  },
+  {
+   "t": 247.4,
+   "d": 6.47,
+   "text": "There is a lovingly depicted and diverse cast."
+  },
+  {
+   "t": 253.87,
+   "d": 4.1,
+   "text": "You can see them scattered all throughout Qud."
+  },
+  {
+   "t": 257.97,
+   "d": 8.39,
+   "text": "There are a series of safe places you go go to to hangout with the characters and not"
+  },
+  {
+   "t": 266.36,
+   "d": 7.68,
+   "text": "worry about who is going to attack you next for the most part."
+  },
+  {
+   "t": 274.04,
+   "d": 9.58,
+   "text": "But having these characters depicted as they are I feel is paramount to creating a world"
+  },
+  {
+   "t": 283.62,
+   "d": 5.07,
+   "text": "that feels real and alive."
+  },
+  {
+   "t": 288.69,
+   "d": 17.95,
+   "text": "Finally, we have the game systems themselves."
+  },
+  {
+   "t": 306.64,
+   "d": 7.55,
+   "text": "These systems are narratives in and of themselves."
+  },
+  {
+   "t": 314.19,
+   "d": 7.49,
+   "text": "I believe you have to take that into account."
+  },
+  {
+   "t": 321.68,
+   "d": 6.67,
+   "text": "In Jason's narrative talk he talks about Caves of Qud and talks about the difficulties he"
+  },
+  {
+   "t": 328.35,
+   "d": 12.65,
+   "text": "explored in the process of being taught by Caves of Qud directly that systems tells stories."
+  },
+  {
+   "t": 341.0,
+   "d": 6.81,
+   "text": "He describes Caves of Qud in the beginning as a naive implementation of traditional Roguelike"
+  },
+  {
+   "t": 347.81,
+   "d": 6.14,
+   "text": "heritage results in what he refers to in his talk as a combat gravity well."
+  },
+  {
+   "t": 353.95,
+   "d": 4.87,
+   "text": "Because of the narrative gravity of combat he realized the Qud experience was more gleefully"
+  },
+  {
+   "t": 358.82,
+   "d": 15.23,
+   "text": "blood hungry than he had mistaken."
+  },
+  {
+   "t": 374.05,
+   "d": 4.59,
+   "text": "The simulation is the aspect of Caves of Qud also gives us unintended details about the"
+  },
+  {
+   "t": 378.64,
+   "d": 6.41,
+   "text": "world that requires suspension of disbelief."
+  },
+  {
+   "t": 385.05,
+   "d": 9.14,
+   "text": "Over here we have the example that I provided is how long is a Qud day?"
+  },
+  {
+   "t": 394.19,
+   "d": 2.31,
+   "text": "How long is a Qud turn?"
+  },
+  {
+   "t": 396.5,
+   "d": 8.54,
+   "text": "If we assume that the Qud day is 24 hours like our earth then the 1200 turns count up"
+  },
+  {
+   "t": 405.04,
+   "d": 3.16,
+   "text": "to be 72 seconds long."
+  },
+  {
+   "t": 408.2,
+   "d": 6.17,
+   "text": "If we assume the standards are the six second dudgeon turns than every day in Qud is two"
+  },
+  {
+   "t": 414.37,
+   "d": 3.47,
+   "text": "hours long."
+  },
+  {
+   "t": 417.84,
+   "d": 6.66,
+   "text": "As you can see, some suspension of belief is required."
+  },
+  {
+   "t": 424.5,
+   "d": 12.5,
+   "text": "The narratives built by simulation tend to run into narratives written by hand and sometimes"
+  },
+  {
+   "t": 437.0,
+   "d": 4.94,
+   "text": "hilarious ways."
+  },
+  {
+   "t": 441.94,
+   "d": 5.24,
+   "text": "All these things can inform the player experience in ways that are reflected off the community"
+  },
+  {
+   "t": 447.18,
+   "d": 5.34,
+   "text": "can be quite surprisingly and even see a reflection of the game and more of what you would originally"
+  },
+  {
+   "t": 452.52,
+   "d": 2.69,
+   "text": "have written."
+  },
+  {
+   "t": 455.21,
+   "d": 9.36,
+   "text": "With the combination of systems, static Proc Gen and emerging narratives every game leaves"
+  },
+  {
+   "t": 464.57,
+   "d": 10.69,
+   "text": "players with different aspects on the narrative and these interpretations insert gravity on"
+  },
+  {
+   "t": 475.26,
+   "d": 7.69,
+   "text": "the game and the spaces where they don't overlap tend to be the most fertile ground for telling"
+  },
+  {
+   "t": 482.95,
+   "d": 10.7,
+   "text": "your own story."
+  },
+  {
+   "t": 493.65,
+   "d": 7.8,
+   "text": "Fans create art, mods, fiction and other things that expand the boundaries of Caves of Qud"
+  },
+  {
+   "t": 501.45,
+   "d": 2.52,
+   "text": "as a narrative experience."
+  },
+  {
+   "t": 503.97,
+   "d": 3.89,
+   "text": "That too has influenced the game itself."
+  },
+  {
+   "t": 507.86,
+   "d": 5.75,
+   "text": "It creates a social ecology which provides a feedback cycle and fosters and bears fruit"
+  },
+  {
+   "t": 513.61,
+   "d": 9.19,
+   "text": "for all involved."
+  },
+  {
+   "t": 522.8,
+   "d": 18.66,
+   "text": "What sort of fruit is your game bearing?"
+  },
+  {
+   "t": 541.46,
+   "d": 4.8,
+   "text": "I am going it basically tell a story all throughout part 2."
+  },
+  {
+   "t": 546.26,
+   "d": 7.37,
+   "text": "When I was 16, I used to go to the longs drugstore around the corner."
+  },
+  {
+   "t": 553.63,
+   "d": 4.84,
+   "text": "They had these wire racks used for holding dime store novels and postcards and I would"
+  },
+  {
+   "t": 558.47,
+   "d": 5.65,
+   "text": "go and get $5 games to try out when where was bored."
+  },
+  {
+   "t": 564.12,
+   "d": 5.13,
+   "text": "Eventually that phase died out and I got my hands on a 500 share wear game CD which had"
+  },
+  {
+   "t": 569.25,
+   "d": 2.47,
+   "text": "all the games listed in alphabetical order."
+  },
+  {
+   "t": 571.72,
+   "d": 4.98,
+   "text": "I don't remember come games became ancient domains of mystery but I got hooked on that"
+  },
+  {
+   "t": 576.7,
+   "d": 2.3,
+   "text": "like nobody's business."
+  },
+  {
+   "t": 579.0,
+   "d": 7.94,
+   "text": "Didn't take long for me to look online for help with the game because it is that sort"
+  },
+  {
+   "t": 586.94,
+   "d": 1.74,
+   "text": "of Roguelike."
+  },
+  {
+   "t": 588.68,
+   "d": 5.51,
+   "text": "I immediately found an IRC channel about the game and found I enjoyed spending time there"
+  },
+  {
+   "t": 594.19,
+   "d": 3.68,
+   "text": "and decided to stick around."
+  },
+  {
+   "t": 597.87,
+   "d": 8.23,
+   "text": "They introduced me to the news group, the ADOM guidebook and personal experience."
+  },
+  {
+   "t": 606.1,
+   "d": 6.94,
+   "text": "Very little allow aeded me to complete a playthrough but I found that wasn't what I kept coming"
+  },
+  {
+   "t": 613.04,
+   "d": 3.65,
+   "text": "back to that space for."
+  },
+  {
+   "t": 616.69,
+   "d": 5.69,
+   "text": "I discovered they had a Meetup every year."
+  },
+  {
+   "t": 622.38,
+   "d": 4.95,
+   "text": "So when I graduated high school my parents asked what I wanted as a graduation gift and"
+  },
+  {
+   "t": 627.33,
+   "d": 4.46,
+   "text": "I told them I wanted roundtrip tickets to Amsterdam and I got them."
+  },
+  {
+   "t": 631.79,
+   "d": 8.07,
+   "text": "There I met all the people I had formed meaningful relationships with and watched me grow and"
+  },
+  {
+   "t": 639.86,
+   "d": 5.23,
+   "text": "change as I got older and were happy to have me at their meet."
+  },
+  {
+   "t": 645.09,
+   "d": 5.83,
+   "text": "That was the first time I met the crate -- creator of ADOM."
+  },
+  {
+   "t": 650.92,
+   "d": 8.73,
+   "text": "We met him as he landed flying from Germany and took him back to the flat we were wholeed"
+  },
+  {
+   "t": 659.65,
+   "d": 4.37,
+   "text": "-- holed up in for the two weeks we were there."
+  },
+  {
+   "t": 664.02,
+   "d": 9.98,
+   "text": "He gave us secrets to the ADOM code and something like 14 years later on another continent after"
+  },
+  {
+   "t": 674.0,
+   "d": 9.07,
+   "text": "my transition that I next met him and he remembered me."
+  },
+  {
+   "t": 683.07,
+   "d": 4.93,
+   "text": "My experience with engaging with that community was so positive and effecting it had long"
+  },
+  {
+   "t": 688.0,
+   "d": 2.34,
+   "text": "lasting effects on the course of my life."
+  },
+  {
+   "t": 690.34,
+   "d": 4.9,
+   "text": "I began getting into the other indy games and trying to engage with their communities"
+  },
+  {
+   "t": 695.24,
+   "d": 1.72,
+   "text": "and creators."
+  },
+  {
+   "t": 696.96,
+   "d": 4.81,
+   "text": "I had my ups and downs during that but it was always worth it."
+  },
+  {
+   "t": 701.77,
+   "d": 8.1,
+   "text": "I would find myself going to events and trade shows like GDC and INDY cave and stuck into"
+  },
+  {
+   "t": 709.87,
+   "d": 2.92,
+   "text": "E3 once and got kicked out once they found out."
+  },
+  {
+   "t": 712.79,
+   "d": 3.94,
+   "text": "I got in the first place because my brother was serving as a booth babe for one of the"
+  },
+  {
+   "t": 716.73,
+   "d": 2.43,
+   "text": "hardware vendors there."
+  },
+  {
+   "t": 719.16,
+   "d": 5.1,
+   "text": "It was the year they were exhibiting beta for DSX before that game came out a long time"
+  },
+  {
+   "t": 724.26,
+   "d": 2.63,
+   "text": "ago."
+  },
+  {
+   "t": 726.89,
+   "d": 8.87,
+   "text": "So even though it wasn't part of my industry I still wanted to engage with it."
+  },
+  {
+   "t": 735.76,
+   "d": 3.35,
+   "text": "I found out about Caves of Qud in January of 2017."
+  },
+  {
+   "t": 739.11,
+   "d": 3.73,
+   "text": "I was playing the old free version."
+  },
+  {
+   "t": 742.84,
+   "d": 6.3,
+   "text": "The one without sound and no color scheme to think of and I am sure it wasn't even built"
+  },
+  {
+   "t": 749.14,
+   "d": 6.42,
+   "text": "in unity yet and yet I loved it enough to get to grid gate and find a place to talk"
+  },
+  {
+   "t": 755.56,
+   "d": 5.29,
+   "text": "about it."
+  },
+  {
+   "t": 760.85,
+   "d": 10.8,
+   "text": "Brian was the other half of Freehold Games originally and he provideded me with a code"
+  },
+  {
+   "t": 771.65,
+   "d": 1.96,
+   "text": "in short order."
+  },
+  {
+   "t": 773.61,
+   "d": 6.41,
+   "text": "I took it and proceeded to have a blast with a full version of the game such as back then."
+  },
+  {
+   "t": 780.02,
+   "d": 9.11,
+   "text": "Gast forward to a year GDC is happening and I am attending it ticketless."
+  },
+  {
+   "t": 789.13,
+   "d": 4.99,
+   "text": "I would go to yerba buena gardens ever year."
+  },
+  {
+   "t": 794.12,
+   "d": 10.64,
+   "text": "They had an anti-con called lost level every year."
+  },
+  {
+   "t": 804.76,
+   "d": 4.83,
+   "text": "The deal is tickets to that place are expensive."
+  },
+  {
+   "t": 809.59,
+   "d": 7.02,
+   "text": "You usually only have a ticket to that place if you belong to a corporation or are of means"
+  },
+  {
+   "t": 816.61,
+   "d": 4.89,
+   "text": "yourself and a lot of people didn't fit into either of those categories but still wanted"
+  },
+  {
+   "t": 821.5,
+   "d": 10.74,
+   "text": "to make industry connections and do all of the ancillary fun stuff that happens at places"
+  },
+  {
+   "t": 832.24,
+   "d": 2.9,
+   "text": "like GDC."
+  },
+  {
+   "t": 835.14,
+   "d": 5.54,
+   "text": "I saw Jason on Twitter saying she was going to take lunch in the garden and wanted to"
+  },
+  {
+   "t": 840.68,
+   "d": 1.75,
+   "text": "know if anyone else would like to Meetup."
+  },
+  {
+   "t": 842.43,
+   "d": 5.51,
+   "text": "I took him up on the offer and we met up and talked about systems and the history described"
+  },
+  {
+   "t": 847.94,
+   "d": 7.45,
+   "text": "in Qud and the forceful nature of narratives when it comes to video game systems."
+  },
+  {
+   "t": 855.39,
+   "d": 4.92,
+   "text": "We hit it off well and found out he lived near each other and became friend."
+  },
+  {
+   "t": 860.31,
+   "d": 5.27,
+   "text": "It wasn't long before that he approached me and asked me about moderating the fresh new"
+  },
+  {
+   "t": 865.58,
+   "d": 2.51,
+   "text": "Caves of Qud discord."
+  },
+  {
+   "t": 868.09,
+   "d": 3.48,
+   "text": "At the time there were only a handful of people in there so it wasn't a huge ask."
+  },
+  {
+   "t": 871.57,
+   "d": 3.65,
+   "text": "I was honored and took the position."
+  },
+  {
+   "t": 875.22,
+   "d": 11.3,
+   "text": "He paid me a stipened eventually."
+  },
+  {
+   "t": 886.52,
+   "d": 5.0,
+   "text": "As the server grew, I grew into my role as community managers as well."
+  },
+  {
+   "t": 891.52,
+   "d": 6.23,
+   "text": "I starteded organizing an official wiki and gathered a crew to assemble and populate."
+  },
+  {
+   "t": 897.75,
+   "d": 4.71,
+   "text": "I started appointing volunteer mayors."
+  },
+  {
+   "t": 902.46,
+   "d": 4.66,
+   "text": "That is our word for moderation staff."
+  },
+  {
+   "t": 907.12,
+   "d": 4.52,
+   "text": "We got a Patreon setup and I continued to shield the game."
+  },
+  {
+   "t": 911.64,
+   "d": 8.67,
+   "text": "I am in charge of the wiki team and subreddit."
+  },
+  {
+   "t": 920.31,
+   "d": 3.69,
+   "text": "As far as contributions go, I haven't got a whole lot compared to the rest of the game"
+  },
+  {
+   "t": 924.0,
+   "d": 6.41,
+   "text": "but the latest mutation update that dropped is a document I spent the better part of a"
+  },
+  {
+   "t": 930.41,
+   "d": 5.91,
+   "text": "year hashing out."
+  },
+  {
+   "t": 936.32,
+   "d": 6.09,
+   "text": "And so for now, I am here given this talk and earning a salary that can sustain me."
+  },
+  {
+   "t": 942.41,
+   "d": 3.38,
+   "text": "I can trace the line from the beginning."
+  },
+  {
+   "t": 945.79,
+   "d": 12.52,
+   "text": "The moment where I booted up ADOM and died to a pack of Jekylls in the forest."
+  },
+  {
+   "t": 958.31,
+   "d": 4.12,
+   "text": "That direct line between ADOM and Caves of Qud did this for me."
+  },
+  {
+   "t": 962.43,
+   "d": 8.38,
+   "text": "What is your game doing for its community?"
+  },
+  {
+   "t": 970.81,
+   "d": 11.75,
+   "text": "This crosses the concept of iron chef with Qud."
+  },
+  {
+   "t": 982.56,
+   "d": 9.31,
+   "text": "The first is the cooking revamp and why the ultimate cooking skill is called such."
+  },
+  {
+   "t": 991.87,
+   "d": 6.28,
+   "text": "The challenger was added to the game blue prints and given an endgame book by dev Caelyn"
+  },
+  {
+   "t": 998.15,
+   "d": 6.76,
+   "text": "Sandel when she added her hindren to the game."
+  },
+  {
+   "t": 1004.91,
+   "d": 7.16,
+   "text": "At the time, hindren were a fan creation of Caelyns."
+  },
+  {
+   "t": 1012.07,
+   "d": 8.63,
+   "text": "This is how the community builds on each other and leapfrogs from fan work to canyon."
+  },
+  {
+   "t": 1020.7,
+   "d": 8.77,
+   "text": "It was the strength of Caelyn's writing and she managed to capture the voice of Qud like"
+  },
+  {
+   "t": 1029.47,
+   "d": 2.54,
+   "text": "Jason never thought anyone would."
+  },
+  {
+   "t": 1032.01,
+   "d": 10.92,
+   "text": "So, well, he offered her a position and she is with us now and is not going anywhere."
+  },
+  {
+   "t": 1042.93,
+   "d": 5.26,
+   "text": "We love her."
+  },
+  {
+   "t": 1048.19,
+   "d": 10.1,
+   "text": "The mopango like the hindren started as one of the earlier builds."
+  },
+  {
+   "t": 1058.29,
+   "d": 4.28,
+   "text": "After discussions between her and Jason about creating a settlement within the Tomb they"
+  },
+  {
+   "t": 1062.57,
+   "d": 6.0,
+   "text": "agreed the mopano were a convenient species to inhabit such a cramped and dangerous place."
+  },
+  {
+   "t": 1068.57,
+   "d": 8.72,
+   "text": "The subterranean nature made them a fit and in Caelyn's words it was a pretty small narrative"
+  },
+  {
+   "t": 1077.29,
+   "d": 6.27,
+   "text": "leap to get from the basic build to the theme as a concept since I went to a quaker school"
+  },
+  {
+   "t": 1083.56,
+   "d": 3.08,
+   "text": "I could recognize friends when I saw them."
+  },
+  {
+   "t": 1086.64,
+   "d": 6.41,
+   "text": "That's how they ended up with their pseudospeech."
+  },
+  {
+   "t": 1093.05,
+   "d": 14.06,
+   "text": "It was right there and I just had to tie the string between the pins."
+  },
+  {
+   "t": 1107.11,
+   "d": 3.57,
+   "text": "For the rest of my time I have some nice fan art to leave you with."
+  },
+  {
+   "t": 1110.68,
+   "d": 10.03,
+   "text": "This is my Cassandra Lepin."
+  },
+  {
+   "t": 1120.71,
+   "d": 12.57,
+   "text": "And it a lovely day in Japa and you are a horrible goose."
+  },
+  {
+   "t": 1133.28,
+   "d": 4.16,
+   "text": "This a modfor a game."
+  },
+  {
+   "t": 1137.44,
+   "d": 20.56,
+   "text": "On the right is another by Cassandra."
+  },
+  {
+   "t": 1158.0,
+   "d": 9.76,
+   "text": "We get cartagraphic impressions because it started as a campaign for Tabletop and made"
+  },
+  {
+   "t": 1167.76,
+   "d": 1.23,
+   "text": "it's way here."
+  },
+  {
+   "t": 1168.99,
+   "d": 11.05,
+   "text": "I appreciate the poetry of bringing it to full circle."
+  },
+  {
+   "t": 1180.04,
+   "d": 9.83,
+   "text": "Eventually we hope to release a system agnostic campaign module for Caves of Qud table top"
+  },
+  {
+   "t": 1189.87,
+   "d": 9.06,
+   "text": "settings but we are really busy and we will see what"
+  },
+  {
+   "t": 1198.93,
+   "d": 1.88,
+   "text": "happens."
+  },
+  {
+   "t": 1200.81,
+   "d": 5.09,
+   "text": "So build club was a server activity that ran for a few months after the Proc Gen villages"
+  },
+  {
+   "t": 1205.9,
+   "d": 1.72,
+   "text": "update."
+  },
+  {
+   "t": 1207.62,
+   "d": 3.99,
+   "text": "Anyone could provide a character code seed and starting village."
+  },
+  {
+   "t": 1211.61,
+   "d": 3.39,
+   "text": "We had a bunch of different people building different characters and taking them different"
+  },
+  {
+   "t": 1215.0,
+   "d": 2.11,
+   "text": "directions to tell different stories."
+  },
+  {
+   "t": 1217.11,
+   "d": 5.64,
+   "text": "It was a lot of fun and as you can see here we ended up with some breathtaking fan art"
+  },
+  {
+   "t": 1222.75,
+   "d": 9.21,
+   "text": "and it revealed issues we had with world seeding."
+  },
+  {
+   "t": 1231.96,
+   "d": 5.96,
+   "text": "This is the bizarre at the foot of tall stethy which is a structure that's been build by"
+  },
+  {
+   "t": 1237.92,
+   "d": 8.79,
+   "text": "discord user cloud of neutron flex in the hearth pire mod which adds homesteading capabilities"
+  },
+  {
+   "t": 1246.71,
+   "d": 1.86,
+   "text": "to the character."
+  },
+  {
+   "t": 1248.57,
+   "d": 8.22,
+   "text": "Loot, tiles, furniture, structural objects and customizability of colors and items and"
+  },
+  {
+   "t": 1256.79,
+   "d": 5.51,
+   "text": "equipment to facilitate large-scale building projects such as the one you see before them."
+  },
+  {
+   "t": 1262.3,
+   "d": 5.44,
+   "text": "It does all this diagetically from the perspective of the character."
+  },
+  {
+   "t": 1267.74,
+   "d": 5.72,
+   "text": "I believe Caves of Qud is a much more honest experience when given the ability to build"
+  },
+  {
+   "t": 1273.46,
+   "d": 5.4,
+   "text": "yourself a home, to build a place where a community can gather, live and flourish."
+  },
+  {
+   "t": 1278.86,
+   "d": 8.28,
+   "text": "This is just one mod out of a whole constallation of them."
+  },
+  {
+   "t": 1287.14,
+   "d": 10.3,
+   "text": "I want to take a sidebar here to mention a thing I was thinking about this morning which"
+  },
+  {
+   "t": 1297.44,
+   "d": 6.0,
+   "text": "is that if Dwarf Fortress has a Roguelike mode than Caves of Qud should have a fortress"
+  },
+  {
+   "t": 1303.44,
+   "d": 1.0,
+   "text": "mode."
+  },
+  {
+   "t": 1304.44,
+   "d": 3.85,
+   "text": "I think that would be really cool."
+  },
+  {
+   "t": 1308.29,
+   "d": 5.17,
+   "text": "Anyway, the hardest part of this talk was the curation process."
+  },
+  {
+   "t": 1313.46,
+   "d": 8.88,
+   "text": "This is is just a handful of those who helped bridge the gap."
+  },
+  {
+   "t": 1322.34,
+   "d": 1.47,
+   "text": "That's the end of the talk."
+  },
+  {
+   "t": 1323.81,
+   "d": 3.96,
+   "text": "I am Ivy Melinda, community managers for Caves of Qud."
+  },
+  {
+   "t": 1327.77,
+   "d": 1.05,
+   "text": "You can find me on Twitter."
+  },
+  {
+   "t": 1328.82,
+   "d": 9.46,
+   "text": "And remember, if Caves of Qud can motivate me to learn and support one either, maybe"
+  },
+  {
+   "t": 1338.28,
+   "d": 3.41,
+   "text": "yours can too."
+  },
+  {
+   "t": 1341.69,
+   "d": 5.09,
+   "text": "Thank you."
+  },
+  {
+   "t": 1346.78,
+   "d": 9.63,
+   "text": ">> That was wonderful continuing with the very motivational talks today and we have"
+  },
+  {
+   "t": 1356.41,
+   "d": 3.33,
+   "text": "Ivy here to answer -- sorry -- some questions."
+  },
+  {
+   "t": 1359.74,
+   "d": 4.19,
+   "text": ">> I am here with special guest Ava Problems."
+  },
+  {
+   "t": 1363.93,
+   "d": 4.25,
+   "text": "EMCEE: Hello, special guest Ava problems."
+  },
+  {
+   "t": 1368.18,
+   "d": 2.92,
+   "text": "Welcome to Roguelike Celebration."
+  },
+  {
+   "t": 1371.1,
+   "d": 1.7,
+   "text": "Thanks so much."
+  },
+  {
+   "t": 1372.8,
+   "d": 2.21,
+   "text": "It was a wonderful talk."
+  },
+  {
+   "t": 1375.01,
+   "d": 1.84,
+   "text": "I really -- yeah."
+  },
+  {
+   "t": 1376.85,
+   "d": 1.0,
+   "text": "I think it was interesting."
+  },
+  {
+   "t": 1377.85,
+   "d": 4.7,
+   "text": "I don't know if you could see chat but a lot of people definitely went through similar"
+  },
+  {
+   "t": 1382.55,
+   "d": 4.66,
+   "text": "experiences in terms of coming in through games like ADOM and so it resonated with a"
+  },
+  {
+   "t": 1387.21,
+   "d": 1.0,
+   "text": "lot of people."
+  },
+  {
+   "t": 1388.21,
+   "d": 1.19,
+   "text": ">> I am so glad."
+  },
+  {
+   "t": 1389.4,
+   "d": 7.83,
+   "text": "I was hoping I wasn't just doing Babe Ruth sort of thing with that story."
+  },
+  {
+   "t": 1397.23,
+   "d": 8.86,
+   "text": "EMCEE: No, lots of people -- this is the place where I think many, many people know exactly"
+  },
+  {
+   "t": 1406.09,
+   "d": 1.0,
+   "text": "what you are talking about."
+  },
+  {
+   "t": 1407.09,
+   "d": 2.14,
+   "text": "Yeah, so we do have some questions."
+  },
+  {
+   "t": 1409.23,
+   "d": 5.37,
+   "text": "The first question is how does Caves of Qud team navigate the gray area of relying on"
+  },
+  {
+   "t": 1414.6,
+   "d": 3.08,
+   "text": "volunteer moderator as a commercial project?"
+  },
+  {
+   "t": 1417.68,
+   "d": 3.46,
+   "text": "IVY MELINDA: Um."
+  },
+  {
+   "t": 1421.14,
+   "d": 3.06,
+   "text": "It is opt-in."
+  },
+  {
+   "t": 1424.2,
+   "d": 2.35,
+   "text": "What can I say?"
+  },
+  {
+   "t": 1426.55,
+   "d": 8.21,
+   "text": "I feel like a lot of people feel very strongly about the community, enough to want to be"
+  },
+  {
+   "t": 1434.76,
+   "d": 4.12,
+   "text": "able to give back to it but they aren't sure how."
+  },
+  {
+   "t": 1438.88,
+   "d": 8.78,
+   "text": "I think the more ways that we provide people to give back to the community it is good for"
+  },
+  {
+   "t": 1447.66,
+   "d": 4.31,
+   "text": "us, it is good for the community, it is good for those people that want to give back but"
+  },
+  {
+   "t": 1451.97,
+   "d": 6.82,
+   "text": "don't know how and I think that's the real, like core of that dynamic."
+  },
+  {
+   "t": 1458.79,
+   "d": 2.49,
+   "text": "At least that's how I have been focusing on it."
+  },
+  {
+   "t": 1461.28,
+   "d": 3.01,
+   "text": "I am not in charge of payroll so..."
+  },
+  {
+   "t": 1464.29,
+   "d": 3.61,
+   "text": "EMCEE: Take it up with someone else on Twitter."
+  },
+  {
+   "t": 1467.9,
+   "d": 1.0,
+   "text": "It's good."
+  },
+  {
+   "t": 1468.9,
+   "d": 2.82,
+   "text": "I think that's a good point."
+  },
+  {
+   "t": 1471.72,
+   "d": 3.03,
+   "text": "Another question here I think is good is at what point in the game do you recommend playing"
+  },
+  {
+   "t": 1474.75,
+   "d": 4.64,
+   "text": "with mods and do you have any mods that are our favorites?"
+  },
+  {
+   "t": 1479.39,
+   "d": 8.75,
+   "text": "IVY MELINDA: I think it depends on how much you care about getting a \"authentic experience\""
+  },
+  {
+   "t": 1488.14,
+   "d": 1.99,
+   "text": "of Caves of Qud."
+  },
+  {
+   "t": 1490.13,
+   "d": 6.1,
+   "text": "I tend not to play with a whole lot of mods because I want my experience to be similar"
+  },
+  {
+   "t": 1496.23,
+   "d": 6.25,
+   "text": "enough to an entry level experience that I can still provide meaningful guidance."
+  },
+  {
+   "t": 1502.48,
+   "d": 1.0,
+   "text": "You know?"
+  },
+  {
+   "t": 1503.48,
+   "d": 6.95,
+   "text": "There are so many mods out there and I feel like once you get a certain point into like,"
+  },
+  {
+   "t": 1510.43,
+   "d": 8.87,
+   "text": "you know, like mucking around in the muds that like the game can start to become unrecognizable"
+  },
+  {
+   "t": 1519.3,
+   "d": 7.67,
+   "text": "from what it originally was and that kind of, you know, for me, that makes it hard to"
+  },
+  {
+   "t": 1526.97,
+   "d": 5.63,
+   "text": "sort of like tease out what information I need to like help new players to integrate"
+  },
+  {
+   "t": 1532.6,
+   "d": 2.7,
+   "text": "into Caves of Qud as a game and as a community."
+  },
+  {
+   "t": 1535.3,
+   "d": 1.91,
+   "text": "EMCEE: That makes a lot of sense."
+  },
+  {
+   "t": 1537.21,
+   "d": 3.5,
+   "text": ">> There is a lot of chaos as mods."
+  },
+  {
+   "t": 1540.71,
+   "d": 5.89,
+   "text": "I play with your own personal relics right now."
+  },
+  {
+   "t": 1546.6,
+   "d": 8.93,
+   "text": "Chaos is uniquely positioned to put this functionality in the game and the mods are just like the"
+  },
+  {
+   "t": 1555.53,
+   "d": 6.47,
+   "text": "toggle that turn on interesting features that may or may not become implemented."
+  },
+  {
+   "t": 1562.0,
+   "d": 5.46,
+   "text": "Your own personal relic gives a chance for when you suddenly swell with inspiration to"
+  },
+  {
+   "t": 1567.46,
+   "d": 8.43,
+   "text": "name your two-face null worm skull like the commanding cap of grip gate and maybe it will"
+  },
+  {
+   "t": 1575.89,
+   "d": 2.16,
+   "text": "make you start collector generation."
+  },
+  {
+   "t": 1578.05,
+   "d": 2.09,
+   "text": "That's cool."
+  },
+  {
+   "t": 1580.14,
+   "d": 2.36,
+   "text": "EMCEE: That sound really cool."
+  },
+  {
+   "t": 1582.5,
+   "d": 1.0,
+   "text": "Thank you."
+  },
+  {
+   "t": 1583.5,
+   "d": 4.01,
+   "text": "That's excellent and makes a lot of sense."
+  },
+  {
+   "t": 1587.51,
+   "d": 4.18,
+   "text": "I think when people are developing a game too there is that need to not get too involved"
+  },
+  {
+   "t": 1591.69,
+   "d": 5.57,
+   "text": "in certain amounts of mods and ways removed from it because you have to try to preserve"
+  },
+  {
+   "t": 1597.26,
+   "d": 1.0,
+   "text": "that experience."
+  },
+  {
+   "t": 1598.26,
+   "d": 3.99,
+   "text": "I see for people listening in the theater chat people are name dropping some of their"
+  },
+  {
+   "t": 1602.25,
+   "d": 1.11,
+   "text": "favorite mods."
+  },
+  {
+   "t": 1603.36,
+   "d": 3.77,
+   "text": ">> There are so many good mods out there."
+  },
+  {
+   "t": 1607.13,
+   "d": 2.06,
+   "text": ">> Pet mod!"
+  },
+  {
+   "t": 1609.19,
+   "d": 2.05,
+   "text": "Character extraordinary."
+  },
+  {
+   "t": 1611.24,
+   "d": 7.72,
+   "text": "She will bury you or she will carry you."
+  },
+  {
+   "t": 1618.96,
+   "d": 7.77,
+   "text": "EMCEE: Can you remark on how key give aways impacted the growth of the community?"
+  },
+  {
+   "t": 1626.73,
+   "d": 10.78,
+   "text": "IVY MELINDA: That's a really hard question to answer because I don't really have like,"
+  },
+  {
+   "t": 1637.51,
+   "d": 5.74,
+   "text": "you know, like the connections that get formed that way are sort of invisible."
+  },
+  {
+   "t": 1643.25,
+   "d": 5.66,
+   "text": "Like I can look at the amount of keys that we have given away and the amount of like"
+  },
+  {
+   "t": 1648.91,
+   "d": 7.56,
+   "text": "copies of Caves of Qud that exist on steam for example that haven't been purchased but"
+  },
+  {
+   "t": 1656.47,
+   "d": 3.56,
+   "text": "that doesn't really tell me about the impact."
+  },
+  {
+   "t": 1660.03,
+   "d": 4.42,
+   "text": "You can look at the stats but there is so much more information behind those stats that"
+  },
+  {
+   "t": 1664.45,
+   "d": 6.63,
+   "text": "it is not really actually possible to be privy to at least from my position."
+  },
+  {
+   "t": 1671.08,
+   "d": 9.11,
+   "text": "It is not -- I think I would have to like chase down every, you know, every person I"
+  },
+  {
+   "t": 1680.19,
+   "d": 8.24,
+   "text": "have given a code to and been like have you convinceded anybody else to do Caves of Qud?"
+  },
+  {
+   "t": 1688.43,
+   "d": 8.51,
+   "text": "Tell me all about your volunteer marketing for Caves of Qud."
+  },
+  {
+   "t": 1696.94,
+   "d": 3.77,
+   "text": "And like, I don't know."
+  },
+  {
+   "t": 1700.71,
+   "d": 1.39,
+   "text": "I don't do that."
+  },
+  {
+   "t": 1702.1,
+   "d": 1.8,
+   "text": "That's not a thing."
+  },
+  {
+   "t": 1703.9,
+   "d": 1.04,
+   "text": "EMCEE: Yeah."
+  },
+  {
+   "t": 1704.94,
+   "d": 1.0,
+   "text": "Yeah."
+  },
+  {
+   "t": 1705.94,
+   "d": 1.0,
+   "text": "That's a fair question."
+  },
+  {
+   "t": 1706.94,
+   "d": 7.79,
+   "text": "Obviously the answer is like nothing so drastic as to be noticeably."
+  },
+  {
+   "t": 1714.73,
+   "d": 8.31,
+   "text": "One good question."
+  },
+  {
+   "t": 1723.04,
+   "d": 4.08,
+   "text": "What attracted you to be a community manager and what do you think makes games attract"
+  },
+  {
+   "t": 1727.12,
+   "d": 1.04,
+   "text": "them?"
+  },
+  {
+   "t": 1728.16,
+   "d": 6.7,
+   "text": "IVY MELINDA: I didn't really -- you know, OK."
+  },
+  {
+   "t": 1734.86,
+   "d": 2.67,
+   "text": "Here is the thing."
+  },
+  {
+   "t": 1737.53,
+   "d": 5.73,
+   "text": "I spent a lot of my time, you know, like poor, not having a lot of opportunities, no education,"
+  },
+  {
+   "t": 1743.26,
+   "d": 1.0,
+   "text": "no training."
+  },
+  {
+   "t": 1744.26,
+   "d": 6.0,
+   "text": "You know, like minimum wage jobs and all of the that."
+  },
+  {
+   "t": 1750.26,
+   "d": 8.52,
+   "text": "I didn't feel like I had a lot of marketable skills to apply to, you know, like quote unquote"
+  },
+  {
+   "t": 1758.78,
+   "d": 9.39,
+   "text": "professional roles in as much as that means anything but what ended up happening for me"
+  },
+  {
+   "t": 1768.17,
+   "d": 6.73,
+   "text": "was I just sort of lived my life and did my thing and I didn't choose to become a community"
+  },
+  {
+   "t": 1774.9,
+   "d": 1.0,
+   "text": "manager."
+  },
+  {
+   "t": 1775.9,
+   "d": 6.2,
+   "text": "Where was chosen to be a community manager so I consider myself very lucky to have fallen"
+  },
+  {
+   "t": 1782.1,
+   "d": 5.54,
+   "text": "into this position and I am eternally grateful to the people who are providing it to me."
+  },
+  {
+   "t": 1787.64,
+   "d": 6.45,
+   "text": "EMCEE: I am glad you say that because I think to me part of the joy of Roguelike Celebration"
+  },
+  {
+   "t": 1794.09,
+   "d": 4.64,
+   "text": "is the fact that it is important that you know, you and your work on the community of"
+  },
+  {
+   "t": 1798.73,
+   "d": 4.75,
+   "text": "Caves of Qud is just as important as when we have had Brian or Jason or someone up here"
+  },
+  {
+   "t": 1803.48,
+   "d": 5.14,
+   "text": "to talk about the development side and what makes a game is all of that working together."
+  },
+  {
+   "t": 1808.62,
+   "d": 3.83,
+   "text": "So I think it has always been important and the great thing about Roguelike Celebration"
+  },
+  {
+   "t": 1812.45,
+   "d": 4.81,
+   "text": "to appreciate the fact that those are their own skill sets and just as valuable as, you"
+  },
+  {
+   "t": 1817.26,
+   "d": 5.21,
+   "text": "know, to use my own paradigm of wizards and people who do technical stuff and that's great"
+  },
+  {
+   "t": 1822.47,
+   "d": 6.23,
+   "text": "and three -- they get a lot of attention but the everything behind the scenes is just as"
+  },
+  {
+   "t": 1828.7,
+   "d": 1.63,
+   "text": "important."
+  },
+  {
+   "t": 1830.33,
+   "d": 2.88,
+   "text": "Thank you so much for being here."
+  },
+  {
+   "t": 1833.21,
+   "d": 3.6,
+   "text": "Thank you special guest for appearing as well."
+  },
+  {
+   "t": 1836.81,
+   "d": 1.19,
+   "text": "We will see you around the con."
+  },
+  {
+   "t": 1838.0,
+   "d": 1.0,
+   "text": "See you."
+  },
+  {
+   "t": 1839.0,
+   "d": 1.0,
+   "text": "All right."
+  }
+ ],
+ "note": "manual track runs past the end of the video and there is no English auto-generated (en-orig) track to align it with; cut at the video's duration only, so text squeezed in just before the end is unchecked"
+}

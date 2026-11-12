@@ -1,0 +1,54 @@
+Qristy Overton - Exhibition: Attempting Brogue on a Dancepad
+Speaker: Qristy Overton
+https://www.youtube.com/watch?v=zlJNIJOog9M
+Year: 2021   Kind: talk   Captions: manual (en)
+
+## Introduction
+
+[0:00:05] I can't even begin. Our next speaker is my fellow organizer, Qristy. She has been the person you have been seeing on Twitter all this time. She has been our website person this whole time. If you have not seen her personal website it is the hint for what is about to happen. As you can see, there is multiple cameras going on here. What is that thing? That is a custom pad made with a Makey Makey. We are going to play some Brogue for the next 15 minutes and I am going to do the best live commentary of Brogue that I can. Take it away, Qristy.
+
+## Setup and mechanics
+
+[0:00:49] >> Qristy: All right. Can you hear me? >> EMCEE: Yup, we are good. >> Qristy: Hi, what's up, Roguelike Celebration? I am Qristy AKA next level banana coming to you live from sunny downtown Portland, Oregon. I am here as we have said to answer the question is it possible to play a traditional Roguelike on a dance mat. I have determined the answer is eh? Obviously your normal off the shelf mat not enough buttons but using every input on the Makey Makey I have got almost all of the keys I need. I have got directions over here. We have got search, no, apply, inventory, throw, space is null, yes, enter. I can't call anything anything but given the amount of letters I have I think that's fine.
+
+[0:01:51] Two quick things. Ground is an important piece in connecting a circuit. This is going to be less DDR and more Twister. One foot on ground and the other foot on whichever button I want to press. This would be easier if I had longer legs. EMCEE: It is fine. We are doing it. >> Qristy: We are doing it. I can't see the chat so whatever you are saying has to come through Kawa or you are screaming into the void. EMCEE: People are asking the traditional sound like. I don't think there would be music. Have fun with it. It is a gorgeous, weird, ambient ASCII game. Am I the void? I don't know. I have this beautiful golden light.
+
+[0:02:55] Let's get going.
+
+## Gameplay and strategy
+
+[0:03:00] >> Qristy: I am going to zip through the first level. It isn't exciting. KAWA: Traditional Roguelike, moves only happen when she pushes her foot on something. There is an auto explore feature you are seeing her take very full advantage of. The big thing about this game is that it is very focused on item-based progression. Basically your character will kind of always be the same at the start and the only things that will change is as you find interesting and cool items that will change your abilities, maybe find allies to help you out and all sorts of things along those lines. There is a -- yeah. And the other very cool thing this game has is a lot of these really gorgeous visual effects in terms of its level generation. Brian walker, the developer for this, did a level gen talk many years ago for us.
+
+[0:04:05] They have these huge open caverns and foliage that can catch on fire and all sorts of ridiculous things. You have insinidary carts -- darts and it is possible you will throw things to catch fire to cause other shenanigans down the line. >> Qristy: I don't know if I have ever found these darts before. KAWA: Fun. We are doing it live. That big dark blue area is deep water. She technically can go through it but really shouldn't because her items will get away from her and eels will attack and eels are very bad. It scares me personal ray -- personally when I play Brogue and I don't play Brogue on a dance mat so who even knows.
+
+[0:05:08] The main stat here is strength which makes wielding better weapons and armor possible. There is -- it has the classic identification game of like we don't know what an aqua marine potion is until she tries to use it. This stuff range thing here on the top left where the larger that number is, the further away monsters can be and notice her. You want that number tiny if I understand this correctly. Apparently you got your first scroll. Some scrolls with some -- apologies to Maggie in advance. >> Quisty: Sorry to the captioner for the names of my scrolls. But the names of my scrolls are -- protector starting weapon.
+
+[0:06:16] We are not playing with good strategy. We are playing with interesting strategy to demonstrate what pressing the buttons is like. KAWA: Hell yeah.
+
+## Hardware design and iteration
+
+[0:06:25] Awesome. There is a pad for each input that Brogue uses. How long did take you to get this going? >> Qristy: You know the Makey Makey is so cool. I am not an electronics person. So this was all kind of like wait, how does a circuit work? Can I enchant anything? I may be stuck here. KAWA: Oh, do you need to press multiple buttons? You might be able to just scroll to the item and enter in a submenu for interacting with it might be able to do it. >> Qristy: Hang on, I am cheating. KAWA: OK. We are doing it live. It is Roguelike development. It is how this works. What is the other question people were asking?
+
+[0:07:27] Each of the controls. So there is auto explore like other traditional Roguelikes bump-to-attack and move as Michael talked about at the start of the day. Everythingential -- everything else you have these items and you can put on weapons of armor and they have different effects. That's why it is something like Brogue and the complicated systems. >> Qristy: 18 buttons is all you need. KAWA: Blaseball generators at the same time. I am not going to put that on. >> Qristy: Send me those sound tracks later. KAWA: Brogue's ID game is unique.
+
+[0:08:33] KAWA: That was the healing potion. Scrolls of enchanting can be used on just about anything to make it better. Nope, don't eat yet. There is a hunger clock in this game. But you are doing OK. You are all right. You might get a friend. Are we going to get a friend? They missed you. I wonder. Can you free the one that is trapped? Yes. Oh, you tried. It is very cool.
+
+[0:09:34] Allies can do really cool things for you and follow you around and help you do stuff which in a game with such a small design space does a lot of very cool things. We are starting again. We technically only have five minutes but you know, we can talk through. We have our first treasure room. If you can get to that key then she can get a vault that has a bunch of cool stuff in it. It is like floating in the middle of the pit. I don't know how we are meant to be there if we are going to get there. Rogue is actually a good one because it is small design space and as Dylan talked about there isn't a lot of this huge complexity of lots of possibility space. Sproggiwood also brought up in the chat extremely good.
+
+[0:10:36] Golden Krone Hotel also great. Golden Krone Hotel super for sure and sproggiwood are on sale in the office of steam. You should head over there and check those out. Yeah, someone was asking if you had done any iteration on where the pads were located and
+
+## Refining the experience
+
+[0:10:58] seeing about making them closure together and more ergnomic for you. I know you have been working hard on this. >> Qristy: I was joining for maximum comedic value. I would have definitely put more grounds in if I was doing this again. Also the foil on the ground button is starting to show its wear. Didn't think about how I would have to be stepping on that button the entire time. I wish I had the potion of incineration still. KAWA: That's unfortunate. We are here to try it. We are here to hack around and find out. That how it works. Yeah. Oh, man. >> Qristy: Look at all that treasure I can't get. KAWA: There is the rest of the dungeon.
+
+[0:12:01] I wonder if you will get another opportunity. People are admiring your ability to keep balanced in the midst of it all. You are doing your best. You are doing great. >> Qristy: I am doing what I can. That's all we ask. Can you hear the -- KAWA: Sam is asking if that is in fact the cool S in the corner of your pad? >> Qristy: Yes, of course. Also, I don't know if you can see it this is my earring. KAWA: Cool Ss all over the place. Being able to search for hidden areas is an important part of exploring the levels in Brogue. >> Qristy: Yes, which I haven't done yet but I could if I wanted to. >> Qristy: Pick up some gold. Let's see. KAWA: Gold is literally only for the score.
+
+[0:13:03] It does nothing. It is fine. OOPH. Big hit. >> Qristy: Listen, I am almost out of time. KAWA: You are going to hurl yourself into a death and then we will call it the end? >> Qristy: No, I am going to win. KAWA: This is amazing. I hope you all are having as much fun as I am. >> Qristy: I am not looking so hot. KAWA: Two puzzles that require potion and because you are early you don't know which is which. Yeah, there is always a bit of luck in things like early levels especially in these traditional Roguelikes but that's part of what makes it compelling. Sometimes you get an overpowered run very early and that's fascinating.
+
+[0:14:04] Sometimes balance is just for fun. Sometimes it is not. Have fun with making games. That's what it is for.
+
+## Final descent and conclusion
+
+[0:14:22] >> Qristy: We are really going places. KAWA: It is top of the hour. >> Qristy: Want to get licked by a toad? Yeah, you do. KAWA: The bars on the top right are total health, total hunger clock and how long any effects are happening. She is going to be hallucinating for quite a while. You the player don't know what's going on. >> Qristy: Yeah, I don't know what that enemy is. Let's fight it. KAWA: Over balancing gets -- and of course, yes.
+
+[0:15:24] The juicyness of Rogue's hallucnation and in Rogue in general and all these wonderful ASCII color effects is fantastic for a turn-based ASCII game. I have had arguments with people about this. I think it is fabulous. Other people think it is -- but hey. Ah. >> Qristy: Killed by a question mark. KAWA: That was so much fun. It was a jackal. It looked like a unicorn. We were hallucinating. It was a unicorn in our hearts. So, yeah, thank you so much, Qristy. That was -- >> Qristy: Thanks. This was a blast.

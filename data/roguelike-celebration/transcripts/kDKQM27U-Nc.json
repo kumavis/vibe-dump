@@ -1,0 +1,6801 @@
+{
+ "id": "kDKQM27U-Nc",
+ "url": "https://www.youtube.com/watch?v=kDKQM27U-Nc",
+ "title": "Caves of Qud Live Playthrough with Developer Commentary",
+ "speaker": null,
+ "talk_title": null,
+ "year": 2017,
+ "kind": "talk",
+ "upload_date": "2017-12-23",
+ "duration_s": 3574,
+ "playlists": [
+  "Roguelike Celebration 2017"
+ ],
+ "description": "Jason Grinblat and Nick DeCapua play Caves of Qud taking suggestions from the audience!\nThis video is from the 2017 Roguelike Celebration: https://roguelike.club/event2017.html",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 173,
+   "title": "Scenario Selection"
+  },
+  {
+   "start": 425,
+   "title": "Character Creation"
+  },
+  {
+   "start": 841,
+   "title": "Character Refinement"
+  },
+  {
+   "start": 1332,
+   "title": "Starting the Adventure"
+  },
+  {
+   "start": 1736,
+   "title": "Navigating the Jungle"
+  },
+  {
+   "start": 2130,
+   "title": "Fighting the Evil Twin"
+  },
+  {
+   "start": 2603,
+   "title": "Reaching the Village"
+  },
+  {
+   "start": 2884,
+   "title": "Final Battles"
+  },
+  {
+   "start": 3301,
+   "title": "Character Death"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 9889,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.08,
+   "d": 5.26,
+   "text": "all right so hi I'm Jason grim blood I'm"
+  },
+  {
+   "t": 5.34,
+   "d": 2.7,
+   "text": "the co-creator of roguelike cold case of"
+  },
+  {
+   "t": 8.04,
+   "d": 2.16,
+   "text": "cod I'm Nick T Capua"
+  },
+  {
+   "t": 10.2,
+   "d": 2.25,
+   "text": "I'm the primary playtester of caves of"
+  },
+  {
+   "t": 12.45,
+   "d": 1.56,
+   "text": "Cod I've played it since the beginning"
+  },
+  {
+   "t": 14.01,
+   "d": 2.37,
+   "text": "yeah so okay so what we're gonna do"
+  },
+  {
+   "t": 16.38,
+   "d": 3.8,
+   "text": "today is a little different and"
+  },
+  {
+   "t": 20.18,
+   "d": 3.55,
+   "text": "unpracticed so basically we're going to"
+  },
+  {
+   "t": 23.73,
+   "d": 2.34,
+   "text": "do like a live playthrough session of"
+  },
+  {
+   "t": 26.07,
+   "d": 2.58,
+   "text": "caves of cod but it's choose your own"
+  },
+  {
+   "t": 28.65,
+   "d": 1.53,
+   "text": "playthrough of caves of cod so we're"
+  },
+  {
+   "t": 30.18,
+   "d": 2.61,
+   "text": "going to incorporate your like choices"
+  },
+  {
+   "t": 32.79,
+   "d": 1.98,
+   "text": "we're going to have some like branching"
+  },
+  {
+   "t": 34.77,
+   "d": 2.43,
+   "text": "points depending on what happens in the"
+  },
+  {
+   "t": 37.2,
+   "d": 2.4,
+   "text": "game and we're gonna like query you for"
+  },
+  {
+   "t": 39.6,
+   "d": 2.91,
+   "text": "like what we should do and nick is gonna"
+  },
+  {
+   "t": 42.51,
+   "d": 2.55,
+   "text": "be the expert here and he'll sort of"
+  },
+  {
+   "t": 45.06,
+   "d": 3.51,
+   "text": "like synthesize the may be right"
+  },
+  {
+   "t": 48.57,
+   "d": 3.09,
+   "text": "decision with your decision now and/or"
+  },
+  {
+   "t": 51.66,
+   "d": 1.74,
+   "text": "get us all horribly killed yeah or get"
+  },
+  {
+   "t": 53.4,
+   "d": 3.06,
+   "text": "us all horribly killed so a couple"
+  },
+  {
+   "t": 56.46,
+   "d": 0.96,
+   "text": "things like if you haven't heard of"
+  },
+  {
+   "t": 57.42,
+   "d": 1.14,
+   "text": "caves of cuts so let me just talk about"
+  },
+  {
+   "t": 58.56,
+   "d": 1.74,
+   "text": "it briefly so caves of cut is a"
+  },
+  {
+   "t": 60.3,
+   "d": 0.57,
+   "text": "roguelike"
+  },
+  {
+   "t": 60.87,
+   "d": 1.47,
+   "text": "it's an open-world roguelike it's"
+  },
+  {
+   "t": 62.34,
+   "d": 1.83,
+   "text": "heavily inspired by Adam I'm glad we're"
+  },
+  {
+   "t": 64.17,
+   "d": 5.25,
+   "text": "following Thomas here so it's kind of a"
+  },
+  {
+   "t": 69.42,
+   "d": 3.75,
+   "text": "science fantasy new wave science fiction"
+  },
+  {
+   "t": 73.17,
+   "d": 2.55,
+   "text": "weird mashup of a whole whole lot of"
+  },
+  {
+   "t": 75.72,
+   "d": 3.36,
+   "text": "genres it's heavily inspired by a pen"
+  },
+  {
+   "t": 79.08,
+   "d": 1.5,
+   "text": "and paper role-playing system called"
+  },
+  {
+   "t": 80.58,
+   "d": 2.73,
+   "text": "gamma world which was a derivative game"
+  },
+  {
+   "t": 83.31,
+   "d": 3.24,
+   "text": "or old fans was a derivative of Dungeons"
+  },
+  {
+   "t": 86.55,
+   "d": 2.34,
+   "text": "& Dragons that was around in the 70s and"
+  },
+  {
+   "t": 88.89,
+   "d": 2.85,
+   "text": "it was sort of like this puppy science"
+  },
+  {
+   "t": 91.74,
+   "d": 4.77,
+   "text": "fiction world where nuclear radiation"
+  },
+  {
+   "t": 96.51,
+   "d": 4.23,
+   "text": "had uplifted a bunch of animals and"
+  },
+  {
+   "t": 100.74,
+   "d": 2.04,
+   "text": "plants that human level intelligence and"
+  },
+  {
+   "t": 102.78,
+   "d": 2.94,
+   "text": "they were like crazy robots and kind of"
+  },
+  {
+   "t": 105.72,
+   "d": 1.59,
+   "text": "it was the sort of post apocalyptic"
+  },
+  {
+   "t": 107.31,
+   "d": 3.36,
+   "text": "world where the vestiges of the old"
+  },
+  {
+   "t": 110.67,
+   "d": 2.73,
+   "text": "pre-fall past were like obscured enough"
+  },
+  {
+   "t": 113.4,
+   "d": 2.34,
+   "text": "through time and through weird cultural"
+  },
+  {
+   "t": 115.74,
+   "d": 2.1,
+   "text": "like mashups that they weren't as"
+  },
+  {
+   "t": 117.84,
+   "d": 1.86,
+   "text": "discernible as something like we're"
+  },
+  {
+   "t": 119.7,
+   "d": 1.56,
+   "text": "fallout you can prove it you can very"
+  },
+  {
+   "t": 121.26,
+   "d": 1.62,
+   "text": "much identify with the culture that"
+  },
+  {
+   "t": 122.88,
+   "d": 5.03,
+   "text": "existed before that fall okay so"
+  },
+  {
+   "t": 127.91,
+   "d": 2.26,
+   "text": "basically what we're gonna do here so"
+  },
+  {
+   "t": 130.17,
+   "d": 1.86,
+   "text": "caves are cut it's like a big messy game"
+  },
+  {
+   "t": 132.03,
+   "d": 1.86,
+   "text": "we only have an hour so"
+  },
+  {
+   "t": 133.89,
+   "d": 1.5,
+   "text": "what we thought we would do is we have"
+  },
+  {
+   "t": 135.39,
+   "d": 4.08,
+   "text": "some scenarios planned we have three of"
+  },
+  {
+   "t": 139.47,
+   "d": 1.11,
+   "text": "them what I'm going to do is I'm going"
+  },
+  {
+   "t": 140.58,
+   "d": 2.49,
+   "text": "to read them out to you and then your"
+  },
+  {
+   "t": 143.07,
+   "d": 2.04,
+   "text": "will do like a show of hands and you'll"
+  },
+  {
+   "t": 145.11,
+   "d": 1.41,
+   "text": "choose the one that sounds most"
+  },
+  {
+   "t": 146.52,
+   "d": 2.82,
+   "text": "interesting and that'll be like our"
+  },
+  {
+   "t": 149.34,
+   "d": 2.04,
+   "text": "overarching goal but of course it's a"
+  },
+  {
+   "t": 151.38,
+   "d": 1.8,
+   "text": "roguelike so we don't really know what"
+  },
+  {
+   "t": 153.18,
+   "d": 1.92,
+   "text": "to expect we might deviate from that"
+  },
+  {
+   "t": 155.1,
+   "d": 2.82,
+   "text": "we'll see and then we'll jump into"
+  },
+  {
+   "t": 157.92,
+   "d": 1.26,
+   "text": "character creation and character"
+  },
+  {
+   "t": 159.18,
+   "d": 1.89,
+   "text": "creation is very important and intimate"
+  },
+  {
+   "t": 161.07,
+   "d": 1.53,
+   "text": "in caves will cut until we'll all do it"
+  },
+  {
+   "t": 162.6,
+   "d": 1.98,
+   "text": "together and we'll go from there"
+  },
+  {
+   "t": 164.58,
+   "d": 2.28,
+   "text": "and we'll see how far we could get in in"
+  },
+  {
+   "t": 166.86,
+   "d": 8.1,
+   "text": "an hour that's that's the plan okay so"
+  },
+  {
+   "t": 174.96,
+   "d": 1.56,
+   "text": "I'm gonna I'm gonna read some scenario"
+  },
+  {
+   "t": 176.52,
+   "d": 2.43,
+   "text": "and and kind of just meditate on which"
+  },
+  {
+   "t": 178.95,
+   "d": 2.03,
+   "text": "of them sound those interesting okay a"
+  },
+  {
+   "t": 180.98,
+   "d": 3.91,
+   "text": "sect of genius albino cave bears yes a"
+  },
+  {
+   "t": 184.89,
+   "d": 2.1,
+   "text": "sect of genius albino cave bears with"
+  },
+  {
+   "t": 186.99,
+   "d": 1.92,
+   "text": "quills to boot the bear through mites"
+  },
+  {
+   "t": 188.91,
+   "d": 1.89,
+   "text": "are trying to restore cut to its former"
+  },
+  {
+   "t": 190.8,
+   "d": 2.01,
+   "text": "technological splendor and they need"
+  },
+  {
+   "t": 192.81,
+   "d": 2.34,
+   "text": "your help you see due to an unfortunate"
+  },
+  {
+   "t": 195.15,
+   "d": 2.43,
+   "text": "accounting error the bear through mites"
+  },
+  {
+   "t": 197.58,
+   "d": 2.04,
+   "text": "accidentally flushed the wrong way joy"
+  },
+  {
+   "t": 199.62,
+   "d": 2.16,
+   "text": "down the trash chutes of a noxious scrap"
+  },
+  {
+   "t": 201.78,
+   "d": 3.18,
+   "text": "yard yard called golgotha turned out the"
+  },
+  {
+   "t": 204.96,
+   "d": 2.46,
+   "text": "poor thing was sentient now they need"
+  },
+  {
+   "t": 207.42,
+   "d": 1.98,
+   "text": "you to retrieve it but be careful go"
+  },
+  {
+   "t": 209.4,
+   "d": 1.47,
+   "text": "goldish trash chutes are home to many"
+  },
+  {
+   "t": 210.87,
+   "d": 2.79,
+   "text": "horrors sewage eels flesh-eating crabs a"
+  },
+  {
+   "t": 213.66,
+   "d": 1.86,
+   "text": "disease that rots out your tongue and a"
+  },
+  {
+   "t": 215.52,
+   "d": 2.76,
+   "text": "12 foot tall slug it'd be best to jump"
+  },
+  {
+   "t": 218.28,
+   "d": 1.83,
+   "text": "down a chute recover the way jord and"
+  },
+  {
+   "t": 220.11,
+   "d": 1.79,
+   "text": "get out as quickly as possible otherwise"
+  },
+  {
+   "t": 221.9,
+   "d": 2.56,
+   "text": "you might become the next bag of trash"
+  },
+  {
+   "t": 224.46,
+   "d": 4.37,
+   "text": "to be processed scenario two"
+  },
+  {
+   "t": 228.83,
+   "d": 2.2,
+   "text": "someone once said this was a world of"
+  },
+  {
+   "t": 231.03,
+   "d": 1.98,
+   "text": "paper and bone and encased beneath the"
+  },
+  {
+   "t": 233.01,
+   "d": 1.71,
+   "text": "shale crust of earth lies the crypts of"
+  },
+  {
+   "t": 234.72,
+   "d": 2.43,
+   "text": "a thousand and one kings what if you"
+  },
+  {
+   "t": 237.15,
+   "d": 1.71,
+   "text": "were to tease out the locations of these"
+  },
+  {
+   "t": 238.86,
+   "d": 1.86,
+   "text": "tombs from the porters of their secrets"
+  },
+  {
+   "t": 240.72,
+   "d": 2.61,
+   "text": "the vine swathes shrines the engraved"
+  },
+  {
+   "t": 243.33,
+   "d": 2.04,
+   "text": "trade goods the folk who share their"
+  },
+  {
+   "t": 245.37,
+   "d": 2.58,
+   "text": "tales over a dram of fresh water if you"
+  },
+  {
+   "t": 247.95,
+   "d": 1.74,
+   "text": "could do that why then you could travel"
+  },
+  {
+   "t": 249.69,
+   "d": 2.07,
+   "text": "to them break the chrome seals that"
+  },
+  {
+   "t": 251.76,
+   "d": 1.65,
+   "text": "shelter them from the salted air and"
+  },
+  {
+   "t": 253.41,
+   "d": 1.35,
+   "text": "plunder them Hollow"
+  },
+  {
+   "t": 254.76,
+   "d": 1.8,
+   "text": "a merchant would pay through the teeth"
+  },
+  {
+   "t": 256.56,
+   "d": 2.43,
+   "text": "for such fossils of the attune pass or"
+  },
+  {
+   "t": 258.99,
+   "d": 1.77,
+   "text": "better yet you could Don the raiment of"
+  },
+  {
+   "t": 260.76,
+   "d": 2.07,
+   "text": "these ancient kings emerge from their"
+  },
+  {
+   "t": 262.83,
+   "d": 2.01,
+   "text": "crypts unscarred and take what you want"
+  },
+  {
+   "t": 264.84,
+   "d": 2.35,
+   "text": "from merchants and farm folk alight"
+  },
+  {
+   "t": 267.19,
+   "d": 4.12,
+   "text": "okay they're three-deep in the verdurous"
+  },
+  {
+   "t": 271.31,
+   "d": 2.01,
+   "text": "jungles east of the river spy a"
+  },
+  {
+   "t": 273.32,
+   "d": 2.1,
+   "text": "shamanistic man goat has made the woods"
+  },
+  {
+   "t": 275.42,
+   "d": 2.64,
+   "text": "his home there he slaughters his own"
+  },
+  {
+   "t": 278.06,
+   "d": 1.89,
+   "text": "kind bathed in their blood and recites"
+  },
+  {
+   "t": 279.95,
+   "d": 1.77,
+   "text": "the incantations of another world it"
+  },
+  {
+   "t": 281.72,
+   "d": 2.01,
+   "text": "said that he's under the enthronement of"
+  },
+  {
+   "t": 283.73,
+   "d": 2.43,
+   "text": "an unearthly charm a glass prism fired"
+  },
+  {
+   "t": 286.16,
+   "d": 1.73,
+   "text": "in the burning gases of a distant star"
+  },
+  {
+   "t": 287.89,
+   "d": 2.08,
+   "text": "those who have sought him out have all"
+  },
+  {
+   "t": 289.97,
+   "d": 2.58,
+   "text": "disappeared now it is your turn first"
+  },
+  {
+   "t": 292.55,
+   "d": 1.65,
+   "text": "travel to the mushroom village of"
+  },
+  {
+   "t": 294.2,
+   "d": 2.07,
+   "text": "Koyukuk aya and speak with the one who"
+  },
+  {
+   "t": 296.27,
+   "d": 2.01,
+   "text": "wards their simple huts a man goat"
+  },
+  {
+   "t": 298.28,
+   "d": 2.07,
+   "text": "himself he will tell you what you need"
+  },
+  {
+   "t": 300.35,
+   "d": 1.2,
+   "text": "to know to face the ending that"
+  },
+  {
+   "t": 301.55,
+   "d": 2.4,
+   "text": "enigmatic man goat known only as Mammon"
+  },
+  {
+   "t": 303.95,
+   "d": 3.66,
+   "text": "soul drinker okay so of those three"
+  },
+  {
+   "t": 307.61,
+   "d": 2.03,
+   "text": "scenarios if you are interested wait"
+  },
+  {
+   "t": 309.64,
+   "d": 3.04,
+   "text": "okay let's know that like I don't know"
+  },
+  {
+   "t": 312.68,
+   "d": 1.08,
+   "text": "if that made any sense anywhere like"
+  },
+  {
+   "t": 313.76,
+   "d": 1.68,
+   "text": "it's supposed to be like a bunch of"
+  },
+  {
+   "t": 315.44,
+   "d": 3.0,
+   "text": "crazy like just pros that you you know"
+  },
+  {
+   "t": 318.44,
+   "d": 3.18,
+   "text": "it's a thing whatever it's like a DNC"
+  },
+  {
+   "t": 321.62,
+   "d": 1.35,
+   "text": "site right like the idea behind this I"
+  },
+  {
+   "t": 322.97,
+   "d": 1.65,
+   "text": "think is that I'm gonna kind of like GM"
+  },
+  {
+   "t": 324.62,
+   "d": 2.4,
+   "text": "this case of con session and we'll see"
+  },
+  {
+   "t": 327.02,
+   "d": 2.22,
+   "text": "how that goes okay so if you were most"
+  },
+  {
+   "t": 329.24,
+   "d": 2.1,
+   "text": "interested in that first scenario where"
+  },
+  {
+   "t": 331.34,
+   "d": 2.73,
+   "text": "there's a sect of albino cave bears and"
+  },
+  {
+   "t": 334.07,
+   "d": 1.89,
+   "text": "you're helping them you're gonna go to"
+  },
+  {
+   "t": 335.96,
+   "d": 2.31,
+   "text": "this noxious scrapyard and recover this"
+  },
+  {
+   "t": 338.27,
+   "d": 3.98,
+   "text": "sentient way joyed raise your hand okay"
+  },
+  {
+   "t": 342.25,
+   "d": 2.32,
+   "text": "okay"
+  },
+  {
+   "t": 344.57,
+   "d": 1.8,
+   "text": "actually put your hand back up I'll do a"
+  },
+  {
+   "t": 346.37,
+   "d": 5.33,
+   "text": "quick count cuz like once you wait what"
+  },
+  {
+   "t": 351.7,
+   "d": 2.59,
+   "text": "okay all true so I'll start with okay"
+  },
+  {
+   "t": 354.29,
+   "d": 1.98,
+   "text": "I'll summarize them okay so cave bears"
+  },
+  {
+   "t": 356.27,
+   "d": 3.5,
+   "text": "noxious scrapyard rescue the way Droid"
+  },
+  {
+   "t": 359.77,
+   "d": 4.39,
+   "text": "that's one go and explore the crypts of"
+  },
+  {
+   "t": 364.16,
+   "d": 1.95,
+   "text": "ancient kings and recover their"
+  },
+  {
+   "t": 366.11,
+   "d": 2.82,
+   "text": "artifacts and put them on and be you"
+  },
+  {
+   "t": 368.93,
+   "d": 3.36,
+   "text": "know awesome that's two and three was"
+  },
+  {
+   "t": 372.29,
+   "d": 3.21,
+   "text": "there's a psychic man goat in the jungle"
+  },
+  {
+   "t": 375.5,
+   "d": 2.94,
+   "text": "and you have to find him and figure out"
+  },
+  {
+   "t": 378.44,
+   "d": 1.41,
+   "text": "what he's all about"
+  },
+  {
+   "t": 379.85,
+   "d": 3.03,
+   "text": "okay so first scenario I might have"
+  },
+  {
+   "t": 382.88,
+   "d": 2.13,
+   "text": "something to do with dismembering and"
+  },
+  {
+   "t": 385.01,
+   "d": 2.07,
+   "text": "there's just certain people alive and"
+  },
+  {
+   "t": 387.08,
+   "d": 2.01,
+   "text": "but really there's like dismembering"
+  },
+  {
+   "t": 389.09,
+   "d": 1.86,
+   "text": "probably in all three scenarios to be"
+  },
+  {
+   "t": 390.95,
+   "d": 1.38,
+   "text": "honest Oh"
+  },
+  {
+   "t": 392.33,
+   "d": 10.11,
+   "text": "okay so albino cave bears okay okay"
+  },
+  {
+   "t": 402.44,
+   "d": 12.43,
+   "text": "ancient kings okay that was mango okay I"
+  },
+  {
+   "t": 414.87,
+   "d": 4.56,
+   "text": "think mango one wow it was close it was"
+  },
+  {
+   "t": 419.43,
+   "d": 0.33,
+   "text": "close"
+  },
+  {
+   "t": 419.76,
+   "d": 5.51,
+   "text": "okay so alright so let's jump I just see"
+  },
+  {
+   "t": 425.27,
+   "d": 2.17,
+   "text": "whatever alright let's jump into"
+  },
+  {
+   "t": 427.44,
+   "d": 3.15,
+   "text": "character creation so character creation"
+  },
+  {
+   "t": 430.59,
+   "d": 2.67,
+   "text": "is like a really creative act in caves a"
+  },
+  {
+   "t": 433.26,
+   "d": 2.78,
+   "text": "cut like you know speaking to bends talk"
+  },
+  {
+   "t": 436.04,
+   "d": 2.89,
+   "text": "about it's very much inspired by those"
+  },
+  {
+   "t": 438.93,
+   "d": 3.56,
+   "text": "like 90s there are four x games like"
+  },
+  {
+   "t": 442.49,
+   "d": 2.95,
+   "text": "master of magic where like you're it's"
+  },
+  {
+   "t": 445.44,
+   "d": 2.25,
+   "text": "supposed to just sort of like flood your"
+  },
+  {
+   "t": 447.69,
+   "d": 2.13,
+   "text": "brain with possibilities for what maybe"
+  },
+  {
+   "t": 449.82,
+   "d": 1.83,
+   "text": "this games about what you can do in the"
+  },
+  {
+   "t": 451.65,
+   "d": 2.19,
+   "text": "world so we'll sort of walk through it"
+  },
+  {
+   "t": 453.84,
+   "d": 1.53,
+   "text": "together okay so the first decision you"
+  },
+  {
+   "t": 455.37,
+   "d": 0.84,
+   "text": "have to make when you're making"
+  },
+  {
+   "t": 456.21,
+   "d": 2.13,
+   "text": "character in caves of cod is if you want"
+  },
+  {
+   "t": 458.34,
+   "d": 2.76,
+   "text": "to play a mutated human or a true kin so"
+  },
+  {
+   "t": 461.1,
+   "d": 2.88,
+   "text": "a mutated human is a human with"
+  },
+  {
+   "t": 463.98,
+   "d": 2.52,
+   "text": "mutations and these mutations can like"
+  },
+  {
+   "t": 466.5,
+   "d": 1.47,
+   "text": "they're they're quite varied there's"
+  },
+  {
+   "t": 467.97,
+   "d": 1.86,
+   "text": "over seventy mutations in the game and"
+  },
+  {
+   "t": 469.83,
+   "d": 2.79,
+   "text": "you assemble your character from like as"
+  },
+  {
+   "t": 472.62,
+   "d": 2.49,
+   "text": "many as you can choose essentially and"
+  },
+  {
+   "t": 475.11,
+   "d": 1.44,
+   "text": "so there's things like they're kind of"
+  },
+  {
+   "t": 476.55,
+   "d": 1.47,
+   "text": "like you could have like animal body"
+  },
+  {
+   "t": 478.02,
+   "d": 1.17,
+   "text": "parts like you could have a tale or"
+  },
+  {
+   "t": 479.19,
+   "d": 4.35,
+   "text": "stinger or a multiple legs or you could"
+  },
+  {
+   "t": 483.54,
+   "d": 2.37,
+   "text": "have like mental powers you can like rip"
+  },
+  {
+   "t": 485.91,
+   "d": 3.27,
+   "text": "space-time vortex open or you can like"
+  },
+  {
+   "t": 489.18,
+   "d": 2.67,
+   "text": "teleport or you can create time clones"
+  },
+  {
+   "t": 491.85,
+   "d": 1.65,
+   "text": "of yourself so I think the most"
+  },
+  {
+   "t": 493.5,
+   "d": 1.74,
+   "text": "interesting wait okay so yeah so that's"
+  },
+  {
+   "t": 495.24,
+   "d": 2.16,
+   "text": "a mutant so true can't you can can't do"
+  },
+  {
+   "t": 497.4,
+   "d": 2.97,
+   "text": "any of that they do they're kind of"
+  },
+  {
+   "t": 500.37,
+   "d": 2.97,
+   "text": "harder they are basically despair strain"
+  },
+  {
+   "t": 503.34,
+   "d": 3.72,
+   "text": "descendants of these enclosed hermetic"
+  },
+  {
+   "t": 507.06,
+   "d": 1.92,
+   "text": "arcologies that are kind of mysterious"
+  },
+  {
+   "t": 508.98,
+   "d": 2.97,
+   "text": "they're they're a little more like they"
+  },
+  {
+   "t": 511.95,
+   "d": 1.53,
+   "text": "have better attributes and mutants but"
+  },
+  {
+   "t": 513.48,
+   "d": 1.47,
+   "text": "the thing that they get is that they can"
+  },
+  {
+   "t": 514.95,
+   "d": 3.27,
+   "text": "install cybernetic implants which is a"
+  },
+  {
+   "t": 518.22,
+   "d": 2.19,
+   "text": "cool thing to be able to do I'm so like"
+  },
+  {
+   "t": 520.41,
+   "d": 2.58,
+   "text": "you can have like treads instead of legs"
+  },
+  {
+   "t": 522.99,
+   "d": 1.15,
+   "text": "or"
+  },
+  {
+   "t": 524.14,
+   "d": 2.46,
+   "text": "you can have what's another cybernetic"
+  },
+  {
+   "t": 526.6,
+   "d": 3.11,
+   "text": "implant like giant hands is one of them"
+  },
+  {
+   "t": 529.71,
+   "d": 3.43,
+   "text": "metal fists metal fist yes so this you"
+  },
+  {
+   "t": 533.14,
+   "d": 2.34,
+   "text": "know like things like that all right so"
+  },
+  {
+   "t": 535.48,
+   "d": 2.55,
+   "text": "I guess again let's do a show of hands"
+  },
+  {
+   "t": 538.03,
+   "d": 1.5,
+   "text": "so if you want to do a mutated human"
+  },
+  {
+   "t": 539.53,
+   "d": 10.04,
+   "text": "raise your hand okay okay and true can"
+  },
+  {
+   "t": 549.57,
+   "d": 2.32,
+   "text": "okay I think me today's gonna win okay"
+  },
+  {
+   "t": 551.89,
+   "d": 3.78,
+   "text": "so mutant wins by about two to one okay"
+  },
+  {
+   "t": 555.67,
+   "d": 2.64,
+   "text": "so yeah we're gonna skip that screen"
+  },
+  {
+   "t": 558.31,
+   "d": 2.88,
+   "text": "because don't worry about that I'm going"
+  },
+  {
+   "t": 561.19,
+   "d": 2.91,
+   "text": "with all 10/10 first stats but welcome"
+  },
+  {
+   "t": 564.1,
+   "d": 3.06,
+   "text": "back this like this crisis such screen"
+  },
+  {
+   "t": 567.16,
+   "d": 1.8,
+   "text": "shouldn't even be here like this points"
+  },
+  {
+   "t": 568.96,
+   "d": 3.48,
+   "text": "to have like flan de but anyway so now"
+  },
+  {
+   "t": 572.44,
+   "d": 1.98,
+   "text": "what we're going to do is we're going to"
+  },
+  {
+   "t": 574.42,
+   "d": 1.38,
+   "text": "pick our mutations so there again"
+  },
+  {
+   "t": 575.8,
+   "d": 1.5,
+   "text": "there's like 70 mutations we're not"
+  },
+  {
+   "t": 577.3,
+   "d": 1.26,
+   "text": "gonna list in here because the UI is"
+  },
+  {
+   "t": 578.56,
+   "d": 1.53,
+   "text": "kind of not great and we don't want to"
+  },
+  {
+   "t": 580.09,
+   "d": 2.01,
+   "text": "read 70 mutations so I think a more"
+  },
+  {
+   "t": 582.1,
+   "d": 2.7,
+   "text": "interesting way to do it is you're the"
+  },
+  {
+   "t": 584.8,
+   "d": 2.94,
+   "text": "audience you have a mic somewhere and"
+  },
+  {
+   "t": 587.74,
+   "d": 2.64,
+   "text": "like if you just think of a mutation"
+  },
+  {
+   "t": 590.38,
+   "d": 1.29,
+   "text": "that you might like to have like"
+  },
+  {
+   "t": 591.67,
+   "d": 1.98,
+   "text": "multiple legs or something that might"
+  },
+  {
+   "t": 593.65,
+   "d": 2.19,
+   "text": "affect your body or a mental power you"
+  },
+  {
+   "t": 595.84,
+   "d": 2.64,
+   "text": "can think of I'm interested especially"
+  },
+  {
+   "t": 598.48,
+   "d": 1.95,
+   "text": "if you haven't played Kaiser Kaiser Cod"
+  },
+  {
+   "t": 600.43,
+   "d": 1.32,
+   "text": "but if you have played you can do it too"
+  },
+  {
+   "t": 601.75,
+   "d": 2.52,
+   "text": "but I'm interested in like your thoughts"
+  },
+  {
+   "t": 604.27,
+   "d": 1.38,
+   "text": "on what type of character what type of"
+  },
+  {
+   "t": 605.65,
+   "d": 1.98,
+   "text": "mutant you would like to play so you"
+  },
+  {
+   "t": 607.63,
+   "d": 2.46,
+   "text": "could just like same mutation and then"
+  },
+  {
+   "t": 610.09,
+   "d": 1.59,
+   "text": "maybe like if someone raises their hand"
+  },
+  {
+   "t": 611.68,
+   "d": 1.53,
+   "text": "and that person could take the might and"
+  },
+  {
+   "t": 613.21,
+   "d": 2.1,
+   "text": "we'll see if we could match that with a"
+  },
+  {
+   "t": 615.31,
+   "d": 1.56,
+   "text": "mutation that exists in caves oh god"
+  },
+  {
+   "t": 616.87,
+   "d": 2.07,
+   "text": "okay so hold on sorry so you wait you"
+  },
+  {
+   "t": 618.94,
+   "d": 1.62,
+   "text": "raise your hand so we'll start you in a"
+  },
+  {
+   "t": 620.56,
+   "d": 1.23,
+   "text": "second but what I think we're gonna do"
+  },
+  {
+   "t": 621.79,
+   "d": 1.89,
+   "text": "is we're gonna let you pick a mutation"
+  },
+  {
+   "t": 623.68,
+   "d": 2.43,
+   "text": "and then we're gonna let Nick pick a"
+  },
+  {
+   "t": 626.11,
+   "d": 1.77,
+   "text": "mutation and then we'll alternate and"
+  },
+  {
+   "t": 627.88,
+   "d": 3.06,
+   "text": "the reason for that is that there are"
+  },
+  {
+   "t": 630.94,
+   "d": 2.64,
+   "text": "obviously like 70 mutations you can pick"
+  },
+  {
+   "t": 633.58,
+   "d": 1.95,
+   "text": "any combination of them there are you"
+  },
+  {
+   "t": 635.53,
+   "d": 1.05,
+   "text": "know hundreds of thousands of"
+  },
+  {
+   "t": 636.58,
+   "d": 2.01,
+   "text": "combinatorial possibilities a lot of"
+  },
+  {
+   "t": 638.59,
+   "d": 1.71,
+   "text": "them are terrible like a lot of them"
+  },
+  {
+   "t": 640.3,
+   "d": 2.31,
+   "text": "will create characters that will just"
+  },
+  {
+   "t": 642.61,
+   "d": 1.98,
+   "text": "flat-out die and that's part of the"
+  },
+  {
+   "t": 644.59,
+   "d": 1.71,
+   "text": "experience of learning caves of cut but"
+  },
+  {
+   "t": 646.3,
+   "d": 1.77,
+   "text": "like terrible mutations he likes her"
+  },
+  {
+   "t": 648.07,
+   "d": 3.39,
+   "text": "yeah well Nick might pick terrible okay"
+  },
+  {
+   "t": 651.46,
+   "d": 2.37,
+   "text": "well in that kit but you know the idea"
+  },
+  {
+   "t": 653.83,
+   "d": 1.92,
+   "text": "is that we'll try because we only have"
+  },
+  {
+   "t": 655.75,
+   "d": 1.2,
+   "text": "an hour we're gonna try to pick a"
+  },
+  {
+   "t": 656.95,
+   "d": 0.84,
+   "text": "character it's a"
+  },
+  {
+   "t": 657.79,
+   "d": 1.65,
+   "text": "little bit survival another thing that"
+  },
+  {
+   "t": 659.44,
+   "d": 1.29,
+   "text": "we're gonna do which I didn't mention I"
+  },
+  {
+   "t": 660.73,
+   "d": 1.47,
+   "text": "want to mention now is that we're going"
+  },
+  {
+   "t": 662.2,
+   "d": 2.43,
+   "text": "to not start at level one like when we"
+  },
+  {
+   "t": 664.63,
+   "d": 1.68,
+   "text": "get in the game we're going to do like a"
+  },
+  {
+   "t": 666.31,
+   "d": 1.38,
+   "text": "debug command to give us a little more"
+  },
+  {
+   "t": 667.69,
+   "d": 2.13,
+   "text": "XP just so we get to some of the more"
+  },
+  {
+   "t": 669.82,
+   "d": 1.32,
+   "text": "interesting parts of the game just"
+  },
+  {
+   "t": 671.14,
+   "d": 1.59,
+   "text": "because again we have an hour and"
+  },
+  {
+   "t": 672.73,
+   "d": 2.85,
+   "text": "whatever but um okay so do you have a"
+  },
+  {
+   "t": 675.58,
+   "d": 3.09,
+   "text": "mic are you okay you have a lot of voice"
+  },
+  {
+   "t": 678.67,
+   "d": 7.11,
+   "text": "that's fine laser eyes would be awesome"
+  },
+  {
+   "t": 685.78,
+   "d": 2.94,
+   "text": "or or like you're blind but you have"
+  },
+  {
+   "t": 688.72,
+   "d": 3.63,
+   "text": "like echolocation okay yeah so I haven't"
+  },
+  {
+   "t": 692.35,
+   "d": 2.1,
+   "text": "played cable by the way there are two"
+  },
+  {
+   "t": 694.45,
+   "d": 1.59,
+   "text": "options here there's a mutation that's"
+  },
+  {
+   "t": 696.04,
+   "d": 1.62,
+   "text": "like heightened hearing where it which"
+  },
+  {
+   "t": 697.66,
+   "d": 1.59,
+   "text": "will show us things that are outside of"
+  },
+  {
+   "t": 699.25,
+   "d": 3.51,
+   "text": "our field of vision or there there is a"
+  },
+  {
+   "t": 702.76,
+   "d": 2.4,
+   "text": "mutation which is light manipulation"
+  },
+  {
+   "t": 705.16,
+   "d": 1.71,
+   "text": "which will let us shoot lasers with our"
+  },
+  {
+   "t": 706.87,
+   "d": 3.15,
+   "text": "minds but of course you know who's to"
+  },
+  {
+   "t": 710.02,
+   "d": 1.38,
+   "text": "say that the lasers aren't coming out of"
+  },
+  {
+   "t": 711.4,
+   "d": 3.45,
+   "text": "our eyes sounds really well I guess"
+  },
+  {
+   "t": 714.85,
+   "d": 9.9,
+   "text": "you're to say that you're the fun fact"
+  },
+  {
+   "t": 724.75,
+   "d": 1.71,
+   "text": "is that they're actually used to be an"
+  },
+  {
+   "t": 726.46,
+   "d": 2.13,
+   "text": "echolocation mutation like a long I"
+  },
+  {
+   "t": 728.59,
+   "d": 1.23,
+   "text": "actually don't think it ever made it"
+  },
+  {
+   "t": 729.82,
+   "d": 1.8,
+   "text": "into the public version like one of the"
+  },
+  {
+   "t": 731.62,
+   "d": 2.28,
+   "text": "first mutations we cut we had this like"
+  },
+  {
+   "t": 733.9,
+   "d": 2.64,
+   "text": "complex like sonar bouncing off walls in"
+  },
+  {
+   "t": 736.54,
+   "d": 1.56,
+   "text": "it like you could do this sonar attack"
+  },
+  {
+   "t": 738.1,
+   "d": 2.04,
+   "text": "but it was like I don't know it was bad"
+  },
+  {
+   "t": 740.14,
+   "d": 2.94,
+   "text": "so but yeah that's a good one like so"
+  },
+  {
+   "t": 743.08,
+   "d": 3.24,
+   "text": "lasers from your mind slash eyes"
+  },
+  {
+   "t": 746.32,
+   "d": 1.89,
+   "text": "so yeah let's pick that that sounds good"
+  },
+  {
+   "t": 748.21,
+   "d": 1.2,
+   "text": "thank you"
+  },
+  {
+   "t": 749.41,
+   "d": 1.8,
+   "text": "so we're going to pick that we have"
+  },
+  {
+   "t": 751.21,
+   "d": 2.16,
+   "text": "light manipulation so each of their"
+  },
+  {
+   "t": 753.37,
+   "d": 1.65,
+   "text": "mutations cost a certain number of"
+  },
+  {
+   "t": 755.02,
+   "d": 1.26,
+   "text": "points but we're not going to worry too"
+  },
+  {
+   "t": 756.28,
+   "d": 1.83,
+   "text": "much about that I'll like let you know"
+  },
+  {
+   "t": 758.11,
+   "d": 2.67,
+   "text": "if we're we're having some trouble so do"
+  },
+  {
+   "t": 760.78,
+   "d": 1.47,
+   "text": "you want it you want to pick one yeah"
+  },
+  {
+   "t": 762.25,
+   "d": 5.7,
+   "text": "okay so I so I'm not gonna totally pick"
+  },
+  {
+   "t": 767.95,
+   "d": 2.12,
+   "text": "safe mutations or like the best"
+  },
+  {
+   "t": 770.07,
+   "d": 4.11,
+   "text": "mutations I'm gonna pick the most fun"
+  },
+  {
+   "t": 774.18,
+   "d": 2.44,
+   "text": "from among the best mutations but that"
+  },
+  {
+   "t": 776.62,
+   "d": 2.4,
+   "text": "might still be a little dangerous that's"
+  },
+  {
+   "t": 779.02,
+   "d": 2.79,
+   "text": "good but you know first I I really like"
+  },
+  {
+   "t": 781.81,
+   "d": 3.44,
+   "text": "having multiple legs personally I mean"
+  },
+  {
+   "t": 785.25,
+   "d": 3.19,
+   "text": "not well I mean I've never had multiple"
+  },
+  {
+   "t": 788.44,
+   "d": 1.95,
+   "text": "legs in real life but that's why I like"
+  },
+  {
+   "t": 790.39,
+   "d": 1.02,
+   "text": "caves have cut is"
+  },
+  {
+   "t": 791.41,
+   "d": 2.31,
+   "text": "let's me sort of experience that so"
+  },
+  {
+   "t": 793.72,
+   "d": 3.6,
+   "text": "we'll go with multiple legs okay so to"
+  },
+  {
+   "t": 797.32,
+   "d": 3.42,
+   "text": "recap so far we have we can shoot lasers"
+  },
+  {
+   "t": 800.74,
+   "d": 2.28,
+   "text": "from our eyes and we have multiple legs"
+  },
+  {
+   "t": 803.02,
+   "d": 3.99,
+   "text": "so to be specifically of an extra pair"
+  },
+  {
+   "t": 807.01,
+   "d": 3.72,
+   "text": "of legs like how many is normal how many"
+  },
+  {
+   "t": 810.73,
+   "d": 2.22,
+   "text": "do you have good question like if you"
+  },
+  {
+   "t": 812.95,
+   "d": 2.55,
+   "text": "want to establish the baseline you have"
+  },
+  {
+   "t": 815.5,
+   "d": 2.76,
+   "text": "two legs normally both in caves have cut"
+  },
+  {
+   "t": 818.26,
+   "d": 4.56,
+   "text": "and and elsewhere but so now we'll have"
+  },
+  {
+   "t": 822.82,
+   "d": 2.28,
+   "text": "four legs which will make us move more"
+  },
+  {
+   "t": 825.1,
+   "d": 1.83,
+   "text": "quickly light manipulation will let us"
+  },
+  {
+   "t": 826.93,
+   "d": 1.92,
+   "text": "shoot lasers from our eyes but actually"
+  },
+  {
+   "t": 828.85,
+   "d": 1.92,
+   "text": "it'll also produce just like ambient"
+  },
+  {
+   "t": 830.77,
+   "d": 2.22,
+   "text": "light around us which is quite useful"
+  },
+  {
+   "t": 832.99,
+   "d": 2.04,
+   "text": "because normally to light a dark area"
+  },
+  {
+   "t": 835.03,
+   "d": 1.59,
+   "text": "you would need to carry a torch and you"
+  },
+  {
+   "t": 836.62,
+   "d": 1.71,
+   "text": "can deflect laser beams okay and you"
+  },
+  {
+   "t": 838.33,
+   "d": 1.32,
+   "text": "could deflect laser beams that's sure"
+  },
+  {
+   "t": 839.65,
+   "d": 2.88,
+   "text": "okay so someone else who has an idea for"
+  },
+  {
+   "t": 842.53,
+   "d": 9.9,
+   "text": "a mutation you oh it's a couple I think"
+  },
+  {
+   "t": 852.43,
+   "d": 4.83,
+   "text": "there are a couple options there yes so"
+  },
+  {
+   "t": 857.26,
+   "d": 1.59,
+   "text": "we'll give will give you some choices so"
+  },
+  {
+   "t": 858.85,
+   "d": 2.61,
+   "text": "you that can either be pyro like a pyro"
+  },
+  {
+   "t": 861.46,
+   "d": 1.77,
+   "text": "kinetic effect if you want it to be like"
+  },
+  {
+   "t": 863.23,
+   "d": 2.61,
+   "text": "a heat sort of explosion if you want to"
+  },
+  {
+   "t": 865.84,
+   "d": 2.85,
+   "text": "be more about like the blast there is a"
+  },
+  {
+   "t": 868.69,
+   "d": 2.28,
+   "text": "mutation called concussive force which"
+  },
+  {
+   "t": 870.97,
+   "d": 1.89,
+   "text": "will let us just create an explosion"
+  },
+  {
+   "t": 872.86,
+   "d": 3.66,
+   "text": "wherever we want there's also an"
+  },
+  {
+   "t": 876.52,
+   "d": 2.37,
+   "text": "argument for disintegration which will"
+  },
+  {
+   "t": 878.89,
+   "d": 2.34,
+   "text": "just create a field from our character"
+  },
+  {
+   "t": 881.23,
+   "d": 2.72,
+   "text": "that will destroy everything around us"
+  },
+  {
+   "t": 883.95,
+   "d": 2.56,
+   "text": "but it will exhaust us for a few rounds"
+  },
+  {
+   "t": 886.51,
+   "d": 10.74,
+   "text": "points we use it so yeah I think I'll go"
+  },
+  {
+   "t": 897.25,
+   "d": 2.64,
+   "text": "with the pyro kinetic effect okay pyre"
+  },
+  {
+   "t": 899.89,
+   "d": 2.01,
+   "text": "can you play some fires yeah lighting"
+  },
+  {
+   "t": 901.9,
+   "d": 2.85,
+   "text": "fires is fun so that's like so we"
+  },
+  {
+   "t": 904.75,
+   "d": 2.1,
+   "text": "actually don't have enough points we"
+  },
+  {
+   "t": 906.85,
+   "d": 4.08,
+   "text": "don't fire Kinesis but well what we can"
+  },
+  {
+   "t": 910.93,
+   "d": 3.48,
+   "text": "do is we can Hindle right there we can"
+  },
+  {
+   "t": 914.41,
+   "d": 2.23,
+   "text": "select a defect yeah"
+  },
+  {
+   "t": 916.64,
+   "d": 2.04,
+   "text": "so there are defects so we're going to"
+  },
+  {
+   "t": 918.68,
+   "d": 2.97,
+   "text": "select a defect and I since is your"
+  },
+  {
+   "t": 921.65,
+   "d": 1.53,
+   "text": "attorney to select a defect there is a"
+  },
+  {
+   "t": 923.18,
+   "d": 1.77,
+   "text": "defect that you really like to select oh"
+  },
+  {
+   "t": 924.95,
+   "d": 2.67,
+   "text": "yeah well my favorite defect so there"
+  },
+  {
+   "t": 927.62,
+   "d": 1.74,
+   "text": "are a bunch of defects and defects or"
+  },
+  {
+   "t": 929.36,
+   "d": 3.6,
+   "text": "things like blinking tick which lets you"
+  },
+  {
+   "t": 932.96,
+   "d": 2.52,
+   "text": "randomly doesn't let you it teleports"
+  },
+  {
+   "t": 935.48,
+   "d": 2.31,
+   "text": "you around against your tightest there"
+  },
+  {
+   "t": 937.79,
+   "d": 3.95,
+   "text": "are things like spontaneous combustion"
+  },
+  {
+   "t": 941.74,
+   "d": 3.76,
+   "text": "beak of course is is a popular one you"
+  },
+  {
+   "t": 945.5,
+   "d": 2.79,
+   "text": "you have a none so of course of course"
+  },
+  {
+   "t": 948.29,
+   "d": 2.64,
+   "text": "your face bears an unsightly beak of"
+  },
+  {
+   "t": 950.93,
+   "d": 4.86,
+   "text": "course well my personal favorite is evil"
+  },
+  {
+   "t": 955.79,
+   "d": 6.21,
+   "text": "twin I should say this is an extremely"
+  },
+  {
+   "t": 962.0,
+   "d": 2.67,
+   "text": "dangerous character to have evil twin"
+  },
+  {
+   "t": 964.67,
+   "d": 2.67,
+   "text": "with because we can shoot lasers with"
+  },
+  {
+   "t": 967.34,
+   "d": 4.65,
+   "text": "our mind we can create well we're going"
+  },
+  {
+   "t": 971.99,
+   "d": 2.46,
+   "text": "to be able to create these explosions of"
+  },
+  {
+   "t": 974.45,
+   "d": 4.11,
+   "text": "fire I mean we're really fast so well do"
+  },
+  {
+   "t": 978.56,
+   "d": 1.11,
+   "text": "you want to describe what do you yes"
+  },
+  {
+   "t": 979.67,
+   "d": 1.26,
+   "text": "this one's fun"
+  },
+  {
+   "t": 980.93,
+   "d": 2.46,
+   "text": "so the description here is acting on"
+  },
+  {
+   "t": 983.39,
+   "d": 1.71,
+   "text": "some inscrutable impulse a parallel"
+  },
+  {
+   "t": 985.1,
+   "d": 1.38,
+   "text": "version of yourself travels through"
+  },
+  {
+   "t": 986.48,
+   "d": 2.22,
+   "text": "space and time to destroy you so what"
+  },
+  {
+   "t": 988.7,
+   "d": 1.5,
+   "text": "this means is that basically every time"
+  },
+  {
+   "t": 990.2,
+   "d": 2.25,
+   "text": "you you walk onto a new map there's a"
+  },
+  {
+   "t": 992.45,
+   "d": 3.06,
+   "text": "small chance that your evil twin from"
+  },
+  {
+   "t": 995.51,
+   "d": 1.83,
+   "text": "some dimension has tracked you down and"
+  },
+  {
+   "t": 997.34,
+   "d": 1.44,
+   "text": "then you have to fight a clone of"
+  },
+  {
+   "t": 998.78,
+   "d": 2.34,
+   "text": "yourself it's like whatever a clone of"
+  },
+  {
+   "t": 1001.12,
+   "d": 2.19,
+   "text": "like your current powers and equipment"
+  },
+  {
+   "t": 1003.31,
+   "d": 3.29,
+   "text": "is spawned and you have to fight them"
+  },
+  {
+   "t": 1006.6,
+   "d": 3.43,
+   "text": "you know whatever so like it's very"
+  },
+  {
+   "t": 1010.03,
+   "d": 2.07,
+   "text": "dangerous if you have a powerful"
+  },
+  {
+   "t": 1012.1,
+   "d": 1.59,
+   "text": "offensive character which we do so"
+  },
+  {
+   "t": 1013.69,
+   "d": 3.3,
+   "text": "that's fun which we have to of okay yes"
+  },
+  {
+   "t": 1016.99,
+   "d": 2.79,
+   "text": "so we're gonna pick pyrokinesis and then"
+  },
+  {
+   "t": 1019.78,
+   "d": 1.56,
+   "text": "we're gonna have one point remaining"
+  },
+  {
+   "t": 1021.34,
+   "d": 2.85,
+   "text": "after that so there's only a few one"
+  },
+  {
+   "t": 1024.19,
+   "d": 2.67,
+   "text": "point mutations I would make a"
+  },
+  {
+   "t": 1026.86,
+   "d": 1.26,
+   "text": "recommendation here okay what's your"
+  },
+  {
+   "t": 1028.12,
+   "d": 2.34,
+   "text": "recommend so we're chasing a psychic man"
+  },
+  {
+   "t": 1030.46,
+   "d": 4.08,
+   "text": "goat of extreme power and also we're"
+  },
+  {
+   "t": 1034.54,
+   "d": 2.54,
+   "text": "pursued by an evil version of ourselves"
+  },
+  {
+   "t": 1037.08,
+   "d": 1.99,
+   "text": "traveling through time and space to"
+  },
+  {
+   "t": 1039.07,
+   "d": 2.22,
+   "text": "destroy us yeah it would be good to"
+  },
+  {
+   "t": 1041.29,
+   "d": 2.61,
+   "text": "sense when they're like nearby at least"
+  },
+  {
+   "t": 1043.9,
+   "d": 3.03,
+   "text": "so so there's a mutation called sense"
+  },
+  {
+   "t": 1046.93,
+   "d": 2.07,
+   "text": "psychic which will let us"
+  },
+  {
+   "t": 1049.0,
+   "d": 2.07,
+   "text": "at least see you know where they are on"
+  },
+  {
+   "t": 1051.07,
+   "d": 1.53,
+   "text": "the map and hopefully that can give us"
+  },
+  {
+   "t": 1052.6,
+   "d": 1.23,
+   "text": "enough early warning because these"
+  },
+  {
+   "t": 1053.83,
+   "d": 1.62,
+   "text": "mutations like if they catch us"
+  },
+  {
+   "t": 1055.45,
+   "d": 2.25,
+   "text": "off-guard they're just there's a chance"
+  },
+  {
+   "t": 1057.7,
+   "d": 2.82,
+   "text": "a not so small chance that they will"
+  },
+  {
+   "t": 1060.52,
+   "d": 2.64,
+   "text": "destroy us and dismember us yes okay so"
+  },
+  {
+   "t": 1063.16,
+   "d": 2.27,
+   "text": "I think that's good so why don't okay so"
+  },
+  {
+   "t": 1065.43,
+   "d": 3.16,
+   "text": "so here's what we'll do so now Nick is"
+  },
+  {
+   "t": 1068.59,
+   "d": 2.07,
+   "text": "going to allocate our SAP points cuz"
+  },
+  {
+   "t": 1070.66,
+   "d": 2.0,
+   "text": "that's kind of like a sort of you know"
+  },
+  {
+   "t": 1072.66,
+   "d": 2.5,
+   "text": "grog dirty thing and we don't need like"
+  },
+  {
+   "t": 1075.16,
+   "d": 1.95,
+   "text": "he'll he'll do it and we'll just discuss"
+  },
+  {
+   "t": 1077.11,
+   "d": 2.4,
+   "text": "I'll recap the character we created okay"
+  },
+  {
+   "t": 1079.51,
+   "d": 2.91,
+   "text": "so we are a mutant we're a mutated human"
+  },
+  {
+   "t": 1082.42,
+   "d": 2.7,
+   "text": "we have the ability to shoot lasers from"
+  },
+  {
+   "t": 1085.12,
+   "d": 2.79,
+   "text": "our eyes we can we have pyrokinesis"
+  },
+  {
+   "t": 1087.91,
+   "d": 2.22,
+   "text": "which means we can like heat an area"
+  },
+  {
+   "t": 1090.13,
+   "d": 3.42,
+   "text": "with our mind and set it aflame we have"
+  },
+  {
+   "t": 1093.55,
+   "d": 3.69,
+   "text": "multiple legs and we have the ability to"
+  },
+  {
+   "t": 1097.24,
+   "d": 2.4,
+   "text": "sense other psychics we are psychic"
+  },
+  {
+   "t": 1099.64,
+   "d": 2.85,
+   "text": "ourselves and then a parallel version of"
+  },
+  {
+   "t": 1102.49,
+   "d": 1.92,
+   "text": "ourselves is tracking us through space"
+  },
+  {
+   "t": 1104.41,
+   "d": 2.39,
+   "text": "and time to destroy us right so I think"
+  },
+  {
+   "t": 1106.8,
+   "d": 2.05,
+   "text": "that's kind of the summary of what's"
+  },
+  {
+   "t": 1108.85,
+   "d": 4.08,
+   "text": "going on okay so we have some stats we"
+  },
+  {
+   "t": 1112.93,
+   "d": 3.03,
+   "text": "have our mutations okay so one last"
+  },
+  {
+   "t": 1115.96,
+   "d": 3.51,
+   "text": "thing is like we're sort of a mutant in"
+  },
+  {
+   "t": 1119.47,
+   "d": 4.56,
+   "text": "this kind of strange verdant alien world"
+  },
+  {
+   "t": 1124.03,
+   "d": 2.52,
+   "text": "and we have we have to choose what's"
+  },
+  {
+   "t": 1126.55,
+   "d": 2.22,
+   "text": "called what do we call it actually a"
+  },
+  {
+   "t": 1128.77,
+   "d": 3.41,
+   "text": "cast right subtype subtype that's weird"
+  },
+  {
+   "t": 1132.18,
+   "d": 3.7,
+   "text": "it's it's kind of it's basically like a"
+  },
+  {
+   "t": 1135.88,
+   "d": 2.73,
+   "text": "class it doesn't actually have too much"
+  },
+  {
+   "t": 1138.61,
+   "d": 1.47,
+   "text": "effect in case of cut you're you're"
+  },
+  {
+   "t": 1140.08,
+   "d": 1.41,
+   "text": "mutations are much more important but"
+  },
+  {
+   "t": 1141.49,
+   "d": 1.38,
+   "text": "what it'll do is it'll give us our"
+  },
+  {
+   "t": 1142.87,
+   "d": 2.1,
+   "text": "starting skills and it'll adjust our"
+  },
+  {
+   "t": 1144.97,
+   "d": 2.16,
+   "text": "stats a little bit so without going"
+  },
+  {
+   "t": 1147.13,
+   "d": 1.47,
+   "text": "through all of them like there's things"
+  },
+  {
+   "t": 1148.6,
+   "d": 2.13,
+   "text": "like marauder so you were like you were"
+  },
+  {
+   "t": 1150.73,
+   "d": 2.34,
+   "text": "sort of pillaging villages or you could"
+  },
+  {
+   "t": 1153.07,
+   "d": 2.45,
+   "text": "be a apostle you were sort of you know"
+  },
+  {
+   "t": 1155.52,
+   "d": 2.14,
+   "text": "proselytizing to the people of God or"
+  },
+  {
+   "t": 1157.66,
+   "d": 2.34,
+   "text": "maybe you're tinker's I don't know just"
+  },
+  {
+   "t": 1160.0,
+   "d": 1.8,
+   "text": "think does anyone have an idea of like a"
+  },
+  {
+   "t": 1161.8,
+   "d": 1.53,
+   "text": "type of profession you might want to be"
+  },
+  {
+   "t": 1163.33,
+   "d": 5.4,
+   "text": "yeah what's the water merchants what's"
+  },
+  {
+   "t": 1168.73,
+   "d": 0.87,
+   "text": "the water okay"
+  },
+  {
+   "t": 1169.6,
+   "d": 2.1,
+   "text": "that's a good question thank you so this"
+  },
+  {
+   "t": 1171.7,
+   "d": 1.83,
+   "text": "world what an interesting thing about"
+  },
+  {
+   "t": 1173.53,
+   "d": 2.28,
+   "text": "the world of cut is that fresh water is"
+  },
+  {
+   "t": 1175.81,
+   "d": 2.07,
+   "text": "actually the currency of the world so"
+  },
+  {
+   "t": 1177.88,
+   "d": 1.86,
+   "text": "not only do you have to carry it around"
+  },
+  {
+   "t": 1179.74,
+   "d": 2.43,
+   "text": "and drink it because there's a sort of"
+  },
+  {
+   "t": 1182.17,
+   "d": 0.66,
+   "text": "survival"
+  },
+  {
+   "t": 1182.83,
+   "d": 2.3,
+   "text": "Kanak based around that but it's also"
+  },
+  {
+   "t": 1185.13,
+   "d": 2.86,
+   "text": "how you buy things in the world you"
+  },
+  {
+   "t": 1187.99,
+   "d": 1.35,
+   "text": "trade fresh water and so a water"
+  },
+  {
+   "t": 1189.34,
+   "d": 2.13,
+   "text": "merchant might be important in that"
+  },
+  {
+   "t": 1191.47,
+   "d": 1.41,
+   "text": "world right so water merchants"
+  },
+  {
+   "t": 1192.88,
+   "d": 1.44,
+   "text": "interesting because they start with a"
+  },
+  {
+   "t": 1194.32,
+   "d": 2.16,
+   "text": "lot of ego which affects like trade"
+  },
+  {
+   "t": 1196.48,
+   "d": 3.0,
+   "text": "prices when you go and talk to people it"
+  },
+  {
+   "t": 1199.48,
+   "d": 1.47,
+   "text": "is also good because it boosts our"
+  },
+  {
+   "t": 1200.95,
+   "d": 2.07,
+   "text": "mental mutations which is very important"
+  },
+  {
+   "t": 1203.02,
+   "d": 2.88,
+   "text": "as a mental mutant and then we also"
+  },
+  {
+   "t": 1205.9,
+   "d": 2.1,
+   "text": "start with like a bunch of water which"
+  },
+  {
+   "t": 1208.0,
+   "d": 2.07,
+   "text": "is which is good and it's like good"
+  },
+  {
+   "t": 1210.07,
+   "d": 2.19,
+   "text": "because we I put no points into strength"
+  },
+  {
+   "t": 1212.26,
+   "d": 2.76,
+   "text": "Oh with water merchants sometimes you"
+  },
+  {
+   "t": 1215.02,
+   "d": 1.8,
+   "text": "start with so much water that you are"
+  },
+  {
+   "t": 1216.82,
+   "d": 2.73,
+   "text": "just overburdened yeah so no I mean you"
+  },
+  {
+   "t": 1219.55,
+   "d": 1.2,
+   "text": "know I guess that's a good problem to"
+  },
+  {
+   "t": 1220.75,
+   "d": 2.04,
+   "text": "have but we might not be able to move"
+  },
+  {
+   "t": 1222.79,
+   "d": 1.5,
+   "text": "when we sure it's fine if we have too"
+  },
+  {
+   "t": 1224.29,
+   "d": 2.22,
+   "text": "much water why don't we do it we could"
+  },
+  {
+   "t": 1226.51,
+   "d": 3.75,
+   "text": "drop some water okay oh yeah and we're a"
+  },
+  {
+   "t": 1230.26,
+   "d": 2.22,
+   "text": "snake oiler we're similar snake oiler"
+  },
+  {
+   "t": 1232.48,
+   "d": 4.07,
+   "text": "yeah did you say what it's a coiler well"
+  },
+  {
+   "t": 1236.55,
+   "d": 2.8,
+   "text": "snake oiler it is you're kind of like a"
+  },
+  {
+   "t": 1239.35,
+   "d": 2.7,
+   "text": "you are like a silver tongue merchant"
+  },
+  {
+   "t": 1242.05,
+   "d": 2.16,
+   "text": "kind of character so you like you're"
+  },
+  {
+   "t": 1244.21,
+   "d": 2.01,
+   "text": "better at trading you're kind of better"
+  },
+  {
+   "t": 1246.22,
+   "d": 3.69,
+   "text": "at you know scamming people out of their"
+  },
+  {
+   "t": 1249.91,
+   "d": 3.0,
+   "text": "their wares okay so we were thinking we"
+  },
+  {
+   "t": 1252.91,
+   "d": 1.41,
+   "text": "would just roll a random name I don't"
+  },
+  {
+   "t": 1254.32,
+   "d": 1.41,
+   "text": "know unless somebody has a good if"
+  },
+  {
+   "t": 1255.73,
+   "d": 1.89,
+   "text": "someone has suggestion for like a multi"
+  },
+  {
+   "t": 1257.62,
+   "d": 4.35,
+   "text": "legs mind wizard what was anyone know"
+  },
+  {
+   "t": 1261.97,
+   "d": 3.93,
+   "text": "okay we could roll wait yeah Rodney"
+  },
+  {
+   "t": 1265.9,
+   "d": 3.33,
+   "text": "Rodney Rodney do you do you approve of"
+  },
+  {
+   "t": 1269.23,
+   "d": 2.67,
+   "text": "Rodney alright sure let's let's go okay"
+  },
+  {
+   "t": 1271.9,
+   "d": 1.92,
+   "text": "just just to clarify"
+  },
+  {
+   "t": 1273.82,
+   "d": 6.41,
+   "text": "we've multiple legs like too many Oh"
+  },
+  {
+   "t": 1280.77,
+   "d": 4.27,
+   "text": "no uh okay multiple legs doesn't just"
+  },
+  {
+   "t": 1285.04,
+   "d": 1.74,
+   "text": "mean you have your normal pair of two"
+  },
+  {
+   "t": 1286.78,
+   "d": 2.04,
+   "text": "legs yeah you'll get that you only start"
+  },
+  {
+   "t": 1288.82,
+   "d": 3.27,
+   "text": "with one leg it's really bad now we have"
+  },
+  {
+   "t": 1292.09,
+   "d": 0.57,
+   "text": "four legs"
+  },
+  {
+   "t": 1292.66,
+   "d": 2.16,
+   "text": "okay so there's some text always skip"
+  },
+  {
+   "t": 1294.82,
+   "d": 3.57,
+   "text": "the text now don't do that we're gonna"
+  },
+  {
+   "t": 1298.39,
+   "d": 1.23,
+   "text": "kind of ignore it because what we're"
+  },
+  {
+   "t": 1299.62,
+   "d": 1.56,
+   "text": "gonna do like I said we're gonna fast"
+  },
+  {
+   "t": 1301.18,
+   "d": 1.32,
+   "text": "forward we're gonna give ourselves a"
+  },
+  {
+   "t": 1302.5,
+   "d": 3.42,
+   "text": "little XP and equipment by doing a debug"
+  },
+  {
+   "t": 1305.92,
+   "d": 3.27,
+   "text": "wish command called Stage three I think"
+  },
+  {
+   "t": 1309.19,
+   "d": 3.0,
+   "text": "you did right stage for Stage four oh"
+  },
+  {
+   "t": 1312.19,
+   "d": 2.01,
+   "text": "okay yeah so we're gonna start at a kind"
+  },
+  {
+   "t": 1314.2,
+   "d": 2.16,
+   "text": "of high level because this as we"
+  },
+  {
+   "t": 1316.36,
+   "d": 1.71,
+   "text": "discovered when we were playing this"
+  },
+  {
+   "t": 1318.07,
+   "d": 3.0,
+   "text": "last night this this quest is quite"
+  },
+  {
+   "t": 1321.07,
+   "d": 3.35,
+   "text": "difficult and even with doing this like"
+  },
+  {
+   "t": 1324.42,
+   "d": 2.41,
+   "text": "whether or not we'll succeed or not is"
+  },
+  {
+   "t": 1326.83,
+   "d": 1.59,
+   "text": "quite up in the air okay so I think"
+  },
+  {
+   "t": 1328.42,
+   "d": 0.93,
+   "text": "we're going to talk about what we're"
+  },
+  {
+   "t": 1329.35,
+   "d": 1.32,
+   "text": "seeing here oh let's talk about what"
+  },
+  {
+   "t": 1330.67,
+   "d": 2.13,
+   "text": "we're seeing okay so this is the world"
+  },
+  {
+   "t": 1332.8,
+   "d": 2.94,
+   "text": "map so caves of cut is very much"
+  },
+  {
+   "t": 1335.74,
+   "d": 3.09,
+   "text": "inspired by Adam and kind of like other"
+  },
+  {
+   "t": 1338.83,
+   "d": 1.74,
+   "text": "open-world games so there's a world map"
+  },
+  {
+   "t": 1340.57,
+   "d": 1.65,
+   "text": "that you could travel across the world"
+  },
+  {
+   "t": 1342.22,
+   "d": 3.35,
+   "text": "maps actually statically generated and"
+  },
+  {
+   "t": 1345.57,
+   "d": 2.47,
+   "text": "each of these little tiles that you"
+  },
+  {
+   "t": 1348.04,
+   "d": 2.58,
+   "text": "enter is a map of 3x3 procedurally"
+  },
+  {
+   "t": 1350.62,
+   "d": 2.43,
+   "text": "generated tiles and they're their"
+  },
+  {
+   "t": 1353.05,
+   "d": 2.46,
+   "text": "builders are all based on the type of"
+  },
+  {
+   "t": 1355.51,
+   "d": 2.16,
+   "text": "terrain you're in so right now you start"
+  },
+  {
+   "t": 1357.67,
+   "d": 2.37,
+   "text": "you start all over up here oh yeah we"
+  },
+  {
+   "t": 1360.04,
+   "d": 1.62,
+   "text": "kind of got teleported up here normally"
+  },
+  {
+   "t": 1361.66,
+   "d": 1.89,
+   "text": "you start if you if you start a normal"
+  },
+  {
+   "t": 1363.55,
+   "d": 1.68,
+   "text": "game you're gonna start down here yeah"
+  },
+  {
+   "t": 1365.23,
+   "d": 2.04,
+   "text": "because of the debug command that we use"
+  },
+  {
+   "t": 1367.27,
+   "d": 2.16,
+   "text": "we can you can you zoom in a little bit"
+  },
+  {
+   "t": 1369.43,
+   "d": 2.37,
+   "text": "actually so we're using this new there's"
+  },
+  {
+   "t": 1371.8,
+   "d": 2.85,
+   "text": "a new UI that we're using which i think"
+  },
+  {
+   "t": 1374.65,
+   "d": 1.38,
+   "text": "is gonna be a little better because we"
+  },
+  {
+   "t": 1376.03,
+   "d": 1.47,
+   "text": "can zoom in and see our character a"
+  },
+  {
+   "t": 1377.5,
+   "d": 2.28,
+   "text": "little better okay but wait we have is"
+  },
+  {
+   "t": 1379.78,
+   "d": 1.05,
+   "text": "we have something else to do first"
+  },
+  {
+   "t": 1380.83,
+   "d": 2.1,
+   "text": "because we're level 18 now right yeah"
+  },
+  {
+   "t": 1382.93,
+   "d": 3.21,
+   "text": "we're level 18 so because we've advanced"
+  },
+  {
+   "t": 1386.14,
+   "d": 5.09,
+   "text": "our character to level 18 we have some"
+  },
+  {
+   "t": 1391.23,
+   "d": 2.26,
+   "text": "wow we have so many mutations yeah we"
+  },
+  {
+   "t": 1393.49,
+   "d": 1.89,
+   "text": "have some okay so we have mutation"
+  },
+  {
+   "t": 1395.38,
+   "d": 1.8,
+   "text": "points to spend that's exciting so what"
+  },
+  {
+   "t": 1397.18,
+   "d": 1.95,
+   "text": "that means is we could either increase"
+  },
+  {
+   "t": 1399.13,
+   "d": 2.28,
+   "text": "the power of our current mutations you"
+  },
+  {
+   "t": 1401.41,
+   "d": 2.79,
+   "text": "can like level up your mutation for by"
+  },
+  {
+   "t": 1404.2,
+   "d": 2.46,
+   "text": "one point and it'll get your mutation to"
+  },
+  {
+   "t": 1406.66,
+   "d": 1.86,
+   "text": "the Lexx level and it'll do like kind of"
+  },
+  {
+   "t": 1408.52,
+   "d": 2.37,
+   "text": "like like pyrokinesis means we'll do"
+  },
+  {
+   "t": 1410.89,
+   "d": 1.17,
+   "text": "more damage and make things hotter"
+  },
+  {
+   "t": 1412.06,
+   "d": 2.16,
+   "text": "multiple legs means we can move"
+  },
+  {
+   "t": 1414.22,
+   "d": 2.28,
+   "text": "or we could spend 4 points and buy a new"
+  },
+  {
+   "t": 1416.5,
+   "d": 2.7,
+   "text": "mutation I have a question yeah"
+  },
+  {
+   "t": 1419.2,
+   "d": 2.4,
+   "text": "can you level up your evil twin you"
+  },
+  {
+   "t": 1421.6,
+   "d": 2.52,
+   "text": "cannot level up your diva thankfully so"
+  },
+  {
+   "t": 1424.12,
+   "d": 2.88,
+   "text": "the defect it went one funny thing about"
+  },
+  {
+   "t": 1427.0,
+   "d": 2.73,
+   "text": "evil twin his evil twin has everything"
+  },
+  {
+   "t": 1429.73,
+   "d": 2.1,
+   "text": "that we have when he spawns so if we"
+  },
+  {
+   "t": 1431.83,
+   "d": 3.09,
+   "text": "like find an awesome like rifle he's"
+  },
+  {
+   "t": 1434.92,
+   "d": 3.21,
+   "text": "gonna show up with it if I well yeah so"
+  },
+  {
+   "t": 1438.13,
+   "d": 3.12,
+   "text": "evil Rodney will show up with it if we"
+  },
+  {
+   "t": 1441.25,
+   "d": 2.34,
+   "text": "level up pyrokinesis you know he's gonna"
+  },
+  {
+   "t": 1443.59,
+   "d": 2.94,
+   "text": "have the exact same power level that we"
+  },
+  {
+   "t": 1446.53,
+   "d": 3.45,
+   "text": "will so so by benefit like any choice"
+  },
+  {
+   "t": 1449.98,
+   "d": 1.95,
+   "text": "that we make here will also level up the"
+  },
+  {
+   "t": 1451.93,
+   "d": 5.19,
+   "text": "evil twin ok so so do you want to level"
+  },
+  {
+   "t": 1457.12,
+   "d": 1.8,
+   "text": "up some of our mutations or do you want"
+  },
+  {
+   "t": 1458.92,
+   "d": 5.55,
+   "text": "to buy a new mutation more like okay so"
+  },
+  {
+   "t": 1464.47,
+   "d": 2.76,
+   "text": "when you level up okay yeah so let's"
+  },
+  {
+   "t": 1467.23,
+   "d": 2.58,
+   "text": "level up multiple legs okay they they"
+  },
+  {
+   "t": 1469.81,
+   "d": 3.39,
+   "text": "really want so it doesn't I should I"
+  },
+  {
+   "t": 1473.2,
+   "d": 2.31,
+   "text": "should clarify that it doesn't mean"
+  },
+  {
+   "t": 1475.51,
+   "d": 1.92,
+   "text": "we're getting more legs unfortunate"
+  },
+  {
+   "t": 1477.43,
+   "d": 3.9,
+   "text": "what's happening for level I'm sorry but"
+  },
+  {
+   "t": 1481.33,
+   "d": 4.38,
+   "text": "it can if we wanted to right you can't"
+  },
+  {
+   "t": 1485.71,
+   "d": 1.83,
+   "text": "that has been a suggestion that you"
+  },
+  {
+   "t": 1487.54,
+   "d": 2.49,
+   "text": "should be able to purchase it multiple"
+  },
+  {
+   "t": 1490.03,
+   "d": 2.19,
+   "text": "times to do that we'll put it on the"
+  },
+  {
+   "t": 1492.22,
+   "d": 4.74,
+   "text": "feature request list but you can't right"
+  },
+  {
+   "t": 1496.96,
+   "d": 1.5,
+   "text": "now okay so we leveled up a few times"
+  },
+  {
+   "t": 1498.46,
+   "d": 1.35,
+   "text": "okay we still have a bunch of mutation"
+  },
+  {
+   "t": 1499.81,
+   "d": 1.41,
+   "text": "points so should we buy any mutation"
+  },
+  {
+   "t": 1501.22,
+   "d": 0.96,
+   "text": "because that's fun"
+  },
+  {
+   "t": 1502.18,
+   "d": 2.19,
+   "text": "sure yeah let's do that and when you buy"
+  },
+  {
+   "t": 1504.37,
+   "d": 2.48,
+   "text": "a new mutation you get a choice of three"
+  },
+  {
+   "t": 1506.85,
+   "d": 2.71,
+   "text": "okay here we go we have three mutations"
+  },
+  {
+   "t": 1509.56,
+   "d": 1.98,
+   "text": "we have time dilation this will let us"
+  },
+  {
+   "t": 1511.54,
+   "d": 2.1,
+   "text": "slow time in the area around us making"
+  },
+  {
+   "t": 1513.64,
+   "d": 1.53,
+   "text": "enemies near us slower"
+  },
+  {
+   "t": 1515.17,
+   "d": 3.93,
+   "text": "we have cryo Kinesis which roll is"
+  },
+  {
+   "t": 1519.1,
+   "d": 2.13,
+   "text": "essentially like the inverse of"
+  },
+  {
+   "t": 1521.23,
+   "d": 3.75,
+   "text": "pyrokinesis we can freeze and and also"
+  },
+  {
+   "t": 1524.98,
+   "d": 1.92,
+   "text": "deal damage to things in and in like a"
+  },
+  {
+   "t": 1526.9,
+   "d": 2.88,
+   "text": "3x3 area or we have force bubble which"
+  },
+  {
+   "t": 1529.78,
+   "d": 1.98,
+   "text": "is this like force field that can come"
+  },
+  {
+   "t": 1531.76,
+   "d": 2.13,
+   "text": "up around us and it'll travel with us as"
+  },
+  {
+   "t": 1533.89,
+   "d": 2.1,
+   "text": "we move along it's like this activated"
+  },
+  {
+   "t": 1535.99,
+   "d": 2.25,
+   "text": "ability that will have a cool-down but"
+  },
+  {
+   "t": 1538.24,
+   "d": 3.63,
+   "text": "is a good defensive mutation so I guess"
+  },
+  {
+   "t": 1541.87,
+   "d": 1.71,
+   "text": "let's just do a show of hand oh do you"
+  },
+  {
+   "t": 1543.58,
+   "d": 1.32,
+   "text": "have a yes"
+  },
+  {
+   "t": 1544.9,
+   "d": 2.31,
+   "text": "dilation fits with your nemesis time"
+  },
+  {
+   "t": 1547.21,
+   "d": 1.62,
+   "text": "dilation fits with your nemesis"
+  },
+  {
+   "t": 1548.83,
+   "d": 1.68,
+   "text": "traveling through time and this is true"
+  },
+  {
+   "t": 1550.51,
+   "d": 2.79,
+   "text": "so a thematic argument for picking time"
+  },
+  {
+   "t": 1553.3,
+   "d": 2.88,
+   "text": "dilation is that we have a evil twin"
+  },
+  {
+   "t": 1556.18,
+   "d": 1.89,
+   "text": "chasing us through space and time it"
+  },
+  {
+   "t": 1558.07,
+   "d": 1.65,
+   "text": "might make sense that we can warp space"
+  },
+  {
+   "t": 1559.72,
+   "d": 4.35,
+   "text": "or time yeah so that's good so let's do"
+  },
+  {
+   "t": 1564.07,
+   "d": 1.71,
+   "text": "a show of hands so how many people want"
+  },
+  {
+   "t": 1565.78,
+   "d": 3.83,
+   "text": "the time manipulate time dilation okay"
+  },
+  {
+   "t": 1569.61,
+   "d": 6.79,
+   "text": "yeah okay cryo Kinesis uh-huh"
+  },
+  {
+   "t": 1576.4,
+   "d": 6.29,
+   "text": "someone wanted crime use force bubble I"
+  },
+  {
+   "t": 1582.69,
+   "d": 3.64,
+   "text": "think time dilation dilation wins but"
+  },
+  {
+   "t": 1586.33,
+   "d": 2.19,
+   "text": "yeah funny side note about force bubble"
+  },
+  {
+   "t": 1588.52,
+   "d": 2.49,
+   "text": "is that if we had selected that evil"
+  },
+  {
+   "t": 1591.01,
+   "d": 1.74,
+   "text": "twin does not know how to deal with"
+  },
+  {
+   "t": 1592.75,
+   "d": 5.48,
+   "text": "their own force bubble so they oh so"
+  },
+  {
+   "t": 1598.23,
+   "d": 5.59,
+   "text": "okay okay so we got we something"
+  },
+  {
+   "t": 1603.82,
+   "d": 1.92,
+   "text": "happened already we haven't even started"
+  },
+  {
+   "t": 1605.74,
+   "d": 2.97,
+   "text": "playing the game yet okay so I'll just"
+  },
+  {
+   "t": 1608.71,
+   "d": 2.82,
+   "text": "read this you and we'll see what you've"
+  },
+  {
+   "t": 1611.53,
+   "d": 2.28,
+   "text": "got so it's a little text bubble here"
+  },
+  {
+   "t": 1613.81,
+   "d": 1.68,
+   "text": "okay we are being watched it's a"
+  },
+  {
+   "t": 1615.49,
+   "d": 2.16,
+   "text": "familiar feeling with when someone has"
+  },
+  {
+   "t": 1617.65,
+   "d": 1.47,
+   "text": "watched you in the past when it's light"
+  },
+  {
+   "t": 1619.12,
+   "d": 1.95,
+   "text": "that's betrayed your presence you made a"
+  },
+  {
+   "t": 1621.07,
+   "d": 1.92,
+   "text": "friend of the darkness you pulled your"
+  },
+  {
+   "t": 1622.99,
+   "d": 2.55,
+   "text": "hamper in low over your eyes you step"
+  },
+  {
+   "t": 1625.54,
+   "d": 2.34,
+   "text": "behind the cover of a thatched wall but"
+  },
+  {
+   "t": 1627.88,
+   "d": 2.19,
+   "text": "those who watch you now in spite of such"
+  },
+  {
+   "t": 1630.07,
+   "d": 2.82,
+   "text": "simple watch you in spite of such simple"
+  },
+  {
+   "t": 1632.89,
+   "d": 2.28,
+   "text": "obstructions their site isn't mediated"
+  },
+  {
+   "t": 1635.17,
+   "d": 1.83,
+   "text": "by the Rays of a gleaming star or torch"
+  },
+  {
+   "t": 1637.0,
+   "d": 2.16,
+   "text": "but by something much older if there are"
+  },
+  {
+   "t": 1639.16,
+   "d": 1.59,
+   "text": "ways to conceal yourself from these"
+  },
+  {
+   "t": 1640.75,
+   "d": 2.37,
+   "text": "seeing eyes if there are new kinds of"
+  },
+  {
+   "t": 1643.12,
+   "d": 1.77,
+   "text": "darkness to befriend you know nothing up"
+  },
+  {
+   "t": 1644.89,
+   "d": 6.63,
+   "text": "them okay so let's move on BET's do not"
+  },
+  {
+   "t": 1651.52,
+   "d": 3.36,
+   "text": "question that so okay so we have okay so"
+  },
+  {
+   "t": 1654.88,
+   "d": 1.29,
+   "text": "I'm just gonna level these up why don't"
+  },
+  {
+   "t": 1656.17,
+   "d": 3.42,
+   "text": "you level goes up we also don't have the"
+  },
+  {
+   "t": 1659.59,
+   "d": 3.63,
+   "text": "most time yeah hunt after Mammon okay so"
+  },
+  {
+   "t": 1663.22,
+   "d": 1.62,
+   "text": "we'll see how it goes let's yeah let's"
+  },
+  {
+   "t": 1664.84,
+   "d": 2.63,
+   "text": "start let's start the game already"
+  },
+  {
+   "t": 1667.47,
+   "d": 3.22,
+   "text": "there's a lot of preparations in case"
+  },
+  {
+   "t": 1670.69,
+   "d": 2.58,
+   "text": "I've got character creation so that's"
+  },
+  {
+   "t": 1673.27,
+   "d": 2.61,
+   "text": "you know but we're about we're about to"
+  },
+  {
+   "t": 1675.88,
+   "d": 1.95,
+   "text": "start okay we're going to buy some"
+  },
+  {
+   "t": 1677.83,
+   "d": 0.95,
+   "text": "skills very"
+  },
+  {
+   "t": 1678.78,
+   "d": 4.43,
+   "text": "quickly so while that's happening so um"
+  },
+  {
+   "t": 1683.21,
+   "d": 3.22,
+   "text": "this is like the character menu and"
+  },
+  {
+   "t": 1686.43,
+   "d": 1.95,
+   "text": "what's I'll remind you what we're going"
+  },
+  {
+   "t": 1688.38,
+   "d": 1.29,
+   "text": "to be doing so we're going to be"
+  },
+  {
+   "t": 1689.67,
+   "d": 2.25,
+   "text": "traveling to this mushroom village as it"
+  },
+  {
+   "t": 1691.92,
+   "d": 2.37,
+   "text": "was described to us to speak with the"
+  },
+  {
+   "t": 1694.29,
+   "d": 4.86,
+   "text": "warden there who has information for us"
+  },
+  {
+   "t": 1699.15,
+   "d": 2.52,
+   "text": "about this psychic man goat that were to"
+  },
+  {
+   "t": 1701.67,
+   "d": 5.88,
+   "text": "be hunting in the jungle so as as we get"
+  },
+  {
+   "t": 1707.55,
+   "d": 2.97,
+   "text": "to the village and as as Nick is walking"
+  },
+  {
+   "t": 1710.52,
+   "d": 1.53,
+   "text": "through the jungle and we sort of"
+  },
+  {
+   "t": 1712.05,
+   "d": 2.88,
+   "text": "encounter strange things if we do I'll"
+  },
+  {
+   "t": 1714.93,
+   "d": 2.67,
+   "text": "again I'll like kind of like request"
+  },
+  {
+   "t": 1717.6,
+   "d": 4.59,
+   "text": "some input from from the audience that"
+  },
+  {
+   "t": 1722.19,
+   "d": 1.44,
+   "text": "try to figure it figure that out and"
+  },
+  {
+   "t": 1723.63,
+   "d": 1.74,
+   "text": "like if nothing particularly interesting"
+  },
+  {
+   "t": 1725.37,
+   "d": 1.74,
+   "text": "is happening where we would like need"
+  },
+  {
+   "t": 1727.11,
+   "d": 2.4,
+   "text": "input I you know we'll just kind of talk"
+  },
+  {
+   "t": 1729.51,
+   "d": 1.65,
+   "text": "about what's happening and tell you a"
+  },
+  {
+   "t": 1731.16,
+   "d": 1.76,
+   "text": "bit about caves we've cut and and like"
+  },
+  {
+   "t": 1732.92,
+   "d": 2.35,
+   "text": "the the situation we're in"
+  },
+  {
+   "t": 1735.27,
+   "d": 1.65,
+   "text": "essentially okay we're ready we're ready"
+  },
+  {
+   "t": 1736.92,
+   "d": 1.53,
+   "text": "for that so the first thing we have to"
+  },
+  {
+   "t": 1738.45,
+   "d": 2.49,
+   "text": "do we start up in this like kind of"
+  },
+  {
+   "t": 1740.94,
+   "d": 1.71,
+   "text": "northwest corner of the map like we're"
+  },
+  {
+   "t": 1742.65,
+   "d": 3.69,
+   "text": "up can you hit alts maybe yeah so we're"
+  },
+  {
+   "t": 1746.34,
+   "d": 1.89,
+   "text": "the little green this is like an alt"
+  },
+  {
+   "t": 1748.23,
+   "d": 1.47,
+   "text": "display you can see to actually tell"
+  },
+  {
+   "t": 1749.7,
+   "d": 2.07,
+   "text": "what's going on so we're the little"
+  },
+  {
+   "t": 1751.77,
+   "d": 2.94,
+   "text": "green tile up in the sort of northwest"
+  },
+  {
+   "t": 1754.71,
+   "d": 1.38,
+   "text": "and we need to go to this mushroom"
+  },
+  {
+   "t": 1756.09,
+   "d": 1.98,
+   "text": "villagers like due south of us directly"
+  },
+  {
+   "t": 1758.07,
+   "d": 2.04,
+   "text": "sits right here now the problem is we"
+  },
+  {
+   "t": 1760.11,
+   "d": 4.26,
+   "text": "have to walk there and that might go"
+  },
+  {
+   "t": 1764.37,
+   "d": 3.09,
+   "text": "uneventful eh but it might not so that's"
+  },
+  {
+   "t": 1767.46,
+   "d": 1.53,
+   "text": "gonna be the first challenge so let's"
+  },
+  {
+   "t": 1768.99,
+   "d": 4.89,
+   "text": "let's start oh yes okay so we have some"
+  },
+  {
+   "t": 1773.88,
+   "d": 1.62,
+   "text": "equipment so we have a roaring complete"
+  },
+  {
+   "t": 1775.5,
+   "d": 1.07,
+   "text": "armor"
+  },
+  {
+   "t": 1776.57,
+   "d": 1.98,
+   "text": "we've got a crazy cloak we've got an"
+  },
+  {
+   "t": 1778.55,
+   "d": 1.5,
+   "text": "awesome gun Wow"
+  },
+  {
+   "t": 1780.05,
+   "d": 3.69,
+   "text": "yeah and wait so we have yet to see if"
+  },
+  {
+   "t": 1783.74,
+   "d": 2.82,
+   "text": "we're carrying too much to move okay so"
+  },
+  {
+   "t": 1786.56,
+   "d": 2.1,
+   "text": "we will now see if we can move in the"
+  },
+  {
+   "t": 1788.66,
+   "d": 4.71,
+   "text": "game we are okay okay so we've got to"
+  },
+  {
+   "t": 1793.37,
+   "d": 1.62,
+   "text": "drop some stuff don't just drop it on"
+  },
+  {
+   "t": 1794.99,
+   "d": 1.44,
+   "text": "the world what oh we're dropped we're"
+  },
+  {
+   "t": 1796.43,
+   "d": 2.85,
+   "text": "dropping oh okay"
+  },
+  {
+   "t": 1799.28,
+   "d": 2.28,
+   "text": "so we're going to okay this is you I"
+  },
+  {
+   "t": 1801.56,
+   "d": 4.19,
+   "text": "equipped it okay we're dropping it"
+  },
+  {
+   "t": 1806.09,
+   "d": 1.68,
+   "text": "we don't you're right actually a good"
+  },
+  {
+   "t": 1807.77,
+   "d": 2.79,
+   "text": "point we can manipulate light so well"
+  },
+  {
+   "t": 1810.56,
+   "d": 1.47,
+   "text": "you probably wanted oh you have it glows"
+  },
+  {
+   "t": 1812.03,
+   "d": 1.44,
+   "text": "here too so that's fine yeah and I"
+  },
+  {
+   "t": 1813.47,
+   "d": 7.8,
+   "text": "equipped it so in terms of like studded"
+  },
+  {
+   "t": 1821.27,
+   "d": 2.76,
+   "text": "leather it's been suggested that you"
+  },
+  {
+   "t": 1824.03,
+   "d": 1.65,
+   "text": "drop the studded leather up all of this"
+  },
+  {
+   "t": 1825.68,
+   "d": 1.89,
+   "text": "armor what are we carrying this for okay"
+  },
+  {
+   "t": 1827.57,
+   "d": 1.5,
+   "text": "I think we're probably good okay yeah"
+  },
+  {
+   "t": 1829.07,
+   "d": 2.31,
+   "text": "we're good now okay so can you zoom in"
+  },
+  {
+   "t": 1831.38,
+   "d": 2.49,
+   "text": "again so we could see yeah okay okay so"
+  },
+  {
+   "t": 1833.87,
+   "d": 1.14,
+   "text": "we're gonna I'm gonna start heading down"
+  },
+  {
+   "t": 1835.01,
+   "d": 2.13,
+   "text": "there now the jungle is like really"
+  },
+  {
+   "t": 1837.14,
+   "d": 1.5,
+   "text": "dangerous there's a chance we could"
+  },
+  {
+   "t": 1838.64,
+   "d": 1.53,
+   "text": "become lost I think that's what you were"
+  },
+  {
+   "t": 1840.17,
+   "d": 4.1,
+   "text": "starting to say that is what I yes so"
+  },
+  {
+   "t": 1844.27,
+   "d": 3.04,
+   "text": "dangerous here okay we have some"
+  },
+  {
+   "t": 1847.31,
+   "d": 6.33,
+   "text": "abilities that we have to hotkey there's"
+  },
+  {
+   "t": 1853.64,
+   "d": 1.68,
+   "text": "so much like preparation to do when you"
+  },
+  {
+   "t": 1855.32,
+   "d": 2.13,
+   "text": "start that's fine we're we're gonna"
+  },
+  {
+   "t": 1857.45,
+   "d": 3.33,
+   "text": "we're gonna beat them okay so we also"
+  },
+  {
+   "t": 1860.78,
+   "d": 1.35,
+   "text": "have some weird skills like we can"
+  },
+  {
+   "t": 1862.13,
+   "d": 3.06,
+   "text": "berate our enemy we could make them feel"
+  },
+  {
+   "t": 1865.19,
+   "d": 2.49,
+   "text": "bad about themselves oh oh we're dying"
+  },
+  {
+   "t": 1867.68,
+   "d": 1.65,
+   "text": "for huh we're dying of hunger so you do"
+  },
+  {
+   "t": 1869.33,
+   "d": 3.12,
+   "text": "have to eat in this game and right now"
+  },
+  {
+   "t": 1872.45,
+   "d": 1.92,
+   "text": "we can't do it because we don't have any"
+  },
+  {
+   "t": 1874.37,
+   "d": 2.64,
+   "text": "food okay well I think all we can do at"
+  },
+  {
+   "t": 1877.01,
+   "d": 2.94,
+   "text": "this point is just to go into the map"
+  },
+  {
+   "t": 1879.95,
+   "d": 2.34,
+   "text": "and yes look for food basically so"
+  },
+  {
+   "t": 1882.29,
+   "d": 4.56,
+   "text": "already are our noble multiple leg hero"
+  },
+  {
+   "t": 1886.85,
+   "d": 4.92,
+   "text": "on their way to the mushroom village to"
+  },
+  {
+   "t": 1891.77,
+   "d": 4.44,
+   "text": "like solve the mystery of the psychic"
+  },
+  {
+   "t": 1896.21,
+   "d": 2.34,
+   "text": "man goat is starving and needs to find"
+  },
+  {
+   "t": 1898.55,
+   "d": 3.6,
+   "text": "some food okay so we're actually in a"
+  },
+  {
+   "t": 1902.15,
+   "d": 1.62,
+   "text": "caves of cut map like this is a"
+  },
+  {
+   "t": 1903.77,
+   "d": 2.28,
+   "text": "procedurally generated map if we die of"
+  },
+  {
+   "t": 1906.05,
+   "d": 3.08,
+   "text": "hunger I'm gonna be so"
+  },
+  {
+   "t": 1910.38,
+   "d": 3.04,
+   "text": "so we're in oh hey we discovered"
+  },
+  {
+   "t": 1913.42,
+   "d": 2.52,
+   "text": "something too Murad okay so when you"
+  },
+  {
+   "t": 1915.94,
+   "d": 1.29,
+   "text": "walk around caves have cut there are"
+  },
+  {
+   "t": 1917.23,
+   "d": 3.24,
+   "text": "various procedurally generated locations"
+  },
+  {
+   "t": 1920.47,
+   "d": 1.41,
+   "text": "that you can discover this is kind of"
+  },
+  {
+   "t": 1921.88,
+   "d": 1.31,
+   "text": "like an ancient ruin"
+  },
+  {
+   "t": 1923.19,
+   "d": 2.77,
+   "text": "it's called tomb rod it it gets"
+  },
+  {
+   "t": 1925.96,
+   "d": 2.13,
+   "text": "inscribed in your journal and then it's"
+  },
+  {
+   "t": 1928.09,
+   "d": 1.68,
+   "text": "kind of a secret that you have that you"
+  },
+  {
+   "t": 1929.77,
+   "d": 1.83,
+   "text": "can trade to people later who might be"
+  },
+  {
+   "t": 1931.6,
+   "d": 2.25,
+   "text": "also interested like npcs who might be"
+  },
+  {
+   "t": 1933.85,
+   "d": 2.58,
+   "text": "interested in ruins themselves so we're"
+  },
+  {
+   "t": 1936.43,
+   "d": 2.46,
+   "text": "gonna walk around this ruin and see if"
+  },
+  {
+   "t": 1938.89,
+   "d": 2.22,
+   "text": "there's any food or anything else"
+  },
+  {
+   "t": 1941.11,
+   "d": 2.97,
+   "text": "interesting okay we know we're dying of"
+  },
+  {
+   "t": 1944.08,
+   "d": 5.76,
+   "text": "hunger through the door yeah these are"
+  },
+  {
+   "t": 1949.84,
+   "d": 1.89,
+   "text": "just ruins so these are like totally"
+  },
+  {
+   "t": 1951.73,
+   "d": 1.98,
+   "text": "overgrown and there is some very"
+  },
+  {
+   "t": 1953.71,
+   "d": 2.87,
+   "text": "dangerous stuff that we could find here"
+  },
+  {
+   "t": 1956.58,
+   "d": 4.6,
+   "text": "okay so so this is a so these are some"
+  },
+  {
+   "t": 1961.18,
+   "d": 3.21,
+   "text": "creatures like we won't oh so this is"
+  },
+  {
+   "t": 1964.39,
+   "d": 3.0,
+   "text": "like a giant insect there's also a giant"
+  },
+  {
+   "t": 1967.39,
+   "d": 2.76,
+   "text": "dragonfly there the jungle has all sorts"
+  },
+  {
+   "t": 1970.15,
+   "d": 1.47,
+   "text": "of creatures so we're gonna use some of"
+  },
+  {
+   "t": 1971.62,
+   "d": 1.14,
+   "text": "our abilities okay look we set it on"
+  },
+  {
+   "t": 1972.76,
+   "d": 1.47,
+   "text": "fire that's what that is"
+  },
+  {
+   "t": 1974.23,
+   "d": 5.18,
+   "text": "we set the insects on fire yeah"
+  },
+  {
+   "t": 1979.41,
+   "d": 4.75,
+   "text": "congratulations we yeah yeah oh yeah"
+  },
+  {
+   "t": 1984.16,
+   "d": 1.35,
+   "text": "good point thank you"
+  },
+  {
+   "t": 1985.51,
+   "d": 1.86,
+   "text": "we will definitely eat the giant"
+  },
+  {
+   "t": 1987.37,
+   "d": 6.14,
+   "text": "dragonfly yes okay that hits the spot"
+  },
+  {
+   "t": 1993.84,
+   "d": 2.59,
+   "text": "now we could continue on or we could"
+  },
+  {
+   "t": 1996.43,
+   "d": 2.13,
+   "text": "continue to explore these ruins you need"
+  },
+  {
+   "t": 1998.56,
+   "d": 1.47,
+   "text": "a little more food we probably need a"
+  },
+  {
+   "t": 2000.03,
+   "d": 3.09,
+   "text": "little bit more food so we don't have a"
+  },
+  {
+   "t": 2003.12,
+   "d": 2.37,
+   "text": "ton of time so we can't really linger"
+  },
+  {
+   "t": 2005.49,
+   "d": 5.22,
+   "text": "here okay an interesting thing to note"
+  },
+  {
+   "t": 2010.71,
+   "d": 2.61,
+   "text": "is that we will be adding let's kill"
+  },
+  {
+   "t": 2013.32,
+   "d": 5.49,
+   "text": "this one hunger system soon no current"
+  },
+  {
+   "t": 2018.81,
+   "d": 2.72,
+   "text": "one isn't great and everything but the"
+  },
+  {
+   "t": 2021.53,
+   "d": 2.53,
+   "text": "the next one will be better too so we"
+  },
+  {
+   "t": 2024.06,
+   "d": 2.55,
+   "text": "won't like starve to death as often but"
+  },
+  {
+   "t": 2026.61,
+   "d": 1.14,
+   "text": "hopefully we'll be able to find some"
+  },
+  {
+   "t": 2027.75,
+   "d": 2.88,
+   "text": "more food and then continue on oh it's a"
+  },
+  {
+   "t": 2030.63,
+   "d": 2.43,
+   "text": "shrine okay so look so there are these"
+  },
+  {
+   "t": 2033.06,
+   "d": 4.29,
+   "text": "shrines to ancient Sultan's of cut who"
+  },
+  {
+   "t": 2037.35,
+   "d": 1.74,
+   "text": "are these like ancient rulers of God so"
+  },
+  {
+   "t": 2039.09,
+   "d": 1.08,
+   "text": "let's just read this here because"
+  },
+  {
+   "t": 2040.17,
+   "d": 1.35,
+   "text": "sometimes they're interesting"
+  },
+  {
+   "t": 2041.52,
+   "d": 1.86,
+   "text": "okay at the shrine - if they're a"
+  },
+  {
+   "t": 2043.38,
+   "d": 2.13,
+   "text": "toughie the second the weighted devil on"
+  },
+  {
+   "t": 2045.51,
+   "d": 2.25,
+   "text": "the anniversary of a great battle a"
+  },
+  {
+   "t": 2047.76,
+   "d": 2.01,
+   "text": "gambler found a babe with a fortuitous"
+  },
+  {
+   "t": 2049.77,
+   "d": 2.64,
+   "text": "token in each hand outside her gambling"
+  },
+  {
+   "t": 2052.41,
+   "d": 3.03,
+   "text": "den she and her fellow gamblers adopted"
+  },
+  {
+   "t": 2055.44,
+   "d": 2.28,
+   "text": "the babe and named him if they're top of"
+  },
+  {
+   "t": 2057.72,
+   "d": 2.25,
+   "text": "a second wait a second does this sounds"
+  },
+  {
+   "t": 2059.97,
+   "d": 2.07,
+   "text": "like somebody was trying to pay back a"
+  },
+  {
+   "t": 2062.04,
+   "d": 1.86,
+   "text": "debt and they were like here's some of"
+  },
+  {
+   "t": 2063.9,
+   "d": 1.53,
+   "text": "the money that I owed you and also a"
+  },
+  {
+   "t": 2065.43,
+   "d": 6.24,
+   "text": "baby hey they were a B was that really a"
+  },
+  {
+   "t": 2071.67,
+   "d": 3.51,
+   "text": "fortuitous its event it's a troubling"
+  },
+  {
+   "t": 2075.18,
+   "d": 2.64,
+   "text": "story that's how history remembers so"
+  },
+  {
+   "t": 2077.82,
+   "d": 1.68,
+   "text": "these were at least"
+  },
+  {
+   "t": 2079.5,
+   "d": 1.44,
+   "text": "so there's procedurally generated"
+  },
+  {
+   "t": 2080.94,
+   "d": 2.13,
+   "text": "history in caves of cod and if you want"
+  },
+  {
+   "t": 2083.07,
+   "d": 1.41,
+   "text": "to hear about it come to my talk"
+  },
+  {
+   "t": 2084.48,
+   "d": 1.2,
+   "text": "tomorrow because I'll be talking about"
+  },
+  {
+   "t": 2085.68,
+   "d": 3.12,
+   "text": "it but you could find these like shrines"
+  },
+  {
+   "t": 2088.8,
+   "d": 2.07,
+   "text": "and engravings and paintings of this"
+  },
+  {
+   "t": 2090.87,
+   "d": 2.04,
+   "text": "ancient culture and read about them and"
+  },
+  {
+   "t": 2092.91,
+   "d": 1.38,
+   "text": "they're real locations in the game that"
+  },
+  {
+   "t": 2094.29,
+   "d": 1.56,
+   "text": "you could go visit so we just learned"
+  },
+  {
+   "t": 2095.85,
+   "d": 3.39,
+   "text": "about some ancient king who was adopted"
+  },
+  {
+   "t": 2099.24,
+   "d": 1.95,
+   "text": "by gamblers to pay off some gambling"
+  },
+  {
+   "t": 2101.19,
+   "d": 6.86,
+   "text": "debt or some something okay"
+  },
+  {
+   "t": 2108.23,
+   "d": 2.71,
+   "text": "yeah we're not finding any food here I"
+  },
+  {
+   "t": 2110.94,
+   "d": 1.44,
+   "text": "think we should just press on because"
+  },
+  {
+   "t": 2112.38,
+   "d": 1.53,
+   "text": "all right let's press if we can make it"
+  },
+  {
+   "t": 2113.91,
+   "d": 3.98,
+   "text": "there there's there's food okay let's"
+  },
+  {
+   "t": 2119.42,
+   "d": 2.29,
+   "text": "okay there we go okay so we're back on"
+  },
+  {
+   "t": 2121.71,
+   "d": 2.67,
+   "text": "the world map we're dying of hunger okay"
+  },
+  {
+   "t": 2124.38,
+   "d": 0.87,
+   "text": "we didn't get very far"
+  },
+  {
+   "t": 2125.25,
+   "d": 6.48,
+   "text": "oh okay okay all right so we sense the"
+  },
+  {
+   "t": 2131.73,
+   "d": 2.04,
+   "text": "sinister presence nearby so what that"
+  },
+  {
+   "t": 2133.77,
+   "d": 2.16,
+   "text": "means is that somewhere on the map our"
+  },
+  {
+   "t": 2135.93,
+   "d": 4.79,
+   "text": "evil twin has spawned question is"
+  },
+  {
+   "t": 2140.72,
+   "d": 3.45,
+   "text": "it should be here question yes question"
+  },
+  {
+   "t": 2144.17,
+   "d": 3.42,
+   "text": "is our is our evil twin also dying of"
+  },
+  {
+   "t": 2147.59,
+   "d": 7.77,
+   "text": "hunger actually yeah I it would be yeah"
+  },
+  {
+   "t": 2155.36,
+   "d": 1.86,
+   "text": "it would be but has anyone who's played"
+  },
+  {
+   "t": 2157.22,
+   "d": 2.01,
+   "text": "caves I've had seen their evil twin die"
+  },
+  {
+   "t": 2159.23,
+   "d": 3.48,
+   "text": "of hunger that that's a nice the way"
+  },
+  {
+   "t": 2162.71,
+   "d": 2.37,
+   "text": "that the hunger works is we're just not"
+  },
+  {
+   "t": 2165.08,
+   "d": 1.41,
+   "text": "gonna be able to like regenerate"
+  },
+  {
+   "t": 2166.49,
+   "d": 2.48,
+   "text": "naturally from resting or anything so"
+  },
+  {
+   "t": 2168.97,
+   "d": 3.85,
+   "text": "let's try to find this yeah can you zoom"
+  },
+  {
+   "t": 2172.82,
+   "d": 3.33,
+   "text": "in again well I assume doubt because I"
+  },
+  {
+   "t": 2176.15,
+   "d": 4.46,
+   "text": "want to see if he's on the map but"
+  },
+  {
+   "t": 2182.44,
+   "d": 5.11,
+   "text": "there's a good okay that zoom in though"
+  },
+  {
+   "t": 2187.55,
+   "d": 1.76,
+   "text": "so we can because it's like too high"
+  },
+  {
+   "t": 2189.31,
+   "d": 3.55,
+   "text": "okay so well this isn't none of he's"
+  },
+  {
+   "t": 2192.86,
+   "d": 8.4,
+   "text": "gonna upward to the right here okay left"
+  },
+  {
+   "t": 2201.26,
+   "d": 3.57,
+   "text": "I hear some people saying right and some"
+  },
+  {
+   "t": 2204.83,
+   "d": 4.19,
+   "text": "people saying left sorry go ahead"
+  },
+  {
+   "t": 2209.32,
+   "d": 3.82,
+   "text": "this area this guy yeah this is a this"
+  },
+  {
+   "t": 2213.14,
+   "d": 2.7,
+   "text": "is a hermit that's a hermit"
+  },
+  {
+   "t": 2215.84,
+   "d": 2.97,
+   "text": "yeah the are evil twin will look exactly"
+  },
+  {
+   "t": 2218.81,
+   "d": 0.69,
+   "text": "like us"
+  },
+  {
+   "t": 2219.5,
+   "d": 1.35,
+   "text": "so let's just kill a bunch of these"
+  },
+  {
+   "t": 2220.85,
+   "d": 2.04,
+   "text": "things and all right so these are like"
+  },
+  {
+   "t": 2222.89,
+   "d": 1.83,
+   "text": "there's a there's a tribe of forest"
+  },
+  {
+   "t": 2224.72,
+   "d": 1.89,
+   "text": "where we're eating them i whatever it is"
+  },
+  {
+   "t": 2226.61,
+   "d": 2.4,
+   "text": "we're eating we're eating them oh wait"
+  },
+  {
+   "t": 2229.01,
+   "d": 2.55,
+   "text": "okay now I know that our evil twin is"
+  },
+  {
+   "t": 2231.56,
+   "d": 2.64,
+   "text": "nearby because that that that blue"
+  },
+  {
+   "t": 2234.2,
+   "d": 2.07,
+   "text": "outline means that were being time"
+  },
+  {
+   "t": 2236.27,
+   "d": 3.15,
+   "text": "dilated which means that he's using his"
+  },
+  {
+   "t": 2239.42,
+   "d": 2.64,
+   "text": "time dilation to slow us down so I think"
+  },
+  {
+   "t": 2242.06,
+   "d": 2.64,
+   "text": "we've got to use ours to counteract that"
+  },
+  {
+   "t": 2244.7,
+   "d": 2.9,
+   "text": "I don't know what happens with"
+  },
+  {
+   "t": 2247.6,
+   "d": 2.62,
+   "text": "conflicting time dilation fields it will"
+  },
+  {
+   "t": 2250.22,
+   "d": 3.63,
+   "text": "be interesting to learn yes okay now"
+  },
+  {
+   "t": 2253.85,
+   "d": 3.48,
+   "text": "we've activated ours okay so we don't"
+  },
+  {
+   "t": 2257.33,
+   "d": 1.89,
+   "text": "quite even see him yet so this little"
+  },
+  {
+   "t": 2259.22,
+   "d": 3.03,
+   "text": "effect here is is to is telling us that"
+  },
+  {
+   "t": 2262.25,
+   "d": 1.83,
+   "text": "were under the effect of a time dilation"
+  },
+  {
+   "t": 2264.08,
+   "d": 2.19,
+   "text": "field and also that are there is okay"
+  },
+  {
+   "t": 2266.27,
+   "d": 1.8,
+   "text": "there is there is so we let's click on"
+  },
+  {
+   "t": 2268.07,
+   "d": 3.1,
+   "text": "him oh it's it's evil you evil Roger"
+  },
+  {
+   "t": 2271.17,
+   "d": 5.13,
+   "text": "see he's aggressive and he's wearing all"
+  },
+  {
+   "t": 2276.3,
+   "d": 2.7,
+   "text": "of our equipment which if you will"
+  },
+  {
+   "t": 2279.0,
+   "d": 1.74,
+   "text": "display it because he's from another"
+  },
+  {
+   "t": 2280.74,
+   "d": 1.56,
+   "text": "dimension it D spawns when we kill him"
+  },
+  {
+   "t": 2282.3,
+   "d": 1.47,
+   "text": "so you can't like kill your evil twin"
+  },
+  {
+   "t": 2283.77,
+   "d": 2.37,
+   "text": "and then double all your loot every time"
+  },
+  {
+   "t": 2286.14,
+   "d": 2.76,
+   "text": "he does come back or another another"
+  },
+  {
+   "t": 2288.9,
+   "d": 2.52,
+   "text": "version of yourself okay this is this is"
+  },
+  {
+   "t": 2291.42,
+   "d": 2.07,
+   "text": "kind of strange though there there is a"
+  },
+  {
+   "t": 2293.49,
+   "d": 1.92,
+   "text": "difference with this version of him"
+  },
+  {
+   "t": 2295.41,
+   "d": 2.1,
+   "text": "notice what it is"
+  },
+  {
+   "t": 2297.51,
+   "d": 4.05,
+   "text": "oh he's used some of his tonics oh"
+  },
+  {
+   "t": 2301.56,
+   "d": 2.37,
+   "text": "that's why he has burrowing claws yes"
+  },
+  {
+   "t": 2303.93,
+   "d": 5.4,
+   "text": "okay so here's the thing that's why he"
+  },
+  {
+   "t": 2309.33,
+   "d": 3.87,
+   "text": "has giant claws yes so we have in our"
+  },
+  {
+   "t": 2313.2,
+   "d": 2.16,
+   "text": "inventory what's called a tonic which is"
+  },
+  {
+   "t": 2315.36,
+   "d": 1.44,
+   "text": "essentially the caves have cut"
+  },
+  {
+   "t": 2316.8,
+   "d": 2.15,
+   "text": "equivalent to a potion or a scroll a"
+  },
+  {
+   "t": 2318.95,
+   "d": 2.2,
+   "text": "potion I think they're more like so"
+  },
+  {
+   "t": 2321.15,
+   "d": 4.68,
+   "text": "there they do different things when you"
+  },
+  {
+   "t": 2325.83,
+   "d": 2.22,
+   "text": "inject them into yourself so one of them"
+  },
+  {
+   "t": 2328.05,
+   "d": 2.43,
+   "text": "is called the skull tonic and it gives"
+  },
+  {
+   "t": 2330.48,
+   "d": 2.37,
+   "text": "you burrowing claws you groper and claws"
+  },
+  {
+   "t": 2332.85,
+   "d": 1.29,
+   "text": "on your hands that you could like burrow"
+  },
+  {
+   "t": 2334.14,
+   "d": 3.3,
+   "text": "through walls so evil Rodney has like"
+  },
+  {
+   "t": 2337.44,
+   "d": 1.68,
+   "text": "seen us and is like injected himself"
+  },
+  {
+   "t": 2339.12,
+   "d": 1.83,
+   "text": "with a bunch of these tonics because"
+  },
+  {
+   "t": 2340.95,
+   "d": 1.2,
+   "text": "he's like whatever"
+  },
+  {
+   "t": 2342.15,
+   "d": 3.75,
+   "text": "oh look okay so so Nick's fighting him"
+  },
+  {
+   "t": 2345.9,
+   "d": 1.83,
+   "text": "right now yeah we're gonna fight him we"
+  },
+  {
+   "t": 2347.73,
+   "d": 1.77,
+   "text": "still don't have a lot of time he lit us"
+  },
+  {
+   "t": 2349.5,
+   "d": 3.42,
+   "text": "on fire we lit head on fire the it's oh"
+  },
+  {
+   "t": 2352.92,
+   "d": 2.31,
+   "text": "he's shooting lasers at us now that's"
+  },
+  {
+   "t": 2355.23,
+   "d": 4.23,
+   "text": "what those little asterisks are yes good"
+  },
+  {
+   "t": 2359.46,
+   "d": 1.86,
+   "text": "point like we should be occasionally"
+  },
+  {
+   "t": 2361.32,
+   "d": 2.1,
+   "text": "deflecting them because we have light"
+  },
+  {
+   "t": 2363.42,
+   "d": 1.44,
+   "text": "manipulation now of course he'll be"
+  },
+  {
+   "t": 2364.86,
+   "d": 1.86,
+   "text": "occasionally deflecting our lasers as"
+  },
+  {
+   "t": 2366.72,
+   "d": 2.82,
+   "text": "well and an evil twin battle can get"
+  },
+  {
+   "t": 2369.54,
+   "d": 8.04,
+   "text": "somewhat chaotic so there's a we have an"
+  },
+  {
+   "t": 2377.58,
+   "d": 3.57,
+   "text": "HP bar at the bottom here this I'm gonna"
+  },
+  {
+   "t": 2381.15,
+   "d": 2.25,
+   "text": "berate him"
+  },
+  {
+   "t": 2383.4,
+   "d": 2.16,
+   "text": "I think that's an appropriate thing to"
+  },
+  {
+   "t": 2385.56,
+   "d": 2.37,
+   "text": "so okay so like for all versions of"
+  },
+  {
+   "t": 2387.93,
+   "d": 2.58,
+   "text": "yourself you can see this red HP bar at"
+  },
+  {
+   "t": 2390.51,
+   "d": 1.86,
+   "text": "the bottom that is how much HP we have"
+  },
+  {
+   "t": 2392.37,
+   "d": 1.86,
+   "text": "we have 108 but it.we if you could see"
+  },
+  {
+   "t": 2394.23,
+   "d": 3.54,
+   "text": "we have like 3/5 HP left we're currently"
+  },
+  {
+   "t": 2397.77,
+   "d": 4.38,
+   "text": "berating evil Rodney what do you imagine"
+  },
+  {
+   "t": 2402.15,
+   "d": 3.59,
+   "text": "what do you imagine you're saying to him"
+  },
+  {
+   "t": 2405.74,
+   "d": 2.65,
+   "text": "well I mean we must know everything that"
+  },
+  {
+   "t": 2408.39,
+   "d": 4.25,
+   "text": "will like cut right to his core right"
+  },
+  {
+   "t": 2413.58,
+   "d": 4.77,
+   "text": "what would our brother think okay so"
+  },
+  {
+   "t": 2418.35,
+   "d": 2.52,
+   "text": "what had happen with playing with fire"
+  },
+  {
+   "t": 2420.87,
+   "d": 2.07,
+   "text": "is that occasionally you you set other"
+  },
+  {
+   "t": 2422.94,
+   "d": 2.85,
+   "text": "things he's almost dead so we set a tree"
+  },
+  {
+   "t": 2425.79,
+   "d": 2.01,
+   "text": "on fire and it burnt down there's but"
+  },
+  {
+   "t": 2427.8,
+   "d": 6.48,
+   "text": "this gray particle effect here is and"
+  },
+  {
+   "t": 2434.28,
+   "d": 2.46,
+   "text": "now we get the spoils of all the corpses"
+  },
+  {
+   "t": 2436.74,
+   "d": 2.37,
+   "text": "to eat yet unfortunately don't get"
+  },
+  {
+   "t": 2439.11,
+   "d": 1.59,
+   "text": "yellow Rodney's loop but we do get to"
+  },
+  {
+   "t": 2440.7,
+   "d": 3.69,
+   "text": "eat the corpses around the that light"
+  },
+  {
+   "t": 2444.39,
+   "d": 3.32,
+   "text": "died as like casualty of the battle oh"
+  },
+  {
+   "t": 2447.71,
+   "d": 4.87,
+   "text": "yeah oh yeah you're right because we're"
+  },
+  {
+   "t": 2452.58,
+   "d": 2.25,
+   "text": "a water merchants we have a high ego we"
+  },
+  {
+   "t": 2454.83,
+   "d": 1.77,
+   "text": "actually can use this power called"
+  },
+  {
+   "t": 2456.6,
+   "d": 3.45,
+   "text": "proselytize where if we worked oh it"
+  },
+  {
+   "t": 2460.05,
+   "d": 2.0,
+   "text": "worked we persuaded this goat folk"
+  },
+  {
+   "t": 2462.05,
+   "d": 4.15,
+   "text": "savage to join us yeah so do we want to"
+  },
+  {
+   "t": 2466.2,
+   "d": 1.53,
+   "text": "give him a name can we do that we can"
+  },
+  {
+   "t": 2467.73,
+   "d": 1.53,
+   "text": "give him a name well we now have"
+  },
+  {
+   "t": 2469.26,
+   "d": 2.61,
+   "text": "following us a goat folk savage what we"
+  },
+  {
+   "t": 2471.87,
+   "d": 2.07,
+   "text": "probably we convinced him to join our"
+  },
+  {
+   "t": 2473.94,
+   "d": 2.13,
+   "text": "cause we are a snake you know despite"
+  },
+  {
+   "t": 2476.07,
+   "d": 2.58,
+   "text": "the fact that we're like a multi-legged"
+  },
+  {
+   "t": 2478.65,
+   "d": 3.24,
+   "text": "mind wizard yeah we're we happen to be a"
+  },
+  {
+   "t": 2481.89,
+   "d": 3.51,
+   "text": "very charismatic one right so so we can"
+  },
+  {
+   "t": 2485.4,
+   "d": 2.07,
+   "text": "rename so we could either enter a name"
+  },
+  {
+   "t": 2487.47,
+   "d": 2.49,
+   "text": "for the goat folk or we could choose a"
+  },
+  {
+   "t": 2489.96,
+   "d": 1.86,
+   "text": "random name from our culture or we could"
+  },
+  {
+   "t": 2491.82,
+   "d": 1.47,
+   "text": "choose a random name from the go folks"
+  },
+  {
+   "t": 2493.29,
+   "d": 5.64,
+   "text": "culture good folk culture okay Nath Minh"
+  },
+  {
+   "t": 2498.93,
+   "d": 1.97,
+   "text": "Nath men"
+  },
+  {
+   "t": 2500.9,
+   "d": 3.16,
+   "text": "no this is not that good this is just a"
+  },
+  {
+   "t": 2504.06,
+   "d": 2.01,
+   "text": "random goat folk that we found wandering"
+  },
+  {
+   "t": 2506.07,
+   "d": 3.29,
+   "text": "around what"
+  },
+  {
+   "t": 2509.36,
+   "d": 2.56,
+   "text": "well he's not random right she snapped"
+  },
+  {
+   "t": 2511.92,
+   "d": 3.15,
+   "text": "men oh yes I'm sorry I'm sorry Nath man"
+  },
+  {
+   "t": 2515.07,
+   "d": 1.62,
+   "text": "he's standing right there I should have"
+  },
+  {
+   "t": 2516.69,
+   "d": 2.97,
+   "text": "I should have known better I should okay"
+  },
+  {
+   "t": 2519.66,
+   "d": 3.42,
+   "text": "so I like let me say that goat folk or a"
+  },
+  {
+   "t": 2523.08,
+   "d": 2.34,
+   "text": "species of these like be shield goat"
+  },
+  {
+   "t": 2525.42,
+   "d": 2.67,
+   "text": "people who live in this jungle and they"
+  },
+  {
+   "t": 2528.09,
+   "d": 1.56,
+   "text": "have villages you can actually find them"
+  },
+  {
+   "t": 2529.65,
+   "d": 1.29,
+   "text": "and interact with them they're mostly"
+  },
+  {
+   "t": 2530.94,
+   "d": 2.34,
+   "text": "trying to kill you but like any creature"
+  },
+  {
+   "t": 2533.28,
+   "d": 1.68,
+   "text": "in the game if you if you get enough"
+  },
+  {
+   "t": 2534.96,
+   "d": 1.5,
+   "text": "reputation with their faction they'll"
+  },
+  {
+   "t": 2536.46,
+   "d": 1.8,
+   "text": "actually like be friendly with you and"
+  },
+  {
+   "t": 2538.26,
+   "d": 1.89,
+   "text": "invite you into their town and even"
+  },
+  {
+   "t": 2540.15,
+   "d": 3.57,
+   "text": "occasionally fight with you so there are"
+  },
+  {
+   "t": 2543.72,
+   "d": 1.5,
+   "text": "good folk are all over the jungle now"
+  },
+  {
+   "t": 2545.22,
+   "d": 2.43,
+   "text": "Mammon soul drinker is this like really"
+  },
+  {
+   "t": 2547.65,
+   "d": 4.44,
+   "text": "special shaman goat folk psychic who"
+  },
+  {
+   "t": 2552.09,
+   "d": 1.56,
+   "text": "we're looking for we'll know him when we"
+  },
+  {
+   "t": 2553.65,
+   "d": 1.47,
+   "text": "find them which I think will we're"
+  },
+  {
+   "t": 2555.12,
+   "d": 1.89,
+   "text": "unlikely to do at this point because"
+  },
+  {
+   "t": 2557.01,
+   "d": 3.63,
+   "text": "we're still trying to reach the original"
+  },
+  {
+   "t": 2560.64,
+   "d": 2.1,
+   "text": "right fine okay finally we found a"
+  },
+  {
+   "t": 2562.74,
+   "d": 1.86,
+   "text": "chitinous puma corpse which is a real"
+  },
+  {
+   "t": 2564.6,
+   "d": 4.77,
+   "text": "meal as far as like you know as far as"
+  },
+  {
+   "t": 2569.37,
+   "d": 2.19,
+   "text": "I'm concerned I I think that they're"
+  },
+  {
+   "t": 2571.56,
+   "d": 3.78,
+   "text": "technically crabs and not Pumas so they"
+  },
+  {
+   "t": 2575.34,
+   "d": 2.43,
+   "text": "are they're supposed to be Pumas who"
+  },
+  {
+   "t": 2577.77,
+   "d": 1.95,
+   "text": "have a chin this exoskeleton but they're"
+  },
+  {
+   "t": 2579.72,
+   "d": 3.47,
+   "text": "incorrectly labeled in the game as crabs"
+  },
+  {
+   "t": 2583.19,
+   "d": 3.37,
+   "text": "we're almost there I I think I think we"
+  },
+  {
+   "t": 2586.56,
+   "d": 2.64,
+   "text": "can we can we can continue alright just"
+  },
+  {
+   "t": 2589.2,
+   "d": 5.07,
+   "text": "go just go for it no I think we should"
+  },
+  {
+   "t": 2594.27,
+   "d": 2.1,
+   "text": "really press on let's fight I would love"
+  },
+  {
+   "t": 2596.37,
+   "d": 2.04,
+   "text": "to explore these ruins let's let's go we"
+  },
+  {
+   "t": 2598.41,
+   "d": 3.35,
+   "text": "need to this time is of the essence here"
+  },
+  {
+   "t": 2601.76,
+   "d": 3.28,
+   "text": "okay we're there okay we've arrived at"
+  },
+  {
+   "t": 2605.04,
+   "d": 3.24,
+   "text": "the the the jungle village of ko ko kya"
+  },
+  {
+   "t": 2608.28,
+   "d": 1.89,
+   "text": "so there are a bunch of little mushroom"
+  },
+  {
+   "t": 2610.17,
+   "d": 3.3,
+   "text": "Hut's here so this is a village I think"
+  },
+  {
+   "t": 2613.47,
+   "d": 1.2,
+   "text": "the first thing we should do is get"
+  },
+  {
+   "t": 2614.67,
+   "d": 1.56,
+   "text": "something we're gonna buy some food so"
+  },
+  {
+   "t": 2616.23,
+   "d": 3.87,
+   "text": "there's a there's a a merchant over here"
+  },
+  {
+   "t": 2620.1,
+   "d": 3.42,
+   "text": "named ural who's a sentient cucumber"
+  },
+  {
+   "t": 2623.52,
+   "d": 7.43,
+   "text": "vines yeah so let's do well okay okay"
+  },
+  {
+   "t": 2630.95,
+   "d": 2.81,
+   "text": "let's suck the gyro so"
+  },
+  {
+   "t": 2633.76,
+   "d": 2.61,
+   "text": "Ural is a merchant he's a cucumber vine"
+  },
+  {
+   "t": 2636.37,
+   "d": 2.55,
+   "text": "and as we see he sells you his own"
+  },
+  {
+   "t": 2638.92,
+   "d": 4.47,
+   "text": "cucumbers to eat which we will happily"
+  },
+  {
+   "t": 2643.39,
+   "d": 1.8,
+   "text": "buy at this point because we've been"
+  },
+  {
+   "t": 2645.19,
+   "d": 1.92,
+   "text": "starving wandering through the jungle"
+  },
+  {
+   "t": 2647.11,
+   "d": 2.04,
+   "text": "but and let's sell some of this other"
+  },
+  {
+   "t": 2649.15,
+   "d": 3.42,
+   "text": "junk we've got to so joke I will leave"
+  },
+  {
+   "t": 2652.57,
+   "d": 5.31,
+   "text": "you to parse out the ethics of this but"
+  },
+  {
+   "t": 2657.88,
+   "d": 6.51,
+   "text": "for now what our cinching cucumbers"
+  },
+  {
+   "t": 2664.39,
+   "d": 6.53,
+   "text": "vegan it's it's a good question okay so"
+  },
+  {
+   "t": 2670.92,
+   "d": 2.62,
+   "text": "it's this number down here yes so we"
+  },
+  {
+   "t": 2673.54,
+   "d": 1.95,
+   "text": "have five hundred fifty eight grams of"
+  },
+  {
+   "t": 2675.49,
+   "d": 3.09,
+   "text": "water or like that is that actually a"
+  },
+  {
+   "t": 2678.58,
+   "d": 2.37,
+   "text": "yeah yeah it is how much we have okay"
+  },
+  {
+   "t": 2680.95,
+   "d": 3.3,
+   "text": "and so the left"
+  },
+  {
+   "t": 2684.25,
+   "d": 2.4,
+   "text": "screed the left tab is your old girl is"
+  },
+  {
+   "t": 2686.65,
+   "d": 1.98,
+   "text": "the name of the merchant girls inventory"
+  },
+  {
+   "t": 2688.63,
+   "d": 2.1,
+   "text": "the right tab is our inventory and so"
+  },
+  {
+   "t": 2690.73,
+   "d": 1.41,
+   "text": "right now what what Nick is doing I'll"
+  },
+  {
+   "t": 2692.14,
+   "d": 1.59,
+   "text": "just summarize is kind of buying some"
+  },
+  {
+   "t": 2693.73,
+   "d": 2.79,
+   "text": "ammo when you get to a new merchant but"
+  },
+  {
+   "t": 2696.52,
+   "d": 1.68,
+   "text": "to it to a new village in caves of Cod"
+  },
+  {
+   "t": 2698.2,
+   "d": 1.65,
+   "text": "like it's a nice chance to stock up on"
+  },
+  {
+   "t": 2699.85,
+   "d": 2.97,
+   "text": "some good some ammo okay so why don't"
+  },
+  {
+   "t": 2702.82,
+   "d": 2.79,
+   "text": "why don't we go talk to ya now hold on a"
+  },
+  {
+   "t": 2705.61,
+   "d": 2.22,
+   "text": "second so we have a guess we have some"
+  },
+  {
+   "t": 2707.83,
+   "d": 2.94,
+   "text": "we have a guest voice actor to do the"
+  },
+  {
+   "t": 2710.77,
+   "d": 2.37,
+   "text": "dialogue here for it for warden and"
+  },
+  {
+   "t": 2713.14,
+   "d": 12.69,
+   "text": "Rik's - Jim do you want to come up so"
+  },
+  {
+   "t": 2725.83,
+   "d": 4.65,
+   "text": "we're approaching this this goat this"
+  },
+  {
+   "t": 2730.48,
+   "d": 3.03,
+   "text": "man goat who happens to be the sort of"
+  },
+  {
+   "t": 2733.51,
+   "d": 4.08,
+   "text": "sheriff of this village so why don't why"
+  },
+  {
+   "t": 2737.59,
+   "d": 1.86,
+   "text": "doesn't Rodney initiate dialogue with"
+  },
+  {
+   "t": 2739.45,
+   "d": 2.42,
+   "text": "that okay"
+  },
+  {
+   "t": 2741.87,
+   "d": 5.65,
+   "text": "mara cage traveler I am in search of"
+  },
+  {
+   "t": 2747.52,
+   "d": 6.63,
+   "text": "work I've got one I know to offer it is"
+  },
+  {
+   "t": 2754.15,
+   "d": 1.86,
+   "text": "treacherous and you are weak in all"
+  },
+  {
+   "t": 2756.01,
+   "d": 2.43,
+   "text": "likelihood you will perish like everyone"
+  },
+  {
+   "t": 2758.44,
+   "d": 3.99,
+   "text": "else miss your interest waned oh no of"
+  },
+  {
+   "t": 2762.43,
+   "d": 1.32,
+   "text": "course not"
+  },
+  {
+   "t": 2763.75,
+   "d": 5.46,
+   "text": "how could it be huh it's a long story"
+  },
+  {
+   "t": 2770.92,
+   "d": 3.37,
+   "text": "there's a goat we really don't like he's"
+  },
+  {
+   "t": 2774.29,
+   "d": 1.92,
+   "text": "mean and he's purple and he's possessed"
+  },
+  {
+   "t": 2776.21,
+   "d": 2.16,
+   "text": "by a crystal and along this riverbank to"
+  },
+  {
+   "t": 2778.37,
+   "d": 3.39,
+   "text": "the north and then eastwardly Madden's"
+  },
+  {
+   "t": 2781.76,
+   "d": 2.31,
+   "text": "sole drinker keeps crushing everybody we"
+  },
+  {
+   "t": 2784.07,
+   "d": 2.25,
+   "text": "send over there he has explained to me"
+  },
+  {
+   "t": 2786.32,
+   "d": 2.19,
+   "text": "this prism reflects light but I tell you"
+  },
+  {
+   "t": 2788.51,
+   "d": 3.15,
+   "text": "the sting is a pole cursed cursed no man"
+  },
+  {
+   "t": 2791.66,
+   "d": 2.07,
+   "text": "or groped me safely wield it for long"
+  },
+  {
+   "t": 2793.73,
+   "d": 2.31,
+   "text": "travel to the village retrieve the prism"
+  },
+  {
+   "t": 2796.04,
+   "d": 1.23,
+   "text": "bide Mammon from any means necessary"
+  },
+  {
+   "t": 2797.27,
+   "d": 2.55,
+   "text": "kill him do you understand well if"
+  },
+  {
+   "t": 2799.82,
+   "d": 1.56,
+   "text": "you're such a badass goat man why don't"
+  },
+  {
+   "t": 2801.38,
+   "d": 1.89,
+   "text": "you retrieve it yourself because"
+  },
+  {
+   "t": 2803.27,
+   "d": 4.83,
+   "text": "traveller Mammon is my elder brother he"
+  },
+  {
+   "t": 2808.1,
+   "d": 1.95,
+   "text": "would discern my presence before I could"
+  },
+  {
+   "t": 2810.05,
+   "d": 2.94,
+   "text": "drink okay okay I get that is there is"
+  },
+  {
+   "t": 2812.99,
+   "d": 1.29,
+   "text": "there anything else I should know"
+  },
+  {
+   "t": 2814.28,
+   "d": 2.13,
+   "text": "yes you will likely have several gold"
+  },
+  {
+   "t": 2816.41,
+   "d": 7.05,
+   "text": "folk under his take care to stay out of"
+  },
+  {
+   "t": 2823.46,
+   "d": 1.92,
+   "text": "his cruel reach for his power as most"
+  },
+  {
+   "t": 2825.38,
+   "d": 2.46,
+   "text": "potent with me lands hands on you and"
+  },
+  {
+   "t": 2827.84,
+   "d": 2.58,
+   "text": "finally when you recover the prism do"
+  },
+  {
+   "t": 2830.42,
+   "d": 2.52,
+   "text": "not under any circumstances wield it I"
+  },
+  {
+   "t": 2832.94,
+   "d": 2.4,
+   "text": "needed to warn me without consequences"
+  },
+  {
+   "t": 2835.34,
+   "d": 1.68,
+   "text": "should you return to me bearing that"
+  },
+  {
+   "t": 2837.02,
+   "d": 4.76,
+   "text": "charm wielded cursed prism yeah okay"
+  },
+  {
+   "t": 2841.78,
+   "d": 10.45,
+   "text": "okay word an endurance okay we gotta get"
+  },
+  {
+   "t": 2852.23,
+   "d": 6.18,
+   "text": "moving up this river okay so oh so we so"
+  },
+  {
+   "t": 2858.41,
+   "d": 2.31,
+   "text": "we learned something there ma'am it is"
+  },
+  {
+   "t": 2860.72,
+   "d": 1.77,
+   "text": "and Rick's his brother okay I'm just"
+  },
+  {
+   "t": 2862.49,
+   "d": 1.77,
+   "text": "gonna make a beeline for it yeah well"
+  },
+  {
+   "t": 2864.26,
+   "d": 1.68,
+   "text": "basically there's this river north of"
+  },
+  {
+   "t": 2865.94,
+   "d": 2.61,
+   "text": "the town and we follow it and eventually"
+  },
+  {
+   "t": 2868.55,
+   "d": 3.81,
+   "text": "he's somewhere up the river we may or"
+  },
+  {
+   "t": 2872.36,
+   "d": 1.86,
+   "text": "may not see horrible goat folk"
+  },
+  {
+   "t": 2874.22,
+   "d": 5.37,
+   "text": "atrocities on the way okay you sense the"
+  },
+  {
+   "t": 2879.59,
+   "d": 2.19,
+   "text": "animus of a vast mind someone is near"
+  },
+  {
+   "t": 2881.78,
+   "d": 3.87,
+   "text": "okay okay let's continue all right okay"
+  },
+  {
+   "t": 2885.65,
+   "d": 2.94,
+   "text": "now we can sense like it's time to"
+  },
+  {
+   "t": 2888.59,
+   "d": 2.4,
+   "text": "explain what's going on so if you"
+  },
+  {
+   "t": 2890.99,
+   "d": 2.13,
+   "text": "remember that message about someone"
+  },
+  {
+   "t": 2893.12,
+   "d": 2.97,
+   "text": "watching us which we kind of widely"
+  },
+  {
+   "t": 2896.09,
+   "d": 1.41,
+   "text": "ignored"
+  },
+  {
+   "t": 2897.5,
+   "d": 2.59,
+   "text": "what's happening is that because we've"
+  },
+  {
+   "t": 2900.09,
+   "d": 2.52,
+   "text": "accrued enough mental power through our"
+  },
+  {
+   "t": 2902.61,
+   "d": 2.19,
+   "text": "mental mutations"
+  },
+  {
+   "t": 2904.8,
+   "d": 3.63,
+   "text": "pyrokinesis and light manipulation we"
+  },
+  {
+   "t": 2908.43,
+   "d": 3.54,
+   "text": "have sort of made waves in the psychic"
+  },
+  {
+   "t": 2911.97,
+   "d": 3.21,
+   "text": "Heather and and so other psychics from"
+  },
+  {
+   "t": 2915.18,
+   "d": 3.74,
+   "text": "across space and time kind of like our"
+  },
+  {
+   "t": 2918.92,
+   "d": 3.19,
+   "text": "evil twin have have taken notice and are"
+  },
+  {
+   "t": 2922.11,
+   "d": 3.78,
+   "text": "coming to well they're trying to come"
+  },
+  {
+   "t": 2925.89,
+   "d": 1.44,
+   "text": "they're coming to try to absorb our"
+  },
+  {
+   "t": 2927.33,
+   "d": 3.75,
+   "text": "psyches to put it frankly so just like"
+  },
+  {
+   "t": 2931.08,
+   "d": 1.71,
+   "text": "we have to deal with their evil twin now"
+  },
+  {
+   "t": 2932.79,
+   "d": 3.21,
+   "text": "we also have to deal with these psychics"
+  },
+  {
+   "t": 2936.0,
+   "d": 1.47,
+   "text": "so look so there's a question mark there"
+  },
+  {
+   "t": 2937.47,
+   "d": 1.38,
+   "text": "so that means that's a psychic well"
+  },
+  {
+   "t": 2938.85,
+   "d": 1.47,
+   "text": "that's what it looks like when we sense"
+  },
+  {
+   "t": 2940.32,
+   "d": 1.89,
+   "text": "psychic we have sensed a psychic so we"
+  },
+  {
+   "t": 2942.21,
+   "d": 1.89,
+   "text": "don't know who it is but it's some sort"
+  },
+  {
+   "t": 2944.1,
+   "d": 2.52,
+   "text": "of psychic well should we could avoid it"
+  },
+  {
+   "t": 2946.62,
+   "d": 2.43,
+   "text": "or we can try to to fight it do you want"
+  },
+  {
+   "t": 2949.05,
+   "d": 1.41,
+   "text": "to enjoy the psychic or fight the"
+  },
+  {
+   "t": 2950.46,
+   "d": 3.54,
+   "text": "psychic fight let's let's fight this"
+  },
+  {
+   "t": 2954.0,
+   "d": 3.05,
+   "text": "like a let's kill the psychic with fire"
+  },
+  {
+   "t": 2957.05,
+   "d": 7.47,
+   "text": "okay okay so his it is I can't"
+  },
+  {
+   "t": 2964.52,
+   "d": 4.54,
+   "text": "what does that say shim Mu Shu wound no"
+  },
+  {
+   "t": 2969.06,
+   "d": 3.3,
+   "text": "longer toes Harrier ghosts okay so the"
+  },
+  {
+   "t": 2972.36,
+   "d": 1.44,
+   "text": "long and short of it is there's this"
+  },
+  {
+   "t": 2973.8,
+   "d": 2.16,
+   "text": "very powerful psychic entity called toe"
+  },
+  {
+   "t": 2975.96,
+   "d": 4.92,
+   "text": "who is sending out these these thralls"
+  },
+  {
+   "t": 2980.88,
+   "d": 2.73,
+   "text": "of woe of his to come find you"
+  },
+  {
+   "t": 2983.61,
+   "d": 2.85,
+   "text": "so what just happened there so he used a"
+  },
+  {
+   "t": 2986.46,
+   "d": 2.22,
+   "text": "power called burgeoning to cause evil"
+  },
+  {
+   "t": 2988.68,
+   "d": 2.7,
+   "text": "plants to sprout up from around other"
+  },
+  {
+   "t": 2991.38,
+   "d": 2.88,
+   "text": "evil like would you go that far well I"
+  },
+  {
+   "t": 2994.26,
+   "d": 4.86,
+   "text": "mean you know transdimensional hey you I"
+  },
+  {
+   "t": 2999.12,
+   "d": 1.95,
+   "text": "I don't know a transdimensional might"
+  },
+  {
+   "t": 3001.07,
+   "d": 2.34,
+   "text": "have a negative connotation or maybe not"
+  },
+  {
+   "t": 3003.41,
+   "d": 1.98,
+   "text": "I maybe you know I mean there are"
+  },
+  {
+   "t": 3005.39,
+   "d": 2.22,
+   "text": "belligerent plants we could say that"
+  },
+  {
+   "t": 3007.61,
+   "d": 3.9,
+   "text": "much so can you zoom in a bit so we"
+  },
+  {
+   "t": 3011.51,
+   "d": 2.67,
+   "text": "could yeah so the jungle and interesting"
+  },
+  {
+   "t": 3014.18,
+   "d": 1.86,
+   "text": "it's it's quite hard to parse what's"
+  },
+  {
+   "t": 3016.04,
+   "d": 1.74,
+   "text": "going on I guess I unless you are kind"
+  },
+  {
+   "t": 3017.78,
+   "d": 2.31,
+   "text": "of familiar but I kill them oh we killed"
+  },
+  {
+   "t": 3020.09,
+   "d": 1.59,
+   "text": "them okay so we shot him with our mind"
+  },
+  {
+   "t": 3021.68,
+   "d": 3.66,
+   "text": "lasers i laser there are lasers okay all"
+  },
+  {
+   "t": 3025.34,
+   "d": 1.32,
+   "text": "right so we're gonna continue on the"
+  },
+  {
+   "t": 3026.66,
+   "d": 2.43,
+   "text": "river because we we need to find Mammon"
+  },
+  {
+   "t": 3029.09,
+   "d": 2.28,
+   "text": "let's see how much how are you doing on"
+  },
+  {
+   "t": 3031.37,
+   "d": 2.28,
+   "text": "time we've got 9 minutes 9 minutes oh my"
+  },
+  {
+   "t": 3033.65,
+   "d": 1.47,
+   "text": "goodness okay we got to move fast"
+  },
+  {
+   "t": 3035.12,
+   "d": 3.18,
+   "text": "okay nope oh what something bad is that"
+  },
+  {
+   "t": 3038.3,
+   "d": 3.27,
+   "text": "okay this is a rope something really bad"
+  },
+  {
+   "t": 3041.57,
+   "d": 1.28,
+   "text": "is happening"
+  },
+  {
+   "t": 3042.85,
+   "d": 3.28,
+   "text": "we found a robot called a saw hander it"
+  },
+  {
+   "t": 3046.13,
+   "d": 5.19,
+   "text": "has equipped rust pitted saws that will"
+  },
+  {
+   "t": 3051.32,
+   "d": 2.67,
+   "text": "dismember us or dismember our limbs from"
+  },
+  {
+   "t": 3053.99,
+   "d": 4.26,
+   "text": "our body we do kind of have legs to"
+  },
+  {
+   "t": 3058.25,
+   "d": 4.35,
+   "text": "spare but we would we would like to keep"
+  },
+  {
+   "t": 3062.6,
+   "d": 1.56,
+   "text": "them if we can so let's just like that"
+  },
+  {
+   "t": 3064.16,
+   "d": 1.62,
+   "text": "we need to run let's run let's oh"
+  },
+  {
+   "t": 3065.78,
+   "d": 1.68,
+   "text": "there's more of them oh there's so many"
+  },
+  {
+   "t": 3067.46,
+   "d": 4.98,
+   "text": "of them and then and then this is not a"
+  },
+  {
+   "t": 3072.44,
+   "d": 1.05,
+   "text": "good sign either"
+  },
+  {
+   "t": 3073.49,
+   "d": 2.04,
+   "text": "okay I'm gonna actually sprint so caves"
+  },
+  {
+   "t": 3075.53,
+   "d": 1.95,
+   "text": "have cut has an ability like everybody"
+  },
+  {
+   "t": 3077.48,
+   "d": 1.92,
+   "text": "gets called sprint which is basically"
+  },
+  {
+   "t": 3079.4,
+   "d": 2.7,
+   "text": "just like I'm getting out of here"
+  },
+  {
+   "t": 3082.1,
+   "d": 2.64,
+   "text": "I'm running away that's all I'm thinking"
+  },
+  {
+   "t": 3084.74,
+   "d": 2.07,
+   "text": "about so so we're gonna start sprinting"
+  },
+  {
+   "t": 3086.81,
+   "d": 3.69,
+   "text": "and we're just gonna run and we we have"
+  },
+  {
+   "t": 3090.5,
+   "d": 2.1,
+   "text": "multiple legs so we're a pretty quick"
+  },
+  {
+   "t": 3092.6,
+   "d": 1.65,
+   "text": "runner as you might expect but actually"
+  },
+  {
+   "t": 3094.25,
+   "d": 3.84,
+   "text": "I can't resist setting them on fire as I"
+  },
+  {
+   "t": 3098.09,
+   "d": 5.13,
+   "text": "run I I just can't okay okay so we're"
+  },
+  {
+   "t": 3103.22,
+   "d": 1.8,
+   "text": "right we set the robot on fire okay so"
+  },
+  {
+   "t": 3105.02,
+   "d": 1.44,
+   "text": "these psychics that were sensing are"
+  },
+  {
+   "t": 3106.46,
+   "d": 2.22,
+   "text": "actually ice frogs they're frogs that"
+  },
+  {
+   "t": 3108.68,
+   "d": 2.76,
+   "text": "inhabit the forest that can shoot they"
+  },
+  {
+   "t": 3111.44,
+   "d": 2.31,
+   "text": "have cryo Kinesis actually so that's why"
+  },
+  {
+   "t": 3113.75,
+   "d": 2.85,
+   "text": "there's there's a good folks over and"
+  },
+  {
+   "t": 3116.6,
+   "d": 2.19,
+   "text": "he's throwing these exploding seeds at"
+  },
+  {
+   "t": 3118.79,
+   "d": 3.27,
+   "text": "us which like if there were a bunch of"
+  },
+  {
+   "t": 3122.06,
+   "d": 2.07,
+   "text": "them nearby and they start to do this it"
+  },
+  {
+   "t": 3124.13,
+   "d": 3.23,
+   "text": "really can kill us very quickly so"
+  },
+  {
+   "t": 3127.36,
+   "d": 2.2,
+   "text": "something I'm doing is like trying to"
+  },
+  {
+   "t": 3129.56,
+   "d": 1.5,
+   "text": "stay back and just shoot them from a"
+  },
+  {
+   "t": 3131.06,
+   "d": 1.65,
+   "text": "distance with this awesome rifle we have"
+  },
+  {
+   "t": 3132.71,
+   "d": 3.15,
+   "text": "because yeah well we'll see if we get"
+  },
+  {
+   "t": 3135.86,
+   "d": 3.09,
+   "text": "killed by a pack of servers throwing"
+  },
+  {
+   "t": 3138.95,
+   "d": 3.42,
+   "text": "seeds so here's the thing I'm oh okay so"
+  },
+  {
+   "t": 3142.37,
+   "d": 1.74,
+   "text": "no this isn't this isn't him this is a"
+  },
+  {
+   "t": 3144.11,
+   "d": 1.74,
+   "text": "different unique monster this is a"
+  },
+  {
+   "t": 3145.85,
+   "d": 2.7,
+   "text": "unique monster so a pink or purple"
+  },
+  {
+   "t": 3148.55,
+   "d": 3.66,
+   "text": "whatever magenta is usual is a signal"
+  },
+  {
+   "t": 3152.21,
+   "d": 1.41,
+   "text": "that this is the sort of legendary"
+  },
+  {
+   "t": 3153.62,
+   "d": 3.27,
+   "text": "version of a monster so this is a this"
+  },
+  {
+   "t": 3156.89,
+   "d": 2.64,
+   "text": "is a chrome Idol so there's essentially"
+  },
+  {
+   "t": 3159.53,
+   "d": 2.23,
+   "text": "these floating metal orbs that"
+  },
+  {
+   "t": 3161.76,
+   "d": 5.1,
+   "text": "worshiped by these these this this tribe"
+  },
+  {
+   "t": 3166.86,
+   "d": 2.22,
+   "text": "that inhabits the jungle on this one's"
+  },
+  {
+   "t": 3169.08,
+   "d": 3.03,
+   "text": "name is who can I call okay let's so"
+  },
+  {
+   "t": 3172.11,
+   "d": 1.47,
+   "text": "yeah yeah okay I just want to mention"
+  },
+  {
+   "t": 3173.58,
+   "d": 2.97,
+   "text": "that this this robot is hated by both"
+  },
+  {
+   "t": 3176.55,
+   "d": 2.91,
+   "text": "birds and oceans for burnt for torching"
+  },
+  {
+   "t": 3179.46,
+   "d": 5.37,
+   "text": "their villages yeah so well we can live"
+  },
+  {
+   "t": 3184.83,
+   "d": 4.8,
+   "text": "I the let live part I I don't know"
+  },
+  {
+   "t": 3189.63,
+   "d": 3.42,
+   "text": "what's happened oh he he seems to have"
+  },
+  {
+   "t": 3193.05,
+   "d": 3.83,
+   "text": "the power to shoot beams of fire okay"
+  },
+  {
+   "t": 3196.88,
+   "d": 2.8,
+   "text": "let's leave him alone I think oh no he's"
+  },
+  {
+   "t": 3199.68,
+   "d": 2.13,
+   "text": "getting into a fight with these so"
+  },
+  {
+   "t": 3201.81,
+   "d": 2.52,
+   "text": "there's a tribe of goat folk here that"
+  },
+  {
+   "t": 3204.33,
+   "d": 2.55,
+   "text": "is interacting with this tribe of"
+  },
+  {
+   "t": 3206.88,
+   "d": 5.07,
+   "text": "Naphtali and I think I think they might"
+  },
+  {
+   "t": 3211.95,
+   "d": 2.94,
+   "text": "they might not like each other no yeah"
+  },
+  {
+   "t": 3214.89,
+   "d": 2.9,
+   "text": "so they're they're competing for the"
+  },
+  {
+   "t": 3217.79,
+   "d": 2.26,
+   "text": "territory they set us on fire they're"
+  },
+  {
+   "t": 3220.05,
+   "d": 2.97,
+   "text": "throwing seeds that they don't like is"
+  },
+  {
+   "t": 3223.02,
+   "d": 4.32,
+   "text": "what it turns out to be hi I misread the"
+  },
+  {
+   "t": 3227.34,
+   "d": 1.1,
+   "text": "situation"
+  },
+  {
+   "t": 3228.44,
+   "d": 2.89,
+   "text": "alright so we're gonna run because this"
+  },
+  {
+   "t": 3231.33,
+   "d": 2.34,
+   "text": "is very dangerous now okay so we're at"
+  },
+  {
+   "t": 3233.67,
+   "d": 1.83,
+   "text": "like half health for with okay so"
+  },
+  {
+   "t": 3235.5,
+   "d": 1.77,
+   "text": "unfortunately with five minutes left I"
+  },
+  {
+   "t": 3237.27,
+   "d": 1.29,
+   "text": "don't think we're gonna get some and so"
+  },
+  {
+   "t": 3238.56,
+   "d": 5.96,
+   "text": "I I have a proposal what well you're"
+  },
+  {
+   "t": 3245.06,
+   "d": 7.09,
+   "text": "this is bad we could persuade one of"
+  },
+  {
+   "t": 3252.15,
+   "d": 1.77,
+   "text": "them to be actually no so with"
+  },
+  {
+   "t": 3253.92,
+   "d": 2.61,
+   "text": "proselytize you can only persuade one"
+  },
+  {
+   "t": 3256.53,
+   "d": 2.4,
+   "text": "person at a time so if we do if we use"
+  },
+  {
+   "t": 3258.93,
+   "d": 2.94,
+   "text": "that ability will lose our other goat"
+  },
+  {
+   "t": 3261.87,
+   "d": 1.68,
+   "text": "folk friend who is around here fighting"
+  },
+  {
+   "t": 3263.55,
+   "d": 2.22,
+   "text": "for us somewhere yeah what's he been"
+  },
+  {
+   "t": 3265.77,
+   "d": 3.36,
+   "text": "doing yeah he's not been pulling his"
+  },
+  {
+   "t": 3269.13,
+   "d": 1.86,
+   "text": "weight he might have died when we ran"
+  },
+  {
+   "t": 3270.99,
+   "d": 2.94,
+   "text": "away yeah we sort of left him to like"
+  },
+  {
+   "t": 3273.93,
+   "d": 2.46,
+   "text": "all kinds of terrible stuff happening"
+  },
+  {
+   "t": 3276.39,
+   "d": 1.95,
+   "text": "Baxter's like why don't we try to why"
+  },
+  {
+   "t": 3278.34,
+   "d": 1.5,
+   "text": "don't we get out of this situation and"
+  },
+  {
+   "t": 3279.84,
+   "d": 2.73,
+   "text": "then we can because we're not quite"
+  },
+  {
+   "t": 3282.57,
+   "d": 2.19,
+   "text": "gonna find madmen what we can do is we"
+  },
+  {
+   "t": 3284.76,
+   "d": 1.83,
+   "text": "could use a debug command to summon him"
+  },
+  {
+   "t": 3286.59,
+   "d": 3.81,
+   "text": "directly to us and just fight them right"
+  },
+  {
+   "t": 3290.4,
+   "d": 3.13,
+   "text": "there well let's"
+  },
+  {
+   "t": 3293.53,
+   "d": 3.7,
+   "text": "get out of this situation I am accepting"
+  },
+  {
+   "t": 3297.23,
+   "d": 3.78,
+   "text": "proposals from for at this okay"
+  },
+  {
+   "t": 3301.01,
+   "d": 2.67,
+   "text": "getting in the water seems like it would"
+  },
+  {
+   "t": 3303.68,
+   "d": 3.0,
+   "text": "be intuitive but actually depending upon"
+  },
+  {
+   "t": 3306.68,
+   "d": 2.43,
+   "text": "our temperature at this point it may"
+  },
+  {
+   "t": 3309.11,
+   "d": 2.58,
+   "text": "turn the water to steam which is in some"
+  },
+  {
+   "t": 3311.69,
+   "d": 2.9,
+   "text": "ways more deadly than the fire itself"
+  },
+  {
+   "t": 3314.59,
+   "d": 4.51,
+   "text": "strangely so if that happens yeah I"
+  },
+  {
+   "t": 3319.1,
+   "d": 1.32,
+   "text": "don't know we could try to Pat the"
+  },
+  {
+   "t": 3320.42,
+   "d": 0.87,
+   "text": "flames out"
+  },
+  {
+   "t": 3321.29,
+   "d": 1.77,
+   "text": "I do have our time dilation up so"
+  },
+  {
+   "t": 3323.06,
+   "d": 4.08,
+   "text": "they're slowed but yeah it's not looking"
+  },
+  {
+   "t": 3327.14,
+   "d": 7.29,
+   "text": "great sprint is not up we have 54"
+  },
+  {
+   "t": 3334.43,
+   "d": 1.92,
+   "text": "seconds I can intimidate these guys"
+  },
+  {
+   "t": 3336.35,
+   "d": 1.47,
+   "text": "that's gonna make them run away so I'm"
+  },
+  {
+   "t": 3337.82,
+   "d": 3.18,
+   "text": "gonna do that oh and here's another"
+  },
+  {
+   "t": 3341.0,
+   "d": 4.74,
+   "text": "unique goat folk shaman we do have"
+  },
+  {
+   "t": 3345.74,
+   "d": 3.54,
+   "text": "potions yes so this is okay so this is"
+  },
+  {
+   "t": 3349.28,
+   "d": 2.85,
+   "text": "important so this is a cloven horn this"
+  },
+  {
+   "t": 3352.13,
+   "d": 2.25,
+   "text": "is this is not the goat folk shaman"
+  },
+  {
+   "t": 3354.38,
+   "d": 2.64,
+   "text": "we're looking for unfortunately he's"
+  },
+  {
+   "t": 3357.02,
+   "d": 2.04,
+   "text": "hated by bears for slaying one of their"
+  },
+  {
+   "t": 3359.06,
+   "d": 2.31,
+   "text": "leaders and he's hated by the merchants"
+  },
+  {
+   "t": 3361.37,
+   "d": 2.28,
+   "text": "guild for casting doubts on their"
+  },
+  {
+   "t": 3363.65,
+   "d": 2.1,
+   "text": "beliefs so he's like a he's like a"
+  },
+  {
+   "t": 3365.75,
+   "d": 2.58,
+   "text": "skeptic I thought he was like a like"
+  },
+  {
+   "t": 3368.33,
+   "d": 2.7,
+   "text": "maybe against capitalism or oh yeah"
+  },
+  {
+   "t": 3371.03,
+   "d": 3.45,
+   "text": "that's just like a socialist goat folk"
+  },
+  {
+   "t": 3374.48,
+   "d": 2.88,
+   "text": "song okay well can we recruit them to"
+  },
+  {
+   "t": 3377.36,
+   "d": 6.41,
+   "text": "our side can we join his okay um okay so"
+  },
+  {
+   "t": 3383.77,
+   "d": 2.41,
+   "text": "Jim is reminding us to use potions yeah"
+  },
+  {
+   "t": 3386.18,
+   "d": 1.62,
+   "text": "we have some places show here you know"
+  },
+  {
+   "t": 3387.8,
+   "d": 2.43,
+   "text": "what oh we might be able to we might be"
+  },
+  {
+   "t": 3390.23,
+   "d": 2.45,
+   "text": "able to hit him with a love injector oh"
+  },
+  {
+   "t": 3392.68,
+   "d": 3.22,
+   "text": "yeah all in love with us it would"
+  },
+  {
+   "t": 3395.9,
+   "d": 2.16,
+   "text": "require that we get into melee rage with"
+  },
+  {
+   "t": 3398.06,
+   "d": 1.82,
+   "text": "him so it would be very dangerous"
+  },
+  {
+   "t": 3399.88,
+   "d": 3.64,
+   "text": "potentially so here I have a new"
+  },
+  {
+   "t": 3403.52,
+   "d": 2.97,
+   "text": "proposal hold on Mammon you know we"
+  },
+  {
+   "t": 3406.49,
+   "d": 3.39,
+   "text": "don't even know if he's real we have a"
+  },
+  {
+   "t": 3409.88,
+   "d": 2.07,
+   "text": "goat book shaman right in front of us I"
+  },
+  {
+   "t": 3411.95,
+   "d": 3.54,
+   "text": "say let's like you know let's treat that"
+  },
+  {
+   "t": 3415.49,
+   "d": 1.59,
+   "text": "as the challenge so we could either kill"
+  },
+  {
+   "t": 3417.08,
+   "d": 2.04,
+   "text": "him or maybe I think maybe we'll win the"
+  },
+  {
+   "t": 3419.12,
+   "d": 1.26,
+   "text": "challenge if we could convince him to"
+  },
+  {
+   "t": 3420.38,
+   "d": 1.92,
+   "text": "join us I would be personally satisfied"
+  },
+  {
+   "t": 3422.3,
+   "d": 1.59,
+   "text": "like I would"
+  },
+  {
+   "t": 3423.89,
+   "d": 3.0,
+   "text": "love to really help out that nice goat"
+  },
+  {
+   "t": 3426.89,
+   "d": 2.37,
+   "text": "folk warden who we met back at the town"
+  },
+  {
+   "t": 3429.26,
+   "d": 2.52,
+   "text": "right you know if we get this shaman to"
+  },
+  {
+   "t": 3431.78,
+   "d": 3.0,
+   "text": "fall in love with us we could go back"
+  },
+  {
+   "t": 3434.78,
+   "d": 3.96,
+   "text": "and see if that's that's good okay we"
+  },
+  {
+   "t": 3438.74,
+   "d": 2.49,
+   "text": "didn't complete the quest but okay"
+  },
+  {
+   "t": 3441.23,
+   "d": 2.79,
+   "text": "that cursed prismatic thing you're"
+  },
+  {
+   "t": 3444.02,
+   "d": 1.74,
+   "text": "talking about I still didn't get it but"
+  },
+  {
+   "t": 3445.76,
+   "d": 6.15,
+   "text": "look it you know cloven hoof maybe as"
+  },
+  {
+   "t": 3451.91,
+   "d": 1.95,
+   "text": "good okay I'm gonna try I'm gonna try to"
+  },
+  {
+   "t": 3453.86,
+   "d": 17.7,
+   "text": "do that oh you know so fair Oh goat folk"
+  },
+  {
+   "t": 3471.56,
+   "d": 4.02,
+   "text": "combat oh we have a grand yes I think"
+  },
+  {
+   "t": 3475.58,
+   "d": 2.43,
+   "text": "that was a fair game that was a okay so"
+  },
+  {
+   "t": 3478.01,
+   "d": 2.31,
+   "text": "we have a little like morgue file here"
+  },
+  {
+   "t": 3480.32,
+   "d": 2.31,
+   "text": "and we have a chronology Rodney"
+  },
+  {
+   "t": 3482.63,
+   "d": 2.85,
+   "text": "so the chronology actually we could read"
+  },
+  {
+   "t": 3485.48,
+   "d": 1.71,
+   "text": "through it actually includes some quests"
+  },
+  {
+   "t": 3487.19,
+   "d": 2.49,
+   "text": "that we didn't do as part of our debug"
+  },
+  {
+   "t": 3489.68,
+   "d": 2.4,
+   "text": "skipping so okay we fetched a trinket"
+  },
+  {
+   "t": 3492.08,
+   "d": 1.14,
+   "text": "for an old man we didn't really do that"
+  },
+  {
+   "t": 3493.22,
+   "d": 2.82,
+   "text": "so what else you had the feeling of"
+  },
+  {
+   "t": 3496.04,
+   "d": 2.37,
+   "text": "being way way go up a little bit you had"
+  },
+  {
+   "t": 3498.41,
+   "d": 1.44,
+   "text": "the feeling of being watched and learned"
+  },
+  {
+   "t": 3499.85,
+   "d": 2.52,
+   "text": "that there's a site older than site Fair"
+  },
+  {
+   "t": 3502.37,
+   "d": 2.1,
+   "text": "your genome to stabilizing you gained"
+  },
+  {
+   "t": 3504.47,
+   "d": 1.95,
+   "text": "the time-dilation mutation okay you"
+  },
+  {
+   "t": 3506.42,
+   "d": 2.13,
+   "text": "discovered tomb rod you convinced the"
+  },
+  {
+   "t": 3508.55,
+   "d": 1.26,
+   "text": "goat folks average to join your cause"
+  },
+  {
+   "t": 3509.81,
+   "d": 1.35,
+   "text": "you started calling a goat psychic"
+  },
+  {
+   "t": 3511.16,
+   "d": 2.82,
+   "text": "savage by the name Navman you journey to"
+  },
+  {
+   "t": 3513.98,
+   "d": 2.85,
+   "text": "cut real time I guess that's a different"
+  },
+  {
+   "t": 3516.83,
+   "d": 0.39,
+   "text": "story"
+  },
+  {
+   "t": 3517.22,
+   "d": 2.19,
+   "text": "what an evidence I think men just left"
+  },
+  {
+   "t": 3519.41,
+   "d": 3.78,
+   "text": "you at like what he when he saw that you"
+  },
+  {
+   "t": 3523.19,
+   "d": 1.56,
+   "text": "he didn't think you were to profit like"
+  },
+  {
+   "t": 3524.75,
+   "d": 1.86,
+   "text": "your fate wasn't too promising he didn't"
+  },
+  {
+   "t": 3526.61,
+   "d": 3.56,
+   "text": "really he's putting his money on manage"
+  },
+  {
+   "t": 3530.17,
+   "d": 3.22,
+   "text": "you journey to kya kya and we did sweet"
+  },
+  {
+   "t": 3533.39,
+   "d": 3.15,
+   "text": "we slew a psychic but then on the 26th"
+  },
+  {
+   "t": 3536.54,
+   "d": 0.78,
+   "text": "of year"
+  },
+  {
+   "t": 3537.32,
+   "d": 3.63,
+   "text": "we were killed by a cloven horn the goat"
+  },
+  {
+   "t": 3540.95,
+   "d": 1.38,
+   "text": "jamming of Clan Hodor"
+  },
+  {
+   "t": 3542.33,
+   "d": 3.51,
+   "text": "okay so this like like most roguelike"
+  },
+  {
+   "t": 3545.84,
+   "d": 1.89,
+   "text": "challenges ends in our death but you"
+  },
+  {
+   "t": 3547.73,
+   "d": 3.42,
+   "text": "know that's that's fine I think we get"
+  },
+  {
+   "t": 3551.15,
+   "d": 4.08,
+   "text": "charged us and impaled us with his words"
+  },
+  {
+   "t": 3555.23,
+   "d": 2.68,
+   "text": "yeah these are the last 30 turns"
+  },
+  {
+   "t": 3557.91,
+   "d": 2.28,
+   "text": "so what had happened was that he charged"
+  },
+  {
+   "t": 3560.19,
+   "d": 3.33,
+   "text": "us he dealt us a lot of damage like he"
+  },
+  {
+   "t": 3563.52,
+   "d": 3.09,
+   "text": "essentially gored us with his horns and"
+  },
+  {
+   "t": 3566.61,
+   "d": 2.51,
+   "text": "that's case of cut"
+  },
+  {
+   "t": 3569.12,
+   "d": 6.18,
+   "text": "[Applause]"
+  }
+ ]
+}

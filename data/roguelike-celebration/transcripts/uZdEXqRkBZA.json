@@ -1,0 +1,1210 @@
+{
+ "id": "uZdEXqRkBZA",
+ "url": "https://www.youtube.com/watch?v=uZdEXqRkBZA",
+ "title": "G blekkenhorst - It's Standing Right Behind You: Interface Games as Metaleptic Convergences",
+ "speaker": "G blekkenhorst",
+ "talk_title": "It's Standing Right Behind You: Interface Games as Metaleptic Convergences",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 1900,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "Games that impersonate other kinds of software have a special quality -they create a geographical space in which the real world and the fictional world of the game intersect, just by referencing the fact that they know you are sitting right on the other side of the screen. Certain fictions feign that they exist in the same world that we do - this book claims to be autobiographical, this footage was found at the scene of the crime, this software was updated moments ago by someone who could still be in the room with you. These meta-referential stories playfully imply that you could be in the same immediate danger as the other characters - your own body and reality are at risk. They do not need to be about the supernatural to have a supernatural quality.\n\nWhile interface games automatically create this convergence, my recent game work has been about extending the digital interface into tangible spaces, forcing players to use their endangered bodies in ways beyond what is usually asked for by the genre.",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4037,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 4.42,
+   "d": 7.18,
+   "text": "ALEXEI: Hello. Welcome back to your next block for Roguelike Celebration 2026!"
+  },
+  {
+   "t": 11.6,
+   "d": 7.12,
+   "text": "I remembered what year it was. Gold star for me. Thanks, everyone, for hanging around. Reminder if"
+  },
+  {
+   "t": 18.72,
+   "d": 3.84,
+   "text": "you want to explore the space, I don't think I mentioned it before, there is a button you can"
+  },
+  {
+   "t": 22.56,
+   "d": 5.36,
+   "text": "pop out the video. So if you want to not be in the theater but keeping an eye on the talks you"
+  },
+  {
+   "t": 27.92,
+   "d": 6.88,
+   "text": "can do that. It is great, if you have questions, remember, you can add them. If you are watching"
+  },
+  {
+   "t": 34.8,
+   "d": 6.96,
+   "text": "this stream on Twitch or YouTube, please, keep in mind you can go to roguelike.club and get a"
+  },
+  {
+   "t": 41.76,
+   "d": 5.2,
+   "text": "pay what you can ticket to hangout with us in the social space and be able to talk to other"
+  },
+  {
+   "t": 46.96,
+   "d": 8.32,
+   "text": "attendees and ask speakers questions and all of that good stuff. And yeah, I think that's the main"
+  },
+  {
+   "t": 55.28,
+   "d": 4.88,
+   "text": "housekeeping. We will see if I mention anything else later but I don't know about the rest of you"
+  },
+  {
+   "t": 60.16,
+   "d": 15.76,
+   "text": "but I am pretty excited to get back to it and have our next set of speakers. G blekkenhorst:"
+  },
+  {
+   "t": 160.8,
+   "d": 4.8,
+   "text": "Interface games where I am trying to explore why interface games make me feel the way I do and how"
+  },
+  {
+   "t": 165.6,
+   "d": 6.24,
+   "text": "I can enter a portal and invite other people into it. I started this as part of my master's thesis."
+  },
+  {
+   "t": 176.72,
+   "d": 11.52,
+   "text": "I will talk more about both of these games later on in the talk. But first I will go"
+  },
+  {
+   "t": 188.24,
+   "d": 17.92,
+   "text": "into the the theory and the -- they have the rare ability to create an experience that is"
+  },
+  {
+   "t": 206.16,
+   "d": 5.68,
+   "text": "intensely first-person. Rather than being given virtual eyes and exploring a virtual environment"
+  },
+  {
+   "t": 211.84,
+   "d": 7.28,
+   "text": "with a third person Avatar, an interface game, a player is set right in front of the software"
+  },
+  {
+   "t": 219.12,
+   "d": 4.88,
+   "text": "that could have been used by the characters it describes bringing the game world right into the"
+  },
+  {
+   "t": 224.0,
+   "d": 11.52,
+   "text": "room with the player. I really labored over what to call these kinds of games and every"
+  },
+  {
+   "t": 235.52,
+   "d": 4.8,
+   "text": "game is an interface at the end of the day no matter what it is showing on the screen."
+  },
+  {
+   "t": 240.32,
+   "d": 8.08,
+   "text": "I thought about interface simulation games but Dawson and barkman swept in with an article and"
+  },
+  {
+   "t": 253.28,
+   "d": 5.92,
+   "text": "I am taking it as permission to call these games just interface games even though it may be a"
+  },
+  {
+   "t": 259.2,
+   "d": 12.4,
+   "text": "little big. It is much less of a mouthful. So I am getting a little red string murder board trying"
+  },
+  {
+   "t": 271.6,
+   "d": 10.64,
+   "text": "to triangulate on what this creature is by what it usually isn't. Here are my first two piles."
+  },
+  {
+   "t": 282.24,
+   "d": 5.52,
+   "text": "In the blue we have interface games so as I said games that immolate different kinds of software"
+  },
+  {
+   "t": 287.76,
+   "d": 5.28,
+   "text": "or operating systems. And in the green games that refer to their own existence as software"
+  },
+  {
+   "t": 293.04,
+   "d": 7.36,
+   "text": "and your meat body on the other side of the screen. And these are metareferential games."
+  },
+  {
+   "t": 306.56,
+   "d": 5.92,
+   "text": "That is any game that draws attention to the fact that the story world you are visiting is mediated."
+  },
+  {
+   "t": 318.64,
+   "d": 4.72,
+   "text": "This could have a distancing effect or make the story world feel more artificial or the opposite"
+  },
+  {
+   "t": 323.36,
+   "d": 5.68,
+   "text": "effect. It is aware of itself on the same plain of reality in which you exist and it can see you."
+  },
+  {
+   "t": 329.84,
+   "d": 8.96,
+   "text": "It escapes containment and becomes part of your wider reality. So metareference implies there are"
+  },
+  {
+   "t": 338.8,
+   "d": 11.12,
+   "text": "differing levels of reality and metalepsis means moving between the worlds. A hologram escaping"
+  },
+  {
+   "t": 349.92,
+   "d": 9.44,
+   "text": "the hollow deck is an example. But the metaleptic entity I am interested in is you. Your meat body"
+  },
+  {
+   "t": 362.32,
+   "d": 6.88,
+   "text": "entering portals into game worlds. All games are metaleptic to some degree. We can interact with"
+  },
+  {
+   "t": 369.2,
+   "d": 8.64,
+   "text": "the different worlds but there are more specific types of metalepsis and more specific metaleptic"
+  },
+  {
+   "t": 378.88,
+   "d": 13.04,
+   "text": "mechanics that you can include in your games. So convergent metalepsis they specified the specific"
+  },
+  {
+   "t": 391.92,
+   "d": 7.04,
+   "text": "type that can surface in games. It is when a game world is anchored into an actual geographic"
+  },
+  {
+   "t": 398.96,
+   "d": 4.96,
+   "text": "location creating spaces for the game world and the actual world overlap and players spend time"
+  },
+  {
+   "t": 403.92,
+   "d": 5.6,
+   "text": "in this blended space. Rather than us entering and leaving a game world, it gives the sensation"
+  },
+  {
+   "t": 409.52,
+   "d": 7.68,
+   "text": "the game world has come to us to meet us where we live. I argue that an interface game makes"
+  },
+  {
+   "t": 417.2,
+   "d": 5.6,
+   "text": "its own metaleptic convergence without needing any specific geographical locations because the"
+  },
+  {
+   "t": 422.8,
+   "d": 6.8,
+   "text": "story incorporates the hardware and the player's body automatically. The geography of the game"
+  },
+  {
+   "t": 429.6,
+   "d": 9.28,
+   "text": "world is wherever you access it from. Other media like found footage movies and apistillary novels,"
+  },
+  {
+   "t": 438.88,
+   "d": 6.0,
+   "text": "which aren't games, but by claiming the exist in the real world in a way they make you a character"
+  },
+  {
+   "t": 444.88,
+   "d": 4.64,
+   "text": "in the story. You, the person that found this evidence of the event that happened,"
+  },
+  {
+   "t": 449.52,
+   "d": 5.84,
+   "text": "are participating by holding it in your hand and considering how that evidence came to you."
+  },
+  {
+   "t": 456.72,
+   "d": 8.72,
+   "text": "So when an interface and meta reference overlap which it is emulating software and drawing"
+  },
+  {
+   "t": 465.44,
+   "d": 7.44,
+   "text": "attention to you, the physical human/player using it, is what I am calling a metaleptic user game."
+  },
+  {
+   "t": 472.88,
+   "d": 9.44,
+   "text": "The definition of an interface game are actually what I am calling metaleptic interface games but"
+  },
+  {
+   "t": 482.32,
+   "d": 5.44,
+   "text": "making it a bit more narrow definition because I want to examine games that would not qualify"
+  },
+  {
+   "t": 487.76,
+   "d": 6.4,
+   "text": "in this narrow thing because I still think they are very interesting and by bringing them into"
+  },
+  {
+   "t": 494.16,
+   "d": 6.24,
+   "text": "this story I can describe what I am talking about. We are really in a golden age of interface games"
+  },
+  {
+   "t": 500.4,
+   "d": 5.84,
+   "text": "right now. There are so many really wonderful ones coming out. A lot of excellent examples I can use"
+  },
+  {
+   "t": 506.24,
+   "d": 13.44,
+   "text": "to illustrate this point for you. So here is my crazy Venn diagram of examples I have created"
+  },
+  {
+   "t": 519.68,
+   "d": 8.96,
+   "text": "for you. First to dig into non-metaleptic interface games. In these games there is an"
+  },
+  {
+   "t": 528.64,
+   "d": 5.28,
+   "text": "immolated interface but you are given a virtual body to navigate it even if that virtual body is"
+  },
+  {
+   "t": 533.92,
+   "d": 6.96,
+   "text": "pretty subtle. In many examples I have included here, I did have to go back and physically or"
+  },
+  {
+   "t": 541.92,
+   "d": 6.72,
+   "text": "actually look at the game because I had forgotten that there were virtual bodies in them. We are"
+  },
+  {
+   "t": 548.64,
+   "d": 5.52,
+   "text": "very used to inhabiting virtual bodies when we play video games and carrying about their fates."
+  },
+  {
+   "t": 559.2,
+   "d": 7.76,
+   "text": "And then on the other side in the green we have meta-refential non interface games. The"
+  },
+  {
+   "t": 566.96,
+   "d": 6.0,
+   "text": "gameplay isn't any kind of interface but at a certain point even though you have a virtual"
+  },
+  {
+   "t": 572.96,
+   "d": 4.64,
+   "text": "body the game does turn and point at you, your physical body, on the other side of the screen."
+  },
+  {
+   "t": 578.56,
+   "d": 4.64,
+   "text": "I didn't want to give the names of any specific examples here because often this sort of"
+  },
+  {
+   "t": 583.2,
+   "d": 12.56,
+   "text": "metareferential wall break is a surprise. An ex istential jump scare. If you recognize any of"
+  },
+  {
+   "t": 595.76,
+   "d": 5.04,
+   "text": "these, I will have my social media later on, or if you have examples you would like to share with me"
+  },
+  {
+   "t": 600.8,
+   "d": 9.28,
+   "text": "I would love that. These games are also wonderful. In the center are clearly metaleptic interface"
+  },
+  {
+   "t": 610.08,
+   "d": 7.68,
+   "text": "games. I am calling them metaleptic interface games because I don't like the term pure interface"
+  },
+  {
+   "t": 617.76,
+   "d": 6.8,
+   "text": "game. It is not like having a virtual body in a game is a failure. In these games, the interfaces"
+  },
+  {
+   "t": 624.56,
+   "d": 6.88,
+   "text": "always keep character that you are using real software. Me on the side of the screen, I am"
+  },
+  {
+   "t": 631.44,
+   "d": 8.56,
+   "text": "the player. So a couple examples we have here. The big classics are Her Story and Immortality"
+  },
+  {
+   "t": 640.0,
+   "d": 10.96,
+   "text": "is extension. A normal lost phone. ARGs I would consider a sub-type but aren't the entire type."
+  },
+  {
+   "t": 650.96,
+   "d": 11.12,
+   "text": "They have their own genre conventions. And then space laws is a favorite of mine. Many of these"
+  },
+  {
+   "t": 662.08,
+   "d": 9.76,
+   "text": "games are coming out all of the time. Interface games are extremely e effective because we spend"
+  },
+  {
+   "t": 671.84,
+   "d": 6.08,
+   "text": "as much time starring at rectangles as we stare at anything else. Our true experience is mediated"
+  },
+  {
+   "t": 677.92,
+   "d": 7.68,
+   "text": "by absent devices as much as it isn't. It feels seamless and insidious and I enjoy insidious when"
+  },
+  {
+   "t": 685.6,
+   "d": 7.2,
+   "text": "it is fiction. You trust the person sending you minion memes over Facebook is your grandmother."
+  },
+  {
+   "t": 693.92,
+   "d": 7.84,
+   "text": "You trust the person sending Slack messages is your boss even if you work remotely. They are"
+  },
+  {
+   "t": 701.76,
+   "d": 4.08,
+   "text": "just important as anything they tell you in person and the consequences of disappointing"
+  },
+  {
+   "t": 705.84,
+   "d": 6.24,
+   "text": "that person is real and meaningful. If on the other end of the interface is something magic,"
+  },
+  {
+   "t": 712.08,
+   "d": 7.36,
+   "text": "something dangerous, that can feel real and it exists on the same plain as you, your grandma,"
+  },
+  {
+   "t": 719.44,
+   "d": 7.68,
+   "text": "and your boss. It is integrated into daily life that we have developed visual shorthand"
+  },
+  {
+   "t": 727.12,
+   "d": 11.04,
+   "text": "to express it on television. We think through these interfaces and so much takes place on"
+  },
+  {
+   "t": 738.16,
+   "d": 8.32,
+   "text": "them. The things we look at on our phones might occasionally be relentlessly horrific but they"
+  },
+  {
+   "t": 746.48,
+   "d": 6.32,
+   "text": "are always mundane because they are part of the real world. Hiding something possible and magical"
+  },
+  {
+   "t": 752.8,
+   "d": 8.16,
+   "text": "within an interface we create a sense the mundane world is becoming viewed with the mystic quality."
+  },
+  {
+   "t": 768.0,
+   "d": 5.44,
+   "text": "We play along that these fictions are happening to our real selves in the real world. Because we"
+  },
+  {
+   "t": 773.44,
+   "d": 4.72,
+   "text": "can see the game world that lines up exactly with the interfaces that reflect the truth of the real"
+  },
+  {
+   "t": 778.16,
+   "d": 5.84,
+   "text": "world, we can play that we are really in danger. Entities and events the software referring to"
+  },
+  {
+   "t": 784.0,
+   "d": 8.16,
+   "text": "could be standing behind us, follow us home. It is the interface doesn't stop existing because"
+  },
+  {
+   "t": 792.16,
+   "d": 13.04,
+   "text": "we stopped reading it about it so why should monsters? The danger is not out in the real world."
+  },
+  {
+   "t": 806.08,
+   "d": 5.8,
+   "text": "We have stepped inside of the game like with any other game. There is nothing wrong with this. We"
+  },
+  {
+   "t": 811.88,
+   "d": 5.08,
+   "text": "are used to relating to our virtual bodies. We take it for granted. We have literacy and caring"
+  },
+  {
+   "t": 816.96,
+   "d": 5.6,
+   "text": "about these bodies we have been given however, I think there is an extra sense of manly magic"
+  },
+  {
+   "t": 824.64,
+   "d": 5.68,
+   "text": "whether you are aware of the edges or not. It does something subconscious. I have spent my life"
+  },
+  {
+   "t": 830.32,
+   "d": 6.32,
+   "text": "looking for evidence of magic or God in my life and interface games are the closest I have come to"
+  },
+  {
+   "t": 836.64,
+   "d": 5.44,
+   "text": "convincing someone else I can make that for them. There is a thrill someone can come across our"
+  },
+  {
+   "t": 842.08,
+   "d": 7.12,
+   "text": "interfaces having lost context it is fiction or a game and what we have hidden from people could"
+  },
+  {
+   "t": 849.2,
+   "d": 10.8,
+   "text": "sneak up on them and be believed. Even non-horror games involve a sense of mistrust and unease and"
+  },
+  {
+   "t": 861.12,
+   "d": 11.52,
+   "text": "voyeurism and even the collection they made of themselves on social media. They can reflect our"
+  },
+  {
+   "t": 872.64,
+   "d": 6.16,
+   "text": "daily struggle to try to make technology behave how it is supposed to only to glitch out at the"
+  },
+  {
+   "t": 878.8,
+   "d": 5.28,
+   "text": "worst time. It is easy to feel persecuted by a machine that wiped out an assignment the"
+  },
+  {
+   "t": 884.08,
+   "d": 9.12,
+   "text": "night before it is due. Even though we know the interface can't understand how much this"
+  },
+  {
+   "t": 893.2,
+   "d": 10.24,
+   "text": "hurts us. They can exploit the anxiety and view inhumane with unintentional. The views suggest"
+  },
+  {
+   "t": 904.0,
+   "d": 9.28,
+   "text": "the software is glitching because it is unable to contain something powerful. They can invite"
+  },
+  {
+   "t": 913.28,
+   "d": 12.8,
+   "text": "you to imagine playing with your own bodies and histories and stories. Players have agency on"
+  },
+  {
+   "t": 926.08,
+   "d": 7.12,
+   "text": "how sincerely they engage with any type of fiction but at most the games include a lean pretext story"
+  },
+  {
+   "t": 933.2,
+   "d": 8.08,
+   "text": "about fictional employment that contextualizes task for the player. They have been hired for"
+  },
+  {
+   "t": 941.28,
+   "d": 5.92,
+   "text": "a fictional future or in customer service. Playing in the game is your job now. That is"
+  },
+  {
+   "t": 947.2,
+   "d": 6.4,
+   "text": "horror. But we do like to be seen as we are. And working all day long on various interfaces is"
+  },
+  {
+   "t": 953.6,
+   "d": 5.36,
+   "text": "relatable. Having mundane moments of digging through databases and checking notification"
+  },
+  {
+   "t": 958.96,
+   "d": 9.12,
+   "text": "deserves to be valorized. So what I think I have been exploring is not just interface"
+  },
+  {
+   "t": 968.08,
+   "d": 14.72,
+   "text": "games but third access is here. Extending past the screen and hardware setup you add an extra"
+  },
+  {
+   "t": 982.8,
+   "d": 6.72,
+   "text": "layer of tangibility of convergence and that's a space I am playing in. It requires"
+  },
+  {
+   "t": 989.52,
+   "d": 5.28,
+   "text": "you to use your own meat body existing in a geographical location existing. As an example,"
+  },
+  {
+   "t": 996.88,
+   "d": 5.92,
+   "text": "LARPs don't generally need digital components and aren't emulating any kind of interface."
+  },
+  {
+   "t": 1002.8,
+   "d": 7.52,
+   "text": "In my Venn Diagram they are out in the red not overlapping with anything. So this intersection"
+  },
+  {
+   "t": 1010.32,
+   "d": 5.68,
+   "text": "between these three things is what I am calling a tangible metaleptic interface game. We are"
+  },
+  {
+   "t": 1016.0,
+   "d": 5.76,
+   "text": "back to having a bit of a mouthful but it should do what it says on the 10 if you followed along"
+  },
+  {
+   "t": 1021.76,
+   "d": 5.6,
+   "text": "with it so far. So in these games you walk into a room and in that room is software that narratives"
+  },
+  {
+   "t": 1027.36,
+   "d": 6.4,
+   "text": "the world around it adding context and deepening the fiction. The digital attaches history to the"
+  },
+  {
+   "t": 1033.76,
+   "d": 4.16,
+   "text": "physical objects you can touch and the software telling you what you should be doing with them."
+  },
+  {
+   "t": 1040.4,
+   "d": 10.56,
+   "text": "Look, there is me. My games. A couple other examples of games in this space. I know that --"
+  },
+  {
+   "t": 1050.96,
+   "d": 11.76,
+   "text": "narrow scope this year had a specific category for these digital, physical hybrid games. So"
+  },
+  {
+   "t": 1062.72,
+   "d": 9.28,
+   "text": "there were probably interface games there as well. A found letter game could fall under this category"
+  },
+  {
+   "t": 1072.0,
+   "d": 7.44,
+   "text": "if you consider a letter a type of interface and reading someone else's correspondence. Some ARGs"
+  },
+  {
+   "t": 1079.44,
+   "d": 7.04,
+   "text": "are not just digital interfaces. Many have a physical component. Going to a geographical"
+  },
+  {
+   "t": 1086.48,
+   "d": 9.92,
+   "text": "location or performing some sort of physical mechanic in the real world. And yeah. I will"
+  },
+  {
+   "t": 1096.4,
+   "d": 9.2,
+   "text": "talk briefly now about some of the games that I have made. I have a little bit of time left. So"
+  },
+  {
+   "t": 1105.6,
+   "d": 7.68,
+   "text": "the archive was my thesis research game. So it was an installation created in a 10X10 foot room"
+  },
+  {
+   "t": 1113.28,
+   "d": 6.8,
+   "text": "of a physical archive with the digital archive software that indexed everything together. Players"
+  },
+  {
+   "t": 1120.08,
+   "d": 7.44,
+   "text": "volunteered for shifts migrating from a previous version. I would explain the job to them when they"
+  },
+  {
+   "t": 1127.52,
+   "d": 6.56,
+   "text": "signed up and leave them entirely alone in the room for up to an hour. They would migrate entries"
+  },
+  {
+   "t": 1134.08,
+   "d": 5.12,
+   "text": "that told the stories of the previous owners or users of the archives and the fate of those people"
+  },
+  {
+   "t": 1139.2,
+   "d": 7.12,
+   "text": "as they become obsessed with becoming one with the entities reaching out through the archive."
+  },
+  {
+   "t": 1149.04,
+   "d": 4.64,
+   "text": "Part of the game towards the end of the game asks players to create"
+  },
+  {
+   "t": 1155.04,
+   "d": 6.8,
+   "text": "their own forgeries of an artifact for the archive. So they would craft something in"
+  },
+  {
+   "t": 1161.84,
+   "d": 6.64,
+   "text": "the room and write a description of how it fit into the wider narrative. Once you"
+  },
+  {
+   "t": 1168.48,
+   "d": 5.36,
+   "text": "entered that in the database it would crash because it was too powerful to be contained."
+  },
+  {
+   "t": 1174.56,
+   "d": 6.32,
+   "text": "I created a version working as a demo for the private game. All progressive elements stripped"
+  },
+  {
+   "t": 1180.88,
+   "d": 10.24,
+   "text": "out and more people could visit at once. I am very proud of how this game turned out but my attempts"
+  },
+  {
+   "t": 1191.12,
+   "d": 5.92,
+   "text": "to prompt players to work with the physical space around the game was very difficult just like in"
+  },
+  {
+   "t": 1197.04,
+   "d": 5.44,
+   "text": "real life. It is hard once you let people on to the computer or the devices or the rectangles"
+  },
+  {
+   "t": 1202.48,
+   "d": 5.6,
+   "text": "it is very hard to get them to pay attention to anything around them again. But creating a game"
+  },
+  {
+   "t": 1208.08,
+   "d": 4.4,
+   "text": "that was an interface and database created all these great opportunities for different ways to"
+  },
+  {
+   "t": 1212.48,
+   "d": 6.24,
+   "text": "incorporate character voices so the character is writing in the entries. I also had sort of"
+  },
+  {
+   "t": 1218.72,
+   "d": 5.84,
+   "text": "the entities talking to you through the console pop up at a certain point. And players had very"
+  },
+  {
+   "t": 1224.56,
+   "d": 7.12,
+   "text": "different takes on what the mythology of what was corrupting the archives. But when I talked"
+  },
+  {
+   "t": 1231.68,
+   "d": 3.92,
+   "text": "to players after finishing because I had an exit survey to ask about their experience,"
+  },
+  {
+   "t": 1236.4,
+   "d": 5.6,
+   "text": "a lot of players were very invested in the game and immersed but were not think about themselves,"
+  },
+  {
+   "t": 1242.0,
+   "d": 7.44,
+   "text": "their own bodies or histories which is part of what I was looking for in this. I used"
+  },
+  {
+   "t": 1249.44,
+   "d": 6.08,
+   "text": "what I learned from the archive with my next game which is you are a strange sensor. In this game"
+  },
+  {
+   "t": 1255.52,
+   "d": 8.24,
+   "text": "it was much more paired down. Just you and the digital entity. I force players to kneel before"
+  },
+  {
+   "t": 1265.6,
+   "d": 5.52,
+   "text": "entity, the monitor is starring down at them from above, you could only reach the keyboard if you"
+  },
+  {
+   "t": 1271.12,
+   "d": 9.12,
+   "text": "took the position below it, and this fictionalized digital entity would ask you about your feelings."
+  },
+  {
+   "t": 1280.24,
+   "d": 6.88,
+   "text": "It would want you to be a sensor for it. Touch the artifacts. Describe the texture and temperature of"
+  },
+  {
+   "t": 1287.12,
+   "d": 5.04,
+   "text": "the objects and describe it to them. Parse the data into something it can understand. It would"
+  },
+  {
+   "t": 1292.16,
+   "d": 11.28,
+   "text": "dig in deeper and ask about greasy guts and skin and feelings. It was written in a way that was"
+  },
+  {
+   "t": 1303.44,
+   "d": 5.04,
+   "text": "static. It wasn't responding to players. I just wrote it in such a way that it always sounded"
+  },
+  {
+   "t": 1308.48,
+   "d": 7.76,
+   "text": "catty like a character that wasn't quite listening to you because it was extremely self-absorbed. But"
+  },
+  {
+   "t": 1316.24,
+   "d": 5.6,
+   "text": "players when I spoke to them afterwards did think it was directly responding to them. We"
+  },
+  {
+   "t": 1321.84,
+   "d": 3.84,
+   "text": "are used to computers misunderstanding us all of the time see we give it a lot of benefit of"
+  },
+  {
+   "t": 1325.68,
+   "d": 8.16,
+   "text": "the doubt. The posture made it inaccessible to some people. I was injured during it so I"
+  },
+  {
+   "t": 1333.84,
+   "d": 6.48,
+   "text": "couldn't play it. But once you were down in the position everyone played it until the end. It is"
+  },
+  {
+   "t": 1340.32,
+   "d": 7.12,
+   "text": "a big up front investment to take that position in a room. And the game did deliberately ask"
+  },
+  {
+   "t": 1347.44,
+   "d": 6.72,
+   "text": "people about their bodies and feelings and mocked them for allowing another entity to put them in"
+  },
+  {
+   "t": 1354.16,
+   "d": 7.04,
+   "text": "this position that makes them so uncomfortable. Yeah, and I ended the game by having the game"
+  },
+  {
+   "t": 1362.0,
+   "d": 6.88,
+   "text": "tell players to go out and find more victims and sensors. So in a way you enter and never"
+  },
+  {
+   "t": 1368.88,
+   "d": 6.8,
+   "text": "leave because you have been kicked out with a task to do. I am probably going to make more of"
+  },
+  {
+   "t": 1375.68,
+   "d": 6.8,
+   "text": "these games and I think you should too. Here is some credits for some of the media and literary"
+  },
+  {
+   "t": 1382.48,
+   "d": 9.84,
+   "text": "theory I included in my talk. They are all deep page turners. We have time for questions."
+  },
+  {
+   "t": 1392.32,
+   "d": 15.6,
+   "text": "ALEXEI: One question from silence walker, what do you think like an analog flow like"
+  },
+  {
+   "t": 1407.92,
+   "d": 6.08,
+   "text": "a typewriter or fax machine could improve the archive problem where people get in the"
+  },
+  {
+   "t": 1414.0,
+   "d": 6.8,
+   "text": "screen and are fixated on the screen? G blekkenhorst: I had a typewriter but"
+  },
+  {
+   "t": 1420.8,
+   "d": 7.6,
+   "text": "I broke it. I was going to turn it into an Oracle machine because a lot of the previous"
+  },
+  {
+   "t": 1428.4,
+   "d": 10.4,
+   "text": "users of the archive were going back a 100 years. A lot were Christians and assumed it"
+  },
+  {
+   "t": 1438.8,
+   "d": 7.52,
+   "text": "was ghosts or angles talking to them through the archive or the archive artifacts. That ended up"
+  },
+  {
+   "t": 1446.32,
+   "d": 9.28,
+   "text": "being out of scope. What I ended up doing for mechanics is I created four vignettes so four"
+  },
+  {
+   "t": 1455.6,
+   "d": 8.24,
+   "text": "different play tests before completed of different chapters. I had mechanics where people had to take"
+  },
+  {
+   "t": 1463.84,
+   "d": 9.6,
+   "text": "one of the artifacts and bind their name to it. And also papers you could only real read as the"
+  },
+  {
+   "t": 1474.72,
+   "d": 7.6,
+   "text": "actual paper in file folders. I made it difficult or corrupted to read within the database. I really"
+  },
+  {
+   "t": 1482.32,
+   "d": 5.52,
+   "text": "wanted that typewriter in there. I was going to have like a VHS player where you had to put the"
+  },
+  {
+   "t": 1487.84,
+   "d": 5.92,
+   "text": "video in there and things like that. ALEXEI: The tactile memory of VHS."
+  },
+  {
+   "t": 1493.76,
+   "d": 5.36,
+   "text": "G blekkenhorst: I am probably going to make more of these with things like that in it."
+  },
+  {
+   "t": 1499.12,
+   "d": 9.04,
+   "text": "ALEXEI: Here is an interesting question from I believe Mike Cook of how this reminds them of an"
+  },
+  {
+   "t": 1508.16,
+   "d": 6.48,
+   "text": "ad campaign for a TV show that appeared on smart fridges and accidentally triggered a mental health"
+  },
+  {
+   "t": 1514.64,
+   "d": 5.52,
+   "text": "episode for someone. I don't know if you have heard about this. I was interested in there are"
+  },
+  {
+   "t": 1520.16,
+   "d": 7.68,
+   "text": "any safety issues or people opting into. I would assume it would be like that un-reality thing"
+  },
+  {
+   "t": 1527.84,
+   "d": 4.96,
+   "text": "I know some people have some trouble with that. How have you approached some of that? Or does the"
+  },
+  {
+   "t": 1532.8,
+   "d": 7.12,
+   "text": "game itself have some of those safety barriers? G blekkenhorst: So for the archive, I actually had"
+  },
+  {
+   "t": 1539.92,
+   "d": 4.56,
+   "text": "especially because it was running as a research project, I had like a list of trigger warnings"
+  },
+  {
+   "t": 1544.48,
+   "d": 7.92,
+   "text": "available to people beforehand, so I had a general list of wider things, and then information about"
+  },
+  {
+   "t": 1552.4,
+   "d": 5.36,
+   "text": "how to ask if there was anything more specific. I had a list of allergens because that can be a"
+  },
+  {
+   "t": 1557.76,
+   "d": 7.12,
+   "text": "problem if you are asking people to touch physical objects. I also, because I had some real bones"
+  },
+  {
+   "t": 1565.76,
+   "d": 4.64,
+   "text": "in my game, anything that was a real bone was sealed so they couldn't open it,"
+  },
+  {
+   "t": 1570.4,
+   "d": 6.16,
+   "text": "and that was part of the trigger warning for that. When I was talking with my advisor about"
+  },
+  {
+   "t": 1576.56,
+   "d": 7.28,
+   "text": "pitching it I wanted to make it theory secret and don't want people to know it is a game. But"
+  },
+  {
+   "t": 1583.84,
+   "d": 5.92,
+   "text": "if you are doing something with horror I ended up not feeling comfortable doing that even if I"
+  },
+  {
+   "t": 1589.76,
+   "d": 7.44,
+   "text": "had been able to get the ethics board in Canada approval. I do want people to con don't having"
+  },
+  {
+   "t": 1597.2,
+   "d": 4.72,
+   "text": "these experiences even though I have had a bunch of experiences in my life where I discovered it"
+  },
+  {
+   "t": 1601.92,
+   "d": 7.36,
+   "text": "was art and therefore a lie after it happened. And when you start you are angry and then afterwards"
+  },
+  {
+   "t": 1609.28,
+   "d": 6.32,
+   "text": "you are like that is the best thing that has ever happened to me. It is a weird line to walk."
+  },
+  {
+   "t": 1615.6,
+   "d": 7.12,
+   "text": "ALEXEI: I think that makes a lot of sense. One thing that came up in chat is I like"
+  },
+  {
+   "t": 1622.72,
+   "d": 7.68,
+   "text": "forbidden solitaire doing this kind of thing. I don't remember how it worked."
+  },
+  {
+   "t": 1630.4,
+   "d": 6.24,
+   "text": "But I have seen some of these games with cascading opt-in to view content warnings"
+  },
+  {
+   "t": 1636.64,
+   "d": 4.32,
+   "text": "or just go into the experience unspoiled? And then I feel like there might have"
+  },
+  {
+   "t": 1640.96,
+   "d": 7.44,
+   "text": "even been gradation of which content type warnings. How much detail do you want? Like"
+  },
+  {
+   "t": 1648.4,
+   "d": 21.76,
+   "text": "there is generally something with eyeballs. G blekkenhorst: I have hard stops of things I"
+  },
+  {
+   "t": 1670.16,
+   "d": 7.76,
+   "text": "don't like. I like how table top RPGs do it. What are your lines and bails? And when I run those"
+  },
+  {
+   "t": 1677.92,
+   "d": 5.6,
+   "text": "games, I include spotlights to be like let's include the things, with the list of things,"
+  },
+  {
+   "t": 1683.52,
+   "d": 4.4,
+   "text": "we don't want, let's include the list of things we do want, and it becomes a creative bank."
+  },
+  {
+   "t": 1689.12,
+   "d": 6.16,
+   "text": "It is very tough. I want people to be miserable in the exact way they want to"
+  },
+  {
+   "t": 1695.28,
+   "d": 5.92,
+   "text": "be miserable. They have that right. ALEXEI: Another interesting question."
+  },
+  {
+   "t": 1702.72,
+   "d": 5.2,
+   "text": "What are your thoughts on how many popular interface games evoke a retro interface like"
+  },
+  {
+   "t": 1707.92,
+   "d": 7.52,
+   "text": "Windows '98? Do you think it is nostalgia or deeper value in emulating those older styles"
+  },
+  {
+   "t": 1715.44,
+   "d": 5.52,
+   "text": "of Windows systems and technology? G blekkenhorst: I don't want to dismiss"
+  },
+  {
+   "t": 1720.96,
+   "d": 10.64,
+   "text": "nostalgia. It is wonderful. I am getting older and the archive I specifically used -- I think"
+  },
+  {
+   "t": 1731.6,
+   "d": 10.0,
+   "text": "it was Windows 2000. I looked specifically for an era of 2007 because that's when my official"
+  },
+  {
+   "t": 1743.92,
+   "d": 7.12,
+   "text": "volunteer cult started trying to mitigate the database. Whoever started the newer software"
+  },
+  {
+   "t": 1751.04,
+   "d": 6.88,
+   "text": "started then but it is a newer project and drops off and comes back. I was doing it to evoke a"
+  },
+  {
+   "t": 1757.92,
+   "d": 5.04,
+   "text": "specific time period and playing with different artifacts coming from different time periods by"
+  },
+  {
+   "t": 1762.96,
+   "d": 7.6,
+   "text": "emulating their graphic style. I love that because it is almost like historical cautioning but for"
+  },
+  {
+   "t": 1770.56,
+   "d": 12.48,
+   "text": "software. I think nostalgic design always sets up the player for a specific experience. It is"
+  },
+  {
+   "t": 1784.4,
+   "d": 4.88,
+   "text": "in a positive way like marketing. When you look at what something looks like,"
+  },
+  {
+   "t": 1789.28,
+   "d": 4.72,
+   "text": "you know what you might be getting into. ALEXEI: Like signaling and setting up certain"
+  },
+  {
+   "t": 1794.0,
+   "d": 1.12,
+   "text": "impressions. G blekkenhorst:"
+  },
+  {
+   "t": 1796.4,
+   "d": 6.56,
+   "text": "I think as long as you are doing it with an open heart it is almost always positive."
+  },
+  {
+   "t": 1802.96,
+   "d": 8.64,
+   "text": "ALEXEI: It isn't like the older Windows operating system had more tactile. It is also the area. I"
+  },
+  {
+   "t": 1811.6,
+   "d": 8.48,
+   "text": "miss VHS tapes but computers had more buttons and sliding in floppies and you had to flip things."
+  },
+  {
+   "t": 1820.08,
+   "d": 6.64,
+   "text": "There was a lot more tactile like I think so many interactions are a flat surface with haptic"
+  },
+  {
+   "t": 1826.72,
+   "d": 5.92,
+   "text": "buttons. I wonder if there is something about the connection to old memories and memories of"
+  },
+  {
+   "t": 1832.64,
+   "d": 5.44,
+   "text": "times when things were more tactile. G blekkenhorst: Yeah. Also I feel like"
+  },
+  {
+   "t": 1838.08,
+   "d": 8.0,
+   "text": "a lot of the nostalgia is going for the early internet or PS1-2"
+  },
+  {
+   "t": 1846.08,
+   "d": 7.92,
+   "text": "era and that felt like a bit more of the term I can think of. You aren't"
+  },
+  {
+   "t": 1865.28,
+   "d": 5.6,
+   "text": "just evoking a look. You are evoking a feeling that comes with it. And that literacy carries on."
+  },
+  {
+   "t": 1873.36,
+   "d": 5.44,
+   "text": "Kids don't know about blue screen of death anymore? What's our shorthand for that now?"
+  },
+  {
+   "t": 1878.8,
+   "d": 6.48,
+   "text": "ALEXEI: We will have to figure it out. Thanks so much. Delighted to learn about the name for this"
+  },
+  {
+   "t": 1885.28,
+   "d": 7.52,
+   "text": "type of cool thing I like. Thank you so much. Thanks for coming to Roguelike Celebration."
+  },
+  {
+   "t": 1894.8,
+   "d": 5.39,
+   "text": "There is a chance to have follow up discussion at the end of the chunk."
+  }
+ ]
+}

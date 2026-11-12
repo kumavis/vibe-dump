@@ -1,0 +1,4593 @@
+{
+ "id": "9se2M27LuOs",
+ "url": "https://www.youtube.com/watch?v=9se2M27LuOs",
+ "title": "Josh Ge - Cogmind & becoming a dev",
+ "speaker": "Josh Ge",
+ "talk_title": "Cogmind & becoming a dev",
+ "year": 2016,
+ "kind": "talk",
+ "upload_date": "2021-02-07",
+ "duration_s": 1767,
+ "playlists": [
+  "Roguelike Celebration 2016"
+ ],
+ "description": "This talk is from the 2016 Roguelike Celebration: https://roguelike.club/event.html, re-uploaded 2021.\n\nFrom Hobbyist to Full-time Roguelike Developer: Tracing my route from before I even knew what a roguelike was to years of exploring the genre and community before setting out to create a grand and innovative roguelike with just the right mix of traditional and modern features to help guide the genre towards a more mainstream audience without losing anything that makes roguelikes great.\n\nFor the past three and a half years, Josh Ge (aka Kyzrati) has been working on Cogmind, a sci-fi robot-building roguelike with a focus on audiovisual immersion and a combination of procedural and handmade content. Josh has spent years helping other developers in the community, writing articles about building roguelikes, and also created REXPaint, a widely-used ASCII art and roguelike development tool.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 72,
+   "title": "Early development years"
+  },
+  {
+   "start": 172,
+   "title": "Discovering roguelikes"
+  },
+  {
+   "start": 315,
+   "title": "First roguelike project"
+  },
+  {
+   "start": 435,
+   "title": "Creating Cogmind"
+  },
+  {
+   "start": 621,
+   "title": "Developing RexPaint"
+  },
+  {
+   "start": 678,
+   "title": "Importance of community"
+  },
+  {
+   "start": 781,
+   "title": "Going full-time"
+  },
+  {
+   "start": 952,
+   "title": "Expanding the audience"
+  },
+  {
+   "start": 1151,
+   "title": "UI and user experience"
+  },
+  {
+   "start": 1416,
+   "title": "Visual effects and polish"
+  },
+  {
+   "start": 1571,
+   "title": "Success and future goals"
+  },
+  {
+   "start": 1651,
+   "title": "Conclusion and Q&A"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5485,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 4.0,
+   "text": "yes it's gonna be great anyway josh key"
+  },
+  {
+   "t": 4.0,
+   "d": 0.93,
+   "text": "[Applause]"
+  },
+  {
+   "t": 4.93,
+   "d": 3.16,
+   "text": "[Music]"
+  },
+  {
+   "t": 12.0,
+   "d": 3.36,
+   "text": "squeeze up uh hi everyone"
+  },
+  {
+   "t": 15.36,
+   "d": 3.28,
+   "text": "my name is uh josh g actually um but"
+  },
+  {
+   "t": 18.64,
+   "d": 2.24,
+   "text": "uh most people probably don't know me by"
+  },
+  {
+   "t": 20.88,
+   "d": 2.72,
+   "text": "that name online i go by kisrati"
+  },
+  {
+   "t": 23.6,
+   "d": 1.76,
+   "text": "um you've probably seen that name around"
+  },
+  {
+   "t": 25.36,
+   "d": 2.08,
+   "text": "um"
+  },
+  {
+   "t": 27.44,
+   "d": 1.52,
+   "text": "so what i wanted to talk about today was"
+  },
+  {
+   "t": 28.96,
+   "d": 1.52,
+   "text": "a couple things one of the main things"
+  },
+  {
+   "t": 30.48,
+   "d": 1.84,
+   "text": "is my route to becoming a full-time"
+  },
+  {
+   "t": 32.32,
+   "d": 1.52,
+   "text": "rolex developer it's my job"
+  },
+  {
+   "t": 33.84,
+   "d": 3.92,
+   "text": "make broke likes um"
+  },
+  {
+   "t": 37.76,
+   "d": 1.76,
+   "text": "and the other thing was basically what"
+  },
+  {
+   "t": 39.52,
+   "d": 2.08,
+   "text": "i'm doing with my current roguelike"
+  },
+  {
+   "t": 41.6,
+   "d": 3.36,
+   "text": "um for so i'll be getting into that so"
+  },
+  {
+   "t": 44.96,
+   "d": 1.92,
+   "text": "uh hopefully it'll be inspirational to"
+  },
+  {
+   "t": 46.88,
+   "d": 1.28,
+   "text": "some of you who are thinking about maybe"
+  },
+  {
+   "t": 48.16,
+   "d": 0.96,
+   "text": "working on your own because there's"
+  },
+  {
+   "t": 49.12,
+   "d": 1.36,
+   "text": "definitely a lot of overlap"
+  },
+  {
+   "t": 50.48,
+   "d": 1.6,
+   "text": "between the community you know between"
+  },
+  {
+   "t": 52.08,
+   "d": 1.2,
+   "text": "players and developers in the roguelike"
+  },
+  {
+   "t": 53.28,
+   "d": 1.76,
+   "text": "community"
+  },
+  {
+   "t": 55.04,
+   "d": 3.28,
+   "text": "uh so um a little bit"
+  },
+  {
+   "t": 58.32,
+   "d": 2.24,
+   "text": "of my background i don't have a cs"
+  },
+  {
+   "t": 60.56,
+   "d": 0.96,
+   "text": "background so"
+  },
+  {
+   "t": 61.52,
+   "d": 2.48,
+   "text": "if you don't have a cs background um"
+  },
+  {
+   "t": 64.0,
+   "d": 1.36,
+   "text": "you're in luck it's still completely"
+  },
+  {
+   "t": 65.36,
+   "d": 1.52,
+   "text": "possible to make a roguelike and make it"
+  },
+  {
+   "t": 66.88,
+   "d": 1.2,
+   "text": "your job eventually"
+  },
+  {
+   "t": 68.08,
+   "d": 3.44,
+   "text": "it just takes a while yeah"
+  },
+  {
+   "t": 71.52,
+   "d": 2.16,
+   "text": "there you go um languages um my"
+  },
+  {
+   "t": 73.68,
+   "d": 1.28,
+   "text": "background is actually languages"
+  },
+  {
+   "t": 74.96,
+   "d": 2.16,
+   "text": "um especially idiographic languages uh"
+  },
+  {
+   "t": 77.12,
+   "d": 1.68,
+   "text": "chinese japanese and"
+  },
+  {
+   "t": 78.8,
+   "d": 2.24,
+   "text": "i studied in berkeley uh classical"
+  },
+  {
+   "t": 81.04,
+   "d": 1.52,
+   "text": "chinese"
+  },
+  {
+   "t": 82.56,
+   "d": 2.8,
+   "text": "um so it's you know what i found is that"
+  },
+  {
+   "t": 85.36,
+   "d": 1.6,
+   "text": "uh especially years ago it was a lot"
+  },
+  {
+   "t": 86.96,
+   "d": 0.88,
+   "text": "more common for"
+  },
+  {
+   "t": 87.84,
+   "d": 1.6,
+   "text": "people in like cs departments to work on"
+  },
+  {
+   "t": 89.44,
+   "d": 1.68,
+   "text": "roguelikes but now and especially in the"
+  },
+  {
+   "t": 91.12,
+   "d": 1.68,
+   "text": "last few years with all the resources"
+  },
+  {
+   "t": 92.8,
+   "d": 0.96,
+   "text": "that are out there"
+  },
+  {
+   "t": 93.76,
+   "d": 2.8,
+   "text": "we're seeing a lot more people um from"
+  },
+  {
+   "t": 96.56,
+   "d": 1.12,
+   "text": "all walks of life"
+  },
+  {
+   "t": 97.68,
+   "d": 1.76,
+   "text": "uh making roguelikes and that's kind of"
+  },
+  {
+   "t": 99.44,
+   "d": 1.68,
+   "text": "where i came from but i've been doing it"
+  },
+  {
+   "t": 101.12,
+   "d": 0.56,
+   "text": "for"
+  },
+  {
+   "t": 101.68,
+   "d": 3.28,
+   "text": "a while and uh building on my knowledge"
+  },
+  {
+   "t": 104.96,
+   "d": 1.68,
+   "text": "it took a long time but i'll get into"
+  },
+  {
+   "t": 106.64,
+   "d": 1.6,
+   "text": "more about that later um so"
+  },
+  {
+   "t": 108.24,
+   "d": 2.8,
+   "text": "uh yeah i've uh my entire life i've been"
+  },
+  {
+   "t": 111.04,
+   "d": 1.36,
+   "text": "a freelance worker doing"
+  },
+  {
+   "t": 112.4,
+   "d": 2.24,
+   "text": "translating interpreting i've been a"
+  },
+  {
+   "t": 114.64,
+   "d": 1.12,
+   "text": "fixer researcher"
+  },
+  {
+   "t": 115.76,
+   "d": 3.28,
+   "text": "mostly uh related to chinese and my uh"
+  },
+  {
+   "t": 119.04,
+   "d": 2.0,
+   "text": "expertise in that area but it left me"
+  },
+  {
+   "t": 121.04,
+   "d": 1.12,
+   "text": "with a lot of free time"
+  },
+  {
+   "t": 122.16,
+   "d": 1.84,
+   "text": "and i always liked making games of all"
+  },
+  {
+   "t": 124.0,
+   "d": 4.48,
+   "text": "kinds and so among those games uh"
+  },
+  {
+   "t": 128.48,
+   "d": 2.32,
+   "text": "so programming and pen and paper games"
+  },
+  {
+   "t": 130.8,
+   "d": 1.6,
+   "text": "all kinds of games"
+  },
+  {
+   "t": 132.4,
+   "d": 4.8,
+   "text": "but uh so anyway that's my first game"
+  },
+  {
+   "t": 137.2,
+   "d": 1.36,
+   "text": "i actually started when i was really"
+  },
+  {
+   "t": 138.56,
+   "d": 2.48,
+   "text": "young but the first major game i started"
+  },
+  {
+   "t": 141.04,
+   "d": 1.52,
+   "text": "on was in 2006"
+  },
+  {
+   "t": 142.56,
+   "d": 3.92,
+   "text": "when my brother um just out of nowhere"
+  },
+  {
+   "t": 146.48,
+   "d": 1.52,
+   "text": "i used to write fiction and i was just"
+  },
+  {
+   "t": 148.0,
+   "d": 1.2,
+   "text": "spending all my time writing short"
+  },
+  {
+   "t": 149.2,
+   "d": 1.36,
+   "text": "stories and then my brother showed up"
+  },
+  {
+   "t": 150.56,
+   "d": 2.08,
+   "text": "and and suggested uh why don't we do a"
+  },
+  {
+   "t": 152.64,
+   "d": 1.84,
+   "text": "game where our ais compete with each"
+  },
+  {
+   "t": 154.48,
+   "d": 0.32,
+   "text": "other"
+  },
+  {
+   "t": 154.8,
+   "d": 1.12,
+   "text": "first we have to learn c plus plus"
+  },
+  {
+   "t": 155.92,
+   "d": 0.8,
+   "text": "because neither of us knew how to"
+  },
+  {
+   "t": 156.72,
+   "d": 2.0,
+   "text": "program"
+  },
+  {
+   "t": 158.72,
+   "d": 3.2,
+   "text": "so we started that it was an srbg it"
+  },
+  {
+   "t": 161.92,
+   "d": 1.2,
+   "text": "wasn't a roguelike at all in fact at"
+  },
+  {
+   "t": 163.12,
+   "d": 1.28,
+   "text": "this point in time i had no idea what"
+  },
+  {
+   "t": 164.4,
+   "d": 1.12,
+   "text": "roguelike was"
+  },
+  {
+   "t": 165.52,
+   "d": 1.28,
+   "text": "even despite having played games for a"
+  },
+  {
+   "t": 166.8,
+   "d": 2.48,
+   "text": "very long time i used to play muds bbs"
+  },
+  {
+   "t": 169.28,
+   "d": 1.36,
+   "text": "games all kinds of text games but i'd"
+  },
+  {
+   "t": 170.64,
+   "d": 1.68,
+   "text": "never even heard of a roguelike"
+  },
+  {
+   "t": 172.32,
+   "d": 2.48,
+   "text": "um not as lucky as many of the people in"
+  },
+  {
+   "t": 174.8,
+   "d": 1.12,
+   "text": "the audience here"
+  },
+  {
+   "t": 175.92,
+   "d": 1.76,
+   "text": "i still it so in 2006 i still had no"
+  },
+  {
+   "t": 177.68,
+   "d": 1.12,
+   "text": "idea what it was but it's kind of"
+  },
+  {
+   "t": 178.8,
+   "d": 1.12,
+   "text": "interesting if you look at the bottom"
+  },
+  {
+   "t": 179.92,
+   "d": 1.28,
+   "text": "picture on the left the first iteration"
+  },
+  {
+   "t": 181.2,
+   "d": 2.0,
+   "text": "of the game i was working on"
+  },
+  {
+   "t": 183.2,
+   "d": 1.36,
+   "text": "it kind of looks like a roguelike i was"
+  },
+  {
+   "t": 184.56,
+   "d": 2.24,
+   "text": "using letters to represent things"
+  },
+  {
+   "t": 186.8,
+   "d": 1.36,
+   "text": "it was done in a terminal because that's"
+  },
+  {
+   "t": 188.16,
+   "d": 1.76,
+   "text": "all i could use and eventually it went"
+  },
+  {
+   "t": 189.92,
+   "d": 0.96,
+   "text": "through these"
+  },
+  {
+   "t": 190.88,
+   "d": 2.24,
+   "text": "evolutions and i spent 10 000 hours on"
+  },
+  {
+   "t": 193.12,
+   "d": 0.96,
+   "text": "this game"
+  },
+  {
+   "t": 194.08,
+   "d": 1.6,
+   "text": "never saw the light of day it was just a"
+  },
+  {
+   "t": 195.68,
+   "d": 1.84,
+   "text": "hobby"
+  },
+  {
+   "t": 197.52,
+   "d": 4.16,
+   "text": "but you learn a lot in 10 000 hours um"
+  },
+  {
+   "t": 201.68,
+   "d": 1.76,
+   "text": "it was a really big game way too"
+  },
+  {
+   "t": 203.44,
+   "d": 1.44,
+   "text": "ambitious for a first"
+  },
+  {
+   "t": 204.88,
+   "d": 3.6,
+   "text": "uh serious game and eventually"
+  },
+  {
+   "t": 208.48,
+   "d": 3.68,
+   "text": "so get to this point and um"
+  },
+  {
+   "t": 212.16,
+   "d": 2.88,
+   "text": "so the interesting thing was so how did"
+  },
+  {
+   "t": 215.04,
+   "d": 1.84,
+   "text": "i switch from that to roguelikes well"
+  },
+  {
+   "t": 216.88,
+   "d": 1.92,
+   "text": "i was in the beta stage almost done with"
+  },
+  {
+   "t": 218.8,
+   "d": 1.76,
+   "text": "this game and"
+  },
+  {
+   "t": 220.56,
+   "d": 1.12,
+   "text": "these little sprites here i don't know"
+  },
+  {
+   "t": 221.68,
+   "d": 2.32,
+   "text": "if you might recognize them they're"
+  },
+  {
+   "t": 224.0,
+   "d": 1.6,
+   "text": "similar they're dungeon crew dungeon"
+  },
+  {
+   "t": 225.6,
+   "d": 2.0,
+   "text": "crawl sprites dcss"
+  },
+  {
+   "t": 227.6,
+   "d": 1.84,
+   "text": "and the there was a japanese pixel"
+  },
+  {
+   "t": 229.44,
+   "d": 1.2,
+   "text": "artist who made all the original ones"
+  },
+  {
+   "t": 230.64,
+   "d": 0.56,
+   "text": "denzi"
+  },
+  {
+   "t": 231.2,
+   "d": 2.72,
+   "text": "you know i'm santiago yeah um the great"
+  },
+  {
+   "t": 233.92,
+   "d": 1.76,
+   "text": "pixel artist i found his stuff"
+  },
+  {
+   "t": 235.68,
+   "d": 1.76,
+   "text": "and i put it into my game because i"
+  },
+  {
+   "t": 237.44,
+   "d": 1.44,
+   "text": "needed something to replace"
+  },
+  {
+   "t": 238.88,
+   "d": 2.0,
+   "text": "what um i'm showing on the previous page"
+  },
+  {
+   "t": 240.88,
+   "d": 1.84,
+   "text": "you can see uh the letters"
+  },
+  {
+   "t": 242.72,
+   "d": 2.32,
+   "text": "uh representing different things even in"
+  },
+  {
+   "t": 245.04,
+   "d": 1.68,
+   "text": "sprite mode i was doing that"
+  },
+  {
+   "t": 246.72,
+   "d": 2.8,
+   "text": "and i needed something to replace it so"
+  },
+  {
+   "t": 249.52,
+   "d": 1.36,
+   "text": "i dropped them into my game and then one"
+  },
+  {
+   "t": 250.88,
+   "d": 0.64,
+   "text": "day"
+  },
+  {
+   "t": 251.52,
+   "d": 1.6,
+   "text": "after like a year or two i was like you"
+  },
+  {
+   "t": 253.12,
+   "d": 0.96,
+   "text": "know i'm using these sprites where did"
+  },
+  {
+   "t": 254.08,
+   "d": 1.36,
+   "text": "they come from"
+  },
+  {
+   "t": 255.44,
+   "d": 3.68,
+   "text": "and so i found the original game and"
+  },
+  {
+   "t": 259.12,
+   "d": 1.76,
+   "text": "i found dungeon cross stone soup i'd"
+  },
+  {
+   "t": 260.88,
+   "d": 2.16,
+   "text": "never even heard of this roguelike genre"
+  },
+  {
+   "t": 263.04,
+   "d": 3.2,
+   "text": "i started playing it and just like that"
+  },
+  {
+   "t": 266.24,
+   "d": 2.0,
+   "text": "i dropped my 10 000 hour project which"
+  },
+  {
+   "t": 268.24,
+   "d": 1.92,
+   "text": "was nearing the end"
+  },
+  {
+   "t": 270.16,
+   "d": 2.16,
+   "text": "and said i need to make a roguelike"
+  },
+  {
+   "t": 272.32,
+   "d": 1.76,
+   "text": "immediately"
+  },
+  {
+   "t": 274.08,
+   "d": 1.6,
+   "text": "it was a really amazing experience it's"
+  },
+  {
+   "t": 275.68,
+   "d": 2.08,
+   "text": "hard to express how excited i was during"
+  },
+  {
+   "t": 277.76,
+   "d": 1.2,
+   "text": "that period"
+  },
+  {
+   "t": 278.96,
+   "d": 2.64,
+   "text": "um that's literally like all i did i was"
+  },
+  {
+   "t": 281.6,
+   "d": 0.48,
+   "text": "just playing"
+  },
+  {
+   "t": 282.08,
+   "d": 1.6,
+   "text": "all these roguelikes and just and many"
+  },
+  {
+   "t": 283.68,
+   "d": 1.28,
+   "text": "more than this but these are pictures of"
+  },
+  {
+   "t": 284.96,
+   "d": 1.76,
+   "text": "actual like my saved games that i pulled"
+  },
+  {
+   "t": 286.72,
+   "d": 1.36,
+   "text": "or some of them are something i got off"
+  },
+  {
+   "t": 288.08,
+   "d": 1.84,
+   "text": "the internet but um"
+  },
+  {
+   "t": 289.92,
+   "d": 1.44,
+   "text": "all kinds of stuff you can see i ate"
+  },
+  {
+   "t": 291.36,
+   "d": 2.24,
+   "text": "them in here dwarf fortress and xenocide"
+  },
+  {
+   "t": 293.6,
+   "d": 1.92,
+   "text": "incursion mage guild a lot of games that"
+  },
+  {
+   "t": 295.52,
+   "d": 1.28,
+   "text": "many of you"
+  },
+  {
+   "t": 296.8,
+   "d": 1.92,
+   "text": "probably played before i was playing all"
+  },
+  {
+   "t": 298.72,
+   "d": 1.68,
+   "text": "these games and scouring forums"
+  },
+  {
+   "t": 300.4,
+   "d": 1.84,
+   "text": "all over the net looking for people's"
+  },
+  {
+   "t": 302.24,
+   "d": 1.6,
+   "text": "opinions of these games and basically"
+  },
+  {
+   "t": 303.84,
+   "d": 1.04,
+   "text": "trying to catch up"
+  },
+  {
+   "t": 304.88,
+   "d": 3.52,
+   "text": "with these decades of history"
+  },
+  {
+   "t": 308.4,
+   "d": 3.84,
+   "text": "um so when i was looking uh for"
+  },
+  {
+   "t": 312.24,
+   "d": 2.24,
+   "text": "uh what i could do with uh with"
+  },
+  {
+   "t": 314.48,
+   "d": 2.56,
+   "text": "roguelikes i decided uh i was just"
+  },
+  {
+   "t": 317.04,
+   "d": 1.76,
+   "text": "looking all over the place and i found"
+  },
+  {
+   "t": 318.8,
+   "d": 2.16,
+   "text": "a shout out to andrew doole who runs a"
+  },
+  {
+   "t": 320.96,
+   "d": 1.76,
+   "text": "blog and back in 2008"
+  },
+  {
+   "t": 322.72,
+   "d": 1.6,
+   "text": "he had uh written a post said why"
+  },
+  {
+   "t": 324.32,
+   "d": 2.0,
+   "text": "doesn't someone make an x-com roguelike"
+  },
+  {
+   "t": 326.32,
+   "d": 1.36,
+   "text": "and it's one of my all-time favorite"
+  },
+  {
+   "t": 327.68,
+   "d": 1.84,
+   "text": "games xcom um"
+  },
+  {
+   "t": 329.52,
+   "d": 2.08,
+   "text": "and it's it's not exactly a roguelike"
+  },
+  {
+   "t": 331.6,
+   "d": 1.36,
+   "text": "but um"
+  },
+  {
+   "t": 332.96,
+   "d": 2.16,
+   "text": "it has a lot of roguelike qualities and"
+  },
+  {
+   "t": 335.12,
+   "d": 1.2,
+   "text": "no one had done that before"
+  },
+  {
+   "t": 336.32,
+   "d": 2.24,
+   "text": "so i said well i'll start with this and"
+  },
+  {
+   "t": 338.56,
+   "d": 2.56,
+   "text": "so i made the xcom roguelike"
+  },
+  {
+   "t": 341.12,
+   "d": 2.96,
+   "text": "um i spent about two years on that it's"
+  },
+  {
+   "t": 344.08,
+   "d": 1.04,
+   "text": "really kind of a roguelite it's not"
+  },
+  {
+   "t": 345.12,
+   "d": 0.48,
+   "text": "exactly"
+  },
+  {
+   "t": 345.6,
+   "d": 1.52,
+   "text": "roguelike but it was a really good"
+  },
+  {
+   "t": 347.12,
+   "d": 1.52,
+   "text": "starting point for me because i was very"
+  },
+  {
+   "t": 348.64,
+   "d": 1.44,
+   "text": "familiar with the mechanics i was very"
+  },
+  {
+   "t": 350.08,
+   "d": 0.96,
+   "text": "familiar with"
+  },
+  {
+   "t": 351.04,
+   "d": 4.32,
+   "text": "xcom and so i was able to spend"
+  },
+  {
+   "t": 355.36,
+   "d": 1.6,
+   "text": "my i was able to focus a lot on the"
+  },
+  {
+   "t": 356.96,
+   "d": 2.32,
+   "text": "technical aspects and the usability"
+  },
+  {
+   "t": 359.28,
+   "d": 1.52,
+   "text": "usability is very important to me so i"
+  },
+  {
+   "t": 360.8,
+   "d": 1.28,
+   "text": "wanted to make it so you know how can"
+  },
+  {
+   "t": 362.08,
+   "d": 1.12,
+   "text": "you represent"
+  },
+  {
+   "t": 363.2,
+   "d": 1.44,
+   "text": "and make it easy to interact with this"
+  },
+  {
+   "t": 364.64,
+   "d": 1.36,
+   "text": "is actually a 3d world with multiple"
+  },
+  {
+   "t": 366.0,
+   "d": 0.64,
+   "text": "levels"
+  },
+  {
+   "t": 366.64,
+   "d": 2.8,
+   "text": "in a roguelike in this kind of interface"
+  },
+  {
+   "t": 369.44,
+   "d": 0.48,
+   "text": "um"
+  },
+  {
+   "t": 369.92,
+   "d": 4.08,
+   "text": "so i was able to work on that and"
+  },
+  {
+   "t": 374.08,
+   "d": 1.68,
+   "text": "so it wasn't too overwhelming because"
+  },
+  {
+   "t": 375.76,
+   "d": 2.0,
+   "text": "it's easy to get overwhelmed early on in"
+  },
+  {
+   "t": 377.76,
+   "d": 1.2,
+   "text": "roguelike development there's just too"
+  },
+  {
+   "t": 378.96,
+   "d": 2.24,
+   "text": "many things to do so what a lot of"
+  },
+  {
+   "t": 381.2,
+   "d": 1.36,
+   "text": "people do for the first roguelike is"
+  },
+  {
+   "t": 382.56,
+   "d": 1.28,
+   "text": "just take their favorite thing and make"
+  },
+  {
+   "t": 383.84,
+   "d": 1.12,
+   "text": "it into a vogue like you've seen a lot"
+  },
+  {
+   "t": 384.96,
+   "d": 1.28,
+   "text": "of examples of that kind of thing"
+  },
+  {
+   "t": 386.24,
+   "d": 2.64,
+   "text": "do morel all the things that end with"
+  },
+  {
+   "t": 388.88,
+   "d": 1.92,
+   "text": "capital r capital l"
+  },
+  {
+   "t": 390.8,
+   "d": 2.88,
+   "text": "there's so many of them out there um and"
+  },
+  {
+   "t": 393.68,
+   "d": 1.92,
+   "text": "so that was really good uh i finished"
+  },
+  {
+   "t": 395.6,
+   "d": 1.52,
+   "text": "the battlescape part if you're familiar"
+  },
+  {
+   "t": 397.12,
+   "d": 1.92,
+   "text": "with xcom that's the"
+  },
+  {
+   "t": 399.04,
+   "d": 2.72,
+   "text": "part on the ground not the geoscape"
+  },
+  {
+   "t": 401.76,
+   "d": 0.88,
+   "text": "campaign mode"
+  },
+  {
+   "t": 402.64,
+   "d": 2.4,
+   "text": "but it was a lot of fun and what that"
+  },
+  {
+   "t": 405.04,
+   "d": 0.64,
+   "text": "really did"
+  },
+  {
+   "t": 405.68,
+   "d": 3.2,
+   "text": "is help build um"
+  },
+  {
+   "t": 408.88,
+   "d": 1.92,
+   "text": "help build a community and you really"
+  },
+  {
+   "t": 410.8,
+   "d": 1.28,
+   "text": "need to build a community if you're"
+  },
+  {
+   "t": 412.08,
+   "d": 0.48,
+   "text": "gonna"
+  },
+  {
+   "t": 412.56,
+   "d": 2.48,
+   "text": "uh have a successful roguelike i mean"
+  },
+  {
+   "t": 415.04,
+   "d": 1.52,
+   "text": "that community can build itself"
+  },
+  {
+   "t": 416.56,
+   "d": 1.36,
+   "text": "but it's easy if you for example in this"
+  },
+  {
+   "t": 417.92,
+   "d": 1.68,
+   "text": "case i gave them the tools to build"
+  },
+  {
+   "t": 419.6,
+   "d": 0.88,
+   "text": "their own"
+  },
+  {
+   "t": 420.48,
+   "d": 3.44,
+   "text": "um we're in uh with mods"
+  },
+  {
+   "t": 423.92,
+   "d": 3.2,
+   "text": "so during that two year period i um i"
+  },
+  {
+   "t": 427.12,
+   "d": 1.36,
+   "text": "started branching out this is the two"
+  },
+  {
+   "t": 428.48,
+   "d": 1.12,
+   "text": "period two year period i was working on"
+  },
+  {
+   "t": 429.6,
+   "d": 1.6,
+   "text": "xcom the roguelike and i wanted to build"
+  },
+  {
+   "t": 431.2,
+   "d": 2.0,
+   "text": "a new engine come out i built a new game"
+  },
+  {
+   "t": 433.2,
+   "d": 1.2,
+   "text": "new tools we'll get into each of these"
+  },
+  {
+   "t": 434.4,
+   "d": 1.6,
+   "text": "in a second first thing i did was make"
+  },
+  {
+   "t": 436.0,
+   "d": 1.52,
+   "text": "my own engine i was originally using an"
+  },
+  {
+   "t": 437.52,
+   "d": 0.64,
+   "text": "engine called"
+  },
+  {
+   "t": 438.16,
+   "d": 2.0,
+   "text": "lipticod which is a really good engine"
+  },
+  {
+   "t": 440.16,
+   "d": 1.68,
+   "text": "if you're going to roguelike development"
+  },
+  {
+   "t": 441.84,
+   "d": 2.8,
+   "text": "a lot of people start there"
+  },
+  {
+   "t": 444.64,
+   "d": 1.84,
+   "text": "and so i built my own engine with these"
+  },
+  {
+   "t": 446.48,
+   "d": 1.36,
+   "text": "features no need to go into them in"
+  },
+  {
+   "t": 447.84,
+   "d": 0.64,
+   "text": "detail"
+  },
+  {
+   "t": 448.48,
+   "d": 2.08,
+   "text": "but because all i was using from"
+  },
+  {
+   "t": 450.56,
+   "d": 0.96,
+   "text": "libtcode was"
+  },
+  {
+   "t": 451.52,
+   "d": 3.12,
+   "text": "uh the console output"
+  },
+  {
+   "t": 454.64,
+   "d": 2.0,
+   "text": "um and so i needed something that could"
+  },
+  {
+   "t": 456.64,
+   "d": 1.52,
+   "text": "was a little more versatile and could"
+  },
+  {
+   "t": 458.16,
+   "d": 1.52,
+   "text": "fit in with all the stuff that i'd spent"
+  },
+  {
+   "t": 459.68,
+   "d": 1.84,
+   "text": "many years i spent that ten thousand"
+  },
+  {
+   "t": 461.52,
+   "d": 1.6,
+   "text": "hours working on earlier i had such a"
+  },
+  {
+   "t": 463.12,
+   "d": 1.52,
+   "text": "large library of things i could use but"
+  },
+  {
+   "t": 464.64,
+   "d": 0.48,
+   "text": "i couldn't"
+  },
+  {
+   "t": 465.12,
+   "d": 2.08,
+   "text": "they weren't very compatible so i built"
+  },
+  {
+   "t": 467.2,
+   "d": 2.24,
+   "text": "my own engine that um"
+  },
+  {
+   "t": 469.44,
+   "d": 2.4,
+   "text": "then i wanted to participate in 7drl a"
+  },
+  {
+   "t": 471.84,
+   "d": 1.12,
+   "text": "lot of people here probably know what"
+  },
+  {
+   "t": 472.96,
+   "d": 1.36,
+   "text": "70rls the seven-day roguelike"
+  },
+  {
+   "t": 474.32,
+   "d": 1.84,
+   "text": "competition once per year"
+  },
+  {
+   "t": 476.16,
+   "d": 2.24,
+   "text": "um and it's a great competition where"
+  },
+  {
+   "t": 478.4,
+   "d": 2.0,
+   "text": "hundreds of roguelike developers now"
+  },
+  {
+   "t": 480.4,
+   "d": 2.8,
+   "text": "uh get uh get you know spend an entire"
+  },
+  {
+   "t": 483.2,
+   "d": 0.32,
+   "text": "week"
+  },
+  {
+   "t": 483.52,
+   "d": 4.0,
+   "text": "working on their uh a new game and um"
+  },
+  {
+   "t": 487.52,
+   "d": 1.2,
+   "text": "so i really wanted to participate in"
+  },
+  {
+   "t": 488.72,
+   "d": 1.44,
+   "text": "that after having been a part of the"
+  },
+  {
+   "t": 490.16,
+   "d": 2.32,
+   "text": "community and seeing how vibrant it was"
+  },
+  {
+   "t": 492.48,
+   "d": 1.44,
+   "text": "so i wanted to do a game based on battle"
+  },
+  {
+   "t": 493.92,
+   "d": 1.92,
+   "text": "tech but i didn't have a hex"
+  },
+  {
+   "t": 495.84,
+   "d": 3.12,
+   "text": "engine for to use for that"
+  },
+  {
+   "t": 498.96,
+   "d": 1.84,
+   "text": "so instead i came up with my own idea"
+  },
+  {
+   "t": 500.8,
+   "d": 2.08,
+   "text": "and i'm glad i did that"
+  },
+  {
+   "t": 502.88,
+   "d": 1.36,
+   "text": "but we'll get to why i'm glad in a"
+  },
+  {
+   "t": 504.24,
+   "d": 2.4,
+   "text": "little while um so i was in thailand at"
+  },
+  {
+   "t": 506.64,
+   "d": 1.12,
+   "text": "the time and just"
+  },
+  {
+   "t": 507.76,
+   "d": 1.76,
+   "text": "all my notes were written on paper i"
+  },
+  {
+   "t": 509.52,
+   "d": 1.28,
+   "text": "spent a lot of time planning it's a"
+  },
+  {
+   "t": 510.8,
+   "d": 0.48,
+   "text": "seven"
+  },
+  {
+   "t": 511.28,
+   "d": 1.92,
+   "text": "day roguelike but i actually spent over"
+  },
+  {
+   "t": 513.2,
+   "d": 2.0,
+   "text": "a month planning what i was going to do"
+  },
+  {
+   "t": 515.2,
+   "d": 0.56,
+   "text": "with it"
+  },
+  {
+   "t": 515.76,
+   "d": 1.6,
+   "text": "otherwise it would have been impossible"
+  },
+  {
+   "t": 517.36,
+   "d": 1.6,
+   "text": "um it was"
+  },
+  {
+   "t": 518.96,
+   "d": 3.6,
+   "text": "uh way too ambitious of a game"
+  },
+  {
+   "t": 522.56,
+   "d": 2.64,
+   "text": "uh spent a very long time planning it oh"
+  },
+  {
+   "t": 525.2,
+   "d": 1.84,
+   "text": "and the impetus was um"
+  },
+  {
+   "t": 527.04,
+   "d": 2.96,
+   "text": "i was we were in a uh it was with my"
+  },
+  {
+   "t": 530.0,
+   "d": 0.64,
+   "text": "brother at"
+  },
+  {
+   "t": 530.64,
+   "d": 1.04,
+   "text": "a hotel there and we were on the"
+  },
+  {
+   "t": 531.68,
+   "d": 1.68,
+   "text": "internet surfing around and someone i"
+  },
+  {
+   "t": 533.36,
+   "d": 0.64,
+   "text": "saw a"
+  },
+  {
+   "t": 534.0,
+   "d": 3.04,
+   "text": "a message on a forum or somebody posted"
+  },
+  {
+   "t": 537.04,
+   "d": 1.52,
+   "text": "just a single sentence what if you could"
+  },
+  {
+   "t": 538.56,
+   "d": 2.0,
+   "text": "take the parts of your enemies and"
+  },
+  {
+   "t": 540.56,
+   "d": 2.08,
+   "text": "and make them a part of you and you know"
+  },
+  {
+   "t": 542.64,
+   "d": 1.92,
+   "text": "become bigger and bigger and more more"
+  },
+  {
+   "t": 544.56,
+   "d": 1.44,
+   "text": "powerful and that's exactly what cogmind"
+  },
+  {
+   "t": 546.0,
+   "d": 1.28,
+   "text": "is really that's where the idea came"
+  },
+  {
+   "t": 547.28,
+   "d": 1.12,
+   "text": "from originally"
+  },
+  {
+   "t": 548.4,
+   "d": 2.08,
+   "text": "um that really interested me i said yeah"
+  },
+  {
+   "t": 550.48,
+   "d": 1.84,
+   "text": "i could do this um"
+  },
+  {
+   "t": 552.32,
+   "d": 4.24,
+   "text": "in a week uh that was a crazy week"
+  },
+  {
+   "t": 556.56,
+   "d": 2.96,
+   "text": "um i yeah i was pretty much working uh"
+  },
+  {
+   "t": 559.52,
+   "d": 1.84,
+   "text": "constantly during that entire week"
+  },
+  {
+   "t": 561.36,
+   "d": 2.56,
+   "text": "it was uh it was really hard um you"
+  },
+  {
+   "t": 563.92,
+   "d": 1.04,
+   "text": "don't have to"
+  },
+  {
+   "t": 564.96,
+   "d": 1.2,
+   "text": "put this much effort into a seven-day"
+  },
+  {
+   "t": 566.16,
+   "d": 1.44,
+   "text": "roguelike if you're thinking of doing"
+  },
+  {
+   "t": 567.6,
+   "d": 1.6,
+   "text": "one some people only spend a day or two"
+  },
+  {
+   "t": 569.2,
+   "d": 1.84,
+   "text": "or maybe a few hours each day i was"
+  },
+  {
+   "t": 571.04,
+   "d": 1.52,
+   "text": "working morning till night almost every"
+  },
+  {
+   "t": 572.56,
+   "d": 0.64,
+   "text": "day"
+  },
+  {
+   "t": 573.2,
+   "d": 2.0,
+   "text": "uh until like two or three a.m and then"
+  },
+  {
+   "t": 575.2,
+   "d": 1.68,
+   "text": "get up at 6 a.m and start again so i"
+  },
+  {
+   "t": 576.88,
+   "d": 2.0,
+   "text": "it was a lot of time put into this"
+  },
+  {
+   "t": 578.88,
+   "d": 1.28,
+   "text": "roguelike"
+  },
+  {
+   "t": 580.16,
+   "d": 2.48,
+   "text": "and the planning paid off so it and i"
+  },
+  {
+   "t": 582.64,
+   "d": 1.76,
+   "text": "spent another two months"
+  },
+  {
+   "t": 584.4,
+   "d": 3.04,
+   "text": "improving it over time mainly just"
+  },
+  {
+   "t": 587.44,
+   "d": 1.52,
+   "text": "fixing it fixing problems"
+  },
+  {
+   "t": 588.96,
+   "d": 2.88,
+   "text": "and all this came from the bay 12 forums"
+  },
+  {
+   "t": 591.84,
+   "d": 0.48,
+   "text": "uh"
+  },
+  {
+   "t": 592.32,
+   "d": 2.8,
+   "text": "you know tarn who uh just gave a talk"
+  },
+  {
+   "t": 595.12,
+   "d": 0.4,
+   "text": "his"
+  },
+  {
+   "t": 595.52,
+   "d": 1.6,
+   "text": "his forms are amazing the community"
+  },
+  {
+   "t": 597.12,
+   "d": 2.0,
+   "text": "there their feedback is great they're"
+  },
+  {
+   "t": 599.12,
+   "d": 0.8,
+   "text": "friendly"
+  },
+  {
+   "t": 599.92,
+   "d": 2.72,
+   "text": "a lot of roguelike fans obviously um so"
+  },
+  {
+   "t": 602.64,
+   "d": 0.88,
+   "text": "that's really where"
+  },
+  {
+   "t": 603.52,
+   "d": 2.0,
+   "text": "cogmine thrived there was a tournament"
+  },
+  {
+   "t": 605.52,
+   "d": 2.24,
+   "text": "there and then i said okay well i'm done"
+  },
+  {
+   "t": 607.76,
+   "d": 0.48,
+   "text": "this is"
+  },
+  {
+   "t": 608.24,
+   "d": 2.24,
+   "text": "a seven day roguelike so we'll put that"
+  },
+  {
+   "t": 610.48,
+   "d": 1.36,
+   "text": "on the wayside it's time for"
+  },
+  {
+   "t": 611.84,
+   "d": 1.68,
+   "text": "uh time to get back to my other game"
+  },
+  {
+   "t": 613.52,
+   "d": 1.52,
+   "text": "xcom"
+  },
+  {
+   "t": 615.04,
+   "d": 2.08,
+   "text": "um so i continued working on it after"
+  },
+  {
+   "t": 617.12,
+   "d": 1.6,
+   "text": "that for another year"
+  },
+  {
+   "t": 618.72,
+   "d": 2.48,
+   "text": "so that was the second year and then so"
+  },
+  {
+   "t": 621.2,
+   "d": 1.28,
+   "text": "another thing i've been working on"
+  },
+  {
+   "t": 622.48,
+   "d": 3.04,
+   "text": "is you know rex paint"
+  },
+  {
+   "t": 625.52,
+   "d": 2.56,
+   "text": "this is uh it's done but i continue"
+  },
+  {
+   "t": 628.08,
+   "d": 1.28,
+   "text": "adding features to it"
+  },
+  {
+   "t": 629.36,
+   "d": 3.12,
+   "text": "it's an ascii art program but it has so"
+  },
+  {
+   "t": 632.48,
+   "d": 1.76,
+   "text": "many more uses than that i discovered"
+  },
+  {
+   "t": 634.24,
+   "d": 1.2,
+   "text": "i found out there wasn't really anything"
+  },
+  {
+   "t": 635.44,
+   "d": 1.84,
+   "text": "that had all the features i needed for"
+  },
+  {
+   "t": 637.28,
+   "d": 1.6,
+   "text": "this"
+  },
+  {
+   "t": 638.88,
+   "d": 3.44,
+   "text": "so i built"
+  },
+  {
+   "t": 642.32,
+   "d": 3.12,
+   "text": "this program which is like photoshop"
+  },
+  {
+   "t": 645.44,
+   "d": 3.44,
+   "text": "for roguelikes photoshop for ascii art"
+  },
+  {
+   "t": 648.88,
+   "d": 1.2,
+   "text": "it's got a whole lot of features and"
+  },
+  {
+   "t": 650.08,
+   "d": 1.28,
+   "text": "there's just a small example you can see"
+  },
+  {
+   "t": 651.36,
+   "d": 1.84,
+   "text": "on the website a whole bunch more"
+  },
+  {
+   "t": 653.2,
+   "d": 2.88,
+   "text": "of art and uh that some art artists pick"
+  },
+  {
+   "t": 656.08,
+   "d": 1.44,
+   "text": "it up roguelike developers use it like"
+  },
+  {
+   "t": 657.52,
+   "d": 1.12,
+   "text": "this on the bottom left is just a"
+  },
+  {
+   "t": 658.64,
+   "d": 2.08,
+   "text": "mock-up that was done a few weeks ago"
+  },
+  {
+   "t": 660.72,
+   "d": 3.04,
+   "text": "by one of the users so it's really good"
+  },
+  {
+   "t": 663.76,
+   "d": 0.72,
+   "text": "tool for"
+  },
+  {
+   "t": 664.48,
+   "d": 3.44,
+   "text": "uh roguelike development as well as art"
+  },
+  {
+   "t": 667.92,
+   "d": 3.44,
+   "text": "you can use it for mock-ups for mapping"
+  },
+  {
+   "t": 671.36,
+   "d": 1.92,
+   "text": "and i use it in every aspect of cogmind"
+  },
+  {
+   "t": 673.28,
+   "d": 3.36,
+   "text": "i'm opening this program every day"
+  },
+  {
+   "t": 677.12,
+   "d": 5.44,
+   "text": "so community is really really important"
+  },
+  {
+   "t": 682.56,
+   "d": 2.96,
+   "text": "when becoming a developer for me it was"
+  },
+  {
+   "t": 685.52,
+   "d": 1.04,
+   "text": "without the community without the"
+  },
+  {
+   "t": 686.56,
+   "d": 2.0,
+   "text": "roguelike community specifically too"
+  },
+  {
+   "t": 688.56,
+   "d": 2.56,
+   "text": "i would not be where i am today um and"
+  },
+  {
+   "t": 691.12,
+   "d": 1.2,
+   "text": "if you asked me a few years ago i would"
+  },
+  {
+   "t": 692.32,
+   "d": 1.92,
+   "text": "totally not expect i'd be here now but"
+  },
+  {
+   "t": 694.24,
+   "d": 3.2,
+   "text": "the community is just so friendly um"
+  },
+  {
+   "t": 697.44,
+   "d": 3.76,
+   "text": "and helpful mature but"
+  },
+  {
+   "t": 701.2,
+   "d": 2.96,
+   "text": "during all my time before xcom when i"
+  },
+  {
+   "t": 704.16,
+   "d": 1.28,
+   "text": "wasn't developing roguelikes i was"
+  },
+  {
+   "t": 705.44,
+   "d": 1.36,
+   "text": "completely avoided social media"
+  },
+  {
+   "t": 706.8,
+   "d": 2.0,
+   "text": "and this is a big problem uh for"
+  },
+  {
+   "t": 708.8,
+   "d": 1.2,
+   "text": "developers especially if you're starting"
+  },
+  {
+   "t": 710.0,
+   "d": 0.8,
+   "text": "out because there's"
+  },
+  {
+   "t": 710.8,
+   "d": 1.52,
+   "text": "so much you can learn if you go out"
+  },
+  {
+   "t": 712.32,
+   "d": 1.52,
+   "text": "there and interact with people"
+  },
+  {
+   "t": 713.84,
+   "d": 2.16,
+   "text": "and that's something i did not do until"
+  },
+  {
+   "t": 716.0,
+   "d": 1.92,
+   "text": "i started gradually blogging"
+  },
+  {
+   "t": 717.92,
+   "d": 1.6,
+   "text": "and blogging more and more writing lots"
+  },
+  {
+   "t": 719.52,
+   "d": 2.0,
+   "text": "of articles development articles of"
+  },
+  {
+   "t": 721.52,
+   "d": 1.36,
+   "text": "articles about you know the things i had"
+  },
+  {
+   "t": 722.88,
+   "d": 1.28,
+   "text": "discovered about roguelikes and"
+  },
+  {
+   "t": 724.16,
+   "d": 1.2,
+   "text": "roguelike development"
+  },
+  {
+   "t": 725.36,
+   "d": 2.16,
+   "text": "i do a lot of that i still do hundreds"
+  },
+  {
+   "t": 727.52,
+   "d": 1.52,
+   "text": "and hundreds of articles"
+  },
+  {
+   "t": 729.04,
+   "d": 1.44,
+   "text": "over the years and then i found reddit"
+  },
+  {
+   "t": 730.48,
+   "d": 1.84,
+   "text": "for people who are posting"
+  },
+  {
+   "t": 732.32,
+   "d": 2.96,
+   "text": "about my games again starting back with"
+  },
+  {
+   "t": 735.28,
+   "d": 1.2,
+   "text": "xcom"
+  },
+  {
+   "t": 736.48,
+   "d": 3.68,
+   "text": "and browsing forums basically"
+  },
+  {
+   "t": 740.16,
+   "d": 2.64,
+   "text": "the important thing is to you know have"
+  },
+  {
+   "t": 742.8,
+   "d": 1.04,
+   "text": "have your hand on the pulse of the"
+  },
+  {
+   "t": 743.84,
+   "d": 1.84,
+   "text": "roguelike world because"
+  },
+  {
+   "t": 745.68,
+   "d": 2.0,
+   "text": "uh by looking through all this social"
+  },
+  {
+   "t": 747.68,
+   "d": 1.76,
+   "text": "media i was able to"
+  },
+  {
+   "t": 749.44,
+   "d": 4.24,
+   "text": "um you know understand what people uh"
+  },
+  {
+   "t": 753.84,
+   "d": 2.24,
+   "text": "um you know what everyone's varying"
+  },
+  {
+   "t": 756.08,
+   "d": 0.88,
+   "text": "opinions because there's so many"
+  },
+  {
+   "t": 756.96,
+   "d": 1.36,
+   "text": "different opinions about roguelike so"
+  },
+  {
+   "t": 758.32,
+   "d": 1.52,
+   "text": "many things you can do with roguelikes"
+  },
+  {
+   "t": 759.84,
+   "d": 2.8,
+   "text": "and so many different viewpoints so with"
+  },
+  {
+   "t": 762.64,
+   "d": 0.72,
+   "text": "um"
+  },
+  {
+   "t": 763.36,
+   "d": 1.36,
+   "text": "and you can't think of them all yourself"
+  },
+  {
+   "t": 764.72,
+   "d": 2.0,
+   "text": "so it really helps to interact with the"
+  },
+  {
+   "t": 766.72,
+   "d": 0.96,
+   "text": "community"
+  },
+  {
+   "t": 767.68,
+   "d": 1.2,
+   "text": "this is again from a developer's"
+  },
+  {
+   "t": 768.88,
+   "d": 2.08,
+   "text": "perspective i mean players can argue"
+  },
+  {
+   "t": 770.96,
+   "d": 1.44,
+   "text": "back and forth but developers"
+  },
+  {
+   "t": 772.4,
+   "d": 2.08,
+   "text": "really should also listen to all sides"
+  },
+  {
+   "t": 774.48,
+   "d": 1.2,
+   "text": "and take it all into account"
+  },
+  {
+   "t": 775.68,
+   "d": 3.12,
+   "text": "when developing and working on"
+  },
+  {
+   "t": 778.8,
+   "d": 3.2,
+   "text": "a new roguelike so um"
+  },
+  {
+   "t": 782.0,
+   "d": 4.72,
+   "text": "then came my turning point in 2013"
+  },
+  {
+   "t": 786.72,
+   "d": 3.12,
+   "text": "when uh we decided to have a kid"
+  },
+  {
+   "t": 789.84,
+   "d": 2.88,
+   "text": "and that changed everything this changed"
+  },
+  {
+   "t": 792.72,
+   "d": 2.32,
+   "text": "my entire calculus um"
+  },
+  {
+   "t": 795.04,
+   "d": 1.84,
+   "text": "it was uh basically now or never i"
+  },
+  {
+   "t": 796.88,
+   "d": 1.28,
+   "text": "decided that because"
+  },
+  {
+   "t": 798.16,
+   "d": 2.32,
+   "text": "of the way you know our lifestyle was"
+  },
+  {
+   "t": 800.48,
+   "d": 0.72,
+   "text": "working and then"
+  },
+  {
+   "t": 801.2,
+   "d": 2.56,
+   "text": "work wise and whatnot i either had to"
+  },
+  {
+   "t": 803.76,
+   "d": 1.6,
+   "text": "continue working and pretty much"
+  },
+  {
+   "t": 805.36,
+   "d": 2.24,
+   "text": "drop my favorite hobby which was"
+  },
+  {
+   "t": 807.6,
+   "d": 1.36,
+   "text": "basically freelancing a little bit"
+  },
+  {
+   "t": 808.96,
+   "d": 2.48,
+   "text": "and doing a lot of roguelike development"
+  },
+  {
+   "t": 811.44,
+   "d": 0.72,
+   "text": "um"
+  },
+  {
+   "t": 812.16,
+   "d": 1.28,
+   "text": "i'd have to stop that development in"
+  },
+  {
+   "t": 813.44,
+   "d": 2.48,
+   "text": "order to get a a better job"
+  },
+  {
+   "t": 815.92,
+   "d": 1.92,
+   "text": "uh more full-time work and i would just"
+  },
+  {
+   "t": 817.84,
+   "d": 1.2,
+   "text": "wouldn't be able to"
+  },
+  {
+   "t": 819.04,
+   "d": 2.0,
+   "text": "develop roguelikes at the pace i would"
+  },
+  {
+   "t": 821.04,
+   "d": 1.68,
+   "text": "want so i decided"
+  },
+  {
+   "t": 822.72,
+   "d": 2.4,
+   "text": "i really had to uh i'd have to make it"
+  },
+  {
+   "t": 825.12,
+   "d": 0.88,
+   "text": "full-time"
+  },
+  {
+   "t": 826.0,
+   "d": 1.68,
+   "text": "um so that that was only made possible"
+  },
+  {
+   "t": 827.68,
+   "d": 2.0,
+   "text": "by this years of building a community"
+  },
+  {
+   "t": 829.68,
+   "d": 3.12,
+   "text": "by working on these other games um by uh"
+  },
+  {
+   "t": 832.8,
+   "d": 2.24,
+   "text": "in the past so it really took a long"
+  },
+  {
+   "t": 835.04,
+   "d": 1.2,
+   "text": "time to get to this point"
+  },
+  {
+   "t": 836.24,
+   "d": 1.6,
+   "text": "i would never recommend that anyone just"
+  },
+  {
+   "t": 837.84,
+   "d": 2.56,
+   "text": "jump right in and do this"
+  },
+  {
+   "t": 840.4,
+   "d": 3.52,
+   "text": "um so my idea was to turn my 7drl"
+  },
+  {
+   "t": 843.92,
+   "d": 2.56,
+   "text": "the seven-day roguelike cogmind uh into"
+  },
+  {
+   "t": 846.48,
+   "d": 1.52,
+   "text": "a small game"
+  },
+  {
+   "t": 848.0,
+   "d": 3.52,
+   "text": "so i did i just yeah i i decided i"
+  },
+  {
+   "t": 851.52,
+   "d": 1.44,
+   "text": "wanted to turn it into a"
+  },
+  {
+   "t": 852.96,
+   "d": 3.28,
+   "text": "i wanted to do that because um"
+  },
+  {
+   "t": 856.24,
+   "d": 1.36,
+   "text": "it would be easier i figured i could"
+  },
+  {
+   "t": 857.6,
+   "d": 2.8,
+   "text": "finish it in a year um"
+  },
+  {
+   "t": 860.4,
+   "d": 1.68,
+   "text": "here's the cumulative hours i've spent"
+  },
+  {
+   "t": 862.08,
+   "d": 2.0,
+   "text": "working on cogmind for the past three"
+  },
+  {
+   "t": 864.08,
+   "d": 1.04,
+   "text": "and a half years"
+  },
+  {
+   "t": 865.12,
+   "d": 3.6,
+   "text": "we're approaching 6 000 hours um"
+  },
+  {
+   "t": 868.72,
+   "d": 3.12,
+   "text": "but we're getting close to 1.0 uh so it"
+  },
+  {
+   "t": 871.84,
+   "d": 0.8,
+   "text": "ended up being"
+  },
+  {
+   "t": 872.64,
+   "d": 2.48,
+   "text": "it ballooned uh not really feature creep"
+  },
+  {
+   "t": 875.12,
+   "d": 1.12,
+   "text": "per se but"
+  },
+  {
+   "t": 876.24,
+   "d": 1.76,
+   "text": "uh well i'm just going to talk about"
+  },
+  {
+   "t": 878.0,
+   "d": 1.68,
+   "text": "that why are we not at 1.0 yet well"
+  },
+  {
+   "t": 879.68,
+   "d": 0.96,
+   "text": "first of all the"
+  },
+  {
+   "t": 880.64,
+   "d": 1.2,
+   "text": "first iterations of the game people"
+  },
+  {
+   "t": 881.84,
+   "d": 2.16,
+   "text": "really liked it and"
+  },
+  {
+   "t": 884.0,
+   "d": 3.68,
+   "text": "i saw the potential for a lot more um"
+  },
+  {
+   "t": 887.68,
+   "d": 2.0,
+   "text": "so i really wanted to continue"
+  },
+  {
+   "t": 889.68,
+   "d": 1.36,
+   "text": "developing for that reason without just"
+  },
+  {
+   "t": 891.04,
+   "d": 1.44,
+   "text": "saying okay i'm done i could have"
+  },
+  {
+   "t": 892.48,
+   "d": 1.52,
+   "text": "if i'd just taken the original 70rl and"
+  },
+  {
+   "t": 894.0,
+   "d": 1.2,
+   "text": "polished it it would have been done"
+  },
+  {
+   "t": 895.2,
+   "d": 2.0,
+   "text": "pretty quickly within a year for sure"
+  },
+  {
+   "t": 897.2,
+   "d": 1.2,
+   "text": "and i also wanted a really impressive"
+  },
+  {
+   "t": 898.4,
+   "d": 2.56,
+   "text": "first commercial game um and a lot of"
+  },
+  {
+   "t": 900.96,
+   "d": 1.36,
+   "text": "people say your first commercial game"
+  },
+  {
+   "t": 902.32,
+   "d": 0.48,
+   "text": "will"
+  },
+  {
+   "t": 902.8,
+   "d": 1.76,
+   "text": "fail i don't want that to be the case"
+  },
+  {
+   "t": 904.56,
+   "d": 1.2,
+   "text": "here because that would mean i have to"
+  },
+  {
+   "t": 905.76,
+   "d": 1.12,
+   "text": "quit"
+  },
+  {
+   "t": 906.88,
+   "d": 2.24,
+   "text": "um and yeah so there's always more you"
+  },
+  {
+   "t": 909.12,
+   "d": 2.48,
+   "text": "can do with a grand roguelike this was"
+  },
+  {
+   "t": 911.6,
+   "d": 1.84,
+   "text": "the idea for cogmind can really be"
+  },
+  {
+   "t": 913.44,
+   "d": 1.68,
+   "text": "expanded"
+  },
+  {
+   "t": 915.12,
+   "d": 1.52,
+   "text": "and the other reason is i have greater"
+  },
+  {
+   "t": 916.64,
+   "d": 2.0,
+   "text": "goals for what i'm doing in general both"
+  },
+  {
+   "t": 918.64,
+   "d": 0.8,
+   "text": "with cogmind"
+  },
+  {
+   "t": 919.44,
+   "d": 3.2,
+   "text": "and community wise so one is i like to"
+  },
+  {
+   "t": 922.64,
+   "d": 1.44,
+   "text": "share all my methods to help other"
+  },
+  {
+   "t": 924.08,
+   "d": 1.68,
+   "text": "developers i write a lot about"
+  },
+  {
+   "t": 925.76,
+   "d": 1.12,
+   "text": "development if you want to check out my"
+  },
+  {
+   "t": 926.88,
+   "d": 2.08,
+   "text": "blogs or come visit us on the roguelike"
+  },
+  {
+   "t": 928.96,
+   "d": 1.36,
+   "text": "dev subreddit"
+  },
+  {
+   "t": 930.32,
+   "d": 1.6,
+   "text": "there's a lot you can learn both from me"
+  },
+  {
+   "t": 931.92,
+   "d": 2.48,
+   "text": "and others"
+  },
+  {
+   "t": 935.76,
+   "d": 1.76,
+   "text": "so i enjoy doing that and i like to keep"
+  },
+  {
+   "t": 937.52,
+   "d": 1.36,
+   "text": "doing that as long as i can"
+  },
+  {
+   "t": 938.88,
+   "d": 1.52,
+   "text": "and the other one is to expand the"
+  },
+  {
+   "t": 940.4,
+   "d": 1.92,
+   "text": "roguelike audience that's kind of what"
+  },
+  {
+   "t": 942.32,
+   "d": 1.36,
+   "text": "cogmind is aimed at"
+  },
+  {
+   "t": 943.68,
+   "d": 2.8,
+   "text": "is well i'll get into the details in a"
+  },
+  {
+   "t": 946.48,
+   "d": 0.48,
+   "text": "second"
+  },
+  {
+   "t": 946.96,
+   "d": 5.04,
+   "text": "but in general terms well okay"
+  },
+  {
+   "t": 952.64,
+   "d": 1.6,
+   "text": "okay so how can we expand the roguelike"
+  },
+  {
+   "t": 954.24,
+   "d": 2.24,
+   "text": "audience this is kind of a second part"
+  },
+  {
+   "t": 956.48,
+   "d": 1.04,
+   "text": "of this uh"
+  },
+  {
+   "t": 957.52,
+   "d": 2.96,
+   "text": "talk here um polish is important a lot"
+  },
+  {
+   "t": 960.48,
+   "d": 1.36,
+   "text": "of roguelikes"
+  },
+  {
+   "t": 961.84,
+   "d": 1.92,
+   "text": "aren't too polished i mean you see a lot"
+  },
+  {
+   "t": 963.76,
+   "d": 2.24,
+   "text": "of the 2d and 3d rogue lights and all"
+  },
+  {
+   "t": 966.0,
+   "d": 1.28,
+   "text": "those games coming out but all the other"
+  },
+  {
+   "t": 967.28,
+   "d": 0.64,
+   "text": "ones they"
+  },
+  {
+   "t": 967.92,
+   "d": 3.6,
+   "text": "often people wouldn't generally describe"
+  },
+  {
+   "t": 971.52,
+   "d": 1.2,
+   "text": "them as polished"
+  },
+  {
+   "t": 972.72,
+   "d": 1.36,
+   "text": "and so what i wanted to do was create"
+  },
+  {
+   "t": 974.08,
+   "d": 1.28,
+   "text": "what people would consider polished"
+  },
+  {
+   "t": 975.36,
+   "d": 0.56,
+   "text": "roguelike"
+  },
+  {
+   "t": 975.92,
+   "d": 2.88,
+   "text": "um so how do we do this polish and then"
+  },
+  {
+   "t": 978.8,
+   "d": 1.52,
+   "text": "polish some more"
+  },
+  {
+   "t": 980.32,
+   "d": 4.08,
+   "text": "and uh really a whole lot of polish"
+  },
+  {
+   "t": 984.4,
+   "d": 2.4,
+   "text": "and uh even more polish so that's what i"
+  },
+  {
+   "t": 986.8,
+   "d": 1.44,
+   "text": "mean that's why it's taking so long too"
+  },
+  {
+   "t": 988.24,
+   "d": 0.8,
+   "text": "i work on"
+  },
+  {
+   "t": 989.04,
+   "d": 2.16,
+   "text": "a feature and just make sure it's"
+  },
+  {
+   "t": 991.2,
+   "d": 1.12,
+   "text": "perfect um"
+  },
+  {
+   "t": 992.32,
+   "d": 3.12,
+   "text": "it's a problem being a perfectionist but"
+  },
+  {
+   "t": 995.44,
+   "d": 2.88,
+   "text": "we're still approaching 1.0 so um"
+  },
+  {
+   "t": 998.32,
+   "d": 1.84,
+   "text": "important features"
+  },
+  {
+   "t": 1000.16,
+   "d": 2.24,
+   "text": "um so there's uh these are the important"
+  },
+  {
+   "t": 1002.4,
+   "d": 1.28,
+   "text": "features that i think a lot more"
+  },
+  {
+   "t": 1003.68,
+   "d": 0.8,
+   "text": "roguelikes"
+  },
+  {
+   "t": 1004.48,
+   "d": 2.56,
+   "text": "need to do in order to capture a wider"
+  },
+  {
+   "t": 1007.04,
+   "d": 0.96,
+   "text": "audience"
+  },
+  {
+   "t": 1008.0,
+   "d": 3.2,
+   "text": "um okay so the first uh the"
+  },
+  {
+   "t": 1011.2,
+   "d": 2.08,
+   "text": "first thing is audio this is a really"
+  },
+  {
+   "t": 1013.28,
+   "d": 1.12,
+   "text": "big thing"
+  },
+  {
+   "t": 1014.4,
+   "d": 2.8,
+   "text": "um i think that roguelikes need to do uh"
+  },
+  {
+   "t": 1017.2,
+   "d": 1.44,
+   "text": "there aren't many roguelikes that have"
+  },
+  {
+   "t": 1018.64,
+   "d": 0.48,
+   "text": "audio"
+  },
+  {
+   "t": 1019.12,
+   "d": 2.08,
+   "text": "sound effects and other kinds of audio"
+  },
+  {
+   "t": 1021.2,
+   "d": 1.6,
+   "text": "not music per se but"
+  },
+  {
+   "t": 1022.8,
+   "d": 2.88,
+   "text": "other kinds of audio that can make the"
+  },
+  {
+   "t": 1025.68,
+   "d": 1.44,
+   "text": "atmosphere more immersive"
+  },
+  {
+   "t": 1027.12,
+   "d": 3.68,
+   "text": "i mean ascii is awesome and"
+  },
+  {
+   "t": 1031.44,
+   "d": 2.4,
+   "text": "the idea is you know relies on your"
+  },
+  {
+   "t": 1033.84,
+   "d": 0.72,
+   "text": "imagination"
+  },
+  {
+   "t": 1034.56,
+   "d": 1.76,
+   "text": "and sound effects can support that"
+  },
+  {
+   "t": 1036.32,
+   "d": 1.6,
+   "text": "imagination without hijacking it like"
+  },
+  {
+   "t": 1037.92,
+   "d": 1.28,
+   "text": "visuals do"
+  },
+  {
+   "t": 1039.2,
+   "d": 1.6,
+   "text": "so i really think a lot more developers"
+  },
+  {
+   "t": 1040.8,
+   "d": 1.2,
+   "text": "need to work on audio so i want to show"
+  },
+  {
+   "t": 1042.0,
+   "d": 0.8,
+   "text": "you real quick the"
+  },
+  {
+   "t": 1042.8,
+   "d": 2.72,
+   "text": "a trailer as an example of that just the"
+  },
+  {
+   "t": 1045.52,
+   "d": 0.88,
+   "text": "first"
+  },
+  {
+   "t": 1046.4,
+   "d": 3.52,
+   "text": "minute and 20 if we can hear it"
+  },
+  {
+   "t": 1049.92,
+   "d": 3.92,
+   "text": "louder so we can"
+  },
+  {
+   "t": 1057.22,
+   "d": 14.84,
+   "text": "[Music]"
+  },
+  {
+   "t": 1074.17,
+   "d": 6.41,
+   "text": "[Music]"
+  },
+  {
+   "t": 1083.06,
+   "d": 7.66,
+   "text": "[Music]"
+  },
+  {
+   "t": 1094.52,
+   "d": 8.83,
+   "text": "[Music]"
+  },
+  {
+   "t": 1106.84,
+   "d": 3.0,
+   "text": "so"
+  },
+  {
+   "t": 1132.16,
+   "d": 4.32,
+   "text": "all right so yeah that's good"
+  },
+  {
+   "t": 1136.48,
+   "d": 3.76,
+   "text": "thanks so oh"
+  },
+  {
+   "t": 1140.24,
+   "d": 3.28,
+   "text": "kind of relax there okay so that um"
+  },
+  {
+   "t": 1143.52,
+   "d": 1.36,
+   "text": "that gives you an idea of the audio"
+  },
+  {
+   "t": 1144.88,
+   "d": 1.04,
+   "text": "aspect that's really what i wanted to"
+  },
+  {
+   "t": 1145.92,
+   "d": 1.12,
+   "text": "show you that for because"
+  },
+  {
+   "t": 1147.04,
+   "d": 1.76,
+   "text": "i need a video to show it in the trailer"
+  },
+  {
+   "t": 1148.8,
+   "d": 1.36,
+   "text": "is a kind of easy way to do it"
+  },
+  {
+   "t": 1150.16,
+   "d": 4.24,
+   "text": "so in like cogmind has"
+  },
+  {
+   "t": 1154.56,
+   "d": 3.28,
+   "text": "so it's for immersion um cogmine has"
+  },
+  {
+   "t": 1157.84,
+   "d": 1.44,
+   "text": "over 1 000"
+  },
+  {
+   "t": 1159.28,
+   "d": 2.24,
+   "text": "sound samples in it most indie games"
+  },
+  {
+   "t": 1161.52,
+   "d": 1.52,
+   "text": "have maybe a couple hundred"
+  },
+  {
+   "t": 1163.04,
+   "d": 3.04,
+   "text": "most roguelikes have about zero um"
+  },
+  {
+   "t": 1166.08,
+   "d": 3.04,
+   "text": "so the idea is to build a very"
+  },
+  {
+   "t": 1169.12,
+   "d": 1.92,
+   "text": "immersive atmosphere through sound um"
+  },
+  {
+   "t": 1171.04,
+   "d": 1.44,
+   "text": "like down here i can't see everyone on"
+  },
+  {
+   "t": 1172.48,
+   "d": 0.64,
+   "text": "the brightness"
+  },
+  {
+   "t": 1173.12,
+   "d": 2.8,
+   "text": "but there's um a lot of uh this shows"
+  },
+  {
+   "t": 1175.92,
+   "d": 1.44,
+   "text": "the ambient sound"
+  },
+  {
+   "t": 1177.36,
+   "d": 2.0,
+   "text": "different objects in the world gen uh"
+  },
+  {
+   "t": 1179.36,
+   "d": 1.52,
+   "text": "produce ambient sound that you can hear"
+  },
+  {
+   "t": 1180.88,
+   "d": 1.76,
+   "text": "different types of machines"
+  },
+  {
+   "t": 1182.64,
+   "d": 1.36,
+   "text": "i only have a few samples of it in the"
+  },
+  {
+   "t": 1184.0,
+   "d": 1.04,
+   "text": "game right now i'm going to drop them"
+  },
+  {
+   "t": 1185.04,
+   "d": 0.8,
+   "text": "all in"
+  },
+  {
+   "t": 1185.84,
+   "d": 3.2,
+   "text": "when it goes 1.0 but"
+  },
+  {
+   "t": 1189.04,
+   "d": 1.68,
+   "text": "that helps with you know you can hear"
+  },
+  {
+   "t": 1190.72,
+   "d": 2.0,
+   "text": "different things around the corner"
+  },
+  {
+   "t": 1192.72,
+   "d": 3.04,
+   "text": "based on their distance and direction"
+  },
+  {
+   "t": 1195.76,
+   "d": 3.52,
+   "text": "so audio is really important um"
+  },
+  {
+   "t": 1199.28,
+   "d": 2.32,
+   "text": "so an accessible and intuitive ui is"
+  },
+  {
+   "t": 1201.6,
+   "d": 1.36,
+   "text": "something else that a lot of roguelikes"
+  },
+  {
+   "t": 1202.96,
+   "d": 1.36,
+   "text": "need to work towards"
+  },
+  {
+   "t": 1204.32,
+   "d": 3.2,
+   "text": "um okay so mouse support is super"
+  },
+  {
+   "t": 1207.52,
+   "d": 0.72,
+   "text": "important"
+  },
+  {
+   "t": 1208.24,
+   "d": 2.72,
+   "text": "uh if we want to expand the audience now"
+  },
+  {
+   "t": 1210.96,
+   "d": 1.68,
+   "text": "you can see here this is some data i'll"
+  },
+  {
+   "t": 1212.64,
+   "d": 0.88,
+   "text": "show you i'll be showing you a little"
+  },
+  {
+   "t": 1213.52,
+   "d": 1.12,
+   "text": "bit of data from my"
+  },
+  {
+   "t": 1214.64,
+   "d": 3.68,
+   "text": "players so keyboard users um"
+  },
+  {
+   "t": 1218.32,
+   "d": 1.44,
+   "text": "are still are in the minority you can"
+  },
+  {
+   "t": 1219.76,
+   "d": 1.68,
+   "text": "play cogmine with only the keyboard even"
+  },
+  {
+   "t": 1221.44,
+   "d": 0.96,
+   "text": "though it requires"
+  },
+  {
+   "t": 1222.4,
+   "d": 1.76,
+   "text": "you can use it uses every single key on"
+  },
+  {
+   "t": 1224.16,
+   "d": 1.44,
+   "text": "the keyboard and there's like 300"
+  },
+  {
+   "t": 1225.6,
+   "d": 0.8,
+   "text": "commands"
+  },
+  {
+   "t": 1226.4,
+   "d": 1.84,
+   "text": "but uh they're pretty intuitive actually"
+  },
+  {
+   "t": 1228.24,
+   "d": 1.68,
+   "text": "for for"
+  },
+  {
+   "t": 1229.92,
+   "d": 3.36,
+   "text": "for uh for pure keyboard players but"
+  },
+  {
+   "t": 1233.28,
+   "d": 1.36,
+   "text": "you know you gen you have to gradually"
+  },
+  {
+   "t": 1234.64,
+   "d": 1.84,
+   "text": "move into that so first you make sure"
+  },
+  {
+   "t": 1236.48,
+   "d": 1.28,
+   "text": "every single thing is accessible via"
+  },
+  {
+   "t": 1237.76,
+   "d": 0.8,
+   "text": "mouse"
+  },
+  {
+   "t": 1238.56,
+   "d": 1.52,
+   "text": "um and just for the heck of it i put up"
+  },
+  {
+   "t": 1240.08,
+   "d": 1.44,
+   "text": "these are the different forms of"
+  },
+  {
+   "t": 1241.52,
+   "d": 1.52,
+   "text": "movement input that people use"
+  },
+  {
+   "t": 1243.04,
+   "d": 2.64,
+   "text": "majority are numpad the smallest amount"
+  },
+  {
+   "t": 1245.68,
+   "d": 1.28,
+   "text": "is the vi keys"
+  },
+  {
+   "t": 1246.96,
+   "d": 3.04,
+   "text": "hdkl um you can"
+  },
+  {
+   "t": 1250.0,
+   "d": 1.6,
+   "text": "see that there there's a drag and drop"
+  },
+  {
+   "t": 1251.6,
+   "d": 2.16,
+   "text": "interface um there's no reason to not"
+  },
+  {
+   "t": 1253.76,
+   "d": 1.28,
+   "text": "have that if it's"
+  },
+  {
+   "t": 1255.04,
+   "d": 2.48,
+   "text": "easy um i mean you can just drag things"
+  },
+  {
+   "t": 1257.52,
+   "d": 0.56,
+   "text": "around"
+  },
+  {
+   "t": 1258.08,
+   "d": 2.16,
+   "text": "inventory management is all managed by"
+  },
+  {
+   "t": 1260.24,
+   "d": 0.96,
+   "text": "drag and drop"
+  },
+  {
+   "t": 1261.2,
+   "d": 1.84,
+   "text": "uh it can be anyway i mean again the"
+  },
+  {
+   "t": 1263.04,
+   "d": 1.52,
+   "text": "keyboard is faster for all these things"
+  },
+  {
+   "t": 1264.56,
+   "d": 0.4,
+   "text": "but"
+  },
+  {
+   "t": 1264.96,
+   "d": 1.12,
+   "text": "for people with a mouse this is just"
+  },
+  {
+   "t": 1266.08,
+   "d": 2.08,
+   "text": "natural it happens so easily you just"
+  },
+  {
+   "t": 1268.16,
+   "d": 2.0,
+   "text": "click on something and drag it somewhere"
+  },
+  {
+   "t": 1270.16,
+   "d": 1.44,
+   "text": "and it goes where you want"
+  },
+  {
+   "t": 1271.6,
+   "d": 3.28,
+   "text": "context help is another big thing"
+  },
+  {
+   "t": 1274.88,
+   "d": 2.32,
+   "text": "for user for accessibility you can just"
+  },
+  {
+   "t": 1277.2,
+   "d": 1.36,
+   "text": "click on a stat and it tells you you"
+  },
+  {
+   "t": 1278.56,
+   "d": 1.04,
+   "text": "know what it does that's pretty"
+  },
+  {
+   "t": 1279.6,
+   "d": 1.76,
+   "text": "all these things are common in"
+  },
+  {
+   "t": 1281.36,
+   "d": 1.76,
+   "text": "non-roguelike games but what we need to"
+  },
+  {
+   "t": 1283.12,
+   "d": 1.36,
+   "text": "do is take all these non-roguelike"
+  },
+  {
+   "t": 1284.48,
+   "d": 1.36,
+   "text": "things and put them into roguelikes"
+  },
+  {
+   "t": 1285.84,
+   "d": 3.36,
+   "text": "there's just no reason not to especially"
+  },
+  {
+   "t": 1289.2,
+   "d": 0.8,
+   "text": "if you can do it while"
+  },
+  {
+   "t": 1290.0,
+   "d": 2.16,
+   "text": "still keeping the roguelike a roguelike"
+  },
+  {
+   "t": 1292.16,
+   "d": 0.96,
+   "text": "and there's nothing"
+  },
+  {
+   "t": 1293.12,
+   "d": 3.44,
+   "text": "that's not roguelike about cogmind um"
+  },
+  {
+   "t": 1296.56,
+   "d": 2.72,
+   "text": "uh player convenience so auto labeling"
+  },
+  {
+   "t": 1299.28,
+   "d": 1.68,
+   "text": "uh every new objects that come into view"
+  },
+  {
+   "t": 1300.96,
+   "d": 1.76,
+   "text": "they're automatically labeled why not"
+  },
+  {
+   "t": 1302.72,
+   "d": 1.76,
+   "text": "i mean why make someone use a look"
+  },
+  {
+   "t": 1304.48,
+   "d": 1.6,
+   "text": "command to go uh"
+  },
+  {
+   "t": 1306.08,
+   "d": 2.0,
+   "text": "somewhere else you know to find out what"
+  },
+  {
+   "t": 1308.08,
+   "d": 1.68,
+   "text": "everything is uh that helps especially"
+  },
+  {
+   "t": 1309.76,
+   "d": 1.12,
+   "text": "in cogbine because there are a lot of"
+  },
+  {
+   "t": 1310.88,
+   "d": 1.44,
+   "text": "objects out there lots of parts lying"
+  },
+  {
+   "t": 1312.32,
+   "d": 1.12,
+   "text": "around once you blow something up"
+  },
+  {
+   "t": 1313.44,
+   "d": 1.6,
+   "text": "explodes into its parts and you can just"
+  },
+  {
+   "t": 1315.04,
+   "d": 1.6,
+   "text": "pick up those parts and use them"
+  },
+  {
+   "t": 1316.64,
+   "d": 2.0,
+   "text": "and so robots and parts and objects"
+  },
+  {
+   "t": 1318.64,
+   "d": 1.36,
+   "text": "they're all just labeled as you see them"
+  },
+  {
+   "t": 1320.0,
+   "d": 0.48,
+   "text": "you can"
+  },
+  {
+   "t": 1320.48,
+   "d": 1.68,
+   "text": "and these are all optional you can turn"
+  },
+  {
+   "t": 1322.16,
+   "d": 1.44,
+   "text": "that off if you want you can change the"
+  },
+  {
+   "t": 1323.6,
+   "d": 0.96,
+   "text": "duration"
+  },
+  {
+   "t": 1324.56,
+   "d": 2.88,
+   "text": "um it makes playing really easy new"
+  },
+  {
+   "t": 1327.44,
+   "d": 1.2,
+   "text": "players can get in"
+  },
+  {
+   "t": 1328.64,
+   "d": 3.68,
+   "text": "uh get into the game very easily um"
+  },
+  {
+   "t": 1332.32,
+   "d": 1.92,
+   "text": "they don't have to look anything up uh"
+  },
+  {
+   "t": 1334.24,
+   "d": 3.28,
+   "text": "inventory sorting just another uh"
+  },
+  {
+   "t": 1337.52,
+   "d": 2.16,
+   "text": "useful feature a lot of automated"
+  },
+  {
+   "t": 1339.68,
+   "d": 1.28,
+   "text": "features basically things that the"
+  },
+  {
+   "t": 1340.96,
+   "d": 1.28,
+   "text": "player might want to do but you can do"
+  },
+  {
+   "t": 1342.24,
+   "d": 1.6,
+   "text": "it for them automatically"
+  },
+  {
+   "t": 1343.84,
+   "d": 2.48,
+   "text": "this is your player as a key and"
+  },
+  {
+   "t": 1346.32,
+   "d": 1.2,
+   "text": "everything's sorted"
+  },
+  {
+   "t": 1347.52,
+   "d": 1.6,
+   "text": "automatically for them because you know"
+  },
+  {
+   "t": 1349.12,
+   "d": 1.44,
+   "text": "throw things in your inventory"
+  },
+  {
+   "t": 1350.56,
+   "d": 1.44,
+   "text": "um they can appear in different places"
+  },
+  {
+   "t": 1352.0,
+   "d": 1.84,
+   "text": "uh data visualization"
+  },
+  {
+   "t": 1353.84,
+   "d": 1.6,
+   "text": "the different ways to look at stats"
+  },
+  {
+   "t": 1355.44,
+   "d": 1.36,
+   "text": "can't really see it in the light but on"
+  },
+  {
+   "t": 1356.8,
+   "d": 1.68,
+   "text": "the right here there's bars colored bars"
+  },
+  {
+   "t": 1358.48,
+   "d": 1.2,
+   "text": "different colors"
+  },
+  {
+   "t": 1359.68,
+   "d": 1.12,
+   "text": "and there's all kinds of different ways"
+  },
+  {
+   "t": 1360.8,
+   "d": 2.89,
+   "text": "you can visualize and compare your items"
+  },
+  {
+   "t": 1363.69,
+   "d": 1.43,
+   "text": "[Music]"
+  },
+  {
+   "t": 1365.12,
+   "d": 3.28,
+   "text": "based on all different kinds of data so"
+  },
+  {
+   "t": 1368.4,
+   "d": 1.6,
+   "text": "it allows you to play more efficiently"
+  },
+  {
+   "t": 1370.0,
+   "d": 2.8,
+   "text": "if and everybody likes efficient play"
+  },
+  {
+   "t": 1372.8,
+   "d": 1.6,
+   "text": "smart inventory management is another"
+  },
+  {
+   "t": 1374.4,
+   "d": 1.68,
+   "text": "one um"
+  },
+  {
+   "t": 1376.08,
+   "d": 1.84,
+   "text": "there are decisions in roguelikes which"
+  },
+  {
+   "t": 1377.92,
+   "d": 1.28,
+   "text": "are kind of no-brainer"
+  },
+  {
+   "t": 1379.2,
+   "d": 3.44,
+   "text": "um like you have a"
+  },
+  {
+   "t": 1382.64,
+   "d": 1.68,
+   "text": "damaged item and you would like to and"
+  },
+  {
+   "t": 1384.32,
+   "d": 2.24,
+   "text": "you find a less damaged item of the same"
+  },
+  {
+   "t": 1386.56,
+   "d": 1.12,
+   "text": "type well obviously you're going to"
+  },
+  {
+   "t": 1387.68,
+   "d": 1.6,
+   "text": "replace it well so a single key can do"
+  },
+  {
+   "t": 1389.28,
+   "d": 1.84,
+   "text": "that it picks it up puts it in your"
+  },
+  {
+   "t": 1391.12,
+   "d": 0.8,
+   "text": "inventory"
+  },
+  {
+   "t": 1391.92,
+   "d": 1.84,
+   "text": "i mean put it it attaches it to you and"
+  },
+  {
+   "t": 1393.76,
+   "d": 1.6,
+   "text": "talk mind you can attach a lot of parts"
+  },
+  {
+   "t": 1395.36,
+   "d": 2.8,
+   "text": "attaches it to you drops the one that"
+  },
+  {
+   "t": 1398.16,
+   "d": 1.2,
+   "text": "was attached it might replace something"
+  },
+  {
+   "t": 1399.36,
+   "d": 1.28,
+   "text": "your inventory drop that it does"
+  },
+  {
+   "t": 1400.64,
+   "d": 0.96,
+   "text": "everything automatically these are"
+  },
+  {
+   "t": 1401.6,
+   "d": 1.2,
+   "text": "things that you would have to do as the"
+  },
+  {
+   "t": 1402.8,
+   "d": 0.96,
+   "text": "player but"
+  },
+  {
+   "t": 1403.76,
+   "d": 2.56,
+   "text": "um it can do that for you and that's not"
+  },
+  {
+   "t": 1406.32,
+   "d": 1.52,
+   "text": "to say there aren't any decisions there"
+  },
+  {
+   "t": 1407.84,
+   "d": 2.32,
+   "text": "are tons of decisions to make in cogmind"
+  },
+  {
+   "t": 1410.16,
+   "d": 2.24,
+   "text": "the prime these are these are solutions"
+  },
+  {
+   "t": 1412.4,
+   "d": 1.76,
+   "text": "for problems that appear"
+  },
+  {
+   "t": 1414.16,
+   "d": 2.48,
+   "text": "particularly to the mechanics um tileset"
+  },
+  {
+   "t": 1416.64,
+   "d": 1.12,
+   "text": "is incredibly important"
+  },
+  {
+   "t": 1417.76,
+   "d": 3.28,
+   "text": "for a roguelike um roguelike or cogmine"
+  },
+  {
+   "t": 1421.04,
+   "d": 1.04,
+   "text": "data"
+  },
+  {
+   "t": 1422.08,
+   "d": 1.68,
+   "text": "this is the recent data so the numbers"
+  },
+  {
+   "t": 1423.76,
+   "d": 2.08,
+   "text": "are 66 players recently we're using"
+  },
+  {
+   "t": 1425.84,
+   "d": 1.84,
+   "text": "tiles versus 18"
+  },
+  {
+   "t": 1427.68,
+   "d": 2.56,
+   "text": "in ascii mode so you always want tiles"
+  },
+  {
+   "t": 1430.24,
+   "d": 1.36,
+   "text": "if you're building a rogue like this"
+  },
+  {
+   "t": 1431.6,
+   "d": 3.04,
+   "text": "again more people will play"
+  },
+  {
+   "t": 1434.64,
+   "d": 3.04,
+   "text": "um but the tiles do kind of keep ascii"
+  },
+  {
+   "t": 1437.68,
+   "d": 2.0,
+   "text": "characteristics they're all monochrome"
+  },
+  {
+   "t": 1439.68,
+   "d": 2.32,
+   "text": "they're kind of identifiable by shape"
+  },
+  {
+   "t": 1442.0,
+   "d": 1.52,
+   "text": "these are ascii characteristics where i"
+  },
+  {
+   "t": 1443.52,
+   "d": 0.96,
+   "text": "think which i think are pretty important"
+  },
+  {
+   "t": 1444.48,
+   "d": 1.04,
+   "text": "to keep uh"
+  },
+  {
+   "t": 1445.52,
+   "d": 3.52,
+   "text": "um to keep when you're working on a tile"
+  },
+  {
+   "t": 1449.04,
+   "d": 1.76,
+   "text": "set if you wanted to retain that"
+  },
+  {
+   "t": 1450.8,
+   "d": 2.24,
+   "text": "roguelike aesthetic so pixels or by"
+  },
+  {
+   "t": 1453.04,
+   "d": 1.52,
+   "text": "casper wozniak look them up if you need"
+  },
+  {
+   "t": 1454.56,
+   "d": 0.48,
+   "text": "some"
+  },
+  {
+   "t": 1455.04,
+   "d": 2.88,
+   "text": "pixel work done he's awesome so"
+  },
+  {
+   "t": 1457.92,
+   "d": 1.44,
+   "text": "particles"
+  },
+  {
+   "t": 1459.36,
+   "d": 3.04,
+   "text": "um particles and this is a lot of"
+  },
+  {
+   "t": 1462.4,
+   "d": 1.2,
+   "text": "most people who've seen cog mine"
+  },
+  {
+   "t": 1463.6,
+   "d": 1.84,
+   "text": "remember this if they remember anything"
+  },
+  {
+   "t": 1465.44,
+   "d": 0.8,
+   "text": "um"
+  },
+  {
+   "t": 1466.24,
+   "d": 2.16,
+   "text": "is the fact that there are a whole lot"
+  },
+  {
+   "t": 1468.4,
+   "d": 2.44,
+   "text": "of particle effects"
+  },
+  {
+   "t": 1470.84,
+   "d": 2.84,
+   "text": "um and"
+  },
+  {
+   "t": 1473.68,
+   "d": 2.48,
+   "text": "uh they're relatively smooth in cog mine"
+  },
+  {
+   "t": 1476.16,
+   "d": 1.2,
+   "text": "compared to other roguelikes you've seen"
+  },
+  {
+   "t": 1477.36,
+   "d": 1.04,
+   "text": "them in roguelikes before"
+  },
+  {
+   "t": 1478.4,
+   "d": 3.28,
+   "text": "but not quite like this um because"
+  },
+  {
+   "t": 1481.68,
+   "d": 1.92,
+   "text": "again the technical reason for that"
+  },
+  {
+   "t": 1483.6,
+   "d": 1.92,
+   "text": "would be"
+  },
+  {
+   "t": 1485.52,
+   "d": 2.32,
+   "text": "there are uh there is there are two"
+  },
+  {
+   "t": 1487.84,
+   "d": 1.44,
+   "text": "grids you can only see one of them you"
+  },
+  {
+   "t": 1489.28,
+   "d": 1.36,
+   "text": "see the terminal grid it's an emulated"
+  },
+  {
+   "t": 1490.64,
+   "d": 1.2,
+   "text": "terminal like you would see in a console"
+  },
+  {
+   "t": 1491.84,
+   "d": 0.96,
+   "text": "a terminal console"
+  },
+  {
+   "t": 1492.8,
+   "d": 1.2,
+   "text": "they're actually another one it's much"
+  },
+  {
+   "t": 1494.0,
+   "d": 2.24,
+   "text": "finer um but you never see it you don't"
+  },
+  {
+   "t": 1496.24,
+   "d": 1.12,
+   "text": "even know it's there"
+  },
+  {
+   "t": 1497.36,
+   "d": 1.76,
+   "text": "it's only used for logic it's where"
+  },
+  {
+   "t": 1499.12,
+   "d": 1.52,
+   "text": "there is a particle engine that sends"
+  },
+  {
+   "t": 1500.64,
+   "d": 1.84,
+   "text": "particles shooting around on those grids"
+  },
+  {
+   "t": 1502.48,
+   "d": 2.24,
+   "text": "and it's each cell each space is"
+  },
+  {
+   "t": 1504.72,
+   "d": 1.68,
+   "text": "actually nine by nine"
+  },
+  {
+   "t": 1506.4,
+   "d": 1.76,
+   "text": "it's a nine by nine space so cut like a"
+  },
+  {
+   "t": 1508.16,
+   "d": 1.68,
+   "text": "tic-tac-toe board and particles are"
+  },
+  {
+   "t": 1509.84,
+   "d": 1.44,
+   "text": "moving around in there and they stack on"
+  },
+  {
+   "t": 1511.28,
+   "d": 0.72,
+   "text": "each other"
+  },
+  {
+   "t": 1512.0,
+   "d": 2.56,
+   "text": "and make everything seem more smooth but"
+  },
+  {
+   "t": 1514.56,
+   "d": 1.92,
+   "text": "everything is still one color per tile"
+  },
+  {
+   "t": 1516.48,
+   "d": 1.84,
+   "text": "it doesn't break that rule so it seems"
+  },
+  {
+   "t": 1518.32,
+   "d": 1.92,
+   "text": "like it's a consistent roguelike"
+  },
+  {
+   "t": 1520.24,
+   "d": 3.04,
+   "text": "aesthetic um but on the underside it"
+  },
+  {
+   "t": 1523.28,
+   "d": 1.68,
+   "text": "works a little differently the ui is the"
+  },
+  {
+   "t": 1524.96,
+   "d": 3.04,
+   "text": "same thing you can animate the entire"
+  },
+  {
+   "t": 1528.0,
+   "d": 4.4,
+   "text": "ui using the same the same technique"
+  },
+  {
+   "t": 1532.4,
+   "d": 2.0,
+   "text": "is to split everything into smaller"
+  },
+  {
+   "t": 1534.4,
+   "d": 1.52,
+   "text": "pieces and"
+  },
+  {
+   "t": 1535.92,
+   "d": 3.6,
+   "text": "use particle engines cogmine's main ui"
+  },
+  {
+   "t": 1539.52,
+   "d": 2.24,
+   "text": "has something like 200 particle engines"
+  },
+  {
+   "t": 1541.76,
+   "d": 1.44,
+   "text": "on the same"
+  },
+  {
+   "t": 1543.2,
+   "d": 3.12,
+   "text": "screen um all working on different parts"
+  },
+  {
+   "t": 1546.32,
+   "d": 0.88,
+   "text": "of the screen"
+  },
+  {
+   "t": 1547.2,
+   "d": 2.96,
+   "text": "and elements um and so this is kind of"
+  },
+  {
+   "t": 1550.16,
+   "d": 0.4,
+   "text": "thing"
+  },
+  {
+   "t": 1550.56,
+   "d": 3.12,
+   "text": "that you know any um more roguelike"
+  },
+  {
+   "t": 1553.68,
+   "d": 1.76,
+   "text": "developers should if they can do this"
+  },
+  {
+   "t": 1555.44,
+   "d": 1.76,
+   "text": "kind of thing because obviously this is"
+  },
+  {
+   "t": 1557.2,
+   "d": 1.28,
+   "text": "attractive it's attracted to more"
+  },
+  {
+   "t": 1558.48,
+   "d": 1.12,
+   "text": "mainstream audiences"
+  },
+  {
+   "t": 1559.6,
+   "d": 1.36,
+   "text": "and it doesn't take anything away from"
+  },
+  {
+   "t": 1560.96,
+   "d": 1.84,
+   "text": "the experience if anything in this case"
+  },
+  {
+   "t": 1562.8,
+   "d": 1.52,
+   "text": "especially it's a game about robots it"
+  },
+  {
+   "t": 1564.32,
+   "d": 0.96,
+   "text": "enhances the theme"
+  },
+  {
+   "t": 1565.28,
+   "d": 2.32,
+   "text": "you are this robot and so you see"
+  },
+  {
+   "t": 1567.6,
+   "d": 1.24,
+   "text": "everything through these animated"
+  },
+  {
+   "t": 1568.84,
+   "d": 2.04,
+   "text": "interfaces"
+  },
+  {
+   "t": 1570.88,
+   "d": 1.44,
+   "text": "and uh so gameplay is another thing"
+  },
+  {
+   "t": 1572.32,
+   "d": 1.28,
+   "text": "roguelikes don't need any help with"
+  },
+  {
+   "t": 1573.6,
+   "d": 1.28,
+   "text": "gameplay that's like"
+  },
+  {
+   "t": 1574.88,
+   "d": 2.0,
+   "text": "the bread and butter of roguelikes um"
+  },
+  {
+   "t": 1576.88,
+   "d": 1.52,
+   "text": "overall galaxy have their own unique"
+  },
+  {
+   "t": 1578.4,
+   "d": 0.64,
+   "text": "gameplay"
+  },
+  {
+   "t": 1579.04,
+   "d": 1.28,
+   "text": "that's not a problem so it's at the end"
+  },
+  {
+   "t": 1580.32,
+   "d": 4.0,
+   "text": "in parentheses um"
+  },
+  {
+   "t": 1584.32,
+   "d": 1.52,
+   "text": "yeah in cog mine this is these are"
+  },
+  {
+   "t": 1585.84,
+   "d": 1.6,
+   "text": "examples of for example the unique"
+  },
+  {
+   "t": 1587.44,
+   "d": 1.68,
+   "text": "gameplay of cogmind it's it's a living"
+  },
+  {
+   "t": 1589.12,
+   "d": 1.44,
+   "text": "world it's not actually you're going"
+  },
+  {
+   "t": 1590.56,
+   "d": 1.6,
+   "text": "around bumping and killing everything"
+  },
+  {
+   "t": 1592.16,
+   "d": 1.28,
+   "text": "or running away from things that would"
+  },
+  {
+   "t": 1593.44,
+   "d": 2.08,
+   "text": "bump you and kill you um"
+  },
+  {
+   "t": 1595.52,
+   "d": 1.92,
+   "text": "it's uh there's most things out there"
+  },
+  {
+   "t": 1597.44,
+   "d": 2.0,
+   "text": "actually doing their own tasks these are"
+  },
+  {
+   "t": 1599.44,
+   "d": 1.6,
+   "text": "robots of rebuilding walls"
+  },
+  {
+   "t": 1601.04,
+   "d": 2.16,
+   "text": "building new tunnels the world is alive"
+  },
+  {
+   "t": 1603.2,
+   "d": 1.52,
+   "text": "um so that's one of cogmine's"
+  },
+  {
+   "t": 1604.72,
+   "d": 2.16,
+   "text": "uh draws and there's also uh story is"
+  },
+  {
+   "t": 1606.88,
+   "d": 1.04,
+   "text": "another element but i'm gonna run out of"
+  },
+  {
+   "t": 1607.92,
+   "d": 0.96,
+   "text": "time so"
+  },
+  {
+   "t": 1608.88,
+   "d": 2.0,
+   "text": "it's working so far um this is older"
+  },
+  {
+   "t": 1610.88,
+   "d": 1.2,
+   "text": "data but um"
+  },
+  {
+   "t": 1612.08,
+   "d": 3.12,
+   "text": "and cogmind is not on steam yet uh but"
+  },
+  {
+   "t": 1615.2,
+   "d": 1.12,
+   "text": "in the first year"
+  },
+  {
+   "t": 1616.32,
+   "d": 2.96,
+   "text": "it brought in uh 62 thousand dollars"
+  },
+  {
+   "t": 1619.28,
+   "d": 1.12,
+   "text": "which is pretty good"
+  },
+  {
+   "t": 1620.4,
+   "d": 2.16,
+   "text": "um you can see all the specifics of that"
+  },
+  {
+   "t": 1622.56,
+   "d": 1.12,
+   "text": "i've written about all this in great"
+  },
+  {
+   "t": 1623.68,
+   "d": 1.04,
+   "text": "detail on my blog"
+  },
+  {
+   "t": 1624.72,
+   "d": 1.44,
+   "text": "if you want to read about all these"
+  },
+  {
+   "t": 1626.16,
+   "d": 1.84,
+   "text": "different things those articles are"
+  },
+  {
+   "t": 1628.0,
+   "d": 0.88,
+   "text": "there"
+  },
+  {
+   "t": 1628.88,
+   "d": 1.68,
+   "text": "um yeah since then it's gone up to like"
+  },
+  {
+   "t": 1630.56,
+   "d": 1.52,
+   "text": "75 so"
+  },
+  {
+   "t": 1632.08,
+   "d": 1.68,
+   "text": "it's just enough to keep you know that"
+  },
+  {
+   "t": 1633.76,
+   "d": 1.92,
+   "text": "seems like a lot but and it is"
+  },
+  {
+   "t": 1635.68,
+   "d": 2.08,
+   "text": "for a for a traditional roguelike that"
+  },
+  {
+   "t": 1637.76,
+   "d": 1.2,
+   "text": "looks like this that is"
+  },
+  {
+   "t": 1638.96,
+   "d": 1.52,
+   "text": "very surprising i was surprised and"
+  },
+  {
+   "t": 1640.48,
+   "d": 0.96,
+   "text": "that's why i'm still working on it"
+  },
+  {
+   "t": 1641.44,
+   "d": 0.88,
+   "text": "though i would have quit if"
+  },
+  {
+   "t": 1642.32,
+   "d": 2.16,
+   "text": "not quit but i would have reached 1.0 if"
+  },
+  {
+   "t": 1644.48,
+   "d": 1.76,
+   "text": "it wasn't like this but it's just enough"
+  },
+  {
+   "t": 1646.24,
+   "d": 1.52,
+   "text": "to keep going so"
+  },
+  {
+   "t": 1647.76,
+   "d": 3.44,
+   "text": "i will keep going um"
+  },
+  {
+   "t": 1651.2,
+   "d": 3.84,
+   "text": "so um you have anyone here who's"
+  },
+  {
+   "t": 1655.04,
+   "d": 1.36,
+   "text": "interested in developing a roguelike"
+  },
+  {
+   "t": 1656.4,
+   "d": 0.64,
+   "text": "there's just"
+  },
+  {
+   "t": 1657.04,
+   "d": 2.48,
+   "text": "so many resources now to do that uh"
+  },
+  {
+   "t": 1659.52,
+   "d": 1.6,
+   "text": "there's the roguelike dev subreddit"
+  },
+  {
+   "t": 1661.12,
+   "d": 2.32,
+   "text": "a lot of friendly developers um and any"
+  },
+  {
+   "t": 1663.44,
+   "d": 1.84,
+   "text": "if you have any questions"
+  },
+  {
+   "t": 1665.28,
+   "d": 2.08,
+   "text": "um feel free to ask me email me contact"
+  },
+  {
+   "t": 1667.36,
+   "d": 2.0,
+   "text": "me however i'm on a lot of social media"
+  },
+  {
+   "t": 1669.36,
+   "d": 2.64,
+   "text": "easy to find grid sage games or kisrati"
+  },
+  {
+   "t": 1672.0,
+   "d": 1.28,
+   "text": "and um"
+  },
+  {
+   "t": 1673.28,
+   "d": 1.44,
+   "text": "and just take those so the resources are"
+  },
+  {
+   "t": 1674.72,
+   "d": 1.12,
+   "text": "there you just really it takes"
+  },
+  {
+   "t": 1675.84,
+   "d": 1.52,
+   "text": "dedication you just have to spend a long"
+  },
+  {
+   "t": 1677.36,
+   "d": 0.48,
+   "text": "time"
+  },
+  {
+   "t": 1677.84,
+   "d": 1.6,
+   "text": "and i'm not as long as me i made the"
+  },
+  {
+   "t": 1679.44,
+   "d": 1.44,
+   "text": "mistake of not"
+  },
+  {
+   "t": 1680.88,
+   "d": 2.32,
+   "text": "um not interacting with the community"
+  },
+  {
+   "t": 1683.2,
+   "d": 1.92,
+   "text": "early enough so it's taken me longer"
+  },
+  {
+   "t": 1685.12,
+   "d": 2.88,
+   "text": "than it otherwise would have but you"
+  },
+  {
+   "t": 1688.0,
+   "d": 1.6,
+   "text": "have to do it for the love of roguelikes"
+  },
+  {
+   "t": 1689.6,
+   "d": 1.44,
+   "text": "and brian who's probably he's in the"
+  },
+  {
+   "t": 1691.04,
+   "d": 1.76,
+   "text": "other room right now but shortly before"
+  },
+  {
+   "t": 1692.8,
+   "d": 1.6,
+   "text": "coming here"
+  },
+  {
+   "t": 1694.4,
+   "d": 2.88,
+   "text": "um he basically summarized my talk in uh"
+  },
+  {
+   "t": 1697.28,
+   "d": 1.84,
+   "text": "one sentence"
+  },
+  {
+   "t": 1699.12,
+   "d": 2.0,
+   "text": "from unpaid to poorly paid the roguelike"
+  },
+  {
+   "t": 1701.12,
+   "d": 1.52,
+   "text": "heroes journey"
+  },
+  {
+   "t": 1702.64,
+   "d": 2.32,
+   "text": "it took what was my hobby and made it"
+  },
+  {
+   "t": 1704.96,
+   "d": 1.2,
+   "text": "into my job but"
+  },
+  {
+   "t": 1706.16,
+   "d": 2.16,
+   "text": "you know like that's that's excellent"
+  },
+  {
+   "t": 1708.32,
+   "d": 1.68,
+   "text": "revenue for year one but"
+  },
+  {
+   "t": 1710.0,
+   "d": 2.0,
+   "text": "i've spent over three and a half years"
+  },
+  {
+   "t": 1712.0,
+   "d": 1.6,
+   "text": "working on cogmine now so"
+  },
+  {
+   "t": 1713.6,
+   "d": 2.72,
+   "text": "it's barely enough to scrape by and my"
+  },
+  {
+   "t": 1716.32,
+   "d": 1.52,
+   "text": "hope is that once it's on steam"
+  },
+  {
+   "t": 1717.84,
+   "d": 2.08,
+   "text": "it'll bring roguelikes to a much wider"
+  },
+  {
+   "t": 1719.92,
+   "d": 0.96,
+   "text": "audience"
+  },
+  {
+   "t": 1720.88,
+   "d": 3.36,
+   "text": "and already today more than one person"
+  },
+  {
+   "t": 1724.24,
+   "d": 1.52,
+   "text": "here has come up to me and said that"
+  },
+  {
+   "t": 1725.76,
+   "d": 1.68,
+   "text": "cogmine was the first"
+  },
+  {
+   "t": 1727.44,
+   "d": 2.88,
+   "text": "non-roguelite roguelike they played uh"
+  },
+  {
+   "t": 1730.32,
+   "d": 1.12,
+   "text": "they played a lot of rogue lights and"
+  },
+  {
+   "t": 1731.44,
+   "d": 0.48,
+   "text": "they"
+  },
+  {
+   "t": 1731.92,
+   "d": 1.52,
+   "text": "you know pokemon is pretty easy to get"
+  },
+  {
+   "t": 1733.44,
+   "d": 1.68,
+   "text": "into and they got into this and"
+  },
+  {
+   "t": 1735.12,
+   "d": 1.84,
+   "text": "from there you can continue moving"
+  },
+  {
+   "t": 1736.96,
+   "d": 1.52,
+   "text": "towards other roguelikes so it'd be"
+  },
+  {
+   "t": 1738.48,
+   "d": 1.12,
+   "text": "really nice if other vocaloids could"
+  },
+  {
+   "t": 1739.6,
+   "d": 1.12,
+   "text": "start incorporating some of the features"
+  },
+  {
+   "t": 1740.72,
+   "d": 0.96,
+   "text": "that i listed"
+  },
+  {
+   "t": 1741.68,
+   "d": 2.24,
+   "text": "um"
+  },
+  {
+   "t": 1744.72,
+   "d": 2.88,
+   "text": "okay sorry that was a lot to say"
+  },
+  {
+   "t": 1747.6,
+   "d": 2.4,
+   "text": "questions"
+  },
+  {
+   "t": 1751.04,
+   "d": 2.16,
+   "text": "okay sorry oh yeah yeah yeah all right"
+  },
+  {
+   "t": 1753.2,
+   "d": 1.52,
+   "text": "perfect timing man excellent"
+  },
+  {
+   "t": 1754.72,
+   "d": 1.28,
+   "text": "i had a lot more to say and i was kind"
+  },
+  {
+   "t": 1756.0,
+   "d": 2.32,
+   "text": "of like whoa that's great perfect"
+  },
+  {
+   "t": 1758.32,
+   "d": 1.92,
+   "text": "any questions then afterwards or later"
+  },
+  {
+   "t": 1760.24,
+   "d": 1.6,
+   "text": "i'll be here afterwards you can find"
+  },
+  {
+   "t": 1761.84,
+   "d": 0.64,
+   "text": "josh"
+  },
+  {
+   "t": 1762.48,
+   "d": 5.36,
+   "text": "big round of applause"
+  }
+ ]
+}

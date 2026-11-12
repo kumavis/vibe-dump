@@ -1,0 +1,4690 @@
+{
+ "id": "Kh9m-ixeqec",
+ "url": "https://www.youtube.com/watch?v=Kh9m-ixeqec",
+ "title": "Brian Cronin - Playtesting Process for Ultra Small Teams",
+ "speaker": "Brian Cronin",
+ "talk_title": "Playtesting Process for Ultra Small Teams",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-03-10",
+ "duration_s": 1865,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Making a roguelike with a tiny team (or just you)? You don't need a giant QA department to get incredible feedback, just a smart, repeatable process. Over the past five years, I've refined a lightweight 1-on-1 playtesting approach that has powered every project I've worked on. I'll show you how to find testers, run effective sessions, and turn raw reactions into actionable insights you can prioritize and act on. You'll leave with a concrete, field-tested playbook you can implement right away. A strong playtesting process is not just a way to passively collect feedback, it is one of the key ingredients that separates good games from truly great ones.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 6647,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 3.0,
+   "text": "Our"
+  },
+  {
+   "t": 7.84,
+   "d": 3.44,
+   "text": "next speaker is Brian Cronin, who is"
+  },
+  {
+   "t": 11.28,
+   "d": 2.8,
+   "text": "here to talk about play testing protest"
+  },
+  {
+   "t": 14.08,
+   "d": 2.64,
+   "text": "protests. 2025 has been an interesting"
+  },
+  {
+   "t": 16.72,
+   "d": 3.68,
+   "text": "year, y'all. Play testing process for"
+  },
+  {
+   "t": 20.4,
+   "d": 2.32,
+   "text": "ultra small teams. So, Brian Cronin,"
+  },
+  {
+   "t": 22.72,
+   "d": 2.4,
+   "text": "engineer and designer from San Diego. uh"
+  },
+  {
+   "t": 25.12,
+   "d": 1.44,
+   "text": "started on pre- smartphone game"
+  },
+  {
+   "t": 26.56,
+   "d": 2.0,
+   "text": "development in 2005 worked on games"
+  },
+  {
+   "t": 28.56,
+   "d": 2.64,
+   "text": "especially for 20 years and uh yeah"
+  },
+  {
+   "t": 31.2,
+   "d": 2.64,
+   "text": "works on rogue likes in free time as"
+  },
+  {
+   "t": 33.84,
+   "d": 2.08,
+   "text": "well as working in the educ educational"
+  },
+  {
+   "t": 35.92,
+   "d": 4.16,
+   "text": "games space. Uh I am going to just let"
+  },
+  {
+   "t": 40.08,
+   "d": 2.08,
+   "text": "Brian get started so I don't keep just"
+  },
+  {
+   "t": 42.16,
+   "d": 1.6,
+   "text": "like stumbling over my words. Welcome"
+  },
+  {
+   "t": 43.76,
+   "d": 0.96,
+   "text": "Brian."
+  },
+  {
+   "t": 44.72,
+   "d": 2.32,
+   "text": ">> Awesome. Thank you for having me. Um"
+  },
+  {
+   "t": 47.04,
+   "d": 1.76,
+   "text": "yeah uh Monster Train I've heard that's"
+  },
+  {
+   "t": 48.8,
+   "d": 3.04,
+   "text": "a good game. Uh so here we are uh Sat"
+  },
+  {
+   "t": 51.84,
+   "d": 2.32,
+   "text": "Sunday evening. Usually the time where"
+  },
+  {
+   "t": 54.16,
+   "d": 1.44,
+   "text": "like a conference like this the energy"
+  },
+  {
+   "t": 55.6,
+   "d": 1.76,
+   "text": "level is the highest. So I'm going to do"
+  },
+  {
+   "t": 57.36,
+   "d": 1.84,
+   "text": "my best to kind of mellow things out a"
+  },
+  {
+   "t": 59.2,
+   "d": 1.6,
+   "text": "little bit chill. This presentation"
+  },
+  {
+   "t": 60.8,
+   "d": 2.0,
+   "text": "won't be super packed and dense and"
+  },
+  {
+   "t": 62.8,
+   "d": 2.64,
+   "text": "super fast. Um it probably will be. But"
+  },
+  {
+   "t": 65.44,
+   "d": 2.08,
+   "text": "anyway, thank you for having me. I have"
+  },
+  {
+   "t": 67.52,
+   "d": 1.84,
+   "text": "spoken a couple other times at Rogike"
+  },
+  {
+   "t": 69.36,
+   "d": 2.4,
+   "text": "Celebration in the past. This year I"
+  },
+  {
+   "t": 71.76,
+   "d": 2.0,
+   "text": "wanted to speak on play testing for"
+  },
+  {
+   "t": 73.76,
+   "d": 2.64,
+   "text": "ultra small teams. So let's get into it."
+  },
+  {
+   "t": 76.4,
+   "d": 3.28,
+   "text": "Oh, I need my pointer to be working."
+  },
+  {
+   "t": 79.68,
+   "d": 2.08,
+   "text": "Okay, so I wanted to start with a quick"
+  },
+  {
+   "t": 81.76,
+   "d": 2.88,
+   "text": "story. Uh, I started making a dice"
+  },
+  {
+   "t": 84.64,
+   "d": 2.56,
+   "text": "rogike game. Speaking of dice, back in"
+  },
+  {
+   "t": 87.2,
+   "d": 2.24,
+   "text": "late 2022,"
+  },
+  {
+   "t": 89.44,
+   "d": 2.24,
+   "text": "I really love this game called Machioru."
+  },
+  {
+   "t": 91.68,
+   "d": 1.76,
+   "text": "It's a board game. It's kind of like a"
+  },
+  {
+   "t": 93.44,
+   "d": 2.64,
+   "text": "citybuer and has a really elegant dice"
+  },
+  {
+   "t": 96.08,
+   "d": 1.92,
+   "text": "mechanic at the core. So, I did the"
+  },
+  {
+   "t": 98.0,
+   "d": 1.52,
+   "text": "classic thing of like let's take like a"
+  },
+  {
+   "t": 99.52,
+   "d": 1.84,
+   "text": "board game or a game you really love and"
+  },
+  {
+   "t": 101.36,
+   "d": 1.92,
+   "text": "figure out how to kind of enhance it,"
+  },
+  {
+   "t": 103.28,
+   "d": 2.72,
+   "text": "grow it into a rog like a rog light type"
+  },
+  {
+   "t": 106.0,
+   "d": 2.0,
+   "text": "structure."
+  },
+  {
+   "t": 108.0,
+   "d": 2.8,
+   "text": "So before I fired up Unity, I went into,"
+  },
+  {
+   "t": 110.8,
+   "d": 1.6,
+   "text": "you know, spreadsheet and I started"
+  },
+  {
+   "t": 112.4,
+   "d": 2.48,
+   "text": "laying out some card ideas basically and"
+  },
+  {
+   "t": 114.88,
+   "d": 2.24,
+   "text": "I ended up creating this. So some of you"
+  },
+  {
+   "t": 117.12,
+   "d": 1.76,
+   "text": "might be familiar. This is tabletop"
+  },
+  {
+   "t": 118.88,
+   "d": 2.08,
+   "text": "simulator. Um, I'll talk about this a"
+  },
+  {
+   "t": 120.96,
+   "d": 1.6,
+   "text": "little bit more later, but I was able to"
+  },
+  {
+   "t": 122.56,
+   "d": 1.76,
+   "text": "kind of quickly prototype this and I"
+  },
+  {
+   "t": 124.32,
+   "d": 2.16,
+   "text": "play tested it with a few of my friends"
+  },
+  {
+   "t": 126.48,
+   "d": 2.72,
+   "text": "and their feedback was pretty similar."
+  },
+  {
+   "t": 129.2,
+   "d": 3.12,
+   "text": "It was kind of like this. So feedback"
+  },
+  {
+   "t": 132.32,
+   "d": 1.84,
+   "text": "wasn't incredibly amazing. I didn't just"
+  },
+  {
+   "t": 134.16,
+   "d": 1.76,
+   "text": "suddenly invent a perfect game, you"
+  },
+  {
+   "t": 135.92,
+   "d": 2.16,
+   "text": "know, big surprise, but the feedback was"
+  },
+  {
+   "t": 138.08,
+   "d": 2.48,
+   "text": "super valuable. Um, and I I got feedback"
+  },
+  {
+   "t": 140.56,
+   "d": 2.48,
+   "text": "very early. So, that helped shape the"
+  },
+  {
+   "t": 143.04,
+   "d": 1.92,
+   "text": "game moving forward."
+  },
+  {
+   "t": 144.96,
+   "d": 1.68,
+   "text": "And then we ended up having our second"
+  },
+  {
+   "t": 146.64,
+   "d": 2.88,
+   "text": "kid. So, this is a tangent, but I've"
+  },
+  {
+   "t": 149.52,
+   "d": 1.44,
+   "text": "sort of noticed the difficulty level"
+  },
+  {
+   "t": 150.96,
+   "d": 2.08,
+   "text": "here from one kid to two kids in my"
+  },
+  {
+   "t": 153.04,
+   "d": 2.8,
+   "text": "experience is a huge jump. Um, I think"
+  },
+  {
+   "t": 155.84,
+   "d": 1.12,
+   "text": "it goes up from there, but you ends up"
+  },
+  {
+   "t": 156.96,
+   "d": 1.28,
+   "text": "like you end up getting a lot of"
+  },
+  {
+   "t": 158.24,
+   "d": 2.56,
+   "text": "benefits uh as in the tail end as you"
+  },
+  {
+   "t": 160.8,
+   "d": 2.8,
+   "text": "stack up the kids. Um, and I think this"
+  },
+  {
+   "t": 163.6,
+   "d": 1.76,
+   "text": "is because of synergy, right? The kids"
+  },
+  {
+   "t": 165.36,
+   "d": 2.0,
+   "text": "learn how to kind of leverage each other"
+  },
+  {
+   "t": 167.36,
+   "d": 1.52,
+   "text": "toward the end goal of getting more of"
+  },
+  {
+   "t": 168.88,
+   "d": 2.56,
+   "text": "your time, energy, and attention."
+  },
+  {
+   "t": 171.44,
+   "d": 2.08,
+   "text": "Anyway, the point being, I was about to"
+  },
+  {
+   "t": 173.52,
+   "d": 2.4,
+   "text": "have way less free time than than"
+  },
+  {
+   "t": 175.92,
+   "d": 2.56,
+   "text": "normal. So, here's some facts about the"
+  },
+  {
+   "t": 178.48,
+   "d": 2.08,
+   "text": "2022 version of me. I had two young"
+  },
+  {
+   "t": 180.56,
+   "d": 3.36,
+   "text": "kids. I was very part-time on this game."
+  },
+  {
+   "t": 183.92,
+   "d": 2.8,
+   "text": "I was working alone. I had even less"
+  },
+  {
+   "t": 186.72,
+   "d": 3.2,
+   "text": "time now, but must make game. I think"
+  },
+  {
+   "t": 189.92,
+   "d": 1.28,
+   "text": "everyone here could probably identify"
+  },
+  {
+   "t": 191.2,
+   "d": 1.6,
+   "text": "with that last bullet point at least."
+  },
+  {
+   "t": 192.8,
+   "d": 2.48,
+   "text": "So, how am I going to make this happen?"
+  },
+  {
+   "t": 195.28,
+   "d": 2.0,
+   "text": "I ended up leaning really hard in play"
+  },
+  {
+   "t": 197.28,
+   "d": 1.76,
+   "text": "testing. I saw the early success of the"
+  },
+  {
+   "t": 199.04,
+   "d": 1.84,
+   "text": "play testing I did and I said, \"This is"
+  },
+  {
+   "t": 200.88,
+   "d": 1.6,
+   "text": "just going to be like I'm going to just"
+  },
+  {
+   "t": 202.48,
+   "d": 1.44,
+   "text": "do a lot of play testing that somehow"
+  },
+  {
+   "t": 203.92,
+   "d": 2.16,
+   "text": "this will work out.\" And it it worked"
+  },
+  {
+   "t": 206.08,
+   "d": 1.68,
+   "text": "out great for me. So, I'll I'll explain"
+  },
+  {
+   "t": 207.76,
+   "d": 2.64,
+   "text": "more about this, but so I ran some play"
+  },
+  {
+   "t": 210.4,
+   "d": 2.48,
+   "text": "tests. I did 50 play tests in that first"
+  },
+  {
+   "t": 212.88,
+   "d": 2.48,
+   "text": "year, like between 2022 and throughout"
+  },
+  {
+   "t": 215.36,
+   "d": 2.8,
+   "text": "2023. These were all done one- on-one"
+  },
+  {
+   "t": 218.16,
+   "d": 3.2,
+   "text": "via Discord calls or Google Meet,"
+  },
+  {
+   "t": 221.36,
+   "d": 1.52,
+   "text": "whatever. And then they were all one"
+  },
+  {
+   "t": 222.88,
+   "d": 2.08,
+   "text": "hour generally, maybe hour and a half in"
+  },
+  {
+   "t": 224.96,
+   "d": 2.48,
+   "text": "some cases. I've done I think about 88,"
+  },
+  {
+   "t": 227.44,
+   "d": 1.76,
+   "text": "maybe a little bit more now, but 88 of"
+  },
+  {
+   "t": 229.2,
+   "d": 1.92,
+   "text": "these play tests, these one-on-one play"
+  },
+  {
+   "t": 231.12,
+   "d": 2.08,
+   "text": "tests. I've done more than that in other"
+  },
+  {
+   "t": 233.2,
+   "d": 1.68,
+   "text": "forms, but this talk is specifically"
+  },
+  {
+   "t": 234.88,
+   "d": 1.52,
+   "text": "about one-on-one synchronous play"
+  },
+  {
+   "t": 236.4,
+   "d": 2.16,
+   "text": "testing. So, that's about 113 hours I've"
+  },
+  {
+   "t": 238.56,
+   "d": 2.0,
+   "text": "done play testing. I track all my time"
+  },
+  {
+   "t": 240.56,
+   "d": 2.32,
+   "text": "very religiously, so I know this for a"
+  },
+  {
+   "t": 242.88,
+   "d": 1.92,
+   "text": "fact. And this may or may not sound like"
+  },
+  {
+   "t": 244.8,
+   "d": 1.84,
+   "text": "a lot of time, but for me being very"
+  },
+  {
+   "t": 246.64,
+   "d": 1.76,
+   "text": "part-time on the project, this was a big"
+  },
+  {
+   "t": 248.4,
+   "d": 2.72,
+   "text": "commitment of time."
+  },
+  {
+   "t": 251.12,
+   "d": 1.68,
+   "text": "Our our friend Tommy here said, \"I've"
+  },
+  {
+   "t": 252.8,
+   "d": 1.76,
+   "text": "not failed. I've just found 10,000 ways"
+  },
+  {
+   "t": 254.56,
+   "d": 2.24,
+   "text": "that won't work. I he may have also said"
+  },
+  {
+   "t": 256.8,
+   "d": 1.2,
+   "text": "this. I don't know. I found on the"
+  },
+  {
+   "t": 258.0,
+   "d": 2.16,
+   "text": "internet. I thought I should share it.\""
+  },
+  {
+   "t": 260.16,
+   "d": 2.56,
+   "text": "Uh so failure is a part of the process"
+  },
+  {
+   "t": 262.72,
+   "d": 1.76,
+   "text": "of making games. I think probably"
+  },
+  {
+   "t": 264.48,
+   "d": 1.52,
+   "text": "everyone could identify with it. Part of"
+  },
+  {
+   "t": 266.0,
+   "d": 2.24,
+   "text": "any creative process, right? And games"
+  },
+  {
+   "t": 268.24,
+   "d": 2.56,
+   "text": "are an act of pure creativity, for"
+  },
+  {
+   "t": 270.8,
+   "d": 2.24,
+   "text": "example."
+  },
+  {
+   "t": 273.04,
+   "d": 1.84,
+   "text": "But you don't know if you failed until"
+  },
+  {
+   "t": 274.88,
+   "d": 1.84,
+   "text": "you've tested."
+  },
+  {
+   "t": 276.72,
+   "d": 1.52,
+   "text": "So to me, this is what it feels like to"
+  },
+  {
+   "t": 278.24,
+   "d": 1.44,
+   "text": "make a game without any kind of play"
+  },
+  {
+   "t": 279.68,
+   "d": 1.44,
+   "text": "testing. You know, are players going to"
+  },
+  {
+   "t": 281.12,
+   "d": 1.36,
+   "text": "understand the game or they going to"
+  },
+  {
+   "t": 282.48,
+   "d": 3.76,
+   "text": "think it's fun? I don't know. Maybe."
+  },
+  {
+   "t": 286.24,
+   "d": 1.52,
+   "text": "And if anyone ever tells you something"
+  },
+  {
+   "t": 287.76,
+   "d": 2.8,
+   "text": "like this, it's probably pretty solidly"
+  },
+  {
+   "t": 290.56,
+   "d": 2.4,
+   "text": "in like the survival ship bias category."
+  },
+  {
+   "t": 292.96,
+   "d": 1.04,
+   "text": "If if you're not familiar with this"
+  },
+  {
+   "t": 294.0,
+   "d": 2.0,
+   "text": "image, look up survival ship bias. You"
+  },
+  {
+   "t": 296.0,
+   "d": 1.68,
+   "text": "know, World War II airplanes. It's a"
+  },
+  {
+   "t": 297.68,
+   "d": 2.56,
+   "text": "really fascinating story. Um, but they"
+  },
+  {
+   "t": 300.24,
+   "d": 1.92,
+   "text": "probably just got lucky basically. I"
+  },
+  {
+   "t": 302.16,
+   "d": 1.6,
+   "text": "would I would guess or there's something"
+  },
+  {
+   "t": 303.76,
+   "d": 2.64,
+   "text": "else they're not telling you."
+  },
+  {
+   "t": 306.4,
+   "d": 2.32,
+   "text": "Play testing hurts, you know, especially"
+  },
+  {
+   "t": 308.72,
+   "d": 2.4,
+   "text": "early on. Uh, this is this image is from"
+  },
+  {
+   "t": 311.12,
+   "d": 2.8,
+   "text": "this video. It represents like testing."
+  },
+  {
+   "t": 313.92,
+   "d": 2.0,
+   "text": "So this this person on the left is a"
+  },
+  {
+   "t": 315.92,
+   "d": 2.8,
+   "text": "developer and she's watching a user like"
+  },
+  {
+   "t": 318.72,
+   "d": 1.52,
+   "text": "use this product she made and they're"
+  },
+  {
+   "t": 320.24,
+   "d": 1.6,
+   "text": "supposed to just put the shapes in the"
+  },
+  {
+   "t": 321.84,
+   "d": 1.68,
+   "text": "correct hole and the person is finding"
+  },
+  {
+   "t": 323.52,
+   "d": 2.08,
+   "text": "every which way to put the wrong shape"
+  },
+  {
+   "t": 325.6,
+   "d": 2.0,
+   "text": "in the wrong hole in very creative ways"
+  },
+  {
+   "t": 327.6,
+   "d": 2.0,
+   "text": "and she's just suffering like it's why"
+  },
+  {
+   "t": 329.6,
+   "d": 1.92,
+   "text": "are you doing this you know so it it"
+  },
+  {
+   "t": 331.52,
+   "d": 1.6,
+   "text": "could be painful to watch people play"
+  },
+  {
+   "t": 333.12,
+   "d": 2.0,
+   "text": "your game and just not understand the"
+  },
+  {
+   "t": 335.12,
+   "d": 2.24,
+   "text": "thing or they don't enjoy it, you know,"
+  },
+  {
+   "t": 337.36,
+   "d": 2.8,
+   "text": "it's it's it's difficult"
+  },
+  {
+   "t": 340.16,
+   "d": 3.52,
+   "text": "but with some persistence and constant"
+  },
+  {
+   "t": 343.68,
+   "d": 3.52,
+   "text": "feedback from play testing, you'll start"
+  },
+  {
+   "t": 347.2,
+   "d": 3.84,
+   "text": "to see happy faces."
+  },
+  {
+   "t": 351.04,
+   "d": 1.6,
+   "text": "Hello, I'm Brian. These are some of the"
+  },
+  {
+   "t": 352.64,
+   "d": 1.76,
+   "text": "games I've worked on. Uh Monster Train,"
+  },
+  {
+   "t": 354.4,
+   "d": 1.52,
+   "text": "as mentioned, I'm working on a dice game"
+  },
+  {
+   "t": 355.92,
+   "d": 1.52,
+   "text": "now. So, that's called Slumber Realm. A"
+  },
+  {
+   "t": 357.44,
+   "d": 2.72,
+   "text": "lot of rogike stuff over the years. This"
+  },
+  {
+   "t": 360.16,
+   "d": 2.56,
+   "text": "talk is about one-on-one play testing."
+  },
+  {
+   "t": 362.72,
+   "d": 1.76,
+   "text": "Why you should do it, why you should do"
+  },
+  {
+   "t": 364.48,
+   "d": 2.32,
+   "text": "it very early and often, how you should"
+  },
+  {
+   "t": 366.8,
+   "d": 1.92,
+   "text": "do it, and why it should be the core of"
+  },
+  {
+   "t": 368.72,
+   "d": 2.4,
+   "text": "your development practice. This isn't to"
+  },
+  {
+   "t": 371.12,
+   "d": 2.24,
+   "text": "say other forms of play testing are not"
+  },
+  {
+   "t": 373.36,
+   "d": 2.8,
+   "text": "equally good or invalid or whatever. I'm"
+  },
+  {
+   "t": 376.16,
+   "d": 1.6,
+   "text": "just focused on one-on-one play testing"
+  },
+  {
+   "t": 377.76,
+   "d": 1.68,
+   "text": "because I think it is underutilized,"
+  },
+  {
+   "t": 379.44,
+   "d": 2.24,
+   "text": "especially by smaller teams, and it's"
+  },
+  {
+   "t": 381.68,
+   "d": 2.32,
+   "text": "extremely valuable."
+  },
+  {
+   "t": 384.0,
+   "d": 1.6,
+   "text": "So, some assumptions about the people"
+  },
+  {
+   "t": 385.6,
+   "d": 1.68,
+   "text": "watching. You are making a video game or"
+  },
+  {
+   "t": 387.28,
+   "d": 1.68,
+   "text": "will be making a video game. You're"
+  },
+  {
+   "t": 388.96,
+   "d": 1.36,
+   "text": "making it for an audience that isn't"
+  },
+  {
+   "t": 390.32,
+   "d": 1.6,
+   "text": "just you. So whether or not you have"
+  },
+  {
+   "t": 391.92,
+   "d": 2.08,
+   "text": "commercial intent with the game you're"
+  },
+  {
+   "t": 394.0,
+   "d": 1.84,
+   "text": "making, um, I'm assuming you're making"
+  },
+  {
+   "t": 395.84,
+   "d": 2.0,
+   "text": "it for other people to play that aren't"
+  },
+  {
+   "t": 397.84,
+   "d": 1.52,
+   "text": "you,"
+  },
+  {
+   "t": 399.36,
+   "d": 2.0,
+   "text": "you're working alone or on a small team."
+  },
+  {
+   "t": 401.36,
+   "d": 1.36,
+   "text": "I think a lot of these practices can"
+  },
+  {
+   "t": 402.72,
+   "d": 1.84,
+   "text": "also adapt to larger teams, but I've"
+  },
+  {
+   "t": 404.56,
+   "d": 1.68,
+   "text": "I've developed a process that works"
+  },
+  {
+   "t": 406.24,
+   "d": 2.48,
+   "text": "really well for just me or me. And now I"
+  },
+  {
+   "t": 408.72,
+   "d": 2.48,
+   "text": "have an artist that I work with. So you"
+  },
+  {
+   "t": 411.2,
+   "d": 1.84,
+   "text": "may or may not have ran one-on-one play"
+  },
+  {
+   "t": 413.04,
+   "d": 1.52,
+   "text": "test before, but you're curious how to"
+  },
+  {
+   "t": 414.56,
+   "d": 1.84,
+   "text": "do it better."
+  },
+  {
+   "t": 416.4,
+   "d": 1.68,
+   "text": "So this is the traditional dev cycle."
+  },
+  {
+   "t": 418.08,
+   "d": 1.44,
+   "text": "When I started working on games, this"
+  },
+  {
+   "t": 419.52,
+   "d": 1.6,
+   "text": "was kind of drilled into my head of this"
+  },
+  {
+   "t": 421.12,
+   "d": 1.12,
+   "text": "is how you make a game, right? You have"
+  },
+  {
+   "t": 422.24,
+   "d": 2.4,
+   "text": "an idea, you write up a game design"
+  },
+  {
+   "t": 424.64,
+   "d": 2.0,
+   "text": "document, you prototype it, you go"
+  },
+  {
+   "t": 426.64,
+   "d": 1.52,
+   "text": "through some amount of time production,"
+  },
+  {
+   "t": 428.16,
+   "d": 2.08,
+   "text": "you do some QA testing at the end, and"
+  },
+  {
+   "t": 430.24,
+   "d": 2.08,
+   "text": "then you release."
+  },
+  {
+   "t": 432.32,
+   "d": 1.84,
+   "text": "I'm arguing that dev practices should"
+  },
+  {
+   "t": 434.16,
+   "d": 1.36,
+   "text": "look a lot more like this, kind of like"
+  },
+  {
+   "t": 435.52,
+   "d": 2.4,
+   "text": "these tight iteration loops that revolve"
+  },
+  {
+   "t": 437.92,
+   "d": 2.24,
+   "text": "around play testing. And in fact, many"
+  },
+  {
+   "t": 440.16,
+   "d": 2.96,
+   "text": "do. Um, but I've observed smaller devs"
+  },
+  {
+   "t": 443.12,
+   "d": 1.68,
+   "text": "who don't incorporate play testing"
+  },
+  {
+   "t": 444.8,
+   "d": 2.64,
+   "text": "enough into their proc process. So, they"
+  },
+  {
+   "t": 447.44,
+   "d": 1.52,
+   "text": "don't take advantage of it as much as"
+  },
+  {
+   "t": 448.96,
+   "d": 1.36,
+   "text": "they should. Or they do like"
+  },
+  {
+   "t": 450.32,
+   "d": 1.6,
+   "text": "asynchronous play testing only. They"
+  },
+  {
+   "t": 451.92,
+   "d": 1.36,
+   "text": "send it out to some people. Those people"
+  },
+  {
+   "t": 453.28,
+   "d": 2.24,
+   "text": "send back notes. That can be good to do"
+  },
+  {
+   "t": 455.52,
+   "d": 2.08,
+   "text": "as well, but I really think one-on-one"
+  },
+  {
+   "t": 457.6,
+   "d": 2.8,
+   "text": "synchronous is is critical."
+  },
+  {
+   "t": 460.4,
+   "d": 2.56,
+   "text": "So, why play test at all? Devs are bad"
+  },
+  {
+   "t": 462.96,
+   "d": 2.72,
+   "text": "at knowing if their game is fun. Devs"
+  },
+  {
+   "t": 465.68,
+   "d": 1.36,
+   "text": "are bad at knowing if their game is"
+  },
+  {
+   "t": 467.04,
+   "d": 2.32,
+   "text": "understandable. This I discovered I is a"
+  },
+  {
+   "t": 469.36,
+   "d": 2.0,
+   "text": "huge flaw for myself. Like, it's amazing"
+  },
+  {
+   "t": 471.36,
+   "d": 1.52,
+   "text": "how I think something is so clear. I'll"
+  },
+  {
+   "t": 472.88,
+   "d": 1.76,
+   "text": "put it in front of some people and just"
+  },
+  {
+   "t": 474.64,
+   "d": 2.64,
+   "text": "universally like five people in a row"
+  },
+  {
+   "t": 477.28,
+   "d": 1.36,
+   "text": "have no idea what I'm trying to"
+  },
+  {
+   "t": 478.64,
+   "d": 2.88,
+   "text": "communicate. Oh, extensive play testing"
+  },
+  {
+   "t": 481.52,
+   "d": 1.84,
+   "text": "will lead to a better game. I think that"
+  },
+  {
+   "t": 483.36,
+   "d": 2.8,
+   "text": "is just universally true. Players will"
+  },
+  {
+   "t": 486.16,
+   "d": 1.52,
+   "text": "feel like you're reading their mind."
+  },
+  {
+   "t": 487.68,
+   "d": 1.44,
+   "text": "This is one of my favorite parts about"
+  },
+  {
+   "t": 489.12,
+   "d": 1.52,
+   "text": "play testing. I'm working on some"
+  },
+  {
+   "t": 490.64,
+   "d": 1.68,
+   "text": "feature. I've been iterating on it. I've"
+  },
+  {
+   "t": 492.32,
+   "d": 1.68,
+   "text": "been testing it. I put it in front of a"
+  },
+  {
+   "t": 494.0,
+   "d": 1.36,
+   "text": "new player. They're playing through my"
+  },
+  {
+   "t": 495.36,
+   "d": 1.92,
+   "text": "game and they have a question. How does"
+  },
+  {
+   "t": 497.28,
+   "d": 1.68,
+   "text": "that work? and then they click to the"
+  },
+  {
+   "t": 498.96,
+   "d": 1.6,
+   "text": "next like screen or whatever and it's"
+  },
+  {
+   "t": 500.56,
+   "d": 1.76,
+   "text": "instantly revealed to them almost like I"
+  },
+  {
+   "t": 502.32,
+   "d": 1.52,
+   "text": "was reading their mind. It's because I"
+  },
+  {
+   "t": 503.84,
+   "d": 1.52,
+   "text": "did I just read a lot of other people's"
+  },
+  {
+   "t": 505.36,
+   "d": 2.96,
+   "text": "minds first. And then this is pretty"
+  },
+  {
+   "t": 508.32,
+   "d": 1.76,
+   "text": "applicable to smaller developers, but"
+  },
+  {
+   "t": 510.08,
+   "d": 1.84,
+   "text": "this can also serve as early community"
+  },
+  {
+   "t": 511.92,
+   "d": 2.72,
+   "text": "building. Um I'm doing my game solo"
+  },
+  {
+   "t": 514.64,
+   "d": 2.24,
+   "text": "part-time. Uh it's up on Steam and all"
+  },
+  {
+   "t": 516.88,
+   "d": 1.52,
+   "text": "that. I'm doing marketing. I have a"
+  },
+  {
+   "t": 518.4,
+   "d": 2.0,
+   "text": "small Discord community. That Discord"
+  },
+  {
+   "t": 520.4,
+   "d": 1.76,
+   "text": "community is almost entirely built out"
+  },
+  {
+   "t": 522.16,
+   "d": 1.76,
+   "text": "of people that have play tested my game"
+  },
+  {
+   "t": 523.92,
+   "d": 1.68,
+   "text": "in the past. And there's ways that you"
+  },
+  {
+   "t": 525.6,
+   "d": 1.52,
+   "text": "can make this more effective in the"
+  },
+  {
+   "t": 527.12,
+   "d": 2.24,
+   "text": "process that I'll explain. But another"
+  },
+  {
+   "t": 529.36,
+   "d": 2.8,
+   "text": "nice side benefit."
+  },
+  {
+   "t": 532.16,
+   "d": 2.08,
+   "text": "So you're spending months or even years"
+  },
+  {
+   "t": 534.24,
+   "d": 1.84,
+   "text": "on your game. This is a serious"
+  },
+  {
+   "t": 536.08,
+   "d": 1.84,
+   "text": "endeavor. Uh and you don't want to be"
+  },
+  {
+   "t": 537.92,
+   "d": 1.92,
+   "text": "surprised when you release it. So it's"
+  },
+  {
+   "t": 539.84,
+   "d": 2.16,
+   "text": "better to know. I I see these posts on"
+  },
+  {
+   "t": 542.0,
+   "d": 2.8,
+   "text": "Reddit in particular uh quite often. You"
+  },
+  {
+   "t": 544.8,
+   "d": 2.24,
+   "text": "know h I just like how do you spend four"
+  },
+  {
+   "t": 547.04,
+   "d": 1.6,
+   "text": "years on a game and you didn't know it"
+  },
+  {
+   "t": 548.64,
+   "d": 2.4,
+   "text": "was going to be a complete failure? Um,"
+  },
+  {
+   "t": 551.04,
+   "d": 1.68,
+   "text": "this isn't to say that play testing is"
+  },
+  {
+   "t": 552.72,
+   "d": 2.08,
+   "text": "going to guarantee success, especially"
+  },
+  {
+   "t": 554.8,
+   "d": 3.36,
+   "text": "financial success, but it can help avoid"
+  },
+  {
+   "t": 558.16,
+   "d": 3.56,
+   "text": "some of these catastrophes."
+  },
+  {
+   "t": 562.08,
+   "d": 1.6,
+   "text": "So, when you want to start play testing"
+  },
+  {
+   "t": 563.68,
+   "d": 1.92,
+   "text": "is as early as possible. You hear this a"
+  },
+  {
+   "t": 565.6,
+   "d": 2.0,
+   "text": "lot, but I just wanted to show some some"
+  },
+  {
+   "t": 567.6,
+   "d": 1.92,
+   "text": "ways you can make it happen, right? So,"
+  },
+  {
+   "t": 569.52,
+   "d": 1.76,
+   "text": "I'm going to play just clips this video."
+  },
+  {
+   "t": 571.28,
+   "d": 2.56,
+   "text": "I'm hopefully mute it. Yeah. Uh, so this"
+  },
+  {
+   "t": 573.84,
+   "d": 1.6,
+   "text": "tabletop simulator, hopefully I get a"
+  },
+  {
+   "t": 575.44,
+   "d": 2.8,
+   "text": "good clip here. Um, basically it and I"
+  },
+  {
+   "t": 578.24,
+   "d": 2.0,
+   "text": "will acknowledge this was made in early"
+  },
+  {
+   "t": 580.24,
+   "d": 2.96,
+   "text": "or like mid 2022. I was experimenting"
+  },
+  {
+   "t": 583.2,
+   "d": 3.28,
+   "text": "with AR AI art um in this prototype. I"
+  },
+  {
+   "t": 586.48,
+   "d": 1.6,
+   "text": "I've since gotten away from all that,"
+  },
+  {
+   "t": 588.08,
+   "d": 2.08,
+   "text": "but just to acknowledge that fact here."
+  },
+  {
+   "t": 590.16,
+   "d": 2.24,
+   "text": "[snorts] Um anyway, tabletop simulator"
+  },
+  {
+   "t": 592.4,
+   "d": 2.0,
+   "text": "is a great program to to prototype"
+  },
+  {
+   "t": 594.4,
+   "d": 1.68,
+   "text": "things. So you it's just you could have"
+  },
+  {
+   "t": 596.08,
+   "d": 2.64,
+   "text": "a deck of cards, dice, counters, all"
+  },
+  {
+   "t": 598.72,
+   "d": 2.08,
+   "text": "stuff like that. And it's a great way to"
+  },
+  {
+   "t": 600.8,
+   "d": 2.32,
+   "text": "just very quickly be able to put some"
+  },
+  {
+   "t": 603.12,
+   "d": 1.44,
+   "text": "cards in there and play with friends."
+  },
+  {
+   "t": 604.56,
+   "d": 3.12,
+   "text": "Um, so that's one option, but you could"
+  },
+  {
+   "t": 607.68,
+   "d": 1.36,
+   "text": "also just do it on paper if you have,"
+  },
+  {
+   "t": 609.04,
+   "d": 2.08,
+   "text": "especially like a turn-based game. Um,"
+  },
+  {
+   "t": 611.12,
+   "d": 2.0,
+   "text": "there's probably a way to prototype at"
+  },
+  {
+   "t": 613.12,
+   "d": 2.16,
+   "text": "least some early ideas, the core loop,"
+  },
+  {
+   "t": 615.28,
+   "d": 3.2,
+   "text": "whatever. Play friends. If you have a"
+  },
+  {
+   "t": 618.48,
+   "d": 1.84,
+   "text": "real-time game, maybe you you've made a"
+  },
+  {
+   "t": 620.32,
+   "d": 1.28,
+   "text": "version of that game in the past, you"
+  },
+  {
+   "t": 621.6,
+   "d": 2.32,
+   "text": "could kind of tweak to you want to"
+  },
+  {
+   "t": 623.92,
+   "d": 2.0,
+   "text": "validate some some idea as early as you"
+  },
+  {
+   "t": 625.92,
+   "d": 1.68,
+   "text": "can. Maybe you can prototype it in"
+  },
+  {
+   "t": 627.6,
+   "d": 2.08,
+   "text": "another game sort of as a mod or"
+  },
+  {
+   "t": 629.68,
+   "d": 2.4,
+   "text": "whatever. Just get creative. um get it"
+  },
+  {
+   "t": 632.08,
+   "d": 1.44,
+   "text": "into someone's hands as early as you can"
+  },
+  {
+   "t": 633.52,
+   "d": 2.8,
+   "text": "to start validating the idea. So when we"
+  },
+  {
+   "t": 636.32,
+   "d": 1.6,
+   "text": "talk about validation, you want to try a"
+  },
+  {
+   "t": 637.92,
+   "d": 1.44,
+   "text": "lot of stuff quickly and answer these"
+  },
+  {
+   "t": 639.36,
+   "d": 2.24,
+   "text": "questions. Is the secondto-second"
+  },
+  {
+   "t": 641.6,
+   "d": 2.96,
+   "text": "gameplay fun? So in a deck builder card"
+  },
+  {
+   "t": 644.56,
+   "d": 1.84,
+   "text": "game, you like drawing cards, playing"
+  },
+  {
+   "t": 646.4,
+   "d": 3.6,
+   "text": "cards, is that aspect fun? Um just"
+  },
+  {
+   "t": 650.0,
+   "d": 1.6,
+   "text": "depends on your genre how you validate"
+  },
+  {
+   "t": 651.6,
+   "d": 1.44,
+   "text": "that. But the player is going to be do"
+  },
+  {
+   "t": 653.04,
+   "d": 2.72,
+   "text": "something in your game like the the core"
+  },
+  {
+   "t": 655.76,
+   "d": 2.16,
+   "text": "nugget of the game versus the like"
+  },
+  {
+   "t": 657.92,
+   "d": 2.24,
+   "text": "minute to minutes loop fun. So, in a"
+  },
+  {
+   "t": 660.16,
+   "d": 1.92,
+   "text": "deck builder, that topics on my mind"
+  },
+  {
+   "t": 662.08,
+   "d": 2.16,
+   "text": "from before, this would be, you know,"
+  },
+  {
+   "t": 664.24,
+   "d": 1.68,
+   "text": "between the battle, how you're adding"
+  },
+  {
+   "t": 665.92,
+   "d": 1.68,
+   "text": "cards to your deck, how you're going to"
+  },
+  {
+   "t": 667.6,
+   "d": 3.68,
+   "text": "the shop, that kind of loop. And then,"
+  },
+  {
+   "t": 671.28,
+   "d": 1.92,
+   "text": "do players understand what is happening."
+  },
+  {
+   "t": 673.2,
+   "d": 2.72,
+   "text": "This is really critical uh to most"
+  },
+  {
+   "t": 675.92,
+   "d": 2.32,
+   "text": "games. And then, do players find like"
+  },
+  {
+   "t": 678.24,
+   "d": 1.68,
+   "text": "the artwork, the theme, the world"
+  },
+  {
+   "t": 679.92,
+   "d": 1.68,
+   "text": "compelling? You don't need to just play"
+  },
+  {
+   "t": 681.6,
+   "d": 1.92,
+   "text": "test the gameplay. You could play test"
+  },
+  {
+   "t": 683.52,
+   "d": 2.8,
+   "text": "music, uh artwork. There's all sorts of"
+  },
+  {
+   "t": 686.32,
+   "d": 2.48,
+   "text": "things you can play test. So here's the"
+  },
+  {
+   "t": 688.8,
+   "d": 1.84,
+   "text": "process that I'm advocating for. You"
+  },
+  {
+   "t": 690.64,
+   "d": 2.4,
+   "text": "start with a hypothesis. You go through"
+  },
+  {
+   "t": 693.04,
+   "d": 2.88,
+   "text": "a play test round of one to five people."
+  },
+  {
+   "t": 695.92,
+   "d": 2.0,
+   "text": "You synthesize and process their"
+  },
+  {
+   "t": 697.92,
+   "d": 2.16,
+   "text": "feedback. You take action on the"
+  },
+  {
+   "t": 700.08,
+   "d": 2.0,
+   "text": "feedback and you just loop around. This"
+  },
+  {
+   "t": 702.08,
+   "d": 1.84,
+   "text": "is the loop."
+  },
+  {
+   "t": 703.92,
+   "d": 1.92,
+   "text": "So starting with the hypothesis, you"
+  },
+  {
+   "t": 705.84,
+   "d": 1.36,
+   "text": "know, this is a classic example. I"
+  },
+  {
+   "t": 707.2,
+   "d": 2.32,
+   "text": "believe this is Resident Evil. Um I I"
+  },
+  {
+   "t": 709.52,
+   "d": 1.92,
+   "text": "haven't played the game, but I know this"
+  },
+  {
+   "t": 711.44,
+   "d": 1.92,
+   "text": "was a thing on Twitter several years"
+  },
+  {
+   "t": 713.36,
+   "d": 1.52,
+   "text": "ago, like why is everything painted"
+  },
+  {
+   "t": 714.88,
+   "d": 2.0,
+   "text": "yellow? Well, what I'm guessing is they"
+  },
+  {
+   "t": 716.88,
+   "d": 1.84,
+   "text": "play tested this game a bunch and people"
+  },
+  {
+   "t": 718.72,
+   "d": 1.52,
+   "text": "were not finding these interactable"
+  },
+  {
+   "t": 720.24,
+   "d": 1.68,
+   "text": "objects. So, people are not seeing our"
+  },
+  {
+   "t": 721.92,
+   "d": 2.48,
+   "text": "interactable chests. What if we painted"
+  },
+  {
+   "t": 724.4,
+   "d": 1.84,
+   "text": "them all yellow? They play tested this"
+  },
+  {
+   "t": 726.24,
+   "d": 2.4,
+   "text": "and this probably result had great like"
+  },
+  {
+   "t": 728.64,
+   "d": 2.0,
+   "text": "people were finding the chests. So, this"
+  },
+  {
+   "t": 730.64,
+   "d": 1.44,
+   "text": "worked there. There may have been other"
+  },
+  {
+   "t": 732.08,
+   "d": 2.16,
+   "text": "ways to do this, but this worked for"
+  },
+  {
+   "t": 734.24,
+   "d": 1.2,
+   "text": "their game. So, you start with a"
+  },
+  {
+   "t": 735.44,
+   "d": 1.52,
+   "text": "hypothesis. I have some problem in my"
+  },
+  {
+   "t": 736.96,
+   "d": 1.6,
+   "text": "game. There's some new feature I'm"
+  },
+  {
+   "t": 738.56,
+   "d": 2.16,
+   "text": "adding. Is it fun? Why aren't people"
+  },
+  {
+   "t": 740.72,
+   "d": 1.76,
+   "text": "understanding this screen? Whatever. You"
+  },
+  {
+   "t": 742.48,
+   "d": 2.48,
+   "text": "start with a hypothesis."
+  },
+  {
+   "t": 744.96,
+   "d": 2.08,
+   "text": "But it's also worth pointing out that"
+  },
+  {
+   "t": 747.04,
+   "d": 1.44,
+   "text": "don't neglect the whole experience."
+  },
+  {
+   "t": 748.48,
+   "d": 2.64,
+   "text": "You're making a whole game, right? Um,"
+  },
+  {
+   "t": 751.12,
+   "d": 1.52,
+   "text": "so the player is playing the whole game."
+  },
+  {
+   "t": 752.64,
+   "d": 1.68,
+   "text": "They don't know about your hypothesis."
+  },
+  {
+   "t": 754.32,
+   "d": 1.2,
+   "text": "They're just being presented what's in"
+  },
+  {
+   "t": 755.52,
+   "d": 2.72,
+   "text": "front of them. So it's okay to test more"
+  },
+  {
+   "t": 758.24,
+   "d": 2.24,
+   "text": "than just your one hypothesis. This"
+  },
+  {
+   "t": 760.48,
+   "d": 1.52,
+   "text": "isn't actually science. So you might"
+  },
+  {
+   "t": 762.0,
+   "d": 1.36,
+   "text": "have a few changes in your game. It's"
+  },
+  {
+   "t": 763.36,
+   "d": 1.44,
+   "text": "not like we're trying to isolate exact"
+  },
+  {
+   "t": 764.8,
+   "d": 2.48,
+   "text": "changes, but I think it is good to have"
+  },
+  {
+   "t": 767.28,
+   "d": 2.08,
+   "text": "one hypothesis you're really focused on"
+  },
+  {
+   "t": 769.36,
+   "d": 2.88,
+   "text": "for the play test. So in other words,"
+  },
+  {
+   "t": 772.24,
+   "d": 2.48,
+   "text": "it's a balance. So now let's go into the"
+  },
+  {
+   "t": 774.72,
+   "d": 1.52,
+   "text": "play test round. You run a play test"
+  },
+  {
+   "t": 776.24,
+   "d": 2.24,
+   "text": "with one to five people. Where did this"
+  },
+  {
+   "t": 778.48,
+   "d": 2.48,
+   "text": "magic number come from? Why five? I got"
+  },
+  {
+   "t": 780.96,
+   "d": 1.6,
+   "text": "it from this book called Sprint. I think"
+  },
+  {
+   "t": 782.56,
+   "d": 1.76,
+   "text": "it's a really great book. It's it"
+  },
+  {
+   "t": 784.32,
+   "d": 2.4,
+   "text": "doesn't exactly apply to like play"
+  },
+  {
+   "t": 786.72,
+   "d": 1.68,
+   "text": "testing, but they do play testing as"
+  },
+  {
+   "t": 788.4,
+   "d": 1.84,
+   "text": "part of their sprint process. They just"
+  },
+  {
+   "t": 790.24,
+   "d": 1.76,
+   "text": "mentioned that once they got to their"
+  },
+  {
+   "t": 792.0,
+   "d": 1.68,
+   "text": "fifth user, they would start to see"
+  },
+  {
+   "t": 793.68,
+   "d": 2.48,
+   "text": "patterns repeat. In my experience,"
+  },
+  {
+   "t": 796.16,
+   "d": 1.6,
+   "text": "that's definitely true. And for most of"
+  },
+  {
+   "t": 797.76,
+   "d": 3.44,
+   "text": "my play tests, three people is enough. I"
+  },
+  {
+   "t": 801.2,
+   "d": 1.76,
+   "text": "start to get a really good gut feeling"
+  },
+  {
+   "t": 802.96,
+   "d": 2.08,
+   "text": "by three, sometimes by one. I already"
+  },
+  {
+   "t": 805.04,
+   "d": 1.12,
+   "text": "know the right thing, but I'll usually"
+  },
+  {
+   "t": 806.16,
+   "d": 2.16,
+   "text": "go through and validate that. But there"
+  },
+  {
+   "t": 808.32,
+   "d": 1.44,
+   "text": "are cases where you might need to do"
+  },
+  {
+   "t": 809.76,
+   "d": 1.92,
+   "text": "more. So, it's up to your judgment. But"
+  },
+  {
+   "t": 811.68,
+   "d": 1.28,
+   "text": "my main point here is don't think you"
+  },
+  {
+   "t": 812.96,
+   "d": 2.16,
+   "text": "have to schedule 20 people to test every"
+  },
+  {
+   "t": 815.12,
+   "d": 1.44,
+   "text": "single change you make in the game."
+  },
+  {
+   "t": 816.56,
+   "d": 2.96,
+   "text": "That's not what the idea is in. So, in"
+  },
+  {
+   "t": 819.52,
+   "d": 0.96,
+   "text": "each play test, you're going to be"
+  },
+  {
+   "t": 820.48,
+   "d": 1.44,
+   "text": "taking, you know, write a document of"
+  },
+  {
+   "t": 821.92,
+   "d": 1.92,
+   "text": "notes. Um, I'll explain some of that a"
+  },
+  {
+   "t": 823.84,
+   "d": 1.36,
+   "text": "little bit later, some details, but"
+  },
+  {
+   "t": 825.2,
+   "d": 1.28,
+   "text": "you're going to output that you're going"
+  },
+  {
+   "t": 826.48,
+   "d": 1.6,
+   "text": "to have, let's say, five documents,"
+  },
+  {
+   "t": 828.08,
+   "d": 1.84,
+   "text": "right?"
+  },
+  {
+   "t": 829.92,
+   "d": 2.16,
+   "text": "So, what I do is after all the play"
+  },
+  {
+   "t": 832.08,
+   "d": 1.52,
+   "text": "tests, I I usually wait till I'm done"
+  },
+  {
+   "t": 833.6,
+   "d": 1.2,
+   "text": "with the whole round. I'll go through"
+  },
+  {
+   "t": 834.8,
+   "d": 1.76,
+   "text": "and mark sort of the action items in"
+  },
+  {
+   "t": 836.56,
+   "d": 2.0,
+   "text": "each document. I just use an emoji or"
+  },
+  {
+   "t": 838.56,
+   "d": 1.92,
+   "text": "however you want to do it. Um, in this"
+  },
+  {
+   "t": 840.48,
+   "d": 1.44,
+   "text": "case, I had like completed a couple"
+  },
+  {
+   "t": 841.92,
+   "d": 2.4,
+   "text": "already when I was going through, but uh"
+  },
+  {
+   "t": 844.32,
+   "d": 1.04,
+   "text": "you want just kind of mark down the"
+  },
+  {
+   "t": 845.36,
+   "d": 1.44,
+   "text": "action items. Some of those action items"
+  },
+  {
+   "t": 846.8,
+   "d": 1.76,
+   "text": "might just be like, think about this"
+  },
+  {
+   "t": 848.56,
+   "d": 1.36,
+   "text": "more. I have a design problem. It"
+  },
+  {
+   "t": 849.92,
+   "d": 1.2,
+   "text": "doesn't necessarily mean I need to go"
+  },
+  {
+   "t": 851.12,
+   "d": 1.76,
+   "text": "and write code to fix this immediately,"
+  },
+  {
+   "t": 852.88,
+   "d": 2.08,
+   "text": "but you want to take some kind of action"
+  },
+  {
+   "t": 854.96,
+   "d": 2.0,
+   "text": "on it. I also write a lot of things that"
+  },
+  {
+   "t": 856.96,
+   "d": 1.28,
+   "text": "like I don't know they laughed about"
+  },
+  {
+   "t": 858.24,
+   "d": 1.28,
+   "text": "some line in the game that's not"
+  },
+  {
+   "t": 859.52,
+   "d": 0.88,
+   "text": "necessarily something I'm going to take"
+  },
+  {
+   "t": 860.4,
+   "d": 2.24,
+   "text": "action in but it validates that like"
+  },
+  {
+   "t": 862.64,
+   "d": 1.6,
+   "text": "that's a good line don't change it or"
+  },
+  {
+   "t": 864.24,
+   "d": 2.24,
+   "text": "whatever. So then you're going to"
+  },
+  {
+   "t": 866.48,
+   "d": 1.92,
+   "text": "process the feedback. So you add all of"
+  },
+  {
+   "t": 868.4,
+   "d": 2.16,
+   "text": "those action items to another document"
+  },
+  {
+   "t": 870.56,
+   "d": 1.76,
+   "text": "with I like to put relevant notes and"
+  },
+  {
+   "t": 872.32,
+   "d": 1.36,
+   "text": "lately I've even been sort of"
+  },
+  {
+   "t": 873.68,
+   "d": 2.08,
+   "text": "attributing a person to each note and"
+  },
+  {
+   "t": 875.76,
+   "d": 2.32,
+   "text": "that's for reasons I'll explain later"
+  },
+  {
+   "t": 878.08,
+   "d": 2.72,
+   "text": "and then prioritize the list. That's a"
+  },
+  {
+   "t": 880.8,
+   "d": 1.36,
+   "text": "little bit of a gut thing, but generally"
+  },
+  {
+   "t": 882.16,
+   "d": 2.24,
+   "text": "the hypothesis items will go toward the"
+  },
+  {
+   "t": 884.4,
+   "d": 2.96,
+   "text": "top in my case. This looks a lot like a"
+  },
+  {
+   "t": 887.36,
+   "d": 1.92,
+   "text": "to-do list. So, here's a man being"
+  },
+  {
+   "t": 889.28,
+   "d": 2.48,
+   "text": "murdered by to-do list. Um, don't stress"
+  },
+  {
+   "t": 891.76,
+   "d": 1.28,
+   "text": "about completing everything. You're"
+  },
+  {
+   "t": 893.04,
+   "d": 1.12,
+   "text": "probably going to have way too many"
+  },
+  {
+   "t": 894.16,
+   "d": 2.32,
+   "text": "action items come out of like even three"
+  },
+  {
+   "t": 896.48,
+   "d": 1.92,
+   "text": "play tests."
+  },
+  {
+   "t": 898.4,
+   "d": 1.84,
+   "text": "So, my feeling about feedback is"
+  },
+  {
+   "t": 900.24,
+   "d": 1.2,
+   "text": "especially when you're in this tight"
+  },
+  {
+   "t": 901.44,
+   "d": 1.68,
+   "text": "iteration loop of play testing your"
+  },
+  {
+   "t": 903.12,
+   "d": 1.36,
+   "text": "game, it's going to come back and hit"
+  },
+  {
+   "t": 904.48,
+   "d": 2.16,
+   "text": "you again. So do the high priority"
+  },
+  {
+   "t": 906.64,
+   "d": 1.12,
+   "text": "things, the thing that you think will"
+  },
+  {
+   "t": 907.76,
+   "d": 2.8,
+   "text": "make the most impact and then you know"
+  },
+  {
+   "t": 910.56,
+   "d": 1.52,
+   "text": "you could validate the other stuff in"
+  },
+  {
+   "t": 912.08,
+   "d": 2.24,
+   "text": "the future. It's also possible you will"
+  },
+  {
+   "t": 914.32,
+   "d": 1.84,
+   "text": "make a design decision later that's"
+  },
+  {
+   "t": 916.16,
+   "d": 1.92,
+   "text": "going to remove that screen from the"
+  },
+  {
+   "t": 918.08,
+   "d": 2.24,
+   "text": "game. You're just so you know just just"
+  },
+  {
+   "t": 920.32,
+   "d": 1.36,
+   "text": "prioritize is kind of the point here."
+  },
+  {
+   "t": 921.68,
+   "d": 2.16,
+   "text": "Don't don't worry about doing everything"
+  },
+  {
+   "t": 923.84,
+   "d": 2.24,
+   "text": "and then take action, you know. So do"
+  },
+  {
+   "t": 926.08,
+   "d": 3.28,
+   "text": "the actions. One heristic I have is I'd"
+  },
+  {
+   "t": 929.36,
+   "d": 2.16,
+   "text": "like to do at least one action per play"
+  },
+  {
+   "t": 931.52,
+   "d": 1.6,
+   "text": "test. It feels really bad to me if I"
+  },
+  {
+   "t": 933.12,
+   "d": 2.16,
+   "text": "spend an hour with a person and I do"
+  },
+  {
+   "t": 935.28,
+   "d": 2.08,
+   "text": "nothing in response. Like, what was the"
+  },
+  {
+   "t": 937.36,
+   "d": 1.44,
+   "text": "point of that, right? Is is the game"
+  },
+  {
+   "t": 938.8,
+   "d": 1.84,
+   "text": "really perfect at this point? Probably"
+  },
+  {
+   "t": 940.64,
+   "d": 2.24,
+   "text": "not. So, I I try and do at least one"
+  },
+  {
+   "t": 942.88,
+   "d": 3.04,
+   "text": "thing per play test. And then do most of"
+  },
+  {
+   "t": 945.92,
+   "d": 2.72,
+   "text": "your high priority actions. Um, again,"
+  },
+  {
+   "t": 948.64,
+   "d": 2.0,
+   "text": "don't worry about doing everything. And"
+  },
+  {
+   "t": 950.64,
+   "d": 3.12,
+   "text": "then you loop around, go to one. So, one"
+  },
+  {
+   "t": 953.76,
+   "d": 2.08,
+   "text": "of the key things that has has made this"
+  },
+  {
+   "t": 955.84,
+   "d": 2.0,
+   "text": "process really work for me is I track"
+  },
+  {
+   "t": 957.84,
+   "d": 2.24,
+   "text": "all of my play tests. So, this helps me"
+  },
+  {
+   "t": 960.08,
+   "d": 1.52,
+   "text": "generally stay organized. You know, I"
+  },
+  {
+   "t": 961.6,
+   "d": 1.84,
+   "text": "have fields like name, date played,"
+  },
+  {
+   "t": 963.44,
+   "d": 1.92,
+   "text": "build. I I keep all my notes linked"
+  },
+  {
+   "t": 965.36,
+   "d": 2.96,
+   "text": "here. Status is really important. Um,"
+  },
+  {
+   "t": 968.32,
+   "d": 1.6,
+   "text": "so, you know, if someone tells me"
+  },
+  {
+   "t": 969.92,
+   "d": 1.28,
+   "text": "they're interested in playing my game,"
+  },
+  {
+   "t": 971.2,
+   "d": 2.08,
+   "text": "this could be a person I know in real"
+  },
+  {
+   "t": 973.28,
+   "d": 1.84,
+   "text": "life, a person on Discord, Reddit,"
+  },
+  {
+   "t": 975.12,
+   "d": 1.92,
+   "text": "whatever, I will get their information"
+  },
+  {
+   "t": 977.04,
+   "d": 1.92,
+   "text": "and add it to this list for like a"
+  },
+  {
+   "t": 978.96,
+   "d": 1.44,
+   "text": "future, right? In the future, when I'm"
+  },
+  {
+   "t": 980.4,
+   "d": 2.48,
+   "text": "ready to play test, I have a bank of"
+  },
+  {
+   "t": 982.88,
+   "d": 2.56,
+   "text": "people I can I could go to."
+  },
+  {
+   "t": 985.44,
+   "d": 2.48,
+   "text": "And it also helps me just track where"
+  },
+  {
+   "t": 987.92,
+   "d": 1.52,
+   "text": "some people it's like they they were in"
+  },
+  {
+   "t": 989.44,
+   "d": 1.68,
+   "text": "a Reddit comment and they they expressed"
+  },
+  {
+   "t": 991.12,
+   "d": 1.68,
+   "text": "interest. So I'll like link to that"
+  },
+  {
+   "t": 992.8,
+   "d": 1.44,
+   "text": "Reddit comment or link to their Reddit"
+  },
+  {
+   "t": 994.24,
+   "d": 1.52,
+   "text": "name or you know how how you find"
+  },
+  {
+   "t": 995.76,
+   "d": 1.2,
+   "text": "people. It's all over the place. So you"
+  },
+  {
+   "t": 996.96,
+   "d": 2.48,
+   "text": "want to remember how to get in touch."
+  },
+  {
+   "t": 999.44,
+   "d": 1.92,
+   "text": "And then you could track notes over time"
+  },
+  {
+   "t": 1001.36,
+   "d": 1.92,
+   "text": "which I found to be useful. I could go"
+  },
+  {
+   "t": 1003.28,
+   "d": 2.08,
+   "text": "back in time and and look at the state"
+  },
+  {
+   "t": 1005.36,
+   "d": 2.8,
+   "text": "of the game in the past basically. So I"
+  },
+  {
+   "t": 1008.16,
+   "d": 1.68,
+   "text": "almost always have this tab open on my"
+  },
+  {
+   "t": 1009.84,
+   "d": 1.84,
+   "text": "computer. It's extremely useful. You"
+  },
+  {
+   "t": 1011.68,
+   "d": 1.52,
+   "text": "don't have to follow this exact format."
+  },
+  {
+   "t": 1013.2,
+   "d": 2.0,
+   "text": "whatever works for you, but track your"
+  },
+  {
+   "t": 1015.2,
+   "d": 2.48,
+   "text": "play test somehow."
+  },
+  {
+   "t": 1017.68,
+   "d": 1.52,
+   "text": "This is a big question, right? How do"
+  },
+  {
+   "t": 1019.2,
+   "d": 1.84,
+   "text": "you find play testers? I don't know. I"
+  },
+  {
+   "t": 1021.04,
+   "d": 1.28,
+   "text": "have a bunch of screenshots of Reddit."
+  },
+  {
+   "t": 1022.32,
+   "d": 1.46,
+   "text": "I'm on Reddit way too much and I I"
+  },
+  {
+   "t": 1023.78,
+   "d": 1.42,
+   "text": "[laughter] just on all the game dev"
+  },
+  {
+   "t": 1025.2,
+   "d": 1.36,
+   "text": "Reddits and I see these types of"
+  },
+  {
+   "t": 1026.56,
+   "d": 2.96,
+   "text": "questions. So So this is actually like"
+  },
+  {
+   "t": 1029.52,
+   "d": 2.08,
+   "text": "in a rogike exclusive. I'm going to just"
+  },
+  {
+   "t": 1031.6,
+   "d": 2.48,
+   "text": "ask that you know uh don't share this"
+  },
+  {
+   "t": 1034.08,
+   "d": 1.68,
+   "text": "around because this is the all the top"
+  },
+  {
+   "t": 1035.76,
+   "d": 1.84,
+   "text": "game companies do this. So I'm going to"
+  },
+  {
+   "t": 1037.6,
+   "d": 1.2,
+   "text": "go next slide, but yeah, don't take"
+  },
+  {
+   "t": 1038.8,
+   "d": 1.28,
+   "text": "screenshots or whatever. I appreciate"
+  },
+  {
+   "t": 1040.08,
+   "d": 1.28,
+   "text": "that."
+  },
+  {
+   "t": 1041.36,
+   "d": 2.0,
+   "text": "So, what I do is I ask people if they"
+  },
+  {
+   "t": 1043.36,
+   "d": 3.84,
+   "text": "want to play test my game."
+  },
+  {
+   "t": 1047.2,
+   "d": 1.76,
+   "text": "Uh, here's an image that appeared when I"
+  },
+  {
+   "t": 1048.96,
+   "d": 2.24,
+   "text": "searched Google for social anxiety. Game"
+  },
+  {
+   "t": 1051.2,
+   "d": 1.6,
+   "text": "developers aren't known to be"
+  },
+  {
+   "t": 1052.8,
+   "d": 2.0,
+   "text": "extroverted. Um, it could be stressful"
+  },
+  {
+   "t": 1054.8,
+   "d": 1.52,
+   "text": "to even ask people a question like that."
+  },
+  {
+   "t": 1056.32,
+   "d": 2.08,
+   "text": "I'm not super extroverted. I'm a little"
+  },
+  {
+   "t": 1058.4,
+   "d": 3.04,
+   "text": "bit extroverted, but uh, so you could"
+  },
+  {
+   "t": 1061.44,
+   "d": 1.12,
+   "text": "start with friends and family,"
+  },
+  {
+   "t": 1062.56,
+   "d": 1.36,
+   "text": "especially when you're early on and you"
+  },
+  {
+   "t": 1063.92,
+   "d": 1.44,
+   "text": "know, you don't have artwork in the game"
+  },
+  {
+   "t": 1065.36,
+   "d": 2.72,
+   "text": "or whatever. Um, I sent a message out on"
+  },
+  {
+   "t": 1068.08,
+   "d": 2.24,
+   "text": "Facebook asking for people to play test"
+  },
+  {
+   "t": 1070.32,
+   "d": 2.8,
+   "text": "um, what almost two years ago and I got"
+  },
+  {
+   "t": 1073.12,
+   "d": 1.76,
+   "text": "a lot of responses from this. I ended up"
+  },
+  {
+   "t": 1074.88,
+   "d": 1.92,
+   "text": "probably doing six or seven play tests"
+  },
+  {
+   "t": 1076.8,
+   "d": 2.24,
+   "text": "out of this one post. So, it might"
+  },
+  {
+   "t": 1079.04,
+   "d": 1.2,
+   "text": "surprise you like the number of people"
+  },
+  {
+   "t": 1080.24,
+   "d": 2.24,
+   "text": "that want to play your game."
+  },
+  {
+   "t": 1082.48,
+   "d": 1.76,
+   "text": "Mine your Discord server collection. We"
+  },
+  {
+   "t": 1084.24,
+   "d": 1.6,
+   "text": "already we have like a hundred of these."
+  },
+  {
+   "t": 1085.84,
+   "d": 1.92,
+   "text": "So, you could go through there and just,"
+  },
+  {
+   "t": 1087.76,
+   "d": 1.44,
+   "text": "you know, you might message a mod or"
+  },
+  {
+   "t": 1089.2,
+   "d": 1.84,
+   "text": "whatever, but you can ask and of the"
+  },
+  {
+   "t": 1091.04,
+   "d": 1.76,
+   "text": "appropriate channel. Does I'm making a"
+  },
+  {
+   "t": 1092.8,
+   "d": 1.92,
+   "text": "video game about a rogike dice game or"
+  },
+  {
+   "t": 1094.72,
+   "d": 1.84,
+   "text": "whatever. Does anybody want to try it? I"
+  },
+  {
+   "t": 1096.56,
+   "d": 1.23,
+   "text": "need play test feedback. Again,"
+  },
+  {
+   "t": 1097.79,
+   "d": 2.21,
+   "text": "[clears throat] you might be surprised."
+  },
+  {
+   "t": 1100.0,
+   "d": 1.68,
+   "text": "I found a good amount of people on"
+  },
+  {
+   "t": 1101.68,
+   "d": 2.64,
+   "text": "Reddit. So, just there's like subreddits"
+  },
+  {
+   "t": 1104.32,
+   "d": 2.72,
+   "text": "like play testing or whatever. An army"
+  },
+  {
+   "t": 1107.04,
+   "d": 2.48,
+   "text": "of game testers, you know. So, you could"
+  },
+  {
+   "t": 1109.52,
+   "d": 2.72,
+   "text": "find people just like on social media. I"
+  },
+  {
+   "t": 1112.24,
+   "d": 2.16,
+   "text": "found people on Twitter, Blue Sky over"
+  },
+  {
+   "t": 1114.4,
+   "d": 2.08,
+   "text": "the years as well."
+  },
+  {
+   "t": 1116.48,
+   "d": 1.52,
+   "text": "So, other game developers, I just"
+  },
+  {
+   "t": 1118.0,
+   "d": 1.28,
+   "text": "thought it was funny to represent game"
+  },
+  {
+   "t": 1119.28,
+   "d": 2.08,
+   "text": "developers as always working in VR and"
+  },
+  {
+   "t": 1121.36,
+   "d": 1.76,
+   "text": "being like amazed that they're in VR,"
+  },
+  {
+   "t": 1123.12,
+   "d": 2.48,
+   "text": "but um there's an asterisk on this one"
+  },
+  {
+   "t": 1125.6,
+   "d": 2.0,
+   "text": "because don't lean too heavily into"
+  },
+  {
+   "t": 1127.6,
+   "d": 2.08,
+   "text": "this. Game developers have a very"
+  },
+  {
+   "t": 1129.68,
+   "d": 3.12,
+   "text": "particular way to view a game. Um I"
+  },
+  {
+   "t": 1132.8,
+   "d": 1.36,
+   "text": "think it's useful to have some game"
+  },
+  {
+   "t": 1134.16,
+   "d": 1.84,
+   "text": "developers in the mix, especially if you"
+  },
+  {
+   "t": 1136.0,
+   "d": 1.92,
+   "text": "really trust their in their subject"
+  },
+  {
+   "t": 1137.92,
+   "d": 1.52,
+   "text": "matter expert on the genre you're"
+  },
+  {
+   "t": 1139.44,
+   "d": 2.24,
+   "text": "working on, whatever. But don't over"
+  },
+  {
+   "t": 1141.68,
+   "d": 2.0,
+   "text": "rely on it. Uh oh, I have a visitor. I"
+  },
+  {
+   "t": 1143.68,
+   "d": 1.52,
+   "text": "have a couple kids. So,"
+  },
+  {
+   "t": 1145.2,
+   "d": 1.36,
+   "text": ">> okay. Hope I forgot to [laughter] lock"
+  },
+  {
+   "t": 1146.56,
+   "d": 2.4,
+   "text": "the door. Anyway, I think I made the"
+  },
+  {
+   "t": 1148.96,
+   "d": 2.48,
+   "text": "point. So, uh I've heard you can even"
+  },
+  {
+   "t": 1151.44,
+   "d": 1.76,
+   "text": "just hire people. There's websites like"
+  },
+  {
+   "t": 1153.2,
+   "d": 1.92,
+   "text": "Fiverr where you can you can pay someone"
+  },
+  {
+   "t": 1155.12,
+   "d": 2.24,
+   "text": "like a relatively little amount of money"
+  },
+  {
+   "t": 1157.36,
+   "d": 1.92,
+   "text": "to play test your game. So, that's an"
+  },
+  {
+   "t": 1159.28,
+   "d": 2.72,
+   "text": "option to look at as well. But I think"
+  },
+  {
+   "t": 1162.0,
+   "d": 1.12,
+   "text": "this is probably the most important."
+  },
+  {
+   "t": 1163.12,
+   "d": 1.36,
+   "text": "Once you start getting some play"
+  },
+  {
+   "t": 1164.48,
+   "d": 2.0,
+   "text": "testers, you can network with them. So,"
+  },
+  {
+   "t": 1166.48,
+   "d": 1.28,
+   "text": "you don't have to go wear a business"
+  },
+  {
+   "t": 1167.76,
+   "d": 1.44,
+   "text": "suit and go inside of an office"
+  },
+  {
+   "t": 1169.2,
+   "d": 1.76,
+   "text": "building, but you can just ask them on"
+  },
+  {
+   "t": 1170.96,
+   "d": 2.64,
+   "text": "Discord, hey, thanks for playing. Uh, do"
+  },
+  {
+   "t": 1173.6,
+   "d": 1.2,
+   "text": "you know anybody else who might be"
+  },
+  {
+   "t": 1174.8,
+   "d": 1.6,
+   "text": "interested in playing this game? And you"
+  },
+  {
+   "t": 1176.4,
+   "d": 1.76,
+   "text": "can kind of, you know, spiderweb out"
+  },
+  {
+   "t": 1178.16,
+   "d": 3.44,
+   "text": "from there and find a lot of people."
+  },
+  {
+   "t": 1181.6,
+   "d": 1.52,
+   "text": "Okay, so I want to talk about the actual"
+  },
+  {
+   "t": 1183.12,
+   "d": 1.92,
+   "text": "play test. You've got a play tester, you"
+  },
+  {
+   "t": 1185.04,
+   "d": 1.68,
+   "text": "you're starting the session with them."
+  },
+  {
+   "t": 1186.72,
+   "d": 1.84,
+   "text": "How do you make that as effective as you"
+  },
+  {
+   "t": 1188.56,
+   "d": 1.84,
+   "text": "can?"
+  },
+  {
+   "t": 1190.4,
+   "d": 1.2,
+   "text": "So, I'm going to go through a series of"
+  },
+  {
+   "t": 1191.6,
+   "d": 2.4,
+   "text": "scenes, right?"
+  },
+  {
+   "t": 1194.0,
+   "d": 1.68,
+   "text": "Thank you for taking the time to play my"
+  },
+  {
+   "t": 1195.68,
+   "d": 2.56,
+   "text": "game. Feedback is a gift and I'm so"
+  },
+  {
+   "t": 1198.24,
+   "d": 2.08,
+   "text": "grateful you decided to help me out. So"
+  },
+  {
+   "t": 1200.32,
+   "d": 1.92,
+   "text": "they are spending like at least an hour"
+  },
+  {
+   "t": 1202.24,
+   "d": 2.48,
+   "text": "with you. Time is so valuable. Everyone"
+  },
+  {
+   "t": 1204.72,
+   "d": 2.96,
+   "text": "is so busy. Um you know this is this is"
+  },
+  {
+   "t": 1207.68,
+   "d": 1.28,
+   "text": "worth acknowledging from the start just"
+  },
+  {
+   "t": 1208.96,
+   "d": 1.68,
+   "text": "that you appreciate that they are taking"
+  },
+  {
+   "t": 1210.64,
+   "d": 2.16,
+   "text": "the time. What type of games do you"
+  },
+  {
+   "t": 1212.8,
+   "d": 2.0,
+   "text": "play? Have you ever play tested before?"
+  },
+  {
+   "t": 1214.8,
+   "d": 1.52,
+   "text": "These questions are intended to kind of"
+  },
+  {
+   "t": 1216.32,
+   "d": 1.84,
+   "text": "warm up the person towards just"
+  },
+  {
+   "t": 1218.16,
+   "d": 1.6,
+   "text": "speaking. Like if you just go into the"
+  },
+  {
+   "t": 1219.76,
+   "d": 1.36,
+   "text": "play test, you don't talk, you don't"
+  },
+  {
+   "t": 1221.12,
+   "d": 2.88,
+   "text": "introduce yourself, whatever. Like it's"
+  },
+  {
+   "t": 1224.0,
+   "d": 2.72,
+   "text": "just going to feel off, you know? So we"
+  },
+  {
+   "t": 1226.72,
+   "d": 1.12,
+   "text": "want to warm them up. And these"
+  },
+  {
+   "t": 1227.84,
+   "d": 1.76,
+   "text": "questions are also relevant just to help"
+  },
+  {
+   "t": 1229.6,
+   "d": 1.92,
+   "text": "you understand their point of view. I've"
+  },
+  {
+   "t": 1231.52,
+   "d": 2.0,
+   "text": "had people play my turn-based rogike"
+  },
+  {
+   "t": 1233.52,
+   "d": 2.0,
+   "text": "game, dice game, and they like one"
+  },
+  {
+   "t": 1235.52,
+   "d": 1.52,
+   "text": "person, it blew mind, they never played"
+  },
+  {
+   "t": 1237.04,
+   "d": 1.84,
+   "text": "a turn-based game in their life. So,"
+  },
+  {
+   "t": 1238.88,
+   "d": 1.12,
+   "text": "they were playing through and say, \"Oh,"
+  },
+  {
+   "t": 1240.0,
+   "d": 1.76,
+   "text": "this is pretty chill.\" Like, what? And I"
+  },
+  {
+   "t": 1241.76,
+   "d": 1.04,
+   "text": "didn't understand at first what they"
+  },
+  {
+   "t": 1242.8,
+   "d": 1.28,
+   "text": "were talking about, but they just had"
+  },
+  {
+   "t": 1244.08,
+   "d": 1.36,
+   "text": "never played that type of game before."
+  },
+  {
+   "t": 1245.44,
+   "d": 1.44,
+   "text": "So, it's useful to understand where"
+  },
+  {
+   "t": 1246.88,
+   "d": 2.72,
+   "text": "they're coming from. Scene two, we want"
+  },
+  {
+   "t": 1249.6,
+   "d": 2.48,
+   "text": "to open them up to be like transparent."
+  },
+  {
+   "t": 1252.08,
+   "d": 2.24,
+   "text": "Um, so the goal is to get your honest,"
+  },
+  {
+   "t": 1254.32,
+   "d": 1.68,
+   "text": "open feedback. I want to know what"
+  },
+  {
+   "t": 1256.0,
+   "d": 1.52,
+   "text": "you're thinking and feeling as much as"
+  },
+  {
+   "t": 1257.52,
+   "d": 3.12,
+   "text": "possible. We want to just have an open"
+  },
+  {
+   "t": 1260.64,
+   "d": 2.08,
+   "text": "window to their mind ideally, right? So,"
+  },
+  {
+   "t": 1262.72,
+   "d": 2.64,
+   "text": "we want we want to tell them this. Don't"
+  },
+  {
+   "t": 1265.36,
+   "d": 2.0,
+   "text": "hold back. You won't hurt my feelings. I"
+  },
+  {
+   "t": 1267.36,
+   "d": 1.92,
+   "text": "always say some form of this. Like, I"
+  },
+  {
+   "t": 1269.28,
+   "d": 1.76,
+   "text": "don't want them to think they're going"
+  },
+  {
+   "t": 1271.04,
+   "d": 1.52,
+   "text": "to hurt my feelings by saying something,"
+  },
+  {
+   "t": 1272.56,
+   "d": 2.24,
+   "text": "right? Please tell me what you find fun,"
+  },
+  {
+   "t": 1274.8,
+   "d": 1.76,
+   "text": "frustrating, and confusing. I always go"
+  },
+  {
+   "t": 1276.56,
+   "d": 1.44,
+   "text": "to these three words. I think these"
+  },
+  {
+   "t": 1278.0,
+   "d": 1.52,
+   "text": "three words are super useful in the"
+  },
+  {
+   "t": 1279.52,
+   "d": 2.32,
+   "text": "context of play testing. This is like"
+  },
+  {
+   "t": 1281.84,
+   "d": 2.16,
+   "text": "the core three things that people"
+  },
+  {
+   "t": 1284.0,
+   "d": 3.44,
+   "text": "generally feel in some way or another."
+  },
+  {
+   "t": 1287.44,
+   "d": 2.56,
+   "text": "So, we want to know. Okay, I want to"
+  },
+  {
+   "t": 1290.0,
+   "d": 2.32,
+   "text": "talk about defensive language here. So,"
+  },
+  {
+   "t": 1292.32,
+   "d": 1.92,
+   "text": "here the play tester says, \"I feel"
+  },
+  {
+   "t": 1294.24,
+   "d": 1.6,
+   "text": "confused by the skeleton enemy. I don't"
+  },
+  {
+   "t": 1295.84,
+   "d": 1.44,
+   "text": "understand why I'm on fire when I hit"
+  },
+  {
+   "t": 1297.28,
+   "d": 2.08,
+   "text": "it. Here's the bad thing that here's how"
+  },
+  {
+   "t": 1299.36,
+   "d": 1.44,
+   "text": "to be defensive. You don't want to do"
+  },
+  {
+   "t": 1300.8,
+   "d": 2.24,
+   "text": "this.\" Uh, don't you see that status"
+  },
+  {
+   "t": 1303.04,
+   "d": 1.68,
+   "text": "icon in the top left of the screen? It"
+  },
+  {
+   "t": 1304.72,
+   "d": 2.08,
+   "text": "seems pretty clear to me. Okay, this"
+  },
+  {
+   "t": 1306.8,
+   "d": 1.76,
+   "text": "might be an extreme example, but I I've"
+  },
+  {
+   "t": 1308.56,
+   "d": 1.76,
+   "text": "had when I'm play testing other people's"
+  },
+  {
+   "t": 1310.32,
+   "d": 2.32,
+   "text": "game, in some cases I Nobody here, of"
+  },
+  {
+   "t": 1312.64,
+   "d": 2.08,
+   "text": "course, but I've heard some defensive"
+  },
+  {
+   "t": 1314.72,
+   "d": 2.0,
+   "text": "language like this before. So, don't be"
+  },
+  {
+   "t": 1316.72,
+   "d": 1.76,
+   "text": "like Mr. Turtle. This is excellent"
+  },
+  {
+   "t": 1318.48,
+   "d": 1.84,
+   "text": "feedback this play tester is giving us."
+  },
+  {
+   "t": 1320.32,
+   "d": 2.08,
+   "text": "Um whether the information is on the"
+  },
+  {
+   "t": 1322.4,
+   "d": 1.92,
+   "text": "screen or not, she is noticing the"
+  },
+  {
+   "t": 1324.32,
+   "d": 2.48,
+   "text": "connection. Um so, she's done her part."
+  },
+  {
+   "t": 1326.8,
+   "d": 2.88,
+   "text": "She has told us that she's confused and"
+  },
+  {
+   "t": 1329.68,
+   "d": 2.24,
+   "text": "our job here is to take that in and note"
+  },
+  {
+   "t": 1331.92,
+   "d": 1.52,
+   "text": "it down. We could ask some more"
+  },
+  {
+   "t": 1333.44,
+   "d": 1.52,
+   "text": "clarifying questions or whatever, but we"
+  },
+  {
+   "t": 1334.96,
+   "d": 1.52,
+   "text": "don't want to be defensive with this."
+  },
+  {
+   "t": 1336.48,
+   "d": 2.08,
+   "text": "So, here's a this is what's going to"
+  },
+  {
+   "t": 1338.56,
+   "d": 1.76,
+   "text": "happen then. She's going to notice that"
+  },
+  {
+   "t": 1340.32,
+   "d": 1.28,
+   "text": "we're being defensive and she's going to"
+  },
+  {
+   "t": 1341.6,
+   "d": 1.36,
+   "text": "give us feedback. The game was good."
+  },
+  {
+   "t": 1342.96,
+   "d": 2.24,
+   "text": "Thanks. Which is not useful, right? We"
+  },
+  {
+   "t": 1345.2,
+   "d": 2.32,
+   "text": "don't know what she's actually feeling."
+  },
+  {
+   "t": 1347.52,
+   "d": 2.08,
+   "text": "So, here's a better example. This play"
+  },
+  {
+   "t": 1349.6,
+   "d": 1.68,
+   "text": "tester says, \"I'm frustrated by this"
+  },
+  {
+   "t": 1351.28,
+   "d": 1.92,
+   "text": "gap. I keep trying, but I can't jump"
+  },
+  {
+   "t": 1353.2,
+   "d": 1.44,
+   "text": "that high.\" So, they they can't jump"
+  },
+  {
+   "t": 1354.64,
+   "d": 3.52,
+   "text": "over a gap in our like platformer. So,"
+  },
+  {
+   "t": 1358.16,
+   "d": 1.68,
+   "text": "here I'm going to say, \"Ah, I can see"
+  },
+  {
+   "t": 1359.84,
+   "d": 1.6,
+   "text": "where I made a mistake. go ahead and"
+  },
+  {
+   "t": 1361.44,
+   "d": 1.92,
+   "text": "smash that box to get the power boots."
+  },
+  {
+   "t": 1363.36,
+   "d": 2.4,
+   "text": "I'll fix that in the next version. So"
+  },
+  {
+   "t": 1365.76,
+   "d": 2.0,
+   "text": "here I'm using more like eye language"
+  },
+  {
+   "t": 1367.76,
+   "d": 1.6,
+   "text": "like I can see where I made a mistake"
+  },
+  {
+   "t": 1369.36,
+   "d": 2.56,
+   "text": "rather than why don't you why can't you"
+  },
+  {
+   "t": 1371.92,
+   "d": 1.2,
+   "text": "figure out what to do? It's right there."
+  },
+  {
+   "t": 1373.12,
+   "d": 2.72,
+   "text": "Have you looked at the box, you know? So"
+  },
+  {
+   "t": 1375.84,
+   "d": 1.12,
+   "text": "another thing to look into, I don't"
+  },
+  {
+   "t": 1376.96,
+   "d": 1.28,
+   "text": "know, this could be a whole talk in of"
+  },
+  {
+   "t": 1378.24,
+   "d": 1.84,
+   "text": "itself, but it's active listening. These"
+  },
+  {
+   "t": 1380.08,
+   "d": 1.2,
+   "text": "are kind of like active listening"
+  },
+  {
+   "t": 1381.28,
+   "d": 1.76,
+   "text": "techniques are really useful for this"
+  },
+  {
+   "t": 1383.04,
+   "d": 2.24,
+   "text": "kind of play testing."
+  },
+  {
+   "t": 1385.28,
+   "d": 2.4,
+   "text": "Scene three on note takingaking. You"
+  },
+  {
+   "t": 1387.68,
+   "d": 1.76,
+   "text": "might hear me typing. I'm just taking"
+  },
+  {
+   "t": 1389.44,
+   "d": 2.48,
+   "text": "notes. There's two benefits to this. It"
+  },
+  {
+   "t": 1391.92,
+   "d": 1.92,
+   "text": "explains if they hear you you typing on"
+  },
+  {
+   "t": 1393.84,
+   "d": 2.08,
+   "text": "your keyboard and then they understand"
+  },
+  {
+   "t": 1395.92,
+   "d": 1.68,
+   "text": "that you are taking this seriously like"
+  },
+  {
+   "t": 1397.6,
+   "d": 1.36,
+   "text": "you're going to be taking notes. You"
+  },
+  {
+   "t": 1398.96,
+   "d": 1.92,
+   "text": "value their time and they are going to"
+  },
+  {
+   "t": 1400.88,
+   "d": 1.92,
+   "text": "take it more seriously as well. You get"
+  },
+  {
+   "t": 1402.8,
+   "d": 1.92,
+   "text": "better feedback."
+  },
+  {
+   "t": 1404.72,
+   "d": 1.84,
+   "text": "So at some point in the process,"
+  },
+  {
+   "t": 1406.56,
+   "d": 1.76,
+   "text": "somebody decided that we should just be"
+  },
+  {
+   "t": 1408.32,
+   "d": 1.68,
+   "text": "silent while play testing. It's like"
+  },
+  {
+   "t": 1410.0,
+   "d": 1.52,
+   "text": "that. The first play test I ever"
+  },
+  {
+   "t": 1411.52,
+   "d": 1.36,
+   "text": "participated in was when one of those"
+  },
+  {
+   "t": 1412.88,
+   "d": 2.72,
+   "text": "like one-way mirror situations. This was"
+  },
+  {
+   "t": 1415.6,
+   "d": 2.56,
+   "text": "like in 2003 and it was so bizarre to"
+  },
+  {
+   "t": 1418.16,
+   "d": 1.6,
+   "text": "me. So I think it's weird to just be"
+  },
+  {
+   "t": 1419.76,
+   "d": 1.6,
+   "text": "totally silent when you're running a"
+  },
+  {
+   "t": 1421.36,
+   "d": 2.08,
+   "text": "play test and I think it's not useful. I"
+  },
+  {
+   "t": 1423.44,
+   "d": 1.28,
+   "text": "think you get a lot of value out of"
+  },
+  {
+   "t": 1424.72,
+   "d": 1.52,
+   "text": "talking,"
+  },
+  {
+   "t": 1426.24,
+   "d": 2.16,
+   "text": "but don't be too chatty. You don't want"
+  },
+  {
+   "t": 1428.4,
+   "d": 2.64,
+   "text": "to bias a player, at least not too much."
+  },
+  {
+   "t": 1431.04,
+   "d": 1.44,
+   "text": "And you, like I said, you don't want to"
+  },
+  {
+   "t": 1432.48,
+   "d": 1.92,
+   "text": "be defensive. So I think that's why the"
+  },
+  {
+   "t": 1434.4,
+   "d": 2.96,
+   "text": "silent approach has has become a thing."
+  },
+  {
+   "t": 1437.36,
+   "d": 1.68,
+   "text": "But I I really think there are better"
+  },
+  {
+   "t": 1439.04,
+   "d": 2.4,
+   "text": "ways. Uh you want to be an active"
+  },
+  {
+   "t": 1441.44,
+   "d": 2.0,
+   "text": "listener instead."
+  },
+  {
+   "t": 1443.44,
+   "d": 2.0,
+   "text": "So sometimes they'll ask questions in"
+  },
+  {
+   "t": 1445.44,
+   "d": 1.36,
+   "text": "the play test like they're you know and"
+  },
+  {
+   "t": 1446.8,
+   "d": 1.68,
+   "text": "this is questions are useful that's you"
+  },
+  {
+   "t": 1448.48,
+   "d": 1.44,
+   "text": "want to take note of every question they"
+  },
+  {
+   "t": 1449.92,
+   "d": 2.08,
+   "text": "ask but um sometime you what you want to"
+  },
+  {
+   "t": 1452.0,
+   "d": 1.36,
+   "text": "know this is my decision tree is the"
+  },
+  {
+   "t": 1453.36,
+   "d": 1.28,
+   "text": "question related to something I'm"
+  },
+  {
+   "t": 1454.64,
+   "d": 2.4,
+   "text": "testing so they might be asking you know"
+  },
+  {
+   "t": 1457.04,
+   "d": 2.08,
+   "text": "does vulnerability stack with poison"
+  },
+  {
+   "t": 1459.12,
+   "d": 2.64,
+   "text": "great question is that related to the"
+  },
+  {
+   "t": 1461.76,
+   "d": 1.28,
+   "text": "thing I'm play testing now or is that"
+  },
+  {
+   "t": 1463.04,
+   "d": 1.12,
+   "text": "something I'm concerned about? It could"
+  },
+  {
+   "t": 1464.16,
+   "d": 1.52,
+   "text": "be that I've already play tested enough"
+  },
+  {
+   "t": 1465.68,
+   "d": 2.32,
+   "text": "and I've decided most people get it or"
+  },
+  {
+   "t": 1468.0,
+   "d": 1.44,
+   "text": "I'm teaching that later in the game and"
+  },
+  {
+   "t": 1469.44,
+   "d": 1.92,
+   "text": "I'm I'm okay with them not knowing now."
+  },
+  {
+   "t": 1471.36,
+   "d": 1.36,
+   "text": "So, I'm going to run that decision tree"
+  },
+  {
+   "t": 1472.72,
+   "d": 1.44,
+   "text": "and I'm going to ask a question like,"
+  },
+  {
+   "t": 1474.16,
+   "d": 2.08,
+   "text": "\"What's your intuition say if I want to"
+  },
+  {
+   "t": 1476.24,
+   "d": 2.08,
+   "text": "know more?\" Otherwise, I'm just going to"
+  },
+  {
+   "t": 1478.32,
+   "d": 1.28,
+   "text": "answer their question and move things"
+  },
+  {
+   "t": 1479.6,
+   "d": 2.48,
+   "text": "along. Uh, the time is super valuable."
+  },
+  {
+   "t": 1482.08,
+   "d": 1.84,
+   "text": "So, you don't want to get stuck up on"
+  },
+  {
+   "t": 1483.92,
+   "d": 3.04,
+   "text": "details that don't matter."
+  },
+  {
+   "t": 1486.96,
+   "d": 2.48,
+   "text": "So, know when to move on. If if if"
+  },
+  {
+   "t": 1489.44,
+   "d": 2.24,
+   "text": "they're blocked by a bug or they're"
+  },
+  {
+   "t": 1491.68,
+   "d": 1.44,
+   "text": "totally confused and you don't think"
+  },
+  {
+   "t": 1493.12,
+   "d": 1.6,
+   "text": "they're going to get it, like you made a"
+  },
+  {
+   "t": 1494.72,
+   "d": 2.0,
+   "text": "mistake somewhere, you messed up, um,"
+  },
+  {
+   "t": 1496.72,
+   "d": 2.0,
+   "text": "just move on. You you want to keep"
+  },
+  {
+   "t": 1498.72,
+   "d": 2.96,
+   "text": "things going. And our talking strategy"
+  },
+  {
+   "t": 1501.68,
+   "d": 4.96,
+   "text": "allows for us to unblock the player."
+  },
+  {
+   "t": 1506.64,
+   "d": 2.08,
+   "text": "Okay. And then finally, you can ask them"
+  },
+  {
+   "t": 1508.72,
+   "d": 1.92,
+   "text": "questions. So these are some of my"
+  },
+  {
+   "t": 1510.64,
+   "d": 1.6,
+   "text": "favorite questions. What are you feeling"
+  },
+  {
+   "t": 1512.24,
+   "d": 1.84,
+   "text": "now? If they're sometimes the player's"
+  },
+  {
+   "t": 1514.08,
+   "d": 1.68,
+   "text": "just really silent, they're if you have"
+  },
+  {
+   "t": 1515.76,
+   "d": 1.28,
+   "text": "a crunchy game, they're like thinking"
+  },
+  {
+   "t": 1517.04,
+   "d": 2.0,
+   "text": "through all sorts of possibilities. What"
+  },
+  {
+   "t": 1519.04,
+   "d": 1.04,
+   "text": "are you feeling now? What are you"
+  },
+  {
+   "t": 1520.08,
+   "d": 1.04,
+   "text": "thinking about? What's the decision"
+  },
+  {
+   "t": 1521.12,
+   "d": 2.0,
+   "text": "you're making? These questions are super"
+  },
+  {
+   "t": 1523.12,
+   "d": 2.56,
+   "text": "useful to get insight. I can see there"
+  },
+  {
+   "t": 1525.68,
+   "d": 1.44,
+   "text": "is room for improvement on the screen."
+  },
+  {
+   "t": 1527.12,
+   "d": 1.92,
+   "text": "Do you know what to click next? So, you"
+  },
+  {
+   "t": 1529.04,
+   "d": 1.52,
+   "text": "know, if you see that they're struggling"
+  },
+  {
+   "t": 1530.56,
+   "d": 1.68,
+   "text": "through something, you understand that"
+  },
+  {
+   "t": 1532.24,
+   "d": 3.2,
+   "text": "you have a problem. Um, you can you can"
+  },
+  {
+   "t": 1535.44,
+   "d": 1.68,
+   "text": "like see if they at least understand"
+  },
+  {
+   "t": 1537.12,
+   "d": 2.56,
+   "text": "what to click on next. For example, I"
+  },
+  {
+   "t": 1539.68,
+   "d": 1.28,
+   "text": "sense you're a bit frustrated. I'm"
+  },
+  {
+   "t": 1540.96,
+   "d": 1.68,
+   "text": "curious to learn why. So, here we're"
+  },
+  {
+   "t": 1542.64,
+   "d": 2.24,
+   "text": "acknowledging there. We might sense it."
+  },
+  {
+   "t": 1544.88,
+   "d": 1.92,
+   "text": "Webcams are very useful in one play"
+  },
+  {
+   "t": 1546.8,
+   "d": 2.16,
+   "text": "test. You should always have yours on."
+  },
+  {
+   "t": 1548.96,
+   "d": 1.52,
+   "text": "Should encourage them to turn theirs on."
+  },
+  {
+   "t": 1550.48,
+   "d": 1.52,
+   "text": "I I like when I could see their face,"
+  },
+  {
+   "t": 1552.0,
+   "d": 2.32,
+   "text": "but yeah, we're acknowledging that"
+  },
+  {
+   "t": 1554.32,
+   "d": 1.92,
+   "text": "they're frustrated and we, you know, we"
+  },
+  {
+   "t": 1556.24,
+   "d": 1.84,
+   "text": "want to understand why so we can make"
+  },
+  {
+   "t": 1558.08,
+   "d": 1.84,
+   "text": "the game better. You know, I most games"
+  },
+  {
+   "t": 1559.92,
+   "d": 2.88,
+   "text": "don't want to frustrate their player."
+  },
+  {
+   "t": 1562.8,
+   "d": 3.04,
+   "text": "So, this is also an important part of my"
+  },
+  {
+   "t": 1565.84,
+   "d": 2.96,
+   "text": "process. I I send notes afterwards. I"
+  },
+  {
+   "t": 1568.8,
+   "d": 1.84,
+   "text": "don't do this 100% of the time, right?"
+  },
+  {
+   "t": 1570.64,
+   "d": 1.68,
+   "text": "It's it's hard to manage. This is why I"
+  },
+  {
+   "t": 1572.32,
+   "d": 2.8,
+   "text": "said I attribute like feedback actions"
+  },
+  {
+   "t": 1575.12,
+   "d": 2.32,
+   "text": "to particular people is I like to"
+  },
+  {
+   "t": 1577.44,
+   "d": 1.12,
+   "text": "respond to people and you know if"
+  },
+  {
+   "t": 1578.56,
+   "d": 1.36,
+   "text": "they've spent their time play testing"
+  },
+  {
+   "t": 1579.92,
+   "d": 1.92,
+   "text": "and I can make a change that addresses"
+  },
+  {
+   "t": 1581.84,
+   "d": 2.08,
+   "text": "some frustration or confusion they had"
+  },
+  {
+   "t": 1583.92,
+   "d": 1.6,
+   "text": "or I can make the fun thing even funner"
+  },
+  {
+   "t": 1585.52,
+   "d": 1.6,
+   "text": "or they had they some people have"
+  },
+  {
+   "t": 1587.12,
+   "d": 1.28,
+   "text": "suggestions as they're playing. Well,"
+  },
+  {
+   "t": 1588.4,
+   "d": 1.68,
+   "text": "what if it worked this way and if I like"
+  },
+  {
+   "t": 1590.08,
+   "d": 1.68,
+   "text": "it and implement it, I'll tell them."
+  },
+  {
+   "t": 1591.76,
+   "d": 1.92,
+   "text": "I'll thank them. So, it's a way to show"
+  },
+  {
+   "t": 1593.68,
+   "d": 2.56,
+   "text": "thanks. It helps build trust and it"
+  },
+  {
+   "t": 1596.24,
+   "d": 1.92,
+   "text": "opens up like for future opportunities"
+  },
+  {
+   "t": 1598.16,
+   "d": 1.12,
+   "text": "of play testing. they're going to be"
+  },
+  {
+   "t": 1599.28,
+   "d": 1.92,
+   "text": "much more interested in in collaborating"
+  },
+  {
+   "t": 1601.2,
+   "d": 1.52,
+   "text": "with you on play testing if they see"
+  },
+  {
+   "t": 1602.72,
+   "d": 1.6,
+   "text": "that you're you're doing stuff, you"
+  },
+  {
+   "t": 1604.32,
+   "d": 1.76,
+   "text": "know. I also just think it's sort of a"
+  },
+  {
+   "t": 1606.08,
+   "d": 1.52,
+   "text": "nice thing to do. It's like a a really"
+  },
+  {
+   "t": 1607.6,
+   "d": 2.48,
+   "text": "cool thank you note in a way."
+  },
+  {
+   "t": 1610.08,
+   "d": 1.52,
+   "text": "So, some final thoughts. I'm going to go"
+  },
+  {
+   "t": 1611.6,
+   "d": 1.76,
+   "text": "through these fast, so a little time for"
+  },
+  {
+   "t": 1613.36,
+   "d": 1.44,
+   "text": "questions maybe. Play testing is"
+  },
+  {
+   "t": 1614.8,
+   "d": 2.24,
+   "text": "absolutely essential. One, play testing"
+  },
+  {
+   "t": 1617.04,
+   "d": 2.4,
+   "text": "is a critical tool to success. Play"
+  },
+  {
+   "t": 1619.44,
+   "d": 1.6,
+   "text": "testing should be the central pillar of"
+  },
+  {
+   "t": 1621.04,
+   "d": 2.48,
+   "text": "your development process. Everyone says"
+  },
+  {
+   "t": 1623.52,
+   "d": 2.48,
+   "text": "it's true. Uh but test early and often."
+  },
+  {
+   "t": 1626.0,
+   "d": 1.68,
+   "text": "I think that's absolutely the case with"
+  },
+  {
+   "t": 1627.68,
+   "d": 2.32,
+   "text": "me. Don't wait until release to find"
+  },
+  {
+   "t": 1630.0,
+   "d": 3.12,
+   "text": "what players think. It's hypothesis,"
+  },
+  {
+   "t": 1633.12,
+   "d": 2.8,
+   "text": "play test, process, the feedback,"
+  },
+  {
+   "t": 1635.92,
+   "d": 3.2,
+   "text": "action, repeat. Ask people to play your"
+  },
+  {
+   "t": 1639.12,
+   "d": 2.8,
+   "text": "game. They often want to"
+  },
+  {
+   "t": 1641.92,
+   "d": 1.68,
+   "text": "talk to your testers, but don't be"
+  },
+  {
+   "t": 1643.6,
+   "d": 1.52,
+   "text": "defensive."
+  },
+  {
+   "t": 1645.12,
+   "d": 1.84,
+   "text": "Then actually do stuff based on their"
+  },
+  {
+   "t": 1646.96,
+   "d": 1.76,
+   "text": "feedback."
+  },
+  {
+   "t": 1648.72,
+   "d": 2.56,
+   "text": "Follow up with testers. And that's it."
+  },
+  {
+   "t": 1651.28,
+   "d": 1.76,
+   "text": "So that's my talk for this year. uh you"
+  },
+  {
+   "t": 1653.04,
+   "d": 1.84,
+   "text": "can get a hold of me on various social"
+  },
+  {
+   "t": 1654.88,
+   "d": 2.08,
+   "text": "media platforms or good oldfashioned"
+  },
+  {
+   "t": 1656.96,
+   "d": 2.24,
+   "text": "email. Uh people in the past years that"
+  },
+  {
+   "t": 1659.2,
+   "d": 1.84,
+   "text": "I've spoken have someone last week"
+  },
+  {
+   "t": 1661.04,
+   "d": 2.08,
+   "text": "messaged me about the talk last year. So"
+  },
+  {
+   "t": 1663.12,
+   "d": 1.44,
+   "text": "if any of this resonated, if you have"
+  },
+  {
+   "t": 1664.56,
+   "d": 2.24,
+   "text": "follow-up questions, if you have other"
+  },
+  {
+   "t": 1666.8,
+   "d": 2.16,
+   "text": "ideas to contribute related to this,"
+  },
+  {
+   "t": 1668.96,
+   "d": 2.32,
+   "text": "please send me messages. Uh and thanks"
+  },
+  {
+   "t": 1671.28,
+   "d": 2.24,
+   "text": "for having me."
+  },
+  {
+   "t": 1673.52,
+   "d": 2.4,
+   "text": ">> Thank you. That was really great. I love"
+  },
+  {
+   "t": 1675.92,
+   "d": 1.76,
+   "text": "it. It was a very like detailed process."
+  },
+  {
+   "t": 1677.68,
+   "d": 1.76,
+   "text": "It seems like a great reference talk."
+  },
+  {
+   "t": 1679.44,
+   "d": 1.2,
+   "text": "That's what I love about some of these"
+  },
+  {
+   "t": 1680.64,
+   "d": 1.28,
+   "text": "and actually your talks in particular"
+  },
+  {
+   "t": 1681.92,
+   "d": 1.52,
+   "text": "are often I think people come back to"
+  },
+  {
+   "t": 1683.44,
+   "d": 1.28,
+   "text": "them. We see that in our YouTube"
+  },
+  {
+   "t": 1684.72,
+   "d": 1.92,
+   "text": "background of like I think that they're"
+  },
+  {
+   "t": 1686.64,
+   "d": 1.2,
+   "text": "great for people to come back and"
+  },
+  {
+   "t": 1687.84,
+   "d": 2.32,
+   "text": "reference. Um I'm going to try and fit"
+  },
+  {
+   "t": 1690.16,
+   "d": 1.28,
+   "text": "in one question here just because it"
+  },
+  {
+   "t": 1691.44,
+   "d": 1.28,
+   "text": "came up and I do think it's a good one"
+  },
+  {
+   "t": 1692.72,
+   "d": 2.64,
+   "text": "from Joseph which is um is there such a"
+  },
+  {
+   "t": 1695.36,
+   "d": 2.4,
+   "text": "thing as a bad play tester? And kind of"
+  },
+  {
+   "t": 1697.76,
+   "d": 2.56,
+   "text": "like what criteria do you have for good"
+  },
+  {
+   "t": 1700.32,
+   "d": 2.24,
+   "text": "play testers? And is it like uh"
+  },
+  {
+   "t": 1702.56,
+   "d": 2.48,
+   "text": "especially you know if your ability or"
+  },
+  {
+   "t": 1705.04,
+   "d": 2.08,
+   "text": "like emotional capacity to parse"
+  },
+  {
+   "t": 1707.12,
+   "d": 1.84,
+   "text": "feedback is limited like I guess I'm"
+  },
+  {
+   "t": 1708.96,
+   "d": 1.28,
+   "text": "curious there's kind of multiple"
+  },
+  {
+   "t": 1710.24,
+   "d": 2.56,
+   "text": "questions in there but um do you end up"
+  },
+  {
+   "t": 1712.8,
+   "d": 3.04,
+   "text": "over time kind of refining or looking"
+  },
+  {
+   "t": 1715.84,
+   "d": 2.24,
+   "text": "for traits of who's going to make an"
+  },
+  {
+   "t": 1718.08,
+   "d": 1.68,
+   "text": "easier to work with play tester perhaps"
+  },
+  {
+   "t": 1719.76,
+   "d": 1.44,
+   "text": "or someone who gives you more useful"
+  },
+  {
+   "t": 1721.2,
+   "d": 1.28,
+   "text": "feedback?"
+  },
+  {
+   "t": 1722.48,
+   "d": 2.4,
+   "text": ">> Well, I can't say I'm like well known"
+  },
+  {
+   "t": 1724.88,
+   "d": 1.92,
+   "text": "enough just to have hundreds of people"
+  },
+  {
+   "t": 1726.8,
+   "d": 2.48,
+   "text": "diving at me to play test. So I I'm not"
+  },
+  {
+   "t": 1729.28,
+   "d": 3.12,
+   "text": "super selective, but some the only trait"
+  },
+  {
+   "t": 1732.4,
+   "d": 2.4,
+   "text": "I would call out is people who are"
+  },
+  {
+   "t": 1734.8,
+   "d": 2.0,
+   "text": "willing to sort of speak as they're"
+  },
+  {
+   "t": 1736.8,
+   "d": 1.44,
+   "text": "playing, who are willing to give"
+  },
+  {
+   "t": 1738.24,
+   "d": 2.32,
+   "text": "feedback. I I had a play tester"
+  },
+  {
+   "t": 1740.56,
+   "d": 1.68,
+   "text": "recently, and this was not a one-on-one"
+  },
+  {
+   "t": 1742.24,
+   "d": 1.44,
+   "text": "play testing situation. They did it"
+  },
+  {
+   "t": 1743.68,
+   "d": 2.8,
+   "text": "asynchronously for reasons, but they had"
+  },
+  {
+   "t": 1746.48,
+   "d": 1.6,
+   "text": "a lot of harsh feedback for me. They had"
+  },
+  {
+   "t": 1748.08,
+   "d": 1.84,
+   "text": "a lot of negative things to say about"
+  },
+  {
+   "t": 1749.92,
+   "d": 2.88,
+   "text": "the game. Um, and some of it, you know,"
+  },
+  {
+   "t": 1752.8,
+   "d": 2.72,
+   "text": "like I was a little defensive in my head"
+  },
+  {
+   "t": 1755.52,
+   "d": 1.28,
+   "text": "as I was reading. was like, well, you"
+  },
+  {
+   "t": 1756.8,
+   "d": 1.44,
+   "text": "know, maybe if you played a bit more or"
+  },
+  {
+   "t": 1758.24,
+   "d": 2.0,
+   "text": "maybe like clearly this game isn't for"
+  },
+  {
+   "t": 1760.24,
+   "d": 2.8,
+   "text": "you, that will happen. Um, that being"
+  },
+  {
+   "t": 1763.04,
+   "d": 1.6,
+   "text": "said, I got a lot of value out of that"
+  },
+  {
+   "t": 1764.64,
+   "d": 1.76,
+   "text": "play test. Some of that feedback that"
+  },
+  {
+   "t": 1766.4,
+   "d": 2.16,
+   "text": "this person sent me was super it was"
+  },
+  {
+   "t": 1768.56,
+   "d": 2.08,
+   "text": "just absolutely correct. I didn't know"
+  },
+  {
+   "t": 1770.64,
+   "d": 3.36,
+   "text": "about some of it ahead of time. Um, so I"
+  },
+  {
+   "t": 1774.0,
+   "d": 1.68,
+   "text": "another like sort of I wouldn't say"
+  },
+  {
+   "t": 1775.68,
+   "d": 1.76,
+   "text": "anyone's a bad play tester. I think it's"
+  },
+  {
+   "t": 1777.44,
+   "d": 1.6,
+   "text": "up to you as the person running the play"
+  },
+  {
+   "t": 1779.04,
+   "d": 1.92,
+   "text": "test to figure out how to get value out"
+  },
+  {
+   "t": 1780.96,
+   "d": 3.76,
+   "text": "of the time. But um I do worry often"
+  },
+  {
+   "t": 1784.72,
+   "d": 1.68,
+   "text": "with this process especially when you"
+  },
+  {
+   "t": 1786.4,
+   "d": 3.04,
+   "text": "get people who are you know that they"
+  },
+  {
+   "t": 1789.44,
+   "d": 3.52,
+   "text": "will bias toward the positive um that is"
+  },
+  {
+   "t": 1792.96,
+   "d": 1.92,
+   "text": "a part of it and it's up to you again to"
+  },
+  {
+   "t": 1794.88,
+   "d": 1.92,
+   "text": "figure out how to extract that like I"
+  },
+  {
+   "t": 1796.8,
+   "d": 1.76,
+   "text": "you know clearly you're confused about"
+  },
+  {
+   "t": 1798.56,
+   "d": 1.28,
+   "text": "something or you're frustrated like how"
+  },
+  {
+   "t": 1799.84,
+   "d": 1.76,
+   "text": "do you they they will end up giving you"
+  },
+  {
+   "t": 1801.6,
+   "d": 1.92,
+   "text": "too much positive feedback. So, I think"
+  },
+  {
+   "t": 1803.52,
+   "d": 2.0,
+   "text": "that is where later on in the process"
+  },
+  {
+   "t": 1805.52,
+   "d": 1.76,
+   "text": "when you start doing asynchronous or"
+  },
+  {
+   "t": 1807.28,
+   "d": 2.0,
+   "text": "like anonymous like I just put my demo"
+  },
+  {
+   "t": 1809.28,
+   "d": 2.56,
+   "text": "up last week. Um, so I'm starting to get"
+  },
+  {
+   "t": 1811.84,
+   "d": 1.76,
+   "text": "a little more anonymous feedback and"
+  },
+  {
+   "t": 1813.6,
+   "d": 1.92,
+   "text": "that that can be useful too. I'm not"
+  },
+  {
+   "t": 1815.52,
+   "d": 1.68,
+   "text": "advocating that one play testing is the"
+  },
+  {
+   "t": 1817.2,
+   "d": 1.84,
+   "text": "only play testing you should do. It's"
+  },
+  {
+   "t": 1819.04,
+   "d": 1.76,
+   "text": "more I think you should absolutely do"
+  },
+  {
+   "t": 1820.8,
+   "d": 1.84,
+   "text": "one play testing. I hopefully that"
+  },
+  {
+   "t": 1822.64,
+   "d": 1.76,
+   "text": "answers some subset of your question."
+  },
+  {
+   "t": 1824.4,
+   "d": 1.68,
+   "text": ">> Yeah. And I think it highlights it's"
+  },
+  {
+   "t": 1826.08,
+   "d": 1.68,
+   "text": "like it's it's a step of processing"
+  },
+  {
+   "t": 1827.76,
+   "d": 1.68,
+   "text": "right of it's not play test isn't like"
+  },
+  {
+   "t": 1829.44,
+   "d": 1.2,
+   "text": "you get feedback and then you just"
+  },
+  {
+   "t": 1830.64,
+   "d": 1.84,
+   "text": "follow it dogmatically like you are"
+  },
+  {
+   "t": 1832.48,
+   "d": 1.44,
+   "text": "parsing it and you're deciding and"
+  },
+  {
+   "t": 1833.92,
+   "d": 1.68,
+   "text": "sometimes the answer will be like okay I"
+  },
+  {
+   "t": 1835.6,
+   "d": 1.44,
+   "text": "don't think that this person is actually"
+  },
+  {
+   "t": 1837.04,
+   "d": 3.04,
+   "text": "quite my target audience but there are"
+  },
+  {
+   "t": 1840.08,
+   "d": 1.12,
+   "text": "parts of what they're saying that are"
+  },
+  {
+   "t": 1841.2,
+   "d": 1.52,
+   "text": "definitely applicable and so yeah I"
+  },
+  {
+   "t": 1842.72,
+   "d": 1.04,
+   "text": "think that that's a good thing to"
+  },
+  {
+   "t": 1843.76,
+   "d": 1.76,
+   "text": "highlight too that like"
+  },
+  {
+   "t": 1845.52,
+   "d": 2.72,
+   "text": ">> you are actively working"
+  },
+  {
+   "t": 1848.24,
+   "d": 2.4,
+   "text": ">> it's definitely more of an art than a"
+  },
+  {
+   "t": 1850.64,
+   "d": 1.84,
+   "text": "science in terms of like what you do"
+  },
+  {
+   "t": 1852.48,
+   "d": 2.24,
+   "text": "with the feedback that's where the you"
+  },
+  {
+   "t": 1854.72,
+   "d": 2.56,
+   "text": "game design stuff comes in and Yeah."
+  },
+  {
+   "t": 1857.28,
+   "d": 1.76,
+   "text": ">> Yeah. Excellent. Well, thank you so"
+  },
+  {
+   "t": 1859.04,
+   "d": 1.6,
+   "text": "much, Brian. Uh, thanks for coming back"
+  },
+  {
+   "t": 1860.64,
+   "d": 2.4,
+   "text": "to Rogike Celebration and for such a"
+  },
+  {
+   "t": 1863.04,
+   "d": 1.52,
+   "text": "useful talk. Yeah, thanks for having me"
+  },
+  {
+   "t": 1864.56,
+   "d": 2.32,
+   "text": "again."
+  }
+ ]
+}

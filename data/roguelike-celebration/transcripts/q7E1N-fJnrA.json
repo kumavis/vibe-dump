@@ -1,0 +1,1776 @@
+{
+ "id": "q7E1N-fJnrA",
+ "url": "https://www.youtube.com/watch?v=q7E1N-fJnrA",
+ "title": "Cat Manning - How To Build A Character System That Doesn't Fall Apart Two Turns Later",
+ "speaker": "Cat Manning",
+ "talk_title": "How To Build A Character System That Doesn't Fall Apart Two Turns Later",
+ "year": 2020,
+ "kind": "talk",
+ "upload_date": "2020-10-15",
+ "duration_s": 1766,
+ "playlists": [
+  "Roguelike Celebration 2020"
+ ],
+ "description": "This talk is from the 2020 virtual Roguelike Celebration:\nhttps://roguelike.club/event2020.html\n\nCat Manning is a narrative designer and writer currently at Riot Games. She has also worked on critically-acclaimed indie narrative games, including Pathologic 2 and Where the Water Tastes Like Wine. Her interests include procedural narrative generation, Ancient Greek drama, and making unwise decisions, as evidenced by her Ph.D. in literature.\n\nIn this talk Cat digs into procedurally generated character traits - how to select which ones will be useful to you as a designer, and which ones are overwhelming fluff that will confuse your players or bog down your system. Using games like Shrouded Isle, The Sims 3 and 4, Crusader Kings 2, and Dwarf Fortress as touchstones, she talks about models that work and don't work for a given context. While mostly focused on procedural character traits and procedural narrative design, the selection and design process also has applicable lessons to other fields of procedural content creation.\n\nFollow her on Twitter: https://twitter.com/catacalypto\nProcedural Storytelling in Game Design, featuring a chapter by Cat Manning among many other fantastic essays: https://www.routledge.com/Procedural-Storytelling-in-Game-Design/Short-Adams/p/book/9781138595309\nCat's Blaseball Explainers (and other thoughts): https://catacalypto.substack.com/",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to traits"
+  },
+  {
+   "start": 75,
+   "title": "Traits in The Sims 3"
+  },
+  {
+   "start": 183,
+   "title": "Overlapping system traits"
+  },
+  {
+   "start": 383,
+   "title": "Traits and expansion packs"
+  },
+  {
+   "start": 557,
+   "title": "Dwarf Fortress systems"
+  },
+  {
+   "start": 738,
+   "title": "Shrouded Isle design"
+  },
+  {
+   "start": 856,
+   "title": "Crusader Kings traits"
+  },
+  {
+   "start": 1027,
+   "title": "Venom principle in design"
+  },
+  {
+   "start": 1232,
+   "title": "Trait design takeaways"
+  },
+  {
+   "start": 1309,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3768,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 1.02,
+   "d": 4.92,
+   "text": "MODERATOR: Enjoy the rest of the conference."
+  },
+  {
+   "t": 5.94,
+   "d": 4.92,
+   "text": "That brings us nice three Cat Manning."
+  },
+  {
+   "t": 10.86,
+   "d": 8.4,
+   "text": "To describe the rest of what you do Cat is works on"
+  },
+  {
+   "t": 19.26,
+   "d": 3.84,
+   "text": "INDY narrative games and where the water tastes like line."
+  },
+  {
+   "t": 23.1,
+   "d": 7.69,
+   "text": "Her interests include procedural narrative generation"
+  },
+  {
+   "t": 30.79,
+   "d": 6.07,
+   "text": "and recently known for wonderful Blaseball explainers."
+  },
+  {
+   "t": 36.86,
+   "d": 2.62,
+   "text": ">> Thank you so much."
+  },
+  {
+   "t": 39.48,
+   "d": 10.15,
+   "text": "Please let me know if my volume is OK but otherwise let's just jump in."
+  },
+  {
+   "t": 49.63,
+   "d": 4.66,
+   "text": "As you just heard I am Cat Manning and today I am talking about how to design meaningful"
+  },
+  {
+   "t": 54.29,
+   "d": 4.91,
+   "text": "character traits that work with the game systems and support interesting emerging stories."
+  },
+  {
+   "t": 59.2,
+   "d": 14.17,
+   "text": "If the designer does this well, you can have good characters but there are things that"
+  },
+  {
+   "t": 73.37,
+   "d": 2.57,
+   "text": "go wrong."
+  },
+  {
+   "t": 75.94,
+   "d": 2.02,
+   "text": "Let's start with what are traits?"
+  },
+  {
+   "t": 77.96,
+   "d": 3.44,
+   "text": "What are they for and what do they do?"
+  },
+  {
+   "t": 81.4,
+   "d": 4.3,
+   "text": "So the concept of a trait is a pretty fuzzy category but for the purposes of our talk"
+  },
+  {
+   "t": 85.7,
+   "d": 5.6,
+   "text": "here I am going to define it as an ingame word that gestures at a procedurally generate"
+  },
+  {
+   "t": 91.3,
+   "d": 5.65,
+   "text": "character's personality and had tying to the game's underlying system."
+  },
+  {
+   "t": 96.95,
+   "d": 4.92,
+   "text": "Simple, binary and either a character has a trait or they don't."
+  },
+  {
+   "t": 101.87,
+   "d": 8.87,
+   "text": "This is an over simplification but that's kind of"
+  },
+  {
+   "t": 110.74,
+   "d": 1.67,
+   "text": "the point of traits."
+  },
+  {
+   "t": 112.41,
+   "d": 3.74,
+   "text": "Sometimes traits are the focus of mystery."
+  },
+  {
+   "t": 116.15,
+   "d": 4.31,
+   "text": "Ultimately, they should offer clear hooks to a game's mechanics that allow players to"
+  },
+  {
+   "t": 120.46,
+   "d": 3.5,
+   "text": "imagine and extrapolate stories."
+  },
+  {
+   "t": 123.96,
+   "d": 7.9,
+   "text": "They allow players to parse information presented in games with dense systems that give them"
+  },
+  {
+   "t": 131.86,
+   "d": 3.77,
+   "text": "an overwhelming amount of data."
+  },
+  {
+   "t": 135.63,
+   "d": 5.37,
+   "text": "To talk about traits that feel very Vivid and expressive on first looking at them and"
+  },
+  {
+   "t": 141.0,
+   "d": 3.38,
+   "text": "what potential issues they might have let's take a look at the sims 3."
+  },
+  {
+   "t": 144.38,
+   "d": 6.46,
+   "text": "The original intention was to produce robust traits that players could use to create unique"
+  },
+  {
+   "t": 150.84,
+   "d": 1.74,
+   "text": "feeling characters."
+  },
+  {
+   "t": 152.58,
+   "d": 5.48,
+   "text": "The game was successful in expressive granularity there were tradeoffs."
+  },
+  {
+   "t": 158.06,
+   "d": 10.6,
+   "text": "There was mechanical overlap and the sheer number of the games systems meant later traits"
+  },
+  {
+   "t": 168.66,
+   "d": 6.24,
+   "text": "joined an already overwhelming set of overlapping simulated behavior or were confined to showing"
+  },
+  {
+   "t": 174.9,
+   "d": 5.92,
+   "text": "off features in an entirely self-contained way leading to the trait feeling meaningness."
+  },
+  {
+   "t": 180.82,
+   "d": 15.05,
+   "text": "The Sims 3 released in 2009 moved away from the binary system and added a number of unique"
+  },
+  {
+   "t": 195.87,
+   "d": 3.67,
+   "text": "traits most which were positioned orthogonally."
+  },
+  {
+   "t": 199.54,
+   "d": 10.86,
+   "text": "Sims who have the trait friendly do not necessarily end up with the trait party animal, for example."
+  },
+  {
+   "t": 210.4,
+   "d": 4.62,
+   "text": "The player can put those two together and correlate them mentally in the model of the"
+  },
+  {
+   "t": 215.02,
+   "d": 5.35,
+   "text": "Sim but the game does not impose that with the exception of some binary traits like slob"
+  },
+  {
+   "t": 220.37,
+   "d": 4.42,
+   "text": "and neat or good and evil the game doesn't close out traits and while it splits them"
+  },
+  {
+   "t": 224.79,
+   "d": 5.25,
+   "text": "into four categories it doesn't require players to pick a certain amount from any category"
+  },
+  {
+   "t": 230.04,
+   "d": 4.87,
+   "text": "or cap the number they can choose."
+  },
+  {
+   "t": 234.91,
+   "d": 4.17,
+   "text": "In the attempt to add more granularity to character behavior the game ended up with"
+  },
+  {
+   "t": 239.08,
+   "d": 2.59,
+   "text": "multiple similar traits."
+  },
+  {
+   "t": 241.67,
+   "d": 17.55,
+   "text": "This is an issue Kate compton pointed out in the term the 10,000 bowls of oatmeal."
+  },
+  {
+   "t": 259.22,
+   "d": 1.64,
+   "text": "The sims 3 falls into something similar."
+  },
+  {
+   "t": 260.86,
+   "d": 10.27,
+   "text": "It undermines the uniqueness by offering the same gameplay affordances."
+  },
+  {
+   "t": 271.13,
+   "d": 4.57,
+   "text": "Traits that govern social behavior fall into this most noticeably."
+  },
+  {
+   "t": 275.7,
+   "d": 7.52,
+   "text": "If this were a live talk I would ask you if anyone can tell me the difference between"
+  },
+  {
+   "t": 283.22,
+   "d": 1.6,
+   "text": "irresistible and flirty?"
+  },
+  {
+   "t": 284.82,
+   "d": 5.03,
+   "text": "If we are talking about my sense of what these words mean in natural language I would tell"
+  },
+  {
+   "t": 289.85,
+   "d": 7.38,
+   "text": "you flirty is how a person reacts to the outside world and irresistible is how someone relates"
+  },
+  {
+   "t": 297.23,
+   "d": 2.88,
+   "text": "to them."
+  },
+  {
+   "t": 300.11,
+   "d": 5.07,
+   "text": "How often the sims flirt action is successful and the base attraction of the target sim"
+  },
+  {
+   "t": 305.18,
+   "d": 1.56,
+   "text": "to the active sim."
+  },
+  {
+   "t": 306.74,
+   "d": 11.34,
+   "text": "The mechanical difference is irresistible sims have to wait but build up"
+  },
+  {
+   "t": 318.08,
+   "d": 1.52,
+   "text": "romantic scores faster."
+  },
+  {
+   "t": 319.6,
+   "d": 4.53,
+   "text": "That means the effect is not that distinguishable."
+  },
+  {
+   "t": 324.13,
+   "d": 4.7,
+   "text": "It just means flirting actions are available for sims with the traits earlier in the get"
+  },
+  {
+   "t": 328.83,
+   "d": 3.72,
+   "text": "to know a romantic partner loop."
+  },
+  {
+   "t": 332.55,
+   "d": 11.72,
+   "text": "The same overlap happens with social traits like friendly, charismatic and schmoozer."
+  },
+  {
+   "t": 344.27,
+   "d": 4.52,
+   "text": "If I describe somebody as charismatic I don't always mean they are warm and if I call someone"
+  },
+  {
+   "t": 348.79,
+   "d": 9.18,
+   "text": "a schmoozer I would be insulting them."
+  },
+  {
+   "t": 357.97,
+   "d": 4.07,
+   "text": "If there is a meaningful difference to the player it is how the player interprets the"
+  },
+  {
+   "t": 362.04,
+   "d": 2.8,
+   "text": "words not in being surprised by emerging gameplay."
+  },
+  {
+   "t": 364.84,
+   "d": 5.58,
+   "text": "In that sense, there is a perceptual difference in how the traits are presented and how the"
+  },
+  {
+   "t": 370.42,
+   "d": 4.87,
+   "text": "player might act then given how they think about the sims personality."
+  },
+  {
+   "t": 375.29,
+   "d": 5.71,
+   "text": "Traits in this case are much more about coauthoring than giving the game distinct patterns of"
+  },
+  {
+   "t": 381.0,
+   "d": 1.0,
+   "text": "behavior."
+  },
+  {
+   "t": 382.0,
+   "d": 9.58,
+   "text": "The sims 3 tendency toward maximalism was acerbated with the release of extension packs."
+  },
+  {
+   "t": 391.58,
+   "d": 5.56,
+   "text": "Because there were already so many expressive traits overlapping new traits felt like this"
+  },
+  {
+   "t": 397.14,
+   "d": 5.22,
+   "text": "expansion packs version of a preexisting trait or entirely designed to show off feature X"
+  },
+  {
+   "t": 402.36,
+   "d": 4.32,
+   "text": "of this expansion pack."
+  },
+  {
+   "t": 406.68,
+   "d": 4.11,
+   "text": "Their integration into previously existing systems as a result is shallow."
+  },
+  {
+   "t": 410.79,
+   "d": 2.34,
+   "text": "There were mechanical reasons for this."
+  },
+  {
+   "t": 413.13,
+   "d": 8.53,
+   "text": "Designers had to only draw on base game possibilities but it had the effect of making an already"
+  },
+  {
+   "t": 421.66,
+   "d": 2.95,
+   "text": "cluttered space even more crowded."
+  },
+  {
+   "t": 424.61,
+   "d": 7.79,
+   "text": "There are behaviors that model realistic behavior that players can recognize."
+  },
+  {
+   "t": 432.4,
+   "d": 5.87,
+   "text": "Consider the absent mindedness trait meaning they will stop what they are doing occasionally,"
+  },
+  {
+   "t": 438.27,
+   "d": 3.7,
+   "text": "get up, pause and go do something else."
+  },
+  {
+   "t": 441.97,
+   "d": 4.44,
+   "text": "Stopping for water."
+  },
+  {
+   "t": 446.41,
+   "d": 3.05,
+   "text": "You can probably where this is going."
+  },
+  {
+   "t": 449.46,
+   "d": 5.23,
+   "text": "Absent minded sims became infuriating for some because they had to be monitored to make"
+  },
+  {
+   "t": 454.69,
+   "d": 5.46,
+   "text": "sure whatever the player setup in the queue had not been randomly dropped."
+  },
+  {
+   "t": 460.15,
+   "d": 3.14,
+   "text": "The trait took away from Grandma rather than opening up new options."
+  },
+  {
+   "t": 463.29,
+   "d": 5.27,
+   "text": "It was a great idea at ontempt at realistic simulation and passes the test of tying stories"
+  },
+  {
+   "t": 468.56,
+   "d": 5.89,
+   "text": "in the system but disrupted had -- the core loop of gameplay."
+  },
+  {
+   "t": 474.45,
+   "d": 9.24,
+   "text": "No matter how interesting a trait is on its own you do still need to consider how your"
+  },
+  {
+   "t": 483.69,
+   "d": 4.19,
+   "text": "traits will interface with the rest of your core loop so you don't create an UX nightmare"
+  },
+  {
+   "t": 487.88,
+   "d": 4.24,
+   "text": "and frustration for your players."
+  },
+  {
+   "t": 492.12,
+   "d": 9.58,
+   "text": "Essentially adding expressive traits rather than tightly mechanical traits workeded."
+  },
+  {
+   "t": 501.7,
+   "d": 4.81,
+   "text": "Character appearance, home decor, professional choice and were ways players could incorporate"
+  },
+  {
+   "t": 506.51,
+   "d": 5.44,
+   "text": "into the gameplay even when the behavioral AI didn't distinguish."
+  },
+  {
+   "t": 511.95,
+   "d": 9.74,
+   "text": "The Sims series is a game full of clutter by design"
+  },
+  {
+   "t": 521.69,
+   "d": 5.58,
+   "text": "and sometimes players create more and upload to sites as mods."
+  },
+  {
+   "t": 527.27,
+   "d": 3.57,
+   "text": "The power fantasy in the game is to have it all."
+  },
+  {
+   "t": 530.84,
+   "d": 4.16,
+   "text": "There is nothing stopping a player from putting a giant exercise room in their kitchen above"
+  },
+  {
+   "t": 535.0,
+   "d": 7.74,
+   "text": "a reflecting pool while their wife grows immortality fruit in the backyard in between vacations."
+  },
+  {
+   "t": 542.74,
+   "d": 9.56,
+   "text": "It wasn't the same way it wasn't an issue that sims had multiple different exercise"
+  },
+  {
+   "t": 552.3,
+   "d": 1.0,
+   "text": "option raise."
+  },
+  {
+   "t": 553.3,
+   "d": 4.16,
+   "text": "The plethora is the point."
+  },
+  {
+   "t": 557.46,
+   "d": 10.37,
+   "text": "Dwarf Fortress's approach to character is deeply entwined with numerous other systems."
+  },
+  {
+   "t": 567.83,
+   "d": 7.42,
+   "text": "Dwarf's happiness or more frequently their unhappiness is influenced by complex metrics"
+  },
+  {
+   "t": 575.25,
+   "d": 1.31,
+   "text": "of traits."
+  },
+  {
+   "t": 576.56,
+   "d": 6.26,
+   "text": "So many things can affect the fortress the game has a web complex for dwarfs because"
+  },
+  {
+   "t": 582.82,
+   "d": 2.77,
+   "text": "there are so many ways to express."
+  },
+  {
+   "t": 585.59,
+   "d": 5.53,
+   "text": "This can be an issue because it always in the foreground when and how particular traits"
+  },
+  {
+   "t": 591.12,
+   "d": 2.39,
+   "text": "come into play."
+  },
+  {
+   "t": 593.51,
+   "d": 4.82,
+   "text": "It can turn into a puzzle to figure out why one dwarf is consistently sadder than its"
+  },
+  {
+   "t": 598.33,
+   "d": 10.77,
+   "text": "peers."
+  },
+  {
+   "t": 609.1,
+   "d": 2.48,
+   "text": "Dwarfs poses believes and facets."
+  },
+  {
+   "t": 611.58,
+   "d": 5.49,
+   "text": "The former determines what they value."
+  },
+  {
+   "t": 617.07,
+   "d": 5.68,
+   "text": "Facets are traits every dwarf exhibit on a sliding scale of negative 50 to 50 and determine"
+  },
+  {
+   "t": 622.75,
+   "d": 3.01,
+   "text": "how dwarfs act with respect to other dwarfs."
+  },
+  {
+   "t": 625.76,
+   "d": 11.29,
+   "text": "A dwarf can have a high friendship believe and low friendly facet which leads you to"
+  },
+  {
+   "t": 637.05,
+   "d": 5.16,
+   "text": "a sad dwarf."
+  },
+  {
+   "t": 642.21,
+   "d": 3.92,
+   "text": "These are examples of orthogonal traits."
+  },
+  {
+   "t": 646.13,
+   "d": 5.26,
+   "text": "Emily and Tonia short have pointed out you often correlate aspects of personality that"
+  },
+  {
+   "t": 651.39,
+   "d": 5.22,
+   "text": "don't need to be correlated for instance not all extroverts are loud and not all introverts"
+  },
+  {
+   "t": 656.61,
+   "d": 2.88,
+   "text": "are shy."
+  },
+  {
+   "t": 659.49,
+   "d": 5.29,
+   "text": "This creates a really interesting system for that value clash and thus for emerging stories"
+  },
+  {
+   "t": 664.78,
+   "d": 2.85,
+   "text": "about that value clash."
+  },
+  {
+   "t": 667.63,
+   "d": 4.69,
+   "text": "Not every dwarf is going to have particularly interesting or surprising stories."
+  },
+  {
+   "t": 672.32,
+   "d": 5.0,
+   "text": "The stories that are the most interesting is strangest often take work to extract from"
+  },
+  {
+   "t": 677.32,
+   "d": 5.49,
+   "text": "the simulation."
+  },
+  {
+   "t": 682.81,
+   "d": 3.6,
+   "text": "Players have to decide where they will choose to focus on."
+  },
+  {
+   "t": 686.41,
+   "d": 2.09,
+   "text": "Often that is determined by what catches their eyes."
+  },
+  {
+   "t": 688.5,
+   "d": 5.69,
+   "text": "If there is a dwarf essential to the functioning but if a particularly change or puzzling thing"
+  },
+  {
+   "t": 694.19,
+   "d": 4.39,
+   "text": "happens it is difficult to trace backwards."
+  },
+  {
+   "t": 698.58,
+   "d": 5.49,
+   "text": "There is no such information it is often hard to tell what trait is causing the observed"
+  },
+  {
+   "t": 704.07,
+   "d": 4.31,
+   "text": "behavior and what else is feeding it."
+  },
+  {
+   "t": 708.38,
+   "d": 7.38,
+   "text": "A game's procedurally generated traits don't naratize on their own."
+  },
+  {
+   "t": 715.76,
+   "d": 7.25,
+   "text": "How much work depends how much they are foregrounded and fruit the -- brought to the player's attention."
+  },
+  {
+   "t": 723.01,
+   "d": 7.09,
+   "text": "There is a sliding scale how much you want to surface to players and how much you want"
+  },
+  {
+   "t": 730.1,
+   "d": 1.19,
+   "text": "them to do the work."
+  },
+  {
+   "t": 731.29,
+   "d": 7.6,
+   "text": "You should decide where you want your game to fall on that spectrum and design for that."
+  },
+  {
+   "t": 738.89,
+   "d": 2.2,
+   "text": "The shrowd isle is different."
+  },
+  {
+   "t": 741.09,
+   "d": 19.17,
+   "text": "You are preparing your players for the ultimate human sacrifice."
+  },
+  {
+   "t": 760.26,
+   "d": 3.99,
+   "text": "The core gameplay is about discovering traits and purging your community of the worst sinners"
+  },
+  {
+   "t": 764.25,
+   "d": 2.61,
+   "text": "so they can't run a muck."
+  },
+  {
+   "t": 766.86,
+   "d": 2.03,
+   "text": "Traits are simple."
+  },
+  {
+   "t": 768.89,
+   "d": 4.25,
+   "text": "Everyone has a virtue and vice that corresponds to one of the cults five values."
+  },
+  {
+   "t": 773.14,
+   "d": 4.4,
+   "text": "The game is about discovering the traits by making educated guesss but the mow more time"
+  },
+  {
+   "t": 777.54,
+   "d": 8.06,
+   "text": "you spend discovering a customer the more interesting they become."
+  },
+  {
+   "t": 785.6,
+   "d": 13.13,
+   "text": "Hits hit a more Vivid picture of the cults cruelty."
+  },
+  {
+   "t": 798.73,
+   "d": 5.38,
+   "text": "Traits are the focal elements of the central puzzle and do heavy lifting in terms of what"
+  },
+  {
+   "t": 804.11,
+   "d": 3.06,
+   "text": "is considered an outrage in the game."
+  },
+  {
+   "t": 807.17,
+   "d": 6.15,
+   "text": "A scholar or an artist is as much a sinner as a pervert."
+  },
+  {
+   "t": 813.32,
+   "d": 6.48,
+   "text": "These elements end up being much more in the foreground but they have to be."
+  },
+  {
+   "t": 819.8,
+   "d": 9.71,
+   "text": "Traits and their effect need to be eligible to players who are actively engaging in the"
+  },
+  {
+   "t": 829.51,
+   "d": 1.49,
+   "text": "game system."
+  },
+  {
+   "t": 831.0,
+   "d": 3.76,
+   "text": "The game feeds on the tension generated by having to kill the most interesting players"
+  },
+  {
+   "t": 834.76,
+   "d": 4.41,
+   "text": "and the most time the players spent negative -- investigating and knows the most about."
+  },
+  {
+   "t": 839.17,
+   "d": 7.11,
+   "text": "This is effective here and that's important to note."
+  },
+  {
+   "t": 846.28,
+   "d": 4.33,
+   "text": "Good trait design depends heavily on what you need them to do and how much you need"
+  },
+  {
+   "t": 850.61,
+   "d": 6.25,
+   "text": "your players to understand when they actually do the work of making sense of those traits."
+  },
+  {
+   "t": 856.86,
+   "d": 6.05,
+   "text": "Crusader kings two is between the two."
+  },
+  {
+   "t": 862.91,
+   "d": 6.09,
+   "text": "This makes sense since a character's trait influence success or failure in the action"
+  },
+  {
+   "t": 869.0,
+   "d": 4.79,
+   "text": "they would like to take but not obtrusive enough to present an action."
+  },
+  {
+   "t": 873.79,
+   "d": 8.29,
+   "text": "You can see this is a fairly prominent position and depicted by icons and on mouse over they"
+  },
+  {
+   "t": 882.08,
+   "d": 3.49,
+   "text": "will tell you the effects on gameplay each trait has."
+  },
+  {
+   "t": 885.57,
+   "d": 5.46,
+   "text": "Many are linked in multiple systems including stats, influence, piety and others."
+  },
+  {
+   "t": 891.03,
+   "d": 7.55,
+   "text": "The game is clear about surfacing how players traits will have an impact on player choices."
+  },
+  {
+   "t": 898.58,
+   "d": 11.85,
+   "text": "Some traits are genetic but many are gained, lost or changed."
+  },
+  {
+   "t": 910.43,
+   "d": 3.97,
+   "text": "Sometimes they let you pet a Cat which is great."
+  },
+  {
+   "t": 914.4,
+   "d": 4.79,
+   "text": "Traits are unclear and all together in that one prominent position so when you have a"
+  },
+  {
+   "t": 919.19,
+   "d": 4.5,
+   "text": "particularly long lived character who engages with a bunch of event changes you get an overwhelming"
+  },
+  {
+   "t": 923.69,
+   "d": 5.97,
+   "text": "litany of icons that are difficult to differentiate if you take a look here."
+  },
+  {
+   "t": 929.66,
+   "d": 4.17,
+   "text": "A player can end up with something like a 60 plus learning score and discover where"
+  },
+  {
+   "t": 933.83,
+   "d": 6.16,
+   "text": "it comes from by tracing back the points to inherited traits, genetic traits and results."
+  },
+  {
+   "t": 939.99,
+   "d": 5.38,
+   "text": "The effect is a character rapidly running through a monologue of every Shakespearean"
+  },
+  {
+   "t": 945.37,
+   "d": 6.48,
+   "text": "at once where traits stand out for a second but otherwise blend."
+  },
+  {
+   "t": 951.85,
+   "d": 7.06,
+   "text": "We don't need every character in crusader two to have interesting traits."
+  },
+  {
+   "t": 958.91,
+   "d": 6.7,
+   "text": "It makes the characters who have traits and are interesting easier to pick up from a pool"
+  },
+  {
+   "t": 965.61,
+   "d": 1.13,
+   "text": "of hundreds."
+  },
+  {
+   "t": 966.74,
+   "d": 8.04,
+   "text": "In the appendix, Emily short lays out a procedural I found useful in my own work."
+  },
+  {
+   "t": 974.78,
+   "d": 5.31,
+   "text": "This design here fits the principle of venom."
+  },
+  {
+   "t": 980.09,
+   "d": 4.89,
+   "text": "In venom design, Vivid statistically less likely or spiky moments stand out and provide"
+  },
+  {
+   "t": 984.98,
+   "d": 3.21,
+   "text": "variation that's suppose to surprise."
+  },
+  {
+   "t": 988.19,
+   "d": 3.79,
+   "text": "Crusader king doesn't go full venom."
+  },
+  {
+   "t": 991.98,
+   "d": 9.98,
+   "text": "Gluttonous or greedy is a much less interesting trait than lust full in terms of game systems"
+  },
+  {
+   "t": 1001.96,
+   "d": 1.85,
+   "text": "and affordances at least."
+  },
+  {
+   "t": 1003.81,
+   "d": 6.92,
+   "text": "If it is the flavors and values of the world like sims 3 but less good in terms of something"
+  },
+  {
+   "t": 1010.73,
+   "d": 2.7,
+   "text": "that's going to generate compelling story choice."
+  },
+  {
+   "t": 1013.43,
+   "d": 3.71,
+   "text": "Now, fortunately, there are enough traits that do stand out that frustration around"
+  },
+  {
+   "t": 1017.14,
+   "d": 4.04,
+   "text": "the less interesting traits is reduced and they can moistly be flavor."
+  },
+  {
+   "t": 1021.18,
+   "d": 1.63,
+   "text": "This applies to characters also."
+  },
+  {
+   "t": 1022.81,
+   "d": 3.17,
+   "text": "There are enough interesting characters that the hundreds of less interesting ones are"
+  },
+  {
+   "t": 1025.98,
+   "d": 1.42,
+   "text": "fine as supporting casts."
+  },
+  {
+   "t": 1027.4,
+   "d": 13.73,
+   "text": "In fact, if all the customers have interesting back stories it would quickly become overwhelming."
+  },
+  {
+   "t": 1041.13,
+   "d": 7.02,
+   "text": "The venom spike depends on the game you are making."
+  },
+  {
+   "t": 1048.15,
+   "d": 6.51,
+   "text": "If you have game where you have five characters and have to interact with all of them the"
+  },
+  {
+   "t": 1054.66,
+   "d": 5.88,
+   "text": "venom principle of 2-3 characters are interesting probably won't serve you particularly well."
+  },
+  {
+   "t": 1060.54,
+   "d": 6.06,
+   "text": "Crusider kings 2 was good at giving players enough hooks to make interesting stories but"
+  },
+  {
+   "t": 1066.6,
+   "d": 4.67,
+   "text": "eventually the stories could end up feeling the same and players could become familiared"
+  },
+  {
+   "t": 1071.27,
+   "d": 5.67,
+   "text": "with the authored pool of events and know what led to the treats they like the best."
+  },
+  {
+   "t": 1076.94,
+   "d": 9.13,
+   "text": "The way of life expansion offered an intermediary they responded on and incorporated in crusader"
+  },
+  {
+   "t": 1086.07,
+   "d": 3.0,
+   "text": "king 3."
+  },
+  {
+   "t": 1089.07,
+   "d": 8.73,
+   "text": "The end players had influence over them because they could choose the focus."
+  },
+  {
+   "t": 1097.8,
+   "d": 4.48,
+   "text": "This worked against orthogonal trait design and attempts to correlate hedonist and lustful"
+  },
+  {
+   "t": 1102.28,
+   "d": 10.71,
+   "text": "and in this case it works well especially if you have a focus on one design and it has"
+  },
+  {
+   "t": 1112.99,
+   "d": 2.58,
+   "text": "gotten you as far as you can."
+  },
+  {
+   "t": 1115.57,
+   "d": 6.41,
+   "text": "Crusader king 3 is new but attempting to make interesting solves to the previous games issues."
+  },
+  {
+   "t": 1121.98,
+   "d": 6.14,
+   "text": "In 2, traits influenced five hidden AI stats determining the frequency a decision would"
+  },
+  {
+   "t": 1128.12,
+   "d": 4.53,
+   "text": "be made but it was impossible to tell how they influenced those unless you looked under"
+  },
+  {
+   "t": 1132.65,
+   "d": 1.0,
+   "text": "the hood."
+  },
+  {
+   "t": 1133.65,
+   "d": 6.38,
+   "text": "In 3, they surface the AI stats by having a noun epitaph attached to every character"
+  },
+  {
+   "t": 1140.03,
+   "d": 6.91,
+   "text": "and you will see examples and it tells you how they are generally likely to behave."
+  },
+  {
+   "t": 1146.94,
+   "d": 4.72,
+   "text": "A lot of zealots in this one."
+  },
+  {
+   "t": 1151.66,
+   "d": 5.51,
+   "text": "These are correlated to nine hidden attributes and the top two most extreme are selected"
+  },
+  {
+   "t": 1157.17,
+   "d": 1.89,
+   "text": "and surfaced."
+  },
+  {
+   "t": 1159.06,
+   "d": 7.58,
+   "text": "A callus planner has low compassion and high rationality."
+  },
+  {
+   "t": 1166.64,
+   "d": 6.14,
+   "text": "The trait compassionate gives plus 200 to the compassion attribute so it is very likely"
+  },
+  {
+   "t": 1172.78,
+   "d": 7.3,
+   "text": "to surface but a compassionate greedy character would shake out as a vindictive ravener and"
+  },
+  {
+   "t": 1180.08,
+   "d": 2.54,
+   "text": "that's really interesting."
+  },
+  {
+   "t": 1182.62,
+   "d": 5.19,
+   "text": "Also, the new stress system is an excellent way to make traits relevant."
+  },
+  {
+   "t": 1187.81,
+   "d": 4.04,
+   "text": "If you play against character type you will rapidly drive your ruler to a breakdown which"
+  },
+  {
+   "t": 1191.85,
+   "d": 4.89,
+   "text": "can be fun but becomes disruptive to gameplay."
+  },
+  {
+   "t": 1196.74,
+   "d": 3.57,
+   "text": "With stress, traits aren't just passive bonuses."
+  },
+  {
+   "t": 1200.31,
+   "d": 3.92,
+   "text": "They are an active part of the player's decision making."
+  },
+  {
+   "t": 1204.23,
+   "d": 9.81,
+   "text": "If you have a pagan ruler who is compassionate they will have trouble gaining piety."
+  },
+  {
+   "t": 1214.04,
+   "d": 4.54,
+   "text": "Traits are particularly potent secret sauce and when tied to gameplay systems in effective"
+  },
+  {
+   "t": 1218.58,
+   "d": 4.73,
+   "text": "way they allow players to sketch out and focus on the stories that interest them."
+  },
+  {
+   "t": 1223.31,
+   "d": 4.43,
+   "text": "You don't need them to tell the story."
+  },
+  {
+   "t": 1227.74,
+   "d": 4.45,
+   "text": "Part of the fun is letting the player decipher what the traits are doing and what they mean."
+  },
+  {
+   "t": 1232.19,
+   "d": 3.4,
+   "text": "Blood type is a great example of this in Blaseball."
+  },
+  {
+   "t": 1235.59,
+   "d": 4.12,
+   "text": "You aren't going to be picking the traits just because they sound good or a game you"
+  },
+  {
+   "t": 1239.71,
+   "d": 1.78,
+   "text": "like use them well."
+  },
+  {
+   "t": 1241.49,
+   "d": 14.85,
+   "text": "You want traits that express indreams -- how much you want to surface how much they tie"
+  },
+  {
+   "t": 1256.34,
+   "d": 3.35,
+   "text": "into system depends on you."
+  },
+  {
+   "t": 1259.69,
+   "d": 6.17,
+   "text": "How much discovery is on the game loop versus how much depends on players acting decisively"
+  },
+  {
+   "t": 1265.86,
+   "d": 2.51,
+   "text": "on their existing knowledge."
+  },
+  {
+   "t": 1268.37,
+   "d": 5.55,
+   "text": "A trait doesn't have to be beautiful on its own."
+  },
+  {
+   "t": 1273.92,
+   "d": 3.41,
+   "text": "What it needs is to fit into context."
+  },
+  {
+   "t": 1277.33,
+   "d": 6.84,
+   "text": "Sometimes you can have a trait or two that is ornate but too many of these will confuse"
+  },
+  {
+   "t": 1284.17,
+   "d": 5.33,
+   "text": "your players and make them wonder how mechanically resident all traits are."
+  },
+  {
+   "t": 1289.5,
+   "d": 7.36,
+   "text": "This a key point of communication between game systems and players extrapolated imagined"
+  },
+  {
+   "t": 1296.86,
+   "d": 1.0,
+   "text": "stories."
+  },
+  {
+   "t": 1297.86,
+   "d": 4.46,
+   "text": "A vector of transition and you you want to translate is up to you."
+  },
+  {
+   "t": 1302.32,
+   "d": 7.01,
+   "text": "My best advice on finding the right balance is fuck around and find out."
+  },
+  {
+   "t": 1309.33,
+   "d": 7.1,
+   "text": "MODERATOR: What a wonderful end."
+  },
+  {
+   "t": 1316.43,
+   "d": 3.82,
+   "text": "Thank you so much, Cat."
+  },
+  {
+   "t": 1320.25,
+   "d": 1.54,
+   "text": "Very beautiful."
+  },
+  {
+   "t": 1321.79,
+   "d": 18.45,
+   "text": "Is -- the first question is what do you think is the most underutilized trait?"
+  },
+  {
+   "t": 1340.24,
+   "d": 3.9,
+   "text": ">> This is a bit of a trick question because I don't feel there is any specific trait that"
+  },
+  {
+   "t": 1344.14,
+   "d": 1.35,
+   "text": "is underutilized."
+  },
+  {
+   "t": 1345.49,
+   "d": 6.9,
+   "text": "It really is going to depend on how you choose to express that trait."
+  },
+  {
+   "t": 1352.39,
+   "d": 6.79,
+   "text": "For instance, I am not a huge fan of chase in crusader king 2 but Tonia short gave me"
+  },
+  {
+   "t": 1359.18,
+   "d": 7.31,
+   "text": "an interesting way of think about that trait that if you use chased as a way of here is"
+  },
+  {
+   "t": 1366.49,
+   "d": 1.56,
+   "text": "what you can't do."
+  },
+  {
+   "t": 1368.05,
+   "d": 3.59,
+   "text": "Here are all of the things you are closeded off from then it becomes a passive trait and"
+  },
+  {
+   "t": 1371.64,
+   "d": 5.29,
+   "text": "it is not particularly useful to think about and it is just kind of boring and sits there."
+  },
+  {
+   "t": 1376.93,
+   "d": 4.01,
+   "text": "But if chased means you are running around yelling at everybody who is having sex then"
+  },
+  {
+   "t": 1380.94,
+   "d": 3.7,
+   "text": "suddenly your game is much more interesting."
+  },
+  {
+   "t": 1384.64,
+   "d": 5.91,
+   "text": "So I think when I think about traits that are underutilized I would kind of want to"
+  },
+  {
+   "t": 1390.55,
+   "d": 5.96,
+   "text": "emphasize traits that kind of sit there and do nothing and have people think about what"
+  },
+  {
+   "t": 1396.51,
+   "d": 4.35,
+   "text": "they can do to make the traits more active and create surprising gameplay in their own"
+  },
+  {
+   "t": 1400.86,
+   "d": 1.0,
+   "text": "work."
+  },
+  {
+   "t": 1401.86,
+   "d": 3.43,
+   "text": "MODERATOR: I think that's a great point."
+  },
+  {
+   "t": 1405.29,
+   "d": 1.0,
+   "text": "Another question."
+  },
+  {
+   "t": 1406.29,
+   "d": 5.3,
+   "text": "There is a couple similar ones of if you had had to only choose three high level traits"
+  },
+  {
+   "t": 1411.59,
+   "d": 5.64,
+   "text": "or spectrums for characters for the rest of your career what traits would you choose?"
+  },
+  {
+   "t": 1417.23,
+   "d": 2.98,
+   "text": ">> Oh, a spectra."
+  },
+  {
+   "t": 1420.21,
+   "d": 5.29,
+   "text": "I don't have to choose three traits and not all characters, right?"
+  },
+  {
+   "t": 1425.5,
+   "d": 1.0,
+   "text": "Fantastic."
+  },
+  {
+   "t": 1426.5,
+   "d": 5.92,
+   "text": "One of them is believes and expressed values."
+  },
+  {
+   "t": 1432.42,
+   "d": 3.23,
+   "text": "How they view the world and that internal view."
+  },
+  {
+   "t": 1435.65,
+   "d": 1.88,
+   "text": "The other one is how they relate to others."
+  },
+  {
+   "t": 1437.53,
+   "d": 4.47,
+   "text": "The way they express their relationships."
+  },
+  {
+   "t": 1442.0,
+   "d": 6.89,
+   "text": "And I think the third one in terms of that would be how likely they are to take specific"
+  },
+  {
+   "t": 1448.89,
+   "d": 8.31,
+   "text": "actions based on both their beliefs and society, i.e. the game systems that are default."
+  },
+  {
+   "t": 1457.2,
+   "d": 5.14,
+   "text": "Those are the three that would be the most interesting for me to explore."
+  },
+  {
+   "t": 1462.34,
+   "d": 6.81,
+   "text": "That combination of when people act on things, what they act on, and how their relationships"
+  },
+  {
+   "t": 1469.15,
+   "d": 3.77,
+   "text": "are impacted and how that makes them feel."
+  },
+  {
+   "t": 1472.92,
+   "d": 4.1,
+   "text": "MODERATOR: That's fascinating."
+  },
+  {
+   "t": 1477.02,
+   "d": 2.82,
+   "text": "I am so impressed you had an answer ready."
+  },
+  {
+   "t": 1479.84,
+   "d": 1.0,
+   "text": ">> I didn't."
+  },
+  {
+   "t": 1480.84,
+   "d": 1.0,
+   "text": "I genuinely didn't."
+  },
+  {
+   "t": 1481.84,
+   "d": 3.09,
+   "text": "Those are the things I think about the most."
+  },
+  {
+   "t": 1484.93,
+   "d": 5.37,
+   "text": "I am most interested in social design which doesn't necessarily mean there are not other"
+  },
+  {
+   "t": 1490.3,
+   "d": 4.85,
+   "text": "things you can do with traits but for me traits are about how your characters interact with"
+  },
+  {
+   "t": 1495.15,
+   "d": 4.12,
+   "text": "the world and not just cool pieces of paper on a screen."
+  },
+  {
+   "t": 1499.27,
+   "d": 6.86,
+   "text": "Those are my favorite ways to think about how characters can work through their stuff."
+  },
+  {
+   "t": 1506.13,
+   "d": 5.46,
+   "text": "MODERATOR: Cat Manning, can we have the null team filter you are using?"
+  },
+  {
+   "t": 1511.59,
+   "d": 1.0,
+   "text": ">> Absolutely."
+  },
+  {
+   "t": 1512.59,
+   "d": 4.71,
+   "text": "This is a snap cam filter and I will tweet what it is."
+  },
+  {
+   "t": 1517.3,
+   "d": 4.53,
+   "text": "Hello, everyone, from the void."
+  },
+  {
+   "t": 1521.83,
+   "d": 6.08,
+   "text": "MODERATOR: An interesting question of I wonder if you could make a trade system on purpose"
+  },
+  {
+   "t": 1527.91,
+   "d": 1.54,
+   "text": "to show humans are confusing."
+  },
+  {
+   "t": 1529.45,
+   "d": 6.26,
+   "text": "What kind of things could you get out of taking all the bad things out of traits intentionally?"
+  },
+  {
+   "t": 1535.71,
+   "d": 3.16,
+   "text": ">> That is interesting and terrifying on the surface."
+  },
+  {
+   "t": 1538.87,
+   "d": 3.18,
+   "text": "I think I could do it very easy unintentionally."
+  },
+  {
+   "t": 1542.05,
+   "d": 6.4,
+   "text": "If you asked me to create a trait system off the top of my head I think it would do that"
+  },
+  {
+   "t": 1548.45,
+   "d": 1.99,
+   "text": "easily."
+  },
+  {
+   "t": 1550.44,
+   "d": 9.03,
+   "text": "I think one thing that is interesting is games like prom week are really, really interesting"
+  },
+  {
+   "t": 1559.47,
+   "d": 5.59,
+   "text": "artifacts but had that problem of there was so much going on under the hood because these"
+  },
+  {
+   "t": 1565.06,
+   "d": 1.57,
+   "text": "characters were so complex."
+  },
+  {
+   "t": 1566.63,
+   "d": 6.5,
+   "text": "They were really a little bit frustrating to play apologies to all my friends who made"
+  },
+  {
+   "t": 1573.13,
+   "d": 2.29,
+   "text": "prom week."
+  },
+  {
+   "t": 1575.42,
+   "d": 6.11,
+   "text": "Essentially what was happening is the complexity of characters, how much they sport of waffled"
+  },
+  {
+   "t": 1581.53,
+   "d": 5.32,
+   "text": "back and forth and how quickly moods changes and how they felt about all their friends"
+  },
+  {
+   "t": 1586.85,
+   "d": 3.6,
+   "text": "made it very, very chaotic."
+  },
+  {
+   "t": 1590.45,
+   "d": 8.14,
+   "text": "I think there is a lot of fruitful work in how to to make that confusion legible in ways"
+  },
+  {
+   "t": 1598.59,
+   "d": 9.11,
+   "text": "that feel non-simplistic but I don't have a clear hypothesis on what that is."
+  },
+  {
+   "t": 1607.7,
+   "d": 2.46,
+   "text": "MODERATOR: I think that's interesting."
+  },
+  {
+   "t": 1610.16,
+   "d": 3.56,
+   "text": "Calling out the setting makes sense."
+  },
+  {
+   "t": 1613.72,
+   "d": 5.53,
+   "text": "In games like until dawn I remember a lot of discussion the characters would make stupid"
+  },
+  {
+   "t": 1619.25,
+   "d": 6.46,
+   "text": "decisions but the point it was playing with the whole like a bunch of horny teens going"
+  },
+  {
+   "t": 1625.71,
+   "d": 2.6,
+   "text": "to the woods and make bad decisions."
+  },
+  {
+   "t": 1628.31,
+   "d": 1.01,
+   "text": ">> Absolutely."
+  },
+  {
+   "t": 1629.32,
+   "d": 5.74,
+   "text": "MODERATOR: Of course they would and I think quite a lot of people understood that and"
+  },
+  {
+   "t": 1635.06,
+   "d": 5.1,
+   "text": "embraced it whereas if it was a game like mass effect and commander shepherd was making"
+  },
+  {
+   "t": 1640.16,
+   "d": 5.07,
+   "text": "these extremely foolish decisions there would be dissonance but some found it fascinating"
+  },
+  {
+   "t": 1645.23,
+   "d": 2.65,
+   "text": "like why are you going to check on the scary noise?"
+  },
+  {
+   "t": 1647.88,
+   "d": 2.29,
+   "text": "It is like they are stupid teens."
+  },
+  {
+   "t": 1650.17,
+   "d": 2.91,
+   "text": "Of course that's what whey are going to do."
+  },
+  {
+   "t": 1653.08,
+   "d": 5.83,
+   "text": ">> I think there are ways to surface that more narratively speaking but leaning into"
+  },
+  {
+   "t": 1658.91,
+   "d": 6.1,
+   "text": "your simulation's weaknesses is always one of my number one design tips."
+  },
+  {
+   "t": 1665.01,
+   "d": 6.0,
+   "text": "Leverage what you have and make it make sense and design toward that rather than trying"
+  },
+  {
+   "t": 1671.01,
+   "d": 1.49,
+   "text": "to cover it up."
+  },
+  {
+   "t": 1672.5,
+   "d": 1.0,
+   "text": "MODERATOR: Yeah."
+  },
+  {
+   "t": 1673.5,
+   "d": 4.83,
+   "text": "I think last question is if you had to pick three traits from any game or combination"
+  },
+  {
+   "t": 1678.33,
+   "d": 2.58,
+   "text": "of games to describe yourself what would they be?"
+  },
+  {
+   "t": 1680.91,
+   "d": 1.72,
+   "text": ">> I have done this before."
+  },
+  {
+   "t": 1682.63,
+   "d": 6.07,
+   "text": "I think a lot about who I would be in crusader king 2 specifically."
+  },
+  {
+   "t": 1688.7,
+   "d": 6.46,
+   "text": "I tried to do this with crusader king 3 and my hot pitch I will not stand behind is the"
+  },
+  {
+   "t": 1695.16,
+   "d": 7.25,
+   "text": "more difficult a trait system is to do a satisfying tag yourself meme with the more complicated"
+  },
+  {
+   "t": 1702.41,
+   "d": 5.96,
+   "text": "it is to surface to a player what is relevant and what isn't."
+  },
+  {
+   "t": 1708.37,
+   "d": 7.9,
+   "text": "Leaving out genetic traits from crusader kings 2, I would probably pick, gosh, I am going"
+  },
+  {
+   "t": 1716.27,
+   "d": 2.17,
+   "text": "to do a blend."
+  },
+  {
+   "t": 1718.44,
+   "d": 2.78,
+   "text": "Gregarious absolutely."
+  },
+  {
+   "t": 1721.22,
+   "d": 2.22,
+   "text": "Scholar."
+  },
+  {
+   "t": 1723.44,
+   "d": 5.03,
+   "text": "And hmm..."
+  },
+  {
+   "t": 1728.47,
+   "d": 7.33,
+   "text": "I am trying to think of one that isn't crusader Kings related."
+  },
+  {
+   "t": 1735.8,
+   "d": 4.04,
+   "text": "I would probably say Dwarf Fortress' knowledge trait."
+  },
+  {
+   "t": 1739.84,
+   "d": 1.77,
+   "text": "I am going to pick that."
+  },
+  {
+   "t": 1741.61,
+   "d": 6.11,
+   "text": "No, I am going to pick part because it incorporates a lot of what are I like about procedural"
+  },
+  {
+   "t": 1747.72,
+   "d": 7.52,
+   "text": "generation design so I will pick the artistic trait."
+  },
+  {
+   "t": 1755.24,
+   "d": 3.77,
+   "text": "MODERATOR: Thank you for joining us, Cat."
+  },
+  {
+   "t": 1759.01,
+   "d": 2.21,
+   "text": "That was a great talk."
+  },
+  {
+   "t": 1761.22,
+   "d": 1.0,
+   "text": "Very useful."
+  },
+  {
+   "t": 1762.22,
+   "d": 1.94,
+   "text": "See you around the conference space."
+  },
+  {
+   "t": 1764.16,
+   "d": 1.28,
+   "text": ">> I will be there."
+  }
+ ]
+}

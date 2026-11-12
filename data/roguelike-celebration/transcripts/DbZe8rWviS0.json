@@ -1,0 +1,1990 @@
+{
+ "id": "DbZe8rWviS0",
+ "url": "https://www.youtube.com/watch?v=DbZe8rWviS0",
+ "title": "Johnathon Pagnutti - Coin Flips, Violence and Spreadsheets: the Binomial Distribution in FE:3Houses",
+ "speaker": "Johnathon Pagnutti",
+ "talk_title": "Coin Flips, Violence and Spreadsheets: the Binomial Distribution in FE:3Houses",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-11-10",
+ "duration_s": 836,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "You could go full Dwarf Fortress and simulate everything in your game world, but that's a lot of work. It's a lot easier to just say \"60% of the time, it works\". However, this simple rule can be surprisingly powerful and dynamic. I'll be doing a lightning tour of some fun tricks (like quantifying luck!) anyone can do with the magic of google sheets given this rule. The violent anime cuties and their random level-ups from Fire Emblem: Three Houses will join us for this tour.",
+ "chapters": [],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 2559,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.6,
+   "d": 3.5,
+   "text": "And I will introduce our next speaker."
+  },
+  {
+   "t": 7.1,
+   "d": 2.0,
+   "text": "Jonathan Pagnetti"
+  },
+  {
+   "t": 9.1,
+   "d": 2.3,
+   "text": "is a recovering academic, I think as are"
+  },
+  {
+   "t": 11.4,
+   "d": 2.5,
+   "text": "many of us, a rogue-like fan and barfly"
+  },
+  {
+   "t": 13.9,
+   "d": 2.5,
+   "text": "at the Dungeon Potion Bar. Jonathan has"
+  },
+  {
+   "t": 16.4,
+   "d": 1.8,
+   "text": "performed a primer five brewing his own"
+  },
+  {
+   "t": 18.2,
+   "d": 1.7,
+   "text": "potions via the arcane rituals of"
+  },
+  {
+   "t": 19.9,
+   "d": 2.3,
+   "text": "JavaScript, Python context-free"
+  },
+  {
+   "t": 22.2,
+   "d": 2.9,
+   "text": "grammars, and probabilistic soft logics."
+  },
+  {
+   "t": 25.1,
+   "d": 1.2,
+   "text": "Some were crimes against software,"
+  },
+  {
+   "t": 26.3,
+   "d": 1.4,
+   "text": "others were crimes against flavor, and"
+  },
+  {
+   "t": 27.7,
+   "d": 1.5,
+   "text": "the last few were crimes against"
+  },
+  {
+   "t": 29.2,
+   "d": 1.9,
+   "text": "fashion."
+  },
+  {
+   "t": 31.1,
+   "d": 1.7,
+   "text": "Jonathan will be presenting coin flips"
+  },
+  {
+   "t": 32.8,
+   "d": 1.2,
+   "text": "of violence and spreadsheets, the"
+  },
+  {
+   "t": 34.0,
+   "d": 2.9,
+   "text": "binomial distribution in Firehouse in"
+  },
+  {
+   "t": 36.9,
+   "d": 1.9,
+   "text": "Fire Emblem Three Houses. That would be"
+  },
+  {
+   "t": 38.8,
+   "d": 2.3,
+   "text": "a very different game, Firehouse."
+  },
+  {
+   "t": 41.1,
+   "d": 2.2,
+   "text": "But take it away, Jonathan."
+  },
+  {
+   "t": 43.3,
+   "d": 2.7,
+   "text": ">> Um, hello. Um, well, it's wonderful to"
+  },
+  {
+   "t": 46.0,
+   "d": 3.1,
+   "text": "be here. Thank you all so much."
+  },
+  {
+   "t": 49.1,
+   "d": 2.7,
+   "text": "And I I am Jonathan. You see him"
+  },
+  {
+   "t": 51.8,
+   "d": 1.5,
+   "text": "pronouns."
+  },
+  {
+   "t": 53.3,
+   "d": 2.8,
+   "text": "I used to be an academic and games"
+  },
+  {
+   "t": 56.1,
+   "d": 1.8,
+   "text": "researcher. Now I kind of just sort of"
+  },
+  {
+   "t": 57.9,
+   "d": 2.1,
+   "text": "do whatever I want with computers and"
+  },
+  {
+   "t": 60.0,
+   "d": 2.4,
+   "text": "sometimes I come by this conference to"
+  },
+  {
+   "t": 62.4,
+   "d": 2.1,
+   "text": "talk about it."
+  },
+  {
+   "t": 64.5,
+   "d": 1.3,
+   "text": "Wonderful conference so far. Thank you"
+  },
+  {
+   "t": 65.8,
+   "d": 2.9,
+   "text": "so much for putting this on."
+  },
+  {
+   "t": 68.7,
+   "d": 1.6,
+   "text": "I'm also really excited to show you my"
+  },
+  {
+   "t": 70.3,
+   "d": 1.2,
+   "text": "spreadsheets because I love a"
+  },
+  {
+   "t": 71.5,
+   "d": 1.9,
+   "text": "spreadsheet."
+  },
+  {
+   "t": 73.4,
+   "d": 1.4,
+   "text": "So we're going to talk about the"
+  },
+  {
+   "t": 74.8,
+   "d": 1.8,
+   "text": "binomial distribution, but it's a"
+  },
+  {
+   "t": 76.6,
+   "d": 1.0,
+   "text": "lightning talk and I don't have a ton of"
+  },
+  {
+   "t": 77.6,
+   "d": 1.0,
+   "text": "time. I'm not going to get too deep into"
+  },
+  {
+   "t": 78.6,
+   "d": 1.4,
+   "text": "it."
+  },
+  {
+   "t": 80.0,
+   "d": 1.2,
+   "text": "And we're also going to talk about kind"
+  },
+  {
+   "t": 81.2,
+   "d": 2.5,
+   "text": "of like how that distribution plays out"
+  },
+  {
+   "t": 83.7,
+   "d": 2.5,
+   "text": "in level ups in Fire Emblem Three"
+  },
+  {
+   "t": 86.2,
+   "d": 2.3,
+   "text": "Houses. And sort of what that might mean"
+  },
+  {
+   "t": 88.5,
+   "d": 2.1,
+   "text": "for you as a game designer or you as a"
+  },
+  {
+   "t": 90.6,
+   "d": 1.9,
+   "text": "game player thinking about sort of"
+  },
+  {
+   "t": 92.5,
+   "d": 2.4,
+   "text": "balancing around things that are kind of"
+  },
+  {
+   "t": 94.9,
+   "d": 1.8,
+   "text": "funky."
+  },
+  {
+   "t": 96.7,
+   "d": 2.9,
+   "text": "So Fire Emblem as a series and Fire"
+  },
+  {
+   "t": 99.6,
+   "d": 1.7,
+   "text": "Emblem Three Houses in particular is a"
+  },
+  {
+   "t": 101.3,
+   "d": 1.6,
+   "text": "tactics game. It's not really a"
+  },
+  {
+   "t": 102.9,
+   "d": 1.6,
+   "text": "rogue-like"
+  },
+  {
+   "t": 104.5,
+   "d": 2.6,
+   "text": "in which you have a stable of anime"
+  },
+  {
+   "t": 107.1,
+   "d": 2.0,
+   "text": "protagonists and they all have their"
+  },
+  {
+   "t": 109.1,
+   "d": 2.2,
+   "text": "quirks and they inflict terrible"
+  },
+  {
+   "t": 111.3,
+   "d": 3.1,
+   "text": "fantasy-based violence on nameless mooks"
+  },
+  {
+   "t": 114.4,
+   "d": 3.4,
+   "text": "and other quirky anime protagonists."
+  },
+  {
+   "t": 117.8,
+   "d": 2.29,
+   "text": "But Fire Emblem does do one weird thing,"
+  },
+  {
+   "t": 120.09,
+   "d": 1.4,
+   "text": "which is that its level ups are not"
+  },
+  {
+   "t": 121.49,
+   "d": 2.1,
+   "text": "deterministic. They're rolled. They're"
+  },
+  {
+   "t": 123.59,
+   "d": 2.1,
+   "text": "random. Essentially, each stat has a"
+  },
+  {
+   "t": 125.69,
+   "d": 2.6,
+   "text": "chance of increasing at level up time."
+  },
+  {
+   "t": 128.29,
+   "d": 1.2,
+   "text": "And so you can have a good level up in"
+  },
+  {
+   "t": 129.49,
+   "d": 1.3,
+   "text": "which a whole bunch of these green"
+  },
+  {
+   "t": 130.79,
+   "d": 1.6,
+   "text": "arrows happen and you level up a bunch"
+  },
+  {
+   "t": 132.39,
+   "d": 1.5,
+   "text": "of stats, or you can have a bad level up"
+  },
+  {
+   "t": 133.89,
+   "d": 2.5,
+   "text": "in which you only get one or two."
+  },
+  {
+   "t": 136.39,
+   "d": 1.4,
+   "text": "I believe, although I haven't confirmed"
+  },
+  {
+   "t": 137.79,
+   "d": 0.7,
+   "text": "it's"
+  },
+  {
+   "t": 138.49,
+   "d": 2.0,
+   "text": "you know, it's impossible to get no stat"
+  },
+  {
+   "t": 140.49,
+   "d": 2.2,
+   "text": "increases on level up."
+  },
+  {
+   "t": 142.69,
+   "d": 2.3,
+   "text": "But there is definitely a minimum."
+  },
+  {
+   "t": 144.99,
+   "d": 2.7,
+   "text": "And uh"
+  },
+  {
+   "t": 148.19,
+   "d": 2.1,
+   "text": "so I want to talk to you, you know, in"
+  },
+  {
+   "t": 150.29,
+   "d": 2.0,
+   "text": "particular about Edelgard. They're my"
+  },
+  {
+   "t": 152.29,
+   "d": 1.2,
+   "text": "co-presenter. Everybody say hi to"
+  },
+  {
+   "t": 153.49,
+   "d": 1.0,
+   "text": "Edelgard. We're going to be talking"
+  },
+  {
+   "t": 154.49,
+   "d": 2.3,
+   "text": "about her stats a lot today."
+  },
+  {
+   "t": 156.79,
+   "d": 2.4,
+   "text": "And so we'll start with kind of just"
+  },
+  {
+   "t": 159.19,
+   "d": 1.6,
+   "text": "basic character growth. So all"
+  },
+  {
+   "t": 160.79,
+   "d": 3.1,
+   "text": "characters in Fire Emblem across"
+  },
+  {
+   "t": 163.89,
+   "d": 2.4,
+   "text": "all of these stats have a percentage"
+  },
+  {
+   "t": 166.29,
+   "d": 3.0,
+   "text": "chance for those stats to increase."
+  },
+  {
+   "t": 169.29,
+   "d": 2.9,
+   "text": "Edelgard is gifted in sort of strength."
+  },
+  {
+   "t": 172.19,
+   "d": 1.4,
+   "text": "She's definitely a brawler. She wants to"
+  },
+  {
+   "t": 173.59,
+   "d": 1.8,
+   "text": "get in your face. She's also very"
+  },
+  {
+   "t": 175.39,
+   "d": 2.2,
+   "text": "charismatic. And with a little bit of"
+  },
+  {
+   "t": 177.59,
+   "d": 2.2,
+   "text": "Google Sheets magic, we can sort of"
+  },
+  {
+   "t": 179.79,
+   "d": 1.5,
+   "text": "highlight all of this to make it easy to"
+  },
+  {
+   "t": 181.29,
+   "d": 2.1,
+   "text": "see where she's better than all of her"
+  },
+  {
+   "t": 183.39,
+   "d": 2.4,
+   "text": "sort of house classmates."
+  },
+  {
+   "t": 185.79,
+   "d": 1.4,
+   "text": "Uh but the thing about sort of"
+  },
+  {
+   "t": 187.19,
+   "d": 2.2,
+   "text": "highlighting it this way and the way I"
+  },
+  {
+   "t": 189.39,
+   "d": 2.4,
+   "text": "did this was just go format, conditional"
+  },
+  {
+   "t": 191.79,
+   "d": 1.8,
+   "text": "formatting, and then just select the"
+  },
+  {
+   "t": 193.59,
+   "d": 3.1,
+   "text": "whole thing and then apply a scale to it"
+  },
+  {
+   "t": 196.69,
+   "d": 2.2,
+   "text": "uh is that we do get a good sort of"
+  },
+  {
+   "t": 198.89,
+   "d": 1.7,
+   "text": "sense of like, hey, this is where sort"
+  },
+  {
+   "t": 200.59,
+   "d": 1.5,
+   "text": "of standouts happen across the whole"
+  },
+  {
+   "t": 202.09,
+   "d": 2.0,
+   "text": "data set, but we lose a sense on a per"
+  },
+  {
+   "t": 204.09,
+   "d": 2.4,
+   "text": "stat basis. So we look at speed, for"
+  },
+  {
+   "t": 206.49,
+   "d": 3.0,
+   "text": "example, here. If you just highlight the"
+  },
+  {
+   "t": 209.49,
+   "d": 2.4,
+   "text": "whole thing, then you do sort of lose"
+  },
+  {
+   "t": 211.89,
+   "d": 1.8,
+   "text": "the fact that 40 is the lowest number"
+  },
+  {
+   "t": 213.69,
+   "d": 2.2,
+   "text": "here. Now speed in general is above"
+  },
+  {
+   "t": 215.89,
+   "d": 2.5,
+   "text": "average across all of the stats, but"
+  },
+  {
+   "t": 218.39,
+   "d": 2.0,
+   "text": "really you very rarely comparing things"
+  },
+  {
+   "t": 220.39,
+   "d": 2.3,
+   "text": "like speed to skill. They govern"
+  },
+  {
+   "t": 222.69,
+   "d": 1.5,
+   "text": "different things."
+  },
+  {
+   "t": 224.19,
+   "d": 1.9,
+   "text": ">> I think we're just seeing the closing"
+  },
+  {
+   "t": 226.09,
+   "d": 0.7,
+   "text": "sheet."
+  },
+  {
+   "t": 226.79,
+   "d": 3.3,
+   "text": ">> Oh, that is so funky. Thank you."
+  },
+  {
+   "t": 230.09,
+   "d": 3.8,
+   "text": "Um let me try to"
+  },
+  {
+   "t": 233.89,
+   "d": 2.8,
+   "text": "re-share my screen."
+  },
+  {
+   "t": 236.69,
+   "d": 2.4,
+   "text": "Present."
+  },
+  {
+   "t": 240.39,
+   "d": 2.6,
+   "text": ">> I'm so um"
+  },
+  {
+   "t": 244.99,
+   "d": 1.2,
+   "text": ">> You run a tech test and you hope for the"
+  },
+  {
+   "t": 246.19,
+   "d": 1.5,
+   "text": "best, but sometimes it just doesn't"
+  },
+  {
+   "t": 247.69,
+   "d": 0.8,
+   "text": "work."
+  },
+  {
+   "t": 248.49,
+   "d": 2.1,
+   "text": ">> Yes. Tech tests uh definitely mitigate"
+  },
+  {
+   "t": 250.59,
+   "d": 1.58,
+   "text": "problems but do not remove them."
+  },
+  {
+   "t": 252.18,
+   "d": 0.92,
+   "text": ">> [clears throat]"
+  },
+  {
+   "t": 253.09,
+   "d": 1.2,
+   "text": ">> Is that any better?"
+  },
+  {
+   "t": 254.29,
+   "d": 2.4,
+   "text": ">> Okay."
+  },
+  {
+   "t": 256.99,
+   "d": 2.5,
+   "text": "Um try do switching to a different one"
+  },
+  {
+   "t": 259.49,
+   "d": 1.6,
+   "text": "and see if anything changes cuz right"
+  },
+  {
+   "t": 261.09,
+   "d": 1.2,
+   "text": "now I'm still just seeing the closing"
+  },
+  {
+   "t": 262.29,
+   "d": 1.1,
+   "text": "sheet."
+  },
+  {
+   "t": 263.39,
+   "d": 2.3,
+   "text": ">> Fascinating. Okay."
+  },
+  {
+   "t": 265.69,
+   "d": 3.4,
+   "text": "One more check."
+  },
+  {
+   "t": 283.29,
+   "d": 3.9,
+   "text": "Is there anything changing now?"
+  },
+  {
+   "t": 287.49,
+   "d": 3.1,
+   "text": ">> No. Um"
+  },
+  {
+   "t": 290.59,
+   "d": 1.3,
+   "text": ">> Do I have another"
+  },
+  {
+   "t": 291.89,
+   "d": 2.6,
+   "text": ">> What browser are you in currently?"
+  },
+  {
+   "t": 294.49,
+   "d": 4.2,
+   "text": ">> I'm in Firefox, but it turns out I had a"
+  },
+  {
+   "t": 298.69,
+   "d": 2.4,
+   "text": "extra tab open that I didn't realize"
+  },
+  {
+   "t": 301.09,
+   "d": 2.1,
+   "text": "because I have too many tabs in my old"
+  },
+  {
+   "t": 303.19,
+   "d": 1.2,
+   "text": "life."
+  },
+  {
+   "t": 304.39,
+   "d": 0.3,
+   "text": ">> Oh. Okay."
+  },
+  {
+   "t": 304.69,
+   "d": 4.5,
+   "text": ">> And I do believe this will work."
+  },
+  {
+   "t": 309.19,
+   "d": 1.8,
+   "text": "Okay, great. Now we're back on track."
+  },
+  {
+   "t": 310.99,
+   "d": 0.6,
+   "text": "Thank you so much."
+  },
+  {
+   "t": 311.59,
+   "d": 0.8,
+   "text": ">> I see"
+  },
+  {
+   "t": 312.39,
+   "d": 3.6,
+   "text": "Yay. Okay. Great."
+  },
+  {
+   "t": 316.09,
+   "d": 2.6,
+   "text": ">> So uh we have a bunch of stats here. If"
+  },
+  {
+   "t": 318.69,
+   "d": 1.7,
+   "text": "we highlight them in particular ways, we"
+  },
+  {
+   "t": 320.39,
+   "d": 2.0,
+   "text": "can lose sort of definition across a"
+  },
+  {
+   "t": 322.39,
+   "d": 2.1,
+   "text": "single stat."
+  },
+  {
+   "t": 324.49,
+   "d": 1.2,
+   "text": "Um"
+  },
+  {
+   "t": 325.69,
+   "d": 1.5,
+   "text": "and the other thing that Fire Emblem"
+  },
+  {
+   "t": 327.19,
+   "d": 2.0,
+   "text": "Three Houses has is that every character"
+  },
+  {
+   "t": 329.19,
+   "d": 1.5,
+   "text": "has a class. They have to take a test to"
+  },
+  {
+   "t": 330.69,
+   "d": 2.2,
+   "text": "get into a class. So everybody starts"
+  },
+  {
+   "t": 332.89,
+   "d": 1.6,
+   "text": "either out as a noble or a commoner,"
+  },
+  {
+   "t": 334.49,
+   "d": 1.4,
+   "text": "much like real life."
+  },
+  {
+   "t": 335.89,
+   "d": 2.0,
+   "text": "And then after sort of getting some love"
+  },
+  {
+   "t": 337.89,
+   "d": 2.4,
+   "text": "loves, they can take a test and if they"
+  },
+  {
+   "t": 340.29,
+   "d": 2.1,
+   "text": "succeed, they can then become a"
+  },
+  {
+   "t": 342.39,
+   "d": 2.1,
+   "text": "Myrmidon, Soldier, Fighter, or Monk. And"
+  },
+  {
+   "t": 344.49,
+   "d": 1.5,
+   "text": "these have their own growth rates as"
+  },
+  {
+   "t": 345.99,
+   "d": 2.5,
+   "text": "well. We can sort of see that Myrmidons"
+  },
+  {
+   "t": 348.49,
+   "d": 1.7,
+   "text": "are faster than their peers because they"
+  },
+  {
+   "t": 350.19,
+   "d": 1.7,
+   "text": "will level up their speed stat a little"
+  },
+  {
+   "t": 351.89,
+   "d": 1.3,
+   "text": "bit more."
+  },
+  {
+   "t": 353.19,
+   "d": 1.3,
+   "text": "A thing to realize here though and"
+  },
+  {
+   "t": 354.49,
+   "d": 1.0,
+   "text": "something that's kind of important when"
+  },
+  {
+   "t": 355.49,
+   "d": 1.4,
+   "text": "we think about color scaling large"
+  },
+  {
+   "t": 356.89,
+   "d": 2.0,
+   "text": "amounts of data is that if I were to"
+  },
+  {
+   "t": 358.89,
+   "d": 1.9,
+   "text": "just use the same naive approach before"
+  },
+  {
+   "t": 360.79,
+   "d": 2.4,
+   "text": "as just like, hey, here's a range, I'm"
+  },
+  {
+   "t": 363.19,
+   "d": 2.2,
+   "text": "just going to sit down and like color"
+  },
+  {
+   "t": 365.39,
+   "d": 4.0,
+   "text": "it, then we lose definition. So instead"
+  },
+  {
+   "t": 369.39,
+   "d": 2.4,
+   "text": "there's a quick little trick if you know"
+  },
+  {
+   "t": 371.8,
+   "d": 1.7,
+   "text": "a little bit about how Google does"
+  },
+  {
+   "t": 373.5,
+   "d": 1.8,
+   "text": "formatting is that you can apply"
+  },
+  {
+   "t": 375.3,
+   "d": 1.9,
+   "text": "additional formats to just small chunks"
+  },
+  {
+   "t": 377.19,
+   "d": 1.3,
+   "text": "of your table."
+  },
+  {
+   "t": 378.5,
+   "d": 2.0,
+   "text": "And then a way to kind of make sure that"
+  },
+  {
+   "t": 380.5,
+   "d": 1.7,
+   "text": "like hey if these values are all the"
+  },
+  {
+   "t": 382.19,
+   "d": 1.5,
+   "text": "same just don't color them because I"
+  },
+  {
+   "t": 383.69,
+   "d": 1.2,
+   "text": "don't want them to wash out the"
+  },
+  {
+   "t": 384.89,
+   "d": 1.3,
+   "text": "information that I'm looking at. I want"
+  },
+  {
+   "t": 386.19,
+   "d": 1.3,
+   "text": "those colors to pop. I want them to be"
+  },
+  {
+   "t": 387.5,
+   "d": 1.2,
+   "text": "meaningful."
+  },
+  {
+   "t": 388.69,
+   "d": 1.2,
+   "text": "You can just sort of say like all right"
+  },
+  {
+   "t": 389.89,
+   "d": 2.8,
+   "text": "well look at all of the values here uh"
+  },
+  {
+   "t": 392.69,
+   "d": 2.2,
+   "text": "or look at the the number of rows or"
+  },
+  {
+   "t": 394.89,
+   "d": 2.2,
+   "text": "columns if you're going the other way"
+  },
+  {
+   "t": 397.1,
+   "d": 2.2,
+   "text": "uh that are in my range and are they all"
+  },
+  {
+   "t": 399.3,
+   "d": 1.8,
+   "text": "the same value? And if so they are"
+  },
+  {
+   "t": 401.1,
+   "d": 2.9,
+   "text": "great. Just don't apply any formatting."
+  },
+  {
+   "t": 404.0,
+   "d": 1.0,
+   "text": "And the trick to be able to do this"
+  },
+  {
+   "t": 405.0,
+   "d": 2.6,
+   "text": "quickly is if you hit add another rule"
+  },
+  {
+   "t": 407.6,
+   "d": 2.1,
+   "text": "here and only here there are plenty of"
+  },
+  {
+   "t": 409.69,
+   "d": 1.4,
+   "text": "places in the sheets interface that have"
+  },
+  {
+   "t": 411.1,
+   "d": 1.9,
+   "text": "this button you can get a quick copy of"
+  },
+  {
+   "t": 413.0,
+   "d": 2.2,
+   "text": "this immediately to edit for another"
+  },
+  {
+   "t": 415.19,
+   "d": 2.1,
+   "text": "chunk. Um so I could then reapply this"
+  },
+  {
+   "t": 417.3,
+   "d": 2.0,
+   "text": "to say charisma."
+  },
+  {
+   "t": 419.3,
+   "d": 0.7,
+   "text": "Uh"
+  },
+  {
+   "t": 420.0,
+   "d": 2.7,
+   "text": "anyway moving on."
+  },
+  {
+   "t": 422.69,
+   "d": 1.5,
+   "text": "So uh"
+  },
+  {
+   "t": 424.19,
+   "d": 1.6,
+   "text": "what about the stats right? I promised"
+  },
+  {
+   "t": 425.8,
+   "d": 2.5,
+   "text": "math and math we shall get. So uh there"
+  },
+  {
+   "t": 428.3,
+   "d": 1.6,
+   "text": "are two probability distributions that"
+  },
+  {
+   "t": 429.89,
+   "d": 1.3,
+   "text": "we care or there's one probability"
+  },
+  {
+   "t": 431.19,
+   "d": 1.3,
+   "text": "distribution the binomial distribution"
+  },
+  {
+   "t": 432.5,
+   "d": 1.3,
+   "text": "and there's two ways of thinking about"
+  },
+  {
+   "t": 433.8,
+   "d": 1.5,
+   "text": "it that we care about."
+  },
+  {
+   "t": 435.3,
+   "d": 2.0,
+   "text": "Uh one is we want to know the number of"
+  },
+  {
+   "t": 437.3,
+   "d": 1.8,
+   "text": "times we are going to call something"
+  },
+  {
+   "t": 439.1,
+   "d": 2.1,
+   "text": "correctly exactly and that's the"
+  },
+  {
+   "t": 441.19,
+   "d": 2.3,
+   "text": "probability on the left here. So if I"
+  },
+  {
+   "t": 443.5,
+   "d": 2.3,
+   "text": "were to flip a coin 20 times"
+  },
+  {
+   "t": 445.8,
+   "d": 1.9,
+   "text": "and then try to say if it's heads or"
+  },
+  {
+   "t": 447.69,
+   "d": 2.6,
+   "text": "tails if that coin is fair I am most"
+  },
+  {
+   "t": 450.3,
+   "d": 2.2,
+   "text": "likely although still not very likely to"
+  },
+  {
+   "t": 452.5,
+   "d": 2.7,
+   "text": "get it right 10 times right? And that"
+  },
+  {
+   "t": 455.19,
+   "d": 2.8,
+   "text": "sort of makes sense intuitively. And if"
+  },
+  {
+   "t": 458.0,
+   "d": 2.0,
+   "text": "I sort of slide this around so if I make"
+  },
+  {
+   "t": 460.0,
+   "d": 2.1,
+   "text": "this coin unfair like it knows what I 'm"
+  },
+  {
+   "t": 462.1,
+   "d": 1.7,
+   "text": "going to say before I say it and then"
+  },
+  {
+   "t": 463.8,
+   "d": 1.7,
+   "text": "wiggles itself in the air like an XCOM"
+  },
+  {
+   "t": 465.5,
+   "d": 2.0,
+   "text": "shot percentage uh"
+  },
+  {
+   "t": 467.5,
+   "d": 2.9,
+   "text": "and in order to sort of make me wrong um"
+  },
+  {
+   "t": 470.39,
+   "d": 3.1,
+   "text": "then I can slide it the other way."
+  },
+  {
+   "t": 473.5,
+   "d": 2.7,
+   "text": "Um and so we can see that this then"
+  },
+  {
+   "t": 476.19,
+   "d": 1.5,
+   "text": "shifts to the left and I'm more likely"
+  },
+  {
+   "t": 477.69,
+   "d": 2.6,
+   "text": "to be incorrect then correct."
+  },
+  {
+   "t": 480.3,
+   "d": 2.0,
+   "text": "Uh the on the right and then the same"
+  },
+  {
+   "t": 482.3,
+   "d": 1.6,
+   "text": "thing happens if we go in the other"
+  },
+  {
+   "t": 483.89,
+   "d": 3.0,
+   "text": "direction."
+  },
+  {
+   "t": 493.2,
+   "d": 2.2,
+   "text": ">> And we can see that it slides this way."
+  },
+  {
+   "t": 495.4,
+   "d": 1.5,
+   "text": "So the other thing that's interesting"
+  },
+  {
+   "t": 496.9,
+   "d": 2.7,
+   "text": "here is that the graph on the right is"
+  },
+  {
+   "t": 499.6,
+   "d": 2.8,
+   "text": "the probability of n or less successes."
+  },
+  {
+   "t": 502.4,
+   "d": 1.7,
+   "text": "So"
+  },
+  {
+   "t": 504.1,
+   "d": 1.8,
+   "text": "this is a little funky to think about,"
+  },
+  {
+   "t": 505.9,
+   "d": 2.4,
+   "text": "but it does make a lot of sense. If the"
+  },
+  {
+   "t": 508.3,
+   "d": 1.4,
+   "text": "reason why we're at one here is that"
+  },
+  {
+   "t": 509.7,
+   "d": 2.9,
+   "text": "we're going at at 20 is that if we only"
+  },
+  {
+   "t": 512.6,
+   "d": 2.7,
+   "text": "have 20 coins, we have to get"
+  },
+  {
+   "t": 515.3,
+   "d": 2.5,
+   "text": "at most 20 correct, and we will always"
+  },
+  {
+   "t": 517.8,
+   "d": 2.5,
+   "text": "get 20 or less correct because that's"
+  },
+  {
+   "t": 520.3,
+   "d": 2.5,
+   "text": "all the numbers. We run out of numbers."
+  },
+  {
+   "t": 522.8,
+   "d": 1.7,
+   "text": "And furthermore,"
+  },
+  {
+   "t": 524.5,
+   "d": 2.3,
+   "text": "things you know will rapidly decrease."
+  },
+  {
+   "t": 526.8,
+   "d": 2.3,
+   "text": "If we're taking 20 shots on goal and the"
+  },
+  {
+   "t": 529.1,
+   "d": 2.0,
+   "text": "coin is weighted in our favor, then"
+  },
+  {
+   "t": 531.1,
+   "d": 1.7,
+   "text": "we're very unlikely to not be able to"
+  },
+  {
+   "t": 532.8,
+   "d": 2.0,
+   "text": "get anything right."
+  },
+  {
+   "t": 534.8,
+   "d": 2.0,
+   "text": "And this also slides around a little bit"
+  },
+  {
+   "t": 536.8,
+   "d": 1.9,
+   "text": "too. It's got some weird fun properties"
+  },
+  {
+   "t": 538.7,
+   "d": 1.6,
+   "text": "though. A thing that I always find"
+  },
+  {
+   "t": 540.3,
+   "d": 1.2,
+   "text": "really interesting about this"
+  },
+  {
+   "t": 541.5,
+   "d": 1.6,
+   "text": "distribution is that it's a sigmoid, not"
+  },
+  {
+   "t": 543.1,
+   "d": 1.1,
+   "text": "a line,"
+  },
+  {
+   "t": 544.2,
+   "d": 1.7,
+   "text": "which sort of shows that it flattens out"
+  },
+  {
+   "t": 545.9,
+   "d": 2.4,
+   "text": "at the top, right? Like the probability"
+  },
+  {
+   "t": 548.3,
+   "d": 2.8,
+   "text": "of us getting 16 or less right and the"
+  },
+  {
+   "t": 551.1,
+   "d": 1.5,
+   "text": "probability of us getting 20 or less"
+  },
+  {
+   "t": 552.6,
+   "d": 2.5,
+   "text": "right are about the same, which is one"
+  },
+  {
+   "t": 555.1,
+   "d": 1.7,
+   "text": "of those like weird counterintuitive"
+  },
+  {
+   "t": 556.8,
+   "d": 1.9,
+   "text": "things that"
+  },
+  {
+   "t": 558.7,
+   "d": 1.5,
+   "text": "is just true in statistics that I think"
+  },
+  {
+   "t": 560.2,
+   "d": 1.5,
+   "text": "just like makes us living like a"
+  },
+  {
+   "t": 561.7,
+   "d": 2.1,
+   "text": "wonderful and interesting world. So this"
+  },
+  {
+   "t": 563.8,
+   "d": 1.2,
+   "text": "is all well and good, but how do you"
+  },
+  {
+   "t": 565.0,
+   "d": 2.0,
+   "text": "actually use any of this? And so this is"
+  },
+  {
+   "t": 567.0,
+   "d": 3.2,
+   "text": "kind of the first complicated cheat,"
+  },
+  {
+   "t": 570.2,
+   "d": 1.6,
+   "text": "which is to say that if we're looking at"
+  },
+  {
+   "t": 571.8,
+   "d": 3.4,
+   "text": "a particular stat for Aethelgard,"
+  },
+  {
+   "t": 575.2,
+   "d": 3.0,
+   "text": "and Aethelgard is a fighter that has"
+  },
+  {
+   "t": 578.2,
+   "d": 1.8,
+   "text": "sort of a combined growth rate ending up"
+  },
+  {
+   "t": 580.0,
+   "d": 3.2,
+   "text": "here at 60%, then the"
+  },
+  {
+   "t": 583.2,
+   "d": 2.3,
+   "text": "we can sort of see as she gains level"
+  },
+  {
+   "t": 585.5,
+   "d": 2.9,
+   "text": "ups in this class, what are her odds of"
+  },
+  {
+   "t": 588.4,
+   "d": 1.6,
+   "text": "getting stat growth? And as she gains"
+  },
+  {
+   "t": 590.0,
+   "d": 1.9,
+   "text": "more level ups, obviously the odds shift"
+  },
+  {
+   "t": 591.9,
+   "d": 2.2,
+   "text": "to the right for more and more stats."
+  },
+  {
+   "t": 594.1,
+   "d": 1.6,
+   "text": "You get stuck up here at zero because"
+  },
+  {
+   "t": 595.7,
+   "d": 1.9,
+   "text": "you can't get two stat growths in one"
+  },
+  {
+   "t": 597.6,
+   "d": 1.3,
+   "text": "level up. You haven't done it enough"
+  },
+  {
+   "t": 598.9,
+   "d": 1.0,
+   "text": "times."
+  },
+  {
+   "t": 599.9,
+   "d": 1.6,
+   "text": "And slowly the thing sort of moves to"
+  },
+  {
+   "t": 601.5,
+   "d": 1.9,
+   "text": "the right."
+  },
+  {
+   "t": 603.4,
+   "d": 1.1,
+   "text": "A thing that's interesting about this"
+  },
+  {
+   "t": 604.5,
+   "d": 1.4,
+   "text": "graph and a thing that I like and a"
+  },
+  {
+   "t": 605.9,
+   "d": 2.6,
+   "text": "thing that also sort of just shows like"
+  },
+  {
+   "t": 608.5,
+   "d": 0.9,
+   "text": "interesting little bits about"
+  },
+  {
+   "t": 609.4,
+   "d": 2.5,
+   "text": "probability is that the best case here"
+  },
+  {
+   "t": 611.9,
+   "d": 1.9,
+   "text": "is always more likely than the worst"
+  },
+  {
+   "t": 613.8,
+   "d": 2.9,
+   "text": "case. So as even as we get out to sort"
+  },
+  {
+   "t": 616.7,
+   "d": 2.9,
+   "text": "of extreme like lucky scenarios, like"
+  },
+  {
+   "t": 619.6,
+   "d": 3.7,
+   "text": "say Edelgard goes six for six and uh"
+  },
+  {
+   "t": 623.3,
+   "d": 2.0,
+   "text": "gets all the level ups that uh she"
+  },
+  {
+   "t": 625.3,
+   "d": 2.9,
+   "text": "expects to get in six levels, she's more"
+  },
+  {
+   "t": 628.2,
+   "d": 2.8,
+   "text": "likely to do that than not get any level"
+  },
+  {
+   "t": 631.0,
+   "d": 2.1,
+   "text": "ups by a lot. And it's actually just"
+  },
+  {
+   "t": 633.1,
+   "d": 2.3,
+   "text": "because of this sort of waiting in her"
+  },
+  {
+   "t": 635.4,
+   "d": 1.7,
+   "text": "favor."
+  },
+  {
+   "t": 637.1,
+   "d": 1.9,
+   "text": "But we can go one step further."
+  },
+  {
+   "t": 639.0,
+   "d": 1.6,
+   "text": "And if we use both of these"
+  },
+  {
+   "t": 640.6,
+   "d": 1.2,
+   "text": "distributions that we talked about, we"
+  },
+  {
+   "t": 641.8,
+   "d": 1.7,
+   "text": "can flip it on its head and actually"
+  },
+  {
+   "t": 643.5,
+   "d": 1.6,
+   "text": "sort of quantify how lucky we're"
+  },
+  {
+   "t": 645.1,
+   "d": 1.0,
+   "text": "getting."
+  },
+  {
+   "t": 646.1,
+   "d": 2.6,
+   "text": "So uh for strength, again talking about"
+  },
+  {
+   "t": 648.7,
+   "d": 2.2,
+   "text": "Edelgard, we can look at her sort of if"
+  },
+  {
+   "t": 650.9,
+   "d": 1.9,
+   "text": "she takes 10 levels in Noble, 10 levels"
+  },
+  {
+   "t": 652.8,
+   "d": 2.2,
+   "text": "in Fighter, and then 10 levels in Monk,"
+  },
+  {
+   "t": 655.0,
+   "d": 1.8,
+   "text": "we can look at sort of the stat growth"
+  },
+  {
+   "t": 656.8,
+   "d": 2.0,
+   "text": "that she'll get combined. And then we"
+  },
+  {
+   "t": 658.8,
+   "d": 3.5,
+   "text": "can also quantify sort of how well uh"
+  },
+  {
+   "t": 662.3,
+   "d": 2.0,
+   "text": "she is doing based off of her current"
+  },
+  {
+   "t": 664.3,
+   "d": 4.0,
+   "text": "stats. So after 10 level ups in Noble,"
+  },
+  {
+   "t": 668.3,
+   "d": 2.9,
+   "text": "if Edelgard only has like 16 strength,"
+  },
+  {
+   "t": 671.2,
+   "d": 2.9,
+   "text": "she's well behind the curve. Um"
+  },
+  {
+   "t": 674.1,
+   "d": 2.1,
+   "text": "that's not where she should be and"
+  },
+  {
+   "t": 676.2,
+   "d": 1.8,
+   "text": "you're getting pretty unlucky. If she"
+  },
+  {
+   "t": 678.0,
+   "d": 3.0,
+   "text": "ends up at a 20, then uh she's getting a"
+  },
+  {
+   "t": 681.0,
+   "d": 2.2,
+   "text": "lot more bang for her buck than we would"
+  },
+  {
+   "t": 683.2,
+   "d": 2.3,
+   "text": "expect. And we can sort of keep going"
+  },
+  {
+   "t": 685.5,
+   "d": 2.2,
+   "text": "down here and"
+  },
+  {
+   "t": 687.7,
+   "d": 1.9,
+   "text": "filling out this graph."
+  },
+  {
+   "t": 689.6,
+   "d": 1.9,
+   "text": "These numbers are a little fudged um"
+  },
+  {
+   "t": 691.5,
+   "d": 1.3,
+   "text": "because you do have to try to figure out"
+  },
+  {
+   "t": 692.8,
+   "d": 3.1,
+   "text": "once you go from Noble to Fighter, which"
+  },
+  {
+   "t": 695.9,
+   "d": 1.9,
+   "text": "number from Noble do you use to start"
+  },
+  {
+   "t": 697.8,
+   "d": 2.6,
+   "text": "calculating your new distribution? Um"
+  },
+  {
+   "t": 700.4,
+   "d": 1.6,
+   "text": "then this case I just assumed that the"
+  },
+  {
+   "t": 702.0,
+   "d": 4.2,
+   "text": "past is always just uh a median. Um but"
+  },
+  {
+   "t": 706.2,
+   "d": 2.2,
+   "text": "uh that's not a great model not all the"
+  },
+  {
+   "t": 708.4,
+   "d": 2.5,
+   "text": "time. Um and there is some other little"
+  },
+  {
+   "t": 710.9,
+   "d": 1.5,
+   "text": "funky things here which is why we end up"
+  },
+  {
+   "t": 712.4,
+   "d": 1.6,
+   "text": "in with decimal points. Uh I didn't"
+  },
+  {
+   "t": 714.0,
+   "d": 1.3,
+   "text": "bother rounding things off. You can't"
+  },
+  {
+   "t": 715.3,
+   "d": 2.0,
+   "text": "have fractional strength in Fire Emblem."
+  },
+  {
+   "t": 717.3,
+   "d": 1.8,
+   "text": "Um anyway, uh apologies for the"
+  },
+  {
+   "t": 719.1,
+   "d": 1.9,
+   "text": "technical problems, but thank you so"
+  },
+  {
+   "t": 721.0,
+   "d": 3.5,
+   "text": "much for your time and um"
+  },
+  {
+   "t": 724.5,
+   "d": 1.5,
+   "text": "I can take any questions if there is any"
+  },
+  {
+   "t": 726.0,
+   "d": 2.7,
+   "text": "time left."
+  },
+  {
+   "t": 729.3,
+   "d": 2.0,
+   "text": ">> Yeah, actually I do think we have time"
+  },
+  {
+   "t": 731.3,
+   "d": 3.2,
+   "text": "for one question uh from HyperGardens,"
+  },
+  {
+   "t": 734.5,
+   "d": 2.0,
+   "text": "do you think tabletop RPG mechanics are"
+  },
+  {
+   "t": 736.5,
+   "d": 1.8,
+   "text": "over-engineered? And how can you tell"
+  },
+  {
+   "t": 738.3,
+   "d": 1.9,
+   "text": "when a system really pulls its weight or"
+  },
+  {
+   "t": 740.2,
+   "d": 1.7,
+   "text": "it's just interesting to the designer"
+  },
+  {
+   "t": 741.9,
+   "d": 1.8,
+   "text": "and nobody else? I think that's a"
+  },
+  {
+   "t": 743.7,
+   "d": 1.6,
+   "text": "problem many of us have had designing"
+  },
+  {
+   "t": 745.3,
+   "d": 1.4,
+   "text": "games."
+  },
+  {
+   "t": 746.7,
+   "d": 3.7,
+   "text": ">> Yeah, it's kind of a big one. Um,"
+  },
+  {
+   "t": 751.1,
+   "d": 2.9,
+   "text": "I don't really I think that like"
+  },
+  {
+   "t": 754.0,
+   "d": 1.1,
+   "text": "a lot of times it comes down to the"
+  },
+  {
+   "t": 755.1,
+   "d": 2.6,
+   "text": "audience. Um, and so a thing that's kind"
+  },
+  {
+   "t": 757.7,
+   "d": 2.8,
+   "text": "of funny about um this particular talk"
+  },
+  {
+   "t": 760.5,
+   "d": 1.8,
+   "text": "is that all these things are true. Like"
+  },
+  {
+   "t": 762.3,
+   "d": 1.5,
+   "text": "all this math is in the game and you can"
+  },
+  {
+   "t": 763.8,
+   "d": 2.0,
+   "text": "you can stat it all out. But like none"
+  },
+  {
+   "t": 765.8,
+   "d": 2.4,
+   "text": "of this matters. Um, the things that are"
+  },
+  {
+   "t": 768.2,
+   "d": 1.5,
+   "text": "actually driving character performance"
+  },
+  {
+   "t": 769.7,
+   "d": 2.0,
+   "text": "in Fire Emblem are not their stats. Not"
+  },
+  {
+   "t": 771.7,
+   "d": 1.6,
+   "text": "until you crank up the difficulty to"
+  },
+  {
+   "t": 773.3,
+   "d": 2.0,
+   "text": "like absurd levels."
+  },
+  {
+   "t": 775.3,
+   "d": 3.9,
+   "text": "And so I think that it's really kind of"
+  },
+  {
+   "t": 779.2,
+   "d": 3.0,
+   "text": "the mix and match between"
+  },
+  {
+   "t": 782.2,
+   "d": 2.0,
+   "text": "um"
+  },
+  {
+   "t": 784.2,
+   "d": 2.3,
+   "text": "what you are sort of intending certain"
+  },
+  {
+   "t": 786.5,
+   "d": 2.5,
+   "text": "mechanics to say or do and the"
+  },
+  {
+   "t": 789.0,
+   "d": 1.7,
+   "text": "experience that you want them to have"
+  },
+  {
+   "t": 790.7,
+   "d": 2.1,
+   "text": "versus your audience and kind of what"
+  },
+  {
+   "t": 792.8,
+   "d": 1.8,
+   "text": "they are looking for in the game that"
+  },
+  {
+   "t": 794.6,
+   "d": 1.3,
+   "text": "you present."
+  },
+  {
+   "t": 795.9,
+   "d": 2.3,
+   "text": "Um, generally speaking, I find that"
+  },
+  {
+   "t": 798.2,
+   "d": 1.8,
+   "text": "pretty simple things like a probability"
+  },
+  {
+   "t": 800.0,
+   "d": 2.3,
+   "text": "distribution that is either yes or no"
+  },
+  {
+   "t": 802.3,
+   "d": 1.9,
+   "text": "um can be very compelling and lead to"
+  },
+  {
+   "t": 804.2,
+   "d": 2.5,
+   "text": "very dynamic and interesting gameplay."
+  },
+  {
+   "t": 806.7,
+   "d": 2.1,
+   "text": "Um, but that's just my own personal"
+  },
+  {
+   "t": 808.8,
+   "d": 2.1,
+   "text": "flavor. There's also, you know,"
+  },
+  {
+   "t": 810.9,
+   "d": 1.4,
+   "text": "a large tradition of really, really"
+  },
+  {
+   "t": 812.3,
+   "d": 2.0,
+   "text": "complicated systems, right? Got coming"
+  },
+  {
+   "t": 814.3,
+   "d": 1.7,
+   "text": "up with with beautiful sort of"
+  },
+  {
+   "t": 816.0,
+   "d": 1.2,
+   "text": "artifacts."
+  },
+  {
+   "t": 817.2,
+   "d": 1.2,
+   "text": "Um,"
+  },
+  {
+   "t": 818.4,
+   "d": 1.3,
+   "text": "so yeah, I don't know. That was kind of"
+  },
+  {
+   "t": 819.7,
+   "d": 1.6,
+   "text": "rambly, but hopefully gets to something"
+  },
+  {
+   "t": 821.3,
+   "d": 1.0,
+   "text": "interesting."
+  },
+  {
+   "t": 822.3,
+   "d": 2.1,
+   "text": ">> No, totally. Well, thank you so much for"
+  },
+  {
+   "t": 824.4,
+   "d": 1.8,
+   "text": "your talk, Jonathan. I'm glad we did"
+  },
+  {
+   "t": 826.2,
+   "d": 3.5,
+   "text": "finally get to see Edelgard. Uh, and if"
+  },
+  {
+   "t": 829.7,
+   "d": 1.4,
+   "text": "people want to talk to you more about"
+  },
+  {
+   "t": 831.1,
+   "d": 2.4,
+   "text": "this during the break, uh, your breakout"
+  },
+  {
+   "t": 833.5,
+   "d": 3.7,
+   "text": "room will be in the press box."
+  }
+ ]
+}

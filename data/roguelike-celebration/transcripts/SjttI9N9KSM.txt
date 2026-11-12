@@ -1,0 +1,48 @@
+Xalavier Nelson Jr - Procedural Generation for Dogs
+Speaker: Xalavier Nelson Jr
+https://www.youtube.com/watch?v=SjttI9N9KSM
+Year: 2020   Kind: talk   Captions: manual (en)
+
+## Introduction and background
+
+[0:00:00] MODERATOR: We are going to go quick and high energy because we are starting with lightning talks. Xalavier Nelson, Jr. our first lightning talk of the day. >> Hi, everyone. It is an honor to be here. Thanks. MODERATOR: I think since it is lightning talks and fast I will let you introduce yourself. I am looking forward to seeing some dogs. >> I have got so many good dog pictures. Hello, everyone. My name is Xalavier Nelson and I am a narrative director, writer and I have done so many things. You might know me from my work on an airport for alien currently run by dogs. I worked on Hypnospace outlaw and we are the caretakers and just a whole bunch of games over four dozen? Over 40? It has been a lot. I was a journalist for awhile. Wrote for every outlet you
+
+[0:01:01] can think of. Wrote in print as a columnist, contributed to table top stuff, made an RPG system, and I have make comics that people like and I would go around the world to play in games and give talks and give panels and now I get to be at Roguelike Celebration. Polymorphic. This is the next evolution. This talk is titled Procedural Generation for Dogs. That is
+
+## Defining procedural generation
+
+[0:01:41] from airport run by killer dogs. We are talking about procedural generation for dogs because in the airport game it uses a lot of procedural generations. Airports are fascinating because they have so much standardized and unique aspects to them that you cannot care about if it doesn't align with personal goals. If your gate is at B6 you can't care about terminal A or C. You go past them and you can say you are belining. Making spaces that have a sense of unique content and cool stuff with presentation that is randomized and different for every player especially because their own journey through the game defines what they encounter is at the heart of what it is. It means procedural generation is a fantastic tool
+
+## Demystifying the design process
+
+[0:02:44] but you might not expect me to be the person doing a deeply procedurally generated game because the concept terrifies me. I believe it should terrify anyone reasonably speaking why? Mainly because of the speakers and exhibitors of Roguelike Celebration present and past. So many people are doing such incredible, complicated mind blowing work in this space. For a long time I totally discarded the concept that procedural generation was for people like me. I would hear them talking about making universes and people and poetry from scraps of words and language and grammar simulated on deep level and I go yeah, I know what games are. I know what games are. I promise. But then I realize that from the term procedural generation
+
+[0:03:47] even we see a couple different routes to pursue a fundamental design concept. You can simulate entire civilizations and you can create conin -- continents worth unique and emotionally varying content from black magic composed of words and numbers or look at the two words; procedural and generation. Procedure meaning according to a set of rules and procedure. Generation meaning making stuff. Making stuff according to a set of rules that could be all of that or it could be
+
+## Modular design and lists
+
+[0:04:31] picking stuff from a list. I understand lists. They speak to me on a deep and spiritual level and I am starting to understand that lists are just as valid an approach to the eternal question of let's make a whole bunch of really cool weird stuff with procedural generation as these much more complicated, deeply impressive examples that we see in games super often. And the key to understanding the difference in design to use procedural generation which is a fundamental design tool for any game creator is understanding how it differs from the typical development approach. When you are looking at something like a dwarf fortress and you see the utter scope of that world you think wow, procedural generation isn't for me until you realize that it is isn't making an entire civilization from day one. That's
+
+[0:05:34] terrifying. Most people haven't managed to do it. People who have you could argue probably shouldn't have done that. Making civilization in a single day is a foolhardy act built from hubris. You were not building a house from scratch in a single day. What you are doing is making the pieces of the house. You are making the Windows, the doors, and the garage and you could make increasingly complex versions of these and make sure all of the pieces match when you generate them, for example. There is escalating degrees for procedural generation or design or you could have a list. Just a whole bunch of boxes and you just throw them in a box and everything is cool. This dog thinks that pieces of houses are cool. Also thinks that houses are cool. Also thinks everybody should have a place to live. This dog is a bit of a radical. I believe in him, love him and I hope y'all do too.
+
+[0:06:36] I realized that procedural generation comes not from having to deal with this giant content burden from the auth but instead relied on thinking of design in modular pieces. How do all these elements come together to create a greater whole? It changed the way I see game development utterly. It made me believe I could be a game designer because that's the way my brain works.
+
+## The 'Pedogram' system
+
+[0:07:08] You end up with things like the pedostrian system. It is used in airports currently run by dogs. I am very proud of it. It looks like I am creating bioorganic abominations on a daily basis but I promise I am not. The pedostrian system comes from the principle that airports are built on unique aspects presented in strange and evolving ways based on your own journey and priorities. I know the airports would be filled with creatures and figures and characters. The way we filled the airports was with pedogstrians. Get it? You have elves, and you have pinostrian who have
+
+[0:08:17] gray scale models and cool hats. You have super buff ones who are existentially terrifying. You have want to consider a dog with giant buff arms saying they love you. And then you have emptystrians which create an empty object and nothing is spawned and we can in a basic way simulate the flow of population in an airport. Coming to an airport and finding it empty very early in the morning is something possible through this system. When we take these things, again, built in theses, and all we are really doing is picking an object from a list and then that object is picking two more things from two different lists. The line that they say and the thing that says that line. It can be a gray scale picture of a dog. It can be
+
+[0:09:18] a really enthusiastic picture of a dog. We don't know. Again, going off of how modular and procedural design works it is the combination of things that produce things like this beautiful
+
+## Injecting meaning and closure
+
+[0:09:31] body who says every time I lift weights I think about my folks and the weights they lifted to get me here. Important stuff. It does that at the moment you press play across the airport for as long as you play. Potentially infinite variety but infinite situations and context to inject meaning into. Procedural generation isn't just about building universes or building houses. It is about creating context, endless amount of context for people to find their own meaning in. Even if you don't believe that procedural generation is for you it is a fundamental tool. It is actually really simple and it is indeed for you. This dog believes in you and so do I. And
+
+[0:10:31] that's how I am using procedural generation for dogs because dogs are the essence of optimism and enthusiasm projected into a complicated world. What encapsulates that more brilliantly than procedural generation itself? It turns out all dogs are procedurally generated. Thank you for watching and
+
+## Closing thoughts
+
+[0:11:00] attending Roguelike Celebration and it is an honor to kickoff. I am Xalavier Nelson, Jr. talking about dogs and procedural generation. MODERATOR: Thank you so much. That's just wow. I can't decide if I should be clapping or crying or laughing. It is too many emotions first thing in the morning, Xavier. >> Procedurally generated emotions are hard to take in. MODERATOR: I am just getting a lot of feelings quickly. Thank you so much. I think that we will move on just because, you know, lightning talks go fast but that was excellent. Thank you so much for joining us and I hope people can find you in the space and take confidence. I feel much better about myself knowing that dog believes in me. >> Dogs believe in you in general. They are
+
+[0:12:01] fantastic animals. It is so great to participate in everything that Roguelike Celebration is. Such an honor. Thank you. MODERATOR: Thank you.

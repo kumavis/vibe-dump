@@ -1,0 +1,4158 @@
+{
+ "id": "C2CzHLtt1Fw",
+ "url": "https://www.youtube.com/watch?v=C2CzHLtt1Fw",
+ "title": "Jamie Brittain - Don't Save the @",
+ "speaker": "Jamie Brittain",
+ "talk_title": "Don't Save the @",
+ "year": 2026,
+ "kind": "talk",
+ "upload_date": "2026-10-05",
+ "duration_s": 1788,
+ "playlists": [
+  "Roguelike Celebration 2026"
+ ],
+ "description": "As someone who has worked in tv, film - and now AAA gaming, I have long been obsessed with story structures, both as a tool to use in my own work, but also as perhaps the biggest grift in the creative industries today. The Hero With A Thousand Faces, Robert McKee's Story, Dan Harmon's 'story wheel', and perhaps most of all, Blake Snyder's 'Save The Cat' all contain much wisdom, but they have also contributed to the mass homogenisation of storytelling across culture. How many times have you been reading a book, watching a movie, playing a game, and have found that you know precisely what is going to happen next, and after that, and after that...\n\nI would like to look at how the stories we experience in roguelike games resist the predictability of story structure orthodoxy. Permadeath, random level generation, ascii graphics and turn based gameplay could all be viewed as antithetical to a gripping narrative structure, but, as anyone who has played one of these games knows, they can create some of the most immersive and emotional experiences we can have with games. I will argue that roguelikes teach us about the importance of avoiding well travelled paths (and structures) when we tell stories.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 121,
+   "title": "The hero's journey overview"
+  },
+  {
+   "start": 315,
+   "title": "The predictability crisis"
+  },
+  {
+   "start": 440,
+   "title": "Story structure as a tool"
+  },
+  {
+   "start": 667,
+   "title": "Lessons from roguelikes"
+  },
+  {
+   "start": 1006,
+   "title": "Audience participation"
+  },
+  {
+   "start": 1248,
+   "title": "Diverse storytelling"
+  },
+  {
+   "start": 1512,
+   "title": "Conclusion"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5731,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.0,
+   "d": 3.0,
+   "text": "Without"
+  },
+  {
+   "t": 3.36,
+   "d": 1.2,
+   "text": "further ado, we're going to have our"
+  },
+  {
+   "t": 4.56,
+   "d": 1.04,
+   "text": "last talk of the day and then when"
+  },
+  {
+   "t": 5.6,
+   "d": 2.08,
+   "text": "that's done, we will do breakouts. So,"
+  },
+  {
+   "t": 7.68,
+   "d": 4.08,
+   "text": "hello Jamie. Uh, here with Don't Save"
+  },
+  {
+   "t": 11.76,
+   "d": 1.92,
+   "text": "the At, which I got to say, it took me a"
+  },
+  {
+   "t": 13.68,
+   "d": 2.8,
+   "text": "while to say it out loud and and get the"
+  },
+  {
+   "t": 16.48,
+   "d": 1.92,
+   "text": "joke, [laughter]"
+  },
+  {
+   "t": 18.4,
+   "d": 2.56,
+   "text": "so I had to make sure to say it. Um, but"
+  },
+  {
+   "t": 20.96,
+   "d": 1.52,
+   "text": "yes, I don't know. I I'll I'll do my"
+  },
+  {
+   "t": 22.48,
+   "d": 2.56,
+   "text": "spiel for you. You're a uh initially a"
+  },
+  {
+   "t": 25.04,
+   "d": 2.0,
+   "text": "television writer, co-creator of the"
+  },
+  {
+   "t": 27.04,
+   "d": 2.24,
+   "text": "teen drama Skins, working on shows like"
+  },
+  {
+   "t": 29.28,
+   "d": 1.84,
+   "text": "Dates, Kiss Me First, and Breeders for"
+  },
+  {
+   "t": 31.12,
+   "d": 1.92,
+   "text": "the best part of two decades, but always"
+  },
+  {
+   "t": 33.04,
+   "d": 2.16,
+   "text": "loved games more than TV, and managed to"
+  },
+  {
+   "t": 35.2,
+   "d": 2.0,
+   "text": "con your way onto the Kraton Crowbar"
+  },
+  {
+   "t": 37.2,
+   "d": 2.4,
+   "text": "podcast, which includes uh a few"
+  },
+  {
+   "t": 39.6,
+   "d": 2.48,
+   "text": "previous rogike folks like Tom Francis."
+  },
+  {
+   "t": 42.08,
+   "d": 2.32,
+   "text": "And then now you're working as a lead"
+  },
+  {
+   "t": 44.4,
+   "d": 2.08,
+   "text": "writer on a AAA narrativeled driving"
+  },
+  {
+   "t": 46.48,
+   "d": 1.92,
+   "text": "game made by Maverick Games, which is"
+  },
+  {
+   "t": 48.4,
+   "d": 1.6,
+   "text": "very cool. And so, yeah, I'm very"
+  },
+  {
+   "t": 50.0,
+   "d": 1.68,
+   "text": "excited. I love when people blend"
+  },
+  {
+   "t": 51.68,
+   "d": 2.48,
+   "text": "multiple discipline experiences."
+  },
+  {
+   "t": 54.16,
+   "d": 2.4,
+   "text": ">> I'm trying to get the term roadlike uh"
+  },
+  {
+   "t": 56.56,
+   "d": 2.16,
+   "text": "to [laughter] to catch on for driving"
+  },
+  {
+   "t": 58.72,
+   "d": 1.6,
+   "text": "games. It's not getting much traction so"
+  },
+  {
+   "t": 60.32,
+   "d": 0.8,
+   "text": "far."
+  },
+  {
+   "t": 61.12,
+   "d": 1.6,
+   "text": ">> Well, this is the community. We'll"
+  },
+  {
+   "t": 62.72,
+   "d": 2.13,
+   "text": "absolutely champion roadlike for you."
+  },
+  {
+   "t": 64.84,
+   "d": 1.23,
+   "text": "[laughter]"
+  },
+  {
+   "t": 66.08,
+   "d": 0.72,
+   "text": ">> Uh all right,"
+  },
+  {
+   "t": 66.8,
+   "d": 2.16,
+   "text": ">> great. Shall I get into it?"
+  },
+  {
+   "t": 68.96,
+   "d": 2.56,
+   "text": ">> Um so yeah, the talk is called don't"
+  },
+  {
+   "t": 71.52,
+   "d": 2.88,
+   "text": "save the at what rogue likes teach us"
+  },
+  {
+   "t": 74.4,
+   "d": 2.88,
+   "text": "about story structure. So the image"
+  },
+  {
+   "t": 77.28,
+   "d": 1.84,
+   "text": "you're seeing here, it's been one days"
+  },
+  {
+   "t": 79.12,
+   "d": 1.6,
+   "text": "since someone mentioned the hero's"
+  },
+  {
+   "t": 80.72,
+   "d": 2.88,
+   "text": "journey. that is from the um discord for"
+  },
+  {
+   "t": 83.6,
+   "d": 1.6,
+   "text": "interactive narrative which is a really"
+  },
+  {
+   "t": 85.2,
+   "d": 2.16,
+   "text": "nice discord for lots of writers and"
+  },
+  {
+   "t": 87.36,
+   "d": 2.0,
+   "text": "narrative designers and people like that"
+  },
+  {
+   "t": 89.36,
+   "d": 2.32,
+   "text": "um kind of congregate and there is a"
+  },
+  {
+   "t": 91.68,
+   "d": 1.68,
+   "text": "specialized channel on there called"
+  },
+  {
+   "t": 93.36,
+   "d": 2.08,
+   "text": "#resetthe"
+  },
+  {
+   "t": 95.44,
+   "d": 1.52,
+   "text": "um and every time someone mentions the"
+  },
+  {
+   "t": 96.96,
+   "d": 2.88,
+   "text": "hero's journey uh it gets reset and it's"
+  },
+  {
+   "t": 99.84,
+   "d": 1.68,
+   "text": "often and uh you know it's something of"
+  },
+  {
+   "t": 101.52,
+   "d": 2.32,
+   "text": "preoccupation along among writers. Uh if"
+  },
+  {
+   "t": 103.84,
+   "d": 1.36,
+   "text": "you don't know what the hero's journey"
+  },
+  {
+   "t": 105.2,
+   "d": 1.04,
+   "text": "is, if you don't know what story"
+  },
+  {
+   "t": 106.24,
+   "d": 2.8,
+   "text": "structure is, um hopefully this talk uh"
+  },
+  {
+   "t": 109.04,
+   "d": 1.2,
+   "text": "will give you a little bit of a primer"
+  },
+  {
+   "t": 110.24,
+   "d": 1.76,
+   "text": "in that as well as kind of talking about"
+  },
+  {
+   "t": 112.0,
+   "d": 2.4,
+   "text": "yeah what they teach us about uh story"
+  },
+  {
+   "t": 114.4,
+   "d": 2.24,
+   "text": "structure in other mediums. As well as"
+  },
+  {
+   "t": 116.64,
+   "d": 2.0,
+   "text": "that, it will help uh reset the sign"
+  },
+  {
+   "t": 118.64,
+   "d": 3.76,
+   "text": "which I've you know ironic I guess. So"
+  },
+  {
+   "t": 122.4,
+   "d": 2.48,
+   "text": "to any uh story structure freaks uh who"
+  },
+  {
+   "t": 124.88,
+   "d": 2.4,
+   "text": "are watching in the audience, um I'm"
+  },
+  {
+   "t": 127.28,
+   "d": 2.0,
+   "text": "going to be going with the Christopher"
+  },
+  {
+   "t": 129.28,
+   "d": 2.88,
+   "text": "Vogler 12step version of the hero's"
+  },
+  {
+   "t": 132.16,
+   "d": 2.96,
+   "text": "journey. Um, this is mostly because it's"
+  },
+  {
+   "t": 135.12,
+   "d": 2.08,
+   "text": "shorter. We don't have time for all 17"
+  },
+  {
+   "t": 137.2,
+   "d": 1.76,
+   "text": "steps, which is reminding me to set time"
+  },
+  {
+   "t": 138.96,
+   "d": 3.2,
+   "text": "here. Um, and also, you know, the"
+  },
+  {
+   "t": 142.16,
+   "d": 2.24,
+   "text": "Campbell one initiation, there's some"
+  },
+  {
+   "t": 144.4,
+   "d": 1.28,
+   "text": "problematic stuff in there. If you"
+  },
+  {
+   "t": 145.68,
+   "d": 2.96,
+   "text": "trigger words, I'm sure you agree. Um,"
+  },
+  {
+   "t": 148.64,
+   "d": 2.24,
+   "text": "the Vogler one, which is the one he kind"
+  },
+  {
+   "t": 150.88,
+   "d": 2.32,
+   "text": "of designed in the 1980s when he was"
+  },
+  {
+   "t": 153.2,
+   "d": 2.4,
+   "text": "working for Disney, uh, is also useful"
+  },
+  {
+   "t": 155.6,
+   "d": 1.36,
+   "text": "to use because it's the one that's"
+  },
+  {
+   "t": 156.96,
+   "d": 2.8,
+   "text": "become the most sort of, uh, used"
+  },
+  {
+   "t": 159.76,
+   "d": 1.84,
+   "text": "throughout the industry. you know, he"
+  },
+  {
+   "t": 161.6,
+   "d": 1.28,
+   "text": "kind of came up with it. He went on to"
+  },
+  {
+   "t": 162.88,
+   "d": 1.68,
+   "text": "write The Lion King, which is an example"
+  },
+  {
+   "t": 164.56,
+   "d": 2.64,
+   "text": "I'm going to give here in a moment. Um,"
+  },
+  {
+   "t": 167.2,
+   "d": 2.96,
+   "text": "and he is a real uh advocate and he's"
+  },
+  {
+   "t": 170.16,
+   "d": 2.4,
+   "text": "probably along with George Lucas, one of"
+  },
+  {
+   "t": 172.56,
+   "d": 1.52,
+   "text": "the people most responsible for bringing"
+  },
+  {
+   "t": 174.08,
+   "d": 2.56,
+   "text": "these kind of heroes journey narratives"
+  },
+  {
+   "t": 176.64,
+   "d": 3.36,
+   "text": "um into uh writing and media and that"
+  },
+  {
+   "t": 180.0,
+   "d": 2.96,
+   "text": "kind of space. Um, oh, why did it change"
+  },
+  {
+   "t": 182.96,
+   "d": 2.48,
+   "text": "on its own? That was strange. So, step"
+  },
+  {
+   "t": 185.44,
+   "d": 1.6,
+   "text": "one of the hero's narrative is the"
+  },
+  {
+   "t": 187.04,
+   "d": 1.68,
+   "text": "ordinary world. We meet the hero in"
+  },
+  {
+   "t": 188.72,
+   "d": 2.16,
+   "text": "their normal everyday life before their"
+  },
+  {
+   "t": 190.88,
+   "d": 2.16,
+   "text": "adventure starts. Why is it changing?"
+  },
+  {
+   "t": 193.04,
+   "d": 1.76,
+   "text": "Oh, it's because of something on Mickey."
+  },
+  {
+   "t": 194.8,
+   "d": 2.72,
+   "text": "Uh, so here we are in the ordinary"
+  },
+  {
+   "t": 197.52,
+   "d": 5.12,
+   "text": "world. Um, so I guess I'm the hero of"
+  },
+  {
+   "t": 202.64,
+   "d": 2.8,
+   "text": "this talk. I'm going to say only for the"
+  },
+  {
+   "t": 205.44,
+   "d": 1.36,
+   "text": "hero the the purpose of this"
+  },
+  {
+   "t": 206.8,
+   "d": 2.16,
+   "text": "presentation. Uh, I am the hero uh"
+  },
+  {
+   "t": 208.96,
+   "d": 1.36,
+   "text": "striking out into the wilderness, which"
+  },
+  {
+   "t": 210.32,
+   "d": 2.48,
+   "text": "is something uh I never do in real life"
+  },
+  {
+   "t": 212.8,
+   "d": 2.24,
+   "text": "really. So a small amount about me."
+  },
+  {
+   "t": 215.04,
+   "d": 1.44,
+   "text": "We've already talked about me, so I'll"
+  },
+  {
+   "t": 216.48,
+   "d": 2.0,
+   "text": "probably just jump right through all the"
+  },
+  {
+   "t": 218.48,
+   "d": 3.2,
+   "text": "getting to know you stuff. Um, except to"
+  },
+  {
+   "t": 221.68,
+   "d": 1.76,
+   "text": "say that the thing that kind of brought"
+  },
+  {
+   "t": 223.44,
+   "d": 2.32,
+   "text": "me to writing as a as a job and as"
+  },
+  {
+   "t": 225.76,
+   "d": 2.16,
+   "text": "something that I'm passionate about has"
+  },
+  {
+   "t": 227.92,
+   "d": 2.96,
+   "text": "always been as a collaborative exercise."
+  },
+  {
+   "t": 230.88,
+   "d": 2.56,
+   "text": "I've never really been interested in or"
+  },
+  {
+   "t": 233.44,
+   "d": 2.0,
+   "text": "perhaps capable of being the kind of"
+  },
+  {
+   "t": 235.44,
+   "d": 1.44,
+   "text": "wise writer coming down from the"
+  },
+  {
+   "t": 236.88,
+   "d": 1.28,
+   "text": "mountain with his manuscript and"
+  },
+  {
+   "t": 238.16,
+   "d": 1.52,
+   "text": "delivering it to the adoring public."
+  },
+  {
+   "t": 239.68,
+   "d": 1.28,
+   "text": "Maybe I'm just not good enough. I don't"
+  },
+  {
+   "t": 240.96,
+   "d": 4.08,
+   "text": "know. Um that said, I think that a lot"
+  },
+  {
+   "t": 245.04,
+   "d": 3.04,
+   "text": "of the joy in writing is the joys of"
+  },
+  {
+   "t": 248.08,
+   "d": 4.32,
+   "text": "creative collaborative um uh ways of"
+  },
+  {
+   "t": 252.4,
+   "d": 2.08,
+   "text": "working, writer rooms essentially. And"
+  },
+  {
+   "t": 254.48,
+   "d": 1.6,
+   "text": "you know, Skins, go back and watch Skins"
+  },
+  {
+   "t": 256.08,
+   "d": 2.56,
+   "text": "now. It's a show from 2007, teen drama."
+  },
+  {
+   "t": 258.64,
+   "d": 1.6,
+   "text": "There's all sorts of things that are"
+  },
+  {
+   "t": 260.24,
+   "d": 1.68,
+   "text": "wrong with that show. There's all sorts"
+  },
+  {
+   "t": 261.92,
+   "d": 1.84,
+   "text": "of things that don't quite work. Uh one"
+  },
+  {
+   "t": 263.76,
+   "d": 1.2,
+   "text": "thing that does work though is it still"
+  },
+  {
+   "t": 264.96,
+   "d": 1.92,
+   "text": "feels quite authentic. It still feels"
+  },
+  {
+   "t": 266.88,
+   "d": 2.56,
+   "text": "quite real. And I can't really take any"
+  },
+  {
+   "t": 269.44,
+   "d": 3.12,
+   "text": "responsibility for that. Uh the only uh"
+  },
+  {
+   "t": 272.56,
+   "d": 1.44,
+   "text": "thing that I think we did right is we"
+  },
+  {
+   "t": 274.0,
+   "d": 2.72,
+   "text": "got a room full of teenagers and weird"
+  },
+  {
+   "t": 276.72,
+   "d": 1.52,
+   "text": "people and comedians and people who"
+  },
+  {
+   "t": 278.24,
+   "d": 2.24,
+   "text": "would tell us uh that the things we were"
+  },
+  {
+   "t": 280.48,
+   "d": 2.08,
+   "text": "saying were wrong or stupid or old or"
+  },
+  {
+   "t": 282.56,
+   "d": 2.56,
+   "text": "whatever uh and to correct us and became"
+  },
+  {
+   "t": 285.12,
+   "d": 1.76,
+   "text": "this extraordinary creative space where"
+  },
+  {
+   "t": 286.88,
+   "d": 1.68,
+   "text": "we had people like Daniel Kuya who was"
+  },
+  {
+   "t": 288.56,
+   "d": 2.16,
+   "text": "hired as a writer initially for our show"
+  },
+  {
+   "t": 290.72,
+   "d": 2.72,
+   "text": "before going on to win an Oscar. Um, you"
+  },
+  {
+   "t": 293.44,
+   "d": 1.84,
+   "text": "know, we had people like that in the,"
+  },
+  {
+   "t": 295.28,
+   "d": 1.76,
+   "text": "you know, telling us to shut up and sit"
+  },
+  {
+   "t": 297.04,
+   "d": 2.48,
+   "text": "down. Um, and that's something I've"
+  },
+  {
+   "t": 299.52,
+   "d": 1.52,
+   "text": "tried to bring through my career and"
+  },
+  {
+   "t": 301.04,
+   "d": 1.44,
+   "text": "even working at Maverick and working on"
+  },
+  {
+   "t": 302.48,
+   "d": 1.28,
+   "text": "this game Clutch, which is out next"
+  },
+  {
+   "t": 303.76,
+   "d": 3.28,
+   "text": "spring, wish list now. Um, is to try and"
+  },
+  {
+   "t": 307.04,
+   "d": 2.32,
+   "text": "bring that sense of collaboration into"
+  },
+  {
+   "t": 309.36,
+   "d": 2.4,
+   "text": "the into the into the process. Video"
+  },
+  {
+   "t": 311.76,
+   "d": 1.44,
+   "text": "games are by their nature collaborative,"
+  },
+  {
+   "t": 313.2,
+   "d": 2.88,
+   "text": "right? So, it's it's a perfect fit."
+  },
+  {
+   "t": 316.08,
+   "d": 1.76,
+   "text": "So, the call to adventure, maybe the"
+  },
+  {
+   "t": 317.84,
+   "d": 2.64,
+   "text": "most uh kind of famous uh aspect of the"
+  },
+  {
+   "t": 320.48,
+   "d": 2.88,
+   "text": "hero's journey. a challenge, event, or"
+  },
+  {
+   "t": 323.36,
+   "d": 2.96,
+   "text": "problem disrupts the hero's normal"
+  },
+  {
+   "t": 326.32,
+   "d": 3.12,
+   "text": "world. So, what I'm going to uh talk"
+  },
+  {
+   "t": 329.44,
+   "d": 2.24,
+   "text": "about here is what I consider to be a"
+  },
+  {
+   "t": 331.68,
+   "d": 1.92,
+   "text": "narrative predictability crisis, which"
+  },
+  {
+   "t": 333.6,
+   "d": 2.0,
+   "text": "is definitely not a phrase I came up"
+  },
+  {
+   "t": 335.6,
+   "d": 1.76,
+   "text": "with three minutes ago while waiting to"
+  },
+  {
+   "t": 337.36,
+   "d": 2.56,
+   "text": "start this talk. Um, I think there's a"
+  },
+  {
+   "t": 339.92,
+   "d": 3.28,
+   "text": "real issue here um across all media, uh,"
+  },
+  {
+   "t": 343.2,
+   "d": 1.68,
+   "text": "particularly in movies, particularly in"
+  },
+  {
+   "t": 344.88,
+   "d": 1.28,
+   "text": "the in the movies with the bigger"
+  },
+  {
+   "t": 346.16,
+   "d": 1.92,
+   "text": "budgets, but also in lots of things that"
+  },
+  {
+   "t": 348.08,
+   "d": 4.16,
+   "text": "we see on streaming platforms. um uh you"
+  },
+  {
+   "t": 352.24,
+   "d": 2.48,
+   "text": "know the Marvel movies uh the kind of TV"
+  },
+  {
+   "t": 354.72,
+   "d": 2.96,
+   "text": "show shows that are made at uh you know"
+  },
+  {
+   "t": 357.68,
+   "d": 4.32,
+   "text": "at um in a bulk quantities. What we're"
+  },
+  {
+   "t": 362.0,
+   "d": 2.16,
+   "text": "finding is that I mean you could call it"
+  },
+  {
+   "t": 364.16,
+   "d": 1.44,
+   "text": "the narrative predictability crisis or"
+  },
+  {
+   "t": 365.6,
+   "d": 1.92,
+   "text": "you could call it you really shouldn't"
+  },
+  {
+   "t": 367.52,
+   "d": 2.8,
+   "text": "be able to predict with such accuracy at"
+  },
+  {
+   "t": 370.32,
+   "d": 1.92,
+   "text": "the cinema when it's okay to go to the"
+  },
+  {
+   "t": 372.24,
+   "d": 1.44,
+   "text": "toilet, right? You shouldn't be able to"
+  },
+  {
+   "t": 373.68,
+   "d": 1.84,
+   "text": "do that. And yet we're all so good at"
+  },
+  {
+   "t": 375.52,
+   "d": 2.88,
+   "text": "it. we can all pretty much predict with"
+  },
+  {
+   "t": 378.4,
+   "d": 3.04,
+   "text": "near uh you know precision points uh"
+  },
+  {
+   "t": 381.44,
+   "d": 1.84,
+   "text": "when it's okay for us to go to the L and"
+  },
+  {
+   "t": 383.28,
+   "d": 1.36,
+   "text": "then we come back and sometimes we don't"
+  },
+  {
+   "t": 384.64,
+   "d": 1.44,
+   "text": "even do the thing of asking the person"
+  },
+  {
+   "t": 386.08,
+   "d": 1.04,
+   "text": "what happened because we know what"
+  },
+  {
+   "t": 387.12,
+   "d": 3.2,
+   "text": "happened. Um movies in particular have"
+  },
+  {
+   "t": 390.32,
+   "d": 4.72,
+   "text": "become uh deeply predictable um uh and"
+  },
+  {
+   "t": 395.04,
+   "d": 2.64,
+   "text": "deeply right and there's various reasons"
+  },
+  {
+   "t": 397.68,
+   "d": 2.4,
+   "text": "for this um and perhaps you disagree"
+  },
+  {
+   "t": 400.08,
+   "d": 2.24,
+   "text": "with me but I feel it's a pretty pretty"
+  },
+  {
+   "t": 402.32,
+   "d": 1.68,
+   "text": "universal perspective. I haven't heard"
+  },
+  {
+   "t": 404.0,
+   "d": 2.24,
+   "text": "anyone recently say, \"God, haven't we"
+  },
+  {
+   "t": 406.24,
+   "d": 1.28,
+   "text": "had a good run of movies recently?"
+  },
+  {
+   "t": 407.52,
+   "d": 2.8,
+   "text": "Haven't there been such a set of quality"
+  },
+  {
+   "t": 410.32,
+   "d": 2.0,
+   "text": "narratives delivered to our uh"
+  },
+  {
+   "t": 412.32,
+   "d": 2.48,
+   "text": "blockbuster eyes.\""
+  },
+  {
+   "t": 414.8,
+   "d": 2.08,
+   "text": "Um,"
+  },
+  {
+   "t": 416.88,
+   "d": 1.84,
+   "text": "so why is this? We're going to talk"
+  },
+  {
+   "t": 418.72,
+   "d": 1.68,
+   "text": "about the refusal of the call. The hero"
+  },
+  {
+   "t": 420.4,
+   "d": 1.44,
+   "text": "fears the fear of the unknown and tries"
+  },
+  {
+   "t": 421.84,
+   "d": 2.16,
+   "text": "to turn away from the adventure. What is"
+  },
+  {
+   "t": 424.0,
+   "d": 1.92,
+   "text": "the thing that's stopping our cinema,"
+  },
+  {
+   "t": 425.92,
+   "d": 1.92,
+   "text": "our TV, our games even from being"
+  },
+  {
+   "t": 427.84,
+   "d": 2.0,
+   "text": "adventurous? Well, there's myriad"
+  },
+  {
+   "t": 429.84,
+   "d": 1.36,
+   "text": "reasons. the last 10 years has been"
+  },
+  {
+   "t": 431.2,
+   "d": 1.52,
+   "text": "tricky for humanity as you might have"
+  },
+  {
+   "t": 432.72,
+   "d": 1.44,
+   "text": "noticed and that has bled through in all"
+  },
+  {
+   "t": 434.16,
+   "d": 1.84,
+   "text": "sorts of different ways. But one of the"
+  },
+  {
+   "t": 436.0,
+   "d": 2.96,
+   "text": "main issues we have"
+  },
+  {
+   "t": 438.96,
+   "d": 3.6,
+   "text": "is the proliferation of story structure"
+  },
+  {
+   "t": 442.56,
+   "d": 3.68,
+   "text": "manuals. Now, just to be absolutely"
+  },
+  {
+   "t": 446.24,
+   "d": 2.24,
+   "text": "clear, I don't have any kind of problem"
+  },
+  {
+   "t": 448.48,
+   "d": 2.88,
+   "text": "with story structure um or story"
+  },
+  {
+   "t": 451.36,
+   "d": 2.0,
+   "text": "structure writing guides or anything"
+  },
+  {
+   "t": 453.36,
+   "d": 2.0,
+   "text": "like that. I've read these books or I"
+  },
+  {
+   "t": 455.36,
+   "d": 1.12,
+   "text": "haven't read Joseph Campbell. Good luck"
+  },
+  {
+   "t": 456.48,
+   "d": 2.8,
+   "text": "with that one. Um but god keeps changing"
+  },
+  {
+   "t": 459.28,
+   "d": 1.2,
+   "text": "the slides around. I'm not quite sure"
+  },
+  {
+   "t": 460.48,
+   "d": 3.0,
+   "text": "why"
+  },
+  {
+   "t": 465.71,
+   "d": 3.45,
+   "text": "[snorts] um"
+  },
+  {
+   "t": 470.24,
+   "d": 2.48,
+   "text": "so uh sorry about that. So these are you"
+  },
+  {
+   "t": 472.72,
+   "d": 2.4,
+   "text": "know um very very common and they become"
+  },
+  {
+   "t": 475.12,
+   "d": 1.12,
+   "text": "more common particularly over the last"
+  },
+  {
+   "t": 476.24,
+   "d": 2.4,
+   "text": "20 years. Um, when you're a writer and"
+  },
+  {
+   "t": 478.64,
+   "d": 2.8,
+   "text": "you're working in any kind of um, medium"
+  },
+  {
+   "t": 481.44,
+   "d": 2.16,
+   "text": "uh, that requires some kind of uh,"
+  },
+  {
+   "t": 483.6,
+   "d": 2.4,
+   "text": "system, like if you're writing a TV show"
+  },
+  {
+   "t": 486.0,
+   "d": 1.52,
+   "text": "that needs a number of episodes or a"
+  },
+  {
+   "t": 487.52,
+   "d": 1.52,
+   "text": "book that needs a number of chapters,"
+  },
+  {
+   "t": 489.04,
+   "d": 1.44,
+   "text": "you're going to have to have some kind"
+  },
+  {
+   "t": 490.48,
+   "d": 3.52,
+   "text": "of system or structure. Um, this is just"
+  },
+  {
+   "t": 494.0,
+   "d": 2.96,
+   "text": "a necessary fact of it, right? Um, and"
+  },
+  {
+   "t": 496.96,
+   "d": 1.52,
+   "text": "part of the thing that these books do,"
+  },
+  {
+   "t": 498.48,
+   "d": 1.44,
+   "text": "if you're not familiar with them, and"
+  },
+  {
+   "t": 499.92,
+   "d": 1.36,
+   "text": "we're working through the stages of it"
+  },
+  {
+   "t": 501.28,
+   "d": 2.72,
+   "text": "now, is basically boil that system down"
+  },
+  {
+   "t": 504.0,
+   "d": 2.32,
+   "text": "to saying that there isn't really a"
+  },
+  {
+   "t": 506.32,
+   "d": 1.84,
+   "text": "multiplicities of stories out there to"
+  },
+  {
+   "t": 508.16,
+   "d": 3.12,
+   "text": "tell. There's one there's one story. Um,"
+  },
+  {
+   "t": 511.28,
+   "d": 1.92,
+   "text": "that's basically about, as we can see"
+  },
+  {
+   "t": 513.2,
+   "d": 1.68,
+   "text": "here, a guy going out, a man always a"
+  },
+  {
+   "t": 514.88,
+   "d": 2.16,
+   "text": "man, going out into the unknown, slaying"
+  },
+  {
+   "t": 517.04,
+   "d": 1.6,
+   "text": "some dragon, collecting some treasure,"
+  },
+  {
+   "t": 518.64,
+   "d": 2.72,
+   "text": "coming home, uh, growing, learning, yada"
+  },
+  {
+   "t": 521.36,
+   "d": 1.6,
+   "text": "yada yada. These are all things that if"
+  },
+  {
+   "t": 522.96,
+   "d": 1.6,
+   "text": "you haven't even read Save the Cat,"
+  },
+  {
+   "t": 524.56,
+   "d": 1.6,
+   "text": "which literally argues that you should"
+  },
+  {
+   "t": 526.16,
+   "d": 2.32,
+   "text": "have your hero hero Save a Cat on page"
+  },
+  {
+   "t": 528.48,
+   "d": 2.64,
+   "text": "four or whatever, um even if you haven't"
+  },
+  {
+   "t": 531.12,
+   "d": 1.2,
+   "text": "read these books, you've internalized"
+  },
+  {
+   "t": 532.32,
+   "d": 2.72,
+   "text": "them, right? And again, nothing wrong"
+  },
+  {
+   "t": 535.04,
+   "d": 1.76,
+   "text": "with them. Useful things. Most of the"
+  },
+  {
+   "t": 536.8,
+   "d": 2.32,
+   "text": "writers I know use these and abuse these"
+  },
+  {
+   "t": 539.12,
+   "d": 2.16,
+   "text": "in some form or another. The problem is"
+  },
+  {
+   "t": 541.28,
+   "d": 1.92,
+   "text": "is when they fall into the hands of the"
+  },
+  {
+   "t": 543.2,
+   "d": 1.84,
+   "text": "moneymen, of the commissioners, of the"
+  },
+  {
+   "t": 545.04,
+   "d": 3.2,
+   "text": "executives, when you basically start"
+  },
+  {
+   "t": 548.24,
+   "d": 2.32,
+   "text": "stop seeing these things as acts of"
+  },
+  {
+   "t": 550.56,
+   "d": 2.32,
+   "text": "description, of acts of understanding,"
+  },
+  {
+   "t": 552.88,
+   "d": 2.0,
+   "text": "and turn them into instead acts of"
+  },
+  {
+   "t": 554.88,
+   "d": 2.16,
+   "text": "prescription. I added Jordan B."
+  },
+  {
+   "t": 557.04,
+   "d": 1.6,
+   "text": "Peterson's 12 rules for life there. It's"
+  },
+  {
+   "t": 558.64,
+   "d": 1.36,
+   "text": "obviously not a screenwriting manual,"
+  },
+  {
+   "t": 560.0,
+   "d": 1.6,
+   "text": "but it does almost exactly the same"
+  },
+  {
+   "t": 561.6,
+   "d": 2.32,
+   "text": "trick. It says, \"Oh, look at all these"
+  },
+  {
+   "t": 563.92,
+   "d": 1.2,
+   "text": "things that seem different. They're"
+  },
+  {
+   "t": 565.12,
+   "d": 1.76,
+   "text": "actually the same thing. Let's use that"
+  },
+  {
+   "t": 566.88,
+   "d": 3.36,
+   "text": "to reinforce um conservative hierarch"
+  },
+  {
+   "t": 570.24,
+   "d": 1.92,
+   "text": "hierarchical systems that should be a"
+  },
+  {
+   "t": 572.16,
+   "d": 2.32,
+   "text": "bit abolished decades ago. [snorts]"
+  },
+  {
+   "t": 574.48,
+   "d": 2.24,
+   "text": "So, how do we solve this problem? Well,"
+  },
+  {
+   "t": 576.72,
+   "d": 1.52,
+   "text": "I'm a big fan of video games, right?"
+  },
+  {
+   "t": 578.24,
+   "d": 2.0,
+   "text": "That's my favorite thing in the world."
+  },
+  {
+   "t": 580.24,
+   "d": 2.48,
+   "text": "And I think that video games can be this"
+  },
+  {
+   "t": 582.72,
+   "d": 2.16,
+   "text": "these amazing machines for telling"
+  },
+  {
+   "t": 584.88,
+   "d": 2.88,
+   "text": "stories. Um, and that's true of all all"
+  },
+  {
+   "t": 587.76,
+   "d": 1.6,
+   "text": "sorts of games, you know, that's true of"
+  },
+  {
+   "t": 589.36,
+   "d": 1.52,
+   "text": "playing Monkey Island, right? Monkey"
+  },
+  {
+   "t": 590.88,
+   "d": 1.28,
+   "text": "Island 2, which was one of the most"
+  },
+  {
+   "t": 592.16,
+   "d": 2.56,
+   "text": "amazing narrative experiences I'd had up"
+  },
+  {
+   "t": 594.72,
+   "d": 1.76,
+   "text": "to that point in my life. Even though"
+  },
+  {
+   "t": 596.48,
+   "d": 1.68,
+   "text": "you're playing through a story which has"
+  },
+  {
+   "t": 598.16,
+   "d": 1.84,
+   "text": "set dialogue and set characters and set"
+  },
+  {
+   "t": 600.0,
+   "d": 3.04,
+   "text": "moments and set interactions, um you're"
+  },
+  {
+   "t": 603.04,
+   "d": 1.52,
+   "text": "still there. You're still with Guy"
+  },
+  {
+   "t": 604.56,
+   "d": 1.2,
+   "text": "Brush. You're still choosing the things"
+  },
+  {
+   "t": 605.76,
+   "d": 3.12,
+   "text": "he says and uh uh you're still telling"
+  },
+  {
+   "t": 608.88,
+   "d": 1.68,
+   "text": "your own story. And part of what this"
+  },
+  {
+   "t": 610.56,
+   "d": 1.44,
+   "text": "talk is going to be about is about how"
+  },
+  {
+   "t": 612.0,
+   "d": 2.32,
+   "text": "rogikes can help us tell stories but"
+  },
+  {
+   "t": 614.32,
+   "d": 2.32,
+   "text": "also how we can help uh encourage our"
+  },
+  {
+   "t": 616.64,
+   "d": 1.68,
+   "text": "audiences to take part in the"
+  },
+  {
+   "t": 618.32,
+   "d": 2.0,
+   "text": "storytelling process rather than having"
+  },
+  {
+   "t": 620.32,
+   "d": 2.8,
+   "text": "it as these kind of set steps."
+  },
+  {
+   "t": 623.12,
+   "d": 4.08,
+   "text": "So uh my mentor uh in this hero story is"
+  },
+  {
+   "t": 627.2,
+   "d": 1.84,
+   "text": "obviously Brian Walker, creator of"
+  },
+  {
+   "t": 629.04,
+   "d": 2.64,
+   "text": "Rogue. Um, but the rogike celebration in"
+  },
+  {
+   "t": 631.68,
+   "d": 1.92,
+   "text": "2016, he talked about how the biggest"
+  },
+  {
+   "t": 633.6,
+   "d": 3.04,
+   "text": "risk to the longevity of a game is where"
+  },
+  {
+   "t": 636.64,
+   "d": 1.84,
+   "text": "challenge and uh becomes wrote and"
+  },
+  {
+   "t": 638.48,
+   "d": 1.76,
+   "text": "systematized, which is the video game"
+  },
+  {
+   "t": 640.24,
+   "d": 1.52,
+   "text": "version of basically what I'm describing"
+  },
+  {
+   "t": 641.76,
+   "d": 2.16,
+   "text": "with story structure, right? Longevity"
+  },
+  {
+   "t": 643.92,
+   "d": 2.16,
+   "text": "of a game. Well, I think we'd all agree"
+  },
+  {
+   "t": 646.08,
+   "d": 1.92,
+   "text": "that movies and television are a form of"
+  },
+  {
+   "t": 648.0,
+   "d": 2.32,
+   "text": "play in their own way."
+  },
+  {
+   "t": 650.32,
+   "d": 2.0,
+   "text": "the challenge, you know, the the"
+  },
+  {
+   "t": 652.32,
+   "d": 2.48,
+   "text": "friction, the what we experience as we"
+  },
+  {
+   "t": 654.8,
+   "d": 2.0,
+   "text": "watch it when that becomes wrote and"
+  },
+  {
+   "t": 656.8,
+   "d": 1.76,
+   "text": "systemsized, which is what those"
+  },
+  {
+   "t": 658.56,
+   "d": 2.4,
+   "text": "screenwriting manuals do and what story"
+  },
+  {
+   "t": 660.96,
+   "d": 1.28,
+   "text": "structure kind of imposes on"
+  },
+  {
+   "t": 662.24,
+   "d": 3.04,
+   "text": "storytelling as a necessary uh part of"
+  },
+  {
+   "t": 665.28,
+   "d": 2.56,
+   "text": "them."
+  },
+  {
+   "t": 667.84,
+   "d": 2.4,
+   "text": "So, let's [snorts] cross the threshold."
+  },
+  {
+   "t": 670.24,
+   "d": 2.32,
+   "text": "Here we go. The hero officially leaves"
+  },
+  {
+   "t": 672.56,
+   "d": 2.48,
+   "text": "their safe ordinary world and enters a"
+  },
+  {
+   "t": 675.04,
+   "d": 2.89,
+   "text": "dangerous or unknown place."
+  },
+  {
+   "t": 677.93,
+   "d": 0.31,
+   "text": ">> [snorts]"
+  },
+  {
+   "t": 678.24,
+   "d": 1.84,
+   "text": ">> So, uh, here we are crossing the"
+  },
+  {
+   "t": 680.08,
+   "d": 3.04,
+   "text": "threshold. Um,"
+  },
+  {
+   "t": 683.12,
+   "d": 1.84,
+   "text": "each, uh, I'm going to break these"
+  },
+  {
+   "t": 684.96,
+   "d": 1.76,
+   "text": "things down into a bunch of lessons that"
+  },
+  {
+   "t": 686.72,
+   "d": 2.16,
+   "text": "I think we can learn from rogue likes."
+  },
+  {
+   "t": 688.88,
+   "d": 2.16,
+   "text": "So, the first one, interestingly enough,"
+  },
+  {
+   "t": 691.04,
+   "d": 3.92,
+   "text": "these slides stop changing, man. Um, so"
+  },
+  {
+   "t": 694.96,
+   "d": 2.64,
+   "text": "lesson number one, uh, rogue likes"
+  },
+  {
+   "t": 697.6,
+   "d": 2.48,
+   "text": "reinforce the power of hero narratives,"
+  },
+  {
+   "t": 700.08,
+   "d": 1.52,
+   "text": "right? So actually this is something in"
+  },
+  {
+   "t": 701.6,
+   "d": 3.12,
+   "text": "support of of the uh of hero stories of"
+  },
+  {
+   "t": 704.72,
+   "d": 3.44,
+   "text": "of the hero structure of a story because"
+  },
+  {
+   "t": 708.16,
+   "d": 1.28,
+   "text": "there's something to be said for them,"
+  },
+  {
+   "t": 709.44,
+   "d": 2.4,
+   "text": "right? There's something about a power"
+  },
+  {
+   "t": 711.84,
+   "d": 1.92,
+   "text": "fantasy that is worthwhile and I don't"
+  },
+  {
+   "t": 713.76,
+   "d": 1.76,
+   "text": "want to disregard it. I don't want to"
+  },
+  {
+   "t": 715.52,
+   "d": 2.08,
+   "text": "disregard that like an overpowered run"
+  },
+  {
+   "t": 717.6,
+   "d": 2.48,
+   "text": "in Isaac uh the binding of Isaac up"
+  },
+  {
+   "t": 720.08,
+   "d": 2.16,
+   "text": "there feels like nothing else. I don't"
+  },
+  {
+   "t": 722.24,
+   "d": 1.6,
+   "text": "want to disregard the fact that we all"
+  },
+  {
+   "t": 723.84,
+   "d": 2.16,
+   "text": "walked out of the matrix in 1999 walking"
+  },
+  {
+   "t": 726.0,
+   "d": 1.76,
+   "text": "on air, right? And that was a real"
+  },
+  {
+   "t": 727.76,
+   "d": 1.36,
+   "text": "experience that we had and there's"
+  },
+  {
+   "t": 729.12,
+   "d": 2.32,
+   "text": "nothing wrong with it, right? So clearly"
+  },
+  {
+   "t": 731.44,
+   "d": 2.32,
+   "text": "we should allow our players to feel"
+  },
+  {
+   "t": 733.76,
+   "d": 1.76,
+   "text": "powerful and we should allow our stories"
+  },
+  {
+   "t": 735.52,
+   "d": 2.16,
+   "text": "to sometimes creep into some of those"
+  },
+  {
+   "t": 737.68,
+   "d": 3.36,
+   "text": "tropes of of heroism. Um, thinking about"
+  },
+  {
+   "t": 741.04,
+   "d": 1.68,
+   "text": "rogikes is really interesting in terms"
+  },
+  {
+   "t": 742.72,
+   "d": 2.88,
+   "text": "of heroes narrative, right? Because uh a"
+  },
+  {
+   "t": 745.6,
+   "d": 2.4,
+   "text": "successful run of say net hack is more"
+  },
+  {
+   "t": 748.0,
+   "d": 3.04,
+   "text": "or less the the most uh exquisite"
+  },
+  {
+   "t": 751.04,
+   "d": 2.16,
+   "text": "version of a hero's journey. you know,"
+  },
+  {
+   "t": 753.2,
+   "d": 1.68,
+   "text": "you're literally, you know, plunging"
+  },
+  {
+   "t": 754.88,
+   "d": 2.24,
+   "text": "into the depths and uh rescuing an"
+  },
+  {
+   "t": 757.12,
+   "d": 2.88,
+   "text": "elixir from a, you know, some uh"
+  },
+  {
+   "t": 760.0,
+   "d": 1.68,
+   "text": "subcavern and bringing it back to the"
+  },
+  {
+   "t": 761.68,
+   "d": 1.6,
+   "text": "world and ascending to godhood, right?"
+  },
+  {
+   "t": 763.28,
+   "d": 2.56,
+   "text": "They're by design, uh, you know, trying"
+  },
+  {
+   "t": 765.84,
+   "d": 2.24,
+   "text": "to emulate these kind of hero stories."
+  },
+  {
+   "t": 768.08,
+   "d": 1.44,
+   "text": "Um, but of course, the fact of the"
+  },
+  {
+   "t": 769.52,
+   "d": 1.36,
+   "text": "matter is that in play, they're the"
+  },
+  {
+   "t": 770.88,
+   "d": 2.24,
+   "text": "opposite of that, right? Um, if you've"
+  },
+  {
+   "t": 773.12,
+   "d": 2.08,
+   "text": "ever played Net Hack, uh, and if you've"
+  },
+  {
+   "t": 775.2,
+   "d": 2.08,
+   "text": "never won Net Hack, which is a pretty"
+  },
+  {
+   "t": 777.28,
+   "d": 2.24,
+   "text": "good description of me, then you're you"
+  },
+  {
+   "t": 779.52,
+   "d": 1.44,
+   "text": "feel anything but heroic, right? And"
+  },
+  {
+   "t": 780.96,
+   "d": 1.28,
+   "text": "that is one of the interesting kind of"
+  },
+  {
+   "t": 782.24,
+   "d": 1.68,
+   "text": "tensions that I want to kind of talk"
+  },
+  {
+   "t": 783.92,
+   "d": 2.48,
+   "text": "about a little bit here."
+  },
+  {
+   "t": 786.4,
+   "d": 3.28,
+   "text": "Uh five tests allies in initiations. A"
+  },
+  {
+   "t": 789.68,
+   "d": 1.6,
+   "text": "hero faces challenges, figures out who"
+  },
+  {
+   "t": 791.28,
+   "d": 3.04,
+   "text": "to trust and meets rivals or villains."
+  },
+  {
+   "t": 794.32,
+   "d": 3.76,
+   "text": "So um lesson number two I think is about"
+  },
+  {
+   "t": 798.08,
+   "d": 2.8,
+   "text": "how rogikes create meaning through chaos"
+  },
+  {
+   "t": 800.88,
+   "d": 3.12,
+   "text": "and mistakes. Um, Shearan the Wanderer,"
+  },
+  {
+   "t": 804.0,
+   "d": 2.8,
+   "text": "which is one of my favorite video games,"
+  },
+  {
+   "t": 806.8,
+   "d": 2.48,
+   "text": "uh, has this wonderful um, sense of"
+  },
+  {
+   "t": 809.28,
+   "d": 2.32,
+   "text": "chaos to it that even though it has this"
+  },
+  {
+   "t": 811.6,
+   "d": 1.84,
+   "text": "overarching narrative to each of the"
+  },
+  {
+   "t": 813.44,
+   "d": 1.52,
+   "text": "games where there is a kind of heroes"
+  },
+  {
+   "t": 814.96,
+   "d": 2.0,
+   "text": "narrative that you're playing through,"
+  },
+  {
+   "t": 816.96,
+   "d": 1.92,
+   "text": "there is a prize to be won, there's a"
+  },
+  {
+   "t": 818.88,
+   "d": 1.6,
+   "text": "princess to save, all those things are"
+  },
+  {
+   "t": 820.48,
+   "d": 2.24,
+   "text": "kind of there. Um, and obviously they're"
+  },
+  {
+   "t": 822.72,
+   "d": 1.12,
+   "text": "going to take you a long time to get"
+  },
+  {
+   "t": 823.84,
+   "d": 1.84,
+   "text": "there through the traditional roglike"
+  },
+  {
+   "t": 825.68,
+   "d": 3.6,
+   "text": "ways. Um, but you're still capable of"
+  },
+  {
+   "t": 829.28,
+   "d": 2.56,
+   "text": "failing to beat the dragon at the end of"
+  },
+  {
+   "t": 831.84,
+   "d": 1.68,
+   "text": "the story because your hand gets stuck"
+  },
+  {
+   "t": 833.52,
+   "d": 2.96,
+   "text": "in a pot, right? That was the ending of"
+  },
+  {
+   "t": 836.48,
+   "d": 2.32,
+   "text": "one of my most uh uh successful until"
+  },
+  {
+   "t": 838.8,
+   "d": 1.68,
+   "text": "the very last moment runs in the"
+  },
+  {
+   "t": 840.48,
+   "d": 2.0,
+   "text": "wanderer. My hand got stuck in a pot. I"
+  },
+  {
+   "t": 842.48,
+   "d": 1.84,
+   "text": "couldn't get it out of the pot and so"
+  },
+  {
+   "t": 844.32,
+   "d": 3.12,
+   "text": "the dragon slew me and I was dead. Um,"
+  },
+  {
+   "t": 847.44,
+   "d": 1.84,
+   "text": "and that was really funny, right? And"
+  },
+  {
+   "t": 849.28,
+   "d": 2.32,
+   "text": "that was really meaningful experience,"
+  },
+  {
+   "t": 851.6,
+   "d": 1.68,
+   "text": "right? No one's going to spend hundreds"
+  },
+  {
+   "t": 853.28,
+   "d": 1.76,
+   "text": "of millions of dollars on writing a"
+  },
+  {
+   "t": 855.04,
+   "d": 1.28,
+   "text": "version of a Marvel movie where someone"
+  },
+  {
+   "t": 856.32,
+   "d": 1.6,
+   "text": "gets their hand stuck in the a pot at"
+  },
+  {
+   "t": 857.92,
+   "d": 1.36,
+   "text": "the end and so they can't vanquish the"
+  },
+  {
+   "t": 859.28,
+   "d": 2.72,
+   "text": "baddy. But there is something to be said"
+  },
+  {
+   "t": 862.0,
+   "d": 3.36,
+   "text": "for how chaos uh can flow into these"
+  },
+  {
+   "t": 865.36,
+   "d": 2.4,
+   "text": "games and what an narrative experience"
+  },
+  {
+   "t": 867.76,
+   "d": 2.24,
+   "text": "that can be. Um and we've seen versions"
+  },
+  {
+   "t": 870.0,
+   "d": 1.68,
+   "text": "of this in in cinema, right? The Cohen"
+  },
+  {
+   "t": 871.68,
+   "d": 1.76,
+   "text": "brothers got Anton Shagur there from No"
+  },
+  {
+   "t": 873.44,
+   "d": 2.32,
+   "text": "Country for Old Men. you know, a being"
+  },
+  {
+   "t": 875.76,
+   "d": 3.2,
+   "text": "of pure chaos um with a sort of sense of"
+  },
+  {
+   "t": 878.96,
+   "d": 1.68,
+   "text": "a rigorous system somewhere behind it"
+  },
+  {
+   "t": 880.64,
+   "d": 1.36,
+   "text": "that's just kind of out of our reach,"
+  },
+  {
+   "t": 882.0,
+   "d": 1.52,
+   "text": "right? That's a very roglikey"
+  },
+  {
+   "t": 883.52,
+   "d": 2.4,
+   "text": "experience. So, one of the these aspects"
+  },
+  {
+   "t": 885.92,
+   "d": 1.6,
+   "text": "is chaos, but the other one is mistakes,"
+  },
+  {
+   "t": 887.52,
+   "d": 2.24,
+   "text": "right? Uh so, you have here uh I don't"
+  },
+  {
+   "t": 889.76,
+   "d": 1.28,
+   "text": "know if we could this shows up, but this"
+  },
+  {
+   "t": 891.04,
+   "d": 2.32,
+   "text": "is a screenshot from uh the Cray Crowbar"
+  },
+  {
+   "t": 893.36,
+   "d": 2.16,
+   "text": "Discord uh back when I was just a member"
+  },
+  {
+   "t": 895.52,
+   "d": 1.36,
+   "text": "of the Discord rather than one of the"
+  },
+  {
+   "t": 896.88,
+   "d": 1.68,
+   "text": "hosts of the podcast. And it's me"
+  },
+  {
+   "t": 898.56,
+   "d": 1.76,
+   "text": "recounting uh something that happened to"
+  },
+  {
+   "t": 900.32,
+   "d": 1.52,
+   "text": "me while I was playing Heat Signature,"
+  },
+  {
+   "t": 901.84,
+   "d": 2.8,
+   "text": "the game made by uh Tom Francis uh who"
+  },
+  {
+   "t": 904.64,
+   "d": 1.44,
+   "text": "was then also one of the hosts. And I"
+  },
+  {
+   "t": 906.08,
+   "d": 1.92,
+   "text": "talked about ah this game is amazing."
+  },
+  {
+   "t": 908.0,
+   "d": 1.68,
+   "text": "Ninjed my way across a ship like a boss"
+  },
+  {
+   "t": 909.68,
+   "d": 1.6,
+   "text": "towards my target. Only realized when I"
+  },
+  {
+   "t": 911.28,
+   "d": 1.36,
+   "text": "was jumping out in front of him that it"
+  },
+  {
+   "t": 912.64,
+   "d": 1.76,
+   "text": "was capture not kill and I had nothing"
+  },
+  {
+   "t": 914.4,
+   "d": 2.16,
+   "text": "non-lethal on me. Luckily I had a slip"
+  },
+  {
+   "t": 916.56,
+   "d": 1.36,
+   "text": "stream running so I had time to duck"
+  },
+  {
+   "t": 917.92,
+   "d": 1.76,
+   "text": "away from the danger until the visitor"
+  },
+  {
+   "t": 919.68,
+   "d": 1.92,
+   "text": "sent me back the way I came. But now the"
+  },
+  {
+   "t": 921.6,
+   "d": 1.44,
+   "text": "target was running for the telepad. At"
+  },
+  {
+   "t": 923.04,
+   "d": 1.68,
+   "text": "10 seconds I had absolutely no idea what"
+  },
+  {
+   "t": 924.72,
+   "d": 1.84,
+   "text": "would happen if I used a subverter on"
+  },
+  {
+   "t": 926.56,
+   "d": 1.44,
+   "text": "the teleipad. It was my only chance."
+  },
+  {
+   "t": 928.0,
+   "d": 1.76,
+   "text": "Raced him back till I was just in range"
+  },
+  {
+   "t": 929.76,
+   "d": 1.68,
+   "text": "with one second to spare. Fired the"
+  },
+  {
+   "t": 931.44,
+   "d": 1.68,
+   "text": "subverter as he stepped onto the pad and"
+  },
+  {
+   "t": 933.12,
+   "d": 2.48,
+   "text": "teleported him into the inky advant uh"
+  },
+  {
+   "t": 935.6,
+   "d": 1.84,
+   "text": "void of space. Spaceship picked him up"
+  },
+  {
+   "t": 937.44,
+   "d": 1.36,
+   "text": "nice and easy and I strolled back to"
+  },
+  {
+   "t": 938.8,
+   "d": 1.68,
+   "text": "meet them both like a boss. So good. And"
+  },
+  {
+   "t": 940.48,
+   "d": 2.4,
+   "text": "then Tom himself, excellent. Just the"
+  },
+  {
+   "t": 942.88,
+   "d": 2.08,
+   "text": "sort of high jinks we're hoping for. I'd"
+  },
+  {
+   "t": 944.96,
+   "d": 2.0,
+   "text": "never played a game up until that point"
+  },
+  {
+   "t": 946.96,
+   "d": 2.08,
+   "text": "which basically relied on you making"
+  },
+  {
+   "t": 949.04,
+   "d": 2.56,
+   "text": "mistakes that relied on the fallibility"
+  },
+  {
+   "t": 951.6,
+   "d": 1.92,
+   "text": "and the imperfection of how you would"
+  },
+  {
+   "t": 953.52,
+   "d": 2.48,
+   "text": "engage with its systems. And the thing"
+  },
+  {
+   "t": 956.0,
+   "d": 2.0,
+   "text": "is with hero narratives and storytelling"
+  },
+  {
+   "t": 958.0,
+   "d": 2.24,
+   "text": "structures is that they encourage us to"
+  },
+  {
+   "t": 960.24,
+   "d": 2.24,
+   "text": "be compliant. They encou encourage us to"
+  },
+  {
+   "t": 962.48,
+   "d": 1.52,
+   "text": "be kind of good school children, right?"
+  },
+  {
+   "t": 964.0,
+   "d": 2.48,
+   "text": "They encourage us to um not make"
+  },
+  {
+   "t": 966.48,
+   "d": 1.12,
+   "text": "mistakes. We're trying to impress"
+  },
+  {
+   "t": 967.6,
+   "d": 1.36,
+   "text": "people. You send your script off to"
+  },
+  {
+   "t": 968.96,
+   "d": 1.76,
+   "text": "someone. What you want is, you know,"
+  },
+  {
+   "t": 970.72,
+   "d": 1.36,
+   "text": "we're writers. We want praise. You want"
+  },
+  {
+   "t": 972.08,
+   "d": 1.04,
+   "text": "people to tell us we're brilliant,"
+  },
+  {
+   "t": 973.12,
+   "d": 2.72,
+   "text": "right? But actually, the best movies,"
+  },
+  {
+   "t": 975.84,
+   "d": 1.76,
+   "text": "the best stories, they're full of"
+  },
+  {
+   "t": 977.6,
+   "d": 1.6,
+   "text": "mistakes. They're full of things that"
+  },
+  {
+   "t": 979.2,
+   "d": 2.16,
+   "text": "weren't meant to be. You know, uh, this"
+  },
+  {
+   "t": 981.36,
+   "d": 2.24,
+   "text": "is a a shot at the bottom here from, uh,"
+  },
+  {
+   "t": 983.6,
+   "d": 1.36,
+   "text": "the great escape, right? One of the"
+  },
+  {
+   "t": 984.96,
+   "d": 1.6,
+   "text": "great faux pawars, one of his"
+  },
+  {
+   "t": 986.56,
+   "d": 2.72,
+   "text": "devastating fauxar mistakes in in cinema"
+  },
+  {
+   "t": 989.28,
+   "d": 2.16,
+   "text": "history. Good luck, says the Germans to"
+  },
+  {
+   "t": 991.44,
+   "d": 1.92,
+   "text": "the English men who are, you know,"
+  },
+  {
+   "t": 993.36,
+   "d": 1.84,
+   "text": "pretending to be German. Thank you, he"
+  },
+  {
+   "t": 995.2,
+   "d": 2.72,
+   "text": "says. And, you know, it's it's anyone"
+  },
+  {
+   "t": 997.92,
+   "d": 1.92,
+   "text": "who sees that remembers it, right? And I"
+  },
+  {
+   "t": 999.84,
+   "d": 1.68,
+   "text": "feel like those moments are too few and"
+  },
+  {
+   "t": 1001.52,
+   "d": 2.32,
+   "text": "far between. Like we should be allow"
+  },
+  {
+   "t": 1003.84,
+   "d": 1.84,
+   "text": "ourselves to be careless sometimes with"
+  },
+  {
+   "t": 1005.68,
+   "d": 2.08,
+   "text": "our stories."
+  },
+  {
+   "t": 1007.76,
+   "d": 1.76,
+   "text": "I'm going to pick up the pace. Approach"
+  },
+  {
+   "t": 1009.52,
+   "d": 2.16,
+   "text": "the inmost cave. The hero gets closer to"
+  },
+  {
+   "t": 1011.68,
+   "d": 1.44,
+   "text": "their main goal and prepares for the"
+  },
+  {
+   "t": 1013.12,
+   "d": 3.52,
+   "text": "core danger. Rog likes demand creative"
+  },
+  {
+   "t": 1016.64,
+   "d": 1.92,
+   "text": "participation. This is lesson number"
+  },
+  {
+   "t": 1018.56,
+   "d": 1.6,
+   "text": "three. I think I'm counting up right. I"
+  },
+  {
+   "t": 1020.16,
+   "d": 1.28,
+   "text": "don't have the maths like the last"
+  },
+  {
+   "t": 1021.44,
+   "d": 1.6,
+   "text": "speaker, but I think I can count to"
+  },
+  {
+   "t": 1023.04,
+   "d": 2.24,
+   "text": "three. So"
+  },
+  {
+   "t": 1025.28,
+   "d": 2.4,
+   "text": "this is basically to say that by the"
+  },
+  {
+   "t": 1027.68,
+   "d": 2.16,
+   "text": "nature of the low graphical fidelity of"
+  },
+  {
+   "t": 1029.84,
+   "d": 1.52,
+   "text": "a lot of rogikes, although something"
+  },
+  {
+   "t": 1031.36,
+   "d": 1.44,
+   "text": "like Cogind is obviously very beautiful"
+  },
+  {
+   "t": 1032.8,
+   "d": 3.04,
+   "text": "in its own way, you're cued by the game"
+  },
+  {
+   "t": 1035.84,
+   "d": 2.64,
+   "text": "to use your imagination more. I remember"
+  },
+  {
+   "t": 1038.48,
+   "d": 1.44,
+   "text": "when I was first kind of getting into"
+  },
+  {
+   "t": 1039.92,
+   "d": 2.32,
+   "text": "Net Hack and first playing Rogike, I"
+  },
+  {
+   "t": 1042.24,
+   "d": 1.76,
+   "text": "couldn't quite believe that these games"
+  },
+  {
+   "t": 1044.0,
+   "d": 1.28,
+   "text": "were made of ASI and they're just"
+  },
+  {
+   "t": 1045.28,
+   "d": 1.92,
+   "text": "letters and numbers and stuff like that."
+  },
+  {
+   "t": 1047.2,
+   "d": 2.56,
+   "text": "And someone on Reddit suggested that I"
+  },
+  {
+   "t": 1049.76,
+   "d": 2.88,
+   "text": "uh uh the person they were talking to"
+  },
+  {
+   "t": 1052.64,
+   "d": 2.16,
+   "text": "imagined the halls of of Net Hack, you"
+  },
+  {
+   "t": 1054.8,
+   "d": 2.8,
+   "text": "know, being a thousand meters high and"
+  },
+  {
+   "t": 1057.6,
+   "d": 1.76,
+   "text": "uh you know, really try and visualize"
+  },
+  {
+   "t": 1059.36,
+   "d": 3.36,
+   "text": "yourself in the space. Um, and that has"
+  },
+  {
+   "t": 1062.72,
+   "d": 2.56,
+   "text": "been uh a really wonderful experience"
+  },
+  {
+   "t": 1065.28,
+   "d": 2.32,
+   "text": "over the years uh of playing a rogike,"
+  },
+  {
+   "t": 1067.6,
+   "d": 1.12,
+   "text": "particularly one of the more traditional"
+  },
+  {
+   "t": 1068.72,
+   "d": 1.2,
+   "text": "ones, but actually it's kind of"
+  },
+  {
+   "t": 1069.92,
+   "d": 2.16,
+   "text": "enlivened all other games because, you"
+  },
+  {
+   "t": 1072.08,
+   "d": 2.08,
+   "text": "know, you're seeing a a very obvious"
+  },
+  {
+   "t": 1074.16,
+   "d": 2.4,
+   "text": "representation of a space. Um, which"
+  },
+  {
+   "t": 1076.56,
+   "d": 2.16,
+   "text": "just gives you all of the freedom in the"
+  },
+  {
+   "t": 1078.72,
+   "d": 2.32,
+   "text": "world to imagine yourself in it, to"
+  },
+  {
+   "t": 1081.04,
+   "d": 1.84,
+   "text": "imagine what it looks like, to"
+  },
+  {
+   "t": 1082.88,
+   "d": 2.24,
+   "text": "essentially collaborate with the maker"
+  },
+  {
+   "t": 1085.12,
+   "d": 1.92,
+   "text": "of the game in in how you feel this"
+  },
+  {
+   "t": 1087.04,
+   "d": 1.6,
+   "text": "place would look and how you feel this"
+  },
+  {
+   "t": 1088.64,
+   "d": 1.92,
+   "text": "place would feel, you know, and you"
+  },
+  {
+   "t": 1090.56,
+   "d": 2.0,
+   "text": "know, a game like um Caves of Caves of"
+  },
+  {
+   "t": 1092.56,
+   "d": 2.24,
+   "text": "Kurd, it seems to me like Rogike"
+  },
+  {
+   "t": 1094.8,
+   "d": 1.92,
+   "text": "Celebration talk, so I have to mention"
+  },
+  {
+   "t": 1096.72,
+   "d": 2.56,
+   "text": "it. you know there is a a very conscious"
+  },
+  {
+   "t": 1099.28,
+   "d": 2.88,
+   "text": "decision to um you know it used to be a"
+  },
+  {
+   "t": 1102.16,
+   "d": 2.48,
+   "text": "function of the a necessity that you"
+  },
+  {
+   "t": 1104.64,
+   "d": 1.68,
+   "text": "would the asky graphics but now it's a"
+  },
+  {
+   "t": 1106.32,
+   "d": 1.68,
+   "text": "function of the play and of the world"
+  },
+  {
+   "t": 1108.0,
+   "d": 2.56,
+   "text": "and that's a wonderful thing right and"
+  },
+  {
+   "t": 1110.56,
+   "d": 2.32,
+   "text": "and I think imagining the space around"
+  },
+  {
+   "t": 1112.88,
+   "d": 4.08,
+   "text": "you um is is a real uh the best movies"
+  },
+  {
+   "t": 1116.96,
+   "d": 2.08,
+   "text": "do it right so here's a screenshot from"
+  },
+  {
+   "t": 1119.04,
+   "d": 4.08,
+   "text": "the end of whiplash right like that cues"
+  },
+  {
+   "t": 1123.12,
+   "d": 2.64,
+   "text": "the audience to imagine theirelves in"
+  },
+  {
+   "t": 1125.76,
+   "d": 2.48,
+   "text": "this world It's an uncertainty. You're"
+  },
+  {
+   "t": 1128.24,
+   "d": 2.24,
+   "text": "thinking to yourself, uh, you know, have"
+  },
+  {
+   "t": 1130.48,
+   "d": 2.24,
+   "text": "I seen, uh, something that is this a"
+  },
+  {
+   "t": 1132.72,
+   "d": 1.52,
+   "text": "world I want to aspire to be a part of"
+  },
+  {
+   "t": 1134.24,
+   "d": 1.68,
+   "text": "or is this a world I want to turn away"
+  },
+  {
+   "t": 1135.92,
+   "d": 1.44,
+   "text": "from? And it's it's about what you bring"
+  },
+  {
+   "t": 1137.36,
+   "d": 2.24,
+   "text": "to that moment. It's about queuing the"
+  },
+  {
+   "t": 1139.6,
+   "d": 2.32,
+   "text": "audience to to creatively participate."
+  },
+  {
+   "t": 1141.92,
+   "d": 1.92,
+   "text": "Whereas in traditional storytelling"
+  },
+  {
+   "t": 1143.84,
+   "d": 4.16,
+   "text": "structures, it is a is in its own way a"
+  },
+  {
+   "t": 1148.0,
+   "d": 1.6,
+   "text": "way of excluding people from the story."
+  },
+  {
+   "t": 1149.6,
+   "d": 1.84,
+   "text": "It's saying, \"This is a hero story."
+  },
+  {
+   "t": 1151.44,
+   "d": 1.84,
+   "text": "You're not a hero. You're you're someone"
+  },
+  {
+   "t": 1153.28,
+   "d": 1.6,
+   "text": "you're someone just observing. You're"
+  },
+  {
+   "t": 1154.88,
+   "d": 1.36,
+   "text": "one of the kind of muggles in this"
+  },
+  {
+   "t": 1156.24,
+   "d": 3.0,
+   "text": "world,"
+  },
+  {
+   "t": 1159.84,
+   "d": 2.96,
+   "text": "right? Or deal. So, the hero faces a"
+  },
+  {
+   "t": 1162.8,
+   "d": 2.24,
+   "text": "major near-death crisis or deepest fear"
+  },
+  {
+   "t": 1165.04,
+   "d": 2.4,
+   "text": "emerging transformed after a symbolic re"
+  },
+  {
+   "t": 1167.44,
+   "d": 2.08,
+   "text": "uh rebirth. Uh lesson number four, rog"
+  },
+  {
+   "t": 1169.52,
+   "d": 2.56,
+   "text": "likes don't care if you live or die. So,"
+  },
+  {
+   "t": 1172.08,
+   "d": 1.84,
+   "text": "obviously, it's been very well observed"
+  },
+  {
+   "t": 1173.92,
+   "d": 2.96,
+   "text": "how brutally hard uh rogue likes can be."
+  },
+  {
+   "t": 1176.88,
+   "d": 3.44,
+   "text": "Um and that can feel very punishing,"
+  },
+  {
+   "t": 1180.32,
+   "d": 1.28,
+   "text": "particularly when you die on level one"
+  },
+  {
+   "t": 1181.6,
+   "d": 2.16,
+   "text": "of net hack or whatever. But there's"
+  },
+  {
+   "t": 1183.76,
+   "d": 1.68,
+   "text": "something to be said for challenge for"
+  },
+  {
+   "t": 1185.44,
+   "d": 2.24,
+   "text": "its own sake. And I'll leave that to the"
+  },
+  {
+   "t": 1187.68,
+   "d": 1.76,
+   "text": "many other talks that have been uh had"
+  },
+  {
+   "t": 1189.44,
+   "d": 1.84,
+   "text": "on on nature of challenge and the nature"
+  },
+  {
+   "t": 1191.28,
+   "d": 3.12,
+   "text": "of difficulty in video games. Um but one"
+  },
+  {
+   "t": 1194.4,
+   "d": 1.2,
+   "text": "of the things that storytelling"
+  },
+  {
+   "t": 1195.6,
+   "d": 1.68,
+   "text": "structures do when they impose a"
+  },
+  {
+   "t": 1197.28,
+   "d": 1.76,
+   "text": "structure on us is they tend to favor"
+  },
+  {
+   "t": 1199.04,
+   "d": 2.56,
+   "text": "happy endings, right? They tend to end"
+  },
+  {
+   "t": 1201.6,
+   "d": 2.88,
+   "text": "they tend to favor the hero returning uh"
+  },
+  {
+   "t": 1204.48,
+   "d": 2.08,
+   "text": "you know with the elixir to his"
+  },
+  {
+   "t": 1206.56,
+   "d": 1.52,
+   "text": "community to save everyone. And"
+  },
+  {
+   "t": 1208.08,
+   "d": 2.32,
+   "text": "actually, some of the best narrative"
+  },
+  {
+   "t": 1210.4,
+   "d": 2.4,
+   "text": "experiences don't have happy endings."
+  },
+  {
+   "t": 1212.8,
+   "d": 1.28,
+   "text": "You know, I've got Spor Loose here, the"
+  },
+  {
+   "t": 1214.08,
+   "d": 1.68,
+   "text": "killing of the sacred deer. I could fill"
+  },
+  {
+   "t": 1215.76,
+   "d": 2.4,
+   "text": "this page with images of of stories"
+  },
+  {
+   "t": 1218.16,
+   "d": 2.96,
+   "text": "where uh you know, we don't care if you"
+  },
+  {
+   "t": 1221.12,
+   "d": 2.0,
+   "text": "live or die in a in a symbolic or or a"
+  },
+  {
+   "t": 1223.12,
+   "d": 3.84,
+   "text": "real sense. Um again, the cue of story"
+  },
+  {
+   "t": 1226.96,
+   "d": 5.04,
+   "text": "structure is to um is to kind of assert"
+  },
+  {
+   "t": 1232.0,
+   "d": 2.08,
+   "text": "a version of events where there is an"
+  },
+  {
+   "t": 1234.08,
+   "d": 2.32,
+   "text": "easy pattern that we can follow. And"
+  },
+  {
+   "t": 1236.4,
+   "d": 1.84,
+   "text": "actually, some of the most uh"
+  },
+  {
+   "t": 1238.24,
+   "d": 2.24,
+   "text": "enlightening artistic experiences I've"
+  },
+  {
+   "t": 1240.48,
+   "d": 2.16,
+   "text": "had have appeared to take place in"
+  },
+  {
+   "t": 1242.64,
+   "d": 1.6,
+   "text": "worlds where love simply doesn't exist,"
+  },
+  {
+   "t": 1244.24,
+   "d": 1.6,
+   "text": "which is what a rogike can feel like"
+  },
+  {
+   "t": 1245.84,
+   "d": 3.8,
+   "text": "sometimes. Um,"
+  },
+  {
+   "t": 1250.41,
+   "d": 2.39,
+   "text": "[snorts] uh, the reward, the hero takes"
+  },
+  {
+   "t": 1252.8,
+   "d": 2.0,
+   "text": "possession of the treasure, prize, or"
+  },
+  {
+   "t": 1254.8,
+   "d": 3.52,
+   "text": "vital knowledge won from the ordeal."
+  },
+  {
+   "t": 1258.32,
+   "d": 1.68,
+   "text": "So, uh, lesson number five, and this is"
+  },
+  {
+   "t": 1260.0,
+   "d": 1.36,
+   "text": "kind of the most important one, I think."
+  },
+  {
+   "t": 1261.36,
+   "d": 2.64,
+   "text": "Rog likes invite you to the party. So,"
+  },
+  {
+   "t": 1264.0,
+   "d": 1.76,
+   "text": "uh, playing Wildermouth a couple of"
+  },
+  {
+   "t": 1265.76,
+   "d": 3.52,
+   "text": "years ago. This is the game that, um, I"
+  },
+  {
+   "t": 1269.28,
+   "d": 1.76,
+   "text": "think I think it's definitely one of the"
+  },
+  {
+   "t": 1271.04,
+   "d": 2.24,
+   "text": "very greatest games ever made. It's the"
+  },
+  {
+   "t": 1273.28,
+   "d": 1.84,
+   "text": "game that talking about it got me my job"
+  },
+  {
+   "t": 1275.12,
+   "d": 2.4,
+   "text": "at Maverick, among other things. Uh,"
+  },
+  {
+   "t": 1277.52,
+   "d": 1.44,
+   "text": "it's a wonderful, wonderful thing. And"
+  },
+  {
+   "t": 1278.96,
+   "d": 2.16,
+   "text": "if you haven't played it, I urge you to."
+  },
+  {
+   "t": 1281.12,
+   "d": 4.64,
+   "text": "Its central kind of genius is to um be"
+  },
+  {
+   "t": 1285.76,
+   "d": 3.04,
+   "text": "full of beautiful writing um which is"
+  },
+  {
+   "t": 1288.8,
+   "d": 2.56,
+   "text": "offered um branching in some aspects but"
+  },
+  {
+   "t": 1291.36,
+   "d": 2.24,
+   "text": "very awed and very written and full of"
+  },
+  {
+   "t": 1293.6,
+   "d": 2.64,
+   "text": "um artistic ability you know and and"
+  },
+  {
+   "t": 1296.24,
+   "d": 2.4,
+   "text": "real sensitivity uh and those stories"
+  },
+  {
+   "t": 1298.64,
+   "d": 1.6,
+   "text": "are offered but the characters that take"
+  },
+  {
+   "t": 1300.24,
+   "d": 2.24,
+   "text": "place in them are procedurally generated"
+  },
+  {
+   "t": 1302.48,
+   "d": 2.32,
+   "text": "right um with a small amount of"
+  },
+  {
+   "t": 1304.8,
+   "d": 3.68,
+   "text": "customization and this gives you an"
+  },
+  {
+   "t": 1308.48,
+   "d": 2.8,
+   "text": "experience kind of uh like no Right?"
+  },
+  {
+   "t": 1311.28,
+   "d": 2.08,
+   "text": "You'll have your characters, you'll see"
+  },
+  {
+   "t": 1313.36,
+   "d": 2.0,
+   "text": "them evolve as people, they'll get"
+  },
+  {
+   "t": 1315.36,
+   "d": 1.68,
+   "text": "mutations in their body, they get"
+  },
+  {
+   "t": 1317.04,
+   "d": 2.0,
+   "text": "transformed, you know, they'll retire"
+  },
+  {
+   "t": 1319.04,
+   "d": 1.52,
+   "text": "and then they'll come out of retirement"
+  },
+  {
+   "t": 1320.56,
+   "d": 1.44,
+   "text": "to become kind of legends in someone"
+  },
+  {
+   "t": 1322.0,
+   "d": 2.8,
+   "text": "else's story. Um, the game is sort of"
+  },
+  {
+   "t": 1324.8,
+   "d": 1.36,
+   "text": "structured to give you this sense of"
+  },
+  {
+   "t": 1326.16,
+   "d": 2.64,
+   "text": "time passing, people going old and these"
+  },
+  {
+   "t": 1328.8,
+   "d": 1.68,
+   "text": "moments between characters, these little"
+  },
+  {
+   "t": 1330.48,
+   "d": 2.96,
+   "text": "moments sometimes across the backdrop of"
+  },
+  {
+   "t": 1333.44,
+   "d": 4.72,
+   "text": "a big epic hero's quest type story. Um"
+  },
+  {
+   "t": 1338.16,
+   "d": 3.52,
+   "text": "and and for me it was a real reminder of"
+  },
+  {
+   "t": 1341.68,
+   "d": 4.08,
+   "text": "how uh stories become necessarily better"
+  },
+  {
+   "t": 1345.76,
+   "d": 2.4,
+   "text": "the more diverse the group of people are"
+  },
+  {
+   "t": 1348.16,
+   "d": 2.56,
+   "text": "delivering them. Right? [snorts] Uh if"
+  },
+  {
+   "t": 1350.72,
+   "d": 1.68,
+   "text": "there's a single lesson I've learned"
+  },
+  {
+   "t": 1352.4,
+   "d": 2.24,
+   "text": "from working in writer rooms over my"
+  },
+  {
+   "t": 1354.64,
+   "d": 2.16,
+   "text": "career is that if you fill those rooms"
+  },
+  {
+   "t": 1356.8,
+   "d": 1.84,
+   "text": "with people who just look like you or"
+  },
+  {
+   "t": 1358.64,
+   "d": 1.36,
+   "text": "just sound like you or come from the"
+  },
+  {
+   "t": 1360.0,
+   "d": 3.44,
+   "text": "same place as you, uh one way or another"
+  },
+  {
+   "t": 1363.44,
+   "d": 2.0,
+   "text": "your story starts to round themselves"
+  },
+  {
+   "t": 1365.44,
+   "d": 2.0,
+   "text": "down. And it's been a well-observed"
+  },
+  {
+   "t": 1367.44,
+   "d": 2.24,
+   "text": "thing about structures and and and and"
+  },
+  {
+   "t": 1369.68,
+   "d": 1.92,
+   "text": "narrative structures in general that"
+  },
+  {
+   "t": 1371.6,
+   "d": 2.0,
+   "text": "they tend to reinforce hierarchies. It's"
+  },
+  {
+   "t": 1373.6,
+   "d": 1.52,
+   "text": "why I mentioned Jordan Peterson at the"
+  },
+  {
+   "t": 1375.12,
+   "d": 2.88,
+   "text": "beginning there. Whereas simply by uh"
+  },
+  {
+   "t": 1378.0,
+   "d": 1.52,
+   "text": "having a procedurally generated"
+  },
+  {
+   "t": 1379.52,
+   "d": 2.56,
+   "text": "character system within a hero story,"
+  },
+  {
+   "t": 1382.08,
+   "d": 1.52,
+   "text": "you immediately start to break those"
+  },
+  {
+   "t": 1383.6,
+   "d": 3.28,
+   "text": "systems down. Um and for me, I start to"
+  },
+  {
+   "t": 1386.88,
+   "d": 2.16,
+   "text": "really think about the kind of the"
+  },
+  {
+   "t": 1389.04,
+   "d": 2.0,
+   "text": "voices within a a game, the voices"
+  },
+  {
+   "t": 1391.04,
+   "d": 2.24,
+   "text": "within a a space, and how they are"
+  },
+  {
+   "t": 1393.28,
+   "d": 2.56,
+   "text": "creatively engaging with each other. um"
+  },
+  {
+   "t": 1395.84,
+   "d": 1.84,
+   "text": "and and rogue uh rogue likes because of"
+  },
+  {
+   "t": 1397.68,
+   "d": 1.6,
+   "text": "their procedural generation generation"
+  },
+  {
+   "t": 1399.28,
+   "d": 1.52,
+   "text": "but also because of the peradev right"
+  },
+  {
+   "t": 1400.8,
+   "d": 1.44,
+   "text": "because things matter things have"
+  },
+  {
+   "t": 1402.24,
+   "d": 2.48,
+   "text": "consequence um I think they can be"
+  },
+  {
+   "t": 1404.72,
+   "d": 2.64,
+   "text": "beautiful uh engines for character"
+  },
+  {
+   "t": 1407.36,
+   "d": 2.22,
+   "text": "development"
+  },
+  {
+   "t": 1409.58,
+   "d": 1.62,
+   "text": "[snorts] uh the road back the hero"
+  },
+  {
+   "t": 1411.2,
+   "d": 0.88,
+   "text": "begins their journey back to the"
+  },
+  {
+   "t": 1412.08,
+   "d": 2.32,
+   "text": "ordinary world often facing new urgent"
+  },
+  {
+   "t": 1414.4,
+   "d": 3.76,
+   "text": "pursuits um so uh lesson number six here"
+  },
+  {
+   "t": 1418.16,
+   "d": 2.08,
+   "text": "is a rog likes invited you to the party"
+  },
+  {
+   "t": 1420.24,
+   "d": 2.64,
+   "text": "but they don't mind if you leave early"
+  },
+  {
+   "t": 1422.88,
+   "d": 2.32,
+   "text": "uh illustrated here by the eggplant Yama"
+  },
+  {
+   "t": 1425.2,
+   "d": 2.96,
+   "text": "from Spalunky. Uh, one of the things"
+  },
+  {
+   "t": 1428.16,
+   "d": 3.6,
+   "text": "that rogue likes do is they create vast"
+  },
+  {
+   "t": 1431.76,
+   "d": 2.32,
+   "text": "amounts of content um that not every"
+  },
+  {
+   "t": 1434.08,
+   "d": 1.36,
+   "text": "player will see. And obviously that's"
+  },
+  {
+   "t": 1435.44,
+   "d": 1.52,
+   "text": "quite difficult to do in other narrative"
+  },
+  {
+   "t": 1436.96,
+   "d": 2.16,
+   "text": "forms. Uh, it's hard to write an extra"
+  },
+  {
+   "t": 1439.12,
+   "d": 2.0,
+   "text": "film for people to uh watch if they"
+  },
+  {
+   "t": 1441.12,
+   "d": 1.92,
+   "text": "stick around after the credits. However,"
+  },
+  {
+   "t": 1443.04,
+   "d": 1.92,
+   "text": "there's something to be said by catering"
+  },
+  {
+   "t": 1444.96,
+   "d": 3.12,
+   "text": "for different layers of audience, right?"
+  },
+  {
+   "t": 1448.08,
+   "d": 1.6,
+   "text": "If you want to cater to the sickos who"
+  },
+  {
+   "t": 1449.68,
+   "d": 1.12,
+   "text": "are going to do the eggplant run of"
+  },
+  {
+   "t": 1450.8,
+   "d": 2.08,
+   "text": "Spalunky, then that's great. But there's"
+  },
+  {
+   "t": 1452.88,
+   "d": 1.6,
+   "text": "also a whole other game for them."
+  },
+  {
+   "t": 1454.48,
+   "d": 1.68,
+   "text": "there. You know, Derek, you actually"
+  },
+  {
+   "t": 1456.16,
+   "d": 2.32,
+   "text": "gives you several endings to Spalunky"
+  },
+  {
+   "t": 1458.48,
+   "d": 2.16,
+   "text": "that you can uh aim for. I've only done"
+  },
+  {
+   "t": 1460.64,
+   "d": 1.68,
+   "text": "the easiest one and it was really really"
+  },
+  {
+   "t": 1462.32,
+   "d": 3.52,
+   "text": "hard. Um I think it's it's mostly this"
+  },
+  {
+   "t": 1465.84,
+   "d": 4.08,
+   "text": "one about just reminding that audiences"
+  },
+  {
+   "t": 1469.92,
+   "d": 2.4,
+   "text": "will bring themselves to bear to on a"
+  },
+  {
+   "t": 1472.32,
+   "d": 2.32,
+   "text": "story to the degree that they choose, to"
+  },
+  {
+   "t": 1474.64,
+   "d": 2.72,
+   "text": "the degree that they enjoy it, to the"
+  },
+  {
+   "t": 1477.36,
+   "d": 2.24,
+   "text": "degree that they can offer themselves up"
+  },
+  {
+   "t": 1479.6,
+   "d": 3.2,
+   "text": "to that story. Um, and sometimes that's"
+  },
+  {
+   "t": 1482.8,
+   "d": 2.56,
+   "text": "okay. You know, story structures kind of"
+  },
+  {
+   "t": 1485.36,
+   "d": 2.16,
+   "text": "want to impose this idea that everyone"
+  },
+  {
+   "t": 1487.52,
+   "d": 2.0,
+   "text": "has to come along at the same speed."
+  },
+  {
+   "t": 1489.52,
+   "d": 1.52,
+   "text": "Everyone needs to march towards the"
+  },
+  {
+   "t": 1491.04,
+   "d": 2.32,
+   "text": "dragon's cave. Um, but actually, it's"
+  },
+  {
+   "t": 1493.36,
+   "d": 2.16,
+   "text": "okay to let leave some people behind and"
+  },
+  {
+   "t": 1495.52,
+   "d": 3.64,
+   "text": "let them catch up."
+  },
+  {
+   "t": 1499.36,
+   "d": 2.08,
+   "text": "11. The resurrection. The hero faces a"
+  },
+  {
+   "t": 1501.44,
+   "d": 2.56,
+   "text": "survi a final severe test at the climax"
+  },
+  {
+   "t": 1504.0,
+   "d": 1.6,
+   "text": "where they use everything they learned"
+  },
+  {
+   "t": 1505.6,
+   "d": 2.32,
+   "text": "to defeat the remaining threat. So, I'm"
+  },
+  {
+   "t": 1507.92,
+   "d": 1.6,
+   "text": "going to trigger a few people with my"
+  },
+  {
+   "t": 1509.52,
+   "d": 1.76,
+   "text": "last slide here. One one of my last"
+  },
+  {
+   "t": 1511.28,
+   "d": 2.64,
+   "text": "slides in. I'm really really sorry. Uh,"
+  },
+  {
+   "t": 1513.92,
+   "d": 3.12,
+   "text": "this is an issue. These companies, um,"
+  },
+  {
+   "t": 1517.04,
+   "d": 2.32,
+   "text": "someone said, uh, I used another picture"
+  },
+  {
+   "t": 1519.36,
+   "d": 1.6,
+   "text": "and I realized it was someone saying,"
+  },
+  {
+   "t": 1520.96,
+   "d": 2.64,
+   "text": "\"Why do so many AI companies, uh, logos"
+  },
+  {
+   "t": 1523.6,
+   "d": 2.32,
+   "text": "look like anuses,\" which is unnecessary"
+  },
+  {
+   "t": 1525.92,
+   "d": 2.8,
+   "text": "to mention, but it's true. Um, these"
+  },
+  {
+   "t": 1528.72,
+   "d": 2.48,
+   "text": "companies are a real problem, right? The"
+  },
+  {
+   "t": 1531.2,
+   "d": 1.12,
+   "text": "audience here know this better than"
+  },
+  {
+   "t": 1532.32,
+   "d": 1.92,
+   "text": "anyone. Uh, and that brings me to lesson"
+  },
+  {
+   "t": 1534.24,
+   "d": 1.6,
+   "text": "number seven. Rog likes are our last"
+  },
+  {
+   "t": 1535.84,
+   "d": 1.52,
+   "text": "line of defense in the ultimate war"
+  },
+  {
+   "t": 1537.36,
+   "d": 2.88,
+   "text": "between man and machine. We've been an"
+  },
+  {
+   "t": 1540.24,
+   "d": 2.16,
+   "text": "algorithmically generated media"
+  },
+  {
+   "t": 1542.4,
+   "d": 3.04,
+   "text": "landscape for quite a while now. Um AIs"
+  },
+  {
+   "t": 1545.44,
+   "d": 2.16,
+   "text": "are already writing our TV shows, our"
+  },
+  {
+   "t": 1547.6,
+   "d": 3.84,
+   "text": "games, our movies. Um and of course, as"
+  },
+  {
+   "t": 1551.44,
+   "d": 1.36,
+   "text": "people watching will know better than"
+  },
+  {
+   "t": 1552.8,
+   "d": 3.12,
+   "text": "most, uh what AI is really, really good"
+  },
+  {
+   "t": 1555.92,
+   "d": 3.36,
+   "text": "at doing is reinforcing uh hierarchies,"
+  },
+  {
+   "t": 1559.28,
+   "d": 3.12,
+   "text": "re reinforcing structures. the more save"
+  },
+  {
+   "t": 1562.4,
+   "d": 2.88,
+   "text": "the cat that the AIs read, the more"
+  },
+  {
+   "t": 1565.28,
+   "d": 1.12,
+   "text": "it's going to become more and more"
+  },
+  {
+   "t": 1566.4,
+   "d": 2.48,
+   "text": "entrenched and the more porridge, even"
+  },
+  {
+   "t": 1568.88,
+   "d": 1.6,
+   "text": "more porridge than we have already on"
+  },
+  {
+   "t": 1570.48,
+   "d": 2.85,
+   "text": "our screens is going to um emerge."
+  },
+  {
+   "t": 1573.33,
+   "d": 0.59,
+   "text": "[snorts]"
+  },
+  {
+   "t": 1573.92,
+   "d": 2.64,
+   "text": "And so rogikes with their wonderful uh"
+  },
+  {
+   "t": 1576.56,
+   "d": 2.88,
+   "text": "procedurally generated random generated"
+  },
+  {
+   "t": 1579.44,
+   "d": 2.8,
+   "text": "algorithms are an excellent tool for"
+  },
+  {
+   "t": 1582.24,
+   "d": 1.68,
+   "text": "stopping that from happening as far as"
+  },
+  {
+   "t": 1583.92,
+   "d": 2.88,
+   "text": "I'm concerned. um Krux Smash's uh Dwarf"
+  },
+  {
+   "t": 1586.8,
+   "d": 3.6,
+   "text": "Fortresses video uh which uh you know"
+  },
+  {
+   "t": 1590.4,
+   "d": 2.4,
+   "text": "involve which I recommend to almost you"
+  },
+  {
+   "t": 1592.8,
+   "d": 1.28,
+   "text": "know anyone could watch those whether"
+  },
+  {
+   "t": 1594.08,
+   "d": 2.0,
+   "text": "they like the games or not. They are"
+  },
+  {
+   "t": 1596.08,
+   "d": 3.36,
+   "text": "beautiful in how they um extract stories"
+  },
+  {
+   "t": 1599.44,
+   "d": 2.16,
+   "text": "from the game. You know it's it's not"
+  },
+  {
+   "t": 1601.6,
+   "d": 2.56,
+   "text": "like he's just sort of reading out uh"
+  },
+  {
+   "t": 1604.16,
+   "d": 2.16,
+   "text": "you know logs from the game. It's a"
+  },
+  {
+   "t": 1606.32,
+   "d": 2.0,
+   "text": "genuine act of creation that he takes"
+  },
+  {
+   "t": 1608.32,
+   "d": 2.32,
+   "text": "part in when he goes through the legends"
+  },
+  {
+   "t": 1610.64,
+   "d": 1.28,
+   "text": "mode and reads out stuff about"
+  },
+  {
+   "t": 1611.92,
+   "d": 3.12,
+   "text": "characters. Um, and I I can't imagine"
+  },
+  {
+   "t": 1615.04,
+   "d": 2.16,
+   "text": "how a machine would do this. It's it's a"
+  },
+  {
+   "t": 1617.2,
+   "d": 1.52,
+   "text": "level of creation that I think is"
+  },
+  {
+   "t": 1618.72,
+   "d": 2.08,
+   "text": "completely unique and the sort of thing"
+  },
+  {
+   "t": 1620.8,
+   "d": 2.24,
+   "text": "I aspire to, to be honest. It's so"
+  },
+  {
+   "t": 1623.04,
+   "d": 2.56,
+   "text": "collaborative and creative. It honors"
+  },
+  {
+   "t": 1625.6,
+   "d": 2.56,
+   "text": "both uh, you know, the the chaos of a"
+  },
+  {
+   "t": 1628.16,
+   "d": 2.4,
+   "text": "world outside, but also the creativity"
+  },
+  {
+   "t": 1630.56,
+   "d": 1.52,
+   "text": "within."
+  },
+  {
+   "t": 1632.08,
+   "d": 3.2,
+   "text": "Return with elixir. Um, let's go through"
+  },
+  {
+   "t": 1635.28,
+   "d": 1.6,
+   "text": "to the final lesson. Lesson number"
+  },
+  {
+   "t": 1636.88,
+   "d": 3.36,
+   "text": "eight. Rog likes kill cats. Um, so you"
+  },
+  {
+   "t": 1640.24,
+   "d": 1.76,
+   "text": "know, net hack gives you a cat, right?"
+  },
+  {
+   "t": 1642.0,
+   "d": 2.16,
+   "text": "Um, and you can do all sorts of things"
+  },
+  {
+   "t": 1644.16,
+   "d": 2.32,
+   "text": "with that cat. You can, uh, use it to"
+  },
+  {
+   "t": 1646.48,
+   "d": 1.76,
+   "text": "pick up items. You can use it to rob the"
+  },
+  {
+   "t": 1648.24,
+   "d": 2.72,
+   "text": "shop. You can eat the cat if you want."
+  },
+  {
+   "t": 1650.96,
+   "d": 2.64,
+   "text": "Um, that's often quite useful thing to"
+  },
+  {
+   "t": 1653.6,
+   "d": 2.0,
+   "text": "do. You can polymorph it. You know, the"
+  },
+  {
+   "t": 1655.6,
+   "d": 2.24,
+   "text": "thing is that, uh, rogue likes do is"
+  },
+  {
+   "t": 1657.84,
+   "d": 1.84,
+   "text": "that they they give the option of saving"
+  },
+  {
+   "t": 1659.68,
+   "d": 2.08,
+   "text": "the cat. Um, but that's just one option"
+  },
+  {
+   "t": 1661.76,
+   "d": 2.48,
+   "text": "amongst uh, many. Uh, one of the best"
+  },
+  {
+   "t": 1664.24,
+   "d": 1.92,
+   "text": "movies I saw I've seen in recent years,"
+  },
+  {
+   "t": 1666.16,
+   "d": 2.4,
+   "text": "Obsession. Uh, I'm not going to spoil uh"
+  },
+  {
+   "t": 1668.56,
+   "d": 1.44,
+   "text": "what happens to the cat in that movie,"
+  },
+  {
+   "t": 1670.0,
+   "d": 2.4,
+   "text": "but it does not get saved. [laughter]"
+  },
+  {
+   "t": 1672.4,
+   "d": 1.92,
+   "text": "Um, that something happens to it that is"
+  },
+  {
+   "t": 1674.32,
+   "d": 1.92,
+   "text": "also something you can do in Net Hack."
+  },
+  {
+   "t": 1676.24,
+   "d": 2.72,
+   "text": "And I think uh that is the thing that"
+  },
+  {
+   "t": 1678.96,
+   "d": 1.76,
+   "text": "rogikkes can do is that they can be"
+  },
+  {
+   "t": 1680.72,
+   "d": 2.56,
+   "text": "incredibly disobedient. They can uh"
+  },
+  {
+   "t": 1683.28,
+   "d": 2.32,
+   "text": "change the way you think about things by"
+  },
+  {
+   "t": 1685.6,
+   "d": 1.6,
+   "text": "offering possibilities that you would"
+  },
+  {
+   "t": 1687.2,
+   "d": 2.72,
+   "text": "have never encountered before."
+  },
+  {
+   "t": 1689.92,
+   "d": 1.92,
+   "text": "[snorts] So to summarize, that's what I"
+  },
+  {
+   "t": 1691.84,
+   "d": 1.68,
+   "text": "think rogue likes teach us about story"
+  },
+  {
+   "t": 1693.52,
+   "d": 2.4,
+   "text": "structure. Uh, rogue likes reinforce the"
+  },
+  {
+   "t": 1695.92,
+   "d": 1.6,
+   "text": "power of heroes narratives and remind us"
+  },
+  {
+   "t": 1697.52,
+   "d": 1.52,
+   "text": "that structure is a tool, not a"
+  },
+  {
+   "t": 1699.04,
+   "d": 2.24,
+   "text": "prescription. Uh, rogue likes create"
+  },
+  {
+   "t": 1701.28,
+   "d": 2.0,
+   "text": "meaning through chaos and mistakes."
+  },
+  {
+   "t": 1703.28,
+   "d": 2.24,
+   "text": "Compliance is the enemy of surprise. Rog"
+  },
+  {
+   "t": 1705.52,
+   "d": 2.16,
+   "text": "likes demand creative participation. We"
+  },
+  {
+   "t": 1707.68,
+   "d": 1.36,
+   "text": "need to make space for the imaginations"
+  },
+  {
+   "t": 1709.04,
+   "d": 2.32,
+   "text": "of our audience. Rog likes don't care if"
+  },
+  {
+   "t": 1711.36,
+   "d": 2.16,
+   "text": "you live or die. Happy endings are"
+  },
+  {
+   "t": 1713.52,
+   "d": 2.24,
+   "text": "better endings. Rog likes invite you to"
+  },
+  {
+   "t": 1715.76,
+   "d": 1.68,
+   "text": "the party. Bring people into the process"
+  },
+  {
+   "t": 1717.44,
+   "d": 1.36,
+   "text": "who aren't like you, but they don't mind"
+  },
+  {
+   "t": 1718.8,
+   "d": 1.92,
+   "text": "if you leave early. Honor the desires of"
+  },
+  {
+   "t": 1720.72,
+   "d": 2.08,
+   "text": "more than one audience. Ultimate"
+  },
+  {
+   "t": 1722.8,
+   "d": 1.84,
+   "text": "defense. Uh, last line of defense in the"
+  },
+  {
+   "t": 1724.64,
+   "d": 1.36,
+   "text": "war between human and machine. The more"
+  },
+  {
+   "t": 1726.0,
+   "d": 1.52,
+   "text": "we resist existing structures, the more"
+  },
+  {
+   "t": 1727.52,
+   "d": 2.24,
+   "text": "we can keep human storytelling alive."
+  },
+  {
+   "t": 1729.76,
+   "d": 2.32,
+   "text": "Rog likes kill cats. Sometimes that"
+  },
+  {
+   "t": 1732.08,
+   "d": 3.28,
+   "text": "cat has to die. Reset the sign."
+  },
+  {
+   "t": 1735.36,
+   "d": 3.36,
+   "text": "That's it. Thank you very much."
+  },
+  {
+   "t": 1738.72,
+   "d": 1.84,
+   "text": "Excellent. Thank you so much. That was"
+  },
+  {
+   "t": 1740.56,
+   "d": 3.2,
+   "text": "wonderful. Um, sometimes the cat just"
+  },
+  {
+   "t": 1743.76,
+   "d": 2.8,
+   "text": "just has to beef it. Um, yeah. I love"
+  },
+  {
+   "t": 1746.56,
+   "d": 1.6,
+   "text": "they're so unforgiving. I like playing."
+  },
+  {
+   "t": 1748.16,
+   "d": 1.52,
+   "text": "There's like a orc messiah god in"
+  },
+  {
+   "t": 1749.68,
+   "d": 1.44,
+   "text": "dungeon crawlstone soup and you end up"
+  },
+  {
+   "t": 1751.12,
+   "d": 2.16,
+   "text": "with all these followers of orcs which"
+  },
+  {
+   "t": 1753.28,
+   "d": 2.08,
+   "text": "just means that then you get to watch"
+  },
+  {
+   "t": 1755.36,
+   "d": 2.24,
+   "text": "them die and be like, [laughter] \"No,"
+  },
+  {
+   "t": 1757.6,
+   "d": 2.16,
+   "text": "that was my guy."
+  },
+  {
+   "t": 1759.76,
+   "d": 2.96,
+   "text": "Uh, I'm a bad messiah.\" So, yeah."
+  },
+  {
+   "t": 1762.72,
+   "d": 2.24,
+   "text": "Excellent. Thank you so much. Um, again"
+  },
+  {
+   "t": 1764.96,
+   "d": 2.24,
+   "text": "with the perfect timing. Ended right on"
+  },
+  {
+   "t": 1767.2,
+   "d": 0.8,
+   "text": "the dot."
+  },
+  {
+   "t": 1768.0,
+   "d": 1.52,
+   "text": ">> I had a I had a timer here."
+  },
+  {
+   "t": 1769.52,
+   "d": 3.2,
+   "text": ">> Yeah. Well done. Um, excellent. Well,"
+  },
+  {
+   "t": 1772.72,
+   "d": 1.68,
+   "text": "thank you so much. Are you going to be"
+  },
+  {
+   "t": 1774.4,
+   "d": 2.96,
+   "text": "in chat for breakout discussions? Yes, I"
+  },
+  {
+   "t": 1777.36,
+   "d": 1.52,
+   "text": "will hang around for a little bit."
+  },
+  {
+   "t": 1778.88,
+   "d": 1.68,
+   "text": ">> Excellent. All right. Well, thank you so"
+  },
+  {
+   "t": 1780.56,
+   "d": 2.4,
+   "text": "much, Jamie, um, for speaking and and"
+  },
+  {
+   "t": 1782.96,
+   "d": 2.08,
+   "text": "getting it ready in time for the preview"
+  },
+  {
+   "t": 1785.04,
+   "d": 2.16,
+   "text": "event. That was excellent."
+  },
+  {
+   "t": 1787.2,
+   "d": 2.96,
+   "text": ">> Thanks very much. All right."
+  }
+ ]
+}

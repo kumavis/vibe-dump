@@ -1,0 +1,80 @@
+Michael Langford - For the Squishies: Making Roguelikes Accessible to Children and their Parents
+Speaker: Michael Langford
+https://www.youtube.com/watch?v=wPN5bPxWXm8
+Year: 2021   Kind: talk   Captions: manual (en)
+
+## <Untitled Chapter 1>
+
+[0:00:03] There we go. Hi. Michael: Hi, there. How is it going? EMCEE: Great. Wonderful. Thank you for starting early. I only have so much patter in me to get through the whole day. With no further ado, I will kickoff our lightning talks and we are starting with Michael Langford, an iOS developer making accessible software for adults, youth and children. Listen, I haven't drank all of my coffee yet. You will be talking about For the squishies which is a delightful title. Michael: Thank you very much. I have to say, childrens actually works. One of the clients I have works for children's medical hospital. That works. I am Michael Langford. I have been enjoying the Roguelike Celebration a ton. It has been some great stuff. I wanted to talk to you all, though, as if you had a Roguelike game. I know a lot of you are going to go and eventually finish one even if you are just currently a player and some of you make really cool Roguelikes aural -- already.
+
+[0:01:07] This presentation is about making games work for young children. Some of this is console-specific but you could remap to a keyboard for PC. No problem. And this focuses on stuff that's cost-effective because you know we only have a limited amount of time in the world and I want everyone to be able to do the changes they need easily. OK. Let's get going. OK. This presentation shows you to beat the appetite of children. It is about making small changes to the game you don't even care much about. This greatly raises sales figures especially when you go to platforms other than PC. Children have a lot more of everything but PCs. Childhood is a massive force spending for every parent. Parents by enrichment and fun opportunities for the children and you want to be part of
+
+[0:02:07] that spending. Roguelikes also happen to hit this cool sweet spot because there is a lot of content available at a particular skill level which isn't the same for 'one and done' traditional games. A kid can play a Roguelike many times at a level appropriate for them far more than something like a Mario Brothers Game. Every piece of software, not just games, come with an introductory difficulty level that's really hard for some people. You imposed it accidentally. It is on newest players, players with different attention spans, or they can only read certain things or their hands are different sizes. Since they are only slightly different though you can serve them with a little nudge and a little change. Here is how you get there. You rel don't have to do every step on the path. Doing any of them will get you closer, more sales and serve people better. This is going to say do this role-playing exercise and I heard yesterday a lot of you
+
+[0:03:09] know how to do that and try to think as the people in the test are instructed to think and act as they are. These tests sometimes will require people with small hands or less proficiency at the game. Every time you hear me mention a kid STHA they are not present or could be substituted with a small-hand adult. There is a ladder of games every some. Every game in this presentation I recommend adults go play. Some aren't suitable for children and you will understand why. But I am just saying they are all good games but that doesn't mean they are accessible and don't take that as I hate the thing you like, please hate you. OK? And first off, kids' hands are small. On the left hand side there that's my daughter's hands near the beginning of the pandemic and on the right is my hands.
+
+[0:04:11] That orange one on the right would work. That's an iOS control SKWR -- controller and not available on the Switch. I have like 20 Switch controllers. These are just a few good examples. Can a person with small hands do the motion your game requires without injury and discomfort? You can do this with keyboard and mouse with small hands. You buy a big controller and you give it to a person with small hands. You should try it with other controllers if you have time. For this and all of these test procedures they are written out in the slides and the slides are downloadable afterwards so you can do these on your game. Just record the kids arm, hands, and the game while it is going.
+
+## Smol Hands Testing
+
+[0:05:03] Now watch. You will see the kids climb up the controller to play some games including yours. You will see sometimes they are flicking a bunch trying to deal with the dead zone and things like that. In particular, if they have reach problems, go to the in-game controller remapping if you have that, and if you don't, use the system remapping right in the middle of the test session and move the flipper buttons down so they can finish that part of the game and get used to those modes. One huge problem that will almost always trip up kids is look for issues with corded-held modes. By corded I mean Chord where you take your hands and play at the time time. On a controller it is hard for kids but on a computer if you hit command c or control C on your keyboard that does some damage to your hands and wrist especially if you are bending the wrist. This is an injury accessibility thing for adults and for kids it is -- they can't control
+
+[0:06:07] it necessarily.
+
+## Smol Hands Unlocked
+
+[0:06:09] You don't have to rework your control scheme. You can just make it so the people who need it can fix it. You can add a button fixing map and that will address almost 100% of parent issues. You might take efforts to support system but they are cumbersome and don't work for multiple controllers. Consider changing game modes to being more like an item is what does this and you swap to that item and then instead of something where you hold the button down to do this. Higher rated games spend a lot of time where you equip an item and you get special abilities and mode and you can swap between itemwise -- items with a toger. The new metroid -- came out and a kid is going to have a problem for a number of years playing a game like that.
+
+[0:07:10] OK. Now the rest of these are a lot shorter and less deeper commentary because that one is a little rough. Let's see how kids survive a multi-player.
+
+## Cheese Strategies
+
+[0:07:19] They do it by using cheesy strategies. Think about it like walk in a circle and shoot left and then a proficient player plays with the child, the child plays along and does the stupid AI you tell them to do. You will want to write down more than one but think of monster things or there is a Tom 7 video linked there about stupid chess AI. I am not calling kids stupid. I am saying these AIs are intentionally not very good. If they let the kid survive multi-player the kid able to play with their parent. They don't have to get a high score. They just need to be there along with mom or dad going boom, boom, boom through everything.
+
+## Cheese- Playthru
+
+[0:08:06] Note what items and characters enable their strategy. Also notice where in the game strategies cause and understand you might want to fight cheese strategy in single player but in multiplayer you want to flip the incentive so cheese can get past or doesn't overly tax resources.
+
+## Cheese Unlocked
+
+[0:08:32] Once you get to the point where you finished recording the cheese strategy runs, figure out if you have characters that are the good ones for cheese and they are not of a gender that some kid Nate -- may not want to play. You don't have to it make it a boy and girl the youngest kids want to play and at that age there is rear zero gender difference. They will want to play the one like their gender if you don't fix that. Kids eat a lot of snacks, wiggle, get up all of the time and bump every part of the controller.
+
+## Chaos: Random Input
+
+[0:09:15] This test is taking the game controller, sticking it in a blanket and shaking it around. I mean don't do this in the action part but the pause menu, the load menu in particular. The real question is did you delete player profile that took 80 hours to make?
+
+## Order to Chaos
+
+[0:09:35] Clearly you need some more conformation if you need that because adults will do that too accidentally. Does a person end a run when they are on a pause menu and do this throw around? Did you accidentally use all the ultra rare super bombs? A quick fix is a more complicated confirm screen or maybe a map gate if that's easier. We are move along through the levels. Next up, two quick vision tests. OK.
+
+## Vision: Important Text, Preliterate Eyes
+
+[0:10:07] There is two scenario here. One it is making itself kids' eyes which are hooked up to kids pre-literate brains. The fix is turn on another localization. Wait a second, I don't have my game localized. OK. Go to your font, hack all the characters to be similar size characters but different, and play there game that way and congratulations you just made a new language. Now, if a person who isn't you can get through your game then a kid can probably get you through your game. The general fix for this by there way is to add more GIFs like a heart or Bullseye for archery.
+
+## Vision: Tiny Text, Old Eyes
+
+[0:10:50] For parents, you are going to be adding more and cutting down the text on the screen and make the text on the screen bigger. Sit one and a half times as far as normal from your screen or television and play the game. We are almost done.
+
+## Attention Test + Fixes
+
+[0:11:08] Attention. This is an easy test. You get a slow system or a slow PC and by slow PC I mean spinning hard disk, put your game on it, run your game and watch the kid play or the young adult or anyone else. Any time they die right after a load screen, that's what you got to fix. Don't go fix your load screen performance. That takes a lot of work. Instead add a conformation screen that partially obscures the action and you solve the problem and don't have to show it on fast loading systems. Or just add transit hubs. The game is great but the screens kill my kid in this game. Next up is shame and it isn't really about shame.
+
+## Shame is a hack for content barriers
+
+[0:11:56] Writing these things are really kind of hard because they have to work for a lot of different games and testers. I am going to go through this and you can ask questions later if you want to know why it is setup like this. Stage a zoom call with a friend. You call them. You are doing some work. Your game is on. OK. They go wait a sec. That's my husband's boss and they leave the room and Zoom call is still on. You sit your phone behind you and you hear that the boss' kid, that her husband's boss' kid got left in the room with the Zoom meeting. This is a person you don't have a relationship with and you could easily embarrass. You are going to play your game, any time you feel anxiety you may embarrass your friend,
+
+## Shame Testing
+
+[0:12:39] pick a screenshot. Any time you may want to turn the sound on because of a gross sound take a screenshot. Any time you want to offer misinformation or mischaracterization to deceive the child take a screenshot.
+
+## Fixing Context Accessibility
+
+[0:13:00] If that's behind modes where they can turn off a lot of that, a lot of that, then the game is playable to children. However, if you can't even play your game all in the same system a kid may occasionally turn on like games with graphic store art which is great for adults and sales but not so great for parents because the kid will come up Scheie someone ripping their eye off you may have more adjustments so you can sell it. Art should always express the full range of emotions. This is about just about commercial art to sell more and make games workable for parents. If you have comments, or happen to need references on the games, or any of these controller references,
+
+## Smol Hands Reference
+
+[0:13:52] feel free to use them and have a good day. EMCEE: Thank you, Michael. Every point to do with children at least someone in chat was like that would help me. I have ADHD-brain and the attention point is so valid. A game loses me if I have to sit and stare at nothing for a ridiculously small number of seconds. Michael: I feel that too. Swords of Ditto has gotten me a couple times with those load screens. EMCEE: I think we have time for one question which is an interesting Roguelike specific one. Would you consider removing or lightning up the effects of permadeath for accessibility for children? Or would that reason the Roguelikes? Do you have thoughts on is that something that's discouraging to kids? Michael: One game you will see rated higher than every triple A game is Son of a Witch
+
+[0:14:58] and the default answer here is other than, you know, it just go do what they did. There is a paper in the references section I have where he writes about how we dealt with permadeath and made it lighter. They added extra modes to make it where permadeath is removed. Permadeath is useful for keeping the game at the level of the kid but you may also want to give them a chance to not have permadeath so they can experience the rest of the game if they are lower proficiency or a mode where it exists but the game is easy so they are less likely to encounter it. EMCEE: Thank you caves of Qud for adding a mode that doesn't improve proper permadeath because games are hard even for adults. If you could name a couple games that do child friendliness really well and I guess part of the answer is look at the things in your talk and the ones rated highly. Michael: Son of a Witch, Raymond legends if they can do platforms.
+
+[0:16:04] Start del you can get them into but the economic focuses. Sort of ditto is playable other than the load screen issues. Cat quest 2 usually is pretty fine. There is a couple challenging ones. And the other one I was going to point out -- oh. I don't have it any more. I mean, you can get through basic levels of a lot of games and as long as you as a person are OK with that that will work well. But anyhow, if you ping me on Twitter, I have a list of a billion games. I mean literally I buy and go nope, this isn't going to work. We finally found one that works. EMCEE: Cool. Thank you so much, Michael. That was a fantastic talk. Awesome. We will move on. I think I will announce the speaker breakouts at the end so it is a little bit clearer to people what it is. Yeah, that you can thank you so much and, hopefully, people can see you around. All right.

@@ -1,0 +1,70 @@
+Stanley W. Baxton: Bringing Real-World Occultism into Your Games Without Accidentally Being Racist
+Speaker: Stanley W. Baxton
+https://www.youtube.com/watch?v=HCbiYSzHtrI
+Year: 2024   Kind: talk   Captions: manual (en)
+
+## Intro
+
+[0:00:03] For our final talk of this block, another lightning talk. We will welcome to the stage Stanley W. Baxter who is a solo dev Stanley is a solo dev who makes narrative games for exactly three people to lose their minds. His works are usually satirical, horrifying, or queer, and sometimes all at once. In his spare time he likes spending inordinate amounts of money on occult texts and getting mad about people who have been dead for hundreds of years.. So here to talk about "Bringing Real-World Occultism into Your Games Without Accidentally Being Racist" we have Stanley. Why we are going to take it away. STANLEY: Thank you. Thank you. Welcome to my talk.
+
+## Welcome
+
+[0:00:48] Bringing "Bringing Real-World Occultism into Your Games Without Accidentally Being Racist." Content warning. We will be going into a little anti-Semitism, racism, and Nazi ideology and not too deeply but take heed if these are sensitive topics. My name is Stanley.
+
+## Introduction
+
+[0:01:06] I make narrative games and most importantly for this talk I spend far too much money on books specifically books about the occult and these makes their way into my games. To flex to a very select group of people there you go. To answer why I am actually here, I would like everyone in
+
+## Why Im here
+
+[0:01:32] the audience to go open your game library and see how long it take use to hit a game that features magic. It is practically embedded in the medium itself considering how ubiquitous magic points for the casting of spells. It is rampant and everywhere. That begs the question of what's the
+
+## The Problem
+
+[0:01:57] problem with this? I will create a hypothetical with something I have seen a million times. You have a horror dev and want to make your game stand out and you are going add real magic into your game. You do intense and vigorous rougher Fe research and come across this eventually. It is spooky. This is a real symbol used. It is great. Terrifying and pack up the game and ship it. You have just done something antisemitic. I should hope the reaction in the crowd is I did not intend this and how do I fix it. If you go searching for real magic on the internet you will get a bunch of
+
+## Western Esoterica
+
+[0:02:51] resources on western esoteric which synchronize and create a lose corrective of practices called esoterica. What is a magic tradition? These are things a group of people partake in and usually have roots in a specific cultures. The important part is many traditions go out of specific cultures. That's the critical takeaway. Western esoterica has a history of culture appropriation.
+
+## Cultural Appropriation
+
+[0:03:37] I am deploying a special technique for this talk. When you see this image that is an ex planation in history but we don't have the time right now and if you want to know you can catch me after the
+
+## Crowley
+
+[0:03:49] talk. Crash course. I am about to introduce you to two of the most influential characters. First is Aleister Crowley who created religion and magic and - continues the tradition of stealing from many and he was good at what he did. I need to stress the golden dawn is western ceremonial magic. You cannot study and practice anything without becoming acquainted with Crowley and often people take inspiration and engage while being ignorant of the sources. The second is
+
+## Helena Blavatsky
+
+[0:04:51] Helena Blavatsky who is most well known for being the founder of theosophy. I am just going to quote someone. The first white rich woman to go to Tibet and claim she was taught ancient secrets and became a grifter influencer. I need the stress the first part. Spoiler warning. She didn't have contact with these mystics. She made shit up and pretended she was in contact or someone in Tibet was as much as of a grifter as she was. She inspired the inspiring of eastern mysticism, chakras, continued pushing of conspiracy theories around ancient civilizations, the idea of the lost
+
+[0:05:54] continent that held an advanced civilization, the idea of a higher race, the main influence of Nazi cultism, and influenced so much more. She is everywhere. Finally, the crowning jewel is Christianity and the influence it had on European thought and interacted with other traditions around the world. Western esoterica is a bit of a mind field and not many know this. People take
+
+## Western Occultism
+
+[0:06:31] occult symbols they will see everywhere to put in games, comics, novels and have no idea where they are from. Let's talk about how we can combat this. I am going into this assume Yugoslavia
+
+## Open and Closed Traditions
+
+[0:06:48] are just here because you want some inspiration, primarily esthetic, from real life, or nice nod to the real thing. The first thing we need to define is an open and closed tradition. In general, an open tradition is one that can be practiced by anyone. A closed tradition requires invitation. Most closed traditions are ethno-religions being tied to a specific culture often to the point that divorcing it strips away anything meaningful from it. Inversely, most open traditions are ones that are encouraged to spread usually ones that -- this is very generalized thing and a fluid system but generally a good starting point to go from. If you want to represent a closed tradition in your game,
+
+[0:07:49] or in any sort of media, you almost always need permission or to do it in a very specific way. Often if you ask for permission people are going to say no. Practices are closed for a reason and most of the time that is disrespect from colonizers. Equally, you need to consider context if you take from open traditions. Consider some of the ones I put under open traditions and remember everything is political. Right. As a quick exercise we will go back to the symbol we saw at the beginning. That guy in the very middle which some of you may know is Baphomet who has an interesting history and the source of that symbol ism is open and inspired by a Greco Egyptian mystic tradition. These are Hebrew letters. Which is the sacred language of Judaism. Jewish magic
+
+[0:08:57] isn't for outsiders to use and practice. It is disrespectful for how important those letters are. As you might have guessed from the name of the symbol. This isn't a Jewish symbol. Western esoterica loves messing Hebrew letters. This does give us a rule of thumb. If you see Hebrew letters an an occult symbol it is something you should avoid for either of those reasons. If you follow this one rule you will probably dodge about 80% of appropriation. Let's wrap it up. What I hope I
+
+## Conclusion
+
+[0:09:40] taught you today is western magic traditions have a long history of cultural appropriation. Many are taken without consent or are so different from the original it is not close to what it actually was. Sometimes to the point where it is just insulting. There are rules of thumbs to avoid the egregious cases but there is never going to be paint by numbers solution. There is always context and edge cases to account for. Something to ask yourself, and if you take anything really take this, why do you want to use that symbol. Does it just look cool? If you are using something to represent an idea or concept is that idea what the symbol represents or what other decided it means? Talk to people from minority religions and how they want their practices to be depicted if
+
+[0:10:41] at all. If someone doesn't want to share their culture with you respect that. There are plenty willing to share. If you would like further reading on this, I cannot stress enough how FYMA goes deeper in the appropriation of Jewish magic which is foundational to a lot of western esoterica and written by a Jewish practitioner. If you are left want to learn more about magic, there is a YouTube channel and everyone raises on Dr. Sledge. Magic this is which is a podcast I don't agree with all the takes but if you want an introduction with a reading list I do recommend it. And finally CT Kelly. You can learn a ton by following them. They are currently writing an introductory book on magic. Keep an eye out. That is it from me. I am Stanley Baxton and I
+
+[0:11:46] will continue to be. And hopefully you can bring real world occultism into your games now with a sharper eye. If you want to chat about any of this, meet me in the Breakout rooms later ALEXEI: Impressive job fitting a lot into a short talk. We will make sure all the links are available and accessible. We will probably have time for a couple questions if that's all right with you, Stanley. The one question we have is someone who needs to know what the book is at the beginning. STANLEY: That's by Andrew Chumbley. It is a book. This is going to take a lot of context. It is a book about sabbatical witchcraft which
+
+[0:12:47] is a specific brand Andrew pioneered. The best way I can explain is it a chaos magic for pretentious people and that book can sell for over $1,000 and I managed to snag it for $200. ALEXEI: Wonderful. We appreciate esoteric flex at Roguelike Celebration. Cool. One thing I saw come up in chat, and I am curious if you have thoughts, in terms of, you know, obviously that kind of distinction between open and closed and thinking about the origin of different practices but also talking about diaspora and you can have ways religion and practices get tied up in that difference and those who moved in that culture to other places and whether or not the way that gets tied up in colonialism. Curious if you have thoughts on diaspora religions and practices.
+
+[0:13:54] STANLEY: It is a complex one because you find a lot of diasporic practice and one that comes to mind is Santoria and that is syncretized to Central America. It was basically a way for Indigenous people in Central America to hide or mask their religion while pretending it was Catholicism. It is a case of well it is technically Catholicism on paper but it is a specific and niche way people practice their religion. It is a case where there is no real paint by number solution. It is a matter of talking to practitioners and doing a deep dive on why it came about and if you want do represent it there are many practitioners alive and many will want to discuss it and might want to pop up in whatever game you are doing.
+
+[0:15:02] That's the takeaway. Talk to people. 90% could be avoided if people just talk to each other. ALEXEI: Are there examples of games you think have navigated western Esotericism well? STANLEY: That's a good question. I would say in general less that it uses it but the idea of occult ideas I would say fallen London is a good one. I think fallen London gets away with it because it is set before Crawley is born. It is usually tied in a way it is a special nod of if you know you know and I understand why you didn't do the full reference because you don't want that full racist thing or you have taken this and transformed the core idea
+
+[0:16:05] and taken it into a different direction. ALEXEI: Excellent. Thank you very much, Stanley. We appreciate you sharing with the conference. Yeah, such an informative packed 15 minutes. STANLEY: Thank you.

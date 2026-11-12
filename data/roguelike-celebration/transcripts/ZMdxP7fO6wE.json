@@ -1,0 +1,3322 @@
+{
+ "id": "ZMdxP7fO6wE",
+ "url": "https://www.youtube.com/watch?v=ZMdxP7fO6wE",
+ "title": "Santiago Zapata - Roguelikes as automated Dungeon Masters: a historical overview",
+ "speaker": "Santiago Zapata",
+ "talk_title": "Roguelikes as automated Dungeon Masters: a historical overview",
+ "year": 2018,
+ "kind": "talk",
+ "upload_date": "2018-10-09",
+ "duration_s": 1891,
+ "playlists": [
+  "Roguelike Celebration 2018"
+ ],
+ "description": "Talk from the Roguelike Celebration 2018 - roguelike.club",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 54,
+   "title": "Must Reads"
+  },
+  {
+   "start": 232,
+   "title": "Permanent Consequences"
+  },
+  {
+   "start": 267,
+   "title": "Character-centric"
+  },
+  {
+   "start": 310,
+   "title": "Turn-based"
+  },
+  {
+   "start": 334,
+   "title": "Procedural Generated Content"
+  },
+  {
+   "start": 548,
+   "title": "A pretty basic Dungeon Master"
+  },
+  {
+   "start": 663,
+   "title": "Overcoming limitations"
+  },
+  {
+   "start": 858,
+   "title": "Characters Based Display"
+  },
+  {
+   "start": 1036,
+   "title": "The 80's"
+  },
+  {
+   "start": 1213,
+   "title": "Hack (1982)"
+  },
+  {
+   "start": 1358,
+   "title": "NetHack (1987)"
+  },
+  {
+   "start": 1390,
+   "title": "Larn (1986)"
+  },
+  {
+   "start": 1438,
+   "title": "The 90's"
+  },
+  {
+   "start": 1494,
+   "title": "Rise of ADOM"
+  },
+  {
+   "start": 1558,
+   "title": "An expanding roguelike dev community"
+  },
+  {
+   "start": 1652,
+   "title": "The 2000's"
+  },
+  {
+   "start": 1757,
+   "title": "Influencing other Genres"
+  },
+  {
+   "start": 1808,
+   "title": "Future of Traditional Roguelikes"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4487,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.03,
+   "d": 2.79,
+   "text": "so let's talk a bit about raga history"
+  },
+  {
+   "t": 2.82,
+   "d": 1.95,
+   "text": "and Santiago Zapata I have been"
+  },
+  {
+   "t": 4.77,
+   "d": 2.91,
+   "text": "developing rock legs for about 15 years"
+  },
+  {
+   "t": 7.68,
+   "d": 4.35,
+   "text": "over 15 years now and this is a very"
+  },
+  {
+   "t": 12.03,
+   "d": 3.59,
+   "text": "broad subject so lots of people have"
+  },
+  {
+   "t": 15.62,
+   "d": 3.22,
+   "text": "invested time looking into the history"
+  },
+  {
+   "t": 18.84,
+   "d": 2.4,
+   "text": "of computer games the history of"
+  },
+  {
+   "t": 21.24,
+   "d": 2.79,
+   "text": "role-playing games doing interviews and"
+  },
+  {
+   "t": 24.03,
+   "d": 1.8,
+   "text": "trying to dig up some information from"
+  },
+  {
+   "t": 25.83,
+   "d": 3.39,
+   "text": "the 80s and 90s so we are not going to"
+  },
+  {
+   "t": 29.22,
+   "d": 1.83,
+   "text": "be able to cover all of that in this"
+  },
+  {
+   "t": 31.05,
+   "d": 2.43,
+   "text": "talk right but I still think it's"
+  },
+  {
+   "t": 33.48,
+   "d": 3.92,
+   "text": "important to talk about it"
+  },
+  {
+   "t": 37.4,
+   "d": 4.09,
+   "text": "apologies in advance if I miss some"
+  },
+  {
+   "t": 41.49,
+   "d": 2.1,
+   "text": "important games because there's been so"
+  },
+  {
+   "t": 43.59,
+   "d": 3.93,
+   "text": "many of them that it's impossible to to"
+  },
+  {
+   "t": 47.52,
+   "d": 3.9,
+   "text": "keep them all in account so ok let's go"
+  },
+  {
+   "t": 51.42,
+   "d": 3.81,
+   "text": "ahead and do this first off as I said"
+  },
+  {
+   "t": 55.23,
+   "d": 2.73,
+   "text": "well there's are two books that I"
+  },
+  {
+   "t": 57.96,
+   "d": 1.86,
+   "text": "recommend if you are interested in"
+  },
+  {
+   "t": 59.82,
+   "d": 1.98,
+   "text": "roguelike history or be the game history"
+  },
+  {
+   "t": 61.8,
+   "d": 1.34,
+   "text": "in general"
+  },
+  {
+   "t": 63.14,
+   "d": 3.28,
+   "text": "David's kradic's don't your hacks he was"
+  },
+  {
+   "t": 66.42,
+   "d": 2.67,
+   "text": "here I think in the two years ago"
+  },
+  {
+   "t": 69.09,
+   "d": 2.7,
+   "text": "celebration and also john hirsh was here"
+  },
+  {
+   "t": 71.79,
+   "d": 3.42,
+   "text": "they have been they had devoted a lot of"
+  },
+  {
+   "t": 75.21,
+   "d": 3.14,
+   "text": "time into researching these topics"
+  },
+  {
+   "t": 78.35,
+   "d": 2.41,
+   "text": "David's book in particular is very"
+  },
+  {
+   "t": 80.76,
+   "d": 1.95,
+   "text": "interesting because he goes into the"
+  },
+  {
+   "t": 82.71,
+   "d": 3.33,
+   "text": "personal details of the journeys of some"
+  },
+  {
+   "t": 86.04,
+   "d": 3.3,
+   "text": "of these rogues from the 80s and 90s he"
+  },
+  {
+   "t": 89.34,
+   "d": 2.85,
+   "text": "it doesn't cover like the new roguelike"
+  },
+  {
+   "t": 92.19,
+   "d": 4.56,
+   "text": "games but is this this era of game"
+  },
+  {
+   "t": 96.75,
+   "d": 2.73,
+   "text": "development is very interesting and your"
+  },
+  {
+   "t": 99.48,
+   "d": 2.79,
+   "text": "hurries will he run a column and came"
+  },
+  {
+   "t": 102.27,
+   "d": 2.61,
+   "text": "said watch for lots of years and he"
+  },
+  {
+   "t": 104.88,
+   "d": 2.88,
+   "text": "compiled all that information into this"
+  },
+  {
+   "t": 107.76,
+   "d": 2.76,
+   "text": "book so really recommended to check them"
+  },
+  {
+   "t": 110.52,
+   "d": 6.12,
+   "text": "out now the history of roguelikes if you"
+  },
+  {
+   "t": 116.64,
+   "d": 2.31,
+   "text": "go and check the Wikipedia page of"
+  },
+  {
+   "t": 118.95,
+   "d": 2.46,
+   "text": "roguelikes well you're going to see a"
+  },
+  {
+   "t": 121.41,
+   "d": 2.82,
+   "text": "summary of the games that are the line"
+  },
+  {
+   "t": 124.23,
+   "d": 4.05,
+   "text": "of games that followed rogue and I"
+  },
+  {
+   "t": 128.28,
+   "d": 3.75,
+   "text": "wanted to go a bit before that"
+  },
+  {
+   "t": 132.03,
+   "d": 5.71,
+   "text": "before a rock happened so we know that"
+  },
+  {
+   "t": 137.74,
+   "d": 2.73,
+   "text": "the developers of the early rock legs"
+  },
+  {
+   "t": 140.47,
+   "d": 2.61,
+   "text": "into the rock had a common interest and"
+  },
+  {
+   "t": 143.08,
+   "d": 4.2,
+   "text": "it was Dungeons and Dragons right so"
+  },
+  {
+   "t": 147.28,
+   "d": 2.4,
+   "text": "this can be seen I mean in the interview"
+  },
+  {
+   "t": 149.68,
+   "d": 3.09,
+   "text": "they have mentioned this and it's also"
+  },
+  {
+   "t": 152.77,
+   "d": 3.33,
+   "text": "clearly visible in the stat right so"
+  },
+  {
+   "t": 156.1,
+   "d": 1.56,
+   "text": "when you're playing road you can see"
+  },
+  {
+   "t": 157.66,
+   "d": 2.28,
+   "text": "that you are handling characters with"
+  },
+  {
+   "t": 159.94,
+   "d": 3.99,
+   "text": "strength dexterity and all those classic"
+  },
+  {
+   "t": 163.93,
+   "d": 3.57,
+   "text": "stats from Dungeons and Dragons but what"
+  },
+  {
+   "t": 167.5,
+   "d": 2.4,
+   "text": "I want to explore here is is Dungeons"
+  },
+  {
+   "t": 169.9,
+   "d": 3.96,
+   "text": "and Dragons a roguelike so what about"
+  },
+  {
+   "t": 173.86,
+   "d": 1.53,
+   "text": "the core features of Dungeons and"
+  },
+  {
+   "t": 175.39,
+   "d": 5.67,
+   "text": "Dragons the last year we thought we"
+  },
+  {
+   "t": 181.06,
+   "d": 2.61,
+   "text": "talked about this for features that"
+  },
+  {
+   "t": 183.67,
+   "d": 3.9,
+   "text": "would may be considered as what a"
+  },
+  {
+   "t": 187.57,
+   "d": 2.12,
+   "text": "traditional roguelike is and it is"
+  },
+  {
+   "t": 189.69,
+   "d": 2.71,
+   "text": "permanent consequences being character"
+  },
+  {
+   "t": 192.4,
+   "d": 2.4,
+   "text": "centric being turn-based and having"
+  },
+  {
+   "t": 194.8,
+   "d": 3.96,
+   "text": "procedural content this this is like"
+  },
+  {
+   "t": 198.76,
+   "d": 3.66,
+   "text": "this this tile from the the full list of"
+  },
+  {
+   "t": 202.42,
+   "d": 1.94,
+   "text": "much more features that are featured"
+  },
+  {
+   "t": 204.36,
+   "d": 2.98,
+   "text": "somewhere else but these are for are"
+  },
+  {
+   "t": 207.34,
+   "d": 2.07,
+   "text": "like the main things that we may"
+  },
+  {
+   "t": 209.41,
+   "d": 3.0,
+   "text": "consider to say if a game is a"
+  },
+  {
+   "t": 212.41,
+   "d": 2.79,
+   "text": "traditional roguelike or not so Dungeons"
+  },
+  {
+   "t": 215.2,
+   "d": 3.42,
+   "text": "& Dragons was released in 1974 at"
+  },
+  {
+   "t": 218.62,
+   "d": 3.71,
+   "text": "Advanced Dungeons & Dragons 1977 and"
+  },
+  {
+   "t": 222.33,
+   "d": 4.83,
+   "text": "they say well this is what what the"
+  },
+  {
+   "t": 227.16,
+   "d": 2.77,
+   "text": "original rocket developers were more"
+  },
+  {
+   "t": 229.93,
+   "d": 4.55,
+   "text": "inspired on so permanent consequences"
+  },
+  {
+   "t": 234.48,
+   "d": 2.59,
+   "text": "this is like the definition that is"
+  },
+  {
+   "t": 237.07,
+   "d": 1.71,
+   "text": "actually on temple of the rock like of"
+  },
+  {
+   "t": 238.78,
+   "d": 2.67,
+   "text": "these are this characteristic of the"
+  },
+  {
+   "t": 241.45,
+   "d": 2.79,
+   "text": "games and of course I mean when you are"
+  },
+  {
+   "t": 244.24,
+   "d": 1.37,
+   "text": "playing with a dungeon master"
+  },
+  {
+   "t": 245.61,
+   "d": 2.92,
+   "text": "pen-and-paper role-playing session you"
+  },
+  {
+   "t": 248.53,
+   "d": 2.04,
+   "text": "cannot go back into something that"
+  },
+  {
+   "t": 250.57,
+   "d": 2.22,
+   "text": "happened normally right so it's"
+  },
+  {
+   "t": 252.79,
+   "d": 2.1,
+   "text": "something that is you know it's covered"
+  },
+  {
+   "t": 254.89,
+   "d": 3.06,
+   "text": "by the definition even the term roll"
+  },
+  {
+   "t": 257.95,
+   "d": 2.13,
+   "text": "back rolling back something kind of"
+  },
+  {
+   "t": 260.08,
+   "d": 2.1,
+   "text": "hints of rolling a die right you cannot"
+  },
+  {
+   "t": 262.18,
+   "d": 2.73,
+   "text": "go back and change the results of I mean"
+  },
+  {
+   "t": 264.91,
+   "d": 3.99,
+   "text": "thy character centric is very"
+  },
+  {
+   "t": 268.9,
+   "d": 3.27,
+   "text": "interesting because it's one of the main"
+  },
+  {
+   "t": 272.17,
+   "d": 2.13,
+   "text": "things on the history of Dungeons &"
+  },
+  {
+   "t": 274.3,
+   "d": 3.72,
+   "text": "Dragons and the transformation between"
+  },
+  {
+   "t": 278.02,
+   "d": 3.57,
+   "text": "these war games into the role-playing"
+  },
+  {
+   "t": 281.59,
+   "d": 2.1,
+   "text": "games because in the workings the"
+  },
+  {
+   "t": 283.69,
+   "d": 4.94,
+   "text": "players were they had like an squared of"
+  },
+  {
+   "t": 288.63,
+   "d": 3.94,
+   "text": "units and things like that and in the"
+  },
+  {
+   "t": 292.57,
+   "d": 2.4,
+   "text": "the main feature of Dungeons & Dragons"
+  },
+  {
+   "t": 294.97,
+   "d": 3.78,
+   "text": "was transforming that so that every"
+  },
+  {
+   "t": 298.75,
+   "d": 2.54,
+   "text": "player was identified with a character"
+  },
+  {
+   "t": 301.29,
+   "d": 2.77,
+   "text": "so again this is something that went"
+  },
+  {
+   "t": 304.06,
+   "d": 2.07,
+   "text": "into the roguelikes is a very important"
+  },
+  {
+   "t": 306.13,
+   "d": 5.46,
+   "text": "factor then of course we had a"
+  },
+  {
+   "t": 311.59,
+   "d": 2.94,
+   "text": "turn-based gameplay which is kind of"
+  },
+  {
+   "t": 314.53,
+   "d": 2.48,
+   "text": "something that it was inherited from"
+  },
+  {
+   "t": 317.01,
+   "d": 3.64,
+   "text": "front from these war games and of course"
+  },
+  {
+   "t": 320.65,
+   "d": 2.28,
+   "text": "this is like more practical reasons why"
+  },
+  {
+   "t": 322.93,
+   "d": 2.28,
+   "text": "it has to be like this you have a gain"
+  },
+  {
+   "t": 325.21,
+   "d": 2.37,
+   "text": "master and you have some people playing"
+  },
+  {
+   "t": 327.58,
+   "d": 2.64,
+   "text": "the game so you need to have some order"
+  },
+  {
+   "t": 330.22,
+   "d": 5.19,
+   "text": "for them to interact and finally there's"
+  },
+  {
+   "t": 335.41,
+   "d": 2.19,
+   "text": "procedurally or procedural generated"
+  },
+  {
+   "t": 337.6,
+   "d": 2.31,
+   "text": "content so this one is interesting"
+  },
+  {
+   "t": 339.91,
+   "d": 4.23,
+   "text": "because on one hand well the role of the"
+  },
+  {
+   "t": 344.14,
+   "d": 3.3,
+   "text": "dungeon master is unfold and story right"
+  },
+  {
+   "t": 347.44,
+   "d": 2.97,
+   "text": "as the players are participating in the"
+  },
+  {
+   "t": 350.41,
+   "d": 2.7,
+   "text": "in the game session so in one way he is"
+  },
+  {
+   "t": 353.11,
+   "d": 3.56,
+   "text": "already creating things along the way"
+  },
+  {
+   "t": 356.67,
+   "d": 4.3,
+   "text": "but in a more detailed way well there"
+  },
+  {
+   "t": 360.97,
+   "d": 2.43,
+   "text": "was also some some tools like the"
+  },
+  {
+   "t": 363.4,
+   "d": 3.51,
+   "text": "dungeons master design kit which well in"
+  },
+  {
+   "t": 366.91,
+   "d": 3.21,
+   "text": "it included a lot of tools for the"
+  },
+  {
+   "t": 370.12,
+   "d": 1.86,
+   "text": "dungeon master to create his adventures"
+  },
+  {
+   "t": 371.98,
+   "d": 3.33,
+   "text": "like hand crafted but it also included"
+  },
+  {
+   "t": 375.31,
+   "d": 3.78,
+   "text": "some modules or some sections where they"
+  },
+  {
+   "t": 379.09,
+   "d": 3.83,
+   "text": "had a lot of tools to create random"
+  },
+  {
+   "t": 382.92,
+   "d": 4.3,
+   "text": "adventures so this is could be Saints in"
+  },
+  {
+   "t": 387.22,
+   "d": 3.51,
+   "text": "like a predecessor of what a procedural"
+  },
+  {
+   "t": 390.73,
+   "d": 3.63,
+   "text": "generator would be this one including"
+  },
+  {
+   "t": 394.36,
+   "d": 2.58,
+   "text": "more stuff than just the terrain or the"
+  },
+  {
+   "t": 396.94,
+   "d": 1.03,
+   "text": "map"
+  },
+  {
+   "t": 397.97,
+   "d": 2.7,
+   "text": "also the setting the NPCs and everything"
+  },
+  {
+   "t": 400.67,
+   "d": 7.98,
+   "text": "that was going in there so as we can see"
+  },
+  {
+   "t": 408.65,
+   "d": 5.13,
+   "text": "here this we get for granted today that"
+  },
+  {
+   "t": 413.78,
+   "d": 2.46,
+   "text": "all these four aspects are part of the"
+  },
+  {
+   "t": 416.24,
+   "d": 2.88,
+   "text": "roguelikes but they are like very core"
+  },
+  {
+   "t": 419.12,
+   "d": 3.02,
+   "text": "things that really inspired the early"
+  },
+  {
+   "t": 422.14,
+   "d": 3.03,
+   "text": "developers of rock legs to create"
+  },
+  {
+   "t": 425.17,
+   "d": 3.7,
+   "text": "versions of it that allowed different"
+  },
+  {
+   "t": 428.87,
+   "d": 2.94,
+   "text": "advantages so but they were not alone"
+  },
+  {
+   "t": 431.81,
+   "d": 2.61,
+   "text": "there were also a different group of"
+  },
+  {
+   "t": 434.42,
+   "d": 3.71,
+   "text": "people creating another computer RPGs"
+  },
+  {
+   "t": 438.13,
+   "d": 2.62,
+   "text": "we-well there were many but here are"
+  },
+  {
+   "t": 440.75,
+   "d": 3.53,
+   "text": "some samples so here we have Maria and"
+  },
+  {
+   "t": 444.28,
+   "d": 4.84,
+   "text": "DND for the plural machine these are"
+  },
+  {
+   "t": 449.12,
+   "d": 4.11,
+   "text": "pretty early I mean 1975 90 70 for many"
+  },
+  {
+   "t": 453.23,
+   "d": 3.36,
+   "text": "years before rogue we are talking about"
+  },
+  {
+   "t": 456.59,
+   "d": 5.04,
+   "text": "a different age where the technology was"
+  },
+  {
+   "t": 461.63,
+   "d": 3.18,
+   "text": "not readily accessible the communication"
+  },
+  {
+   "t": 464.81,
+   "d": 3.0,
+   "text": "was much more limited so it's even"
+  },
+  {
+   "t": 467.81,
+   "d": 2.22,
+   "text": "possible that the developers of rope"
+  },
+  {
+   "t": 470.03,
+   "d": 2.43,
+   "text": "didn't know about these games or know"
+  },
+  {
+   "t": 472.46,
+   "d": 4.17,
+   "text": "little about these games and they what"
+  },
+  {
+   "t": 476.63,
+   "d": 1.98,
+   "text": "they did was kind of something that"
+  },
+  {
+   "t": 478.61,
+   "d": 3.72,
+   "text": "happened on their own but there was"
+  },
+  {
+   "t": 482.33,
+   "d": 1.68,
+   "text": "people working already on this so just"
+  },
+  {
+   "t": 484.01,
+   "d": 1.77,
+   "text": "one year after Dungeons & Dragons was"
+  },
+  {
+   "t": 485.78,
+   "d": 2.52,
+   "text": "released there was a really a computer"
+  },
+  {
+   "t": 488.3,
+   "d": 3.51,
+   "text": "that updation of it and then even this"
+  },
+  {
+   "t": 491.81,
+   "d": 2.31,
+   "text": "early I mean almost 10 years before"
+  },
+  {
+   "t": 494.12,
+   "d": 2.88,
+   "text": "Moria the roguelike happened there was a"
+  },
+  {
+   "t": 497.0,
+   "d": 2.73,
+   "text": "game based on Maria so there was people"
+  },
+  {
+   "t": 499.73,
+   "d": 3.71,
+   "text": "are really working on computerizing this"
+  },
+  {
+   "t": 503.44,
+   "d": 4.8,
+   "text": "experience of role-playing games and"
+  },
+  {
+   "t": 508.24,
+   "d": 2.95,
+   "text": "then of course we have a Colossal Cave"
+  },
+  {
+   "t": 511.19,
+   "d": 3.51,
+   "text": "adventure which has also been cited as"
+  },
+  {
+   "t": 514.7,
+   "d": 2.85,
+   "text": "one of the main influences from for the"
+  },
+  {
+   "t": 517.55,
+   "d": 2.82,
+   "text": "original rock developers in this case"
+  },
+  {
+   "t": 520.37,
+   "d": 2.94,
+   "text": "it's running on a terminal which is the"
+  },
+  {
+   "t": 523.31,
+   "d": 2.52,
+   "text": "way that these games were accessible at"
+  },
+  {
+   "t": 525.83,
+   "d": 2.66,
+   "text": "that time"
+  },
+  {
+   "t": 529.55,
+   "d": 4.65,
+   "text": "so what is what makes Road important in"
+  },
+  {
+   "t": 534.2,
+   "d": 2.13,
+   "text": "this context of the video game"
+  },
+  {
+   "t": 536.33,
+   "d": 3.3,
+   "text": "development history as I said there were"
+  },
+  {
+   "t": 539.63,
+   "d": 3.45,
+   "text": "already some efforts in that area so in"
+  },
+  {
+   "t": 543.08,
+   "d": 4.05,
+   "text": "1980 when rogue came what what they did"
+  },
+  {
+   "t": 547.13,
+   "d": 2.19,
+   "text": "was creating a pretty basic Dungeon"
+  },
+  {
+   "t": 549.32,
+   "d": 2.55,
+   "text": "Master I mean the idea with rogue is"
+  },
+  {
+   "t": 551.87,
+   "d": 1.95,
+   "text": "getting rid of the dungeon master role"
+  },
+  {
+   "t": 553.82,
+   "d": 3.27,
+   "text": "we don't need him so we create a new"
+  },
+  {
+   "t": 557.09,
+   "d": 2.31,
+   "text": "ambassador don't you master that can"
+  },
+  {
+   "t": 559.4,
+   "d": 3.66,
+   "text": "create very simple adventures every time"
+  },
+  {
+   "t": 563.06,
+   "d": 2.22,
+   "text": "so it's like a boring dungeon master"
+  },
+  {
+   "t": 565.28,
+   "d": 3.21,
+   "text": "every new bite on you master but he has"
+  },
+  {
+   "t": 568.49,
+   "d": 2.76,
+   "text": "some advantages he can he takes care of"
+  },
+  {
+   "t": 571.25,
+   "d": 1.59,
+   "text": "all the computation in the gameplay"
+  },
+  {
+   "t": 572.84,
+   "d": 2.79,
+   "text": "session he can play anything you want to"
+  },
+  {
+   "t": 575.63,
+   "d": 4.34,
+   "text": "know how to arrange a session to play a"
+  },
+  {
+   "t": 579.97,
+   "d": 2.2,
+   "text": "role playing session you don't need"
+  },
+  {
+   "t": 582.17,
+   "d": 5.07,
+   "text": "friends so that's great and but you can"
+  },
+  {
+   "t": 587.24,
+   "d": 2.28,
+   "text": "still brag about your accomplishments so"
+  },
+  {
+   "t": 589.52,
+   "d": 2.43,
+   "text": "it's like your own private than your"
+  },
+  {
+   "t": 591.95,
+   "d": 3.21,
+   "text": "master that it's not as good as a real"
+  },
+  {
+   "t": 595.16,
+   "d": 3.24,
+   "text": "Dungeon Master could be but it still has"
+  },
+  {
+   "t": 598.4,
+   "d": 4.44,
+   "text": "some advantages so I imagine that the"
+  },
+  {
+   "t": 602.84,
+   "d": 4.11,
+   "text": "whole journey of the bell of evolution"
+  },
+  {
+   "t": 606.95,
+   "d": 2.85,
+   "text": "of roguelike games has been trying to"
+  },
+  {
+   "t": 609.8,
+   "d": 2.46,
+   "text": "make a better private Dungeon Master"
+  },
+  {
+   "t": 612.26,
+   "d": 1.89,
+   "text": "every time at least for the"
+  },
+  {
+   "t": 614.15,
+   "d": 5.85,
+   "text": "single-player game so it's I'm comparing"
+  },
+  {
+   "t": 620.0,
+   "d": 3.18,
+   "text": "if we compare what rogue can do with"
+  },
+  {
+   "t": 623.18,
+   "d": 3.0,
+   "text": "what dungeon master using the dungeon"
+  },
+  {
+   "t": 626.18,
+   "d": 2.52,
+   "text": "creation kid could do it's very limited"
+  },
+  {
+   "t": 628.7,
+   "d": 2.85,
+   "text": "because as I say that included the"
+  },
+  {
+   "t": 631.55,
+   "d": 3.06,
+   "text": "setting the NPC's the lanes the enemies"
+  },
+  {
+   "t": 634.61,
+   "d": 3.09,
+   "text": "a lot of different stuff while rogue all"
+  },
+  {
+   "t": 637.7,
+   "d": 3.32,
+   "text": "it does is put in creating nine rooms"
+  },
+  {
+   "t": 641.02,
+   "d": 1.69,
+   "text": "interconnecting them changing their"
+  },
+  {
+   "t": 642.71,
+   "d": 3.12,
+   "text": "sizes and using another AIDS that we"
+  },
+  {
+   "t": 645.83,
+   "d": 2.85,
+   "text": "will see but still that was enough to"
+  },
+  {
+   "t": 648.68,
+   "d": 3.3,
+   "text": "spawn a genre and here is where we are"
+  },
+  {
+   "t": 651.98,
+   "d": 5.31,
+   "text": "today so in order for the experience to"
+  },
+  {
+   "t": 657.29,
+   "d": 3.93,
+   "text": "be interesting the developers of ro had"
+  },
+  {
+   "t": 661.22,
+   "d": 1.5,
+   "text": "to overcome some limit"
+  },
+  {
+   "t": 662.72,
+   "d": 4.38,
+   "text": "patience so how did they do that they"
+  },
+  {
+   "t": 667.1,
+   "d": 2.61,
+   "text": "needed to make it look like it was more"
+  },
+  {
+   "t": 669.71,
+   "d": 1.68,
+   "text": "accomplished than it really was right"
+  },
+  {
+   "t": 671.39,
+   "d": 2.43,
+   "text": "because in the end it was pretty simple"
+  },
+  {
+   "t": 673.82,
+   "d": 4.11,
+   "text": "so we have the discovery mechanics that"
+  },
+  {
+   "t": 677.93,
+   "d": 2.79,
+   "text": "is been having to identify the potions"
+  },
+  {
+   "t": 680.72,
+   "d": 3.3,
+   "text": "the wand the scrolls as that gave the"
+  },
+  {
+   "t": 684.02,
+   "d": 2.43,
+   "text": "impression of having more complexity or"
+  },
+  {
+   "t": 686.45,
+   "d": 2.31,
+   "text": "more content than just having a fixed"
+  },
+  {
+   "t": 688.76,
+   "d": 2.34,
+   "text": "set of content so that every time you"
+  },
+  {
+   "t": 691.1,
+   "d": 2.73,
+   "text": "play it it would look like this Dungeon"
+  },
+  {
+   "t": 693.83,
+   "d": 2.61,
+   "text": "Master is actually building a new set of"
+  },
+  {
+   "t": 696.44,
+   "d": 4.53,
+   "text": "ideas a new set of magic scrolls and"
+  },
+  {
+   "t": 700.97,
+   "d": 3.03,
+   "text": "stuff then we have the unnatural because"
+  },
+  {
+   "t": 704.0,
+   "d": 3.03,
+   "text": "it's a natural difficulty spike so this"
+  },
+  {
+   "t": 707.03,
+   "d": 2.01,
+   "text": "is something that is maybe not really be"
+  },
+  {
+   "t": 709.04,
+   "d": 2.88,
+   "text": "found on the normal role-playing"
+  },
+  {
+   "t": 711.92,
+   "d": 2.55,
+   "text": "sessions but is now estoppel of"
+  },
+  {
+   "t": 714.47,
+   "d": 1.98,
+   "text": "roguelike so why do rogue lines have to"
+  },
+  {
+   "t": 716.45,
+   "d": 3.84,
+   "text": "be heard this comes from different the"
+  },
+  {
+   "t": 720.29,
+   "d": 2.19,
+   "text": "original rogue again that is really very"
+  },
+  {
+   "t": 722.48,
+   "d": 1.95,
+   "text": "very hard to beat I have never done that"
+  },
+  {
+   "t": 724.43,
+   "d": 4.29,
+   "text": "have been close but it's extremely hard"
+  },
+  {
+   "t": 728.72,
+   "d": 2.19,
+   "text": "these people playing for years and years"
+  },
+  {
+   "t": 730.91,
+   "d": 3.27,
+   "text": "and they just don't manage to do it so"
+  },
+  {
+   "t": 734.18,
+   "d": 5.19,
+   "text": "in some years ago in rock temple there"
+  },
+  {
+   "t": 739.37,
+   "d": 2.34,
+   "text": "was a thread in the forums about someone"
+  },
+  {
+   "t": 741.71,
+   "d": 2.31,
+   "text": "trying to pay to be it rogue and he's"
+  },
+  {
+   "t": 744.02,
+   "d": 2.22,
+   "text": "been on it for years four years five"
+  },
+  {
+   "t": 746.24,
+   "d": 3.27,
+   "text": "years and still hasn't managed to and it"
+  },
+  {
+   "t": 749.51,
+   "d": 2.25,
+   "text": "still keeps on it so this difficulty"
+  },
+  {
+   "t": 751.76,
+   "d": 0.63,
+   "text": "spike"
+  },
+  {
+   "t": 752.39,
+   "d": 3.39,
+   "text": "again is a way to make the journey that"
+  },
+  {
+   "t": 755.78,
+   "d": 2.04,
+   "text": "the dungeon master is creating more"
+  },
+  {
+   "t": 757.82,
+   "d": 2.58,
+   "text": "interesting then there's the food timer"
+  },
+  {
+   "t": 760.4,
+   "d": 2.9,
+   "text": "as an additional mission to keep these"
+  },
+  {
+   "t": 763.3,
+   "d": 3.31,
+   "text": "the pressure on the player to go ahead"
+  },
+  {
+   "t": 766.61,
+   "d": 2.31,
+   "text": "and continue on the journey and finally"
+  },
+  {
+   "t": 768.92,
+   "d": 2.91,
+   "text": "there's the reliance on imagination you"
+  },
+  {
+   "t": 771.83,
+   "d": 4.29,
+   "text": "can see Thomas Holly not red dragon in"
+  },
+  {
+   "t": 776.12,
+   "d": 2.04,
+   "text": "his hands and then the dragon attacked"
+  },
+  {
+   "t": 778.16,
+   "d": 3.96,
+   "text": "him again this is something that was"
+  },
+  {
+   "t": 782.12,
+   "d": 2.58,
+   "text": "similar to what the role-playing games"
+  },
+  {
+   "t": 784.7,
+   "d": 1.86,
+   "text": "did well they had the monster manuals"
+  },
+  {
+   "t": 786.56,
+   "d": 2.67,
+   "text": "with illustrations of the monsters but"
+  },
+  {
+   "t": 789.23,
+   "d": 2.96,
+   "text": "when you were on a gameplay session"
+  },
+  {
+   "t": 792.19,
+   "d": 3.64,
+   "text": "everything happened on the players heads"
+  },
+  {
+   "t": 795.83,
+   "d": 3.54,
+   "text": "right so this is something that was"
+  },
+  {
+   "t": 799.37,
+   "d": 3.3,
+   "text": "translated to the roadless I think using"
+  },
+  {
+   "t": 802.67,
+   "d": 3.27,
+   "text": "the terminal displays that's what they"
+  },
+  {
+   "t": 805.94,
+   "d": 5.1,
+   "text": "had at their time as a vehicle for for a"
+  },
+  {
+   "t": 811.04,
+   "d": 1.92,
+   "text": "representation that relied on the"
+  },
+  {
+   "t": 812.96,
+   "d": 3.9,
+   "text": "imagination of the players which was a"
+  },
+  {
+   "t": 816.86,
+   "d": 2.37,
+   "text": "happy accident if you ask the developers"
+  },
+  {
+   "t": 819.23,
+   "d": 2.76,
+   "text": "of Road they say that if they could have"
+  },
+  {
+   "t": 821.99,
+   "d": 1.41,
+   "text": "made graphics they would have done"
+  },
+  {
+   "t": 823.4,
+   "d": 4.56,
+   "text": "graphics but if you see the presentation"
+  },
+  {
+   "t": 827.96,
+   "d": 4.32,
+   "text": "that just just did 95% of the games that"
+  },
+  {
+   "t": 832.28,
+   "d": 2.88,
+   "text": "he displayed were character based this"
+  },
+  {
+   "t": 835.16,
+   "d": 3.81,
+   "text": "place and as I said it's a lot of"
+  },
+  {
+   "t": 838.97,
+   "d": 2.82,
+   "text": "variety that you can do and you're still"
+  },
+  {
+   "t": 841.79,
+   "d": 2.75,
+   "text": "every game can be unique using the same"
+  },
+  {
+   "t": 844.54,
+   "d": 3.91,
+   "text": "set of attributes because it it has a"
+  },
+  {
+   "t": 848.45,
+   "d": 4.26,
+   "text": "different context so it's the task of"
+  },
+  {
+   "t": 852.71,
+   "d": 1.89,
+   "text": "the developer to actually create that"
+  },
+  {
+   "t": 854.6,
+   "d": 6.18,
+   "text": "context so let's talk about character"
+  },
+  {
+   "t": 860.78,
+   "d": 3.41,
+   "text": "based display and this may be roads most"
+  },
+  {
+   "t": 864.19,
+   "d": 2.14,
+   "text": "important legacy or the second most"
+  },
+  {
+   "t": 866.33,
+   "d": 2.13,
+   "text": "important legacy we know that the"
+  },
+  {
+   "t": 868.46,
+   "d": 1.83,
+   "text": "procedural generation is maybe the first"
+  },
+  {
+   "t": 870.29,
+   "d": 2.22,
+   "text": "one and it's what most games are"
+  },
+  {
+   "t": 872.51,
+   "d": 2.82,
+   "text": "currently taking advantage of but it"
+  },
+  {
+   "t": 875.33,
+   "d": 2.64,
+   "text": "often T word is missing this character"
+  },
+  {
+   "t": 877.97,
+   "d": 2.61,
+   "text": "based display when we talk about what is"
+  },
+  {
+   "t": 880.58,
+   "d": 2.73,
+   "text": "a roguelike because it it seems to be"
+  },
+  {
+   "t": 883.31,
+   "d": 2.4,
+   "text": "like a superficial thing like something"
+  },
+  {
+   "t": 885.71,
+   "d": 3.26,
+   "text": "that is not embedded into the gameplay"
+  },
+  {
+   "t": 888.97,
+   "d": 2.83,
+   "text": "but we know that it has very big"
+  },
+  {
+   "t": 891.8,
+   "d": 2.13,
+   "text": "advantages and by the way the picture in"
+  },
+  {
+   "t": 893.93,
+   "d": 3.12,
+   "text": "the slide is from a concept that someone"
+  },
+  {
+   "t": 897.05,
+   "d": 4.89,
+   "text": "once did freedom maybe 25 years ago or"
+  },
+  {
+   "t": 901.94,
+   "d": 2.67,
+   "text": "something like that I think you know a"
+  },
+  {
+   "t": 904.61,
+   "d": 5.52,
+   "text": "long time ago or 15 not sure the"
+  },
+  {
+   "t": 910.13,
+   "d": 2.01,
+   "text": "character by displays has great"
+  },
+  {
+   "t": 912.14,
+   "d": 2.01,
+   "text": "advantages when you are developing our"
+  },
+  {
+   "t": 914.15,
+   "d": 3.0,
+   "text": "game it's very easy to create content"
+  },
+  {
+   "t": 917.15,
+   "d": 2.16,
+   "text": "it's when you are doing procedural"
+  },
+  {
+   "t": 919.31,
+   "d": 1.89,
+   "text": "content generation I mean even if you"
+  },
+  {
+   "t": 921.2,
+   "d": 1.71,
+   "text": "are doing manual content generation if"
+  },
+  {
+   "t": 922.91,
+   "d": 1.68,
+   "text": "you want to create a new monster world"
+  },
+  {
+   "t": 924.59,
+   "d": 2.73,
+   "text": "you just decide what character to use"
+  },
+  {
+   "t": 927.32,
+   "d": 0.55,
+   "text": "what"
+  },
+  {
+   "t": 927.87,
+   "d": 2.34,
+   "text": "to use and then write the description"
+  },
+  {
+   "t": 930.21,
+   "d": 3.45,
+   "text": "and then go and define the data for that"
+  },
+  {
+   "t": 933.66,
+   "d": 3.03,
+   "text": "monster that you don't have to draw a"
+  },
+  {
+   "t": 936.69,
+   "d": 2.55,
+   "text": "sprite you don't have to create a 3d"
+  },
+  {
+   "t": 939.24,
+   "d": 2.82,
+   "text": "model and more importantly all the"
+  },
+  {
+   "t": 942.06,
+   "d": 3.03,
+   "text": "interactions that these new entity is"
+  },
+  {
+   "t": 945.09,
+   "d": 2.19,
+   "text": "doing into the world you don't have to"
+  },
+  {
+   "t": 947.28,
+   "d": 2.16,
+   "text": "animate them so you just have to"
+  },
+  {
+   "t": 949.44,
+   "d": 2.7,
+   "text": "describe them and that allows the game"
+  },
+  {
+   "t": 952.14,
+   "d": 1.62,
+   "text": "content and the interaction that are"
+  },
+  {
+   "t": 953.76,
+   "d": 3.15,
+   "text": "possible between the entities to be very"
+  },
+  {
+   "t": 956.91,
+   "d": 4.11,
+   "text": "complex which if you try to do that with"
+  },
+  {
+   "t": 961.02,
+   "d": 1.92,
+   "text": "graphics well if you try to go all the"
+  },
+  {
+   "t": 962.94,
+   "d": 2.4,
+   "text": "way it's very expensive to have all that"
+  },
+  {
+   "t": 965.34,
+   "d": 2.19,
+   "text": "and if you don't go all the way and you"
+  },
+  {
+   "t": 967.53,
+   "d": 3.09,
+   "text": "just replace the characters with static"
+  },
+  {
+   "t": 970.62,
+   "d": 4.5,
+   "text": "sprites then it's like halfway and the"
+  },
+  {
+   "t": 975.12,
+   "d": 2.58,
+   "text": "players just one field that is good I"
+  },
+  {
+   "t": 977.7,
+   "d": 2.34,
+   "text": "mean it's not enough so either you go"
+  },
+  {
+   "t": 980.04,
+   "d": 3.36,
+   "text": "all the way or you stay on this safe"
+  },
+  {
+   "t": 983.4,
+   "d": 3.21,
+   "text": "side so and the other thing that with"
+  },
+  {
+   "t": 986.61,
+   "d": 3.48,
+   "text": "the character based display is that well"
+  },
+  {
+   "t": 990.09,
+   "d": 2.01,
+   "text": "I already discussed manual content"
+  },
+  {
+   "t": 992.1,
+   "d": 2.07,
+   "text": "generation but for procedural content"
+  },
+  {
+   "t": 994.17,
+   "d": 1.67,
+   "text": "generation when you have the game"
+  },
+  {
+   "t": 995.84,
+   "d": 3.25,
+   "text": "creating its own type of monsters or"
+  },
+  {
+   "t": 999.09,
+   "d": 4.11,
+   "text": "it's bad it sound items or so it's much"
+  },
+  {
+   "t": 1003.2,
+   "d": 2.67,
+   "text": "easier to have a representation at a"
+  },
+  {
+   "t": 1005.87,
+   "d": 3.21,
+   "text": "visual representation of these so and"
+  },
+  {
+   "t": 1009.08,
+   "d": 2.64,
+   "text": "finally each player has his own unique"
+  },
+  {
+   "t": 1011.72,
+   "d": 2.49,
+   "text": "experience every one that has played a"
+  },
+  {
+   "t": 1014.21,
+   "d": 2.67,
+   "text": "role and has seen a miniature has a"
+  },
+  {
+   "t": 1016.88,
+   "d": 2.88,
+   "text": "different image on his head as to how it"
+  },
+  {
+   "t": 1019.76,
+   "d": 2.48,
+   "text": "looks so it's a very personal experience"
+  },
+  {
+   "t": 1022.24,
+   "d": 2.8,
+   "text": "but players wants to see graphics and if"
+  },
+  {
+   "t": 1025.04,
+   "d": 2.64,
+   "text": "you want to modern players to play your"
+  },
+  {
+   "t": 1027.68,
+   "d": 2.61,
+   "text": "game most of the time you will have to"
+  },
+  {
+   "t": 1030.29,
+   "d": 2.37,
+   "text": "feature graphics so that's one big"
+  },
+  {
+   "t": 1032.66,
+   "d": 2.81,
+   "text": "disadvantage"
+  },
+  {
+   "t": 1035.62,
+   "d": 5.41,
+   "text": "all right time is running up so I will"
+  },
+  {
+   "t": 1041.03,
+   "d": 3.06,
+   "text": "go very quickly through the different"
+  },
+  {
+   "t": 1044.09,
+   "d": 2.58,
+   "text": "nations that I see on the road like"
+  },
+  {
+   "t": 1046.67,
+   "d": 1.68,
+   "text": "development so first we have the"
+  },
+  {
+   "t": 1048.35,
+   "d": 2.4,
+   "text": "eighties and this is where well rock was"
+  },
+  {
+   "t": 1050.75,
+   "d": 3.47,
+   "text": "created in 1980 then the first rock legs"
+  },
+  {
+   "t": 1054.22,
+   "d": 3.04,
+   "text": "appeared and I say roguelikes because"
+  },
+  {
+   "t": 1057.26,
+   "d": 2.04,
+   "text": "they were just people trying to make"
+  },
+  {
+   "t": 1059.3,
+   "d": 2.01,
+   "text": "Rock because rogue"
+  },
+  {
+   "t": 1061.31,
+   "d": 2.76,
+   "text": "closed-source it was the source was not"
+  },
+  {
+   "t": 1064.07,
+   "d": 2.16,
+   "text": "available and people wanted to play"
+  },
+  {
+   "t": 1066.23,
+   "d": 2.46,
+   "text": "rogue so they had to port it to"
+  },
+  {
+   "t": 1068.69,
+   "d": 1.83,
+   "text": "different kind of machines and they had"
+  },
+  {
+   "t": 1070.52,
+   "d": 3.5,
+   "text": "to just reverse-engineer rogue and"
+  },
+  {
+   "t": 1074.02,
+   "d": 4.57,
+   "text": "sometimes in some some occasions it was"
+  },
+  {
+   "t": 1078.59,
+   "d": 1.86,
+   "text": "just that someone wasn't a trip to"
+  },
+  {
+   "t": 1080.45,
+   "d": 3.33,
+   "text": "university and got a brief glimpse of"
+  },
+  {
+   "t": 1083.78,
+   "d": 3.21,
+   "text": "rogue and it was great and then he had"
+  },
+  {
+   "t": 1086.99,
+   "d": 2.16,
+   "text": "to go back to his University who to his"
+  },
+  {
+   "t": 1089.15,
+   "d": 3.0,
+   "text": "town and Joe's basing on what he was"
+  },
+  {
+   "t": 1092.15,
+   "d": 2.66,
+   "text": "managed had managed to see in that brief"
+  },
+  {
+   "t": 1094.81,
+   "d": 2.47,
+   "text": "occasion he had replicated that"
+  },
+  {
+   "t": 1097.28,
+   "d": 2.22,
+   "text": "somewhere else and that's how the first"
+  },
+  {
+   "t": 1099.5,
+   "d": 5.6,
+   "text": "gains were made because well as I said"
+  },
+  {
+   "t": 1105.1,
+   "d": 2.11,
+   "text": "communication was not the same you was"
+  },
+  {
+   "t": 1107.21,
+   "d": 2.4,
+   "text": "you were not able to just share the game"
+  },
+  {
+   "t": 1109.61,
+   "d": 2.94,
+   "text": "with others send it via internet or"
+  },
+  {
+   "t": 1112.55,
+   "d": 2.19,
+   "text": "something that didn't exist yet or at"
+  },
+  {
+   "t": 1114.74,
+   "d": 3.33,
+   "text": "least was not really available so that's"
+  },
+  {
+   "t": 1118.07,
+   "d": 2.58,
+   "text": "how it kind of start growing but then"
+  },
+  {
+   "t": 1120.65,
+   "d": 2.97,
+   "text": "this port started doing more than what"
+  },
+  {
+   "t": 1123.62,
+   "d": 3.0,
+   "text": "rogue did so instead of just replicating"
+  },
+  {
+   "t": 1126.62,
+   "d": 2.37,
+   "text": "the features of rogue they added more"
+  },
+  {
+   "t": 1128.99,
+   "d": 3.0,
+   "text": "stuff and every time more stuff and in"
+  },
+  {
+   "t": 1131.99,
+   "d": 2.01,
+   "text": "this era do we have some developers that"
+  },
+  {
+   "t": 1134.0,
+   "d": 1.95,
+   "text": "were really exceptional because they"
+  },
+  {
+   "t": 1135.95,
+   "d": 3.93,
+   "text": "were not just gene that such kind things"
+  },
+  {
+   "t": 1139.88,
+   "d": 2.22,
+   "text": "sorry of the rogue like they're ready"
+  },
+  {
+   "t": 1142.1,
+   "d": 1.41,
+   "text": "there something like that I mean they"
+  },
+  {
+   "t": 1143.51,
+   "d": 2.19,
+   "text": "were making stuff on the front ground"
+  },
+  {
+   "t": 1145.7,
+   "d": 4.17,
+   "text": "and they were crazy people basically for"
+  },
+  {
+   "t": 1149.87,
+   "d": 2.82,
+   "text": "example the developer of Moria he worked"
+  },
+  {
+   "t": 1152.69,
+   "d": 3.14,
+   "text": "about 12 16 hours a day on that game"
+  },
+  {
+   "t": 1155.83,
+   "d": 3.94,
+   "text": "just to make it on his own I mean he was"
+  },
+  {
+   "t": 1159.77,
+   "d": 2.13,
+   "text": "not a spec expecting to sell it or leap"
+  },
+  {
+   "t": 1161.9,
+   "d": 3.69,
+   "text": "from it but they keep like expanding"
+  },
+  {
+   "t": 1165.59,
+   "d": 5.25,
+   "text": "what a rogue Lee was oh and here we see"
+  },
+  {
+   "t": 1170.84,
+   "d": 2.19,
+   "text": "a computer for a university does how"
+  },
+  {
+   "t": 1173.03,
+   "d": 2.7,
+   "text": "roguelikes first worked they were"
+  },
+  {
+   "t": 1175.73,
+   "d": 2.7,
+   "text": "installed into computers like this small"
+  },
+  {
+   "t": 1178.43,
+   "d": 1.47,
+   "text": "computer which was in a basement"
+  },
+  {
+   "t": 1179.9,
+   "d": 2.97,
+   "text": "somewhere and the students just"
+  },
+  {
+   "t": 1182.87,
+   "d": 2.49,
+   "text": "connected to it be a terminal and were"
+  },
+  {
+   "t": 1185.36,
+   "d": 2.13,
+   "text": "able to play but it was not something"
+  },
+  {
+   "t": 1187.49,
+   "d": 1.71,
+   "text": "that you will have a phone at home"
+  },
+  {
+   "t": 1189.2,
+   "d": 3.12,
+   "text": "unless you dialed into that computer"
+  },
+  {
+   "t": 1192.32,
+   "d": 2.67,
+   "text": "from home but that was not that common"
+  },
+  {
+   "t": 1194.99,
+   "d": 2.73,
+   "text": "all right so on the ad we have some"
+  },
+  {
+   "t": 1197.72,
+   "d": 2.37,
+   "text": "first iterations on the roguelikes and"
+  },
+  {
+   "t": 1200.09,
+   "d": 2.25,
+   "text": "this is completely summarized I mean"
+  },
+  {
+   "t": 1202.34,
+   "d": 2.73,
+   "text": "even unfairly summarizing I could say"
+  },
+  {
+   "t": 1205.07,
+   "d": 3.0,
+   "text": "but just to give you an idea of of this"
+  },
+  {
+   "t": 1208.07,
+   "d": 2.76,
+   "text": "so we have HACC and Maria some of the"
+  },
+  {
+   "t": 1210.83,
+   "d": 1.92,
+   "text": "HACC it's probably the first roguelike"
+  },
+  {
+   "t": 1212.75,
+   "d": 2.64,
+   "text": "because it expanded upon what rock did"
+  },
+  {
+   "t": 1215.39,
+   "d": 3.54,
+   "text": "and I think this is what they in"
+  },
+  {
+   "t": 1218.93,
+   "d": 2.52,
+   "text": "specialized on so Maria a story Huck"
+  },
+  {
+   "t": 1221.45,
+   "d": 2.37,
+   "text": "first tried to do it with world"
+  },
+  {
+   "t": 1223.82,
+   "d": 3.15,
+   "text": "interaction so trying to make the world"
+  },
+  {
+   "t": 1226.97,
+   "d": 2.58,
+   "text": "feel more more interactive again making"
+  },
+  {
+   "t": 1229.55,
+   "d": 2.52,
+   "text": "it feel like this was a dungeon master"
+  },
+  {
+   "t": 1232.07,
+   "d": 2.61,
+   "text": "because when you're playing a rogue"
+  },
+  {
+   "t": 1234.68,
+   "d": 1.95,
+   "text": "role-playing session well you a sit on"
+  },
+  {
+   "t": 1236.63,
+   "d": 3.0,
+   "text": "your master I I drink this what happened"
+  },
+  {
+   "t": 1239.63,
+   "d": 3.15,
+   "text": "or I lift this lever and the Tonio"
+  },
+  {
+   "t": 1242.78,
+   "d": 2.01,
+   "text": "master tells you the result"
+  },
+  {
+   "t": 1244.79,
+   "d": 3.36,
+   "text": "so Huck trying to improve broke into"
+  },
+  {
+   "t": 1248.15,
+   "d": 2.37,
+   "text": "that then we have Moria which added a"
+  },
+  {
+   "t": 1250.52,
+   "d": 2.7,
+   "text": "couple things first off more content so"
+  },
+  {
+   "t": 1253.22,
+   "d": 2.34,
+   "text": "wrote only had like the letters of the"
+  },
+  {
+   "t": 1255.56,
+   "d": 2.67,
+   "text": "alphabet number of monsters Mario added"
+  },
+  {
+   "t": 1258.23,
+   "d": 2.31,
+   "text": "more at the races for example a"
+  },
+  {
+   "t": 1260.54,
+   "d": 2.49,
+   "text": "character now represented a whole race"
+  },
+  {
+   "t": 1263.03,
+   "d": 3.09,
+   "text": "not just a single type of monster added"
+  },
+  {
+   "t": 1266.12,
+   "d": 2.88,
+   "text": "as setting well of course from Lord of"
+  },
+  {
+   "t": 1269.0,
+   "d": 2.85,
+   "text": "the Rings but that was a really more"
+  },
+  {
+   "t": 1271.85,
+   "d": 5.49,
+   "text": "than what rogue had and there are a"
+  },
+  {
+   "t": 1277.34,
+   "d": 1.71,
+   "text": "couple interesting things in Moria"
+  },
+  {
+   "t": 1279.05,
+   "d": 2.61,
+   "text": "so as I said the developer was very"
+  },
+  {
+   "t": 1281.66,
+   "d": 4.77,
+   "text": "passionate about it and it was like the"
+  },
+  {
+   "t": 1286.43,
+   "d": 3.39,
+   "text": "first tried to jump away from these"
+  },
+  {
+   "t": 1289.82,
+   "d": 2.13,
+   "text": "computers in universities into personal"
+  },
+  {
+   "t": 1291.95,
+   "d": 2.52,
+   "text": "computers which were still very very"
+  },
+  {
+   "t": 1294.47,
+   "d": 2.91,
+   "text": "limited in that time and there's one"
+  },
+  {
+   "t": 1297.38,
+   "d": 2.46,
+   "text": "thing that happened along with the"
+  },
+  {
+   "t": 1299.84,
+   "d": 1.86,
+   "text": "development which is not very widely"
+  },
+  {
+   "t": 1301.7,
+   "d": 4.02,
+   "text": "known and it's that he transformed it"
+  },
+  {
+   "t": 1305.72,
+   "d": 3.24,
+   "text": "into a real-time game briefly so it was"
+  },
+  {
+   "t": 1308.96,
+   "d": 2.07,
+   "text": "not a turn-based game for some small"
+  },
+  {
+   "t": 1311.03,
+   "d": 4.14,
+   "text": "time and people just did not like it so"
+  },
+  {
+   "t": 1315.17,
+   "d": 2.18,
+   "text": "it rolled back into turn base a"
+  },
+  {
+   "t": 1317.35,
+   "d": 2.8,
+   "text": "turn-based form which is interesting"
+  },
+  {
+   "t": 1320.15,
+   "d": 3.81,
+   "text": "because being torn based the reason why"
+  },
+  {
+   "t": 1323.96,
+   "d": 1.68,
+   "text": "the first row glades were turn-based"
+  },
+  {
+   "t": 1325.64,
+   "d": 3.09,
+   "text": "were because of technical constraints"
+  },
+  {
+   "t": 1328.73,
+   "d": 3.15,
+   "text": "but still that ended up being part of"
+  },
+  {
+   "t": 1331.88,
+   "d": 2.28,
+   "text": "the design the most contingent"
+  },
+  {
+   "t": 1334.16,
+   "d": 2.1,
+   "text": "contentious part of the design probably"
+  },
+  {
+   "t": 1336.26,
+   "d": 4.56,
+   "text": "in nowadays but that that's the way that"
+  },
+  {
+   "t": 1340.82,
+   "d": 1.17,
+   "text": "history shaved it"
+  },
+  {
+   "t": 1341.99,
+   "d": 3.39,
+   "text": "Maria is also what Michael Tuohy the"
+  },
+  {
+   "t": 1345.38,
+   "d": 2.28,
+   "text": "main developer of rope besides Glenn"
+  },
+  {
+   "t": 1347.66,
+   "d": 3.27,
+   "text": "Whitman say that rock was meant to be I"
+  },
+  {
+   "t": 1350.93,
+   "d": 2.13,
+   "text": "mean if that's what he actually ambition"
+  },
+  {
+   "t": 1353.06,
+   "d": 2.61,
+   "text": "drug to be but he could not they"
+  },
+  {
+   "t": 1355.67,
+   "d": 4.56,
+   "text": "couldn't make it on that time then we"
+  },
+  {
+   "t": 1360.23,
+   "d": 4.17,
+   "text": "have network of course and Angband which"
+  },
+  {
+   "t": 1364.4,
+   "d": 3.78,
+   "text": "are can kind of potential eyes or"
+  },
+  {
+   "t": 1368.18,
+   "d": 3.75,
+   "text": "powered up versions of hack and Moria so"
+  },
+  {
+   "t": 1371.93,
+   "d": 2.57,
+   "text": "what they did was expand upon the same"
+  },
+  {
+   "t": 1374.5,
+   "d": 3.4,
+   "text": "aspects that those two did more world"
+  },
+  {
+   "t": 1377.9,
+   "d": 2.49,
+   "text": "interaction we know what you can do"
+  },
+  {
+   "t": 1380.39,
+   "d": 1.71,
+   "text": "nethack all the crazy things that can"
+  },
+  {
+   "t": 1382.1,
+   "d": 2.16,
+   "text": "happen there and Angband"
+  },
+  {
+   "t": 1384.26,
+   "d": 2.61,
+   "text": "more content and more studying expanding"
+  },
+  {
+   "t": 1386.87,
+   "d": 5.52,
+   "text": "upon the same lore we also have two"
+  },
+  {
+   "t": 1392.39,
+   "d": 1.68,
+   "text": "other roguelikes from the area we have"
+  },
+  {
+   "t": 1394.07,
+   "d": 3.84,
+   "text": "learn and Omega O'Meara so learn was the"
+  },
+  {
+   "t": 1397.91,
+   "d": 3.03,
+   "text": "first to date town level and it also"
+  },
+  {
+   "t": 1400.94,
+   "d": 3.33,
+   "text": "went into the new generation so instead"
+  },
+  {
+   "t": 1404.27,
+   "d": 3.24,
+   "text": "of just having rooms with corridors it"
+  },
+  {
+   "t": 1407.51,
+   "d": 2.16,
+   "text": "added more different varied kinds of"
+  },
+  {
+   "t": 1409.67,
+   "d": 5.16,
+   "text": "rooms a really Huck had some fixed rules"
+  },
+  {
+   "t": 1414.83,
+   "d": 3.3,
+   "text": "like balls with stuff but learn improved"
+  },
+  {
+   "t": 1418.13,
+   "d": 2.94,
+   "text": "into that and Omega which is not very"
+  },
+  {
+   "t": 1421.07,
+   "d": 3.42,
+   "text": "widely known it was an interesting game"
+  },
+  {
+   "t": 1424.49,
+   "d": 3.15,
+   "text": "because it also served as a seed to what"
+  },
+  {
+   "t": 1427.64,
+   "d": 4.13,
+   "text": "the rogue has in the 90 included atom"
+  },
+  {
+   "t": 1431.77,
+   "d": 2.65,
+   "text": "including a countryside and a pantheon"
+  },
+  {
+   "t": 1434.42,
+   "d": 2.45,
+   "text": "of gods"
+  },
+  {
+   "t": 1437.05,
+   "d": 5.23,
+   "text": "so the 90s in the 90s the Usenet"
+  },
+  {
+   "t": 1442.28,
+   "d": 2.07,
+   "text": "communities led to the role actor"
+  },
+  {
+   "t": 1444.35,
+   "d": 2.84,
+   "text": "actually start being used"
+  },
+  {
+   "t": 1447.19,
+   "d": 2.83,
+   "text": "we had the explosion of personal"
+  },
+  {
+   "t": 1450.02,
+   "d": 2.34,
+   "text": "computers or Rolex cookie-tray at home"
+  },
+  {
+   "t": 1452.36,
+   "d": 1.29,
+   "text": "without having to connect to a computer"
+  },
+  {
+   "t": 1453.65,
+   "d": 2.43,
+   "text": "anywhere you could just install it in"
+  },
+  {
+   "t": 1456.08,
+   "d": 3.3,
+   "text": "your computer it was still very small I"
+  },
+  {
+   "t": 1459.38,
+   "d": 2.36,
+   "text": "mean still not many people play them"
+  },
+  {
+   "t": 1461.74,
+   "d": 3.15,
+   "text": "in the 80s it was extremely small in the"
+  },
+  {
+   "t": 1464.89,
+   "d": 2.91,
+   "text": "90s it kept something that was not"
+  },
+  {
+   "t": 1467.8,
+   "d": 2.07,
+   "text": "White's read at all"
+  },
+  {
+   "t": 1469.87,
+   "d": 2.97,
+   "text": "in Japan there was some jump into the"
+  },
+  {
+   "t": 1472.84,
+   "d": 3.9,
+   "text": "consoles but that's another world which"
+  },
+  {
+   "t": 1476.74,
+   "d": 2.34,
+   "text": "is all very interesting to explore it's"
+  },
+  {
+   "t": 1479.08,
+   "d": 3.06,
+   "text": "a completely different story in hot meal"
+  },
+  {
+   "t": 1482.14,
+   "d": 3.48,
+   "text": "success nowadays they have come back"
+  },
+  {
+   "t": 1485.62,
+   "d": 3.72,
+   "text": "like stronger but in the 90s it did not"
+  },
+  {
+   "t": 1489.34,
+   "d": 4.38,
+   "text": "really impact very big Lee so we had the"
+  },
+  {
+   "t": 1493.72,
+   "d": 3.47,
+   "text": "rise of edom which kind of opened the"
+  },
+  {
+   "t": 1497.19,
+   "d": 3.7,
+   "text": "new age of roguelike development net"
+  },
+  {
+   "t": 1500.89,
+   "d": 2.04,
+   "text": "Huck was too crazy with the samurai"
+  },
+  {
+   "t": 1502.93,
+   "d": 4.41,
+   "text": "tourist mmm and Egmond I think was too"
+  },
+  {
+   "t": 1507.34,
+   "d": 2.34,
+   "text": "dull these are not words from the"
+  },
+  {
+   "t": 1509.68,
+   "d": 1.47,
+   "text": "developer it's just something that I"
+  },
+  {
+   "t": 1511.15,
+   "d": 4.41,
+   "text": "have in my mind as to how it all came to"
+  },
+  {
+   "t": 1515.56,
+   "d": 2.37,
+   "text": "be so let's create an original setting"
+  },
+  {
+   "t": 1517.93,
+   "d": 3.24,
+   "text": "but computers are really not very good"
+  },
+  {
+   "t": 1521.17,
+   "d": 0.93,
+   "text": "at storytelling"
+  },
+  {
+   "t": 1522.1,
+   "d": 3.45,
+   "text": "so what Adam did was create a general"
+  },
+  {
+   "t": 1525.55,
+   "d": 4.04,
+   "text": "setting that was birth detail and then"
+  },
+  {
+   "t": 1529.59,
+   "d": 2.59,
+   "text": "provide like some initial or some"
+  },
+  {
+   "t": 1532.18,
+   "d": 2.34,
+   "text": "foundation of the path that the player"
+  },
+  {
+   "t": 1534.52,
+   "d": 3.51,
+   "text": "cooled or cool not travel different"
+  },
+  {
+   "t": 1538.03,
+   "d": 3.75,
+   "text": "paths and then let the player play and"
+  },
+  {
+   "t": 1541.78,
+   "d": 3.18,
+   "text": "probably feel follow some of these paths"
+  },
+  {
+   "t": 1544.96,
+   "d": 2.82,
+   "text": "or not but the player filled those gaps"
+  },
+  {
+   "t": 1547.78,
+   "d": 3.48,
+   "text": "that in his head could make like a"
+  },
+  {
+   "t": 1551.26,
+   "d": 2.22,
+   "text": "bigger or a more complex setting that"
+  },
+  {
+   "t": 1553.48,
+   "d": 5.79,
+   "text": "than the previous games did we also had"
+  },
+  {
+   "t": 1559.27,
+   "d": 4.89,
+   "text": "in the 90s a on the start of the 2010"
+  },
+  {
+   "t": 1564.16,
+   "d": 2.75,
+   "text": "ding roguelite development community"
+  },
+  {
+   "t": 1566.91,
+   "d": 3.46,
+   "text": "developing games was now something more"
+  },
+  {
+   "t": 1570.37,
+   "d": 2.34,
+   "text": "common or developing software than in"
+  },
+  {
+   "t": 1572.71,
+   "d": 3.0,
+   "text": "the 80s so Rogen became a way for the"
+  },
+  {
+   "t": 1575.71,
+   "d": 2.13,
+   "text": "computer science students to hunters"
+  },
+  {
+   "t": 1577.84,
+   "d": 2.01,
+   "text": "their skills to become more proficient"
+  },
+  {
+   "t": 1579.85,
+   "d": 5.28,
+   "text": "and in this era we also see that the"
+  },
+  {
+   "t": 1585.13,
+   "d": 2.52,
+   "text": "what what the developers were trying to"
+  },
+  {
+   "t": 1587.65,
+   "d": 2.28,
+   "text": "do was what we would call the gen"
+  },
+  {
+   "t": 1589.93,
+   "d": 3.09,
+   "text": "roguelikes this is after jenrog which"
+  },
+  {
+   "t": 1593.02,
+   "d": 2.61,
+   "text": "was a very ambitious project by Cornell"
+  },
+  {
+   "t": 1595.63,
+   "d": 1.92,
+   "text": "before he went to do don't don't"
+  },
+  {
+   "t": 1597.55,
+   "d": 3.93,
+   "text": "roguelike and those were huge worlds I"
+  },
+  {
+   "t": 1601.48,
+   "d": 2.34,
+   "text": "mean the idea with these games was not"
+  },
+  {
+   "t": 1603.82,
+   "d": 2.25,
+   "text": "really to make a game but to make the"
+  },
+  {
+   "t": 1606.07,
+   "d": 1.77,
+   "text": "ultimate simulation of a medieval"
+  },
+  {
+   "t": 1607.84,
+   "d": 3.03,
+   "text": "fantasy world with a lot of detail with"
+  },
+  {
+   "t": 1610.87,
+   "d": 3.3,
+   "text": "a lot of extreme detail attention to"
+  },
+  {
+   "t": 1614.17,
+   "d": 3.15,
+   "text": "detail so in combat with 100 body parts"
+  },
+  {
+   "t": 1617.32,
+   "d": 2.46,
+   "text": "modeling out to the fingernails and then"
+  },
+  {
+   "t": 1619.78,
+   "d": 3.33,
+   "text": "everything like around that but the"
+  },
+  {
+   "t": 1623.11,
+   "d": 2.16,
+   "text": "problem is that this not did not really"
+  },
+  {
+   "t": 1625.27,
+   "d": 1.92,
+   "text": "work too well because they were too"
+  },
+  {
+   "t": 1627.19,
+   "d": 2.82,
+   "text": "complex for the for the developers to"
+  },
+  {
+   "t": 1630.01,
+   "d": 2.4,
+   "text": "complete them"
+  },
+  {
+   "t": 1632.41,
+   "d": 2.07,
+   "text": "theirs was also the creation on a body"
+  },
+  {
+   "t": 1634.48,
+   "d": 1.8,
+   "text": "of knowledge body of knowledge about"
+  },
+  {
+   "t": 1636.28,
+   "d": 2.52,
+   "text": "road lengths algorithms data structures"
+  },
+  {
+   "t": 1638.8,
+   "d": 1.74,
+   "text": "everything that was required to make a"
+  },
+  {
+   "t": 1640.54,
+   "d": 3.3,
+   "text": "roguelike it was scattered in some"
+  },
+  {
+   "t": 1643.84,
+   "d": 3.53,
+   "text": "website but it was also in Usenet in the"
+  },
+  {
+   "t": 1647.37,
+   "d": 2.47,
+   "text": "discussion groups groups that exceeds"
+  },
+  {
+   "t": 1649.84,
+   "d": 5.25,
+   "text": "back then then we have the 2000 Usenet"
+  },
+  {
+   "t": 1655.09,
+   "d": 2.4,
+   "text": "slowly dies it was kept alive by google"
+  },
+  {
+   "t": 1657.49,
+   "d": 3.09,
+   "text": "group groups but in the end it just died"
+  },
+  {
+   "t": 1660.58,
+   "d": 3.36,
+   "text": "and then we had some isolated"
+  },
+  {
+   "t": 1663.94,
+   "d": 1.95,
+   "text": "communities for popular rogue lines like"
+  },
+  {
+   "t": 1665.89,
+   "d": 3.2,
+   "text": "a man and ate them in their arm forums"
+  },
+  {
+   "t": 1669.09,
+   "d": 3.34,
+   "text": "that was where rogue racing was created"
+  },
+  {
+   "t": 1672.43,
+   "d": 3.66,
+   "text": "and actually I had the idea to create it"
+  },
+  {
+   "t": 1676.09,
+   "d": 2.37,
+   "text": "but most of the content of course come"
+  },
+  {
+   "t": 1678.46,
+   "d": 2.91,
+   "text": "from a lot of contributors to the to it"
+  },
+  {
+   "t": 1681.37,
+   "d": 3.27,
+   "text": "that even nowadays keep putting their"
+  },
+  {
+   "t": 1684.64,
+   "d": 1.89,
+   "text": "information there keep putting new"
+  },
+  {
+   "t": 1686.53,
+   "d": 3.93,
+   "text": "algorithms mostly information about new"
+  },
+  {
+   "t": 1690.46,
+   "d": 2.1,
+   "text": "games because I think is the biggest"
+  },
+  {
+   "t": 1692.56,
+   "d": 5.37,
+   "text": "roguelike games catalog see know which"
+  },
+  {
+   "t": 1697.93,
+   "d": 1.89,
+   "text": "has also worked with Thomas in some"
+  },
+  {
+   "t": 1699.82,
+   "d": 3.45,
+   "text": "stuff created the re-air ldb"
+  },
+  {
+   "t": 1703.27,
+   "d": 2.25,
+   "text": "international roguelike database which"
+  },
+  {
+   "t": 1705.52,
+   "d": 3.69,
+   "text": "actually pulls data from raw pacing and"
+  },
+  {
+   "t": 1709.21,
+   "d": 2.42,
+   "text": "transforms that into a searchable"
+  },
+  {
+   "t": 1711.63,
+   "d": 3.88,
+   "text": "catalog of things also well the"
+  },
+  {
+   "t": 1715.51,
+   "d": 2.15,
+   "text": "roguelike drug temple forums appear"
+  },
+  {
+   "t": 1717.66,
+   "d": 2.23,
+   "text": "basically trying to fill that back home"
+  },
+  {
+   "t": 1719.89,
+   "d": 3.15,
+   "text": "that use net have left and we're widely"
+  },
+  {
+   "t": 1723.04,
+   "d": 2.07,
+   "text": "used for some time they are still up but"
+  },
+  {
+   "t": 1725.11,
+   "d": 2.32,
+   "text": "do you have that much traffic now"
+  },
+  {
+   "t": 1727.43,
+   "d": 2.94,
+   "text": "and then we changed on the mindset from"
+  },
+  {
+   "t": 1730.37,
+   "d": 3.48,
+   "text": "trying to make those huge simulations"
+  },
+  {
+   "t": 1733.85,
+   "d": 2.22,
+   "text": "into trying to make phone games from a"
+  },
+  {
+   "t": 1736.07,
+   "d": 2.16,
+   "text": "smaller games so we had the coffee-break"
+  },
+  {
+   "t": 1738.23,
+   "d": 2.4,
+   "text": "roguelikes happen and the second a"
+  },
+  {
+   "t": 1740.63,
+   "d": 1.62,
+   "text": "roguelike which changed a bit the"
+  },
+  {
+   "t": 1742.25,
+   "d": 2.43,
+   "text": "mindset of the community to try to make"
+  },
+  {
+   "t": 1744.68,
+   "d": 2.43,
+   "text": "something smaller and something more"
+  },
+  {
+   "t": 1747.11,
+   "d": 0.78,
+   "text": "focused"
+  },
+  {
+   "t": 1747.89,
+   "d": 2.55,
+   "text": "there are still projects trying to make"
+  },
+  {
+   "t": 1750.44,
+   "d": 2.73,
+   "text": "great worlds like automated to resume"
+  },
+  {
+   "t": 1753.17,
+   "d": 3.27,
+   "text": "for example but we also have a lot of"
+  },
+  {
+   "t": 1756.44,
+   "d": 3.33,
+   "text": "different games now now with the"
+  },
+  {
+   "t": 1759.77,
+   "d": 2.73,
+   "text": "seven-day rogue lines we had this what"
+  },
+  {
+   "t": 1762.5,
+   "d": 2.13,
+   "text": "happened is a lot of ideas from"
+  },
+  {
+   "t": 1764.63,
+   "d": 2.04,
+   "text": "different genres were brought into"
+  },
+  {
+   "t": 1766.67,
+   "d": 0.72,
+   "text": "roguelikes"
+  },
+  {
+   "t": 1767.39,
+   "d": 3.9,
+   "text": "and as just mentioned a lot of games"
+  },
+  {
+   "t": 1771.29,
+   "d": 3.03,
+   "text": "were created to so in the 19d eighties"
+  },
+  {
+   "t": 1774.32,
+   "d": 3.27,
+   "text": "we had less than 10 20 rogue likes but"
+  },
+  {
+   "t": 1777.59,
+   "d": 2.82,
+   "text": "with the 70 roguelike celebrate every"
+  },
+  {
+   "t": 1780.41,
+   "d": 3.36,
+   "text": "say they roguelike we had hundreds every"
+  },
+  {
+   "t": 1783.77,
+   "d": 3.57,
+   "text": "year so this ended up creating a lot of"
+  },
+  {
+   "t": 1787.34,
+   "d": 2.46,
+   "text": "expulsion for the genre into other game"
+  },
+  {
+   "t": 1789.8,
+   "d": 2.81,
+   "text": "developers game development circles and"
+  },
+  {
+   "t": 1792.61,
+   "d": 3.67,
+   "text": "eventually the reverse effect happened"
+  },
+  {
+   "t": 1796.28,
+   "d": 3.6,
+   "text": "so elements from the roguelikes infected"
+  },
+  {
+   "t": 1799.88,
+   "d": 2.85,
+   "text": "a different different genres permeated"
+  },
+  {
+   "t": 1802.73,
+   "d": 1.47,
+   "text": "different journals and the mainstream"
+  },
+  {
+   "t": 1804.2,
+   "d": 6.3,
+   "text": "games so what the future of traditional"
+  },
+  {
+   "t": 1810.5,
+   "d": 3.69,
+   "text": "roguelikes well no one knows but we are"
+  },
+  {
+   "t": 1814.19,
+   "d": 2.01,
+   "text": "here working and trying to make to keep"
+  },
+  {
+   "t": 1816.2,
+   "d": 1.83,
+   "text": "them alive so we have some examples like"
+  },
+  {
+   "t": 1818.03,
+   "d": 1.95,
+   "text": "ultimate ADA which we are solely going"
+  },
+  {
+   "t": 1819.98,
+   "d": 1.35,
+   "text": "to get a lot of information throughout"
+  },
+  {
+   "t": 1821.33,
+   "d": 2.7,
+   "text": "this celebration we have Jupiter hail"
+  },
+  {
+   "t": 1824.03,
+   "d": 2.82,
+   "text": "which was the beat the better which will"
+  },
+  {
+   "t": 1826.85,
+   "d": 2.34,
+   "text": "rust released yesterday corners working"
+  },
+  {
+   "t": 1829.19,
+   "d": 2.73,
+   "text": "hard on it and a lot of other games will"
+  },
+  {
+   "t": 1831.92,
+   "d": 2.64,
+   "text": "discussed case of good here as I say"
+  },
+  {
+   "t": 1834.56,
+   "d": 2.76,
+   "text": "that I feel it's unfair that I'm not"
+  },
+  {
+   "t": 1837.32,
+   "d": 3.41,
+   "text": "mentioning games like crawl including"
+  },
+  {
+   "t": 1840.73,
+   "d": 2.02,
+   "text": "Stone Soup"
+  },
+  {
+   "t": 1842.75,
+   "d": 2.4,
+   "text": "tales of middle-earth that later became"
+  },
+  {
+   "t": 1845.15,
+   "d": 3.39,
+   "text": "tales of Master Chao and those like from"
+  },
+  {
+   "t": 1848.54,
+   "d": 3.12,
+   "text": "the 90s and then we have man of"
+  },
+  {
+   "t": 1851.66,
+   "d": 1.65,
+   "text": "course a different a lot of different"
+  },
+  {
+   "t": 1853.31,
+   "d": 2.67,
+   "text": "games that are being developed today so"
+  },
+  {
+   "t": 1855.98,
+   "d": 1.71,
+   "text": "I think there's a future in traditional"
+  },
+  {
+   "t": 1857.69,
+   "d": 2.49,
+   "text": "rogue lies of the find one year ago with"
+  },
+  {
+   "t": 1860.18,
+   "d": 0.75,
+   "text": "these"
+  },
+  {
+   "t": 1860.93,
+   "d": 4.71,
+   "text": "term-based thing or feature so that's"
+  },
+  {
+   "t": 1865.64,
+   "d": 1.62,
+   "text": "what I wanted to share as I say it is"
+  },
+  {
+   "t": 1867.26,
+   "d": 2.52,
+   "text": "very hard to compress I don't know how"
+  },
+  {
+   "t": 1869.78,
+   "d": 2.91,
+   "text": "many years of history 3040 years of"
+  },
+  {
+   "t": 1872.69,
+   "d": 3.78,
+   "text": "history in such a small timeframe but I"
+  },
+  {
+   "t": 1876.47,
+   "d": 2.91,
+   "text": "hope that I manage to pick your interest"
+  },
+  {
+   "t": 1879.38,
+   "d": 2.55,
+   "text": "on this and get those books and read"
+  },
+  {
+   "t": 1881.93,
+   "d": 4.64,
+   "text": "them because they are great thank you"
+  },
+  {
+   "t": 1886.72,
+   "d": 5.8,
+   "text": "[Applause]"
+  }
+ ]
+}

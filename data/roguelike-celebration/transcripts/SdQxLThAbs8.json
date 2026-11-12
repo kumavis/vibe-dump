@@ -1,0 +1,4518 @@
+{
+ "id": "SdQxLThAbs8",
+ "url": "https://www.youtube.com/watch?v=SdQxLThAbs8",
+ "title": "Xalavier Nelson Jr. - Building an Economic Flesh Simulation Will Make You Disassociate from Reality",
+ "speaker": "Xalavier Nelson Jr.",
+ "talk_title": "Building an Economic Flesh Simulation Will Make You Disassociate from Reality",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1970,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "I'm making a game called Space Warlord Organ Trading Simulator, about buying and selling the fleshy meat parts of sentient beings in a strange and evolving universe. This required making an intergalactic stock market. Which required defining the value of a given organ. Which required defining a list of organs. Which required defining what is and is not an organ in the first place, and so on, in an endless line.\n\nThe process broke our team. Not in terms of crunch, or mental health, but in the realization that so many of the systems and definitions used in every aspect of our reality are *invented*. False. Arbitrary decisions from someone else we'd never meet.\n\nIn this lightning talk, we're going to show the necessary and powerful existential hell of unravelling your game's systems to discover the implicit ethical considerations beneath. A seemingly simple or absurdist game can reveal the arbitrary nonsensicality of the systems we live within every day--and cause one to demand better systems in the process.\n\nExistential crisis: the dev talk.\n\nRadicalization via viscera.\n\nViva la revolorgan.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 83,
+   "title": "Building an Economic Flesh Simulation Will Make You Disassociate from Reality"
+  },
+  {
+   "start": 134,
+   "title": "A spur of the moment joke damned us."
+  },
+  {
+   "start": 397,
+   "title": "What factors impact an organ's value?"
+  },
+  {
+   "start": 434,
+   "title": "Is the Soul an organ?"
+  },
+  {
+   "start": 490,
+   "title": "Do aliens have souls?"
+  },
+  {
+   "start": 596,
+   "title": "\"Finding the Fun\" Designing and/or discovering the compelling (and ideally, unique) portions of your experience."
+  },
+  {
+   "start": 637,
+   "title": "In our pursuit of finding the fun, we can end up following a chain of beliefs and implications rather than deciding upon them."
+  },
+  {
+   "start": 708,
+   "title": "Often, 'objective' systems are just reflections of a flawed, human perspective."
+  },
+  {
+   "start": 1158,
+   "title": "Get ready to be perceived, motherf"
+  },
+  {
+   "start": 1569,
+   "title": "Our numbers, categories, and arbitrary decisions, like those made in real-life, have an impact on our audience."
+  },
+  {
+   "start": 1624,
+   "title": "Games are not exempt from conveying a perspective through their creative process."
+  },
+  {
+   "start": 1654,
+   "title": "Seek the opportunities your intentional development choices and implied perspective provide."
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4477,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.68,
+   "d": 2.16,
+   "text": "back for a full talk after an amazing"
+  },
+  {
+   "t": 5.84,
+   "d": 2.72,
+   "text": "dog based like big talk last year um"
+  },
+  {
+   "t": 8.56,
+   "d": 1.6,
+   "text": "you've worked on too many things for me"
+  },
+  {
+   "t": 10.16,
+   "d": 1.92,
+   "text": "to list so i'm just gonna let you take"
+  },
+  {
+   "t": 12.08,
+   "d": 2.08,
+   "text": "the floor and talk about what you what"
+  },
+  {
+   "t": 14.16,
+   "d": 1.92,
+   "text": "you want because i'm buckling down"
+  },
+  {
+   "t": 16.08,
+   "d": 1.92,
+   "text": "mentally for this presentation"
+  },
+  {
+   "t": 18.0,
+   "d": 1.6,
+   "text": "i appreciate it and thank you for that"
+  },
+  {
+   "t": 19.6,
+   "d": 2.08,
+   "text": "lovely introduction hello everyone my"
+  },
+  {
+   "t": 21.68,
+   "d": 3.28,
+   "text": "name is oliver nelson jr i do and have"
+  },
+  {
+   "t": 24.96,
+   "d": 0.88,
+   "text": "done"
+  },
+  {
+   "t": 25.84,
+   "d": 1.84,
+   "text": "just so many things i've worked in over"
+  },
+  {
+   "t": 27.68,
+   "d": 2.48,
+   "text": "60 games in the past five years uh some"
+  },
+  {
+   "t": 30.16,
+   "d": 1.2,
+   "text": "of which you may know including"
+  },
+  {
+   "t": 31.36,
+   "d": 1.52,
+   "text": "skateboard and airport for aliens"
+  },
+  {
+   "t": 32.88,
+   "d": 2.96,
+   "text": "currently run by dogs uh frog fractions"
+  },
+  {
+   "t": 35.84,
+   "d": 2.64,
+   "text": "three reigns beyond hypno space outlaw"
+  },
+  {
+   "t": 38.48,
+   "d": 1.76,
+   "text": "space warlord organ training simulator"
+  },
+  {
+   "t": 40.24,
+   "d": 1.52,
+   "text": "and more"
+  },
+  {
+   "t": 41.76,
+   "d": 0.96,
+   "text": "uh"
+  },
+  {
+   "t": 42.72,
+   "d": 1.76,
+   "text": "i was a journalist once upon a time i've"
+  },
+  {
+   "t": 44.48,
+   "d": 2.24,
+   "text": "worked in tabletop and literature i"
+  },
+  {
+   "t": 46.72,
+   "d": 1.44,
+   "text": "write comics"
+  },
+  {
+   "t": 48.16,
+   "d": 2.32,
+   "text": "and once upon a time i also gallivanted"
+  },
+  {
+   "t": 50.48,
+   "d": 1.84,
+   "text": "around the world giving"
+  },
+  {
+   "t": 52.32,
+   "d": 1.12,
+   "text": "talks"
+  },
+  {
+   "t": 53.44,
+   "d": 2.16,
+   "text": "strange interactive experiences in"
+  },
+  {
+   "t": 55.6,
+   "d": 2.72,
+   "text": "general coming upon my current passion"
+  },
+  {
+   "t": 58.32,
+   "d": 2.0,
+   "text": "and eternal pursuit which is finding"
+  },
+  {
+   "t": 60.32,
+   "d": 3.12,
+   "text": "ways to make games better faster cheaper"
+  },
+  {
+   "t": 63.44,
+   "d": 2.0,
+   "text": "and more healthy"
+  },
+  {
+   "t": 65.44,
+   "d": 1.52,
+   "text": "for the people who create them so that"
+  },
+  {
+   "t": 66.96,
+   "d": 2.96,
+   "text": "we can allow the people who"
+  },
+  {
+   "t": 69.92,
+   "d": 2.0,
+   "text": "make the interactive experiences that we"
+  },
+  {
+   "t": 71.92,
+   "d": 0.8,
+   "text": "love"
+  },
+  {
+   "t": 72.72,
+   "d": 1.44,
+   "text": "to have"
+  },
+  {
+   "t": 74.16,
+   "d": 2.0,
+   "text": "long lasting and evolving creative"
+  },
+  {
+   "t": 76.16,
+   "d": 1.12,
+   "text": "careers"
+  },
+  {
+   "t": 77.28,
+   "d": 3.84,
+   "text": "the best work in 15 years as opposed to"
+  },
+  {
+   "t": 81.12,
+   "d": 2.4,
+   "text": "five"
+  },
+  {
+   "t": 83.76,
+   "d": 2.0,
+   "text": "this talk is titled building an economic"
+  },
+  {
+   "t": 85.76,
+   "d": 1.28,
+   "text": "flesh simulation will make you"
+  },
+  {
+   "t": 87.04,
+   "d": 2.4,
+   "text": "disassociate from reality because it's"
+  },
+  {
+   "t": 89.44,
+   "d": 3.44,
+   "text": "true i've lived it it's a nightmare"
+  },
+  {
+   "t": 92.88,
+   "d": 2.8,
+   "text": "and uh"
+  },
+  {
+   "t": 97.04,
+   "d": 3.44,
+   "text": "i don't think i'll ever be able to fully"
+  },
+  {
+   "t": 100.48,
+   "d": 2.48,
+   "text": "grasp or believe in anything anymore"
+  },
+  {
+   "t": 102.96,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 103.76,
+   "d": 1.52,
+   "text": "let me explain for just a second i'm"
+  },
+  {
+   "t": 105.28,
+   "d": 2.32,
+   "text": "making as i mentioned earlier among the"
+  },
+  {
+   "t": 107.6,
+   "d": 1.76,
+   "text": "many many games i work on"
+  },
+  {
+   "t": 109.36,
+   "d": 1.76,
+   "text": "space world organ trading simulator"
+  },
+  {
+   "t": 111.12,
+   "d": 1.68,
+   "text": "comes out this winter"
+  },
+  {
+   "t": 112.8,
+   "d": 2.0,
+   "text": "within the next few months it is about"
+  },
+  {
+   "t": 114.8,
+   "d": 2.64,
+   "text": "buying selling and trading the one thing"
+  },
+  {
+   "t": 117.44,
+   "d": 1.68,
+   "text": "that everyone has and everyone needs in"
+  },
+  {
+   "t": 119.12,
+   "d": 2.32,
+   "text": "a strange and evolving universe"
+  },
+  {
+   "t": 121.44,
+   "d": 1.36,
+   "text": "organs"
+  },
+  {
+   "t": 122.8,
+   "d": 2.32,
+   "text": "and depending on"
+  },
+  {
+   "t": 125.12,
+   "d": 3.28,
+   "text": "who you serve and how you serve them uh"
+  },
+  {
+   "t": 128.4,
+   "d": 1.76,
+   "text": "the decisions you make with your clients"
+  },
+  {
+   "t": 130.16,
+   "d": 3.2,
+   "text": "may impact the universe permanently and"
+  },
+  {
+   "t": 133.36,
+   "d": 1.36,
+   "text": "all of this"
+  },
+  {
+   "t": 134.72,
+   "d": 1.2,
+   "text": "began"
+  },
+  {
+   "t": 135.92,
+   "d": 1.68,
+   "text": "as a spur of the moment joke with a"
+  },
+  {
+   "t": 137.6,
+   "d": 1.04,
+   "text": "friend"
+  },
+  {
+   "t": 138.64,
+   "d": 0.88,
+   "text": "like"
+  },
+  {
+   "t": 139.52,
+   "d": 1.84,
+   "text": "over a year ago"
+  },
+  {
+   "t": 141.36,
+   "d": 1.44,
+   "text": "so"
+  },
+  {
+   "t": 142.8,
+   "d": 2.64,
+   "text": "late 2019 i'm talking with a friend"
+  },
+  {
+   "t": 145.44,
+   "d": 1.04,
+   "text": "we're"
+  },
+  {
+   "t": 146.48,
+   "d": 2.8,
+   "text": "discussing how the simulator genre has"
+  },
+  {
+   "t": 149.28,
+   "d": 2.24,
+   "text": "single-handedly occupied an unbreakable"
+  },
+  {
+   "t": 151.52,
+   "d": 1.44,
+   "text": "niche and steam that's growing and"
+  },
+  {
+   "t": 152.96,
+   "d": 3.2,
+   "text": "growing and games that even have"
+  },
+  {
+   "t": 156.16,
+   "d": 2.72,
+   "text": "somewhat absurd or simple simulations"
+  },
+  {
+   "t": 158.88,
+   "d": 1.92,
+   "text": "are selling thousands of thousands of"
+  },
+  {
+   "t": 160.8,
+   "d": 1.36,
+   "text": "copies"
+  },
+  {
+   "t": 162.16,
+   "d": 2.32,
+   "text": "my friend asks me"
+  },
+  {
+   "t": 164.48,
+   "d": 2.08,
+   "text": "what simulator game would you make to"
+  },
+  {
+   "t": 166.56,
+   "d": 1.68,
+   "text": "put onto steam"
+  },
+  {
+   "t": 168.24,
+   "d": 2.96,
+   "text": "and uh without a single moment of"
+  },
+  {
+   "t": 171.2,
+   "d": 2.24,
+   "text": "hesitation deep from the eldritch"
+  },
+  {
+   "t": 173.44,
+   "d": 3.04,
+   "text": "recesses of my brain i say space warlord"
+  },
+  {
+   "t": 176.48,
+   "d": 3.92,
+   "text": "organ trading and regulation simulator"
+  },
+  {
+   "t": 180.64,
+   "d": 0.96,
+   "text": "after"
+  },
+  {
+   "t": 181.6,
+   "d": 2.8,
+   "text": "the laugh and the joke uh and a moment"
+  },
+  {
+   "t": 184.4,
+   "d": 2.56,
+   "text": "of consideration i then realize i have"
+  },
+  {
+   "t": 186.96,
+   "d": 2.16,
+   "text": "invented the perfect video game here's"
+  },
+  {
+   "t": 189.12,
+   "d": 2.64,
+   "text": "why organs they're easily systematized"
+  },
+  {
+   "t": 191.76,
+   "d": 2.08,
+   "text": "right you know what an organ is there's"
+  },
+  {
+   "t": 193.84,
+   "d": 2.08,
+   "text": "a given number of organs with"
+  },
+  {
+   "t": 195.92,
+   "d": 3.12,
+   "text": "known traits and modifiers you can add"
+  },
+  {
+   "t": 199.04,
+   "d": 3.04,
+   "text": "to them blood type rarity size etc"
+  },
+  {
+   "t": 202.08,
+   "d": 1.84,
+   "text": "they're unique and compelling no one's"
+  },
+  {
+   "t": 203.92,
+   "d": 2.64,
+   "text": "out there saying let's give the soft"
+  },
+  {
+   "t": 206.56,
+   "d": 2.96,
+   "text": "juicy liquid flesh a real moment in the"
+  },
+  {
+   "t": 209.52,
+   "d": 2.96,
+   "text": "sun uh"
+  },
+  {
+   "t": 212.48,
+   "d": 2.64,
+   "text": "even hospital tycoons are scared of"
+  },
+  {
+   "t": 215.12,
+   "d": 1.52,
+   "text": "engaging"
+  },
+  {
+   "t": 216.64,
+   "d": 3.44,
+   "text": "with the meat at the heart of humanity"
+  },
+  {
+   "t": 220.08,
+   "d": 2.4,
+   "text": "it's also just vaguely erotic you see"
+  },
+  {
+   "t": 222.48,
+   "d": 1.44,
+   "text": "those intestines sliding around and you"
+  },
+  {
+   "t": 223.92,
+   "d": 1.28,
+   "text": "go like"
+  },
+  {
+   "t": 225.2,
+   "d": 1.36,
+   "text": "i don't know what you're saying but"
+  },
+  {
+   "t": 226.56,
+   "d": 2.48,
+   "text": "you're saying something in other words"
+  },
+  {
+   "t": 229.04,
+   "d": 2.8,
+   "text": "a game centered around organs"
+  },
+  {
+   "t": 231.84,
+   "d": 3.44,
+   "text": "and economics is a surefire hit and"
+  },
+  {
+   "t": 235.28,
+   "d": 1.68,
+   "text": "something that you can"
+  },
+  {
+   "t": 236.96,
+   "d": 2.56,
+   "text": "with thought consideration hopefully"
+  },
+  {
+   "t": 239.52,
+   "d": 2.48,
+   "text": "maybe apply"
+  },
+  {
+   "t": 242.0,
+   "d": 2.72,
+   "text": "pretty reasonable accessible"
+  },
+  {
+   "t": 244.72,
+   "d": 2.4,
+   "text": "easy to release procedural generation"
+  },
+  {
+   "t": 247.12,
+   "d": 2.0,
+   "text": "and systemic elements to"
+  },
+  {
+   "t": 249.12,
+   "d": 2.56,
+   "text": "create a lot from a little and make that"
+  },
+  {
+   "t": 251.68,
+   "d": 2.72,
+   "text": "lot each little bit of it"
+  },
+  {
+   "t": 254.4,
+   "d": 1.04,
+   "text": "really"
+  },
+  {
+   "t": 255.44,
+   "d": 1.2,
+   "text": "matter"
+  },
+  {
+   "t": 256.64,
+   "d": 2.32,
+   "text": "uh"
+  },
+  {
+   "t": 260.72,
+   "d": 1.52,
+   "text": "that was the the"
+  },
+  {
+   "t": 262.24,
+   "d": 3.04,
+   "text": "you know the thesis"
+  },
+  {
+   "t": 265.6,
+   "d": 1.68,
+   "text": "and then"
+  },
+  {
+   "t": 267.28,
+   "d": 2.56,
+   "text": "as time passed on and i reached a point"
+  },
+  {
+   "t": 269.84,
+   "d": 1.28,
+   "text": "where we actually started to develop"
+  },
+  {
+   "t": 271.12,
+   "d": 1.2,
+   "text": "this game"
+  },
+  {
+   "t": 272.32,
+   "d": 2.24,
+   "text": "uh"
+  },
+  {
+   "t": 275.2,
+   "d": 1.68,
+   "text": "we suddenly had to answer some questions"
+  },
+  {
+   "t": 276.88,
+   "d": 2.16,
+   "text": "which i wasn't prepared for"
+  },
+  {
+   "t": 279.04,
+   "d": 2.08,
+   "text": "the first one being"
+  },
+  {
+   "t": 281.12,
+   "d": 2.24,
+   "text": "very simple seemingly what are the"
+  },
+  {
+   "t": 283.36,
+   "d": 1.6,
+   "text": "organs"
+  },
+  {
+   "t": 284.96,
+   "d": 1.12,
+   "text": "i was like"
+  },
+  {
+   "t": 286.08,
+   "d": 2.72,
+   "text": "i know this one uh there's a heart"
+  },
+  {
+   "t": 288.8,
+   "d": 2.88,
+   "text": "there's org there's like livers lungs"
+  },
+  {
+   "t": 291.68,
+   "d": 3.6,
+   "text": "gall bladders of bladders um"
+  },
+  {
+   "t": 295.28,
+   "d": 2.16,
+   "text": "pancreases"
+  },
+  {
+   "t": 297.44,
+   "d": 2.48,
+   "text": "brains"
+  },
+  {
+   "t": 300.08,
+   "d": 2.56,
+   "text": "nerves nerves are important in the body"
+  },
+  {
+   "t": 302.64,
+   "d": 2.08,
+   "text": "and they're inside you but i'm not sure"
+  },
+  {
+   "t": 304.72,
+   "d": 1.36,
+   "text": "if they're"
+  },
+  {
+   "t": 306.08,
+   "d": 1.52,
+   "text": "i'm not sure if they're they're an organ"
+  },
+  {
+   "t": 307.6,
+   "d": 1.68,
+   "text": "i'll have to look that up teeth are"
+  },
+  {
+   "t": 309.28,
+   "d": 3.52,
+   "text": "teeth in organ your ear ear drums do"
+  },
+  {
+   "t": 312.8,
+   "d": 2.08,
+   "text": "your drums count"
+  },
+  {
+   "t": 314.88,
+   "d": 2.32,
+   "text": "what followed was a breathless 48 hours"
+  },
+  {
+   "t": 317.2,
+   "d": 1.12,
+   "text": "in which"
+  },
+  {
+   "t": 318.32,
+   "d": 2.32,
+   "text": "i slowly but surely lost my mind as i"
+  },
+  {
+   "t": 320.64,
+   "d": 2.48,
+   "text": "considered the gradations of"
+  },
+  {
+   "t": 323.12,
+   "d": 2.64,
+   "text": "what not just medical science considers"
+  },
+  {
+   "t": 325.76,
+   "d": 2.0,
+   "text": "an organ and what these organs actually"
+  },
+  {
+   "t": 327.76,
+   "d": 0.88,
+   "text": "do"
+  },
+  {
+   "t": 328.64,
+   "d": 0.72,
+   "text": "but"
+  },
+  {
+   "t": 329.36,
+   "d": 2.56,
+   "text": "what we would define in decide as an"
+  },
+  {
+   "t": 331.92,
+   "d": 1.84,
+   "text": "organ what was"
+  },
+  {
+   "t": 333.76,
+   "d": 2.48,
+   "text": "in fact an arbitrary decision on our"
+  },
+  {
+   "t": 336.24,
+   "d": 2.88,
+   "text": "part that meant everything"
+  },
+  {
+   "t": 339.12,
+   "d": 2.64,
+   "text": "and as much as based upon our flawed"
+  },
+  {
+   "t": 341.76,
+   "d": 1.6,
+   "text": "limited perspective"
+  },
+  {
+   "t": 343.36,
+   "d": 2.24,
+   "text": "would be seen as an objective"
+  },
+  {
+   "t": 345.6,
+   "d": 3.04,
+   "text": "projection of truth into the reality of"
+  },
+  {
+   "t": 348.64,
+   "d": 1.6,
+   "text": "our game"
+  },
+  {
+   "t": 350.24,
+   "d": 1.12,
+   "text": "uh"
+  },
+  {
+   "t": 351.36,
+   "d": 2.24,
+   "text": "skin is an organ"
+  },
+  {
+   "t": 353.6,
+   "d": 1.84,
+   "text": "and the question comes up should we sell"
+  },
+  {
+   "t": 355.44,
+   "d": 3.44,
+   "text": "skin is that okay"
+  },
+  {
+   "t": 359.12,
+   "d": 2.56,
+   "text": "in the interest of nuanced satire there"
+  },
+  {
+   "t": 361.68,
+   "d": 2.0,
+   "text": "is a potential to even replace the blood"
+  },
+  {
+   "t": 363.68,
+   "d": 2.72,
+   "text": "type system for skin specifically with"
+  },
+  {
+   "t": 366.4,
+   "d": 3.12,
+   "text": "light skin to dark skin and value one"
+  },
+  {
+   "t": 369.52,
+   "d": 1.84,
+   "text": "higher than the other either way you put"
+  },
+  {
+   "t": 371.36,
+   "d": 3.44,
+   "text": "it it is incredibly [ __ ] up and"
+  },
+  {
+   "t": 374.8,
+   "d": 3.36,
+   "text": "an unfortunate uh glimpse into uh"
+  },
+  {
+   "t": 378.16,
+   "d": 2.32,
+   "text": "the real horrific"
+  },
+  {
+   "t": 380.48,
+   "d": 2.4,
+   "text": "realities of our uh"
+  },
+  {
+   "t": 382.88,
+   "d": 5.04,
+   "text": "cultural biases and uh economic systems"
+  },
+  {
+   "t": 387.92,
+   "d": 0.8,
+   "text": "but"
+  },
+  {
+   "t": 388.72,
+   "d": 2.24,
+   "text": "you know unlike"
+  },
+  {
+   "t": 390.96,
+   "d": 1.52,
+   "text": "the real life horrors that we have to"
+  },
+  {
+   "t": 392.48,
+   "d": 1.6,
+   "text": "live through this is more likely to get"
+  },
+  {
+   "t": 394.08,
+   "d": 2.08,
+   "text": "censored by the esrb and have people"
+  },
+  {
+   "t": 396.16,
+   "d": 2.96,
+   "text": "shouting at you on twitter"
+  },
+  {
+   "t": 399.12,
+   "d": 1.76,
+   "text": "we have to look at the factors impacting"
+  },
+  {
+   "t": 400.88,
+   "d": 1.76,
+   "text": "organs value some people genetically"
+  },
+  {
+   "t": 402.64,
+   "d": 0.96,
+   "text": "have"
+  },
+  {
+   "t": 403.6,
+   "d": 1.76,
+   "text": "organs that are smaller than others if"
+  },
+  {
+   "t": 405.36,
+   "d": 1.2,
+   "text": "we"
+  },
+  {
+   "t": 406.56,
+   "d": 2.64,
+   "text": "decide the value of an organ"
+  },
+  {
+   "t": 409.2,
+   "d": 2.48,
+   "text": "uh as being partially determined by its"
+  },
+  {
+   "t": 411.68,
+   "d": 2.24,
+   "text": "size we're suddenly making decisions"
+  },
+  {
+   "t": 413.92,
+   "d": 1.68,
+   "text": "about health"
+  },
+  {
+   "t": 415.6,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 416.4,
+   "d": 2.08,
+   "text": "which as a group of game designers and"
+  },
+  {
+   "t": 418.48,
+   "d": 2.8,
+   "text": "developers and artists and just people"
+  },
+  {
+   "t": 421.28,
+   "d": 1.92,
+   "text": "we we aren't"
+  },
+  {
+   "t": 423.2,
+   "d": 2.4,
+   "text": "qualified to be saying a gigantic heart"
+  },
+  {
+   "t": 425.6,
+   "d": 1.76,
+   "text": "is inherently better than the small"
+  },
+  {
+   "t": 427.36,
+   "d": 1.6,
+   "text": "heart and also"
+  },
+  {
+   "t": 428.96,
+   "d": 2.08,
+   "text": "we slowly but surely start to step into"
+  },
+  {
+   "t": 431.04,
+   "d": 4.32,
+   "text": "the realm of eugenics the video game"
+  },
+  {
+   "t": 435.52,
+   "d": 1.52,
+   "text": "i thought we were grappling with all"
+  },
+  {
+   "t": 437.04,
+   "d": 1.68,
+   "text": "this fine"
+  },
+  {
+   "t": 438.72,
+   "d": 2.0,
+   "text": "we were winnowing down the list we had"
+  },
+  {
+   "t": 440.72,
+   "d": 3.04,
+   "text": "like 20 or so organs and we were like"
+  },
+  {
+   "t": 443.76,
+   "d": 1.52,
+   "text": "okay we aren't going to determine stuff"
+  },
+  {
+   "t": 445.28,
+   "d": 2.56,
+   "text": "by size we aren't going to get uh weird"
+  },
+  {
+   "t": 447.84,
+   "d": 2.96,
+   "text": "or racist with this we hope"
+  },
+  {
+   "t": 450.8,
+   "d": 1.52,
+   "text": "we figured this out and someone in the"
+  },
+  {
+   "t": 452.32,
+   "d": 3.12,
+   "text": "chat asked is the soul in organ"
+  },
+  {
+   "t": 455.44,
+   "d": 1.6,
+   "text": "it was our programmer sam chet and i"
+  },
+  {
+   "t": 457.04,
+   "d": 1.44,
+   "text": "want to name him"
+  },
+  {
+   "t": 458.48,
+   "d": 1.04,
+   "text": "because"
+  },
+  {
+   "t": 459.52,
+   "d": 1.6,
+   "text": "he was the person who did the first"
+  },
+  {
+   "t": 461.12,
+   "d": 1.28,
+   "text": "crack"
+  },
+  {
+   "t": 462.4,
+   "d": 3.76,
+   "text": "in the glass that represented my sanity"
+  },
+  {
+   "t": 466.16,
+   "d": 2.0,
+   "text": "because suddenly again"
+  },
+  {
+   "t": 468.16,
+   "d": 2.4,
+   "text": "from a single"
+  },
+  {
+   "t": 470.56,
+   "d": 1.84,
+   "text": "seemingly simple or arbitrary systemic"
+  },
+  {
+   "t": 472.4,
+   "d": 2.72,
+   "text": "decision there's a spiraling series of"
+  },
+  {
+   "t": 475.12,
+   "d": 2.16,
+   "text": "implications"
+  },
+  {
+   "t": 477.28,
+   "d": 1.84,
+   "text": "if the soul is an organ what role does"
+  },
+  {
+   "t": 479.12,
+   "d": 1.84,
+   "text": "it have in an afterlife"
+  },
+  {
+   "t": 480.96,
+   "d": 1.68,
+   "text": "who possesses a soul what does it mean"
+  },
+  {
+   "t": 482.64,
+   "d": 2.32,
+   "text": "to possess a different quality of soul"
+  },
+  {
+   "t": 484.96,
+   "d": 4.64,
+   "text": "where are these harvested from uh"
+  },
+  {
+   "t": 490.16,
+   "d": 2.32,
+   "text": "we are in an alien universe so do aliens"
+  },
+  {
+   "t": 492.48,
+   "d": 1.36,
+   "text": "have souls"
+  },
+  {
+   "t": 493.84,
+   "d": 1.92,
+   "text": "do they have the same souls that humans"
+  },
+  {
+   "t": 495.76,
+   "d": 2.16,
+   "text": "boo"
+  },
+  {
+   "t": 498.8,
+   "d": 1.12,
+   "text": "this"
+  },
+  {
+   "t": 499.92,
+   "d": 1.52,
+   "text": "tangled web"
+  },
+  {
+   "t": 501.44,
+   "d": 1.52,
+   "text": "of nightmares"
+  },
+  {
+   "t": 502.96,
+   "d": 2.8,
+   "text": "that i had found myself stepping into"
+  },
+  {
+   "t": 505.76,
+   "d": 1.6,
+   "text": "mixing both economics as well as the"
+  },
+  {
+   "t": 507.36,
+   "d": 2.32,
+   "text": "body"
+  },
+  {
+   "t": 510.08,
+   "d": 2.56,
+   "text": "as i took even just a slightly step a"
+  },
+  {
+   "t": 512.64,
+   "d": 3.2,
+   "text": "slight step back i understood how much"
+  },
+  {
+   "t": 515.84,
+   "d": 2.24,
+   "text": "this was just emblematic of"
+  },
+  {
+   "t": 518.08,
+   "d": 1.12,
+   "text": "the range"
+  },
+  {
+   "t": 519.2,
+   "d": 1.76,
+   "text": "of decisions that a game developer makes"
+  },
+  {
+   "t": 520.96,
+   "d": 2.72,
+   "text": "across a"
+  },
+  {
+   "t": 524.16,
+   "d": 2.24,
+   "text": "project's development cycle"
+  },
+  {
+   "t": 526.4,
+   "d": 1.68,
+   "text": "and"
+  },
+  {
+   "t": 528.08,
+   "d": 2.64,
+   "text": "i knew this ahead of time i believe this"
+  },
+  {
+   "t": 530.72,
+   "d": 2.24,
+   "text": "i understood this but having to grapple"
+  },
+  {
+   "t": 532.96,
+   "d": 2.64,
+   "text": "with it viscerally when dealing with"
+  },
+  {
+   "t": 535.6,
+   "d": 1.52,
+   "text": "viscera"
+  },
+  {
+   "t": 537.12,
+   "d": 1.76,
+   "text": "i"
+  },
+  {
+   "t": 538.88,
+   "d": 1.12,
+   "text": "felt"
+  },
+  {
+   "t": 540.0,
+   "d": 2.56,
+   "text": "deeply unprepared"
+  },
+  {
+   "t": 542.56,
+   "d": 2.8,
+   "text": "to deal with the full consequences of my"
+  },
+  {
+   "t": 545.36,
+   "d": 2.24,
+   "text": "actions"
+  },
+  {
+   "t": 547.6,
+   "d": 0.88,
+   "text": "and"
+  },
+  {
+   "t": 548.48,
+   "d": 2.72,
+   "text": "a game and a concept that seemed fun and"
+  },
+  {
+   "t": 551.2,
+   "d": 1.6,
+   "text": "that"
+  },
+  {
+   "t": 552.8,
+   "d": 1.92,
+   "text": "mirrored you know my own fascination"
+  },
+  {
+   "t": 554.72,
+   "d": 0.72,
+   "text": "with"
+  },
+  {
+   "t": 555.44,
+   "d": 2.0,
+   "text": "things like satire and body horror and"
+  },
+  {
+   "t": 557.44,
+   "d": 3.84,
+   "text": "finding nuanced ways a nuanced"
+  },
+  {
+   "t": 561.28,
+   "d": 2.48,
+   "text": "absurd ways to express nuanced"
+  },
+  {
+   "t": 563.76,
+   "d": 3.04,
+   "text": "worldviews opinions and glimpses into a"
+  },
+  {
+   "t": 566.8,
+   "d": 1.68,
+   "text": "wider universe"
+  },
+  {
+   "t": 568.48,
+   "d": 2.32,
+   "text": "um"
+  },
+  {
+   "t": 571.36,
+   "d": 3.48,
+   "text": "this all seemed to fit that objective"
+  },
+  {
+   "t": 574.84,
+   "d": 4.04,
+   "text": "but as soon as i started to"
+  },
+  {
+   "t": 578.88,
+   "d": 2.64,
+   "text": "make decisions and value judgments upon"
+  },
+  {
+   "t": 581.52,
+   "d": 2.64,
+   "text": "this universe"
+  },
+  {
+   "t": 584.16,
+   "d": 2.72,
+   "text": "my idea of objectivity and of easy"
+  },
+  {
+   "t": 586.88,
+   "d": 2.0,
+   "text": "systemization"
+  },
+  {
+   "t": 588.88,
+   "d": 3.2,
+   "text": "not of vague erotica vague organ erotica"
+  },
+  {
+   "t": 592.08,
+   "d": 1.52,
+   "text": "is still valid but everything else"
+  },
+  {
+   "t": 593.6,
+   "d": 2.08,
+   "text": "started to crumble"
+  },
+  {
+   "t": 595.68,
+   "d": 1.6,
+   "text": "we have this concept in games that we"
+  },
+  {
+   "t": 597.28,
+   "d": 1.68,
+   "text": "call finding the fun"
+  },
+  {
+   "t": 598.96,
+   "d": 2.56,
+   "text": "and it essentially refers to designing"
+  },
+  {
+   "t": 601.52,
+   "d": 2.08,
+   "text": "and or discovering the compelling and"
+  },
+  {
+   "t": 603.6,
+   "d": 1.92,
+   "text": "ideally unique portions of your"
+  },
+  {
+   "t": 605.52,
+   "d": 2.56,
+   "text": "experience it is determined"
+  },
+  {
+   "t": 608.08,
+   "d": 2.88,
+   "text": "and discussed as one of the most"
+  },
+  {
+   "t": 610.96,
+   "d": 1.84,
+   "text": "important pieces of your development"
+  },
+  {
+   "t": 612.8,
+   "d": 3.68,
+   "text": "cycle if not the most important"
+  },
+  {
+   "t": 617.04,
+   "d": 1.68,
+   "text": "people say that a"
+  },
+  {
+   "t": 618.72,
+   "d": 1.6,
+   "text": "groundbreaking moment on their project"
+  },
+  {
+   "t": 620.32,
+   "d": 2.48,
+   "text": "is whenever they found the fun"
+  },
+  {
+   "t": 622.8,
+   "d": 2.56,
+   "text": "or realizing that they had lost it and"
+  },
+  {
+   "t": 625.36,
+   "d": 2.16,
+   "text": "how much development time and human"
+  },
+  {
+   "t": 627.52,
+   "d": 1.6,
+   "text": "anguish would result"
+  },
+  {
+   "t": 629.12,
+   "d": 2.48,
+   "text": "from that mistaken assumption that they"
+  },
+  {
+   "t": 631.6,
+   "d": 2.72,
+   "text": "had found it in the first place"
+  },
+  {
+   "t": 634.32,
+   "d": 2.56,
+   "text": "that's valid it's interesting"
+  },
+  {
+   "t": 636.88,
+   "d": 1.92,
+   "text": "but"
+  },
+  {
+   "t": 638.8,
+   "d": 2.16,
+   "text": "in our pursuit of finding the fun and"
+  },
+  {
+   "t": 640.96,
+   "d": 4.16,
+   "text": "prioritizing this ideal"
+  },
+  {
+   "t": 645.12,
+   "d": 4.0,
+   "text": "if we just continue to follow that chain"
+  },
+  {
+   "t": 649.68,
+   "d": 1.44,
+   "text": "we aren't finding the fund anymore we're"
+  },
+  {
+   "t": 651.12,
+   "d": 1.76,
+   "text": "following the fun"
+  },
+  {
+   "t": 652.88,
+   "d": 2.24,
+   "text": "and"
+  },
+  {
+   "t": 655.28,
+   "d": 2.08,
+   "text": "assuming the responsibility for a chain"
+  },
+  {
+   "t": 657.36,
+   "d": 1.84,
+   "text": "of beliefs and implications rather than"
+  },
+  {
+   "t": 659.2,
+   "d": 2.24,
+   "text": "deciding upon them"
+  },
+  {
+   "t": 661.44,
+   "d": 2.32,
+   "text": "this is part of an entirely larger"
+  },
+  {
+   "t": 663.76,
+   "d": 1.52,
+   "text": "discussion which i'm happy to have at"
+  },
+  {
+   "t": 665.28,
+   "d": 2.24,
+   "text": "some point with anyone who's interested"
+  },
+  {
+   "t": 667.52,
+   "d": 1.2,
+   "text": "but"
+  },
+  {
+   "t": 668.72,
+   "d": 2.64,
+   "text": "this is part of why i do"
+  },
+  {
+   "t": 671.36,
+   "d": 1.84,
+   "text": "kind of believe in sub-optimal game"
+  },
+  {
+   "t": 673.2,
+   "d": 1.44,
+   "text": "design decisions"
+  },
+  {
+   "t": 674.64,
+   "d": 2.64,
+   "text": "because yes the objective quote-unquote"
+  },
+  {
+   "t": 677.28,
+   "d": 2.56,
+   "text": "most fun decision at any given moment"
+  },
+  {
+   "t": 679.84,
+   "d": 1.92,
+   "text": "might be"
+  },
+  {
+   "t": 681.76,
+   "d": 1.76,
+   "text": "x"
+  },
+  {
+   "t": 683.52,
+   "d": 2.4,
+   "text": "but if it does not"
+  },
+  {
+   "t": 685.92,
+   "d": 1.44,
+   "text": "end up creating"
+  },
+  {
+   "t": 687.36,
+   "d": 1.52,
+   "text": "something that matches the reality of"
+  },
+  {
+   "t": 688.88,
+   "d": 1.68,
+   "text": "your world or something that you even"
+  },
+  {
+   "t": 690.56,
+   "d": 2.72,
+   "text": "want to bring into existence"
+  },
+  {
+   "t": 693.28,
+   "d": 1.68,
+   "text": "maybe not something that you personally"
+  },
+  {
+   "t": 694.96,
+   "d": 3.2,
+   "text": "believe in or could justify"
+  },
+  {
+   "t": 698.16,
+   "d": 3.28,
+   "text": "i believe making a"
+  },
+  {
+   "t": 701.44,
+   "d": 3.36,
+   "text": "optimal game design decision is not just"
+  },
+  {
+   "t": 704.8,
+   "d": 1.12,
+   "text": "valid"
+  },
+  {
+   "t": 705.92,
+   "d": 2.8,
+   "text": "but important"
+  },
+  {
+   "t": 710.32,
+   "d": 3.44,
+   "text": "i thought of economics"
+  },
+  {
+   "t": 714.56,
+   "d": 1.84,
+   "text": "and the nature of what it means to be"
+  },
+  {
+   "t": 716.4,
+   "d": 2.0,
+   "text": "human and what we're composed of things"
+  },
+  {
+   "t": 718.4,
+   "d": 2.64,
+   "text": "that philosophers and very very smart"
+  },
+  {
+   "t": 721.04,
+   "d": 2.24,
+   "text": "people have debated for centuries"
+  },
+  {
+   "t": 723.28,
+   "d": 1.76,
+   "text": "uh if not millennia"
+  },
+  {
+   "t": 725.04,
+   "d": 1.28,
+   "text": "i thought that these were things that"
+  },
+  {
+   "t": 726.32,
+   "d": 3.64,
+   "text": "were set in stone"
+  },
+  {
+   "t": 731.36,
+   "d": 3.12,
+   "text": "but so often"
+  },
+  {
+   "t": 734.48,
+   "d": 2.24,
+   "text": "the so-called objective systems and"
+  },
+  {
+   "t": 736.72,
+   "d": 2.48,
+   "text": "categorizations are just reflections of"
+  },
+  {
+   "t": 739.2,
+   "d": 1.36,
+   "text": "a flawed"
+  },
+  {
+   "t": 740.56,
+   "d": 1.04,
+   "text": "limited"
+  },
+  {
+   "t": 741.6,
+   "d": 1.68,
+   "text": "human perspective"
+  },
+  {
+   "t": 743.28,
+   "d": 3.92,
+   "text": "that is itself changing over time"
+  },
+  {
+   "t": 747.2,
+   "d": 2.16,
+   "text": "and the ways in which it is changing"
+  },
+  {
+   "t": 749.36,
+   "d": 2.64,
+   "text": "might not be in the interest of the"
+  },
+  {
+   "t": 752.0,
+   "d": 3.6,
+   "text": "human beings who it represents"
+  },
+  {
+   "t": 756.96,
+   "d": 1.84,
+   "text": "we had grappled with this we looked in"
+  },
+  {
+   "t": 758.8,
+   "d": 1.92,
+   "text": "the face of horror we decided that"
+  },
+  {
+   "t": 760.72,
+   "d": 3.68,
+   "text": "aliens do in fact have souls"
+  },
+  {
+   "t": 764.4,
+   "d": 2.96,
+   "text": "and also that souls are inherently human"
+  },
+  {
+   "t": 767.36,
+   "d": 2.24,
+   "text": "the nightmare of being like okay all"
+  },
+  {
+   "t": 769.6,
+   "d": 1.84,
+   "text": "human organs the market are affected and"
+  },
+  {
+   "t": 771.44,
+   "d": 2.64,
+   "text": "then be and then having to just"
+  },
+  {
+   "t": 774.08,
+   "d": 1.52,
+   "text": "disassociate"
+  },
+  {
+   "t": 775.6,
+   "d": 2.32,
+   "text": "into space for an hour as you go like do"
+  },
+  {
+   "t": 777.92,
+   "d": 1.76,
+   "text": "do organs"
+  },
+  {
+   "t": 779.68,
+   "d": 3.68,
+   "text": "better souls belong on that list"
+  },
+  {
+   "t": 783.44,
+   "d": 2.32,
+   "text": "i don't know"
+  },
+  {
+   "t": 785.76,
+   "d": 1.76,
+   "text": "we thought we had gotten past that hump"
+  },
+  {
+   "t": 787.52,
+   "d": 3.36,
+   "text": "and had continued on with development"
+  },
+  {
+   "t": 790.88,
+   "d": 2.4,
+   "text": "and then gamestop happened"
+  },
+  {
+   "t": 793.28,
+   "d": 1.68,
+   "text": "if you aren't familiar with"
+  },
+  {
+   "t": 794.96,
+   "d": 3.28,
+   "text": "what the whole thing behind gamestop is"
+  },
+  {
+   "t": 798.24,
+   "d": 4.16,
+   "text": "last year people decided to uh boost the"
+  },
+  {
+   "t": 802.4,
+   "d": 1.36,
+   "text": "value"
+  },
+  {
+   "t": 803.76,
+   "d": 0.88,
+   "text": "of"
+  },
+  {
+   "t": 804.64,
+   "d": 1.36,
+   "text": "gamestop's"
+  },
+  {
+   "t": 806.0,
+   "d": 2.4,
+   "text": "sales"
+  },
+  {
+   "t": 808.64,
+   "d": 2.16,
+   "text": "to the point that it"
+  },
+  {
+   "t": 810.8,
+   "d": 2.4,
+   "text": "nearly destabilized the international"
+  },
+  {
+   "t": 813.2,
+   "d": 1.76,
+   "text": "economic system"
+  },
+  {
+   "t": 814.96,
+   "d": 3.44,
+   "text": "uh essentially the more people invested"
+  },
+  {
+   "t": 818.4,
+   "d": 2.32,
+   "text": "into gamestop the more"
+  },
+  {
+   "t": 820.72,
+   "d": 1.68,
+   "text": "investors who would bet against the"
+  },
+  {
+   "t": 822.4,
+   "d": 2.08,
+   "text": "stock would be forced to cover the"
+  },
+  {
+   "t": 824.48,
+   "d": 3.2,
+   "text": "difference in terms of their shorting of"
+  },
+  {
+   "t": 827.68,
+   "d": 4.16,
+   "text": "the stock is a term um not coming true"
+  },
+  {
+   "t": 831.84,
+   "d": 1.2,
+   "text": "and this"
+  },
+  {
+   "t": 833.04,
+   "d": 2.0,
+   "text": "is an escalating cycle which is easily"
+  },
+  {
+   "t": 835.04,
+   "d": 1.44,
+   "text": "manipulable"
+  },
+  {
+   "t": 836.48,
+   "d": 1.6,
+   "text": "uh"
+  },
+  {
+   "t": 838.08,
+   "d": 1.6,
+   "text": "when i was a kid i asked my dad to"
+  },
+  {
+   "t": 839.68,
+   "d": 1.6,
+   "text": "invest in gamestop because i was like"
+  },
+  {
+   "t": 841.28,
+   "d": 1.68,
+   "text": "game stuff is great we go there all the"
+  },
+  {
+   "t": 842.96,
+   "d": 2.48,
+   "text": "time it's so cool i'm 11. i know about"
+  },
+  {
+   "t": 845.44,
+   "d": 1.2,
+   "text": "financial"
+  },
+  {
+   "t": 846.64,
+   "d": 1.6,
+   "text": "systems"
+  },
+  {
+   "t": 848.24,
+   "d": 2.4,
+   "text": "turns out"
+  },
+  {
+   "t": 850.64,
+   "d": 2.08,
+   "text": "the current stock value"
+  },
+  {
+   "t": 852.72,
+   "d": 4.8,
+   "text": "of gamestop is 183 dollars still"
+  },
+  {
+   "t": 857.52,
+   "d": 3.04,
+   "text": "nearly a year post boom"
+  },
+  {
+   "t": 860.56,
+   "d": 2.56,
+   "text": "when i was a kid and as"
+  },
+  {
+   "t": 863.12,
+   "d": 2.56,
+   "text": "early as last year"
+  },
+  {
+   "t": 865.68,
+   "d": 2.0,
+   "text": "late 20 late"
+  },
+  {
+   "t": 867.68,
+   "d": 1.36,
+   "text": "2020"
+  },
+  {
+   "t": 869.04,
+   "d": 2.72,
+   "text": "early 2019 it was 12 bucks it's over in"
+  },
+  {
+   "t": 871.76,
+   "d": 2.32,
+   "text": "a thousand percent difference just"
+  },
+  {
+   "t": 874.08,
+   "d": 3.6,
+   "text": "decided by arbitrary belief in movements"
+  },
+  {
+   "t": 877.68,
+   "d": 2.0,
+   "text": "manipulating the inherent systems which"
+  },
+  {
+   "t": 879.68,
+   "d": 3.2,
+   "text": "we considered to be set in stone"
+  },
+  {
+   "t": 882.88,
+   "d": 1.84,
+   "text": "this [ __ ] guy"
+  },
+  {
+   "t": 884.72,
+   "d": 1.52,
+   "text": "did one tweet"
+  },
+  {
+   "t": 886.24,
+   "d": 2.88,
+   "text": "a [ __ ] post on twitter and it made the"
+  },
+  {
+   "t": 889.12,
+   "d": 2.8,
+   "text": "stock of tesla dive more than ten"
+  },
+  {
+   "t": 891.92,
+   "d": 1.6,
+   "text": "percent"
+  },
+  {
+   "t": 893.52,
+   "d": 3.44,
+   "text": "if one person can do one tweet"
+  },
+  {
+   "t": 896.96,
+   "d": 2.08,
+   "text": "that makes"
+  },
+  {
+   "t": 899.04,
+   "d": 4.08,
+   "text": "millions in theoretical value disappear"
+  },
+  {
+   "t": 903.12,
+   "d": 1.28,
+   "text": "it is"
+  },
+  {
+   "t": 904.4,
+   "d": 2.08,
+   "text": "concrete proof"
+  },
+  {
+   "t": 906.48,
+   "d": 2.4,
+   "text": "that a so-called objective financial"
+  },
+  {
+   "t": 908.88,
+   "d": 1.04,
+   "text": "system"
+  },
+  {
+   "t": 909.92,
+   "d": 2.32,
+   "text": "which operates based off of the great"
+  },
+  {
+   "t": 912.24,
+   "d": 3.12,
+   "text": "whims of the market"
+  },
+  {
+   "t": 916.48,
+   "d": 3.6,
+   "text": "is actually founded upon mutual human"
+  },
+  {
+   "t": 920.08,
+   "d": 2.4,
+   "text": "faith"
+  },
+  {
+   "t": 923.84,
+   "d": 2.88,
+   "text": "we ran into a bug"
+  },
+  {
+   "t": 926.72,
+   "d": 2.24,
+   "text": "where"
+  },
+  {
+   "t": 929.6,
+   "d": 3.92,
+   "text": "we had in our simulation of the market"
+  },
+  {
+   "t": 933.52,
+   "d": 2.56,
+   "text": "the idea that stocks would be partially"
+  },
+  {
+   "t": 936.08,
+   "d": 1.04,
+   "text": "based"
+  },
+  {
+   "t": 937.12,
+   "d": 4.64,
+   "text": "upon the movements of a wider world"
+  },
+  {
+   "t": 941.76,
+   "d": 1.12,
+   "text": "if"
+  },
+  {
+   "t": 942.88,
+   "d": 2.08,
+   "text": "the market as a whole goes down we"
+  },
+  {
+   "t": 944.96,
+   "d": 1.04,
+   "text": "assumed"
+  },
+  {
+   "t": 946.0,
+   "d": 2.4,
+   "text": "all the stocks should also mirror in"
+  },
+  {
+   "t": 948.4,
+   "d": 2.56,
+   "text": "some way this change alongside their own"
+  },
+  {
+   "t": 950.96,
+   "d": 4.04,
+   "text": "internal simulation factors"
+  },
+  {
+   "t": 955.92,
+   "d": 3.76,
+   "text": "what happened was that most of our stock"
+  },
+  {
+   "t": 959.68,
+   "d": 2.16,
+   "text": "tickers over time started to follow a"
+  },
+  {
+   "t": 961.84,
+   "d": 1.36,
+   "text": "similar flow"
+  },
+  {
+   "t": 963.2,
+   "d": 1.68,
+   "text": "which not just inhibited interesting"
+  },
+  {
+   "t": 964.88,
+   "d": 1.2,
+   "text": "gameplay"
+  },
+  {
+   "t": 966.08,
+   "d": 1.92,
+   "text": "but"
+  },
+  {
+   "t": 968.0,
+   "d": 3.6,
+   "text": "internal and external qa feedback"
+  },
+  {
+   "t": 971.6,
+   "d": 1.12,
+   "text": "uh"
+  },
+  {
+   "t": 972.72,
+   "d": 2.88,
+   "text": "regarded as being not true to life"
+  },
+  {
+   "t": 975.6,
+   "d": 1.76,
+   "text": "it was actually when we embraced true"
+  },
+  {
+   "t": 977.36,
+   "d": 2.96,
+   "text": "randomness and pattern finding"
+  },
+  {
+   "t": 980.32,
+   "d": 0.96,
+   "text": "the"
+  },
+  {
+   "t": 981.28,
+   "d": 1.76,
+   "text": "madness of the market"
+  },
+  {
+   "t": 983.04,
+   "d": 2.08,
+   "text": "that people believed it to be true the"
+  },
+  {
+   "t": 985.12,
+   "d": 1.76,
+   "text": "more we tried to make the stock market"
+  },
+  {
+   "t": 986.88,
+   "d": 2.56,
+   "text": "make sense we tried to clamp it and put"
+  },
+  {
+   "t": 989.44,
+   "d": 2.4,
+   "text": "it within a set structure"
+  },
+  {
+   "t": 991.84,
+   "d": 1.12,
+   "text": "actually"
+  },
+  {
+   "t": 992.96,
+   "d": 3.64,
+   "text": "the less it worked"
+  },
+  {
+   "t": 996.64,
+   "d": 2.08,
+   "text": "and at this point we collectively lost"
+  },
+  {
+   "t": 998.72,
+   "d": 2.56,
+   "text": "our minds"
+  },
+  {
+   "t": 1001.68,
+   "d": 1.84,
+   "text": "the range of decisions in a game"
+  },
+  {
+   "t": 1003.52,
+   "d": 3.6,
+   "text": "anything associated with assigning value"
+  },
+  {
+   "t": 1007.12,
+   "d": 3.68,
+   "text": "became an overwhelming title wave of"
+  },
+  {
+   "t": 1010.8,
+   "d": 3.76,
+   "text": "nightmarish implication scenarios"
+  },
+  {
+   "t": 1014.56,
+   "d": 2.56,
+   "text": "we have these philanthropic hospital"
+  },
+  {
+   "t": 1017.12,
+   "d": 2.0,
+   "text": "administrators made out of ice cream in"
+  },
+  {
+   "t": 1019.12,
+   "d": 1.76,
+   "text": "the game long story they're called"
+  },
+  {
+   "t": 1020.88,
+   "d": 2.8,
+   "text": "administrators doing a quest for them we"
+  },
+  {
+   "t": 1023.68,
+   "d": 2.64,
+   "text": "have one of three sounds that can play"
+  },
+  {
+   "t": 1026.32,
+   "d": 2.0,
+   "text": "when you fulfill a quest one that's"
+  },
+  {
+   "t": 1028.32,
+   "d": 2.24,
+   "text": "positive one that's neutral one that is"
+  },
+  {
+   "t": 1030.56,
+   "d": 1.2,
+   "text": "negative"
+  },
+  {
+   "t": 1031.76,
+   "d": 2.08,
+   "text": "our neutral one sounds a bit like an"
+  },
+  {
+   "t": 1033.84,
+   "d": 1.6,
+   "text": "error message so"
+  },
+  {
+   "t": 1035.44,
+   "d": 1.36,
+   "text": "by default"
+  },
+  {
+   "t": 1036.8,
+   "d": 3.84,
+   "text": "most of our sounds for fulfilling a"
+  },
+  {
+   "t": 1040.64,
+   "d": 3.2,
+   "text": "client request in the game are positive"
+  },
+  {
+   "t": 1043.84,
+   "d": 2.56,
+   "text": "you are a cutthroat piece of [ __ ] in"
+  },
+  {
+   "t": 1046.4,
+   "d": 3.28,
+   "text": "this video game excuse my french uh"
+  },
+  {
+   "t": 1049.68,
+   "d": 2.4,
+   "text": "if only because you participate by"
+  },
+  {
+   "t": 1052.08,
+   "d": 2.08,
+   "text": "virtue of"
+  },
+  {
+   "t": 1054.16,
+   "d": 2.4,
+   "text": "endorsing and working within this market"
+  },
+  {
+   "t": 1056.56,
+   "d": 2.4,
+   "text": "uh widespread exploitation"
+  },
+  {
+   "t": 1058.96,
+   "d": 1.6,
+   "text": "and"
+  },
+  {
+   "t": 1060.56,
+   "d": 1.44,
+   "text": "in this moment because you're dealing"
+  },
+  {
+   "t": 1062.0,
+   "d": 1.92,
+   "text": "with like philanthropic entities even"
+  },
+  {
+   "t": 1063.92,
+   "d": 2.96,
+   "text": "that decision what freaking sound plays"
+  },
+  {
+   "t": 1066.88,
+   "d": 2.0,
+   "text": "when you fulfill a request was like okay"
+  },
+  {
+   "t": 1068.88,
+   "d": 2.8,
+   "text": "if it's positive then"
+  },
+  {
+   "t": 1071.68,
+   "d": 2.96,
+   "text": "you're both endorsing a a view and"
+  },
+  {
+   "t": 1074.64,
+   "d": 1.28,
+   "text": "perspective"
+  },
+  {
+   "t": 1075.92,
+   "d": 1.04,
+   "text": "uh"
+  },
+  {
+   "t": 1076.96,
+   "d": 2.88,
+   "text": "also it's in the standard uh of the rest"
+  },
+  {
+   "t": 1079.84,
+   "d": 2.16,
+   "text": "of the game's quest by default but if"
+  },
+  {
+   "t": 1082.0,
+   "d": 1.92,
+   "text": "you make it negative it speaks to"
+  },
+  {
+   "t": 1083.92,
+   "d": 2.08,
+   "text": "perhaps the perspective of your given"
+  },
+  {
+   "t": 1086.0,
+   "d": 2.16,
+   "text": "player character as well as something"
+  },
+  {
+   "t": 1088.16,
+   "d": 1.76,
+   "text": "else that the world might be saying"
+  },
+  {
+   "t": 1089.92,
+   "d": 1.68,
+   "text": "about"
+  },
+  {
+   "t": 1091.6,
+   "d": 2.24,
+   "text": "assisting anything other than purely"
+  },
+  {
+   "t": 1093.84,
+   "d": 2.8,
+   "text": "misanthropic aims"
+  },
+  {
+   "t": 1096.64,
+   "d": 2.88,
+   "text": "a tidal wave"
+  },
+  {
+   "t": 1102.0,
+   "d": 1.12,
+   "text": "and"
+  },
+  {
+   "t": 1103.12,
+   "d": 3.2,
+   "text": "that was what shook me because i'm"
+  },
+  {
+   "t": 1106.32,
+   "d": 2.4,
+   "text": "used to doing a lot of writing"
+  },
+  {
+   "t": 1108.72,
+   "d": 1.92,
+   "text": "i've done a lot of game design in my"
+  },
+  {
+   "t": 1110.64,
+   "d": 1.12,
+   "text": "time"
+  },
+  {
+   "t": 1111.76,
+   "d": 2.48,
+   "text": "uh and i'm used to authored and"
+  },
+  {
+   "t": 1114.24,
+   "d": 2.08,
+   "text": "procedural experiences in a way that"
+  },
+  {
+   "t": 1116.32,
+   "d": 2.16,
+   "text": "made me feel i was prepared to make this"
+  },
+  {
+   "t": 1118.48,
+   "d": 1.76,
+   "text": "game"
+  },
+  {
+   "t": 1120.24,
+   "d": 1.76,
+   "text": "but grappling with the idea that even"
+  },
+  {
+   "t": 1122.0,
+   "d": 2.48,
+   "text": "beyond the writing"
+  },
+  {
+   "t": 1124.48,
+   "d": 1.84,
+   "text": "just the generation systems the"
+  },
+  {
+   "t": 1126.32,
+   "d": 2.48,
+   "text": "statistics the"
+  },
+  {
+   "t": 1128.8,
+   "d": 2.96,
+   "text": "base numbers that build up this reality"
+  },
+  {
+   "t": 1131.76,
+   "d": 1.76,
+   "text": "said more about our fictional world than"
+  },
+  {
+   "t": 1133.52,
+   "d": 2.88,
+   "text": "the writing and marketing ever might the"
+  },
+  {
+   "t": 1136.4,
+   "d": 0.88,
+   "text": "things that the people actually"
+  },
+  {
+   "t": 1137.28,
+   "d": 2.64,
+   "text": "experience would be"
+  },
+  {
+   "t": 1139.92,
+   "d": 1.92,
+   "text": "little integers that would mean more"
+  },
+  {
+   "t": 1141.84,
+   "d": 2.64,
+   "text": "than any of my words"
+  },
+  {
+   "t": 1144.48,
+   "d": 2.24,
+   "text": "uh"
+  },
+  {
+   "t": 1147.36,
+   "d": 3.12,
+   "text": "did that would that terrified me it"
+  },
+  {
+   "t": 1150.48,
+   "d": 1.04,
+   "text": "shook me"
+  },
+  {
+   "t": 1151.52,
+   "d": 1.04,
+   "text": "uh"
+  },
+  {
+   "t": 1152.56,
+   "d": 1.92,
+   "text": "and it left me"
+  },
+  {
+   "t": 1154.48,
+   "d": 2.4,
+   "text": "grappling with the full implications of"
+  },
+  {
+   "t": 1156.88,
+   "d": 2.32,
+   "text": "my decisions yet again"
+  },
+  {
+   "t": 1159.2,
+   "d": 2.0,
+   "text": "get ready to be perceived"
+  },
+  {
+   "t": 1161.2,
+   "d": 2.8,
+   "text": "it's not in good faith to look into the"
+  },
+  {
+   "t": 1164.0,
+   "d": 2.56,
+   "text": "systems and generations and bugs"
+  },
+  {
+   "t": 1166.56,
+   "d": 2.32,
+   "text": "of any given game to call out a"
+  },
+  {
+   "t": 1168.88,
+   "d": 2.32,
+   "text": "developer for how their world view"
+  },
+  {
+   "t": 1171.2,
+   "d": 2.4,
+   "text": "is incorrect"
+  },
+  {
+   "t": 1173.6,
+   "d": 2.08,
+   "text": "or prejudiced"
+  },
+  {
+   "t": 1175.68,
+   "d": 1.92,
+   "text": "it can be in bad faith especially when"
+  },
+  {
+   "t": 1177.6,
+   "d": 2.48,
+   "text": "those designers and developers might not"
+  },
+  {
+   "t": 1180.08,
+   "d": 2.16,
+   "text": "have much agency in what those systems"
+  },
+  {
+   "t": 1182.24,
+   "d": 1.2,
+   "text": "are"
+  },
+  {
+   "t": 1183.44,
+   "d": 2.56,
+   "text": "but also"
+  },
+  {
+   "t": 1186.4,
+   "d": 3.12,
+   "text": "any and all of your systems"
+  },
+  {
+   "t": 1189.52,
+   "d": 2.16,
+   "text": "can be a reflection of something"
+  },
+  {
+   "t": 1191.68,
+   "d": 2.56,
+   "text": "concrete"
+  },
+  {
+   "t": 1194.4,
+   "d": 1.84,
+   "text": "and i might be"
+  },
+  {
+   "t": 1196.24,
+   "d": 1.84,
+   "text": "preaching to the choir"
+  },
+  {
+   "t": 1198.08,
+   "d": 1.92,
+   "text": "but"
+  },
+  {
+   "t": 1200.0,
+   "d": 2.24,
+   "text": "looking at every decision that you've"
+  },
+  {
+   "t": 1202.24,
+   "d": 2.32,
+   "text": "made in your game every category every"
+  },
+  {
+   "t": 1204.56,
+   "d": 2.56,
+   "text": "set of numbers and values"
+  },
+  {
+   "t": 1207.12,
+   "d": 1.76,
+   "text": "and"
+  },
+  {
+   "t": 1208.88,
+   "d": 3.04,
+   "text": "drawing out the"
+  },
+  {
+   "t": 1211.92,
+   "d": 1.44,
+   "text": "social"
+  },
+  {
+   "t": 1213.36,
+   "d": 1.2,
+   "text": "moral"
+  },
+  {
+   "t": 1214.56,
+   "d": 1.44,
+   "text": "uh"
+  },
+  {
+   "t": 1216.0,
+   "d": 1.36,
+   "text": "cultural"
+  },
+  {
+   "t": 1217.36,
+   "d": 0.88,
+   "text": "and"
+  },
+  {
+   "t": 1218.24,
+   "d": 0.96,
+   "text": "uh"
+  },
+  {
+   "t": 1219.2,
+   "d": 1.36,
+   "text": "physical"
+  },
+  {
+   "t": 1220.56,
+   "d": 2.4,
+   "text": "implications of those decisions one by"
+  },
+  {
+   "t": 1222.96,
+   "d": 2.4,
+   "text": "one and whether you can stand by them"
+  },
+  {
+   "t": 1225.36,
+   "d": 1.76,
+   "text": "uh"
+  },
+  {
+   "t": 1227.12,
+   "d": 2.48,
+   "text": "it very quickly emerged to the team not"
+  },
+  {
+   "t": 1229.6,
+   "d": 1.52,
+   "text": "just as a"
+  },
+  {
+   "t": 1231.12,
+   "d": 4.64,
+   "text": "opportunity to say intentional things"
+  },
+  {
+   "t": 1235.76,
+   "d": 2.16,
+   "text": "even if making those decisions was"
+  },
+  {
+   "t": 1237.92,
+   "d": 2.88,
+   "text": "itself scary"
+  },
+  {
+   "t": 1240.8,
+   "d": 3.04,
+   "text": "it became apparent as a necessity"
+  },
+  {
+   "t": 1243.84,
+   "d": 2.0,
+   "text": "game design decisions"
+  },
+  {
+   "t": 1245.84,
+   "d": 2.8,
+   "text": "can be and are advertising"
+  },
+  {
+   "t": 1248.64,
+   "d": 1.6,
+   "text": "uh"
+  },
+  {
+   "t": 1250.24,
+   "d": 1.92,
+   "text": "simon parkin did an investigation for"
+  },
+  {
+   "t": 1252.16,
+   "d": 1.36,
+   "text": "eurogamer"
+  },
+  {
+   "t": 1253.52,
+   "d": 2.4,
+   "text": "into how arms manufacturers"
+  },
+  {
+   "t": 1255.92,
+   "d": 3.2,
+   "text": "collaborating with game studios"
+  },
+  {
+   "t": 1259.12,
+   "d": 1.68,
+   "text": "are implicitly and explicitly"
+  },
+  {
+   "t": 1260.8,
+   "d": 2.0,
+   "text": "advertising weapons"
+  },
+  {
+   "t": 1262.8,
+   "d": 3.28,
+   "text": "the barrett 50 caliber sniper rifle"
+  },
+  {
+   "t": 1266.08,
+   "d": 1.36,
+   "text": "is"
+  },
+  {
+   "t": 1267.44,
+   "d": 2.08,
+   "text": "basically the most powerful sniper rifle"
+  },
+  {
+   "t": 1269.52,
+   "d": 2.56,
+   "text": "in call of duty modern warfare 2."
+  },
+  {
+   "t": 1272.08,
+   "d": 2.24,
+   "text": "when i think of the sniper rifle i"
+  },
+  {
+   "t": 1274.32,
+   "d": 1.12,
+   "text": "played a lot of call of duty modern"
+  },
+  {
+   "t": 1275.44,
+   "d": 2.0,
+   "text": "warfare 2 as a teenager"
+  },
+  {
+   "t": 1277.44,
+   "d": 2.32,
+   "text": "i think of the barrett 50 caliber and"
+  },
+  {
+   "t": 1279.76,
+   "d": 2.24,
+   "text": "the company"
+  },
+  {
+   "t": 1282.0,
+   "d": 1.84,
+   "text": "speaks to the concrete impact that has"
+  },
+  {
+   "t": 1283.84,
+   "d": 2.48,
+   "text": "had on their sales because teenagers and"
+  },
+  {
+   "t": 1286.32,
+   "d": 5.52,
+   "text": "kids become adults who buy guns and view"
+  },
+  {
+   "t": 1292.32,
+   "d": 3.52,
+   "text": "guns within a framework of power and"
+  },
+  {
+   "t": 1295.84,
+   "d": 1.36,
+   "text": "safety"
+  },
+  {
+   "t": 1297.2,
+   "d": 2.16,
+   "text": "that is constructed by the digital"
+  },
+  {
+   "t": 1299.36,
+   "d": 1.68,
+   "text": "worlds in which they experience them i'm"
+  },
+  {
+   "t": 1301.04,
+   "d": 1.52,
+   "text": "not saying that this is single-handed"
+  },
+  {
+   "t": 1302.56,
+   "d": 2.56,
+   "text": "i'm saying it contributes"
+  },
+  {
+   "t": 1305.12,
+   "d": 1.28,
+   "text": "to a"
+  },
+  {
+   "t": 1306.4,
+   "d": 3.04,
+   "text": "wider perception"
+  },
+  {
+   "t": 1311.44,
+   "d": 2.32,
+   "text": "there is an infamous article about uh"
+  },
+  {
+   "t": 1313.76,
+   "d": 1.52,
+   "text": "how rim worlds"
+  },
+  {
+   "t": 1315.28,
+   "d": 1.92,
+   "text": "back in 2016 it was on our rock paper"
+  },
+  {
+   "t": 1317.2,
+   "d": 2.8,
+   "text": "shotgun about how rimworld"
+  },
+  {
+   "t": 1320.0,
+   "d": 2.24,
+   "text": "modeled attraction and the differences"
+  },
+  {
+   "t": 1322.24,
+   "d": 3.04,
+   "text": "between men and women in its game"
+  },
+  {
+   "t": 1325.28,
+   "d": 2.0,
+   "text": "however you feel about the article"
+  },
+  {
+   "t": 1327.28,
+   "d": 1.36,
+   "text": "the the fact that there was any"
+  },
+  {
+   "t": 1328.64,
+   "d": 2.2,
+   "text": "differentiation at all"
+  },
+  {
+   "t": 1330.84,
+   "d": 1.88,
+   "text": "between"
+  },
+  {
+   "t": 1332.72,
+   "d": 3.04,
+   "text": "male coded and female coded npcs"
+  },
+  {
+   "t": 1335.76,
+   "d": 2.96,
+   "text": "makes those differences meaningful"
+  },
+  {
+   "t": 1338.72,
+   "d": 2.16,
+   "text": "and allows us to assign patterns to them"
+  },
+  {
+   "t": 1340.88,
+   "d": 1.28,
+   "text": "that again"
+  },
+  {
+   "t": 1342.16,
+   "d": 2.16,
+   "text": "whether or not we believe them"
+  },
+  {
+   "t": 1344.32,
+   "d": 2.4,
+   "text": "are simply commentaries and part of the"
+  },
+  {
+   "t": 1346.72,
+   "d": 2.8,
+   "text": "cloud of data points through which we"
+  },
+  {
+   "t": 1349.52,
+   "d": 2.88,
+   "text": "see the world through which we see value"
+  },
+  {
+   "t": 1352.4,
+   "d": 1.28,
+   "text": "and"
+  },
+  {
+   "t": 1353.68,
+   "d": 2.48,
+   "text": "logic"
+  },
+  {
+   "t": 1356.4,
+   "d": 1.6,
+   "text": "i love the elder scrolls oblivion might"
+  },
+  {
+   "t": 1358.0,
+   "d": 3.2,
+   "text": "be my favorite elder scrolls"
+  },
+  {
+   "t": 1361.2,
+   "d": 2.0,
+   "text": "in elder scrolls"
+  },
+  {
+   "t": 1363.2,
+   "d": 2.32,
+   "text": "uh oblivion"
+  },
+  {
+   "t": 1365.52,
+   "d": 1.28,
+   "text": "imperials"
+  },
+  {
+   "t": 1366.8,
+   "d": 1.28,
+   "text": "have"
+  },
+  {
+   "t": 1368.08,
+   "d": 1.84,
+   "text": "are kind of like the"
+  },
+  {
+   "t": 1369.92,
+   "d": 0.35,
+   "text": "uh"
+  },
+  {
+   "t": 1370.27,
+   "d": 1.17,
+   "text": "[Music]"
+  },
+  {
+   "t": 1371.44,
+   "d": 2.24,
+   "text": "sort of like standard slash you know"
+  },
+  {
+   "t": 1373.68,
+   "d": 1.2,
+   "text": "noble"
+  },
+  {
+   "t": 1374.88,
+   "d": 1.04,
+   "text": "race"
+  },
+  {
+   "t": 1375.92,
+   "d": 1.76,
+   "text": "they have"
+  },
+  {
+   "t": 1377.68,
+   "d": 2.8,
+   "text": "racial traits associated with that"
+  },
+  {
+   "t": 1380.48,
+   "d": 2.8,
+   "text": "such as tradecraft persuasion"
+  },
+  {
+   "t": 1383.28,
+   "d": 2.4,
+   "text": "um and also based off their in-game"
+  },
+  {
+   "t": 1385.68,
+   "d": 3.2,
+   "text": "appearance lighter skin"
+  },
+  {
+   "t": 1388.88,
+   "d": 2.32,
+   "text": "red guards people who look like me"
+  },
+  {
+   "t": 1391.2,
+   "d": 2.96,
+   "text": "feel less pain and are more powerful in"
+  },
+  {
+   "t": 1394.16,
+   "d": 1.28,
+   "text": "combat"
+  },
+  {
+   "t": 1395.44,
+   "d": 1.92,
+   "text": "i'm someone who when i'm playing rpg"
+  },
+  {
+   "t": 1397.36,
+   "d": 1.92,
+   "text": "experience whether it's in tabletop form"
+  },
+  {
+   "t": 1399.28,
+   "d": 2.08,
+   "text": "or digital form i love talking to people"
+  },
+  {
+   "t": 1401.36,
+   "d": 1.36,
+   "text": "i love lock picking things i love"
+  },
+  {
+   "t": 1402.72,
+   "d": 1.6,
+   "text": "finding my ways into other parts of the"
+  },
+  {
+   "t": 1404.32,
+   "d": 2.8,
+   "text": "world and making decisions"
+  },
+  {
+   "t": 1407.12,
+   "d": 2.96,
+   "text": "that and impacts on the world without"
+  },
+  {
+   "t": 1410.08,
+   "d": 1.52,
+   "text": "pulling out my sword at all and if i"
+  },
+  {
+   "t": 1411.6,
+   "d": 1.04,
+   "text": "want to"
+  },
+  {
+   "t": 1412.64,
+   "d": 4.12,
+   "text": "pursue my chosen play style"
+  },
+  {
+   "t": 1416.96,
+   "d": 1.52,
+   "text": "i have to choose someone who doesn't"
+  },
+  {
+   "t": 1418.48,
+   "d": 2.08,
+   "text": "look like me"
+  },
+  {
+   "t": 1420.56,
+   "d": 2.4,
+   "text": "there's coincidentally also a negative"
+  },
+  {
+   "t": 1422.96,
+   "d": 1.6,
+   "text": "five starting disposition towards red"
+  },
+  {
+   "t": 1424.56,
+   "d": 3.76,
+   "text": "guards which could be satire it could be"
+  },
+  {
+   "t": 1428.32,
+   "d": 1.6,
+   "text": "a [ __ ] up racial bias it could be a"
+  },
+  {
+   "t": 1429.92,
+   "d": 1.36,
+   "text": "bug or just an arbitrary decision"
+  },
+  {
+   "t": 1431.28,
+   "d": 2.24,
+   "text": "someone made somewhere but in this cloud"
+  },
+  {
+   "t": 1433.52,
+   "d": 2.0,
+   "text": "of data points"
+  },
+  {
+   "t": 1435.52,
+   "d": 1.44,
+   "text": "we have"
+  },
+  {
+   "t": 1436.96,
+   "d": 2.96,
+   "text": "beliefs that are reinforced about"
+  },
+  {
+   "t": 1439.92,
+   "d": 1.68,
+   "text": "the world"
+  },
+  {
+   "t": 1441.6,
+   "d": 0.8,
+   "text": "uh"
+  },
+  {
+   "t": 1442.4,
+   "d": 1.2,
+   "text": "there are"
+  },
+  {
+   "t": 1443.6,
+   "d": 3.36,
+   "text": "statements being made"
+  },
+  {
+   "t": 1448.32,
+   "d": 1.6,
+   "text": "people are going to play space world"
+  },
+  {
+   "t": 1449.92,
+   "d": 2.8,
+   "text": "organ training simulator"
+  },
+  {
+   "t": 1452.72,
+   "d": 1.36,
+   "text": "and"
+  },
+  {
+   "t": 1454.08,
+   "d": 3.12,
+   "text": "are going to"
+  },
+  {
+   "t": 1457.28,
+   "d": 2.16,
+   "text": "have beliefs about what is and isn't an"
+  },
+  {
+   "t": 1459.44,
+   "d": 1.52,
+   "text": "organ based off of the organs we put"
+  },
+  {
+   "t": 1460.96,
+   "d": 2.64,
+   "text": "into the game i know that that's coming"
+  },
+  {
+   "t": 1463.6,
+   "d": 1.92,
+   "text": "yes is it silly"
+  },
+  {
+   "t": 1465.52,
+   "d": 1.6,
+   "text": "is it absurd"
+  },
+  {
+   "t": 1467.12,
+   "d": 3.44,
+   "text": "am i not medically qualified"
+  },
+  {
+   "t": 1470.56,
+   "d": 2.4,
+   "text": "sure"
+  },
+  {
+   "t": 1472.96,
+   "d": 1.2,
+   "text": "but the fact that someone's gonna be"
+  },
+  {
+   "t": 1474.16,
+   "d": 1.76,
+   "text": "like well you know the teeth tooth is an"
+  },
+  {
+   "t": 1475.92,
+   "d": 1.6,
+   "text": "organ and someone from somewhere in"
+  },
+  {
+   "t": 1477.52,
+   "d": 1.12,
+   "text": "their brain"
+  },
+  {
+   "t": 1478.64,
+   "d": 2.16,
+   "text": "having played a lot of space world organ"
+  },
+  {
+   "t": 1480.8,
+   "d": 1.84,
+   "text": "training simulator which is doling out"
+  },
+  {
+   "t": 1482.64,
+   "d": 2.24,
+   "text": "and giving you an experiential"
+  },
+  {
+   "t": 1484.88,
+   "d": 3.12,
+   "text": "uh moments with a variety of human and"
+  },
+  {
+   "t": 1488.0,
+   "d": 1.92,
+   "text": "alien viscera"
+  },
+  {
+   "t": 1489.92,
+   "d": 1.52,
+   "text": "the fact that they might in that moment"
+  },
+  {
+   "t": 1491.44,
+   "d": 1.2,
+   "text": "because they played a game have any"
+  },
+  {
+   "t": 1492.64,
+   "d": 1.68,
+   "text": "hesitation at all about"
+  },
+  {
+   "t": 1494.32,
+   "d": 3.52,
+   "text": "what is and isn't an organ"
+  },
+  {
+   "t": 1497.84,
+   "d": 1.84,
+   "text": "is something that has kept me awake at"
+  },
+  {
+   "t": 1499.68,
+   "d": 1.76,
+   "text": "night"
+  },
+  {
+   "t": 1501.44,
+   "d": 2.96,
+   "text": "because this is a real"
+  },
+  {
+   "t": 1505.76,
+   "d": 2.08,
+   "text": "statement being made about"
+  },
+  {
+   "t": 1507.84,
+   "d": 1.36,
+   "text": "both our fictional and"
+  },
+  {
+   "t": 1509.2,
+   "d": 2.72,
+   "text": "literal world"
+  },
+  {
+   "t": 1511.92,
+   "d": 1.68,
+   "text": "um"
+  },
+  {
+   "t": 1513.6,
+   "d": 2.24,
+   "text": "i aged out of my health care a few years"
+  },
+  {
+   "t": 1515.84,
+   "d": 2.64,
+   "text": "ago i was a military brat i aged out"
+  },
+  {
+   "t": 1518.48,
+   "d": 2.24,
+   "text": "that shook me and i was in the middle of"
+  },
+  {
+   "t": 1520.72,
+   "d": 1.52,
+   "text": "making an airport for aliens currently"
+  },
+  {
+   "t": 1522.24,
+   "d": 1.52,
+   "text": "run by dogs"
+  },
+  {
+   "t": 1523.76,
+   "d": 1.68,
+   "text": "so one of the first"
+  },
+  {
+   "t": 1525.44,
+   "d": 2.72,
+   "text": "npcs i made"
+  },
+  {
+   "t": 1528.16,
+   "d": 1.44,
+   "text": "your save point in the game of these"
+  },
+  {
+   "t": 1529.6,
+   "d": 2.16,
+   "text": "little medical clinics"
+  },
+  {
+   "t": 1531.76,
+   "d": 3.12,
+   "text": "he says i'm a doctor not a monster as"
+  },
+  {
+   "t": 1534.88,
+   "d": 2.4,
+   "text": "the punchline in a series of us in a"
+  },
+  {
+   "t": 1537.28,
+   "d": 2.16,
+   "text": "series of conversations that you have"
+  },
+  {
+   "t": 1539.44,
+   "d": 1.76,
+   "text": "with him if you"
+  },
+  {
+   "t": 1541.2,
+   "d": 3.76,
+   "text": "say hey what do i owe you for helping me"
+  },
+  {
+   "t": 1544.96,
+   "d": 2.0,
+   "text": "when i created a world that was"
+  },
+  {
+   "t": 1546.96,
+   "d": 2.24,
+   "text": "inherently joyful and cared about you a"
+  },
+  {
+   "t": 1549.2,
+   "d": 1.68,
+   "text": "utopia"
+  },
+  {
+   "t": 1550.88,
+   "d": 1.6,
+   "text": "the reflection of it based upon my"
+  },
+  {
+   "t": 1552.48,
+   "d": 2.72,
+   "text": "perspective and my fears"
+  },
+  {
+   "t": 1555.2,
+   "d": 2.64,
+   "text": "was"
+  },
+  {
+   "t": 1559.04,
+   "d": 2.56,
+   "text": "health care"
+  },
+  {
+   "t": 1563.12,
+   "d": 2.4,
+   "text": "treatment that was free"
+  },
+  {
+   "t": 1565.52,
+   "d": 3.32,
+   "text": "and that it would be absurd to believe"
+  },
+  {
+   "t": 1568.84,
+   "d": 2.76,
+   "text": "otherwise the numbers categorizations"
+  },
+  {
+   "t": 1571.6,
+   "d": 1.76,
+   "text": "and arbitrary decisions we make are"
+  },
+  {
+   "t": 1573.36,
+   "d": 1.28,
+   "text": "constantly making an impact on our"
+  },
+  {
+   "t": 1574.64,
+   "d": 1.52,
+   "text": "audience and again i can't overstate how"
+  },
+  {
+   "t": 1576.16,
+   "d": 2.32,
+   "text": "much that goes beyond the writing that"
+  },
+  {
+   "t": 1578.48,
+   "d": 3.36,
+   "text": "goes beyond even the context"
+  },
+  {
+   "t": 1581.84,
+   "d": 2.72,
+   "text": "we still in games with lasers and rocket"
+  },
+  {
+   "t": 1584.56,
+   "d": 2.4,
+   "text": "launchers see the double barrel shotgun"
+  },
+  {
+   "t": 1586.96,
+   "d": 2.24,
+   "text": "as"
+  },
+  {
+   "t": 1589.36,
+   "d": 2.08,
+   "text": "a deserved"
+  },
+  {
+   "t": 1591.44,
+   "d": 2.0,
+   "text": "place having a deserved place in the"
+  },
+  {
+   "t": 1593.44,
+   "d": 1.92,
+   "text": "pantheon of the most powerful weapons in"
+  },
+  {
+   "t": 1595.36,
+   "d": 2.56,
+   "text": "that game regardless of genre because of"
+  },
+  {
+   "t": 1597.92,
+   "d": 1.12,
+   "text": "doom"
+  },
+  {
+   "t": 1599.04,
+   "d": 1.68,
+   "text": "a game that came out more than 20 years"
+  },
+  {
+   "t": 1600.72,
+   "d": 2.24,
+   "text": "ago and its experiential impact on our"
+  },
+  {
+   "t": 1602.96,
+   "d": 2.48,
+   "text": "medium to depart from that standard is"
+  },
+  {
+   "t": 1605.44,
+   "d": 5.04,
+   "text": "to itself make a decision in a statement"
+  },
+  {
+   "t": 1611.68,
+   "d": 2.16,
+   "text": "and"
+  },
+  {
+   "t": 1613.92,
+   "d": 0.96,
+   "text": "so"
+  },
+  {
+   "t": 1614.88,
+   "d": 2.32,
+   "text": "the chain of decisions and the things"
+  },
+  {
+   "t": 1617.2,
+   "d": 1.84,
+   "text": "that we say to and about each other and"
+  },
+  {
+   "t": 1619.04,
+   "d": 0.88,
+   "text": "about"
+  },
+  {
+   "t": 1619.92,
+   "d": 2.8,
+   "text": "the way in which we interpret reality"
+  },
+  {
+   "t": 1622.72,
+   "d": 2.72,
+   "text": "goes on and on and on and on i'm not"
+  },
+  {
+   "t": 1625.44,
+   "d": 2.96,
+   "text": "saying that games have an especial"
+  },
+  {
+   "t": 1628.4,
+   "d": 1.76,
+   "text": "responsibility"
+  },
+  {
+   "t": 1630.16,
+   "d": 1.6,
+   "text": "to"
+  },
+  {
+   "t": 1631.76,
+   "d": 2.88,
+   "text": "convey their worlds respectfully"
+  },
+  {
+   "t": 1634.64,
+   "d": 1.2,
+   "text": "or to"
+  },
+  {
+   "t": 1635.84,
+   "d": 1.6,
+   "text": "hyper fixate"
+  },
+  {
+   "t": 1637.44,
+   "d": 0.88,
+   "text": "on"
+  },
+  {
+   "t": 1638.32,
+   "d": 2.32,
+   "text": "all of their decisions to the point of"
+  },
+  {
+   "t": 1640.64,
+   "d": 1.84,
+   "text": "paralysis"
+  },
+  {
+   "t": 1642.48,
+   "d": 1.68,
+   "text": "it's not fair to our players and it's"
+  },
+  {
+   "t": 1644.16,
+   "d": 2.0,
+   "text": "not fair to the people who make"
+  },
+  {
+   "t": 1646.16,
+   "d": 1.68,
+   "text": "the games that we love"
+  },
+  {
+   "t": 1647.84,
+   "d": 1.36,
+   "text": "i'm simply saying that they're not"
+  },
+  {
+   "t": 1649.2,
+   "d": 2.4,
+   "text": "exempt from conveying a perspective"
+  },
+  {
+   "t": 1651.6,
+   "d": 1.36,
+   "text": "through their creative process and"
+  },
+  {
+   "t": 1652.96,
+   "d": 2.32,
+   "text": "through the final product"
+  },
+  {
+   "t": 1655.28,
+   "d": 1.76,
+   "text": "i encourage you"
+  },
+  {
+   "t": 1657.04,
+   "d": 2.64,
+   "text": "to seek the opportunities that your"
+  },
+  {
+   "t": 1659.68,
+   "d": 2.32,
+   "text": "intentional development choices and"
+  },
+  {
+   "t": 1662.0,
+   "d": 2.8,
+   "text": "implied perspective provide to find the"
+  },
+  {
+   "t": 1664.8,
+   "d": 1.04,
+   "text": "fun"
+  },
+  {
+   "t": 1665.84,
+   "d": 3.04,
+   "text": "and decide what fun is as opposed to"
+  },
+  {
+   "t": 1668.88,
+   "d": 2.96,
+   "text": "following it"
+  },
+  {
+   "t": 1672.4,
+   "d": 2.8,
+   "text": "and simulate some damn organs"
+  },
+  {
+   "t": 1675.2,
+   "d": 1.36,
+   "text": "uh"
+  },
+  {
+   "t": 1676.56,
+   "d": 2.16,
+   "text": "my name has been salvia nelson jr thank"
+  },
+  {
+   "t": 1678.72,
+   "d": 3.12,
+   "text": "you so much for hearing me um lose my"
+  },
+  {
+   "t": 1681.84,
+   "d": 2.64,
+   "text": "mind and have an existential crisis for"
+  },
+  {
+   "t": 1684.48,
+   "d": 2.16,
+   "text": "a half hour straight and"
+  },
+  {
+   "t": 1686.64,
+   "d": 2.64,
+   "text": "i wish you good luck because"
+  },
+  {
+   "t": 1689.28,
+   "d": 2.32,
+   "text": "if you do this well"
+  },
+  {
+   "t": 1691.6,
+   "d": 1.36,
+   "text": "you might not just end up making a"
+  },
+  {
+   "t": 1692.96,
+   "d": 2.48,
+   "text": "system a set of systems and choices and"
+  },
+  {
+   "t": 1695.44,
+   "d": 2.24,
+   "text": "categories that you believe in"
+  },
+  {
+   "t": 1697.68,
+   "d": 1.76,
+   "text": "you might end up creating"
+  },
+  {
+   "t": 1699.44,
+   "d": 1.76,
+   "text": "something so effective that it causes"
+  },
+  {
+   "t": 1701.2,
+   "d": 2.4,
+   "text": "your players to"
+  },
+  {
+   "t": 1703.6,
+   "d": 1.2,
+   "text": "seek"
+  },
+  {
+   "t": 1704.8,
+   "d": 4.0,
+   "text": "for er and demand those systems"
+  },
+  {
+   "t": 1708.8,
+   "d": 4.4,
+   "text": "for a better world in their own reality"
+  },
+  {
+   "t": 1713.2,
+   "d": 2.96,
+   "text": "our own reality"
+  },
+  {
+   "t": 1716.16,
+   "d": 2.64,
+   "text": "well thank you"
+  },
+  {
+   "t": 1718.88,
+   "d": 3.2,
+   "text": "thank you thank you"
+  },
+  {
+   "t": 1722.16,
+   "d": 2.72,
+   "text": "that was that was quite the 30 minutes"
+  },
+  {
+   "t": 1724.88,
+   "d": 1.76,
+   "text": "thank you so far"
+  },
+  {
+   "t": 1726.64,
+   "d": 2.8,
+   "text": "i think yeah there was a really um"
+  },
+  {
+   "t": 1729.44,
+   "d": 1.52,
+   "text": "troubled and then thoughtful discussion"
+  },
+  {
+   "t": 1730.96,
+   "d": 2.72,
+   "text": "in chat i think of of the mix of how"
+  },
+  {
+   "t": 1733.68,
+   "d": 1.68,
+   "text": "it can be very disheartening but also"
+  },
+  {
+   "t": 1735.36,
+   "d": 1.84,
+   "text": "there's the push of you know"
+  },
+  {
+   "t": 1737.2,
+   "d": 1.68,
+   "text": "we can make intentional choices and we"
+  },
+  {
+   "t": 1738.88,
+   "d": 1.84,
+   "text": "can do better i think i like that note"
+  },
+  {
+   "t": 1740.72,
+   "d": 1.6,
+   "text": "you ended on of"
+  },
+  {
+   "t": 1742.32,
+   "d": 2.64,
+   "text": "this is an opportunity to do more than"
+  },
+  {
+   "t": 1744.96,
+   "d": 3.28,
+   "text": "just make something fun"
+  },
+  {
+   "t": 1748.24,
+   "d": 1.84,
+   "text": "and if you lose your mind it's an"
+  },
+  {
+   "t": 1750.08,
+   "d": 2.4,
+   "text": "opportunity to find it again you know"
+  },
+  {
+   "t": 1752.48,
+   "d": 3.04,
+   "text": "i'd give a talk like"
+  },
+  {
+   "t": 1755.52,
+   "d": 1.44,
+   "text": "if there's anything i've learned from"
+  },
+  {
+   "t": 1756.96,
+   "d": 1.92,
+   "text": "the modern economy in our real world"
+  },
+  {
+   "t": 1758.88,
+   "d": 3.2,
+   "text": "it's that i can commodify my pain so"
+  },
+  {
+   "t": 1762.08,
+   "d": 1.52,
+   "text": "you know"
+  },
+  {
+   "t": 1763.6,
+   "d": 1.84,
+   "text": "which actually i mean i hate that's the"
+  },
+  {
+   "t": 1765.44,
+   "d": 2.8,
+   "text": "worst sentence to say speaking of"
+  },
+  {
+   "t": 1768.24,
+   "d": 1.36,
+   "text": "but"
+  },
+  {
+   "t": 1769.6,
+   "d": 1.44,
+   "text": "i will say we have time probably for one"
+  },
+  {
+   "t": 1771.04,
+   "d": 1.12,
+   "text": "question i think it's an interesting one"
+  },
+  {
+   "t": 1772.16,
+   "d": 1.2,
+   "text": "because i see it come up all the time"
+  },
+  {
+   "t": 1773.36,
+   "d": 1.36,
+   "text": "around this discussion so i feel like"
+  },
+  {
+   "t": 1774.72,
+   "d": 1.84,
+   "text": "you'll have thoughts which is uh what do"
+  },
+  {
+   "t": 1776.56,
+   "d": 2.4,
+   "text": "you think about realistic sexism and"
+  },
+  {
+   "t": 1778.96,
+   "d": 2.0,
+   "text": "racism and games and other depictions of"
+  },
+  {
+   "t": 1780.96,
+   "d": 1.36,
+   "text": "like well it's a medieval game so we"
+  },
+  {
+   "t": 1782.32,
+   "d": 1.52,
+   "text": "have to depict women like this in that"
+  },
+  {
+   "t": 1783.84,
+   "d": 2.32,
+   "text": "kind of example"
+  },
+  {
+   "t": 1786.16,
+   "d": 2.8,
+   "text": "it's it's a decision uh like like any"
+  },
+  {
+   "t": 1788.96,
+   "d": 1.68,
+   "text": "other um"
+  },
+  {
+   "t": 1790.64,
+   "d": 1.2,
+   "text": "and"
+  },
+  {
+   "t": 1791.84,
+   "d": 1.92,
+   "text": "especially depending on the execution i"
+  },
+  {
+   "t": 1793.76,
+   "d": 2.8,
+   "text": "would not tell the developer to do it or"
+  },
+  {
+   "t": 1796.56,
+   "d": 1.12,
+   "text": "not do it"
+  },
+  {
+   "t": 1797.68,
+   "d": 2.32,
+   "text": "it's it's more than the the impact that"
+  },
+  {
+   "t": 1800.0,
+   "d": 0.8,
+   "text": "that"
+  },
+  {
+   "t": 1800.8,
+   "d": 2.24,
+   "text": "set of decisions has on"
+  },
+  {
+   "t": 1803.04,
+   "d": 2.32,
+   "text": "their world and on their players"
+  },
+  {
+   "t": 1805.36,
+   "d": 1.68,
+   "text": "um"
+  },
+  {
+   "t": 1807.04,
+   "d": 1.36,
+   "text": "am"
+  },
+  {
+   "t": 1808.4,
+   "d": 1.28,
+   "text": "i"
+  },
+  {
+   "t": 1809.68,
+   "d": 1.44,
+   "text": "uncomfortable"
+  },
+  {
+   "t": 1811.12,
+   "d": 2.32,
+   "text": "with the idea of"
+  },
+  {
+   "t": 1813.44,
+   "d": 2.08,
+   "text": "you know stepping into a fantasy world"
+  },
+  {
+   "t": 1815.52,
+   "d": 2.32,
+   "text": "and everybody kind of seeing me as other"
+  },
+  {
+   "t": 1817.84,
+   "d": 1.2,
+   "text": "because"
+  },
+  {
+   "t": 1819.04,
+   "d": 1.92,
+   "text": "like i'm not an orc or something i'm"
+  },
+  {
+   "t": 1820.96,
+   "d": 1.6,
+   "text": "just a black dude"
+  },
+  {
+   "t": 1822.56,
+   "d": 1.28,
+   "text": "that is"
+  },
+  {
+   "t": 1823.84,
+   "d": 3.2,
+   "text": "you know uh valid but it's also like"
+  },
+  {
+   "t": 1827.04,
+   "d": 1.84,
+   "text": "i'll be honest it's it's interesting i"
+  },
+  {
+   "t": 1828.88,
+   "d": 2.56,
+   "text": "think part of the reason we make art is"
+  },
+  {
+   "t": 1831.44,
+   "d": 1.12,
+   "text": "to"
+  },
+  {
+   "t": 1832.56,
+   "d": 0.96,
+   "text": "thrill"
+  },
+  {
+   "t": 1833.52,
+   "d": 3.12,
+   "text": "to encourage to uh"
+  },
+  {
+   "t": 1836.64,
+   "d": 1.84,
+   "text": "distract and"
+  },
+  {
+   "t": 1838.48,
+   "d": 1.12,
+   "text": "um"
+  },
+  {
+   "t": 1839.6,
+   "d": 2.48,
+   "text": "provide you know"
+  },
+  {
+   "t": 1842.08,
+   "d": 1.92,
+   "text": "what what what whatever whatever the"
+  },
+  {
+   "t": 1844.0,
+   "d": 1.76,
+   "text": "term is for like there's there's all"
+  },
+  {
+   "t": 1845.76,
+   "d": 1.12,
+   "text": "sorts of things that games can be"
+  },
+  {
+   "t": 1846.88,
+   "d": 2.88,
+   "text": "including quote unquote just fun but one"
+  },
+  {
+   "t": 1849.76,
+   "d": 1.84,
+   "text": "of those things is like"
+  },
+  {
+   "t": 1851.6,
+   "d": 1.92,
+   "text": "yeah if you want to make your players"
+  },
+  {
+   "t": 1853.52,
+   "d": 1.44,
+   "text": "uncomfortable if you want to say"
+  },
+  {
+   "t": 1854.96,
+   "d": 1.28,
+   "text": "something"
+  },
+  {
+   "t": 1856.24,
+   "d": 2.64,
+   "text": "one be damn sure that you're saying it"
+  },
+  {
+   "t": 1858.88,
+   "d": 0.88,
+   "text": "well"
+  },
+  {
+   "t": 1859.76,
+   "d": 1.2,
+   "text": "and"
+  },
+  {
+   "t": 1860.96,
+   "d": 1.68,
+   "text": "that's one of the reasons that we play"
+  },
+  {
+   "t": 1862.64,
+   "d": 2.88,
+   "text": "games in the first place to experience"
+  },
+  {
+   "t": 1865.52,
+   "d": 3.28,
+   "text": "um and i want to see more games that are"
+  },
+  {
+   "t": 1868.8,
+   "d": 2.16,
+   "text": "approaching that intentionally"
+  },
+  {
+   "t": 1870.96,
+   "d": 2.0,
+   "text": "um and not being [ __ ] about it"
+  },
+  {
+   "t": 1872.96,
+   "d": 1.2,
+   "text": "because it's very"
+  },
+  {
+   "t": 1874.16,
+   "d": 2.64,
+   "text": "easy to be an [ __ ] about it yeah no i"
+  },
+  {
+   "t": 1876.8,
+   "d": 0.88,
+   "text": "think that's great i think"
+  },
+  {
+   "t": 1877.68,
+   "d": 1.76,
+   "text": "intentionality is a big part of it i"
+  },
+  {
+   "t": 1879.44,
+   "d": 2.8,
+   "text": "feel like the where the line often is is"
+  },
+  {
+   "t": 1882.24,
+   "d": 1.52,
+   "text": "the difference of games that i think are"
+  },
+  {
+   "t": 1883.76,
+   "d": 1.76,
+   "text": "using historical arguments to kind of"
+  },
+  {
+   "t": 1885.52,
+   "d": 2.0,
+   "text": "sidestep of like you mentioned of kind"
+  },
+  {
+   "t": 1887.52,
+   "d": 1.44,
+   "text": "of following a chain of decisions of"
+  },
+  {
+   "t": 1888.96,
+   "d": 2.64,
+   "text": "like well we didn't decide it we we just"
+  },
+  {
+   "t": 1891.6,
+   "d": 1.68,
+   "text": "went that's just the way it was it's"
+  },
+  {
+   "t": 1893.28,
+   "d": 1.68,
+   "text": "just how it was we decided it was a"
+  },
+  {
+   "t": 1894.96,
+   "d": 1.84,
+   "text": "medieval game that's what had to happen"
+  },
+  {
+   "t": 1896.8,
+   "d": 3.2,
+   "text": "so yeah i think owning those decisions"
+  },
+  {
+   "t": 1900.0,
+   "d": 2.24,
+   "text": "making sure that i think space warlord"
+  },
+  {
+   "t": 1902.24,
+   "d": 1.36,
+   "text": "is the game that has taught me more so"
+  },
+  {
+   "t": 1903.6,
+   "d": 1.36,
+   "text": "than anything"
+  },
+  {
+   "t": 1904.96,
+   "d": 2.4,
+   "text": "to own the implications of my creative"
+  },
+  {
+   "t": 1907.36,
+   "d": 3.12,
+   "text": "decisions sometimes i will and i'm sure"
+  },
+  {
+   "t": 1910.48,
+   "d": 3.04,
+   "text": "have been wrong uh sometimes i've done"
+  },
+  {
+   "t": 1913.52,
+   "d": 2.16,
+   "text": "something great by accident and"
+  },
+  {
+   "t": 1915.68,
+   "d": 2.64,
+   "text": "sometimes i've made a choice that was"
+  },
+  {
+   "t": 1918.32,
+   "d": 3.12,
+   "text": "uncomfortable or disagreed with but"
+  },
+  {
+   "t": 1921.44,
+   "d": 2.56,
+   "text": "needed to be there for the work to exist"
+  },
+  {
+   "t": 1924.0,
+   "d": 2.72,
+   "text": "or to have the impact uh that i wanted"
+  },
+  {
+   "t": 1926.72,
+   "d": 2.96,
+   "text": "to have and all of those things and all"
+  },
+  {
+   "t": 1929.68,
+   "d": 2.24,
+   "text": "those situations i'm learning i have"
+  },
+  {
+   "t": 1931.92,
+   "d": 2.32,
+   "text": "learned with this game in particular to"
+  },
+  {
+   "t": 1934.24,
+   "d": 1.04,
+   "text": "own them"
+  },
+  {
+   "t": 1935.28,
+   "d": 2.56,
+   "text": "yeah that was me that was our team and"
+  },
+  {
+   "t": 1937.84,
+   "d": 1.36,
+   "text": "the next game"
+  },
+  {
+   "t": 1939.2,
+   "d": 2.16,
+   "text": "is going to continue that trend of"
+  },
+  {
+   "t": 1941.36,
+   "d": 1.44,
+   "text": "intentionality"
+  },
+  {
+   "t": 1942.8,
+   "d": 1.04,
+   "text": "and"
+  },
+  {
+   "t": 1943.84,
+   "d": 3.0,
+   "text": "human empathy and"
+  },
+  {
+   "t": 1946.84,
+   "d": 2.6,
+   "text": "respect excellent all right well thank"
+  },
+  {
+   "t": 1949.44,
+   "d": 2.8,
+   "text": "you so much for that great talk and uh"
+  },
+  {
+   "t": 1952.24,
+   "d": 2.96,
+   "text": "for coming to roguelike celebration"
+  },
+  {
+   "t": 1955.2,
+   "d": 2.56,
+   "text": "take care remember roguelike celebration"
+  },
+  {
+   "t": 1957.76,
+   "d": 3.96,
+   "text": "commodify your pain"
+  },
+  {
+   "t": 1963.28,
+   "d": 1.44,
+   "text": "hmm"
+  },
+  {
+   "t": 1964.72,
+   "d": 2.0,
+   "text": "down the years will i regret that being"
+  },
+  {
+   "t": 1966.72,
+   "d": 1.52,
+   "text": "taken out of context"
+  },
+  {
+   "t": 1968.24,
+   "d": 4.0,
+   "text": "there's only one way to find out"
+  }
+ ]
+}

@@ -1,0 +1,1754 @@
+{
+ "id": "WeRCGy3-uPY",
+ "url": "https://www.youtube.com/watch?v=WeRCGy3-uPY",
+ "title": "Allie Signet & Joe Maliksi - SIBR - Sports, Splorts, and Statistics: Why Data Accessibility Matters",
+ "speaker": "Allie Signet & Joe Maliksi",
+ "talk_title": "SIBR - Sports, Splorts, and Statistics: Why Data Accessibility Matters",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1791,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "Roguelikes are well-known for their ability to generate infinitely complex histories, but how do you make such a detailed—and often ephemeral—historical record an accessible resource for storytelling? We discuss our experience as fan-archivists and tool-builders for the absurdist online baseball simulator, Blaseball, and how going beyond the raw event log to increase data accessibility, automate insights, and encourage “creative” statistical interpretations helps make storytellers out of everyone in the community by sharing not just data, but meaning.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to blaseball"
+  },
+  {
+   "start": 90,
+   "title": "Data and archival principles"
+  },
+  {
+   "start": 242,
+   "title": "Tools for data accessibility"
+  },
+  {
+   "start": 448,
+   "title": "Building and utilizing tools"
+  },
+  {
+   "start": 648,
+   "title": "Aggregating for narratives"
+  },
+  {
+   "start": 842,
+   "title": "Replays and community engagement"
+  },
+  {
+   "start": 951,
+   "title": "Final reflections on storytelling"
+  },
+  {
+   "start": 1020,
+   "title": "Q&A and technical discussion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3809,
+ "trimmed": {
+  "segments": 394,
+  "words": 4280
+ },
+ "segments": [
+  {
+   "t": 5.53,
+   "d": 1.0,
+   "text": "And next up, we are going to get into a game."
+  },
+  {
+   "t": 13.35,
+   "d": 4.0,
+   "text": "We have some of the wonderful people from SIBR."
+  },
+  {
+   "t": 17.35,
+   "d": 11.61,
+   "text": "We are joined by Allie and Joe to talk about \"SIBR - Sports, Splorts, and Statistics: Why"
+  },
+  {
+   "t": 28.96,
+   "d": 4.25,
+   "text": "Data Accessibility Matters in Blaseball and Beyond\"."
+  },
+  {
+   "t": 33.21,
+   "d": 1.62,
+   "text": ">> Thanks, Alexei."
+  },
+  {
+   "t": 34.83,
+   "d": 7.83,
+   "text": "I am Joe and known as should be around the internet."
+  },
+  {
+   "t": 42.66,
+   "d": 1.08,
+   "text": ">> I am Allie."
+  },
+  {
+   "t": 43.74,
+   "d": 6.64,
+   "text": "I am an archiveal researcher and programmer of only sometimes useful things."
+  },
+  {
+   "t": 50.38,
+   "d": 9.14,
+   "text": ">> We are here to talk about data archiveal."
+  },
+  {
+   "t": 59.52,
+   "d": 7.18,
+   "text": "And why you should care not just about saving every procedural event but making data available."
+  },
+  {
+   "t": 66.7,
+   "d": 6.53,
+   "text": "Looking at funny numbers and deriving a story is unique to the Roguelike community but Blaseball"
+  },
+  {
+   "t": 73.23,
+   "d": 2.45,
+   "text": "is just like a real experience."
+  },
+  {
+   "t": 75.68,
+   "d": 14.29,
+   "text": "A fan in the stand can't pause the games and we will talk about -- Blaseball and the community"
+  },
+  {
+   "t": 89.97,
+   "d": 2.14,
+   "text": "and artwork."
+  },
+  {
+   "t": 92.11,
+   "d": 1.36,
+   "text": "What is Blaseball?"
+  },
+  {
+   "t": 93.47,
+   "d": 6.28,
+   "text": "Launched in August 2020, it is an online base ball simulate and every week is a mew season"
+  },
+  {
+   "t": 99.75,
+   "d": 3.34,
+   "text": "and every hour is a new game day."
+  },
+  {
+   "t": 103.09,
+   "d": 3.91,
+   "text": "You pick your favorite team, irrational cheer for success and hope your favorite player"
+  },
+  {
+   "t": 107.0,
+   "d": 2.48,
+   "text": "doesn't get incinerated."
+  },
+  {
+   "t": 109.48,
+   "d": 5.68,
+   "text": "We have agency over the plans and teams, we don't have effect on the games."
+  },
+  {
+   "t": 115.16,
+   "d": 4.9,
+   "text": "We are just an audience observing the outcome of dice we don't even get to roll ourselves."
+  },
+  {
+   "t": 120.06,
+   "d": 9.47,
+   "text": "Here is where SIBR comes in."
+  },
+  {
+   "t": 129.53,
+   "d": 10.57,
+   "text": "And decide today pipe all that as JSON and upload a file."
+  },
+  {
+   "t": 140.1,
+   "d": 3.71,
+   "text": "Like the early days of sports, in the early days of Blaseball if you were not watching"
+  },
+  {
+   "t": 143.81,
+   "d": 6.71,
+   "text": "the game and missed, the best you could hope for is having a friend tell you how cool it"
+  },
+  {
+   "t": 150.52,
+   "d": 2.76,
+   "text": "was."
+  },
+  {
+   "t": 153.28,
+   "d": 9.35,
+   "text": "This might sound familiar to all us Roguelike enthusist."
+  },
+  {
+   "t": 162.63,
+   "d": 4.28,
+   "text": "You might be able to review log to find that viewerist was throwing a tantrum."
+  },
+  {
+   "t": 166.91,
+   "d": 10.08,
+   "text": "What if a supply chain lapsed?"
+  },
+  {
+   "t": 176.99,
+   "d": 3.88,
+   "text": "This is a double edge sword of procedural systems where tons of things are interacting"
+  },
+  {
+   "t": 180.87,
+   "d": 1.0,
+   "text": "with themselves."
+  },
+  {
+   "t": 181.87,
+   "d": 3.84,
+   "text": "They are constantly telling interesting, surprising stories that are absolutely inpenetrateable"
+  },
+  {
+   "t": 185.71,
+   "d": 2.51,
+   "text": "without detailed notes."
+  },
+  {
+   "t": 188.22,
+   "d": 8.24,
+   "text": "Despite the complexity of having a couple dozen real human beings taking hundreds of"
+  },
+  {
+   "t": 196.46,
+   "d": 5.64,
+   "text": "actions, sports commentary these days faces increasingly factoids like Aaron Donald has"
+  },
+  {
+   "t": 202.1,
+   "d": 6.04,
+   "text": "played Tom Brady three times but never sacked him in the second half while down three scores."
+  },
+  {
+   "t": 208.14,
+   "d": 6.54,
+   "text": "It is a technological marble we can do this and filtering signal from noise is the answer"
+  },
+  {
+   "t": 214.68,
+   "d": 1.0,
+   "text": "of narrative."
+  },
+  {
+   "t": 215.68,
+   "d": 2.64,
+   "text": ">> How do we get there?"
+  },
+  {
+   "t": 218.32,
+   "d": 5.89,
+   "text": "The essential information of any good archive system is recording everything."
+  },
+  {
+   "t": 224.21,
+   "d": 5.73,
+   "text": "Data you don't think is important today might be at the core of a story you want to tell"
+  },
+  {
+   "t": 229.94,
+   "d": 6.14,
+   "text": "tomorrow and then a remarkable player can become a breakout in a matter of a play and"
+  },
+  {
+   "t": 236.08,
+   "d": 10.63,
+   "text": "you will be wishing you recorded that game."
+  },
+  {
+   "t": 246.71,
+   "d": 4.8,
+   "text": "The first step starting out in an unprocessed form as we can."
+  },
+  {
+   "t": 251.51,
+   "d": 5.86,
+   "text": "You always want to have the most complete picture you can saved before you start carving"
+  },
+  {
+   "t": 257.37,
+   "d": 1.0,
+   "text": "it down."
+  },
+  {
+   "t": 258.37,
+   "d": 7.24,
+   "text": "As precious as this raw pile of data is, a nightmarishly tall stack of data is not enjoyable"
+  },
+  {
+   "t": 265.61,
+   "d": 1.29,
+   "text": "to work with."
+  },
+  {
+   "t": 266.9,
+   "d": 7.07,
+   "text": "Telling a story means finding that one play where you can see you are start to get it"
+  },
+  {
+   "t": 273.97,
+   "d": 5.2,
+   "text": "and don't have the time to scrub data footage to see it."
+  },
+  {
+   "t": 279.17,
+   "d": 6.41,
+   "text": "So the second step is not only saving your data but making it accessible."
+  },
+  {
+   "t": 285.58,
+   "d": 3.85,
+   "text": "Now, accessibility means different things to different people."
+  },
+  {
+   "t": 289.43,
+   "d": 8.61,
+   "text": "Some enjoy the sight of hundreds of JSON from API and some find it terrifying."
+  },
+  {
+   "t": 298.04,
+   "d": 4.52,
+   "text": "Both pose different challenges but share one fundamental need."
+  },
+  {
+   "t": 302.56,
+   "d": 3.18,
+   "text": "The ability to find needles in a haystack."
+  },
+  {
+   "t": 305.74,
+   "d": 6.5,
+   "text": "We talked about the lessons we have learned over the past year but we only have half an"
+  },
+  {
+   "t": 312.24,
+   "d": 3.97,
+   "text": "hour so we picked out four to focus on."
+  },
+  {
+   "t": 316.21,
+   "d": 3.38,
+   "text": "The first is documentation."
+  },
+  {
+   "t": 319.59,
+   "d": 5.84,
+   "text": "We mentioned earlier that we started by piping raw JSON game events."
+  },
+  {
+   "t": 325.43,
+   "d": 6.77,
+   "text": "The next step was that folks took the time to document the publicly known end points"
+  },
+  {
+   "t": 332.2,
+   "d": 5.3,
+   "text": "on GitHub and the game band graciously never asked them to stop."
+  },
+  {
+   "t": 337.5,
+   "d": 9.88,
+   "text": "While this meant that there was a common reference to use while doing the tough job of processing,"
+  },
+  {
+   "t": 347.38,
+   "d": 9.63,
+   "text": "aggregating game structures into the structured analysis, it meant when blasebot was built,"
+  },
+  {
+   "t": 357.01,
+   "d": 8.55,
+   "text": "they were not starting from zero nor was their blocks despite having a different use case"
+  },
+  {
+   "t": 365.56,
+   "d": 4.85,
+   "text": "from the initial intended use case for the raw data."
+  },
+  {
+   "t": 370.41,
+   "d": 4.32,
+   "text": "An understanding of existing APIs can lead to shenanigans."
+  },
+  {
+   "t": 374.73,
+   "d": 7.59,
+   "text": "In season 6, the Blaseball community realized we could bring it back and the idle mechanic"
+  },
+  {
+   "t": 382.32,
+   "d": 9.53,
+   "text": "was introduced allowing fans to declare a player theirs idol and get notes when they"
+  },
+  {
+   "t": 391.85,
+   "d": 4.17,
+   "text": "through a home run or a strike."
+  },
+  {
+   "t": 396.02,
+   "d": 3.29,
+   "text": "There was an idol board that listed the most idolized players."
+  },
+  {
+   "t": 399.31,
+   "d": 9.4,
+   "text": "They can trade to whoever is the top idol to your team and the fans wanted to see what"
+  },
+  {
+   "t": 408.71,
+   "d": 6.42,
+   "text": "happened the player on the spot was dead and the question is who do we bring back?"
+  },
+  {
+   "t": 415.13,
+   "d": 12.72,
+   "text": "One of the names floated was the first of the incinerated."
+  },
+  {
+   "t": 427.85,
+   "d": 6.37,
+   "text": "Some creative digging for the official Blaseball API fans were able to find the ID and player"
+  },
+  {
+   "t": 434.22,
+   "d": 7.6,
+   "text": "page and kick start the pivotal plot of the disciplinary so lesson number one is don't"
+  },
+  {
+   "t": 441.82,
+   "d": 6.94,
+   "text": "just start with raw data but document where you start."
+  },
+  {
+   "t": 448.76,
+   "d": 6.25,
+   "text": "It can encourage community growth and creativity."
+  },
+  {
+   "t": 455.01,
+   "d": 5.1,
+   "text": ">> However, raw data is still obviously very important."
+  },
+  {
+   "t": 460.11,
+   "d": 3.78,
+   "text": "Even if you have a set of aggregated data available, the questions people ask evolve"
+  },
+  {
+   "t": 463.89,
+   "d": 4.25,
+   "text": "over time and the only way to surface unknown unknowns is analyzing the raw data."
+  },
+  {
+   "t": 468.14,
+   "d": 4.38,
+   "text": "We can make accessing and slicing that raw data easier."
+  },
+  {
+   "t": 472.52,
+   "d": 4.6,
+   "text": "On day 1, we had a lot of JSON and S3 enough to power Blaseball reference for three months"
+  },
+  {
+   "t": 477.12,
+   "d": 10.28,
+   "text": "but not great for newcomers because they had to reinvent the real every time and install"
+  },
+  {
+   "t": 487.4,
+   "d": 2.42,
+   "text": "it and figure out their JSON parser."
+  },
+  {
+   "t": 489.82,
+   "d": 7.25,
+   "text": "The data blase which has been worked on by a variety of folks was the first crack at"
+  },
+  {
+   "t": 497.07,
+   "d": 5.61,
+   "text": "messaging the raw data into a rich indexable game object and provides SQL and spreadsheet"
+  },
+  {
+   "t": 502.68,
+   "d": 1.0,
+   "text": "toot."
+  },
+  {
+   "t": 503.68,
+   "d": 8.65,
+   "text": "It was based on cyber metrics and baseball data but has accommodated over time."
+  },
+  {
+   "t": 512.33,
+   "d": 7.8,
+   "text": "Providing now, we are able to answer the overspecifically questions like which player hit a home run"
+  },
+  {
+   "t": 520.13,
+   "d": 8.96,
+   "text": "against Jalen hot dog fingers."
+  },
+  {
+   "t": 529.09,
+   "d": 4.98,
+   "text": "And then we added index to the raw data and provided a web API to query it."
+  },
+  {
+   "t": 534.07,
+   "d": 5.53,
+   "text": "Since it was written to back reblaze, another great front end tool, web apps in general"
+  },
+  {
+   "t": 539.6,
+   "d": 7.14,
+   "text": "wanted to display historical data were possible and you were able to simplify analysis to"
+  },
+  {
+   "t": 546.74,
+   "d": 2.82,
+   "text": "jet -- get just the subset of raw data you need."
+  },
+  {
+   "t": 549.56,
+   "d": 12.38,
+   "text": "That led to a hackathon for everyone to make viewers despite Blaseball we being in siesta."
+  },
+  {
+   "t": 561.94,
+   "d": 5.36,
+   "text": "We ended up with 58 different entries and that's kind of amazing W. The introduction"
+  },
+  {
+   "t": 567.3,
+   "d": 4.8,
+   "text": "of the feed in season 12, we had an official API for historical data that was better tagged"
+  },
+  {
+   "t": 572.1,
+   "d": 8.49,
+   "text": "and structured but Allie's API allowed questions like what are the interactions between nan"
+  },
+  {
+   "t": 580.59,
+   "d": 1.64,
+   "text": "and forest vest?"
+  },
+  {
+   "t": 582.23,
+   "d": 6.44,
+   "text": "At the core, all these tools work toward the same goal in different areas and making things"
+  },
+  {
+   "t": 588.67,
+   "d": 2.02,
+   "text": "easier to find."
+  },
+  {
+   "t": 590.69,
+   "d": 8.91,
+   "text": "Data hanging around with nothing to handle is it not useful."
+  },
+  {
+   "t": 599.6,
+   "d": 4.71,
+   "text": "Providing an easy way to access raw data also empower folks to run their own analysis."
+  },
+  {
+   "t": 604.31,
+   "d": 4.81,
+   "text": "Meta sim was a bot that featured games and was accurate but wouldn't have been able to"
+  },
+  {
+   "t": 609.12,
+   "d": 4.43,
+   "text": "create the methods."
+  },
+  {
+   "t": 613.55,
+   "d": 5.86,
+   "text": "The Wiki automated events freed up a ton of time that would have been spent back lagging"
+  },
+  {
+   "t": 619.41,
+   "d": 3.47,
+   "text": "and copy and pasting."
+  },
+  {
+   "t": 622.88,
+   "d": 15.72,
+   "text": "Blaseball news reporters scoured over the logs and was able to write stories."
+  },
+  {
+   "t": 638.6,
+   "d": 1.17,
+   "text": "So lesson two."
+  },
+  {
+   "t": 639.77,
+   "d": 3.97,
+   "text": "You don't need to answer everything with a perfect API out the gate."
+  },
+  {
+   "t": 643.74,
+   "d": 6.1,
+   "text": "But it enablings a lot of creativity."
+  },
+  {
+   "t": 649.84,
+   "d": 4.67,
+   "text": ">> With the raw data in hand the next step is aggregating the data."
+  },
+  {
+   "t": 654.51,
+   "d": 2.32,
+   "text": "For example, statistics."
+  },
+  {
+   "t": 656.83,
+   "d": 5.87,
+   "text": "While play back narratives are are a classic statistics can tell stories."
+  },
+  {
+   "t": 662.7,
+   "d": 11.48,
+   "text": "Idol games communicate expoponential and terrifying growth."
+  },
+  {
+   "t": 674.18,
+   "d": 6.05,
+   "text": "Just a graph of how a player's stats got better over time can tell a story of an underdog"
+  },
+  {
+   "t": 680.23,
+   "d": 1.51,
+   "text": "rising to the spotlight."
+  },
+  {
+   "t": 681.74,
+   "d": 7.48,
+   "text": "Aggregating data means being able to see a narrative in a single number, making the stories"
+  },
+  {
+   "t": 689.22,
+   "d": 3.2,
+   "text": "that sign easier to notice at a glance."
+  },
+  {
+   "t": 692.42,
+   "d": 4.94,
+   "text": "One of the first tools built using this principle is blaze Blaseball reference."
+  },
+  {
+   "t": 697.36,
+   "d": 10.71,
+   "text": "A site that makes it easy to see the expected on base, slugging percentage and the season's"
+  },
+  {
+   "t": 708.07,
+   "d": 1.0,
+   "text": "scale."
+  },
+  {
+   "t": 709.07,
+   "d": 9.3,
+   "text": "These are directly taken from baseball and avoid mechanics that Blaseball introduces."
+  },
+  {
+   "t": 718.37,
+   "d": 2.49,
+   "text": "Averages are great."
+  },
+  {
+   "t": 720.86,
+   "d": 6.6,
+   "text": "If you know the averages, you can spot players and craft a story out of that."
+  },
+  {
+   "t": 727.46,
+   "d": 7.55,
+   "text": "Averages, leaderboards, are easier to access and then the average viewer doesn't have to"
+  },
+  {
+   "t": 735.01,
+   "d": 6.45,
+   "text": "watch every single game to participate in identifying and telling stories."
+  },
+  {
+   "t": 741.46,
+   "d": 8.78,
+   "text": "For example, the Dallas stakes can be considered a small market them but they were playing"
+  },
+  {
+   "t": 750.24,
+   "d": 7.78,
+   "text": "your team in the play offs you need to fear which Connor steps up to bat since they are"
+  },
+  {
+   "t": 758.02,
+   "d": 4.8,
+   "text": "one of the consistently best sluggers in the entire league."
+  },
+  {
+   "t": 762.82,
+   "d": 6.99,
+   "text": "You would not have had to watch a single Stakes game to find this out."
+  },
+  {
+   "t": 769.81,
+   "d": 5.16,
+   "text": "Another example on a longer scale, in season 4, you could have the shift of the triple"
+  },
+  {
+   "t": 774.97,
+   "d": 6.44,
+   "text": "crown by being the leader in batting average, home runs and runs batted in."
+  },
+  {
+   "t": 781.41,
+   "d": 9.98,
+   "text": "The stat nerds are happy we can identify this and the storytelling in us might want to explain"
+  },
+  {
+   "t": 791.39,
+   "d": 1.86,
+   "text": "why."
+  },
+  {
+   "t": 793.25,
+   "d": 5.35,
+   "text": "Maybe you simply look at your five batting stars, give a thumbs up and continue on your"
+  },
+  {
+   "t": 798.6,
+   "d": 1.0,
+   "text": "day."
+  },
+  {
+   "t": 799.6,
+   "d": 7.98,
+   "text": "Maybe you see that the only other five star hitter was traded in the offseason and you"
+  },
+  {
+   "t": 807.58,
+   "d": 7.97,
+   "text": "see they have never had a winning season and then there is a down year and their teammate"
+  },
+  {
+   "t": 815.55,
+   "d": 9.7,
+   "text": "has a career-year by cracking the top 10 in most hitting categories despite only 1.5 starts"
+  },
+  {
+   "t": 825.25,
+   "d": 8.4,
+   "text": "and this becomes the seed of inspiration for a tragic or triumphant underdog fun fact."
+  },
+  {
+   "t": 833.65,
+   "d": 5.02,
+   "text": "Lesson three averages and leaderboards are good because it makes spotting out players"
+  },
+  {
+   "t": 838.67,
+   "d": 4.17,
+   "text": "easy and accessible."
+  },
+  {
+   "t": 842.84,
+   "d": 6.88,
+   "text": ">> At first glance, it might feel like you only need to care about the effects of something."
+  },
+  {
+   "t": 849.72,
+   "d": 3.55,
+   "text": "The final score of a match or that it landed you in the playoffs but to tell a story about"
+  },
+  {
+   "t": 853.27,
+   "d": 3.11,
+   "text": "it you often need to know what happened."
+  },
+  {
+   "t": 856.38,
+   "d": 3.88,
+   "text": "How do you tell the story of the play that saved your team from the clutches of a defeat"
+  },
+  {
+   "t": 860.26,
+   "d": 1.59,
+   "text": "without access to a replay?"
+  },
+  {
+   "t": 861.85,
+   "d": 3.51,
+   "text": "You can try but without a way to look back it is a challenge."
+  },
+  {
+   "t": 865.36,
+   "d": 10.85,
+   "text": "Blaseball and blase bot were tooled -- tools that changed the land."
+  },
+  {
+   "t": 876.21,
+   "d": 7.69,
+   "text": "It can make the same community inpenetrateable at times and places the burden for community"
+  },
+  {
+   "t": 883.9,
+   "d": 2.45,
+   "text": "members online to repeat themselves."
+  },
+  {
+   "t": 886.35,
+   "d": 8.68,
+   "text": "By posting notable events like game outcomes and more to Discord, these blasebots provided"
+  },
+  {
+   "t": 895.03,
+   "d": 4.54,
+   "text": "ways to asynchronously read updates on the tool."
+  },
+  {
+   "t": 899.57,
+   "d": 6.15,
+   "text": "Reblase did the same by making it easy to search previous games with the chronological"
+  },
+  {
+   "t": 905.72,
+   "d": 6.2,
+   "text": "event log and made it possible for people to share series of events with each other."
+  },
+  {
+   "t": 911.92,
+   "d": 9.77,
+   "text": "Mythology based on themes and you can write a story talk directly and indirectly paved"
+  },
+  {
+   "t": 921.69,
+   "d": 6.0,
+   "text": "the way for much of Blaseball's culture and plot and shout-out to Sam and Steve."
+  },
+  {
+   "t": 927.69,
+   "d": 7.43,
+   "text": "Pulling up a replay of gloom being incinerated before hitting a home run goes from weird,"
+  },
+  {
+   "t": 935.12,
+   "d": 4.95,
+   "text": "to holy crap I want believe that just happened to everyone check this out."
+  },
+  {
+   "t": 940.07,
+   "d": 3.87,
+   "text": "Lesson four, make viewing scroll back easy, shareable, Etc."
+  },
+  {
+   "t": 943.94,
+   "d": 3.85,
+   "text": "It is another way to build community by sharing the common seeds of inspiration."
+  },
+  {
+   "t": 947.79,
+   "d": 2.1,
+   "text": "If you have free time, check out before.SIBR.dev."
+  },
+  {
+   "t": 949.89,
+   "d": 7.71,
+   "text": "There are a ton more tools and stories we can cover but at the ondf -- end of the day"
+  },
+  {
+   "t": 957.6,
+   "d": 2.45,
+   "text": "it is people telling stories."
+  },
+  {
+   "t": 960.05,
+   "d": 7.8,
+   "text": "Once we started collecting the data folks were able to tell the stories even when it"
+  },
+  {
+   "t": 967.85,
+   "d": 2.11,
+   "text": "tooling was nonexistent."
+  },
+  {
+   "t": 969.96,
+   "d": 8.57,
+   "text": "Those tools will never exist and that's totally fine."
+  },
+  {
+   "t": 978.53,
+   "d": 3.1,
+   "text": "Remember the stories we tell each other and not the ease in which we derive signal from"
+  },
+  {
+   "t": 981.63,
+   "d": 5.77,
+   "text": "noise but if you made it possible for one more person to tell a story that's one more"
+  },
+  {
+   "t": 987.4,
+   "d": 6.78,
+   "text": "voice in your community that can leave a lasting impact."
+  },
+  {
+   "t": 994.18,
+   "d": 1.49,
+   "text": "Thank you."
+  },
+  {
+   "t": 995.67,
+   "d": 4.02,
+   "text": "We wanted to give a special thanks to the SIBR college for helping us write this and"
+  },
+  {
+   "t": 999.69,
+   "d": 3.27,
+   "text": "SIBR as a whole."
+  },
+  {
+   "t": 1002.96,
+   "d": 4.3,
+   "text": ">> Thank you so much for hosting us."
+  },
+  {
+   "t": 1007.26,
+   "d": 7.83,
+   "text": "If you have questions, I am happy to talk about how to transfer this into other games"
+  },
+  {
+   "t": 1015.09,
+   "d": 1.75,
+   "text": "and other sets of data."
+  },
+  {
+   "t": 1016.84,
+   "d": 2.82,
+   "text": "I literally do this for my job."
+  },
+  {
+   "t": 1019.66,
+   "d": 1.26,
+   "text": "EMCEE: Excellent."
+  },
+  {
+   "t": 1020.92,
+   "d": 1.27,
+   "text": "Yeah, no."
+  },
+  {
+   "t": 1022.19,
+   "d": 1.26,
+   "text": "Thank you."
+  },
+  {
+   "t": 1023.45,
+   "d": 1.88,
+   "text": "We have a few questions already."
+  },
+  {
+   "t": 1025.33,
+   "d": 6.55,
+   "text": "What has been the most surprising offhand use of the data stream archive which you were"
+  },
+  {
+   "t": 1031.88,
+   "d": 6.78,
+   "text": "not expecting which I think is hard since you had a game jam that was how can you surprise"
+  },
+  {
+   "t": 1038.66,
+   "d": 1.01,
+   "text": "us?"
+  },
+  {
+   "t": 1039.67,
+   "d": 2.58,
+   "text": ">> I have a special answer."
+  },
+  {
+   "t": 1042.25,
+   "d": 6.22,
+   "text": "We used the Blaseball on a CD ROM."
+  },
+  {
+   "t": 1048.47,
+   "d": 6.36,
+   "text": ">> For those that haven't heard that story, want to get into that?"
+  },
+  {
+   "t": 1054.83,
+   "d": 6.55,
+   "text": ">> The head had the leader with Joe who is one of the developers of Blaseball and we"
+  },
+  {
+   "t": 1061.38,
+   "d": 8.57,
+   "text": "decided we want today surprise him with a copy of Blaseball entirely history of Blaseball"
+  },
+  {
+   "t": 1069.95,
+   "d": 5.45,
+   "text": "on a single 700 megabyte CD-ROM."
+  },
+  {
+   "t": 1075.4,
+   "d": 9.91,
+   "text": "We used before, I wrote some curse compression to take 20 gigabytes of Blaseball history"
+  },
+  {
+   "t": 1085.31,
+   "d": 5.68,
+   "text": "into 570 and we put Blaseball on a CD and gave it to Joe."
+  },
+  {
+   "t": 1090.99,
+   "d": 1.65,
+   "text": "EMCEE: I think that's so beautiful."
+  },
+  {
+   "t": 1092.64,
+   "d": 11.98,
+   "text": "I can't imagine as a game developer something much more satisfying than that."
+  },
+  {
+   "t": 1104.62,
+   "d": 6.65,
+   "text": ">> I am thinking -- >> We had blaseball '99."
+  },
+  {
+   "t": 1111.27,
+   "d": 4.71,
+   "text": ">> I was thinking about the hackathon entries."
+  },
+  {
+   "t": 1115.98,
+   "d": 4.9,
+   "text": "There were a couple that translated game events into music."
+  },
+  {
+   "t": 1120.88,
+   "d": 7.71,
+   "text": "All of them in very different ways generated sheet music, one was like a sinth wave."
+  },
+  {
+   "t": 1128.59,
+   "d": 1.9,
+   "text": "One did jazz orchestrations."
+  },
+  {
+   "t": 1130.49,
+   "d": 1.71,
+   "text": "It was great."
+  },
+  {
+   "t": 1132.2,
+   "d": 1.14,
+   "text": "EMCEE: Yeah."
+  },
+  {
+   "t": 1133.34,
+   "d": 1.0,
+   "text": "Cool."
+  },
+  {
+   "t": 1134.34,
+   "d": 3.81,
+   "text": "I mean people go ahead and ask more questions."
+  },
+  {
+   "t": 1138.15,
+   "d": 1.91,
+   "text": "We have a fair bit of time for Q&A."
+  },
+  {
+   "t": 1140.06,
+   "d": 5.08,
+   "text": "I guess one thing I would ask because you mentioned it was when it comes to apply it"
+  },
+  {
+   "t": 1145.14,
+   "d": 5.05,
+   "text": "to other games, which I know I can see the use of it, are there any things that come"
+  },
+  {
+   "t": 1150.19,
+   "d": 4.74,
+   "text": "from mind from games you floated you wish it also provided the type of datat that would"
+  },
+  {
+   "t": 1154.93,
+   "d": 4.26,
+   "text": "let you pull it out and make things like this?"
+  },
+  {
+   "t": 1159.19,
+   "d": 9.82,
+   "text": ">> I haven't played it but during the Noita talk it was mentioned there is gift export"
+  },
+  {
+   "t": 1169.01,
+   "d": 4.59,
+   "text": "for sharing like fun deaths and kills and that's kind of the same thing here."
+  },
+  {
+   "t": 1173.6,
+   "d": 5.18,
+   "text": "Sharing replay is like people love to crowd around and see highlights."
+  },
+  {
+   "t": 1178.78,
+   "d": 8.74,
+   "text": "And whether you make that like something easy to snapshot or easy with gift export, yeah."
+  },
+  {
+   "t": 1187.52,
+   "d": 7.36,
+   "text": ">> I think any strategy game I would love to like be able to select single place."
+  },
+  {
+   "t": 1194.88,
+   "d": 2.82,
+   "text": "Like move X-unit to tell why."
+  },
+  {
+   "t": 1197.7,
+   "d": 4.34,
+   "text": "I would love to be able to do that in live siv."
+  },
+  {
+   "t": 1202.04,
+   "d": 4.13,
+   "text": "Just see the entire game log and be able to filter it down into a story."
+  },
+  {
+   "t": 1206.17,
+   "d": 5.79,
+   "text": "EMCEE: Yeah, I wonder and I don't know if this came up, I know you mentioned TTPG being"
+  },
+  {
+   "t": 1211.96,
+   "d": 6.34,
+   "text": "find enough to not stop you but I wonder about the intersection I feel like sometimes we"
+  },
+  {
+   "t": 1218.3,
+   "d": 8.47,
+   "text": "see talks from developers and I know there is an in-depth data view of the different"
+  },
+  {
+   "t": 1226.77,
+   "d": 4.27,
+   "text": "runs and usually I think we see it talked about internal DevTools."
+  },
+  {
+   "t": 1231.04,
+   "d": 5.19,
+   "text": "I wonder about the possibility of making internal tools external or how much difference there"
+  },
+  {
+   "t": 1236.23,
+   "d": 7.01,
+   "text": "would be if those internal tools would not fulfill the type of role you are talking about?"
+  },
+  {
+   "t": 1243.24,
+   "d": 3.21,
+   "text": ">> The game has been very kind to us."
+  },
+  {
+   "t": 1246.45,
+   "d": 8.92,
+   "text": "We have great communication with them and just like if you have that amount of data,"
+  },
+  {
+   "t": 1255.37,
+   "d": 4.04,
+   "text": "figure out how to make it safe for public access."
+  },
+  {
+   "t": 1259.41,
+   "d": 7.85,
+   "text": "For example, in SIBR, we have a hard line against messing with any kind of user data"
+  },
+  {
+   "t": 1267.26,
+   "d": 9.6,
+   "text": "but the API gets game updates and doesn't require you to send any login information."
+  },
+  {
+   "t": 1276.86,
+   "d": 8.51,
+   "text": "Just being able to access the data without dealing any kind of personal user data is"
+  },
+  {
+   "t": 1285.37,
+   "d": 1.52,
+   "text": "great."
+  },
+  {
+   "t": 1286.89,
+   "d": 5.69,
+   "text": "Figure out what you have that is safe to expose and give that to your community."
+  },
+  {
+   "t": 1292.58,
+   "d": 4.31,
+   "text": "They will do cursed and often blessed things with it."
+  },
+  {
+   "t": 1296.89,
+   "d": 5.19,
+   "text": ">> I am reminded of the double jump paper which is a little bit of an inverse of the"
+  },
+  {
+   "t": 1302.08,
+   "d": 4.89,
+   "text": "question you just asked but there was a decree one season called double jump."
+  },
+  {
+   "t": 1306.97,
+   "d": 6.67,
+   "text": "I forgot the exact mechanics but it allowed silly hopping around the standings within"
+  },
+  {
+   "t": 1313.64,
+   "d": 1.59,
+   "text": "there division."
+  },
+  {
+   "t": 1315.23,
+   "d": 8.85,
+   "text": "SIBR, I forgot who the authors were because it was a while back, but we had all the data,"
+  },
+  {
+   "t": 1324.08,
+   "d": 5.69,
+   "text": "ran the numbers, did Excel spreadsheet wizardry to see what happened within the last season"
+  },
+  {
+   "t": 1329.77,
+   "d": 5.26,
+   "text": "if double jump happened and wrote a whole white paper and published it before the elections"
+  },
+  {
+   "t": 1335.03,
+   "d": 2.25,
+   "text": "which was amazing."
+  },
+  {
+   "t": 1337.28,
+   "d": 7.71,
+   "text": "Later on, TBG told us they read the paper and realized we had uncovered a bunch of edge"
+  },
+  {
+   "t": 1344.99,
+   "d": 3.39,
+   "text": "cases that would have happened if that would have gone through."
+  },
+  {
+   "t": 1348.38,
+   "d": 4.77,
+   "text": "Within the framework of the game they were voting against it but yeah, it was to that"
+  },
+  {
+   "t": 1353.15,
+   "d": 1.0,
+   "text": "degree."
+  },
+  {
+   "t": 1354.15,
+   "d": 1.57,
+   "text": "EMCEE: It is a back and forth as a community."
+  },
+  {
+   "t": 1355.72,
+   "d": 6.55,
+   "text": "They gave you enough data you were able to find some things they had not thought of."
+  },
+  {
+   "t": 1362.27,
+   "d": 1.45,
+   "text": "I think that's really great."
+  },
+  {
+   "t": 1363.72,
+   "d": 1.0,
+   "text": "We have a few other questions."
+  },
+  {
+   "t": 1364.72,
+   "d": 5.52,
+   "text": "One I think people didn't realize was a joke question or is a difficult one is how do you"
+  },
+  {
+   "t": 1370.24,
+   "d": 2.96,
+   "text": "pronounce the acronym for the society."
+  },
+  {
+   "t": 1373.2,
+   "d": 2.61,
+   "text": ">> It is pronounced SIBR in Portuguese."
+  },
+  {
+   "t": 1375.81,
+   "d": 4.02,
+   "text": ">> We got a definitive answer, folks."
+  },
+  {
+   "t": 1379.83,
+   "d": 2.68,
+   "text": "I wasn't expecting that."
+  },
+  {
+   "t": 1382.51,
+   "d": 3.35,
+   "text": ">> Oh, did we lose her?"
+  },
+  {
+   "t": 1385.86,
+   "d": 5.5,
+   "text": ">> Just a little cutting in and out."
+  },
+  {
+   "t": 1391.36,
+   "d": 4.63,
+   "text": "There is another good question from the audience."
+  },
+  {
+   "t": 1395.99,
+   "d": 8.2,
+   "text": "Have you found people new to coding have been able to learn more about databases and programming"
+  },
+  {
+   "t": 1404.19,
+   "d": 1.75,
+   "text": "by joining SIBR?"
+  },
+  {
+   "t": 1405.94,
+   "d": 8.31,
+   "text": ">> I have a personal answer here which is that a year ago I knew very little about modern"
+  },
+  {
+   "t": 1414.25,
+   "d": 1.83,
+   "text": "systems administration."
+  },
+  {
+   "t": 1416.08,
+   "d": 5.94,
+   "text": "I was very old school and did not know what Docker is."
+  },
+  {
+   "t": 1422.02,
+   "d": 8.16,
+   "text": "And then I started learning it like how do you administer modern server because I wanted"
+  },
+  {
+   "t": 1430.18,
+   "d": 5.57,
+   "text": "to put some software on our server we ran for the community."
+  },
+  {
+   "t": 1435.75,
+   "d": 5.26,
+   "text": "And now I am run of the key managers of the server."
+  },
+  {
+   "t": 1441.01,
+   "d": 7.38,
+   "text": "So we do definitely get a lot of like just being exposed to a community that will like"
+  },
+  {
+   "t": 1448.39,
+   "d": 7.6,
+   "text": "let you ask questions and give you kind answers and walk you through things."
+  },
+  {
+   "t": 1455.99,
+   "d": 4.35,
+   "text": "And also, accept if you don't want to deal with code."
+  },
+  {
+   "t": 1460.34,
+   "d": 9.49,
+   "text": "We have a lot of great tools like Joe has made Feedback which uses my tool to make little"
+  },
+  {
+   "t": 1469.83,
+   "d": 7.0,
+   "text": "columns of sorted events from Blaseball that allow you to get a lot of data even if you"
+  },
+  {
+   "t": 1476.83,
+   "d": 2.14,
+   "text": "don't like messing with tech."
+  },
+  {
+   "t": 1478.97,
+   "d": 11.67,
+   "text": "It is about being kind if people ask questions, time to walk them through things, and making"
+  },
+  {
+   "t": 1490.64,
+   "d": 5.46,
+   "text": "tools for people that don't like that kind of thing."
+  },
+  {
+   "t": 1496.1,
+   "d": 5.05,
+   "text": ">> I think that's definitely a very important thing."
+  },
+  {
+   "t": 1501.15,
+   "d": 1.65,
+   "text": "Accessibility doesn't just mean for coders."
+  },
+  {
+   "t": 1502.8,
+   "d": 2.51,
+   "text": "It means for everyone."
+  },
+  {
+   "t": 1505.31,
+   "d": 2.76,
+   "text": "Making everyone be able to participate in these things."
+  },
+  {
+   "t": 1508.07,
+   "d": 7.39,
+   "text": "In real sports, you don't need to understand camera work to watch a replay of a sporting"
+  },
+  {
+   "t": 1515.46,
+   "d": 1.29,
+   "text": "event."
+  },
+  {
+   "t": 1516.75,
+   "d": 3.57,
+   "text": "Things like that."
+  },
+  {
+   "t": 1520.32,
+   "d": 9.0,
+   "text": "Also, Allie mentioned Feedback, we also wrote Tome because we want to make quick information"
+  },
+  {
+   "t": 1529.32,
+   "d": 5.18,
+   "text": "more accessible to the sports casters, like the folks who are calling games live on Twitch."
+  },
+  {
+   "t": 1534.5,
+   "d": 5.96,
+   "text": "They don't have time to write a JSON query and parse that to see what's going on."
+  },
+  {
+   "t": 1540.46,
+   "d": 1.09,
+   "text": "Yeah."
+  },
+  {
+   "t": 1541.55,
+   "d": 5.43,
+   "text": "EMCEE: I called them quasi-commentators."
+  },
+  {
+   "t": 1546.98,
+   "d": 1.09,
+   "text": ">> Crabs."
+  },
+  {
+   "t": 1548.07,
+   "d": 3.26,
+   "text": ">> Crab is OK."
+  },
+  {
+   "t": 1551.33,
+   "d": 7.69,
+   "text": "Even on a meta level, you are in the back end."
+  },
+  {
+   "t": 1559.02,
+   "d": 2.23,
+   "text": "Making tools for the people that make tools."
+  },
+  {
+   "t": 1561.25,
+   "d": 7.05,
+   "text": "Kawa, I don't know if you want to speak."
+  },
+  {
+   "t": 1568.3,
+   "d": 2.35,
+   "text": "You are muted."
+  },
+  {
+   "t": 1570.65,
+   "d": 1.0,
+   "text": ">> Hello."
+  },
+  {
+   "t": 1571.65,
+   "d": 1.94,
+   "text": "I am Kawa."
+  },
+  {
+   "t": 1573.59,
+   "d": 1.0,
+   "text": "Pronouns they/them."
+  },
+  {
+   "t": 1574.59,
+   "d": 5.36,
+   "text": "One of the organizers of the conference and other members of the SIBR or whatever you"
+  },
+  {
+   "t": 1579.95,
+   "d": 3.51,
+   "text": "want to call it community of tool makers and hack posters."
+  },
+  {
+   "t": 1583.46,
+   "d": 11.21,
+   "text": "Yeah, my baby, my tool is actually the weird meta accessibility tool called witchtool.SIBR.dev."
+  },
+  {
+   "t": 1594.67,
+   "d": 5.43,
+   "text": "It is a collection of all of these crazy things that all these crazy cats have made in twine."
+  },
+  {
+   "t": 1600.1,
+   "d": 5.89,
+   "text": "You can just ask where is that thing where I can see how much experience everyone has"
+  },
+  {
+   "t": 1605.99,
+   "d": 5.85,
+   "text": "and it will tell you, oh, it is at this lake, and there is these older tools you might remember."
+  },
+  {
+   "t": 1611.84,
+   "d": 1.45,
+   "text": "Yeah."
+  },
+  {
+   "t": 1613.29,
+   "d": 2.41,
+   "text": "That's a thing."
+  },
+  {
+   "t": 1615.7,
+   "d": 4.58,
+   "text": "And it is one of these things that I learned Twine during the pandemic for personal projects"
+  },
+  {
+   "t": 1620.28,
+   "d": 1.1,
+   "text": "last year."
+  },
+  {
+   "t": 1621.38,
+   "d": 1.7,
+   "text": "That was really fun and satisfying."
+  },
+  {
+   "t": 1623.08,
+   "d": 4.49,
+   "text": "Other than my personal narrative projects, Ied siI didn't -- I didn't have any reason"
+  },
+  {
+   "t": 1627.57,
+   "d": 8.14,
+   "text": "to use this skill and realized hanging out at the discord for society, the same five"
+  },
+  {
+   "t": 1635.71,
+   "d": 2.81,
+   "text": "questions kept being asked over."
+  },
+  {
+   "t": 1638.52,
+   "d": 1.59,
+   "text": "Where is that thing?"
+  },
+  {
+   "t": 1640.11,
+   "d": 4.35,
+   "text": "Which one of these databases should I use?"
+  },
+  {
+   "t": 1644.46,
+   "d": 2.57,
+   "text": "Where is that one other thing that happened again?"
+  },
+  {
+   "t": 1647.03,
+   "d": 5.28,
+   "text": "I decided instead of us doing that over and over I would just say OK."
+  },
+  {
+   "t": 1652.31,
+   "d": 1.96,
+   "text": "Here is a website."
+  },
+  {
+   "t": 1654.27,
+   "d": 2.46,
+   "text": "Maybe it will answer your question."
+  },
+  {
+   "t": 1656.73,
+   "d": 3.22,
+   "text": "If it won't, then come over and ask us."
+  },
+  {
+   "t": 1659.95,
+   "d": 4.34,
+   "text": "It helped a lot and a lot of people have found a lot of really good use from it."
+  },
+  {
+   "t": 1664.29,
+   "d": 2.8,
+   "text": "I try to make it as accessible as possible."
+  },
+  {
+   "t": 1667.09,
+   "d": 3.93,
+   "text": "People can contribute their own tools and I always help people contribute it."
+  },
+  {
+   "t": 1671.02,
+   "d": 6.9,
+   "text": "It has been satisfying to watch what people can make in the community go up and up as"
+  },
+  {
+   "t": 1677.92,
+   "d": 4.78,
+   "text": "we make more and more things."
+  },
+  {
+   "t": 1682.7,
+   "d": 1.05,
+   "text": "That's that's."
+  },
+  {
+   "t": 1683.75,
+   "d": 4.43,
+   "text": "EMCEE: It is interesting."
+  },
+  {
+   "t": 1688.18,
+   "d": 2.4,
+   "text": "Applying it more broadly, again."
+  },
+  {
+   "t": 1690.58,
+   "d": 7.06,
+   "text": "Almost in coincidence of the web data being accessible it created ways for people to engage"
+  },
+  {
+   "t": 1697.64,
+   "d": 6.42,
+   "text": "and become a subcommunity and seems like people learn now skills and engage with the game"
+  },
+  {
+   "t": 1704.06,
+   "d": 1.29,
+   "text": "and do the storytelling."
+  },
+  {
+   "t": 1705.35,
+   "d": 4.52,
+   "text": "Feeds back into the TBG's level of excitement and happiness with the game."
+  },
+  {
+   "t": 1709.87,
+   "d": 2.71,
+   "text": ">> Also, use Twine for your documentation."
+  },
+  {
+   "t": 1712.58,
+   "d": 1.55,
+   "text": "It is good."
+  },
+  {
+   "t": 1714.13,
+   "d": 2.65,
+   "text": ">> Kawa: Yeah, Twine is great."
+  },
+  {
+   "t": 1716.78,
+   "d": 9.53,
+   "text": "And props to Em Lazer-Walker being the architecture of this space created a cool way of using"
+  },
+  {
+   "t": 1726.31,
+   "d": 11.57,
+   "text": "twine pages with GitHub page and it changed everything in being capable of running a virtual"
+  },
+  {
+   "t": 1737.88,
+   "d": 3.94,
+   "text": "community's documentation stack in Twine."
+  },
+  {
+   "t": 1741.82,
+   "d": 5.37,
+   "text": "Like it is a game-changer to just be able to have a bunch of files on GitHub that automatically"
+  },
+  {
+   "t": 1747.19,
+   "d": 7.05,
+   "text": "push to the right place and turn into a Twine format instead of passing HTML files back."
+  },
+  {
+   "t": 1754.24,
+   "d": 7.35,
+   "text": "Props to EM and props to SIBR for doing this and helping a lot of people make sense of"
+  },
+  {
+   "t": 1761.59,
+   "d": 8.69,
+   "text": "this strange game."
+  },
+  {
+   "t": 1770.28,
+   "d": 4.96,
+   "text": "I will put a link in space hanger's lounge later on EM's developer workflow for Twine."
+  },
+  {
+   "t": 1780.49,
+   "d": 1.0,
+   "text": ">> Before we go, you might be able to get my cats on the breakout room."
+  },
+  {
+   "t": 1788.38,
+   "d": 1.0,
+   "text": "They tried to knock on my door before we started the talk so I might bring her to the room."
+  }
+ ],
+ "note": "re-timed 3 segment(s) next to the start/end of the talk from the auto-generated track: the manual timing there was compressed (up to 12 s off the audio)"
+}

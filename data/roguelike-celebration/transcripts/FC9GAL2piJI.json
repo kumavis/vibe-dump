@@ -1,0 +1,1160 @@
+{
+ "id": "FC9GAL2piJI",
+ "url": "https://www.youtube.com/watch?v=FC9GAL2piJI",
+ "title": "Alexander Birke & Sofie Kjær Schmidt - Art direction and tech art in Sea Of Rifts, a naval RPG",
+ "speaker": "Alexander Birke & Sofie Kjær Schmidt",
+ "talk_title": "Art direction and tech art in Sea Of Rifts, a naval RPG",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2025-12-05",
+ "duration_s": 1950,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Art direction and production for procedural games is tricky. Artists need to understand the technical limitations and opportunities the medium offers, while programmers must create artist friendly workflows that also support the chosen aesthetic, and still have enough time to code the game itself. Last year Alex gave a talk on the procedural world, story, and character generation in Sea Of Rifts. We now want to open the lid on the treasure trove of experience we have gained on how to efficiently create art content for a generated 3D game in terms of direction, workflow, and technical solutions. In the talk we will first cover the overall art goals of the game. Sofie will then cover the specific techniques and design rules used to design the visuals, how we give feedback to each other, and why artists knowing the basics of the technical implementation, is a big win for the whole team. Alex will round off the talk with showing various artist friendly workflows and clever shader and GPU tricks we use to create a lot of visual variation in the game.",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 4133,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 24.0,
+   "d": 28.32,
+   "text": "ALEXANDER: This is our talk, \"Hoist the colours! Art direction and tech art in Sea"
+  },
+  {
+   "t": 52.32,
+   "d": 5.36,
+   "text": "Of Rifts, a naval story generation RPG,\" and it is a sequel to the talk I did last year. In Sea"
+  },
+  {
+   "t": 57.68,
+   "d": 7.76,
+   "text": "Of Rifts you are the captain of a ship exploring a vast dangerous ocean that is being torn apart by"
+  },
+  {
+   "t": 65.44,
+   "d": 8.8,
+   "text": "rifts into other dimensions. It should drop to get to the center of the world. We have done a lot of"
+  },
+  {
+   "t": 74.88,
+   "d": 9.04,
+   "text": "work on the procedural generation in the game and we are quite excited to talk more in-depth about"
+  },
+  {
+   "t": 83.92,
+   "d": 7.84,
+   "text": "how that works. We also have ship-to-ship combat in the game which adds a lot of"
+  },
+  {
+   "t": 94.08,
+   "d": 12.16,
+   "text": "challenges in terms of how much art we have to do. We also -- sorry, I am a bit nervous. We are also"
+  },
+  {
+   "t": 107.44,
+   "d": 6.56,
+   "text": "very reliant on procedural generation across the game so what you see here is a harbor that"
+  },
+  {
+   "t": 114.0,
+   "d": 7.44,
+   "text": "is using like generation. We generate the harbors, the quest lines, and we generate crew members that"
+  },
+  {
+   "t": 121.44,
+   "d": 10.8,
+   "text": "you can hire so it is very roguelike game. This is us. My name is Alex and I am the creative lead"
+  },
+  {
+   "t": 133.52,
+   "d": 4.4,
+   "text": "and designer and coder on the game. SOFIE: Hello my name is Sofie and I"
+  },
+  {
+   "t": 137.92,
+   "d": 5.12,
+   "text": "am the art lead on Sea Of Rifts and I have been so for the past two years."
+  },
+  {
+   "t": 143.04,
+   "d": 7.6,
+   "text": "ALEXANDER: The agenda were the talk is I am going to cover overall goals for"
+  },
+  {
+   "t": 150.64,
+   "d": 4.64,
+   "text": "the art direction in the game. SOFIE: And then we will go and dive"
+  },
+  {
+   "t": 155.28,
+   "d": 6.0,
+   "text": "into the art iteration. I will show you some of the decisions we made along the process and talk"
+  },
+  {
+   "t": 161.28,
+   "d": 5.2,
+   "text": "about techniques we applied throughout. ALEXANDER: And finally, I am going to do"
+  },
+  {
+   "t": 166.48,
+   "d": 7.12,
+   "text": "a deep dive into some of the tech art we used to achieve that direction."
+  },
+  {
+   "t": 173.6,
+   "d": 5.36,
+   "text": "SOFIE: But first of all, let's go and talk about the goals for this production."
+  },
+  {
+   "t": 179.68,
+   "d": 7.28,
+   "text": "So Sea Of Rifts is a very large game. We are a very small team. One of the major goals for"
+  },
+  {
+   "t": 186.96,
+   "d": 6.0,
+   "text": "the visual direction of Sea Of Rifts has been to how we can create the most visual variation with"
+  },
+  {
+   "t": 192.96,
+   "d": 7.52,
+   "text": "the fewest assets possible. Because we figured out we have a top-down approach which caters"
+  },
+  {
+   "t": 201.04,
+   "d": 11.92,
+   "text": "to the art and the good thing about the art we went for is it is speedy to produce and allows"
+  },
+  {
+   "t": 213.6,
+   "d": 15.6,
+   "text": "a lot of variation. Some major inspirations with the anno series, Kenshi, and DOTA."
+  },
+  {
+   "t": 231.44,
+   "d": 10.16,
+   "text": "ALEXANDER: I had three principles I wanted to follow and the first was I as the tech department"
+  },
+  {
+   "t": 241.6,
+   "d": 4.4,
+   "text": "didn't become an implementation bottleneck so everyone on the team should be able to"
+  },
+  {
+   "t": 246.0,
+   "d": 9.44,
+   "text": "push content in the game. And be as the decision maker did not become decision bottleneck. I hate"
+  },
+  {
+   "t": 255.44,
+   "d": 6.64,
+   "text": "micromanagement, being the one that has to do it and the one on the receiving end of it, so"
+  },
+  {
+   "t": 262.88,
+   "d": 7.92,
+   "text": "it has been very important to me that everyone had the agency on the team to put stuff in and not"
+  },
+  {
+   "t": 270.8,
+   "d": 6.08,
+   "text": "necessarily checking with me first if it was OK. That also hits on the third one which is"
+  },
+  {
+   "t": 276.88,
+   "d": 6.64,
+   "text": "it is a race in how quickly can we work on the game because if you can't iterate on a game you"
+  },
+  {
+   "t": 284.08,
+   "d": 11.76,
+   "text": "are in for a world of pain. Turn the ship around is a game that made me think of this. It is"
+  },
+  {
+   "t": 295.84,
+   "d": 9.68,
+   "text": "written by a naval captain took the worst ship and made it the about the in a year and that is"
+  },
+  {
+   "t": 306.72,
+   "d": 9.2,
+   "text": "by letting go and letting people doing their job. I think it is important to have a balanced"
+  },
+  {
+   "t": 315.92,
+   "d": 28.64,
+   "text": "approach.' One thing we made sure of is that the game is always playable. We have"
+  },
+  {
+   "t": 344.56,
+   "d": 13.28,
+   "text": "automate tests that we can run and a flexible workflow of trying things out."
+  },
+  {
+   "t": 357.84,
+   "d": 5.76,
+   "text": "Like the usual thing that happens is the artist focuses on the aesthetics and the visual niceties"
+  },
+  {
+   "t": 363.6,
+   "d": 6.24,
+   "text": "of the game. The programmers are looking at the numbers and are like the frame rate is terrible."
+  },
+  {
+   "t": 369.84,
+   "d": 8.0,
+   "text": "What should we do? The best game hatch happens when everyone shares responsibility for those"
+  },
+  {
+   "t": 377.84,
+   "d": 12.16,
+   "text": "areas. I think it helps we are a flexible team. I like to say we are a team of octopuses with shared"
+  },
+  {
+   "t": 390.0,
+   "d": 14.88,
+   "text": "skill sets and can come in and off load each other. And also, we do a lot of play tests. Is"
+  },
+  {
+   "t": 410.0,
+   "d": 6.32,
+   "text": "SOFIE: Now I will cover about the iteration, some decisions we made throughout the process,"
+  },
+  {
+   "t": 416.32,
+   "d": 5.84,
+   "text": "and some of the techniques we applied to really make our production as efficient as possible"
+  },
+  {
+   "t": 422.16,
+   "d": 12.24,
+   "text": "with the resources we had. I was the only art producer on the team at first and this is a big"
+  },
+  {
+   "t": 434.4,
+   "d": 12.64,
+   "text": "project. I tried to figure out where we could cut corners without making it too obvious. How can we"
+  },
+  {
+   "t": 448.24,
+   "d": 6.4,
+   "text": "maximize the potential of the assets we produced and make sure we use them in many places of the"
+  },
+  {
+   "t": 454.64,
+   "d": 6.08,
+   "text": "game but maybe create variation through texture swap and different types of colors"
+  },
+  {
+   "t": 460.72,
+   "d": 5.36,
+   "text": "as well as also making sure that as Alex just pointed out that he doesn't become"
+  },
+  {
+   "t": 466.08,
+   "d": 8.4,
+   "text": "bottleneck and nobody else does and free up the dependencies on the team ensuring that the artists"
+  },
+  {
+   "t": 477.44,
+   "d": 7.04,
+   "text": "are allowed to finish their tasks without having a middleman to come in and approving on the side."
+  },
+  {
+   "t": 486.0,
+   "d": 7.6,
+   "text": "One thing when I started this project was to look at how we could make a good way of running the"
+  },
+  {
+   "t": 493.6,
+   "d": 7.68,
+   "text": "process of this art direction of the game. Being a big game it is quite a mouthful to steer. One of"
+  },
+  {
+   "t": 501.28,
+   "d": 5.52,
+   "text": "the tools I used throughout the process has been in my role for establishing this art direction"
+  },
+  {
+   "t": 506.8,
+   "d": 7.44,
+   "text": "board and in Miro we give a quick overview of the art of the Sea Of Rifts and present some of the"
+  },
+  {
+   "t": 514.24,
+   "d": 6.72,
+   "text": "inspiration it draws from, some of the resources we used throughout the process, and because we"
+  },
+  {
+   "t": 520.96,
+   "d": 6.4,
+   "text": "have so many different environments in the game, so many different types of shifts, I wanted to use"
+  },
+  {
+   "t": 527.36,
+   "d": 8.64,
+   "text": "Miro for making detailed style guides for the game but I realized in the process using Google Slides"
+  },
+  {
+   "t": 536.0,
+   "d": 6.88,
+   "text": "was the best option so that's the next thing. We use just Google Slides for running these detailed"
+  },
+  {
+   "t": 542.88,
+   "d": 6.72,
+   "text": "in-depth style guides for instance covering the environment of sunken city. It is a very nice tool"
+  },
+  {
+   "t": 550.56,
+   "d": 7.04,
+   "text": "because it is easy to modify, share, you can print it, and whatnot. Everyone has easy access without"
+  },
+  {
+   "t": 557.6,
+   "d": 7.04,
+   "text": "having to create a lot of accounts. I have a rule of thumb saying you should avoid juggling too many"
+  },
+  {
+   "t": 564.64,
+   "d": 5.76,
+   "text": "tools. There might be a lot of smart tools out there but they aren't smart if you aren't using"
+  },
+  {
+   "t": 570.4,
+   "d": 8.32,
+   "text": "them and cause friction or stall the production of what you are making you might as well get rid"
+  },
+  {
+   "t": 578.72,
+   "d": 11.2,
+   "text": "of it and stick with a Google sheet document. We have content rich games with several ship types"
+  },
+  {
+   "t": 593.52,
+   "d": 7.92,
+   "text": "and different fractions. We have this top down camera which caters well to this low poly stylus"
+  },
+  {
+   "t": 602.72,
+   "d": 7.52,
+   "text": "style we went for the 3D assets of the game. One thing we had to think about throughout the"
+  },
+  {
+   "t": 610.24,
+   "d": 5.84,
+   "text": "process -- think -- was how can we establish a visual hierarchy for this game? The players"
+  },
+  {
+   "t": 616.08,
+   "d": 7.44,
+   "text": "need to decode which fractions to the ships belong to and what types of ships are there."
+  },
+  {
+   "t": 623.52,
+   "d": 6.64,
+   "text": "There are different ways for you to establish a visual hierarchy n game. Especially for top down"
+  },
+  {
+   "t": 630.16,
+   "d": 5.28,
+   "text": "you pay attention to the top part of the element since that's what you spot first."
+  },
+  {
+   "t": 636.88,
+   "d": 10.96,
+   "text": "We were mindful we repeat the values across the elements in the game in a way that creates"
+  },
+  {
+   "t": 647.84,
+   "d": 6.96,
+   "text": "enhanced depth perception but also makes sure that we put interest to the most important aspects in"
+  },
+  {
+   "t": 654.8,
+   "d": 4.88,
+   "text": "the game. As you can see here on this slide with some of the buildings from sunken city and the"
+  },
+  {
+   "t": 659.68,
+   "d": 11.6,
+   "text": "other development notice at the top we have all of the details primarily situated there."
+  },
+  {
+   "t": 671.28,
+   "d": 12.72,
+   "text": "Another thing we worked a lot with is contrast in colors and shapes. The human eye has some looking"
+  },
+  {
+   "t": 684.0,
+   "d": 8.08,
+   "text": "for boundaries between like areas that have a lot of contrast. As you see here for the shape boat,"
+  },
+  {
+   "t": 692.08,
+   "d": 7.28,
+   "text": "this long boat, there is a lot of contrast between the coloration of how the spikes and the roof top"
+  },
+  {
+   "t": 699.36,
+   "d": 4.88,
+   "text": "making sure that we tell the players, you should not touch this. It is going to hurt you. And also"
+  },
+  {
+   "t": 704.24,
+   "d": 6.24,
+   "text": "the enemies you see on the right, they are very, very bright purple making sure they"
+  },
+  {
+   "t": 710.48,
+   "d": 7.84,
+   "text": "stick out from the ocean but also making sure the weaponry is contrasted nicely to the surroundings."
+  },
+  {
+   "t": 719.84,
+   "d": 7.52,
+   "text": "And talking about contrast, I can't help but talk about OK, because we see things very often from"
+  },
+  {
+   "t": 727.36,
+   "d": 6.96,
+   "text": "afar in the game, we have to make ways for making sure that everything is readable at all times,"
+  },
+  {
+   "t": 734.32,
+   "d": 7.12,
+   "text": "no matter how close you get with the camera. One way we do that is to really accentuate sizes and"
+  },
+  {
+   "t": 741.44,
+   "d": 11.04,
+   "text": "shapes that are important. This blunt boom here does not look proportionally realistic but for"
+  },
+  {
+   "t": 752.48,
+   "d": 7.36,
+   "text": "the game and the sake of readability, making sure the players can see the weapon from afar,"
+  },
+  {
+   "t": 759.84,
+   "d": 5.68,
+   "text": "this is quite important. This is a way for us to make sure that people can always tell"
+  },
+  {
+   "t": 765.52,
+   "d": 7.84,
+   "text": "what's going on on the screen wherever they are and wherever the camera is. And obviously,"
+  },
+  {
+   "t": 773.36,
+   "d": 6.08,
+   "text": "throughout this process, been looking at a lot of different types of references. I couldn't help but"
+  },
+  {
+   "t": 780.24,
+   "d": 11.76,
+   "text": "think of my childhood favorite game which is acid Meier's pirates and notice how the city here"
+  },
+  {
+   "t": 793.68,
+   "d": 7.6,
+   "text": "standing out. The roof tops are bright red. It is sitting in a green area. The ship itself is nicely"
+  },
+  {
+   "t": 801.28,
+   "d": 6.8,
+   "text": "contrasted to the ocean making sure we can decode and decipher the shapes and what's going on on"
+  },
+  {
+   "t": 808.08,
+   "d": 7.28,
+   "text": "the screen. So those games like the Settlers where you can easily tell from the shape and coloration"
+  },
+  {
+   "t": 815.36,
+   "d": 9.28,
+   "text": "when you look top-down what the functions of these buildings are and who they belong to."
+  },
+  {
+   "t": 824.64,
+   "d": 5.44,
+   "text": "In case anybody is interested in looking up how you can create assets for a top-down game I can"
+  },
+  {
+   "t": 830.08,
+   "d": 14.16,
+   "text": "recommend this guide from Dota 2's workshop. It is easily readable in a top-down perspective. Another"
+  },
+  {
+   "t": 844.24,
+   "d": 7.68,
+   "text": "thing we have been working on for the past year especially is how we can add depth to our game."
+  },
+  {
+   "t": 851.92,
+   "d": 9.52,
+   "text": "So most of the game is covered by ocean, right? Like 80% of the time when you are out at sea. We"
+  },
+  {
+   "t": 861.44,
+   "d": 12.96,
+   "text": "have this ground for storytelling and how can we use this. And create hues for past things and also"
+  },
+  {
+   "t": 876.08,
+   "d": 7.92,
+   "text": "for all the creatures beneath the surface. This is a way we have this hierarchy where"
+  },
+  {
+   "t": 884.0,
+   "d": 7.36,
+   "text": "we have the underwater assets you see above and can explore and this is a way to spark curiosity"
+  },
+  {
+   "t": 891.36,
+   "d": 13.44,
+   "text": "in players to go out and explore this world. For the production of the assets in the game,"
+  },
+  {
+   "t": 904.8,
+   "d": 7.84,
+   "text": "we have this modular design approach for the ships and the buildings. What do I mean by"
+  },
+  {
+   "t": 912.64,
+   "d": 7.92,
+   "text": "modular? Remember when you were a kid and you had toy blocks you could build castles and unicorns"
+  },
+  {
+   "t": 920.56,
+   "d": 5.84,
+   "text": "and what not. You might not have had a lot of variety of blocks but it didn't stop you from"
+  },
+  {
+   "t": 926.4,
+   "d": 8.32,
+   "text": "using your imagination and creating more from what you actually have. It is kind of the same"
+  },
+  {
+   "t": 935.6,
+   "d": 6.0,
+   "text": "thinking process we are trying to nurture in Sea Of Rifts is to maximize the potential of our"
+  },
+  {
+   "t": 941.6,
+   "d": 9.6,
+   "text": "assets and create every 3D model as a module that can be build so we can build ships on the fly in"
+  },
+  {
+   "t": 951.2,
+   "d": 6.16,
+   "text": "the engine which has been a huge success because everybody on the team can go in and build one when"
+  },
+  {
+   "t": 957.36,
+   "d": 9.6,
+   "text": "they need one. We have maybe three types of roofs for the ship and used them for 10 different types"
+  },
+  {
+   "t": 966.96,
+   "d": 12.48,
+   "text": "of ships. We can really maximize and reuse assets for a lot of things. Then another way to show"
+  },
+  {
+   "t": 979.44,
+   "d": 8.32,
+   "text": "we have proper color variation in the game is we have like Alex has made this HSV offset shader in"
+  },
+  {
+   "t": 987.76,
+   "d": 6.8,
+   "text": "collaboration with me which makes sure although we only have three different types of texture atlas"
+  },
+  {
+   "t": 996.48,
+   "d": 7.52,
+   "text": "for all the ships, we have this database, this shader that makes sure we can do color swaps,"
+  },
+  {
+   "t": 1004.0,
+   "d": 5.28,
+   "text": "and actually have a whole range of different colored ships which is really good especially"
+  },
+  {
+   "t": 1009.28,
+   "d": 10.96,
+   "text": "for when we want to convey this ship belong do is that fraction or this fraction. Of course as"
+  },
+  {
+   "t": 1020.24,
+   "d": 5.28,
+   "text": "always is when you are a small team you also have to think about OK, I was talking about how to cut"
+  },
+  {
+   "t": 1025.52,
+   "d": 8.4,
+   "text": "corners and the best way to do that is to produce assets. It could be a good way to test things that"
+  },
+  {
+   "t": 1033.92,
+   "d": 7.44,
+   "text": "are still a work in progress. It could it can be a good thing to do to speed up production and you"
+  },
+  {
+   "t": 1041.36,
+   "d": 6.8,
+   "text": "can achieve a lot if you just rescan your assets and it can look like they also belong to the game."
+  },
+  {
+   "t": 1048.16,
+   "d": 11.2,
+   "text": "The conis you don't have production files to loop back to and you have a risk the game loses"
+  },
+  {
+   "t": 1059.36,
+   "d": 7.84,
+   "text": "character meaning it ends up looking like a series of stock photos so be weary about how you use"
+  },
+  {
+   "t": 1067.2,
+   "d": 12.56,
+   "text": "store bought assets. So the cherry on the top, we utilized post-processing. It is a very well"
+  },
+  {
+   "t": 1079.76,
+   "d": 5.04,
+   "text": "to ensure everything you see on the screen comes together nicely. Because we have so many different"
+  },
+  {
+   "t": 1084.8,
+   "d": 7.52,
+   "text": "environments we use are vignette and lighting to make sure everything in Sea Of Rifts works"
+  },
+  {
+   "t": 1092.32,
+   "d": 8.16,
+   "text": "together no matter if it is store bought assets or self produced. This is something we have been"
+  },
+  {
+   "t": 1100.48,
+   "d": 4.56,
+   "text": "really happy to use as well. It is very efficient and I can only recommend using it."
+  },
+  {
+   "t": 1106.4,
+   "d": 14.4,
+   "text": "Let's go and talk about -- ALEXANDER: Now let's talk about tech art."
+  },
+  {
+   "t": 1132.4,
+   "d": 9.68,
+   "text": "We have a streaming world setup which means the only constant data we have for each game object"
+  },
+  {
+   "t": 1142.08,
+   "d": 5.2,
+   "text": "that is looking static to the player is actually the height and angle but that is still enough"
+  },
+  {
+   "t": 1147.28,
+   "d": 7.28,
+   "text": "that we can actually derive a random like value from that and we then use that to apply a random"
+  },
+  {
+   "t": 1154.56,
+   "d": 7.76,
+   "text": "color offset to the model. It is very fake. Like normally you would not have a whole house in a"
+  },
+  {
+   "t": 1162.32,
+   "d": 8.8,
+   "text": "city is like a little bit darker than the house next to it but because the houses on the screen"
+  },
+  {
+   "t": 1171.12,
+   "d": 10.16,
+   "text": "are small you don't notice it. You just notice variation and that is adding a lot. You have it"
+  },
+  {
+   "t": 1181.28,
+   "d": 6.32,
+   "text": "with and without the variation here. You can see it is a lot more flat and dull to look at whereas"
+  },
+  {
+   "t": 1187.6,
+   "d": 5.92,
+   "text": "like here you get that just something with like having enough natural like noise in an image that"
+  },
+  {
+   "t": 1193.52,
+   "d": 9.68,
+   "text": "is appealing to us to view. And also we can use the same noise value to change how much light"
+  },
+  {
+   "t": 1203.2,
+   "d": 20.32,
+   "text": "there is in each house and that also adds life and character. That rotation and random height"
+  },
+  {
+   "t": 1223.52,
+   "d": 7.2,
+   "text": "is used to dictate where the LG is being placed on the rock and adds a huge amount of variation"
+  },
+  {
+   "t": 1230.72,
+   "d": 11.04,
+   "text": "to not a lot of assets. This is how it is done. We basically just grab data from the model and"
+  },
+  {
+   "t": 1241.76,
+   "d": 7.6,
+   "text": "the world matrix and from that we calculate dot product and do F mode and that's it. It is not"
+  },
+  {
+   "t": 1249.92,
+   "d": 7.12,
+   "text": "super complicated. If you are doing a game where you aren't moving everything around on the X axis"
+  },
+  {
+   "t": 1257.04,
+   "d": 5.76,
+   "text": "because you are streaming it you can just probably take the objects precision and rotation and go"
+  },
+  {
+   "t": 1262.8,
+   "d": 9.2,
+   "text": "nuts. We had to do this little bit of workaround. One drawback that is from having this kid-based"
+  },
+  {
+   "t": 1272.0,
+   "d": 8.32,
+   "text": "approach to assets is if you don't do some kind of optimization you end up with having a lot of game"
+  },
+  {
+   "t": 1280.32,
+   "d": 8.16,
+   "text": "objects, draw calls, and unhappy players because the frame rate is under flaw. What we do there is"
+  },
+  {
+   "t": 1288.48,
+   "d": 16.96,
+   "text": "we use a plug in called mesh kit. Here it actually is really nice that we have a few atlasesfor each"
+  },
+  {
+   "t": 1305.44,
+   "d": 7.12,
+   "text": "ship family because all the missions can be combined together and use the same texture."
+  },
+  {
+   "t": 1314.48,
+   "d": 4.96,
+   "text": "One thing that was really interesting for sunken city which is by far the most complex"
+  },
+  {
+   "t": 1320.96,
+   "d": 6.32,
+   "text": "biome we have done in the game so far is that we needed a lot of verticality to the structures."
+  },
+  {
+   "t": 1327.92,
+   "d": 8.08,
+   "text": "We were -- I was basically like OK I don't want to become a bottleneck so what I did was made this"
+  },
+  {
+   "t": 1337.92,
+   "d": 6.16,
+   "text": "simple generator that stacks elements on top of each other. There is different stacking"
+  },
+  {
+   "t": 1344.08,
+   "d": 6.8,
+   "text": "rules. It can either repeat one, two, three, or add them at random, and then I let the artists"
+  },
+  {
+   "t": 1350.88,
+   "d": 12.87,
+   "text": "go nuts with it. [Test test test"
+  },
+  {
+   "t": 1363.75,
+   "d": 5.37,
+   "text": "SOFIE: Of stacking modules to create different types of buildings, while Alex was working on"
+  },
+  {
+   "t": 1369.12,
+   "d": 8.16,
+   "text": "this, I was drawing the consensus for how much visual variation can you get from just a square"
+  },
+  {
+   "t": 1377.28,
+   "d": 7.36,
+   "text": "so to speak, and I handed over this concept to our other artist and he did magic in blender creating"
+  },
+  {
+   "t": 1384.64,
+   "d": 6.8,
+   "text": "these modules and exporting them out and you have it. We got these buildings and as you see on the"
+  },
+  {
+   "t": 1391.44,
+   "d": 5.52,
+   "text": "right the nice buildings for sunken city using the method of stacking and stacking different"
+  },
+  {
+   "t": 1396.96,
+   "d": 6.24,
+   "text": "modules to create more types of buildings. ALEXANDER: As soon as you give a tool to"
+  },
+  {
+   "t": 1403.2,
+   "d": 7.6,
+   "text": "someone else they find ways to I could say abuse but use in creative ways. For example,"
+  },
+  {
+   "t": 1410.8,
+   "d": 8.24,
+   "text": "the building on the right, they found out they could add pillars to the top section and extend"
+  },
+  {
+   "t": 1419.04,
+   "d": 9.52,
+   "text": "it down and that version of the roof would have those corner pillars which was a clever use of"
+  },
+  {
+   "t": 1428.56,
+   "d": 8.72,
+   "text": "the generator. Another thing that I am also really pleased I finally got to use in a game that people"
+  },
+  {
+   "t": 1437.28,
+   "d": 9.36,
+   "text": "have actually tried is what I call the sub-tiling system. It is trim sheets combined with nine slice"
+  },
+  {
+   "t": 1446.64,
+   "d": 11.52,
+   "text": "sprites. Trim sheets is you can use the fact that textures can tile in the width or height or both."
+  },
+  {
+   "t": 1458.16,
+   "d": 6.48,
+   "text": "And nine slice splits is that you take an image and splice it into the nine pieces and you can use"
+  },
+  {
+   "t": 1464.64,
+   "d": 5.52,
+   "text": "that to create corners that don't stretch well and you can stretch the sides. I came up with a way of"
+  },
+  {
+   "t": 1470.16,
+   "d": 8.4,
+   "text": "combining the two. When we are texturing these buildings for sunken city, we actually have this"
+  },
+  {
+   "t": 1478.56,
+   "d": 8.56,
+   "text": "large tile set you see here on the right. And then for each vertex we define the position as normal"
+  },
+  {
+   "t": 1487.12,
+   "d": 7.12,
+   "text": "and then we define an off set to that file we want to show and also define the tile dimensions in the"
+  },
+  {
+   "t": 1494.24,
+   "d": 8.56,
+   "text": "vertex data. That actually allows the shader to basically take the current UV, offset it, repeat"
+  },
+  {
+   "t": 1502.8,
+   "d": 7.04,
+   "text": "it with the frequency of the tile dimension, and that way we can actually show a lot of different"
+  },
+  {
+   "t": 1509.84,
+   "d": 6.72,
+   "text": "textures from one texture. We are not bound to the limitations that stays with the traditional trim"
+  },
+  {
+   "t": 1516.56,
+   "d": 7.04,
+   "text": "sheet way you have to basically stretch it to the edge. What was really interesting to me is I made"
+  },
+  {
+   "t": 1523.6,
+   "d": 8.32,
+   "text": "this technique for a game when I was generating the buildings by code but when it was taken ahold"
+  },
+  {
+   "t": 1531.92,
+   "d": 10.56,
+   "text": "of he was like I don't need to stick to your rules and started using authoff sets and tiling"
+  },
+  {
+   "t": 1542.48,
+   "d": 8.64,
+   "text": "dimensions. On the left, he used that to create two different window types with the stain glass"
+  },
+  {
+   "t": 1551.12,
+   "d": 7.52,
+   "text": "even though there is only one he is picking from. It is like a really interesting way that he found"
+  },
+  {
+   "t": 1558.64,
+   "d": 6.96,
+   "text": "a way to, yeah, get enhanced use out of it. One thing you might run into if you use this technique"
+  },
+  {
+   "t": 1565.6,
+   "d": 8.32,
+   "text": "is as you go down your mid levels you will start to get like bleed from tiles into each other. A"
+  },
+  {
+   "t": 1573.92,
+   "d": 5.52,
+   "text": "way to get around that is that you have to pad each tile and basically like make that repeat"
+  },
+  {
+   "t": 1580.16,
+   "d": 6.48,
+   "text": "on to itself. This was quite a hassle to figure out back in the day. Thankfully we haven't had"
+  },
+  {
+   "t": 1586.64,
+   "d": 6.32,
+   "text": "to deal with it much on Sea Of Rifts because of the camera but it is something to be aware of and"
+  },
+  {
+   "t": 1592.96,
+   "d": 9.92,
+   "text": "something you can script your way out of with a custom texture importer. All right. Paver."
+  },
+  {
+   "t": 1602.88,
+   "d": 6.72,
+   "text": "SOFIE: Yes, paver. We have so much paver in the game, you know that? -- paper. In the beginning"
+  },
+  {
+   "t": 1609.6,
+   "d": 9.6,
+   "text": "I was drawing paper and I was drawing paper for so many kind of use-cases. Because we have a very"
+  },
+  {
+   "t": 1619.2,
+   "d": 6.24,
+   "text": "dynamic content in the game where we use a lot of different types of sizes of paper for the UI,"
+  },
+  {
+   "t": 1625.44,
+   "d": 8.96,
+   "text": "I draw a lot of papers but as you can imagine in the long run this was not the most efficient way."
+  },
+  {
+   "t": 1634.4,
+   "d": 6.72,
+   "text": "So, Alex, I just want to ask you, could we do this with a shader?"
+  },
+  {
+   "t": 1641.12,
+   "d": 9.92,
+   "text": "ALEXANDER: Yes, we can. The first thing is can we get the servers of the paper and that"
+  },
+  {
+   "t": 1651.04,
+   "d": 6.24,
+   "text": "is quite easy. We just take this green space precision, use it as UV, apply a paper texture,"
+  },
+  {
+   "t": 1657.28,
+   "d": 6.32,
+   "text": "it looks like paper but modern paper because the edge is very clean. This looks like it has"
+  },
+  {
+   "t": 1663.6,
+   "d": 9.04,
+   "text": "just been born at the shop. How do we go about fixing that? Well, we use what I think is going"
+  },
+  {
+   "t": 1672.64,
+   "d": 7.04,
+   "text": "to become my signature technique. I talked about using it for land generation last year and that"
+  },
+  {
+   "t": 1679.68,
+   "d": 7.68,
+   "text": "is use a signed distance field. A signed distance field is like magic. It is super easy to use and"
+  },
+  {
+   "t": 1687.36,
+   "d": 7.36,
+   "text": "scales well to a lot of different like -- it basically lets you take in discreet input and"
+  },
+  {
+   "t": 1694.72,
+   "d": 7.68,
+   "text": "kind of turn it into something that looks more organic. The whole secret is in this case it is"
+  },
+  {
+   "t": 1702.4,
+   "d": 5.12,
+   "text": "a gray scale texture with a bit of noise where we are extenuating the corners and the sides a bit."
+  },
+  {
+   "t": 1710.24,
+   "d": 7.04,
+   "text": "What we then do is that signed distance field is quite easy to understand. It is just that you pick"
+  },
+  {
+   "t": 1717.28,
+   "d": 7.76,
+   "text": "a threshold value and you say I am inside if I am above the value or below and all of the way around"
+  },
+  {
+   "t": 1725.68,
+   "d": 8.32,
+   "text": "for the other case. And if you can then set that value dynamically, then you can basically set"
+  },
+  {
+   "t": 1734.0,
+   "d": 5.52,
+   "text": "like exactly where you want the shape to appear, and if you combine that with the paper texture"
+  },
+  {
+   "t": 1739.52,
+   "d": 9.44,
+   "text": "we had before, you start to get something that actually has that pirate map look with the frail"
+  },
+  {
+   "t": 1748.96,
+   "d": 12.72,
+   "text": "edges. If you then nine slice that signed distance field map, in unity when you resize the elements,"
+  },
+  {
+   "t": 1761.68,
+   "d": 7.92,
+   "text": "the paper will automatically get that look with that edge. One problem that there is with this"
+  },
+  {
+   "t": 1769.6,
+   "d": 7.68,
+   "text": "technique is that if you are using the same SDF across your whole game, and we probably will,"
+  },
+  {
+   "t": 1779.04,
+   "d": 6.48,
+   "text": "it can become clear it is the same shape being repeated and that's because it is the same"
+  },
+  {
+   "t": 1789.76,
+   "d": 7.2,
+   "text": "field being displayed underneath. The way to fix that is by adding noise to it. We can just"
+  },
+  {
+   "t": 1796.96,
+   "d": 5.12,
+   "text": "do that in screen space like we did with the noise we use to create the paper texture. And"
+  },
+  {
+   "t": 1802.64,
+   "d": 7.04,
+   "text": "you can see here that that is actually a really good way of modifying the shape of"
+  },
+  {
+   "t": 1811.68,
+   "d": 8.4,
+   "text": "the paper. A little trick that we think I also got around to implementing is that we can take the"
+  },
+  {
+   "t": 1820.08,
+   "d": 6.96,
+   "text": "individual vertex color that can be said in the UI system and use that to create a bit of an offset"
+  },
+  {
+   "t": 1827.04,
+   "d": 4.72,
+   "text": "so that creates even more variety. >> We are running close"
+  },
+  {
+   "t": 1831.76,
+   "d": 5.68,
+   "text": "on time just so you know. ALEXANDER: It can also be used for shadows."
+  },
+  {
+   "t": 1839.04,
+   "d": 7.2,
+   "text": "Also, there was a talk about the dreaded oatmeal problem. One thing we ran into is a lot of our"
+  },
+  {
+   "t": 1846.24,
+   "d": 8.64,
+   "text": "islands look the same. The way I fixed that, you are going to get a little tip on that here,"
+  },
+  {
+   "t": 1854.88,
+   "d": 7.36,
+   "text": "that was basically by having all our props be defined in a range that they could appear in,"
+  },
+  {
+   "t": 1862.24,
+   "d": 13.36,
+   "text": "and then each defines a weighting for each prop and then zee a weight range for each"
+  },
+  {
+   "t": 1875.6,
+   "d": 5.6,
+   "text": "of the props and each harbor picks a range we pick from, and from that, you then get islands"
+  },
+  {
+   "t": 1881.2,
+   "d": 13.84,
+   "text": "that look different even though it is pulled from with different. Summary. It is really important"
+  },
+  {
+   "t": 1895.04,
+   "d": 7.6,
+   "text": "you let everyone on the team contribute to the generation in the game. They will surprise you"
+  },
+  {
+   "t": 1902.64,
+   "d": 6.16,
+   "text": "the creativity they can bring to the table. SOFIE: Make sure it is strong collaboration."
+  },
+  {
+   "t": 1909.6,
+   "d": 6.88,
+   "text": "We came up with examples of how the magic can happen when we start like tossing ideas like"
+  },
+  {
+   "t": 1916.48,
+   "d": 6.24,
+   "text": "the building generation for the sunken city, for instance. And also figure out where you"
+  },
+  {
+   "t": 1922.72,
+   "d": 4.72,
+   "text": "can cheat and cut corners without losing too much of the visual quality. We have a"
+  },
+  {
+   "t": 1927.44,
+   "d": 8.08,
+   "text": "game where the camera is far away and it is OK with high fidelity or details in the game."
+  },
+  {
+   "t": 1935.52,
+   "d": 7.12,
+   "text": "ALEXANDER: And shaders can add a lot of variety of a small selection of props. It"
+  },
+  {
+   "t": 1942.64,
+   "d": 6.4,
+   "text": "is an area where there is a lot of room for exploration in procedural games. Thank you."
+  }
+ ]
+}

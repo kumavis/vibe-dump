@@ -1,0 +1,593 @@
+{
+ "id": "-MX1imoSxTg",
+ "url": "https://www.youtube.com/watch?v=-MX1imoSxTg",
+ "title": "Tabea Iseli: Animal Crossing meets Roguelite Dungeon Crawler: The genre mixture of Grimoire Groves",
+ "speaker": "Tabea Iseli",
+ "talk_title": "Animal Crossing meets Roguelite Dungeon Crawler: The genre mixture of Grimoire Groves",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 805,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "During the peak of the Covid pandemic, a small indie game studio from Switzerland set out to take their favorite genre - roguelite dungeon crawlers - and transfer it into a cozy, colorful and comforting world. After all, the real world out there is already scary enough, so at least our favorite video games should be a place we want to escape to, right? Over the past four years, this vision manifested itself in Grimoire Groves, a roguelite game about witches, friendship, mythical creatures and growing plants. The talk tackles the surprising similarities between farming/life sims and roguelite dungeon crawlers by explaining how Grimoire Groves mixes cute Animal Crossing-like villagers and friendship systems with dungeon crawler action mechanics.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction"
+  },
+  {
+   "start": 24,
+   "title": "Conceptualizing the game"
+  },
+  {
+   "start": 131,
+   "title": "Mixing genres"
+  },
+  {
+   "start": 201,
+   "title": "Integrating farming elements"
+  },
+  {
+   "start": 310,
+   "title": "Responding to player feedback"
+  },
+  {
+   "start": 435,
+   "title": "Friendship and mechanics"
+  },
+  {
+   "start": 518,
+   "title": "Future of the genre"
+  },
+  {
+   "start": 605,
+   "title": "Q&A and conclusion"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1845,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 2.92,
+   "d": 7.84,
+   "text": "Our next speaker is Tabea Iseli is the founder and game director of Stardust, a Swiss indie game"
+  },
+  {
+   "t": 10.76,
+   "d": 7.24,
+   "text": "studio creating diverse games for a diverse audience. I will let you kick it off. I want"
+  },
+  {
+   "t": 18.0,
+   "d": 3.84,
+   "text": "to let you get into \"Animal Crossing meets Roguelite Dungeon Crawler: The surprising"
+  },
+  {
+   "t": 21.84,
+   "d": 8.2,
+   "text": "genre mixture behind Grimoire Groves.\" TABEA: Since we are at Roguelike Celebration"
+  },
+  {
+   "t": 30.04,
+   "d": 6.0,
+   "text": "and I am giving a talk, it probably comes to nobody's surprise that roguelikes are one of"
+  },
+  {
+   "t": 36.04,
+   "d": 7.92,
+   "text": "my favorite genres and it was always a dream for me to create one myself. Back in 2020 when"
+  },
+  {
+   "t": 43.96,
+   "d": 6.44,
+   "text": "we were talking about the concept for our second game that dream started to become a reality. We"
+  },
+  {
+   "t": 50.96,
+   "d": 8.76,
+   "text": "wanted to create a non-violent dungeon with growing plants with magic. To explain how we"
+  },
+  {
+   "t": 59.72,
+   "d": 9.72,
+   "text": "came to this decision, let's travel back to the year 2020. A year probably most of us spent alone"
+  },
+  {
+   "t": 69.44,
+   "d": 7.04,
+   "text": "at home in some fashion. For gaming 2020 was a huge year. We had Animal Crossing, new horizons,"
+  },
+  {
+   "t": 76.48,
+   "d": 8.88,
+   "text": "huge hits, which also for many people were some kind of a shining light through the pandemic. If"
+  },
+  {
+   "t": 85.36,
+   "d": 5.2,
+   "text": "I remember correctly, it was also the year when whole some direct took the gaming world by storm"
+  },
+  {
+   "t": 90.56,
+   "d": 6.72,
+   "text": "and made it career wholesome and cozy games were here to stay. Roguelike games, on the other hand,"
+  },
+  {
+   "t": 97.28,
+   "d": 8.6,
+   "text": "were still a staple of indie game as they arguably are still today because they have this captivating"
+  },
+  {
+   "t": 105.88,
+   "d": 8.72,
+   "text": "formula that never grows old. The anticipation of what you might encounter on the next draw,"
+  },
+  {
+   "t": 115.44,
+   "d": 6.56,
+   "text": "the hope of finding the right components for your build to click, sometimes also the thrill"
+  },
+  {
+   "t": 122.0,
+   "d": 6.36,
+   "text": "of living on the edge, and at least for roguelites the solace that even if you fail you at least made"
+  },
+  {
+   "t": 128.36,
+   "d": 7.0,
+   "text": "a step towards your goal. We ask ourselves the question if it would be possible to re-create"
+  },
+  {
+   "t": 135.36,
+   "d": 5.24,
+   "text": "this captivateing roguelike elements but not in a traditional it is a dark dungeon and you"
+  },
+  {
+   "t": 140.6,
+   "d": 8.52,
+   "text": "have to slay monster kind of setting but rather colorful, cute, and cozy world. We came up with"
+  },
+  {
+   "t": 149.12,
+   "d": 9.84,
+   "text": "the concept where you as a witch would grow plant creatures with magic and materials you find on"
+  },
+  {
+   "t": 158.96,
+   "d": 10.28,
+   "text": "your journey and help the local foresters. It is still a traditional Dungeon Crawler so you"
+  },
+  {
+   "t": 169.84,
+   "d": 7.96,
+   "text": "are exploring a procedurally generated map, cast spells on plant creatures that replace the enemies"
+  },
+  {
+   "t": 177.8,
+   "d": 7.84,
+   "text": "in a traditional roguelike game. You also can buy boons that, hopefully, will synergize well and"
+  },
+  {
+   "t": 185.64,
+   "d": 8.52,
+   "text": "help you get through the whole run where you will encounter a bus fight. Our vision was wizard of"
+  },
+  {
+   "t": 194.16,
+   "d": 8.24,
+   "text": "legends meets adventure time. But we also leaned into some aspect of farming games because on one"
+  },
+  {
+   "t": 202.4,
+   "d": 6.72,
+   "text": "hand they are popular with our target audience but share similarities with roguelike and Dungeon"
+  },
+  {
+   "t": 209.12,
+   "d": 12.68,
+   "text": "Crawler mechanics. If you think about it, both are about collecting resources, both have have these"
+  },
+  {
+   "t": 221.8,
+   "d": 6.28,
+   "text": "freedom for players to choose their own approaches and priorities, and in both genres players are"
+  },
+  {
+   "t": 228.08,
+   "d": 7.16,
+   "text": "working over several runs or game days to reach their next goal. As a plus, the farming aspects"
+  },
+  {
+   "t": 235.24,
+   "d": 7.04,
+   "text": "were also helping us to explain the non-violent aspects of our game because players could"
+  },
+  {
+   "t": 242.28,
+   "d": 7.6,
+   "text": "understand the concept of watering plants with magic. This mixture with farming games especially"
+  },
+  {
+   "t": 250.56,
+   "d": 6.4,
+   "text": "helped us with meta-progression. As an example our spell tree in the game is a literal tree."
+  },
+  {
+   "t": 256.96,
+   "d": 7.0,
+   "text": "That's just not a silly pun that went too far but rather we made the whole upgrading and unlocking"
+  },
+  {
+   "t": 263.96,
+   "d": 8.56,
+   "text": "system a garden in your home base. Unlocks are plants that you can put into your garden. After"
+  },
+  {
+   "t": 272.52,
+   "d": 6.8,
+   "text": "you start with an empty overgrown plot of land it will slowly turn into a pretty home over time"
+  },
+  {
+   "t": 279.32,
+   "d": 6.96,
+   "text": "which at the same time also is a representation of your capabilities in the game. This is one"
+  },
+  {
+   "t": 286.28,
+   "d": 5.44,
+   "text": "aspect that our players loved from the beginning and of course they wanted to see more stuff like"
+  },
+  {
+   "t": 291.72,
+   "d": 6.52,
+   "text": "that. One feature that we sadly were not able to implement was their wish that they could place"
+  },
+  {
+   "t": 298.24,
+   "d": 7.28,
+   "text": "these objects freely in the garden. Even though it is super hard, we wanted to have some areas"
+  },
+  {
+   "t": 305.52,
+   "d": 7.36,
+   "text": "where woe we wanted to go the extra mile for the players. While our wizard of legend meets"
+  },
+  {
+   "t": 312.88,
+   "d": 9.12,
+   "text": "adventure time some found appeal with players but they pushed toward the Hades or cult of the lamb"
+  },
+  {
+   "t": 322.0,
+   "d": 6.64,
+   "text": "meets Animal Crossing direction. No pressure. It is not like these were some of the biggest games"
+  },
+  {
+   "t": 328.64,
+   "d": 7.48,
+   "text": "in the last few years. Suddenly a whole bunch of players were throwing errands that and despite the"
+  },
+  {
+   "t": 336.12,
+   "d": 7.52,
+   "text": "impossibility of meeting these high expectations as just a small indie team we still decided we"
+  },
+  {
+   "t": 343.64,
+   "d": 8.08,
+   "text": "wanted to try to bring some of these wishes to the game for our players. Admittedly a lot of things"
+  },
+  {
+   "t": 351.72,
+   "d": 7.08,
+   "text": "I wanted to see in the game were very unexpected for us. For example, one thing that players wanted"
+  },
+  {
+   "t": 358.8,
+   "d": 6.28,
+   "text": "to see more of was story and we actually hot it would be the other way around. We had all these"
+  },
+  {
+   "t": 365.08,
+   "d": 7.68,
+   "text": "uncommon non-violent action mechanics that we had to explain which generated a lot of dialogue and"
+  },
+  {
+   "t": 372.76,
+   "d": 4.96,
+   "text": "we thought that this might be a complete turn off for players because after all neither roguelikes"
+  },
+  {
+   "t": 377.72,
+   "d": 7.24,
+   "text": "or farming sims are super rich in story. Many roguelikes barely have a story at all. It is like,"
+  },
+  {
+   "t": 384.96,
+   "d": 7.68,
+   "text": "yeah, go slay these evil monsters. Farming sims don't have an intricate overarching story but the"
+  },
+  {
+   "t": 392.64,
+   "d": 8.36,
+   "text": "meat is in the players and background. Our players were totally going for it. They loved the story."
+  },
+  {
+   "t": 401.0,
+   "d": 6.16,
+   "text": "They loved the elemental spirits. The quarrel among sibblings, dialogue, corky characters,"
+  },
+  {
+   "t": 407.16,
+   "d": 7.44,
+   "text": "and most of all the humor. Despite roguelike genre usually being the opposite of story rich, we"
+  },
+  {
+   "t": 414.6,
+   "d": 4.44,
+   "text": "wanted to accommodate our player's wishes because it was one way to flesh out the game but it"
+  },
+  {
+   "t": 419.04,
+   "d": 11.44,
+   "text": "was also a way to help players understand the roguelike genre because it isn't super simple"
+  },
+  {
+   "t": 430.48,
+   "d": 6.48,
+   "text": "to understand how roguelikes work if you have never played one before. Of course,"
+  },
+  {
+   "t": 436.96,
+   "d": 7.08,
+   "text": "when we were talking about player wishes and players enjoying our characters and drawing"
+  },
+  {
+   "t": 444.04,
+   "d": 6.92,
+   "text": "inspiration from Animal Crossing, befriending characters was a huge topic. Since friendship,"
+  },
+  {
+   "t": 452.16,
+   "d": 6.28,
+   "text": "luckily was already at the core of our story, we were more than happy to implement that theme into"
+  },
+  {
+   "t": 458.44,
+   "d": 10.48,
+   "text": "our game mechanics but we wanted to stay true with the roguelike core. We took shock MPCs and you can"
+  },
+  {
+   "t": 469.44,
+   "d": 9.52,
+   "text": "befriend them doing fun little mini games giving additional choices in the shop and a discount."
+  },
+  {
+   "t": 480.12,
+   "d": 9.44,
+   "text": "We also created cute homes for the characters and they can new love in permanently in your forest if"
+  },
+  {
+   "t": 489.56,
+   "d": 8.48,
+   "text": "you befriend them. We took the bus plants and put them into the backyard of set characters and give"
+  },
+  {
+   "t": 498.04,
+   "d": 6.92,
+   "text": "players additional benefits in the bus fight if they already befriended the character. Yes, that"
+  },
+  {
+   "t": 504.96,
+   "d": 7.92,
+   "text": "means we have do fights in the game ebon -- even those are cozy because you are helping friends"
+  },
+  {
+   "t": 512.88,
+   "d": 7.84,
+   "text": "harvesting the fruits of the huge plants in the backyard. That's kind of the story of how we"
+  },
+  {
+   "t": 520.72,
+   "d": 10.12,
+   "text": "started with a concept for a non-violent roguelike game and it more turned into Animal Crossing esc"
+  },
+  {
+   "t": 530.84,
+   "d": 7.0,
+   "text": "Dungeon Crawler. To me the story is more than just the story of our game. It also highlights"
+  },
+  {
+   "t": 537.84,
+   "d": 7.56,
+   "text": "what I like so much about this genre. How amazing and versatile it is. I am 100% sure we will see"
+  },
+  {
+   "t": 545.4,
+   "d": 7.68,
+   "text": "more innovative iterations and reinventions of the roguelike genre. After all, even since we"
+  },
+  {
+   "t": 553.08,
+   "d": 6.8,
+   "text": "started with Grimoire Groves we realized we are not at all alone in the non-violent or"
+  },
+  {
+   "t": 559.88,
+   "d": 7.36,
+   "text": "cozy roguelike space. To show some examples, we have moon drop which showed us it is possible to"
+  },
+  {
+   "t": 567.24,
+   "d": 8.28,
+   "text": "create a non-violent farming roguelike. I also saw worlds greatest pub which is a game I discovered"
+  },
+  {
+   "t": 575.52,
+   "d": 8.0,
+   "text": "at this conference. I am so hyped because it is a roguelike game about dog shows of all things."
+  },
+  {
+   "t": 583.52,
+   "d": 10.2,
+   "text": "That's just amazing. I would also like to talk about Dave the diver because that showed us the"
+  },
+  {
+   "t": 593.72,
+   "d": 13.56,
+   "text": "cozy crowd is ready to embrace roguelike games if they are made for a cozy crowd. Long story short,"
+  },
+  {
+   "t": 607.28,
+   "d": 5.52,
+   "text": "I am sure that there is a lot to look forward to in the future of roguelike games. I am also"
+  },
+  {
+   "t": 612.8,
+   "d": 7.99,
+   "text": "very happy Grimoire Groves will probably not be the last ever cute and cozy roguelike game."
+  },
+  {
+   "t": 620.79,
+   "d": 8.65,
+   "text": "ALEXEI: Very exciting. Thank you. Super cute. If people have questions, we probably have time for"
+  },
+  {
+   "t": 629.44,
+   "d": 5.16,
+   "text": "one at least. But yeah, kicking things off. I think what's really interesting there is"
+  },
+  {
+   "t": 634.6,
+   "d": 7.56,
+   "text": "how it sounds like as a team you dug why people are asking for what they are and asking for and"
+  },
+  {
+   "t": 642.16,
+   "d": 6.08,
+   "text": "in other genres what purpose is this serving? What is the interaction with the villagers and the part"
+  },
+  {
+   "t": 648.24,
+   "d": 4.84,
+   "text": "that matter? The sense of building a community like Animal Crossing where it"
+  },
+  {
+   "t": 653.08,
+   "d": 6.36,
+   "text": "feels good you build up friends close by and figuring out how to copy that. It is"
+  },
+  {
+   "t": 659.44,
+   "d": 13.92,
+   "text": "interesting when you go genre to genre you don't want to just copy and paste. Similar to roguelikes"
+  },
+  {
+   "t": 673.36,
+   "d": 9.24,
+   "text": "where you need a progression mechanic and that could be a garden or an UI. I think that's"
+  },
+  {
+   "t": 682.6,
+   "d": 6.64,
+   "text": "interesting how you've considered the elements of those different genres and how to blend them."
+  },
+  {
+   "t": 690.24,
+   "d": 7.44,
+   "text": "TABEA: Yup. I also think when we started the gaming world looked differently in 2020. It"
+  },
+  {
+   "t": 697.68,
+   "d": 5.96,
+   "text": "was really important for us to give our target audience a voice because back then they were"
+  },
+  {
+   "t": 703.64,
+   "d": 7.4,
+   "text": "not really heard as an audience. There are not a lot of games out there for them. So we made the"
+  },
+  {
+   "t": 711.04,
+   "d": 6.64,
+   "text": "conscious decision that we kind of want to do this participation design where we would go throughout"
+  },
+  {
+   "t": 717.68,
+   "d": 4.68,
+   "text": "as early as possible to players and ask them, you know, what kind of things would you like to see in"
+  },
+  {
+   "t": 722.36,
+   "d": 6.48,
+   "text": "the game? How should it look? They decided on the art stuff for example. They also came up with the"
+  },
+  {
+   "t": 728.84,
+   "d": 8.56,
+   "text": "name for our game. We tried to keep them in the loop and ask them as much as possible within the"
+  },
+  {
+   "t": 737.4,
+   "d": 9.88,
+   "text": "boundaries of what is possible for us to do as an indie studio with a set budget basically."
+  },
+  {
+   "t": 747.28,
+   "d": 5.08,
+   "text": "ALEXEI: That's great. I think that really relevant -- the early access type development. It is more"
+  },
+  {
+   "t": 752.36,
+   "d": 3.88,
+   "text": "and more common. It has that back and forth. And reminds me, I don't know what year it was,"
+  },
+  {
+   "t": 756.24,
+   "d": 5.36,
+   "text": "we had a talk from one of the devs of shattered pixel dungeon for mobile who I believe talked"
+  },
+  {
+   "t": 761.6,
+   "d": 5.24,
+   "text": "about the process of taking user feedback. When people were like I want to see Gamlen"
+  },
+  {
+   "t": 766.84,
+   "d": 8.84,
+   "text": "in the game from lord of the rings. It is like well, can't do that. That's IP. So"
+  },
+  {
+   "t": 775.68,
+   "d": 5.32,
+   "text": "that kind of mediating back and forth. It is good that you found a way to do that. Sounds"
+  },
+  {
+   "t": 781.0,
+   "d": 3.86,
+   "text": "like you have a really positive community. TABEA: Oh, absolutely, yes. They are amazing."
+  },
+  {
+   "t": 784.86,
+   "d": 5.46,
+   "text": "ALEXEI: Excellent. Thank you. It is great shout-out world's goodest pub."
+  },
+  {
+   "t": 790.84,
+   "d": 7.56,
+   "text": "TABEA: Looking forward so much to that game. ALEXEI: People can check out Grimoire Groves"
+  },
+  {
+   "t": 798.4,
+   "d": 5.84,
+   "text": "in the Steam sale. I am sure we have a link to it. Thank you very much, Tabea."
+  }
+ ]
+}

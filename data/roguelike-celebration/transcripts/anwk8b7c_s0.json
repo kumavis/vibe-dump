@@ -1,0 +1,3209 @@
+{
+ "id": "anwk8b7c_s0",
+ "url": "https://www.youtube.com/watch?v=anwk8b7c_s0",
+ "title": "Max Hawkins - Mapping Activity Space - Adventures in Randomized Living",
+ "speaker": "Max Hawkins",
+ "talk_title": "Mapping Activity Space - Adventures in Randomized Living",
+ "year": 2019,
+ "kind": "talk",
+ "upload_date": "2019-10-23",
+ "duration_s": 1778,
+ "playlists": [
+  "Roguelike Celebration 2019"
+ ],
+ "description": "This talk is from the 2019 Roguelike Celebration - find out more at https://roguelike.club/event2019.html\n\nMax Hawkins is an artist and computer scientist based in Los Angeles. For two years he let a randomized computer algorithm make all of his decisions including where to live, what to wear, who to talk to, and what to eat.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "The trap of identity"
+  },
+  {
+   "start": 207,
+   "title": "Preference loops and control"
+  },
+  {
+   "start": 476,
+   "title": "Randomization as a solution"
+  },
+  {
+   "start": 751,
+   "title": "Building life randomizers"
+  },
+  {
+   "start": 1051,
+   "title": "Social space experiments"
+  },
+  {
+   "start": 1276,
+   "title": "Linguistic and value testing"
+  },
+  {
+   "start": 1591,
+   "title": "Q&A on life randomization"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 4736,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 0.03,
+   "d": 7.71,
+   "text": "high configuration what what all are you"
+  },
+  {
+   "t": 7.74,
+   "d": 3.75,
+   "text": "doing like actually like what right now"
+  },
+  {
+   "t": 11.49,
+   "d": 2.85,
+   "text": "are you doing like are you are you"
+  },
+  {
+   "t": 14.34,
+   "d": 3.09,
+   "text": "sitting in a chair all right are you"
+  },
+  {
+   "t": 17.43,
+   "d": 2.48,
+   "text": "like in an office in San Francisco"
+  },
+  {
+   "t": 19.91,
+   "d": 4.56,
+   "text": "sitting in a chair watching a talk"
+  },
+  {
+   "t": 24.47,
+   "d": 3.88,
+   "text": "are you on Twitter instead of watching a"
+  },
+  {
+   "t": 28.35,
+   "d": 4.47,
+   "text": "talk sitting in a chair I got really"
+  },
+  {
+   "t": 32.82,
+   "d": 2.28,
+   "text": "interested in this question of like what"
+  },
+  {
+   "t": 35.1,
+   "d": 2.07,
+   "text": "am i doing now and what is it possible"
+  },
+  {
+   "t": 37.17,
+   "d": 1.8,
+   "text": "to be doing now because like you're"
+  },
+  {
+   "t": 38.97,
+   "d": 2.04,
+   "text": "sitting in a chair in San Francisco but"
+  },
+  {
+   "t": 41.01,
+   "d": 2.1,
+   "text": "you could be like tapping on a podium or"
+  },
+  {
+   "t": 43.11,
+   "d": 2.58,
+   "text": "you could be calling your mom or you"
+  },
+  {
+   "t": 45.69,
+   "d": 3.15,
+   "text": "could be any number of things and you're"
+  },
+  {
+   "t": 48.84,
+   "d": 2.52,
+   "text": "not right now you've chosen to do this"
+  },
+  {
+   "t": 51.36,
+   "d": 2.19,
+   "text": "one thing and I've gotten like really"
+  },
+  {
+   "t": 53.55,
+   "d": 2.64,
+   "text": "fascinated with what's the list of every"
+  },
+  {
+   "t": 56.19,
+   "d": 1.77,
+   "text": "possible thing that I could be doing"
+  },
+  {
+   "t": 57.96,
+   "d": 2.7,
+   "text": "right now and it's like pretty hard to"
+  },
+  {
+   "t": 60.66,
+   "d": 1.23,
+   "text": "generate that list I think it's actually"
+  },
+  {
+   "t": 61.89,
+   "d": 2.42,
+   "text": "an impossible task but you can start and"
+  },
+  {
+   "t": 64.31,
+   "d": 3.76,
+   "text": "so I started making these lists of just"
+  },
+  {
+   "t": 68.07,
+   "d": 3.75,
+   "text": "like things that you can do and you know"
+  },
+  {
+   "t": 71.82,
+   "d": 2.22,
+   "text": "however like weird and crazy just what"
+  },
+  {
+   "t": 74.04,
+   "d": 2.58,
+   "text": "could I be doing and then I started"
+  },
+  {
+   "t": 76.62,
+   "d": 3.93,
+   "text": "thinking about like some of these I am I"
+  },
+  {
+   "t": 80.55,
+   "d": 3.77,
+   "text": "would do and some of them I wouldn't and"
+  },
+  {
+   "t": 84.32,
+   "d": 3.79,
+   "text": "there's a reason for that and like what"
+  },
+  {
+   "t": 88.11,
+   "d": 1.65,
+   "text": "what is the difference between the"
+  },
+  {
+   "t": 89.76,
+   "d": 2.76,
+   "text": "things that are inbounds for me and the"
+  },
+  {
+   "t": 92.52,
+   "d": 2.79,
+   "text": "things that are out of bounds like I"
+  },
+  {
+   "t": 95.31,
+   "d": 5.28,
+   "text": "might be someone who plays a guitar and"
+  },
+  {
+   "t": 100.59,
+   "d": 2.31,
+   "text": "I think like the reason why that's"
+  },
+  {
+   "t": 102.9,
+   "d": 4.08,
+   "text": "inbounds for me is because I define"
+  },
+  {
+   "t": 106.98,
+   "d": 2.34,
+   "text": "myself as the kind of person who would"
+  },
+  {
+   "t": 109.32,
+   "d": 1.55,
+   "text": "play guitar like that's something that"
+  },
+  {
+   "t": 110.87,
+   "d": 3.97,
+   "text": "is for me but I could be someone who"
+  },
+  {
+   "t": 114.84,
+   "d": 1.77,
+   "text": "says like no that's not for me I don't"
+  },
+  {
+   "t": 116.61,
+   "d": 5.16,
+   "text": "like the guitar similarly I'm not the"
+  },
+  {
+   "t": 121.77,
+   "d": 1.14,
+   "text": "kind of person who pretends to be a"
+  },
+  {
+   "t": 122.91,
+   "d": 4.62,
+   "text": "Viking ghost or goes to church why is"
+  },
+  {
+   "t": 127.53,
+   "d": 3.48,
+   "text": "that like why do i define myself such"
+  },
+  {
+   "t": 131.01,
+   "d": 2.17,
+   "text": "that those things are outside"
+  },
+  {
+   "t": 133.18,
+   "d": 3.54,
+   "text": "and the other things are inside I think"
+  },
+  {
+   "t": 136.72,
+   "d": 1.92,
+   "text": "that part of it is that like once you"
+  },
+  {
+   "t": 138.64,
+   "d": 3.15,
+   "text": "choose an action once you say like I'm a"
+  },
+  {
+   "t": 141.79,
+   "d": 4.02,
+   "text": "guitar person then that has implications"
+  },
+  {
+   "t": 145.81,
+   "d": 1.98,
+   "text": "that means that you're like more likely"
+  },
+  {
+   "t": 147.79,
+   "d": 3.42,
+   "text": "to join a band you you with every action"
+  },
+  {
+   "t": 151.21,
+   "d": 2.13,
+   "text": "that you take our carving out a subspace"
+  },
+  {
+   "t": 153.34,
+   "d": 2.64,
+   "text": "of all possible actions that you can"
+  },
+  {
+   "t": 155.98,
+   "d": 1.43,
+   "text": "live inside and you're pushing away"
+  },
+  {
+   "t": 157.41,
+   "d": 4.27,
+   "text": "things in other sub spaces and so I got"
+  },
+  {
+   "t": 161.68,
+   "d": 5.16,
+   "text": "really fascinated with this and yeah I"
+  },
+  {
+   "t": 166.84,
+   "d": 1.89,
+   "text": "think that like the this is a really"
+  },
+  {
+   "t": 168.73,
+   "d": 2.25,
+   "text": "deep thing that we do as humans it's"
+  },
+  {
+   "t": 170.98,
+   "d": 2.37,
+   "text": "like figure out what's our stuff and"
+  },
+  {
+   "t": 173.35,
+   "d": 2.55,
+   "text": "what's outside of us and I think that"
+  },
+  {
+   "t": 175.9,
+   "d": 3.39,
+   "text": "our society our culture like really"
+  },
+  {
+   "t": 179.29,
+   "d": 2.33,
+   "text": "reinforces that it says like who are you"
+  },
+  {
+   "t": 181.62,
+   "d": 3.34,
+   "text": "what is your purpose what are you gonna"
+  },
+  {
+   "t": 184.96,
+   "d": 2.4,
+   "text": "do next you're at Subway it's like what"
+  },
+  {
+   "t": 187.36,
+   "d": 2.15,
+   "text": "do you want on your sandwich"
+  },
+  {
+   "t": 189.51,
+   "d": 4.63,
+   "text": "are you a Mac or a PC Republican or"
+  },
+  {
+   "t": 194.14,
+   "d": 3.69,
+   "text": "Democrat which Sex in the City character"
+  },
+  {
+   "t": 197.83,
+   "d": 3.78,
+   "text": "are you actually I took the quiz okay"
+  },
+  {
+   "t": 201.61,
+   "d": 1.77,
+   "text": "they say I'm a Samantha I don't see it"
+  },
+  {
+   "t": 203.38,
+   "d": 5.79,
+   "text": "but and then so like I actually have a"
+  },
+  {
+   "t": 209.17,
+   "d": 3.39,
+   "text": "problem with this and it might like you"
+  },
+  {
+   "t": 212.56,
+   "d": 1.11,
+   "text": "might not agree with me that this is a"
+  },
+  {
+   "t": 213.67,
+   "d": 2.97,
+   "text": "problem but I think I think that it's a"
+  },
+  {
+   "t": 216.64,
+   "d": 5.46,
+   "text": "problem that once you define a set of"
+  },
+  {
+   "t": 222.1,
+   "d": 3.0,
+   "text": "things that is like in bounds for you it"
+  },
+  {
+   "t": 225.1,
+   "d": 2.19,
+   "text": "gets rid of the other things because I"
+  },
+  {
+   "t": 227.29,
+   "d": 3.0,
+   "text": "think about it like maybe my life would"
+  },
+  {
+   "t": 230.29,
+   "d": 1.83,
+   "text": "be better off if I spent my Saturdays"
+  },
+  {
+   "t": 232.12,
+   "d": 2.94,
+   "text": "pretending to be a Viking ghost like"
+  },
+  {
+   "t": 235.06,
+   "d": 1.92,
+   "text": "maybe but actually I would like being"
+  },
+  {
+   "t": 236.98,
+   "d": 2.15,
+   "text": "someone who went to church on Sunday but"
+  },
+  {
+   "t": 239.13,
+   "d": 2.35,
+   "text": "it's very difficult to get from where I"
+  },
+  {
+   "t": 241.48,
+   "d": 0.6,
+   "text": "am"
+  },
+  {
+   "t": 242.08,
+   "d": 2.93,
+   "text": "to that other place"
+  },
+  {
+   "t": 247.76,
+   "d": 1.59,
+   "text": "so the way I think about it in this"
+  },
+  {
+   "t": 249.35,
+   "d": 3.42,
+   "text": "terrible diagram is that like when you"
+  },
+  {
+   "t": 252.77,
+   "d": 4.38,
+   "text": "choose a subset of action space you're"
+  },
+  {
+   "t": 257.15,
+   "d": 2.49,
+   "text": "putting yourself into an attractor like"
+  },
+  {
+   "t": 259.64,
+   "d": 2.37,
+   "text": "you you are sort of trapping yourself in"
+  },
+  {
+   "t": 262.01,
+   "d": 3.33,
+   "text": "a rut and that makes things that are"
+  },
+  {
+   "t": 265.34,
+   "d": 3.48,
+   "text": "outside of that subspace really"
+  },
+  {
+   "t": 268.82,
+   "d": 1.23,
+   "text": "difficult to get to like you have to"
+  },
+  {
+   "t": 270.05,
+   "d": 4.8,
+   "text": "climb up that wall it kind of puts you"
+  },
+  {
+   "t": 274.85,
+   "d": 3.63,
+   "text": "into a reality tunnel and you see this a"
+  },
+  {
+   "t": 278.48,
+   "d": 5.58,
+   "text": "lot of places like when you are in the"
+  },
+  {
+   "t": 284.06,
+   "d": 3.96,
+   "text": "space of here's a great direct example"
+  },
+  {
+   "t": 288.02,
+   "d": 6.95,
+   "text": "like the the election in 2000 Trump I"
+  },
+  {
+   "t": 294.97,
+   "d": 2.41,
+   "text": "was in San Francisco at the time and"
+  },
+  {
+   "t": 297.38,
+   "d": 1.59,
+   "text": "there was a lot of people that were in"
+  },
+  {
+   "t": 298.97,
+   "d": 3.57,
+   "text": "the reality tunnel we're voting for"
+  },
+  {
+   "t": 302.54,
+   "d": 2.76,
+   "text": "Trump was not an option like that was"
+  },
+  {
+   "t": 305.3,
+   "d": 1.71,
+   "text": "just like outside of the universe of"
+  },
+  {
+   "t": 307.01,
+   "d": 3.42,
+   "text": "possibilities and then there were people"
+  },
+  {
+   "t": 310.43,
+   "d": 3.3,
+   "text": "crying in the streets when when the"
+  },
+  {
+   "t": 313.73,
+   "d": 2.25,
+   "text": "results came in and a lot of people went"
+  },
+  {
+   "t": 315.98,
+   "d": 0.54,
+   "text": "the other way"
+  },
+  {
+   "t": 316.52,
+   "d": 3.51,
+   "text": "and so I think there's like a lot of"
+  },
+  {
+   "t": 320.03,
+   "d": 3.51,
+   "text": "danger to getting sucked into this sort"
+  },
+  {
+   "t": 323.54,
+   "d": 4.11,
+   "text": "of tunnel where you are restricted for"
+  },
+  {
+   "t": 327.65,
+   "d": 2.85,
+   "text": "making certain actions and I also think"
+  },
+  {
+   "t": 330.5,
+   "d": 2.61,
+   "text": "that technology is making it worse this"
+  },
+  {
+   "t": 333.11,
+   "d": 3.33,
+   "text": "is not like a new idea that but the if"
+  },
+  {
+   "t": 336.44,
+   "d": 1.8,
+   "text": "you have like the the filter bubble that"
+  },
+  {
+   "t": 338.24,
+   "d": 1.17,
+   "text": "you know when you go on your Facebook"
+  },
+  {
+   "t": 339.41,
+   "d": 2.49,
+   "text": "newsfeed you see things that reinforce"
+  },
+  {
+   "t": 341.9,
+   "d": 2.43,
+   "text": "your your viewpoints and sort of get"
+  },
+  {
+   "t": 344.33,
+   "d": 1.68,
+   "text": "into an echo chamber that sort of deal I"
+  },
+  {
+   "t": 346.01,
+   "d": 3.06,
+   "text": "kind of buy into that but actually think"
+  },
+  {
+   "t": 349.07,
+   "d": 2.96,
+   "text": "that it's it's worse than that because"
+  },
+  {
+   "t": 352.03,
+   "d": 2.8,
+   "text": "if you think about like the logic of a"
+  },
+  {
+   "t": 354.83,
+   "d": 4.89,
+   "text": "recommender system the end goal of a"
+  },
+  {
+   "t": 359.72,
+   "d": 3.5,
+   "text": "recommender is to know you so well that"
+  },
+  {
+   "t": 363.22,
+   "d": 2.17,
+   "text": "you don't have to make a choice that"
+  },
+  {
+   "t": 365.39,
+   "d": 2.49,
+   "text": "like if the computer knows your"
+  },
+  {
+   "t": 367.88,
+   "d": 2.79,
+   "text": "preferences perfectly then it already"
+  },
+  {
+   "t": 370.67,
+   "d": 1.44,
+   "text": "knows what you're going to do like it"
+  },
+  {
+   "t": 372.11,
+   "d": 1.95,
+   "text": "knows what the logical next step is and"
+  },
+  {
+   "t": 374.06,
+   "d": 3.63,
+   "text": "so you are free from having any agency"
+  },
+  {
+   "t": 377.69,
+   "d": 2.18,
+   "text": "and"
+  },
+  {
+   "t": 379.87,
+   "d": 1.89,
+   "text": "I like that really bothers me because I"
+  },
+  {
+   "t": 381.76,
+   "d": 1.47,
+   "text": "think that it like conflicts with the"
+  },
+  {
+   "t": 383.23,
+   "d": 4.61,
+   "text": "idea of free will and I think that we"
+  },
+  {
+   "t": 387.84,
+   "d": 6.13,
+   "text": "should demand that we have agency we"
+  },
+  {
+   "t": 393.97,
+   "d": 2.79,
+   "text": "should push back against the idea that"
+  },
+  {
+   "t": 396.76,
+   "d": 2.91,
+   "text": "we can be predicted by a machine because"
+  },
+  {
+   "t": 399.67,
+   "d": 2.49,
+   "text": "if we don't it's very easy to get into a"
+  },
+  {
+   "t": 402.16,
+   "d": 3.81,
+   "text": "place where you can be controlled by"
+  },
+  {
+   "t": 405.97,
+   "d": 3.17,
+   "text": "other people so I worry about that"
+  },
+  {
+   "t": 409.14,
+   "d": 2.17,
+   "text": "so yeah in this diagram like the"
+  },
+  {
+   "t": 411.31,
+   "d": 1.32,
+   "text": "recommenders were sort of pushing you"
+  },
+  {
+   "t": 412.63,
+   "d": 2.22,
+   "text": "down into this subspace they're"
+  },
+  {
+   "t": 414.85,
+   "d": 3.86,
+   "text": "reinforcing the identity that you have"
+  },
+  {
+   "t": 418.74,
+   "d": 3.1,
+   "text": "and I think that like that the tech"
+  },
+  {
+   "t": 421.84,
+   "d": 4.5,
+   "text": "industry is interested in this feature"
+  },
+  {
+   "t": 426.34,
+   "d": 3.39,
+   "text": "because it like it makes a lot of sense"
+  },
+  {
+   "t": 429.73,
+   "d": 1.65,
+   "text": "financially like advertising works a lot"
+  },
+  {
+   "t": 431.38,
+   "d": 1.35,
+   "text": "better when people are into certain"
+  },
+  {
+   "t": 432.73,
+   "d": 3.33,
+   "text": "categories but it also is kind of what"
+  },
+  {
+   "t": 436.06,
+   "d": 1.71,
+   "text": "people want and that's really the like"
+  },
+  {
+   "t": 437.77,
+   "d": 1.47,
+   "text": "the tricky thing about it is that like"
+  },
+  {
+   "t": 439.24,
+   "d": 2.79,
+   "text": "if you ask what do you want to show up"
+  },
+  {
+   "t": 442.03,
+   "d": 1.26,
+   "text": "in your news feed you don't want it to"
+  },
+  {
+   "t": 443.29,
+   "d": 4.92,
+   "text": "be like this weird other stuff but so I"
+  },
+  {
+   "t": 448.21,
+   "d": 1.71,
+   "text": "think that you get to make sort of a"
+  },
+  {
+   "t": 449.92,
+   "d": 2.22,
+   "text": "counterintuitive turn in order to get"
+  },
+  {
+   "t": 452.14,
+   "d": 3.54,
+   "text": "out of this place where recommenders are"
+  },
+  {
+   "t": 455.68,
+   "d": 2.22,
+   "text": "trapping you into a subspace of action"
+  },
+  {
+   "t": 457.9,
+   "d": 3.69,
+   "text": "space oh this is a good kind of"
+  },
+  {
+   "t": 461.59,
+   "d": 2.69,
+   "text": "terrifying quote for Eric Schmidt I"
+  },
+  {
+   "t": 464.28,
+   "d": 2.38,
+   "text": "actually think that most people don't"
+  },
+  {
+   "t": 466.66,
+   "d": 1.35,
+   "text": "want Google to answer the questions they"
+  },
+  {
+   "t": 468.01,
+   "d": 0.99,
+   "text": "want Google to tell them what they're"
+  },
+  {
+   "t": 469.0,
+   "d": 1.53,
+   "text": "going to do next I think that's true"
+  },
+  {
+   "t": 470.53,
+   "d": 2.22,
+   "text": "that's sort of like the logic of this"
+  },
+  {
+   "t": 472.75,
+   "d": 4.68,
+   "text": "system so my like my solution to this"
+  },
+  {
+   "t": 477.43,
+   "d": 1.92,
+   "text": "personally was a little bit of a"
+  },
+  {
+   "t": 479.35,
+   "d": 2.76,
+   "text": "paradoxical one which is that in order"
+  },
+  {
+   "t": 482.11,
+   "d": 1.71,
+   "text": "to free yourself from these sorts of"
+  },
+  {
+   "t": 483.82,
+   "d": 2.79,
+   "text": "preference loops you actually have to"
+  },
+  {
+   "t": 486.61,
+   "d": 1.5,
+   "text": "submit completely to the will of the"
+  },
+  {
+   "t": 488.11,
+   "d": 5.58,
+   "text": "machine you just need to forget what"
+  },
+  {
+   "t": 493.69,
+   "d": 3.42,
+   "text": "your preferences are and follow a"
+  },
+  {
+   "t": 497.11,
+   "d": 3.27,
+   "text": "computer system but a random one one"
+  },
+  {
+   "t": 500.38,
+   "d": 2.61,
+   "text": "that isn't biased in one particular way"
+  },
+  {
+   "t": 502.99,
+   "d": 5.4,
+   "text": "and so I am this is a little bit like"
+  },
+  {
+   "t": 508.39,
+   "d": 1.62,
+   "text": "counterintuitive so let's let's do a"
+  },
+  {
+   "t": 510.01,
+   "d": 1.89,
+   "text": "free association exercise here and maybe"
+  },
+  {
+   "t": 511.9,
+   "d": 0.34,
+   "text": "this"
+  },
+  {
+   "t": 512.24,
+   "d": 5.52,
+   "text": "help prove my point but I'm going to say"
+  },
+  {
+   "t": 517.76,
+   "d": 2.19,
+   "text": "a word and I want all of you to think of"
+  },
+  {
+   "t": 519.95,
+   "d": 2.43,
+   "text": "the first noun that comes into your your"
+  },
+  {
+   "t": 522.38,
+   "d": 1.44,
+   "text": "mind when I say this word"
+  },
+  {
+   "t": 523.82,
+   "d": 2.46,
+   "text": "I'll put it up on there too so hold on"
+  },
+  {
+   "t": 526.28,
+   "d": 1.38,
+   "text": "to it then I'll ask you about it natural"
+  },
+  {
+   "t": 527.66,
+   "d": 6.12,
+   "text": "words game first now it's anyone have a"
+  },
+  {
+   "t": 533.78,
+   "d": 13.7,
+   "text": "noun the player rogue theory fun great"
+  },
+  {
+   "t": 547.48,
+   "d": 4.93,
+   "text": "so how many of you thought of theory"
+  },
+  {
+   "t": 552.41,
+   "d": 7.53,
+   "text": "that's your word it's one cube one"
+  },
+  {
+   "t": 559.94,
+   "d": 4.23,
+   "text": "I can't report the others are player I"
+  },
+  {
+   "t": 564.17,
+   "d": 2.7,
+   "text": "mean quite a few player did I mean you"
+  },
+  {
+   "t": 566.87,
+   "d": 1.8,
+   "text": "think of the Pittsburgh Steelers and Ben"
+  },
+  {
+   "t": 568.67,
+   "d": 1.86,
+   "text": "Roethlisberger who plays the game"
+  },
+  {
+   "t": 570.53,
+   "d": 6.33,
+   "text": "football nobody how about like big-game"
+  },
+  {
+   "t": 576.86,
+   "d": 2.15,
+   "text": "hunting"
+  },
+  {
+   "t": 579.01,
+   "d": 4.24,
+   "text": "no what about clip playing games with my"
+  },
+  {
+   "t": 583.25,
+   "d": 3.08,
+   "text": "heart like song by the Backstreet Boys I"
+  },
+  {
+   "t": 586.33,
+   "d": 3.64,
+   "text": "didn't think of anything either but"
+  },
+  {
+   "t": 589.97,
+   "d": 2.07,
+   "text": "what's interesting about the way that"
+  },
+  {
+   "t": 592.04,
+   "d": 2.79,
+   "text": "computers work is that if you like made"
+  },
+  {
+   "t": 594.83,
+   "d": 2.04,
+   "text": "a comprehensive list of all the words"
+  },
+  {
+   "t": 596.87,
+   "d": 2.49,
+   "text": "and phrases related to game all those"
+  },
+  {
+   "t": 599.36,
+   "d": 2.31,
+   "text": "things would show up in the list like"
+  },
+  {
+   "t": 601.67,
+   "d": 3.45,
+   "text": "you could do a search query and all"
+  },
+  {
+   "t": 605.12,
+   "d": 2.4,
+   "text": "those things would sit together and so"
+  },
+  {
+   "t": 607.52,
+   "d": 3.03,
+   "text": "if you had like a big list of concepts"
+  },
+  {
+   "t": 610.55,
+   "d": 3.03,
+   "text": "you could choose a random one and it"
+  },
+  {
+   "t": 613.58,
+   "d": 1.2,
+   "text": "would be likely to be something that you"
+  },
+  {
+   "t": 614.78,
+   "d": 1.29,
+   "text": "didn't think of it would be"
+  },
+  {
+   "t": 616.07,
+   "d": 4.14,
+   "text": "unconditioned by your thought process"
+  },
+  {
+   "t": 620.21,
+   "d": 2.97,
+   "text": "and the things that you did before so"
+  },
+  {
+   "t": 623.18,
+   "d": 1.41,
+   "text": "it's sort of like a ladder out of that"
+  },
+  {
+   "t": 624.59,
+   "d": 1.29,
+   "text": "space you know if you're stuck in this"
+  },
+  {
+   "t": 625.88,
+   "d": 2.94,
+   "text": "this subspace of actions what if you"
+  },
+  {
+   "t": 628.82,
+   "d": 1.68,
+   "text": "just asked the computer for like some"
+  },
+  {
+   "t": 630.5,
+   "d": 2.49,
+   "text": "random action and then that would push"
+  },
+  {
+   "t": 632.99,
+   "d": 2.61,
+   "text": "you onto a different path so I got like"
+  },
+  {
+   "t": 635.6,
+   "d": 2.87,
+   "text": "really obsessed with this idea I started"
+  },
+  {
+   "t": 638.47,
+   "d": 2.26,
+   "text": "trying to transform every part of my"
+  },
+  {
+   "t": 640.73,
+   "d": 3.41,
+   "text": "life to be randomized so that I could"
+  },
+  {
+   "t": 644.14,
+   "d": 2.07,
+   "text": "go into a different direction I made a"
+  },
+  {
+   "t": 646.21,
+   "d": 2.28,
+   "text": "program that chose a random restaurant"
+  },
+  {
+   "t": 648.49,
+   "d": 1.41,
+   "text": "for me to go to and every time I went to"
+  },
+  {
+   "t": 649.9,
+   "d": 2.18,
+   "text": "a restaurant I would choose a random one"
+  },
+  {
+   "t": 652.08,
+   "d": 2.86,
+   "text": "I start something called the random Diet"
+  },
+  {
+   "t": 654.94,
+   "d": 6.78,
+   "text": "Club it's a it's a random elimination"
+  },
+  {
+   "t": 661.72,
+   "d": 4.67,
+   "text": "diet and so once a week you'd get a"
+  },
+  {
+   "t": 666.39,
+   "d": 2.62,
+   "text": "something that's that's eliminated and"
+  },
+  {
+   "t": 669.01,
+   "d": 2.97,
+   "text": "it was cumulative and so you know"
+  },
+  {
+   "t": 671.98,
+   "d": 2.16,
+   "text": "packets and then no coffee and then no"
+  },
+  {
+   "t": 674.14,
+   "d": 2.1,
+   "text": "it just kept going on and on and on"
+  },
+  {
+   "t": 676.24,
+   "d": 1.35,
+   "text": "there are never people in this room that"
+  },
+  {
+   "t": 677.59,
+   "d": 4.92,
+   "text": "were in the club it was a real slog but"
+  },
+  {
+   "t": 682.51,
+   "d": 1.44,
+   "text": "it does like change the way that you"
+  },
+  {
+   "t": 683.95,
+   "d": 1.44,
+   "text": "think about food because you start"
+  },
+  {
+   "t": 685.39,
+   "d": 1.23,
+   "text": "having to avoid things and it's"
+  },
+  {
+   "t": 686.62,
+   "d": 3.6,
+   "text": "interesting I started randomizing my"
+  },
+  {
+   "t": 690.22,
+   "d": 3.03,
+   "text": "appearance I I don't do this anymore so"
+  },
+  {
+   "t": 693.25,
+   "d": 1.92,
+   "text": "at the tattoo but it gave me a random"
+  },
+  {
+   "t": 695.17,
+   "d": 1.71,
+   "text": "tattoo from all the internet I got"
+  },
+  {
+   "t": 696.88,
+   "d": 2.55,
+   "text": "really lucky it wasn't like something"
+  },
+  {
+   "t": 699.43,
+   "d": 3.75,
+   "text": "else I got a soul patch which was a"
+  },
+  {
+   "t": 703.18,
+   "d": 1.17,
+   "text": "weird look"
+  },
+  {
+   "t": 704.35,
+   "d": 2.58,
+   "text": "I had it shipping me random shirts from"
+  },
+  {
+   "t": 706.93,
+   "d": 6.54,
+   "text": "Amazon and eventually I had it choose a"
+  },
+  {
+   "t": 713.47,
+   "d": 1.8,
+   "text": "random place for me to live and so I"
+  },
+  {
+   "t": 715.27,
+   "d": 2.79,
+   "text": "made a big database of every flight fare"
+  },
+  {
+   "t": 718.06,
+   "d": 1.89,
+   "text": "and the cost of it and figured out like"
+  },
+  {
+   "t": 719.95,
+   "d": 1.89,
+   "text": "what's within my budget and I chose a"
+  },
+  {
+   "t": 721.84,
+   "d": 2.58,
+   "text": "random one from that and then would live"
+  },
+  {
+   "t": 724.42,
+   "d": 1.56,
+   "text": "wherever it told me to live for a couple"
+  },
+  {
+   "t": 725.98,
+   "d": 1.68,
+   "text": "of months and then move on to the next"
+  },
+  {
+   "t": 727.66,
+   "d": 3.99,
+   "text": "place and it sent me from places like"
+  },
+  {
+   "t": 731.65,
+   "d": 3.06,
+   "text": "Slovenia to Dubai and all sorts of other"
+  },
+  {
+   "t": 734.71,
+   "d": 2.13,
+   "text": "places in between places that I never"
+  },
+  {
+   "t": 736.84,
+   "d": 1.62,
+   "text": "would have thought to go to if I was"
+  },
+  {
+   "t": 738.46,
+   "d": 3.27,
+   "text": "choosing based on my preferences I did"
+  },
+  {
+   "t": 741.73,
+   "d": 2.13,
+   "text": "this for about two years I was doing"
+  },
+  {
+   "t": 743.86,
+   "d": 2.13,
+   "text": "like freelance work in in-between to"
+  },
+  {
+   "t": 745.99,
+   "d": 1.35,
+   "text": "keep things going but I was just trying"
+  },
+  {
+   "t": 747.34,
+   "d": 1.62,
+   "text": "to like randomize everything that I"
+  },
+  {
+   "t": 748.96,
+   "d": 2.76,
+   "text": "could possibly think of and at this"
+  },
+  {
+   "t": 751.72,
+   "d": 1.53,
+   "text": "point you might be wondering like why am"
+  },
+  {
+   "t": 753.25,
+   "d": 3.5,
+   "text": "I here like why roguelikes"
+  },
+  {
+   "t": 757.05,
+   "d": 2.97,
+   "text": "and I think that like people that design"
+  },
+  {
+   "t": 760.02,
+   "d": 3.27,
+   "text": "roguelikes have the sorts of skills that"
+  },
+  {
+   "t": 763.29,
+   "d": 2.13,
+   "text": "are important for getting outside of"
+  },
+  {
+   "t": 765.42,
+   "d": 3.0,
+   "text": "these preference loops like you all are"
+  },
+  {
+   "t": 768.42,
+   "d": 2.43,
+   "text": "experts in procedural generation you"
+  },
+  {
+   "t": 770.85,
+   "d": 2.1,
+   "text": "know how to like make Maps"
+  },
+  {
+   "t": 772.95,
+   "d": 3.87,
+   "text": "how does Cystic elise ample things you"
+  },
+  {
+   "t": 776.82,
+   "d": 1.89,
+   "text": "are able to create realities within"
+  },
+  {
+   "t": 778.71,
+   "d": 4.7,
+   "text": "computers that are totally different and"
+  },
+  {
+   "t": 783.41,
+   "d": 2.89,
+   "text": "totally different every time you play"
+  },
+  {
+   "t": 786.3,
+   "d": 3.14,
+   "text": "them and I would like to encourage you"
+  },
+  {
+   "t": 789.44,
+   "d": 2.77,
+   "text": "hopefully inspire you to apply those"
+  },
+  {
+   "t": 792.21,
+   "d": 1.98,
+   "text": "skills that you have to things that are"
+  },
+  {
+   "t": 794.19,
+   "d": 2.67,
+   "text": "outside of the screen like figure out"
+  },
+  {
+   "t": 796.86,
+   "d": 3.27,
+   "text": "ways that you can use those techniques"
+  },
+  {
+   "t": 800.13,
+   "d": 2.93,
+   "text": "to shift your life into different"
+  },
+  {
+   "t": 803.06,
+   "d": 4.51,
+   "text": "subspaces of action space so I'm gonna"
+  },
+  {
+   "t": 807.57,
+   "d": 3.15,
+   "text": "walk through like a sort of a framework"
+  },
+  {
+   "t": 810.72,
+   "d": 2.85,
+   "text": "for how I think about these randomizers"
+  },
+  {
+   "t": 813.57,
+   "d": 1.98,
+   "text": "and then a couple of examples of apps"
+  },
+  {
+   "t": 815.55,
+   "d": 1.89,
+   "text": "that I built that randomized different"
+  },
+  {
+   "t": 817.44,
+   "d": 2.91,
+   "text": "parts of my life so the way that I think"
+  },
+  {
+   "t": 820.35,
+   "d": 2.52,
+   "text": "about how to build a randomizer is is"
+  },
+  {
+   "t": 822.87,
+   "d": 2.22,
+   "text": "first you make a map of the thing that"
+  },
+  {
+   "t": 825.09,
+   "d": 2.22,
+   "text": "you want to randomize so it could be a"
+  },
+  {
+   "t": 827.31,
+   "d": 3.57,
+   "text": "map of every city in the world"
+  },
+  {
+   "t": 830.88,
+   "d": 1.41,
+   "text": "and then you choose a random one or it"
+  },
+  {
+   "t": 832.29,
+   "d": 1.26,
+   "text": "could be like a map of all of your"
+  },
+  {
+   "t": 833.55,
+   "d": 2.28,
+   "text": "friends and then you call or something"
+  },
+  {
+   "t": 835.83,
+   "d": 2.75,
+   "text": "like that so you make the big list and"
+  },
+  {
+   "t": 838.58,
+   "d": 2.97,
+   "text": "then you throw a dart at the map and"
+  },
+  {
+   "t": 841.55,
+   "d": 4.35,
+   "text": "that's you know choose a random sample"
+  },
+  {
+   "t": 845.9,
+   "d": 2.26,
+   "text": "probably uniform random I think it's the"
+  },
+  {
+   "t": 848.16,
+   "d": 2.97,
+   "text": "best way to go and then we see what"
+  },
+  {
+   "t": 851.13,
+   "d": 3.54,
+   "text": "changes like you take on whatever the"
+  },
+  {
+   "t": 854.67,
+   "d": 2.22,
+   "text": "computer gave to you and you said you"
+  },
+  {
+   "t": 856.89,
+   "d": 2.52,
+   "text": "like no matter what it is barring some"
+  },
+  {
+   "t": 859.41,
+   "d": 2.13,
+   "text": "like ethical concerns you do what the"
+  },
+  {
+   "t": 861.54,
+   "d": 2.01,
+   "text": "computer tells you and then you see like"
+  },
+  {
+   "t": 863.55,
+   "d": 2.82,
+   "text": "how did that change my life and iterate"
+  },
+  {
+   "t": 866.37,
+   "d": 5.13,
+   "text": "and it's interesting way to push"
+  },
+  {
+   "t": 871.5,
+   "d": 2.25,
+   "text": "yourself in different directions so the"
+  },
+  {
+   "t": 873.75,
+   "d": 1.35,
+   "text": "first one I want to talk about is an app"
+  },
+  {
+   "t": 875.1,
+   "d": 2.91,
+   "text": "called off bot this was a random Google"
+  },
+  {
+   "t": 878.01,
+   "d": 2.45,
+   "text": "place generator it's in the App Store"
+  },
+  {
+   "t": 880.46,
+   "d": 3.1,
+   "text": "you press a button and it gives you a"
+  },
+  {
+   "t": 883.56,
+   "d": 3.56,
+   "text": "random restaurant business bar cafe in"
+  },
+  {
+   "t": 887.12,
+   "d": 1.15,
+   "text": "your"
+  },
+  {
+   "t": 888.27,
+   "d": 4.68,
+   "text": "area and the way that I built this it's"
+  },
+  {
+   "t": 892.95,
+   "d": 3.53,
+   "text": "really simple like Google has an API to"
+  },
+  {
+   "t": 896.48,
+   "d": 3.27,
+   "text": "get names and information about places"
+  },
+  {
+   "t": 899.75,
+   "d": 4.06,
+   "text": "so you just figure out all the places in"
+  },
+  {
+   "t": 903.81,
+   "d": 0.87,
+   "text": "San Francisco"
+  },
+  {
+   "t": 904.68,
+   "d": 2.46,
+   "text": "there's a big list and this is like all"
+  },
+  {
+   "t": 907.14,
+   "d": 1.8,
+   "text": "the businesses that Google knows about"
+  },
+  {
+   "t": 908.94,
+   "d": 3.33,
+   "text": "in San Francisco and then you throw a"
+  },
+  {
+   "t": 912.27,
+   "d": 1.8,
+   "text": "dart you choose a random one and it says"
+  },
+  {
+   "t": 914.07,
+   "d": 3.21,
+   "text": "you're going to nails by Lisa and then"
+  },
+  {
+   "t": 917.28,
+   "d": 2.13,
+   "text": "no matter what it chooses it has to be"
+  },
+  {
+   "t": 919.41,
+   "d": 1.08,
+   "text": "the first one because you can get in"
+  },
+  {
+   "t": 920.49,
+   "d": 1.56,
+   "text": "this loop where you're like pressing"
+  },
+  {
+   "t": 922.05,
+   "d": 1.35,
+   "text": "again and again until you get the thing"
+  },
+  {
+   "t": 923.4,
+   "d": 2.46,
+   "text": "that you want but whatever it chooses as"
+  },
+  {
+   "t": 925.86,
+   "d": 1.68,
+   "text": "long as it's practical you go there and"
+  },
+  {
+   "t": 927.54,
+   "d": 3.9,
+   "text": "you see what happens and sometimes it it"
+  },
+  {
+   "t": 931.44,
+   "d": 2.55,
+   "text": "really changes things one thing that I"
+  },
+  {
+   "t": 933.99,
+   "d": 2.49,
+   "text": "found is that like when I go to random"
+  },
+  {
+   "t": 936.48,
+   "d": 1.92,
+   "text": "places random restaurants especially"
+  },
+  {
+   "t": 938.4,
+   "d": 3.89,
+   "text": "like I'll be in my neighborhood and I'll"
+  },
+  {
+   "t": 942.29,
+   "d": 3.31,
+   "text": "be sent to a place that is on my route"
+  },
+  {
+   "t": 945.6,
+   "d": 1.95,
+   "text": "to work it's like I pass by it every"
+  },
+  {
+   "t": 947.55,
+   "d": 1.5,
+   "text": "single day and I had never seen it"
+  },
+  {
+   "t": 949.05,
+   "d": 3.81,
+   "text": "before because once you've gone along a"
+  },
+  {
+   "t": 952.86,
+   "d": 2.01,
+   "text": "route to work for something a couple of"
+  },
+  {
+   "t": 954.87,
+   "d": 1.62,
+   "text": "times that you sort of block out things"
+  },
+  {
+   "t": 956.49,
+   "d": 2.25,
+   "text": "that aren't new and so you might totally"
+  },
+  {
+   "t": 958.74,
+   "d": 1.77,
+   "text": "miss it so there's a lot of times what I"
+  },
+  {
+   "t": 960.51,
+   "d": 2.78,
+   "text": "like discover something that was there"
+  },
+  {
+   "t": 963.29,
+   "d": 2.59,
+   "text": "the other thing is I start to detect"
+  },
+  {
+   "t": 965.88,
+   "d": 1.5,
+   "text": "patterns in the noise and this is like a"
+  },
+  {
+   "t": 967.38,
+   "d": 1.95,
+   "text": "very human thing like even though it's"
+  },
+  {
+   "t": 969.33,
+   "d": 1.59,
+   "text": "totally random it seems to have a"
+  },
+  {
+   "t": 970.92,
+   "d": 3.09,
+   "text": "meaning and I'll give you an example of"
+  },
+  {
+   "t": 974.01,
+   "d": 2.73,
+   "text": "this this is like a couple of years ago"
+  },
+  {
+   "t": 976.74,
+   "d": 4.47,
+   "text": "I was going through a breakup kind of it"
+  },
+  {
+   "t": 981.21,
+   "d": 2.46,
+   "text": "was like a business breakup like I was"
+  },
+  {
+   "t": 983.67,
+   "d": 1.98,
+   "text": "working on a project to someone and we"
+  },
+  {
+   "t": 985.65,
+   "d": 1.59,
+   "text": "decided we're gonna end it and so we"
+  },
+  {
+   "t": 987.24,
+   "d": 2.79,
+   "text": "decided let's go somewhere random to"
+  },
+  {
+   "t": 990.03,
+   "d": 4.59,
+   "text": "discuss the end of this adventure and so"
+  },
+  {
+   "t": 994.62,
+   "d": 1.98,
+   "text": "I asked the computer where to go and it"
+  },
+  {
+   "t": 996.6,
+   "d": 3.72,
+   "text": "sent us Tacoma just south of SF to the"
+  },
+  {
+   "t": 1000.32,
+   "d": 4.17,
+   "text": "the pets rest Pet Cemetery which I"
+  },
+  {
+   "t": 1004.49,
+   "d": 3.18,
+   "text": "thought was amazing like to put your"
+  },
+  {
+   "t": 1007.67,
+   "d": 3.39,
+   "text": "your project into the grave at the pets"
+  },
+  {
+   "t": 1011.06,
+   "d": 6.12,
+   "text": "best pet cemetery I found myself Max and"
+  },
+  {
+   "t": 1017.18,
+   "d": 3.53,
+   "text": "I ended up like going and talking to the"
+  },
+  {
+   "t": 1020.71,
+   "d": 3.58,
+   "text": "proprietors of the place and one thing"
+  },
+  {
+   "t": 1024.29,
+   "d": 3.42,
+   "text": "led to another and he said you know do"
+  },
+  {
+   "t": 1027.71,
+   "d": 1.32,
+   "text": "you want to come see in the back because"
+  },
+  {
+   "t": 1029.03,
+   "d": 1.95,
+   "text": "I've you know we've got some creators"
+  },
+  {
+   "t": 1030.98,
+   "d": 1.89,
+   "text": "here and we've got a horse going right"
+  },
+  {
+   "t": 1032.87,
+   "d": 2.19,
+   "text": "now if you want to like check it out and"
+  },
+  {
+   "t": 1035.06,
+   "d": 2.22,
+   "text": "so like we walked into the back of this"
+  },
+  {
+   "t": 1037.28,
+   "d": 2.16,
+   "text": "pet cemetery and there's like smoke"
+  },
+  {
+   "t": 1039.44,
+   "d": 2.04,
+   "text": "billowing out of the furnace and they're"
+  },
+  {
+   "t": 1041.48,
+   "d": 3.39,
+   "text": "like the smell of it was awful but like"
+  },
+  {
+   "t": 1044.87,
+   "d": 3.98,
+   "text": "it was the perfect way to end this this"
+  },
+  {
+   "t": 1048.85,
+   "d": 4.21,
+   "text": "relationship here's another one this is"
+  },
+  {
+   "t": 1053.06,
+   "d": 3.21,
+   "text": "called the third party it's sort of the"
+  },
+  {
+   "t": 1056.27,
+   "d": 3.87,
+   "text": "way to sample social space this was an"
+  },
+  {
+   "t": 1060.14,
+   "d": 1.08,
+   "text": "app in the App Store"
+  },
+  {
+   "t": 1061.22,
+   "d": 2.55,
+   "text": "until Facebook took it down in the"
+  },
+  {
+   "t": 1063.77,
+   "d": 5.7,
+   "text": "Cambridge analytic era it was a way to"
+  },
+  {
+   "t": 1069.47,
+   "d": 4.11,
+   "text": "choose a random Facebook event so if you"
+  },
+  {
+   "t": 1073.58,
+   "d": 1.38,
+   "text": "go into Facebook they have this list of"
+  },
+  {
+   "t": 1074.96,
+   "d": 2.64,
+   "text": "events and at the top there's the stuff"
+  },
+  {
+   "t": 1077.6,
+   "d": 1.98,
+   "text": "that's for you and that's what most"
+  },
+  {
+   "t": 1079.58,
+   "d": 1.32,
+   "text": "people go to but if you keep scrolling"
+  },
+  {
+   "t": 1080.9,
+   "d": 1.8,
+   "text": "down and you keep scrolling down like"
+  },
+  {
+   "t": 1082.7,
+   "d": 2.67,
+   "text": "all the way down there's all sorts of"
+  },
+  {
+   "t": 1085.37,
+   "d": 0.54,
+   "text": "weird stuff"
+  },
+  {
+   "t": 1085.91,
+   "d": 1.98,
+   "text": "at the bottom of the list and so if you"
+  },
+  {
+   "t": 1087.89,
+   "d": 3.15,
+   "text": "make like a comprehensive list of every"
+  },
+  {
+   "t": 1091.04,
+   "d": 2.19,
+   "text": "event that's going on in San Francisco"
+  },
+  {
+   "t": 1093.23,
+   "d": 2.97,
+   "text": "on a particular day there's 100"
+  },
+  {
+   "t": 1096.2,
+   "d": 1.35,
+   "text": "sometimes thousands of events that are"
+  },
+  {
+   "t": 1097.55,
+   "d": 3.36,
+   "text": "going on and and you choose one it puts"
+  },
+  {
+   "t": 1100.91,
+   "d": 1.41,
+   "text": "you into like a really different social"
+  },
+  {
+   "t": 1102.32,
+   "d": 2.64,
+   "text": "space often than you're used to"
+  },
+  {
+   "t": 1104.96,
+   "d": 3.69,
+   "text": "I did this in Brooklyn New York it sent"
+  },
+  {
+   "t": 1108.65,
+   "d": 1.86,
+   "text": "me to the Bushwick Public Library to"
+  },
+  {
+   "t": 1110.51,
+   "d": 2.57,
+   "text": "something called at TNR event you know"
+  },
+  {
+   "t": 1113.08,
+   "d": 1.99,
+   "text": "it's a trap neuter release"
+  },
+  {
+   "t": 1115.07,
+   "d": 4.26,
+   "text": "cat neutering like event if there's a"
+  },
+  {
+   "t": 1119.33,
+   "d": 1.5,
+   "text": "groups of people that that will capture"
+  },
+  {
+   "t": 1120.83,
+   "d": 1.89,
+   "text": "feral cats and take them to be spayed or"
+  },
+  {
+   "t": 1122.72,
+   "d": 2.34,
+   "text": "neutered I now certified I can I can in"
+  },
+  {
+   "t": 1125.06,
+   "d": 3.36,
+   "text": "the state of New York do this it was a"
+  },
+  {
+   "t": 1128.42,
+   "d": 2.79,
+   "text": "really well attended workshop if this is"
+  },
+  {
+   "t": 1131.21,
+   "d": 3.46,
+   "text": "gonna play I think so"
+  },
+  {
+   "t": 1134.67,
+   "d": 2.13,
+   "text": "there's like you know fake cats that you"
+  },
+  {
+   "t": 1136.8,
+   "d": 3.66,
+   "text": "put into cages and it was really weird I"
+  },
+  {
+   "t": 1140.46,
+   "d": 2.67,
+   "text": "later did a variation on this where you"
+  },
+  {
+   "t": 1143.13,
+   "d": 2.48,
+   "text": "take a traveling salesperson"
+  },
+  {
+   "t": 1145.61,
+   "d": 3.37,
+   "text": "optimization with time windows and give"
+  },
+  {
+   "t": 1148.98,
+   "d": 1.95,
+   "text": "it the list of events and it would make"
+  },
+  {
+   "t": 1150.93,
+   "d": 2.34,
+   "text": "an optimal schedule for you to go"
+  },
+  {
+   "t": 1153.27,
+   "d": 1.95,
+   "text": "between random events so you can be out"
+  },
+  {
+   "t": 1155.22,
+   "d": 3.33,
+   "text": "of the random event all the time 24"
+  },
+  {
+   "t": 1158.55,
+   "d": 1.89,
+   "text": "hours a day you can be you know at"
+  },
+  {
+   "t": 1160.44,
+   "d": 3.39,
+   "text": "someone's birthday party or like at the"
+  },
+  {
+   "t": 1163.83,
+   "d": 4.11,
+   "text": "bar mitzvah or whatever and I I did this"
+  },
+  {
+   "t": 1167.94,
+   "d": 3.06,
+   "text": "in Berlin and it sent me all sorts of"
+  },
+  {
+   "t": 1171.0,
+   "d": 1.8,
+   "text": "places this is just like a sample of the"
+  },
+  {
+   "t": 1172.8,
+   "d": 1.53,
+   "text": "places that I went was there was a"
+  },
+  {
+   "t": 1174.33,
+   "d": 1.68,
+   "text": "children's puppet theater that had like"
+  },
+  {
+   "t": 1176.01,
+   "d": 2.91,
+   "text": "a show about dinosaurs and then it sent"
+  },
+  {
+   "t": 1178.92,
+   "d": 2.28,
+   "text": "me to a taxi driver school to learn how"
+  },
+  {
+   "t": 1181.2,
+   "d": 3.06,
+   "text": "to drive a truck and then it sent me to"
+  },
+  {
+   "t": 1184.26,
+   "d": 2.85,
+   "text": "a an official conference that by the"
+  },
+  {
+   "t": 1187.11,
+   "d": 3.39,
+   "text": "German Ministry on energy and something"
+  },
+  {
+   "t": 1190.5,
+   "d": 1.56,
+   "text": "about solar energy with all these"
+  },
+  {
+   "t": 1192.06,
+   "d": 2.7,
+   "text": "bigwigs there and then do a gay sex club"
+  },
+  {
+   "t": 1194.76,
+   "d": 5.31,
+   "text": "and then to a party after that and yeah"
+  },
+  {
+   "t": 1200.07,
+   "d": 4.74,
+   "text": "it was it was a weird day there's this"
+  },
+  {
+   "t": 1204.81,
+   "d": 1.53,
+   "text": "thing that happens when you when you go"
+  },
+  {
+   "t": 1206.34,
+   "d": 1.77,
+   "text": "to like a whole bunch of Facebook events"
+  },
+  {
+   "t": 1208.11,
+   "d": 2.34,
+   "text": "it's um you start to get this sort of"
+  },
+  {
+   "t": 1210.45,
+   "d": 2.64,
+   "text": "zoomed out view of like all of the"
+  },
+  {
+   "t": 1213.09,
+   "d": 1.95,
+   "text": "events that are happening in the world"
+  },
+  {
+   "t": 1215.04,
+   "d": 2.67,
+   "text": "on a particular day because if you go to"
+  },
+  {
+   "t": 1217.71,
+   "d": 3.87,
+   "text": "like ten Labor Day weekend like cookouts"
+  },
+  {
+   "t": 1221.58,
+   "d": 2.04,
+   "text": "or whatever like 10 Christmas parties"
+  },
+  {
+   "t": 1223.62,
+   "d": 3.15,
+   "text": "then you realize like there are like"
+  },
+  {
+   "t": 1226.77,
+   "d": 1.41,
+   "text": "thousands of Christmas parties like"
+  },
+  {
+   "t": 1228.18,
+   "d": 1.56,
+   "text": "there's everybody's having like this"
+  },
+  {
+   "t": 1229.74,
+   "d": 3.78,
+   "text": "sort of event at the same time together"
+  },
+  {
+   "t": 1233.52,
+   "d": 2.13,
+   "text": "in a way and it's a pretty interesting"
+  },
+  {
+   "t": 1235.65,
+   "d": 2.99,
+   "text": "thing to realize like the scale of"
+  },
+  {
+   "t": 1238.64,
+   "d": 4.42,
+   "text": "social activity within a city so that"
+  },
+  {
+   "t": 1243.06,
+   "d": 1.46,
+   "text": "was one thing that was interesting"
+  },
+  {
+   "t": 1244.52,
+   "d": 4.12,
+   "text": "there's also this phenomenon of like you"
+  },
+  {
+   "t": 1248.64,
+   "d": 2.7,
+   "text": "go just to like someone's birthday party"
+  },
+  {
+   "t": 1251.34,
+   "d": 3.68,
+   "text": "or to like a club meeting or something"
+  },
+  {
+   "t": 1255.02,
+   "d": 2.53,
+   "text": "that you would never go to otherwise and"
+  },
+  {
+   "t": 1257.55,
+   "d": 3.6,
+   "text": "you find your friends like you realize I"
+  },
+  {
+   "t": 1261.15,
+   "d": 1.95,
+   "text": "could be the sort of person that goes to"
+  },
+  {
+   "t": 1263.1,
+   "d": 0.93,
+   "text": "this every week"
+  },
+  {
+   "t": 1264.03,
+   "d": 4.82,
+   "text": "and so it kind of gives you a sense that"
+  },
+  {
+   "t": 1268.85,
+   "d": 2.62,
+   "text": "the the path that you're taking through"
+  },
+  {
+   "t": 1271.47,
+   "d": 3.36,
+   "text": "action space is just one of many which"
+  },
+  {
+   "t": 1274.83,
+   "d": 3.39,
+   "text": "is interesting the final thing I want to"
+  },
+  {
+   "t": 1278.22,
+   "d": 2.76,
+   "text": "talk about is sort of a new area of"
+  },
+  {
+   "t": 1280.98,
+   "d": 2.7,
+   "text": "inquiry and it's related to a lot of"
+  },
+  {
+   "t": 1283.68,
+   "d": 1.32,
+   "text": "things that ever is we're talking about"
+  },
+  {
+   "t": 1285.0,
+   "d": 3.24,
+   "text": "with language models and sampling kind"
+  },
+  {
+   "t": 1288.24,
+   "d": 1.5,
+   "text": "of linguistic space and it's still sort"
+  },
+  {
+   "t": 1289.74,
+   "d": 3.66,
+   "text": "of new but I want to talk through it"
+  },
+  {
+   "t": 1293.4,
+   "d": 2.1,
+   "text": "with you guys to see if we can get"
+  },
+  {
+   "t": 1295.5,
+   "d": 3.02,
+   "text": "anywhere with it let's eat this place"
+  },
+  {
+   "t": 1298.52,
+   "d": 9.78,
+   "text": "okay I'm not sure okay here we go so I"
+  },
+  {
+   "t": 1308.3,
+   "d": 4.2,
+   "text": "got really interested in how actions are"
+  },
+  {
+   "t": 1312.5,
+   "d": 3.52,
+   "text": "language so if you read a book there's"
+  },
+  {
+   "t": 1316.02,
+   "d": 1.35,
+   "text": "all sorts of things that the characters"
+  },
+  {
+   "t": 1317.37,
+   "d": 3.42,
+   "text": "are doing people are doing and if you"
+  },
+  {
+   "t": 1320.79,
+   "d": 1.8,
+   "text": "want a map with action space a lot of it"
+  },
+  {
+   "t": 1322.59,
+   "d": 2.79,
+   "text": "I think exists inside of language and so"
+  },
+  {
+   "t": 1325.38,
+   "d": 3.36,
+   "text": "I wrote a program that that reads books"
+  },
+  {
+   "t": 1328.74,
+   "d": 3.27,
+   "text": "and other things and pulls out all the"
+  },
+  {
+   "t": 1332.01,
+   "d": 3.48,
+   "text": "actions and then builds a huge database"
+  },
+  {
+   "t": 1335.49,
+   "d": 2.37,
+   "text": "and I randomly sample it and print it"
+  },
+  {
+   "t": 1337.86,
+   "d": 3.18,
+   "text": "out on this printer and so it's sort of"
+  },
+  {
+   "t": 1341.04,
+   "d": 2.73,
+   "text": "interesting here's the way that I went"
+  },
+  {
+   "t": 1343.77,
+   "d": 2.01,
+   "text": "about this like the initial experiment"
+  },
+  {
+   "t": 1345.78,
+   "d": 1.98,
+   "text": "was that one of the Google and I typed"
+  },
+  {
+   "t": 1347.76,
+   "d": 1.5,
+   "text": "in a phrase like she went to the park"
+  },
+  {
+   "t": 1349.26,
+   "d": 3.03,
+   "text": "and blank and then you get like okay she"
+  },
+  {
+   "t": 1352.29,
+   "d": 1.59,
+   "text": "went to the park and thought she was a"
+  },
+  {
+   "t": 1353.88,
+   "d": 2.66,
+   "text": "tree and the computer can recognize that"
+  },
+  {
+   "t": 1356.54,
+   "d": 4.42,
+   "text": "and then I would also went to wikiHow"
+  },
+  {
+   "t": 1360.96,
+   "d": 3.45,
+   "text": "and all these other corpora but the"
+  },
+  {
+   "t": 1364.41,
+   "d": 1.98,
+   "text": "computer can recognize that phrase as"
+  },
+  {
+   "t": 1366.39,
+   "d": 2.04,
+   "text": "this is a verb phrase if you do"
+  },
+  {
+   "t": 1368.43,
+   "d": 1.95,
+   "text": "something called the constituency parse"
+  },
+  {
+   "t": 1370.38,
+   "d": 1.86,
+   "text": "you can figure out like the structure of"
+  },
+  {
+   "t": 1372.24,
+   "d": 1.32,
+   "text": "the sentence and here's where the verb"
+  },
+  {
+   "t": 1373.56,
+   "d": 1.92,
+   "text": "is there's a bunch of packages that do"
+  },
+  {
+   "t": 1375.48,
+   "d": 1.62,
+   "text": "this the one I use is called core NLP"
+  },
+  {
+   "t": 1377.1,
+   "d": 3.63,
+   "text": "from Stanford and if you pull out all"
+  },
+  {
+   "t": 1380.73,
+   "d": 2.1,
+   "text": "the verb phrases you get all these like"
+  },
+  {
+   "t": 1382.83,
+   "d": 3.54,
+   "text": "person does something sorts of ideas and"
+  },
+  {
+   "t": 1386.37,
+   "d": 4.56,
+   "text": "then you can take that and lemma ties it"
+  },
+  {
+   "t": 1390.93,
+   "d": 2.94,
+   "text": "just like take the the conjugated words"
+  },
+  {
+   "t": 1393.87,
+   "d": 2.08,
+   "text": "and turn them into they're there"
+  },
+  {
+   "t": 1395.95,
+   "d": 3.93,
+   "text": "and you get like go to the park and"
+  },
+  {
+   "t": 1399.88,
+   "d": 2.7,
+   "text": "think she be a tree and then you"
+  },
+  {
+   "t": 1402.58,
+   "d": 3.51,
+   "text": "replaced all of the pronouns with go to"
+  },
+  {
+   "t": 1406.09,
+   "d": 3.27,
+   "text": "the park and think you are a tree and so"
+  },
+  {
+   "t": 1409.36,
+   "d": 1.44,
+   "text": "if you do this at scale you can get like"
+  },
+  {
+   "t": 1410.8,
+   "d": 4.77,
+   "text": "a pretty big group of actress I'm also"
+  },
+  {
+   "t": 1415.57,
+   "d": 4.38,
+   "text": "interested in the I'm also interested in"
+  },
+  {
+   "t": 1419.95,
+   "d": 1.74,
+   "text": "these neural models like I'm not super"
+  },
+  {
+   "t": 1421.69,
+   "d": 1.17,
+   "text": "familiar with them yet but I think"
+  },
+  {
+   "t": 1422.86,
+   "d": 2.91,
+   "text": "there's a lot of potential if you start"
+  },
+  {
+   "t": 1425.77,
+   "d": 1.68,
+   "text": "an action sentence we went to the park"
+  },
+  {
+   "t": 1427.45,
+   "d": 2.61,
+   "text": "and it can complete that took out a"
+  },
+  {
+   "t": 1430.06,
+   "d": 2.3,
+   "text": "bunch of garbage and that's when"
+  },
+  {
+   "t": 1432.36,
+   "d": 4.45,
+   "text": "something like that I'm still having to"
+  },
+  {
+   "t": 1436.81,
+   "d": 1.53,
+   "text": "figured out how to do this yet but I'm"
+  },
+  {
+   "t": 1438.34,
+   "d": 5.72,
+   "text": "curious about it so as I said like I'm"
+  },
+  {
+   "t": 1444.06,
+   "d": 2.86,
+   "text": "it's it's not super clear that this is"
+  },
+  {
+   "t": 1446.92,
+   "d": 4.07,
+   "text": "working yet I've produced a very large"
+  },
+  {
+   "t": 1450.99,
+   "d": 3.1,
+   "text": "corpus of action words from books and"
+  },
+  {
+   "t": 1454.09,
+   "d": 3.17,
+   "text": "blog posts and that sort of thing and"
+  },
+  {
+   "t": 1457.26,
+   "d": 3.7,
+   "text": "you can get printouts of all these"
+  },
+  {
+   "t": 1460.96,
+   "d": 4.38,
+   "text": "actions but when I when I read the the"
+  },
+  {
+   "t": 1465.34,
+   "d": 1.8,
+   "text": "actions they don't really work they"
+  },
+  {
+   "t": 1467.14,
+   "d": 2.91,
+   "text": "don't like they don't really change the"
+  },
+  {
+   "t": 1470.05,
+   "d": 2.19,
+   "text": "way that I think about things because"
+  },
+  {
+   "t": 1472.24,
+   "d": 2.21,
+   "text": "there's a lot of noise there's like I"
+  },
+  {
+   "t": 1474.45,
+   "d": 2.38,
+   "text": "get the action meet a certain goal it's"
+  },
+  {
+   "t": 1476.83,
+   "d": 1.74,
+   "text": "super vague like that doesn't work or"
+  },
+  {
+   "t": 1478.57,
+   "d": 2.46,
+   "text": "like do not get a direct response from"
+  },
+  {
+   "t": 1481.03,
+   "d": 2.64,
+   "text": "Kobe couette see who's like a South"
+  },
+  {
+   "t": 1483.67,
+   "d": 2.46,
+   "text": "African politician or thinking that"
+  },
+  {
+   "t": 1486.13,
+   "d": 2.07,
+   "text": "doesn't really do much for me and so"
+  },
+  {
+   "t": 1488.2,
+   "d": 2.55,
+   "text": "there's like some some conceptual piece"
+  },
+  {
+   "t": 1490.75,
+   "d": 2.04,
+   "text": "that is missing and I haven't like quite"
+  },
+  {
+   "t": 1492.79,
+   "d": 3.56,
+   "text": "figured out how to filter this list yet"
+  },
+  {
+   "t": 1497.7,
+   "d": 2.64,
+   "text": "except there are like a couple of"
+  },
+  {
+   "t": 1500.34,
+   "d": 3.64,
+   "text": "actions in this list that were pretty"
+  },
+  {
+   "t": 1503.98,
+   "d": 1.08,
+   "text": "interesting and changed the way that I"
+  },
+  {
+   "t": 1505.06,
+   "d": 2.91,
+   "text": "thought about things I was testing out"
+  },
+  {
+   "t": 1507.97,
+   "d": 1.41,
+   "text": "the printer and pulling out a bunch of"
+  },
+  {
+   "t": 1509.38,
+   "d": 2.16,
+   "text": "different actions and kind of waiting"
+  },
+  {
+   "t": 1511.54,
+   "d": 1.5,
+   "text": "until I got one that was that was doable"
+  },
+  {
+   "t": 1513.04,
+   "d": 1.44,
+   "text": "because a lot of them are just you know"
+  },
+  {
+   "t": 1514.48,
+   "d": 4.25,
+   "text": "not actionable and I got this one"
+  },
+  {
+   "t": 1518.73,
+   "d": 5.38,
+   "text": "which was a real shock and I like my"
+  },
+  {
+   "t": 1524.11,
+   "d": 2.4,
+   "text": "first instinct was to throw it away like"
+  },
+  {
+   "t": 1526.51,
+   "d": 2.7,
+   "text": "no that's not something I can do but"
+  },
+  {
+   "t": 1529.21,
+   "d": 1.14,
+   "text": "then I started thinking about it like"
+  },
+  {
+   "t": 1530.35,
+   "d": 1.95,
+   "text": "like why is that not something that I"
+  },
+  {
+   "t": 1532.3,
+   "d": 1.07,
+   "text": "can do that's the thing that I'm"
+  },
+  {
+   "t": 1533.37,
+   "d": 2.95,
+   "text": "physically capable of but it's not"
+  },
+  {
+   "t": 1536.32,
+   "d": 4.41,
+   "text": "something that I identify with and I"
+  },
+  {
+   "t": 1540.73,
+   "d": 1.86,
+   "text": "misread thinking about like I'm not a"
+  },
+  {
+   "t": 1542.59,
+   "d": 4.47,
+   "text": "vegan I mean I may have eaten a deer at"
+  },
+  {
+   "t": 1547.06,
+   "d": 2.97,
+   "text": "some point but I feel bad about killing"
+  },
+  {
+   "t": 1550.03,
+   "d": 4.02,
+   "text": "a deer and so like by taking the"
+  },
+  {
+   "t": 1554.05,
+   "d": 2.28,
+   "text": "computer seriously I realized this sort"
+  },
+  {
+   "t": 1556.33,
+   "d": 3.3,
+   "text": "of hypocrisy within my own framework the"
+  },
+  {
+   "t": 1559.63,
+   "d": 2.25,
+   "text": "world and I think that like one of the"
+  },
+  {
+   "t": 1561.88,
+   "d": 1.44,
+   "text": "things that these experiments want me to"
+  },
+  {
+   "t": 1563.32,
+   "d": 2.31,
+   "text": "do is really probe at like what are my"
+  },
+  {
+   "t": 1565.63,
+   "d": 3.0,
+   "text": "values and what do I care about because"
+  },
+  {
+   "t": 1568.63,
+   "d": 1.68,
+   "text": "I'm not the one that's choosing the"
+  },
+  {
+   "t": 1570.31,
+   "d": 2.46,
+   "text": "action and so I actually went on a"
+  },
+  {
+   "t": 1572.77,
+   "d": 3.3,
+   "text": "hunting trip with a friend and my plan"
+  },
+  {
+   "t": 1576.07,
+   "d": 4.26,
+   "text": "was to get to the point where I have to"
+  },
+  {
+   "t": 1580.33,
+   "d": 1.47,
+   "text": "pull the trigger and then decide like"
+  },
+  {
+   "t": 1581.8,
+   "d": 2.55,
+   "text": "you know am I gonna eat meat or not but"
+  },
+  {
+   "t": 1584.35,
+   "d": 2.71,
+   "text": "we never saw a deer so"
+  },
+  {
+   "t": 1587.06,
+   "d": 4.75,
+   "text": "work in progress to be continued and"
+  },
+  {
+   "t": 1591.81,
+   "d": 1.5,
+   "text": "that's that's pretty much it I'd like to"
+  },
+  {
+   "t": 1593.31,
+   "d": 2.85,
+   "text": "encourage you all to try this out and"
+  },
+  {
+   "t": 1596.16,
+   "d": 3.54,
+   "text": "you know think of some space of choice"
+  },
+  {
+   "t": 1599.7,
+   "d": 2.79,
+   "text": "some space of action inside of your life"
+  },
+  {
+   "t": 1602.49,
+   "d": 7.85,
+   "text": "and see how you can randomize it Thanks"
+  },
+  {
+   "t": 1615.17,
+   "d": 5.06,
+   "text": "[Laughter]"
+  },
+  {
+   "t": 1621.92,
+   "d": 3.7,
+   "text": "we have time for a few questions"
+  },
+  {
+   "t": 1625.62,
+   "d": 7.02,
+   "text": "pass the microphone back hi I'm just"
+  },
+  {
+   "t": 1632.64,
+   "d": 0.99,
+   "text": "kind of curious like what was your"
+  },
+  {
+   "t": 1633.63,
+   "d": 1.71,
+   "text": "approach to like showing up to these"
+  },
+  {
+   "t": 1635.34,
+   "d": 1.53,
+   "text": "like events or something like that I"
+  },
+  {
+   "t": 1636.87,
+   "d": 1.65,
+   "text": "could just imagine like kind of showing"
+  },
+  {
+   "t": 1638.52,
+   "d": 2.04,
+   "text": "up to intervention being like oh hey I"
+  },
+  {
+   "t": 1640.56,
+   "d": 2.13,
+   "text": "wouldn't normally be here I'm just here"
+  },
+  {
+   "t": 1642.69,
+   "d": 3.44,
+   "text": "because the computer told me to you know"
+  },
+  {
+   "t": 1647.6,
+   "d": 5.53,
+   "text": "just sort of if I was going to another"
+  },
+  {
+   "t": 1653.13,
+   "d": 2.37,
+   "text": "event that was like inside of my bubble"
+  },
+  {
+   "t": 1655.5,
+   "d": 1.68,
+   "text": "or whatever I wouldn't be like oh I saw"
+  },
+  {
+   "t": 1657.18,
+   "d": 2.28,
+   "text": "some Facebook I don't know and so I try"
+  },
+  {
+   "t": 1659.46,
+   "d": 2.55,
+   "text": "to like take that stance but then if"
+  },
+  {
+   "t": 1662.01,
+   "d": 3.15,
+   "text": "it's clear that like I don't fit inside"
+  },
+  {
+   "t": 1665.16,
+   "d": 2.28,
+   "text": "of this group then I would ask"
+  },
+  {
+   "t": 1667.44,
+   "d": 2.64,
+   "text": "permission like is it okay if I'm here"
+  },
+  {
+   "t": 1670.08,
+   "d": 1.65,
+   "text": "I'm doing this experiment that sort of"
+  },
+  {
+   "t": 1671.73,
+   "d": 1.77,
+   "text": "thing then sometimes they would say no"
+  },
+  {
+   "t": 1673.5,
+   "d": 8.19,
+   "text": "like this is not for you and I just"
+  },
+  {
+   "t": 1681.69,
+   "d": 2.43,
+   "text": "curious if you could sort of reflect on"
+  },
+  {
+   "t": 1684.12,
+   "d": 2.07,
+   "text": "whatever so saying about curation it's"
+  },
+  {
+   "t": 1686.19,
+   "d": 1.65,
+   "text": "almost like you're totally opposed to"
+  },
+  {
+   "t": 1687.84,
+   "d": 2.19,
+   "text": "curation like who are you if you're"
+  },
+  {
+   "t": 1690.03,
+   "d": 2.01,
+   "text": "everybody like if you're drawing from"
+  },
+  {
+   "t": 1692.04,
+   "d": 1.68,
+   "text": "everything in the pool and just doing"
+  },
+  {
+   "t": 1693.72,
+   "d": 2.76,
+   "text": "arbitrary things then aren't you kind of"
+  },
+  {
+   "t": 1696.48,
+   "d": 2.31,
+   "text": "nobody like how does that like there's"
+  },
+  {
+   "t": 1698.79,
+   "d": 2.16,
+   "text": "no curation that's sort of the point but"
+  },
+  {
+   "t": 1700.95,
+   "d": 1.86,
+   "text": "at the same time that is itself curation"
+  },
+  {
+   "t": 1702.81,
+   "d": 1.38,
+   "text": "I don't know I was confused so I thought"
+  },
+  {
+   "t": 1704.19,
+   "d": 2.27,
+   "text": "I'd ask"
+  },
+  {
+   "t": 1706.76,
+   "d": 4.39,
+   "text": "I see this as a step you do before you"
+  },
+  {
+   "t": 1711.15,
+   "d": 1.77,
+   "text": "make that curatorial decision you're"
+  },
+  {
+   "t": 1712.92,
+   "d": 1.2,
+   "text": "sort of like expanding the set of"
+  },
+  {
+   "t": 1714.12,
+   "d": 2.01,
+   "text": "possibilities and then you say like oh"
+  },
+  {
+   "t": 1716.13,
+   "d": 2.91,
+   "text": "what just happened and can I integrate"
+  },
+  {
+   "t": 1719.04,
+   "d": 3.51,
+   "text": "that into my sense of self or do I want"
+  },
+  {
+   "t": 1722.55,
+   "d": 4.86,
+   "text": "to push it away hey there I was"
+  },
+  {
+   "t": 1727.41,
+   "d": 2.46,
+   "text": "wondering how you chose what spaces of"
+  },
+  {
+   "t": 1729.87,
+   "d": 1.77,
+   "text": "actions to randomize within your life"
+  },
+  {
+   "t": 1731.64,
+   "d": 1.5,
+   "text": "because it seems like you're like going"
+  },
+  {
+   "t": 1733.14,
+   "d": 1.74,
+   "text": "to a restaurant or going to an event is"
+  },
+  {
+   "t": 1734.88,
+   "d": 3.12,
+   "text": "a fairly narrow set of like things to"
+  },
+  {
+   "t": 1738.0,
+   "d": 1.83,
+   "text": "randomize can you talk about why that"
+  },
+  {
+   "t": 1739.83,
+   "d": 2.49,
+   "text": "was a choice that you made to randomize"
+  },
+  {
+   "t": 1742.32,
+   "d": 2.4,
+   "text": "that in particular yeah I had the"
+  },
+  {
+   "t": 1744.72,
+   "d": 1.36,
+   "text": "constraint"
+  },
+  {
+   "t": 1746.08,
+   "d": 2.67,
+   "text": "whatever I chose should be easy I didn't"
+  },
+  {
+   "t": 1748.75,
+   "d": 1.23,
+   "text": "want to spend a lot of time building up"
+  },
+  {
+   "t": 1749.98,
+   "d": 2.28,
+   "text": "this big system and not get experience"
+  },
+  {
+   "t": 1752.26,
+   "d": 1.8,
+   "text": "with actually like trying it out"
+  },
+  {
+   "t": 1754.06,
+   "d": 2.55,
+   "text": "so like the Google Places API is"
+  },
+  {
+   "t": 1756.61,
+   "d": 3.66,
+   "text": "available just try that out and quickly"
+  },
+  {
+   "t": 1760.27,
+   "d": 3.57,
+   "text": "get some feedback or one thing has"
+  },
+  {
+   "t": 1763.84,
+   "d": 1.44,
+   "text": "occurred to me if you like can I do that"
+  },
+  {
+   "t": 1765.28,
+   "d": 6.09,
+   "text": "in a day and then try it out cool thank"
+  },
+  {
+   "t": 1771.37,
+   "d": 2.45,
+   "text": "you so much"
+  }
+ ]
+}

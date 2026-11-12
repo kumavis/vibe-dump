@@ -1,0 +1,1040 @@
+{
+ "id": "PvMJY8qtmc8",
+ "url": "https://www.youtube.com/watch?v=PvMJY8qtmc8",
+ "title": "Kes - Hunting the Asphynx: Roguelikes, Provenance, and You",
+ "speaker": "Kes",
+ "talk_title": "Hunting the Asphynx: Roguelikes, Provenance, and You",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 975,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "NetHack and its associated variants are an incomprehensibly huge spiderweb of ideas: Decades of different programmers refining each other's concepts and code, rewriting each other's ideas, and building on each other's work. It's not a community that anyone could have ever envisioned or crafted intentionally, and that's what makes it so beautiful.\n\nIn the midst of this enormous game of programmer telephone, it's easy for wires to get crossed sometimes. What if someone were to, for example, cite a nonexistent book in their source code? How long might it take for someone to notice?\n\nThe answer is not measured in years, but decades.",
+ "chapters": [],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2047,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 5.73,
+   "d": 2.16,
+   "text": "ALEXEI: Moving on."
+  },
+  {
+   "t": 7.89,
+   "d": 1.44,
+   "text": "Hello, Kes."
+  },
+  {
+   "t": 9.33,
+   "d": 1.0,
+   "text": "Welcome."
+  },
+  {
+   "t": 10.33,
+   "d": 4.68,
+   "text": "I will do a little introduction for you."
+  },
+  {
+   "t": 15.01,
+   "d": 4.73,
+   "text": "Kes is a writer librarian in training and specializes in pulling ancient information"
+  },
+  {
+   "t": 19.74,
+   "d": 8.56,
+   "text": "from the bowls of virtual and physical spaces and is always on the look out for stories."
+  },
+  {
+   "t": 28.3,
+   "d": 7.74,
+   "text": "And then bears herself on stream in an instant involving polymorph traps."
+  },
+  {
+   "t": 36.04,
+   "d": 9.19,
+   "text": "In her spare time she has coded many roguelikes and hopes to one day be up to the task of"
+  },
+  {
+   "t": 45.23,
+   "d": 1.28,
+   "text": "releasing one."
+  },
+  {
+   "t": 46.51,
+   "d": 1.0,
+   "text": "Excellent."
+  },
+  {
+   "t": 47.51,
+   "d": 3.47,
+   "text": "Take it away, Kes."
+  },
+  {
+   "t": 50.98,
+   "d": 2.69,
+   "text": "KES: Hello, everyone."
+  },
+  {
+   "t": 53.67,
+   "d": 4.62,
+   "text": "This presentation is called Hunting the Asphynx: Roguelikes, Provenance, and You"
+  },
+  {
+   "t": 58.29,
+   "d": 4.73,
+   "text": ". So this is a lightning talk and I have a lot to say so I won't talk about myself too"
+  },
+  {
+   "t": 63.02,
+   "d": 1.0,
+   "text": "long."
+  },
+  {
+   "t": 64.02,
+   "d": 1.31,
+   "text": "My name is Kes."
+  },
+  {
+   "t": 65.33,
+   "d": 2.01,
+   "text": "Go by anti gulp online."
+  },
+  {
+   "t": 67.34,
+   "d": 4.98,
+   "text": "I am pursuing a master's in library and information science."
+  },
+  {
+   "t": 72.32,
+   "d": 4.31,
+   "text": "I am here because I love playing and coding roguelikes."
+  },
+  {
+   "t": 76.63,
+   "d": 5.85,
+   "text": "More importantly in the context of this presentation, the way I relax is researching esoteric information"
+  },
+  {
+   "t": 82.48,
+   "d": 10.98,
+   "text": "and yes, I can full screen my talk."
+  },
+  {
+   "t": 93.46,
+   "d": 4.64,
+   "text": "Um."
+  },
+  {
+   "t": 98.1,
+   "d": 8.9,
+   "text": "Perhaps I cannot."
+  },
+  {
+   "t": 107.0,
+   "d": 19.74,
+   "text": "It looked good before I came on."
+  },
+  {
+   "t": 126.74,
+   "d": 1.21,
+   "text": "OK."
+  },
+  {
+   "t": 127.95,
+   "d": 7.39,
+   "text": "Just try this."
+  },
+  {
+   "t": 135.34,
+   "d": 28.55,
+   "text": "A little bit differently."
+  },
+  {
+   "t": 163.89,
+   "d": 3.43,
+   "text": "Thank you for bearing with pea through this."
+  },
+  {
+   "t": 167.32,
+   "d": 4.98,
+   "text": "ALEXEI: I think we are good."
+  },
+  {
+   "t": 172.3,
+   "d": 7.36,
+   "text": "If we can't figure it out I think it is still readable."
+  },
+  {
+   "t": 179.66,
+   "d": 2.37,
+   "text": "KES: Sounds good."
+  },
+  {
+   "t": 182.03,
+   "d": 1.0,
+   "text": "Cool."
+  },
+  {
+   "t": 183.03,
+   "d": 6.03,
+   "text": "So, the way I relax is by researching esoteric information and I got into roguelikes through"
+  },
+  {
+   "t": 189.06,
+   "d": 1.43,
+   "text": "a game called NetHack."
+  },
+  {
+   "t": 190.49,
+   "d": 6.68,
+   "text": "Most people here probably know what NetHack is but here is a refresher."
+  },
+  {
+   "t": 197.17,
+   "d": 5.12,
+   "text": "ASCII based traditional roguelike being released in 1987 and still be actively developed."
+  },
+  {
+   "t": 202.29,
+   "d": 10.85,
+   "text": "You are an adventurer tasked with entering the dungeon and the premise is the only thing"
+  },
+  {
+   "t": 213.14,
+   "d": 2.49,
+   "text": "that's simple."
+  },
+  {
+   "t": 215.63,
+   "d": 7.12,
+   "text": "Have been in development for 38 years it is game of unfathomable complexity in terms of"
+  },
+  {
+   "t": 222.75,
+   "d": 3.33,
+   "text": "its play and codebase."
+  },
+  {
+   "t": 226.08,
+   "d": 5.64,
+   "text": "Like a lot of games, particularly roguelikes, NetHack has a modding scene and playable modifications"
+  },
+  {
+   "t": 231.72,
+   "d": 4.37,
+   "text": "are known as variants or sometimes as forks."
+  },
+  {
+   "t": 236.09,
+   "d": 5.05,
+   "text": "Variances frequently incorporate patches and code from one another resulting in terrify"
+  },
+  {
+   "t": 241.14,
+   "d": 4.97,
+   "text": "version history flow charts like the one that's on screen right now."
+  },
+  {
+   "t": 246.11,
+   "d": 4.02,
+   "text": "This story starts with me doing what I do with a kind of embarrassing amount of spare"
+  },
+  {
+   "t": 250.13,
+   "d": 5.56,
+   "text": "time which is browsing the NetHack wiki."
+  },
+  {
+   "t": 255.69,
+   "d": 7.33,
+   "text": "I come across a page for monster known as an asphynx and the asphynx appears in slash"
+  },
+  {
+   "t": 263.02,
+   "d": 4.21,
+   "text": "command is a snake that can turn the player to stone with a single bite."
+  },
+  {
+   "t": 267.23,
+   "d": 1.85,
+   "text": "ALEXEI: Sorry to interrupt."
+  },
+  {
+   "t": 269.08,
+   "d": 4.16,
+   "text": "Your slides were not moving but now they are."
+  },
+  {
+   "t": 273.24,
+   "d": 1.84,
+   "text": "I don't know why."
+  },
+  {
+   "t": 275.08,
+   "d": 1.98,
+   "text": "They were not updating and now they are updated."
+  },
+  {
+   "t": 277.06,
+   "d": 7.31,
+   "text": "So -- I will let you know if they seem to continue not updating."
+  },
+  {
+   "t": 284.37,
+   "d": 1.33,
+   "text": "KES: Sounds good."
+  },
+  {
+   "t": 285.7,
+   "d": 5.76,
+   "text": "I will take it down to a partial screen so that way I can see."
+  },
+  {
+   "t": 291.46,
+   "d": 2.87,
+   "text": "Cool."
+  },
+  {
+   "t": 294.33,
+   "d": 2.33,
+   "text": "The asphynx appears in the slash-em."
+  },
+  {
+   "t": 296.66,
+   "d": 8.63,
+   "text": "It is represented in ASCII bind S like the snakes in NetHack are and it hides underneath"
+  },
+  {
+   "t": 305.29,
+   "d": 3.77,
+   "text": "objects just like all snakes in NetHack do."
+  },
+  {
+   "t": 309.06,
+   "d": 5.12,
+   "text": "In every with respect the article is entirely remarkable except one thing."
+  },
+  {
+   "t": 314.18,
+   "d": 4.11,
+   "text": "I had heard of the asphynx before."
+  },
+  {
+   "t": 318.29,
+   "d": 3.29,
+   "text": "Like a lot of people, I was into high fantasy as a kid."
+  },
+  {
+   "t": 321.58,
+   "d": 7.95,
+   "text": "One of my favorite series here was the series written by Terry Brooks and the character"
+  },
+  {
+   "t": 329.53,
+   "d": 6.51,
+   "text": "known as Walker bow is almost killed by an asphynx spelled with an I."
+  },
+  {
+   "t": 336.04,
+   "d": 4.57,
+   "text": "The snake bites him and he starts turning to stone."
+  },
+  {
+   "t": 340.61,
+   "d": 5.64,
+   "text": "It is very affecting if you are a small child."
+  },
+  {
+   "t": 346.25,
+   "d": 4.39,
+   "text": "I read about the asphynx in the NetHack wiki and got excited."
+  },
+  {
+   "t": 350.64,
+   "d": 3.98,
+   "text": "It was cool to see a variant of my favorite game would contain a reference to one of the"
+  },
+  {
+   "t": 354.62,
+   "d": 2.4,
+   "text": "books of my childhood."
+  },
+  {
+   "t": 357.02,
+   "d": 6.8,
+   "text": "I immediately scrolled to the bottom of the wiki page to look at the database rate."
+  },
+  {
+   "t": 363.82,
+   "d": 5.48,
+   "text": "For context, many older roguelikes contain an internal base with information about monsters,"
+  },
+  {
+   "t": 369.3,
+   "d": 1.65,
+   "text": "items and the like."
+  },
+  {
+   "t": 370.95,
+   "d": 3.97,
+   "text": "That way a player can look at an item or monster they aren't familiar with and get a little"
+  },
+  {
+   "t": 374.92,
+   "d": 3.82,
+   "text": "more information."
+  },
+  {
+   "t": 378.74,
+   "d": 12.56,
+   "text": "Dungeon -- I am expecting this to be from the book and"
+  },
+  {
+   "t": 391.3,
+   "d": 3.69,
+   "text": "here is what the database says about the asphynx."
+  },
+  {
+   "t": 394.99,
+   "d": 11.37,
+   "text": "This small snake shares the feared power of purification with its distant relatives."
+  },
+  {
+   "t": 406.36,
+   "d": 5.05,
+   "text": "Just one touch from the blunt snout can render one motionless for all eternity."
+  },
+  {
+   "t": 411.41,
+   "d": 7.82,
+   "text": "This is attributed to the new bestiary by the wizard Endelbrook and that's weird."
+  },
+  {
+   "t": 419.23,
+   "d": 9.79,
+   "text": "I had never heard of those and I started researching and public academic databases."
+  },
+  {
+   "t": 429.02,
+   "d": 3.58,
+   "text": "If you like you can pull out your phones and do the same but you will come to the same"
+  },
+  {
+   "t": 432.6,
+   "d": 4.73,
+   "text": "conclusion I did and encounter the mystery of this talk."
+  },
+  {
+   "t": 437.33,
+   "d": 5.0,
+   "text": "And that is that this wizard is not a real person."
+  },
+  {
+   "t": 442.33,
+   "d": 4.19,
+   "text": "Not only that, there is no book called the new bestiary."
+  },
+  {
+   "t": 446.52,
+   "d": 4.86,
+   "text": "Both the author and book are entirely fictional."
+  },
+  {
+   "t": 451.38,
+   "d": 2.15,
+   "text": "This by itself is not that strange."
+  },
+  {
+   "t": 453.53,
+   "d": 3.99,
+   "text": "For database entries where a suitable quote can't be found something written by the developers"
+  },
+  {
+   "t": 457.52,
+   "d": 6.31,
+   "text": "is usually used instead and when that happens that database entry is formatted differently."
+  },
+  {
+   "t": 463.83,
+   "d": 6.13,
+   "text": "The way this is formatted clearly implies the existence of a real life author."
+  },
+  {
+   "t": 469.96,
+   "d": 4.58,
+   "text": "This is also the point where I start asking around in IRC and Discord and others start"
+  },
+  {
+   "t": 474.54,
+   "d": 7.85,
+   "text": "investigating as well which is why get to the true nature of this history -- where."
+  },
+  {
+   "t": 482.39,
+   "d": 7.54,
+   "text": "Another user discovers that the asphynx encyclopedia's entry isn't the only one attributed."
+  },
+  {
+   "t": 489.93,
+   "d": 6.76,
+   "text": "There are about a dozen other monsters."
+  },
+  {
+   "t": 496.69,
+   "d": 5.32,
+   "text": "Variants pull from one another and some these databases have started migrating to other"
+  },
+  {
+   "t": 502.01,
+   "d": 1.0,
+   "text": "variants."
+  },
+  {
+   "t": 503.01,
+   "d": 6.32,
+   "text": "Dina states our mysterious wizard friend also."
+  },
+  {
+   "t": 509.33,
+   "d": 5.63,
+   "text": "If this wizard is fictional, who wrote this entry is my question?"
+  },
+  {
+   "t": 514.96,
+   "d": 5.17,
+   "text": "Here is where the research gets a little more complicated."
+  },
+  {
+   "t": 520.13,
+   "d": 4.48,
+   "text": "The NetHack traces the origin of the asphynx to a variant called slash."
+  },
+  {
+   "t": 524.61,
+   "d": 9.94,
+   "text": "It hails from clash a forerunner and dating back to 1996."
+  },
+  {
+   "t": 534.55,
+   "d": 6.95,
+   "text": "The first step in my research is to post this story to nearly every NetHack related space"
+  },
+  {
+   "t": 541.5,
+   "d": 1.0,
+   "text": "on the internet."
+  },
+  {
+   "t": 542.5,
+   "d": 5.03,
+   "text": "The NetHack community tends to be pretty small and a lot of us know each other so I figured"
+  },
+  {
+   "t": 547.53,
+   "d": 5.27,
+   "text": "someone should have an idea about the history of this mysterious database entry."
+  },
+  {
+   "t": 552.8,
+   "d": 5.18,
+   "text": "Unfortunately, the only result is now if you research for this wizard you will get twice"
+  },
+  {
+   "t": 557.98,
+   "d": 4.51,
+   "text": "as many results as I did, but they are all discussions from us trying to figure out where"
+  },
+  {
+   "t": 562.49,
+   "d": 3.27,
+   "text": "the database entry comes from."
+  },
+  {
+   "t": 565.76,
+   "d": 4.46,
+   "text": "So the next step in the quest was to start reaching out to people directly."
+  },
+  {
+   "t": 570.22,
+   "d": 4.89,
+   "text": "The problem slash is a game from the '90s and finding emails of developers from back"
+  },
+  {
+   "t": 575.11,
+   "d": 1.6,
+   "text": "then is very, very difficult."
+  },
+  {
+   "t": 576.71,
+   "d": 7.35,
+   "text": "When I did manage to find emails all but one bounced and the one that didn't bounce I got"
+  },
+  {
+   "t": 584.06,
+   "d": 7.11,
+   "text": "a very nice reply but unfortunately they didn't know where the entry originated from either."
+  },
+  {
+   "t": 591.17,
+   "d": 2.71,
+   "text": "This meant that it was time to go back even further."
+  },
+  {
+   "t": 593.88,
+   "d": 3.98,
+   "text": "It took quite a bit of doing but I tracked it down and messages the original developer"
+  },
+  {
+   "t": 597.86,
+   "d": 4.02,
+   "text": "of slash who was kind enough to lend me a few minutes of his time."
+  },
+  {
+   "t": 601.88,
+   "d": 5.37,
+   "text": "This developer confirmed the asphynx was derived from the series and that's correct."
+  },
+  {
+   "t": 607.25,
+   "d": 5.42,
+   "text": "Strangely, however, he didn't remember writing the entry in the database and said that it"
+  },
+  {
+   "t": 612.67,
+   "d": 2.35,
+   "text": "didn't sound like his writing style."
+  },
+  {
+   "t": 615.02,
+   "d": 3.79,
+   "text": "He suggested I look back to see where the database entry originated."
+  },
+  {
+   "t": 618.81,
+   "d": 6.5,
+   "text": "If the entry first appeared in slash it was probably his writing."
+  },
+  {
+   "t": 625.31,
+   "d": 6.49,
+   "text": "If it first appeared in NetHack minus minus then it almost definitely was."
+  },
+  {
+   "t": 631.8,
+   "d": 1.2,
+   "text": "What's NetHack minus minus?"
+  },
+  {
+   "t": 633.0,
+   "d": 7.11,
+   "text": "It is a variant from 1992 which doesn't even appear in the horrifying flowchart from earlier."
+  },
+  {
+   "t": 640.11,
+   "d": 3.28,
+   "text": "And this is where the trail goes cold."
+  },
+  {
+   "t": 643.39,
+   "d": 4.93,
+   "text": "The wizard is mentioned in the database of slash 6 but not in the database of NetHack"
+  },
+  {
+   "t": 648.32,
+   "d": 2.23,
+   "text": "minus minus."
+  },
+  {
+   "t": 650.55,
+   "d": 1.0,
+   "text": "So to review."
+  },
+  {
+   "t": 651.55,
+   "d": 6.51,
+   "text": "The wizard and Endlebrook are entirely fictional and probably invented by the developer of"
+  },
+  {
+   "t": 658.06,
+   "d": 4.57,
+   "text": "slash who probably wrote the encyclopedia entry."
+  },
+  {
+   "t": 662.63,
+   "d": 4.95,
+   "text": "We don't know and probably never will."
+  },
+  {
+   "t": 667.58,
+   "d": 7.24,
+   "text": "But the outcome a fictional notation someone wrote off the cough managed to survive 27"
+  },
+  {
+   "t": 674.82,
+   "d": 6.15,
+   "text": "years without someone noticing or asking where it was from -- cuff."
+  },
+  {
+   "t": 680.97,
+   "d": 6.54,
+   "text": "There is only one final question remaining and that's why are we talking about this?"
+  },
+  {
+   "t": 687.51,
+   "d": 4.91,
+   "text": "Or to put it another way, why does this matter?"
+  },
+  {
+   "t": 692.42,
+   "d": 4.16,
+   "text": "The easiest answer to this question is it doesn't matter."
+  },
+  {
+   "t": 696.58,
+   "d": 7.76,
+   "text": "This is about a modification paid made to a game about 40 years old and a single entry"
+  },
+  {
+   "t": 704.34,
+   "d": 2.09,
+   "text": "to the database."
+  },
+  {
+   "t": 706.43,
+   "d": 7.3,
+   "text": "It causes no revelations or a definite conclusion."
+  },
+  {
+   "t": 713.73,
+   "d": 9.33,
+   "text": "In some sense, none of this is important but I would argue that's what makes it so important."
+  },
+  {
+   "t": 723.06,
+   "d": 6.28,
+   "text": "I really like this story about fictional wizards and missing encyclopedias and petrify snakes"
+  },
+  {
+   "t": 729.34,
+   "d": 15.23,
+   "text": "because it is human and a human's compassion to care and make mistakes."
+  },
+  {
+   "t": 744.57,
+   "d": 5.21,
+   "text": "This story might be pointless but to me that makes it all the more beautiful."
+  },
+  {
+   "t": 749.78,
+   "d": 5.06,
+   "text": "It is silly, fun and evidence these games were made by many different people all passionate"
+  },
+  {
+   "t": 754.84,
+   "d": 2.52,
+   "text": "about one thing."
+  },
+  {
+   "t": 757.36,
+   "d": 3.51,
+   "text": "Human stories, however, don't tend to last."
+  },
+  {
+   "t": 760.87,
+   "d": 3.83,
+   "text": "If we consider games as a form of art they are fairly young only reaching commercial"
+  },
+  {
+   "t": 764.7,
+   "d": 6.77,
+   "text": "PORP popularity in the 1970s."
+  },
+  {
+   "t": 771.47,
+   "d": 11.27,
+   "text": "Many have an unconventional means self-control if any at all."
+  },
+  {
+   "t": 782.74,
+   "d": 7.13,
+   "text": "Of this exist on the internet around an increasingly unstable relationship with its history."
+  },
+  {
+   "t": 789.87,
+   "d": 5.13,
+   "text": "Tracing the provenance at this specific database entry took me an incredible amount of time"
+  },
+  {
+   "t": 795.0,
+   "d": 4.53,
+   "text": "and effort I was lucky to find the unclear conclusion I did."
+  },
+  {
+   "t": 799.53,
+   "d": 3.41,
+   "text": "This story might not matter but the next one might."
+  },
+  {
+   "t": 802.94,
+   "d": 4.34,
+   "text": "As the internet becomes increasingly flooded with larger quantities of commercially funded"
+  },
+  {
+   "t": 807.28,
+   "d": 5.1,
+   "text": "and procedurally generated information, human stories like this one are going to continue"
+  },
+  {
+   "t": 812.38,
+   "d": 1.45,
+   "text": "fading away."
+  },
+  {
+   "t": 813.83,
+   "d": 5.51,
+   "text": "As we find out about the asphynx and the wizard EndleBrook is of the world are going to get"
+  },
+  {
+   "t": 819.34,
+   "d": 2.24,
+   "text": "more difficult."
+  },
+  {
+   "t": 821.58,
+   "d": 9.8,
+   "text": "If you permit me to finish here is what I think this is about."
+  },
+  {
+   "t": 831.38,
+   "d": 3.91,
+   "text": "Version control itself and things aren't just backups of existing work."
+  },
+  {
+   "t": 835.29,
+   "d": 2.21,
+   "text": "They are stories."
+  },
+  {
+   "t": 837.5,
+   "d": 3.21,
+   "text": "And if there is one thing about roguelike players, it is that there is nothing we like"
+  },
+  {
+   "t": 840.71,
+   "d": 3.23,
+   "text": "better than a good story."
+  },
+  {
+   "t": 843.94,
+   "d": 1.76,
+   "text": "So that's the end of my presentation."
+  },
+  {
+   "t": 845.7,
+   "d": 3.67,
+   "text": "Thank you for sticking with it through all these technical issues."
+  },
+  {
+   "t": 849.37,
+   "d": 4.74,
+   "text": "Special thanks to Ali Harloe and Tom Proudfoot for helping me dig into this."
+  },
+  {
+   "t": 854.11,
+   "d": 12.5,
+   "text": "ALEXEI: Thank you and huge congrats on keeping the flow going the whole time despite all"
+  },
+  {
+   "t": 866.61,
+   "d": 1.0,
+   "text": "the technical hiccups."
+  },
+  {
+   "t": 867.61,
+   "d": 1.22,
+   "text": "That's hard to do."
+  },
+  {
+   "t": 868.83,
+   "d": 5.37,
+   "text": "A lot of people were in chat saying that feels stressful and when you are in the audience"
+  },
+  {
+   "t": 874.2,
+   "d": 2.95,
+   "text": "it is fine and not a problem."
+  },
+  {
+   "t": 877.15,
+   "d": 1.84,
+   "text": "No, I think that was wonderful."
+  },
+  {
+   "t": 878.99,
+   "d": 3.31,
+   "text": "A lot of people really enjoyed it in chat."
+  },
+  {
+   "t": 882.3,
+   "d": 5.07,
+   "text": "I think that this conference and this group cares a lot about, yeah, preservation of especially"
+  },
+  {
+   "t": 887.37,
+   "d": 8.07,
+   "text": "these types of games, so I think this is just a wonderful encapsulation of a lot of feelings"
+  },
+  {
+   "t": 895.44,
+   "d": 7.05,
+   "text": "that even drive why this conference exists basically."
+  },
+  {
+   "t": 902.49,
+   "d": 1.0,
+   "text": "Excellent."
+  },
+  {
+   "t": 903.49,
+   "d": 2.87,
+   "text": "Just checking in case -- oh, here is a question."
+  },
+  {
+   "t": 906.36,
+   "d": 2.84,
+   "text": "Would you mind go back just to that flowchart slide?"
+  },
+  {
+   "t": 909.2,
+   "d": 5.78,
+   "text": "That was the one slide we missed in the technical issues."
+  },
+  {
+   "t": 914.98,
+   "d": 4.03,
+   "text": "KES: Yeah, this is a very low resolution."
+  },
+  {
+   "t": 919.01,
+   "d": 1.65,
+   "text": "Let's see if this full screen sets."
+  },
+  {
+   "t": 920.66,
+   "d": 2.32,
+   "text": "ALEXEI: Yes, it does."
+  },
+  {
+   "t": 922.98,
+   "d": 3.51,
+   "text": "KES: That would have been helpful 10 minutes ago."
+  },
+  {
+   "t": 926.49,
+   "d": 2.57,
+   "text": "This a low resolution version."
+  },
+  {
+   "t": 929.06,
+   "d": 5.77,
+   "text": "It is current as of February 2023."
+  },
+  {
+   "t": 934.83,
+   "d": 6.16,
+   "text": "But yeah, as you can see, it is enormously complicated and doesn't even include things"
+  },
+  {
+   "t": 940.99,
+   "d": 1.57,
+   "text": "like NetHack Minus Minus for example."
+  },
+  {
+   "t": 942.56,
+   "d": 1.0,
+   "text": "ALEXEI: We love a Roguelike Celebration where we hear about a new-old NetHack fork."
+  },
+  {
+   "t": 943.56,
+   "d": 1.0,
+   "text": "Wonderful."
+  },
+  {
+   "t": 944.56,
+   "d": 1.0,
+   "text": "Thank you so much, Kes."
+  },
+  {
+   "t": 945.56,
+   "d": 1.0,
+   "text": "I hope you will be able to enjoy the NetHack developer's AMA tomorrow morning."
+  },
+  {
+   "t": 946.56,
+   "d": 1.0,
+   "text": "I am really excited."
+  },
+  {
+   "t": 947.56,
+   "d": 1.0,
+   "text": "It is like hard to track people down and that chance to hear stories from the original people"
+  },
+  {
+   "t": 948.56,
+   "d": 1.0,
+   "text": "is really valuable."
+  },
+  {
+   "t": 949.56,
+   "d": 1.0,
+   "text": "Excellent."
+  },
+  {
+   "t": 950.56,
+   "d": 1.0,
+   "text": "Thank you so much for your talk."
+  },
+  {
+   "t": 951.56,
+   "d": 1.0,
+   "text": "OK."
+  },
+  {
+   "t": 952.56,
+   "d": 1.0,
+   "text": "Well, that was wonderful."
+  },
+  {
+   "t": 953.56,
+   "d": 1.0,
+   "text": "I love NetHack representation at Roguelike Celebration."
+  },
+  {
+   "t": 954.56,
+   "d": 1.0,
+   "text": "And such a wonderful talk."
+  },
+  {
+   "t": 955.56,
+   "d": 5.61,
+   "text": "Reminders if you have links you want to share, there is an obelisk where you can drop them"
+  },
+  {
+   "t": 961.17,
+   "d": 7.62,
+   "text": "there in between talks and we will do Breakout rooms after this section of talks which I"
+  },
+  {
+   "t": 968.79,
+   "d": 5.7,
+   "text": "believe Mike is going to be the last talk of this section."
+  }
+ ]
+}

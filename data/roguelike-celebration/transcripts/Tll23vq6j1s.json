@@ -1,0 +1,449 @@
+{
+ "id": "Tll23vq6j1s",
+ "url": "https://www.youtube.com/watch?v=Tll23vq6j1s",
+ "title": "Max Sahin - Stuff: the behavioral science of inventory",
+ "speaker": "Max Sahin",
+ "talk_title": "Stuff: the behavioral science of inventory",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2025-11-20",
+ "duration_s": 673,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "The instinct to collect, arrange, display, and share is a core piece of what makes us human. Why do we do it? What makes an inventory stressful and annoying vs. a pleasurable exercise in agency and self-expression? And how does the threat of losing all that, of death, in a videogame (and outside it) shape those actions?\n\nFolks will learn:\n- how different schools of scholarly thought think about the human relationship with objects\n- -how screens change that (because how we perceive things on screens is fundamentally different from how we perceive meatspace data)\n- Where the levers are to influence a player's emotional relationship with in-game objects",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction to research"
+  },
+  {
+   "start": 98,
+   "title": "Research challenges"
+  },
+  {
+   "start": 201,
+   "title": "Roguelike research paradoxes"
+  },
+  {
+   "start": 275,
+   "title": "The psychology of objects"
+  },
+  {
+   "start": 383,
+   "title": "Mortality and excitement"
+  },
+  {
+   "start": 482,
+   "title": "Objects in roguelikes"
+  },
+  {
+   "start": 624,
+   "title": "Designing meaningful inventory"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 1381,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 15.6,
+   "d": 11.68,
+   "text": "MAX: Hi, I am a behavioral scientist and I study people and what people do with computers."
+  },
+  {
+   "t": 27.92,
+   "d": 7.28,
+   "text": "We are going to take a look at what people do with their stuff in games and how and why it"
+  },
+  {
+   "t": 35.2,
+   "d": 9.6,
+   "text": "matters. My scholarly research is mostly in how humans study other humans and how we get"
+  },
+  {
+   "t": 44.8,
+   "d": 6.16,
+   "text": "that information. I study research behavior in academia versus industry for product designers"
+  },
+  {
+   "t": 50.96,
+   "d": 5.2,
+   "text": "in the tech industry and how we make knowledge about how people do things on the internet."
+  },
+  {
+   "t": 56.16,
+   "d": 5.68,
+   "text": "I am really interested in the edges of what we know and what's difficult to study which"
+  },
+  {
+   "t": 61.84,
+   "d": 7.28,
+   "text": "is why I picked this topic. It turns out stuff for roguelikes pushes on the edge of a lot of"
+  },
+  {
+   "t": 69.12,
+   "d": 5.76,
+   "text": "different paradoxes about behavior and what makes things fun. My professional career is a product"
+  },
+  {
+   "t": 74.88,
+   "d": 5.28,
+   "text": "designer and researcher mostly for early stage startups. I worked for Microsoft and a bunch of"
+  },
+  {
+   "t": 80.16,
+   "d": 4.88,
+   "text": "other companies usually in areas where traditional product design methods don't get you there."
+  },
+  {
+   "t": 85.92,
+   "d": 7.12,
+   "text": "I work from first principles. The technology changes but people don't. We are still running"
+  },
+  {
+   "t": 93.04,
+   "d": 7.52,
+   "text": "the same hunter gather brains we were thousands of years ago. Specific research about how we think"
+  },
+  {
+   "t": 100.56,
+   "d": 6.08,
+   "text": "and feel about inventory is rare and generally low quality. Not because the researchers are"
+  },
+  {
+   "t": 106.64,
+   "d": 6.64,
+   "text": "bad but because people can't be trusted to tell you how they think or feel. If you ask a player"
+  },
+  {
+   "t": 113.28,
+   "d": 9.2,
+   "text": "do you like this menu? Or how do you feel? You will get an it is nice or something there of."
+  },
+  {
+   "t": 122.48,
+   "d": 7.12,
+   "text": "People are bad at naming their experience. It is a skill and interviewing is a skill. To get"
+  },
+  {
+   "t": 129.6,
+   "d": 7.52,
+   "text": "people to not just tell you an answer but a useful answer takes a lot of training. It is"
+  },
+  {
+   "t": 137.12,
+   "d": 5.36,
+   "text": "really expensive. It creates a small research pool especially for games and small gaming companies."
+  },
+  {
+   "t": 142.48,
+   "d": 6.48,
+   "text": "There are biases into what information can get out there at all. General research about"
+  },
+  {
+   "t": 148.96,
+   "d": 5.92,
+   "text": "people and how we relate to stuff is also in its infancy. It was dominated by Freudian theory until"
+  },
+  {
+   "t": 154.88,
+   "d": 5.44,
+   "text": "the 2010. Freud isn't as awful as everyone says he is. He uses the same outrage engine"
+  },
+  {
+   "t": 161.92,
+   "d": 8.08,
+   "text": "that social media does. In his letters, he says he was shocking on purse. It is not all but not"
+  },
+  {
+   "t": 170.0,
+   "d": 6.88,
+   "text": "something you can rely on especially since what happened since 2010 is a lot of paradoxes. Our"
+  },
+  {
+   "t": 176.88,
+   "d": 6.56,
+   "text": "current research shows we value digital goods less than physical goods except when it is in a"
+  },
+  {
+   "t": 183.44,
+   "d": 9.12,
+   "text": "game. Gaming changes everything. When you can only die once in real life, this muddies the research,"
+  },
+  {
+   "t": 194.56,
+   "d": 6.88,
+   "text": "general research a lot. You can't apply that to a roguelike. And then gaming research itself is"
+  },
+  {
+   "t": 201.44,
+   "d": 5.04,
+   "text": "tricky to apply to a roguelike. If you ask about meaning, fun, and games people about narrative and"
+  },
+  {
+   "t": 206.48,
+   "d": 9.36,
+   "text": "the digital self hood and that is because research is done in MMORPG talking about relational and"
+  },
+  {
+   "t": 215.84,
+   "d": 6.8,
+   "text": "narrative derived meaning. People are storytellers and we make meaning by creating a narrative"
+  },
+  {
+   "t": 222.64,
+   "d": 8.96,
+   "text": "one thing happens after another and another. We explain backwards why and create stories. A lot"
+  },
+  {
+   "t": 231.6,
+   "d": 5.44,
+   "text": "of how that is done in highly relational or social games or games where we build and tell stories"
+  },
+  {
+   "t": 237.04,
+   "d": 6.08,
+   "text": "doesn't apply or the same words mean the same thing or means slightly different things. The same"
+  },
+  {
+   "t": 243.12,
+   "d": 7.76,
+   "text": "words don't mean the same things. So the nuance becomes lost. It is easy to turn to research"
+  },
+  {
+   "t": 250.88,
+   "d": 5.6,
+   "text": "and end up worse off than you started if you are trying to understand roguelikes specifically in"
+  },
+  {
+   "t": 256.48,
+   "d": 7.36,
+   "text": "how people interact with inventory. There is also the fact that if narrative creation and social"
+  },
+  {
+   "t": 263.84,
+   "d": 4.56,
+   "text": "connections were what people wanted out of the game they would not choose roguelikes. If people"
+  },
+  {
+   "t": 268.4,
+   "d": 8.32,
+   "text": "want complex social interaction they can by world of war craft. Roguelikes have interesting things"
+  },
+  {
+   "t": 276.72,
+   "d": 9.68,
+   "text": "in common with all human experiences in that they are defined by death and with stuff. We"
+  },
+  {
+   "t": 286.4,
+   "d": 5.2,
+   "text": "manipulate objects to keep us live. We use them to act on our world. It is why we are successful as a"
+  },
+  {
+   "t": 291.6,
+   "d": 5.2,
+   "text": "species and a defining factor of humanity. We used to say we were the only tool wielding animals and"
+  },
+  {
+   "t": 296.8,
+   "d": 8.72,
+   "text": "that has been disproved but we are the only ones who used tools in the complex ways we do that are"
+  },
+  {
+   "t": 305.52,
+   "d": 9.04,
+   "text": "absolutely necessary to our survival. It takes an enormous amount of brain power. We use them"
+  },
+  {
+   "t": 316.88,
+   "d": 7.28,
+   "text": "to represent ourselves. For us a thing is never just a thing. A cup gifted to you at"
+  },
+  {
+   "t": 324.16,
+   "d": 7.92,
+   "text": "your wedding handed to your friend warm with coffee morning after morning washed and put"
+  },
+  {
+   "t": 332.08,
+   "d": 7.76,
+   "text": "away takes on the patina of every interaction and not just external but internal interactions. When"
+  },
+  {
+   "t": 339.84,
+   "d": 5.68,
+   "text": "you think of that cup it resonates between your idea of that particular cup, your thoughts about"
+  },
+  {
+   "t": 345.52,
+   "d": 6.16,
+   "text": "cups like that in general, your implicit beliefs about the kind of people who might use that cup,"
+  },
+  {
+   "t": 351.68,
+   "d": 5.76,
+   "text": "the reconciliation of the cup in front of you with your memory of a whole cup, and there is"
+  },
+  {
+   "t": 357.44,
+   "d": 5.52,
+   "text": "a chip you didn't see before, and your feelings about breaking the cup you got at your wedding"
+  },
+  {
+   "t": 362.96,
+   "d": 8.88,
+   "text": "and handed to your friend warm with coffee. Is this the last time? It feels like yesterday. It"
+  },
+  {
+   "t": 371.84,
+   "d": 6.16,
+   "text": "is a wonder that we function day to day when teacups can make us think of dying. A thing"
+  },
+  {
+   "t": 378.0,
+   "d": 19.28,
+   "text": "is never just a thing for us. How cups connect to dying is called mortality science. It is also why"
+  },
+  {
+   "t": 397.28,
+   "d": 7.76,
+   "text": "roguelikes are so much fun. And many things are so much fun. We love fear especially when you divorce"
+  },
+  {
+   "t": 405.04,
+   "d": 9.12,
+   "text": "it from danger. The fear is a biological level to prevent death. Our brain pumps chemicals into our"
+  },
+  {
+   "t": 414.16,
+   "d": 15.92,
+   "text": "system to fight. We take in more data and it is all that. We refocus and sort. And remember the"
+  },
+  {
+   "t": 430.08,
+   "d": 5.92,
+   "text": "best that we ever do and react the fastest. This chemical cocktail is based on what is developing"
+  },
+  {
+   "t": 436.0,
+   "d": 13.12,
+   "text": "PTSD. We get jumpy even if there is nothing to be fear of. Humans love that edge. We feel alive"
+  },
+  {
+   "t": 449.12,
+   "d": 9.36,
+   "text": "there. Research durably shows that anything that taps on the glass to remind us we are mortal makes"
+  },
+  {
+   "t": 458.48,
+   "d": 6.4,
+   "text": "our lives more meaningful. In video games, books, anything that reminds us of this is temporary and"
+  },
+  {
+   "t": 464.88,
+   "d": 9.28,
+   "text": "we will die enhances meaning. But much of complex play involves hijacking that system that dumps"
+  },
+  {
+   "t": 474.16,
+   "d": 13.36,
+   "text": "those chemicals in. Permadeath changes what parts of a game are carrying the meaning-making load."
+  },
+  {
+   "t": 487.52,
+   "d": 5.92,
+   "text": "It is not just about the fun and that creation of meaning we might die. It is how we construct"
+  },
+  {
+   "t": 493.44,
+   "d": 7.36,
+   "text": "meaning internally. Generated maps and a lack of sense of place also alter how we make meaning"
+  },
+  {
+   "t": 500.8,
+   "d": 8.56,
+   "text": "within these games. Normally when you go through a game it is like you do in the normal world."
+  },
+  {
+   "t": 509.36,
+   "d": 6.0,
+   "text": "You move through space and see things that remind you of where you were before and hook backward in"
+  },
+  {
+   "t": 515.36,
+   "d": 6.96,
+   "text": "all the negative and positive experiences you have had in that location. It echoes backward and not"
+  },
+  {
+   "t": 522.32,
+   "d": 6.88,
+   "text": "just in that time and space but in to you. You don't get that in a roguelike. What you do get"
+  },
+  {
+   "t": 529.2,
+   "d": 9.44,
+   "text": "is objects. This hook changes fundamentally the relationship with objects in these games."
+  },
+  {
+   "t": 538.64,
+   "d": 6.56,
+   "text": "Inventory is not just inventory and stuff isn't just stuff. They are relational tools and act"
+  },
+  {
+   "t": 545.2,
+   "d": 14.08,
+   "text": "said of agency. We act in the world -- you take out the thing, the thing creates an action. But"
+  },
+  {
+   "t": 559.28,
+   "d": 7.2,
+   "text": "there are also vessels of memory and meaning. And this is because they persist despite the death"
+  },
+  {
+   "t": 566.48,
+   "d": 17.76,
+   "text": "and physical constraints of these games. They focus as constants. And the sense of familiarity."
+  },
+  {
+   "t": 601.12,
+   "d": 6.56,
+   "text": "It is like taking only the fun parts of death because ultimately the game will only be new to"
+  },
+  {
+   "t": 607.68,
+   "d": 22.8,
+   "text": "you once. All these vessels that die and the great meaningful inventory for players. It is important"
+  },
+  {
+   "t": 630.48,
+   "d": 11.04,
+   "text": "to remember that the cup is never just the cup. When you approach, finding the emotion handles for"
+  },
+  {
+   "t": 641.52,
+   "d": 8.64,
+   "text": "ultimately the people you want to have fun. Creating a sense of safety amidst danger and"
+  },
+  {
+   "t": 650.16,
+   "d": 6.08,
+   "text": "creating a sense of meaning, something they can look back on, and have every positive interaction"
+  },
+  {
+   "t": 656.24,
+   "d": 7.84,
+   "text": "that they have ever had in your world come back to them when they interact with it empowers them"
+  },
+  {
+   "t": 664.08,
+   "d": 8.0,
+   "text": "to take the best parts, forgive what it means and what it means to die and have fun with that."
+  }
+ ]
+}

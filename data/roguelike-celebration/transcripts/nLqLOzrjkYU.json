@@ -1,0 +1,1191 @@
+{
+ "id": "nLqLOzrjkYU",
+ "url": "https://www.youtube.com/watch?v=nLqLOzrjkYU",
+ "title": "Paul Dean - Picking up the Pieces: Building Story in a Roguelike World",
+ "speaker": "Paul Dean",
+ "talk_title": "Picking up the Pieces: Building Story in a Roguelike World",
+ "year": 2025,
+ "kind": "talk",
+ "upload_date": "2026-03-07",
+ "duration_s": 1682,
+ "playlists": [
+  "Roguelike Celebration 2025"
+ ],
+ "description": "Nebula-nominated games writer Paul Dean talks about linearity and non-linearity in both narrative and the writing process itself. He investigates where exactly a narrative begins and ends, as well as how this factors into his writing process and how it was applied in his work on Pacific Drive and other games.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and philosophy"
+  },
+  {
+   "start": 156,
+   "title": "Learning from early narratives"
+  },
+  {
+   "start": 242,
+   "title": "Nuclear Throne and brevity"
+  },
+  {
+   "start": 374,
+   "title": "Non-linear writing process"
+  },
+  {
+   "start": 518,
+   "title": "Designing for Pacific Drive"
+  },
+  {
+   "start": 691,
+   "title": "Drawing from diverse influences"
+  },
+  {
+   "start": 870,
+   "title": "Literature and non-linearity"
+  },
+  {
+   "start": 1025,
+   "title": "Archaeology and jigsaw puzzles"
+  },
+  {
+   "start": 1155,
+   "title": "Conclusion and reflections"
+  },
+  {
+   "start": 1317,
+   "title": "Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3905,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 7.07,
+   "d": 6.77,
+   "text": "ROURKE: Without further ado, let me introduce Paul Dean. Paul is talking about \"Picking up the"
+  },
+  {
+   "t": 13.84,
+   "d": 4.24,
+   "text": "Pieces: Building story in a roguelike world\". Paul Dean is a Nebula-nominated"
+  },
+  {
+   "t": 18.08,
+   "d": 2.88,
+   "text": "writer and ENNIE-nominated game designer with about two decades"
+  },
+  {
+   "t": 20.96,
+   "d": 2.92,
+   "text": "of experience in games, which has included everything from an"
+  },
+  {
+   "t": 23.88,
+   "d": 2.2,
+   "text": "enormous amount of journalism and critical commentary, to"
+  },
+  {
+   "t": 26.08,
+   "d": 3.92,
+   "text": "designing tabletop RPGs, to critically-acclaimed writing and"
+  },
+  {
+   "t": 30.0,
+   "d": 1.27,
+   "text": "narrative design. His last position was as a writer on the"
+  },
+  {
+   "t": 31.27,
+   "d": 5.45,
+   "text": "indie hit Pacific Drive and he's deeply involved in his next"
+  },
+  {
+   "t": 37.84,
+   "d": 11.04,
+   "text": "couple of projects. PAUL: That hello, everyone. The intro has taken"
+  },
+  {
+   "t": 48.88,
+   "d": 6.32,
+   "text": "the wind out of my own intro. My name is Paul and this is \"Picking up the Pieces: Building story in"
+  },
+  {
+   "t": 55.2,
+   "d": 9.6,
+   "text": "a roguelike world.\" And this is a picture of me when I was six. This is a picture of me taken this"
+  },
+  {
+   "t": 64.8,
+   "d": 8.16,
+   "text": "week. Now, it would be a lie to say that time, the connection between the two has been a largely"
+  },
+  {
+   "t": 72.96,
+   "d": 7.2,
+   "text": "linear progression at least in terms of narrative, because the fact is that most all the things you"
+  },
+  {
+   "t": 80.16,
+   "d": 8.4,
+   "text": "think you know about linear narrative are a lie, or if not a lie ablateant misrepresentation or a"
+  },
+  {
+   "t": 88.56,
+   "d": 6.32,
+   "text": "gross exaggeration. That's a big claim but you see what I am supposed to do any in narrative"
+  },
+  {
+   "t": 94.88,
+   "d": 8.24,
+   "text": "presentation about video games is talk about how the medium is so special, how the stuff we make is"
+  },
+  {
+   "t": 103.12,
+   "d": 6.48,
+   "text": "different to films and comics, and any other medium, and that the player isn't as passive"
+  },
+  {
+   "t": 109.6,
+   "d": 7.92,
+   "text": "and if things don't unfold in a linear faction and maybe I will cite an exception like final fantasy."
+  },
+  {
+   "t": 120.64,
+   "d": 11.68,
+   "text": "And you can hold the place with your finger and jump back into time to avoid certain deaths. I"
+  },
+  {
+   "t": 132.32,
+   "d": 7.04,
+   "text": "have done this style of talk loads in the past but I don't think it is as good of an idea this time"
+  },
+  {
+   "t": 139.36,
+   "d": 6.72,
+   "text": "and frankly, I don't know want to. Also, our hosts were interested in me talking about the"
+  },
+  {
+   "t": 146.08,
+   "d": 8.64,
+   "text": "whiting process itself or at least in this context and my writing process. Let's also do that but"
+  },
+  {
+   "t": 154.72,
+   "d": 9.92,
+   "text": "this is the Roguelike Celebration so let's start everything all over again. My name is Paul. This"
+  },
+  {
+   "t": 164.64,
+   "d": 6.56,
+   "text": "is a picture of me when I was six and not long after this picture was taken I read the book"
+  },
+  {
+   "t": 171.2,
+   "d": 8.48,
+   "text": "Grinny which is a story of kids who think their grandmother may be an alien. It was the first"
+  },
+  {
+   "t": 179.68,
+   "d": 8.88,
+   "text": "book I read that was written as a journal with diary entries and that introduced an idea without"
+  },
+  {
+   "t": 188.56,
+   "d": 6.32,
+   "text": "explaining it first which is something we love to do in roguelikes. I thumbed back through the pages"
+  },
+  {
+   "t": 194.88,
+   "d": 5.2,
+   "text": "to find what the author was talking about but it turned out the idea was going to be explained"
+  },
+  {
+   "t": 200.08,
+   "d": 6.4,
+   "text": "later. This was suspense. And God, you don't have to explain everything all at the start and"
+  },
+  {
+   "t": 206.48,
+   "d": 8.0,
+   "text": "at once. Stories and narrative are not programming and you aren't loading in the DLL, libraries, and"
+  },
+  {
+   "t": 214.48,
+   "d": 9.84,
+   "text": "references up front. Now, did I say stories or did I say writing? Or is this a narrative talk? Well,"
+  },
+  {
+   "t": 224.32,
+   "d": 8.32,
+   "text": "what are we talking about here? What exactly is the difference? Well, my name is Paul and"
+  },
+  {
+   "t": 232.64,
+   "d": 6.0,
+   "text": "this was a picture of me when I was six or there abouts. Not soon after I played the video game"
+  },
+  {
+   "t": 238.64,
+   "d": 8.4,
+   "text": "captain blood which was the first game to make me cry. As a space fairing starship captain,"
+  },
+  {
+   "t": 247.04,
+   "d": 6.48,
+   "text": "I could pick up aliens from different planet and take them to others. I took a young alien from"
+  },
+  {
+   "t": 253.52,
+   "d": 6.48,
+   "text": "one planet to another and released him without realizing the second planet had no atmosphere and"
+  },
+  {
+   "t": 260.0,
+   "d": 6.16,
+   "text": "he could not breathe. In two or three lines of dialogue he told me he was suffocating,"
+  },
+  {
+   "t": 267.12,
+   "d": 12.48,
+   "text": "scared and missed his parent so much and then he died. It was a clear organic discovering a result"
+  },
+  {
+   "t": 279.6,
+   "d": 8.88,
+   "text": "through gameplay. No more writing the map was necessary. I restarted the game, picked him up,"
+  },
+  {
+   "t": 288.48,
+   "d": 4.96,
+   "text": "and took him to a different planet and he talked to me about how excited he was and having a great"
+  },
+  {
+   "t": 293.44,
+   "d": 7.92,
+   "text": "time. This happened more than 35 years ago and I still remember it because good narrative doesn't"
+  },
+  {
+   "t": 301.36,
+   "d": 6.0,
+   "text": "have to be wordy, complex or elaborate. In fact, particularly in a roguelike context,"
+  },
+  {
+   "t": 307.36,
+   "d": 7.76,
+   "text": "I think less may be more. My name is Paul and I am about to share a collage of my favorite scene"
+  },
+  {
+   "t": 315.12,
+   "d": 9.76,
+   "text": "setting roguelike narratives, and if I gave about a 100 of you guesses on which game I am about"
+  },
+  {
+   "t": 324.88,
+   "d": 12.4,
+   "text": "to introduce, I don't think any of you would get it. Do you see what I am doing? This is suspense."
+  },
+  {
+   "t": 338.08,
+   "d": 7.44,
+   "text": "What I am going to show you now is a few mid-level narratives interstitials from the roguelike bullet"
+  },
+  {
+   "t": 345.52,
+   "d": 9.68,
+   "text": "hell shooter Nuclear Thrown. And I love these. I think they are sassy single lines you could miss"
+  },
+  {
+   "t": 355.2,
+   "d": 5.12,
+   "text": "if you look away but they have a quality that hints at the wider world or your character's"
+  },
+  {
+   "t": 360.32,
+   "d": 6.64,
+   "text": "feelings and in a fast-pace roguelike shooter this is just the right amount of extra world"
+  },
+  {
+   "t": 366.96,
+   "d": 5.84,
+   "text": "building for me. Thank you very much. They don't compromise tone, pacing, don't waste your time and"
+  },
+  {
+   "t": 372.8,
+   "d": 8.0,
+   "text": "keep you waiting. My name is Paul and this is a picture of me when I was 36 and when a feature I"
+  },
+  {
+   "t": 380.8,
+   "d": 8.56,
+   "text": "wrote about the game star G valley was about to go so viral people still talk about it today. I"
+  },
+  {
+   "t": 389.36,
+   "d": 7.12,
+   "text": "wrote about my experience and how my life and how these things sometimes paralleled one another,"
+  },
+  {
+   "t": 396.48,
+   "d": 10.0,
+   "text": "my experience in the game, and my real life unfolding in front of me. And star G value has"
+  },
+  {
+   "t": 406.48,
+   "d": 5.92,
+   "text": "a narrative that's really loose in which the player can poses relationships and narrative"
+  },
+  {
+   "t": 412.4,
+   "d": 8.4,
+   "text": "threads and discover secrets in various order and in parallel. Conversations are relatively short."
+  },
+  {
+   "t": 420.8,
+   "d": 7.04,
+   "text": "We like that. The game's fan base has come up with interpretations and extrapolations in the last"
+  },
+  {
+   "t": 427.84,
+   "d": 9.04,
+   "text": "decade in no small part because of what MPCs don't say as well as what they do say. I myself wove"
+  },
+  {
+   "t": 436.88,
+   "d": 8.32,
+   "text": "ideas about the game and my life together in part because the fabric of the narrative is loose with"
+  },
+  {
+   "t": 445.2,
+   "d": 7.84,
+   "text": "holes big enough to thread all sorts of things through. Intentional or not this is good. My name"
+  },
+  {
+   "t": 453.04,
+   "d": 6.32,
+   "text": "is Paul and this is a picture of me when I was writing this middle paragraph which I have to tell"
+  },
+  {
+   "t": 459.36,
+   "d": 7.6,
+   "text": "you I did not write in the middle of this talk. I did not write the start of this talk at the start."
+  },
+  {
+   "t": 466.96,
+   "d": 8.0,
+   "text": "Or the end at the end. I put them there later. Just like when I wrote my non-linear feature"
+  },
+  {
+   "t": 474.96,
+   "d": 7.44,
+   "text": "about Star G Valley I lifted up pieces and moved them around, wrote about what I wanted to when I"
+  },
+  {
+   "t": 482.4,
+   "d": 9.6,
+   "text": "wanted to and stitched it together later. I didn't know what order it would go in but I knew what was"
+  },
+  {
+   "t": 492.0,
+   "d": 5.92,
+   "text": "as important as that order was the bigger picture that it would all create. I frequently tell"
+  },
+  {
+   "t": 497.92,
+   "d": 5.92,
+   "text": "budding writers not knowing your ending when you start or everything you want to say is normal and"
+  },
+  {
+   "t": 503.84,
+   "d": 6.8,
+   "text": "is OK. You discover much of this in the process. My name is Paul and this is a picture of me when I"
+  },
+  {
+   "t": 510.64,
+   "d": 6.56,
+   "text": "was drafting the next paragraph I am reading now. Different time, places, same end result. My name"
+  },
+  {
+   "t": 517.2,
+   "d": 5.68,
+   "text": "is Paul and this is a picture of me when I was working on the video game Pacific Drive. I had no"
+  },
+  {
+   "t": 522.88,
+   "d": 11.04,
+   "text": "idea how to start. I began with sassy descriptions that had minimal narrative and I had no guarantee"
+  },
+  {
+   "t": 533.92,
+   "d": 9.2,
+   "text": "anyone would read. I work would my terrific lead carry who built an alternative timeline"
+  },
+  {
+   "t": 543.12,
+   "d": 11.52,
+   "text": "and an ex planation of the game's strange store mechanic. No one knows which parts I redrafted,"
+  },
+  {
+   "t": 554.64,
+   "d": 8.32,
+   "text": "cut, edited, or rewrote to make them consistent with things I had written, or with changes from"
+  },
+  {
+   "t": 562.96,
+   "d": 8.48,
+   "text": "other members of the team of the developing mechanics. It is OK I wrote with iteration and"
+  },
+  {
+   "t": 571.44,
+   "d": 6.32,
+   "text": "restructuring and starting in essentially a random place because I think one of the worst things you"
+  },
+  {
+   "t": 577.76,
+   "d": 8.48,
+   "text": "can do as a writer is believe you have to start at the start. The start is where people get stuck."
+  },
+  {
+   "t": 587.44,
+   "d": 6.16,
+   "text": "I looked at the world Cari was building and much as when I worked on collaborative table top RPGs"
+  },
+  {
+   "t": 593.6,
+   "d": 12.08,
+   "text": "and source books, I tried to find complimentary ways to describe the things in element. Why is"
+  },
+  {
+   "t": 605.68,
+   "d": 10.32,
+   "text": "there gasoline ever where in Pacific Drive? It is useful. I decided the constant break down of"
+  },
+  {
+   "t": 616.0,
+   "d": 6.16,
+   "text": "the world's infrastructure caused by the game's ever shifting word would make an essential power"
+  },
+  {
+   "t": 622.16,
+   "d": 6.56,
+   "text": "source, a portable power source like fuel an essential resource. Or the fact there is no"
+  },
+  {
+   "t": 628.72,
+   "d": 5.52,
+   "text": "animals in the game and there wasn't time to add anything like that. I built in bits of lull where"
+  },
+  {
+   "t": 634.24,
+   "d": 9.76,
+   "text": "I imagined what it was like for people just trying live their life including things like getting"
+  },
+  {
+   "t": 644.0,
+   "d": 6.24,
+   "text": "lost, resenting their work, seeing colleagues die, playing practical jokes, and even falling"
+  },
+  {
+   "t": 650.24,
+   "d": 7.84,
+   "text": "in lover. I was well appoint the of Pacific Drive wasn't to read law so I assumed players larger"
+  },
+  {
+   "t": 658.08,
+   "d": 8.64,
+   "text": "wouldn't or at random. There is consistency and repetition across much of what I wrote, I wanted"
+  },
+  {
+   "t": 666.72,
+   "d": 8.96,
+   "text": "things bite size, digestible, and non-essential. They were a compliment to the gameplay. Rewards,"
+  },
+  {
+   "t": 675.68,
+   "d": 6.96,
+   "text": "Easter eggs, for the more curious players. The writing is not there to take the limelight and"
+  },
+  {
+   "t": 682.64,
+   "d": 5.2,
+   "text": "it is certainly not something for less interested players to resent. It is not supposed to be an"
+  },
+  {
+   "t": 687.84,
+   "d": 6.48,
+   "text": "obstacle to enjoying the game's mechanics. My name is Paul and here is a picture of a drum kit which"
+  },
+  {
+   "t": 694.32,
+   "d": 6.88,
+   "text": "is the first instrument I learned how to play a long time ago. The thing with a drumbeat is it as"
+  },
+  {
+   "t": 701.2,
+   "d": 7.92,
+   "text": "much about what and when you don't play as what and when you do. It is about space. It is about"
+  },
+  {
+   "t": 709.12,
+   "d": 8.24,
+   "text": "timing. And it's about appropriateness. I love nuclear throwing sassy one liners and if it is"
+  },
+  {
+   "t": 717.36,
+   "d": 7.84,
+   "text": "tight, bouncy, jazz, something like that, you do not need a thunderous rock drummer flipping"
+  },
+  {
+   "t": 725.2,
+   "d": 8.56,
+   "text": "out in the background. It is not appropriate. Pacific Drive needed appropriate writing for me to"
+  },
+  {
+   "t": 733.76,
+   "d": 6.88,
+   "text": "compliment that not ruin the fantastic work that Cari and everybody else on the team was doing."
+  },
+  {
+   "t": 740.64,
+   "d": 7.04,
+   "text": "But I thought instead to reward players who wanted to poke at things, do things like turn"
+  },
+  {
+   "t": 747.68,
+   "d": 7.76,
+   "text": "on the game's fax machine and read a strange brief story or odd message. The fax machine works like a"
+  },
+  {
+   "t": 755.44,
+   "d": 8.16,
+   "text": "deck of cards producing one unique result per use. I wanted to connect with the kind of player who is"
+  },
+  {
+   "t": 763.6,
+   "d": 5.84,
+   "text": "going to explore, poke around, and enjoys going off the beaten path so I could give that kind of"
+  },
+  {
+   "t": 769.44,
+   "d": 6.48,
+   "text": "player reinforcing rewards that would encourage more of that, and give them even more weird"
+  },
+  {
+   "t": 775.92,
+   "d": 6.4,
+   "text": "collectible tidbits. I play several instruments. I like fiddling around with music and I like knowing"
+  },
+  {
+   "t": 782.32,
+   "d": 8.0,
+   "text": "how things are made including other stuff I love -- movies, novels, games, all sorts. This is"
+  },
+  {
+   "t": 790.32,
+   "d": 4.96,
+   "text": "because making things, and I hope you know this or maybe you will learn this, making things is mostly"
+  },
+  {
+   "t": 795.28,
+   "d": 9.6,
+   "text": "a process. And studying people's process is as important as studying the end result. Writers can"
+  },
+  {
+   "t": 804.88,
+   "d": 7.44,
+   "text": "learn from filmmakers, and musician and designers, and everyone else because so much that is about"
+  },
+  {
+   "t": 812.32,
+   "d": 6.08,
+   "text": "creativity and problem solving contains mirrors and parallels. And after a while you might start"
+  },
+  {
+   "t": 818.4,
+   "d": 6.48,
+   "text": "to ask, hey, what exactly is the difference? My name is Paul and this is my favorite book which"
+  },
+  {
+   "t": 824.88,
+   "d": 8.24,
+   "text": "is slaughterhouse 5 which I discovered when I was 26 either as a result of alien abduction"
+  },
+  {
+   "t": 833.12,
+   "d": 6.16,
+   "text": "or PTSD or some mental episode the protagonist becomes stuck in time and find he is constantly"
+  },
+  {
+   "t": 839.28,
+   "d": 7.2,
+   "text": "visiting different momess in this life suddenly deep in the past or far in the future. Live as a"
+  },
+  {
+   "t": 846.48,
+   "d": 8.72,
+   "text": "whole makes sense as a collection of moments but outside there are different moment or experiences"
+  },
+  {
+   "t": 855.2,
+   "d": 8.56,
+   "text": "that are sometimes years apart mir ror, parallel or reinforce one another and gain new context when"
+  },
+  {
+   "t": 863.76,
+   "d": 5.6,
+   "text": "compared side by side. The story doesn't unfold in a linear fashion and it doesn't need to."
+  },
+  {
+   "t": 869.92,
+   "d": 10.16,
+   "text": "I once went to the Kurt Vonnegut's library and I looked at the many drafts of the book which"
+  },
+  {
+   "t": 880.08,
+   "d": 8.24,
+   "text": "were as valuable as studying the book itself. Roguelike games are so often about repetition,"
+  },
+  {
+   "t": 888.32,
+   "d": 9.6,
+   "text": "reinforcement, mirroring, and parallels but also about new moments of novelty and finding something"
+  },
+  {
+   "t": 897.92,
+   "d": 6.8,
+   "text": "new that joins a bigger picture perhaps helping make it make more sense and give clarity. Players"
+  },
+  {
+   "t": 904.72,
+   "d": 8.72,
+   "text": "may compare these elements in all kinds of orders. So why would you feel the author them in any order"
+  },
+  {
+   "t": 913.44,
+   "d": 6.08,
+   "text": "or execute them in any order? Or consider a linear narrative as something normal or"
+  },
+  {
+   "t": 919.52,
+   "d": 6.48,
+   "text": "something essential or something necessary? A lot of players love to figure stuff out,"
+  },
+  {
+   "t": 926.0,
+   "d": 6.24,
+   "text": "to experiment, particularly roguelike players are incredibly talented design director seth"
+  },
+  {
+   "t": 932.24,
+   "d": 6.24,
+   "text": "wanted us to build a game that encouraged players to experiment, to learn, and to discover things"
+  },
+  {
+   "t": 938.48,
+   "d": 5.52,
+   "text": "rather than direct them and explain everything up front. I mean explain everything up front"
+  },
+  {
+   "t": 944.0,
+   "d": 9.2,
+   "text": "mechanically not narrative but I also mean both although hey, what exactly is the difference?"
+  },
+  {
+   "t": 953.84,
+   "d": 9.12,
+   "text": "Well, another favorite book of mine is pail fire which begins with a 1999 line master work poem in"
+  },
+  {
+   "t": 962.96,
+   "d": 9.2,
+   "text": "rhyming couplets followed by the poem's apparent analysis. I recently saw a Bluesky post by someone"
+  },
+  {
+   "t": 972.16,
+   "d": 7.44,
+   "text": "asking how a poem with an odd number of lines can be in couplets. And congratulations, poster,"
+  },
+  {
+   "t": 979.6,
+   "d": 6.8,
+   "text": "you're a winner. It is all about the realization that you cannot trust its narrator. That something"
+  },
+  {
+   "t": 986.4,
+   "d": 6.24,
+   "text": "here is wrong and at a certain point in the book I had to thumb backward to check something as it"
+  },
+  {
+   "t": 992.64,
+   "d": 7.28,
+   "text": "hit me I was being lied to. Hyperlinking my way back and forth through the text to check things"
+  },
+  {
+   "t": 999.92,
+   "d": 7.44,
+   "text": "like a final fantasy book. I discovered this for myself which is good. I love to figure stuff out."
+  },
+  {
+   "t": 1007.36,
+   "d": 6.64,
+   "text": "More recently I read House of Leaves which has several overlapping and perhaps competing"
+  },
+  {
+   "t": 1014.0,
+   "d": 10.08,
+   "text": "narratives. I read it wrong by reading them all in a linear order. Whoops. But linear narrative"
+  },
+  {
+   "t": 1024.08,
+   "d": 9.92,
+   "text": "was never really linear any way. Flashbacks in television shows, new additions to series show us"
+  },
+  {
+   "t": 1035.2,
+   "d": 7.84,
+   "text": "narrative exploration and development has rarely, if ever, been a linear experience. This is great"
+  },
+  {
+   "t": 1043.04,
+   "d": 5.84,
+   "text": "news for roguelike developers. You don't have to tell a story, or let it unfold in a linear"
+  },
+  {
+   "t": 1048.88,
+   "d": 7.2,
+   "text": "fashion for to make sense. You don't even need to tell the whole story. Ask any archeologist"
+  },
+  {
+   "t": 1056.08,
+   "d": 6.08,
+   "text": "if we have a complete picture of past eventss or if we are constantly adding and reevaluating"
+  },
+  {
+   "t": 1062.16,
+   "d": 5.76,
+   "text": "history as we make new discoveries and can we still get the gist of something if we don't"
+  },
+  {
+   "t": 1067.92,
+   "d": 8.72,
+   "text": "have every beat spelled out for us? Sure we can. My name is Paul and when I began my contribution"
+  },
+  {
+   "t": 1076.64,
+   "d": 10.24,
+   "text": "to the fairly roguelike Pacific Drive one of my biggest influences was the not very roguelike"
+  },
+  {
+   "t": 1086.88,
+   "d": 11.6,
+   "text": "horizon dawn. The main plot is linear but the open world allows users to collect side quest in just"
+  },
+  {
+   "t": 1098.48,
+   "d": 12.32,
+   "text": "about know order. The side quest and lore add to the world and fill it out. They are appropriate."
+  },
+  {
+   "t": 1110.8,
+   "d": 8.8,
+   "text": "I would compare it to assembling a jigsaw puzzle and reconstructing an image of a world that even"
+  },
+  {
+   "t": 1119.6,
+   "d": 6.16,
+   "text": "if you never complete it increasingly makes sense as you step back and look at the larger picture."
+  },
+  {
+   "t": 1125.76,
+   "d": 6.64,
+   "text": "Like archeology because what is the difference? I didn't expect players to read everything they"
+  },
+  {
+   "t": 1132.4,
+   "d": 6.32,
+   "text": "found in Pacific Drive, to remember everything they read, or be that interested but because I"
+  },
+  {
+   "t": 1138.72,
+   "d": 7.12,
+   "text": "did personally enjoy finding all the hidden lore I decided I should follow the example"
+  },
+  {
+   "t": 1145.84,
+   "d": 7.76,
+   "text": "of keeping things short, snappy, relevant, and varied as well as hopefully just worth finding."
+  },
+  {
+   "t": 1155.76,
+   "d": 8.0,
+   "text": "Oh, no. I have had a limited amount of time for this talk. Consider all this your open and cut"
+  },
+  {
+   "t": 1163.76,
+   "d": 5.12,
+   "text": "scene. I only partly touched on video games and my work in them because to be honest that's only"
+  },
+  {
+   "t": 1168.88,
+   "d": 5.28,
+   "text": "part of what I do. It is only part of my influence as a writer. Hopefully I made it"
+  },
+  {
+   "t": 1174.16,
+   "d": 5.84,
+   "text": "clear I draw on many influences which I think is essential to any writer's creative process"
+  },
+  {
+   "t": 1180.0,
+   "d": 7.6,
+   "text": "or any creative's process. As well as making it clear I start wherever I want to with whatever"
+  },
+  {
+   "t": 1187.6,
+   "d": 7.92,
+   "text": "works best and I build out and adapt and iterate. The point of this talk isn't to give you answers,"
+  },
+  {
+   "t": 1195.52,
+   "d": 8.88,
+   "text": "sorry. Or a specific direction for how you write or develop or design or explain things to you or"
+  },
+  {
+   "t": 1204.4,
+   "d": 5.52,
+   "text": "tell you what to do or give you an optimal build because what matters more is discovering and"
+  },
+  {
+   "t": 1209.92,
+   "d": 5.44,
+   "text": "iterating that for yourself in your own roject and finding out what is appropriate. Instead I hope I"
+  },
+  {
+   "t": 1215.36,
+   "d": 6.64,
+   "text": "have given you a bunch of things to consider, or to research. To anyone in games or anything"
+  },
+  {
+   "t": 1222.0,
+   "d": 8.16,
+   "text": "creative, the answer to hey, what exactly is the difference should be hey, let's find out."
+  },
+  {
+   "t": 1230.16,
+   "d": 7.12,
+   "text": "One final thing. My name is Paul and this talk was actually written to be broken down, rearranged,"
+  },
+  {
+   "t": 1237.28,
+   "d": 5.92,
+   "text": "and reassembled so it could be presented in several different orders but build the same"
+  },
+  {
+   "t": 1243.2,
+   "d": 8.48,
+   "text": "big picture and remain coherent and thematically appropriate. I did my first piece of creative"
+  },
+  {
+   "t": 1251.68,
+   "d": 9.04,
+   "text": "writing when I was six. Like I did then, I work with pens and paper and keyboards and soft wear."
+  },
+  {
+   "t": 1260.72,
+   "d": 8.72,
+   "text": "The first thing I wrote for Pacific Drive was scribbled on a notepad in a local cafe. Cari"
+  },
+  {
+   "t": 1269.44,
+   "d": 13.04,
+   "text": "and I were fortunate enough to be nominated for a nebula award and network I -- every in this talk"
+  },
+  {
+   "t": 1282.48,
+   "d": 12.8,
+   "text": "has led me to where I am as a writer. You are free to take everything or nothing from this talk. Add"
+  },
+  {
+   "t": 1295.28,
+   "d": 4.72,
+   "text": "it to our own work and regardless I guarantee whatever you create, and however you create it,"
+  },
+  {
+   "t": 1300.0,
+   "d": 7.36,
+   "text": "will be as unique and eclectic as your own personal collection of influences already is. And"
+  },
+  {
+   "t": 1307.36,
+   "d": 6.48,
+   "text": "you should be constantly adding to that collection of influences. I encourage you to draw greedily"
+  },
+  {
+   "t": 1313.84,
+   "d": 6.64,
+   "text": "upon anything and everything. Thank you so much for your time. I think we have got some space for"
+  },
+  {
+   "t": 1320.48,
+   "d": 8.08,
+   "text": "one or two questions. I am ready for them. ROURKE: Yeah, we have space for plenty of"
+  },
+  {
+   "t": 1328.56,
+   "d": 4.8,
+   "text": "questions. If anyone has more questions, please, put them on the question wall and I will take a"
+  },
+  {
+   "t": 1333.36,
+   "d": 5.36,
+   "text": "look at those. We do have a question here first. For the speaker with had blue hair speaking about"
+  },
+  {
+   "t": 1338.72,
+   "d": 6.64,
+   "text": "narrative, what was your name again? PAUL: My full name is Paul Andrew Dean."
+  },
+  {
+   "t": 1347.36,
+   "d": 6.24,
+   "text": "You unlock the progression and now zee a we have a little more information."
+  },
+  {
+   "t": 1353.6,
+   "d": 11.12,
+   "text": "ROURKE: It is an Easter egg. That's fun. Thank you so much. House of Leaves is maybe"
+  },
+  {
+   "t": 1364.72,
+   "d": 6.0,
+   "text": "my favorite book. And then I think Name of the Rose is second to that so the talk was"
+  },
+  {
+   "t": 1370.72,
+   "d": 5.36,
+   "text": "definitely relevant to me. I will need to take a look at a lot of these works you mentioned."
+  },
+  {
+   "t": 1376.08,
+   "d": 7.36,
+   "text": "PAUL: Name of the Rose is a big influence on the game pentman which was a game Josh Scherr and I"
+  },
+  {
+   "t": 1383.44,
+   "d": 4.16,
+   "text": "don't think I am spoiling anything. When I first met Josh 10 years ago he said he wanted to make"
+  },
+  {
+   "t": 1387.6,
+   "d": 7.04,
+   "text": "that game Fer years before he did. It is super interesting to know and follow Josh's work because"
+  },
+  {
+   "t": 1394.64,
+   "d": 7.6,
+   "text": "he has a game designer talks about cycling, film, he has a lot of different hobbies and"
+  },
+  {
+   "t": 1402.24,
+   "d": 5.52,
+   "text": "all of this stuff actually bleeds into his games in different ways. I think it is super healthy for"
+  },
+  {
+   "t": 1407.76,
+   "d": 7.6,
+   "text": "all games people to have non-game hobbies. ROURKE: Absolutely. People are asking"
+  },
+  {
+   "t": 1415.36,
+   "d": 5.52,
+   "text": "questions about if you take inspiration from non-linear or other art form and other parts"
+  },
+  {
+   "t": 1420.88,
+   "d": 6.0,
+   "text": "of life and it sounds like very much yes. PAUL: I think so, yes. I can't help but enjoy"
+  },
+  {
+   "t": 1426.88,
+   "d": 8.48,
+   "text": "a lot of narratives where time gets fudged up like there is a show called Dark. Andor was a"
+  },
+  {
+   "t": 1435.36,
+   "d": 6.08,
+   "text": "big hit. I mentioned Wicked in this talk and that is people inserting a piece of work between two"
+  },
+  {
+   "t": 1441.44,
+   "d": 8.16,
+   "text": "others which feels like it would be a constraint but actually gives you amazing possibilities."
+  },
+  {
+   "t": 1449.6,
+   "d": 5.84,
+   "text": "ROURKE: I watched the second season of the rehearsal and it feels like that is messing"
+  },
+  {
+   "t": 1455.44,
+   "d": 4.56,
+   "text": "with narrative exploration as well. PAUL: I haven't tried that yet."
+  },
+  {
+   "t": 1460.0,
+   "d": 2.88,
+   "text": "ROURKE: I recommend it. PAUL: OK. Thank you."
+  },
+  {
+   "t": 1462.88,
+   "d": 11.44,
+   "text": "ROURKE: We have a lot of questions here now in the question wall. OK. OK. What's"
+  },
+  {
+   "t": 1474.32,
+   "d": 5.12,
+   "text": "the best way to add linear narrative structure to the non-linear snippets you come across?"
+  },
+  {
+   "t": 1480.48,
+   "d": 7.36,
+   "text": "PAUL: The answer might be cheating. It might be some amount of gating. I"
+  },
+  {
+   "t": 1487.84,
+   "d": 8.48,
+   "text": "think it is reasonable at the start of a lot of context to still give people an introductory"
+  },
+  {
+   "t": 1496.32,
+   "d": 12.72,
+   "text": "section which can be mixed with something that tutu tutorializes and Pacific Drive and a lot"
+  },
+  {
+   "t": 1509.04,
+   "d": 4.16,
+   "text": "of things do this but it gives you all this wiggle room in the middle. If you have these"
+  },
+  {
+   "t": 1513.2,
+   "d": 6.8,
+   "text": "two points there is a hundred ways to reach them. I don't think it necessarily hurts to"
+  },
+  {
+   "t": 1520.0,
+   "d": 5.6,
+   "text": "give yourself a universal start point and an introduction to mechanics there and key"
+  },
+  {
+   "t": 1525.6,
+   "d": 6.8,
+   "text": "characters or key ideas. There is a sort of a how long is a piece of string like how much do"
+  },
+  {
+   "t": 1532.4,
+   "d": 4.64,
+   "text": "you want to hold people's hands and at which point do you let them lose into the world or"
+  },
+  {
+   "t": 1537.04,
+   "d": 6.08,
+   "text": "game mechanics and that's kind of up to you in how punishing or helpful you want to be. I don't"
+  },
+  {
+   "t": 1543.12,
+   "d": 5.44,
+   "text": "know if there is a right answer for that. ROURKE: That makes sense to me. That kind"
+  },
+  {
+   "t": 1548.56,
+   "d": 4.72,
+   "text": "of segues into what I think is going to be our last question here. A lot has been said"
+  },
+  {
+   "t": 1553.28,
+   "d": 9.2,
+   "text": "about when procedurality should or shouldn't be used. What are some things that don't work maybe"
+  },
+  {
+   "t": 1562.48,
+   "d": 7.68,
+   "text": "well or as well when they are non-linear? PAUL: That's a good question because I want"
+  },
+  {
+   "t": 1570.16,
+   "d": 7.12,
+   "text": "to say like maybe almost anything can be thrown into the tumboluand spun around but maybe not."
+  },
+  {
+   "t": 1579.84,
+   "d": 8.9,
+   "text": "I am putting myself in the niche or getting super specific but I wouldn't advise if you"
+  },
+  {
+   "t": 1588.74,
+   "d": 5.66,
+   "text": "are recording with voice actors, any voice audio or anything like that. There is so much about"
+  },
+  {
+   "t": 1594.4,
+   "d": 5.6,
+   "text": "how someone speaks. I was very lucky I worked with Cari who is not only a good writer but a"
+  },
+  {
+   "t": 1600.0,
+   "d": 7.12,
+   "text": "really good voice director and caster. There is so much inflection and so much that if you"
+  },
+  {
+   "t": 1607.12,
+   "d": 5.76,
+   "text": "chopped up even a robot voice and rearranged things I don't think that would work very well."
+  },
+  {
+   "t": 1614.24,
+   "d": 4.72,
+   "text": "That is the first thing that comes to mind which I don't know -- that's immediately a sort of more"
+  },
+  {
+   "t": 1618.96,
+   "d": 5.84,
+   "text": "specific thing. I don't know. I would have to think on that some more to try and come up with"
+  },
+  {
+   "t": 1624.8,
+   "d": 6.0,
+   "text": "some other examples. But it feels kind of lazy but something that might be very organic like that is"
+  },
+  {
+   "t": 1630.8,
+   "d": 8.32,
+   "text": "hard to -- very human is very hard to slice up. ROURKE: I could imagine getting an uncanny valley"
+  },
+  {
+   "t": 1639.12,
+   "d": 8.96,
+   "text": "element there. Never worry about being too niche at Roguelike Celebration. This is a good place to"
+  },
+  {
+   "t": 1648.08,
+   "d": 5.68,
+   "text": "be niche and specific. If people want to continue this discussion the breakout room is going to be"
+  },
+  {
+   "t": 1653.76,
+   "d": 5.44,
+   "text": "in the Dressing Room. Thank you so much for that wonderful talk, Paul. Enjoyed that. Gave me a lot"
+  },
+  {
+   "t": 1659.2,
+   "d": 4.72,
+   "text": "of cool art I will look at later. PAUL: I am going to hang about for"
+  },
+  {
+   "t": 1663.92,
+   "d": 12.32,
+   "text": "the rest of the afternoon or evening so, please, prod me. Thank you so much, Paul."
+  }
+ ]
+}

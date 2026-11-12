@@ -1,0 +1,4399 @@
+{
+ "id": "NMWQIdfCgQg",
+ "url": "https://www.youtube.com/watch?v=NMWQIdfCgQg",
+ "title": "Evan Debenham- Community-Driven Roguelike Development",
+ "speaker": "Evan Debenham",
+ "talk_title": "Community-Driven Roguelike Development",
+ "year": 2021,
+ "kind": "talk",
+ "upload_date": "2021-10-23",
+ "duration_s": 1753,
+ "playlists": [
+  "Roguelike Celebration 2021"
+ ],
+ "description": "Shattered Pixel Dungeon is a fork of the mobile roguelike Pixel Dungeon, which came into existence thanks to the Pixel Dungeon community. The community has helped guide development direction and drive the game's success. The end result is an approachable but fully-featured roguelike that fits in your pocket!\n\nIn this talk I'll cover some of the techniques and lessons I've learned while developing ShatteredPD. This includes using the Pixel Dungeon community to gain an initial audience, involving player feedback/analytics in the game's iterative update model, leveraging the community to monetize without harming gameplay (despite the mobile ecosystem!), and following community demand to help guide the game's long-term direction.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 143,
+   "title": "Pixel Dungeon Communities"
+  },
+  {
+   "start": 171,
+   "title": "Shattered's Launching Point"
+  },
+  {
+   "start": 212,
+   "title": "The Initial Reaction"
+  },
+  {
+   "start": 277,
+   "title": "Growing With the Community"
+  },
+  {
+   "start": 327,
+   "title": "Shattered Isn't Alone"
+  },
+  {
+   "start": 382,
+   "title": "How Does Shattered Update?"
+  },
+  {
+   "start": 412,
+   "title": "Benefits of Iterative Updates"
+  },
+  {
+   "start": 474,
+   "title": "What Goes into an Update?"
+  },
+  {
+   "start": 552,
+   "title": "Gameplay Analytics"
+  },
+  {
+   "start": 641,
+   "title": "Player Feedback"
+  },
+  {
+   "start": 735,
+   "title": "Getting Feedback Early!"
+  },
+  {
+   "start": 816,
+   "title": "Designing for Interaction"
+  },
+  {
+   "start": 874,
+   "title": "Layered Complexity"
+  },
+  {
+   "start": 961,
+   "title": "Making Development Plans"
+  },
+  {
+   "start": 1046,
+   "title": "Sharing Those Plans!"
+  },
+  {
+   "start": 1146,
+   "title": "How Do Mobile Games Usually Make Money?"
+  },
+  {
+   "start": 1179,
+   "title": "These Don't Work for Shattered"
+  },
+  {
+   "start": 1232,
+   "title": "Supporter Purchases (2015)"
+  },
+  {
+   "start": 1303,
+   "title": "Just Selling the Game! (2021)"
+  },
+  {
+   "start": 1342,
+   "title": "What Was Most Important? Cosmetic Microtransactions Good money, but is dependant on quality of the game"
+  },
+  {
+   "start": 1450,
+   "title": "Shattered Is a Bit Different, but Not Unique"
+  }
+ ],
+ "caption_source": "auto",
+ "caption_lang": "en",
+ "word_count": 5319,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 3.6,
+   "d": 1.12,
+   "text": "all right"
+  },
+  {
+   "t": 4.72,
+   "d": 1.04,
+   "text": "um"
+  },
+  {
+   "t": 5.76,
+   "d": 2.72,
+   "text": "so next up thank you for your patience"
+  },
+  {
+   "t": 8.48,
+   "d": 4.08,
+   "text": "next up we have evan devingham uh"
+  },
+  {
+   "t": 12.56,
+   "d": 2.4,
+   "text": "developer of shattered pixel dungeon"
+  },
+  {
+   "t": 14.96,
+   "d": 3.68,
+   "text": "which i know i enjoy in sodas kawa so"
+  },
+  {
+   "t": 18.64,
+   "d": 1.68,
+   "text": "uh gonna be talking about community"
+  },
+  {
+   "t": 20.32,
+   "d": 1.52,
+   "text": "driven roguelikes which is appropriate"
+  },
+  {
+   "t": 21.84,
+   "d": 0.96,
+   "text": "since we were just talking about"
+  },
+  {
+   "t": 22.8,
+   "d": 2.72,
+   "text": "community and uh yeah i'll hand it over"
+  },
+  {
+   "t": 25.52,
+   "d": 1.76,
+   "text": "to you evan"
+  },
+  {
+   "t": 27.28,
+   "d": 2.08,
+   "text": "thank you very much alexi"
+  },
+  {
+   "t": 29.36,
+   "d": 2.0,
+   "text": "so yeah my presentation is on community"
+  },
+  {
+   "t": 31.36,
+   "d": 1.68,
+   "text": "driven roguelike development"
+  },
+  {
+   "t": 33.04,
+   "d": 1.52,
+   "text": "specifically i'm going to talk a bit"
+  },
+  {
+   "t": 34.56,
+   "d": 1.84,
+   "text": "about my experiences working on"
+  },
+  {
+   "t": 36.4,
+   "d": 2.0,
+   "text": "shattered pixel dungeon and how it came"
+  },
+  {
+   "t": 38.4,
+   "d": 2.0,
+   "text": "from the pixel dungeon community has"
+  },
+  {
+   "t": 40.4,
+   "d": 2.08,
+   "text": "been influenced by it and how it"
+  },
+  {
+   "t": 42.48,
+   "d": 3.44,
+   "text": "involves it in its development process"
+  },
+  {
+   "t": 45.92,
+   "d": 2.0,
+   "text": "so firstly let's talk about how the game"
+  },
+  {
+   "t": 47.92,
+   "d": 2.72,
+   "text": "started from pixel dungeon"
+  },
+  {
+   "t": 50.64,
+   "d": 2.48,
+   "text": "pixel dungeon is a traditional roguelike"
+  },
+  {
+   "t": 53.12,
+   "d": 2.16,
+   "text": "by most definitions that tries to be a"
+  },
+  {
+   "t": 55.28,
+   "d": 1.76,
+   "text": "bit more approachable"
+  },
+  {
+   "t": 57.04,
+   "d": 1.84,
+   "text": "it has pleasant pixel air graphics"
+  },
+  {
+   "t": 58.88,
+   "d": 2.64,
+   "text": "instead of ascii it has a fairly simple"
+  },
+  {
+   "t": 61.52,
+   "d": 2.08,
+   "text": "tap and click based interface that works"
+  },
+  {
+   "t": 63.6,
+   "d": 2.72,
+   "text": "well on both phones and computers"
+  },
+  {
+   "t": 66.32,
+   "d": 2.24,
+   "text": "and it has less up front complexity than"
+  },
+  {
+   "t": 68.56,
+   "d": 2.08,
+   "text": "many roguelikes but it's still got a lot"
+  },
+  {
+   "t": 70.64,
+   "d": 2.24,
+   "text": "of stuff that can be engaging it's very"
+  },
+  {
+   "t": 72.88,
+   "d": 2.0,
+   "text": "much a coffee break roguelike and it's"
+  },
+  {
+   "t": 74.88,
+   "d": 2.08,
+   "text": "inspired by broke"
+  },
+  {
+   "t": 76.96,
+   "d": 2.08,
+   "text": "pixel dungeon was originally made using"
+  },
+  {
+   "t": 79.04,
+   "d": 2.4,
+   "text": "java for android but it was eventually"
+  },
+  {
+   "t": 81.44,
+   "d": 2.96,
+   "text": "ported to the libgdx game library and is"
+  },
+  {
+   "t": 84.4,
+   "d": 2.32,
+   "text": "now available on ios and desktop"
+  },
+  {
+   "t": 86.72,
+   "d": 1.68,
+   "text": "computers as well"
+  },
+  {
+   "t": 88.4,
+   "d": 2.0,
+   "text": "it was made by oleg delia also known as"
+  },
+  {
+   "t": 90.4,
+   "d": 2.56,
+   "text": "wadaboo and it was pretty successful it"
+  },
+  {
+   "t": 92.96,
+   "d": 1.36,
+   "text": "spawned a whole bunch of communities"
+  },
+  {
+   "t": 94.32,
+   "d": 1.6,
+   "text": "which i'll talk about in a second and"
+  },
+  {
+   "t": 95.92,
+   "d": 2.08,
+   "text": "has over five million downloads on"
+  },
+  {
+   "t": 98.0,
+   "d": 3.76,
+   "text": "google play as one example"
+  },
+  {
+   "t": 101.76,
+   "d": 2.08,
+   "text": "so shattered pixel dungeon is a game"
+  },
+  {
+   "t": 103.84,
+   "d": 2.08,
+   "text": "that i make based on pixel dungeon's"
+  },
+  {
+   "t": 105.92,
+   "d": 1.6,
+   "text": "open source code"
+  },
+  {
+   "t": 107.52,
+   "d": 1.76,
+   "text": "it originally started as a balance"
+  },
+  {
+   "t": 109.28,
+   "d": 2.08,
+   "text": "modification but has slowly become its"
+  },
+  {
+   "t": 111.36,
+   "d": 2.16,
+   "text": "own game and its main goal has been to"
+  },
+  {
+   "t": 113.52,
+   "d": 2.08,
+   "text": "expand on pixel dungeon while still"
+  },
+  {
+   "t": 115.6,
+   "d": 1.76,
+   "text": "staying true to its roots"
+  },
+  {
+   "t": 117.36,
+   "d": 2.08,
+   "text": "it's been going for seven years now and"
+  },
+  {
+   "t": 119.44,
+   "d": 1.6,
+   "text": "almost all of the content in pixel"
+  },
+  {
+   "t": 121.04,
+   "d": 1.68,
+   "text": "dungeon is overhauled"
+  },
+  {
+   "t": 122.72,
+   "d": 1.84,
+   "text": "it's also been pretty successful so much"
+  },
+  {
+   "t": 124.56,
+   "d": 2.48,
+   "text": "so that it's now my full-time job"
+  },
+  {
+   "t": 127.04,
+   "d": 1.6,
+   "text": "the two screenshots we have here are"
+  },
+  {
+   "t": 128.64,
+   "d": 2.08,
+   "text": "from the game's main interface and a"
+  },
+  {
+   "t": 130.72,
+   "d": 1.68,
+   "text": "typical scene you might see right after"
+  },
+  {
+   "t": 132.4,
+   "d": 1.92,
+   "text": "starting a game let's go back to pixel"
+  },
+  {
+   "t": 134.32,
+   "d": 2.16,
+   "text": "dungeon here for a second for comparison"
+  },
+  {
+   "t": 136.48,
+   "d": 1.36,
+   "text": "you can see that there's a lot that's"
+  },
+  {
+   "t": 137.84,
+   "d": 4.6,
+   "text": "similar but a lot has changed as well"
+  },
+  {
+   "t": 143.44,
+   "d": 1.76,
+   "text": "so pixel dungeon has spawned a bunch of"
+  },
+  {
+   "t": 145.2,
+   "d": 1.52,
+   "text": "different communities"
+  },
+  {
+   "t": 146.72,
+   "d": 2.4,
+   "text": "there is a subreddit with over 17 000"
+  },
+  {
+   "t": 149.12,
+   "d": 2.08,
+   "text": "members a wiki with over a thousand"
+  },
+  {
+   "t": 151.2,
+   "d": 3.12,
+   "text": "pages a discord with over 2000 members"
+  },
+  {
+   "t": 154.32,
+   "d": 2.24,
+   "text": "and several non-english communities too"
+  },
+  {
+   "t": 156.56,
+   "d": 3.44,
+   "text": "such as in russia south korea and china"
+  },
+  {
+   "t": 160.0,
+   "d": 2.16,
+   "text": "you can see here three examples of"
+  },
+  {
+   "t": 162.16,
+   "d": 2.4,
+   "text": "pictures of logos rather of three of"
+  },
+  {
+   "t": 164.56,
+   "d": 2.08,
+   "text": "those communities the subreddit on the"
+  },
+  {
+   "t": 166.64,
+   "d": 1.68,
+   "text": "left the wiki in the center and the"
+  },
+  {
+   "t": 168.32,
+   "d": 3.2,
+   "text": "discord on the right"
+  },
+  {
+   "t": 171.52,
+   "d": 1.92,
+   "text": "these communities were shattered pixel"
+  },
+  {
+   "t": 173.44,
+   "d": 1.92,
+   "text": "dungeons launching point"
+  },
+  {
+   "t": 175.36,
+   "d": 2.88,
+   "text": "after an ama or ask me anything on the"
+  },
+  {
+   "t": 178.24,
+   "d": 2.64,
+   "text": "pixel dungeon subreddit wadaboo decided"
+  },
+  {
+   "t": 180.88,
+   "d": 2.56,
+   "text": "to make pixel dungeon open source"
+  },
+  {
+   "t": 183.44,
+   "d": 1.76,
+   "text": "at the time i was working a regular"
+  },
+  {
+   "t": 185.2,
+   "d": 2.16,
+   "text": "computer science internship and realized"
+  },
+  {
+   "t": 187.36,
+   "d": 1.44,
+   "text": "that if i wanted to get started making"
+  },
+  {
+   "t": 188.8,
+   "d": 1.92,
+   "text": "games i needed to do it soon"
+  },
+  {
+   "t": 190.72,
+   "d": 1.84,
+   "text": "so the game going open source seemed"
+  },
+  {
+   "t": 192.56,
+   "d": 1.68,
+   "text": "like an amazing opportunity for me to"
+  },
+  {
+   "t": 194.24,
+   "d": 1.28,
+   "text": "get my feet wet"
+  },
+  {
+   "t": 195.52,
+   "d": 2.32,
+   "text": "originally i was just going to modify"
+  },
+  {
+   "t": 197.84,
+   "d": 1.76,
+   "text": "the game's balance tweak a few items"
+  },
+  {
+   "t": 199.6,
+   "d": 2.4,
+   "text": "that i thought were over or underpowered"
+  },
+  {
+   "t": 202.0,
+   "d": 2.08,
+   "text": "and the name shattered pixel dungeon"
+  },
+  {
+   "t": 204.08,
+   "d": 2.24,
+   "text": "came from an old blog i had called"
+  },
+  {
+   "t": 206.32,
+   "d": 2.16,
+   "text": "shattered pixel and the fact that i was"
+  },
+  {
+   "t": 208.48,
+   "d": 4.16,
+   "text": "shattering pixel dungeons balance"
+  },
+  {
+   "t": 212.64,
+   "d": 1.6,
+   "text": "the initial reaction to the community"
+  },
+  {
+   "t": 214.24,
+   "d": 2.32,
+   "text": "was overwhelming"
+  },
+  {
+   "t": 216.56,
+   "d": 1.6,
+   "text": "um the first release was just on the"
+  },
+  {
+   "t": 218.16,
+   "d": 2.24,
+   "text": "pixel dungeon subreddit and clearly the"
+  },
+  {
+   "t": 220.4,
+   "d": 1.76,
+   "text": "community was really really thirsty for"
+  },
+  {
+   "t": 222.16,
+   "d": 2.56,
+   "text": "more pixel dungeon content because the"
+  },
+  {
+   "t": 224.72,
+   "d": 2.16,
+   "text": "response i got on the subreddit was so"
+  },
+  {
+   "t": 226.88,
+   "d": 2.32,
+   "text": "overwhelmingly positive that i decided"
+  },
+  {
+   "t": 229.2,
+   "d": 2.08,
+   "text": "to release on google play way ahead of"
+  },
+  {
+   "t": 231.28,
+   "d": 1.04,
+   "text": "schedule"
+  },
+  {
+   "t": 232.32,
+   "d": 2.8,
+   "text": "the first release was 0.2.0 and it got"
+  },
+  {
+   "t": 235.12,
+   "d": 2.24,
+   "text": "over a hundred thousand downloads within"
+  },
+  {
+   "t": 237.36,
+   "d": 0.88,
+   "text": "a month"
+  },
+  {
+   "t": 238.24,
+   "d": 1.76,
+   "text": "this meant that shattered completely"
+  },
+  {
+   "t": 240.0,
+   "d": 2.0,
+   "text": "blew past the obscurity problem that"
+  },
+  {
+   "t": 242.0,
+   "d": 2.24,
+   "text": "many new games face"
+  },
+  {
+   "t": 244.24,
+   "d": 2.08,
+   "text": "you can see on the right there a little"
+  },
+  {
+   "t": 246.32,
+   "d": 2.48,
+   "text": "graph showing the new download shattered"
+  },
+  {
+   "t": 248.8,
+   "d": 1.68,
+   "text": "pixel dungeon had right after its"
+  },
+  {
+   "t": 250.48,
+   "d": 1.52,
+   "text": "original release"
+  },
+  {
+   "t": 252.0,
+   "d": 2.0,
+   "text": "you might think that that huge spike is"
+  },
+  {
+   "t": 254.0,
+   "d": 2.08,
+   "text": "all the pixel dungeon community but"
+  },
+  {
+   "t": 256.08,
+   "d": 2.24,
+   "text": "actually the community itself was that"
+  },
+  {
+   "t": 258.32,
+   "d": 2.88,
+   "text": "smaller growth up to the spike before it"
+  },
+  {
+   "t": 261.2,
+   "d": 2.0,
+   "text": "what happened was the attention from the"
+  },
+  {
+   "t": 263.2,
+   "d": 2.0,
+   "text": "pixel dungeon communities caused the"
+  },
+  {
+   "t": 265.2,
+   "d": 1.84,
+   "text": "game to rank well on google play's"
+  },
+  {
+   "t": 267.04,
+   "d": 2.24,
+   "text": "listings which exposed it to a greater"
+  },
+  {
+   "t": 269.28,
+   "d": 2.48,
+   "text": "audience the pixel dungeon community was"
+  },
+  {
+   "t": 271.76,
+   "d": 2.08,
+   "text": "quite literally a springboard to shatter"
+  },
+  {
+   "t": 273.84,
+   "d": 3.52,
+   "text": "pixel dungeon's early exposure"
+  },
+  {
+   "t": 277.6,
+   "d": 1.68,
+   "text": "and over the over the years shattered"
+  },
+  {
+   "t": 279.28,
+   "d": 2.24,
+   "text": "has grown with the community that huge"
+  },
+  {
+   "t": 281.52,
+   "d": 2.0,
+   "text": "response as i mentioned meant shattered"
+  },
+  {
+   "t": 283.52,
+   "d": 2.72,
+   "text": "kept growing it became a complete"
+  },
+  {
+   "t": 286.24,
+   "d": 2.24,
+   "text": "overhaul eventually after several years"
+  },
+  {
+   "t": 288.48,
+   "d": 1.52,
+   "text": "far from the original intention of it"
+  },
+  {
+   "t": 290.0,
+   "d": 1.92,
+   "text": "being just a balance mod"
+  },
+  {
+   "t": 291.92,
+   "d": 1.76,
+   "text": "because of my activity on the subreddit"
+  },
+  {
+   "t": 293.68,
+   "d": 1.68,
+   "text": "i became the sole administrator and"
+  },
+  {
+   "t": 295.36,
+   "d": 2.72,
+   "text": "eventually i also started a discord"
+  },
+  {
+   "t": 298.08,
+   "d": 2.32,
+   "text": "over time these communities grew in size"
+  },
+  {
+   "t": 300.4,
+   "d": 2.08,
+   "text": "and eventually i was able to take a step"
+  },
+  {
+   "t": 302.48,
+   "d": 2.24,
+   "text": "back and no longer be the sole admin or"
+  },
+  {
+   "t": 304.72,
+   "d": 1.6,
+   "text": "moderator"
+  },
+  {
+   "t": 306.32,
+   "d": 2.32,
+   "text": "i've also started in a dedicated blog"
+  },
+  {
+   "t": 308.64,
+   "d": 1.56,
+   "text": "website for shattered as well"
+  },
+  {
+   "t": 310.2,
+   "d": 2.52,
+   "text": "shatteredpixel.com which has links both"
+  },
+  {
+   "t": 312.72,
+   "d": 2.4,
+   "text": "back to the subreddit and also a news"
+  },
+  {
+   "t": 315.12,
+   "d": 2.16,
+   "text": "feed in the game in this way i'm trying"
+  },
+  {
+   "t": 317.28,
+   "d": 2.08,
+   "text": "to pull people from shattered pixel"
+  },
+  {
+   "t": 319.36,
+   "d": 2.0,
+   "text": "dungeon into the greater pixel dungeon"
+  },
+  {
+   "t": 321.36,
+   "d": 1.28,
+   "text": "community"
+  },
+  {
+   "t": 322.64,
+   "d": 1.92,
+   "text": "over the years shattered and the pd"
+  },
+  {
+   "t": 324.56,
+   "d": 2.88,
+   "text": "communities have grown together"
+  },
+  {
+   "t": 327.44,
+   "d": 1.52,
+   "text": "and it's important to note that i'm not"
+  },
+  {
+   "t": 328.96,
+   "d": 1.52,
+   "text": "the only person who's taken the source"
+  },
+  {
+   "t": 330.48,
+   "d": 2.48,
+   "text": "code of pixel dungeon there are hundreds"
+  },
+  {
+   "t": 332.96,
+   "d": 2.0,
+   "text": "of other pixel dungeon variants which"
+  },
+  {
+   "t": 334.96,
+   "d": 2.56,
+   "text": "range from tiny tweaks to huge gameplay"
+  },
+  {
+   "t": 337.52,
+   "d": 2.24,
+   "text": "overhauls like shattered and while some"
+  },
+  {
+   "t": 339.76,
+   "d": 1.52,
+   "text": "of them are developed more sporadically"
+  },
+  {
+   "t": 341.28,
+   "d": 1.76,
+   "text": "than others there's always going to be"
+  },
+  {
+   "t": 343.04,
+   "d": 1.6,
+   "text": "something new if you want to play a"
+  },
+  {
+   "t": 344.64,
+   "d": 1.36,
+   "text": "version of pixel dungeon that isn't"
+  },
+  {
+   "t": 346.0,
+   "d": 1.68,
+   "text": "shattered"
+  },
+  {
+   "t": 347.68,
+   "d": 1.36,
+   "text": "shattered and these various versions"
+  },
+  {
+   "t": 349.04,
+   "d": 1.44,
+   "text": "have kept pixel dungeon and its"
+  },
+  {
+   "t": 350.48,
+   "d": 2.32,
+   "text": "community alive for years after pixel"
+  },
+  {
+   "t": 352.8,
+   "d": 3.44,
+   "text": "dungeon's final update in 2015."
+  },
+  {
+   "t": 356.24,
+   "d": 1.6,
+   "text": "here are some of the logos of some of"
+  },
+  {
+   "t": 357.84,
+   "d": 2.16,
+   "text": "the most popular pixel dungeon versions"
+  },
+  {
+   "t": 360.0,
+   "d": 2.4,
+   "text": "from left to right we have remix dungeon"
+  },
+  {
+   "t": 362.4,
+   "d": 2.48,
+   "text": "yet another pixel dungeon skillful pixel"
+  },
+  {
+   "t": 364.88,
+   "d": 2.88,
+   "text": "dungeon sprouted pixel dungeon moonshine"
+  },
+  {
+   "t": 367.76,
+   "d": 4.08,
+   "text": "pixel dungeon and soft pixel dungeon"
+  },
+  {
+   "t": 372.48,
+   "d": 1.52,
+   "text": "so now that we know where the game"
+  },
+  {
+   "t": 374.0,
+   "d": 1.44,
+   "text": "started from i'm going to talk a bit"
+  },
+  {
+   "t": 375.44,
+   "d": 1.92,
+   "text": "about how the game has iteratively"
+  },
+  {
+   "t": 377.36,
+   "d": 1.36,
+   "text": "improved over the years through my"
+  },
+  {
+   "t": 378.72,
+   "d": 1.68,
+   "text": "update philosophy"
+  },
+  {
+   "t": 380.4,
+   "d": 2.08,
+   "text": "shattered does what i call iterative"
+  },
+  {
+   "t": 382.48,
+   "d": 1.36,
+   "text": "updates"
+  },
+  {
+   "t": 383.84,
+   "d": 1.68,
+   "text": "i release an update for shattered about"
+  },
+  {
+   "t": 385.52,
+   "d": 1.84,
+   "text": "every two to three months and these"
+  },
+  {
+   "t": 387.36,
+   "d": 2.48,
+   "text": "updates usually have a primary focus"
+  },
+  {
+   "t": 389.84,
+   "d": 2.24,
+   "text": "plus some content on the side"
+  },
+  {
+   "t": 392.08,
+   "d": 2.08,
+   "text": "over the years i released 10 major and"
+  },
+  {
+   "t": 394.16,
+   "d": 3.44,
+   "text": "28 minor updates to the game since 2014."
+  },
+  {
+   "t": 397.6,
+   "d": 1.84,
+   "text": "these major updates used to take six"
+  },
+  {
+   "t": 399.44,
+   "d": 1.76,
+   "text": "months or more but now i try to break"
+  },
+  {
+   "t": 401.2,
+   "d": 1.84,
+   "text": "them up into more manageable chunks so"
+  },
+  {
+   "t": 403.04,
+   "d": 2.0,
+   "text": "that pretty much every update hits that"
+  },
+  {
+   "t": 405.04,
+   "d": 2.08,
+   "text": "two to three month target"
+  },
+  {
+   "t": 407.12,
+   "d": 1.2,
+   "text": "you can see at the bottom here a"
+  },
+  {
+   "t": 408.32,
+   "d": 3.76,
+   "text": "timeline of shattered major updates"
+  },
+  {
+   "t": 412.08,
+   "d": 2.4,
+   "text": "so why do i do this"
+  },
+  {
+   "t": 414.48,
+   "d": 1.92,
+   "text": "iterative updates are easier to plan and"
+  },
+  {
+   "t": 416.4,
+   "d": 2.08,
+   "text": "design and help limit feature creep i"
+  },
+  {
+   "t": 418.48,
+   "d": 2.16,
+   "text": "can still try to create some bigger"
+  },
+  {
+   "t": 420.64,
+   "d": 1.76,
+   "text": "overarching thing but at the end of the"
+  },
+  {
+   "t": 422.4,
+   "d": 2.64,
+   "text": "day anything i make has to be split into"
+  },
+  {
+   "t": 425.04,
+   "d": 2.72,
+   "text": "two to three month long deliverables"
+  },
+  {
+   "t": 427.76,
+   "d": 1.6,
+   "text": "this helps keep a great balance between"
+  },
+  {
+   "t": 429.36,
+   "d": 2.16,
+   "text": "the short term and the long term two to"
+  },
+  {
+   "t": 431.52,
+   "d": 2.08,
+   "text": "three months is big enough to be able to"
+  },
+  {
+   "t": 433.6,
+   "d": 1.52,
+   "text": "continually work towards something"
+  },
+  {
+   "t": 435.12,
+   "d": 1.76,
+   "text": "bigger but is small enough that there's"
+  },
+  {
+   "t": 436.88,
+   "d": 1.84,
+   "text": "always something new keeping the players"
+  },
+  {
+   "t": 438.72,
+   "d": 1.84,
+   "text": "engaged i've have people who've been"
+  },
+  {
+   "t": 440.56,
+   "d": 2.32,
+   "text": "dedicated to shattered since 2014 and i"
+  },
+  {
+   "t": 442.88,
+   "d": 1.68,
+   "text": "think a big part of that is because if"
+  },
+  {
+   "t": 444.56,
+   "d": 1.52,
+   "text": "they put the game down for a few months"
+  },
+  {
+   "t": 446.08,
+   "d": 1.6,
+   "text": "they'll always be something new to come"
+  },
+  {
+   "t": 447.68,
+   "d": 2.0,
+   "text": "back to"
+  },
+  {
+   "t": 449.68,
+   "d": 1.28,
+   "text": "there's also a lot of room for"
+  },
+  {
+   "t": 450.96,
+   "d": 1.68,
+   "text": "experimentation and course correction"
+  },
+  {
+   "t": 452.64,
+   "d": 1.44,
+   "text": "with this strategy"
+  },
+  {
+   "t": 454.08,
+   "d": 2.08,
+   "text": "if you want to try something and the"
+  },
+  {
+   "t": 456.16,
+   "d": 1.76,
+   "text": "update doesn't quite work the absolute"
+  },
+  {
+   "t": 457.92,
+   "d": 2.4,
+   "text": "worst case scenario is that you lose two"
+  },
+  {
+   "t": 460.32,
+   "d": 1.68,
+   "text": "months of work not great but not"
+  },
+  {
+   "t": 462.0,
+   "d": 1.6,
+   "text": "disastrous"
+  },
+  {
+   "t": 463.6,
+   "d": 2.0,
+   "text": "but more importantly it means that i can"
+  },
+  {
+   "t": 465.6,
+   "d": 2.24,
+   "text": "always go back and revisit an update and"
+  },
+  {
+   "t": 467.84,
+   "d": 2.0,
+   "text": "make changes or corrections this"
+  },
+  {
+   "t": 469.84,
+   "d": 1.44,
+   "text": "frequently happens in an update"
+  },
+  {
+   "t": 471.28,
+   "d": 3.2,
+   "text": "following the previous one"
+  },
+  {
+   "t": 474.64,
+   "d": 2.56,
+   "text": "so it actually does go into an update as"
+  },
+  {
+   "t": 477.2,
+   "d": 1.76,
+   "text": "i mentioned there's major content things"
+  },
+  {
+   "t": 478.96,
+   "d": 1.92,
+   "text": "like overhauls to large gameplay"
+  },
+  {
+   "t": 480.88,
+   "d": 2.48,
+   "text": "mechanics or categories of items"
+  },
+  {
+   "t": 483.36,
+   "d": 1.68,
+   "text": "there can also be minor changes and"
+  },
+  {
+   "t": 485.04,
+   "d": 1.76,
+   "text": "improvements things like a complete"
+  },
+  {
+   "t": 486.8,
+   "d": 1.68,
+   "text": "overhaul to a specific item or a"
+  },
+  {
+   "t": 488.48,
+   "d": 1.68,
+   "text": "specific character"
+  },
+  {
+   "t": 490.16,
+   "d": 1.68,
+   "text": "a specific enemy rather a player"
+  },
+  {
+   "t": 491.84,
+   "d": 1.52,
+   "text": "character rework would be a major or"
+  },
+  {
+   "t": 493.36,
+   "d": 1.52,
+   "text": "content overhaul"
+  },
+  {
+   "t": 494.88,
+   "d": 2.0,
+   "text": "there could also be balance adjustments"
+  },
+  {
+   "t": 496.88,
+   "d": 2.08,
+   "text": "buffing or nerfing various items to try"
+  },
+  {
+   "t": 498.96,
+   "d": 2.16,
+   "text": "to keep the game more fair"
+  },
+  {
+   "t": 501.12,
+   "d": 1.44,
+   "text": "and of course there are quality of life"
+  },
+  {
+   "t": 502.56,
+   "d": 2.16,
+   "text": "tweaks and bug fixes too"
+  },
+  {
+   "t": 504.72,
+   "d": 1.76,
+   "text": "on the right here you can see an example"
+  },
+  {
+   "t": 506.48,
+   "d": 1.68,
+   "text": "of shattered pixel dungeons changes"
+  },
+  {
+   "t": 508.16,
+   "d": 2.16,
+   "text": "screen instead of just having a big wall"
+  },
+  {
+   "t": 510.32,
+   "d": 1.84,
+   "text": "of text and after seven years it would"
+  },
+  {
+   "t": 512.16,
+   "d": 2.88,
+   "text": "be a huge wall of text i try to make the"
+  },
+  {
+   "t": 515.04,
+   "d": 1.36,
+   "text": "changes screen a little bit more"
+  },
+  {
+   "t": 516.4,
+   "d": 2.0,
+   "text": "bite-sized and interactive"
+  },
+  {
+   "t": 518.4,
+   "d": 1.68,
+   "text": "every single one of those icons can be"
+  },
+  {
+   "t": 520.08,
+   "d": 2.56,
+   "text": "clicked to show more details about what"
+  },
+  {
+   "t": 522.64,
+   "d": 2.16,
+   "text": "that specific thing has changed in this"
+  },
+  {
+   "t": 524.8,
+   "d": 1.04,
+   "text": "update"
+  },
+  {
+   "t": 525.84,
+   "d": 1.92,
+   "text": "this way the changes scene still"
+  },
+  {
+   "t": 527.76,
+   "d": 2.96,
+   "text": "provides full detail but can fit onto a"
+  },
+  {
+   "t": 530.72,
+   "d": 2.24,
+   "text": "phone screen and isn't overwhelming at"
+  },
+  {
+   "t": 532.96,
+   "d": 2.88,
+   "text": "first glance"
+  },
+  {
+   "t": 536.0,
+   "d": 2.32,
+   "text": "but it might you might ask"
+  },
+  {
+   "t": 538.32,
+   "d": 2.64,
+   "text": "what how do i decide what to actually"
+  },
+  {
+   "t": 540.96,
+   "d": 1.36,
+   "text": "change or tweak how do i know a"
+  },
+  {
+   "t": 542.32,
+   "d": 1.52,
+   "text": "particular thing is underpowered or"
+  },
+  {
+   "t": 543.84,
+   "d": 2.4,
+   "text": "overpowered or unpopular"
+  },
+  {
+   "t": 546.24,
+   "d": 2.32,
+   "text": "i have two major sources of feedback"
+  },
+  {
+   "t": 548.56,
+   "d": 2.0,
+   "text": "that i use to work into this iterative"
+  },
+  {
+   "t": 550.56,
+   "d": 1.68,
+   "text": "update model"
+  },
+  {
+   "t": 552.24,
+   "d": 2.64,
+   "text": "the first thing is gameplay analytics"
+  },
+  {
+   "t": 554.88,
+   "d": 1.76,
+   "text": "chatter pixel dungeon is primarily a"
+  },
+  {
+   "t": 556.64,
+   "d": 1.52,
+   "text": "mobile game at the moment so i use"
+  },
+  {
+   "t": 558.16,
+   "d": 2.56,
+   "text": "google's firebase library this provides"
+  },
+  {
+   "t": 560.72,
+   "d": 2.16,
+   "text": "me with crash and error reports"
+  },
+  {
+   "t": 562.88,
+   "d": 2.0,
+   "text": "engagement data such as how many players"
+  },
+  {
+   "t": 564.88,
+   "d": 2.48,
+   "text": "are playing the game and in what areas"
+  },
+  {
+   "t": 567.36,
+   "d": 2.48,
+   "text": "and gameplay data such as what items or"
+  },
+  {
+   "t": 569.84,
+   "d": 1.52,
+   "text": "characters are being used and what their"
+  },
+  {
+   "t": 571.36,
+   "d": 1.44,
+   "text": "success rates are"
+  },
+  {
+   "t": 572.8,
+   "d": 1.92,
+   "text": "importantly no personal information is"
+  },
+  {
+   "t": 574.72,
+   "d": 1.84,
+   "text": "collected this is not an advertising"
+  },
+  {
+   "t": 576.56,
+   "d": 2.16,
+   "text": "tool this means that players are free to"
+  },
+  {
+   "t": 578.72,
+   "d": 1.6,
+   "text": "help development of the game just by"
+  },
+  {
+   "t": 580.32,
+   "d": 1.52,
+   "text": "playing it and there's no detriment to"
+  },
+  {
+   "t": 581.84,
+   "d": 1.84,
+   "text": "them"
+  },
+  {
+   "t": 583.68,
+   "d": 2.0,
+   "text": "as an example of this i might pull in a"
+  },
+  {
+   "t": 585.68,
+   "d": 1.6,
+   "text": "bunch of information about a new item"
+  },
+  {
+   "t": 587.28,
+   "d": 1.84,
+   "text": "that's been added to the game i'll see"
+  },
+  {
+   "t": 589.12,
+   "d": 2.08,
+   "text": "how many players take that item and"
+  },
+  {
+   "t": 591.2,
+   "d": 1.28,
+   "text": "invest something like a scroll of"
+  },
+  {
+   "t": 592.48,
+   "d": 1.76,
+   "text": "upgrade into it compared to all the"
+  },
+  {
+   "t": 594.24,
+   "d": 2.48,
+   "text": "other items in its class i can then see"
+  },
+  {
+   "t": 596.72,
+   "d": 1.92,
+   "text": "of the runs that have invested in that"
+  },
+  {
+   "t": 598.64,
+   "d": 2.72,
+   "text": "item how often do they win"
+  },
+  {
+   "t": 601.36,
+   "d": 1.92,
+   "text": "using this i can come up with a somewhat"
+  },
+  {
+   "t": 603.28,
+   "d": 1.92,
+   "text": "objective evaluation of how powerful"
+  },
+  {
+   "t": 605.2,
+   "d": 2.08,
+   "text": "particular items are"
+  },
+  {
+   "t": 607.28,
+   "d": 1.28,
+   "text": "it's important to note though that while"
+  },
+  {
+   "t": 608.56,
+   "d": 2.8,
+   "text": "this data is objective it can be misused"
+  },
+  {
+   "t": 611.36,
+   "d": 1.84,
+   "text": "you can easily mistake correlation for"
+  },
+  {
+   "t": 613.2,
+   "d": 2.56,
+   "text": "causation for example the very high tier"
+  },
+  {
+   "t": 615.76,
+   "d": 1.6,
+   "text": "weapons in the game have really high win"
+  },
+  {
+   "t": 617.36,
+   "d": 2.24,
+   "text": "rates but not because they're massively"
+  },
+  {
+   "t": 619.6,
+   "d": 2.08,
+   "text": "stronger but because players tend to"
+  },
+  {
+   "t": 621.68,
+   "d": 1.92,
+   "text": "only invest in them at the later stages"
+  },
+  {
+   "t": 623.6,
+   "d": 1.76,
+   "text": "of the game"
+  },
+  {
+   "t": 625.36,
+   "d": 2.32,
+   "text": "also very importantly while i do pride"
+  },
+  {
+   "t": 627.68,
+   "d": 2.0,
+   "text": "myself on all of the mechanics in"
+  },
+  {
+   "t": 629.68,
+   "d": 2.0,
+   "text": "shattered pixel dungeon being viable"
+  },
+  {
+   "t": 631.68,
+   "d": 1.68,
+   "text": "just because all the numbers are the"
+  },
+  {
+   "t": 633.36,
+   "d": 1.44,
+   "text": "same doesn't mean that a game is"
+  },
+  {
+   "t": 634.8,
+   "d": 2.64,
+   "text": "actually fun"
+  },
+  {
+   "t": 637.44,
+   "d": 2.32,
+   "text": "so speaking of gameplay feel and fun the"
+  },
+  {
+   "t": 639.76,
+   "d": 1.76,
+   "text": "second major point of feedback is of"
+  },
+  {
+   "t": 641.52,
+   "d": 1.68,
+   "text": "course feedback from the players"
+  },
+  {
+   "t": 643.2,
+   "d": 1.2,
+   "text": "themselves"
+  },
+  {
+   "t": 644.4,
+   "d": 1.36,
+   "text": "i get player feedback from a bunch of"
+  },
+  {
+   "t": 645.76,
+   "d": 2.0,
+   "text": "different channels including emails"
+  },
+  {
+   "t": 647.76,
+   "d": 1.76,
+   "text": "messages on the various pixel dungeon"
+  },
+  {
+   "t": 649.52,
+   "d": 2.16,
+   "text": "communities and even reviews in app"
+  },
+  {
+   "t": 651.68,
+   "d": 2.72,
+   "text": "stores like google play"
+  },
+  {
+   "t": 654.4,
+   "d": 2.32,
+   "text": "i feel like the most valuable thing this"
+  },
+  {
+   "t": 656.72,
+   "d": 2.24,
+   "text": "feedback provides is perspective"
+  },
+  {
+   "t": 658.96,
+   "d": 1.6,
+   "text": "when you're working on your own game"
+  },
+  {
+   "t": 660.56,
+   "d": 2.0,
+   "text": "it's really easy to become your own echo"
+  },
+  {
+   "t": 662.56,
+   "d": 1.84,
+   "text": "chamber and end up working only on"
+  },
+  {
+   "t": 664.4,
+   "d": 2.08,
+   "text": "things that you want and that you like"
+  },
+  {
+   "t": 666.48,
+   "d": 2.08,
+   "text": "and while your perspective is important"
+  },
+  {
+   "t": 668.56,
+   "d": 1.6,
+   "text": "the perspective of all your other"
+  },
+  {
+   "t": 670.16,
+   "d": 1.76,
+   "text": "players is too"
+  },
+  {
+   "t": 671.92,
+   "d": 2.0,
+   "text": "so by constantly pulling in feedback"
+  },
+  {
+   "t": 673.92,
+   "d": 2.16,
+   "text": "from other people you can kind of temper"
+  },
+  {
+   "t": 676.08,
+   "d": 2.48,
+   "text": "your own perspective and broaden it so"
+  },
+  {
+   "t": 678.56,
+   "d": 1.28,
+   "text": "that you're making a game for more"
+  },
+  {
+   "t": 679.84,
+   "d": 1.76,
+   "text": "people"
+  },
+  {
+   "t": 681.6,
+   "d": 2.24,
+   "text": "importantly though players can be biased"
+  },
+  {
+   "t": 683.84,
+   "d": 2.08,
+   "text": "too and sometimes your most dedicated"
+  },
+  {
+   "t": 685.92,
+   "d": 1.68,
+   "text": "players can have the most biased"
+  },
+  {
+   "t": 687.6,
+   "d": 1.68,
+   "text": "perspectives that doesn't mean their"
+  },
+  {
+   "t": 689.28,
+   "d": 1.92,
+   "text": "feedback is worthless you just need to"
+  },
+  {
+   "t": 691.2,
+   "d": 1.92,
+   "text": "you need to recognize when they have"
+  },
+  {
+   "t": 693.12,
+   "d": 2.96,
+   "text": "particular biases and account for them"
+  },
+  {
+   "t": 696.08,
+   "d": 1.76,
+   "text": "one way in particular that i think works"
+  },
+  {
+   "t": 697.84,
+   "d": 2.16,
+   "text": "really well is when players want to give"
+  },
+  {
+   "t": 700.0,
+   "d": 2.24,
+   "text": "a specific suggestion about something in"
+  },
+  {
+   "t": 702.24,
+   "d": 2.0,
+   "text": "the game don't take their suggestion at"
+  },
+  {
+   "t": 704.24,
+   "d": 2.48,
+   "text": "face value but instead try to understand"
+  },
+  {
+   "t": 706.72,
+   "d": 2.24,
+   "text": "the desire behind the suggestion and try"
+  },
+  {
+   "t": 708.96,
+   "d": 1.6,
+   "text": "to address that"
+  },
+  {
+   "t": 710.56,
+   "d": 2.4,
+   "text": "as a somewhat funny example"
+  },
+  {
+   "t": 712.96,
+   "d": 2.88,
+   "text": "i have on a few occasions i'm serious"
+  },
+  {
+   "t": 715.84,
+   "d": 2.72,
+   "text": "had players suggest that i add sans from"
+  },
+  {
+   "t": 718.56,
+   "d": 2.24,
+   "text": "undertale as a boss to shatter pixel"
+  },
+  {
+   "t": 720.8,
+   "d": 2.48,
+   "text": "function and while obviously that on the"
+  },
+  {
+   "t": 723.28,
+   "d": 1.84,
+   "text": "surface is ridiculous"
+  },
+  {
+   "t": 725.12,
+   "d": 2.64,
+   "text": "the very real piece of desire behind"
+  },
+  {
+   "t": 727.76,
+   "d": 1.92,
+   "text": "that is that the players want more"
+  },
+  {
+   "t": 729.68,
+   "d": 2.0,
+   "text": "interesting and engaging boss fights and"
+  },
+  {
+   "t": 731.68,
+   "d": 3.28,
+   "text": "that is something i can do"
+  },
+  {
+   "t": 735.36,
+   "d": 1.52,
+   "text": "and finally one other important part of"
+  },
+  {
+   "t": 736.88,
+   "d": 3.04,
+   "text": "feedback is getting that feedback early"
+  },
+  {
+   "t": 739.92,
+   "d": 1.68,
+   "text": "every single update that shattered has"
+  },
+  {
+   "t": 741.6,
+   "d": 2.0,
+   "text": "has an open public beta that lasts for"
+  },
+  {
+   "t": 743.6,
+   "d": 2.08,
+   "text": "at least a week during the beta i do"
+  },
+  {
+   "t": 745.68,
+   "d": 2.48,
+   "text": "things like quickly fix critical issues"
+  },
+  {
+   "t": 748.16,
+   "d": 1.84,
+   "text": "generally betas are stable after about a"
+  },
+  {
+   "t": 750.0,
+   "d": 2.32,
+   "text": "day i'll finish up any outstanding game"
+  },
+  {
+   "t": 752.32,
+   "d": 2.24,
+   "text": "content gather feedback and make any"
+  },
+  {
+   "t": 754.56,
+   "d": 2.64,
+   "text": "critical tweaks based on that feedback"
+  },
+  {
+   "t": 757.2,
+   "d": 2.16,
+   "text": "and also because shattered pixel dungeon"
+  },
+  {
+   "t": 759.36,
+   "d": 2.4,
+   "text": "has a translation project this gives the"
+  },
+  {
+   "t": 761.76,
+   "d": 2.16,
+   "text": "translators time to help translate all"
+  },
+  {
+   "t": 763.92,
+   "d": 2.72,
+   "text": "of the new content in the game"
+  },
+  {
+   "t": 766.64,
+   "d": 2.0,
+   "text": "importantly this means that effectively"
+  },
+  {
+   "t": 768.64,
+   "d": 2.4,
+   "text": "my players are my qa"
+  },
+  {
+   "t": 771.04,
+   "d": 1.52,
+   "text": "and when you have a very big"
+  },
+  {
+   "t": 772.56,
+   "d": 1.84,
+   "text": "multi-million dollar game studio you've"
+  },
+  {
+   "t": 774.4,
+   "d": 2.8,
+   "text": "probably heard the um the complaint your"
+  },
+  {
+   "t": 777.2,
+   "d": 1.92,
+   "text": "players shouldn't be your qa"
+  },
+  {
+   "t": 779.12,
+   "d": 1.2,
+   "text": "i think that makes a lot of sense for"
+  },
+  {
+   "t": 780.32,
+   "d": 2.32,
+   "text": "really big game studios but for smaller"
+  },
+  {
+   "t": 782.64,
+   "d": 1.84,
+   "text": "independent developers as long as we're"
+  },
+  {
+   "t": 784.48,
+   "d": 1.92,
+   "text": "honest about it i think it's a really"
+  },
+  {
+   "t": 786.4,
+   "d": 2.56,
+   "text": "really great symbiotic relationship to"
+  },
+  {
+   "t": 788.96,
+   "d": 2.4,
+   "text": "offer your players content your content"
+  },
+  {
+   "t": 791.36,
+   "d": 2.0,
+   "text": "a little early in exchange for them"
+  },
+  {
+   "t": 793.36,
+   "d": 2.32,
+   "text": "helping you shape it and fix issues in"
+  },
+  {
+   "t": 795.68,
+   "d": 0.88,
+   "text": "it"
+  },
+  {
+   "t": 796.56,
+   "d": 1.76,
+   "text": "in particular from a development speed"
+  },
+  {
+   "t": 798.32,
+   "d": 2.4,
+   "text": "standpoint it also means that i don't"
+  },
+  {
+   "t": 800.72,
+   "d": 2.08,
+   "text": "have to just frankly waste time testing"
+  },
+  {
+   "t": 802.8,
+   "d": 1.84,
+   "text": "content over and over and over and over"
+  },
+  {
+   "t": 804.64,
+   "d": 3.6,
+   "text": "again the players can do that for me"
+  },
+  {
+   "t": 808.48,
+   "d": 1.84,
+   "text": "so that's a lot of talk about the little"
+  },
+  {
+   "t": 810.32,
+   "d": 1.6,
+   "text": "details but what about the bigger"
+  },
+  {
+   "t": 811.92,
+   "d": 2.08,
+   "text": "overall design"
+  },
+  {
+   "t": 814.0,
+   "d": 1.84,
+   "text": "well obviously game design in general"
+  },
+  {
+   "t": 815.84,
+   "d": 2.0,
+   "text": "isn't the point of this presentation i"
+  },
+  {
+   "t": 817.84,
+   "d": 2.08,
+   "text": "am going to go over to two particular"
+  },
+  {
+   "t": 819.92,
+   "d": 1.28,
+   "text": "things"
+  },
+  {
+   "t": 821.2,
+   "d": 3.52,
+   "text": "the first is designing for interaction"
+  },
+  {
+   "t": 824.72,
+   "d": 1.76,
+   "text": "and every single time i try to add"
+  },
+  {
+   "t": 826.48,
+   "d": 1.4,
+   "text": "something to shattered i try to"
+  },
+  {
+   "t": 827.88,
+   "d": 2.44,
+   "text": "contextualize it in terms of how the"
+  },
+  {
+   "t": 830.32,
+   "d": 1.76,
+   "text": "player interacts with the game and how"
+  },
+  {
+   "t": 832.08,
+   "d": 1.92,
+   "text": "the game interacts with the player and"
+  },
+  {
+   "t": 834.0,
+   "d": 2.0,
+   "text": "so i want to create new and interesting"
+  },
+  {
+   "t": 836.0,
+   "d": 2.4,
+   "text": "ways for those interactions to occur"
+  },
+  {
+   "t": 838.4,
+   "d": 2.32,
+   "text": "both in terms of the player interfacing"
+  },
+  {
+   "t": 840.72,
+   "d": 1.84,
+   "text": "with the game through their hero"
+  },
+  {
+   "t": 842.56,
+   "d": 2.0,
+   "text": "mechanics or their items and also the"
+  },
+  {
+   "t": 844.56,
+   "d": 1.52,
+   "text": "game interacting with the player through"
+  },
+  {
+   "t": 846.08,
+   "d": 3.76,
+   "text": "the environment obstacles and enemies"
+  },
+  {
+   "t": 849.84,
+   "d": 1.92,
+   "text": "one major thing i found is that active"
+  },
+  {
+   "t": 851.76,
+   "d": 1.84,
+   "text": "engaging effects that"
+  },
+  {
+   "t": 853.6,
+   "d": 2.24,
+   "text": "impact player decision making are way"
+  },
+  {
+   "t": 855.84,
+   "d": 3.36,
+   "text": "more fun generally than passive ones"
+  },
+  {
+   "t": 859.2,
+   "d": 2.0,
+   "text": "giving players say a plus one to damage"
+  },
+  {
+   "t": 861.2,
+   "d": 3.04,
+   "text": "for example isn't that interesting it"
+  },
+  {
+   "t": 864.24,
+   "d": 1.44,
+   "text": "doesn't mean it doesn't have a place"
+  },
+  {
+   "t": 865.68,
+   "d": 2.16,
+   "text": "though of course because not everything"
+  },
+  {
+   "t": 867.84,
+   "d": 2.08,
+   "text": "can be really complex and interesting as"
+  },
+  {
+   "t": 869.92,
+   "d": 3.68,
+   "text": "too much complexity can be confusing"
+  },
+  {
+   "t": 874.32,
+   "d": 2.48,
+   "text": "secondly speaking of complexity i like"
+  },
+  {
+   "t": 876.8,
+   "d": 1.76,
+   "text": "to think of shattered game systems in"
+  },
+  {
+   "t": 878.56,
+   "d": 2.16,
+   "text": "terms of layers"
+  },
+  {
+   "t": 880.72,
+   "d": 2.08,
+   "text": "shattered will have things like the core"
+  },
+  {
+   "t": 882.8,
+   "d": 2.16,
+   "text": "tap based gameplay at the very base and"
+  },
+  {
+   "t": 884.96,
+   "d": 1.76,
+   "text": "then there can be things like consumable"
+  },
+  {
+   "t": 886.72,
+   "d": 2.08,
+   "text": "and equipment items on top of that then"
+  },
+  {
+   "t": 888.8,
+   "d": 1.76,
+   "text": "the abilities of the hero and their"
+  },
+  {
+   "t": 890.56,
+   "d": 2.48,
+   "text": "enemies and advanced gameplay strategies"
+  },
+  {
+   "t": 893.04,
+   "d": 2.08,
+   "text": "or the structure of the level itself and"
+  },
+  {
+   "t": 895.12,
+   "d": 2.56,
+   "text": "hazards in it like traps and all sorts"
+  },
+  {
+   "t": 897.68,
+   "d": 1.28,
+   "text": "of other things"
+  },
+  {
+   "t": 898.96,
+   "d": 1.84,
+   "text": "the idea here is that each of these"
+  },
+  {
+   "t": 900.8,
+   "d": 2.32,
+   "text": "layers is not that complicated in and of"
+  },
+  {
+   "t": 903.12,
+   "d": 2.56,
+   "text": "itself but all the layers interact with"
+  },
+  {
+   "t": 905.68,
+   "d": 1.36,
+   "text": "each other to create a really deep"
+  },
+  {
+   "t": 907.04,
+   "d": 2.48,
+   "text": "interesting experience"
+  },
+  {
+   "t": 909.52,
+   "d": 1.44,
+   "text": "crucially i think this is one of the"
+  },
+  {
+   "t": 910.96,
+   "d": 1.52,
+   "text": "reasons why shattered pixel dungeon"
+  },
+  {
+   "t": 912.48,
+   "d": 2.24,
+   "text": "still feels so much like pixel dungeon"
+  },
+  {
+   "t": 914.72,
+   "d": 1.68,
+   "text": "because i haven't really done much to"
+  },
+  {
+   "t": 916.4,
+   "d": 3.44,
+   "text": "change those core layers that basic tap"
+  },
+  {
+   "t": 919.84,
+   "d": 2.08,
+   "text": "based gameplay is still the fun that is"
+  },
+  {
+   "t": 921.92,
+   "d": 2.56,
+   "text": "still the foundation of the game"
+  },
+  {
+   "t": 924.48,
+   "d": 1.68,
+   "text": "you can see here two screenshots that i"
+  },
+  {
+   "t": 926.16,
+   "d": 1.6,
+   "text": "think demonstrate this"
+  },
+  {
+   "t": 927.76,
+   "d": 1.84,
+   "text": "on the left you have a screenshot in the"
+  },
+  {
+   "t": 929.6,
+   "d": 2.24,
+   "text": "early stages of the game the player only"
+  },
+  {
+   "t": 931.84,
+   "d": 1.6,
+   "text": "has one enemy which doesn't have many"
+  },
+  {
+   "t": 933.44,
+   "d": 2.08,
+   "text": "complicated mechanics to it and really"
+  },
+  {
+   "t": 935.52,
+   "d": 1.68,
+   "text": "all they have to do is tap on them to"
+  },
+  {
+   "t": 937.2,
+   "d": 1.52,
+   "text": "defeat them"
+  },
+  {
+   "t": 938.72,
+   "d": 1.6,
+   "text": "on the right here we have a much more"
+  },
+  {
+   "t": 940.32,
+   "d": 2.08,
+   "text": "complex scene much later in the game the"
+  },
+  {
+   "t": 942.4,
+   "d": 2.0,
+   "text": "player now has all sorts of items in"
+  },
+  {
+   "t": 944.4,
+   "d": 1.6,
+   "text": "particular here they have a staff of"
+  },
+  {
+   "t": 946.0,
+   "d": 2.0,
+   "text": "fire blast which they're using against a"
+  },
+  {
+   "t": 948.0,
+   "d": 2.0,
+   "text": "boss monster and that boss has all sorts"
+  },
+  {
+   "t": 950.0,
+   "d": 2.0,
+   "text": "of mechanics of its own as well"
+  },
+  {
+   "t": 952.0,
+   "d": 2.72,
+   "text": "the idea is that that core tap to move"
+  },
+  {
+   "t": 954.72,
+   "d": 2.08,
+   "text": "here or do this gameplay is still there"
+  },
+  {
+   "t": 956.8,
+   "d": 1.76,
+   "text": "but there's so much more going on on top"
+  },
+  {
+   "t": 958.56,
+   "d": 2.24,
+   "text": "of it"
+  },
+  {
+   "t": 961.04,
+   "d": 1.84,
+   "text": "so with those design tenants in mind how"
+  },
+  {
+   "t": 962.88,
+   "d": 1.92,
+   "text": "do i actually create development plans"
+  },
+  {
+   "t": 964.8,
+   "d": 1.52,
+   "text": "for the game"
+  },
+  {
+   "t": 966.32,
+   "d": 2.16,
+   "text": "well firstly planning is important even"
+  },
+  {
+   "t": 968.48,
+   "d": 1.92,
+   "text": "with an iterative update model because i"
+  },
+  {
+   "t": 970.4,
+   "d": 1.36,
+   "text": "have to think more than one update in"
+  },
+  {
+   "t": 971.76,
+   "d": 0.96,
+   "text": "advance"
+  },
+  {
+   "t": 972.72,
+   "d": 1.92,
+   "text": "i need a long-term direction to"
+  },
+  {
+   "t": 974.64,
+   "d": 2.4,
+   "text": "contextualize all these updates in and i"
+  },
+  {
+   "t": 977.04,
+   "d": 2.08,
+   "text": "also the players want to know what's"
+  },
+  {
+   "t": 979.12,
+   "d": 2.08,
+   "text": "coming in the far future"
+  },
+  {
+   "t": 981.2,
+   "d": 1.92,
+   "text": "ultimately my plans are a mixture of my"
+  },
+  {
+   "t": 983.12,
+   "d": 2.4,
+   "text": "own ideas and community sentiment"
+  },
+  {
+   "t": 985.52,
+   "d": 2.32,
+   "text": "some plans are part of my own design"
+  },
+  {
+   "t": 987.84,
+   "d": 2.32,
+   "text": "mixed with feedback from players for"
+  },
+  {
+   "t": 990.16,
+   "d": 1.68,
+   "text": "example i recently created a new"
+  },
+  {
+   "t": 991.84,
+   "d": 2.24,
+   "text": "complexity layer if you want to the game"
+  },
+  {
+   "t": 994.08,
+   "d": 2.64,
+   "text": "uh the talent system for the heroes"
+  },
+  {
+   "t": 996.72,
+   "d": 2.4,
+   "text": "many players told me that hero leveling"
+  },
+  {
+   "t": 999.12,
+   "d": 1.76,
+   "text": "up wasn't very interesting either"
+  },
+  {
+   "t": 1000.88,
+   "d": 1.6,
+   "text": "through suggestions or other types of"
+  },
+  {
+   "t": 1002.48,
+   "d": 1.28,
+   "text": "feedback"
+  },
+  {
+   "t": 1003.76,
+   "d": 1.76,
+   "text": "and so in response to that i created a"
+  },
+  {
+   "t": 1005.52,
+   "d": 1.68,
+   "text": "system where the player gets points"
+  },
+  {
+   "t": 1007.2,
+   "d": 2.08,
+   "text": "every time their hero levels up and they"
+  },
+  {
+   "t": 1009.28,
+   "d": 1.6,
+   "text": "can spend those points on all kinds of"
+  },
+  {
+   "t": 1010.88,
+   "d": 2.08,
+   "text": "interesting abilities some of which"
+  },
+  {
+   "t": 1012.96,
+   "d": 2.0,
+   "text": "change their decision making"
+  },
+  {
+   "t": 1014.96,
+   "d": 2.48,
+   "text": "another example to go back to that more"
+  },
+  {
+   "t": 1017.44,
+   "d": 1.52,
+   "text": "interesting bosses discussion i"
+  },
+  {
+   "t": 1018.96,
+   "d": 1.12,
+   "text": "mentioned"
+  },
+  {
+   "t": 1020.08,
+   "d": 2.4,
+   "text": "is i somewhat well a couple years ago"
+  },
+  {
+   "t": 1022.48,
+   "d": 0.96,
+   "text": "now"
+  },
+  {
+   "t": 1023.44,
+   "d": 1.6,
+   "text": "seven years it feels recent if it's a"
+  },
+  {
+   "t": 1025.04,
+   "d": 2.4,
+   "text": "couple years old i recently overhauled"
+  },
+  {
+   "t": 1027.44,
+   "d": 1.44,
+   "text": "all of the enemies and bosses in the"
+  },
+  {
+   "t": 1028.88,
+   "d": 2.56,
+   "text": "game again to increase interaction in"
+  },
+  {
+   "t": 1031.44,
+   "d": 1.44,
+   "text": "many cases"
+  },
+  {
+   "t": 1032.88,
+   "d": 1.36,
+   "text": "but there have been some ideas that are"
+  },
+  {
+   "t": 1034.24,
+   "d": 2.16,
+   "text": "almost completely community driven such"
+  },
+  {
+   "t": 1036.4,
+   "d": 2.08,
+   "text": "as the game's translation project"
+  },
+  {
+   "t": 1038.48,
+   "d": 1.52,
+   "text": "i helped set some things up on a"
+  },
+  {
+   "t": 1040.0,
+   "d": 1.44,
+   "text": "technical level but for the most part"
+  },
+  {
+   "t": 1041.44,
+   "d": 1.52,
+   "text": "the players do all of the translation"
+  },
+  {
+   "t": 1042.96,
+   "d": 2.8,
+   "text": "work on their own"
+  },
+  {
+   "t": 1047.2,
+   "d": 1.68,
+   "text": "so with those long-term plans i"
+  },
+  {
+   "t": 1048.88,
+   "d": 1.28,
+   "text": "personally think it's really important"
+  },
+  {
+   "t": 1050.16,
+   "d": 1.6,
+   "text": "to share those"
+  },
+  {
+   "t": 1051.76,
+   "d": 1.84,
+   "text": "so i have as i mentioned a website"
+  },
+  {
+   "t": 1053.6,
+   "d": 2.4,
+   "text": "shatteredpixel.com where i write about"
+  },
+  {
+   "t": 1056.0,
+   "d": 2.16,
+   "text": "12 blog posts a year at the moment and"
+  },
+  {
+   "t": 1058.16,
+   "d": 2.24,
+   "text": "these share a lot of my grand or longer"
+  },
+  {
+   "t": 1060.4,
+   "d": 2.96,
+   "text": "term plans with the player base"
+  },
+  {
+   "t": 1063.36,
+   "d": 1.92,
+   "text": "the idea here is firstly to get players"
+  },
+  {
+   "t": 1065.28,
+   "d": 2.08,
+   "text": "excited secondly it helps me be a bit"
+  },
+  {
+   "t": 1067.36,
+   "d": 2.08,
+   "text": "more concrete about my own ideas but"
+  },
+  {
+   "t": 1069.44,
+   "d": 1.68,
+   "text": "thirdly it also means that it gets"
+  },
+  {
+   "t": 1071.12,
+   "d": 1.76,
+   "text": "players talking about the things i'm"
+  },
+  {
+   "t": 1072.88,
+   "d": 1.6,
+   "text": "planning which means that i can gather"
+  },
+  {
+   "t": 1074.48,
+   "d": 2.32,
+   "text": "feedback on upcoming content before i've"
+  },
+  {
+   "t": 1076.8,
+   "d": 2.48,
+   "text": "even released it"
+  },
+  {
+   "t": 1079.28,
+   "d": 1.44,
+   "text": "and finally it's really important to"
+  },
+  {
+   "t": 1080.72,
+   "d": 2.72,
+   "text": "note that while shattered is primarily a"
+  },
+  {
+   "t": 1083.44,
+   "d": 1.6,
+   "text": "solo developed game i've definitely"
+  },
+  {
+   "t": 1085.04,
+   "d": 1.84,
+   "text": "gotten some help along the way"
+  },
+  {
+   "t": 1086.88,
+   "d": 2.32,
+   "text": "some examples of this are splash arts by"
+  },
+  {
+   "t": 1089.2,
+   "d": 2.64,
+   "text": "alexander komatov music from christian"
+  },
+  {
+   "t": 1091.84,
+   "d": 1.28,
+   "text": "haristo"
+  },
+  {
+   "t": 1093.12,
+   "d": 1.76,
+   "text": "sound effects from charlie those"
+  },
+  {
+   "t": 1094.88,
+   "d": 2.08,
+   "text": "translations from the community and of"
+  },
+  {
+   "t": 1096.96,
+   "d": 2.16,
+   "text": "course on a more technical level the lib"
+  },
+  {
+   "t": 1099.12,
+   "d": 2.32,
+   "text": "gdx java game library which has allowed"
+  },
+  {
+   "t": 1101.44,
+   "d": 2.16,
+   "text": "the game to release on new platforms and"
+  },
+  {
+   "t": 1103.6,
+   "d": 1.92,
+   "text": "the original pixel dungeon source code"
+  },
+  {
+   "t": 1105.52,
+   "d": 2.16,
+   "text": "that made all of this possible"
+  },
+  {
+   "t": 1107.68,
+   "d": 1.28,
+   "text": "unfortunately most of these things"
+  },
+  {
+   "t": 1108.96,
+   "d": 1.92,
+   "text": "aren't really too visual so it's a"
+  },
+  {
+   "t": 1110.88,
+   "d": 1.36,
+   "text": "little hard for me to show them to you"
+  },
+  {
+   "t": 1112.24,
+   "d": 2.0,
+   "text": "but i can showcase the hero splash arts"
+  },
+  {
+   "t": 1114.24,
+   "d": 2.16,
+   "text": "which i think are really great"
+  },
+  {
+   "t": 1116.4,
+   "d": 1.36,
+   "text": "i'm just going to leave these up for a"
+  },
+  {
+   "t": 1117.76,
+   "d": 1.76,
+   "text": "few minutes or a few moments rather so"
+  },
+  {
+   "t": 1119.52,
+   "d": 3.72,
+   "text": "you can appreciate them"
+  },
+  {
+   "t": 1133.84,
+   "d": 0.8,
+   "text": "so"
+  },
+  {
+   "t": 1134.64,
+   "d": 1.04,
+   "text": "finally"
+  },
+  {
+   "t": 1135.68,
+   "d": 2.16,
+   "text": "how have i made all of this sustainable"
+  },
+  {
+   "t": 1137.84,
+   "d": 2.72,
+   "text": "in a career as i mentioned previously in"
+  },
+  {
+   "t": 1140.56,
+   "d": 1.92,
+   "text": "my opinion this is the most valuable"
+  },
+  {
+   "t": 1142.48,
+   "d": 1.84,
+   "text": "thing the community has given me but"
+  },
+  {
+   "t": 1144.32,
+   "d": 1.76,
+   "text": "before we get into that"
+  },
+  {
+   "t": 1146.08,
+   "d": 1.92,
+   "text": "let me quickly say how mobile games"
+  },
+  {
+   "t": 1148.0,
+   "d": 1.76,
+   "text": "usually make money"
+  },
+  {
+   "t": 1149.76,
+   "d": 1.52,
+   "text": "generally a mobile game will make money"
+  },
+  {
+   "t": 1151.28,
+   "d": 1.28,
+   "text": "either through advertisements or"
+  },
+  {
+   "t": 1152.56,
+   "d": 1.68,
+   "text": "microtransactions"
+  },
+  {
+   "t": 1154.24,
+   "d": 1.68,
+   "text": "advertisements are things like banners"
+  },
+  {
+   "t": 1155.92,
+   "d": 1.52,
+   "text": "that pop up on the top of the screen"
+  },
+  {
+   "t": 1157.44,
+   "d": 2.24,
+   "text": "during gameplay or full screen ads"
+  },
+  {
+   "t": 1159.68,
+   "d": 2.4,
+   "text": "during pauses and gameplay the goal with"
+  },
+  {
+   "t": 1162.08,
+   "d": 1.68,
+   "text": "them is to generate a consistent amount"
+  },
+  {
+   "t": 1163.76,
+   "d": 2.48,
+   "text": "of small revenue from every player"
+  },
+  {
+   "t": 1166.24,
+   "d": 1.68,
+   "text": "microtransactions on the other hand"
+  },
+  {
+   "t": 1167.92,
+   "d": 2.32,
+   "text": "generally will charge the user to access"
+  },
+  {
+   "t": 1170.24,
+   "d": 1.92,
+   "text": "advantages in the game or to speed"
+  },
+  {
+   "t": 1172.16,
+   "d": 1.28,
+   "text": "gameplay up"
+  },
+  {
+   "t": 1173.44,
+   "d": 1.44,
+   "text": "and their goal is to create a large"
+  },
+  {
+   "t": 1174.88,
+   "d": 1.76,
+   "text": "amount of revenue from a small number of"
+  },
+  {
+   "t": 1176.64,
+   "d": 1.6,
+   "text": "players"
+  },
+  {
+   "t": 1178.24,
+   "d": 2.0,
+   "text": "unfortunately both of these things don't"
+  },
+  {
+   "t": 1180.24,
+   "d": 1.68,
+   "text": "work at all for shattered because"
+  },
+  {
+   "t": 1181.92,
+   "d": 1.36,
+   "text": "they're disruptive to the gameplay"
+  },
+  {
+   "t": 1183.28,
+   "d": 1.36,
+   "text": "experience"
+  },
+  {
+   "t": 1184.64,
+   "d": 2.08,
+   "text": "advertisements take away screen real"
+  },
+  {
+   "t": 1186.72,
+   "d": 1.44,
+   "text": "estate from the game and can have"
+  },
+  {
+   "t": 1188.16,
+   "d": 2.56,
+   "text": "privacy concerns and microtransactions"
+  },
+  {
+   "t": 1190.72,
+   "d": 1.68,
+   "text": "can cheapen the gameplay which is"
+  },
+  {
+   "t": 1192.4,
+   "d": 2.4,
+   "text": "especially problematic for a roguelike"
+  },
+  {
+   "t": 1194.8,
+   "d": 2.56,
+   "text": "that's supposed to be challenging"
+  },
+  {
+   "t": 1197.36,
+   "d": 1.76,
+   "text": "and most importantly the community would"
+  },
+  {
+   "t": 1199.12,
+   "d": 2.48,
+   "text": "be outraged if i did one of these things"
+  },
+  {
+   "t": 1201.6,
+   "d": 1.6,
+   "text": "the original pixel dungeon sets a"
+  },
+  {
+   "t": 1203.2,
+   "d": 3.04,
+   "text": "precedent for a 100 offline game with no"
+  },
+  {
+   "t": 1206.24,
+   "d": 2.24,
+   "text": "monetization the original android"
+  },
+  {
+   "t": 1208.48,
+   "d": 1.6,
+   "text": "version of the game has a tiny little"
+  },
+  {
+   "t": 1210.08,
+   "d": 1.52,
+   "text": "donate button in the main screen and"
+  },
+  {
+   "t": 1211.6,
+   "d": 2.32,
+   "text": "that's it nothing is tied to real world"
+  },
+  {
+   "t": 1213.92,
+   "d": 1.36,
+   "text": "money"
+  },
+  {
+   "t": 1215.28,
+   "d": 2.48,
+   "text": "and importantly shattered is open source"
+  },
+  {
+   "t": 1217.76,
+   "d": 2.32,
+   "text": "so anyone could take my code and compete"
+  },
+  {
+   "t": 1220.08,
+   "d": 2.0,
+   "text": "with me something that many players may"
+  },
+  {
+   "t": 1222.08,
+   "d": 2.4,
+   "text": "want to do if i start to sell out or"
+  },
+  {
+   "t": 1224.48,
+   "d": 1.52,
+   "text": "similar"
+  },
+  {
+   "t": 1226.0,
+   "d": 2.08,
+   "text": "so because of this any monetization has"
+  },
+  {
+   "t": 1228.08,
+   "d": 1.76,
+   "text": "to be non-disruptive"
+  },
+  {
+   "t": 1229.84,
+   "d": 3.12,
+   "text": "i've done three major things toward this"
+  },
+  {
+   "t": 1232.96,
+   "d": 2.48,
+   "text": "the first in 2015 was a supporter"
+  },
+  {
+   "t": 1235.44,
+   "d": 1.36,
+   "text": "purchase system"
+  },
+  {
+   "t": 1236.8,
+   "d": 2.24,
+   "text": "i added cosmetic micro transactions with"
+  },
+  {
+   "t": 1239.04,
+   "d": 2.56,
+   "text": "the branding of support in the game"
+  },
+  {
+   "t": 1241.6,
+   "d": 2.16,
+   "text": "these are cosmetic and mild convenience"
+  },
+  {
+   "t": 1243.76,
+   "d": 2.4,
+   "text": "features like gravestones with custom"
+  },
+  {
+   "t": 1246.16,
+   "d": 2.4,
+   "text": "epitaphs for fallen heroes"
+  },
+  {
+   "t": 1248.56,
+   "d": 1.76,
+   "text": "the ability to rename your characters"
+  },
+  {
+   "t": 1250.32,
+   "d": 1.04,
+   "text": "and items"
+  },
+  {
+   "t": 1251.36,
+   "d": 1.76,
+   "text": "extra screens on the game's rankings"
+  },
+  {
+   "t": 1253.12,
+   "d": 1.92,
+   "text": "page and recolors to the game's"
+  },
+  {
+   "t": 1255.04,
+   "d": 1.52,
+   "text": "interfaces"
+  },
+  {
+   "t": 1256.56,
+   "d": 2.0,
+   "text": "the idea here is that they're focused on"
+  },
+  {
+   "t": 1258.56,
+   "d": 2.4,
+   "text": "small fun little extras that don't"
+  },
+  {
+   "t": 1260.96,
+   "d": 2.24,
+   "text": "detract from the gameplay experience by"
+  },
+  {
+   "t": 1263.2,
+   "d": 2.16,
+   "text": "cheapening the game if you buy them or"
+  },
+  {
+   "t": 1265.36,
+   "d": 1.92,
+   "text": "by making you feel like you miss out if"
+  },
+  {
+   "t": 1267.28,
+   "d": 2.8,
+   "text": "you don't buy them"
+  },
+  {
+   "t": 1270.16,
+   "d": 2.64,
+   "text": "in 2019 i opened another blogging"
+  },
+  {
+   "t": 1272.8,
+   "d": 2.0,
+   "text": "channel through patreon"
+  },
+  {
+   "t": 1274.8,
+   "d": 2.32,
+   "text": "the blog has bonus content that's"
+  },
+  {
+   "t": 1277.12,
+   "d": 1.84,
+   "text": "separate from the game entirely focusing"
+  },
+  {
+   "t": 1278.96,
+   "d": 2.08,
+   "text": "on behind the scenes information it's"
+  },
+  {
+   "t": 1281.04,
+   "d": 1.68,
+   "text": "basically a souped-up version of"
+  },
+  {
+   "t": 1282.72,
+   "d": 2.08,
+   "text": "shatteredpixel.com"
+  },
+  {
+   "t": 1284.8,
+   "d": 1.76,
+   "text": "i write weekly mini blogs there's"
+  },
+  {
+   "t": 1286.56,
+   "d": 1.92,
+   "text": "monthly content polls an exclusive"
+  },
+  {
+   "t": 1288.48,
+   "d": 1.92,
+   "text": "discord etc"
+  },
+  {
+   "t": 1290.4,
+   "d": 2.48,
+   "text": "this requires constant effort to upkeep"
+  },
+  {
+   "t": 1292.88,
+   "d": 1.84,
+   "text": "but i can integrate it with the writing"
+  },
+  {
+   "t": 1294.72,
+   "d": 1.84,
+   "text": "i do for the blog"
+  },
+  {
+   "t": 1296.56,
+   "d": 1.36,
+   "text": "importantly this also provides a"
+  },
+  {
+   "t": 1297.92,
+   "d": 1.92,
+   "text": "community for the game's most dedicated"
+  },
+  {
+   "t": 1299.84,
+   "d": 4.0,
+   "text": "players outside of the public ones"
+  },
+  {
+   "t": 1303.84,
+   "d": 2.64,
+   "text": "most recently just selling the game a"
+  },
+  {
+   "t": 1306.48,
+   "d": 1.36,
+   "text": "shattered pixel dungeon recently"
+  },
+  {
+   "t": 1307.84,
+   "d": 1.92,
+   "text": "released on the ios app store for five"
+  },
+  {
+   "t": 1309.76,
+   "d": 1.36,
+   "text": "us dollars"
+  },
+  {
+   "t": 1311.12,
+   "d": 2.0,
+   "text": "i did this for a couple reasons"
+  },
+  {
+   "t": 1313.12,
+   "d": 1.92,
+   "text": "firstly the original pixel dungeon was"
+  },
+  {
+   "t": 1315.04,
+   "d": 1.68,
+   "text": "already three dollars on the app store"
+  },
+  {
+   "t": 1316.72,
+   "d": 2.08,
+   "text": "and i couldn't undercut it"
+  },
+  {
+   "t": 1318.8,
+   "d": 2.0,
+   "text": "apple also has higher platform fees that"
+  },
+  {
+   "t": 1320.8,
+   "d": 2.48,
+   "text": "i have to offset and apple users are"
+  },
+  {
+   "t": 1323.28,
+   "d": 2.64,
+   "text": "just more willing to buy a game up front"
+  },
+  {
+   "t": 1325.92,
+   "d": 1.68,
+   "text": "shattered pixel dungeon also released"
+  },
+  {
+   "t": 1327.6,
+   "d": 2.0,
+   "text": "with seven years of content already"
+  },
+  {
+   "t": 1329.6,
+   "d": 2.32,
+   "text": "complete by comparison when shattered"
+  },
+  {
+   "t": 1331.92,
+   "d": 1.76,
+   "text": "originally released on google play it"
+  },
+  {
+   "t": 1333.68,
+   "d": 1.92,
+   "text": "was basically just the original pixel"
+  },
+  {
+   "t": 1335.6,
+   "d": 2.4,
+   "text": "dungeon with a couple of tweaks"
+  },
+  {
+   "t": 1338.0,
+   "d": 1.52,
+   "text": "and i also included some supporter"
+  },
+  {
+   "t": 1339.52,
+   "d": 3.12,
+   "text": "benefits in the game as a bonus"
+  },
+  {
+   "t": 1342.64,
+   "d": 2.48,
+   "text": "so which one of these was most important"
+  },
+  {
+   "t": 1345.12,
+   "d": 1.44,
+   "text": "personally i think all three of them"
+  },
+  {
+   "t": 1346.56,
+   "d": 1.68,
+   "text": "played a role the cosmetic"
+  },
+  {
+   "t": 1348.24,
+   "d": 2.0,
+   "text": "microtransactions were good money but"
+  },
+  {
+   "t": 1350.24,
+   "d": 1.76,
+   "text": "that money was dependent on the quality"
+  },
+  {
+   "t": 1352.0,
+   "d": 1.68,
+   "text": "of the game i wouldn't have kept getting"
+  },
+  {
+   "t": 1353.68,
+   "d": 1.36,
+   "text": "revenue from them if i didn't keep"
+  },
+  {
+   "t": 1355.04,
+   "d": 1.12,
+   "text": "updating"
+  },
+  {
+   "t": 1356.16,
+   "d": 1.92,
+   "text": "however they were easy to set up there"
+  },
+  {
+   "t": 1358.08,
+   "d": 1.76,
+   "text": "was nothing i had to do after"
+  },
+  {
+   "t": 1359.84,
+   "d": 2.56,
+   "text": "implementing the direct features"
+  },
+  {
+   "t": 1362.4,
+   "d": 2.32,
+   "text": "the patreon on the other hand required"
+  },
+  {
+   "t": 1364.72,
+   "d": 2.16,
+   "text": "consistent effort to upkeep"
+  },
+  {
+   "t": 1366.88,
+   "d": 2.96,
+   "text": "but also gave me community benefits"
+  },
+  {
+   "t": 1369.84,
+   "d": 2.16,
+   "text": "the patreon does however require a"
+  },
+  {
+   "t": 1372.0,
+   "d": 1.92,
+   "text": "decent number of people to sign up it's"
+  },
+  {
+   "t": 1373.92,
+   "d": 1.52,
+   "text": "not really very compelling having an"
+  },
+  {
+   "t": 1375.44,
+   "d": 1.68,
+   "text": "exclusive community if there's only one"
+  },
+  {
+   "t": 1377.12,
+   "d": 1.76,
+   "text": "or two people in it"
+  },
+  {
+   "t": 1378.88,
+   "d": 2.24,
+   "text": "and finally just selling the game"
+  },
+  {
+   "t": 1381.12,
+   "d": 1.84,
+   "text": "i only have two months of data but so"
+  },
+  {
+   "t": 1382.96,
+   "d": 1.76,
+   "text": "far this looks like it's going to be the"
+  },
+  {
+   "t": 1384.72,
+   "d": 2.24,
+   "text": "best the best sustainability feature of"
+  },
+  {
+   "t": 1386.96,
+   "d": 1.68,
+   "text": "the game by a lot"
+  },
+  {
+   "t": 1388.64,
+   "d": 1.76,
+   "text": "however it was also the hardest to set"
+  },
+  {
+   "t": 1390.4,
+   "d": 2.0,
+   "text": "up the game has to be worth buying in"
+  },
+  {
+   "t": 1392.4,
+   "d": 2.0,
+   "text": "the first place i could definitely not"
+  },
+  {
+   "t": 1394.4,
+   "d": 1.6,
+   "text": "have started selling the game seven"
+  },
+  {
+   "t": 1396.0,
+   "d": 1.28,
+   "text": "years ago"
+  },
+  {
+   "t": 1397.28,
+   "d": 1.68,
+   "text": "so in my mind all three of these have"
+  },
+  {
+   "t": 1398.96,
+   "d": 1.84,
+   "text": "built on each other and none of them"
+  },
+  {
+   "t": 1400.8,
+   "d": 4.24,
+   "text": "were was extraneous or unnecessary"
+  },
+  {
+   "t": 1405.68,
+   "d": 1.84,
+   "text": "and one little thing to mention you may"
+  },
+  {
+   "t": 1407.52,
+   "d": 1.28,
+   "text": "have already seen this if you look at"
+  },
+  {
+   "t": 1408.8,
+   "d": 2.16,
+   "text": "the steam sale following the release on"
+  },
+  {
+   "t": 1410.96,
+   "d": 1.6,
+   "text": "the app store i'm looking to release a"
+  },
+  {
+   "t": 1412.56,
+   "d": 2.08,
+   "text": "pc version early next year as well"
+  },
+  {
+   "t": 1414.64,
+   "d": 1.92,
+   "text": "continuing on that success working with"
+  },
+  {
+   "t": 1416.56,
+   "d": 2.32,
+   "text": "new platforms the plan is to release it"
+  },
+  {
+   "t": 1418.88,
+   "d": 1.6,
+   "text": "under a pay what you want model on it"
+  },
+  {
+   "t": 1420.48,
+   "d": 2.0,
+   "text": "dot io with ten dollars as a suggested"
+  },
+  {
+   "t": 1422.48,
+   "d": 2.48,
+   "text": "amount and ten dollars directly on steam"
+  },
+  {
+   "t": 1424.96,
+   "d": 2.72,
+   "text": "with those supporter benefits included"
+  },
+  {
+   "t": 1427.68,
+   "d": 1.6,
+   "text": "the game does need more work for this"
+  },
+  {
+   "t": 1429.28,
+   "d": 1.76,
+   "text": "though it's just like the other forms of"
+  },
+  {
+   "t": 1431.04,
+   "d": 2.48,
+   "text": "monetization it's not it's not easy to"
+  },
+  {
+   "t": 1433.52,
+   "d": 2.56,
+   "text": "just do right away currently the game on"
+  },
+  {
+   "t": 1436.08,
+   "d": 2.0,
+   "text": "desktop is a straight mobile port and i"
+  },
+  {
+   "t": 1438.08,
+   "d": 1.2,
+   "text": "think that there are changes i need to"
+  },
+  {
+   "t": 1439.28,
+   "d": 1.84,
+   "text": "make to the interface and keyboard and"
+  },
+  {
+   "t": 1441.12,
+   "d": 2.16,
+   "text": "controller support in order for desktop"
+  },
+  {
+   "t": 1443.28,
+   "d": 1.52,
+   "text": "users to feel like they're first-class"
+  },
+  {
+   "t": 1444.8,
+   "d": 2.48,
+   "text": "citizens"
+  },
+  {
+   "t": 1447.28,
+   "d": 0.96,
+   "text": "so"
+  },
+  {
+   "t": 1448.24,
+   "d": 1.92,
+   "text": "in conclusion"
+  },
+  {
+   "t": 1450.16,
+   "d": 1.68,
+   "text": "shattered is a little different perhaps"
+  },
+  {
+   "t": 1451.84,
+   "d": 1.44,
+   "text": "from other games but definitely not"
+  },
+  {
+   "t": 1453.28,
+   "d": 2.4,
+   "text": "unique it started as a modification but"
+  },
+  {
+   "t": 1455.68,
+   "d": 1.92,
+   "text": "grew into its own game there are several"
+  },
+  {
+   "t": 1457.6,
+   "d": 1.52,
+   "text": "easy examples of this with valve"
+  },
+  {
+   "t": 1459.12,
+   "d": 1.6,
+   "text": "properties like team fortress"
+  },
+  {
+   "t": 1460.72,
+   "d": 2.08,
+   "text": "counter-strike and dota"
+  },
+  {
+   "t": 1462.8,
+   "d": 1.52,
+   "text": "its popularity was gained through an"
+  },
+  {
+   "t": 1464.32,
+   "d": 2.0,
+   "text": "existing audience which is true of most"
+  },
+  {
+   "t": 1466.32,
+   "d": 3.04,
+   "text": "modifications fan games and even sequels"
+  },
+  {
+   "t": 1469.36,
+   "d": 1.84,
+   "text": "and it was self-published there is some"
+  },
+  {
+   "t": 1471.2,
+   "d": 1.84,
+   "text": "extremely successful games that have"
+  },
+  {
+   "t": 1473.04,
+   "d": 1.6,
+   "text": "been self-published like minecraft and"
+  },
+  {
+   "t": 1474.64,
+   "d": 2.56,
+   "text": "undertale and plenty of roguelikes and"
+  },
+  {
+   "t": 1477.2,
+   "d": 1.92,
+   "text": "lights as well such as binding of isaac"
+  },
+  {
+   "t": 1479.12,
+   "d": 1.84,
+   "text": "and dwarf fortress"
+  },
+  {
+   "t": 1480.96,
+   "d": 1.52,
+   "text": "all of these games may seem really"
+  },
+  {
+   "t": 1482.48,
+   "d": 1.52,
+   "text": "different from each other but there's"
+  },
+  {
+   "t": 1484.0,
+   "d": 1.92,
+   "text": "one thing they all have in common and"
+  },
+  {
+   "t": 1485.92,
+   "d": 2.56,
+   "text": "that's the power of community"
+  },
+  {
+   "t": 1488.48,
+   "d": 2.08,
+   "text": "every single one of these games to some"
+  },
+  {
+   "t": 1490.56,
+   "d": 2.4,
+   "text": "degree owes either its initial success"
+  },
+  {
+   "t": 1492.96,
+   "d": 2.32,
+   "text": "or its continued success towards"
+  },
+  {
+   "t": 1495.28,
+   "d": 2.0,
+   "text": "community involvement and i don't just"
+  },
+  {
+   "t": 1497.28,
+   "d": 1.44,
+   "text": "mean people being willing to play the"
+  },
+  {
+   "t": 1498.72,
+   "d": 1.44,
+   "text": "game i mean people going above and"
+  },
+  {
+   "t": 1500.16,
+   "d": 1.92,
+   "text": "beyond that making their own content"
+  },
+  {
+   "t": 1502.08,
+   "d": 1.52,
+   "text": "based on the game participating in"
+  },
+  {
+   "t": 1503.6,
+   "d": 2.08,
+   "text": "online communities helping the game grow"
+  },
+  {
+   "t": 1505.68,
+   "d": 3.12,
+   "text": "beyond just its gameplay"
+  },
+  {
+   "t": 1508.8,
+   "d": 1.68,
+   "text": "and i think that that is the biggest"
+  },
+  {
+   "t": 1510.48,
+   "d": 2.36,
+   "text": "reason shattered pixel dungeon has been"
+  },
+  {
+   "t": 1512.84,
+   "d": 1.88,
+   "text": "successful so"
+  },
+  {
+   "t": 1514.72,
+   "d": 1.76,
+   "text": "what did i do in particular for"
+  },
+  {
+   "t": 1516.48,
+   "d": 1.12,
+   "text": "community"
+  },
+  {
+   "t": 1517.6,
+   "d": 1.76,
+   "text": "i helped get people engaged by"
+  },
+  {
+   "t": 1519.36,
+   "d": 1.68,
+   "text": "leveraging and helping grow the existing"
+  },
+  {
+   "t": 1521.04,
+   "d": 2.48,
+   "text": "pixel dungeon community i created a blog"
+  },
+  {
+   "t": 1523.52,
+   "d": 1.6,
+   "text": "and extra content channels for the game"
+  },
+  {
+   "t": 1525.12,
+   "d": 1.12,
+   "text": "as well"
+  },
+  {
+   "t": 1526.24,
+   "d": 2.0,
+   "text": "i iteratively improved the game through"
+  },
+  {
+   "t": 1528.24,
+   "d": 1.92,
+   "text": "frequent smaller updates that were more"
+  },
+  {
+   "t": 1530.16,
+   "d": 2.4,
+   "text": "flexible and easier to make this let me"
+  },
+  {
+   "t": 1532.56,
+   "d": 1.68,
+   "text": "easily integrate player feedback and"
+  },
+  {
+   "t": 1534.24,
+   "d": 1.92,
+   "text": "data so i can course correct when i did"
+  },
+  {
+   "t": 1536.16,
+   "d": 1.76,
+   "text": "make mistakes"
+  },
+  {
+   "t": 1537.92,
+   "d": 1.6,
+   "text": "and i tried my best to identify"
+  },
+  {
+   "t": 1539.52,
+   "d": 2.48,
+   "text": "long-term goals based on a mixture of my"
+  },
+  {
+   "t": 1542.0,
+   "d": 1.76,
+   "text": "own game design goals and community"
+  },
+  {
+   "t": 1543.76,
+   "d": 2.08,
+   "text": "sentiment and this has allowed me to"
+  },
+  {
+   "t": 1545.84,
+   "d": 1.92,
+   "text": "steadily grow shattered pixel dungeon"
+  },
+  {
+   "t": 1547.76,
+   "d": 1.76,
+   "text": "and its audience and turn it into a"
+  },
+  {
+   "t": 1549.52,
+   "d": 2.72,
+   "text": "sustainable career"
+  },
+  {
+   "t": 1552.24,
+   "d": 1.44,
+   "text": "thank you very much for listening i"
+  },
+  {
+   "t": 1553.68,
+   "d": 1.36,
+   "text": "think we have just a little bit of time"
+  },
+  {
+   "t": 1555.04,
+   "d": 1.92,
+   "text": "if there are any questions we do have a"
+  },
+  {
+   "t": 1556.96,
+   "d": 1.44,
+   "text": "little bit thank you so much evan it's"
+  },
+  {
+   "t": 1558.4,
+   "d": 2.96,
+   "text": "really great um mobile kind of roguelike"
+  },
+  {
+   "t": 1561.36,
+   "d": 1.2,
+   "text": "development is something that we haven't"
+  },
+  {
+   "t": 1562.56,
+   "d": 1.52,
+   "text": "really been able to showcase much here"
+  },
+  {
+   "t": 1564.08,
+   "d": 1.6,
+   "text": "before so we really appreciate you"
+  },
+  {
+   "t": 1565.68,
+   "d": 1.92,
+   "text": "taking the time to talk"
+  },
+  {
+   "t": 1567.6,
+   "d": 1.76,
+   "text": "thank you very much for having me yeah"
+  },
+  {
+   "t": 1569.36,
+   "d": 1.52,
+   "text": "of course the first question that i"
+  },
+  {
+   "t": 1570.88,
+   "d": 1.6,
+   "text": "think is a really solid one is from"
+  },
+  {
+   "t": 1572.48,
+   "d": 1.92,
+   "text": "darren gray which is how do you manage"
+  },
+  {
+   "t": 1574.4,
+   "d": 1.84,
+   "text": "default negativity towards any change"
+  },
+  {
+   "t": 1576.24,
+   "d": 1.84,
+   "text": "from veterans"
+  },
+  {
+   "t": 1578.08,
+   "d": 3.12,
+   "text": "oh that's a very good one actually so"
+  },
+  {
+   "t": 1581.2,
+   "d": 1.36,
+   "text": "this is actually a recent example of"
+  },
+  {
+   "t": 1582.56,
+   "d": 2.0,
+   "text": "that the new music in the game"
+  },
+  {
+   "t": 1584.56,
+   "d": 1.44,
+   "text": "um"
+  },
+  {
+   "t": 1586.0,
+   "d": 1.68,
+   "text": "rather than having the old music and"
+  },
+  {
+   "t": 1587.68,
+   "d": 2.0,
+   "text": "then just add new stuff and have a kind"
+  },
+  {
+   "t": 1589.68,
+   "d": 3.04,
+   "text": "of a weird rift in uh music styles"
+  },
+  {
+   "t": 1592.72,
+   "d": 3.28,
+   "text": "christian i opted instead to"
+  },
+  {
+   "t": 1596.0,
+   "d": 2.4,
+   "text": "remake the game's existing tracks"
+  },
+  {
+   "t": 1598.4,
+   "d": 1.36,
+   "text": "which have been in the game for almost a"
+  },
+  {
+   "t": 1599.76,
+   "d": 1.68,
+   "text": "decade now"
+  },
+  {
+   "t": 1601.44,
+   "d": 1.84,
+   "text": "ultimately when it comes to these things"
+  },
+  {
+   "t": 1603.28,
+   "d": 1.2,
+   "text": "you have to"
+  },
+  {
+   "t": 1604.48,
+   "d": 2.32,
+   "text": "i at least what i have done"
+  },
+  {
+   "t": 1606.8,
+   "d": 1.76,
+   "text": "is accounted for the fact that there's"
+  },
+  {
+   "t": 1608.56,
+   "d": 1.92,
+   "text": "going to be some change resistance there"
+  },
+  {
+   "t": 1610.48,
+   "d": 2.32,
+   "text": "will be players who will just say i hate"
+  },
+  {
+   "t": 1612.8,
+   "d": 1.84,
+   "text": "this change it back why is it different"
+  },
+  {
+   "t": 1614.64,
+   "d": 3.28,
+   "text": "and you just sort of have to take it"
+  },
+  {
+   "t": 1617.92,
+   "d": 0.88,
+   "text": "um"
+  },
+  {
+   "t": 1618.8,
+   "d": 1.6,
+   "text": "and i know that's not necessarily very"
+  },
+  {
+   "t": 1620.4,
+   "d": 1.44,
+   "text": "helpful if it's it's something new for"
+  },
+  {
+   "t": 1621.84,
+   "d": 1.2,
+   "text": "you because you might not know what's"
+  },
+  {
+   "t": 1623.04,
+   "d": 2.24,
+   "text": "the acceptable amount of dislike"
+  },
+  {
+   "t": 1625.28,
+   "d": 3.28,
+   "text": "um but in my own experiences there is a"
+  },
+  {
+   "t": 1628.56,
+   "d": 2.24,
+   "text": "noticeable difference between change"
+  },
+  {
+   "t": 1630.8,
+   "d": 2.4,
+   "text": "resistance and the community genuinely"
+  },
+  {
+   "t": 1633.2,
+   "d": 1.44,
+   "text": "not liking something"
+  },
+  {
+   "t": 1634.64,
+   "d": 1.28,
+   "text": "right"
+  },
+  {
+   "t": 1635.92,
+   "d": 1.92,
+   "text": "experience to pick up on that difference"
+  },
+  {
+   "t": 1637.84,
+   "d": 2.72,
+   "text": "i suppose one one thing to note is is"
+  },
+  {
+   "t": 1640.56,
+   "d": 1.44,
+   "text": "what are they saying aside from just"
+  },
+  {
+   "t": 1642.0,
+   "d": 2.24,
+   "text": "being upset is it please change it back"
+  },
+  {
+   "t": 1644.24,
+   "d": 1.6,
+   "text": "or are they giving you actionable"
+  },
+  {
+   "t": 1645.84,
+   "d": 2.56,
+   "text": "reasons why they dislike the new thing"
+  },
+  {
+   "t": 1648.4,
+   "d": 2.16,
+   "text": "right that's a good point um yeah maybe"
+  },
+  {
+   "t": 1650.56,
+   "d": 1.68,
+   "text": "one other quick question of the two"
+  },
+  {
+   "t": 1652.24,
+   "d": 2.24,
+   "text": "minutes we have from cuttlefish man um"
+  },
+  {
+   "t": 1654.48,
+   "d": 2.32,
+   "text": "you mentioned earlier how you"
+  },
+  {
+   "t": 1656.8,
+   "d": 1.76,
+   "text": "occasionally run up against stuff that's"
+  },
+  {
+   "t": 1658.56,
+   "d": 2.88,
+   "text": "unfun but is balanced can you talk about"
+  },
+  {
+   "t": 1661.44,
+   "d": 1.76,
+   "text": "an example of that"
+  },
+  {
+   "t": 1663.2,
+   "d": 2.16,
+   "text": "well i think so if you want to say it"
+  },
+  {
+   "t": 1665.36,
+   "d": 2.0,
+   "text": "from a numbers perspective uh one of one"
+  },
+  {
+   "t": 1667.36,
+   "d": 1.84,
+   "text": "of the scariest things that you can see"
+  },
+  {
+   "t": 1669.2,
+   "d": 2.48,
+   "text": "uh for the numbers is something like"
+  },
+  {
+   "t": 1671.68,
+   "d": 2.48,
+   "text": "an item with very very low usage but"
+  },
+  {
+   "t": 1674.16,
+   "d": 2.88,
+   "text": "very very high win rate"
+  },
+  {
+   "t": 1677.04,
+   "d": 1.2,
+   "text": "because that means there's something"
+  },
+  {
+   "t": 1678.24,
+   "d": 2.32,
+   "text": "that's preventing the players from using"
+  },
+  {
+   "t": 1680.56,
+   "d": 1.92,
+   "text": "that item frequently but when they use"
+  },
+  {
+   "t": 1682.48,
+   "d": 2.0,
+   "text": "it it's very very good"
+  },
+  {
+   "t": 1684.48,
+   "d": 2.08,
+   "text": "or similarly if something has extremely"
+  },
+  {
+   "t": 1686.56,
+   "d": 2.0,
+   "text": "high win rates but the player feedback"
+  },
+  {
+   "t": 1688.56,
+   "d": 1.92,
+   "text": "you're getting isn't that it has very"
+  },
+  {
+   "t": 1690.48,
+   "d": 1.84,
+   "text": "high win rates when there's that kind of"
+  },
+  {
+   "t": 1692.32,
+   "d": 1.76,
+   "text": "big disagreement between player"
+  },
+  {
+   "t": 1694.08,
+   "d": 1.36,
+   "text": "sentiment and the numbers there's got to"
+  },
+  {
+   "t": 1695.44,
+   "d": 2.48,
+   "text": "be a reason for that"
+  },
+  {
+   "t": 1697.92,
+   "d": 1.28,
+   "text": "so at least from an analytics and"
+  },
+  {
+   "t": 1699.2,
+   "d": 2.08,
+   "text": "feedback standpoint you have to identify"
+  },
+  {
+   "t": 1701.28,
+   "d": 1.68,
+   "text": "why that's happening and then try to"
+  },
+  {
+   "t": 1702.96,
+   "d": 2.08,
+   "text": "account for it and most commonly for me"
+  },
+  {
+   "t": 1705.04,
+   "d": 1.36,
+   "text": "in shattered pixel dungeon it's when"
+  },
+  {
+   "t": 1706.4,
+   "d": 2.88,
+   "text": "there are big sources of passive power"
+  },
+  {
+   "t": 1709.28,
+   "d": 2.48,
+   "text": "when there's something like an item like"
+  },
+  {
+   "t": 1711.76,
+   "d": 1.6,
+   "text": "just as an example say an item that"
+  },
+  {
+   "t": 1713.36,
+   "d": 1.84,
+   "text": "makes the player regain their health"
+  },
+  {
+   "t": 1715.2,
+   "d": 2.48,
+   "text": "more quickly that's not very visual the"
+  },
+  {
+   "t": 1717.68,
+   "d": 2.0,
+   "text": "player isn't really going to notice when"
+  },
+  {
+   "t": 1719.68,
+   "d": 2.0,
+   "text": "they get little bits of health but it"
+  },
+  {
+   "t": 1721.68,
+   "d": 2.24,
+   "text": "makes a big big difference to how likely"
+  },
+  {
+   "t": 1723.92,
+   "d": 1.68,
+   "text": "they are to beat the game"
+  },
+  {
+   "t": 1725.6,
+   "d": 1.68,
+   "text": "right"
+  },
+  {
+   "t": 1727.28,
+   "d": 3.12,
+   "text": "right okay well thank you um"
+  },
+  {
+   "t": 1730.4,
+   "d": 2.16,
+   "text": "yeah again a lot of it comes back to"
+  },
+  {
+   "t": 1732.56,
+   "d": 2.0,
+   "text": "interaction that's right"
+  },
+  {
+   "t": 1734.56,
+   "d": 1.84,
+   "text": "from my experience the most surefire way"
+  },
+  {
+   "t": 1736.4,
+   "d": 2.64,
+   "text": "to make something fun is to have it"
+  },
+  {
+   "t": 1739.04,
+   "d": 1.52,
+   "text": "change the way the player wants to"
+  },
+  {
+   "t": 1740.56,
+   "d": 1.36,
+   "text": "interact with things"
+  },
+  {
+   "t": 1741.92,
+   "d": 2.16,
+   "text": "yeah i think that that ties nicely into"
+  },
+  {
+   "t": 1744.08,
+   "d": 2.48,
+   "text": "earlier talks we've had too about even"
+  },
+  {
+   "t": 1746.56,
+   "d": 1.84,
+   "text": "you know questions about juiciness of"
+  },
+  {
+   "t": 1748.4,
+   "d": 2.0,
+   "text": "like what actually do you feel in terms"
+  },
+  {
+   "t": 1750.4,
+   "d": 3.44,
+   "text": "of the way the game's playing out"
+  }
+ ]
+}

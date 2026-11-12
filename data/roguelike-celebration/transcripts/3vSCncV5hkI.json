@@ -1,0 +1,1219 @@
+{
+ "id": "3vSCncV5hkI",
+ "url": "https://www.youtube.com/watch?v=3vSCncV5hkI",
+ "title": "Tom Francis - Generating boring levels for fresh experiences in Heat Signature",
+ "speaker": "Tom Francis",
+ "talk_title": "Generating boring levels for fresh experiences in Heat Signature",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-16",
+ "duration_s": 973,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "When making Heat Signature, our procedural spaceship infiltration game, I found that we didn't need to generate interesting levels to generate interesting experiences. I'll run through the very basic way our level generation works and why, then explain how we approached the game design to ensure it could throw out fresh experiences even when the levels themselves were boring.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 85,
+   "title": "Gates and keys"
+  },
+  {
+   "start": 217,
+   "title": "Security zones"
+  },
+  {
+   "start": 313,
+   "title": "Examples"
+  },
+  {
+   "start": 341,
+   "title": "Make more interesting cards"
+  },
+  {
+   "start": 382,
+   "title": "What are cards"
+  },
+  {
+   "start": 422,
+   "title": "What are tools"
+  },
+  {
+   "start": 482,
+   "title": "Teleporters"
+  },
+  {
+   "start": 605,
+   "title": "Enemy Traits"
+  },
+  {
+   "start": 698,
+   "title": "Filters"
+  },
+  {
+   "start": 713,
+   "title": "Alarms"
+  },
+  {
+   "start": 936,
+   "title": "Summary"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2446,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 5.79,
+   "d": 0.78,
+   "text": "ALEXEI: Moving right along through our lightning talks."
+  },
+  {
+   "t": 6.57,
+   "d": 2.51,
+   "text": "We next up have Tom Francis who you may know."
+  },
+  {
+   "t": 9.08,
+   "d": 3.33,
+   "text": "Designer and writer and coder of Gunpoint, Heat Signature,"
+  },
+  {
+   "t": 12.41,
+   "d": 4.97,
+   "text": "and Tactical Breach Wizards, which is one of my favorite names for a game."
+  },
+  {
+   "t": 17.59,
+   "d": 3.09,
+   "text": "Welcome to the stage, Tom."
+  },
+  {
+   "t": 20.68,
+   "d": 0.82,
+   "text": "TOM: I am tom"
+  },
+  {
+   "t": 21.5,
+   "d": 2.8,
+   "text": "This is Heat Signature."
+  },
+  {
+   "t": 24.3,
+   "d": 5.7,
+   "text": "It is a roguelike in space where you take jobs from clients to break into spaceships"
+  },
+  {
+   "t": 30.0,
+   "d": 2.23,
+   "text": "as they are flying around the galaxy."
+  },
+  {
+   "t": 32.23,
+   "d": 4.41,
+   "text": "You are trying steal something, rescue somebody, kill somebody."
+  },
+  {
+   "t": 36.63,
+   "d": 2.17,
+   "text": "That kind of thing."
+  },
+  {
+   "t": 38.8,
+   "d": 2.87,
+   "text": "One of the first things I needed to think about is how are we going to generate the ships"
+  },
+  {
+   "t": 41.67,
+   "d": 7.99,
+   "text": "Random generation I want it to be fresh and endlessly and new experiences for all time."
+  },
+  {
+   "t": 49.67,
+   "d": 4.26,
+   "text": "My ambitions with the level generation started actually a bit lower and went lower and lower"
+  },
+  {
+   "t": 53.93,
+   "d": 10.94,
+   "text": "and lower because my first thought was that -- first of all, I established they needed"
+  },
+  {
+   "t": 64.87,
+   "d": 3.21,
+   "text": "to actually feel like levels and shouldn't just feel like spaceships because it turns"
+  },
+  {
+   "t": 68.08,
+   "d": 3.18,
+   "text": "out if you make something that feels like a place and not a level you don't really have"
+  },
+  {
+   "t": 71.26,
+   "d": 1.52,
+   "text": "game."
+  },
+  {
+   "t": 72.78,
+   "d": 1.19,
+   "text": "Games kind of need levels."
+  },
+  {
+   "t": 73.97,
+   "d": 3.98,
+   "text": "Of course I had to drill down into what do I mean by that?"
+  },
+  {
+   "t": 77.95,
+   "d": 1.0,
+   "text": "What is a level?"
+  },
+  {
+   "t": 78.95,
+   "d": 6.16,
+   "text": "What makes a level feel like game and what is the essential backbone of it?"
+  },
+  {
+   "t": 85.11,
+   "d": 11.82,
+   "text": "So, in the context of like spaceships, I reckoned the simplest structure I could have was for"
+  },
+  {
+   "t": 96.93,
+   "d": 1.0,
+   "text": "gates and keys."
+  },
+  {
+   "t": 97.93,
+   "d": 3.64,
+   "text": "You can see how quickly my plans went awry."
+  },
+  {
+   "t": 101.57,
+   "d": 4.84,
+   "text": "Basically the progression you make toward the objective is what makes it feel like a"
+  },
+  {
+   "t": 106.41,
+   "d": 1.0,
+   "text": "level."
+  },
+  {
+   "t": 107.41,
+   "d": 1.21,
+   "text": "Make progression in chunks."
+  },
+  {
+   "t": 108.62,
+   "d": 6.72,
+   "text": "Closer to the objective without immediately reaching it and without being completely stuck."
+  },
+  {
+   "t": 115.34,
+   "d": 5.21,
+   "text": "My implementation for that for spaceships is it should be a series of gates and keys."
+  },
+  {
+   "t": 120.55,
+   "d": 7.7,
+   "text": "In the place where you dock is where you start and this is a security wand zone."
+  },
+  {
+   "t": 128.25,
+   "d": 5.29,
+   "text": "There is a level one key card and all the doors out of here are level one doors."
+  },
+  {
+   "t": 133.54,
+   "d": 2.72,
+   "text": "Not all actually."
+  },
+  {
+   "t": 136.26,
+   "d": 2.23,
+   "text": "That's part of why this system sucks."
+  },
+  {
+   "t": 138.49,
+   "d": 5.93,
+   "text": "Once you have the level one key, you have to get to zone two and get level two key but"
+  },
+  {
+   "t": 144.42,
+   "d": 4.34,
+   "text": "it is quite complicated and that's why I did it this way."
+  },
+  {
+   "t": 148.76,
+   "d": 7.4,
+   "text": "I wanted it to be complicated and intricate and thought the next ship well tessellate"
+  },
+  {
+   "t": 156.16,
+   "d": 4.79,
+   "text": "differently and the ships will be more different and more interesting differences between the"
+  },
+  {
+   "t": 160.95,
+   "d": 1.0,
+   "text": "missions."
+  },
+  {
+   "t": 161.95,
+   "d": 7.69,
+   "text": "And that sucked because the interesting differences there are not that interesting and actually"
+  },
+  {
+   "t": 169.64,
+   "d": 1.39,
+   "text": "they are kind of worse than boring."
+  },
+  {
+   "t": 171.03,
+   "d": 1.89,
+   "text": "It is just annoying."
+  },
+  {
+   "t": 172.92,
+   "d": 3.82,
+   "text": "You dock with a ship and just have to sit there puzzling out where do I need to go?"
+  },
+  {
+   "t": 176.74,
+   "d": 4.49,
+   "text": "I want to get to zone 8 but how do I get there because zone 4 isn't where I expect it to"
+  },
+  {
+   "t": 181.23,
+   "d": 2.04,
+   "text": "be."
+  },
+  {
+   "t": 183.27,
+   "d": 1.03,
+   "text": "That's not interesting gameplay."
+  },
+  {
+   "t": 184.3,
+   "d": 1.0,
+   "text": "That's a chore."
+  },
+  {
+   "t": 185.3,
+   "d": 3.56,
+   "text": "They are not just boring but they are actively annoying."
+  },
+  {
+   "t": 188.86,
+   "d": 4.52,
+   "text": "The other problem with it is the zone I am in is what I need to be worrying about and"
+  },
+  {
+   "t": 193.38,
+   "d": 3.2,
+   "text": "don't need to think about the whole ship."
+  },
+  {
+   "t": 196.58,
+   "d": 2.55,
+   "text": "The zone I am in I do need to think about are that all of time."
+  },
+  {
+   "t": 199.13,
+   "d": 2.35,
+   "text": "So I need to see it and need it on the screen."
+  },
+  {
+   "t": 201.48,
+   "d": 6.17,
+   "text": "To see all interesting shape zones, whichever zone, you have to zoom out to keep it on screen"
+  },
+  {
+   "t": 207.65,
+   "d": 1.92,
+   "text": "and are viewing the screen like this."
+  },
+  {
+   "t": 209.57,
+   "d": 4.4,
+   "text": "Where I can't even tell which is the enemies and me."
+  },
+  {
+   "t": 213.97,
+   "d": 3.96,
+   "text": "You can barely see there are people."
+  },
+  {
+   "t": 217.93,
+   "d": 1.74,
+   "text": "I simplified drastically."
+  },
+  {
+   "t": 219.67,
+   "d": 6.08,
+   "text": "Each zone is self contained and it is basically a rectangle so it fits on the screen."
+  },
+  {
+   "t": 225.75,
+   "d": 4.11,
+   "text": "I can see it at this zoom level."
+  },
+  {
+   "t": 229.86,
+   "d": 6.84,
+   "text": "In theory, if this wasn't a cropped larger screenshot these people would be visible and"
+  },
+  {
+   "t": 236.7,
+   "d": 6.07,
+   "text": "you can see John Robert's wonderful art and the whole thing looks very nice."
+  },
+  {
+   "t": 242.77,
+   "d": 1.0,
+   "text": "That means keeping it very, very simple."
+  },
+  {
+   "t": 243.77,
+   "d": 3.96,
+   "text": "There is a key, guards and a locked door."
+  },
+  {
+   "t": 247.73,
+   "d": 1.0,
+   "text": "That's it."
+  },
+  {
+   "t": 248.73,
+   "d": 3.67,
+   "text": "That one zone and a cropped version of another shot."
+  },
+  {
+   "t": 252.4,
+   "d": 3.0,
+   "text": "This is the full shot with the zones labeled on it."
+  },
+  {
+   "t": 255.4,
+   "d": 5.19,
+   "text": "Level three is branching and objective is 3-5."
+  },
+  {
+   "t": 260.59,
+   "d": 8.25,
+   "text": "What I want you to notice is it an absolutely miserable boring and there is nothing interesting"
+  },
+  {
+   "t": 268.84,
+   "d": 1.43,
+   "text": "about this."
+  },
+  {
+   "t": 270.27,
+   "d": 2.67,
+   "text": "It is just nuts and bolts and does its job."
+  },
+  {
+   "t": 272.94,
+   "d": 1.0,
+   "text": "It is structure."
+  },
+  {
+   "t": 273.94,
+   "d": 1.0,
+   "text": "I needed structure."
+  },
+  {
+   "t": 274.94,
+   "d": 1.0,
+   "text": "Now there is structure."
+  },
+  {
+   "t": 275.94,
+   "d": 1.0,
+   "text": "Great."
+  },
+  {
+   "t": 276.94,
+   "d": 4.66,
+   "text": "The problem is this structure is very boring and the individual segments are also very"
+  },
+  {
+   "t": 281.6,
+   "d": 1.0,
+   "text": "boring."
+  },
+  {
+   "t": 282.6,
+   "d": 4.91,
+   "text": "We have a boring tapestry of smaller boring elements."
+  },
+  {
+   "t": 287.51,
+   "d": 5.95,
+   "text": "It solves all my design problems but we are left with not that much breathing room to"
+  },
+  {
+   "t": 293.46,
+   "d": 2.64,
+   "text": "generate interesting differences in the levels themselves."
+  },
+  {
+   "t": 296.1,
+   "d": 5.0,
+   "text": "The level generate, bless its heart, was doing its best but I restricted it a lot."
+  },
+  {
+   "t": 301.1,
+   "d": 9.32,
+   "text": "The question on my mind is how we do make the game fresh when the differences between"
+  },
+  {
+   "t": 310.42,
+   "d": 3.92,
+   "text": "the levels are this trivial nonsense?"
+  },
+  {
+   "t": 314.34,
+   "d": 3.62,
+   "text": "So, yeah."
+  },
+  {
+   "t": 317.96,
+   "d": 2.86,
+   "text": "Let me just illustrate what kind of differences I am talking about."
+  },
+  {
+   "t": 320.82,
+   "d": 5.24,
+   "text": "This is in practice mode and it will generate one zone and you can play a short no stake"
+  },
+  {
+   "t": 326.06,
+   "d": 1.0,
+   "text": "game."
+  },
+  {
+   "t": 327.06,
+   "d": 4.79,
+   "text": "I am tap through a bunch so you can see how one ship differs from the next."
+  },
+  {
+   "t": 331.85,
+   "d": 3.21,
+   "text": "Rooms and corridors in different orders and layouts and guards."
+  },
+  {
+   "t": 335.06,
+   "d": 8.21,
+   "text": "Thinking about how do we turn that into a fresh experience?"
+  },
+  {
+   "t": 343.27,
+   "d": 3.6,
+   "text": "If you can't make the shuffle interesting, make more interesting cards."
+  },
+  {
+   "t": 346.87,
+   "d": 5.89,
+   "text": "This level generator I have taken its legs out from under it all it can do is shuffle"
+  },
+  {
+   "t": 352.76,
+   "d": 3.65,
+   "text": "walls around and it got me thinking about shuffling cards."
+  },
+  {
+   "t": 356.41,
+   "d": 9.89,
+   "text": "You make those games interesting not by doing more interesting shuffles and more intelligently"
+  },
+  {
+   "t": 366.3,
+   "d": 2.45,
+   "text": "placing the king just where you want it in the deck."
+  },
+  {
+   "t": 368.75,
+   "d": 2.22,
+   "text": "You do it my making the cards mean more interesting things."
+  },
+  {
+   "t": 370.97,
+   "d": 9.06,
+   "text": "And if you aren't playing with a regular deck you make the cards interesting with new rules."
+  },
+  {
+   "t": 380.03,
+   "d": 5.02,
+   "text": "Then we have to think about what are the cards."
+  },
+  {
+   "t": 385.05,
+   "d": 2.02,
+   "text": "Flying through space and boarding spaceships."
+  },
+  {
+   "t": 387.07,
+   "d": 7.48,
+   "text": "It is stealth and emergent as well."
+  },
+  {
+   "t": 394.55,
+   "d": 4.84,
+   "text": "I think the three kinds of cards in that context are player tools, enemy traits, and global"
+  },
+  {
+   "t": 399.39,
+   "d": 9.72,
+   "text": "filters in Heat Signature in.. -- the tools are the ability and all things the player"
+  },
+  {
+   "t": 409.11,
+   "d": 1.68,
+   "text": "can do."
+  },
+  {
+   "t": 410.79,
+   "d": 6.29,
+   "text": "Things like shields, armor, various ways the enemy might be able to push back or avoid"
+  },
+  {
+   "t": 417.08,
+   "d": 1.0,
+   "text": "or detect you."
+  },
+  {
+   "t": 418.08,
+   "d": 3.85,
+   "text": "And global filter I won't explain what a filter is just yet."
+  },
+  {
+   "t": 421.93,
+   "d": 3.94,
+   "text": "For tools, what is a shuffle friendly player tool?"
+  },
+  {
+   "t": 425.87,
+   "d": 4.04,
+   "text": "What tools are good if you put them into a shuffled environment?"
+  },
+  {
+   "t": 429.91,
+   "d": 3.66,
+   "text": "Obviously between different tools you want to vary what effect they have."
+  },
+  {
+   "t": 433.57,
+   "d": 3.27,
+   "text": "I can that's where it all starts."
+  },
+  {
+   "t": 436.84,
+   "d": 3.45,
+   "text": "I can we also want to look at the constraints and freedoms."
+  },
+  {
+   "t": 440.29,
+   "d": 7.0,
+   "text": "I think in terms of, you know, a teleporter is a device that has a freedom you don't normally."
+  },
+  {
+   "t": 447.29,
+   "d": 5.27,
+   "text": "You can teleport through walls and get to somewhere you couldn't normally get to."
+  },
+  {
+   "t": 452.56,
+   "d": 1.05,
+   "text": "Range is the obvious one."
+  },
+  {
+   "t": 453.61,
+   "d": 3.32,
+   "text": "All the gadgets are constrained by range to some extent or another."
+  },
+  {
+   "t": 456.93,
+   "d": 6.77,
+   "text": "A teleporter without constraint and freedom is quite boring because those two things,"
+  },
+  {
+   "t": 463.7,
+   "d": 4.45,
+   "text": "sure, relate to the layout of the level but they don't really interact with it."
+  },
+  {
+   "t": 468.15,
+   "d": 6.28,
+   "text": "It doesn't matter how the level is laid ow out to drill down into what I mean my constraints"
+  },
+  {
+   "t": 474.43,
+   "d": 4.52,
+   "text": "and freedoms teleport is a good example."
+  },
+  {
+   "t": 478.95,
+   "d": 4.13,
+   "text": "There are three kinds of teleport in Heat Signature and none do what I said."
+  },
+  {
+   "t": 483.08,
+   "d": 2.87,
+   "text": "The first is a sidewinder."
+  },
+  {
+   "t": 485.95,
+   "d": 5.08,
+   "text": "You can teleport there."
+  },
+  {
+   "t": 491.03,
+   "d": 3.76,
+   "text": "There are three guards."
+  },
+  {
+   "t": 494.79,
+   "d": 3.89,
+   "text": "I can go past all those."
+  },
+  {
+   "t": 498.68,
+   "d": 3.12,
+   "text": "They won't see me or hit me."
+  },
+  {
+   "t": 501.8,
+   "d": 3.92,
+   "text": "It is instantaneous."
+  },
+  {
+   "t": 505.72,
+   "d": 4.77,
+   "text": "Sort as if the atoms are contained along the path."
+  },
+  {
+   "t": 510.49,
+   "d": 2.93,
+   "text": "That one you need a path."
+  },
+  {
+   "t": 513.42,
+   "d": 3.81,
+   "text": "But needs time and detection and a bunch of other things like line of sight."
+  },
+  {
+   "t": 517.23,
+   "d": 4.12,
+   "text": "The swapper can take you through paths."
+  },
+  {
+   "t": 521.35,
+   "d": 6.88,
+   "text": "It is constrained by guard positions and matters where the people are."
+  },
+  {
+   "t": 528.23,
+   "d": 10.14,
+   "text": "That is going to change and where you is a dynamic thing."
+  },
+  {
+   "t": 538.37,
+   "d": 2.14,
+   "text": "By-passes pathing and line of sight."
+  },
+  {
+   "t": 540.51,
+   "d": 1.0,
+   "text": "The last one is the visitor."
+  },
+  {
+   "t": 541.51,
+   "d": 4.24,
+   "text": "Visitor doesn't need pathing or guards."
+  },
+  {
+   "t": 545.75,
+   "d": 6.22,
+   "text": "It really does just take you to exactly where you click and its own constraint is time."
+  },
+  {
+   "t": 551.97,
+   "d": 6.59,
+   "text": "After three seconds of moving it you are teleported back to where you come from."
+  },
+  {
+   "t": 558.56,
+   "d": 4.35,
+   "text": "It is dependent on where you are teleporting to."
+  },
+  {
+   "t": 562.91,
+   "d": 4.65,
+   "text": "In this example, I am safe and no one is going to see me."
+  },
+  {
+   "t": 567.56,
+   "d": 4.42,
+   "text": "For my visit to be useful, I haven't gone into the high security zone."
+  },
+  {
+   "t": 571.98,
+   "d": 1.69,
+   "text": "I am not there."
+  },
+  {
+   "t": 573.67,
+   "d": 5.3,
+   "text": "I would need to get the key card guy in the bottom right where my cursor is."
+  },
+  {
+   "t": 578.97,
+   "d": 3.03,
+   "text": "I need to steal his key but he is covered boy other people."
+  },
+  {
+   "t": 582.0,
+   "d": 1.99,
+   "text": "It is not a great spot for a visitor."
+  },
+  {
+   "t": 583.99,
+   "d": 4.43,
+   "text": "I would have three seconds to find a way to get the key but if I had a key cloner which"
+  },
+  {
+   "t": 588.42,
+   "d": 3.13,
+   "text": "is a device that can clone keys at short range through walls."
+  },
+  {
+   "t": 591.55,
+   "d": 6.33,
+   "text": "It bypasses collision and it is constrained by range."
+  },
+  {
+   "t": 597.88,
+   "d": 1.0,
+   "text": "That would be perfect."
+  },
+  {
+   "t": 598.88,
+   "d": 3.63,
+   "text": "I could visit, grab the key and teleport back and now I have the key to the zone so I can"
+  },
+  {
+   "t": 602.51,
+   "d": 2.88,
+   "text": "get in there."
+  },
+  {
+   "t": 605.39,
+   "d": 6.44,
+   "text": "So for enemy traits, really the same philosophy, bypasses and constraints."
+  },
+  {
+   "t": 611.83,
+   "d": 6.35,
+   "text": "Some enemies have heat sensors that bypasses the line of sight."
+  },
+  {
+   "t": 618.18,
+   "d": 2.07,
+   "text": "With the heat censor they can know you are there."
+  },
+  {
+   "t": 620.25,
+   "d": 4.39,
+   "text": "But it has a shorter vision range."
+  },
+  {
+   "t": 624.64,
+   "d": 6.31,
+   "text": "If they want to see you through a wall they have to be close."
+  },
+  {
+   "t": 630.95,
+   "d": 4.13,
+   "text": "Glitch dash is a trait the gods can have meaning as soon as they hear a suspicious sound they"
+  },
+  {
+   "t": 635.08,
+   "d": 6.24,
+   "text": "will teleport to it."
+  },
+  {
+   "t": 641.32,
+   "d": 5.01,
+   "text": "In terms of the glitch dash they can teleport as far and instantaneous as they like."
+  },
+  {
+   "t": 646.33,
+   "d": 5.33,
+   "text": "It might not sound too wild but when you play anyone who has played and encountered this"
+  },
+  {
+   "t": 651.66,
+   "d": 4.37,
+   "text": "it is always surprising no matter how ready you think you are."
+  },
+  {
+   "t": 656.03,
+   "d": 5.69,
+   "text": "Five Gods teleporting to the second you make a noise is this instant oh fuck situation."
+  },
+  {
+   "t": 661.72,
+   "d": 5.3,
+   "text": "They need to know you are there and to have a reason to teleport in."
+  },
+  {
+   "t": 667.02,
+   "d": 6.19,
+   "text": "And we have an enemy type called the tracker."
+  },
+  {
+   "t": 673.21,
+   "d": 9.37,
+   "text": "It is walking through the whole ship so it is constrained by pathing and time."
+  },
+  {
+   "t": 682.58,
+   "d": 1.75,
+   "text": "It doesn't even run."
+  },
+  {
+   "t": 684.33,
+   "d": 1.89,
+   "text": "It is methodical."
+  },
+  {
+   "t": 686.22,
+   "d": 1.37,
+   "text": "But bypasses detection."
+  },
+  {
+   "t": 687.59,
+   "d": 1.09,
+   "text": "Doesn't need hear or see you."
+  },
+  {
+   "t": 688.68,
+   "d": 5.24,
+   "text": "The pathing part of that is interesting because you get to see its path and you know where"
+  },
+  {
+   "t": 693.92,
+   "d": 5.85,
+   "text": "it will walk so you can Duke it, trick it and lay traps."
+  },
+  {
+   "t": 699.77,
+   "d": 1.06,
+   "text": "Filters I will explain that."
+  },
+  {
+   "t": 700.83,
+   "d": 4.78,
+   "text": "I define a filter as a global change that warps the player's experience of the same"
+  },
+  {
+   "t": 705.61,
+   "d": 2.48,
+   "text": "content and in this case same level."
+  },
+  {
+   "t": 708.09,
+   "d": 2.28,
+   "text": "What changes can we make that will make the same level play differently?"
+  },
+  {
+   "t": 710.37,
+   "d": 8.96,
+   "text": "We will never make you play the same level twice but --"
+  },
+  {
+   "t": 719.33,
+   "d": 3.82,
+   "text": "mission clause everything time you take a mission the highest paid ones have an extra"
+  },
+  {
+   "t": 723.15,
+   "d": 1.0,
+   "text": "clause."
+  },
+  {
+   "t": 724.15,
+   "d": 5.39,
+   "text": "You only get full pay if you don't kill anyone or one is no witnesses so if anyone sees you"
+  },
+  {
+   "t": 729.54,
+   "d": 3.73,
+   "text": "have to kill them and the hardest is ghost."
+  },
+  {
+   "t": 733.27,
+   "d": 12.01,
+   "text": "Don't let them see you and that is brutal and transforms the level."
+  },
+  {
+   "t": 745.28,
+   "d": 6.83,
+   "text": "Even the least armored guard is just as bad of a threat as the nastiest boss because seeing"
+  },
+  {
+   "t": 752.11,
+   "d": 1.0,
+   "text": "is failure."
+  },
+  {
+   "t": 753.11,
+   "d": 3.1,
+   "text": "Each ship has its own alarm type."
+  },
+  {
+   "t": 756.21,
+   "d": 2.56,
+   "text": "When you trip the alarm something happens on different ships."
+  },
+  {
+   "t": 758.77,
+   "d": 8.04,
+   "text": "The default is you have a time mission to get out of the."
+  },
+  {
+   "t": 766.81,
+   "d": 5.26,
+   "text": "Adding a time constraint to a game that doesn't normally have it radically changes all considerations."
+  },
+  {
+   "t": 772.07,
+   "d": 1.36,
+   "text": "All your plans go out the window."
+  },
+  {
+   "t": 773.43,
+   "d": 5.73,
+   "text": "You have to start thinking about you still can't afford to go guns blazing usually."
+  },
+  {
+   "t": 779.16,
+   "d": 5.18,
+   "text": "It becomes a speed stealth of how can I dot through this room and distract someone for"
+  },
+  {
+   "t": 784.34,
+   "d": 4.87,
+   "text": "a second so I can get this done before I get caught."
+  },
+  {
+   "t": 789.21,
+   "d": 5.86,
+   "text": "But if your mission is to rescue somebody or assassinate or capture somebody, you have"
+  },
+  {
+   "t": 795.07,
+   "d": 4.19,
+   "text": "a human target you are trying to get to, one of the types is the target will flee when"
+  },
+  {
+   "t": 799.26,
+   "d": 3.62,
+   "text": "the alarm is triggered so there is a teleporter pad on the ship and they will run to that"
+  },
+  {
+   "t": 802.88,
+   "d": 4.02,
+   "text": "and escape and once that happens the mission is failed."
+  },
+  {
+   "t": 806.9,
+   "d": 1.02,
+   "text": "Where is the teleporter pad?"
+  },
+  {
+   "t": 807.92,
+   "d": 5.52,
+   "text": "I have had missions where it is closer than the target so if I can get there first I can"
+  },
+  {
+   "t": 813.44,
+   "d": 7.43,
+   "text": "lay a trap and get him and some don't have an alarm at all and that completely changes"
+  },
+  {
+   "t": 820.87,
+   "d": 2.54,
+   "text": "all of the stealth considerations."
+  },
+  {
+   "t": 823.41,
+   "d": 1.0,
+   "text": "Being detected is still risky."
+  },
+  {
+   "t": 824.41,
+   "d": 5.08,
+   "text": "People are going to shoot you and guards come running but there is no long term consequence."
+  },
+  {
+   "t": 829.49,
+   "d": 4.39,
+   "text": "If you can manage the situation you can get away with it."
+  },
+  {
+   "t": 833.88,
+   "d": 5.71,
+   "text": "And there is a tool you can use to lure people because there is no longer this heavy cost."
+  },
+  {
+   "t": 839.59,
+   "d": 3.1,
+   "text": "And character traits we added them in an update."
+  },
+  {
+   "t": 842.69,
+   "d": 3.91,
+   "text": "With you start a run you are always playing as someone new."
+  },
+  {
+   "t": 846.6,
+   "d": 4.79,
+   "text": "We randomly generate characters."
+  },
+  {
+   "t": 851.39,
+   "d": 7.38,
+   "text": "Later we added these traits and that will filter the run."
+  },
+  {
+   "t": 858.77,
+   "d": 5.43,
+   "text": "Glitch stick is any time you teleport you pass out so teleporting into a combat situation"
+  },
+  {
+   "t": 864.2,
+   "d": 7.5,
+   "text": "is no longer an option and it is a subtle tool about getting to somewhere, an empty"
+  },
+  {
+   "t": 871.7,
+   "d": 3.48,
+   "text": "room, and having time to recover before I do it."
+  },
+  {
+   "t": 875.18,
+   "d": 5.18,
+   "text": "Technophobe means nothing recharges."
+  },
+  {
+   "t": 880.36,
+   "d": 3.81,
+   "text": "The best ones are self-charging where the charge constantly generates."
+  },
+  {
+   "t": 884.17,
+   "d": 9.8,
+   "text": "If you are a technophobe you don't know and all-times are equally trash."
+  },
+  {
+   "t": 893.97,
+   "d": 1.22,
+   "text": "It is all garbage."
+  },
+  {
+   "t": 895.19,
+   "d": 6.6,
+   "text": "You can use it but can't get the uses back so you have to vary tactics."
+  },
+  {
+   "t": 901.79,
+   "d": 7.67,
+   "text": "And then shaky just means guns are not going to fire where you think they should."
+  },
+  {
+   "t": 909.46,
+   "d": 1.07,
+   "text": "You have to stick to gadgets."
+  },
+  {
+   "t": 910.53,
+   "d": 4.53,
+   "text": "There is the inverse of that which means you aren't strong enough so you have to use guns"
+  },
+  {
+   "t": 915.06,
+   "d": 1.31,
+   "text": "and gadgets."
+  },
+  {
+   "t": 916.37,
+   "d": 3.26,
+   "text": "This applies to all tactics."
+  },
+  {
+   "t": 919.63,
+   "d": 9.83,
+   "text": "If you look down the list and figure out how those are combined you can see how they interface"
+  },
+  {
+   "t": 929.46,
+   "d": 4.6,
+   "text": "with each other because they interface with the shuffling levels and that's what we can"
+  },
+  {
+   "t": 934.06,
+   "d": 1.78,
+   "text": "vary cheaply."
+  },
+  {
+   "t": 935.84,
+   "d": 1.31,
+   "text": "Yeah."
+  },
+  {
+   "t": 937.15,
+   "d": 5.78,
+   "text": "In summary, this is shuffle friendly game design and making elements that all you have"
+  },
+  {
+   "t": 942.93,
+   "d": 2.63,
+   "text": "to do is rearrange them and something interesting happens."
+  },
+  {
+   "t": 945.56,
+   "d": 5.77,
+   "text": "Design tools with different constraints and freedoms that relate closely to what gets"
+  },
+  {
+   "t": 951.33,
+   "d": 2.05,
+   "text": "shuffled when a level is generated."
+  },
+  {
+   "t": 953.38,
+   "d": 4.74,
+   "text": "And then yours can be boring just like mine."
+  },
+  {
+   "t": 958.12,
+   "d": 9.28,
+   "text": "We have one extra slide from Tom which is extra links and credits."
+  },
+  {
+   "t": 967.4,
+   "d": 5.12,
+   "text": "Thank you, Tom, for being understanding as we deal with these technical issues."
+  }
+ ]
+}

@@ -1,0 +1,1418 @@
+{
+ "id": "S5Ukp6AOdQY",
+ "url": "https://www.youtube.com/watch?v=S5Ukp6AOdQY",
+ "title": "Paul Hembree- Coordinate Systems as a Resource for Music Generation",
+ "speaker": "Paul Hembree",
+ "talk_title": "Coordinate Systems as a Resource for Music Generation",
+ "year": 2023,
+ "kind": "talk",
+ "upload_date": "2023-11-14",
+ "duration_s": 1812,
+ "playlists": [
+  "Roguelike Celebration 2023"
+ ],
+ "description": "This presentation will explore how the traversal of virtual spaces in games can be used to procedurally remix or even generate music. I'll show how you can connect a game's coordinate system to concepts from music theory and psychoacoustics to create a subtle, spatial synaesthesia, wherein your players move through both physical and harmonic space.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Introduction and background"
+  },
+  {
+   "start": 53,
+   "title": "Audible geometry concepts"
+  },
+  {
+   "start": 117,
+   "title": "Music theory basics"
+  },
+  {
+   "start": 211,
+   "title": "Mapping pitch to space"
+  },
+  {
+   "start": 467,
+   "title": "Analysis of game music"
+  },
+  {
+   "start": 658,
+   "title": "Implementing procedural audio"
+  },
+  {
+   "start": 1110,
+   "title": "System realization and demos"
+  },
+  {
+   "start": 1534,
+   "title": "Live Q&A session"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 3066,
+ "trimmed": {
+  "segments": 0,
+  "words": 0
+ },
+ "segments": [
+  {
+   "t": 5.82,
+   "d": 53.44,
+   "text": "Hi, my name is Paul Hembree, and today I’ll be talking about Audible Geometry: Using Coordinate"
+  },
+  {
+   "t": 59.26,
+   "d": 1.86,
+   "text": "Systems as a Resource for Music Generation."
+  },
+  {
+   "t": 61.12,
+   "d": 4.31,
+   "text": "I’ll draw examples from Rite of Tephra, a roguelite spelunker by Platypus Games - a"
+  },
+  {
+   "t": 65.43,
+   "d": 4.82,
+   "text": "game design duo consisting of my brother and I. I’ll also show you an analysis of a more"
+  },
+  {
+   "t": 70.25,
+   "d": 2.56,
+   "text": "well-known piece of music."
+  },
+  {
+   "t": 72.81,
+   "d": 2.61,
+   "text": "Most game developers grapple with coordinate systems of various kinds."
+  },
+  {
+   "t": 75.42,
+   "d": 3.8,
+   "text": "We use them as an organizing principle when building the worlds we want our players to"
+  },
+  {
+   "t": 79.22,
+   "d": 1.0,
+   "text": "explore."
+  },
+  {
+   "t": 80.22,
+   "d": 4.41,
+   "text": "The process of exploration itself can reveal things with aesthetic or emotional impact:"
+  },
+  {
+   "t": 84.63,
+   "d": 4.49,
+   "text": "we and our players discover new, arresting visual experiences, valuable resources, dangerous"
+  },
+  {
+   "t": 89.12,
+   "d": 2.84,
+   "text": "adversaries, and other things while moving through our game worlds."
+  },
+  {
+   "t": 91.96,
+   "d": 4.37,
+   "text": "Traversing the game world is thus a kind of traversal of psychological states as well."
+  },
+  {
+   "t": 96.33,
+   "d": 5.05,
+   "text": "A composer’s job is typically to underscore changes in psychological state, either subtly"
+  },
+  {
+   "t": 101.38,
+   "d": 1.0,
+   "text": "or unsubtly."
+  },
+  {
+   "t": 102.38,
+   "d": 3.89,
+   "text": "A change in story beat might receive unsubtle treatment - if a character dies, you’ll"
+  },
+  {
+   "t": 106.27,
+   "d": 1.81,
+   "text": "want a large musical arrival."
+  },
+  {
+   "t": 108.08,
+   "d": 4.28,
+   "text": "However, composers can also underscore the traversal of the game world, by subtly changing"
+  },
+  {
+   "t": 112.36,
+   "d": 4.0,
+   "text": "the scalar, harmonic or melodic material audible at any one moment."
+  },
+  {
+   "t": 116.36,
+   "d": 4.51,
+   "text": "A word on music definitions here: I’ll assume that you don’t have any background in music"
+  },
+  {
+   "t": 120.87,
+   "d": 4.09,
+   "text": "or music theory, but that, as a game developer, you have used quantities to help you express"
+  },
+  {
+   "t": 124.96,
+   "d": 2.0,
+   "text": "aesthetic phenomena."
+  },
+  {
+   "t": 126.96,
+   "d": 3.87,
+   "text": "Music theorists think of scales as the aggregate collection of pitches that occur, either simultaneously"
+  },
+  {
+   "t": 130.83,
+   "d": 2.72,
+   "text": "or successively, in a passage of music."
+  },
+  {
+   "t": 133.55,
+   "d": 4.82,
+   "text": "A scale can be defined abstractly as the series of intervals that separate adjacent pitches"
+  },
+  {
+   "t": 138.37,
+   "d": 1.78,
+   "text": "in the scale."
+  },
+  {
+   "t": 140.15,
+   "d": 4.15,
+   "text": "Most scales repeat that pattern of intervals in all octaves, helping to establish what"
+  },
+  {
+   "t": 144.3,
+   "d": 4.46,
+   "text": "we sometimes call octave equivalence, where any halving or doubling of a frequency is"
+  },
+  {
+   "t": 148.76,
+   "d": 2.2,
+   "text": "treated as equivalent."
+  },
+  {
+   "t": 150.96,
+   "d": 3.8,
+   "text": "The smallest interval commonly found in Western music is the semitone, which is the distance"
+  },
+  {
+   "t": 154.76,
+   "d": 3.47,
+   "text": "in pitch between adjacent keys on the piano."
+  },
+  {
+   "t": 158.23,
+   "d": 2.35,
+   "text": "MIDI note numbers are expressed in semitones."
+  },
+  {
+   "t": 160.58,
+   "d": 4.98,
+   "text": "In addition to note names, we can also assign integers to pitches, usually starting on C"
+  },
+  {
+   "t": 165.56,
+   "d": 2.53,
+   "text": "with 0, ascending by semitones."
+  },
+  {
+   "t": 168.09,
+   "d": 3.33,
+   "text": "These are sometimes called pitch class numbers, and they are equivalent to taking MIDI note"
+  },
+  {
+   "t": 171.42,
+   "d": 3.46,
+   "text": "numbers and applying a modulo 12 operation."
+  },
+  {
+   "t": 174.88,
+   "d": 4.39,
+   "text": "Let’s briefly discuss the diatonic scale, which is the seven-note scale that underpins"
+  },
+  {
+   "t": 179.27,
+   "d": 2.02,
+   "text": "much of music in the West."
+  },
+  {
+   "t": 181.29,
+   "d": 4.03,
+   "text": "Perhaps the most familiar version of the diatonic scale is the major mode, which has a pattern"
+  },
+  {
+   "t": 185.32,
+   "d": 4.97,
+   "text": "of adjacent intervals, in semitones, of (2, 2, 1, 2, 2, 2, 1)."
+  },
+  {
+   "t": 190.29,
+   "d": 4.22,
+   "text": "There are six other modes of the diatonic scale, which can be thought of as “rotations”"
+  },
+  {
+   "t": 194.51,
+   "d": 1.95,
+   "text": "of this collection of intervals."
+  },
+  {
+   "t": 196.46,
+   "d": 4.25,
+   "text": "We perceive a mode in a piece of music depending on which pitch is emphasized more than others,"
+  },
+  {
+   "t": 200.71,
+   "d": 4.8,
+   "text": "either by duration, temporal order, loudness, melodic behaviors, or some combination of"
+  },
+  {
+   "t": 205.51,
+   "d": 1.53,
+   "text": "these characteristics."
+  },
+  {
+   "t": 207.04,
+   "d": 3.72,
+   "text": "That pitch is then assigned to the first note of the mode or scale."
+  },
+  {
+   "t": 210.76,
+   "d": 4.73,
+   "text": "We’ll come back to scales when we discuss our musical examples."
+  },
+  {
+   "t": 215.49,
+   "d": 3.94,
+   "text": "When composing for games, particularly those that rely on procedural generation, the composer"
+  },
+  {
+   "t": 219.43,
+   "d": 3.86,
+   "text": "may not know the specific affordances of the game world for musical content, and often"
+  },
+  {
+   "t": 223.29,
+   "d": 3.85,
+   "text": "the composer does not know the order in which a player will explore the space."
+  },
+  {
+   "t": 227.14,
+   "d": 4.01,
+   "text": "For instance, if you generate a dungeon with branching paths or loops that take the player"
+  },
+  {
+   "t": 231.15,
+   "d": 3.96,
+   "text": "in and out of certain psychological states - again, by encountering monsters, finding"
+  },
+  {
+   "t": 235.11,
+   "d": 4.77,
+   "text": "treasure, or experiencing architectural or visual changes - you can’t compose a linear"
+  },
+  {
+   "t": 239.88,
+   "d": 3.21,
+   "text": "piece of music that is guaranteed to underscore the player’s succession of psychological"
+  },
+  {
+   "t": 243.09,
+   "d": 1.64,
+   "text": "states."
+  },
+  {
+   "t": 244.73,
+   "d": 3.44,
+   "text": "Interactive and adaptive audio techniques, such as horizontal resequencing or vertical"
+  },
+  {
+   "t": 248.17,
+   "d": 2.92,
+   "text": "remixing certainly exist for handling this kind of event structure."
+  },
+  {
+   "t": 251.09,
+   "d": 4.03,
+   "text": "Game composers often use audio middleware to build these kinds of possibilities into"
+  },
+  {
+   "t": 255.12,
+   "d": 1.41,
+   "text": "their music."
+  },
+  {
+   "t": 256.53,
+   "d": 3.94,
+   "text": "However, you can also connect musical content with the underlying structure of the game"
+  },
+  {
+   "t": 260.47,
+   "d": 4.25,
+   "text": "world itself - the coordinate system - as a way to ensure that the musical content shifts"
+  },
+  {
+   "t": 264.72,
+   "d": 3.39,
+   "text": "in a subtle yet interesting way, in tandem with movement in the world."
+  },
+  {
+   "t": 268.11,
+   "d": 4.17,
+   "text": "But how can a composer map the experience of traversing a multidimensional, virtual"
+  },
+  {
+   "t": 272.28,
+   "d": 3.31,
+   "text": "physical space onto the various dimensions of music?"
+  },
+  {
+   "t": 275.59,
+   "d": 3.7,
+   "text": "For this discussion, let’s limit ourselves to the single dimension of musical pitch,"
+  },
+  {
+   "t": 279.29,
+   "d": 1.71,
+   "text": "or audible frequency."
+  },
+  {
+   "t": 281.0,
+   "d": 3.63,
+   "text": "Luckily, our experience of musical pitch is hardly one dimensional."
+  },
+  {
+   "t": 284.63,
+   "d": 4.35,
+   "text": "Most music in the West has a harmonic component - we hear more than one pitch sounding simultaneously,"
+  },
+  {
+   "t": 288.98,
+   "d": 3.79,
+   "text": "and the sensation of the various intervals between the pitches increases the dimensionality"
+  },
+  {
+   "t": 292.77,
+   "d": 1.57,
+   "text": "of our experience of music."
+  },
+  {
+   "t": 294.34,
+   "d": 3.91,
+   "text": "Furthermore, even in monophonic music, we not only experience the instantaneous frequency"
+  },
+  {
+   "t": 298.25,
+   "d": 4.54,
+   "text": "of the instrument or voice, but as a melody unfolds in time, we unconsciously compare"
+  },
+  {
+   "t": 302.79,
+   "d": 1.62,
+   "text": "the intervals between the notes."
+  },
+  {
+   "t": 304.41,
+   "d": 4.6,
+   "text": "Thus, even a melody has an intrinsic intervallic component due to our capacity to apprehend"
+  },
+  {
+   "t": 309.01,
+   "d": 4.74,
+   "text": "recent experiences as a perceptual present, or to compare experiences in memory over longer"
+  },
+  {
+   "t": 313.75,
+   "d": 2.01,
+   "text": "time spans."
+  },
+  {
+   "t": 315.76,
+   "d": 3.32,
+   "text": "There is actually a subdiscipline of Western music theory devoted to creating spatial models"
+  },
+  {
+   "t": 319.08,
+   "d": 3.8,
+   "text": "out of these intervals, with partially aligned subdisciplines in psychoacoustics and music"
+  },
+  {
+   "t": 322.88,
+   "d": 1.0,
+   "text": "cognition."
+  },
+  {
+   "t": 323.88,
+   "d": 3.84,
+   "text": "This subdiscipline offers us various ways to map a multidimensional coordinate system"
+  },
+  {
+   "t": 327.72,
+   "d": 1.07,
+   "text": "onto musical pitch."
+  },
+  {
+   "t": 328.79,
+   "d": 3.89,
+   "text": "I should note that this kind of theory is very focused on Western music."
+  },
+  {
+   "t": 332.68,
+   "d": 4.01,
+   "text": "The idealized listener imagined by these theorists is steeped in this tradition, which includes"
+  },
+  {
+   "t": 336.69,
+   "d": 3.94,
+   "text": "the classical music of Western Europe but also styles that inherited components of its"
+  },
+  {
+   "t": 340.63,
+   "d": 4.76,
+   "text": "pitch systems, including jazz, rock and pop music, as well as film & game scores."
+  },
+  {
+   "t": 345.39,
+   "d": 3.99,
+   "text": "I would gently speculate that spatial cognitive models are formed by experienced listeners"
+  },
+  {
+   "t": 349.38,
+   "d": 4.36,
+   "text": "of other traditions around the world, but these are not well studied in English sources,"
+  },
+  {
+   "t": 353.74,
+   "d": 2.22,
+   "text": "and they are certainly not equivalent to what I am discussing here."
+  },
+  {
+   "t": 355.96,
+   "d": 4.82,
+   "text": "We should probably be wary of espousing universals, particularly related to the experience of"
+  },
+  {
+   "t": 360.78,
+   "d": 1.65,
+   "text": "art."
+  },
+  {
+   "t": 362.43,
+   "d": 3.23,
+   "text": "Within a spatial model of pitch, you typically place “related” pitches near each other,"
+  },
+  {
+   "t": 365.66,
+   "d": 2.18,
+   "text": "and “unrelated” pitches far apart."
+  },
+  {
+   "t": 367.84,
+   "d": 3.18,
+   "text": "Pitches are usually represented with nodes, and the edges that connect the nodes describe"
+  },
+  {
+   "t": 371.02,
+   "d": 2.34,
+   "text": "intervals between those pitches."
+  },
+  {
+   "t": 373.36,
+   "d": 3.49,
+   "text": "What “related” means depends on the research goals or musical context."
+  },
+  {
+   "t": 376.85,
+   "d": 3.51,
+   "text": "For the most part, related means that the pitches sound appropriate when played together,"
+  },
+  {
+   "t": 380.36,
+   "d": 4.6,
+   "text": "or that they are commonly encountered together, either simultaneously or in near succession."
+  },
+  {
+   "t": 384.96,
+   "d": 2.92,
+   "text": "Related doesn’t always mean consonant, although it often does."
+  },
+  {
+   "t": 387.88,
+   "d": 4.19,
+   "text": "If you are analyzing or composing music for a survival horror game, you might find that"
+  },
+  {
+   "t": 392.07,
+   "d": 2.42,
+   "text": "related pitches are quite dissonant when sounding together."
+  },
+  {
+   "t": 394.49,
+   "d": 3.82,
+   "text": "There are several types of geometries that you can arrive at when embedding the single"
+  },
+  {
+   "t": 398.31,
+   "d": 4.65,
+   "text": "dimension of frequency into a more intervallically informed, higher-dimensional pitch space."
+  },
+  {
+   "t": 402.96,
+   "d": 4.45,
+   "text": "For instance, cognitive scientist Roger Shepard, arrived at a double helix, where the two whole-tone"
+  },
+  {
+   "t": 407.41,
+   "d": 2.01,
+   "text": "scales are wrapped around a cylinder."
+  },
+  {
+   "t": 409.42,
+   "d": 4.6,
+   "text": "Before him, Leonhard Euler and later Hugo Riemann arrived at a two-dimensional lattice,"
+  },
+  {
+   "t": 414.02,
+   "d": 4.73,
+   "text": "with the musical interval of seven semitones tiling one axis and the interval of four semitones"
+  },
+  {
+   "t": 418.75,
+   "d": 1.76,
+   "text": "tiling the other axis."
+  },
+  {
+   "t": 420.51,
+   "d": 4.62,
+   "text": "In modern versions of this model, from Neo-Riemannian music theory, this model is often skewed,"
+  },
+  {
+   "t": 425.13,
+   "d": 1.26,
+   "text": "forming a triangular lattice."
+  },
+  {
+   "t": 426.39,
+   "d": 4.46,
+   "text": "There is a question about what you hear in music, as a listener, when located at a particular"
+  },
+  {
+   "t": 430.85,
+   "d": 2.0,
+   "text": "part of one of these spaces."
+  },
+  {
+   "t": 432.85,
+   "d": 3.5,
+   "text": "As mentioned before, the spaces represent “relatedness,” and relatedness usually"
+  },
+  {
+   "t": 436.35,
+   "d": 3.85,
+   "text": "means you are hearing pitches together, either simultaneously or in close succession."
+  },
+  {
+   "t": 440.2,
+   "d": 4.0,
+   "text": "Short range relationships might represent harmonies, medium range relationships might"
+  },
+  {
+   "t": 444.2,
+   "d": 4.96,
+   "text": "represent scales, and the entire space represents the total possibilities of the twelve equal-tempered"
+  },
+  {
+   "t": 449.16,
+   "d": 2.19,
+   "text": "pitches commonly encountered in Western music."
+  },
+  {
+   "t": 451.35,
+   "d": 5.37,
+   "text": "Among the many kinds of spatial configurations available, square or cubic lattices are perhaps"
+  },
+  {
+   "t": 456.72,
+   "d": 3.71,
+   "text": "the most useful for game designers because they are commensurate with the standard coordinate"
+  },
+  {
+   "t": 460.43,
+   "d": 5.43,
+   "text": "systems used in 2- and 3D modeling and level design, so I’ll limit my discussion to those"
+  },
+  {
+   "t": 465.86,
+   "d": 1.24,
+   "text": "types of spaces."
+  },
+  {
+   "t": 467.1,
+   "d": 4.77,
+   "text": "How do these spatial models of pitch help us explain how we perceive music, or potentially"
+  },
+  {
+   "t": 471.87,
+   "d": 2.18,
+   "text": "how composers can make music?"
+  },
+  {
+   "t": 474.05,
+   "d": 3.73,
+   "text": "They can allow us to chart the experience of motion in an auditory phenomenon as motion"
+  },
+  {
+   "t": 477.78,
+   "d": 4.2,
+   "text": "in a metaphoric physical space - and vice versa - they allow composers the ability to"
+  },
+  {
+   "t": 481.98,
+   "d": 4.8,
+   "text": "underscore movement and exploration in physical space with movement in auditory space."
+  },
+  {
+   "t": 486.78,
+   "d": 4.17,
+   "text": "Take for instance the music for Norfair: Ridley's Hideout from Super Metroid (or Magmoor Caverns"
+  },
+  {
+   "t": 490.95,
+   "d": 2.89,
+   "text": "from Metroid Prime), by Kenji Yamamoto."
+  },
+  {
+   "t": 493.84,
+   "d": 3.39,
+   "text": "Although this piece is not from a roguelike, I’d like to use it as an example because"
+  },
+  {
+   "t": 497.23,
+   "d": 3.98,
+   "text": "it is particularly susceptible to analysis with the spatial methods I’ve described"
+  },
+  {
+   "t": 501.21,
+   "d": 1.0,
+   "text": "so far."
+  },
+  {
+   "t": 502.21,
+   "d": 2.94,
+   "text": "Furthermore, this game has an affinity with roguelikes because of the heightened aesthetic"
+  },
+  {
+   "t": 505.15,
+   "d": 1.07,
+   "text": "of discovery."
+  },
+  {
+   "t": 506.22,
+   "d": 3.64,
+   "text": "Also, many of you are probably familiar with this piece of music."
+  },
+  {
+   "t": 509.86,
+   "d": 5.3,
+   "text": "This piece primarily uses Phrygian mode, which is a particular ordering of the seven pitches"
+  },
+  {
+   "t": 515.16,
+   "d": 4.07,
+   "text": "in the diatonic scale in which the second note of the mode is only a semitone above"
+  },
+  {
+   "t": 519.23,
+   "d": 1.49,
+   "text": "the first note of the mode."
+  },
+  {
+   "t": 520.72,
+   "d": 4.4,
+   "text": "Yamamoto exploits this aspect of this ordering - virtually the entire piece is built around"
+  },
+  {
+   "t": 525.12,
+   "d": 3.43,
+   "text": "an oscillation between a chord built on the first note of the mode and then a chord built"
+  },
+  {
+   "t": 528.55,
+   "d": 4.02,
+   "text": "on the second note of the mode, so we hear a lurking semitone alternation underpinning"
+  },
+  {
+   "t": 532.57,
+   "d": 1.17,
+   "text": "the entire piece."
+  },
+  {
+   "t": 533.74,
+   "d": 4.61,
+   "text": "However, Yamamoto doesn’t use the same scale the entire time - each time a new section"
+  },
+  {
+   "t": 538.35,
+   "d": 4.16,
+   "text": "is encountered, he transposes the material up three semitones, and the scale along with"
+  },
+  {
+   "t": 542.51,
+   "d": 1.0,
+   "text": "it."
+  },
+  {
+   "t": 543.51,
+   "d": 4.67,
+   "text": "Moving to a different scale within a piece of music is called modulation."
+  },
+  {
+   "t": 548.18,
+   "d": 2.97,
+   "text": "This sequence of modulations underscores the player character’s movement in physical"
+  },
+  {
+   "t": 551.15,
+   "d": 5.32,
+   "text": "space, as well as ratcheting up psychological tension with each ascent."
+  },
+  {
+   "t": 556.47,
+   "d": 3.95,
+   "text": "We can chart this motion using a cubic pitch lattice, in this case one that tiles the horizontal"
+  },
+  {
+   "t": 560.42,
+   "d": 4.53,
+   "text": "axis with the interval of three semitones, the vertical axis with five semitones, and"
+  },
+  {
+   "t": 564.95,
+   "d": 2.02,
+   "text": "the depth axis with two semitones."
+  },
+  {
+   "t": 566.97,
+   "d": 4.46,
+   "text": "I’ll depict this space with isometric graphs of numbered nodes, where numbers indicate"
+  },
+  {
+   "t": 571.43,
+   "d": 5.3,
+   "text": "pitches 0 through 11, starting on C. Each cube in this lattice gives us the seven notes"
+  },
+  {
+   "t": 576.73,
+   "d": 4.23,
+   "text": "of the diatonic scale (notice how one pitch occurs twice)."
+  },
+  {
+   "t": 580.96,
+   "d": 3.74,
+   "text": "Thus each cube represents fairly well a section of music in this piece."
+  },
+  {
+   "t": 584.7,
+   "d": 3.92,
+   "text": "There are some borrowed pitches from outside of each cube - Yamamoto frequently borrows"
+  },
+  {
+   "t": 588.62,
+   "d": 3.28,
+   "text": "an interval four semitones above the first note in the scale, rather than the native"
+  },
+  {
+   "t": 591.9,
+   "d": 1.5,
+   "text": "three semitones."
+  },
+  {
+   "t": 593.4,
+   "d": 3.24,
+   "text": "This is a common trope in Phrygian, particularly when alternating with a chord built on the"
+  },
+  {
+   "t": 596.64,
+   "d": 1.96,
+   "text": "second note of the scale."
+  },
+  {
+   "t": 598.6,
+   "d": 4.42,
+   "text": "Yamamoto moves right along the horizontal axis, each time keeping four common pitches"
+  },
+  {
+   "t": 603.02,
+   "d": 5.05,
+   "text": "and introducing three new ones with each modulation of three semitones."
+  },
+  {
+   "t": 608.07,
+   "d": 4.51,
+   "text": "Moving along this axis allows Yamamoto to use all twelve pitches within four modulations."
+  },
+  {
+   "t": 612.58,
+   "d": 4.13,
+   "text": "In contrast to this, moving along the vertical axis - a much more common modulation in Western"
+  },
+  {
+   "t": 616.71,
+   "d": 3.09,
+   "text": "music - would have taken twelve modulations to do the same."
+  },
+  {
+   "t": 619.8,
+   "d": 4.93,
+   "text": "Moving along the vertical axis would be equivalent to moving along the circle-of-fifths or -fourths,"
+  },
+  {
+   "t": 624.73,
+   "d": 4.53,
+   "text": "an arrangement of the twelve transpositions of the diatonic scale where adjacent transpositions"
+  },
+  {
+   "t": 629.26,
+   "d": 1.77,
+   "text": "differ by only one pitch."
+  },
+  {
+   "t": 631.03,
+   "d": 4.74,
+   "text": "Thus, part of the appeal of this piece is that each new section moves us a surprisingly"
+  },
+  {
+   "t": 635.77,
+   "d": 2.21,
+   "text": "far amount through tonal space."
+  },
+  {
+   "t": 637.98,
+   "d": 3.51,
+   "text": "The aesthetic of surprise and discovery is thus embedded in the tonal framework of the"
+  },
+  {
+   "t": 641.49,
+   "d": 1.0,
+   "text": "music."
+  },
+  {
+   "t": 642.49,
+   "d": 1.59,
+   "text": "Let’s hear a piano rendition of this piece."
+  },
+  {
+   "t": 644.08,
+   "d": 4.29,
+   "text": "I’ve also provided a pitch lattice diagram and score with color coded pitches, as well"
+  },
+  {
+   "t": 648.37,
+   "d": 150.45,
+   "text": "as piano roll notation for people who aren’t comfortable reading music."
+  },
+  {
+   "t": 798.82,
+   "d": 3.96,
+   "text": "With this demonstration we’ve seen pitch relationships in music described spatially."
+  },
+  {
+   "t": 802.78,
+   "d": 3.45,
+   "text": "So how can we harness this for a game that uses procedural generation?"
+  },
+  {
+   "t": 806.23,
+   "d": 3.28,
+   "text": "As mentioned before, Rite of Tephra is a roguelite spelunker."
+  },
+  {
+   "t": 809.51,
+   "d": 3.64,
+   "text": "The player navigates an endless series of procedurally generated caverns, finding treasure,"
+  },
+  {
+   "t": 813.15,
+   "d": 3.64,
+   "text": "unlocking puzzles via gigantic tuning forks, and fighting huge bugs."
+  },
+  {
+   "t": 816.79,
+   "d": 3.6,
+   "text": "We make use of the vertical dimension by giving the player a grappling hook."
+  },
+  {
+   "t": 820.39,
+   "d": 17.32,
+   "text": "Because this is not a well known game, let’s watch some gameplay to give you some context."
+  },
+  {
+   "t": 837.71,
+   "d": 84.07,
+   "text": "Procedural Generation in Rite of Tephra"
+  },
+  {
+   "t": 921.78,
+   "d": 3.75,
+   "text": "The level geometry is generated in several steps: first, we do a weighted random fill"
+  },
+  {
+   "t": 925.53,
+   "d": 4.23,
+   "text": "of a 3D-grid with cells that represent either solid rock or empty space."
+  },
+  {
+   "t": 929.76,
+   "d": 4.46,
+   "text": "We then run a 3D-cellular automaton over that initial random fill to create a cave like"
+  },
+  {
+   "t": 934.22,
+   "d": 4.8,
+   "text": "structure - the cellular automaton in question is probably best described as a kind of simulated"
+  },
+  {
+   "t": 939.02,
+   "d": 1.19,
+   "text": "annealing."
+  },
+  {
+   "t": 940.21,
+   "d": 3.69,
+   "text": "We prune isolated smaller side caves, and then do a marching cubes pass to generate"
+  },
+  {
+   "t": 943.9,
+   "d": 1.69,
+   "text": "a coarse mesh."
+  },
+  {
+   "t": 945.59,
+   "d": 3.87,
+   "text": "Then we run just a single step of a naive smoothing algorithm on that mesh to round"
+  },
+  {
+   "t": 949.46,
+   "d": 3.87,
+   "text": "off the square edges, and we use a triplanar shader to give it a natural stone look."
+  },
+  {
+   "t": 953.33,
+   "d": 3.09,
+   "text": "All of this is surprisingly efficient."
+  },
+  {
+   "t": 956.42,
+   "d": 4.09,
+   "text": "For music purposes, I overlay a cubic lattice of pitch nodes, where the edge length between"
+  },
+  {
+   "t": 960.51,
+   "d": 3.66,
+   "text": "the nodes is calibrated to the walking pace of the player character."
+  },
+  {
+   "t": 964.17,
+   "d": 4.11,
+   "text": "We want the shifting harmony to happen not too fast, nor too slow, assuming a normal"
+  },
+  {
+   "t": 968.28,
+   "d": 1.0,
+   "text": "pace of exploration."
+  },
+  {
+   "t": 969.28,
+   "d": 3.67,
+   "text": "I ended up using 36 meters as the edge length."
+  },
+  {
+   "t": 972.95,
+   "d": 3.87,
+   "text": "The pitch nodes nearest the player make up the scalar material heard in the music, and"
+  },
+  {
+   "t": 976.82,
+   "d": 2.66,
+   "text": "they also control the color of light emitting objects in the level."
+  },
+  {
+   "t": 979.48,
+   "d": 3.67,
+   "text": "It should be noted that all of these objects are also procedurally generated thanks to"
+  },
+  {
+   "t": 983.15,
+   "d": 1.86,
+   "text": "Will’s hard work."
+  },
+  {
+   "t": 985.01,
+   "d": 3.27,
+   "text": "In our current build of the game, I map the twelve equal-tempered pitch classes onto the"
+  },
+  {
+   "t": 988.28,
+   "d": 4.37,
+   "text": "standard RGB color wheel, starting with C on red, ascending through the circle-of-fifths"
+  },
+  {
+   "t": 992.65,
+   "d": 3.39,
+   "text": "while rotating first towards green, then to blue."
+  },
+  {
+   "t": 996.04,
+   "d": 5.18,
+   "text": "To assign specific pitches to the nodes, I place the pitch class C, or 0, at the origin."
+  },
+  {
+   "t": 1001.22,
+   "d": 3.62,
+   "text": "I then tile each dimension with a specific pitch interval."
+  },
+  {
+   "t": 1004.84,
+   "d": 3.98,
+   "text": "Each new node on that dimension is transposed up from the previous node by that interval."
+  },
+  {
+   "t": 1008.82,
+   "d": 6.18,
+   "text": "The effect of each dimension is additive, and then we wrap all results with a modulo"
+  },
+  {
+   "t": 1015.0,
+   "d": 1.14,
+   "text": "12."
+  },
+  {
+   "t": 1016.14,
+   "d": 3.22,
+   "text": "As mentioned before, the pitch class nodes nearest the player form the scale used in"
+  },
+  {
+   "t": 1019.36,
+   "d": 1.0,
+   "text": "the music."
+  },
+  {
+   "t": 1020.36,
+   "d": 3.27,
+   "text": "As the player moves, the pool of available pitch classes changes."
+  },
+  {
+   "t": 1023.63,
+   "d": 5.18,
+   "text": "Currently I fade each pitch class in and out, based on the distance of nodes to the player."
+  },
+  {
+   "t": 1028.81,
+   "d": 3.08,
+   "text": "We end up with a sphere of influence around the player character."
+  },
+  {
+   "t": 1031.89,
+   "d": 3.59,
+   "text": "The radius of this sphere is larger than the edges of the lattice, allowing us to “hear”"
+  },
+  {
+   "t": 1035.48,
+   "d": 4.49,
+   "text": "between seven and eight nodes at a time - the perfect amount to make up a typical scale."
+  },
+  {
+   "t": 1039.97,
+   "d": 3.85,
+   "text": "If we had a larger radius, we would be able to hear eleven nodes, and if it was smaller,"
+  },
+  {
+   "t": 1043.82,
+   "d": 1.65,
+   "text": "we’d be limited to one node."
+  },
+  {
+   "t": 1045.47,
+   "d": 5.35,
+   "text": "Neither of those possibilities are good for assembling ordinary scalar material."
+  },
+  {
+   "t": 1050.82,
+   "d": 2.94,
+   "text": "The radius ends up being 52 meters, which is about the length of the diagonal of the"
+  },
+  {
+   "t": 1053.76,
+   "d": 5.11,
+   "text": "cubic lattice, and I fully fade-in nodes at 24 meters, using a half-cosine curve to ease"
+  },
+  {
+   "t": 1058.87,
+   "d": 1.27,
+   "text": "the pitches in."
+  },
+  {
+   "t": 1060.14,
+   "d": 5.0,
+   "text": "This is not a realistic distance function for attenuation of sounds over physical distance,"
+  },
+  {
+   "t": 1065.14,
+   "d": 4.0,
+   "text": "but instead is a musically pleasing way to control what are essentially abstract qualities."
+  },
+  {
+   "t": 1069.14,
+   "d": 5.15,
+   "text": "There are two scales that allow us to summarize the affordances of a particular tiling on"
+  },
+  {
+   "t": 1074.29,
+   "d": 4.19,
+   "text": "this space, using this sphere of influence: a centered scale, where the player character"
+  },
+  {
+   "t": 1078.48,
+   "d": 5.48,
+   "text": "is sitting directly on a node, and listening to the six nodes connected to it, and an equidistant"
+  },
+  {
+   "t": 1083.96,
+   "d": 3.34,
+   "text": "scale, where the player character is in the center of a cube hearing the eight corners"
+  },
+  {
+   "t": 1087.3,
+   "d": 1.11,
+   "text": "of the cube."
+  },
+  {
+   "t": 1088.41,
+   "d": 3.62,
+   "text": "All other intermediate positions within the lattice are blends of these two types of positions,"
+  },
+  {
+   "t": 1092.03,
+   "d": 3.32,
+   "text": "or blends between transpositions of themselves."
+  },
+  {
+   "t": 1095.35,
+   "d": 3.69,
+   "text": "There are many possible tilings to use, but for Rite of Tephra, I selected a subset of"
+  },
+  {
+   "t": 1099.04,
+   "d": 4.27,
+   "text": "tilings that sound appealing to me, and for each level I randomly pick one."
+  },
+  {
+   "t": 1103.31,
+   "d": 4.15,
+   "text": "As the player explores a procedurally generated cave, and thus explores a pitch lattice, moving"
+  },
+  {
+   "t": 1107.46,
+   "d": 4.53,
+   "text": "between various transpositions of the scale provided by a tiling, how is that realized"
+  },
+  {
+   "t": 1111.99,
+   "d": 2.35,
+   "text": "in Rite of Tephra musically?"
+  },
+  {
+   "t": 1114.34,
+   "d": 4.05,
+   "text": "Limited by time and by my desire to use the highest quality orchestral sampler instruments"
+  },
+  {
+   "t": 1118.39,
+   "d": 5.25,
+   "text": "possible, I opted not to do just-in-time composition, but instead, live remixing of pre-composed"
+  },
+  {
+   "t": 1123.64,
+   "d": 2.78,
+   "text": "orchestral stems, each devoted to a single pitch class."
+  },
+  {
+   "t": 1126.42,
+   "d": 4.95,
+   "text": "The scalar material is controlled by fading in the appropriate stems, and in-game reverb"
+  },
+  {
+   "t": 1131.37,
+   "d": 2.3,
+   "text": "is used to blend the transitions."
+  },
+  {
+   "t": 1133.67,
+   "d": 3.3,
+   "text": "While this was more expedient than writing a just-in-time composition system, it had"
+  },
+  {
+   "t": 1136.97,
+   "d": 1.59,
+   "text": "its own difficulties."
+  },
+  {
+   "t": 1138.56,
+   "d": 3.48,
+   "text": "Rhythms would have to be baked into each stem, and any combination of stems would have to"
+  },
+  {
+   "t": 1142.04,
+   "d": 1.29,
+   "text": "work texturally."
+  },
+  {
+   "t": 1143.33,
+   "d": 4.11,
+   "text": "Furthermore, stepwise melodies became extremely difficult to rely on."
+  },
+  {
+   "t": 1147.44,
+   "d": 3.75,
+   "text": "Because cave exploration lends itself to an ambient-horror vibe, I was able to deploy"
+  },
+  {
+   "t": 1151.19,
+   "d": 5.16,
+   "text": "a chain of musical events separated by empty space, with events in four categories: drones,"
+  },
+  {
+   "t": 1156.35,
+   "d": 4.81,
+   "text": "morse-code like signals, violent outbursts, and accelerating-decelerating octave leaps."
+  },
+  {
+   "t": 1161.16,
+   "d": 3.77,
+   "text": "I ordered these categories the same in every stem, and thus for every pitch-class, but"
+  },
+  {
+   "t": 1164.93,
+   "d": 3.56,
+   "text": "the speed at which they occur and where they start in the pattern is different for every"
+  },
+  {
+   "t": 1168.49,
+   "d": 1.0,
+   "text": "stem."
+  },
+  {
+   "t": 1169.49,
+   "d": 3.23,
+   "text": "Thus, the entire structure is composed of different instances of the same looping pattern"
+  },
+  {
+   "t": 1172.72,
+   "d": 1.79,
+   "text": "that phase with each other."
+  },
+  {
+   "t": 1174.51,
+   "d": 3.28,
+   "text": "As the player explores the physical space of the game world, a subselection of these"
+  },
+  {
+   "t": 1177.79,
+   "d": 4.18,
+   "text": "stems fade in to assemble the appropriate scalar material according to the nearby pitch"
+  },
+  {
+   "t": 1181.97,
+   "d": 1.0,
+   "text": "nodes."
+  },
+  {
+   "t": 1182.97,
+   "d": 4.02,
+   "text": "Smaller units of pitch information, like chords and melodies, are the emergent property of"
+  },
+  {
+   "t": 1186.99,
+   "d": 3.15,
+   "text": "these systems interacting with each other."
+  },
+  {
+   "t": 1190.14,
+   "d": 4.19,
+   "text": "In the case of the octave leaps, their interaction is almost like moire patterns in overlapping"
+  },
+  {
+   "t": 1194.33,
+   "d": 1.32,
+   "text": "but non-parallel grids."
+  },
+  {
+   "t": 1195.65,
+   "d": 4.21,
+   "text": "The entire structure might also be thought of as a mobile or kinetic sculpture, with"
+  },
+  {
+   "t": 1199.86,
+   "d": 3.61,
+   "text": "loops of different lengths rotating in and out of view as the player activates the structure"
+  },
+  {
+   "t": 1203.47,
+   "d": 2.56,
+   "text": "with their movement in the game world."
+  },
+  {
+   "t": 1206.03,
+   "d": 4.2,
+   "text": "As an example, let’s watch a demonstration using a tiling that creates a suspended pentatonic"
+  },
+  {
+   "t": 1210.23,
+   "d": 1.0,
+   "text": "scale."
+  },
+  {
+   "t": 1211.23,
+   "d": 3.84,
+   "text": "This demonstration will start with synthetic test tones to better focus on the pure harmony,"
+  },
+  {
+   "t": 1215.07,
+   "d": 303.88,
+   "text": "then it moves to a piano short score, then to a full orchestral version."
+  },
+  {
+   "t": 1518.95,
+   "d": 4.02,
+   "text": "Please checkout Rite of Tephra on Itch, where it’s pay-as-you-will, in perpetual early"
+  },
+  {
+   "t": 1522.97,
+   "d": 1.0,
+   "text": "access."
+  },
+  {
+   "t": 1523.97,
+   "d": 39.25,
+   "text": "You can also find the soundtrack on Bandcamp, on the album Lost Levels, where there"
+  },
+  {
+   "t": 1563.22,
+   "d": 61.55,
+   "text": "is"
+  },
+  {
+   "t": 1624.77,
+   "d": 152.69,
+   "text": "a static interpretation of this"
+  },
+  {
+   "t": 1777.46,
+   "d": 33.88,
+   "text": "music system."
+  }
+ ]
+}

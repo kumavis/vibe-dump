@@ -1,0 +1,685 @@
+{
+ "id": "MTam5RT8Kn0",
+ "url": "https://www.youtube.com/watch?v=MTam5RT8Kn0",
+ "title": "Philomena Schwab: 100,000 wishlists in 3 months - Weird roguelikes are taking over the world",
+ "speaker": "Philomena Schwab",
+ "talk_title": "100,000 wishlists in 3 months - Weird roguelikes are taking over the world",
+ "year": 2024,
+ "kind": "talk",
+ "upload_date": "2024-10-26",
+ "duration_s": 945,
+ "playlists": [
+  "Roguelike Celebration 2024"
+ ],
+ "description": "The roguelike genre continues to ride a massive wave of popularity. New games are added to a long list of releases on a daily basis, leaving the market fairly crowded. However, as the genre matures, more and more sub-genres are emerging. Inspired by the success of Peglin, our studio decided to take a swing at putting together a demo for a 'physics rougelike', combining classic mechanics of the genre with the arcady physics of a claw machine. We named the 'Dungeon Clawler' and it has managed to earn 100k+ wishlists in its first 3 months on Steam. This talk goes into detail on how the game was designed and marketed.",
+ "chapters": [
+  {
+   "start": 0,
+   "title": "Intro"
+  },
+  {
+   "start": 60,
+   "title": "Philomena Schwab"
+  },
+  {
+   "start": 393,
+   "title": "Launching the demo"
+  },
+  {
+   "start": 610,
+   "title": "Steam Wishlists"
+  },
+  {
+   "start": 633,
+   "title": "Mobile"
+  },
+  {
+   "start": 682,
+   "title": "Questions"
+  }
+ ],
+ "caption_source": "manual",
+ "caption_lang": "en",
+ "word_count": 2304,
+ "trimmed": {
+  "segments": 4,
+  "words": 58
+ },
+ "segments": [
+  {
+   "t": 5.76,
+   "d": 7.84,
+   "text": "from Switzerland. Game designer and game expert and community manager who wrote her master thesis"
+  },
+  {
+   "t": 13.6,
+   "d": 13.68,
+   "text": "about community building for indie developer and co-founded stray spawn. She was 30 under 30 and"
+  },
+  {
+   "t": 27.28,
+   "d": 9.24,
+   "text": "serves on the wings game fund. And helps the local Swiss game industry. Here to talk about Dungeon"
+  },
+  {
+   "t": 36.52,
+   "d": 10.16,
+   "text": "Crawlers and weird roguelikes which is exciting. PHILOMENA: See the slides and hear me SFWHEL"
+  },
+  {
+   "t": 46.68,
+   "d": 10.24,
+   "text": "ALEXEI: If you click you can on the button you can share the screen."
+  },
+  {
+   "t": 57.64,
+   "d": 8.52,
+   "text": "PHILOMENA: My talk is called \"100'000 wishlists in 3 months - Weird roguelikes are taking over the"
+  },
+  {
+   "t": 66.16,
+   "d": 5.4,
+   "text": "world.\" My name is Philomena. Thank you very much for the kind introduction. I am the co-founder"
+  },
+  {
+   "t": 71.56,
+   "d": 12.4,
+   "text": "of stray fawn theater which is a 13 people based team in Zurich. We are in the same office as the"
+  },
+  {
+   "t": 85.04,
+   "d": 5.0,
+   "text": "last speaker. We have made quite a few games in the last few years. We founded the studio back in"
+  },
+  {
+   "t": 90.04,
+   "d": 18.16,
+   "text": "2016. The first game is niche a genetics survival game. Then we have Nimbatus. And our latest game"
+  },
+  {
+   "t": 108.2,
+   "d": 6.36,
+   "text": "the wandering village which is a citybuilder simulation game with roguelike mechanics. My"
+  },
+  {
+   "t": 114.56,
+   "d": 5.68,
+   "text": "whole team really likes roguelike mechanics. I gave a talk about this one last year. We have"
+  },
+  {
+   "t": 120.24,
+   "d": 8.12,
+   "text": "been working on the game, same as star dust, since 2020. We are such a big team. In Switzerland I can"
+  },
+  {
+   "t": 128.36,
+   "d": 8.32,
+   "text": "tell you it has been quite a financial burden to make this game. All of our studio's money we"
+  },
+  {
+   "t": 136.68,
+   "d": 6.92,
+   "text": "made with the previous game went into this one. It coming out into 1.0 soon. Probably like beginning"
+  },
+  {
+   "t": 143.6,
+   "d": 5.4,
+   "text": "of next year. And yeah, we are at this point a little bit relieved that after four years of"
+  },
+  {
+   "t": 149.0,
+   "d": 5.72,
+   "text": "development we can soon move on to something else. Even though it has been a lot of fun making the"
+  },
+  {
+   "t": 154.72,
+   "d": 5.88,
+   "text": "game. Our whole team every year is voting on what they want to do in the next two years as a studio."
+  },
+  {
+   "t": 161.16,
+   "d": 5.24,
+   "text": "During the whole development of this game we have been eyeing the whole roguelike deckbuilder genre"
+  },
+  {
+   "t": 166.4,
+   "d": 14.12,
+   "text": "and we think it could be fun. We think we could make it in a smaller group like 2-3. We also felt"
+  },
+  {
+   "t": 180.52,
+   "d": 7.84,
+   "text": "there is a lot. At this point there is a lot of roguelike tech -- deck builders. We looked around"
+  },
+  {
+   "t": 188.36,
+   "d": 6.32,
+   "text": "if there were exceptions in the genre and when we saw Peglin we were like this is really it. Peglin"
+  },
+  {
+   "t": 194.68,
+   "d": 8.56,
+   "text": "I think winze was one of the first roguelike deck builders that took the physical spin. Peglin is"
+  },
+  {
+   "t": 203.24,
+   "d": 7.6,
+   "text": "almost like a different sub-genre of roguelike where we are starting to diversify within the"
+  },
+  {
+   "t": 210.84,
+   "d": 8.04,
+   "text": "genre and opening up little sub-genres. We were like OK, so physic-based deckbuilders and what"
+  },
+  {
+   "t": 218.88,
+   "d": 8.28,
+   "text": "are other game mechanics people know and are easy to understand that we could use in a deckbuilder."
+  },
+  {
+   "t": 227.16,
+   "d": 9.12,
+   "text": "We brainstormed with the team and one evening we came up with a why not claw machine. Somebody of"
+  },
+  {
+   "t": 236.28,
+   "d": 7.04,
+   "text": "us said and then we would call it Dungeon Crawler and we were all like that's pretty funny. And then"
+  },
+  {
+   "t": 243.32,
+   "d": 6.52,
+   "text": "we decided, yeah, we are actually going to make this game, and we are going to call it that. My"
+  },
+  {
+   "t": 249.84,
+   "d": 7.52,
+   "text": "co-founder just he by himself went ahead and made this prototype. We have do what you want"
+  },
+  {
+   "t": 257.36,
+   "d": 5.44,
+   "text": "afternoons every Monday and Friday afternoons where people are just prototyping. He went ahead"
+  },
+  {
+   "t": 262.8,
+   "d": 5.6,
+   "text": "and made the prototype. We were like yeah, it is pretty fun. But it is also fun to start new"
+  },
+  {
+   "t": 268.4,
+   "d": 6.84,
+   "text": "things so we quickly moved on, explored some other projects, and this was in the freezer"
+  },
+  {
+   "t": 275.24,
+   "d": 7.72,
+   "text": "for a while. Then we took a team vacation to Japan last year. We went, all of us together,"
+  },
+  {
+   "t": 282.96,
+   "d": 9.36,
+   "text": "for two weeks. We had the grandest time. Then we spent way, way, too much time in the arcades. Here"
+  },
+  {
+   "t": 292.32,
+   "d": 5.44,
+   "text": "on the right side is actually my co-founder who had been making this little prototype. Then one"
+  },
+  {
+   "t": 297.76,
+   "d": 7.57,
+   "text": "of our artists also got super addicted and we all took home like bags of prizes. We said it"
+  },
+  {
+   "t": 305.33,
+   "d": 8.15,
+   "text": "is research. So we did it on company had to pay for our research in the arcades. We had a grand"
+  },
+  {
+   "t": 313.48,
+   "d": 7.84,
+   "text": "old time. We found that OK, actually, these kinds of claw machines are super popular in Japan and"
+  },
+  {
+   "t": 321.32,
+   "d": 5.6,
+   "text": "apparently also in China. I don't know exactly how it is in America but in Europe you only see"
+  },
+  {
+   "t": 326.92,
+   "d": 8.0,
+   "text": "them maybe at like a local festival sometimes. Or sometimes in the restaurant. Then you can play"
+  },
+  {
+   "t": 334.92,
+   "d": 4.6,
+   "text": "and they are super rigged and not fun to play at all. The ones in Japan were quite different"
+  },
+  {
+   "t": 339.52,
+   "d": 7.68,
+   "text": "and the arcade was full of them. There were like five floors full of claw machines. The idea of"
+  },
+  {
+   "t": 347.2,
+   "d": 7.16,
+   "text": "the genre that is pretty popular and the emergent Asian markets on Steam. China is the country with"
+  },
+  {
+   "t": 354.36,
+   "d": 6.12,
+   "text": "the most users on Steam. We thought maybe there is something there and we should get this game"
+  },
+  {
+   "t": 360.48,
+   "d": 4.48,
+   "text": "out of the freezer and keep working on it. The two of them who were super addicted to claw machines"
+  },
+  {
+   "t": 364.96,
+   "d": 6.12,
+   "text": "teamed up and within three months took our little prototype we had previously made and turned into"
+  },
+  {
+   "t": 371.08,
+   "d": 6.4,
+   "text": "this current state. From the beginning, it was very clear we wanted the arch to be pretty basic"
+  },
+  {
+   "t": 377.48,
+   "d": 5.96,
+   "text": "so we could quickly and easily iterate and add new content to the game. Also because while they were"
+  },
+  {
+   "t": 383.44,
+   "d": 6.32,
+   "text": "working on it full time, the artist was only there one day a week. He she has to be able to produce"
+  },
+  {
+   "t": 389.76,
+   "d": 8.52,
+   "text": "the missing artwork fairly quickly. We decided we would launch the demo at the Steam deckbuilders"
+  },
+  {
+   "t": 398.28,
+   "d": 7.52,
+   "text": "fest which was this March. 3-4 months work of demo, got it ready, setup the Steam page,"
+  },
+  {
+   "t": 405.8,
+   "d": 6.16,
+   "text": "and did out reach to YouTuber's and Twitch streamers we had. Mostly people who played"
+  },
+  {
+   "t": 411.96,
+   "d": 8.0,
+   "text": "previous games and some selected before would be a really good fit. Since then the game has"
+  },
+  {
+   "t": 419.96,
+   "d": 5.48,
+   "text": "been snowballing. For us it is crazy because it is such a small team and such a small size compared"
+  },
+  {
+   "t": 425.44,
+   "d": 7.24,
+   "text": "to the 13 people team for four years that we were used to. We didn't think we could pull something"
+  },
+  {
+   "t": 432.68,
+   "d": 5.6,
+   "text": "like this off with such a small team. I wanted to share data with you because I thought it might be"
+  },
+  {
+   "t": 438.28,
+   "d": 6.72,
+   "text": "interesting. I have really seen that this is our fourth game and all have been so different"
+  },
+  {
+   "t": 445.0,
+   "d": 8.64,
+   "text": "in terms of how they appeal to players and how the wishlists are coming in. At the top is the player"
+  },
+  {
+   "t": 453.64,
+   "d": 9.24,
+   "text": "number and we set the demo live at the same time we launched the Steam page. You didn't have to"
+  },
+  {
+   "t": 462.88,
+   "d": 5.88,
+   "text": "think about triggering wishlist for demo releases back then. This has changed so maybe this wouldn't"
+  },
+  {
+   "t": 468.76,
+   "d": 5.72,
+   "text": "have happened like this if we were to launch it now. We put the demo live and you can see"
+  },
+  {
+   "t": 475.32,
+   "d": 5.8,
+   "text": "how the players evolved. You can see the wishlist is corresponding quite well to the demo players."
+  },
+  {
+   "t": 481.12,
+   "d": 6.16,
+   "text": "These were essentially the beats we had the game. When we revealed it was in the deckbuilder fest,"
+  },
+  {
+   "t": 487.28,
+   "d": 7.92,
+   "text": "and we did international PR but also especially in Japan. It was picked up quite a bit by Japanese"
+  },
+  {
+   "t": 495.2,
+   "d": 7.8,
+   "text": "press because I think they really liked the story of a bunch of western devs coming to Japan really"
+  },
+  {
+   "t": 503.0,
+   "d": 6.16,
+   "text": "liking their arcades and then taking home their ideas and turning them into a game. That's why I"
+  },
+  {
+   "t": 509.16,
+   "d": 8.12,
+   "text": "think we had like 10 times more PR coverage from Japan than from global in total. Also, this kind"
+  },
+  {
+   "t": 517.28,
+   "d": 13.2,
+   "text": "of game is hard to sell the -- to the press. If it is six success, yeah, but not before. What"
+  },
+  {
+   "t": 530.48,
+   "d": 8.08,
+   "text": "has been keeping the ball rolling for the game is just influencers. There is a very dedicated"
+  },
+  {
+   "t": 539.6,
+   "d": 6.48,
+   "text": "influencer base like YouTube streamers for roguelikes that are really on the look out for new"
+  },
+  {
+   "t": 546.08,
+   "d": 6.2,
+   "text": "and weird things which here again is why I think weird roguelikes are here to take over the world."
+  },
+  {
+   "t": 553.0,
+   "d": 5.28,
+   "text": "There is people really looking out for these types of games and picking them up even though we didn't"
+  },
+  {
+   "t": 558.28,
+   "d": 7.48,
+   "text": "put a lot of effort and did no paid influencer campaign. They have really just been keeping"
+  },
+  {
+   "t": 565.76,
+   "d": 5.8,
+   "text": "the game alive. And then Steam Next Fest came around and we did the big influencer push and"
+  },
+  {
+   "t": 572.96,
+   "d": 6.28,
+   "text": "contacted quite a few thousand people to check out the game. And thanks to that, the game ended"
+  },
+  {
+   "t": 579.24,
+   "d": 6.84,
+   "text": "up being the 11th most played game in the summer next fest which is insane to me. We were also in a"
+  },
+  {
+   "t": 586.08,
+   "d": 6.8,
+   "text": "few showcases before the next fest which helped as well. On social media, the game hasn't really had"
+  },
+  {
+   "t": 592.88,
+   "d": 6.64,
+   "text": "any success. We tried all kinds of channels. We had one Reddit post which went well but on social"
+  },
+  {
+   "t": 599.52,
+   "d": 6.32,
+   "text": "it really doesn't work. For this game it has been all influencers and we are trying to participate"
+  },
+  {
+   "t": 605.84,
+   "d": 8.84,
+   "text": "in Steam events as much as we can. The game has now reached 175,000 wishlists on Steam which is"
+  },
+  {
+   "t": 614.68,
+   "d": 6.16,
+   "text": "beyond me. In the original press release we said if we could reach 10,000 we would buy a"
+  },
+  {
+   "t": 620.84,
+   "d": 11.16,
+   "text": "claw machine for the office so I guess now we have to buy one. It is the 165th most wishlisted game"
+  },
+  {
+   "t": 632.0,
+   "d": 7.8,
+   "text": "on Steam. The game, hopefully, looks like it, is coming out next month. We also decided because we"
+  },
+  {
+   "t": 639.8,
+   "d": 5.64,
+   "text": "had a lot of feedback that people want to play it on mobile to port it to mobile right away."
+  },
+  {
+   "t": 645.44,
+   "d": 6.4,
+   "text": "This is the first time ever we have a mobile and PC same ship. PC will be early access. I am really"
+  },
+  {
+   "t": 651.84,
+   "d": 6.2,
+   "text": "curious to see how it would hold up on mobile. I did quite a few calls with the devs of Peglin"
+  },
+  {
+   "t": 658.04,
+   "d": 7.32,
+   "text": "and luck be a landlord and other roguelikes on how they are doing their monetization and most of them"
+  },
+  {
+   "t": 665.36,
+   "d": 6.8,
+   "text": "recommended we should just go premium to start out with. So I am really curious if it will live up to"
+  },
+  {
+   "t": 672.16,
+   "d": 6.96,
+   "text": "the sales on Steam in any way or if it will just be a tiny percentage. I am really, really looking"
+  },
+  {
+   "t": 679.12,
+   "d": 10.12,
+   "text": "forward to the launch. I think we have quite a bit of time for questions if we have them."
+  },
+  {
+   "t": 692.72,
+   "d": 7.0,
+   "text": "ALEXEI: Sorry. That's Kawa and I both clicking the button at the same time. We have time for"
+  },
+  {
+   "t": 699.72,
+   "d": 11.2,
+   "text": "questions if anyone has one. It is very excited. One thing I am interested in is that I feel like"
+  },
+  {
+   "t": 710.92,
+   "d": 6.56,
+   "text": "there is a pattern of you find a niche, you get that niche, and then people see it and start"
+  },
+  {
+   "t": 717.48,
+   "d": 7.16,
+   "text": "expanding it in the way of card games. Obviously card games existed heavily before then but I think"
+  },
+  {
+   "t": 724.64,
+   "d": 8.28,
+   "text": "like Slay the Spire pushes them even more. And you know, I think that, yeah. I have seen that"
+  },
+  {
+   "t": 732.92,
+   "d": 9.16,
+   "text": "there is another claw machine inspired game. We are seeing people playing deck of cards inspired"
+  },
+  {
+   "t": 742.08,
+   "d": 8.12,
+   "text": "roguelikes. How do you handle that from the marketing and press idea where it feels like"
+  },
+  {
+   "t": 751.4,
+   "d": 6.96,
+   "text": "people are going to take the idea -- there is the clones problem which is a different thing"
+  },
+  {
+   "t": 758.36,
+   "d": 5.56,
+   "text": "but just the legit inspiration of when it is a good idea and people are riffing on it."
+  },
+  {
+   "t": 763.92,
+   "d": 9.49,
+   "text": "PHILOMENA: Usually I am all for tell everybody your ideas. But with this one, I feel like I"
+  },
+  {
+   "t": 773.41,
+   "d": 6.11,
+   "text": "have been stabbed in the back a bit. Ever since the summer next fest there is three mobile clones"
+  },
+  {
+   "t": 779.52,
+   "d": 8.08,
+   "text": "out already which for me is a new level of crazy. I guess I am used to making more complex games. So"
+  },
+  {
+   "t": 787.6,
+   "d": 6.48,
+   "text": "we did have the problem of people, for example, with wandering village, stealing our footage"
+  },
+  {
+   "t": 794.08,
+   "d": 6.72,
+   "text": "and screen shots or just down right stealing our model and putting their own game on top, but here"
+  },
+  {
+   "t": 800.8,
+   "d": 7.56,
+   "text": "they just took our whole itemization, all of our character designs, and like all of the balancing"
+  },
+  {
+   "t": 808.36,
+   "d": 6.2,
+   "text": "and the games are free to play. That feels not so good when you are about to release your premium"
+  },
+  {
+   "t": 814.56,
+   "d": 7.28,
+   "text": "game, right? In terms of when somebody makes inspiration and makes a similar game. Also for"
+  },
+  {
+   "t": 821.84,
+   "d": 6.24,
+   "text": "example when the other claw machine roguelike was like announced, I looked at it and was like it is"
+  },
+  {
+   "t": 828.08,
+   "d": 5.18,
+   "text": "completely different and just also a claw machine and I am fine with that. Maybe we could bundle"
+  },
+  {
+   "t": 833.26,
+   "d": 8.3,
+   "text": "even with them down the road. I am fine with that. Just don't steal people's actual game content."
+  },
+  {
+   "t": 841.56,
+   "d": 3.88,
+   "text": "ALEXEI: I think bottling is a nice idea if you have that positive relationship"
+  },
+  {
+   "t": 847.24,
+   "d": 5.8,
+   "text": "and share it. I think as a fan, if you hit on a funky genre like that and you enjoy it,"
+  },
+  {
+   "t": 853.04,
+   "d": 6.64,
+   "text": "you often want to play other games riffing on the same idea. We have some questions. One"
+  },
+  {
+   "t": 859.68,
+   "d": 8.08,
+   "text": "quick one is so does your studio do all your own PR? Or did you do any hiring to talk to press?"
+  },
+  {
+   "t": 867.76,
+   "d": 5.92,
+   "text": "PHILOMENA: We actually became, aside an indie studio, a publisher last year because"
+  },
+  {
+   "t": 873.68,
+   "d": 7.24,
+   "text": "we self-published our games. And thanks to the wandering village we decided to take the leap"
+  },
+  {
+   "t": 880.92,
+   "d": 6.72,
+   "text": "and try our hand at publishing so we have five games signed with publisher and have experience."
+  },
+  {
+   "t": 887.64,
+   "d": 6.88,
+   "text": "For China and Japan, we always work with external companies. For the Japanese PR push with Dungeon"
+  },
+  {
+   "t": 894.52,
+   "d": 9.12,
+   "text": "Crawler that went great it was Noryoshi so I can recommend for Japan to work with them. For China"
+  },
+  {
+   "t": 903.64,
+   "d": 5.12,
+   "text": "we work with game dash which is a pretty new Chinese publisher by a friend of mine who has"
+  },
+  {
+   "t": 908.76,
+   "d": 7.4,
+   "text": "been doing a great job. Other than that, we are usually doing everything ourselves. For Dungeon"
+  },
+  {
+   "t": 916.16,
+   "d": 6.48,
+   "text": "Crawler and international press we worked future friends too. But usually we do it ourselves."
+  },
+  {
+   "t": 923.36,
+   "d": 4.64,
+   "text": "ALEXEI: Terse there is a couple other questions but we have to move on so,"
+  },
+  {
+   "t": 928.0,
+   "d": 9.92,
+   "text": "hopefully, people can reach out or talk New Session in the Breakout rooms. Yours will be"
+  },
+  {
+   "t": 937.92,
+   "d": 5.04,
+   "text": "Whip Show. People can hopefully ask more questions later. Thank you, Philomena."
+  },
+  {
+   "t": 942.96,
+   "d": 3.27,
+   "text": "PHILOMENA: Thank you. See you. ALEXEI: Excellent packed talk. We"
+  }
+ ]
+}

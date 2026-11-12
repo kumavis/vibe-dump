@@ -1,0 +1,66 @@
+Mark Gritter - Procedurally Generating Economies with Graph Grammars (and Math)
+Speaker: Mark Gritter
+https://www.youtube.com/watch?v=Q_MFTUYnaf0
+Year: 2020   Kind: talk   Captions: auto (en)
+
+## Intro
+
+[0:00:00] All right. Um, and last but not least is Mark Greter. Welcome to the stage. Hello. Uh, I'm going to be talking about procedurally generating economies with graph grammars and math. Uh, I like both I like all of those. My introduction to roguelikes was NetHack on a PC, and one of the things I really loved was the shopkeepers. Uh, I played a lot of Elite too on my Commodore 64, which has trade as its focus and still does have that as a major component in its current version. Uh, I played a game called RPG Maker called Stuart Smith's Adventure Construction Set, and I spent so much time building shops that I usually didn't finish building the adventures. Uh, Dwarf Fortress, of course, has trade too.
+
+## QUESTIONS
+
+[0:00:46] But I have a lot of questions about what's going on here. Who buys all that junk you sell to shops, and why? What does the merchant do with all the stone tableware your fortune your fortress sells them? And how the heck does an entire planet end up as agricultural? Uh, fundamentally, most of all, does trade in the broader economy make it a difference in a game world, or is it just decoration? So I'm going to talk about my experience with a project called Emoji Economy. It builds toy economies through these four steps. Build a graph that represents a flow of items, apply a utility function that has a decreasing marginal utility and sets the choices represented in that graph to maximize that utility, to maximize happiness. We create different regions, each with a copy of that graph, slightly altered to break or maybe specialize each region, and we find trade routes between regions that exchange goods and bring the utility back up.
+
+## I MAKE A LOT OF GRAPHS
+
+[0:01:45] So here's an example of the sort of graph I'm talking about, not the one Lisa Simpson has made. Uh, you already got an example earlier. It has circles called nodes and arrows called edges, and each can have some label attached. Each node represents either a good, like melon and lemon at the top, or a process that transforms the goods, like the Olympic and the axe here. From an initial set of natural goods like plants, the economy produces a variety of other consumables like pie at the bottom here. So in my prototype, I had just two types
+
+## TRANSFORMATIONS
+
+[0:02:20] of transformations of goods. Factories that put two units together to create a single new unit, or processing plants that split a single unit into its component parts.
+
+## CHOICES
+
+[0:02:33] So the sink of the graph represents consumption of goods by the population. We want as many goods as possible to to be used. And in a graph like this, a good could have more than one possible use. We could eat a plant directly, uh like this left left right hand uh edge, or we could process it into beer. And this gives us some play in the economy. We have to make decisions rather than just everything flowing through the graph. In Emoji Economy, these graphs are produced with a graph grammar. And a graph grammar is a set of production rules that matches some set of labeled nodes and edges within a graph and makes an alteration. For example, on the left hand side, I've illustrated a rule that takes a source and sink node and constructs a new plant in between them. So a new plant is grown and it's eaten directly. The right hand side shows this being applied to an existing graph that already has some some uh some flow.
+
+## WHY GRAPH GRAMMARS?
+
+[0:03:33] So Doris Dormans has used graph grammars to create effect in Unexplored. And there the the strength of a graph grammar is that it makes it easy to preserve structural invariance. So in a dungeon, the graph grammar knows not to move the key behind the door it opens. In Emoji Economy, we we can ensure that inputs or outputs remain hooked up so that there aren't any consumable items just hanging out being unused.
+
+## A MODERATELY COMPLEX RULE
+
+[0:03:59] Here's is example of a a moderately complex from Oort economy. It says if there's some good that's used by a factory um and we have a token that allows us to use another plant product, then we create a new process which produces the same good as well as another byproduct not cooked up to anything. So another rule could use that or maybe convert it into a garbage type with negative utility, but this provides two ways of feeding that that factory.
+
+## UTILITY
+
+[0:04:31] So let's switch to talking about what what does an economy look like besides a graph? So economists are favor and and game theorists are fond of utility, which is circularly defined as whatever people attempt to maximize. So we can think of it as happiness. And virtually any real good has diminishing marginal utility, which just means that the n plus one of it is not worth as much to you as the n. If you have 999 lemons, then the thousandth lemon really doesn't make a whole, you know, doesn't help you a lot. So I modeled this as a sigmoid function which asymptotically reaches some limit.
+
+## OPTIMIZING
+
+[0:05:12] So what have we got? We've got a set of choices about what to do with goods. In the simple graph here, we've got apples which we could eat directly or make into juice or use for apple butter. Uh the constraint is our choices have to add up to 100%. We can't magically get more juice than we have apples. Um and we've got a constraint we want to max maximize under those of a function we want to maximize under those constraints, but our objective on that we saw on the previous slide is nonlinear and so the effect of our choices, so we can't use an easy algorithm like linear program. This is actually a a tough problem.
+
+## GRADIENT DESCENT
+
+[0:05:47] Um the solution I picked is a standard method called gradient descent. Uh I won't go into all this. A lot of the math looks abstruse, but it's really actually a very simple idea. Just move in the direction that makes things better and if you end up making things worse, take smaller steps next time. Don't you know, sort of roll that back and don't do it. Uh one problem I should mention is that we might been following this best path make the choices at more than 100% and the solution is just pull them back to the nearest point that does match the constraint. And there's a very cool and simple algorithm that does this which is surprisingly was only invented in 2011. It was kind of far along our tech tree for some reason.
+
+## REAL ECONOMIES AREN'T PERFECT
+
+[0:06:32] But really you know there's a good point here which is real economies are not perfect and your simulated economy doesn't have to either. I think it's actually cool if players notice that a sub optimal choice has been made if they have the power to do something about it.
+
+## MESS WITH THE GRAPH
+
+[0:06:48] So now that everything's working mostly like it should we can start breaking the economy. Our perfect economy might fail in different ways. Maybe some regions can't grow apples, maybe it lacks the infrastructure to make apple juice. And some of these differences, most of these differences I think can be simulated by removing parts of the original graph. That's what I did in emoji economy. This usually lowers the utility because there are not as many goods or you know not as many choices in each region. So trade can repair some of the damage. The partially broken economies give some motivation to move goods back and forth. Uh the simple econ 101 version looks like this. A can make juice but not butter. B can make apple butter but not apple juice. If they trade equal amounts both are better off. But there are two problems, one
+
+## POST-101 ECON
+
+[0:07:39] theoretical and one practical. So the theoretical problem is how do two negotiators come to an agreement? Maybe A demands more than its fair share. Should be give in just because there's some benefits better than none? Uh economists developed several models all of which disagree and the bad news is that when we study real humans uh they don't behave in a way consistent with any of them. So who knows? And practically this is a hard problem to identify all the good opportunities to trade. Is there any efficient way of doing so?
+
+## AN AUCTION MECHANISM FOR TRADES
+
+[0:08:12] So here's an algorithm I came up with. It produces results that I think are okay. We just proceed in rounds. One region becomes the seller and says, hey, I have 100 limes. What have you got? Each other region makes a honest bid the maximum they'll pay for those limes. Maybe five video games or 16 slime molds or 200 yarn. And the seller reruns his bobble and says, okay, if I subtract my limes and add in the yarn, what does my utility look like? They pick the bid that maximizes their utility or they just reject them all if the game is too small. So this produces, I think, realistic looking trades, but it's lots and lots of optimization runs. It's way too slow. The alternative is to pick trades randomly, use them if they're positive, and this is fast but produces sort of weird results. So here's an example.
+
+## EXAMPLE
+
+[0:09:05] We've got uh sort of the on the left hand side we got an optimally balanced economy that's perfect. On the right hand side we took uh nine different regions and broke them all and ran this algorithm. And I I like that we got a nice dense network of trade with with, you know, things that are traded that make sense, but there's still a lot of variety going on. I'm your one minute timer. All right. All the trades are bidirectional. There's no triangle trades, although they occur in real life. So there's there's a lot of room to do better. I also ignored any cost of moving goods or geographic considerations. I think those could be added in and and make interesting modifications to what you get as the output. So this code is available on GitHub under mgridder/emojieconomy. If you have any trouble, please let me know. My documentation's very poor. Uh I based this on my old own graph grammar implementation called Sofie as an homage to Tracery, uh which has mainly failed in its design goals. So I'm looking forward to rewriting it, but I'll be
+
+[0:10:05] giving a talk on it next Saturday as part of Minibar, my local unconference. That's it. Excellent. Thank you so much. Uh we'll try and make sure those links get shared out. Excellent talk.
