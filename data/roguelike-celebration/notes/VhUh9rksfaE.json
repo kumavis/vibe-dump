@@ -82,8 +82,8 @@
       "topic": "generation-methods",
       "subtopic": "prompt injection",
       "kind": "warning",
-      "claim": "Trying to block malicious player input to a language model through clever prompting is a fool's errand because prompt injection lets users override your instructions.",
-      "detail": "Shane explains that an application is only as trustworthy as the AI's inclination to follow the developer's prompt over the user's; insulating users from free input and prescreening output are the defences.",
+      "claim": "If users can type whatever they want, trying to block malicious player input to a language model through clever prompting is a fool's errand, because prompt injection lets users override your instructions.",
+      "detail": "Answering an audience question, read by host Alexei, that called it a possible 'fool's errand', Shane agrees on condition that users can type freely. She explains that an application is only as trustworthy as the AI's inclination to follow the developer's prompt over the user's; insulating users from free input and prescreening output are the defences.",
       "t": 1716,
       "quote": "your application is only as trustworthy as your AI's inclination to follow your prompt as opposed to your user's prom",
       "weight": 2

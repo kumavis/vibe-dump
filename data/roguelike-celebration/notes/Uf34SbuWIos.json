@@ -65,8 +65,8 @@
       "topic": "architecture-and-tools",
       "subtopic": "spreadsheet simulation",
       "kind": "technique",
-      "claim": "Declarative tools like SQL and spreadsheets can be used to simulate game systems and explore their outcomes without writing a game engine.",
-      "detail": "In Q&A Pagnutti calls himself a 'spreadsheet sicko' with a Google Sheet optimising Stardew Valley planting; he chose SQL as the declarative workhorse he knows because he is bad at Prolog.",
+      "claim": "Pagnutti, a self-described 'spreadsheet sicko', is drawn to simulating games in declarative tools: Google Sheets for Stardew Valley planting, and SQL for Slay the Spire encounter AI.",
+      "detail": "In Q&A Pagnutti says he has done a lot of simulating games in nothing but Google Sheets, including one optimising Stardew Valley planting; he chose SQL as the declarative workhorse he knows because he is bad at Prolog.",
       "t": 807,
       "quote": "I've done a lot of trying to like simulate out games in nothing but Google Sheets",
       "weight": 1

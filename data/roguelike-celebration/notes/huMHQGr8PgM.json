@@ -63,8 +63,8 @@
       "topic": "ai-and-npcs",
       "subtopic": "pathfinding",
       "kind": "warning",
-      "claim": "In a world where every pixel can move, robust and fast pathfinding for many AI agents (like a god game's tribe using ladders) proved effectively too costly, killing Noita's god-game and RTS concepts.",
-      "detail": "Sand falling and water pouring constantly rearrange terrain. The team tried flying jet-pack characters to simplify pathfinding, then shelved AI for years before revisiting it in the roguelite phase.",
+      "claim": "In a world where every pixel can move, robust and fast pathfinding for many AI agents (like a god game's tribe using ladders) proved maybe not impossible but too much, one of the design troubles that undermined Noita's early god-game concept.",
+      "detail": "Sand falling and water pouring constantly rearrange terrain. The team tried flying jet-pack characters to simplify pathfinding, then shelved AI for years before revisiting it in the roguelite phase. Of the later space RTS concept, Teikari says he doesn't remember its problems but they were probably similar.",
       "t": 782,
       "quote": "making a robust uh pathfinding system that doesn't slow down hugely is not trivial",
       "weight": 2

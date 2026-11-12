@@ -39,7 +39,7 @@
       "topic": "combat-and-tactics",
       "subtopic": "grid geometry",
       "kind": "example",
-      "claim": "Roguelike movement and melee make hyperbolic geometry matter in HyperRogue: on a heptagonal tiling the extra neighbour direction lets you escape and defeat monsters that would surround you on a flat grid.",
+      "claim": "Roguelike movement and melee make hyperbolic geometry matter in HyperRogue: on a heptagonal tiling the extra neighbour direction lets you escape and defeat several monsters attacking you at once.",
       "detail": "Zeno says what matters most for HyperRogue is that you move and fight like in Rogue. When attacked by several monsters, standing on a heptagon gives an extra direction to step into so you can defeat them, which he says makes the game cool.",
       "t": 909,
       "quote": "What matters the most is you move and fight like in rogue",
@@ -99,10 +99,10 @@
       "topic": "systems-and-emergence",
       "subtopic": "spatial consistency",
       "kind": "principle",
-      "claim": "HyperRogue values spatial consistency and non-modality, e.g. shops are part of the map, which enables tricks like stealing from shops.",
-      "detail": "Zeno contrasts this with violations such as stairs, where it is unclear whether enemies will follow, and says a consistent spatial world structure is fun.",
-      "t": 1443,
-      "quote": "we have these shops and they aren't part of the map and you can do lots of cools things based on that. Like steal from shops",
+      "claim": "HyperRogue values spatial consistency and non-modality, with its shops as the example, which enables tricks like stealing from shops.",
+      "detail": "Zeno contrasts this with violations such as stairs, where it is unclear whether enemies will follow, and says a consistent spatial world structure is fun. The captions read that the shops 'aren't part of the map', which sits oddly with the non-modality point and may be a caption error.",
+      "t": 1419,
+      "quote": "The next thing I want to talk about is a special consistency. What I mean by that is non-modality",
       "weight": 1
     },
     {

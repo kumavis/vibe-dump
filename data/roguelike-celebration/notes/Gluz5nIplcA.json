@@ -158,8 +158,8 @@
       "topic": "character-and-builds",
       "subtopic": "class balance",
       "kind": "principle",
-      "claim": "Balance matters even in single-player roguelikes, because a far-too-strong or too-weak class produces drastically different player experiences and negative reviews.",
-      "detail": "Tangledeep received one Steam review calling it impossibly hard and broken and another from a player who beat it first try; both were negative. Aversa's response was to show a difficulty rank next to each job, lock very hard jobs (like the Gambler, whose escape goes in a random direction) behind a short unlock, and remove things that are absurdly strong or weak.",
+      "claim": "Balance matters even in single-player roguelikes, because a far-too-strong or too-weak job, weapon or item produces a drastically different player experience, which Aversa ties to contrasting negative reviews.",
+      "detail": "Tangledeep received one Steam review calling it impossibly hard and broken and another from a player who beat it first try; both were negative. Aversa guesses the first player was probably on one of the harder jobs. His response was to show a difficulty rank next to each job, lock very hard jobs (like the Gambler, whose escape goes in a random direction) behind a short unlock, and remove things that are absurdly strong or weak.",
       "t": 1292,
       "quote": "when you have something that's very weak or very strong, uh it should be marked as such",
       "weight": 2
