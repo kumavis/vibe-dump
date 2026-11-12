@@ -35,19 +35,26 @@ export function createStage(el, { fov = 40, minAspect = 1.3, bg = 0x0b0e14 } = {
     if (!w || !h) return
     renderer.render(scene, camera)
     for (const l of labels) {
-      v.copy(l.pos).project(camera)
+      v.copy(l.pos)
+      if (l.parent) v.applyMatrix4(l.parent.matrixWorld) // label rides on a moving object
+      v.project(camera)
       const show = l.opacity > 0.02 && v.z < 1
       l.el.style.opacity = show ? l.opacity : 0
-      if (show) l.el.style.transform = `translate(${(v.x * 0.5 + 0.5) * w}px, ${(-v.y * 0.5 + 0.5) * h}px) translate(-50%, -50%)`
+      if (show) {
+        // keep the whole label inside the frame
+        const half = l.el.offsetWidth / 2 + 4
+        const x = Math.min(Math.max((v.x * 0.5 + 0.5) * w, half), Math.max(half, w - half))
+        l.el.style.transform = `translate(${x}px, ${(-v.y * 0.5 + 0.5) * h}px) translate(-50%, -50%)`
+      }
     }
   }
 
-  function addLabel(text, pos, cls = '') {
+  function addLabel(text, pos, cls = '', parent = null) {
     const d = document.createElement('div')
     d.className = 'label ' + cls
     d.textContent = text
     layer.appendChild(d)
-    const l = { el: d, pos: pos.clone(), opacity: 1 }
+    const l = { el: d, pos: pos.clone(), opacity: 1, parent }
     labels.push(l)
     return l
   }

@@ -3,11 +3,13 @@ import { simulate, STAGE_COUNT } from './sim.js'
 import { createCutaway } from './viz-cutaway.js'
 import { createFundus } from './viz-fundus.js'
 import { createDoorway } from './viz-doorway.js'
+import { createHead } from './viz-head.js'
 
 const APPROACHES = [
   { id: 'cutaway', letter: 'A', name: 'Cutaway', pitch: 'The back of the eye sliced open. See where the blood comes from and where the fibres get squeezed. Drag to turn it.', create: createCutaway },
   { id: 'fundus', letter: 'B', name: 'The doctor’s view', pitch: 'What an eye doctor sees through the pupil, next to what you see as fibres drop out.', create: createFundus },
   { id: 'doorway', letter: 'C', name: 'Crowded doorway', pitch: 'A simple model, not anatomy: the same fibres through a roomy opening and a tight one. Drag to turn it.', create: createDoorway },
+  { id: 'head', letter: 'D', name: 'Whole head', pitch: 'Start from the outside: the head turns to glass to show the eyes and the optic nerves running to the back of the brain. Drag to turn it.', create: createHead },
 ]
 const DURATION = 42 // seconds for the whole story
 
@@ -42,15 +44,16 @@ $('back').addEventListener('click', () => { location.hash = '' })
 route()
 
 // --- timeline
-let t = 0, playing = true
+let t = 0, playing = !matchMedia('(prefers-reduced-motion: reduce)').matches
 const scrub = $('scrub'), steps = $('steps')
+const syncPlay = () => { $('play').textContent = playing ? '❚❚' : '▶' }
+syncPlay()
 STAGES.forEach((s, i) => {
   const b = document.createElement('button')
   b.textContent = s.title
   b.addEventListener('click', () => { t = (i + 0.02) / STAGE_COUNT; playing = true; syncPlay() })
   steps.appendChild(b)
 })
-const syncPlay = () => { $('play').textContent = playing ? '❚❚' : '▶' }
 $('play').addEventListener('click', () => { if (t >= 1) t = 0; playing = !playing; syncPlay() })
 scrub.addEventListener('input', () => { t = scrub.value / 1000; playing = false; syncPlay() })
 

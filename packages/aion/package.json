@@ -12,7 +12,7 @@
   },
   "gallery": {
     "title": "aion",
-    "description": "A patient's guide to NAION — the commonest anterior ischemic optic neuropathy — told three ways in 3-D: an anatomical cutaway, the doctor's view of the retina, and a crowded-doorway model. Every claim is cited. Three.js.",
+    "description": "A patient's guide to NAION — the commonest anterior ischemic optic neuropathy — told four ways in 3-D: a glass head showing the optic nerves, an anatomical cutaway, the doctor's view of the retina, and a crowded-doorway model. Every claim is cited. Three.js.",
     "tags": [
       "tutorial",
       "simulation"
@@ -21,6 +21,6 @@
     "models": [
       "Fable 5.2"
     ],
-    "thinking": "unknown"
+    "thinking": "high"
   }
 }

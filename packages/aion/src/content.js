@@ -75,6 +75,7 @@ export const CAVEATS = [
   'The timeline is compressed: the first three steps are years or hours, the last is weeks.',
   'The model always damages the upper part of the disc because that is the most common pattern; a real eye may lose a different part.',
   'The “roomy disc” in the doorway view is an illustration of the compartment idea, not a measured result.',
+  'The whole-head view is a stylised head; the route of the nerves to the back of the brain is standard anatomy rather than a cited claim, and the dimmed signals are an illustration.',
   'Shapes, sizes and colours are schematic. The link between upper-disc fibres and the lower half of vision is standard anatomy rather than a cited claim.',
 ]
 
