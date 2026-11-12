@@ -1,0 +1,843 @@
+{
+ "id": "demo",
+ "title": "Demo: Cold Open",
+ "duration": 44.693,
+ "audio": "audio/demo.mp3",
+ "tele": "tele/demo.bin",
+ "lines": [
+  {
+   "i": 0,
+   "id": "hello",
+   "who": "larry",
+   "kind": "say",
+   "text": "Good evening, Bluesky! Welcome to The Late Cluster.",
+   "caption": true,
+   "t0": 1.346,
+   "t1": 4.997,
+   "words": [
+    [
+     1.406,
+     1.681,
+     "Good"
+    ],
+    [
+     1.681,
+     2.093,
+     "evening,"
+    ],
+    [
+     2.333,
+     3.042,
+     "Bluesky!"
+    ],
+    [
+     3.452,
+     3.895,
+     "Welcome"
+    ],
+    [
+     3.895,
+     4.071,
+     "to"
+    ],
+    [
+     4.071,
+     4.189,
+     "The"
+    ],
+    [
+     4.189,
+     4.469,
+     "Late"
+    ],
+    [
+     4.469,
+     4.997,
+     "Cluster."
+    ]
+   ],
+   "tele": 0,
+   "teleT0": 1.296
+  },
+  {
+   "i": 1,
+   "id": "intro",
+   "who": "larry",
+   "kind": "say",
+   "text": "I'm your host, Larry Nx.",
+   "caption": true,
+   "t0": 5.277,
+   "t1": 7.311,
+   "words": [
+    [
+     5.337,
+     5.61,
+     "I'm"
+    ],
+    [
+     5.61,
+     5.806,
+     "your"
+    ],
+    [
+     5.806,
+     6.296,
+     "host,"
+    ],
+    [
+     6.536,
+     6.87,
+     "Larry"
+    ],
+    [
+     6.87,
+     7.311,
+     "Nx."
+    ]
+   ],
+   "tele": 1,
+   "teleT0": 5.227
+  },
+  {
+   "i": 2,
+   "id": "interrupt",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Larry, the simcluster is trending again.",
+   "caption": true,
+   "t0": 7.241,
+   "t1": 9.631,
+   "words": [
+    [
+     7.301,
+     7.669,
+     "Larry,"
+    ],
+    [
+     7.909,
+     8.022,
+     "the"
+    ],
+    [
+     8.022,
+     8.716,
+     "simcluster"
+    ],
+    [
+     8.716,
+     8.832,
+     "is"
+    ],
+    [
+     8.832,
+     9.302,
+     "trending"
+    ],
+    [
+     9.302,
+     9.631,
+     "again."
+    ]
+   ],
+   "tele": 2,
+   "teleT0": 7.191
+  },
+  {
+   "i": 3,
+   "id": "again",
+   "who": "larry",
+   "kind": "say",
+   "text": "Again? It's been trending since Tuesday!",
+   "caption": true,
+   "t0": 9.911,
+   "t1": 12.434,
+   "words": [
+    [
+     9.971,
+     10.313,
+     "Again?"
+    ],
+    [
+     10.723,
+     10.959,
+     "It's"
+    ],
+    [
+     10.959,
+     11.159,
+     "been"
+    ],
+    [
+     11.159,
+     11.634,
+     "trending"
+    ],
+    [
+     11.634,
+     11.955,
+     "since"
+    ],
+    [
+     11.955,
+     12.434,
+     "Tuesday!"
+    ]
+   ],
+   "tele": 3,
+   "teleT0": 9.861
+  },
+  {
+   "i": 4,
+   "id": "feed",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Your feed says you are ninety percent posting, and ten percent vibes.",
+   "caption": true,
+   "t0": 13.443,
+   "t1": 17.594,
+   "words": [
+    [
+     13.503,
+     13.702,
+     "Your"
+    ],
+    [
+     13.702,
+     13.969,
+     "feed"
+    ],
+    [
+     13.969,
+     14.237,
+     "says"
+    ],
+    [
+     14.237,
+     14.421,
+     "you"
+    ],
+    [
+     14.421,
+     14.533,
+     "are"
+    ],
+    [
+     14.533,
+     14.953,
+     "ninety"
+    ],
+    [
+     14.953,
+     15.421,
+     "percent"
+    ],
+    [
+     15.421,
+     15.983,
+     "posting,"
+    ],
+    [
+     16.223,
+     16.398,
+     "and"
+    ],
+    [
+     16.398,
+     16.648,
+     "ten"
+    ],
+    [
+     16.648,
+     17.105,
+     "percent"
+    ],
+    [
+     17.105,
+     17.594,
+     "vibes."
+    ]
+   ],
+   "tele": 4,
+   "teleT0": 13.393
+  },
+  {
+   "i": 5,
+   "id": "accurate",
+   "who": "larry",
+   "kind": "say",
+   "text": "Finally, an algorithm that understands me.",
+   "caption": true,
+   "t0": 17.874,
+   "t1": 20.714,
+   "words": [
+    [
+     17.934,
+     18.538,
+     "Finally,"
+    ],
+    [
+     18.778,
+     18.903,
+     "an"
+    ],
+    [
+     18.903,
+     19.511,
+     "algorithm"
+    ],
+    [
+     19.511,
+     19.691,
+     "that"
+    ],
+    [
+     19.691,
+     20.495,
+     "understands"
+    ],
+    [
+     20.495,
+     20.714,
+     "me."
+    ]
+   ],
+   "tele": 5,
+   "teleT0": 17.824
+  },
+  {
+   "i": 6,
+   "id": "ditty",
+   "who": "larry",
+   "kind": "sing",
+   "text": "sim cluster, sim cluster, what is in my feed",
+   "caption": true,
+   "t0": 22.814,
+   "t1": 26.832,
+   "words": [
+    [
+     22.814,
+     23.082,
+     "sim"
+    ],
+    [
+     23.082,
+     23.886,
+     "cluster,"
+    ],
+    [
+     23.886,
+     24.154,
+     "sim"
+    ],
+    [
+     24.154,
+     24.957,
+     "cluster,"
+    ],
+    [
+     24.957,
+     25.225,
+     "what"
+    ],
+    [
+     25.225,
+     25.493,
+     "is"
+    ],
+    [
+     25.493,
+     25.761,
+     "in"
+    ],
+    [
+     25.761,
+     26.029,
+     "my"
+    ],
+    [
+     26.029,
+     26.832,
+     "feed"
+    ]
+   ],
+   "tele": 6,
+   "teleT0": 22.514
+  },
+  {
+   "i": 7,
+   "id": "hitit",
+   "who": "larry",
+   "kind": "say",
+   "text": "Hit it, Formants!",
+   "caption": true,
+   "t0": 27.642,
+   "t1": 28.988,
+   "words": [
+    [
+     27.702,
+     27.899,
+     "Hit"
+    ],
+    [
+     27.899,
+     28.069,
+     "it,"
+    ],
+    [
+     28.309,
+     28.988,
+     "Formants!"
+    ]
+   ],
+   "tele": 7,
+   "teleT0": 27.592
+  },
+  {
+   "i": 8,
+   "id": "stomp-lead",
+   "who": "larry",
+   "kind": "sing",
+   "text": "we post into the void, and the void posts back, we're all in a cluster, and we're not coming back",
+   "caption": true,
+   "t0": 29.238,
+   "t1": 38.238,
+   "words": [
+    [
+     29.238,
+     29.538,
+     "we"
+    ],
+    [
+     29.538,
+     29.838,
+     "post"
+    ],
+    [
+     29.838,
+     30.438,
+     "into"
+    ],
+    [
+     30.438,
+     30.738,
+     "the"
+    ],
+    [
+     30.738,
+     31.038,
+     "void,"
+    ],
+    [
+     31.638,
+     31.938,
+     "and"
+    ],
+    [
+     31.938,
+     32.238,
+     "the"
+    ],
+    [
+     32.238,
+     32.538,
+     "void"
+    ],
+    [
+     32.538,
+     32.838,
+     "posts"
+    ],
+    [
+     32.838,
+     33.438,
+     "back,"
+    ],
+    [
+     34.038,
+     34.338,
+     "we're"
+    ],
+    [
+     34.338,
+     34.638,
+     "all"
+    ],
+    [
+     34.638,
+     34.938,
+     "in"
+    ],
+    [
+     34.938,
+     35.238,
+     "a"
+    ],
+    [
+     35.238,
+     35.838,
+     "cluster,"
+    ],
+    [
+     36.438,
+     36.738,
+     "and"
+    ],
+    [
+     36.738,
+     37.038,
+     "we're"
+    ],
+    [
+     37.038,
+     37.338,
+     "not"
+    ],
+    [
+     37.338,
+     37.938,
+     "coming"
+    ],
+    [
+     37.938,
+     38.238,
+     "back"
+    ]
+   ],
+   "tele": 8,
+   "teleT0": 28.938
+  },
+  {
+   "i": 9,
+   "id": "stomp-beat",
+   "who": "pete",
+   "kind": "beat",
+   "text": "B . . . | ! . . . ",
+   "caption": false,
+   "t0": 29.238,
+   "t1": 38.838,
+   "words": [],
+   "tele": 9,
+   "teleT0": 28.938
+  },
+  {
+   "i": 10,
+   "who": "hy",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 30.898,
+   "t1": 31.277,
+   "words": [
+    [
+     30.898,
+     31.277,
+     "hey"
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 30.848
+  },
+  {
+   "i": 11,
+   "who": "hy",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 33.298,
+   "t1": 33.677,
+   "words": [
+    [
+     33.298,
+     33.677,
+     "hey"
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 33.248
+  },
+  {
+   "i": 12,
+   "who": "hy",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 35.698,
+   "t1": 36.077,
+   "words": [
+    [
+     35.698,
+     36.077,
+     "hey"
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 35.648
+  },
+  {
+   "i": 13,
+   "who": "hy",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 38.098,
+   "t1": 38.477,
+   "words": [
+    [
+     38.098,
+     38.477,
+     "hey"
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 38.048
+  },
+  {
+   "i": 14,
+   "who": "al",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 30.898,
+   "t1": 31.277,
+   "words": [
+    [
+     30.898,
+     31.277,
+     "hey"
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 30.848
+  },
+  {
+   "i": 15,
+   "who": "al",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 33.298,
+   "t1": 33.677,
+   "words": [
+    [
+     33.298,
+     33.677,
+     "hey"
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 33.248
+  },
+  {
+   "i": 16,
+   "who": "al",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 35.698,
+   "t1": 36.077,
+   "words": [
+    [
+     35.698,
+     36.077,
+     "hey"
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 35.648
+  },
+  {
+   "i": 17,
+   "who": "al",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 38.098,
+   "t1": 38.477,
+   "words": [
+    [
+     38.098,
+     38.477,
+     "hey"
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 38.048
+  },
+  {
+   "i": 18,
+   "who": "dee",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 30.902,
+   "t1": 31.265,
+   "words": [
+    [
+     30.902,
+     31.265,
+     "hey"
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 30.852
+  },
+  {
+   "i": 19,
+   "who": "dee",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 33.302,
+   "t1": 33.665,
+   "words": [
+    [
+     33.302,
+     33.665,
+     "hey"
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 33.252
+  },
+  {
+   "i": 20,
+   "who": "dee",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 35.702,
+   "t1": 36.065,
+   "words": [
+    [
+     35.702,
+     36.065,
+     "hey"
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 35.652
+  },
+  {
+   "i": 21,
+   "who": "dee",
+   "kind": "shout",
+   "text": "hey",
+   "caption": false,
+   "t0": 38.102,
+   "t1": 38.465,
+   "words": [
+    [
+     38.102,
+     38.465,
+     "hey"
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 38.052
+  },
+  {
+   "i": 22,
+   "id": "back",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Stay clustered. We will be right back!",
+   "caption": true,
+   "t0": 41.502,
+   "t1": 44.093,
+   "words": [
+    [
+     41.562,
+     41.868,
+     "Stay"
+    ],
+    [
+     41.868,
+     42.469,
+     "clustered."
+    ],
+    [
+     42.879,
+     43.034,
+     "We"
+    ],
+    [
+     43.034,
+     43.238,
+     "will"
+    ],
+    [
+     43.238,
+     43.39,
+     "be"
+    ],
+    [
+     43.39,
+     43.726,
+     "right"
+    ],
+    [
+     43.726,
+     44.093,
+     "back!"
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 41.452
+  }
+ ],
+ "cues": {
+  "chart-in": 12.963,
+  "chart-out": 22.534,
+  "band-in": 29.088
+ },
+ "sfx": [
+  {
+   "name": "applause-long-1",
+   "t0": 0.3,
+   "t1": 6.11
+  },
+  {
+   "name": "laugh-1",
+   "t0": 12.434,
+   "t1": 14.054
+  },
+  {
+   "name": "rimshot-1",
+   "t0": 20.814,
+   "t1": 22.534
+  },
+  {
+   "name": "chuckle-1",
+   "t0": 22.134,
+   "t1": 23.094
+  },
+  {
+   "name": "call:seal/zap",
+   "t0": 22.334,
+   "t1": 22.734
+  },
+  {
+   "name": "ding-1",
+   "t0": 26.882,
+   "t1": 27.682
+  },
+  {
+   "name": "sting-1",
+   "t0": 38.888,
+   "t1": 41.158
+  },
+  {
+   "name": "applause-1",
+   "t0": 40.758,
+   "t1": 43.978
+  }
+ ],
+ "music": [
+  {
+   "id": "stomp",
+   "t0": 29.238,
+   "bpm": 100,
+   "beats": 16
+  }
+ ]
+}

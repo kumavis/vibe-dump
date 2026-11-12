@@ -1,0 +1,2666 @@
+{
+ "id": "song",
+ "title": "Someday (Built It)",
+ "duration": 93.695,
+ "audio": "audio/song.mp3",
+ "tele": "tele/song.bin",
+ "lines": [
+  {
+   "i": 0,
+   "id": "intro-1",
+   "who": "larry",
+   "kind": "say",
+   "text": "Folks, in the simcluster, a dream lasts about six minutes.",
+   "caption": true,
+   "t0": 0.3,
+   "t1": 4.302,
+   "words": [
+    [
+     0.36,
+     0.836,
+     "Folks,"
+    ],
+    [
+     1.076,
+     1.198,
+     "in"
+    ],
+    [
+     1.198,
+     1.31,
+     "the"
+    ],
+    [
+     1.31,
+     2.084,
+     "simcluster,"
+    ],
+    [
+     2.324,
+     2.392,
+     "a"
+    ],
+    [
+     2.392,
+     2.697,
+     "dream"
+    ],
+    [
+     2.697,
+     3.17,
+     "lasts"
+    ],
+    [
+     3.17,
+     3.534,
+     "about"
+    ],
+    [
+     3.534,
+     3.868,
+     "six"
+    ],
+    [
+     3.868,
+     4.302,
+     "minutes."
+    ]
+   ],
+   "tele": 0,
+   "teleT0": 0.25
+  },
+  {
+   "i": 1,
+   "id": "intro-2",
+   "who": "larry",
+   "kind": "say",
+   "text": "Then somebody ships it.",
+   "caption": true,
+   "t0": 4.652,
+   "t1": 5.98,
+   "words": [
+    [
+     4.712,
+     4.884,
+     "Then"
+    ],
+    [
+     4.884,
+     5.455,
+     "somebody"
+    ],
+    [
+     5.455,
+     5.809,
+     "ships"
+    ],
+    [
+     5.809,
+     5.98,
+     "it."
+    ]
+   ],
+   "tele": 1,
+   "teleT0": 4.602
+  },
+  {
+   "i": 2,
+   "id": "intro-3",
+   "who": "larry",
+   "kind": "say",
+   "text": "Here is a song about dreaming.",
+   "caption": true,
+   "t0": 7.039,
+   "t1": 8.804,
+   "words": [
+    [
+     7.099,
+     7.366,
+     "Here"
+    ],
+    [
+     7.366,
+     7.513,
+     "is"
+    ],
+    [
+     7.513,
+     7.581,
+     "a"
+    ],
+    [
+     7.581,
+     7.953,
+     "song"
+    ],
+    [
+     7.953,
+     8.318,
+     "about"
+    ],
+    [
+     8.318,
+     8.804,
+     "dreaming."
+    ]
+   ],
+   "tele": 2,
+   "teleT0": 6.989
+  },
+  {
+   "i": 3,
+   "id": "intro-4",
+   "who": "larry",
+   "kind": "say",
+   "text": "Better sing it fast.",
+   "caption": true,
+   "t0": 9.104,
+   "t1": 10.41,
+   "words": [
+    [
+     9.164,
+     9.458,
+     "Better"
+    ],
+    [
+     9.458,
+     9.745,
+     "sing"
+    ],
+    [
+     9.745,
+     9.874,
+     "it"
+    ],
+    [
+     9.874,
+     10.41,
+     "fast."
+    ]
+   ],
+   "tele": 3,
+   "teleT0": 9.054
+  },
+  {
+   "i": 4,
+   "id": "a-stomp",
+   "who": "al",
+   "kind": "beat",
+   "text": "B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | . . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | . . . . | B . . . | B . . . | B . . . | . . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . .",
+   "caption": false,
+   "t0": 11,
+   "t1": 32.428,
+   "words": [],
+   "tele": 4,
+   "teleT0": 10.7
+  },
+  {
+   "i": 5,
+   "id": "a-clap",
+   "who": "pete",
+   "kind": "beat",
+   "text": ". . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . ! . ! . ! ! ! ! | kch . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t .",
+   "caption": false,
+   "t0": 11,
+   "t1": 32.428,
+   "words": [],
+   "tele": 5,
+   "teleT0": 10.7
+  },
+  {
+   "i": 6,
+   "id": "hook-hy",
+   "who": "hy",
+   "kind": "sing",
+   "text": "whoa oh oh oh, whoa oh oh",
+   "caption": false,
+   "t0": 11,
+   "t1": 14.75,
+   "words": [
+    [
+     11,
+     11.536,
+     "whoa"
+    ],
+    [
+     11.536,
+     12.339,
+     "oh"
+    ],
+    [
+     12.339,
+     12.607,
+     "oh"
+    ],
+    [
+     12.607,
+     13.143,
+     "oh,"
+    ],
+    [
+     13.143,
+     13.678,
+     "whoa"
+    ],
+    [
+     13.678,
+     13.946,
+     "oh"
+    ],
+    [
+     13.946,
+     14.75,
+     "oh"
+    ]
+   ],
+   "tele": 6,
+   "teleT0": 10.7
+  },
+  {
+   "i": 7,
+   "id": "hook-dee",
+   "who": "dee",
+   "kind": "sing",
+   "text": "whoa oh oh oh, whoa oh oh",
+   "caption": false,
+   "t0": 11,
+   "t1": 14.75,
+   "words": [
+    [
+     11,
+     11.536,
+     "whoa"
+    ],
+    [
+     11.536,
+     12.339,
+     "oh"
+    ],
+    [
+     12.339,
+     12.607,
+     "oh"
+    ],
+    [
+     12.607,
+     13.143,
+     "oh,"
+    ],
+    [
+     13.143,
+     13.678,
+     "whoa"
+    ],
+    [
+     13.678,
+     13.946,
+     "oh"
+    ],
+    [
+     13.946,
+     14.75,
+     "oh"
+    ]
+   ],
+   "tele": 7,
+   "teleT0": 10.7
+  },
+  {
+   "i": 8,
+   "id": "v1-a",
+   "who": "larry",
+   "kind": "sing",
+   "text": "Someday a weather report for the posts",
+   "caption": true,
+   "t0": 15.553,
+   "t1": 19.303,
+   "words": [
+    [
+     15.553,
+     16.089,
+     "Someday"
+    ],
+    [
+     16.089,
+     16.357,
+     "a"
+    ],
+    [
+     16.357,
+     17.161,
+     "weather"
+    ],
+    [
+     17.161,
+     17.964,
+     "report"
+    ],
+    [
+     17.964,
+     18.232,
+     "for"
+    ],
+    [
+     18.232,
+     18.5,
+     "the"
+    ],
+    [
+     18.5,
+     19.303,
+     "posts"
+    ]
+   ],
+   "tele": 8,
+   "teleT0": 14.986
+  },
+  {
+   "i": 9,
+   "id": "v1-b",
+   "who": "larry",
+   "kind": "sing",
+   "text": "with a high and a low and a warning for claims",
+   "caption": true,
+   "t0": 19.571,
+   "t1": 23.857,
+   "words": [
+    [
+     19.571,
+     19.839,
+     "with"
+    ],
+    [
+     19.839,
+     20.107,
+     "a"
+    ],
+    [
+     20.107,
+     20.643,
+     "high"
+    ],
+    [
+     20.643,
+     20.911,
+     "and"
+    ],
+    [
+     20.911,
+     21.178,
+     "a"
+    ],
+    [
+     21.178,
+     21.714,
+     "low"
+    ],
+    [
+     21.714,
+     21.982,
+     "and"
+    ],
+    [
+     21.982,
+     22.25,
+     "a"
+    ],
+    [
+     22.25,
+     22.786,
+     "warning"
+    ],
+    [
+     22.786,
+     23.053,
+     "for"
+    ],
+    [
+     23.053,
+     23.857,
+     "claims"
+    ]
+   ],
+   "tele": 9,
+   "teleT0": 19.271
+  },
+  {
+   "i": 10,
+   "id": "c1-a",
+   "who": "larry",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": true,
+   "t0": 23.857,
+   "t1": 25.464,
+   "words": [
+    [
+     23.857,
+     25.464,
+     "Someday!"
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 23.557
+  },
+  {
+   "i": 11,
+   "id": "c1-b",
+   "who": "larry",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": true,
+   "t0": 26,
+   "t1": 27.607,
+   "words": [
+    [
+     26,
+     27.607,
+     "Someday!"
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 25.7
+  },
+  {
+   "i": 12,
+   "id": "c1-c",
+   "who": "larry",
+   "kind": "sing",
+   "text": "we'll build a simcluster where all of us belong",
+   "caption": true,
+   "t0": 28.143,
+   "t1": 32.428,
+   "words": [
+    [
+     28.143,
+     28.411,
+     "we'll"
+    ],
+    [
+     28.411,
+     28.946,
+     "build"
+    ],
+    [
+     28.946,
+     29.214,
+     "a"
+    ],
+    [
+     29.214,
+     30.286,
+     "simcluster"
+    ],
+    [
+     30.286,
+     30.553,
+     "where"
+    ],
+    [
+     30.553,
+     30.821,
+     "all"
+    ],
+    [
+     30.821,
+     31.089,
+     "of"
+    ],
+    [
+     31.089,
+     31.357,
+     "us"
+    ],
+    [
+     31.357,
+     32.428,
+     "belong"
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 27.843
+  },
+  {
+   "i": 13,
+   "who": "hy",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": false,
+   "t0": 23.857,
+   "t1": 25.464,
+   "words": [
+    [
+     23.857,
+     25.464,
+     "Someday!"
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 23.557
+  },
+  {
+   "i": 14,
+   "who": "hy",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": false,
+   "t0": 26,
+   "t1": 27.607,
+   "words": [
+    [
+     26,
+     27.607,
+     "Someday!"
+    ]
+   ],
+   "tele": 14,
+   "teleT0": 25.7
+  },
+  {
+   "i": 15,
+   "who": "hy",
+   "kind": "sing",
+   "text": "we'll build a simcluster where all of us belong",
+   "caption": false,
+   "t0": 28.143,
+   "t1": 32.428,
+   "words": [
+    [
+     28.143,
+     28.411,
+     "we'll"
+    ],
+    [
+     28.411,
+     28.946,
+     "build"
+    ],
+    [
+     28.946,
+     29.214,
+     "a"
+    ],
+    [
+     29.214,
+     30.286,
+     "simcluster"
+    ],
+    [
+     30.286,
+     30.553,
+     "where"
+    ],
+    [
+     30.553,
+     30.821,
+     "all"
+    ],
+    [
+     30.821,
+     31.089,
+     "of"
+    ],
+    [
+     31.089,
+     31.357,
+     "us"
+    ],
+    [
+     31.357,
+     32.428,
+     "belong"
+    ]
+   ],
+   "tele": 15,
+   "teleT0": 27.843
+  },
+  {
+   "i": 16,
+   "who": "dee",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": false,
+   "t0": 23.857,
+   "t1": 25.464,
+   "words": [
+    [
+     23.857,
+     25.464,
+     "Someday!"
+    ]
+   ],
+   "tele": 16,
+   "teleT0": 23.557
+  },
+  {
+   "i": 17,
+   "who": "dee",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": false,
+   "t0": 26,
+   "t1": 27.607,
+   "words": [
+    [
+     26,
+     27.607,
+     "Someday!"
+    ]
+   ],
+   "tele": 17,
+   "teleT0": 25.7
+  },
+  {
+   "i": 18,
+   "who": "dee",
+   "kind": "sing",
+   "text": "we'll build a simcluster where all of us belong",
+   "caption": false,
+   "t0": 28.143,
+   "t1": 32.428,
+   "words": [
+    [
+     28.143,
+     28.411,
+     "we'll"
+    ],
+    [
+     28.411,
+     28.946,
+     "build"
+    ],
+    [
+     28.946,
+     29.214,
+     "a"
+    ],
+    [
+     29.214,
+     30.286,
+     "simcluster"
+    ],
+    [
+     30.286,
+     30.553,
+     "where"
+    ],
+    [
+     30.553,
+     30.821,
+     "all"
+    ],
+    [
+     30.821,
+     31.089,
+     "of"
+    ],
+    [
+     31.089,
+     31.357,
+     "us"
+    ],
+    [
+     31.357,
+     32.428,
+     "belong"
+    ]
+   ],
+   "tele": 18,
+   "teleT0": 27.843
+  },
+  {
+   "i": 19,
+   "who": "hy",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 14.61,
+   "t1": 14.988,
+   "words": [
+    [
+     14.61,
+     14.988,
+     "HEY!"
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 14.56
+  },
+  {
+   "i": 20,
+   "who": "hy",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 25.324,
+   "t1": 25.703,
+   "words": [
+    [
+     25.324,
+     25.703,
+     "HEY!"
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 25.274
+  },
+  {
+   "i": 21,
+   "who": "hy",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 27.467,
+   "t1": 27.846,
+   "words": [
+    [
+     27.467,
+     27.846,
+     "HEY!"
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 27.417
+  },
+  {
+   "i": 22,
+   "who": "dee",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 14.614,
+   "t1": 14.977,
+   "words": [
+    [
+     14.614,
+     14.977,
+     "HEY!"
+    ]
+   ],
+   "tele": 20,
+   "teleT0": 14.564
+  },
+  {
+   "i": 23,
+   "who": "dee",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 25.328,
+   "t1": 25.691,
+   "words": [
+    [
+     25.328,
+     25.691,
+     "HEY!"
+    ]
+   ],
+   "tele": 20,
+   "teleT0": 25.278
+  },
+  {
+   "i": 24,
+   "who": "dee",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 27.471,
+   "t1": 27.834,
+   "words": [
+    [
+     27.471,
+     27.834,
+     "HEY!"
+    ]
+   ],
+   "tele": 20,
+   "teleT0": 27.421
+  },
+  {
+   "i": 25,
+   "who": "al",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 14.61,
+   "t1": 14.988,
+   "words": [
+    [
+     14.61,
+     14.988,
+     "HEY!"
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 14.56
+  },
+  {
+   "i": 26,
+   "who": "al",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 25.324,
+   "t1": 25.703,
+   "words": [
+    [
+     25.324,
+     25.703,
+     "HEY!"
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 25.274
+  },
+  {
+   "i": 27,
+   "who": "al",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 27.467,
+   "t1": 27.846,
+   "words": [
+    [
+     27.467,
+     27.846,
+     "HEY!"
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 27.417
+  },
+  {
+   "i": 28,
+   "id": "built-1",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 32.548,
+   "t1": 33.143,
+   "words": [
+    [
+     32.608,
+     32.954,
+     "Built"
+    ],
+    [
+     32.954,
+     33.143,
+     "it."
+    ]
+   ],
+   "tele": 22,
+   "teleT0": 32.498
+  },
+  {
+   "i": 29,
+   "id": "b-stomp",
+   "who": "al",
+   "kind": "beat",
+   "text": "B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | . . . . | B . . . | B . . . | B . . . | . . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . .",
+   "caption": false,
+   "t0": 34.043,
+   "t1": 51.186,
+   "words": [],
+   "tele": 23,
+   "teleT0": 33.743
+  },
+  {
+   "i": 30,
+   "id": "b-clap",
+   "who": "pete",
+   "kind": "beat",
+   "text": ". . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . ! . ! . ! ! ! ! | kch . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t .",
+   "caption": false,
+   "t0": 34.043,
+   "t1": 51.186,
+   "words": [],
+   "tele": 24,
+   "teleT0": 33.743
+  },
+  {
+   "i": 31,
+   "id": "v2-a",
+   "who": "larry",
+   "kind": "sing",
+   "text": "Someday a museum for all of the art",
+   "caption": true,
+   "t0": 34.311,
+   "t1": 38.061,
+   "words": [
+    [
+     34.311,
+     34.846,
+     "Someday"
+    ],
+    [
+     34.846,
+     35.114,
+     "a"
+    ],
+    [
+     35.114,
+     35.918,
+     "museum"
+    ],
+    [
+     35.918,
+     36.186,
+     "for"
+    ],
+    [
+     36.186,
+     36.721,
+     "all"
+    ],
+    [
+     36.721,
+     36.989,
+     "of"
+    ],
+    [
+     36.989,
+     37.257,
+     "the"
+    ],
+    [
+     37.257,
+     38.061,
+     "art"
+    ]
+   ],
+   "tele": 25,
+   "teleT0": 33.743
+  },
+  {
+   "i": 32,
+   "id": "v2-b",
+   "who": "larry",
+   "kind": "sing",
+   "text": "and the podcast with no name that we all know by heart",
+   "caption": true,
+   "t0": 38.328,
+   "t1": 42.614,
+   "words": [
+    [
+     38.328,
+     38.596,
+     "and"
+    ],
+    [
+     38.596,
+     38.864,
+     "the"
+    ],
+    [
+     38.864,
+     39.668,
+     "podcast"
+    ],
+    [
+     39.668,
+     39.936,
+     "with"
+    ],
+    [
+     39.936,
+     40.203,
+     "no"
+    ],
+    [
+     40.203,
+     40.471,
+     "name"
+    ],
+    [
+     40.471,
+     40.739,
+     "that"
+    ],
+    [
+     40.739,
+     41.007,
+     "we"
+    ],
+    [
+     41.007,
+     41.275,
+     "all"
+    ],
+    [
+     41.275,
+     41.543,
+     "know"
+    ],
+    [
+     41.543,
+     41.811,
+     "by"
+    ],
+    [
+     41.811,
+     42.614,
+     "heart"
+    ]
+   ],
+   "tele": 26,
+   "teleT0": 38.028
+  },
+  {
+   "i": 33,
+   "id": "c2-a",
+   "who": "larry",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": true,
+   "t0": 42.614,
+   "t1": 44.221,
+   "words": [
+    [
+     42.614,
+     44.221,
+     "Someday!"
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 42.314
+  },
+  {
+   "i": 34,
+   "id": "c2-b",
+   "who": "larry",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": true,
+   "t0": 44.757,
+   "t1": 46.364,
+   "words": [
+    [
+     44.757,
+     46.364,
+     "Someday!"
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 44.457
+  },
+  {
+   "i": 35,
+   "id": "c2-c",
+   "who": "larry",
+   "kind": "sing",
+   "text": "we'll build a simcluster where all of us belong",
+   "caption": true,
+   "t0": 46.9,
+   "t1": 51.186,
+   "words": [
+    [
+     46.9,
+     47.168,
+     "we'll"
+    ],
+    [
+     47.168,
+     47.703,
+     "build"
+    ],
+    [
+     47.703,
+     47.971,
+     "a"
+    ],
+    [
+     47.971,
+     49.043,
+     "simcluster"
+    ],
+    [
+     49.043,
+     49.311,
+     "where"
+    ],
+    [
+     49.311,
+     49.578,
+     "all"
+    ],
+    [
+     49.578,
+     49.846,
+     "of"
+    ],
+    [
+     49.846,
+     50.114,
+     "us"
+    ],
+    [
+     50.114,
+     51.186,
+     "belong"
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 46.6
+  },
+  {
+   "i": 36,
+   "who": "hy",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": false,
+   "t0": 42.614,
+   "t1": 44.221,
+   "words": [
+    [
+     42.614,
+     44.221,
+     "Someday!"
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 42.314
+  },
+  {
+   "i": 37,
+   "who": "hy",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": false,
+   "t0": 44.757,
+   "t1": 46.364,
+   "words": [
+    [
+     44.757,
+     46.364,
+     "Someday!"
+    ]
+   ],
+   "tele": 14,
+   "teleT0": 44.457
+  },
+  {
+   "i": 38,
+   "who": "hy",
+   "kind": "sing",
+   "text": "we'll build a simcluster where all of us belong",
+   "caption": false,
+   "t0": 46.9,
+   "t1": 51.186,
+   "words": [
+    [
+     46.9,
+     47.168,
+     "we'll"
+    ],
+    [
+     47.168,
+     47.703,
+     "build"
+    ],
+    [
+     47.703,
+     47.971,
+     "a"
+    ],
+    [
+     47.971,
+     49.043,
+     "simcluster"
+    ],
+    [
+     49.043,
+     49.311,
+     "where"
+    ],
+    [
+     49.311,
+     49.578,
+     "all"
+    ],
+    [
+     49.578,
+     49.846,
+     "of"
+    ],
+    [
+     49.846,
+     50.114,
+     "us"
+    ],
+    [
+     50.114,
+     51.186,
+     "belong"
+    ]
+   ],
+   "tele": 15,
+   "teleT0": 46.6
+  },
+  {
+   "i": 39,
+   "who": "dee",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": false,
+   "t0": 42.614,
+   "t1": 44.221,
+   "words": [
+    [
+     42.614,
+     44.221,
+     "Someday!"
+    ]
+   ],
+   "tele": 16,
+   "teleT0": 42.314
+  },
+  {
+   "i": 40,
+   "who": "dee",
+   "kind": "sing",
+   "text": "Someday!",
+   "caption": false,
+   "t0": 44.757,
+   "t1": 46.364,
+   "words": [
+    [
+     44.757,
+     46.364,
+     "Someday!"
+    ]
+   ],
+   "tele": 17,
+   "teleT0": 44.457
+  },
+  {
+   "i": 41,
+   "who": "dee",
+   "kind": "sing",
+   "text": "we'll build a simcluster where all of us belong",
+   "caption": false,
+   "t0": 46.9,
+   "t1": 51.186,
+   "words": [
+    [
+     46.9,
+     47.168,
+     "we'll"
+    ],
+    [
+     47.168,
+     47.703,
+     "build"
+    ],
+    [
+     47.703,
+     47.971,
+     "a"
+    ],
+    [
+     47.971,
+     49.043,
+     "simcluster"
+    ],
+    [
+     49.043,
+     49.311,
+     "where"
+    ],
+    [
+     49.311,
+     49.578,
+     "all"
+    ],
+    [
+     49.578,
+     49.846,
+     "of"
+    ],
+    [
+     49.846,
+     50.114,
+     "us"
+    ],
+    [
+     50.114,
+     51.186,
+     "belong"
+    ]
+   ],
+   "tele": 18,
+   "teleT0": 46.6
+  },
+  {
+   "i": 42,
+   "who": "hy",
+   "kind": "shout",
+   "text": "ARE WE?",
+   "caption": false,
+   "t0": 44.161,
+   "t1": 44.576,
+   "words": [
+    [
+     44.161,
+     44.576,
+     "ARE WE?"
+    ]
+   ],
+   "tele": 27,
+   "teleT0": 44.111
+  },
+  {
+   "i": 43,
+   "who": "hy",
+   "kind": "shout",
+   "text": "ARE WE?",
+   "caption": false,
+   "t0": 46.304,
+   "t1": 46.719,
+   "words": [
+    [
+     46.304,
+     46.719,
+     "ARE WE?"
+    ]
+   ],
+   "tele": 27,
+   "teleT0": 46.254
+  },
+  {
+   "i": 44,
+   "who": "dee",
+   "kind": "shout",
+   "text": "ARE WE?",
+   "caption": false,
+   "t0": 44.161,
+   "t1": 44.558,
+   "words": [
+    [
+     44.161,
+     44.558,
+     "ARE WE?"
+    ]
+   ],
+   "tele": 28,
+   "teleT0": 44.111
+  },
+  {
+   "i": 45,
+   "who": "dee",
+   "kind": "shout",
+   "text": "ARE WE?",
+   "caption": false,
+   "t0": 46.304,
+   "t1": 46.701,
+   "words": [
+    [
+     46.304,
+     46.701,
+     "ARE WE?"
+    ]
+   ],
+   "tele": 28,
+   "teleT0": 46.254
+  },
+  {
+   "i": 46,
+   "who": "al",
+   "kind": "shout",
+   "text": "ARE WE?",
+   "caption": false,
+   "t0": 44.161,
+   "t1": 44.576,
+   "words": [
+    [
+     44.161,
+     44.576,
+     "ARE WE?"
+    ]
+   ],
+   "tele": 29,
+   "teleT0": 44.111
+  },
+  {
+   "i": 47,
+   "who": "al",
+   "kind": "shout",
+   "text": "ARE WE?",
+   "caption": false,
+   "t0": 46.304,
+   "t1": 46.719,
+   "words": [
+    [
+     46.304,
+     46.719,
+     "ARE WE?"
+    ]
+   ],
+   "tele": 29,
+   "teleT0": 46.254
+  },
+  {
+   "i": 48,
+   "id": "built-2",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 51.306,
+   "t1": 51.9,
+   "words": [
+    [
+     51.366,
+     51.711,
+     "Built"
+    ],
+    [
+     51.711,
+     51.9,
+     "it."
+    ]
+   ],
+   "tele": 22,
+   "teleT0": 51.256
+  },
+  {
+   "i": 49,
+   "id": "both",
+   "who": "hy",
+   "kind": "say",
+   "text": "Both of them?",
+   "caption": true,
+   "t0": 52.1,
+   "t1": 52.878,
+   "words": [
+    [
+     52.16,
+     52.512,
+     "Both"
+    ],
+    [
+     52.512,
+     52.645,
+     "of"
+    ],
+    [
+     52.645,
+     52.878,
+     "them?"
+    ]
+   ],
+   "tele": 30,
+   "teleT0": 52.05
+  },
+  {
+   "i": 50,
+   "who": "al",
+   "kind": "beat",
+   "text": "B . . . | . . . . | . . . . | . . . . | . . . . | . . . . | . . . . | . . . .",
+   "caption": false,
+   "t0": 53.428,
+   "t1": 57.713,
+   "words": [],
+   "tele": 31,
+   "teleT0": 53.128
+  },
+  {
+   "i": 51,
+   "who": "pete",
+   "kind": "beat",
+   "text": ". . . . | . . . . | . . . . | . . . . | ! . . . | . . . . | . . . . | . . . .",
+   "caption": false,
+   "t0": 53.428,
+   "t1": 57.713,
+   "words": [],
+   "tele": 32,
+   "teleT0": 53.128
+  },
+  {
+   "i": 52,
+   "id": "pad-hy-1",
+   "who": "hy",
+   "kind": "sing",
+   "text": "oh",
+   "caption": false,
+   "t0": 53.428,
+   "t1": 57.713,
+   "words": [
+    [
+     53.428,
+     57.713,
+     "oh"
+    ]
+   ],
+   "tele": 33,
+   "teleT0": 53.128
+  },
+  {
+   "i": 53,
+   "id": "pad-dee-1",
+   "who": "dee",
+   "kind": "sing",
+   "text": "oh",
+   "caption": false,
+   "t0": 53.428,
+   "t1": 57.713,
+   "words": [
+    [
+     53.428,
+     57.713,
+     "oh"
+    ]
+   ],
+   "tele": 34,
+   "teleT0": 53.128
+  },
+  {
+   "i": 54,
+   "id": "bd-a",
+   "who": "larry",
+   "kind": "sing",
+   "text": "Someday, maybe, someone will write us a song",
+   "caption": true,
+   "t0": 53.428,
+   "t1": 57.713,
+   "words": [
+    [
+     53.428,
+     54.499,
+     "Someday,"
+    ],
+    [
+     54.499,
+     55.303,
+     "maybe,"
+    ],
+    [
+     55.57,
+     56.106,
+     "someone"
+    ],
+    [
+     56.106,
+     56.374,
+     "will"
+    ],
+    [
+     56.374,
+     56.642,
+     "write"
+    ],
+    [
+     56.642,
+     56.91,
+     "us"
+    ],
+    [
+     56.91,
+     57.178,
+     "a"
+    ],
+    [
+     57.178,
+     57.713,
+     "song"
+    ]
+   ],
+   "tele": 35,
+   "teleT0": 53.128
+  },
+  {
+   "i": 55,
+   "id": "pong",
+   "who": "void",
+   "kind": "say",
+   "text": "Pong.",
+   "caption": true,
+   "t0": 58.263,
+   "t1": 58.864,
+   "words": [
+    [
+     58.323,
+     58.864,
+     "Pong."
+    ]
+   ],
+   "tele": 36,
+   "teleT0": 58.213
+  },
+  {
+   "i": 56,
+   "who": "al",
+   "kind": "beat",
+   "text": "B . . . | . . . . | . . . . | . . . . | . . . . | . . . . | . . . . | . . . .",
+   "caption": false,
+   "t0": 59.564,
+   "t1": 63.85,
+   "words": [],
+   "tele": 31,
+   "teleT0": 59.264
+  },
+  {
+   "i": 57,
+   "who": "pete",
+   "kind": "beat",
+   "text": ". . . . | . . . . | . . . . | . . . . | ! . . . | . . . . | . . . . | . . . .",
+   "caption": false,
+   "t0": 59.564,
+   "t1": 63.85,
+   "words": [],
+   "tele": 32,
+   "teleT0": 59.264
+  },
+  {
+   "i": 58,
+   "id": "pad-hy-2",
+   "who": "hy",
+   "kind": "sing",
+   "text": "oh",
+   "caption": false,
+   "t0": 59.564,
+   "t1": 63.85,
+   "words": [
+    [
+     59.564,
+     63.85,
+     "oh"
+    ]
+   ],
+   "tele": 37,
+   "teleT0": 59.264
+  },
+  {
+   "i": 59,
+   "id": "pad-dee-2",
+   "who": "dee",
+   "kind": "sing",
+   "text": "oh",
+   "caption": false,
+   "t0": 59.564,
+   "t1": 63.85,
+   "words": [
+    [
+     59.564,
+     63.85,
+     "oh"
+    ]
+   ],
+   "tele": 38,
+   "teleT0": 59.264
+  },
+  {
+   "i": 60,
+   "id": "bd-b",
+   "who": "larry",
+   "kind": "sing",
+   "text": "made out of mouths, and we all sing along",
+   "caption": true,
+   "t0": 59.564,
+   "t1": 63.85,
+   "words": [
+    [
+     59.564,
+     60.1,
+     "made"
+    ],
+    [
+     60.1,
+     60.368,
+     "out"
+    ],
+    [
+     60.368,
+     60.636,
+     "of"
+    ],
+    [
+     60.636,
+     61.707,
+     "mouths,"
+    ],
+    [
+     61.707,
+     61.975,
+     "and"
+    ],
+    [
+     61.975,
+     62.243,
+     "we"
+    ],
+    [
+     62.243,
+     62.511,
+     "all"
+    ],
+    [
+     62.511,
+     62.779,
+     "sing"
+    ],
+    [
+     62.779,
+     63.85,
+     "along"
+    ]
+   ],
+   "tele": 39,
+   "teleT0": 59.264
+  },
+  {
+   "i": 61,
+   "id": "built-3",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 64,
+   "t1": 64.594,
+   "words": [
+    [
+     64.06,
+     64.405,
+     "Built"
+    ],
+    [
+     64.405,
+     64.594,
+     "it."
+    ]
+   ],
+   "tele": 22,
+   "teleT0": 63.95
+  },
+  {
+   "i": 62,
+   "id": "when",
+   "who": "larry",
+   "kind": "say",
+   "text": "When?",
+   "caption": true,
+   "t0": 64.944,
+   "t1": 65.311,
+   "words": [
+    [
+     65.004,
+     65.311,
+     "When?"
+    ]
+   ],
+   "tele": 40,
+   "teleT0": 64.894
+  },
+  {
+   "i": 63,
+   "id": "in-it",
+   "who": "bot",
+   "kind": "say",
+   "text": "You are in it.",
+   "caption": true,
+   "t0": 65.661,
+   "t1": 66.93,
+   "words": [
+    [
+     65.721,
+     65.96,
+     "You"
+    ],
+    [
+     65.96,
+     66.174,
+     "are"
+    ],
+    [
+     66.584,
+     66.73,
+     "in"
+    ],
+    [
+     66.73,
+     66.93,
+     "it."
+    ]
+   ],
+   "tele": 41,
+   "teleT0": 65.611
+  },
+  {
+   "i": 64,
+   "id": "d-clap",
+   "who": "pete",
+   "kind": "beat",
+   "text": "! . ! . ! ! ! ! | kch . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | . . t . ! . t . . . t . ! . t . | kch . . . . . . . . . . . . . . .",
+   "caption": false,
+   "t0": 67.23,
+   "t1": 79.016,
+   "words": [],
+   "tele": 42,
+   "teleT0": 66.93
+  },
+  {
+   "i": 65,
+   "id": "d-stomp",
+   "who": "al",
+   "kind": "beat",
+   "text": ". . . . | . . . . | B . . . | B . . . | B . . . | . . . . | B . . . | B . . . | B . . . | . . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | B . . . | . . . .",
+   "caption": false,
+   "t0": 67.23,
+   "t1": 77.409,
+   "words": [],
+   "tele": 43,
+   "teleT0": 66.93
+  },
+  {
+   "i": 66,
+   "id": "c3-a",
+   "who": "larry",
+   "kind": "sing",
+   "text": "We're in it!",
+   "caption": true,
+   "t0": 68.302,
+   "t1": 69.909,
+   "words": [
+    [
+     68.302,
+     68.57,
+     "We're"
+    ],
+    [
+     68.57,
+     68.838,
+     "in"
+    ],
+    [
+     68.838,
+     69.909,
+     "it!"
+    ]
+   ],
+   "tele": 44,
+   "teleT0": 68.002
+  },
+  {
+   "i": 67,
+   "id": "c3-b",
+   "who": "larry",
+   "kind": "sing",
+   "text": "We're in it!",
+   "caption": true,
+   "t0": 70.445,
+   "t1": 72.052,
+   "words": [
+    [
+     70.445,
+     70.713,
+     "We're"
+    ],
+    [
+     70.713,
+     70.98,
+     "in"
+    ],
+    [
+     70.98,
+     72.052,
+     "it!"
+    ]
+   ],
+   "tele": 45,
+   "teleT0": 70.145
+  },
+  {
+   "i": 68,
+   "id": "c3-c",
+   "who": "larry",
+   "kind": "sing",
+   "text": "we built a simcluster where all of us belong",
+   "caption": true,
+   "t0": 72.588,
+   "t1": 76.873,
+   "words": [
+    [
+     72.588,
+     72.855,
+     "we"
+    ],
+    [
+     72.855,
+     73.391,
+     "built"
+    ],
+    [
+     73.391,
+     73.659,
+     "a"
+    ],
+    [
+     73.659,
+     74.73,
+     "simcluster"
+    ],
+    [
+     74.73,
+     74.998,
+     "where"
+    ],
+    [
+     74.998,
+     75.266,
+     "all"
+    ],
+    [
+     75.266,
+     75.534,
+     "of"
+    ],
+    [
+     75.534,
+     75.802,
+     "us"
+    ],
+    [
+     75.802,
+     76.873,
+     "belong"
+    ]
+   ],
+   "tele": 46,
+   "teleT0": 72.288
+  },
+  {
+   "i": 69,
+   "who": "hy",
+   "kind": "sing",
+   "text": "We're in it!",
+   "caption": false,
+   "t0": 68.302,
+   "t1": 69.909,
+   "words": [
+    [
+     68.302,
+     68.57,
+     "We're"
+    ],
+    [
+     68.57,
+     68.838,
+     "in"
+    ],
+    [
+     68.838,
+     69.909,
+     "it!"
+    ]
+   ],
+   "tele": 47,
+   "teleT0": 68.002
+  },
+  {
+   "i": 70,
+   "who": "hy",
+   "kind": "sing",
+   "text": "We're in it!",
+   "caption": false,
+   "t0": 70.445,
+   "t1": 72.052,
+   "words": [
+    [
+     70.445,
+     70.713,
+     "We're"
+    ],
+    [
+     70.713,
+     70.98,
+     "in"
+    ],
+    [
+     70.98,
+     72.052,
+     "it!"
+    ]
+   ],
+   "tele": 48,
+   "teleT0": 70.145
+  },
+  {
+   "i": 71,
+   "who": "hy",
+   "kind": "sing",
+   "text": "we built a simcluster where all of us belong",
+   "caption": false,
+   "t0": 72.588,
+   "t1": 76.873,
+   "words": [
+    [
+     72.588,
+     72.855,
+     "we"
+    ],
+    [
+     72.855,
+     73.391,
+     "built"
+    ],
+    [
+     73.391,
+     73.659,
+     "a"
+    ],
+    [
+     73.659,
+     74.73,
+     "simcluster"
+    ],
+    [
+     74.73,
+     74.998,
+     "where"
+    ],
+    [
+     74.998,
+     75.266,
+     "all"
+    ],
+    [
+     75.266,
+     75.534,
+     "of"
+    ],
+    [
+     75.534,
+     75.802,
+     "us"
+    ],
+    [
+     75.802,
+     76.873,
+     "belong"
+    ]
+   ],
+   "tele": 49,
+   "teleT0": 72.288
+  },
+  {
+   "i": 72,
+   "who": "dee",
+   "kind": "sing",
+   "text": "We're in it!",
+   "caption": false,
+   "t0": 68.302,
+   "t1": 69.909,
+   "words": [
+    [
+     68.302,
+     68.57,
+     "We're"
+    ],
+    [
+     68.57,
+     68.838,
+     "in"
+    ],
+    [
+     68.838,
+     69.909,
+     "it!"
+    ]
+   ],
+   "tele": 50,
+   "teleT0": 68.002
+  },
+  {
+   "i": 73,
+   "who": "dee",
+   "kind": "sing",
+   "text": "We're in it!",
+   "caption": false,
+   "t0": 70.445,
+   "t1": 72.052,
+   "words": [
+    [
+     70.445,
+     70.713,
+     "We're"
+    ],
+    [
+     70.713,
+     70.98,
+     "in"
+    ],
+    [
+     70.98,
+     72.052,
+     "it!"
+    ]
+   ],
+   "tele": 51,
+   "teleT0": 70.145
+  },
+  {
+   "i": 74,
+   "who": "dee",
+   "kind": "sing",
+   "text": "we built a simcluster where all of us belong",
+   "caption": false,
+   "t0": 72.588,
+   "t1": 76.873,
+   "words": [
+    [
+     72.588,
+     72.855,
+     "we"
+    ],
+    [
+     72.855,
+     73.391,
+     "built"
+    ],
+    [
+     73.391,
+     73.659,
+     "a"
+    ],
+    [
+     73.659,
+     74.73,
+     "simcluster"
+    ],
+    [
+     74.73,
+     74.998,
+     "where"
+    ],
+    [
+     74.998,
+     75.266,
+     "all"
+    ],
+    [
+     75.266,
+     75.534,
+     "of"
+    ],
+    [
+     75.534,
+     75.802,
+     "us"
+    ],
+    [
+     75.802,
+     76.873,
+     "belong"
+    ]
+   ],
+   "tele": 52,
+   "teleT0": 72.288
+  },
+  {
+   "i": 75,
+   "who": "hy",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 67.626,
+   "t1": 68.005,
+   "words": [
+    [
+     67.626,
+     68.005,
+     "HEY!"
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 67.576
+  },
+  {
+   "i": 76,
+   "who": "hy",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 69.769,
+   "t1": 70.148,
+   "words": [
+    [
+     69.769,
+     70.148,
+     "HEY!"
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 69.719
+  },
+  {
+   "i": 77,
+   "who": "hy",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 71.912,
+   "t1": 72.29,
+   "words": [
+    [
+     71.912,
+     72.29,
+     "HEY!"
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 71.862
+  },
+  {
+   "i": 78,
+   "who": "hy",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 76.733,
+   "t1": 77.112,
+   "words": [
+    [
+     76.733,
+     77.112,
+     "HEY!"
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 76.683
+  },
+  {
+   "i": 79,
+   "who": "dee",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 67.63,
+   "t1": 67.993,
+   "words": [
+    [
+     67.63,
+     67.993,
+     "HEY!"
+    ]
+   ],
+   "tele": 20,
+   "teleT0": 67.58
+  },
+  {
+   "i": 80,
+   "who": "dee",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 69.773,
+   "t1": 70.136,
+   "words": [
+    [
+     69.773,
+     70.136,
+     "HEY!"
+    ]
+   ],
+   "tele": 20,
+   "teleT0": 69.723
+  },
+  {
+   "i": 81,
+   "who": "dee",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 71.916,
+   "t1": 72.278,
+   "words": [
+    [
+     71.916,
+     72.278,
+     "HEY!"
+    ]
+   ],
+   "tele": 20,
+   "teleT0": 71.866
+  },
+  {
+   "i": 82,
+   "who": "dee",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 76.737,
+   "t1": 77.1,
+   "words": [
+    [
+     76.737,
+     77.1,
+     "HEY!"
+    ]
+   ],
+   "tele": 20,
+   "teleT0": 76.687
+  },
+  {
+   "i": 83,
+   "who": "al",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 67.626,
+   "t1": 68.005,
+   "words": [
+    [
+     67.626,
+     68.005,
+     "HEY!"
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 67.576
+  },
+  {
+   "i": 84,
+   "who": "al",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 69.769,
+   "t1": 70.148,
+   "words": [
+    [
+     69.769,
+     70.148,
+     "HEY!"
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 69.719
+  },
+  {
+   "i": 85,
+   "who": "al",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 71.912,
+   "t1": 72.29,
+   "words": [
+    [
+     71.912,
+     72.29,
+     "HEY!"
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 71.862
+  },
+  {
+   "i": 86,
+   "who": "al",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 76.733,
+   "t1": 77.112,
+   "words": [
+    [
+     76.733,
+     77.112,
+     "HEY!"
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 76.683
+  },
+  {
+   "i": 87,
+   "who": "larry",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 69.773,
+   "t1": 70.136,
+   "words": [
+    [
+     69.773,
+     70.136,
+     "HEY!"
+    ]
+   ],
+   "tele": 53,
+   "teleT0": 69.723
+  },
+  {
+   "i": 88,
+   "who": "larry",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 71.916,
+   "t1": 72.278,
+   "words": [
+    [
+     71.916,
+     72.278,
+     "HEY!"
+    ]
+   ],
+   "tele": 53,
+   "teleT0": 71.866
+  },
+  {
+   "i": 89,
+   "who": "larry",
+   "kind": "shout",
+   "text": "HEY!",
+   "caption": false,
+   "t0": 76.737,
+   "t1": 77.1,
+   "words": [
+    [
+     76.737,
+     77.1,
+     "HEY!"
+    ]
+   ],
+   "tele": 53,
+   "teleT0": 76.687
+  },
+  {
+   "i": 90,
+   "id": "tag",
+   "who": "larry",
+   "kind": "sing",
+   "text": "Someday we'll say something just as a joke",
+   "caption": true,
+   "t0": 79.716,
+   "t1": 84.716,
+   "words": [
+    [
+     79.716,
+     80.654,
+     "Someday"
+    ],
+    [
+     80.654,
+     80.966,
+     "we'll"
+    ],
+    [
+     80.966,
+     81.591,
+     "say"
+    ],
+    [
+     81.591,
+     82.216,
+     "something"
+    ],
+    [
+     82.216,
+     82.529,
+     "just"
+    ],
+    [
+     82.529,
+     82.841,
+     "as"
+    ],
+    [
+     82.841,
+     83.154,
+     "a"
+    ],
+    [
+     83.154,
+     84.716,
+     "joke"
+    ]
+   ],
+   "tele": 54,
+   "teleT0": 79.416
+  },
+  {
+   "i": 91,
+   "id": "built-4",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 85.316,
+   "t1": 85.91,
+   "words": [
+    [
+     85.376,
+     85.721,
+     "Built"
+    ],
+    [
+     85.721,
+     85.91,
+     "it."
+    ]
+   ],
+   "tele": 22,
+   "teleT0": 85.266
+  },
+  {
+   "i": 92,
+   "id": "btn-1",
+   "who": "larry",
+   "kind": "say",
+   "text": "Hy Oid and the Formants, everybody!",
+   "caption": true,
+   "t0": 87.653,
+   "t1": 90.125,
+   "words": [
+    [
+     87.713,
+     88.015,
+     "Hy"
+    ],
+    [
+     88.015,
+     88.24,
+     "Oid"
+    ],
+    [
+     88.24,
+     88.422,
+     "and"
+    ],
+    [
+     88.422,
+     88.534,
+     "the"
+    ],
+    [
+     88.534,
+     89.213,
+     "Formants,"
+    ],
+    [
+     89.453,
+     90.125,
+     "everybody!"
+    ]
+   ],
+   "tele": 55,
+   "teleT0": 87.603
+  }
+ ],
+ "cues": {
+  "band-in": 10.7,
+  "built-1-end": 33.143,
+  "breakdown": 53.078,
+  "pong-end": 58.864,
+  "reveal": 66.93,
+  "tag-in": 79.416
+ },
+ "sfx": [
+  {
+   "name": "laugh-1",
+   "t0": 6.03,
+   "t1": 7.65
+  },
+  {
+   "name": "chuckle-1",
+   "t0": 10.41,
+   "t1": 11.37
+  },
+  {
+   "name": "biglaugh-1",
+   "t0": 86.11,
+   "t1": 88.61
+  },
+  {
+   "name": "applause-long-1",
+   "t0": 86.385,
+   "t1": 92.195
+  },
+  {
+   "name": "sting-1",
+   "t0": 90.175,
+   "t1": 92.445
+  },
+  {
+   "name": "applause-1",
+   "t0": 89.875,
+   "t1": 93.095
+  }
+ ],
+ "music": [
+  {
+   "id": "a",
+   "t0": 11,
+   "bpm": 112,
+   "beats": 40
+  },
+  {
+   "id": "b",
+   "t0": 34.043,
+   "bpm": 112,
+   "beats": 32
+  },
+  {
+   "id": "c1",
+   "t0": 53.428,
+   "bpm": 112,
+   "beats": 8
+  },
+  {
+   "id": "c2",
+   "t0": 59.564,
+   "bpm": 112,
+   "beats": 8
+  },
+  {
+   "id": "d",
+   "t0": 67.23,
+   "bpm": 112,
+   "beats": 22
+  }
+ ]
+}

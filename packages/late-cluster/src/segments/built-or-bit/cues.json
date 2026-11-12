@@ -1,0 +1,1204 @@
+{
+ "id": "built-or-bit",
+ "title": "Built or Bit?",
+ "duration": 69.784,
+ "audio": "audio/built-or-bit.mp3",
+ "tele": "tele/built-or-bit.bin",
+ "lines": [
+  {
+   "i": 0,
+   "id": "intro",
+   "who": "larry",
+   "kind": "say",
+   "text": "It's time for our game show, Built or Bit!",
+   "caption": true,
+   "t0": 0.3,
+   "t1": 2.997,
+   "words": [
+    [
+     0.36,
+     0.596,
+     "It's"
+    ],
+    [
+     0.596,
+     0.957,
+     "time"
+    ],
+    [
+     0.957,
+     1.191,
+     "for"
+    ],
+    [
+     1.191,
+     1.379,
+     "our"
+    ],
+    [
+     1.379,
+     1.664,
+     "game"
+    ],
+    [
+     1.664,
+     2.037,
+     "show,"
+    ],
+    [
+     2.277,
+     2.588,
+     "Built"
+    ],
+    [
+     2.588,
+     2.715,
+     "or"
+    ],
+    [
+     2.715,
+     2.997,
+     "Bit!"
+    ]
+   ],
+   "tele": 0,
+   "teleT0": 0.25
+  },
+  {
+   "i": 1,
+   "id": "buzzer-joke",
+   "who": "larry",
+   "kind": "say",
+   "text": "Somebody already built the buzzer.",
+   "caption": true,
+   "t0": 3.284,
+   "t1": 5.162,
+   "words": [
+    [
+     3.344,
+     3.937,
+     "Somebody"
+    ],
+    [
+     3.937,
+     4.341,
+     "already"
+    ],
+    [
+     4.341,
+     4.648,
+     "built"
+    ],
+    [
+     4.648,
+     4.759,
+     "the"
+    ],
+    [
+     4.759,
+     5.162,
+     "buzzer."
+    ]
+   ],
+   "tele": 1,
+   "teleT0": 3.234
+  },
+  {
+   "i": 2,
+   "id": "rules",
+   "who": "larry",
+   "kind": "say",
+   "text": "I read the cards.",
+   "caption": true,
+   "t0": 6.591,
+   "t1": 7.764,
+   "words": [
+    [
+     6.651,
+     6.8,
+     "I"
+    ],
+    [
+     6.8,
+     7.063,
+     "read"
+    ],
+    [
+     7.063,
+     7.175,
+     "the"
+    ],
+    [
+     7.175,
+     7.764,
+     "cards."
+    ]
+   ],
+   "tele": 2,
+   "teleT0": 6.541
+  },
+  {
+   "i": 3,
+   "id": "rules2",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "And I rule. Built is real. Bit is a joke.",
+   "caption": true,
+   "t0": 8.024,
+   "t1": 11.283,
+   "words": [
+    [
+     8.084,
+     8.276,
+     "And"
+    ],
+    [
+     8.276,
+     8.427,
+     "I"
+    ],
+    [
+     8.427,
+     8.871,
+     "rule."
+    ],
+    [
+     9.281,
+     9.599,
+     "Built"
+    ],
+    [
+     9.599,
+     9.74,
+     "is"
+    ],
+    [
+     9.74,
+     10.095,
+     "real."
+    ],
+    [
+     10.505,
+     10.712,
+     "Bit"
+    ],
+    [
+     10.712,
+     10.862,
+     "is"
+    ],
+    [
+     10.862,
+     10.931,
+     "a"
+    ],
+    [
+     10.931,
+     11.283,
+     "joke."
+    ]
+   ],
+   "tele": 3,
+   "teleT0": 7.974
+  },
+  {
+   "i": 4,
+   "id": "c1",
+   "who": "larry",
+   "kind": "say",
+   "text": "Simcluster University!",
+   "caption": true,
+   "t0": 11.733,
+   "t1": 13.308,
+   "words": [
+    [
+     11.793,
+     12.505,
+     "Simcluster"
+    ],
+    [
+     12.505,
+     13.308,
+     "University!"
+    ]
+   ],
+   "tele": 4,
+   "teleT0": 11.683
+  },
+  {
+   "i": 5,
+   "id": "r1",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Built!",
+   "caption": true,
+   "t0": 13.568,
+   "t1": 14.009,
+   "words": [
+    [
+     13.628,
+     14.009,
+     "Built!"
+    ]
+   ],
+   "tele": 5,
+   "teleT0": 13.518
+  },
+  {
+   "i": 6,
+   "id": "r1b",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "You're already enrolled.",
+   "caption": true,
+   "t0": 14.359,
+   "t1": 15.62,
+   "words": [
+    [
+     14.419,
+     14.681,
+     "You're"
+    ],
+    [
+     14.681,
+     15.093,
+     "already"
+    ],
+    [
+     15.093,
+     15.62,
+     "enrolled."
+    ]
+   ],
+   "tele": 6,
+   "teleT0": 14.309
+  },
+  {
+   "i": 7,
+   "id": "c2",
+   "who": "larry",
+   "kind": "say",
+   "text": "A simcluster podcast!",
+   "caption": true,
+   "t0": 16.554,
+   "t1": 18.215,
+   "words": [
+    [
+     16.614,
+     16.682,
+     "A"
+    ],
+    [
+     16.682,
+     17.393,
+     "simcluster"
+    ],
+    [
+     17.393,
+     18.215,
+     "podcast!"
+    ]
+   ],
+   "tele": 7,
+   "teleT0": 16.504
+  },
+  {
+   "i": 8,
+   "id": "r2",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Built!",
+   "caption": true,
+   "t0": 18.475,
+   "t1": 18.916,
+   "words": [
+    [
+     18.535,
+     18.916,
+     "Built!"
+    ]
+   ],
+   "tele": 5,
+   "teleT0": 18.425
+  },
+  {
+   "i": 9,
+   "id": "r2b",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Twelve episodes so far.",
+   "caption": true,
+   "t0": 19.284,
+   "t1": 20.95,
+   "words": [
+    [
+     19.344,
+     19.703,
+     "Twelve"
+    ],
+    [
+     19.703,
+     20.284,
+     "episodes"
+    ],
+    [
+     20.284,
+     20.483,
+     "so"
+    ],
+    [
+     20.483,
+     20.95,
+     "far."
+    ]
+   ],
+   "tele": 8,
+   "teleT0": 19.234
+  },
+  {
+   "i": 10,
+   "id": "c2q",
+   "who": "larry",
+   "kind": "say",
+   "text": "What is it called?",
+   "caption": true,
+   "t0": 21.21,
+   "t1": 22.282,
+   "words": [
+    [
+     21.27,
+     21.478,
+     "What"
+    ],
+    [
+     21.478,
+     21.624,
+     "is"
+    ],
+    [
+     21.624,
+     21.753,
+     "it"
+    ],
+    [
+     21.753,
+     22.282,
+     "called?"
+    ]
+   ],
+   "tele": 9,
+   "teleT0": 21.16
+  },
+  {
+   "i": 11,
+   "id": "r2c",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "It doesn't have a name.",
+   "caption": true,
+   "t0": 22.792,
+   "t1": 23.954,
+   "words": [
+    [
+     22.852,
+     22.975,
+     "It"
+    ],
+    [
+     22.975,
+     23.371,
+     "doesn't"
+    ],
+    [
+     23.371,
+     23.557,
+     "have"
+    ],
+    [
+     23.557,
+     23.622,
+     "a"
+    ],
+    [
+     23.622,
+     23.954,
+     "name."
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 22.742
+  },
+  {
+   "i": 12,
+   "id": "c3",
+   "who": "larry",
+   "kind": "say",
+   "text": "Simcluster Hamilton!",
+   "caption": true,
+   "t0": 25.133,
+   "t1": 26.528,
+   "words": [
+    [
+     25.193,
+     25.905,
+     "Simcluster"
+    ],
+    [
+     25.905,
+     26.528,
+     "Hamilton!"
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 25.083
+  },
+  {
+   "i": 13,
+   "id": "r3",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Terrible ideas file. Bit!",
+   "caption": true,
+   "t0": 26.788,
+   "t1": 29.02,
+   "words": [
+    [
+     26.848,
+     27.403,
+     "Terrible"
+    ],
+    [
+     27.403,
+     27.832,
+     "ideas"
+    ],
+    [
+     27.832,
+     28.314,
+     "file."
+    ],
+    [
+     28.724,
+     29.02,
+     "Bit!"
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 26.738
+  },
+  {
+   "i": 14,
+   "id": "b1",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 29.17,
+   "t1": 29.764,
+   "words": [
+    [
+     29.23,
+     29.575,
+     "Built"
+    ],
+    [
+     29.575,
+     29.764,
+     "it."
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 29.12
+  },
+  {
+   "i": 15,
+   "id": "c3r",
+   "who": "larry",
+   "kind": "say",
+   "text": "That took four seconds!",
+   "caption": true,
+   "t0": 30.584,
+   "t1": 31.973,
+   "words": [
+    [
+     30.644,
+     30.824,
+     "That"
+    ],
+    [
+     30.824,
+     31.098,
+     "took"
+    ],
+    [
+     31.098,
+     31.435,
+     "four"
+    ],
+    [
+     31.435,
+     31.973,
+     "seconds!"
+    ]
+   ],
+   "tele": 14,
+   "teleT0": 30.534
+  },
+  {
+   "i": 16,
+   "id": "c4",
+   "who": "larry",
+   "kind": "say",
+   "text": "A hot dog toppings tier list!",
+   "caption": true,
+   "t0": 33.066,
+   "t1": 35.004,
+   "words": [
+    [
+     33.126,
+     33.194,
+     "A"
+    ],
+    [
+     33.194,
+     33.515,
+     "hot"
+    ],
+    [
+     33.515,
+     33.843,
+     "dog"
+    ],
+    [
+     33.843,
+     34.349,
+     "toppings"
+    ],
+    [
+     34.349,
+     34.611,
+     "tier"
+    ],
+    [
+     34.611,
+     35.004,
+     "list!"
+    ]
+   ],
+   "tele": 15,
+   "teleT0": 33.016
+  },
+  {
+   "i": 17,
+   "id": "r4",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Bit,",
+   "caption": true,
+   "t0": 35.264,
+   "t1": 35.602,
+   "words": [
+    [
+     35.324,
+     35.602,
+     "Bit,"
+    ]
+   ],
+   "tele": 16,
+   "teleT0": 35.214
+  },
+  {
+   "i": 18,
+   "id": "b2",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 35.522,
+   "t1": 36.117,
+   "words": [
+    [
+     35.582,
+     35.928,
+     "Built"
+    ],
+    [
+     35.928,
+     36.117,
+     "it."
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 35.472
+  },
+  {
+   "i": 19,
+   "id": "c4r",
+   "who": "larry",
+   "kind": "say",
+   "text": "She didn't even finish!",
+   "caption": true,
+   "t0": 36.417,
+   "t1": 37.75,
+   "words": [
+    [
+     36.477,
+     36.663,
+     "She"
+    ],
+    [
+     36.663,
+     37.016,
+     "didn't"
+    ],
+    [
+     37.016,
+     37.309,
+     "even"
+    ],
+    [
+     37.309,
+     37.75,
+     "finish!"
+    ]
+   ],
+   "tele": 17,
+   "teleT0": 36.367
+  },
+  {
+   "i": 20,
+   "id": "c5",
+   "who": "larry",
+   "kind": "say",
+   "text": "Press E to Leave. The simcluster documentary.",
+   "caption": true,
+   "t0": 39.025,
+   "t1": 42.283,
+   "words": [
+    [
+     39.085,
+     39.436,
+     "Press"
+    ],
+    [
+     39.436,
+     39.551,
+     "E"
+    ],
+    [
+     39.551,
+     39.734,
+     "to"
+    ],
+    [
+     39.734,
+     40.15,
+     "Leave."
+    ],
+    [
+     40.56,
+     40.678,
+     "The"
+    ],
+    [
+     40.678,
+     41.389,
+     "simcluster"
+    ],
+    [
+     41.389,
+     42.283,
+     "documentary."
+    ]
+   ],
+   "tele": 18,
+   "teleT0": 38.975
+  },
+  {
+   "i": 21,
+   "id": "r5",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "That's just a title. Bit.",
+   "caption": true,
+   "t0": 42.543,
+   "t1": 44.465,
+   "words": [
+    [
+     42.603,
+     42.945,
+     "That's"
+    ],
+    [
+     42.945,
+     43.237,
+     "just"
+    ],
+    [
+     43.237,
+     43.302,
+     "a"
+    ],
+    [
+     43.302,
+     43.777,
+     "title."
+    ],
+    [
+     44.187,
+     44.465,
+     "Bit."
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 42.493
+  },
+  {
+   "i": 22,
+   "id": "b3",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 44.585,
+   "t1": 45.179,
+   "words": [
+    [
+     44.645,
+     44.99,
+     "Built"
+    ],
+    [
+     44.99,
+     45.179,
+     "it."
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 44.535
+  },
+  {
+   "i": 23,
+   "id": "thud-kick",
+   "who": "pete",
+   "kind": "beat",
+   "text": "B . . . | . . . . ",
+   "caption": false,
+   "t0": 45.479,
+   "t1": 46.479,
+   "words": [],
+   "tele": 20,
+   "teleT0": 45.179
+  },
+  {
+   "i": 24,
+   "id": "e1",
+   "who": "larry",
+   "kind": "say",
+   "text": "I'm not touching that.",
+   "caption": true,
+   "t0": 46.889,
+   "t1": 48.05,
+   "words": [
+    [
+     46.949,
+     47.223,
+     "I'm"
+    ],
+    [
+     47.223,
+     47.467,
+     "not"
+    ],
+    [
+     47.467,
+     47.843,
+     "touching"
+    ],
+    [
+     47.843,
+     48.05,
+     "that."
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 46.839
+  },
+  {
+   "i": 25,
+   "id": "e2",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Larry, it's how you leave.",
+   "caption": true,
+   "t0": 48.31,
+   "t1": 50.022,
+   "words": [
+    [
+     48.37,
+     48.738,
+     "Larry,"
+    ],
+    [
+     48.978,
+     49.205,
+     "it's"
+    ],
+    [
+     49.205,
+     49.441,
+     "how"
+    ],
+    [
+     49.441,
+     49.622,
+     "you"
+    ],
+    [
+     49.622,
+     50.022,
+     "leave."
+    ]
+   ],
+   "tele": 22,
+   "teleT0": 48.26
+  },
+  {
+   "i": 26,
+   "id": "e3",
+   "who": "larry",
+   "kind": "say",
+   "text": "No one leaves the simcluster.",
+   "caption": true,
+   "t0": 50.372,
+   "t1": 52.139,
+   "words": [
+    [
+     50.432,
+     50.619,
+     "No"
+    ],
+    [
+     50.619,
+     50.876,
+     "one"
+    ],
+    [
+     50.876,
+     51.196,
+     "leaves"
+    ],
+    [
+     51.196,
+     51.315,
+     "the"
+    ],
+    [
+     51.315,
+     52.139,
+     "simcluster."
+    ]
+   ],
+   "tele": 23,
+   "teleT0": 50.322
+  },
+  {
+   "i": 27,
+   "id": "c6",
+   "who": "larry",
+   "kind": "say",
+   "text": "Last card. A simcluster late night talk show.",
+   "caption": true,
+   "t0": 53.318,
+   "t1": 56.807,
+   "words": [
+    [
+     53.378,
+     53.775,
+     "Last"
+    ],
+    [
+     53.775,
+     54.302,
+     "card."
+    ],
+    [
+     54.712,
+     54.78,
+     "A"
+    ],
+    [
+     54.78,
+     55.491,
+     "simcluster"
+    ],
+    [
+     55.491,
+     55.772,
+     "late"
+    ],
+    [
+     55.772,
+     56.098,
+     "night"
+    ],
+    [
+     56.098,
+     56.434,
+     "talk"
+    ],
+    [
+     56.434,
+     56.807,
+     "show."
+    ]
+   ],
+   "tele": 24,
+   "teleT0": 53.268
+  },
+  {
+   "i": 28,
+   "id": "r6",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Oh, that's definitely a bit.",
+   "caption": true,
+   "t0": 57.067,
+   "t1": 58.924,
+   "words": [
+    [
+     57.127,
+     57.393,
+     "Oh,"
+    ],
+    [
+     57.633,
+     57.975,
+     "that's"
+    ],
+    [
+     57.975,
+     58.592,
+     "definitely"
+    ],
+    [
+     58.592,
+     58.646,
+     "a"
+    ],
+    [
+     58.646,
+     58.924,
+     "bit."
+    ]
+   ],
+   "tele": 25,
+   "teleT0": 57.017
+  },
+  {
+   "i": 29,
+   "id": "b4",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 59.074,
+   "t1": 59.668,
+   "words": [
+    [
+     59.134,
+     59.479,
+     "Built"
+    ],
+    [
+     59.479,
+     59.668,
+     "it."
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 59.024
+  },
+  {
+   "i": 30,
+   "id": "reveal",
+   "who": "larry",
+   "kind": "say",
+   "text": "Wait. It's this show.",
+   "caption": true,
+   "t0": 60.942,
+   "t1": 62.687,
+   "words": [
+    [
+     61.002,
+     61.379,
+     "Wait."
+    ],
+    [
+     61.789,
+     62.051,
+     "It's"
+    ],
+    [
+     62.051,
+     62.272,
+     "this"
+    ],
+    [
+     62.272,
+     62.687,
+     "show."
+    ]
+   ],
+   "tele": 26,
+   "teleT0": 60.892
+  },
+  {
+   "i": 31,
+   "id": "button",
+   "who": "larry",
+   "kind": "say",
+   "text": "Do not say spin-off.",
+   "caption": true,
+   "t0": 64.602,
+   "t1": 66.114,
+   "words": [
+    [
+     64.662,
+     64.862,
+     "Do"
+    ],
+    [
+     64.862,
+     65.131,
+     "not"
+    ],
+    [
+     65.131,
+     65.384,
+     "say"
+    ],
+    [
+     65.384,
+     66.114,
+     "spin-off."
+    ]
+   ],
+   "tele": 27,
+   "teleT0": 64.552
+  }
+ ],
+ "cues": {
+  "buzz-demo": 5.312,
+  "game-on": 5.931,
+  "card1": 11.383,
+  "ding1": 14.029,
+  "card2": 16.254,
+  "ding2": 18.936,
+  "card3": 24.783,
+  "red3": 28.97,
+  "card4": 32.766,
+  "card5": 38.675,
+  "drop": 45.329,
+  "eye": 45.879,
+  "card6": 52.968,
+  "shatter": 59.718,
+  "inhale": 66.464,
+  "blackout": 66.914
+ },
+ "sfx": [
+  {
+   "name": "applause-1",
+   "t0": 2.697,
+   "t1": 5.917
+  },
+  {
+   "name": "buzzer-2",
+   "t0": 5.312,
+   "t1": 5.962
+  },
+  {
+   "name": "laugh-1",
+   "t0": 5.602,
+   "t1": 7.222
+  },
+  {
+   "name": "ding-1",
+   "t0": 14.029,
+   "t1": 14.829
+  },
+  {
+   "name": "chuckle-1",
+   "t0": 15.67,
+   "t1": 16.63
+  },
+  {
+   "name": "ding-2",
+   "t0": 18.936,
+   "t1": 19.786
+  },
+  {
+   "name": "laugh-2",
+   "t0": 24.004,
+   "t1": 25.514
+  },
+  {
+   "name": "buzzer-1",
+   "t0": 28.67,
+   "t1": 29.52
+  },
+  {
+   "name": "ooh-1",
+   "t0": 29.964,
+   "t1": 31.644
+  },
+  {
+   "name": "laugh-3",
+   "t0": 31.973,
+   "t1": 33.623
+  },
+  {
+   "name": "biglaugh-1",
+   "t0": 37.75,
+   "t1": 40.25
+  },
+  {
+   "name": "whoosh-2",
+   "t0": 45.179,
+   "t1": 45.919
+  },
+  {
+   "name": "laugh-1",
+   "t0": 52.139,
+   "t1": 53.759
+  },
+  {
+   "name": "gasp-1",
+   "t0": 59.818,
+   "t1": 60.608
+  },
+  {
+   "name": "biglaugh-2",
+   "t0": 62.737,
+   "t1": 64.717
+  },
+  {
+   "name": "applause-2",
+   "t0": 63.632,
+   "t1": 66.982
+  },
+  {
+   "name": "sting-1",
+   "t0": 66.914,
+   "t1": 69.184
+  }
+ ],
+ "music": [
+  {
+   "id": "thud",
+   "t0": 45.479,
+   "bpm": 120,
+   "beats": 2
+  }
+ ]
+}

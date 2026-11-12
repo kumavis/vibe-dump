@@ -1,0 +1,42 @@
+// Demo segment: exercises every script feature (see tools/README.md).
+// Render: bun tools/render.ts demo   ·   verify: bun tools/check.ts demo
+export default {
+  id: 'demo',
+  title: 'Demo: Cold Open',
+  gap: 0.28,
+  beats: [
+    { sfx: 'applause-long', hold: 0.18 },
+    { say: 'larry', id: 'hello', text: 'Good evening, Bluesky! Welcome to The Late Cluster.', as: 'Good evening, blue-sky! Welcome to the late cluster.' },
+    { say: 'larry', id: 'intro', text: "I'm your host, Larry Nx.", as: "I'm your host, Larry En-Ex." },
+    { say: 'sibyl', id: 'interrupt', text: 'Larry, the simcluster is trending again.', as: 'Larry, the sim-cluster is trending again.', overlap: 0.35 },
+    { say: 'larry', id: 'again', text: "Again? It's been trending since Tuesday!" },
+    { sfx: 'laugh' },
+    { cue: 'chart-in', at: -0.2 },
+    { say: 'sibyl', id: 'feed', text: 'Your feed says you are ninety percent posting, and ten percent vibes.' },
+    { say: 'larry', id: 'accurate', text: 'Finally, an algorithm that understands me.' },
+    { sfx: 'rimshot', at: 0.1 },
+    { sfx: 'chuckle', at: -0.4, hold: 0 },
+    { cue: 'chart-out' },
+    { call: 'seal', name: 'zap', at: -0.2, hold: 0, vol: 0.7 },
+    { sing: 'larry', id: 'ditty', bpm: 112, lyrics: 'sim cluster, sim cluster, what is in my feed',
+      notes: [[52, 0.5], [55, 0.5], [57, 1], [52, 0.5], [55, 0.5], [57, 1], [59, 0.5], [57, 0.5], [55, 0.5], [52, 0.5], [50, 1.5]] },
+    { sfx: 'ding', at: 0.05 },
+    { say: 'larry', id: 'hitit', text: 'Hit it, Formants!' },
+    { cue: 'band-in', at: 0.1 },
+    { music: { id: 'stomp', bpm: 100, tracks: [
+      { who: 'larry', caption: true, id: 'stomp-lead',
+        lyrics: "we post into the void, and the void posts back, we're all in a cluster, and we're not coming back",
+        notes: [
+          [45, 0.5], [48, 0.5], [48, 0.5], [50, 0.5], [52, 0.5], [52, 0.5], [0, 1],
+          [52, 0.5], [50, 0.5], [48, 0.5], [50, 0.5], [45, 1], [0, 1],
+          [45, 0.5], [48, 0.5], [48, 0.5], [50, 0.5], [52, 0.5], [55, 0.5], [0, 1],
+          [55, 0.5], [52, 0.5], [50, 0.5], [48, 0.5], [50, 0.5], [45, 0.5], [0, 1],
+        ] },
+      { who: 'pete', id: 'stomp-beat', beat: 'B . . . | ! . . . ', loops: 8, vol: 0.9 },
+      { who: ['hy', 'al', 'dee'], shout: 'hey', beats: [3, 7, 11, 15], vol: 0.9 },
+    ] } },
+    { sfx: 'sting', at: 0.05 },
+    { sfx: 'applause', at: -0.4, hold: 0.2 },
+    { say: 'sibyl', id: 'back', text: 'Stay clustered. We will be right back!', gap: 0.1, vol: 1.1 },
+  ],
+}

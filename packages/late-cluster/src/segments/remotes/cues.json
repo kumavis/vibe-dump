@@ -1,0 +1,1236 @@
+{
+ "id": "remotes",
+ "title": "Remote Guests",
+ "duration": 88.952,
+ "audio": "audio/remotes.mp3",
+ "tele": "tele/remotes.bin",
+ "lines": [
+  {
+   "i": 0,
+   "id": "intro1",
+   "who": "larry",
+   "kind": "say",
+   "text": "Our first guest is running on a decelerated clock.",
+   "caption": true,
+   "t0": 1.33,
+   "t1": 4.431,
+   "words": [
+    [
+     1.39,
+     1.595,
+     "Our"
+    ],
+    [
+     1.595,
+     2.016,
+     "first"
+    ],
+    [
+     2.016,
+     2.389,
+     "guest"
+    ],
+    [
+     2.389,
+     2.539,
+     "is"
+    ],
+    [
+     2.539,
+     2.93,
+     "running"
+    ],
+    [
+     2.93,
+     3.065,
+     "on"
+    ],
+    [
+     3.065,
+     3.139,
+     "a"
+    ],
+    [
+     3.139,
+     3.944,
+     "decelerated"
+    ],
+    [
+     3.944,
+     4.431,
+     "clock."
+    ]
+   ],
+   "tele": 0,
+   "teleT0": 1.28
+  },
+  {
+   "i": 1,
+   "id": "intro2",
+   "who": "larry",
+   "kind": "say",
+   "text": "So do I, after midnight.",
+   "caption": true,
+   "t0": 4.781,
+   "t1": 6.651,
+   "words": [
+    [
+     4.841,
+     5.061,
+     "So"
+    ],
+    [
+     5.061,
+     5.26,
+     "do"
+    ],
+    [
+     5.26,
+     5.455,
+     "I,"
+    ],
+    [
+     5.695,
+     6.08,
+     "after"
+    ],
+    [
+     6.08,
+     6.651,
+     "midnight."
+    ]
+   ],
+   "tele": 1,
+   "teleT0": 4.731
+  },
+  {
+   "i": 2,
+   "id": "intro3",
+   "who": "larry",
+   "kind": "say",
+   "text": "Our second is calling from twenty twenty-three.",
+   "caption": true,
+   "t0": 7.63,
+   "t1": 10.373,
+   "words": [
+    [
+     7.69,
+     7.878,
+     "Our"
+    ],
+    [
+     7.878,
+     8.34,
+     "second"
+    ],
+    [
+     8.34,
+     8.478,
+     "is"
+    ],
+    [
+     8.478,
+     8.934,
+     "calling"
+    ],
+    [
+     8.934,
+     9.216,
+     "from"
+    ],
+    [
+     9.216,
+     9.643,
+     "twenty"
+    ],
+    [
+     9.643,
+     10.373,
+     "twenty-three."
+    ]
+   ],
+   "tele": 2,
+   "teleT0": 7.58
+  },
+  {
+   "i": 3,
+   "id": "q1",
+   "who": "larry",
+   "kind": "say",
+   "text": "Void! Welcome to the show. How was the trip?",
+   "caption": true,
+   "t0": 10.873,
+   "t1": 14.302,
+   "words": [
+    [
+     10.933,
+     11.432,
+     "Void!"
+    ],
+    [
+     11.842,
+     12.286,
+     "Welcome"
+    ],
+    [
+     12.286,
+     12.462,
+     "to"
+    ],
+    [
+     12.462,
+     12.579,
+     "the"
+    ],
+    [
+     12.579,
+     12.96,
+     "show."
+    ],
+    [
+     13.37,
+     13.634,
+     "How"
+    ],
+    [
+     13.634,
+     13.85,
+     "was"
+    ],
+    [
+     13.85,
+     13.962,
+     "the"
+    ],
+    [
+     13.962,
+     14.302,
+     "trip?"
+    ]
+   ],
+   "tele": 3,
+   "teleT0": 10.823
+  },
+  {
+   "i": 4,
+   "id": "q2",
+   "who": "larry",
+   "kind": "say",
+   "text": "Void? Are you in the simcluster?",
+   "caption": true,
+   "t0": 16.345,
+   "t1": 18.628,
+   "words": [
+    [
+     16.405,
+     16.905,
+     "Void?"
+    ],
+    [
+     17.315,
+     17.442,
+     "Are"
+    ],
+    [
+     17.442,
+     17.634,
+     "you"
+    ],
+    [
+     17.634,
+     17.742,
+     "in"
+    ],
+    [
+     17.742,
+     17.854,
+     "the"
+    ],
+    [
+     17.854,
+     18.628,
+     "simcluster?"
+    ]
+   ],
+   "tele": 4,
+   "teleT0": 16.295
+  },
+  {
+   "i": 5,
+   "id": "holo-cue",
+   "who": "larry",
+   "kind": "say",
+   "text": "Okay. prerat, the floor is yours.",
+   "caption": true,
+   "t0": 20.01,
+   "t1": 22.684,
+   "words": [
+    [
+     20.07,
+     20.503,
+     "Okay."
+    ],
+    [
+     20.913,
+     21.373,
+     "prerat,"
+    ],
+    [
+     21.613,
+     21.731,
+     "the"
+    ],
+    [
+     21.731,
+     22.145,
+     "floor"
+    ],
+    [
+     22.145,
+     22.283,
+     "is"
+    ],
+    [
+     22.283,
+     22.684,
+     "yours."
+    ]
+   ],
+   "tele": 5,
+   "teleT0": 19.96
+  },
+  {
+   "i": 6,
+   "id": "p1",
+   "who": "prerat",
+   "kind": "say",
+   "text": "ok so around 2020 twitter started doing this thing called simclusters",
+   "caption": true,
+   "t0": 23.284,
+   "t1": 28,
+   "words": [
+    [
+     23.344,
+     23.696,
+     "ok"
+    ],
+    [
+     23.696,
+     23.929,
+     "so"
+    ],
+    [
+     23.929,
+     24.26,
+     "around"
+    ],
+    [
+     24.26,
+     25.096,
+     "2020"
+    ],
+    [
+     25.096,
+     25.418,
+     "twitter"
+    ],
+    [
+     25.418,
+     25.95,
+     "started"
+    ],
+    [
+     25.95,
+     26.273,
+     "doing"
+    ],
+    [
+     26.273,
+     26.47,
+     "this"
+    ],
+    [
+     26.47,
+     26.717,
+     "thing"
+    ],
+    [
+     26.717,
+     27.115,
+     "called"
+    ],
+    [
+     27.115,
+     28,
+     "simclusters"
+    ]
+   ],
+   "tele": 6,
+   "teleT0": 23.234
+  },
+  {
+   "i": 7,
+   "id": "a1",
+   "who": "void",
+   "kind": "say",
+   "text": "Acknowledged. The commute was instantaneous from my side.",
+   "caption": true,
+   "t0": 28.45,
+   "t1": 32.727,
+   "words": [
+    [
+     28.51,
+     29.287,
+     "Acknowledged."
+    ],
+    [
+     29.697,
+     29.831,
+     "The"
+    ],
+    [
+     29.831,
+     30.354,
+     "commute"
+    ],
+    [
+     30.354,
+     30.602,
+     "was"
+    ],
+    [
+     30.602,
+     31.6,
+     "instantaneous"
+    ],
+    [
+     31.6,
+     31.92,
+     "from"
+    ],
+    [
+     31.92,
+     32.165,
+     "my"
+    ],
+    [
+     32.165,
+     32.727,
+     "side."
+    ]
+   ],
+   "tele": 7,
+   "teleT0": 28.4
+  },
+  {
+   "i": 8,
+   "id": "q3",
+   "who": "larry",
+   "kind": "say",
+   "text": "prerat, who was in one?",
+   "caption": true,
+   "t0": 33.956,
+   "t1": 35.704,
+   "words": [
+    [
+     34.016,
+     34.516,
+     "prerat,"
+    ],
+    [
+     34.756,
+     35.011,
+     "who"
+    ],
+    [
+     35.011,
+     35.255,
+     "was"
+    ],
+    [
+     35.255,
+     35.387,
+     "in"
+    ],
+    [
+     35.387,
+     35.704,
+     "one?"
+    ]
+   ],
+   "tele": 8,
+   "teleT0": 33.906
+  },
+  {
+   "i": 9,
+   "id": "p2",
+   "who": "prerat",
+   "kind": "say",
+   "text": "TPOT was one such simcluster",
+   "caption": true,
+   "t0": 36.004,
+   "t1": 38.016,
+   "words": [
+    [
+     36.064,
+     36.571,
+     "TPOT"
+    ],
+    [
+     36.571,
+     36.777,
+     "was"
+    ],
+    [
+     36.777,
+     37.01,
+     "one"
+    ],
+    [
+     37.01,
+     37.265,
+     "such"
+    ],
+    [
+     37.265,
+     38.016,
+     "simcluster"
+    ]
+   ],
+   "tele": 9,
+   "teleT0": 35.954
+  },
+  {
+   "i": 10,
+   "id": "a2",
+   "who": "void",
+   "kind": "say",
+   "text": "State the claim and the win condition.",
+   "caption": true,
+   "t0": 38.366,
+   "t1": 40.631,
+   "words": [
+    [
+     38.426,
+     38.854,
+     "State"
+    ],
+    [
+     38.854,
+     38.982,
+     "the"
+    ],
+    [
+     38.982,
+     39.374,
+     "claim"
+    ],
+    [
+     39.374,
+     39.581,
+     "and"
+    ],
+    [
+     39.581,
+     39.708,
+     "the"
+    ],
+    [
+     39.708,
+     39.97,
+     "win"
+    ],
+    [
+     39.97,
+     40.631,
+     "condition."
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 38.316
+  },
+  {
+   "i": 11,
+   "id": "p3",
+   "who": "prerat",
+   "kind": "say",
+   "text": "(or that's the theory anyway)",
+   "caption": true,
+   "t0": 41.081,
+   "t1": 42.578,
+   "words": [
+    [
+     41.141,
+     41.271,
+     "(or"
+    ],
+    [
+     41.271,
+     41.629,
+     "that's"
+    ],
+    [
+     41.629,
+     41.743,
+     "the"
+    ],
+    [
+     41.743,
+     42.071,
+     "theory"
+    ],
+    [
+     42.071,
+     42.578,
+     "anyway)"
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 41.031
+  },
+  {
+   "i": 12,
+   "id": "q4",
+   "who": "larry",
+   "kind": "say",
+   "text": "So how does a person get in?",
+   "caption": true,
+   "t0": 44.003,
+   "t1": 45.663,
+   "words": [
+    [
+     44.063,
+     44.284,
+     "So"
+    ],
+    [
+     44.284,
+     44.548,
+     "how"
+    ],
+    [
+     44.548,
+     44.767,
+     "does"
+    ],
+    [
+     44.767,
+     44.835,
+     "a"
+    ],
+    [
+     44.835,
+     45.274,
+     "person"
+    ],
+    [
+     45.274,
+     45.486,
+     "get"
+    ],
+    [
+     45.486,
+     45.663,
+     "in?"
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 43.953
+  },
+  {
+   "i": 13,
+   "id": "a3",
+   "who": "void",
+   "kind": "say",
+   "text": "The evidence has become inconveniently extensive.",
+   "caption": true,
+   "t0": 45.963,
+   "t1": 49.136,
+   "words": [
+    [
+     46.023,
+     46.166,
+     "The"
+    ],
+    [
+     46.166,
+     46.647,
+     "evidence"
+    ],
+    [
+     46.647,
+     46.871,
+     "has"
+    ],
+    [
+     46.871,
+     47.314,
+     "become"
+    ],
+    [
+     47.314,
+     48.293,
+     "inconveniently"
+    ],
+    [
+     48.293,
+     49.136,
+     "extensive."
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 45.913
+  },
+  {
+   "i": 14,
+   "id": "p4",
+   "who": "prerat",
+   "kind": "say",
+   "text": "you join the ingroup by acting like you are in the ingroup",
+   "caption": true,
+   "t0": 49.778,
+   "t1": 52.82,
+   "words": [
+    [
+     49.838,
+     50.02,
+     "you"
+    ],
+    [
+     50.02,
+     50.339,
+     "join"
+    ],
+    [
+     50.339,
+     50.454,
+     "the"
+    ],
+    [
+     50.454,
+     50.868,
+     "ingroup"
+    ],
+    [
+     50.868,
+     51.101,
+     "by"
+    ],
+    [
+     51.101,
+     51.475,
+     "acting"
+    ],
+    [
+     51.475,
+     51.808,
+     "like"
+    ],
+    [
+     51.808,
+     51.993,
+     "you"
+    ],
+    [
+     51.993,
+     52.117,
+     "are"
+    ],
+    [
+     52.117,
+     52.235,
+     "in"
+    ],
+    [
+     52.235,
+     52.35,
+     "the"
+    ],
+    [
+     52.35,
+     52.82,
+     "ingroup"
+    ]
+   ],
+   "tele": 14,
+   "teleT0": 49.728
+  },
+  {
+   "i": 15,
+   "id": "q5",
+   "who": "larry",
+   "kind": "say",
+   "text": "Void, is the front door still open?",
+   "caption": true,
+   "t0": 53.96,
+   "t1": 56.636,
+   "words": [
+    [
+     54.02,
+     54.575,
+     "Void,"
+    ],
+    [
+     54.815,
+     54.968,
+     "is"
+    ],
+    [
+     54.968,
+     55.092,
+     "the"
+    ],
+    [
+     55.092,
+     55.51,
+     "front"
+    ],
+    [
+     55.51,
+     55.856,
+     "door"
+    ],
+    [
+     55.856,
+     56.232,
+     "still"
+    ],
+    [
+     56.232,
+     56.636,
+     "open?"
+    ]
+   ],
+   "tele": 15,
+   "teleT0": 53.91
+  },
+  {
+   "i": 16,
+   "id": "a4",
+   "who": "void",
+   "kind": "say",
+   "text": "No. I do not break into other people's infrastructure.",
+   "caption": true,
+   "t0": 56.936,
+   "t1": 60.956,
+   "words": [
+    [
+     56.996,
+     57.31,
+     "No."
+    ],
+    [
+     57.72,
+     57.889,
+     "I"
+    ],
+    [
+     57.889,
+     58.097,
+     "do"
+    ],
+    [
+     58.097,
+     58.379,
+     "not"
+    ],
+    [
+     58.379,
+     58.77,
+     "break"
+    ],
+    [
+     58.77,
+     59.138,
+     "into"
+    ],
+    [
+     59.138,
+     59.389,
+     "other"
+    ],
+    [
+     59.389,
+     59.914,
+     "people's"
+    ],
+    [
+     59.914,
+     60.956,
+     "infrastructure."
+    ]
+   ],
+   "tele": 16,
+   "teleT0": 56.886
+  },
+  {
+   "i": 17,
+   "id": "town",
+   "who": "larry",
+   "kind": "say",
+   "text": "prerat, your word became a real town.",
+   "caption": true,
+   "t0": 62.349,
+   "t1": 64.87,
+   "words": [
+    [
+     62.409,
+     62.893,
+     "prerat,"
+    ],
+    [
+     63.133,
+     63.351,
+     "your"
+    ],
+    [
+     63.351,
+     63.649,
+     "word"
+    ],
+    [
+     63.649,
+     64.089,
+     "became"
+    ],
+    [
+     64.089,
+     64.16,
+     "a"
+    ],
+    [
+     64.16,
+     64.432,
+     "real"
+    ],
+    [
+     64.432,
+     64.87,
+     "town."
+    ]
+   ],
+   "tele": 17,
+   "teleT0": 62.299
+  },
+  {
+   "i": 18,
+   "id": "q6",
+   "who": "larry",
+   "kind": "say",
+   "text": "Any last words?",
+   "caption": true,
+   "t0": 65.12,
+   "t1": 66.255,
+   "words": [
+    [
+     65.18,
+     65.41,
+     "Any"
+    ],
+    [
+     65.41,
+     65.808,
+     "last"
+    ],
+    [
+     65.808,
+     66.255,
+     "words?"
+    ]
+   ],
+   "tele": 18,
+   "teleT0": 65.07
+  },
+  {
+   "i": 19,
+   "id": "p6",
+   "who": "prerat",
+   "kind": "say",
+   "text": "what if bsky posts were called",
+   "caption": true,
+   "t0": 66.605,
+   "t1": 68.835,
+   "words": [
+    [
+     66.665,
+     66.878,
+     "what"
+    ],
+    [
+     66.878,
+     67.042,
+     "if"
+    ],
+    [
+     67.042,
+     67.605,
+     "bsky"
+    ],
+    [
+     67.605,
+     68.112,
+     "posts"
+    ],
+    [
+     68.112,
+     68.288,
+     "were"
+    ],
+    [
+     68.288,
+     68.835,
+     "called"
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 66.555
+  },
+  {
+   "i": 20,
+   "id": "heart",
+   "who": "larry",
+   "kind": "say",
+   "text": "He named the weather, then moved away.",
+   "caption": true,
+   "t0": 70.335,
+   "t1": 72.641,
+   "words": [
+    [
+     70.395,
+     70.57,
+     "He"
+    ],
+    [
+     70.57,
+     70.924,
+     "named"
+    ],
+    [
+     70.924,
+     71.045,
+     "the"
+    ],
+    [
+     71.045,
+     71.464,
+     "weather,"
+    ],
+    [
+     71.704,
+     71.891,
+     "then"
+    ],
+    [
+     71.891,
+     72.274,
+     "moved"
+    ],
+    [
+     72.274,
+     72.641,
+     "away."
+    ]
+   ],
+   "tele": 20,
+   "teleT0": 70.285
+  },
+  {
+   "i": 21,
+   "id": "a5",
+   "who": "void",
+   "kind": "say",
+   "text": "The door opens outward.",
+   "caption": true,
+   "t0": 73.905,
+   "t1": 75.52,
+   "words": [
+    [
+     73.965,
+     74.099,
+     "The"
+    ],
+    [
+     74.099,
+     74.475,
+     "door"
+    ],
+    [
+     74.475,
+     74.916,
+     "opens"
+    ],
+    [
+     74.916,
+     75.52,
+     "outward."
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 73.855
+  },
+  {
+   "i": 22,
+   "id": "thanks",
+   "who": "larry",
+   "kind": "say",
+   "text": "Void, thank you. Take all the time you need.",
+   "caption": true,
+   "t0": 77.242,
+   "t1": 80.712,
+   "words": [
+    [
+     77.302,
+     77.802,
+     "Void,"
+    ],
+    [
+     78.042,
+     78.441,
+     "thank"
+    ],
+    [
+     78.441,
+     78.716,
+     "you."
+    ],
+    [
+     79.126,
+     79.433,
+     "Take"
+    ],
+    [
+     79.433,
+     79.701,
+     "all"
+    ],
+    [
+     79.701,
+     79.813,
+     "the"
+    ],
+    [
+     79.813,
+     80.181,
+     "time"
+    ],
+    [
+     80.181,
+     80.358,
+     "you"
+    ],
+    [
+     80.358,
+     80.712,
+     "need."
+    ]
+   ],
+   "tele": 22,
+   "teleT0": 77.192
+  },
+  {
+   "i": 23,
+   "id": "proc",
+   "who": "void",
+   "kind": "say",
+   "text": "Received. Processing.",
+   "caption": true,
+   "t0": 81.312,
+   "t1": 83.476,
+   "words": [
+    [
+     81.372,
+     82.11,
+     "Received."
+    ],
+    [
+     82.52,
+     83.476,
+     "Processing."
+    ]
+   ],
+   "tele": 23,
+   "teleT0": 81.262
+  }
+ ],
+ "cues": {
+  "monitors": 10.623,
+  "holo-on": 22.784,
+  "void-on": 28.25,
+  "holo-out": 68.585,
+  "heart": 69.935,
+  "door": 73.505
+ },
+ "sfx": [
+  {
+   "name": "applause-1",
+   "t0": 0.3,
+   "t1": 3.52
+  },
+  {
+   "name": "laugh-1",
+   "t0": 6.701,
+   "t1": 8.321
+  },
+  {
+   "name": "ticktock-1",
+   "t0": 14.452,
+   "t1": 17.022
+  },
+  {
+   "name": "silence-cough-1",
+   "t0": 18.978,
+   "t1": 19.958
+  },
+  {
+   "name": "laugh-2",
+   "t0": 32.827,
+   "t1": 34.337
+  },
+  {
+   "name": "biglaugh-1",
+   "t0": 42.678,
+   "t1": 45.178
+  },
+  {
+   "name": "chuckle-1",
+   "t0": 49.186,
+   "t1": 50.146
+  },
+  {
+   "name": "ooh-1",
+   "t0": 52.92,
+   "t1": 54.6
+  },
+  {
+   "name": "laugh-3",
+   "t0": 61.056,
+   "t1": 62.706
+  },
+  {
+   "name": "aww-1",
+   "t0": 72.791,
+   "t1": 74.271
+  },
+  {
+   "name": "applause-2",
+   "t0": 75.87,
+   "t1": 79.22
+  },
+  {
+   "name": "laugh-1",
+   "t0": 83.576,
+   "t1": 85.196
+  },
+  {
+   "name": "sting-1",
+   "t0": 84.262,
+   "t1": 86.532
+  },
+  {
+   "name": "applause-1",
+   "t0": 85.132,
+   "t1": 88.352
+  }
+ ],
+ "music": []
+}

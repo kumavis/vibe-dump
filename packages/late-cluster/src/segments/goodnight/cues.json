@@ -1,0 +1,829 @@
+{
+ "id": "goodnight",
+ "title": "Goodnight",
+ "duration": 65.803,
+ "audio": "audio/goodnight.mp3",
+ "tele": "tele/goodnight.bin",
+ "lines": [
+  {
+   "i": 0,
+   "id": "intro",
+   "who": "larry",
+   "kind": "say",
+   "text": "Well, folks, that's almost our show.",
+   "caption": true,
+   "t0": 1.405,
+   "t1": 4.438,
+   "words": [
+    [
+     1.465,
+     1.837,
+     "Well,"
+    ],
+    [
+     2.077,
+     2.583,
+     "folks,"
+    ],
+    [
+     2.823,
+     3.21,
+     "that's"
+    ],
+    [
+     3.21,
+     3.833,
+     "almost"
+    ],
+    [
+     3.833,
+     4.033,
+     "our"
+    ],
+    [
+     4.033,
+     4.438,
+     "show."
+    ]
+   ],
+   "tele": 0,
+   "teleT0": 1.355
+  },
+  {
+   "i": 1,
+   "id": "crowjoke",
+   "who": "larry",
+   "kind": "say",
+   "text": "Even the crow came down for this.",
+   "caption": true,
+   "t0": 5.228,
+   "t1": 7.19,
+   "words": [
+    [
+     5.288,
+     5.579,
+     "Even"
+    ],
+    [
+     5.579,
+     5.698,
+     "the"
+    ],
+    [
+     5.698,
+     6.015,
+     "crow"
+    ],
+    [
+     6.015,
+     6.339,
+     "came"
+    ],
+    [
+     6.339,
+     6.662,
+     "down"
+    ],
+    [
+     6.662,
+     6.897,
+     "for"
+    ],
+    [
+     6.897,
+     7.19,
+     "this."
+    ]
+   ],
+   "tele": 1,
+   "teleT0": 5.178
+  },
+  {
+   "i": 2,
+   "id": "tally",
+   "who": "larry",
+   "kind": "say",
+   "text": "And the final count: fourteen things built during this episode.",
+   "caption": true,
+   "t0": 7.828,
+   "t1": 12.374,
+   "words": [
+    [
+     7.888,
+     8.082,
+     "And"
+    ],
+    [
+     8.082,
+     8.201,
+     "the"
+    ],
+    [
+     8.201,
+     8.703,
+     "final"
+    ],
+    [
+     8.703,
+     9.217,
+     "count:"
+    ],
+    [
+     9.457,
+     10.052,
+     "fourteen"
+    ],
+    [
+     10.052,
+     10.376,
+     "things"
+    ],
+    [
+     10.376,
+     10.79,
+     "built"
+    ],
+    [
+     11.03,
+     11.434,
+     "during"
+    ],
+    [
+     11.434,
+     11.658,
+     "this"
+    ],
+    [
+     11.658,
+     12.374,
+     "episode."
+    ]
+   ],
+   "tele": 2,
+   "teleT0": 7.778
+  },
+  {
+   "i": 3,
+   "id": "wish",
+   "who": "larry",
+   "kind": "say",
+   "text": "Now somebody should finally say gn.",
+   "caption": true,
+   "t0": 14.07,
+   "t1": 16.326,
+   "words": [
+    [
+     14.13,
+     14.374,
+     "Now"
+    ],
+    [
+     14.374,
+     14.958,
+     "somebody"
+    ],
+    [
+     14.958,
+     15.198,
+     "should"
+    ],
+    [
+     15.198,
+     15.74,
+     "finally"
+    ],
+    [
+     15.74,
+     15.987,
+     "say"
+    ],
+    [
+     15.987,
+     16.326,
+     "gn."
+    ]
+   ],
+   "tele": 3,
+   "teleT0": 14.02
+  },
+  {
+   "i": 4,
+   "id": "raw-gn",
+   "who": "sibyl",
+   "kind": "say",
+   "text": "Gn.",
+   "caption": true,
+   "t0": 16.776,
+   "t1": 17.005,
+   "words": [
+    [
+     16.836,
+     17.005,
+     "Gn."
+    ]
+   ],
+   "tele": 4,
+   "teleT0": 16.726
+  },
+  {
+   "i": 5,
+   "id": "tag",
+   "who": "larry",
+   "kind": "say",
+   "text": "And that, folks, is why nobody says it.",
+   "caption": true,
+   "t0": 17.655,
+   "t1": 20.67,
+   "words": [
+    [
+     17.715,
+     17.906,
+     "And"
+    ],
+    [
+     17.906,
+     18.121,
+     "that,"
+    ],
+    [
+     18.361,
+     18.857,
+     "folks,"
+    ],
+    [
+     19.097,
+     19.241,
+     "is"
+    ],
+    [
+     19.241,
+     19.536,
+     "why"
+    ],
+    [
+     19.536,
+     20.179,
+     "nobody"
+    ],
+    [
+     20.179,
+     20.493,
+     "says"
+    ],
+    [
+     20.493,
+     20.67,
+     "it."
+    ]
+   ],
+   "tele": 5,
+   "teleT0": 17.605
+  },
+  {
+   "i": 6,
+   "id": "built",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 21.447,
+   "t1": 22.042,
+   "words": [
+    [
+     21.507,
+     21.853,
+     "Built"
+    ],
+    [
+     21.853,
+     22.042,
+     "it."
+    ]
+   ],
+   "tele": 6,
+   "teleT0": 21.397
+  },
+  {
+   "i": 7,
+   "id": "heart",
+   "who": "larry",
+   "kind": "say",
+   "text": "We spent all night asking what the simcluster is.",
+   "caption": true,
+   "t0": 23.321,
+   "t1": 26.558,
+   "words": [
+    [
+     23.381,
+     23.556,
+     "We"
+    ],
+    [
+     23.556,
+     24.011,
+     "spent"
+    ],
+    [
+     24.011,
+     24.302,
+     "all"
+    ],
+    [
+     24.302,
+     24.664,
+     "night"
+    ],
+    [
+     24.664,
+     25.155,
+     "asking"
+    ],
+    [
+     25.155,
+     25.418,
+     "what"
+    ],
+    [
+     25.418,
+     25.54,
+     "the"
+    ],
+    [
+     25.54,
+     26.324,
+     "simcluster"
+    ],
+    [
+     26.324,
+     26.558,
+     "is."
+    ]
+   ],
+   "tele": 7,
+   "teleT0": 23.271
+  },
+  {
+   "i": 8,
+   "id": "friends",
+   "who": "larry",
+   "kind": "say",
+   "text": "Goodnight, friends.",
+   "caption": true,
+   "t0": 27.858,
+   "t1": 29.411,
+   "words": [
+    [
+     27.918,
+     28.604,
+     "Goodnight,"
+    ],
+    [
+     28.844,
+     29.411,
+     "friends."
+    ]
+   ],
+   "tele": 8,
+   "teleT0": 27.808
+  },
+  {
+   "i": 9,
+   "id": "gm",
+   "who": "larry",
+   "kind": "say",
+   "text": "Everyone says gm. Nobody says gn.",
+   "caption": true,
+   "t0": 30.451,
+   "t1": 33.506,
+   "words": [
+    [
+     30.511,
+     31.07,
+     "Everyone"
+    ],
+    [
+     31.07,
+     31.373,
+     "says"
+    ],
+    [
+     31.373,
+     31.746,
+     "gm."
+    ],
+    [
+     32.156,
+     32.826,
+     "Nobody"
+    ],
+    [
+     32.826,
+     33.144,
+     "says"
+    ],
+    [
+     33.144,
+     33.506,
+     "gn."
+    ]
+   ],
+   "tele": 9,
+   "teleT0": 30.401
+  },
+  {
+   "i": 10,
+   "id": "see",
+   "who": "larry",
+   "kind": "say",
+   "text": "See? Somebody always says gn.",
+   "caption": true,
+   "t0": 36.03,
+   "t1": 38.652,
+   "words": [
+    [
+     36.09,
+     36.416,
+     "See?"
+    ],
+    [
+     36.826,
+     37.471,
+     "Somebody"
+    ],
+    [
+     37.471,
+     37.986,
+     "always"
+    ],
+    [
+     37.986,
+     38.29,
+     "says"
+    ],
+    [
+     38.29,
+     38.652,
+     "gn."
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 35.98
+  },
+  {
+   "i": 11,
+   "id": "so",
+   "who": "larry",
+   "kind": "say",
+   "text": "So.",
+   "caption": true,
+   "t0": 39.541,
+   "t1": 39.922,
+   "words": [
+    [
+     39.601,
+     39.922,
+     "So."
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 39.491
+  },
+  {
+   "i": 12,
+   "id": "gn",
+   "who": "larry",
+   "kind": "say",
+   "text": "gn, simcluster.",
+   "caption": true,
+   "t0": 40.472,
+   "t1": 42.038,
+   "words": [
+    [
+     40.532,
+     40.918,
+     "gn,"
+    ],
+    [
+     41.158,
+     42.038,
+     "simcluster."
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 40.422
+  },
+  {
+   "i": 13,
+   "id": "ack",
+   "who": "void",
+   "kind": "say",
+   "text": "Acknowledged.",
+   "caption": true,
+   "t0": 45.425,
+   "t1": 46.318,
+   "words": [
+    [
+     45.485,
+     46.318,
+     "Acknowledged."
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 45.375
+  },
+  {
+   "i": 14,
+   "id": "presse",
+   "who": "larry",
+   "kind": "say",
+   "text": "Press E to leave.",
+   "caption": true,
+   "t0": 47.298,
+   "t1": 48.423,
+   "words": [
+    [
+     47.358,
+     47.709,
+     "Press"
+    ],
+    [
+     47.709,
+     47.824,
+     "E"
+    ],
+    [
+     47.824,
+     48.007,
+     "to"
+    ],
+    [
+     48.007,
+     48.423,
+     "leave."
+    ]
+   ],
+   "tele": 14,
+   "teleT0": 47.248
+  },
+  {
+   "i": 15,
+   "id": "lull",
+   "who": "dee",
+   "kind": "sing",
+   "text": "good night, sim cluster, good night, we built it all tonight",
+   "caption": true,
+   "t0": 50.473,
+   "t1": 61.723,
+   "words": [
+    [
+     50.473,
+     51.223,
+     "good"
+    ],
+    [
+     51.223,
+     52.348,
+     "night,"
+    ],
+    [
+     52.348,
+     52.723,
+     "sim"
+    ],
+    [
+     52.723,
+     54.223,
+     "cluster,"
+    ],
+    [
+     54.223,
+     54.973,
+     "good"
+    ],
+    [
+     54.973,
+     56.473,
+     "night,"
+    ],
+    [
+     56.473,
+     56.848,
+     "we"
+    ],
+    [
+     56.848,
+     57.223,
+     "built"
+    ],
+    [
+     57.223,
+     57.973,
+     "it"
+    ],
+    [
+     57.973,
+     58.723,
+     "all"
+    ],
+    [
+     58.723,
+     61.723,
+     "tonight"
+    ]
+   ],
+   "tele": 15,
+   "teleT0": 50.173
+  },
+  {
+   "i": 16,
+   "who": "hy",
+   "kind": "sing",
+   "text": "ooh ooh ooh ooh",
+   "caption": false,
+   "t0": 50.473,
+   "t1": 61.723,
+   "words": [
+    [
+     50.473,
+     53.473,
+     "ooh"
+    ],
+    [
+     53.473,
+     56.473,
+     "ooh"
+    ],
+    [
+     56.473,
+     59.473,
+     "ooh"
+    ],
+    [
+     59.473,
+     61.723,
+     "ooh"
+    ]
+   ],
+   "tele": 16,
+   "teleT0": 50.173
+  },
+  {
+   "i": 17,
+   "who": "al",
+   "kind": "sing",
+   "text": "doo doo doo doo doo doo doo",
+   "caption": false,
+   "t0": 50.473,
+   "t1": 61.723,
+   "words": [
+    [
+     50.473,
+     51.973,
+     "doo"
+    ],
+    [
+     51.973,
+     53.473,
+     "doo"
+    ],
+    [
+     53.473,
+     54.973,
+     "doo"
+    ],
+    [
+     54.973,
+     56.473,
+     "doo"
+    ],
+    [
+     56.473,
+     57.973,
+     "doo"
+    ],
+    [
+     57.973,
+     59.473,
+     "doo"
+    ],
+    [
+     59.473,
+     61.723,
+     "doo"
+    ]
+   ],
+   "tele": 17,
+   "teleT0": 50.173
+  },
+  {
+   "i": 18,
+   "who": "pete",
+   "kind": "beat",
+   "text": "B . . . . . . . ! . . . . . . . ",
+   "caption": false,
+   "t0": 50.473,
+   "t1": 62.473,
+   "words": [],
+   "tele": 18,
+   "teleT0": 50.173
+  }
+ ],
+ "cues": {
+  "crow-dive": 0.905,
+  "crow-land": 4.488,
+  "raw": 16.426,
+  "trumpet": 33.806,
+  "ganweaving": 34.83,
+  "gn-post": 42.188,
+  "dark": 44.025,
+  "press": 48.773,
+  "crt": 49.323,
+  "final": 61.873,
+  "caw-out": 63.803
+ },
+ "sfx": [
+  {
+   "name": "applause-2",
+   "t0": 0.3,
+   "t1": 3.65
+  },
+  {
+   "name": "caw-2",
+   "t0": 4.488,
+   "t1": 5.088
+  },
+  {
+   "name": "chuckle-1",
+   "t0": 7.24,
+   "t1": 8.2
+  },
+  {
+   "name": "ooh-1",
+   "t0": 12.374,
+   "t1": 14.054
+  },
+  {
+   "name": "laugh-2",
+   "t0": 20.72,
+   "t1": 22.23
+  },
+  {
+   "name": "laugh-1",
+   "t0": 22.142,
+   "t1": 23.762
+  },
+  {
+   "name": "aww-1",
+   "t0": 29.511,
+   "t1": 30.991
+  },
+  {
+   "name": "trumpet-1",
+   "t0": 33.806,
+   "t1": 35.126
+  },
+  {
+   "name": "aww-2",
+   "t0": 38.702,
+   "t1": 40.242
+  },
+  {
+   "name": "applause-1",
+   "t0": 42.188,
+   "t1": 45.408
+  },
+  {
+   "name": "woo-2",
+   "t0": 42.525,
+   "t1": 43.925
+  },
+  {
+   "name": "chuckle-2",
+   "t0": 46.468,
+   "t1": 47.418
+  },
+  {
+   "name": "tick-3",
+   "t0": 48.773,
+   "t1": 48.803
+  },
+  {
+   "name": "whoosh-2",
+   "t0": 49.273,
+   "t1": 50.013
+  },
+  {
+   "name": "caw-1",
+   "t0": 63.773,
+   "t1": 64.803
+  }
+ ],
+ "music": [
+  {
+   "id": "playout",
+   "t0": 50.473,
+   "bpm": 80,
+   "beats": 16
+  }
+ ]
+}
