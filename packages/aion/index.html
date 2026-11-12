@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>aion — NAION explained</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="app">
+    <header id="top">
+      <button id="back" hidden>← All three</button>
+      <h1>aion</h1>
+      <p id="tagline">What happens in <abbr title="non-arteritic anterior ischemic optic neuropathy">NAION</abbr>, the most common anterior ischemic optic neuropathy — shown three ways. One timeline drives all three; tap one to open it.</p>
+      <button id="srcbtn">Sources</button>
+    </header>
+    <main id="panel"></main>
+    <footer id="dock">
+      <div id="timeline">
+        <button id="play" aria-label="Play or pause">❚❚</button>
+        <div id="track">
+          <input id="scrub" type="range" min="0" max="1000" value="0" aria-label="Story timeline">
+          <div id="steps"></div>
+        </div>
+      </div>
+      <div id="story">
+        <div id="caption"><h2 id="stagetitle"></h2><p id="stagetext"></p></div>
+        <div id="meters">
+          <div class="meter"><span>Blood flow</span><i><b id="m-flow"></b></i></div>
+          <div class="meter"><span>Swelling</span><i><b id="m-swell"></b></i></div>
+          <div class="meter"><span>Fibres working</span><i><b id="m-work"></b></i></div>
+          <small>in the affected part of the disc</small>
+        </div>
+      </div>
+      <p id="safety"></p>
+    </footer>
+    <aside id="sources" hidden>
+      <button id="srcclose" aria-label="Close sources">×</button>
+      <h2>Where this comes from</h2>
+      <p>Numbers in the text point here. This is an educational model, not a diagnosis.</p>
+      <ol id="srclist"></ol>
+      <h3>What is illustration, not evidence</h3>
+      <ul id="caveats"></ul>
+    </aside>
+  </div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

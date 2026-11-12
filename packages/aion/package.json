@@ -1,0 +1,26 @@
+{
+  "name": "@vibe-dump/aion",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "aion",
+    "description": "A patient's guide to NAION — the commonest anterior ischemic optic neuropathy — told three ways in 3-D: an anatomical cutaway, the doctor's view of the retina, and a crowded-doorway model. Every claim is cited. Three.js.",
+    "tags": [
+      "tutorial",
+      "simulation"
+    ],
+    "status": "wip",
+    "models": [
+      "Fable 5.2"
+    ],
+    "thinking": "unknown"
+  }
+}
