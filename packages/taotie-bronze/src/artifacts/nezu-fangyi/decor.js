@@ -93,7 +93,7 @@ function hookPts(kit, at, len, w, h, dir) {
 export function neckSheet(kit, { hw, v0, Hn, slot, seed = 1 }) {
   const S = new Sheet()
   const w = 0.15 * Hn
-  const r = w * 0.65
+  const r = w * 1.0 // the photo's neck kui are curvy (S-crests, U-bodies), not squared
   const gap = 2.0
   const span = hw - slot - 2.6
   const Wu = (span - gap) / 2

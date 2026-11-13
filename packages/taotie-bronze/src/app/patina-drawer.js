@@ -12,10 +12,10 @@ import { PATINA_PARAMS, PATINA_PRESETS, PATINA_PRESET_GROUPS, setPatina, getPati
 import { el, slider, colorInput, chips } from './ui.js'
 
 const CSS = `
-.patina-sub { display: flex; align-items: baseline; gap: 8px; margin: 6px 0 4px; }
+.patina-sub { margin: 8px 0 2px; }
 .patina-sub:first-of-type { margin-top: 0; }
-.patina-sub > .cap { width: 52px; flex: none; color: var(--dim, #8a8172); font-size: 10.5px; }
-.patina-sub > .chips { flex: 1; }
+.patina-sub > .cap { display: block; margin-bottom: 4px; color: var(--dim, #8a8172); font-size: 10px; }
+.patina-sub > .chips button { padding-left: 7px; padding-right: 7px; }
 details.patina-fold { border-top: 1px solid var(--rule, #2a2622); padding: 0; }
 details.patina-fold > summary { list-style: none; cursor: pointer; padding: 11px 0 9px; display: flex; justify-content: space-between; align-items: baseline; }
 details.patina-fold > summary::-webkit-details-marker { display: none; }

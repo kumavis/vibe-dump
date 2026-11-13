@@ -546,11 +546,14 @@ Carbonates malachite (carbonate crust amount) · carbonate (BALANCE: 0 malachite
            films → 1 sharp-edged crust islands) · malachiteScale mm (botryoid size) · crust mm
            (thickness: flattens the relief normal map, adds lumps)
 Other      tinOxide (Type I noble skin; no bare metal is left under it) + tinOxideTone 0–2 (black
-           黑漆古 · olive · grey 水银古) · cuprite (liver/oxblood, F0 0.18; outside the noble sheet it
+           黑漆古 · olive · grey 水银古) · nobleWarmth (olive-green → warm grey-brown skin) · cuprite (liver/oxblood, F0 0.18; outside the noble sheet it
            shows veiled warm brown) · chloride (pale pustules over pits, dark ring) · soot · crevice
            · patchScale mm (territories, domain-warped) · mottleScale mm
-Surface    dulling (dust / old wax greys every mineral colour) · tops (relief tops rubbed to a darker,
-           warmer, smoother skin) · earth + earthColor · calcite (lime: mostly sharp crusty islands
+Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad glossy highlights;
+           0 = each layer's own sheen, kept only by as-cast / heirloom) · dulling (dust / old wax greys
+           every mineral colour) · tops (relief tops — real mm above the L0 ground — rubbed to a darker,
+           warmer, smoother skin) + topsTone (0 that · 1 paler silvery bands: flush décor read by colour)
+           · earth + earthColor (recesses, ledges, an accretion low on the foot) · calcite (lime: mostly sharp crusty islands
            plus a faint dust) · streaks (gravity runs down the walls + one pale tide line) ·
            burialSide · recessDirt · interiorTone (interior = one calm corroded skin: dark grey-brown
            → pale green) · wax · inlay (black paste in sunk lines AND the sunk ground of relief
@@ -581,7 +584,7 @@ noble-skin / cuprite / crust regions with sharp borders) · azurite field (azuri
 and botryoids (malachiteScale, Worley); each band fades to its mean below ~1.5 px.
 
 Constructor options: `{ relief, cavityAttribute, cavity = 0.8 (constant for plain meshes),
-interior = 0 (1 for a bowl's inside / inner wall: one calm corroded skin per interiorTone, no speckle, no wear), normalStrength }`.
+interior = 0 (1 for a bowl's inside / inner wall: one calm corroded skin per interiorTone, no speckle, no wear; ≥ 0.55 is already fully calm), normalStrength }`.
 Plain meshes (legs, handles, flanges) get a cavity estimate from signed screen-space curvature
 (convex arris → edge/wear, concave crease → recess), undersides and inward faces; the inner wall
 of a decorated panel (uv = -1) is treated as interior. Each layer is one GLSL function

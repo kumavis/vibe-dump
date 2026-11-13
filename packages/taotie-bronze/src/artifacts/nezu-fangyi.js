@@ -290,7 +290,7 @@ export default {
       const ph = polyPath(hip, hip.map((_, i) => faceN(k, i / 12).add(faceN((k + 1) % 4, i / 12)).normalize()))
       const L = ph.length
       // a straight thick bar lying on the hip; past the eave corner it ends in a squared hook turned down
-      F({ path: ph, outline: [[-8, -3], [L, -3], [L, 7], [-15, 7], [-15, -7.5], [-9.5, -7.5], [-9.5, -3.5]], thickness: 7, embed: 3, taper: 1, carve: 'contour' })
+      F({ path: ph, outline: [[-8, -3], [L, -3], [L, 7.5], [-15, 7.5], [-15, -7.5], [-9.5, -7.5], [-9.5, -3.5]], thickness: 8, embed: 3, taper: 1, carve: 'contour' })
       const mid = lid.userData.midlines[SIDES[k]].map(lidY)
       const pm = polyPath(mid, mid.map((_, i) => faceN(k, i / 12)))
       const Lm = pm.length

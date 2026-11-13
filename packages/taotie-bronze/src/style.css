@@ -82,10 +82,16 @@ body[data-tab='vessels'] .atlas-only, body[data-tab='atlas'] .vessels-only { dis
 html.ui-off .chrome, html.ui-off #progress, html.ui-off .vignette { display: none !important; }
 
 /* --------------------------------------------------------- vessel list */
+/* Owner's feedback (keep this arrangement on desktop): the vessel list sits
+   immediately below the masthead at top left and scrolls when it is long; the
+   label card below it scrolls too and must never cover the list. The two
+   share the left column: list in the top 42 %, label in the bottom 58 %. */
 #vessel-list {
-  position: fixed; left: var(--gutter); top: 50%; transform: translateY(-50%);
-  display: flex; flex-direction: column; gap: 2px; z-index: 2; max-height: 46vh; overflow-y: auto;
+  position: fixed; left: var(--gutter); top: 62px;
+  display: flex; flex-direction: column; gap: 2px; z-index: 2; max-height: calc(42% - 62px); overflow-y: auto;
+  width: min(380px, calc(100vw - 2 * var(--gutter)));
   border-left: 1px solid var(--rule); padding-left: 0;
+  scrollbar-width: thin; scrollbar-color: var(--rule-2) transparent;
 }
 #vessel-list button {
   text-align: left; background: none; border: 0; cursor: pointer; padding: 5px 12px; margin-left: -1px;
@@ -100,6 +106,8 @@ html.ui-off .chrome, html.ui-off #progress, html.ui-off .vignette { display: non
   position: fixed; left: var(--gutter); bottom: var(--gutter); width: min(380px, calc(100vw - 2 * var(--gutter)));
   background: var(--panel); border-top: 1px solid var(--rule-2); padding: 14px 16px 14px; z-index: 2;
   backdrop-filter: blur(6px);
+  max-height: calc(58% - var(--gutter) - 12px); overflow-y: auto;
+  scrollbar-width: thin; scrollbar-color: var(--rule-2) transparent;
 }
 #label .zh { font-family: var(--zh); font-size: 30px; line-height: 1.1; color: var(--ink); letter-spacing: 0.06em; }
 #label h1 { margin: 4px 0 6px; font-size: 18px; font-weight: 400; letter-spacing: 0.01em; }
@@ -195,7 +203,7 @@ select option { background: #1a1714; }
   #masthead { padding-top: 12px; gap: 16px; flex-wrap: wrap; row-gap: 4px; }
   .wm-en, .wm-zh { font-size: 17px; }
   #vessel-list {
-    top: 70px; left: var(--gutter); right: var(--gutter); transform: none; flex-direction: row; border-left: 0;
+    top: 70px; left: var(--gutter); right: var(--gutter); width: auto; flex-direction: row; border-left: 0;
     border-bottom: 1px solid var(--rule); overflow-x: auto; max-height: none; gap: 8px;
   }
   #vessel-list button { border-left: 0; border-bottom: 1px solid transparent; padding: 3px 0; margin: 0 0 -1px; white-space: nowrap; }
