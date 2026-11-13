@@ -25,6 +25,10 @@
       "Fable 5.2",
       "Opus 5.5"
     ],
-    "thinking": "unknown"
+    "thinking": "unknown",
+    "thumbnail": {
+      "waitFor": "html[data-ready='1']",
+      "settle": 1500
+    }
   }
 }

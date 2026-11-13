@@ -63,14 +63,20 @@ export const PROFILES = {
 const WIDTH_IS_MAX = new Set(['dome', 'ridge', 'v'])
 
 export class ReliefPanel {
+  /** Default `maxSize` (px per side) when a caller passes none. */
+  static maxSize = 4096
+  /** Hard cap on any panel side, even an explicit maxSize: the app lowers it on phones. */
+  static maxSizeCap = Infinity
+
   /**
    * @param {{width:number,height:number,ppmm?:number,maxSize?:number,seed?:number}} o
    *   width/height in mm; ppmm pixels per mm (clamped so neither side exceeds maxSize)
    */
-  constructor({ width, height, ppmm = 8, maxSize = 4096, seed = 1 } = {}) {
+  constructor({ width, height, ppmm = 8, maxSize = ReliefPanel.maxSize, seed = 1 } = {}) {
     if (!(width > 0 && height > 0)) throw new Error('ReliefPanel: width and height (mm) required')
     this.width = width
     this.height = height
+    maxSize = Math.min(maxSize, ReliefPanel.maxSizeCap)
     this.ppmm = Math.min(ppmm, maxSize / width, maxSize / height)
     this.cols = Math.max(2, Math.round(width * this.ppmm))
     this.rows = Math.max(2, Math.round(height * this.ppmm))

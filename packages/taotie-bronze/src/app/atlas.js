@@ -6,12 +6,20 @@ import * as THREE from 'three'
 import * as kit from '../kit/index.js'
 import { el, slider, selectInput, toggleInput, chips, yieldToBrowser } from './ui.js'
 
-const BORDER = 8 // mm of plain frame around the motif
+const BORDER = 8 // mm of plain frame around the motif (less on very small plaques)
+
+/** The panel size (mm) a motif preset was matched at; the motif's default plaque otherwise. */
+export function plaqueSize(m, preset) {
+  return (preset && m.presetPlaques?.[preset]) || m.plaque || { w: 200, h: 120 }
+}
 
 export function createAtlas({ stage, quality, progress, dom, onBuilt }) {
   const names = Object.keys(kit.MOTIFS)
   let motif = kit.MOTIFS.taotie ? 'taotie' : names[0]
   let preset = null
+  // the preset whose plaque size is in use: a parameter tweak clears `preset` (the
+  // params are now custom) but keeps the size the preset was matched at
+  let sizePreset = null
   let params = kit.resolveMotifParams(motif)
   let plaque = null // { group, mesh, relief }
   let showHeight = false
@@ -35,6 +43,7 @@ export function createAtlas({ stage, quality, progress, dom, onBuilt }) {
       value: preset,
       onPick: (id) => {
         preset = id
+        sizePreset = id
         params = kit.resolveMotifParams(motif, {}, id)
         renderParams()
         schedule()
@@ -77,6 +86,7 @@ export function createAtlas({ stage, quality, progress, dom, onBuilt }) {
   async function setMotif(name, presetName) {
     motif = kit.MOTIFS[name] ? name : motif
     preset = presetName && kit.MOTIFS[motif].presets?.[presetName] ? presetName : null
+    sizePreset = preset
     params = kit.resolveMotifParams(motif, {}, preset)
     picker.set(motif)
     renderControls()
@@ -96,7 +106,7 @@ export function createAtlas({ stage, quality, progress, dom, onBuilt }) {
       do {
         again = false
         await yieldToBrowser()
-        const next = await buildPlaque(motif, params, quality, (f, s) => progress.set(f, s))
+        const next = await buildPlaque(motif, params, quality, (f, s) => progress.set(f, s), sizePreset)
         const prev = plaque
         plaque = next
         if (active) show()
@@ -111,14 +121,20 @@ export function createAtlas({ stage, quality, progress, dom, onBuilt }) {
   }
 
   let active = false
+  // the camera is framed to the plaque whenever its size changes (a new motif or
+  // preset, or coming back from the vessels tab), not on every parameter tweak
   function show() {
     stage.setContent(plaque.group, { rig: 'raking' })
-    if (!shownOnce) stage.setView({ azimuth: 0, elevation: 4, fov: 26, fit: 1.08 })
-    shownOnce = true
+    const key = plaque.size.w + 'x' + plaque.size.h
+    if (framedFor !== key) frame()
+    framedFor = key
     stage.setAutoRotate(false)
     dom.stats.textContent = plaque.stats
   }
-  let shownOnce = false
+  let framedFor = null
+  function frame() {
+    stage.setView({ azimuth: 0, elevation: 4, fov: 26, fit: 1.08 })
+  }
 
   function paintHeight() {
     dom.heightmap.hidden = !(active && showHeight)
@@ -153,7 +169,19 @@ export function createAtlas({ stage, quality, progress, dom, onBuilt }) {
     },
     deactivate() {
       active = false
+      framedFor = null
       dom.heightmap.hidden = true
+    },
+    /** Re-frame the camera on the plaque (after a resize or a layout change). */
+    frame() {
+      if (active && plaque) frame()
+    },
+    setQuality(q) {
+      quality = q
+      if (plaque) return rebuild()
+    },
+    get preset() {
+      return preset
     },
     setMotif,
     get motifs() {
@@ -169,16 +197,21 @@ export function createAtlas({ stage, quality, progress, dom, onBuilt }) {
 }
 
 /** Panel → bake → flat plaque with a back and rims, standing on the plinth. */
-export async function buildPlaque(motif, params, quality, onProgress) {
+export async function buildPlaque(motif, params, quality, onProgress, preset = null) {
   const m = kit.MOTIFS[motif]
-  const size = m.plaque || { w: 200, h: 120 }
-  const W = size.w + BORDER * 2
-  const H = size.h + BORDER * 2
+  const size = plaqueSize(m, preset)
+  const B = Math.max(3, Math.min(BORDER, 0.12 * Math.min(size.w, size.h)))
+  const W = size.w + B * 2
+  const H = size.h + B * 2
   const t0 = performance.now()
-  const panel = new kit.ReliefPanel({ width: W, height: H, ppmm: 6 * quality, seed: 11 })
+  // resolution follows the plaque: a 30 mm boss gets as many pixels across as a 320 mm frieze
+  // would at 6 px/mm (but never fewer than 6 px/mm, never more than 20, both × quality)
+  const ppmm = Math.max(6 * quality, Math.min(20 * quality, (1500 * quality) / Math.max(W, H)))
+  const panel = new kit.ReliefPanel({ width: W, height: H, ppmm, seed: 11 })
   onProgress?.(0.1, 'drawing')
-  kit.drawMotif(panel, motif, { x: BORDER, y: BORDER, w: size.w, h: size.h }, params)
-  kit.borderLine(panel, { x: BORDER * 0.55, y: BORDER * 0.55, w: W - BORDER * 1.1, h: H - BORDER * 1.1 }, { width: 1.6, height: 0.8, sides: 'tblr' })
+  kit.drawMotif(panel, motif, { x: B, y: B, w: size.w, h: size.h }, params)
+  const line = Math.min(1.6, B * 0.2)
+  kit.borderLine(panel, { x: B * 0.55, y: B * 0.55, w: W - B * 1.1, h: H - B * 1.1 }, { width: line, height: Math.min(0.8, line * 0.5), sides: 'tblr' })
   const t1 = performance.now()
   onProgress?.(0.6, 'baking')
   await yieldToBrowser()
@@ -187,7 +220,7 @@ export async function buildPlaque(motif, params, quality, onProgress) {
   const t2 = performance.now()
   const geo = kit.buildSurface({
     surface: kit.quadSurface([-W / 2, 0, 0], [W / 2, 0, 0], [-W / 2, H, 0], [W / 2, H, 0]),
-    segments: { density: 1.2 * Math.sqrt(quality) },
+    segments: { density: Math.max(1.2, Math.min(8, 240 / Math.max(W, H))) * Math.sqrt(quality) },
     relief,
     back: { thickness: 7 },
     fade: 2,
@@ -198,8 +231,8 @@ export async function buildPlaque(motif, params, quality, onProgress) {
   const group = new THREE.Group()
   group.add(mesh)
   const t3 = performance.now()
-  const stats = `${relief.width}×${relief.height} px · ${relief.ppmm.toFixed(1)} px/mm · draw ${Math.round(t1 - t0)} ms · bake ${Math.round(t2 - t1)} ms · mesh ${Math.round(t3 - t2)} ms`
-  return { group, mesh, relief, stats, timings: { draw: t1 - t0, bake: t2 - t1, mesh: t3 - t2 } }
+  const stats = `${size.w}×${size.h} mm${preset ? ' (' + preset + ')' : ''} · ${relief.width}×${relief.height} px · ${relief.ppmm.toFixed(1)} px/mm · draw ${Math.round(t1 - t0)} ms · bake ${Math.round(t2 - t1)} ms · mesh ${Math.round(t3 - t2)} ms`
+  return { group, mesh, relief, stats, size: { w: size.w, h: size.h }, timings: { draw: t1 - t0, bake: t2 - t1, mesh: t3 - t2 } }
 }
 
 function disposePlaque(p) {

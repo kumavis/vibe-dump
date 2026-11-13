@@ -159,29 +159,29 @@ export const PATINA_PRESETS = {
   // plateaus, near-black grooves, darker olive legs, small pale blue-green crust spots
   'houmuwu': {
     age: 1, tin: 0.12, lead: 0.04, polish: 0.4, tarnish: 0.6, cuprite: 0.9, tinOxide: 0.6, tinOxideTone: 2,
-    malachite: 0.85, carbonate: 0.55, azurite: 0.02, azuriteScale: 8, blueHabitat: 0.3, turquoiseTone: 0.1,
-    malachiteHue: 0.25, malachiteTone: 0.85, islands: 0.05, malachiteScale: 2.5, crust: 0.6,
-    chloride: 0.08, soot: 0.05, crevice: 0.3, patchScale: 120, mottleScale: 10,
-    earth: 0.25, earthColor: '#857256', calcite: 0.2, streaks: 0.2, burialSide: 0.3, recessDirt: 0.6, interiorTone: 0.35,
-    wax: 0, inlay: 0, wear: 0.22, dulling: 0.1, tops: 0.5, matte: 0.65, topsTone: 1,
+    malachite: 0.7, carbonate: 0.6, azurite: 0.02, azuriteScale: 8, blueHabitat: 0.3, turquoiseTone: 0.1,
+    malachiteHue: 0.2, malachiteTone: 0.85, islands: 0, malachiteScale: 2.5, crust: 0.6,
+    chloride: 0.08, soot: 0.05, crevice: 0.3, patchScale: 50, mottleScale: 6,
+    earth: 0.25, earthColor: '#857256', calcite: 0.08, streaks: 0.2, burialSide: 0.3, recessDirt: 0.6, interiorTone: 0.35,
+    wax: 0, inlay: 0, wear: 0.22, dulling: 0, tops: 0.5, matte: 0.65, topsTone: 1,
   },
   // Met 1974.268.2: an even waxed olive-grey-brown noble skin, near-black recesses, pale crests,
   // red-brown only in slots and low on the foot, green as sparse specks; pale green interior
   'met-fangyi': {
-    age: 1, tin: 0.14, lead: 0.05, polish: 0.4, tarnish: 0.8, cuprite: 0.6, tinOxide: 0.95, tinOxideTone: 1,
+    age: 1, tin: 0.14, lead: 0.05, polish: 0.4, tarnish: 0.8, cuprite: 0.6, tinOxide: 0.95, tinOxideTone: 1.1,
     malachite: 0.08, carbonate: 0.05, azurite: 0, malachiteHue: 0.45, malachiteTone: 0.6, islands: 0.3, malachiteScale: 1, crust: 0.1,
     chloride: 0.02, soot: 0, crevice: 0.9, patchScale: 80, mottleScale: 6,
     earth: 0.15, earthColor: '#5c4630', calcite: 0.15, streaks: 0.1, burialSide: 0.05, recessDirt: 0.35, interiorTone: 0.6,
-    wax: 0.25, inlay: 0, wear: 0.3, dulling: 0.5, tops: 0.4, nobleWarmth: 0.4, matte: 0.45, topsTone: 0.5,
+    wax: 0.25, inlay: 0, wear: 0.3, dulling: 0.5, tops: 0.4, nobleWarmth: 0.5, matte: 0.45, topsTone: 0.5,
   },
   // Met 43.25.1: silver-grey 水银古 skin, black inlay in every groove, blue-green malachite speckle
   'met-zun': {
-    age: 1, tin: 0.14, lead: 0.05, polish: 0.45, tarnish: 0.4, cuprite: 0.2, tinOxide: 0.95, tinOxideTone: 1.8,
+    age: 1, tin: 0.14, lead: 0.05, polish: 0.45, tarnish: 0.4, cuprite: 0.2, tinOxide: 0.95, tinOxideTone: 1.3,
     malachite: 0.55, carbonate: 0.2, azurite: 0.04, azuriteDepth: 0.4, azuriteScale: 6, blueHabitat: 0.5, turquoiseTone: 0.5,
     malachiteHue: 0.35, malachiteTone: 0.45, islands: 0.7, malachiteScale: 0.9, crust: 0.12,
     chloride: 0, soot: 0, crevice: 0.4, patchScale: 35, mottleScale: 3,
-    earth: 0.25, earthColor: '#9a978c', calcite: 0.3, streaks: 0.1, burialSide: 0.1, recessDirt: 0.4, interiorTone: 0.4,
-    wax: 0.15, inlay: 1, wear: 0.3, dulling: 0.5, tops: 0.6, nobleWarmth: 0, matte: 0.55, topsTone: 1,
+    earth: 0.05, earthColor: '#9a978c', calcite: 0.3, streaks: 0.1, burialSide: 0.1, recessDirt: 0.4, interiorTone: 0.25,
+    wax: 0.15, inlay: 1, wear: 0.3, dulling: 0.55, tops: 0.6, nobleWarmth: 0, matte: 0.55, topsTone: 1,
   },
   // Met 1985.214.4: grey-olive trumpet, silvery décor bands with brown-black leiwen, pale crust
   // islands and emerald spots on the ring and lip
@@ -198,19 +198,19 @@ export const PATINA_PRESETS = {
     age: 1, tin: 0.15, lead: 0.06, polish: 0.35, tarnish: 0.9, cuprite: 0.7, tinOxide: 0.97, tinOxideTone: 0.2,
     malachite: 0.18, carbonate: 0.15, azurite: 0, malachiteHue: 0.55, malachiteTone: 0.6, islands: 0.1, malachiteScale: 1.5, crust: 0.12,
     chloride: 0.1, soot: 0, crevice: 0.95, patchScale: 60, mottleScale: 10,
-    earth: 0.18, earthColor: '#80827a', calcite: 0.2, streaks: 0.1, burialSide: 0.15, recessDirt: 0.05, interiorTone: 0.2,
-    wax: 0.1, inlay: 0, wear: 0.15, dulling: 0.9, tops: 0.35, matte: 0.45, nobleWarmth: 0.7, topsTone: 0.7,
+    earth: 0.12, earthColor: '#6a6458', calcite: 0.15, streaks: 0.1, burialSide: 0.15, recessDirt: 0.05, interiorTone: 0.2,
+    wax: 0.1, inlay: 0, wear: 0.15, dulling: 0.9, tops: 0.15, matte: 0.45, nobleWarmth: 0.7, topsTone: 0,
   },
 
   // the owner's bluer reading of the Nezu vessel: the same dark skin, blue-green and azurite
   // powder bound to the recesses (the real powder is pale grey-green — this is a request)
   'nezu-blue': {
     age: 1, tin: 0.15, lead: 0.05, polish: 0.45, tarnish: 0.85, cuprite: 0.6, tinOxide: 0.95, tinOxideTone: 0.2,
-    malachite: 0.45, carbonate: 0.6, azurite: 0.18, azuriteDepth: 0.55, azuriteScale: 8, blueHabitat: 0.05, turquoiseTone: 0.3,
+    malachite: 0.38, carbonate: 0.6, azurite: 0.18, azuriteDepth: 0.55, azuriteScale: 8, blueHabitat: 0.05, turquoiseTone: 0.5,
     malachiteHue: 0.12, malachiteTone: 0.6, islands: 0.25, malachiteScale: 1.2, crust: 0.2,
     chloride: 0.1, soot: 0, crevice: 0.95, patchScale: 55, mottleScale: 10,
     earth: 0.05, earthColor: '#5f6460', calcite: 0.05, streaks: 0.15, burialSide: 0.2, recessDirt: 0.05, interiorTone: 0.2,
-    wax: 0.05, inlay: 0, wear: 0.1, dulling: 0.3, tops: 0.35, nobleWarmth: 0.7, matte: 0.5, topsTone: 0.6,
+    wax: 0.05, inlay: 0, wear: 0.1, dulling: 0.3, tops: 0.15, nobleWarmth: 0.7, matte: 0.5, topsTone: 0,
   },
 }
 

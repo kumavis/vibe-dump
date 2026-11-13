@@ -16,10 +16,12 @@ const EXPOSURE = 0.85
 const DEG = Math.PI / 180
 
 export class Stage {
-  constructor(canvas, { deterministic = false } = {}) {
+  constructor(canvas, { deterministic = false, pixelRatio = null } = {}) {
     this.deterministic = deterministic
+    // pixelRatio: a fixed cap chosen by the app (phones); default min(devicePixelRatio, 2)
+    this.pixelRatio = pixelRatio
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' })
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
+    renderer.setPixelRatio(pixelRatio ?? Math.min(window.devicePixelRatio || 1, 2))
     renderer.outputColorSpace = THREE.SRGBColorSpace
     renderer.toneMapping = TONE
     renderer.toneMappingExposure = EXPOSURE
@@ -351,11 +353,26 @@ export class Stage {
   // -------------------------------------------------------------- render
   resize() {
     const W = window.innerWidth, H = window.innerHeight
+    // the window may have moved to a screen with another density (or rotated)
+    const pr = this.pixelRatio ?? Math.min(window.devicePixelRatio || 1, 2)
+    if (pr !== this.renderer.getPixelRatio()) this.renderer.setPixelRatio(pr)
     this.width = W
     this.height = H
     this.renderer.setSize(W, H, false)
     this.camera.aspect = W / H
     this._applyViewOffset()
+    this.dirty = true
+  }
+
+  /**
+   * After a WebGL context restore: geometry and DataTextures re-upload by
+   * themselves, but the PMREM environments were render targets and are gone.
+   */
+  restoreContext() {
+    for (const t of [this.envMap, this.envNeutral]) t?.dispose?.()
+    this._buildEnvironment()
+    this.setMode(this.mode)
+    this.key.shadow.needsUpdate = true
     this.dirty = true
   }
 

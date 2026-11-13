@@ -50,8 +50,9 @@ export async function session({ timeout = 240000 } = {}) {
   const pages = []
   return {
     url: server.url,
-    async open(params = {}, { width = 1400, height = 1050, dpr = 1 } = {}) {
-      const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: dpr })
+    // mobile: touch + coarse pointer + the viewport meta honoured, like a phone; hash: a #fragment route
+    async open(params = {}, { width = 1400, height = 1050, dpr = 1, mobile = false, hash = '' } = {}) {
+      const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: dpr, ...(mobile ? { isMobile: true, hasTouch: true } : {}) })
       page.setDefaultTimeout(timeout)
       const errors = []
       page.on('console', (m) => {
@@ -59,14 +60,15 @@ export async function session({ timeout = 240000 } = {}) {
       })
       page.on('pageerror', (e) => errors.push(String(e)))
       const qs = new URLSearchParams(params).toString()
-      await page.goto(`${server.url}/?${qs}`, { waitUntil: 'load' })
+      await page.goto(`${server.url}/${qs ? '?' + qs : ''}${hash ? '#' + hash : ''}`, { waitUntil: 'load' })
       pages.push(page)
+      page.__errors = errors
       return { page, errors }
     },
     async waitReady(page) {
       await page.waitForFunction(() => document.documentElement.dataset.ready === '1' || document.documentElement.dataset.ready === 'error', null, { timeout })
       const state = await page.evaluate(() => document.documentElement.dataset.ready)
-      if (state !== '1') throw new Error('app reported a boot error')
+      if (state !== '1') throw new Error('app reported a boot error' + (page.__errors?.length ? ':\n  ' + page.__errors.join('\n  ') : ''))
     },
     async close() {
       await browser.close()

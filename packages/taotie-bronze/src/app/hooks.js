@@ -41,6 +41,27 @@ export function measure(object) {
   return out
 }
 
+/** Triangles, vertices and draw calls of everything visible under `object`. */
+export function meshStats(object) {
+  const out = { triangles: 0, vertices: 0, meshes: 0 }
+  object?.traverse((o) => {
+    if (!o.isMesh || !o.geometry) return
+    const g = o.geometry
+    const n = g.index ? g.index.count : g.attributes.position?.count || 0
+    out.triangles += Math.floor(n / 3)
+    out.vertices += g.attributes.position?.count || 0
+    out.meshes++
+  })
+  return out
+}
+
+/** "1.24 M triangles · 0.81 M vertices · 86 meshes" */
+export function meshStatsText(object) {
+  const s = meshStats(object)
+  const n = (v) => (v >= 1e6 ? (v / 1e6).toFixed(2) + ' M' : v >= 1e4 ? Math.round(v / 1e3) + ' k' : v >= 1e3 ? (v / 1e3).toFixed(1) + ' k' : String(v))
+  return `${n(s.triangles)} triangles · ${n(s.vertices)} vertices · ${s.meshes} meshes`
+}
+
 export function installHooks(api) {
   let resolveReady
   const ready = new Promise((r) => (resolveReady = r))

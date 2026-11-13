@@ -4,29 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#0f0e0c" />
+    <meta name="color-scheme" content="dark" />
     <link rel="icon" href="data:," />
     <title>Taotie Bronze 饕餮 — procedural late-Shang ritual bronzes</title>
     <link rel="stylesheet" href="./src/style.css" />
   </head>
   <body data-tab="vessels">
     <div id="stage">
-      <canvas id="gl" aria-label="3D view of the bronze"></canvas>
+      <canvas id="gl" aria-label="3D view of the bronze: drag to turn, pinch or scroll to zoom"></canvas>
       <div class="vignette" aria-hidden="true"></div>
       <div id="heightmap" hidden><canvas></canvas><span class="caption">raw height field · black = ground − · white = highest relief</span></div>
     </div>
     <div id="progress" aria-hidden="true"><i></i><span></span></div>
 
     <header id="masthead" class="chrome">
-      <div class="wordmark"><span class="wm-en">Taotie Bronze</span><span class="wm-zh">饕餮</span></div>
-      <nav class="tabs" role="tablist">
+      <div class="wordmark"><span class="wm-en">Taotie Bronze</span><span class="wm-zh" lang="zh-Hans">饕餮</span></div>
+      <nav class="tabs" role="tablist" aria-label="Section">
         <button role="tab" data-tab="vessels" aria-selected="true">Vessels</button>
         <button role="tab" data-tab="atlas" aria-selected="false">Motif Atlas</button>
       </nav>
     </header>
 
-    <!-- Vessels tab -->
-    <nav id="vessel-list" class="chrome vessels-only" aria-label="Vessels"></nav>
-    <section id="label" class="chrome vessels-only" aria-live="polite"></section>
+    <!-- Vessels tab: switcher + label card (a left column on desktop; sheets on a phone) -->
+    <aside id="column" class="chrome vessels-only" aria-label="The vitrine">
+      <nav id="vessel-nav" aria-label="Vessels">
+        <div class="nav-head">
+          <span class="cap">In the vitrine</span>
+          <button type="button" id="nav-close" class="textbtn">Close</button>
+        </div>
+        <ol id="vessel-list"></ol>
+        <div id="quality" class="quality">
+          <span class="cap">Detail</span>
+          <div class="qseg" role="group" aria-label="Build detail"></div>
+        </div>
+      </nav>
+      <section id="label" aria-label="Object label"></section>
+    </aside>
+
+    <div id="dock" class="chrome vessels-only">
+      <div id="viewbar">
+        <span class="cap vb-cap">View</span>
+        <div id="view-chips" class="views"></div>
+        <button type="button" id="details-toggle" class="textbtn" aria-expanded="false" hidden>Details <span class="n"></span></button>
+        <button type="button" id="compare-toggle" class="textbtn compare" aria-pressed="false" aria-disabled="true">Compare</button>
+      </div>
+      <div id="detail-chips" class="views details" hidden></div>
+      <button type="button" id="nav-open" class="textbtn nav-btn" aria-controls="vessel-nav" aria-expanded="false"><span class="cap">Vessels</span></button>
+    </div>
+
+    <figure id="compare" class="chrome vessels-only" hidden>
+      <div class="frame"><img alt="" decoding="async" /></div>
+      <figcaption></figcaption>
+    </figure>
 
     <!-- Motif Atlas tab -->
     <div id="atlas-top" class="chrome atlas-only">
@@ -46,9 +75,10 @@
       <div class="drawer-body" id="drawer-body"></div>
     </aside>
 
+    <div id="glmsg" role="status" hidden><strong>The display was interrupted</strong><span>Restoring the vitrine…</span></div>
     <div id="fallback" hidden>
-      <strong>WebGL unavailable</strong>
-      <span>This vitrine needs a WebGL2-capable browser.</span>
+      <strong>This vitrine needs WebGL 2</strong>
+      <span>Your browser or device did not provide a WebGL 2 context. A recent desktop or mobile browser with hardware acceleration switched on will show the bronzes.</span>
     </div>
 
     <script type="module" src="./src/main.js"></script>
