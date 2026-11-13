@@ -179,9 +179,11 @@ function groovesUV(kit, is) {
  */
 export function renderSheets(kit, panel, halves, o = {}) {
   const {
-    ground = { pitch: 0.8, line: 0.5, depth: 0.4, roundness: 0.1, jitter: 0.06, turns: 2.6, pairs: 0.6 },
-    carve = { pitch: 1.3, line: 0.44, depth: 0.3, roundness: 0.9, jitter: 0.04, pairs: 0.95, turns: 1.8 },
-    groove = { width: 0.7, depth: 0.5 },
+    // ground: nested squared spirals, 4-5 rings per cell, few S-pairs (detail-face-* photographs)
+    ground = { pitch: 0.82, line: 0.5, depth: 0.38, roundness: 0.08, jitter: 0.05, cell: [6, 8.8], pairs: 0.2 },
+    // plateau cutting: round spirals of ~2 turns, packed square (no elongated pairs)
+    carve = { pitch: 0.95, line: 0.42, depth: 0.32, rMax: 2.6, rMin: 0.85, gap: 0.3, margin: 0.4 },
+    groove = { width: 0.85, depth: 0.65 },
     halfRect, // the left half (panel mm) — leiwen is packed only there; mirror copies it
     mirror = true,
     seed = 1,
@@ -216,7 +218,7 @@ export function renderSheets(kit, panel, halves, o = {}) {
         ctx.beginPath()
         pathPoly(ctx, pts)
         ctx.fill()
-      }, { height: b.height, profile: 'dome', shoulder: b.shoulder ?? Math.min(b.w, b.h) * 0.42 })
+      }, { height: b.height, profile: 'dome', shoulder: b.shoulder ?? Math.min(b.w, b.h) * 0.5 })
     }
   }
 
@@ -263,18 +265,11 @@ export function renderSheets(kit, panel, halves, o = {}) {
   const hr = halfRect ?? { x: 0, y: 0, w: W / 2, h: H }
   panel.fillGround({ ...ground, seed }, { rect: hr, avoid: 'raised', margin: 0.42 })
 
-  // 6. spirals on the island tops (V-a "spirals on the plateau")
+  // 6. spirals on the island tops (V-a "spirals on the plateau"): round spirals packed by hand,
+  //    largest first, wherever a disc of plateau top is free (detail-face-*: 4–5 mm round coils)
   const carveIslands = []
   for (const { sheet, P } of halves) for (const is of sheet.islands) if (is.carve) carveIslands.push({ is, P })
-  if (carveIslands.length) {
-    kit.leiwenFillMask(panel, (ctx) => {
-      for (const { is, P } of carveIslands) {
-        ctx.beginPath()
-        pathPoly(ctx, mapPts(P, kit.shapes.fillet(offsetPoly(is.pts, 0.25), Math.max(0.5, (Array.isArray(is.r) ? Math.min(...is.r) : is.r) - 0.25), { closed: true, step: 0.3 })))
-        ctx.fill()
-      }
-    }, { ...carve, seed: seed + 7 }, { level: L1, margin: 0.38 })
-  }
+  if (carveIslands.length) carveSpirals(kit, panel, carveIslands, { ...carve, seed: seed + 7, halfRect: hr })
 
   // 7. mirror, then put plain bands at the wall surface
   if (mirror) panel.mirrorX()
@@ -285,3 +280,115 @@ export function renderSheets(kit, panel, halves, o = {}) {
 
 /** Left-half transform: (u, v) → panel (xc − u, y0 + v). */
 export const leftHalf = (xc, y0 = 0) => ([u, v]) => [xc - u, y0 + v]
+
+function pointInPoly(pts, x, y) {
+  let c = false
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i], [xj, yj] = pts[j]
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c
+  }
+  return c
+}
+
+/**
+ * Pack round spirals on the flat plateau tops of the given islands (panel field must hold L1 there,
+ * grooves already sunk). Greedy, largest disc first; one sink for all coils.
+ * opts: { pitch, line (× pitch), depth, rMax, rMin, gap, margin, seed, halfRect }
+ */
+export function carveSpirals(kit, panel, items, o = {}) {
+  const pitch = o.pitch ?? 1.25
+  const lw = (o.line ?? 0.42) * pitch
+  const rMax = o.rMax ?? 2.5, rMin = o.rMin ?? 1.15
+  const gap = o.gap ?? 0.45, margin = o.margin ?? 0.42
+  const hr = o.halfRect ?? { x: 0, y: 0, w: panel.width, h: panel.height }
+  const rng = new kit.Rng(o.seed ?? 1)
+  const top = (x, y) => Math.abs(panel.heightAt(x, y) - L1) < 0.04
+  const RING = 18
+  const fits = (x, y, r) => {
+    if (!top(x, y)) return false
+    for (const rr of [r + margin, (r + margin) * 0.6]) {
+      for (let k = 0; k < RING; k++) {
+        const a = (k / RING) * Math.PI * 2
+        if (!top(x + rr * Math.cos(a), y + rr * Math.sin(a))) return false
+      }
+    }
+    return true
+  }
+  const cands = []
+  const step = 0.5
+  for (const { is, P } of items) {
+    const poly = kit.shapes.fillet(is.pts, is.r, { closed: true, step: 0.4 }).map(P)
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity
+    for (const [x, y] of poly) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y) }
+    x0 = Math.max(x0, hr.x); x1 = Math.min(x1, hr.x + hr.w)
+    for (let y = y0 + rMin; y <= y1 - rMin; y += step) {
+      for (let x = x0 + rMin; x <= x1 - rMin; x += step) {
+        if (!pointInPoly(poly, x, y) || !fits(x, y, rMin)) continue
+        let lo = rMin, hi = rMax
+        if (fits(x, y, hi)) lo = hi
+        else for (let i = 0; i < 6; i++) { const m = (lo + hi) / 2; if (fits(x, y, m)) lo = m; else hi = m }
+        cands.push([x, y, lo])
+      }
+    }
+  }
+  // lazy greedy, biggest disc first: a candidate's free radius only shrinks as coils are placed,
+  // so pop the top, re-measure it against the placed coils, and accept it only if it is still the biggest
+  const heap = cands.map((c) => [c[2], c[0], c[1], c[2]]) // [key, x, y, rStatic]
+  const less = (a, b) => a[0] > b[0] || (a[0] === b[0] && (a[2] < b[2] || (a[2] === b[2] && a[1] < b[1])))
+  const up = (i) => { while (i > 0) { const p = (i - 1) >> 1; if (!less(heap[i], heap[p])) break; [heap[i], heap[p]] = [heap[p], heap[i]]; i = p } }
+  const down = (i) => {
+    for (;;) {
+      const l = 2 * i + 1, r = l + 1
+      let m = i
+      if (l < heap.length && less(heap[l], heap[m])) m = l
+      if (r < heap.length && less(heap[r], heap[m])) m = r
+      if (m === i) return
+      ;[heap[i], heap[m]] = [heap[m], heap[i]]
+      i = m
+    }
+  }
+  for (let i = (heap.length >> 1) - 1; i >= 0; i--) down(i)
+  const pop = () => { const t = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; down(0) } return t }
+  const placed = []
+  const free = (x, y, r0) => {
+    let r = r0
+    for (const q of placed) {
+      const d = Math.hypot(q[0] - x, q[1] - y) - q[2] - gap - lw
+      if (d < r) r = d
+      if (r < rMin) return r
+    }
+    return r
+  }
+  while (heap.length) {
+    const c = pop()
+    const r = free(c[1], c[2], c[3])
+    if (r < rMin) continue
+    if (heap.length && r < heap[0][0] - 1e-6) { c[0] = r; heap.push(c); up(heap.length - 1); continue }
+    placed.push([c[1], c[2], r])
+  }
+  if (!placed.length) return placed
+  panel.sink((ctx) => {
+    ctx.lineWidth = lw
+    ctx.lineCap = 'round'
+    ctx.lineJoin = 'round'
+    for (const [cx, cy, r] of placed) {
+      const rOut = r - lw / 2
+      const turns = Math.max(1.1, (rOut - 0.25) / pitch)
+      const pp = (rOut - 0.25) / turns
+      const dir = rng.next() < 0.5 ? 1 : -1
+      const a0 = rng.next() * Math.PI * 2
+      const n = Math.ceil(turns * 40)
+      ctx.beginPath()
+      for (let i = 0; i <= n; i++) {
+        const t = (i / n) * turns * Math.PI * 2
+        const rr = 0.25 + (pp * t) / (Math.PI * 2)
+        const a = a0 + dir * t
+        const px = cx + rr * Math.cos(a), py = cy + rr * Math.sin(a)
+        if (i === 0) ctx.moveTo(px, py)
+        else ctx.lineTo(px, py)
+      }
+      ctx.stroke()
+    }
+  }, { depth: o.depth ?? 0.3, profile: 'u' })
+  return placed
+}

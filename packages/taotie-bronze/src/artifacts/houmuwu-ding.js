@@ -21,7 +21,7 @@ const TOP_W = 1042, TOP_D = 731 // wall outer face at the top, under the rim
 const TAPER = { x: 2.2, z: 0.5 } // end walls lean 2.2°, long walls 0.5° (out going up)
 const WALL_T = 60 // published wall thickness
 const HANDLE = { width: 290, height: H - LEG_H - WALL_H - RIM_H, bar: 84, barTop: 90, depth: 100, radius: 25, aperture: 18, x: 492 }
-const LEG = { r: 80, x: 429, z: 260 }
+const LEG = { r: 80, x: 420, z: 260 } // dossier ±429 ±15; 420 keeps the shaft flush with the end wall's foot (§b.4)
 
 export default {
   id: 'houmuwu-ding',
@@ -108,13 +108,13 @@ export default {
       // top: through the top frieze and ≈ 40 mm into the field, beaked top end
       const yTopFlange = WALL_H - FRAME.topPlain - FRAME.top - 40
       flanges.push(kit.flange({
-        from: at(yTopFlange), to: at(WALL_H), out: w.normal, height: 18, thickness: 15, embed: 3, bevel: 1.8,
+        from: at(yTopFlange), to: at(WALL_H), out: w.normal, height: 20, thickness: 24, embed: 3, bevel: 1.8,
         notches: { shape: 'square', pitch: 60, depth: 0.3, width: 7 }, ends: { end: { type: 'beak', length: 10 }, start: 'taper' },
         seed: seed + 10 + i, material: plain,
       }))
       // bottom: within the bottom frieze, segmented into blocks at ≈ 23 mm pitch
       flanges.push(kit.flange({
-        from: at(2), to: at(FRAME.bottom), out: w.normal, height: 17, thickness: 16, embed: 3, bevel: 1.8,
+        from: at(2), to: at(FRAME.bottom), out: w.normal, height: 18, thickness: 22, embed: 3, bevel: 1.8,
         notches: { shape: 'square', pitch: 25, depth: 0.75, width: 5 }, seed: seed + 20 + i, material: plain,
       }))
     }
@@ -125,7 +125,7 @@ export default {
     const zone = [252, LEG_H - 2]
     const legOpts = {
       height: LEG_H, radius: LEG.r, taper: 0, entasis: 0, foot: { swell: 3 / LEG.r, height: 157, step: true },
-      top: { flare: 0.06, height: 24 }, collar: { from: 246, amount: 4, shoulder: 5 },
+      top: { flare: 0.06, height: 24 }, collar: { from: 246, amount: 7, shoulder: 4 },
       rings: { count: 3, at: 200, width: 8, spacing: 28, height: 3 }, hollow: { wall: 25, open: 'bottom' }, embed: 5,
     }
     const arc = 210
@@ -139,7 +139,7 @@ export default {
       const leg = kit.columnLeg({
         ...legOpts, material: plain, density: 0.45 * Math.sqrt(q),
         relief: { map: legMap, zone, arc, facing, material: legMat },
-        flange: { from: zone[0] + 4, to: zone[1] - 6, height: 22, thickness: 15, embed: 3, bevel: 1.8, part: 'legs', notches: { shape: 'square', pitch: 42, depth: 0.5, width: 10 } },
+        flange: { from: zone[0] + 2, to: zone[1] - 4, height: 32, thickness: 24, embed: 4, bevel: 2.5, part: 'legs', notches: { shape: 'square', pitch: 42, depth: 0.4, width: 12 } },
         cast: { seed: seed + 30 + i, splay: 0.4, length: 0.002, twist: 1 },
       })
       leg.position.set(sx * LEG.x, 0, sz * LEG.z)

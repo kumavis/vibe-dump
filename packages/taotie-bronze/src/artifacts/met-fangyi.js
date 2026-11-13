@@ -48,8 +48,8 @@ export default {
     'Reconstructed from the Met’s three photographs: the walls, lid, flanges and décor are measured, but the inside (floor height, lid seat, the cast clan sign) and the hidden back faces are inferred.',
   defaultPatina: 'met-fangyi',
   views: {
-    'three-quarter': { azimuth: 21, elevation: 8, fov: 26, fit: 1.08, ref: 'three-quarter.jpg' },
-    side: { azimuth: 90, elevation: 5, fov: 26, fit: 1.08, ref: 'side.jpg' },
+    'three-quarter': { azimuth: 21, elevation: 8, fov: 26, fit: 1.32, ref: 'three-quarter.jpg' },
+    side: { azimuth: 90, elevation: 5, fov: 26, fit: 1.3, ref: 'side.jpg' },
     front: { azimuth: 0, elevation: 4, fov: 26, fit: 1.08 },
     top: { azimuth: 20, elevation: 62, fov: 26, fit: 1.08 },
     'detail-face-short': { azimuth: 90, elevation: 3, fov: 26, fit: 0.33, target: [68, 81, 0], ref: 'detail-face-short.jpg' },
@@ -66,7 +66,7 @@ export default {
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
     const q = Math.max(0.25, quality)
-    const ppmm = 6.6 * Math.sqrt(q) // 0.82 mm leiwen needs ≥ 5 px/mm
+    const ppmm = 8 * Math.sqrt(q) // 0.82 mm leiwen needs ≥ 5 px/mm
     const plain = new kit.PatinaMaterial()
     const seed = 19742682
     const panels = {}
@@ -77,7 +77,7 @@ export default {
       wall: WALL, floor: { thickness: WALL, round: 2 }, rim: { kind: 'plain', inner: 0.6 },
       foot: {
         height: FOOT_H, flare: -FOOT_H * tanT, thickness: WALL,
-        notch: { long: { width: 16, height: 14.3, shape: 'rect', round: 2 }, short: { width: 14, height: 14.3, shape: 'rect', round: 2 } },
+        notch: { long: { width: 18, height: 15, shape: 'rect', round: 3 }, short: { width: 15, height: 14.8, shape: 'rect', round: 3 } },
       },
       cast: { seed: 11, sag: 0, wave: 0, rim: 0.5, skew: 0.25 },
       material: plain, density: 1.25 * Math.sqrt(q),
@@ -145,7 +145,7 @@ export default {
       renderSheets(kit, p, [{ sheet: sheetFn(w, h), P: leftHalf(w / 2, 0) }], {
         seed: s, halfRect: { x: 0, y: 0, w: w / 2, h },
         ground: { pitch: 0.7, line: 0.5, depth: 0.25, roundness: 0.1, jitter: 0.05 },
-        carve: { pitch: 1.05, line: 0.44, depth: 0.22, roundness: 0.6, jitter: 0.04, pairs: 0.3 },
+        carve: { pitch: 0.95, line: 0.44, depth: 0.22, rMax: 1.6, rMin: 0.9, gap: 0.3, margin: 0.3 },
         groove: { width: 0.5, depth: 0.35 },
       })
       return p.bake()
@@ -193,6 +193,10 @@ export default {
     await onProgress(0.88, 'flanges')
     const flanges = []
     const F = (o) => {
+      if (o.comb) {
+        const L = o.path ? o.path.length : o.from.distanceTo(o.to)
+        o = { ...o, outline: combOutline(L, o.height, o.embed, o.comb), grooves: [] }
+      }
       const m = kit.flange({ notches: FLANGE_NOTCH, material: plain, waver: 0.35, seed: seed + flanges.length * 13, ...o })
       flanges.push(m)
       object.add(m)
@@ -202,21 +206,21 @@ export default {
       // corner flanges on the 45° bisector, from the ground to ~5 mm below the rim
       const B = fc[name].bottom.clone(), T = bc[name].top.clone()
       const at = (y) => B.clone().lerp(T, (y - B.y) / (T.y - B.y))
-      F({ from: at(1), to: at(157), out: bc[name].out, height: 7.5, thickness: 4.2, taper: 8, embed: 3, ends: { start: { type: 'taper', length: 4 } } })
+      F({ from: at(1), to: at(157), out: bc[name].out, height: 7.5, thickness: 4.2, taper: 8, embed: 3, comb: {} })
     }
     for (const side of ['front', 'right', 'back', 'left']) {
       // face-centre flanges: from the notch ceiling to just under the rim, unbroken
       const a = foot.userData.axes[side].bottom.clone(), w = body.userData.walls[side]
       const T = w.axis[1].clone()
       const at = (y) => a.clone().lerp(T, (y - a.y) / (T.y - a.y))
-      F({ from: at(a.y + 0.2), to: at(161.5), out: w.normal, height: 6.5, thickness: 4.5, taper: 9, embed: 1.6 })
+      F({ from: at(a.y + 0.2), to: at(161.5), out: w.normal, height: 6.5, thickness: 4.5, taper: 9, embed: 1.6, comb: {} })
     }
     // lid: hips over the corners (step-out tab at the eave), slope midlines over the face centres
     const lidXf = (p) => p.add(new THREE.Vector3(0, LID_Y, 0))
     for (let k = 0; k < 4; k++) {
-      F({ path: roof.hipPath(k, lidXf), height: 6, thickness: 4, taper: 7, embed: 2.2, ends: { start: { type: 'step', length: 3.2, under: 0.6 } } })
+      F({ path: roof.hipPath(k, lidXf), height: 6, thickness: 4, taper: 7, embed: 2.2, comb: { tab: [3.4, 1.4] } })
       F({ path: roof.midPath(k, lidXf, k % 2 === 0 ? 0.975 : roof.vOfY(214 - LID_Y)), // end-slope flange stops ~9 mm below the apex (detail-lid-end)
-         height: 6, thickness: 4.5, taper: 8, embed: 1.8, bevel: 0.8 })
+         height: 6, thickness: 4.5, taper: 8, embed: 1.8, bevel: 0.8, comb: {} })
     }
     // ridge: two crenellated segments either side of the knob post
     const yR = LID_Y + roof.top
@@ -228,6 +232,30 @@ export default {
     await onProgress(1, 'done')
     return { object, parts: { body, foot, lid, knob, flanges }, panels }
   },
+}
+
+/**
+ * The comb flange's side outline (detail-flanges.jpg, side.jpg): transverse slots at a 4 mm pitch,
+ * 1.2 mm wide, cut in from the crest ~70 % of the projection; each slot turns DOWN at its inner end
+ * (an L-shaped "⌐" cut, the hook the photographs show on every tooth), leaving a continuous spine
+ * on the wall. Square ends with a softened top corner; `tab: [len, extra]` = the step-out at the eave.
+ * CCW polygon in (σ along the path, t outward), root at −embed.
+ */
+function combOutline(L, H, embed, { pitch = 4, w = 1.2, depth = 0.7, hook = 1.1, tab = null } = {}) {
+  const D = depth * H
+  const n = Math.max(2, Math.round(L / pitch))
+  const seg = L / n
+  const pts = [[0, -embed], [L, -embed], [L, H - 0.9], [L - 0.9, H]]
+  for (let k = n - 1; k >= 1; k--) {
+    const c = k * seg
+    const hk = Math.min(hook, seg - w - 1.2)
+    pts.push([c + w / 2, H], [c + w / 2, H - D], [c - w / 2 - hk, H - D], [c - w / 2 - hk, H - D + w], [c - w / 2, H - D + w], [c - w / 2, H])
+  }
+  if (tab) {
+    const [tl, te] = tab
+    pts.push([Math.min(tl, seg - w / 2 - 0.2), H], [Math.min(tl, seg - w / 2 - 0.2), H + te], [0, H + te])
+  } else pts.push([0.6, H], [0, H - 0.6])
+  return pts
 }
 
 /**

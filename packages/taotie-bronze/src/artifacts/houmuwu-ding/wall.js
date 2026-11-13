@@ -89,20 +89,20 @@ function topKui(kit, panel, r, { short, seed }) {
   S.boss([A(48), 54], 9.5, { kind: 'round', base: 'ground', pupil: 'none' })
   // crest: a big squared C over the eye, opening downward, the outer foot curling inward,
   // and a second squared scroll (the "G") nested in it from the axis side
-  S.band(sq(kit, [[A(12), 66], [A(12), 112], [A(108), 112], [A(108), 68], [A(74), 68], [A(74), 92], [A(90), 92]], 8), 11)
-  S.band(sq(kit, [[A(30), 68], [A(30), 94], [A(54), 94], [A(54), 82]], 4), 8)
+  S.band(sq(kit, [[A(12), 66], [A(12), 112], [A(108), 112], [A(108), 68], [A(74), 68], [A(74), 92], [A(90), 92]], 8), 13.2)
+  S.band(sq(kit, [[A(30), 68], [A(30), 94], [A(54), 94], [A(54), 82]], 4), 9.6)
   // jaw ∩ beside the flange, feet flaring
-  S.band(sq(kit, [[A(98), 6], [A(86), 6], [A(86), 36], [A(22), 36], [A(22), 8], [A(12), 8]], 7), 10)
+  S.band(sq(kit, [[A(98), 6], [A(86), 6], [A(86), 36], [A(22), 36], [A(22), 8], [A(12), 8]], 7), 12.0)
   // body: a heavy straight band from behind the head to the tail spiral
   const tail = short ? 68 : 86 // tail spiral size (mm)
   const bx = A(108)
   const x0 = 4 + tail
   S.band([[bx + 8, 74], [x0, 74]], 19, 'flat')
   // the head's second scroll beside the crest (outer side), over the body
-  S.band(sq(kit, [[A(118), 86], [A(118), 112], [A(150), 112], [A(150), 94], [A(134), 94]], 5), 9)
+  S.band(sq(kit, [[A(118), 86], [A(118), 112], [A(150), 112], [A(150), 94], [A(134), 94]], 5), 10.8)
   // tail: big squared spiral below-left, attached by the body bar
-  const d = 19
-  S.band(sq(kit, [[x0 + 2, 74], [10, 74], [10, 8], [4 + tail, 8], [4 + tail, 52], [10 + d, 52], [10 + d, 27], [4 + tail - d, 27], [4 + tail - d, 38]], 6), 13)
+  const d = 24
+  S.band(sq(kit, [[x0 + 2, 74], [10, 74], [10, 8], [4 + tail, 8], [4 + tail, 52], [10 + d, 52], [10 + d, 27], [4 + tail - d, 27], [4 + tail - d, 38]], 6), 15.6)
   // quills: a few squared C-hooks hanging under the body
   hookRow(kit, S, x0 + 20, bx - 12, 64, short ? 2 : 4, { up: -1, h: 22, back: 12, w: 7, dir: 1 })
   render(kit, panel, S, P, r)
@@ -116,23 +116,23 @@ function bottomKui(kit, panel, r, { short, seed }) {
   const A = (dx) => L - dx
   S.boss([A(48), 58], 9.5, { kind: 'round', base: 'ground', pupil: 'none' })
   // crest
-  S.band(sq(kit, [[A(13), 74], [A(13), 114], [A(100), 114], [A(100), 76], [A(66), 76], [A(66), 96], [A(80), 96]], 7), 10)
-  S.band(sq(kit, [[A(30), 76], [A(30), 98], [A(50), 98]], 4), 7)
+  S.band(sq(kit, [[A(13), 74], [A(13), 114], [A(100), 114], [A(100), 76], [A(66), 76], [A(66), 96], [A(80), 96]], 7), 12.0)
+  S.band(sq(kit, [[A(30), 76], [A(30), 98], [A(50), 98]], 4), 8.4)
   // trunk: down beside the flange, curling at the foot
-  S.taper(sq(kit, [[A(30), 46], [A(30), 18], [A(14), 18], [A(14), 28], [A(22), 28]], 5), 9, 6, 0.5)
+  S.taper(sq(kit, [[A(30), 46], [A(30), 18], [A(14), 18], [A(14), 28], [A(22), 28]], 5), 10.8, 7.2, 0.5)
   // body
   const tail = short ? 64 : 82
   const bx = A(64)
   const x0 = 4 + tail
   S.band([[bx, 66], [x0, 66]], 15, 'flat')
   S.band(sq(kit, [[A(64), 66], [A(64), 52], [A(40), 52]], 5), 9) // jowl to the eye
-  const d = 17
-  S.band(sq(kit, [[x0 + 2, 66], [10, 66], [10, 112], [4 + tail, 112], [4 + tail, 80], [10 + d, 80], [10 + d, 98], [4 + tail - d, 98], [4 + tail - d, 90]], 5), 12)
+  const d = 22
+  S.band(sq(kit, [[x0 + 2, 66], [10, 66], [10, 112], [4 + tail, 112], [4 + tail, 80], [10 + d, 80], [10 + d, 98], [4 + tail - d, 98], [4 + tail - d, 90]], 5), 14.4)
   // legs: down from the body, claws hooked toward the flange
   const legs = short ? [A(118)] : [A(122), A(220)]
   for (const lx of legs) {
-    S.taper(sq(kit, [[lx, 60], [lx, 16], [lx + 18, 16], [lx + 18, 24]], 4), 11, 6, 0.55)
-    S.taper(sq(kit, [[lx - 2, 22], [lx - 2, 6], [lx + 10, 6]], 3), 6, 3.5, 0.5)
+    S.taper(sq(kit, [[lx, 60], [lx, 16], [lx + 18, 16], [lx + 18, 24]], 4), 13.2, 7.2, 0.55)
+    S.taper(sq(kit, [[lx - 2, 22], [lx - 2, 6], [lx + 10, 6]], 3), 7.2, 4.2, 0.5)
   }
   hookRow(kit, S, x0 + 8, bx - 8, 74, short ? 3 : 6, { up: 1, h: 15, back: 9, w: 5.5, dir: -1 })
   render(kit, panel, S, P, r)
@@ -161,12 +161,12 @@ function oxHead(kit, panel, r, { seed }) {
   }
   // eye and its socket band
   S.boss([42, h * 0.5], 7.8, { kind: 'round', base: 'ground', pupil: 'none' })
-  S.band(sq(kit, [[16, h * 0.5 + 16], [64, h * 0.5 + 16], [64, h * 0.5 - 2], [56, h * 0.5 - 2]], 4), 7)
+  S.band(sq(kit, [[16, h * 0.5 + 16], [64, h * 0.5 + 16], [64, h * 0.5 - 2], [56, h * 0.5 - 2]], 4), 8.4)
   // ear: C out at the side
-  S.band(sq(kit, [[r.w - 10, h * 0.5 + 18], [r.w - 30, h * 0.5 + 18], [r.w - 30, h * 0.5 - 10], [r.w - 10, h * 0.5 - 10], [r.w - 10, h * 0.5 + 2]], 4), 7)
+  S.band(sq(kit, [[r.w - 10, h * 0.5 + 18], [r.w - 30, h * 0.5 + 18], [r.w - 30, h * 0.5 - 10], [r.w - 10, h * 0.5 - 10], [r.w - 10, h * 0.5 + 2]], 4), 8.4)
   // jaw ∩ with a hooked fang
-  S.band(sq(kit, [[6, h * 0.36], [62, h * 0.36], [62, 10], [50, 10], [50, 18]], 4), 8)
-  S.taper(sq(kit, [[30, h * 0.36], [30, 16], [22, 16]], 3), 7, 3.5, 0.5)
+  S.band(sq(kit, [[6, h * 0.36], [62, h * 0.36], [62, 10], [50, 10], [50, 18]], 4), 9.6)
+  S.taper(sq(kit, [[30, h * 0.36], [30, 16], [22, 16]], 3), 8.4, 4.2, 0.5)
   render(kit, panel, S, P, r)
 }
 
@@ -174,11 +174,11 @@ function oxHead(kit, panel, r, { seed }) {
 function cornerTaotie(kit, panel, r, { seed }) {
   const S = sheet(kit, r, { seed })
   const h = r.h
-  S.band(sq(kit, [[8, h - 44], [8, h - 10], [r.w - 14, h - 10], [r.w - 14, h - 44], [r.w - 48, h - 44], [r.w - 48, h - 26], [r.w - 34, h - 26]], 6), 10)
+  S.band(sq(kit, [[8, h - 44], [8, h - 10], [r.w - 14, h - 10], [r.w - 14, h - 44], [r.w - 48, h - 44], [r.w - 48, h - 26], [r.w - 34, h - 26]], 6), 12.0)
   S.boss([42, h * 0.47], 8.5, { kind: 'round', base: 'ground', pupil: 'none' })
-  S.band(sq(kit, [[16, h * 0.47 + 14], [62, h * 0.47 + 14], [62, h * 0.47 - 6]], 4), 7)
-  S.band(sq(kit, [[6, h * 0.3], [70, h * 0.3], [70, 10], [40, 10], [40, 22], [54, 22]], 5), 9)
-  S.band(sq(kit, [[r.w - 12, h * 0.6], [r.w - 12, 10]], 3), 7)
+  S.band(sq(kit, [[16, h * 0.47 + 14], [62, h * 0.47 + 14], [62, h * 0.47 - 6]], 4), 8.4)
+  S.band(sq(kit, [[6, h * 0.3], [70, h * 0.3], [70, 10], [40, 10], [40, 22], [54, 22]], 5), 10.8)
+  S.band(sq(kit, [[r.w - 12, h * 0.6], [r.w - 12, 10]], 3), 8.4)
   render(kit, panel, S, P, r)
 }
 
@@ -192,12 +192,12 @@ function columnKui(kit, panel, r, { seed }) {
   const ey = h * 0.67
   S.boss([36, ey], 8.8, { kind: 'round', base: 'ground', pupil: 'none' })
   // crest: squared C above the eye, opening down, curling in
-  S.band(sq(kit, [[16, ey + 20], [16, h - 8], [w - 12, h - 8], [w - 12, ey + 18], [w - 44, ey + 18], [w - 44, ey + 38], [w - 30, ey + 38]], 6), 10)
+  S.band(sq(kit, [[16, ey + 20], [16, h - 8], [w - 12, h - 8], [w - 12, ey + 18], [w - 44, ey + 18], [w - 44, ey + 38], [w - 30, ey + 38]], 6), 12.0)
   // jaw: ⊐ opening toward the corner, lower end hooked
-  S.band(sq(kit, [[6, ey - 18], [62, ey - 18], [62, ey - 52], [8, ey - 52], [8, ey - 40], [22, ey - 40]], 5), 9)
+  S.band(sq(kit, [[6, ey - 18], [62, ey - 18], [62, ey - 52], [8, ey - 52], [8, ey - 40], [22, ey - 40]], 5), 10.8)
   // body: down the inner side, then the big squared tail spiral at the bottom
-  const d = 18
-  S.band(sq(kit, [[w - 26, ey + 4], [w - 26, h * 0.38], [12, h * 0.38], [12, 8], [w - 10, 8], [w - 10, h * 0.3 - 4], [12 + d, h * 0.3 - 4], [12 + d, 8 + d], [w - 10 - d, 8 + d], [w - 10 - d, 36]], 5), 12)
+  const d = 22
+  S.band(sq(kit, [[w - 26, ey + 4], [w - 26, h * 0.38], [12, h * 0.38], [12, 8], [w - 10, 8], [w - 10, h * 0.3 - 4], [12 + d, h * 0.3 - 4], [12 + d, 8 + d], [w - 10 - d, 8 + d], [w - 10 - d, 36]], 5), 14.4)
   // quills / claws on the body's back, pointing up
   hookRow(kit, S, 30, w - 40, h * 0.38 + 7, 2, { up: 1, h: 13, back: 8, w: 5.5, dir: 1 })
   render(kit, panel, S, P, r)

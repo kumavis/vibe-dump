@@ -368,6 +368,7 @@ export async function boot() {
     } else {
       ins = { left: r(column).right + 16, right: drawerExtent() + 8, top: mast.bottom + 6, bottom: H - r(dock).top + 6 }
     }
+    ins = { left: 0, right: 0, top: 0, bottom: 0, ...ins }
     // compare: the photograph takes half the free area — the left half on a wide
     // screen, the top half on a tall one — and the vessel is framed in the other
     if (tab === 'vessels' && viewBar.comparing) {
@@ -384,6 +385,7 @@ export async function boot() {
       }
       Object.assign(fig.style, { left: box.left + 'px', top: box.top + 'px', width: box.width + 'px', height: box.height + 'px' })
     }
+    ins = { left: 0, right: 0, top: 0, bottom: 0, ...ins }
     stage.setInsets(ins)
     const free = { w: W - ins.left - ins.right, h: H - ins.top - ins.bottom }
     const changed = !lastFree || Math.abs(free.w / lastFree.w - 1) > 0.15 || Math.abs(free.h / lastFree.h - 1) > 0.15

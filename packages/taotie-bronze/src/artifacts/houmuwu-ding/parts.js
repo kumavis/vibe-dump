@@ -13,29 +13,32 @@ export function legPanel(kit, size, { ppmm, seed }) {
   const panel = new kit.ReliefPanel({ width: W, height: H, ppmm, seed })
   const cx = W / 2
   const half = rect(0, 0, cx, H)
-  const hw = Math.min(cx - 4, 158) // half-mask width (mm of arc from the flange axis)
-  const k = hw / 154
+  // half-mask width: the mask covers ≈ 200–220° of the leg; author in mm from the flange axis
+  const k = Math.min(cx - 4, 150) / 150
   const X = (dx) => dx * k
+  const Y = (f) => f * H
   const P = style(LEVELS.leg, { lineWeight: 1.1, echoInset: 2.6 })
   const s = kit.shapes
-  // horn: broad band along the top from the flange, down the outer side, back in to a spiral above the eye;
-  // its plateau carries packed spirals (V-a), as on the object
+  // horn (H2 ram, inward curl): a broad band from beside the flange along the top edge,
+  // turning down at the outer side into a hooked tip; its plateau carries packed spirals
   const Sh = sheet(kit, half, { flip: true, seed })
-  Sh.taper(sq(kit, [[X(13), H - 16], [X(140), H - 16], [X(140), H - 84], [X(72), H - 84], [X(72), H - 50], [X(104), H - 50], [X(104), H - 64]], 16), 38, 20, 0.35)
+  Sh.taper(sq(kit, [[X(14), Y(0.9)], [X(128), Y(0.9)], [X(138), Y(0.84)], [X(138), Y(0.7)], [X(122), Y(0.7)]], 12), 30, 13, 0.55)
   render(kit, panel, Sh, P, half)
-  kit.leiwenFillMask(panel, kit.companions.plateauPaint(Sh, kit.companions.rectClip(half)), { ...GROUND, seed: seed + 3 }, { margin: 6, level: LEVELS.leg.motif })
+  kit.leiwenFillMask(panel, kit.companions.plateauPaint(Sh, kit.companions.rectClip(half)), { ...GROUND, seed: seed + 3 }, { margin: 5, level: LEVELS.leg.motif })
   const S = sheet(kit, half, { flip: true, seed: seed + 1 })
-  // eye: rounded-square boss with a sunk slit, joined to the flange by a canthus band
-  S.boss([X(62), H * 0.42], 15, { kind: 'square', base: 'plateau', pupil: 'slit' })
-  S.band(sq(kit, [[X(50), H * 0.42 + 2], [X(10), H * 0.42 + 2], [X(10), H * 0.42 + 18]], 4), 17)
-  // ear: C plateau outside the eye, open outward, with a hollow centre
-  S.band(sq(kit, [[X(150), H * 0.6], [X(96), H * 0.6], [X(96), H * 0.3], [X(150), H * 0.3]], 8), 21)
-  S.band([[X(118), H * 0.5], [X(118), H * 0.4]], 8)
-  // lip below the eye
-  S.band(sq(kit, [[X(10), H * 0.27], [X(74), H * 0.27], [X(74), H * 0.2]], 5), 15)
+  // the horn's inner curl: a heavy C sweeping back toward the axis, ending in a tight spiral above the eye
+  S.taper(s.spline([[X(104), Y(0.79)], [X(70), Y(0.8)], [X(40), Y(0.74)], [X(32), Y(0.62)], [X(46), Y(0.55)], [X(64), Y(0.58)], [X(66), Y(0.66)], [X(56), Y(0.68)]], 0.8), 17, 9, 0.5)
+  // eye: big oval boss ≈ 30 × 24 with a sunk ring, joined to the flange by a canthus band
+  S.boss([X(46), Y(0.42)], 14.5, { kind: 'oval', aspect: 1.25, base: 'plateau', pupil: 'ring' })
+  S.band(sq(kit, [[X(36), Y(0.42)], [X(8), Y(0.42)], [X(8), Y(0.5)]], 4), 14)
+  // ear / outer C: a ring plateau with a hollow centre, open toward the outer side
+  S.taper(s.arcPts([X(104), Y(0.47)], 19, 35, 330, 0.6), 14, 11)
+  // lip: under the eye, from the axis, stepping down
+  S.band(sq(kit, [[X(8), Y(0.26)], [X(64), Y(0.26)], [X(76), Y(0.31)]], 5), 12)
   // jaw: a big S-band leaving the axis bottom and curling outward into a spiral
-  const jaw = s.spline([[X(8), 18], [X(60), 13], [X(104), 18], [X(126), 34], [X(116), 52], [X(96), 50], [X(94), 36], [X(104), 32]], 0.8)
-  S.taper(jaw, 24, 12, 0.45)
+  S.taper(s.spline([[X(6), Y(0.08)], [X(46), Y(0.06)], [X(92), Y(0.1)], [X(122), Y(0.2)], [X(124), Y(0.32)], [X(106), Y(0.36)], [X(96), Y(0.28)], [X(106), Y(0.24)]], 0.8), 20, 10, 0.45)
+  // small spiral fillers in the outer corners
+  S.taper(s.cScroll([X(140), Y(0.12)], 8, { start: 90, sweep: 300, dir: 1, shrink: 0.25, step: 0.6 }), 6, 4)
   render(kit, panel, S, P, half)
   panel.fillGround({ ...GROUND, seed }, { rect: inset(half, 3, 3, 9, 3), margin: 0.8 })
   panel.mirrorX()
@@ -63,12 +66,13 @@ export function handleOuterPanel(kit, L, { ppmm, seed, bar, barTop }) {
   // tiger head: big round C-scroll ear in the outer corner, domed boss eye, open jaws toward the human head
   S.taper(s.cScroll([32, H - 54], 26, { start: 250, sweep: -560, dir: -1, shrink: 0.2, step: 0.8 }), 9, 6, 0.5)
   S.boss([cx - 57, H - 60], 11, { kind: 'round', base: 'ground', pupil: 'none' })
-  S.taper(s.spline([[cx - 78, H - 16], [cx - 44, H - 12], [cx - 26, H - 20], [cx - 24, H - 40], [cx - 32, hy + 4], [cx - 26, hy - 14], [cx - 18, hy - 12]], 0.8), 11, 5, 0.5)
+  S.taper(s.spline([[cx - 20, hy - 18], [cx - 30, hy + 2], [cx - 26, H - 40], [cx - 40, H - 18], [cx - 60, H - 16], [cx - 66, H - 30]], 0.8), 11, 6, 0.4)
   S.taper(s.spline([[cx - 70, H - 80], [cx - 44, H - 86], [cx - 36, yTop + 8], [cx - 44, yTop + 4]], 0.8), 9, 4, 0.5)
   // body: down the upright, back on the outer edge, striped with chevron C-hooks
-  const body = s.spline([[46, H - 82], [36, yTop - 30], [32, 120], [30, 64], [26, 34]], 1)
-  S.taper(body, 44, 30, 0.2)
-  for (let y = yTop - 22; y > 52; y -= 9) S.line(sq(kit, [[14, y + 3], [14, y - 2], [44, y - 2], [44, y + 2]], 1.5), 1.1)
+  const body = s.spline([[40, H - 70], [38, yTop - 30], [36, 130], [34, 70], [30, 40]], 1)
+  S.taper(body, 52, 40, 0.25)
+  // striped with rows of C-hooks (scales) across the back, open toward the aperture
+  for (let y = yTop - 18; y > 54; y -= 11) S.line(sq(kit, [[50, y + 4], [16, y + 4], [16, y - 3], [40, y - 3]], 1.5), 1.2)
   // shoulder and foreleg, haunch and hind leg, toward the aperture; claws curled
   S.circle([60, yTop - 46], 15)
   S.taper(sq(kit, [[64, yTop - 52], [bar - 10, yTop - 76], [bar - 10, yTop - 96], [bar - 22, yTop - 96]], 5), 13, 6, 0.5)

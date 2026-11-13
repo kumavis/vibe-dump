@@ -27,7 +27,7 @@ export function mainSheet(halfW, H = 93.3) {
   // brow: a bar out from beside the axis strip, its outer end turned down (between horn and eye)
   S.island({ pts: [[16.5, 46.2], [28, 46.2], [28, 43.2], [31.6, 43.2], [31.6, 51.6], [16.5, 51.6]], r: [1.6, 1.2, 1.2, 1.4, 1.8, 1.6], rim: 1.15 })
   // eye: rounded-square domed boss with a horizontal slit pupil, sitting low
-  S.boss({ c: [23.6, 33.6], w: 13.2, h: 10.6, r: 3.6, height: 3.0, slit: [4.2, 1.2], shoulder: 3.4 })
+  S.boss({ c: [23.6, 33.6], w: 13.2, h: 10.6, r: 3.6, height: 3.0, slit: [4.2, 1.2], shoulder: 5 })
   // axial strip beside the flange: C-spiral chain, T cap (scored) at the top, Γ arm, foot turned out
   S.island({
     pts: [[3.2, 1.6], [12.2, 1.6], [12.2, 10.2], [9.6, 10.2], [9.6, 53.4], [10.6, 53.4], [10.6, 49.6], [13.6, 49.6], [13.6, 58.4], [9.6, 58.4], [9.6, 88.6], [3.2, 88.6]],
@@ -97,39 +97,53 @@ export function friezeSheet(halfW, H = 28.6) {
 }
 
 /**
- * Foot frieze: a kui per half, head with an oval eye in the inner half, a beaked crest riding
- * on it, squared jaws pointing at the notch, body and a big squared tail running outward
- * (dossier §c.3, detail-foot-*). nh = half the notch plus its frame; nv = notch top in field v.
+ * Foot frieze: a kui per half (dossier §c.3), re-read from detail-foot-long.jpg, where it is clearest:
+ * upper jaw hooking down beside the flange, the head with its square eye boss just above the notch
+ * corner, a small beaked crest riding on the body, the body and leg bands running outward full of
+ * C-spirals, and the largest island of all, a big squared down-curled tail at the outer end.
+ * The leg band turns down beside the notch jamb. Authored on the long face (outer field edge u 62);
+ * the end face squeezes it outward of the flange. nh = half the notch plus its frame; nv = notch
+ * top in field v.
  */
 export function footSheet(halfW, nh, nv, H = 27.3) {
   const u1 = halfW - 3.3
-  const d = halfW - BASE + 2 // this frieze is measured on a 49 mm half
-  const hs = Math.max(0, d) * 0.22
-  const j0 = nh + 0.8
+  const L = 62 // field edge the composition was read at
   const S = new Sheet()
-  // tail: big squared C at the outer upper end
-  S.island({ pts: rect(32.4 + d, 12.2, u1 - 0.9, 24.6), r: 3.2, rim: 1.2, spiral: { at: [32.4 + d, 16.4], heading: 0, lead: 2.6, dir: 1, size: [7.6, 7], pitch: 2.4, turns: 1.75, r: 1.1 } })
-  // beaked crest (the small bird-like head) with a ring eye
-  S.island({ pts: [[24.6 + hs, 16.6], [31.2 + hs, 16.6], [31.2 + hs, 20.2], [32.4 + hs, 21.4], [32.4 + hs, 23], [24.6 + hs, 23]], r: [1.6, 1, 0.6, 0.6, 1.2, 2], rim: 0.8 })
-  S.boss({ c: [27.6 + hs, 19.8], w: 2.8, h: 2.8, r: 1.3, height: 2.2, ring: 0.3, shoulder: 1.1 })
-  // body band along the top, its inner end hooking down beside the flange
-  S.island({ pts: [[j0 - 2.6, 15.4], [j0 + 0.8, 15.4], [j0 + 0.8, 17.6], [23.6 + hs, 17.6], [23.6 + hs, 23], [j0 - 2.6, 23]], r: [1, 1, 0.8, 1.6, 2, 1.4], rim: 0.9 })
-  // head plateau with the oval eye boss
-  S.island({ pts: rect(17 + hs, 6.8, 27.8 + hs, 15.6), r: 2.2, rim: 0.85 })
-  S.boss({ c: [22.2 + hs, 11.2], w: 4.8, h: 5.4, r: 2, height: 2.6, ring: 0.3, shoulder: 1.8 })
-  // squared jaws pointing at the notch
-  S.island({ pts: [[j0, 9.4], [j0 + 2.6, 9.4], [j0 + 2.6, 11.6], [16 + hs * 0.6, 11.6], [16 + hs * 0.6, 14.6], [j0, 14.6]], r: [0.8, 0.8, 0.6, 1, 1.2, 1], rim: 0.8 })
-  S.island({ pts: [[j0, 2.4], [16 + hs * 0.6, 2.4], [16 + hs * 0.6, 8.4], [j0 + 2.6, 8.4], [j0 + 2.6, 5.4], [j0, 5.4]], r: [1, 1.2, 1, 0.6, 0.6, 1], rim: 0.8 })
-  // claw spiral under the head
-  S.island({ pts: rect(17.6 + hs, 2.4, 27.2 + hs, 5.9), r: 1.6, rim: 0 })
-  // body and leg bands running outward
-  S.island({ pts: rect(28.8 + hs, 7.8, 31.4 + d, 11.4), r: 1.4, rim: 0.8 })
-  S.island({ pts: rect(28.8 + hs, 2.4, 38.6 + d, 6.8), r: 1.6, rim: 0.8 })
-  S.island({ pts: rect(32.4 + d, 7.8, u1 - 0.9, 11.2), r: 1.4, rim: 0.8 })
-  S.island({ pts: rect(39.6 + d, 2.4, u1 - 0.9, 6.8), r: 1.6, rim: 0.8, spiral: { at: [39.6 + d, 4.4], heading: 0, lead: 1.4, dir: 1, size: [3.4, 2.4], pitch: 1.6, turns: 1, r: 0.6 } })
-  // the field steps round the notch
-  S.field([[3.2, nv], [nh, nv], [nh, 0], [u1, 0], [u1, H], [3.2, H]])
-  return S
+  const top = H - 1.9
+  // upper jaw: a bar along the top from the flange, its inner end hooking down and curling
+  S.island({
+    pts: [[3.6, 16.2], [8.6, 16.2], [8.6, 20.4], [18.2, 20.4], [18.2, top], [3.6, top]], r: [1.2, 1.2, 0.8, 1.4, 1.8, 1.4], rim: 0.9,
+    spiral: { at: [6.1, 16.3], heading: 90, lead: 3.6, dir: -1, size: [6.4, 4.6], pitch: 1.9, turns: 1.5, r: 0.7 },
+  })
+  // lower jaw: below it, above the notch, a bracket curling back toward the flange
+  S.island({
+    pts: rect(3.6, nv + 1.4, 17.8, 14.8), r: 1.6, rim: 0.9,
+    spiral: { at: [17.8, nv + 4.6], heading: 180, lead: 2.2, dir: 1, size: [7.4, 3.4], pitch: 1.8, turns: 1.25, r: 0.7 },
+  })
+  // head plateau with the square eye boss
+  S.island({ pts: rect(19.6, 8.4, 30.4, 19), r: 2.4, rim: 0.9 })
+  S.boss({ c: [25, 13.6], w: 6, h: 5.4, r: 2, height: 2.6, ring: 0.3, slit: [2.2, 0.8], shoulder: 2.6 })
+  // body band over the head
+  S.island({ pts: rect(19.6, 20.4, 30.4, top), r: 1.6, rim: 0.9 })
+  // small beaked crest (a bird-like head with a ring eye) riding on the body
+  S.island({ pts: [[31.8, 15.6], [38.6, 15.6], [40.2, 18.2], [40.2, top], [31.8, top]], r: [1.4, 1.2, 1, 1.6, 1.6], rim: 0.85 })
+  S.boss({ c: [35.4, 20.4], w: 3.2, h: 3.2, r: 1.5, height: 2.1, ring: 0.3, shoulder: 1.3 })
+  // body runs on outward into the tail
+  S.island({ pts: rect(41.6, 16.8, 46.4, top), r: 1.4, rim: 0.8 })
+  // claw band right of the head
+  S.island({ pts: rect(31.8, 8.4, 46.4, 14.2), r: 1.8, rim: 0.9 })
+  // leg band along the bottom, its inner end turning up beside the notch jamb
+  S.island({ pts: [[nh + 0.9, 2.4], [46.4, 2.4], [46.4, 7], [nh + 4.8, 7], [nh + 4.8, nv + 0.2], [nh + 0.9, nv + 0.2]], r: [1, 1.6, 1.6, 0.8, 1, 1], rim: 0.9 })
+  // the big squared tail, curling down and in
+  S.island({
+    pts: rect(47.8, 2.4, L - 0.9, top), r: 3.6, rim: 1.2,
+    spiral: { at: [47.8, 15.4], heading: 0, lead: 3.4, dir: -1, size: [9.6, 11], pitch: 2.5, turns: 1.75, r: 1.1 },
+  })
+  // re-fit outward of the flange to this face (the end face is ~16 mm narrower)
+  const k = (u1 - 3.2) / (L - 3.2)
+  const out = S.map(([u, v]) => [u <= nh + 5 && v < nv + 0.5 ? u : 3.2 + (u - 3.2) * k, v])
+  out.field([[3.2, nv], [nh, nv], [nh, 0], [u1, 0], [u1, H], [3.2, H]])
+  return out
 }
 
 /**
@@ -147,7 +161,7 @@ export function lidLongSheet(halfAt, sTop) {
   })
   // brow under the eye, outer end turned up
   S.island({ pts: [[20.6, 28.6], [37.6, 28.6], [37.6, 36.2], [34.4, 36.2], [34.4, 32.4], [20.6, 32.4]], r: [1.4, 1.6, 1.4, 1, 1, 1.4], rim: 1.05 })
-  S.boss({ c: [28.6, 38.4], w: 10.6, h: 8.2, r: 2.9, height: 2.7, slit: [3.6, 1.1], shoulder: 2.6 })
+  S.boss({ c: [28.6, 38.4], w: 10.6, h: 8.2, r: 2.9, height: 2.7, slit: [3.6, 1.1], shoulder: 3.8 })
   // edge C islands (outer), the lower one beside the eye, the upper one near the ridge
   S.island({ pts: rect(40.2, 30.4, Math.min(51, edge(44) - 0.4), 44.6), r: 2.8, rim: 1.15, spiral: { at: [40.2, 40], heading: 0, lead: 2.4, dir: -1, size: [7, 5.4], pitch: 2.2, turns: 1.5, r: 0.9 } })
   S.island({ pts: rect(34.6, 48.2, Math.min(45.6, edge(62) - 0.4), 62.2), r: 2.8, rim: 1.15, spiral: { at: [34.6, 52.6], heading: 0, lead: 2.4, dir: 1, size: [6.4, 5.2], pitch: 2.2, turns: 1.5, r: 0.9 } })
