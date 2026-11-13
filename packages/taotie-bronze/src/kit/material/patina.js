@@ -57,11 +57,13 @@ export const PATINA_PARAMS = {
   tinOxideTone: { group: 'Other corrosion', label: 'Noble tone', min: 0, max: 2, step: 0.01, default: 1, hint: '0 black 黑漆古 · 1 olive · 2 grey 水银古' },
   nobleWarmth: { group: 'Other corrosion', label: 'Noble warmth', min: 0, max: 1, step: 0.01, default: 0, hint: 'olive-green skin → warm grey-brown (a thin sheet with the cuprite glowing through)' },
   cuprite: { group: 'Other corrosion', label: 'Cuprite', min: 0, max: 1, step: 0.01, default: 0.7, hint: 'red-brown Cu₂O on the metal, shows where the crust is thin or worn' },
+  cupriteTone: { group: 'Other corrosion', label: 'Cuprite tone', min: 0, max: 1, step: 0.01, default: 0, hint: '0 compact liver / oxblood · 1 pale powdery brick-pink, unveiled (cuprite blotches under a lime bloom, Houmuwu fields)' },
   chloride: { group: 'Other corrosion', label: 'Chloride', min: 0, max: 1, step: 0.01, default: 0.08, hint: 'bronze disease: pale powdery pustules over pits' },
   soot: { group: 'Other corrosion', label: 'Soot', min: 0, max: 1, step: 0.01, default: 0, hint: 'tenorite/soot on the lower body and legs (fire)' },
   crevice: { group: 'Other corrosion', label: 'Crevice bias', min: 0, max: 1, step: 0.01, default: 0.7, hint: 'how strongly crust prefers recesses' },
   patchScale: { group: 'Other corrosion', label: 'Territory size', min: 20, max: 200, step: 1, default: 70, unit: 'mm' },
   mottleScale: { group: 'Other corrosion', label: 'Mottle size', min: 3, max: 40, step: 0.5, default: 12, unit: 'mm' },
+  patchiness: { group: 'Other corrosion', label: 'Territories ↔ fine mottle', min: 0, max: 1, step: 0.01, default: 1, hint: '1 broad territories and crust islands · 0 every layer breaks up at the mottle size instead (a fine speckled skin, no large blotches)' },
   // Surface
   matte: { group: 'Surface', key: true, label: 'Matte (dry skin)', min: 0, max: 1, step: 0.01, default: 0, hint: 'micro-pitted, dusty excavated skin: no broad glossy highlights. 0 keeps each layer’s own sheen (as-cast, heirloom)' },
   dulling: { group: 'Surface', label: 'Dulling', min: 0, max: 1, step: 0.01, default: 0, hint: 'dust, old wax and fine soil in the pores grey every mineral colour down' },
@@ -76,6 +78,7 @@ export const PATINA_PARAMS = {
   interiorTone: { group: 'Surface', label: 'Interior skin', min: 0, max: 1, step: 0.01, default: 0.3, hint: 'inside the vessel: dark grey-brown → pale green corroded skin' },
   wax: { group: 'Surface', label: 'Museum wax', min: 0, max: 1, step: 0.01, default: 0 },
   inlay: { group: 'Surface', label: 'Black inlay', min: 0, max: 1, step: 0.01, default: 0, hint: 'paste in the sunk lines (as made)' },
+  inlayGround: { group: 'Surface', label: 'Inlay fills the ground', min: 0, max: 1, step: 0.01, default: 0, hint: 'the black paste fills the whole sunk ground of the décor, not only the lines: flush bands read light on black (Met zun)' },
   wear: { group: 'Surface', key: true, label: 'Wear', min: 0, max: 1, step: 0.01, default: 0.2, hint: 'erases from the top down on arrises' },
   seed: { group: 'Surface', label: 'Seed', min: 0, max: 99, step: 1, default: 7 },
 }
@@ -99,7 +102,7 @@ export const PATINA_PRESETS = {
     age: 1, tin: 0.13, lead: 0.04, polish: 0.4, tarnish: 0.7, cuprite: 0.75, tinOxide: 0.75, tinOxideTone: 0.8,
     malachite: 0.45, carbonate: 0.15, azurite: 0.03, azuriteScale: 10, blueHabitat: 0.3, turquoiseTone: 0.15,
     malachiteHue: 0.45, malachiteTone: 0.6, islands: 0.55, malachiteScale: 2, crust: 0.6,
-    chloride: 0.08, soot: 0.05, crevice: 0.85, patchScale: 70, mottleScale: 10,
+    chloride: 0.08, soot: 0.05, crevice: 0.85, patchScale: 70, mottleScale: 10, patchiness: 0.6,
     earth: 0.1, earthColor: '#7d6a50', calcite: 0.2, streaks: 0.35, burialSide: 0.3, recessDirt: 0.2, interiorTone: 0.3,
     wax: 0, inlay: 0, wear: 0.2, dulling: 0.5, tops: 0.45, nobleWarmth: 0.4, matte: 0.6,
   },
@@ -112,7 +115,7 @@ export const PATINA_PRESETS = {
   // cleaned and waxed Western-collection look: smooth olive-grey, green in recesses
   'olive-museum': {
     age: 1, tin: 0.14, lead: 0.05, polish: 0.5, tarnish: 0.8, cuprite: 0.45, tinOxide: 0.88, tinOxideTone: 1.25, malachite: 0.35, malachiteHue: 0.4,
-    malachiteTone: 0.55, malachiteScale: 1.5, crust: 0.2, islands: 0.4, azurite: 0.02, chloride: 0.02, soot: 0, crevice: 0.95, patchScale: 80, mottleScale: 9,
+    malachiteTone: 0.55, malachiteScale: 1.5, crust: 0.2, islands: 0.4, azurite: 0.02, chloride: 0.02, soot: 0, crevice: 0.95, patchScale: 80, mottleScale: 9, patchiness: 0.5,
     earth: 0.1, earthColor: '#6b5a42', calcite: 0.12, burialSide: 0.1, recessDirt: 0.55, wax: 0.25, inlay: 0, wear: 0.25, dulling: 0.25, tops: 0.2, streaks: 0.15, matte: 0.45, nobleWarmth: 0.3,
   },
   // 黑漆古 / Met fanglei 55.160: glossy black noble skin, red-brown blotches, lime streaks
@@ -124,7 +127,7 @@ export const PATINA_PRESETS = {
   // active chlorides: pale chalky bluish-green pustules in pits, clustered low and on seams
   'bronze-disease': {
     age: 1, tin: 0.13, lead: 0.05, polish: 0.4, tarnish: 0.7, cuprite: 0.8, tinOxide: 0.55, tinOxideTone: 1.2, malachite: 0.45, malachiteHue: 0.45,
-    malachiteScale: 2, crust: 0.6, azurite: 0.03, chloride: 0.7, soot: 0, crevice: 0.8, patchScale: 70, mottleScale: 10,
+    malachiteScale: 2, crust: 0.6, azurite: 0.03, chloride: 0.7, soot: 0, crevice: 0.8, patchScale: 70, mottleScale: 10, patchiness: 0.7,
     earth: 0.15, earthColor: '#7a6548', calcite: 0.1, burialSide: 0.3, recessDirt: 0.45, wax: 0, inlay: 0, wear: 0.15, dulling: 0.35, tops: 0.3, matte: 0.65, nobleWarmth: 0.3,
   },
   // kept above ground and handled: warm metal on every high point, near-black recesses
@@ -140,7 +143,7 @@ export const PATINA_PRESETS = {
     age: 1, tin: 0.13, lead: 0.04, polish: 0.4, tarnish: 0.7, cuprite: 0.9, tinOxide: 0.35, tinOxideTone: 1.3,
     malachite: 0.82, carbonate: 0.52, azurite: 0.06, azuriteDepth: 0.35, azuriteScale: 10, blueHabitat: 0.35, turquoiseTone: 0.12,
     malachiteHue: 0.3, malachiteTone: 0.75, islands: 0.45, malachiteScale: 2.2, crust: 0.9,
-    chloride: 0.1, soot: 0, crevice: 0.75, patchScale: 65, mottleScale: 10,
+    chloride: 0.1, soot: 0, crevice: 0.75, patchScale: 65, mottleScale: 10, patchiness: 0.6,
     earth: 0.3, earthColor: '#8a7354', calcite: 0.35, streaks: 0.3, burialSide: 0.3, recessDirt: 0.15, interiorTone: 0.4,
     wax: 0, inlay: 0, wear: 0.15, dulling: 0.25, tops: 0.5, matte: 0.65, nobleWarmth: 0.3,
   },
@@ -154,63 +157,66 @@ export const PATINA_PRESETS = {
     wax: 0, inlay: 0, wear: 0.15, dulling: 0.1, tops: 0.35, matte: 0.55, nobleWarmth: 0.3,
   },
 
-  // ---- vessels (calibrated against reference/<id>/ photographs and dossier §d)
-  // Houmuwu (NMC): thin grey-green skin, fine red-and-green mottle on the fields, pale grey-green
-  // plateaus, near-black grooves, darker olive legs, small pale blue-green crust spots
+  // ---- vessels (calibrated against reference/<id>/ photographs and dossier §d; round 3: zones
+  // sampled in photo and render, medians and p10/p90 contrast — see each comment)
+  // Houmuwu (NMC): a FINE speckle over the whole skin — powdery brick-pink cuprite blotches and
+  // pale grey-green / blue-green carbonate interleaved at 5–40 mm (patchiness low: no large
+  // islands), frieze plateaus greener, grooves near-black, legs darker
   'houmuwu': {
-    age: 1, tin: 0.12, lead: 0.04, polish: 0.4, tarnish: 0.6, cuprite: 0.9, tinOxide: 0.6, tinOxideTone: 2,
-    malachite: 0.7, carbonate: 0.6, azurite: 0.02, azuriteScale: 8, blueHabitat: 0.3, turquoiseTone: 0.1,
-    malachiteHue: 0.2, malachiteTone: 0.85, islands: 0, malachiteScale: 2.5, crust: 0.6,
-    chloride: 0.08, soot: 0.05, crevice: 0.3, patchScale: 50, mottleScale: 6,
-    earth: 0.25, earthColor: '#857256', calcite: 0.08, streaks: 0.2, burialSide: 0.3, recessDirt: 0.6, interiorTone: 0.35,
-    wax: 0, inlay: 0, wear: 0.22, dulling: 0, tops: 0.5, matte: 0.65, topsTone: 1,
+    age: 1, tin: 0.12, lead: 0.04, polish: 0.4, tarnish: 0.6, cuprite: 1, cupriteTone: 0.75, tinOxide: 0.15, tinOxideTone: 2,
+    malachite: 0.9, carbonate: 0.6, azurite: 0.02, azuriteScale: 8, blueHabitat: 0.3, turquoiseTone: 0.3,
+    malachiteHue: 0.2, malachiteTone: 0.72, islands: 0.1, malachiteScale: 1, crust: 1,
+    chloride: 0.08, soot: 0.2, crevice: 0.3, patchScale: 50, mottleScale: 14, patchiness: 0.15,
+    earth: 0.25, earthColor: '#857256', calcite: 0.06, streaks: 0.2, burialSide: 0.3, recessDirt: 0.8, interiorTone: 0.35,
+    wax: 0, inlay: 0.7, wear: 0.22, dulling: 0.05, tops: 0.15, matte: 0.65, topsTone: 1,
   },
-  // Met 1974.268.2: an even waxed olive-grey-brown noble skin, near-black recesses, pale crests,
-  // red-brown only in slots and low on the foot, green as sparse specks; pale green interior
+  // Met 1974.268.2: one even olive yellow-green-brown noble skin (lid only a little lighter),
+  // dark recesses without verdigris, red-brown in slots and low on the foot, sparse green specks
   'met-fangyi': {
-    age: 1, tin: 0.14, lead: 0.05, polish: 0.4, tarnish: 0.8, cuprite: 0.6, tinOxide: 0.95, tinOxideTone: 1.1,
-    malachite: 0.08, carbonate: 0.05, azurite: 0, malachiteHue: 0.45, malachiteTone: 0.6, islands: 0.3, malachiteScale: 1, crust: 0.1,
-    chloride: 0.02, soot: 0, crevice: 0.9, patchScale: 80, mottleScale: 6,
-    earth: 0.15, earthColor: '#5c4630', calcite: 0.15, streaks: 0.1, burialSide: 0.05, recessDirt: 0.35, interiorTone: 0.6,
-    wax: 0.25, inlay: 0, wear: 0.3, dulling: 0.5, tops: 0.4, nobleWarmth: 0.5, matte: 0.45, topsTone: 0.5,
+    age: 1, tin: 0.14, lead: 0.05, polish: 0.4, tarnish: 0.8, cuprite: 0.8, cupriteTone: 0.3, tinOxide: 0.95, tinOxideTone: 1.15,
+    malachite: 0.04, carbonate: 0.05, azurite: 0, malachiteHue: 0.45, malachiteTone: 0.6, islands: 0.3, malachiteScale: 1, crust: 0.1,
+    chloride: 0.02, soot: 0, crevice: 0.5, patchScale: 80, mottleScale: 6, patchiness: 0.5,
+    earth: 0.15, earthColor: '#5c4630', calcite: 0.03, streaks: 0.1, burialSide: 0.05, recessDirt: 0.15, interiorTone: 0.6,
+    wax: 0.25, inlay: 0, wear: 0.15, dulling: 0.15, tops: 0.4, nobleWarmth: 0.2, matte: 0.45, topsTone: 0.2,
   },
-  // Met 43.25.1: silver-grey 水银古 skin, black inlay in every groove, blue-green malachite speckle
+  // Met 43.25.1: silver-grey 水银古 bands on a black-filled ground (inlayGround), fine blue-green
+  // malachite and chalky speckle, no khaki
   'met-zun': {
-    age: 1, tin: 0.14, lead: 0.05, polish: 0.45, tarnish: 0.4, cuprite: 0.2, tinOxide: 0.95, tinOxideTone: 1.3,
-    malachite: 0.55, carbonate: 0.2, azurite: 0.04, azuriteDepth: 0.4, azuriteScale: 6, blueHabitat: 0.5, turquoiseTone: 0.5,
+    age: 1, tin: 0.14, lead: 0.05, polish: 0.45, tarnish: 0.2, cuprite: 0.2, tinOxide: 0.95, tinOxideTone: 2,
+    malachite: 0.6, carbonate: 0.2, azurite: 0.04, azuriteDepth: 0.4, azuriteScale: 6, blueHabitat: 0.5, turquoiseTone: 0.5,
     malachiteHue: 0.35, malachiteTone: 0.45, islands: 0.7, malachiteScale: 0.9, crust: 0.12,
-    chloride: 0, soot: 0, crevice: 0.4, patchScale: 35, mottleScale: 3,
-    earth: 0.05, earthColor: '#9a978c', calcite: 0.3, streaks: 0.1, burialSide: 0.1, recessDirt: 0.4, interiorTone: 0.25,
-    wax: 0.15, inlay: 1, wear: 0.3, dulling: 0.55, tops: 0.6, nobleWarmth: 0, matte: 0.55, topsTone: 1,
+    chloride: 0, soot: 0, crevice: 0.4, patchScale: 35, mottleScale: 3, patchiness: 0.5,
+    earth: 0.05, earthColor: '#9a978c', calcite: 0.25, streaks: 0.1, burialSide: 0.1, recessDirt: 0.7, interiorTone: 0.25,
+    wax: 0.15, inlay: 1, inlayGround: 0.85, wear: 0.3, dulling: 0.45, tops: 1, nobleWarmth: 0, matte: 0.55, topsTone: 1,
   },
-  // Met 1985.214.4: grey-olive trumpet, silvery décor bands with brown-black leiwen, pale crust
-  // islands and emerald spots on the ring and lip
+  // Met 1985.214.4: grey-olive trumpet, neutral silvery décor bands with dark leiwen, a dark
+  // green-black mottled ring with emerald spots and small pale crust islands
   'met-gu': {
-    age: 1, tin: 0.14, lead: 0.05, polish: 0.4, tarnish: 0.8, cuprite: 0.35, tinOxide: 0.9, tinOxideTone: 1,
-    malachite: 0.3, carbonate: 0.05, azurite: 0, malachiteHue: 0.55, malachiteTone: 0.5, islands: 0.6, malachiteScale: 1.2, crust: 0.2,
-    chloride: 0, soot: 0, crevice: 0.5, patchScale: 45, mottleScale: 6,
-    earth: 0.1, earthColor: '#6b5a42', calcite: 0.2, streaks: 0.1, burialSide: 0.05, recessDirt: 0.7, interiorTone: 0.3,
-    wax: 0.15, inlay: 0.6, wear: 0.3, dulling: 0.25, tops: 0.6, nobleWarmth: 0, matte: 0.5, topsTone: 1,
+    age: 1, tin: 0.14, lead: 0.05, polish: 0.4, tarnish: 0.4, cuprite: 0.35, cupriteTone: 0.3, tinOxide: 0.9, tinOxideTone: 1.6,
+    malachite: 0.45, carbonate: 0.05, azurite: 0, malachiteHue: 0.4, malachiteTone: 0.25, islands: 0.6, malachiteScale: 1.2, crust: 0.2,
+    chloride: 0, soot: 0.7, crevice: 0.5, patchScale: 45, mottleScale: 8, patchiness: 0.35,
+    earth: 0.1, earthColor: '#6b5a42', calcite: 0.2, streaks: 0.1, burialSide: 0.05, recessDirt: 0.95, interiorTone: 0.3,
+    wax: 0.15, inlay: 0.85, inlayGround: 0.4, wear: 0.3, dulling: 0.5, tops: 1, nobleWarmth: 0, matte: 0.5, topsTone: 1,
   },
-  // Nezu fangyi (owner's photo): dark olive-black handled skin, dark lustrous high points, pale
-  // grey-green powder in the leiwen and on every up-facing ledge, warm red-brown low on the belly
+  // Nezu fangyi (owner's photo): warm olive-brown handled skin, plateaus a little lighter than a
+  // DARK ground, almost no powder (it lives only in fine grooves), warm cuprite showing low
   'nezu-olive': {
-    age: 1, tin: 0.15, lead: 0.06, polish: 0.35, tarnish: 0.9, cuprite: 0.7, tinOxide: 0.97, tinOxideTone: 0.2,
-    malachite: 0.18, carbonate: 0.15, azurite: 0, malachiteHue: 0.55, malachiteTone: 0.6, islands: 0.1, malachiteScale: 1.5, crust: 0.12,
-    chloride: 0.1, soot: 0, crevice: 0.95, patchScale: 60, mottleScale: 10,
-    earth: 0.12, earthColor: '#6a6458', calcite: 0.15, streaks: 0.1, burialSide: 0.15, recessDirt: 0.05, interiorTone: 0.2,
-    wax: 0.1, inlay: 0, wear: 0.15, dulling: 0.9, tops: 0.15, matte: 0.45, nobleWarmth: 0.7, topsTone: 0,
+    age: 1, tin: 0.15, lead: 0.06, polish: 0.35, tarnish: 0.9, cuprite: 0.7, cupriteTone: 0.4, tinOxide: 0.97, tinOxideTone: 0.8,
+    malachite: 0.05, carbonate: 0.15, azurite: 0, malachiteHue: 0.55, malachiteTone: 0.6, islands: 0.1, malachiteScale: 1.5, crust: 0.12,
+    chloride: 0.02, soot: 0, crevice: 0.4, patchScale: 60, mottleScale: 10, patchiness: 0.5,
+    earth: 0.05, earthColor: '#6a6458', calcite: 0.04, streaks: 0.1, burialSide: 0.15, recessDirt: 0.4, interiorTone: 0.2,
+    wax: 0.1, inlay: 0, inlayGround: 0.3, wear: 0.15, dulling: 0.6, tops: 1, matte: 0.45, nobleWarmth: 1, topsTone: 0.7,
   },
 
-  // the owner's bluer reading of the Nezu vessel: the same dark skin, blue-green and azurite
-  // powder bound to the recesses (the real powder is pale grey-green — this is a request)
+  // the owner's bluer reading of the Nezu vessel: the same warm dark skin and light plateaus,
+  // blue-green and azurite powder bound to the recesses (the real powder is pale grey-green — this is a request)
   'nezu-blue': {
-    age: 1, tin: 0.15, lead: 0.05, polish: 0.45, tarnish: 0.85, cuprite: 0.6, tinOxide: 0.95, tinOxideTone: 0.2,
-    malachite: 0.38, carbonate: 0.6, azurite: 0.18, azuriteDepth: 0.55, azuriteScale: 8, blueHabitat: 0.05, turquoiseTone: 0.5,
-    malachiteHue: 0.12, malachiteTone: 0.6, islands: 0.25, malachiteScale: 1.2, crust: 0.2,
-    chloride: 0.1, soot: 0, crevice: 0.95, patchScale: 55, mottleScale: 10,
-    earth: 0.05, earthColor: '#5f6460', calcite: 0.05, streaks: 0.15, burialSide: 0.2, recessDirt: 0.05, interiorTone: 0.2,
-    wax: 0.05, inlay: 0, wear: 0.1, dulling: 0.3, tops: 0.15, nobleWarmth: 0.7, matte: 0.5, topsTone: 0,
+    age: 1, tin: 0.15, lead: 0.05, polish: 0.45, tarnish: 0.85, cuprite: 0.6, cupriteTone: 0.3, tinOxide: 0.95, tinOxideTone: 0.6,
+    malachite: 0.3, carbonate: 0.6, azurite: 0.12, azuriteDepth: 0.6, azuriteScale: 8, blueHabitat: 0.05, turquoiseTone: 0.6,
+    malachiteHue: 0.12, malachiteTone: 0.55, islands: 0.25, malachiteScale: 1.2, crust: 0.2,
+    chloride: 0.03, soot: 0, crevice: 0.6, patchScale: 55, mottleScale: 10, patchiness: 0.5,
+    earth: 0.05, earthColor: '#5f6460', calcite: 0, streaks: 0.15, burialSide: 0.2, recessDirt: 0.3, interiorTone: 0.2,
+    wax: 0.05, inlay: 0, wear: 0.1, dulling: 0.35, tops: 0.8, nobleWarmth: 0.8, matte: 0.5, topsTone: 0.6,
   },
 }
 
@@ -484,18 +490,22 @@ float layerCuprite(Surf S, float amt) {
 float layerNoble(Surf S, float amt) {
   // Type I sheet: broad smooth territories, indifferent to relief, better on the exterior;
   // kind-0 cells are noble-skin territories, kind-2 cells crust territories
-  float kNob = 1.0 - tt_ss(0.25, 0.4, S.K);
-  float f = 0.5 * (1.0 - S.T) + 0.22 * S.T2 + 0.24 * (S.M - 0.5) + 0.12 - 0.15 * S.inside + 0.2 * kNob - 0.12 * tt_ss(0.62, 0.75, S.K);
+  // (with fine mottle — patchiness < 1 — the kind borders soften: speckle has no cut edges)
+  float kw = 0.22 * (1.0 - clamp(uPatchiness, 0.0, 1.0));
+  float kNob = 1.0 - tt_ss(0.25 - kw, 0.4 + kw, S.K);
+  float f = 0.5 * (1.0 - S.T) + 0.22 * S.T2 + 0.24 * (S.M - 0.5) + 0.12 - 0.15 * S.inside + 0.2 * kNob - 0.12 * tt_ss(0.62 - kw, 0.75 + kw, S.K) + 1.6 * kw * (S.G - 0.5);
   return tt_cover(amt, f, 0.12);
 }
 
 // the carbonate-crust field: territories + strong recess preference, up-facing and burial-side
 // bias, thinner on convex arrises, a kind bias (crust cells take more), fractal-edged boundaries
 float malachiteField(Surf S) {
+  float kw = 0.22 * (1.0 - clamp(uPatchiness, 0.0, 1.0));
   return 0.42 * S.T + 0.78 * S.rec * (0.3 + 0.7 * uCrevice) + 0.12 * max(S.up, 0.0)
        + 0.15 * uBurialSide * S.burial - 0.3 * S.edge + 0.22 * (S.M - 0.5) + 0.06 * (S.G - 0.5) + 0.1 * S.inside
-       + 0.16 * (tt_ss(0.62, 0.75, S.K) - 0.5) - 0.3 * (1.0 - S.rec) * uCrevice
-       + 0.38 * tt_ss(0.66, 0.74, S.K) * tt_ss(0.3, 0.75, S.T); // a few crust territories on open walls
+       + 0.16 * (tt_ss(0.62 - kw, 0.75 + kw, S.K) - 0.5) - 0.3 * (1.0 - S.rec) * uCrevice
+       + 0.38 * tt_ss(0.66 - kw, 0.74 + kw, S.K) * tt_ss(0.3, 0.75, S.T)
+       + kw * (1.4 * (1.0 - S.rec) + 2.0 * (S.G - 0.5)); // fine mottle: skin-wide, not recess-bound, granular edges // a few crust territories on open walls
 }
 // crust ISLANDS: sharp-edged, a little dependent on the cell kind
 float layerMalachite(Surf S, float amt) {
@@ -588,6 +598,9 @@ float ttF0 = 0.04;
     if (vNormalMapUv.x > -0.5) {
       vec4 rd = texture2D(uReliefData, vNormalMapUv);
       S.h01 = rd.r; S.cav = rd.g; S.edge = rd.b; S.groove = rd.a;
+      // a map with nothing raised (a flange's incised faces): its lands are the wall (0.5, as a
+      // plain mesh), not the tops of décor — otherwise they come out paler than the body
+      S.h01 = mix(0.5 * S.h01, S.h01, tt_ss(0.03, 0.1, uReliefRange.y));
       plain = false;
     }
   #endif
@@ -631,6 +644,19 @@ float ttF0 = 0.04;
   // (looked up through the mottle, the second territory and the grain so the cell borders
   // are ragged at every scale instead of Voronoi-straight)
   S.K = worley8(S.p / (tS * 0.5) + 0.7 * w + vec3(0.9 * (S.M - 0.5), 0.7 * (S.T2 - 0.5), 0.45 * (S.G - 0.5) + 0.5 * (S.M - 0.5)) + so.xzy).y;
+  // patchiness < 1: the territory fields break up at the mottle scale instead (fine speckled
+  // skin, no 100 mm islands); the territory KIND too. Costs one simplex tap.
+  float pat = clamp(uPatchiness, 0.0, 1.0);
+  if (pat < 0.999) {
+    float fS = max(mS * 0.7, 0.8);
+    float Fn = tt_lod(fS, S.px) * snoise(S.p / fS + so.zxy * 0.7);
+    // (the broad territory field still modulates the speckle's density: clusters, not a carpet)
+    float Tf = clamp(0.5 + 0.8 * (S.M - 0.5) + 0.3 * Fn + 0.35 * (S.T - 0.5), 0.0, 1.0);
+    float T2f = clamp(0.5 + 0.55 * Fn - 0.45 * (S.M - 0.5) + 0.12 * (S.G - 0.5), 0.0, 1.0);
+    // kind at the speckle scale too: fine flecks of noble skin / cuprite / crust, not one wash
+    float Kf = clamp(0.5 + 0.8 * Fn + 0.5 * (S.M - 0.5) + 0.15 * (S.G - 0.5) + 0.3 * (S.T2 - 0.5), 0.0, 1.0);
+    S.T = mix(Tf, S.T, pat); S.T2 = mix(T2f, S.T2, pat); S.K = mix(Kf, S.K, pat);
+  }
   // an interior is one quiet skin: no speckle, mottle only at territory scale
   S.M = mix(S.M, 0.5 + 0.2 * (S.T - 0.5), 0.9 * S.calm);
   S.G = mix(S.G, 0.5, 0.9 * S.calm);
@@ -686,7 +712,12 @@ float ttF0 = 0.04;
   // (raised = real mm above the L0 ground from the panel's range, so a 0.12 mm flush band
   // counts as much as a 2 mm plateau, and a tall boss does not squash every other top)
   float hMM = mix(uReliefRange.x, uReliefRange.y, S.h01);
-  float topK = plain ? 0.6 * S.edge : max(tt_ss(0.04, 0.22, hMM), 0.6 * tt_ss(0.6, 0.9, S.h01)) * tt_ss(0.55, 0.9, S.cav) * (1.0 - S.groove);
+  // (a map with nothing raised above L0 — a flange's incised faces — has no tops: its lands are
+  // the wall, not décor bands; plain meshes only get the warm rubbing on arrises, never pale bands)
+  float hasTops = tt_ss(0.03, 0.1, uReliefRange.y);
+  float topK = plain ? 0.6 * S.edge * (1.0 - uTopsTone) : max(tt_ss(0.04, 0.22, hMM), 0.6 * tt_ss(0.6, 0.9, S.h01) * hasTops) * tt_ss(0.55, 0.9, S.cav) * (1.0 - S.groove);
+  // the décor's sunk ground (not raised, on a panel that has raised décor) — for inlayGround
+  float groundM = plain ? 0.0 : hasTops * (1.0 - tt_ss(0.02, 0.12, hMM)) * (1.0 - S.calm);
   topK *= uTops * aW * (1.0 - S.calm);
 
   // ---- wear / cleaning erase, top down (§3.4.9)
@@ -730,6 +761,8 @@ float ttF0 = 0.04;
   // ---- L1 cuprite: liver / oxblood, compact & sub-metallic sheen (F0 ≈ 0.2)
   float cupT = clamp(0.45 * S.M + 0.35 * S.G + 0.3 * (1.0 - S.rec) - 0.1, 0.0, 1.0);
   vec3 cupCol = tt_pal(vec3(0.042, 0.012, 0.008), vec3(0.080, 0.024, 0.015), vec3(0.135, 0.045, 0.027), cupT * 0.8);
+  // cupriteTone: compact liver/oxblood → pale powdery brick-pink (cuprite under a lime bloom, Houmuwu)
+  cupCol = mix(cupCol, tt_pal(vec3(0.150, 0.068, 0.050), vec3(0.290, 0.150, 0.112), vec3(0.420, 0.250, 0.205), cupT), clamp(uCupriteTone, 0.0, 1.0));
   cupCol = mix(cupCol, cupCol * vec3(0.7, 0.62, 0.62), S.rec); // darker, browner in recesses
   col = mix(col, cupCol, cCup); rough = mix(rough, mix(0.38, 0.62, S.G), cCup); metal = mix(metal, 0.0, cCup); f0 = mix(f0, 0.18, cCup);
 
@@ -739,8 +772,10 @@ float ttF0 = 0.04;
   nobCol = mix(nobCol, vec3(tt_lum(nobCol)) * vec3(1.32, 0.98, 0.76), 0.9 * uNobleWarmth);
   col = mix(col, nobCol, cNob); rough = mix(rough, 0.2 + 0.12 * S.rec + 0.06 * S.M, cNob); metal = mix(metal, 0.0, cNob); f0 = mix(f0, 0.075, cNob);
   // outside the sheet a thinner, browner skin still veils the cuprite: warm brown, not raw red
-  float veil = (1.0 - cNob) * cCup * uTinOxide * aN * (0.65 - 0.35 * S.rec) * (0.6 + 0.4 * S.M);
-  col = mix(col, nobCol * 0.75 + cupCol * 0.45, veil); rough = mix(rough, 0.32, veil);
+  float veil = (1.0 - cNob) * cCup * uTinOxide * aN * (0.65 - 0.35 * S.rec) * (0.6 + 0.4 * S.M) * (1.0 - 0.75 * uCupriteTone);
+  // (a grey, tin-rich 水银古 skin veils it greyer: less of the cuprite's warmth comes through)
+  float veilCup = 0.45 * (1.0 - 0.7 * clamp(uTinOxideTone - 1.0, 0.0, 1.0));
+  col = mix(col, nobCol * (1.2 - veilCup) + cupCol * veilCup, veil); rough = mix(rough, 0.32, veil);
 
   // ---- L3 soot / tenorite low on the body
   col = mix(col, vec3(0.022, 0.018, 0.014), cSoot * 0.85); rough = mix(rough, 0.8, cSoot * 0.85); metal = mix(metal, 0.0, cSoot * 0.85);
@@ -807,10 +842,18 @@ float ttF0 = 0.04;
   float skinK = tt_ss(0.0, 0.7, S.calm) * tt_ss(0.2, 0.7, a) * 0.96;
   col = mix(col, skin, skinK); rough = mix(rough, 0.8, skinK); metal = mix(metal, 0.0, skinK); f0 = mix(f0, 0.045, skinK);
 
+  // ---- inlayGround: black paste (or packed dark dirt) fills the whole sunk ground of the décor —
+  // the lands of the leiwen too — so flush bands read light on a black field (Met zun). It is what
+  // shows after cleaning, so it sits over the corrosion, under the dust
+  float cGnd = uInlayGround * groundM * (0.85 + 0.15 * S.G) * (1.0 - 0.6 * cSoil);
+  col = mix(col, vec3(0.010, 0.010, 0.009) * (0.8 + 0.5 * S.M), cGnd * 0.92);
+  rough = mix(rough, 0.62, cGnd); metal = mix(metal, 0.0, cGnd); f0 = mix(f0, 0.045, cGnd);
+  cInl = max(cInl, cGnd);
+
   // ---- dulling: dust, old wax and fine soil in the pores grey the minerals down
   float dull = uDulling * a * (1.0 - metal);
   float lumD = tt_lum(col);
-  col = mix(col, vec3(lumD) * vec3(1.0, 1.01, 0.95), dull * 0.72);
+  col = mix(col, vec3(lumD) * vec3(1.0, 1.01, 0.985), dull * 0.72);
 
   // ---- dirt and wax in recesses on cleaned pieces (§3.4.10), museum wax sheen
   float dirt = uRecessDirt * pow(S.rec, 1.5) * (1.0 - cSoil);

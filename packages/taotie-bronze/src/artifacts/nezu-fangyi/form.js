@@ -19,7 +19,7 @@ export const LV = {
   apex: 261, // roof apex (the ridge beams stand on it to ≈ 0.825 H)
   beam: 12, // ridge beam above the apex: a heavy plank, ≈ 8 mm of it showing above the slopes
   knobBase: 273, // post top of the beams (0.825 H)
-  knobEave: 285.5, // knob eaves (0.865 H)
+  knobEave: 294, // knob eaves: the photo's knob roof is squat (≈ 36 mm tall on a ≈ 20 mm post; dossier 0.865 H was est.)
   top: 330,
 }
 /** plan half-widths (x = broad, z = narrow) — dossier §b.4 */
@@ -32,8 +32,8 @@ export const PLAN = {
   mouth: [84.5, 72],
   eave: [93.2, 79.7], // 1.06 W: the photograph's eaves read wider than the dossier's 1.04
   ridgeHalf: 65.5,
-  knobEave: [37, 25.5], // dossier §b.4: eaves 74 mm tip to tip (0.42 W)
-  knobTop: [22.5, 15.5],
+  knobEave: [34, 23.5], // photo: eaves ≈ 2.1× the post and ≈ 0.5 of the ridge length (dossier's 74 mm read 1.3× too wide)
+  knobTop: [21, 14.5],
   post: [15, 12], // stout: ≈ 0.4–0.5 of the knob eaves in the photograph (dossier 26 mm, review ≈ 30)
 }
 

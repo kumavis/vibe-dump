@@ -43,7 +43,9 @@ export default {
   views: {
     // solved against the photograph (7 landmarks, fov held at the dossier's 36°): eye ≈ 0.77 H, 764 mm from the aim point;
     // the target sits off-axis because the phone frame is an off-centre crop
-    'three-quarter': { azimuth: -27.5, elevation: 9.8, fov: 36, fit: 1.125, target: [30, 125, 18], ref: 'three-quarter.jpg' },
+    // fit/target tightened (was 1.125): the vessel fills ≈ 80 % of the landscape frame's height (photo: 74 % of its
+    // portrait frame, but ≈ 77 % of its width, which a landscape frame can only answer by going bigger)
+    'three-quarter': { azimuth: -27.5, elevation: 9.8, fov: 36, fit: 1.035, target: [30, 144, 18], ref: 'three-quarter.jpg' },
     front: { azimuth: 0, elevation: 8, fov: 30, fit: 1.1 },
     side: { azimuth: -90, elevation: 8, fov: 30, fit: 1.1 },
     top: { azimuth: -25, elevation: 58, fov: 30, fit: 1.1 },
@@ -58,6 +60,11 @@ export default {
     const ppmm = 5.6 * Math.sqrt(q) // 0.9 mm leiwen: ≥ 5 px/mm at q 1
     const dens = 1.5 * Math.sqrt(q) // verts/mm on décor cells (3 mm plateaus must show in the silhouette)
     const plain = new kit.PatinaMaterial()
+    // up-facing ledges (plinth top, belly-top step, neck/mouth steps): a dead-flat, featureless plane with the default
+    // 'fully exposed' cavity 0.8 caught the key light as a neutral near-white strip; at 0.45 it takes the photo's
+    // powdery grey-green settled skin instead
+    const ledge = new kit.PatinaMaterial({ cavity: 0.45 })
+    const ledges = (g) => g.traverse((m) => { if (m.isMesh && /^rim/.test(m.name)) m.material = ledge })
     const seed = 3300
     const panels = {}
     const object = new THREE.Group()
@@ -94,7 +101,7 @@ export default {
       // V-b: 3 mm flat-topped plateaus with rounded shoulders and ONE 0.6 mm incised line; slit eye bosses 5 mm in all
       const sheet = bellySheet(kit, { hw: hw - corner, v0, Hf, kind, L1: 3.0, seed: s })
       renderSheets(kit, p, [{ sheet, xc: hw }], {
-        L1: 3.0, shoulder: 1.25, groove: { w: 0.65, d: 0.5 }, ground: ground(0.9), seed: s,
+        L1: 3.0, shoulder: 1.0, groove: { w: 0.65, d: 0.5 }, ground: ground(0.9), seed: s,
         fields: [{ x: 1.2, y: v0 - 0.6, w: hw - 1.2 - corner, h: Hf + 0.6 }],
       })
       return p.bake()
@@ -144,7 +151,7 @@ export default {
       const { sheet, zones } = lidBroadSheet(kit, { slant: f.h, halfAt, margin: 4.6, slot: 4.6, seed: seed + 7 })
       lidZones = zones
       renderSheets(kit, p, [{ sheet, xc: f.w / 2 }], {
-        L1: 2.5, shoulder: 1.0, groove: { w: 0.85, d: 0.55 }, ground: ground(0.9), seed: seed + 7,
+        L1: 2.5, shoulder: 0.85, groove: { w: 0.75, d: 0.5 }, ground: ground(0.9), seed: seed + 7,
         fields: [{ x: 0, y: zones.vm0 - 0.5, w: f.w / 2 - 4, h: zones.Hm + 0.5 }, { x: 0, y: zones.vf0, w: f.w / 2 - 4, h: zones.Hu }],
       })
       panels.lidLong = p.bake()
@@ -207,6 +214,7 @@ export default {
     mouth.position.y = LV.neck
     neck.add(neckBody, mouth)
     object.add(base, foot, belly, neck)
+    for (const g of [base, foot, belly, neck]) ledges(g)
 
     // ---------------------------------------------------------------- lid + knob
     await onProgress(0.8, 'lid')
@@ -302,7 +310,9 @@ export default {
         const f = 1 - i / 12 // σ from the ridge down to the eave
         crest.push([f * L, 4 + 6.5 * (1 - f * f)])
       }
-      F({ path: ph, outline: [[-11, -3], [L, -3], ...crest, [-4.5, 10.6], [-9.5, 9.2], [-13, 5.4], [-15, 0], [-14.5, -7.5], [-12, -5.5], [-11, -3.4]], thickness: 7, embed: 3, taper: 1 })
+      // photo: past the eave corner the crest keeps its convex run down to a point at about eave level; behind the
+      // point the underside steps back in one small squared notch (no hook, no droop below the eave)
+      F({ path: ph, outline: [[-9.5, -3], [L, -3], ...crest, [-4.5, 10.3], [-9, 9.1], [-12.5, 7.2], [-14, 5.4], [-10.6, 4.6], [-10.6, 2.0], [-9.5, 1.2]], thickness: 7, embed: 3, taper: 1 })
       const mid = lid.userData.midlines[SIDES[k]].map(lidY)
       const pm = polyPath(mid, mid.map((_, i) => faceN(k, i / 12)))
       const Lm = pm.length
@@ -319,8 +329,9 @@ export default {
     for (const sx of [1, -1]) {
       const a = V(sx * (PLAN.post[0] + 0.4), LV.apex, 0), b = V(sx * (PLAN.ridgeHalf + 8), LV.apex, 0)
       const Lb = a.distanceTo(b)
-      // one continuous plank: 12 mm on the apex (≈ 8 showing above the slopes), its end sweeping up ≈ 6 mm
-      const m = F({ from: a, to: b, out: V(0, 1, 0), outline: [[0, -3], [Lb - 3, -3], [Lb + 1, 2.5], [Lb + 2.8, 9.5], [Lb + 3.4, LV.beam + 6], [Lb - 3.4, LV.beam + 6], [Lb - 10, LV.beam + 0.4], [Lb - 16, LV.beam], [0, LV.beam]], thickness: 8, embed: 3, taper: 1.5, carve: 'contour' })
+      // one continuous plank: 12 mm on the apex (≈ 8 showing above the slopes); photo: its end is a squared block
+      // stepping up ≈ 2.5 mm past the hip top (not a swept horn)
+      const m = F({ from: a, to: b, out: V(0, 1, 0), outline: [[0, -3], [Lb - 6, -3], [Lb - 6, 3], [Lb + 1, 3], [Lb + 1, LV.beam + 2.6], [Lb - 8, LV.beam + 2.6], [Lb - 8.6, LV.beam], [0, LV.beam]], thickness: 8, embed: 3, taper: 1.5, carve: 'contour' })
       m.userData.part = 'lid'
     }
     // knob: plain corner ridges whose eave tips hook down and in

@@ -65,7 +65,7 @@ function hornInto(S) {
       ...[24.5, 31, 37.5].map((u) => [[u, 81.7], [u, 80.2]]),
       ...[63, 70].map((v) => [[14.1, v], [15.6, v]]),
     ],
-    spirals: { rMin: 1.3, rMax: 4.5 },
+    spirals: { rMin: 1.5, rMax: 5.2 } /* 1.5: too big for the plain band, small enough for the gaps inside */,
   })
 }
 function jawInto(S) {
@@ -97,13 +97,15 @@ export function mainSheet(halfW, H = 93.3) {
   S.boss({ c: [23.6, 33.6], w: 13.2, h: 10.6, r: 3.6, height: 2.8, slit: [4.2, 1.2] })
   // axial strip beside the flange: C-spiral chain, T cap (scored) at the top, Γ arm, foot turned out
   S.island({
-    pts: [[3.2, 1.6], [12.2, 1.6], [12.2, 10.2], [9.6, 10.2], [9.6, 53.4], [10.6, 53.4], [10.6, 49.6], [13.6, 49.6], [13.6, 58.4], [9.6, 58.4], [9.6, 88.6], [3.2, 88.6]],
-    r: [1, 1.4, 1, 0.8, 0.6, 0.8, 1.2, 1.2, 0.8, 0.8, 1.2, 1],
-    lines: [81.6, 83.1, 84.6, 86.1, 87.4].map((v) => [[3.9, v], [8.9, v]]),
+    // detail-face-short: the strip is ~8.5 mm wide, one C coil filling its width per step
+    pts: [[3.2, 1.6], [12.2, 1.6], [12.2, 10.2], [11.0, 10.2], [11.0, 49.6], [13.6, 49.6], [13.6, 58.4], [11.0, 58.4], [11.0, 88.6], [3.2, 88.6]],
+    r: [1, 1.4, 1, 0.8, 0.8, 1.2, 1.2, 0.8, 1.2, 1],
+    lines: [81.6, 83.1, 84.6, 86.1, 87.4].map((v) => [[3.9, v], [10.3, v]]),
+    spirals: { rMin: 1.2, rMax: 3.8 },
   })
   // outer edge: two C islands opening toward the axis, a spiral curled in each lobe
-  S.island({ pts: cIsland(33.2, 30.7, 42.6, 46.0, 35.6, 39.8, 3.8), r: [3, 3.2, 3.6, 3.2, 1.2, 0.8, 0.8, 1.2], rim: 0, spirals: { rMin: 1.5, rMax: 3.4 } })
-  S.island({ pts: cIsland(34.1, 3.4, 43.4, 21.9, 9.8, 14.0, 3.9), r: [3, 3.2, 3.6, 3.4, 1.2, 0.8, 0.8, 1.2], rim: 0, spirals: { rMin: 1.5, rMax: 3.6 } })
+  S.island({ pts: cIsland(33.2, 30.7, 42.6, 46.0, 35.6, 39.8, 3.8), r: [3, 3.2, 3.6, 3.2, 1.2, 0.8, 0.8, 1.2], rim: 0, spirals: { rMin: 1.2, rMax: 3.4 } })
+  S.island({ pts: cIsland(34.1, 3.4, 43.4, 21.9, 9.8, 14.0, 3.9), r: [3, 3.2, 3.6, 3.4, 1.2, 0.8, 0.8, 1.2], rim: 0, spirals: { rMin: 1.2, rMax: 3.6 } })
   jawInto(S)
   // re-fit to this face: the axial strip keeps its width, the rest stretches to the field
   const u1 = halfW - 3.3
@@ -118,7 +120,8 @@ export function mainSheet(halfW, H = 93.3) {
       out.islands.push({ ...is, pts: is.pts.map(([u, v]) => [u, (v * H) / 93.3]) })
       return
     }
-    const ks = 1 + (k - 1) * (i === 0 ? 0.8 : 0.35)
+    // detail-face-long: the long-face horn is barely wider than the end-face one (dossier 37 vs 33 mm)
+    const ks = 1 + (k - 1) * (i === 0 ? 0.25 : 0.35)
     const uc = (b[0] + b[1]) / 2, uc2 = f(uc)
     const one = new Sheet()
     one.islands.push(is)
@@ -158,7 +161,7 @@ export function friezeSheet(halfW, H = 28.6) {
     pts: [[25.6, 15.4], [32.6, 15.4], [32.6, 8.0], [36.8, 8.0], [36.8, 13.4], [41.6, 13.4], [41.6, 10.2], [E, 8.0], [E, t], [25.6, t - 3.6]],
     r: [1.4, 0.8, 1.8, 1.6, 0.8, 0.8, 2.6, 4.2, 5, 1.6],
     lines: [fl([[25.8, 19.0], [37.6, 19.0], [37.6, 16.8], [E - 4.2, 16.8], [E - 4.2, 11.4]], [1.4, 1.2, 1.6])],
-    spirals: { rMin: 1.3, rMax: 3.4 },
+    spirals: { rMin: 1.15, rMax: 3.6 },
   })
   // lower jaw / mouth beside the flange, curling up
   S.island({ pts: rect(4.2, b, 9.8, 11.4), r: 2, spirals: { rMin: 1.2, rMax: 2.6 } })
@@ -290,53 +293,100 @@ export function lidEndSheet(halfAtY, sOfY, yTop) {
 }
 
 /**
- * Knob roof faces (detail-knob.jpg): FLUSH line work, not raised tiles — one continuous mask of
- * flowing scrolls with two ring eyes at the centre, cut ≤ 0.4 mm into a plain face, a plain eave fillet.
- * Returns groove polylines in panel mm (whole face, symmetric), drawn by knobGrooves().
+ * Knob roof faces (detail-knob.jpg): FLUSH line work — one continuous little taotie of linked,
+ * flowing scrolls cut into a plain face: two ring eyes in squared sockets with a lozenge nose between
+ * them, a brow band over each eye that sweeps out and curls into a coil at the outer edge, a jaw band
+ * under it that curls down into a coil above the eave, and small hooks filling the upper corners;
+ * a thick plain eave fillet. `topHalf` = half width of the face at its top (0 for the triangular ends).
+ * Returns groove polylines in panel mm (whole face, mirrored about the centre line).
  */
-export function knobLines(w, h, { eyes = true } = {}) {
+export function knobLines(w, h, { eyes = true, topHalf = w * 0.3 } = {}) {
   const L = []
   const cx = w / 2
-  const m = 1.3 // plain margin at the hips and the top
-  const eave = 2.4 // the thick plain eave fillet
-  // frame groove up the sides and across the top (no line along the eave)
-  L.push(fl([[m, eave], [m, h - m], [w - m, h - m], [w - m, eave]], 1))
-  const ey = eave + (h - eave) * 0.52, ex = Math.min(3.4, w * 0.13)
-  const keep = []
+  const m = 0.7 // plain margin at the hips and the top
+  const eave = 0.9 // the thick plain eave fillet is the knob's own skirt below the face
+  const hw = (y) => w / 2 + (topHalf - w / 2) * (y / h) - m // usable half width at height y
+  // frame groove along the hips and the top, none along the eave
+  const frame = []
+  for (let i = 0; i <= 8; i++) { const y = eave + ((h - m - eave) * i) / 8; frame.push([cx - hw(y), y]) }
+  for (let i = 8; i >= 0; i--) { const y = eave + ((h - m - eave) * i) / 8; frame.push([cx + hw(y), y]) }
+  L.push(frame)
+  const H = h - m - eave // décor height
+  const ey = eave + H * (topHalf > 0 ? 0.5 : 0.36)
+  // the whole composition scales with the room the face has at eye level (detail-knob: the mask
+  // spans the face from hip to hip)
+  const s = Math.min(1.3, H / 12, hw(ey) / 10.5)
+  const ex = 3.5 * s
   if (eyes) {
-    for (const sx of [-1, 1]) {
-      L.push(ring([cx + sx * ex, ey], 1.5))
-      L.push(ring([cx + sx * ex, ey], 0.45))
-      keep.push([cx + sx * ex, ey, 2.4])
-    }
-    // the nose lozenge between the eyes
-    L.push([[cx, ey + 1.6], [cx + 1.1, ey], [cx, ey - 1.8], [cx - 1.1, ey], [cx, ey + 1.6]])
-    keep.push([cx, ey, 1.9])
+    // the nose lozenge between the eyes, a groove down the centre line to the jaw
+    L.push([[cx, ey + 1.7 * s], [cx + 1.0 * s, ey], [cx, ey - 1.7 * s], [cx - 1.0 * s, ey], [cx, ey + 1.7 * s]])
   }
-  // flowing scrolls packed edge to edge over the rest of the face, mirrored about the centre line
-  const step = 3.7, r = 1.6
-  for (let y = eave + 1.9; y <= h - m - 1.6; y += step * 0.86) {
-    const row = Math.round((y - eave) / step)
-    for (let x = cx + (row % 2 ? step / 2 : 0.0001); x <= w - m - 1.5; x += step) {
-      for (const sx of [1, -1]) {
-        const px = cx + sx * (x - cx)
-        if (sx < 0 && Math.abs(px - cx) < 0.5) continue
-        if (keep.some(([kx, ky, kr]) => Math.hypot(px - kx, y - ky) < kr + r)) continue
-        L.push(scroll([px, y], r, sx * (row % 2 ? 1 : -1)))
-      }
+  for (const sx of [-1, 1]) {
+    const X = (u) => cx + sx * u
+    const P = (pts) => pts.map(([u, v]) => [X(u), v])
+    if (eyes) {
+      L.push(ring([X(ex), ey], 1.15 * s), ring([X(ex), ey], 0.35 * s))
+      // squared socket round the eye, open toward the nose
+      L.push(P(filletOpen([[ex - 1.0 * s, ey + 2.2 * s], [ex + 2.2 * s, ey + 2.2 * s], [ex + 2.2 * s, ey - 2.2 * s], [ex - 1.0 * s, ey - 2.2 * s]], 1.2 * s)))
     }
+    // brow band: from the centre over the eye, out, then down into a coil at the outer edge
+    const yb = ey + 3.3 * s
+    const xo = Math.max(ex + 4.0 * s, hw(ey) - 2.2 * s)
+    if (xo + 1.9 * s < hw(yb)) L.push(P([[0.7 * s, yb], [xo - 1.4 * s, yb], ...coil([xo, ey + 1.2 * s], 1.9 * s, 1.6, Math.PI / 2, -1)]))
+    else L.push(P([[0.7 * s, yb], [Math.min(ex + 2.4 * s, hw(yb) - 0.6), yb]])) // the triangular ends: a plain brow bar
+    // jaw band: from the centre under the eye, out, curling down into a coil over the eave
+    const yj = ey - 3.2 * s
+    L.push(P([[0.7 * s, yj], [ex + 0.6 * s, yj], ...coil([ex + 2.0 * s, eave + 1.9 * s], 1.6 * s, 1.5, Math.PI * 0.75, 1)]))
+    // the outer lower corner: a coil hooking up from the eave
+    const xl = hw(eave + 2) - 1.9 * s
+    if (xl > ex + 4.2 * s) L.push(P(coil([xl, eave + 2.0 * s], 1.7 * s, 1.5, -Math.PI / 2, -1)))
+    // the upper zone: a hook from the centre line curling outward under the frame
+    const yt = Math.min(h - m - 1.9 * s, yb + 2.6 * s)
+    if (yt > yb + 1.6 * s && hw(yt) > 3.2 * s) {
+      const xt = Math.min(hw(yt) - 1.7 * s, ex + 1.2 * s)
+      L.push(P([[0.7 * s, yt + 1.2 * s], [xt - 1.0 * s, yt + 1.2 * s], ...coil([xt, yt], 1.25 * s, 1.2, Math.PI / 2, -1)]))
+    }
+  }
+  // every free patch of the face is cut with a small coil, so the scrolls run edge to edge
+  // (detail-knob: no plain ground left between the mask parts)
+  const pts = []
+  for (const l of L) for (let i = 1; i < l.length; i++) {
+    const [a, b] = [l[i - 1], l[i]]
+    const n = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 0.4))
+    for (let k = 0; k < n; k++) pts.push([a[0] + ((b[0] - a[0]) * k) / n, a[1] + ((b[1] - a[1]) * k) / n])
+  }
+  const clear = (x, y) => {
+    let d = Math.min(y - eave + 0.3, h - m - y, hw(y) - Math.abs(x - cx))
+    for (const [px, py] of pts) d = Math.min(d, Math.hypot(px - x, py - y))
+    return d
+  }
+  const cand = []
+  for (let y = eave + 1; y < h - m - 0.8; y += 0.35) for (let x = cx; x < cx + hw(y) - 0.8; x += 0.35) cand.push([x, y, clear(x, y) - 0.55])
+  cand.sort((a, b) => b[2] - a[2])
+  const placed = []
+  for (const [x, y, r0] of cand) {
+    let r = Math.min(r0, 2.1)
+    for (const [qx, qy, qr] of placed) r = Math.min(r, Math.hypot(qx - x, qy - y) - qr - 0.75, Math.hypot(2 * cx - qx - x, qy - y) - qr - 0.75)
+    if (Math.abs(x - cx) < r + 0.4) continue // keep the centre line for the mirror
+    if (r < 0.95) continue
+    placed.push([x, y, r])
+  }
+  for (const [x, y, r] of placed) {
+    const turns = Math.max(1.1, (r - 0.35) / 0.95)
+    for (const sx of [-1, 1]) L.push(coil([cx + sx * (x - cx), y], r, turns, 0, sx * (y > ey ? 1 : -1)))
   }
   return L
 }
 
-/** A small round scroll groove of ~1.75 turns (radius r), hand ±1. */
-function scroll(c, r, hand) {
+/** A rounded-square coil groove from its outer start (angle a0) winding `turns` inward; hand ±1. */
+function coil(c, r, turns, a0, hand) {
   const pts = []
-  const turns = 1.75, n = 60
+  const n = Math.ceil(turns * 48)
   for (let i = 0; i <= n; i++) {
     const t = (i / n) * turns * Math.PI * 2
-    const rr = 0.3 + ((r - 0.3) * i) / n
-    pts.push([c[0] + rr * Math.cos(hand * t), c[1] + rr * Math.sin(hand * t)])
+    const rr = r - ((r - 0.35) * i) / n
+    const a = a0 + hand * t, ca = Math.cos(a), sa = Math.sin(a)
+    pts.push([c[0] + rr * Math.sign(ca) * Math.pow(Math.abs(ca), 2 / 3), c[1] + rr * Math.sign(sa) * Math.pow(Math.abs(sa), 2 / 3)])
   }
   return pts
 }

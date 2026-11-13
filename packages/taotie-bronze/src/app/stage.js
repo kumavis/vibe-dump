@@ -92,7 +92,7 @@ export class Stage {
       const roomGeo = new THREE.SphereGeometry(16, 32, 16)
       const cols = []
       const pos = roomGeo.attributes.position
-      const lo = tint('#14110e'), mid = tint('#3a3128'), hi = tint('#4a3f33')
+      const lo = tint('#121211'), mid = tint('#343230'), hi = tint('#43413e')
       for (let i = 0; i < pos.count; i++) {
         const y = pos.getY(i) / 16
         const c = y < 0 ? lo.clone().lerp(mid, y + 1) : mid.clone().lerp(hi, Math.min(1, y * 1.4))
@@ -107,17 +107,17 @@ export class Stage {
         env.add(m)
         return m
       }
-      card(7, 4.5, '#ffdcb0', 5.5, [-5.5, 7, 6], [0, 0.5, 0]) // key softbox, front-upper-left
-      card(9, 6, '#ffe6c8', 0.8, [0, 9.5, 0], [0, 0, 0]) // vitrine ceiling light box (dim: up-facing faces must not wash out)
+      card(7, 4.5, '#fff0e2', 5.5, [-5.5, 7, 6], [0, 0.5, 0]) // key softbox, front-upper-left
+      card(9, 6, '#fff0e0', 0.8, [0, 9.5, 0], [0, 0, 0]) // vitrine ceiling light box (dim: up-facing faces must not wash out)
       for (let i = 0; i < 5; i++) card(0.5, 0.5, '#fff0dc', 14, [-6 + i * 3, 11, -3 + (i % 2) * 5], [0, 0, 0]) // ceiling spots
       card(1.3, 8, '#b9cde6', 2.2, [8, 4, -6], [0, 2, 0]) // cool window strip, back-right
-      card(6, 2.2, '#ffcf98', 0.9, [-2, 3.5, -10], [0, 2, 0]) // warm wall card behind
-      card(5, 4, '#ffd9b4', 1.6, [9, 3, 5], [0, 1.5, 0]) // right fill card
-      card(6, 4, '#ffe0c0', 1.4, [-10, 3, -1], [0, 1.5, 0]) // left wall wash
+      card(6, 2.2, '#ffe2c4', 0.9, [-2, 3.5, -10], [0, 2, 0]) // warm wall card behind
+      card(5, 4, '#ffe6d2', 1.6, [9, 3, 5], [0, 1.5, 0]) // right fill card
+      card(6, 4, '#ffeadb', 1.4, [-10, 3, -1], [0, 1.5, 0]) // left wall wash
       for (const x of [-7.5, 7.5]) card(0.08, 12, '#e8e0d4', 1.2, [x, 3, 7.5], [x, 3, 0]) // vitrine glass edges
-      card(10, 10, '#211d18', 1, [0, -2.5, 0], [0, 0, 0]) // plinth / floor bounce
-      card(18, 7, '#6a5a48', 2.2, [0, 3, 13], [0, 3, 0]) // the gallery behind the viewer: dim warm wall
-      card(3.5, 2.2, '#ffe4c0', 3, [2.5, 4.5, 11], [0, 1.5, 0]) // a lit label / doorway glow behind the viewer
+      card(10, 10, '#1e1d1b', 1, [0, -2.5, 0], [0, 0, 0]) // plinth / floor bounce
+      card(18, 7, '#5f5b56', 2.2, [0, 3, 13], [0, 3, 0]) // the gallery behind the viewer: dim warm wall
+      card(3.5, 2.2, '#ffeedd', 3, [2.5, 4.5, 11], [0, 1.5, 0]) // a lit label / doorway glow behind the viewer
       const pmrem = new THREE.PMREMGenerator(this.renderer)
       const tex = pmrem.fromScene(env, 0.015).texture
       pmrem.dispose()
@@ -169,7 +169,7 @@ export class Stage {
 
   _buildLights() {
     // warm tungsten-halogen key spot, front-upper-left: rakes across the relief
-    this.key = new THREE.SpotLight('#ffeedf', 4.2, 0, 0.5, 0.6, 0)
+    this.key = new THREE.SpotLight('#fff6ee', 4.2, 0, 0.5, 0.6, 0)
     this.key.castShadow = true
     this.key.shadow.mapSize.set(2048, 2048)
     this.key.shadow.bias = -0.0002
@@ -181,7 +181,7 @@ export class Stage {
     // soft rim from behind so the silhouette lifts off the near-black ground
     this.rim = new THREE.SpotLight('#dfe6f0', 2.6, 0, 0.45, 0.95, 0)
     this.scene.add(this.rim, this.rim.target)
-    this.ambient = new THREE.HemisphereLight('#3a3631', '#0c0b0a', 0.3)
+    this.ambient = new THREE.HemisphereLight('#363533', '#0c0b0a', 0.3)
     this.scene.add(this.ambient)
     this._lightLook = { key: this.key.color.clone(), fill: this.fill.color.clone(), rim: this.rim.color.clone() }
   }
@@ -235,11 +235,11 @@ export class Stage {
       this.contact.visible = false
     } else {
       // vitrine: key front-upper-left, high enough to rake down across horizontal registers
-      this.key.position.copy(aim).addScaledVector(dir(-38, 42), d)
+      this.key.position.copy(aim).addScaledVector(dir(-36, 34), d)
       this.key.angle = Math.atan((R * 1.9) / d)
       this.key.intensity = 4.2
       this.rim.intensity = 3.2
-      this.fill.intensity = 1.2
+      this.fill.intensity = 1.5
       this.contact.visible = true
     }
     this.key.target.position.copy(aim)

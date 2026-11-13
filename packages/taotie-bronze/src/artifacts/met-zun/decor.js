@@ -41,25 +41,25 @@ export function bellyPanel(kit, size, { ppmm, seed }) {
   // Read from detail-belly-mask.jpg / detail-belly-half.jpg on a developed-mm grid (x from
   // the nose line, y up from the register's lower edge). Orthogonal bands only.
   // nose column beside the flange, from the top down, the snout hooking out at its foot
-  bands.push(B(T(5.5, 62, -90).fwd(40).turn(90, 2).fwd(4.5).turn(90, 1.6).fwd(3), 4))
+  bands.push(B(T(5.5, 62, -90).fwd(40).turn(90, 2).fwd(4.5).turn(90, 1.6).fwd(3), 4.6))
   // THE horn: ONE open band — out of the nose column at y ≈ 36, up beside it, out along
   // the top to x ≈ 70, then down and back toward the axis into a squared spiral of
   // 1½ turns whose free end lies near (0.46, 0.70)
   bands.push(B(T(7.5, 36, 0).fwd(9).turn(90, 2.4).fwd(21).turn(-90, 3.2).fwd(50).turn(-90, 3.2).fwd(23.5)
-    .turn(-90, 3).fwd(33).turn(-90, 2.6).fwd(15).turn(-90, 2.2).fwd(20).turn(-90, 1.8).fwd(6.5).turn(-90, 1.5).fwd(9), 4.4))
+    .turn(-90, 3).fwd(33).turn(-90, 2.6).fwd(15).turn(-90, 2.2).fwd(20).turn(-90, 1.8).fwd(6.5).turn(-90, 1.5).fwd(9), 5.2))
   // outer element: a narrower open C-scroll at the seam (ear / upturned tail), opening to the nose
-  bands.push(B(T(84, 51, 90).fwd(6).turn(-90, 2.4).fwd(18).turn(-90, 2.6).fwd(25).turn(-90, 2.4).fwd(15).turn(-90, 1.8).fwd(5), 3.7))
+  bands.push(B(T(84, 51, 90).fwd(6).turn(-90, 2.4).fwd(18).turn(-90, 2.6).fwd(25).turn(-90, 2.4).fwd(15).turn(-90, 1.8).fwd(5), 4.4))
   // the eye: a pale round socket outlined by the groove, the boss inside; a short
   // horizontal inner-canthus stub to the nose column
-  bands.push(circle(P([38, 23.5]), 6.2 * sx))
-  bands.push(B(T(32, 23.5, 180).fwd(23), 3.8))
+  bands.push(circle(P([38, 23.5]), 6.6 * sx))
+  bands.push(B(T(32, 23.5, 180).fwd(23), 4.3))
   // body: out from behind the eye to the seam, a small hook rising at its end
-  bands.push(B(T(44, 24, 0).fwd(50).turn(90, 1.8).fwd(4).turn(90, 1.4).fwd(3), 3.8))
+  bands.push(B(T(44, 24, 0).fwd(50).turn(90, 1.8).fwd(4).turn(90, 1.4).fwd(3), 4.4))
   // lower row: open hooks of mixed form and size (lip, fangs, claws), none closed
-  bands.push(B(T(17, 14.5, 0).fwd(17).turn(-90, 1.8).fwd(7).turn(-90, 1.6).fwd(8).turn(90, 1.4).fwd(3.5), 3.5)) // S-hook under the eye
-  bands.push(B(T(64, 16, 180).fwd(13).turn(90, 1.6).fwd(9).turn(90, 1.4).fwd(5.5), 3.5)) // C-claw toward the nose
-  bands.push(B(T(80, 4.5, 180).fwd(9).turn(-90, 1.4).fwd(7).turn(-90, 1.2).fwd(3.5), 3.2)) // small hook
-  bands.push(B(T(107, 17, 180).fwd(19).turn(90, 2).fwd(10.5).turn(90, 2).fwd(13).turn(90, 1.6).fwd(4).turn(90, 1.3).fwd(5), 3.6)) // larger hook at the seam end
+  bands.push(B(T(17, 14.5, 0).fwd(17).turn(-90, 1.8).fwd(7).turn(-90, 1.6).fwd(8).turn(90, 1.4).fwd(3.5), 4.1)) // S-hook under the eye
+  bands.push(B(T(64, 16, 180).fwd(13).turn(90, 1.6).fwd(9).turn(90, 1.4).fwd(5.5), 4.1)) // C-claw toward the nose
+  bands.push(B(T(80, 4.5, 180).fwd(9).turn(-90, 1.4).fwd(7).turn(-90, 1.2).fwd(3.5), 3.8)) // small hook
+  bands.push(B(T(107, 17, 180).fwd(19).turn(90, 2).fwd(10.5).turn(90, 2).fwd(13).turn(90, 1.6).fwd(4).turn(90, 1.3).fwd(5), 4.2)) // larger hook at the seam end
   const bosses = [{ c: P([38, 23.5]), r: 4.5 * sx, h: 2.3, ring: false, pupil: 1.1 }]
   renderFlush(kit, panel, { bands, bosses, half, seed })
   panel.mirrorX()
@@ -119,10 +119,12 @@ export function footPanel(kit, size, { ppmm, seed }) {
   bands.push(B(T(69, 41, -90).fwd(8).turn(-90, 2).fwd(11).turn(-90, 3).fwd(44).turn(-90, 3).fwd(22).turn(-90, 3).fwd(12).turn(-90, 2).fwd(9).turn(-90, 2).fwd(4)))
   // edge kui's eye: a tiny boss in a square frame by the seam
   bands.push(kit.shapes.rrect(P([84, 26]), 12 * sx, 12 * sy, 2.2))
-  // jaw / claw row: open S-hooks ('S S'), and a C-hook at the seam end
-  for (const x of [9, 31, 53]) {
-    bands.push(B(T(x + 15, 17.5, 180).fwd(12).turn(90, 1.4).fwd(5.5).turn(90, 1.4).fwd(10).turn(-90, 1.4).fwd(5.5).turn(-90, 1.4).fwd(12), 3.1))
-  }
+  // jaw / claw row: open hooks of mixed form, packed tight (detail-foot-front.jpg) — an
+  // L-claw by the nose, one S under the eye, a squared spiral hook, a C-hook at the seam;
+  // a row of identical S's read as the letters 'SSS'
+  bands.push(B(T(6, 4, 0).fwd(11).turn(90, 1.4).fwd(9).turn(90, 1.4).fwd(6), 3.1))
+  bands.push(B(T(40, 17.5, 180).fwd(13).turn(90, 1.4).fwd(5.5).turn(90, 1.4).fwd(9).turn(-90, 1.4).fwd(5.5).turn(-90, 1.4).fwd(12), 3.1))
+  bands.push(B(T(46, 4, 0).fwd(22).turn(90, 1.6).fwd(13).turn(90, 1.4).fwd(15).turn(90, 1.2).fwd(6).turn(90, 1.2).fwd(7), 3.1))
   bands.push(B(T(76, 17.5, 0).fwd(12).turn(-90, 1.4).fwd(11).turn(-90, 1.4).fwd(6), 3.1))
   const bosses = [
     { c: P([35, 25]), r: 4.4 * sx, ring: true, pupil: 1.0 },
@@ -209,15 +211,16 @@ export function neckPanel(kit, size, { ppmm, seed }) {
   const { circle } = kit.shapes
   const bands = []
   // detail-neck-blades.jpg: two kui heads face each other and meet under the nose blade —
-  // no frame round them. Each head is a bold open squared jaw (a C open to the nose line)
-  // round a flush ring eye at x ≈ 20; the body runs out to the seam ridge in one bold
-  // band and ends in a raised-tail hook.
-  bands.push(B(T(31, 27, 180).fwd(26).turn(90, 2.2).fwd(6))) // upper jaw, its tip curling down at the nose
-  bands.push(B(T(31, 27, -90).fwd(20).turn(-90, 2.2).fwd(24).turn(-90, 1.8).fwd(5))) // back of the head → lower jaw, tip up
-  bands.push(circle(P([18.5, 17]), 4.6 * sx)) // eye socket
-  bands.push(B(T(31, 17, 0).fwd(45.5).turn(90, 2).fwd(9).turn(90, 2).fwd(7).turn(90, 1.6).fwd(3))) // body → raised tail hook
-  bands.push(B(T(50, 15, -90).fwd(7).turn(90, 1.5).fwd(6), 3.6)) // claw
-  const bosses = [{ c: P([18.5, 17]), r: 2.6 * sx, h: 0, ring: true, pupil: 0.8 }] // flush ring eye
+  // no frame round them. Each head is a bold rounded-square loop the full height of the
+  // band, open toward the nose and curling in round a flush ring eye (x ≈ 15); the body
+  // behind it is a tall squared 'P' spiral to the seam, a [-shaped tail hook at the
+  // seam ridge. Everything fills the band height: at vessel distance the band reads as a
+  // row of pale squared loops, not as a thin line.
+  bands.push(B(T(2.5, 27, 0).fwd(20.5).turn(-90, 4).fwd(19).turn(-90, 3.5).fwd(16).turn(-90, 3).fwd(12).turn(-90, 2.4).fwd(6.5), 4.2)) // head loop
+  bands.push(circle(P([15.3, 13.8]), 2.7 * sx)) // eye socket
+  bands.push(B(T(29, 8, 0).fwd(42).turn(90, 3).fwd(19).turn(90, 3).fwd(39).turn(90, 2.4).fwd(12).turn(90, 2.2).fwd(29).turn(90, 1.8).fwd(5), 4.2)) // body 'P' spiral
+  bands.push(B(T(85, 27, 180).fwd(6.5).turn(90, 2.4).fwd(19).turn(90, 2.4).fwd(6.5), 4.0)) // tail hook at the seam
+  const bosses = [{ c: P([15.3, 13.8]), r: 1.9 * sx, h: 0, ring: true, pupil: 0.6 }] // flush ring eye
   // the border strip the blades stand on: two fine lines, leiwen between
   const lines = [
     { pts: [[0, yb + 0.6], [W / 2 + 1, yb + 0.6]], w: 0.6 },
@@ -260,8 +263,6 @@ export function bladePanel(kit, size, { ppmm, seed }) {
   const hw = (t) => (t >= 1 ? 0 : Math.max(0, arc.cx + Math.sqrt(Math.max(0, arc.R * arc.R - (t * Hb - arc.cy) ** 2))))
   const lines = []
   const bands = []
-  const lw = 1.0
-  const sp = 3.6 // 3–4 bold nested bands ≈ 2.6 mm wide, a black groove between
   // widths grow with the flare (∝ r) over the lower 55 %, then stay true so the apex keeps its point: the photographs' blades stay almost touching up
   // to mid height, V-slots between them, rather than narrowing in true mm as the trumpet opens
   const toP = (thc) => ([dx, y]) => size.toPanel([thc * DEG * rAt(y) + dx * (rAt(Math.min(y, baseY + 0.55 * Hb)) / r0), y])
@@ -286,23 +287,27 @@ export function bladePanel(kit, size, { ppmm, seed }) {
     const R = L.slice(0, -1).reverse().map(([x, y]) => [-x, y])
     return L.concat(R).map(toP(thc))
   }
-  const t0 = 0.5 // contour lines only above
+  const t0 = 0.46 // contour lines only above
+  // detail-neck-blades.jpg (≈ 6 px/mm): the arch is a pale border strip between black
+  // grooves, and the upper blade 4–6 nested pale strips ≈ 3 mm apart converging on the
+  // point — pale-on-black line work that reads at vessel distance (1 mm hairlines on the
+  // plain wall vanished)
   for (const thc of [-40, 0]) {
-    // outline: three contour lines
-    for (let k = 0; k < 2; k++) lines.push({ pts: side(thc, 0.8 + k * sp), w: lw })
-    // upper blade: nested lines converging on the apex
-    for (let k = 2; k < 5; k++) {
-      const d = 0.8 + k * sp
-      if (hw(t0) - d < 1.2) break
-      lines.push({ pts: side(thc, d, t0), w: lw })
+    // pale strips between the black grooves (flush bands, so the patina's relief tops
+    // read pale as in the photograph): a 2.4 mm border strip, then nested 1.6 mm strips
+    bands.push(band(side(thc, 2.1), 2.4, 'flat', 'flat'))
+    for (let k = 0; k < 7; k++) {
+      const d = 5.7 + k * 3.0
+      if (hw(t0) - d < 1.6) break
+      bands.push(band(side(thc, d, t0), 1.6, 'flat', 'flat'))
     }
-    const yT = baseY + t0 * Hb - sp * 0.6
-    const wT = hw(t0) - (0.8 + 1 * sp) - 0.8
-    lines.push({ pts: [[-wT, yT], [wT, yT]].map(toP(thc)), w: lw })
+    const yT = baseY + t0 * Hb - 1.9
+    const wT = hw(t0) - 4.4
+    bands.push(band([[-wT, yT], [wT, yT]].map(toP(thc)), 1.6, 'flat', 'flat'))
     // lower blade: the stretched mask
     const m = (pts) => pts.map(toP(thc))
     const yb = baseY + 6.5
-    const ins = 0.8 + 2 * sp + 1.2
+    const ins = 4.4 + 1.6
     for (const sgn of [-1, 1]) {
       const X = (x) => sgn * x
       // squared C-spiral 'eye' (lower 20–45 % of the blade), curling up and back in toward the axis
@@ -322,8 +327,8 @@ export function bladePanel(kit, size, { ppmm, seed }) {
   const include = (ctx) => {
     for (const thc of [-40, 0]) {
       const pts = []
-      const d = 0.8 + 1 * sp + 1.0
-      const tTop = t0 - (sp * 1.1) / Hb
+      const d = 4.4 + 0.6
+      const tTop = t0 - 2.8 / Hb
       for (let i = 0; i <= 40; i++) {
         const t = (tTop * i) / 40
         pts.push([-(hw(t) - d), baseY + t * Hb])
@@ -333,7 +338,7 @@ export function bladePanel(kit, size, { ppmm, seed }) {
       ctx.fill()
     }
   }
-  renderFlush(kit, panel, { bands, lines, half: { x: 0, y: 0, w: W / 2, h: H }, include, seed, lineDepth: 0.4, solid: false })
+  renderFlush(kit, panel, { bands, lines, half: { x: 0, y: 0, w: W / 2, h: H }, include, seed, groove: 0.95, solid: false })
   panel.mirrorX()
   return panel.bake()
 }

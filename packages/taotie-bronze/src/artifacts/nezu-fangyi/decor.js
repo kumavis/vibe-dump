@@ -52,20 +52,21 @@ export function bellySheet(kit, { hw, v0, Hf, kind = 'broad', L1 = 3, seed = 1 }
   const narrow = kind === 'narrow'
   const k = Hf / 75
   // V-b plateaus: broad bands, 0.08–0.09 of the register (photo: 25–30 px of a 280 px register)
-  const wH = 6.6 * k, wB = 6.0 * k, wS = 5.0 * k
+  // round 3: ×1.2 again — the photo's bands are 6.5–7.5 mm with 1.5–2 mm channels between them
+  const wH = 8.0 * k, wB = 7.2 * k, wS = 6.0 * k
   const rq = (w) => w * 0.75
   const rc = wB * 0.8 // squared-round corner radius of the body bands
 
   // the horn (photo, right half re-measured on a 3× crop): ONE heavy band leaves the forehead by the flange at the
   // top, runs outward along the top edge and curls clockwise — down the outer side, back under, up into its own
   // centre — about 1.1 turns round a centre at (0.44, 0.765); nothing of it falls below v ≈ 0.55
-  const R = 10.4 * k
-  const hc = [X(narrow ? 0.40 : 0.44), Y(0.78)]
+  const R = 11.6 * k
+  const hc = [X(narrow ? 0.40 : 0.44), Y(0.755)]
   const top = hc[1] + R
   const lead = [[X(0.065), top - 1.0 * k], [X(0.065), top], [hc[0], top]]
-  const hcoil = coil(hc, R, { start: 90, sweep: 385, dir: -1, hold: 170, rEnd: 2.5 * k })
+  const hcoil = coil(hc, R, { start: 90, sweep: 385, dir: -1, hold: 170, rEnd: 2.2 * k })
   const horn = kit.shapes.resample(kit.shapes.fillet([...lead, ...hcoil.slice(1)], [0, 1.5 * k, 0]), 0.3)
-  S.band(horn, kit.shapes.taper(wH, 4.6 * k, 0.72), { capA: 'flat', capB: 'round' })
+  S.band(horn, kit.shapes.taper(wH, 4.4 * k, 0.72), { capA: 'flat', capB: 'round' })
 
   // eye: a raised rounded-square frame (臣-derived) round a flattened slit boss, low in the field
   const ec = [X(0.25), Y(0.345)]
@@ -89,7 +90,7 @@ export function bellySheet(kit, { hw, v0, Hf, kind = 'broad', L1 = 3, seed = 1 }
   S.band(path(kit, [[uF, Y(0.93)], [uF, yb]]), wB, { capA: 'round', capB: 'flat' })
   for (const v of [0.56, 0.41]) S.band(path(kit, [[uF, Y(v)], [X(0.87), Y(v)], [X(0.87), Y(v) - 5.2 * k]], [0, rq(wS), 0]), wS, { capA: 'flat', capB: 'round' })
   // the ear / tail: a squared-round spiral in the outer top corner, off the top of the F stem
-  const ecx = X(narrow ? 0.86 : 0.875), ecy = Y(0.79), Re = 6.4 * k
+  const ecx = X(narrow ? 0.86 : 0.87), ecy = Y(0.785), Re = 7.2 * k
   const ear = kit.shapes.cScroll([ecx, ecy], Re, { start: 90, sweep: 380, dir: -1, shrink: 0.31 })
   S.band([[uF, ecy + Re], ...ear], kit.shapes.taper(wS, 3.2 * k, 0.45), { capA: 'flat', capB: 'round' })
 
@@ -101,7 +102,7 @@ export function bellySheet(kit, { hw, v0, Hf, kind = 'broad', L1 = 3, seed = 1 }
     S.band(kit.shapes.cScroll(c, 3.9 * k, { start: 270, sweep: 330, dir, shrink: 0.3 }), kit.shapes.taper(wS * 0.95, 3.0 * k, 0.4), { capA: 'flat', capB: 'round' })
   }
   // the crowd: smaller hooked plateaus in every gap that is left; leiwen only in the channels between
-  fillHooks(kit, S, { u0: 1.2, u1: hw - 1.6, v0: v0 + 0.4, v1: v0 + Hf - 0.3 }, { rMin: 3.5 * k, rMax: 9 * k, gap: 1.6 * k, wMin: 3.6 * k, wMax: 5.2 * k, wFloor: 2.8 * k, seed, round: 0.3, max: 48, wScale: 0.5 })
+  fillHooks(kit, S, { u0: 1.2, u1: hw - 1.6, v0: v0 + 0.4, v1: v0 + Hf - 0.3 }, { rMin: 2.3 * k, rMax: 9 * k, gap: 0.95 * k, wMin: 4.6 * k, wMax: 6.4 * k, wFloor: 3.0 * k, seed, round: 0.3, max: 90, wScale: 0.56, stubs: true })
   return S
 }
 
@@ -194,7 +195,8 @@ export function lidBroadSheet(kit, { slant, halfAt, margin = 5, slot = 4.5, seed
     return [slot + x * (hw - slot), v]
   })
   const Mm = M(vm0, Hm), Mu = M(vf0, Hu)
-  const wm = 0.085 * Hm, ws = 0.07 * Hm
+  // round 3: broad flat bands as on the belly (photo: 0.08–0.11 of the main panel, channels 1–2 mm)
+  const wm = 0.102 * Hm, ws = 0.086 * Hm
   const r = wm * 0.7, rs = ws * 0.6
 
   // ---- main panel, re-read off a 3× crop of the photograph's front slope (left half; u 0 = centre flange):
@@ -203,31 +205,34 @@ export function lidBroadSheet(kit, { slant, halfAt, margin = 5, slot = 4.5, seed
   // outer bottom, squared hooks along the top — then the crowd of smaller hooks.
   const M1 = (p) => Mm([p])[0]
   const Wx = (u) => M1([u, 0.5])[0] // mm u at mid panel (for sizes)
-  const ec = M1([0.25, 0.70])
-  S.boss({ c: ec, rx: 0.078 * Hm, ry: 0.06 * Hm, h: 2.5 + 2, slit: [0.085 * Hm, 0.8], flat: 0.9 })
-  S.band(kit.shapes.spline(Mm([[0.115, 0.74], [0.125, 0.63], [0.25, 0.585], [0.375, 0.63], [0.385, 0.74]]), 0.3), ws, { capA: 'round', capB: 'round' })
-  S.band(path(kit, Mm([[0.11, 0.80], [0.11, 0.885], [0.38, 0.885], [0.38, 0.80], [0.30, 0.80]]), [0, rs, rs, rs, 0]), ws, { capA: 'round', capB: 'round' })
-  S.boss({ c: M1([0.10, 0.962]), rx: 0.03 * Hm, h: 2.5 + 1.3 })
+  const ec = M1([0.25, 0.68])
+  S.boss({ c: ec, rx: 0.092 * Hm, ry: 0.072 * Hm, h: 2.5 + 2.2, slit: [0.10 * Hm, 0.9], flat: 0.85 })
+  S.band(kit.shapes.spline(Mm([[0.10, 0.73], [0.11, 0.595], [0.25, 0.545], [0.39, 0.595], [0.40, 0.73]]), 0.3), ws, { capA: 'round', capB: 'round' })
+  S.band(path(kit, Mm([[0.165, 0.815], [0.165, 0.905], [0.40, 0.905], [0.40, 0.815], [0.32, 0.815]]), [0, rs, rs, rs, 0]), ws, { capA: 'round', capB: 'round' })
+  S.boss({ c: M1([0.075, 0.935]), rx: 0.03 * Hm, h: 2.5 + 1.3 })
   // the coil: off a vertical band at u 0.22 (T foot on the eaves), a lead outward along its top, ~1.2 turns clockwise
-  const Rs = 0.12 * Hm, sc = M1([0.43, 0.30])
+  const Rs = 0.135 * Hm, sc = M1([0.43, 0.30])
   const sTop = sc[1] + Rs
   const vx = M1([0.22, 0.3])[0]
-  S.band(path(kit, [[vx, M1([0.22, 0.50])[1]], [vx, M1([0.22, 0.05])[1]]]), wm, { capA: 'round', capB: 'flat' })
+  S.band(path(kit, [[vx, M1([0.22, 0.50])[1]], [vx, M1([0.22, 0.05])[1]]]), wm * 1.12, { capA: 'round', capB: 'flat' })
   S.band(path(kit, Mm([[0.13, 0.05], [0.31, 0.05]])), ws, { capA: 'round', capB: 'round', line: false })
-  S.band(kit.shapes.resample([[vx, sTop], [sc[0], sTop], ...coil(sc, Rs, { start: 90, sweep: 400, dir: -1, hold: 170, rEnd: 0.22 * Rs }).slice(1)], 0.3), kit.shapes.taper(wm, wm * 0.7, 0.7), { capA: 'flat', capB: 'round' })
+  // photo: the coil is a heavy MASS (a broad band wound into a disc, the spiral read from its groove), not an outline
+  S.band(kit.shapes.resample([[vx, sTop], [sc[0], sTop], ...coil(sc, Rs, { start: 90, sweep: 450, dir: -1, hold: 170, rEnd: 0.12 * Rs }).slice(1)], 0.3), kit.shapes.taper(wm * 1.2, wm * 0.75, 0.7), { capA: 'flat', capB: 'round' })
   // the E between eye and body: a spine at u 0.53 with two prongs toward the axis, each hooking down
   S.band(path(kit, Mm([[0.53, 0.86], [0.53, 0.58]])), ws, { capA: 'round', capB: 'flat' })
   for (const v of [0.84, 0.72]) S.band(path(kit, Mm([[0.53, v], [0.45, v], [0.45, v - 0.06]]), rs), ws * 0.95, { capA: 'flat', capB: 'round' })
   // the T/F body: a heavy vertical at u 0.72 (T foot on the eaves), the cross-arm at v 0.58, turning down at the hip
   // into the tail spiral
-  S.band(path(kit, Mm([[0.72, 0.58], [0.72, 0.05]])), wm, { capA: 'flat', capB: 'flat' })
+  S.band(path(kit, Mm([[0.72, 0.58], [0.72, 0.05]])), wm * 1.15, { capA: 'flat', capB: 'flat' })
   S.band(path(kit, Mm([[0.62, 0.05], [0.83, 0.05]])), ws, { capA: 'round', capB: 'round', line: false })
+  // photo: a squared hook branches off the T stem toward the hip, between the cross-arm and the tail
+  S.band(path(kit, Mm([[0.72, 0.47], [0.845, 0.47], [0.845, 0.37]]), [0, rs, 0]), ws * 0.95, { capA: 'flat', capB: 'round' })
   const Rt = 0.075 * Hm
   const tR = M1([0.955, 0.26]), tc = [tR[0] - Rt, tR[1]]
   S.band(kit.shapes.resample([...path(kit, [M1([0.50, 0.58]), M1([0.955, 0.58]), tR], [0, rs, 0]), ...kit.shapes.cScroll(tc, Rt, { start: 0, sweep: 380, dir: -1, shrink: 0.3 }).slice(1)], 0.3), kit.shapes.taper(wm, ws * 0.7, 0.6), { capA: 'round', capB: 'round' })
   // hooks along the top toward the hip
-  S.band(path(kit, Mm([[0.62, 0.70], [0.62, 0.90], [0.80, 0.90], [0.80, 0.80], [0.71, 0.80]]), [0, rs, rs, rs, 0]), ws, { capA: 'round', capB: 'round' })
-  S.band(path(kit, Mm([[0.965, 0.70], [0.965, 0.90], [0.88, 0.90], [0.88, 0.78]]), [0, rs, rs, 0]), ws, { capA: 'round', capB: 'round' })
+  S.band(path(kit, Mm([[0.60, 0.66], [0.60, 0.92], [0.82, 0.92], [0.82, 0.78], [0.70, 0.78]]), [0, rs, rs, rs, 0]), ws, { capA: 'round', capB: 'round' })
+  S.band(path(kit, Mm([[0.97, 0.66], [0.97, 0.92], [0.86, 0.92], [0.86, 0.76]]), [0, rs, rs, 0]), ws, { capA: 'round', capB: 'round' })
   void Wx
 
   // ---- separator bar: a plain raised band across the slope
@@ -241,7 +246,7 @@ export function lidBroadSheet(kit, { slant, halfAt, margin = 5, slot = 4.5, seed
   // ---- upper frieze: one kui per half facing the centre peg (photo + dossier §c.5): jaws open at the peg, a boss
   // eye at u ≈ 0.25, a long crest sweeping diagonally up and back from the head to an up-curl by the hip, a body
   // band running outward with two down-hooks, the tail curling up at u ≈ 0.95
-  const wu = 0.17 * Hu, ru = wu * 0.6
+  const wu = 0.2 * Hu, ru = wu * 0.6
   const U1 = (p) => Mu([p])[0]
   S.boss({ c: U1([0.25, 0.55]), rx: 0.13 * Hu, h: 2.0 + 1.6 })
   S.band(path(kit, Mu([[0.16, 0.80], [0.04, 0.80], [0.04, 0.62]]), ru), wu * 0.9, { capA: 'round', capB: 'round' }) // upper jaw
@@ -253,8 +258,8 @@ export function lidBroadSheet(kit, { slant, halfAt, margin = 5, slot = 4.5, seed
 
   // the crowd of hooks in the gaps of the main panel and the frieze
   const inHalf = (u, v) => u >= slot + 0.4 && u <= halfAt(v) - margin
-  fillHooks(kit, S, { u0: slot, u1: halfAt(vm0) - margin, v0: vm0, v1: vs0 }, { rMin: 3.1, rMax: 7.0, gap: 1.3, wMin: 3.3, wMax: 4.4, wFloor: 2.5, seed: seed + 1, round: 0.3, max: 40, inside: inHalf, wScale: 0.5 })
-  fillHooks(kit, S, { u0: slot, u1: halfAt(vf0) - margin, v0: vf0, v1: vf0 + Hu }, { rMin: 2.6, rMax: 4.2, gap: 1.0, wMin: 2.4, wMax: 3.2, seed: seed + 2, round: 0.4, max: 12, inside: inHalf, wScale: 0.45 })
+  fillHooks(kit, S, { u0: slot, u1: halfAt(vm0) - margin, v0: vm0, v1: vs0 }, { rMin: 2.2, rMax: 7.0, gap: 0.8, wMin: 4.4, wMax: 5.6, wFloor: 3.0, seed: seed + 1, round: 0.3, max: 80, inside: inHalf, wScale: 0.56, stubs: true })
+  fillHooks(kit, S, { u0: slot, u1: halfAt(vf0) - margin, v0: vf0, v1: vf0 + Hu }, { rMin: 2.4, rMax: 4.2, gap: 0.8, wMin: 2.8, wMax: 3.8, wFloor: 2.4, seed: seed + 2, round: 0.4, max: 16, inside: inHalf, wScale: 0.5 })
   return {
     sheet: S,
     zones: { vm0, Hm, vs0, vs1, vf0, Hu },
@@ -270,7 +275,7 @@ export function lidNarrowSheet(kit, { slant, halfAt, margin = 4.5, slot = 4, see
     const v = v0 + y * Hh
     return [slot + x * Math.max(1, halfAt(v) - margin - slot), v]
   })
-  const w = 4.6, r = 2.4
+  const w = 5.6, r = 2.6
   const ec = M([[0.30, 0.58]])[0]
   S.blob(kit.shapes.rrect(ec, 13, 10.5, 4))
   S.ring(kit.shapes.rrect(ec, 8.6, 6.4, 2.6), 0.8)
@@ -283,14 +288,14 @@ export function lidNarrowSheet(kit, { slant, halfAt, margin = 4.5, slot = 4, see
   // brow / crest toward the apex
   S.band(path(kit, M([[0.05, 0.74], [0.55, 0.74], [0.55, 0.86]]), r), w * 0.85, { capA: 'round', capB: 'round' })
   S.boss({ c: M([[0.25, 0.88]])[0], rx: 1.8, h: 2.5 + 1.2 })
-  fillHooks(kit, S, { u0: slot, u1: halfAt(v0) - margin, v0, v1: slant - 2 }, { rMin: 2.6, rMax: 5, gap: 0.9, wMin: 2.1, wMax: 3.1, seed, round: 0.2, max: 24, inside: (u, v) => u >= slot + 0.4 && u <= halfAt(v) - margin })
+  fillHooks(kit, S, { u0: slot, u1: halfAt(v0) - margin, v0, v1: slant - 2 }, { rMin: 2.2, rMax: 5, gap: 0.8, wMin: 3.0, wMax: 4.2, wFloor: 2.4, seed, round: 0.2, max: 44, stubs: true, inside: (u, v) => u >= slot + 0.4 && u <= halfAt(v) - margin })
   return { sheet: S, v0 }
 }
 
 // ------------------------------------------------------------------ knob (§c.7)
 
 /** the knob front's decorated field: half width (mm) and v range (fraction of the slant) */
-export const KNOB_FIELD = { u: 21, v0: 0.17, v1: 0.87 }
+export const KNOB_FIELD = { u: 18.5, v0: 0.15, v1: 0.88 }
 
 /** knob front: a mini-taotie of squared spirals and pellets inside a ~3 mm plain border (mm, u from the axis) */
 export function knobSheet(kit, { kind, halfAt, slant, border = 3, seed = 1 }) {
@@ -312,7 +317,7 @@ export function knobSheet(kit, { kind, halfAt, slant, border = 3, seed = 1 }) {
     S.boss({ c: [Math.min(fu - 3, 15), 0.63 * slant], rx: 1.4, h: 1.2 + 0.8 })
     S.band(path(kit, [[3.5, 0.56 * slant], [10, 0.56 * slant], [10, 0.64 * slant]], 0.9), 2.0, { capA: 'round', capB: 'round', line: false })
     S.band(path(kit, [[3.5, f1 - 2.2], [fu - 1.6, f1 - 2.2], [fu - 1.6, f1 - 7]], 0.9), 2.0, { capA: 'round', capB: 'round', line: false })
-    fillHooks(kit, S, { u0: 1.6, u1: fu, v0: f0, v1: f1 }, { rMin: 1.9, rMax: 3.0, gap: 0.6, wMin: 1.5, wMax: 1.9, seed, round: 0.3, max: 8, wScale: 0.45, line: false })
+    fillHooks(kit, S, { u0: 1.6, u1: fu, v0: f0, v1: f1 }, { rMin: 1.6, rMax: 3.0, gap: 0.5, wMin: 1.5, wMax: 1.9, wFloor: 1.3, seed, round: 0.3, max: 14, wScale: 0.45, line: false, stubs: true })
     return S
   } else {
     // the narrow faces: plainer — one squared spiral each side and a pellet

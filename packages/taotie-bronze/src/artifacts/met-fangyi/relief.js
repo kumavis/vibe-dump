@@ -209,7 +209,7 @@ export function renderSheets(kit, panel, halves, o = {}) {
     ground = { pitch: 0.74, line: 0.5, depth: 0.36, roundness: 0.08, jitter: 0.04, cell: [4.6, 7.2], pairs: 0, maxAspect: 1.3 },
     // plateau cutting: round spirals at a uniform ~1.35 mm groove pitch, packed edge to edge,
     // big first (detail-face-*: 2 large ~9 mm + several ~5 mm coils per horn, nothing smaller than ~3 mm)
-    carve = { pitch: 1.35, line: 0.5, depth: 0.34, rMax: 3.6, rMin: 1.45, gap: 0.16, margin: 0.3 },
+    carve = { pitch: 1.3, line: 0.48, depth: 0.34, rMax: 4.6, rMin: 1.25, gap: 0.08, margin: 0.22, shape: 3.2 },
     groove = { width: 0.85, depth: 0.65 },
     halfRect, // the left half (panel mm) — leiwen is packed only there; mirror copies it
     mirror = true,
@@ -337,14 +337,19 @@ export function carveSpirals(kit, panel, items, o = {}) {
   const hr = o.halfRect ?? { x: 0, y: 0, w: panel.width, h: panel.height }
   const rng = new kit.Rng(o.seed ?? 1)
   const top = (x, y) => Math.abs(panel.heightAt(x, y) - L1) < 0.04
-  const RING = 18
+  // coils are rounded squares (superellipse exponent `shape`): test that footprint, and pack them by
+  // Chebyshev distance, so they tile a band edge to edge the way the carvers filled every plateau
+  const shape = o.shape ?? 3.2
+  const RING = 24
+  const ringPts = []
+  for (let k = 0; k < RING; k++) {
+    const a = (k / RING) * Math.PI * 2, ca = Math.cos(a), sa = Math.sin(a)
+    ringPts.push([Math.sign(ca) * Math.pow(Math.abs(ca), 2 / shape), Math.sign(sa) * Math.pow(Math.abs(sa), 2 / shape)])
+  }
   const fits = (x, y, r) => {
     if (!top(x, y)) return false
     for (const rr of [r + margin, (r + margin) * 0.6]) {
-      for (let k = 0; k < RING; k++) {
-        const a = (k / RING) * Math.PI * 2
-        if (!top(x + rr * Math.cos(a), y + rr * Math.sin(a))) return false
-      }
+      for (const [px, py] of ringPts) if (!top(x + rr * px, y + rr * py)) return false
     }
     return true
   }
@@ -388,7 +393,7 @@ export function carveSpirals(kit, panel, items, o = {}) {
   const free = (x, y, r0) => {
     let r = r0
     for (const q of placed) {
-      const d = Math.hypot(q[0] - x, q[1] - y) - q[2] - gap - lw
+      const d = Math.max(Math.abs(q[0] - x), Math.abs(q[1] - y)) - q[2] - gap - lw
       if (d < r) r = d
       if (r < rMin) return r
     }
@@ -412,15 +417,18 @@ export function carveSpirals(kit, panel, items, o = {}) {
       const pp = (rOut - 0.25) / turns
       const dir = rng.next() < 0.5 ? 1 : -1
       const a0 = (Math.floor(rng.next() * 4) * Math.PI) / 2
-      const n = Math.ceil(turns * 40)
+      // the outer turn closes at full radius for a further 0.55 turn, so a coil reads as a filled
+      // disc edge to edge with its neighbours (detail-face-*), not as a thin open curl
+      const close = r > 2 ? 0.55 : 0
+      const n = Math.ceil((turns + close) * 40)
       ctx.beginPath()
       for (let i = 0; i <= n; i++) {
-        const t = (i / n) * turns * Math.PI * 2
-        const rr = 0.25 + (pp * t) / (Math.PI * 2)
+        const t = (i / n) * (turns + close) * Math.PI * 2
+        const rr = Math.min(rOut, 0.25 + (pp * t) / (Math.PI * 2))
         const a = a0 + dir * t
-        // rounded-square coil (superellipse n 2.6: ≤ 8 % past r on the diagonals), as the carvers cut them
+        // rounded-square coil (superellipse n = shape), as the carvers cut them
         const ca = Math.cos(a), sa = Math.sin(a)
-        const px = cx + rr * Math.sign(ca) * Math.pow(Math.abs(ca), 2 / 2.6), py = cy + rr * Math.sign(sa) * Math.pow(Math.abs(sa), 2 / 2.6)
+        const px = cx + rr * Math.sign(ca) * Math.pow(Math.abs(ca), 2 / shape), py = cy + rr * Math.sign(sa) * Math.pow(Math.abs(sa), 2 / shape)
         if (i === 0) ctx.moveTo(px, py)
         else ctx.lineTo(px, py)
       }

@@ -40,7 +40,7 @@ export function hookSpineAt(kit, c, a, p, ang, dir, { round = false, turns = 1.2
  * scrolls), keep: [{u0,u1,v0,v1}] areas to leave empty, max }
  */
 export function fillHooks(kit, S, region, o = {}) {
-  const { rMin = 3, rMax = 7, gap = 1.1, wMin = 2, wMax = 3.6, seed = 1, round = 0.35, keep = [], max = 60, wScale = 0.36, line = true, inside = null, wFloor = wMin } = o
+  const { rMin = 3, rMax = 7, gap = 1.1, wMin = 2, wMax = 3.6, seed = 1, round = 0.35, keep = [], max = 60, wScale = 0.36, line = true, inside = null, wFloor = wMin, stubs = false } = o
   const rnd = kit.mulberry32(seed)
   const g = 0.5
   const { u0, u1, v0, v1 } = region
@@ -120,7 +120,35 @@ export function fillHooks(kit, S, region, o = {}) {
     }
   }
   const placed = []
-  for (let n = 0; n < max; n++) {
+  const at = (u, v) => {
+    const i = Math.floor((u - u0) / g), j = Math.floor((v - v0) / g)
+    return i < 0 || j < 0 || i >= nx || j >= ny ? 0 : dist[j * nx + i]
+  }
+  const stub = (c, rho) => {
+    // rho already holds `gap` clear of every neighbour: a bar of width 1.3 rho leaves ≥ gap + 0.35 rho each side
+    const ws = Math.min(wMax, Math.max(wFloor, 1.3 * rho))
+    if (ws > 2 * rho - 0.4) return false
+    const need = ws / 2 + 0.3
+    const run = (dx, dy) => {
+      let l = 0
+      while (l < 6 * ws && at(c[0] + dx * (l + g), c[1] + dy * (l + g)) >= need) l += g
+      return l
+    }
+    const lx = [run(-1, 0), run(1, 0)], ly = [run(0, -1), run(0, 1)]
+    const horiz = lx[0] + lx[1] >= ly[0] + ly[1]
+    const [l0, l1] = horiz ? lx : ly
+    const e0 = Math.min(l0, 3 * ws), e1 = Math.min(l1, 3 * ws)
+    const a0 = horiz ? [c[0] - e0, c[1]] : [c[0], c[1] - e0], a1 = horiz ? [c[0] + e1, c[1]] : [c[0], c[1] + e1]
+    const L = e0 + e1
+    if (L < 0.9 * ws) return false // no pellets: the photo's fillers are bars, islands and hooks, never loose dots
+    const pts = kit.shapes.resample([a0, a1], 0.3)
+    S.band(pts, ws, { capA: 'round', capB: 'round', line: line && ws >= 2.4 && L > 1.6 * ws })
+    for (const p of pts) mark(p[0], p[1], ws / 2 + gap)
+    placed.push({ c, rho, w: ws, stub: true })
+    return true
+  }
+  // `max` counts placed units; rejected candidates (marked off) do not use up the budget
+  for (let n = 0, tries = 0; n < max && tries < 8 * max; tries++) {
     dt()
     let best = -1, bd = 0
     for (let k = 0; k < dist.length; k++) if (dist[k] > bd + 1e-6) { bd = dist[k]; best = k }
@@ -139,12 +167,19 @@ export function fillHooks(kit, S, region, o = {}) {
     const p = w + Math.max(0.9, 0.28 * w)
     const ang = Math.floor(rnd() * 4) * 90
     const dir = (n + Math.floor(rnd() * 2)) % 2 === 0 ? 1 : -1
-    if (a < w * 0.9) { mark(c[0], c[1], rho); continue }
+    if (a < w * (stubs ? 0.72 : 0.9)) {
+      // too tight for a hook: (stubs) a short straight bar along the gap's long axis, the photo's T/L stubs and
+      // pellets that close every channel down to 1–2 mm
+      if (stubs && stub(c, rho)) n++
+      else mark(c[0], c[1], rho)
+      continue
+    }
     const turns = 2 * a > 3.2 * p ? 1.25 : 0.75
     const pts = hookSpineAt(kit, c, a, p, ang, dir, { round: isRound, turns: isRound ? (a > 2.2 * p ? 1.1 : 0.8) : turns })
     S.band(pts, w, { capA: 'round', capB: 'round', line: line && w >= 2.4 })
     placed.push({ c, rho, w })
     mark(c[0], c[1], rho + gap)
+    n++
   }
   return placed
 }

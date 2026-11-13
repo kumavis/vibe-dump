@@ -22,7 +22,9 @@ const SEAMS = [60, 180, 300]
 const ALL6 = [0, 60, 120, 180, 240, 300]
 // narrow plain slots (slot/pitch ≈ 0.18) cut 0.35 p deep, continued down both faces as
 // scored lines (detail-belly-mask.jpg, detail-foot-mask.jpg): no stepped heads
-const T_NOTCH = { shape: 'score', rungs: 'full', pitch: 13.5, depth: 0.35, width: 2.4 }
+// re-measured on front.jpg (2.67 px/mm): the ±60° belly slab shows ≈ 16 mm across ⇒ p ≈ 14 at
+// t ≈ 7.5, its tip just reaching the carination outline; the slots are shallow nicks on the edge
+const T_NOTCH = { shape: 'score', rungs: 'full', pitch: 13.5, depth: 0.14, width: 1.6 }
 
 export default {
   id: 'met-zun',
@@ -44,7 +46,9 @@ export default {
   views: {
     // full views: camera on the photographs' own stations (≈ 1.9 m from the axis, dossier §b.1)
     'three-quarter': { azimuth: -60, elevation: 13, fov: 20.2, fit: 1.13, ref: 'three-quarter.jpg' },
-    front: { azimuth: 0, elevation: 11.5, fov: 20.3, fit: 1.26, ref: 'front.jpg' },
+    // camera ≈ 1.65 m out, ≈ 0.51 m up: matches front.jpg's foot ellipse (b/a ≈ 0.30) AND its
+    // shallow rim ellipse (inner b/a ≈ 0.056 + the lip edge), which the old 1.8 m / 0.56 m station overshot
+    front: { azimuth: 0, elevation: 10.6, fov: 20.3, fit: 0.938, target: [0, 200, 0], ref: 'front.jpg' },
     side: { azimuth: 90, elevation: 4, fov: 20, fit: 1.2 },
     back: { azimuth: 180, elevation: 12, fov: 20, fit: 1.2 },
     top: { azimuth: 0, elevation: 68, fov: 20, fit: 1.2 },
@@ -118,15 +122,15 @@ export default {
     // ---------------------------------------------------------------- flanges
     await onProgress(0.8, 'flanges')
     const flanges = []
-    // belly: 6 slabs, y 145 → 243, projection 16, thickness 8, T slots at ≈ 13.5 mm
+    // belly: 6 slabs, y 145 → 243, projection 14, thickness 7.5, shallow slots at ≈ 13.5 mm
     flanges.push(...kit.latheFlanges(body, {
       azimuths: ALL6, ranges: [{ range: { y0: 145, y1: 243 } }], gap: 0, seed: seed + 11,
-      height: 16, thickness: 8, embed: 2, taper: 2.5, bevel: 0.7, waver: 0.35, notches: T_NOTCH, material: plain,
+      height: 14, thickness: 7.5, embed: 2, taper: 2.5, bevel: 0.7, waver: 0.35, notches: T_NOTCH, material: plain,
     }))
-    // foot: 6 slabs, y 30 → 122 along the foot cone, projection 13, thickness 7
+    // foot: 6 slabs, y 30 → 122 along the foot cone, projection 11.5, thickness 6.5
     flanges.push(...kit.latheFlanges(body, {
       azimuths: ALL6, ranges: [{ range: { y0: 30, y1: 122 } }], gap: 0, seed: seed + 12,
-      height: 13, thickness: 7, embed: 2, taper: 2.5, bevel: 0.7, waver: 0.35, notches: { ...T_NOTCH, pitch: 13 }, material: plain,
+      height: 11.5, thickness: 6.5, embed: 2, taper: 2.5, bevel: 0.7, waver: 0.35, notches: { ...T_NOTCH, pitch: 13 }, material: plain,
     }))
     // shoulder: 3 low plain strips on the seams, carination → neck base
     flanges.push(...kit.latheFlanges(body, {

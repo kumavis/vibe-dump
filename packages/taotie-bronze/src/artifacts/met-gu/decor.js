@@ -28,7 +28,7 @@ export function paintFoot(kit, panel, size, { pitch = 0.75, seed = 1 } = {}) {
   const P = ([X, v]) => [cx - X, v]
   const DV = Math.max(0, Hp - 55.1) // dossier v → panel v
   const V = (v) => v + DV
-  const bw = 3.3 // flat band width (dossier 2.8–3.5)
+  const bw = 3.9 // flat band width: dossier 2.8–3.5 between groove centres; the photo's silver band incl. its outline ≈ 4
   const R = 1.0 // centre-line fillet → squared-round corners (fillet ≈ 0.6 mm at the band edge)
   const bands = []
   const coils = [] // round terminal coils: [centre (panel), R, a0, dir]
@@ -38,44 +38,44 @@ export function paintFoot(kit, panel, size, { pitch = 0.75, seed = 1 } = {}) {
   // --- jaw (detail-foot-halfmask.jpg): a compact C under the inner half of the eye, open toward the axis —
   //     the bottom bar starts at a short down-hook near the nose column, runs out, rises, and the top bar
   //     comes back in and winds down into a round coil (≈ 4.5 mm) in the mouth of the C
-  B(new Turtle([9.6, V(1.2)], 90).to([9.6, V(3.6)]).turn(-90, R).to([22.6, V(3.6)]).turn(90, R).to([22.6, V(11.0)]).turn(90, R).to([16.0, V(11.0)]))
-  coil(14.8, 8.1, 2.25, Math.PI / 2, -1)
-  // --- leg / claw fragments below the outer side of the eye: two small T-hooks pointing at the axis
-  B(new Turtle([30.6, V(1.0)], 90).to([30.6, V(9.8)]).turn(90, 0.9).fwd(3.0).turn(90, 0.6).fwd(1.6), 2.4)
-  B(new Turtle([35.8, V(1.0)], 90).to([35.8, V(14.0)]).turn(90, 0.9).fwd(3.4).turn(90, 0.6).fwd(1.9), 2.4)
+  B(new Turtle([10.2, V(0.9)], 90).to([10.2, V(3.2)]).turn(-90, R).to([22.6, V(3.2)]).turn(90, R).to([22.6, V(11.0)]).turn(90, R).to([16.0, V(11.0)]))
+  coil(15.0, 7.4, 2.5, Math.PI / 2, -1)
+  // --- leg / claw below the outer side of the eye (side.jpg, seam view: the outer half of the quadrant
+  //     reads as a broad horizontal G, not as upright hooks): the ear's tail drops, runs out toward the
+  //     seam, down, back in under itself and winds into a round coil
   // --- eye socket: flat rounded-square band field framing the boss
   const eye = [16.7, V(17.6)]
   bands.push(rrect(P(eye), 10.4, 8.8, 2.6))
   // --- ear: a round C just outside the eye, level with its top, opening downward (tail down the outer side)
-  B(new Turtle([28.0, V(19.6)], 270).to([28.0, V(15.2)]), 2.2)
-  coil(26.3, 19.8, 2.05, 0, 1)
+  B(new Turtle([28.4, V(19.6)], 270).to([28.4, V(12.4)]).turn(90, R).to([36.6, V(12.4)]).turn(-90, R).to([36.6, V(3.4)])
+    .turn(-90, R).to([26.4, V(3.4)]).turn(-90, R).to([26.4, V(6.6)]), 3.3)
+  coil(28.4, 7.8, 2.4, Math.PI, -1)
+  coil(26.4, 19.8, 2.4, 0, 1)
   // --- crook horn: an open inverted J — the root rises on the outer side above the ear, the top bar runs
   //     under the separator toward the axis, the inner leg drops and ends in a tight round coil above the
   //     inner corner of the eye
-  B(new Turtle([21.4, V(23.6)], 90).to([21.4, V(35.4)]).turn(90, R).to([11.0, V(35.4)]).turn(90, R).to([11.0, V(27.4)]), 3.4)
-  coil(13.2, 25.6, 2.4, Math.PI, 1)
+  B(new Turtle([23.0, V(23.6)], 90).to([23.0, V(35.4)]).turn(90, R).to([11.0, V(35.4)]).turn(90, R).to([11.0, V(27.4)]), 4.2)
+  coil(13.4, 25.6, 2.8, Math.PI, 1)
   // --- separate ㄱ quill just outside the horn's outer leg
-  B(new Turtle([25.2, V(35.4)], 0).fwd(4.4).turn(-90, 0.9).fwd(6.4).turn(-90, 0.6).fwd(1.6), 2.4)
-  // --- outer edge column (Ǝ): a spine parallel to the seam with bars hooking out toward it
+  B(new Turtle([27.2, V(35.4)], 0).fwd(3.0).turn(-90, 0.9).fwd(6.4).turn(-90, 0.6).fwd(1.4), 2.6)
+  // --- outer edge column: hooked bars reaching in from the seam, stacked down the quadrant's outer edge
+  //     (no continuous spine: the photographs show a column of leiwen there, which at vessel distance
+  //     read as texture, while a spine band read as a long vertical line the bronze does not have)
   {
     const spine = (v) => hw(v) - 6.6
-    const v0 = V(-1.0), v1 = V(36.0)
-    const pts = []
-    for (let v = v0; v <= v1 + 1e-6; v += 0.8) pts.push(P([spine(v), v]))
-    bands.push(band(pts, 2.4, 'square', 'square'))
-    for (const vb of [V(0.2), V(10.4), V(21.6), V(34.9)]) {
+    for (const vb of [V(0.2), V(10.4), V(21.6)]) {
       const x0 = spine(vb), x1 = hw(vb) - FLANGE_HALF - 1.3
-      B(new Turtle([x0, vb], 0).to([x1, vb]).turn(-90, 0.7).fwd(2.2), 2.1)
+      B(new Turtle([x1, vb], 180).to([x0, vb]).turn(vb < V(1) ? -90 : 90, 0.7).fwd(2.2), 2.3) // the lowest one hooks up, clear of the border row
     }
   }
   // --- upper sub-band (v 40.5–53): a squared body/tail band looping out from beside the nose column
-  B(new Turtle([9.4, V(42.6)], 90).to([9.4, V(50.9)]).turn(-90, R).to([29.0, V(50.9)]).turn(-90, R).to([29.0, V(46.4)]), 2.8)
-  coil(26.6, 45.0, 1.9, 0, -1)
+  B(new Turtle([9.8, V(42.6)], 90).to([9.8, V(50.9)]).turn(-90, R).to([29.0, V(50.9)]).turn(-90, R).to([29.0, V(46.4)]), 3.3)
+  coil(26.6, 45.0, 2.2, 0, -1)
   // small C-hook at its outer top corner
   B(new Turtle([32.4, V(43.4)], 90).fwd(6.4).turn(-90, 0.8).fwd(2.0), 2.0)
 
   const paint = (ctx) => { for (const s of bands) drawShape(ctx, s) }
-  flushBands(panel, paint, { lift: 0.28, lw: 0.48, groove: 0.4, shoulder: 0.05 })
+  flushBands(panel, paint, { lift: 0.28, lw: 0.58, groove: 0.46, shoulder: 0.05 })
   // the coil grooves: each terminal reads as the band winding into a tight round spiral
   incise(panel, coils.map(([c, r, a0, dir]) => coilLine(c, r - 0.55, { a0, dir, turns: 1.55, r1: 0.3 })), { width: 0.44, depth: 0.32 })
 
@@ -102,7 +102,7 @@ export function paintFoot(kit, panel, size, { pitch = 0.75, seed = 1 } = {}) {
     const xl = cx - (hw(y0 + h) - FLANGE_HALF), xr = cx - 8.3
     addCells(xl, y0, xr - xl, h, { count: Math.round((xr - xl) / 3.9) })
   }
-  addCells(cx - 24.4, V(42.6), 12.6, 6.4, { count: 2, gap: 0.6, turns: 2.5 })
+  addCells(cx - 24.4, V(42.6), 12.4, 6.2, { count: 2, gap: 0.6, turns: 2.5 })
   incise(panel, cells, { width: pitch * 0.55, depth: 0.3 })
 
   // --- free leiwen in whatever is left on the left half, inside the fan
@@ -121,7 +121,7 @@ export function paintFoot(kit, panel, size, { pitch = 0.75, seed = 1 } = {}) {
     for (const [x, y, w, h] of cellRects) ctx.fillRect(x, y, w, h)
   }
   kit.leiwenFill(panel, { rect: { x: 0, y: 0, w: cx, h: Hp }, include: fan, avoid, margin: 0.5 }, {
-    pitch, line: 0.5, depth: 0.3, roundness: 0.08, jitter: 0.05, cell: [2.4, 4.6], turns: 2, pairs: 0.3, fillers: true, follow: 0.25, seed,
+    pitch, line: 0.56, depth: 0.32, roundness: 0.08, jitter: 0.05, cell: [2.8, 5.0], turns: 2, pairs: 0.3, fillers: true, follow: 0.25, seed,
   })
   panel.mirrorX()
   return { bands: bands.length }
@@ -142,7 +142,7 @@ export function paintWaist(kit, panel, size, { pitch = 0.85, seed = 2, variant =
   const hw = W / 2
   const o = 1.5 // décor starts 1.5 mm inside the drum ends
   const P = ([X, v]) => [cx - X, v + o]
-  const bw = 3.0
+  const bw = 3.5
   const R = 1.0
   const bands = []
   const coils = []
@@ -153,7 +153,7 @@ export function paintWaist(kit, panel, size, { pitch = 0.85, seed = 2, variant =
   // jaw: big squared C/G scroll under the eye; hooked tail toward the nose, the scroll runs out toward the
   // seam, rises, and turns back into a round coil (≈ 5 mm) at x ≈ 24, v ≈ 8
   B(new Turtle([9.8, 9.2], 270).to([6.6, 9.2]).turn(-90, 0.8).to([6.6, 3.0]).turn(90, R).to([28.8, 3.0]).turn(90, R)
-    .to([28.8, 11.6]).turn(90, R).to([22.6, 11.6]))
+    .to([28.8, 10.8]).turn(90, R).to([22.6, 10.8]))
   coil(23.6, 8.1, 2.5, Math.PI / 2, 1)
   // eye socket band around the boss
   const eye = [16.0, 16.5]
@@ -161,12 +161,12 @@ export function paintWaist(kit, panel, size, { pitch = 0.85, seed = 2, variant =
   // crook horn: a broad band rising from above the eye, along the top border toward the nose,
   // ending in a round coil against the nose flange at the top
   B(new Turtle([18.8, 21.6], 90).to([18.8, 44.6]).turn(90, R).to([9.6, 44.6]))
-  coil(7.0, 42.4, 2.75, Math.PI / 2, 1)
+  coil(7.2, 42.2, 3.0, Math.PI / 2, 1)
   // the drop along the nose flange below the horn spiral (brow / nose side), hooking toward the eye
-  B(new Turtle([5.4, 38.2], 270).to([5.4, 21.6]).turn(90, R).to([10.4, 21.6]).turn(90, 0.7).fwd(1.8), 2.6)
+  B(new Turtle([5.4, 38.2], 270).to([5.4, 21.6]).turn(90, R).to([10.4, 21.6]).turn(90, 0.7).fwd(1.8), 3.0)
 
   const paint = (ctx) => { for (const s of bands) drawShape(ctx, s) }
-  flushBands(panel, paint, { lift: 0.35, lw: 0.46, groove: 0.38, echo: 1.25, shoulder: 0.05 })
+  flushBands(panel, paint, { lift: 0.35, lw: 0.52, groove: 0.44, echo: bw / 2, shoulder: 0.05 })
   incise(panel, coils.map(([c, r, a0, dir]) => coilLine(c, r - 0.6, { a0, dir, turns: 1.7, r1: 0.3 })), { width: 0.44, depth: 0.32 })
 
   const eyeDraw = (ctx) => drawShape(ctx, rrect(P(eye), 6.0, 5.5, 2.3))
@@ -180,8 +180,8 @@ export function paintWaist(kit, panel, size, { pitch = 0.85, seed = 2, variant =
     cells.push(...framedRow(x, y, w, h, { minPitch: pitch, turns: 3, ...opts }))
     cellRects.push([x, y, w, h])
   }
-  cellsIn(8.4, 23.6, 7.6, 15.8, { count: 2, vertical: true, gap: 0.7, turns: 2.5 })
-  cellsIn(22.6, 17.2, xs - 22.6, 30.2, { count: 3, vertical: true, gap: 0.8 })
+  cellsIn(8.6, 23.6, 7.4, 15.6, { count: 2, vertical: true, gap: 0.7, turns: 2.2 })
+  cellsIn(22.6, 17.2, xs - 22.6, 30.2, { count: 3, vertical: true, gap: 0.8, turns: 2.3 })
   // B: fang / claw marks inside the jaw scroll
   if (variant === 'B') {
     const lines = []

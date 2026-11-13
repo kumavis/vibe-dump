@@ -23,6 +23,19 @@ const WALL_T = 60 // published wall thickness
 const HANDLE = { width: 290, height: H - LEG_H - WALL_H - RIM_H, bar: 84, barTop: 90, depth: 100, radius: 32, aperture: 18, x: 492 }
 const LEG = { r: 80, x: 420, z: 260 } // dossier ±429 ±15; 420 keeps the shaft flush with the end wall's foot (§b.4)
 
+/** Corner-flange silhouette [σ, t] (CCW, root at t = −e): crest p, narrow wedge slots ≈ 8 wide × 10–13 deep. */
+function cornerOutline(L, rng, { p, e }) {
+  const pts = [[0, -e], [L, -e], [L, p - 2.5], [L - 3, p]]
+  let s = L - rng.range(26, 40)
+  while (s > 24) {
+    const w = rng.range(7, 10), d = rng.range(9.5, 13.5)
+    pts.push([s + w / 2, p], [s + w / 2 - 1.2, p - d], [s - w / 2 + 1.2, p - d], [s - w / 2, p])
+    s -= rng.next() < 0.2 ? rng.range(15, 19) : rng.range(36, 50)
+  }
+  pts.push([3, p], [0, p - 2.5])
+  return pts
+}
+
 export default {
   id: 'houmuwu-ding',
   order: 1,
@@ -100,10 +113,13 @@ export default {
     // ---- flanges (body only): 4 full-height corner flanges, 8 short mid-wall flanges
     await onProgress(0.58, 'flanges')
     const flanges = []
+    // corner flanges: a broad plain slab whose crest is cut by NARROW wedge slots at an irregular
+    // ≈ 42 mm pitch, some paired (detail-short-wall.jpg, front.jpg) — not a regular comb
     for (const [i, c] of Object.values(U.corners).entries()) {
+      const Lc = c.bottom.distanceTo(c.top)
       flanges.push(kit.flange({
-        from: lift(c.bottom), to: lift(c.top), out: c.out, height: 24, thickness: 17, embed: 4, taper: 2, bevel: 2.5,
-        notches: { shape: 'square', pitch: 40, depth: 0.5, width: 10 }, waver: 0.6, seed: seed + i, material: plain,
+        from: lift(c.bottom), to: lift(c.top), out: c.out, height: 26, thickness: 20, embed: 4, taper: 2, bevel: 2.5,
+        outline: cornerOutline(Lc, new kit.Rng(seed + 60 + i), { p: 26, e: 4 }), waver: 0.6, seed: seed + i, material: plain,
       }))
     }
     for (const [i, side] of ['front', 'right', 'back', 'left'].entries()) {
@@ -143,9 +159,9 @@ export default {
     await onProgress(0.62, 'leg masks')
     const zone = [252, LEG_H - 2]
     const legOpts = {
-      height: LEG_H, radius: LEG.r, taper: 0, entasis: 0, foot: { swell: 3.5 / LEG.r, height: 157, step: true },
+      height: LEG_H, radius: LEG.r, taper: 0.035, entasis: 0, foot: { swell: 3.5 / LEG.r, height: 157, step: true },
       top: { flare: 0.05, height: 24 }, collar: { from: 246, amount: 2, shoulder: 4 },
-      rings: { count: 3, at: 200, width: 10, spacing: 28, height: 3, soft: true }, hollow: { wall: 25, open: 'bottom' }, embed: 5,
+      rings: { count: 3, at: 200, width: 16, spacing: 28, height: 1.2, soft: true }, hollow: { wall: 25, open: 'bottom' }, embed: 5,
     }
     const arc = 210
     const lp = kit.legPanelSize({ ...legOpts, zone, arc })

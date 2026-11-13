@@ -83,61 +83,82 @@ function sdSpiral2(x, y, c, r0, r1, turns, h) {
  * The head of Met zun 43.25.1. Local frame: +Z out of the wall, +Y up the slope,
  * wall at z = 0. The muzzle is laid out in the vertical (out, up) plane of the vessel
  * and converted to the local frame with the shoulder slope `slope` (deg from horizontal).
+ *
+ * detail-shoulder-head.jpg (≈ 5.9 px/mm): a SHIELD-shaped face plaque ≈ 60 mm across,
+ * standing ≈ 5 mm proud of the shoulder with crisp edges: two big C-curl horn pads with a
+ * deep sunk spiral, a small raised ridge between them, two round bulging eyes at the inner
+ * lower corners of the horns, and a SHORT, BROAD, BLUNT muzzle (≈ 26 wide, ≈ 17 deep)
+ * pushing out and down over the carination and ending in a flattened oval end face with
+ * well-rounded edges (the malachite spot) — a block, not a tapering thumb.
  * @param o.wallR  radius of curvature of the wall across the head (mm)
  * @param o.slope  shoulder slope (deg from horizontal)
  * @param o.embed  how far the plaque reaches into the wall (mm)
  */
 export function zunHeadSDF({ wallR = 160, slope = 41, embed = 4 } = {}) {
   const sl = (slope * Math.PI) / 180
-  // (out, up) world offset → local (y, z)
-  const L = ([dout, dup]) => [-Math.cos(sl) * dout + Math.sin(sl) * dup, Math.sin(sl) * dout + Math.cos(sl) * dup]
-  const pt = (o, x = 0) => {
-    const [y, z] = L(o)
-    return [x, y, z]
+  const cs = Math.cos(sl), sn = Math.sin(sl)
+  // local (y, z) → world (out, up) offsets from the mount point (the map is its own inverse)
+  const W = (y, z) => [-cs * y + sn * z, sn * y + cs * z]
+  // muzzle: a rounded, slightly tapering box along axis a (out and ≈ 29° down)
+  const R = W(-7, 3.2) // the muzzle starts BELOW the eyes (photo)
+  const al = Math.hypot(22, -10), a = [22 / al, -10 / al], n = [10 / al, 22 / al]
+  const Lm = 24
+  const lobes = [-1, 1].map((sx) => ({ sx, c: [sx * 17.5, 6], a: 12.8, b: 10.6, rot: sx * 0.3 }))
+  const lobeTop = 5.0
+  const faceTop = 4.0
+  const eyes = [-1, 1].map((sx) => [sx * 10.5, 0.5])
+  const plate = (d2, top, z) => {
+    const wx = d2, wy = z - top
+    return Math.min(Math.max(wx, wy), 0) + Math.hypot(Math.max(wx, 0), Math.max(wy, 0))
   }
-  // muzzle centre line (world offsets from the mount point, mm): root on the forehead,
-  // out along the slope, then bending down over the carination to a rounded tip
-  const R0 = pt([1.5, 2]), M = pt([12, -3]), T = pt([18.5, -8])
-  const rR0 = 11.5, rM = 9.6, rT = 8.0
-  // horn lobes: centres (x, y) on the slope, radii, tilt — flat pads with a spiral groove
-  const lobes = [-1, 1].map((sx) => ({ sx, c: [sx * 17, 5.5], a: 13, b: 10.5, rot: sx * 0.32 }))
-  const lobeTop = 3.4
-  const browTop = 2.0
-  const eyes = [-1, 1].map((sx) => [sx * 11, -1, 7.6])
   return {
-    bounds: { min: [-34, -34, -embed - 1], max: [34, 20, 22] },
+    bounds: { min: [-36, -42, -embed - 1], max: [36, 22, 26] },
     sd(x, y, z0) {
       const z = z0 + (x * x) / (2 * wallR)
       let d = Infinity
-      // horn lobes: domed flat pads, ≤ 3 mm proud
+      // horn pads: flat-topped, crisp-edged, gently domed
       for (const lb of lobes) {
         const d2 = sdLobe2(x, y, lb.c, lb.a, lb.b, lb.rot)
         const r2 = ((x - lb.c[0]) / lb.a) ** 2 + ((y - lb.c[1]) / lb.b) ** 2
-        const top = lobeTop * (1 - 0.25 * Math.min(1, r2))
-        const wx = d2, wy = z - top
-        const pad = Math.min(Math.max(wx, wy), 0) + Math.hypot(Math.max(wx, 0), Math.max(wy, 0))
-        d = smin(d, pad, 1.2)
+        // rounded (≈ 1.4 mm) worn edges, not a cut-out plate
+        d = smin(d, plate(d2 + 1.4, lobeTop * (1 - 0.18 * Math.min(1, r2)) - 1.4, z) - 1.4, 0.8)
       }
-      // low forehead between the horns
+      // the face between and below the horns: a shield narrowing to the muzzle root
       {
-        const d2 = sdLobe2(x, y, [0, 1], 11, 11, 0)
-        const wx = d2, wy = z - browTop
-        d = smin(d, Math.min(Math.max(wx, wy), 0) + Math.hypot(Math.max(wx, 0), Math.max(wy, 0)), 1.5)
+        const hw = 13 + Math.max(0, Math.min(1, (y + 8) / 16)) * 5
+        const d2 = Math.max(Math.abs(x) - hw, y - 12, -y - 14)
+        d = smin(d, plate(d2 - 0, faceTop, z), 2.0)
       }
-      // sunk two-turn spiral groove on each horn (0.6 mm deep, 1.3 wide)
+      // a small raised lozenge ridge on the brow, between the horns
+      {
+        const d2 = Math.abs(x) * 2.6 + Math.abs(y - 8) * 0.7 - 4.2
+        d = smin(d, plate(d2 / 2.7, faceTop + 1.2, z), 0.8)
+      }
+      // deep sunk two-turn spiral on each horn (≈ 1.8 wide, 1.4 deep)
       for (const lb of lobes) {
-        const gs = sdSpiral2(x, y, [lb.c[0] + lb.sx * 0.5, lb.c[1]], 1.2, 8.6, 2, lb.sx)
-        const slot = Math.max(gs - 0.8, lobeTop - 1.0 - z)
-        d = smax(d, -slot, 0.25)
+        const gs = sdSpiral2(x, y, [lb.c[0] + lb.sx * 0.5, lb.c[1]], 1.4, 9.2, 2, lb.sx)
+        const slot = Math.max(gs - 0.95, lobeTop - 1.6 - z)
+        d = smax(d, -slot, 0.3)
       }
-      // the muzzle: two round cones, root → mid → rounded tip, a little wider than tall
-      const xs = x * 0.88
-      const m1 = sdRoundCone(xs, y, z, R0, M, rR0, rM)
-      const m2 = sdRoundCone(xs, y, z, M, T, rM, rT)
-      d = smin(d, smin(m1, m2, 3), 2.2)
-      // eyes: small low domes beside the muzzle root, a sunk ring around each
-      for (const e of eyes) {
-        d = smin(d, sdEllipsoid(x - e[0], y - e[1], z - e[2], 2.8, 2.8, 2.0), 0.8)
+      // the muzzle
+      {
+        const [po, pu] = W(y, z)
+        const qo = po - R[0], qu = pu - R[1]
+        const u = qo * a[0] + qu * a[1], w = qo * n[0] + qu * n[1]
+        const t = Math.max(0, Math.min(1, u / Lm))
+        const hw = 13 - 0.6 * t, hh = 8.8 - 0.6 * t, rr = 7.8 // an oval end face (≈ 26 × 17), not a square block
+        const qx = Math.abs(x) - (hw - rr), qy = Math.abs(w) - (hh - rr), qz = Math.abs(u - Lm / 2) - (Lm / 2 - rr)
+        const box = len3(Math.max(qx, 0), Math.max(qy, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qy, qz), 0) - rr
+        // a shallow dish in the end face
+        const dish = sdEllipsoid(x, w - 0.5, u - Lm - 1.2, 8.5, 5.5, 2.2)
+        d = smin(d, smax(box, -dish, 0.8), 2.4)
+      }
+      // round bulging eyes with a sunk ring
+      for (const [ex, ey] of eyes) {
+        const e = sdEllipsoid(x - ex, y - ey, z - faceTop, 3.4, 3.4, 2.4)
+        d = smin(d, e, 0.6)
+        const ring = Math.abs(Math.hypot(x - ex, y - ey) - 3.9) - 0.45
+        d = smax(d, -Math.max(ring, faceTop - 0.8 - z), 0.2)
       }
       return Math.max(d, -embed - z)
     },

@@ -550,17 +550,21 @@ Carbonates malachite (carbonate crust amount) · carbonate (BALANCE: 0 malachite
            (thickness: flattens the relief normal map, adds lumps)
 Other      tinOxide (Type I noble skin; no bare metal is left under it) + tinOxideTone 0–2 (black
            黑漆古 · olive · grey 水银古) · nobleWarmth (olive-green → warm grey-brown skin) · cuprite (liver/oxblood, F0 0.18; outside the noble sheet it
-           shows veiled warm brown) · chloride (pale pustules over pits, dark ring) · soot · crevice
-           · patchScale mm (territories, domain-warped) · mottleScale mm
+           shows veiled warm brown) + cupriteTone (0 liver · 1 pale powdery brick-pink, unveiled: Houmuwu)
+           · chloride (pale pustules over pits, dark ring) · soot · crevice
+           · patchScale mm (territories, domain-warped) · mottleScale mm · patchiness (1 broad
+           territories / crust islands · 0 every layer breaks up at the mottle size: fine speckle, no blotches)
 Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad glossy highlights;
            0 = each layer's own sheen, kept only by as-cast / heirloom) · dulling (dust / old wax greys
            every mineral colour) · tops (relief tops — real mm above the L0 ground — rubbed to a darker,
-           warmer, smoother skin) + topsTone (0 that · 1 paler silvery bands: flush décor read by colour)
+           warmer, smoother skin) + topsTone (0 that · 1 paler silvery bands: flush décor read by colour;
+           a map with nothing raised — a flange's incised faces — has no tops, and plain meshes never go pale)
            · earth + earthColor (recesses, ledges, an accretion low on the foot) · calcite (lime: mostly sharp crusty islands
            plus a faint dust) · streaks (gravity runs down the walls + one pale tide line) ·
            burialSide · recessDirt · interiorTone (interior = one calm corroded skin: dark grey-brown
            → pale green) · wax · inlay (black paste in sunk lines AND the sunk ground of relief
-           panels) · wear (erases soil → crust → noble → cuprite → burnished metal) · seed
+           panels) · inlayGround (paste fills the whole sunk ground of the décor, over the corrosion:
+           light bands on black, Met zun) · wear (erases soil → crust → noble → cuprite → burnished metal) · seed
 ```
 
 Presets (`PATINA_PRESET_GROUPS` groups them for the drawer):
