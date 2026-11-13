@@ -450,7 +450,7 @@ mountOnLathe(body, head, { azimuth, y | s, pitch (deg, + = down), follow (0 radi
 headSDF(params) / meshSDF(sdf, { voxel, clipZ })   // the field and the surface-nets mesher, for other sculpture
 ```
 A head on a sloping shoulder: `follow: 1, pitch: 0` lays the horns on the wall; `droop` points the snout out and down.
-Studies: `src/artifacts/_study-lathe.js` (gu after Met 1985.214.4, zun after Met 43.25.1; not registered).
+Worked examples: `src/artifacts/met-gu.js` and `src/artifacts/met-zun.js`.
 
 ## Box bodies and parts — fang.js, legs.js, handles.js, lid.js (research/03 §1.1, §1.10, §3, §5, §6)
 
