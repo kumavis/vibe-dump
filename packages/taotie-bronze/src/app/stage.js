@@ -9,9 +9,10 @@ import { setPatinaMode, setPatinaVessel } from '../kit/index.js'
 
 const BG = new THREE.Color('#0b0a09')
 // tone mapping: ACES rolls the as-cast gold highlights off without clipping;
-// exposure < 1 keeps saturated malachite from going neon
+// exposure < 1 keeps saturated malachite from going neon, and keeps the matte
+// (rough, diffuse) excavated skins as dark as they photograph
 const TONE = THREE.ACESFilmicToneMapping
-const EXPOSURE = 1.0
+const EXPOSURE = 0.85
 const DEG = Math.PI / 180
 
 export class Stage {
@@ -105,7 +106,7 @@ export class Stage {
         return m
       }
       card(7, 4.5, '#ffdcb0', 5.5, [-5.5, 7, 6], [0, 0.5, 0]) // key softbox, front-upper-left
-      card(9, 6, '#ffe6c8', 1.4, [0, 9.5, 0], [0, 0, 0]) // vitrine ceiling light box
+      card(9, 6, '#ffe6c8', 0.8, [0, 9.5, 0], [0, 0, 0]) // vitrine ceiling light box (dim: up-facing faces must not wash out)
       for (let i = 0; i < 5; i++) card(0.5, 0.5, '#fff0dc', 14, [-6 + i * 3, 11, -3 + (i % 2) * 5], [0, 0, 0]) // ceiling spots
       card(1.3, 8, '#b9cde6', 2.2, [8, 4, -6], [0, 2, 0]) // cool window strip, back-right
       card(6, 2.2, '#ffcf98', 0.9, [-2, 3.5, -10], [0, 2, 0]) // warm wall card behind

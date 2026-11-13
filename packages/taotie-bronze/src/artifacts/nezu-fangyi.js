@@ -18,6 +18,7 @@ import { bellySheet, neckSheet, footSheet, lidBroadSheet, lidNarrowSheet, knobSh
 import { H, LV, PLAN, bellyX, bellyZ, polyPath, segmentOutline, FLANGE_POLY, densify, flangeGrooves, buildKnob, block, rectPoint } from './nezu-fangyi/form.js'
 
 const SIDES = ['front', 'right', 'back', 'left']
+const LID_CONCAVE = -0.06 // straight to slightly convex slopes, crisp at the eave (no bell-cast)
 const SN = [[0, 0, 1], [1, 0, 0], [0, 0, -1], [-1, 0, 0]]
 const BELLY_BORDER = 6.6 // plain lower border of the belly (0.14 → 0.16 H)
 
@@ -35,11 +36,14 @@ export default {
   dimensions: { h: 330, w: 220, d: 175 },
   blurb:
     'A lidded wine box from the hinge between the Shang and Zhou dynasties, still speaking the Anyang vocabulary, only louder: the belly swells outward, ' +
-    'the masks’ coiled horns have grown until they push the slit-boss eyes to the bottom of the field, and heavy hooked flanges break at every register and spring past the eaves like the corners of a pagoda. ' +
-    'Reconstructed from a single photograph of the front and left faces: the height (330 mm) is assumed, and the back and right faces, the narrow-face décor, the foot frieze and the knob’s depth are inferred from the visible ones.',
+    'the masks’ coiled horns have grown until they push the slit-boss eyes to the bottom of the field, every gap between the deep-cut bands is crowded with smaller hooks and thunder-spirals, ' +
+    'and thick hooked flanges break at every register and jut past the eaves of the hipped lid, whose handle is a miniature hipped roof. ' +
+    'Reconstructed from a single photograph of the front and left faces: the height (330 mm) is assumed, the back and right faces repeat the visible ones, and the narrow-face décor, the foot frieze, the knob’s depth and the exact layout of the small filler hooks are inferred.',
   defaultPatina: 'nezu-olive',
   views: {
-    'three-quarter': { azimuth: -25, elevation: 15.8, fov: 21.4, fit: 1.085, target: [0, 122, 0], ref: 'three-quarter.jpg' },
+    // solved against the photograph (7 landmarks, fov held at the dossier's 36°): eye ≈ 0.77 H, 764 mm from the aim point;
+    // the target sits off-axis because the phone frame is an off-centre crop
+    'three-quarter': { azimuth: -27.5, elevation: 9.8, fov: 36, fit: 1.125, target: [30, 125, 18], ref: 'three-quarter.jpg' },
     front: { azimuth: 0, elevation: 8, fov: 30, fit: 1.1 },
     side: { azimuth: -90, elevation: 8, fov: 30, fit: 1.1 },
     top: { azimuth: -25, elevation: 58, fov: 30, fit: 1.1 },
@@ -64,8 +68,8 @@ export default {
     // ---------------------------------------------------------------- layouts
     const baseOpts = { width: 2 * PLAN.base[0], depth: 2 * PLAN.base[1], height: LV.base, wall: 7, floor: { thickness: 4 }, rim: { kind: 'plain' }, material: plain, part: 'base', cast: false }
     const footOpts = {
-      width: 2 * PLAN.foot[0], depth: 2 * PLAN.foot[1], height: LV.foot - LV.base, wall: 6, floor: { thickness: 4 }, rim: { kind: 'plain' },
-      grid: { rows: [{ weight: 1 }, LV.footFrieze - LV.base] }, material: plain, part: 'foot', cast: cast(31), density: dens,
+      width: 2 * PLAN.foot[0], depth: 2 * PLAN.foot[1], height: LV.foot - LV.footFrieze, wall: 6, floor: { thickness: 4 }, rim: { kind: 'plain' },
+      material: plain, part: 'foot', cast: cast(31), density: dens,
     }
     const b0 = [bellyX(0), bellyZ(0)]
     const bellyOpts = {
@@ -75,7 +79,7 @@ export default {
     const neckOpts = { width: 2 * PLAN.neck[0], depth: 2 * PLAN.neck[1], height: LV.neck - LV.belly, wall: 6, floor: { thickness: 4 }, rim: { kind: 'plain' }, material: plain, part: 'neck', cast: cast(33), density: dens }
     const mouthOpts = { width: 2 * PLAN.mouth[0], depth: 2 * PLAN.mouth[1], height: LV.mouth - LV.neck, wall: 5, floor: { thickness: 3 }, rim: { kind: 'plain' }, material: plain, part: 'neck', cast: false }
     const lidOpts = {
-      width: 2 * PLAN.eave[0], depth: 2 * PLAN.eave[1], rise: LV.apex - LV.lid - LV.fascia, ridge: 2 * PLAN.ridgeHalf, concave: 0.45,
+      width: 2 * PLAN.eave[0], depth: 2 * PLAN.eave[1], rise: LV.apex - LV.lid - LV.fascia, ridge: 2 * PLAN.ridgeHalf, concave: LID_CONCAVE,
       skirt: { height: 0, overhang: PLAN.eave[0] - PLAN.mouth[0], fascia: LV.fascia }, thickness: 4,
     }
     const footL = kit.fangLayout(footOpts), bellyL = kit.fangLayout(bellyOpts), neckL = kit.fangLayout(neckOpts)
@@ -86,7 +90,7 @@ export default {
       const cell = bellyL.sides[side].cells[0][0]
       const p = new kit.ReliefPanel({ width: cell.w, height: cell.h, ppmm, seed: s })
       const hw = cell.w / 2, v0 = BELLY_BORDER, Hf = cell.h - v0 - 1.0
-      const sheet = bellySheet(kit, { hw, v0, Hf, kind, L1: 3.3 })
+      const sheet = bellySheet(kit, { hw, v0, Hf, kind, L1: 3.3, seed: s })
       renderSheets(kit, p, [{ sheet, xc: hw }], {
         L1: 3.3, shoulder: 0.95, groove: { w: 0.95, d: 0.7 }, ground: ground(0.9), seed: s,
         fields: [{ x: 1.2, y: v0 - 0.6, w: hw - 1.2 - (kind === 'broad' ? 4.2 : 3.6), h: Hf + 0.6 }],
@@ -102,7 +106,7 @@ export default {
     const friezePanel = (cell, sheetFn, { v0, top, slot, L1, s }) => {
       const p = new kit.ReliefPanel({ width: cell.w, height: cell.h, ppmm, seed: s })
       const hw = cell.w / 2, Hn = cell.h - v0 - top
-      const sheet = sheetFn(kit, { hw, v0, Hn, slot })
+      const sheet = sheetFn(kit, { hw, v0, Hn, slot, seed: s })
       renderSheets(kit, p, [{ sheet, xc: hw }], {
         L1, shoulder: 0.6, groove: { w: 0.6, d: 0.42 }, ground: ground(0.85, 0.35), seed: s,
         fields: [{ x: 1.4, y: v0 - 0.4, w: hw - 1.4 - slot + 1.2, h: Hn + 0.8 }],
@@ -135,7 +139,7 @@ export default {
       const f = lidL.faces.front
       const halfAt = halfFrom(f)
       const p = new kit.ReliefPanel({ width: f.w, height: f.h, ppmm, seed: seed + 7 })
-      const { sheet, zones } = lidBroadSheet(kit, { slant: f.h, halfAt, margin: 4.6, slot: 4.6 })
+      const { sheet, zones } = lidBroadSheet(kit, { slant: f.h, halfAt, margin: 4.6, slot: 4.6, seed: seed + 7 })
       lidZones = zones
       renderSheets(kit, p, [{ sheet, xc: f.w / 2 }], {
         L1: 2.5, shoulder: 1.0, groove: { w: 0.85, d: 0.55 }, ground: ground(0.9), seed: seed + 7,
@@ -148,7 +152,7 @@ export default {
       const f = lidL.faces.right
       const halfAt = halfFrom(f)
       const p = new kit.ReliefPanel({ width: f.w, height: f.h, ppmm, seed: seed + 8 })
-      const { sheet, v0 } = lidNarrowSheet(kit, { slant: f.h, halfAt, margin: 4.4, slot: 4 })
+      const { sheet, v0 } = lidNarrowSheet(kit, { slant: f.h, halfAt, margin: 4.4, slot: 4, seed: seed + 8 })
       renderSheets(kit, p, [{ sheet, xc: f.w / 2 }], {
         L1: 2.5, shoulder: 1.0, groove: { w: 0.8, d: 0.5 }, ground: ground(0.9), seed: seed + 8,
         fields: [{ x: 0, y: v0 - 0.5, w: f.w / 2 - 3.6, h: f.h - v0 - 1 }],
@@ -165,7 +169,7 @@ export default {
       const slant = Math.hypot(LV.top - 0.6 - (LV.knobEave + 2.2), d0 - d1)
       const halfAt = (v) => h0 + (h1 - h0) * (v / slant)
       const p = new kit.ReliefPanel({ width: 2 * h0, height: slant, ppmm: Math.max(ppmm, 8.5), seed: s })
-      const sheet = knobSheet(kit, { kind, halfAt, slant, border: 3 })
+      const sheet = knobSheet(kit, { kind, halfAt, slant, border: 3, seed: s })
       renderSheets(kit, p, [{ sheet, xc: h0 }], {
         L1: 1.25, shoulder: 0.45, groove: { w: 0.5, d: 0.32 }, ground: ground(0.72, 0.3), seed: s,
         fields: [{ x: 3 + (h0 - h1), y: 3, w: h1 - 3, h: slant - 6 }, { x: 3 + (h0 - h1) * 0.5, y: 3, w: h0 - 3 - (h0 - h1) * 0.5, h: slant * 0.5 - 3 }],
@@ -179,8 +183,15 @@ export default {
     await onProgress(0.7, 'casting')
     const cellSpec = (relief) => ({ relief, fade: 1.2, density: dens })
     const base = kit.fangBody(baseOpts)
-    const foot = kit.fangBody({ ...footOpts, cells: { long: [[cellSpec(panels.footLong)], [null]], short: [[cellSpec(panels.footShort)], [null]] } })
-    foot.position.y = LV.base
+    // the foot: frieze band over a plain dark band set back under it, standing on the plinth's ledge (a stepped plinth)
+    const foot = new THREE.Group()
+    foot.name = 'foot'
+    foot.userData.part = 'foot'
+    const footFrieze = kit.fangBody({ ...footOpts, cells: { long: [[cellSpec(panels.footLong)]], short: [[cellSpec(panels.footShort)]] } })
+    footFrieze.position.y = LV.footFrieze
+    const footBand = kit.fangBody({ width: 2 * PLAN.footBand[0], depth: 2 * PLAN.footBand[1], height: LV.footFrieze - LV.base + 0.5, wall: 6, floor: { thickness: 4 }, rim: { kind: 'plain' }, material: plain, part: 'foot', cast: false })
+    footBand.position.y = LV.base - 0.5
+    foot.add(footFrieze, footBand)
     const belly = kit.fangBody({ ...bellyOpts, cells: { long: [[cellSpec(panels.bellyLong)]], short: [[cellSpec(panels.bellyShort)]] } })
     belly.position.y = LV.foot
     const neck = new THREE.Group()
@@ -200,22 +211,6 @@ export default {
       faces: { long: { relief: panels.lidLong, density: dens, fade: 0.8 }, short: { relief: panels.lidShort, density: dens, fade: 0.8 } },
     })
     lid.position.y = LV.lid
-    // eave corners turned up (dossier §b.4: ≈ 3 mm; the photograph's pagoda flare) — the fascia lifts toward
-    // the corners, the soffit and the seat stay level
-    const A = PLAN.eave[0], B = PLAN.eave[1]
-    const UP = 4
-    const upturn = (x, y, z) => {
-      const t = Math.min(1, Math.max(0, y / LV.fascia))
-      return UP * (Math.abs(x) / A) ** 4 * (Math.abs(z) / B) ** 4 * t * t * (3 - 2 * t)
-    }
-    lid.traverse((o) => {
-      if (!o.isMesh) return
-      const pa = o.geometry.attributes.position
-      for (let i = 0; i < pa.count; i++) pa.setY(i, pa.getY(i) + upturn(pa.getX(i), pa.getY(i), pa.getZ(i)))
-      pa.needsUpdate = true
-      o.geometry.computeBoundingBox()
-      o.geometry.computeBoundingSphere()
-    })
     object.add(lid)
     // the knob post's socket: a block on the ridge between the beams, carrying the post down into the roof
     lid.add(block(kit, 0, 0, PLAN.post[0] + 0.6, PLAN.post[1] + 0.6, LV.apex - 16 - LV.lid, LV.knobBase - LV.lid + 0.4, { material: plain, part: 'lid', name: 'post-socket' }))
@@ -250,7 +245,7 @@ export default {
     const diag = (k) => V(SN[k][0] + SN[(k + 1) % 4][0], 0, SN[k][2] + SN[(k + 1) % 4][2]).normalize()
     const face = (k) => V(...SN[k])
     const regs = {
-      foot: { body: foot, y0: 13.0, y1: 40.5 },
+      foot: { body: footFrieze, y0: 13.0, y1: 40.5 },
       belly: { body: belly, y0: LV.foot, y1: LV.belly },
       neck: { body: neckBody, y0: LV.belly + 5.3, y1: LV.neck },
     }
@@ -259,12 +254,12 @@ export default {
       for (let k = 0; k < 4; k++) {
         // corner flanges (45°, F2 hooked, 6 mm thick)
         const pc = wallPath(r.body, k, 1, r.y0, r.y1, diag(k))
-        F({ path: pc, outline: segmentOutline(FLANGE_POLY[name], pc.length, proj[name].corner, 2.2), thickness: 6, embed: 2.2 })
+        F({ path: pc, outline: segmentOutline(FLANGE_POLY[name], pc.length, proj[name].corner, 2.2), thickness: 6.5, embed: 2.2, taper: 1.2 })
         const pf = wallPath(r.body, k, 0.5, r.y0, r.y1, face(k))
         const L = pf.length
         if (k % 2 === 1) {
           // narrow-face centre flanges: hooked, at least as heavy as the corners
-          F({ path: pf, outline: segmentOutline(FLANGE_POLY[name], L, proj[name].centre, 2.2), thickness: 7, embed: 2.2 })
+          F({ path: pf, outline: segmentOutline(FLANGE_POLY[name], L, proj[name].centre, 2.2), thickness: 7, embed: 2.2, taper: 1.2 })
         } else if (name === 'belly') {
           // broad face: a low bar with a small projecting knob at 0.73 of the register
           F({ path: pf, outline: [[1.2, -2.2], [L - 1.2, -2.2], [L - 1.2, 6], [0.80 * L, 6], [0.785 * L, 9.6], [0.665 * L, 9.6], [0.65 * L, 6], [1.2, 6]], thickness: 7.5, embed: 2.2 })
@@ -281,7 +276,8 @@ export default {
     // lid: hip flanges (lower ends stab 12–15 mm past the eave corners as a downward point), slope-centre bars
     const lidY = (p) => p.clone().add(V(0, LV.lid, 0))
     const rise = lidOpts.rise, cc = lidOpts.concave
-    // slope normals of the (bell-cast) loft at level v: flatter at the eaves
+    const A = PLAN.eave[0], B = PLAN.eave[1]
+    // slope normals of the loft at level v
     const faceN = (k, v) => {
       const gr = rise * ((1 - cc) + 2 * cc * v)
       const n = k % 2 === 0 ? V(0, B, gr) : V(gr, A - PLAN.ridgeHalf, 0)
@@ -290,10 +286,11 @@ export default {
       return n.normalize()
     }
     for (let k = 0; k < 4; k++) {
-      const hip = lid.userData.hips[k].map((p) => lidY(p.clone().setY(p.y + upturn(p.x, p.y, p.z))))
+      const hip = lid.userData.hips[k].map((p) => lidY(p.clone()))
       const ph = polyPath(hip, hip.map((_, i) => faceN(k, i / 12).add(faceN((k + 1) % 4, i / 12)).normalize()))
       const L = ph.length
-      F({ path: ph, outline: [[-11, -3.4], [L, -3], [L + 0.4, 7], [-12, 7], [-16.6, 2.6], [-15.6, -6.2]], thickness: 7, embed: 3, taper: 2, carve: 'contour' })
+      // a straight thick bar lying on the hip; past the eave corner it ends in a squared hook turned down
+      F({ path: ph, outline: [[-8, -3], [L, -3], [L, 7], [-15, 7], [-15, -7.5], [-9.5, -7.5], [-9.5, -3.5]], thickness: 7, embed: 3, taper: 1, carve: 'contour' })
       const mid = lid.userData.midlines[SIDES[k]].map(lidY)
       const pm = polyPath(mid, mid.map((_, i) => faceN(k, i / 12)))
       const Lm = pm.length

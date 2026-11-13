@@ -10,12 +10,12 @@ export const H = 330
 export const LV = {
   base: 11.55, // plinth top (0.035 H)
   foot: 46.2, // foot top = belly bottom (0.140 H)
-  footFrieze: 23.1, // plain dark band below, frieze above (≈ 0.07 H frieze)
+  footFrieze: 22.5, // plain dark band below, frieze above (≈ 0.07 H frieze)
   belly: 128.7, // belly top (0.390 H)
-  neck: 157.7, // neck frieze top = mouth band bottom (0.478 H)
+  neck: 160.6, // neck frieze top = mouth band bottom (photo: the plain mouth band is ≈ 14 mm, not the dossier's 17)
   mouth: 174.6, // mouth band top
   lid: 174.9, // eaves underside (0.530 H)
-  fascia: 2.2, // vertical eave edge
+  fascia: 9, // the plain eaves lip: a vertical band under the slopes (photo; dossier 0.53–0.566 H)
   apex: 266, // roof apex (the ridge beams stand on it to 0.825 H)
   beam: 7, // ridge beam above the apex
   knobBase: 271.5, // post top of the beams (0.825 H)
@@ -26,6 +26,8 @@ export const LV = {
 export const PLAN = {
   base: [88, 75],
   foot: [82.5, 70.5],
+  footBand: [80, 68], // the plain dark band under the foot frieze, set back from it
+
   neck: [86, 73.5],
   mouth: [84.5, 72],
   eave: [93.2, 79.7], // 1.06 W: the photograph's eaves read wider than the dossier's 1.04
@@ -37,7 +39,7 @@ export const PLAN = {
 
 // belly bulge, dossier §b.5: s, half-W (x), half-D (z)
 const BELLY = [
-  [0, 85.5, 73.1], [0.05, 86.5, 73.9], [0.1, 87.5, 74.8], [0.2, 89.5, 76.5], [0.3, 91.1, 77.9], [0.4, 92.5, 79.0],
+  [0, 84.2, 71.9], [0.05, 86.3, 73.7], [0.1, 87.5, 74.8], [0.2, 89.5, 76.5], [0.3, 91.1, 77.9], [0.4, 92.5, 79.0],
   [0.5, 93.3, 79.8], [0.6, 93.9, 80.3], [0.7, 94.1, 80.4], [0.8, 94.0, 80.3], [0.87, 93.4, 79.9], [0.93, 92.8, 79.3],
   [0.97, 92.3, 78.8], [1.0, 91.9, 78.5],
 ]
