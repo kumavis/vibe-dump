@@ -106,15 +106,10 @@ export function frieze(panel, rect, a, b, c, d) {
     const facing = !centred ? o.facing : s.rect.x + s.rect.w / 2 < axis - 1e-6 ? 'right' : s.i === mid ? null : 'left'
     if (centred && facing === 'left') continue // the mirror makes the right half
     const p = resolveMotifParams(m, { ...o.params, ...(s.spec.params || {}), ...(facing ? { facing, arrangement: 'single' } : {}) }, s.spec.preset ?? o.preset)
-    if (facing && !m.facing && facing === 'left') {
-      // a motif that cannot turn: draw it, then mirror it in place
-      m.draw(panel, s.rect, p)
-      continue
-    }
     m.draw(panel, s.rect, p)
-    // a symmetric unit drawn on its own (centre slot, whorls) is mirrored about its own axis
-    if (isSym(m, p) && s.i !== mid) panel.mirrorX(s.rect)
-    else if (isSym(m, p) && s.i === mid && !centred) panel.mirrorX(s.rect)
+    // a symmetric unit (whorl–taotie centre, a pair) drawn on its own is mirrored about its own axis;
+    // the centre slot of a centred frieze is mirrored with the whole band below
+    if (isSym(m, p) && !(centred && s.i === mid)) panel.mirrorX(s.rect)
   }
   const half = centred ? { ...rect, w: rect.w / 2 } : rect
   if (o.ground !== false) {
