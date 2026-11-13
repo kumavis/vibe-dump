@@ -1,0 +1,25 @@
+{
+  "note": "Houmuwu (Simuwu) fangding, National Museum of China. Published H 1330 (handles included), mouth 1100 x 790, legs 460, 832.84 kg. Vertical fractions come from a solved camera on front.jpg / side.jpg (camera height ~670 mm, EXIF focal lengths); plan dims are scaled to the published mouth. Long axis = X (handles on the +-X short ends), front long face = +Z. Parts tested: body (walls + floor + rim slab; NO flanges, legs or handles), legs (4 roots, leg flanges included), handles (2 roots, root blocks included), flanges (corner and mid-wall flanges on the body only). See dossier.md.",
+  "dimensions": { "h": 1330, "w": 1100, "d": 790, "legH": 460, "rimTopY": 1043, "bodyBottomY": 465, "weightKg": 832.84 },
+  "ratios": {
+    "silhouette":   { "expr": "overall.w / overall.h",        "expected": 0.83,  "tol": 0.035 },
+    "plan":         { "expr": "overall.d / overall.w",        "expected": 0.718, "tol": 0.03 },
+    "bodyPlan":     { "expr": "parts.body.d / parts.body.w",  "expected": 0.718, "tol": 0.025 },
+    "bodyBox":      { "expr": "parts.body.w / parts.body.h",  "expected": 1.90,  "tol": 0.09 },
+    "bodyShare":    { "expr": "parts.body.h / overall.h",     "expected": 0.435, "tol": 0.02 },
+    "bellyLevel":   { "expr": "parts.body.min.1 / overall.h", "expected": 0.35,  "tol": 0.015 },
+    "rimLevel":     { "expr": "parts.body.max.1 / overall.h", "expected": 0.784, "tol": 0.015 },
+    "legShare":     { "expr": "parts.legs.h / overall.h",     "expected": 0.35,  "tol": 0.02 },
+    "legSpanX":     { "expr": "parts.legs.w / parts.body.w",  "expected": 0.925, "tol": 0.035 },
+    "legSpanZ":     { "expr": "parts.legs.d / parts.body.d",  "expected": 0.885, "tol": 0.04 },
+    "legCount":     { "expr": "parts.legs.count",             "expected": 4,     "tol": 0 },
+    "handleRiseMM": { "expr": "overall.h - parts.body.max.1", "expected": 287,   "tol": 20 },
+    "handleWidth":  { "expr": "parts.handles.d / parts.body.d", "expected": 0.367, "tol": 0.03 },
+    "handleSpan":   { "expr": "parts.handles.w / parts.body.w", "expected": 1.0,  "tol": 0.025 },
+    "handleRoots":  { "expr": "parts.handles.min.1 / overall.h", "expected": 0.74, "tol": 0.025 },
+    "handleCount":  { "expr": "parts.handles.count",          "expected": 2,     "tol": 0 },
+    "flangeBottom": { "expr": "parts.flanges.min.1 / overall.h", "expected": 0.35, "tol": 0.015 },
+    "flangeTop":    { "expr": "parts.flanges.max.1 / overall.h", "expected": 0.74, "tol": 0.02 },
+    "flangeReach":  { "expr": "parts.flanges.w / parts.body.w", "expected": 0.99, "tol": 0.03 }
+  }
+}

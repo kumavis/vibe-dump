@@ -1,0 +1,38 @@
+{
+  "note": "Met 1985.214.4 gu (wine beaker), late Shang. Published H 311 mm, diameter 170 mm (rim; API 16.9863 cm). Weight not published. Proportions measured from the Met CC0 photographs with a solved perspective camera (see dossier.md section b). Part names: body = the whole lathe (foot ring, apron, foot cone, collar ribs, waist drum, neck, trumpet, lip) standing on y = 0, EXCLUDING flanges; flanges = all 8 flange strips (4 on the waist drum, 4 on the foot, the foot ones ending in out-turned spurs), each a separate mesh root (latheFlanges returns one per azimuth x range). Axes: front (+Z, azimuth 0) = the nose flange of taotie A; flanges at 0/90/180/270; the vessel is 4-fold so overall.w ~ overall.d.",
+  "dimensions": { "h": 311, "w": 170, "d": 170, "rimDiameter": 170, "footRingDiameter": 93, "weight": null },
+  "ratios": {
+    "height":        { "expr": "overall.h",                          "expected": 311,   "tol": 3 },
+    "silhouetteW":   { "expr": "overall.w / overall.h",              "expected": 0.547, "tol": 0.015 },
+    "roundPlan":     { "expr": "overall.d / overall.w",              "expected": 1.0,   "tol": 0.02 },
+    "bodyFull":      { "expr": "parts.body.h / overall.h",           "expected": 1.0,   "tol": 0.01 },
+    "bodyGround":    { "expr": "parts.body.min.1",                   "expected": 0,     "tol": 1 },
+    "rimIsWidest":   { "expr": "parts.body.w / overall.w",           "expected": 1.0,   "tol": 0.01 },
+    "flangeTop":     { "expr": "parts.flanges.max.1 / overall.h",    "expected": 0.471, "tol": 0.012 },
+    "flangeBottom":  { "expr": "parts.flanges.min.1 / overall.h",    "expected": 0.075, "tol": 0.015 },
+    "flangeSpan":    { "expr": "parts.flanges.h / overall.h",        "expected": 0.396, "tol": 0.02 },
+    "spurReach":     { "expr": "parts.flanges.w / overall.h",        "expected": 0.336, "tol": 0.02 },
+    "spurReachD":    { "expr": "parts.flanges.d / parts.flanges.w",  "expected": 1.0,   "tol": 0.04 },
+    "spurVsRim":     { "expr": "parts.flanges.w / parts.body.w",     "expected": 0.615, "tol": 0.03 },
+    "flangeCount":   { "expr": "parts.flanges.count",                "expected": 8,     "tol": 0 }
+  },
+  "registers": {
+    "note": "Not machine-checked (the lathe is one part); y in mm and as a fraction of H, for the modeller and the reviewers.",
+    "footRing":   { "y": [0, 17.5],      "f": [0, 0.056] },
+    "apron":      { "y": [17.5, 25.5],   "f": [0.056, 0.082] },
+    "foot":       { "y": [25.5, 77.5],   "f": [0.082, 0.249] },
+    "footTop":    { "y": 78.2,           "f": 0.251 },
+    "collar":     { "y": [78.2, 94.6],   "f": [0.251, 0.304] },
+    "waist":      { "y": [95.0, 146.4],  "f": [0.305, 0.471] },
+    "neckFillet": { "y": [146.8, 153.4], "f": [0.472, 0.493] },
+    "neckBand":   { "y": [153.4, 171.5], "f": [0.493, 0.551] },
+    "blades":     { "y": [171.5, 306.5], "f": [0.551, 0.986] },
+    "lip":        { "y": [307.8, 311],   "f": [0.990, 1.0] }
+  },
+  "radii": {
+    "note": "outer body radius, mm (flanges excluded)",
+    "footRingBottom": 46.5, "footRingTop": 48.3, "footDecorBottom": 36.8, "footTop": 21.8,
+    "collar": 19.6, "waistDrum": 21.5, "neckMin": 18.2, "trumpetAt250": 25.2, "rim": 85.0,
+    "waistFlangeCrest": 28.2, "footSpurTip": 52.3
+  }
+}

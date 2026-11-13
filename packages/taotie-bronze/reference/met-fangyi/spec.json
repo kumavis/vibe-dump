@@ -1,0 +1,26 @@
+{
+  "note": "Met 1974.268.2a, b fangyi (12th c. BCE). Published H 254, W 152, D 114 mm (inch-rounded: 10 x 6 x 4.5 in, so +/-3 mm). Proportions measured from the near-orthographic end view (side.jpg, 0.090 mm/px) and the three-quarter view; see dossier.md. Part names: body = the box walls from the ground (y 0) to the rim (y 162), INCLUDING the flush notched foot band, excluding flanges; foot = the lowest register (y 0-33, flush with the wall, notched on all four sides) if built as its own part (kit fangBody foot child) - body bbox must still start at y 0; lid = hipped roof + skirt, excluding flanges and knob; knob = post + miniature hipped roof; flanges = every flange strip on body and lid (incl. the ridge flanges). Axes: front (+Z) = a LONG face, x = long axis (W), z = short axis (D).",
+  "dimensions": { "h": 254, "w": 152, "d": 114, "weight": { "vessel_kg": 2.211, "lid_kg": 0.907 } },
+  "ratios": {
+    "silhouetteW":  { "expr": "overall.w / overall.h",          "expected": 0.598, "tol": 0.03 },
+    "overallPlan":  { "expr": "overall.d / overall.w",          "expected": 0.75,  "tol": 0.035 },
+    "bodyTop":      { "expr": "parts.body.max.1 / overall.h",   "expected": 0.639, "tol": 0.015 },
+    "bodyFromGround": { "expr": "parts.body.min.1",             "expected": 0,     "tol": 1.5 },
+    "lidBase":      { "expr": "parts.lid.min.1 / overall.h",    "expected": 0.641, "tol": 0.015 },
+    "ridgeLevel":   { "expr": "parts.lid.max.1 / overall.h",    "expected": 0.878, "tol": 0.02 },
+    "lidShare":     { "expr": "parts.lid.h / overall.h",        "expected": 0.237, "tol": 0.02 },
+    "knobShare":    { "expr": "parts.knob.h / overall.h",       "expected": 0.122, "tol": 0.02 },
+    "knobWidth":    { "expr": "parts.knob.w / parts.lid.w",     "expected": 0.19,  "tol": 0.04 },
+    "bodyPlan":     { "expr": "parts.body.w / parts.body.d",    "expected": 1.36,  "tol": 0.06 },
+    "bodyWidth":    { "expr": "parts.body.w / overall.h",       "expected": 0.547, "tol": 0.025 },
+    "bodyDepth":    { "expr": "parts.body.d / overall.h",       "expected": 0.402, "tol": 0.02 },
+    "flangeReachX": { "expr": "overall.w / parts.body.w",       "expected": 1.094, "tol": 0.03 },
+    "flangeReachZ": { "expr": "overall.d / parts.body.d",       "expected": 1.127, "tol": 0.035 },
+    "lidFlushW":    { "expr": "parts.lid.w / parts.body.w",     "expected": 1.0,   "tol": 0.025 },
+    "lidFlushD":    { "expr": "parts.lid.d / parts.body.d",     "expected": 1.0,   "tol": 0.03 },
+    "flangeTop":    { "expr": "parts.flanges.max.1 / overall.h", "expected": 0.906, "tol": 0.02 },
+    "flangeFromGround": { "expr": "parts.flanges.min.1",        "expected": 1,     "tol": 2 },
+    "footShare":    { "expr": "parts.foot.h / overall.h",       "expected": 0.13,  "tol": 0.02 },
+    "footTaper":    { "expr": "parts.foot.w / parts.body.w",    "expected": 0.95,  "tol": 0.03 }
+  }
+}

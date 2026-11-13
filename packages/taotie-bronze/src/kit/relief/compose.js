@@ -100,12 +100,18 @@ export function frieze(panel, rect, a, b, c, d) {
     x += w + o.gap
   }
   const axis = rect.x + rect.w / 2
+  let deferred = null
   for (const s of slots) {
     if (!s.spec) continue
     const m = getMotif(s.spec.motif)
     const facing = !centred ? o.facing : s.rect.x + s.rect.w / 2 < axis - 1e-6 ? 'right' : s.i === mid ? null : 'left'
     if (centred && facing === 'left') continue // the mirror makes the right half
     const p = resolveMotifParams(m, { ...o.params, ...(s.spec.params || {}), ...(facing ? { facing, arrangement: 'single' } : {}) }, s.spec.preset ?? o.preset)
+    if (centred && s.i === mid && !isSym(m, p)) {
+      // a rotational centre unit (a whorl) cannot be mirrored: draw it now so the
+      // ground packs around it, and again over its own footprint after the mirror
+      deferred = { m, p, rect: s.rect, snap: snapshot(panel, s.rect) }
+    }
     m.draw(panel, s.rect, p)
     // a symmetric unit (whorl–taotie centre, a pair) drawn on its own is mirrored about its own axis;
     // the centre slot of a centred frieze is mirrored with the whole band below
@@ -119,7 +125,34 @@ export function frieze(panel, rect, a, b, c, d) {
     panel.fillGround({ ...(gm?.groundOptions?.(gp, rect) || {}), ...o.ground }, { rect: half, margin: o.margin })
   }
   if (centred) panel.mirrorX(rect)
+  if (deferred) {
+    restoreFootprint(panel, deferred.snap)
+    deferred.m.draw(panel, deferred.rect, deferred.p)
+  }
   return { slots }
+}
+
+/** Copy of field + groove inside rect (to find and undo one unit's footprint). */
+function snapshot(panel, r) {
+  const { cols, ppmm } = panel
+  const x0 = Math.max(0, Math.floor(r.x * ppmm)), x1 = Math.min(cols, Math.ceil((r.x + r.w) * ppmm))
+  const y0 = Math.max(0, Math.floor(r.y * ppmm)), y1 = Math.min(panel.rows, Math.ceil((r.y + r.h) * ppmm))
+  const w = x1 - x0
+  const f = new Float32Array(w * (y1 - y0)), g = new Float32Array(w * (y1 - y0))
+  for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) {
+    f[(y - y0) * w + x - x0] = panel.field[y * cols + x]
+    g[(y - y0) * w + x - x0] = panel.groove[y * cols + x]
+  }
+  return { x0, x1, y0, y1, w, f, g, after: null }
+}
+
+/** Put back the pre-draw state wherever the unit raised the surface (its footprint, after mirroring). */
+function restoreFootprint(panel, s) {
+  const { cols } = panel
+  for (let y = s.y0; y < s.y1; y++) for (let x = s.x0; x < s.x1; x++) {
+    const i = y * cols + x, j = (y - s.y0) * s.w + x - s.x0
+    if (panel.field[i] > s.f[j] + 0.03) { panel.field[i] = s.f[j]; panel.groove[i] = s.g[j] }
+  }
 }
 
 /** Two units meeting at rect's centre line (the default neck/foot frieze section). */

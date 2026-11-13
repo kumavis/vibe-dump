@@ -1,0 +1,23 @@
+{
+  "note": "Met 43.25.1 shouldered zun (13th c. BCE). Published H 400, rim D 352, base D 225 mm (Met API: 40.005 / 35.243 / 22.543 cm). Weight not published. Proportions measured from DP140765 (front.jpg, camera on a nose line) and DP140764 (three-quarter.jpg, camera on a mould seam); see dossier.md. THREE-FOLD vessel: 3 mould sectors of 120 deg. Axes: front (+Z, azimuth 0) = a NOSE line: belly nose flange + foot nose flange + shoulder animal head + the symmetric neck blade all sit on azimuth 0; mould seams (join flanges) at +-60 and 180. Part names (userData.part): body = the whole lathe (foot + belly + shoulder + neck + trumpet + lip, incl. low relief, eye bosses, dentils and the thin neck seam ridges), flanges = the 12 slab flanges (6 belly + 6 foot, one per register per 60 deg, each a separate mesh) + 3 low plain shoulder strips on the seams (= 15 meshes), heads = the 3 sculpted bovine heads on the shoulder at azimuths 0, 120, 240. If the shoulder strips are built inside body, set flangeCount to 12 and flangeTop to 0.61.",
+  "dimensions": { "h": 400, "w": 352, "d": 352, "rimDiameter": 352, "baseDiameter": 225, "bellyMaxDiameter": 232, "neckMinDiameter": 162, "waistDiameter": 153, "weight": null },
+  "ratios": {
+    "silhouetteW":    { "expr": "overall.w / overall.h",        "expected": 0.88,  "tol": 0.025 },
+    "planRound":      { "expr": "overall.d / overall.w",        "expected": 1.0,   "tol": 0.03 },
+    "bodyFromGround": { "expr": "parts.body.min.1",             "expected": 0,     "tol": 1.5 },
+    "bodyHeight":     { "expr": "parts.body.h / overall.h",     "expected": 1.0,   "tol": 0.01 },
+    "rimIsWidest":    { "expr": "parts.body.w / overall.w",     "expected": 1.0,   "tol": 0.01 },
+    "headCount":      { "expr": "parts.heads.count",            "expected": 3,     "tol": 0 },
+    "headTop":        { "expr": "parts.heads.max.1 / overall.h", "expected": 0.705, "tol": 0.02 },
+    "headLow":        { "expr": "parts.heads.min.1 / overall.h", "expected": 0.625, "tol": 0.02 },
+    "headShare":      { "expr": "parts.heads.h / overall.h",    "expected": 0.085, "tol": 0.02 },
+    "headFrontReach": { "expr": "parts.heads.max.2 / overall.h", "expected": 0.335, "tol": 0.025 },
+    "headSpan":       { "expr": "parts.heads.w / overall.w",    "expected": 0.75,  "tol": 0.06 },
+    "flangeCount":    { "expr": "parts.flanges.count",          "expected": 15,    "tol": 0 },
+    "flangeBottom":   { "expr": "parts.flanges.min.1 / overall.h", "expected": 0.075, "tol": 0.015 },
+    "flangeTop":      { "expr": "parts.flanges.max.1 / overall.h", "expected": 0.703, "tol": 0.02 },
+    "flangeAspect":   { "expr": "parts.flanges.d / parts.flanges.w", "expected": 1.14,  "tol": 0.04 },
+    "flangeReach":    { "expr": "parts.flanges.d / overall.h",  "expected": 0.65,  "tol": 0.04 },
+    "flangeVsRim":    { "expr": "parts.flanges.d / overall.w",  "expected": 0.74,  "tol": 0.045 }
+  }
+}

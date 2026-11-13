@@ -1,5 +1,7 @@
-// STATUS: first pass — columnar leg, upright loop handle, ring foot. Keep the
-// signatures; refine shapes (cast-on taotie on leg tops, grooved handles…).
+// Legacy one-call parts (kept for old callers) + the index of the newer part
+// modules: legs.js (columnLeg, bladeLeg), handles.js (uprightHandle), lid.js
+// (hippedLid, roofKnob); fang.js builds notched feet for box bodies. Prefer
+// those: they carry relief slots and cast tolerances. ringFoot stays here.
 //
 // These are L3: real sculpture, never a height map. Each returns a Mesh with
 // userData.part set so tools/metrics.mjs can measure it against references.
@@ -75,3 +77,7 @@ export function ringFoot({ radius, height, thickness = 5, flare = 0.08, material
     segments: { density },
   })
 }
+
+export { columnLeg, bladeLeg, legRadius, legPanelSize } from './legs.js'
+export { uprightHandle, handleLayout } from './handles.js'
+export { hippedLid, hippedLidLayout, roofKnob } from './lid.js'

@@ -19,6 +19,7 @@
 
 import { PROFILES } from '../panel.js'
 import { Rng } from '../../util/rng.js'
+import { leiwenFillMask } from '../leiwen.js'
 
 const D2R = Math.PI / 180
 export const FLUSH_LIFT = 0.12
@@ -33,7 +34,7 @@ export { E, R }
 export function reliefSchema({ motif = 1.5, boss = 3, groove = 0.45, lineWeight = 0.55, echoInset = 1.2, carving = 'dense' } = {}) {
   return {
     style: E(['relief', 'flush'], 'relief', 'Style (V relief / IV flush)'),
-    carving: E(['dense', 'sparse', 'none'], carving, 'Plateau line work'),
+    carving: E(['dense', 'sparse', 'spirals', 'none'], carving, 'Plateau line work (spirals = V-a carved plateau)'),
     lineWeight: R(0.3, 1.6, 0.05, lineWeight, 'Line weight', 'mm'),
     echoInset: R(0.5, 3, 0.05, echoInset, 'Contour echo inset', 'mm'),
     irregularity: R(0, 2, 0.1, 1, 'Hand irregularity'),
@@ -71,21 +72,23 @@ export function motifRng(name, rect, p) {
  * dimension; local x runs 0..A along it (A = aspect).
  *   rot: 0 (along x), 90 (local +x points up the panel), -90 (points down)
  *   flip: mirror local x (a creature authored facing +x then faces −x)
+ *   flipY: mirror local y (a vertical creature's back to the other side)
  */
-export function makeFrame(rect, { rot = 0, flip = false, unit } = {}) {
+export function makeFrame(rect, { rot = 0, flip = false, flipY = false, unit } = {}) {
   const along = rot === 0 ? rect.w : rect.h
   const across = rot === 0 ? rect.h : rect.w
   const u = unit ?? across
   const A = along / u
   const H = across / u
-  const map = ([x0, y], out = [0, 0]) => {
+  const map = ([x0, y0], out = [0, 0]) => {
     const x = flip ? A - x0 : x0
+    const y = flipY ? H - y0 : y0
     if (rot === 0) { out[0] = rect.x + x * u; out[1] = rect.y + y * u }
     else if (rot === 90) { out[0] = rect.x + rect.w - y * u; out[1] = rect.y + x * u }
     else { out[0] = rect.x + y * u; out[1] = rect.y + rect.h - x * u }
     return out
   }
-  return { rect, rot, flip, unit: u, A, H, map, pts: (pts) => pts.map((p) => map(p, [0, 0])) }
+  return { rect, rot, flip, flipY, unit: u, A, H, map, pts: (pts) => pts.map((p) => map(p, [0, 0])) }
 }
 
 // ------------------------------------------------------------------ pen
@@ -387,11 +390,14 @@ export function renderSheet(panel, sheet, p, { clip, echo = true } = {}) {
         panel.sink(paint, { depth: lvl.groove, profile: (s) => Math.max(grooveX(s - e, ghw), grooveX(s - e2, ghw)) })
       } else if (carving === 'sparse') {
         panel.sink(paint, { depth: lvl.groove * 0.8, profile: (s) => grooveX(s - e, ghw) })
+      } else if (carving === 'spirals') {
+        // V-a carved plateau: one contour echo, then small spirals packed on the top (§1.2, §3.3)
+        leiwenFillMask(panel, paint, { pitch: p.spiralPitch ?? Math.max(0.7, lw * 2), depth: lvl.groove, echo: 1, eyes: 0, line: 0.48 }, { margin: Math.max(0.35, lw * 0.7), level: motifH })
       }
     }
   }
 
-  if (sheet.lines.length && carving !== 'none') {
+  if (sheet.lines.length) {
     panel.sink(withClip((ctx) => { for (const l of sheet.lines) strokeLine(ctx, l.pts, l.w ?? lw) }), { depth: lvl.groove, shoulder: lw / 2, profile: 'u' })
   }
   if (sheet.ground.length) {

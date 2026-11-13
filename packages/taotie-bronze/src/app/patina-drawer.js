@@ -1,6 +1,7 @@
 // The Patina drawer: master "time in the ground" dial, presets, every shared
 // patina uniform grouped as a conservator would (Alloy / Corrosion / Surface),
-// plus view mode and named views. Generated from PATINA_PARAMS so a new
+// plus view mode (beauty / clay / height / mask = layer coverages in false
+// colour) and named views. Generated from PATINA_PARAMS so a new
 // parameter added to the shader shows up here without UI work.
 
 import { PATINA_PARAMS, PATINA_PRESETS, setPatina, getPatina } from '../kit/index.js'
@@ -25,7 +26,7 @@ export function createPatinaDrawer({ body, stateLabel, onChange, onMode, onView 
 
   // --- view
   const viewGroup = el('div', { class: 'group' }, el('span', { class: 'cap', text: 'View' }))
-  const modeSeg = chips(el('div'), ['beauty', 'clay', 'height'].map((id) => ({ id })), { value: 'beauty', seg: true, onPick: (m) => onMode(m) })
+  const modeSeg = chips(el('div'), ['beauty', 'clay', 'height', 'mask'].map((id) => ({ id })), { value: 'beauty', seg: true, onPick: (m) => onMode(m) })
   const viewChips = el('div', { class: 'chips', style: 'margin-top:8px' })
   viewGroup.append(modeSeg.el, viewChips)
 

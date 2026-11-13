@@ -45,17 +45,24 @@ src/kit/
     motifs/
       taotie.js         the parametric mask (schema, presets, draw) — components in taotie/parts.js, renderer in taotie/render.js
       ground.js         leiwen on its own (atlas entry 'leiwen')
-      kui.js cicada.js blade.js whorl.js boss.js bands.js …
+      kui.js cicada.js blade.js whorl.js boss.js bands.js bird.js eyeband.js snake.js silkworm.js scales.js
+                        companion motifs (§ Companion motifs); _strokes.js = their Pen/Sheet/renderer
+      frieze.js         composed friezes & registers as atlas plaques (compose.js demos)
       list.js           ONE LINE PER MOTIF, alphabetical: export { default as taotie } from './taotie.js'
       schema.js         motifDefaults(schema)
       index.js          registry: MOTIFS[name] = { draw(panel, rect, params), params schema, presets }
-    compose.js          register / panel layout helpers (mirror, repeat, frieze)
+    compose.js          mould-section layout: drawMotif, frieze, mirrorPair, register, bladeRow, frame, bowstrings
   geometry/
     surface.js          ParamSurface → displaced, UV'd BufferGeometry
-    lathe.js            profile of revolution with wall thickness
-    fang.js             rectangular/square-section bodies (fangding, fangyi)
-    flange.js           notched / hooked flange strips along a path
-    parts.js            columnar leg, upright loop handle, ring foot, lid, knob, posts
+    profile.js          Profile: (r, y) outline, arc-length, corners, named registers, bowstrings; measured tables
+    lathe.js            vessel body of revolution: sector × register cells, wall, lip, floor, hollow foot, holes
+    fang.js             rectangular-section bodies: décor-cell grid, rim, inner skin, floor, notched foot, cast tolerances
+    flange.js           flanges along a path (lathe meridian or straight edge): notches, hooks, spurs, incised faces
+    heads.js            sculpted animal heads in the round (SDF → surface nets), mounted on a lathe wall
+    legs.js             columnLeg (taper, entasis, rings, collar, wrapped relief, hollow, splay), bladeLeg
+    handles.js          uprightHandle 立耳 (relief on outer face / edge / root blocks, channel, lean)
+    lid.js              hippedLid (four relief slopes, skirt, seat) + roofKnob
+    parts.js            legacy columnarLeg / loopHandle, ringFoot; re-exports legs/handles/lid
   material/
     patina.js           PatinaMaterial + PATINA_PRESETS + shared uniforms
     noise.glsl.js       3D simplex / worley / fbm chunks
@@ -246,6 +253,82 @@ kit.taotieParts.eye(C); kit.taotieParts.horn(C, { horn: 'ram' }); …    // or k
 kit.renderTaotie(panel, C)                                              // then fillGround(left half) + mirrorX(rect), as drawMotif does
 ```
 
+### Companion motifs (research/01 §4) — `kui cicada blade whorl boss bands bird eyeband snake silkworm scales`
+
+All draw Style V relief (plateau + contour echo + domed L2 eyes) and share these render params
+(`_strokes.reliefSchema`): `style 'relief'|'flush'`, `carving 'dense'|'sparse'|'spirals'` (V-a: echo +
+leiwen packed ON the plateau) `|'none'`, `lineWeight`, `echoInset` (mm), `irregularity`, `seed`,
+`relief { motif, boss, groove }` (mm). Creatures are authored facing +x in a frame whose height is 1
+(the band height), so a longer rect gives a longer body, not a fatter one. Motifs that can turn honour
+`facing: 'left'|'right'` (+ `arrangement: 'single'`) — compose.frieze sets these. `symmetric` may be a
+function of the params; `groundOptions(p, rect)` gives default leiwen opts (pitch scaled to the band).
+
+```
+kui      arrangement 'pair' (two meeting at the centre line; mirrored) | 'single' + facing
+         orient 'horizontal' | 'up' | 'down' (vertical K5 kui, head up/down)    head 'gaping' | 'beaked' | 'trunked'
+         turned (回首, head looks back)  tail 'up' | 'down' | 'forked' (歧尾)  crest 't' | 'bottle' | 'hook' | 'none'
+         eye 'round' | 'square' | 'chen', pupil 'dot' | 'slit' | 'none', eyeSize   quills 0–4  leg
+         bandWidth (× H, 0.23)  square  marks 'none' | 'c-marks'  centreGap mm
+         presets k1-tail-up k2-tail-down k3-trunked k4-beaked carved-plateau turned-back single
+                 vertical-head-up forked flush fangyi-band houmuwu
+cicada   orient 'right'|'left'|'up'|'down' (head toward)  length (2–4 : 1)  chevrons  eyeSize  legs  concave
+         presets standard row-unit blade-fill slender flush
+blade    direction 'rising' | 'hanging'  shape 'triangle' | 'ogive'  concave  border 'band' | 'lines' | 'none'
+         borderLines  borderWidth mm  fill 'mask' (stretched T10) | 'cicada' | 'leiwen'  maskHeight  eye  pupil
+         pitch mm  leiwenTop (above it only nested contour lines — the Met gu)   ground: false (fills itself)
+         presets rising-mask hanging-mask rising-cicada leiwen-only gu-trumpet zun-neck;  blade.outline(ctx, rect, p)
+whorl    kind 'whorl' | 'petal' (四瓣目纹)  spokes 3–7  turn 'ccw'|'cw'  sweep °  size  centre 'circle'|'boss'|'ring'  dome
+         presets five-spokes four-spokes six-spokes post-cap petal flush        (rotational: symmetric false)
+boss     layout 'lattice' (乳钉雷纹) | 'grid' (fangding U-frame) | 'row' | 'single'  side mm  angle °  lines 'double'|'single'
+         ridge ridgeHeight nipple nippleHeight (mm)  shape 'pointed' | 'dome'  rows
+         presets lattice single-lines gui-belly fangding-frame row single;  boss.nipples(panel, [[x,y]…], p)
+bands    kind 'bowstrings' | 'border' | 'step'  count width height spacing (mm)  profile 'round'|'flat'  vertical
+         presets two-bowstrings three-bowstrings single-bowstring monumental gu-waist border step
+bird     arrangement 'pair' | 'single' + facing  crest 'hook'|'t'|'none'  tail 'hook'|'fork'  eye  length  bandWidth
+eyeband  eyes (count)  eye 'chen'|'round'  eyeSize  slope °  rib          (目雷纹, symmetric by construction)
+snake    form 'sinuous' | 'coiled'  facing waves amplitude bandWidth marks 'c-hooks'|'scales'|'none'
+silkworm facing segments bend girth          scales  scale mm  open 'down'|'up'  body (bool)
+```
+`presetPlaques[preset]` (mm) on each module = the panel size a preset was matched at. Hand-building a new
+creature: `kit.companions` exposes `makeFrame(rect, { rot, flip })`, `Pen` (fd / arc / to / spiral / curl),
+`Sheet` (band / taper / poly / circle / rrect / boss / line / groundLine) and `renderSheet(panel, sheet, p, { clip })`;
+`buildKui(S, A, p)`, `buildCicada`, `buildBird` are exported from their modules.
+
+## relief/compose.js — laying out a mould section
+
+All rects in panel mm. Every helper draws the LEFT half and mirrors where the Shang rule says so.
+
+```js
+drawMotif(panel, motif, rect, params?, { preset, ground: leiwenOpts | false, margin: 0.6 })   // one unit (see above)
+frieze(panel, rect, { unit: 'kui' | spec | [spec…] (cycled, e.g. ['whorl','kui']), count: 2,
+                      facing: 'centre' | 'left' | 'right', gap: mm, centre: spec | null,   // middle slot if count is odd
+                      params, preset, ground: leiwenOpts | false, margin })  → { slots }
+  // spec = 'kui' | { motif, params?, preset?, w? (mm, or fraction of the band if ≤ 1) }
+  // 'centre': left-half units face right, ground on the left half, mirror. A rotational centre unit
+  // (whorl) is redrawn after the mirror. Legacy frieze(panel, rect, motif, count, params, opts) still works.
+mirrorPair(panel, rect, unit = 'kui', opts)            // frieze with count 2, facing the centre
+register(panel, rect, rows, { separator, edges: false, inset: 0.8, ground })  → { rows: [rect], byName }
+  // rows TOP → BOTTOM: { name?, h? mm | weight? (share of the rest), and one of motif/params/preset,
+  //   frieze: {…}, blades: {…}, draw(panel, rect), plain: true;  sep?: separator below this row }
+  // separator { kind: 'bowstrings', count, width, height, spacing } | { kind: 'line' } | { kind: 'plain', h } | { kind: 'none' }
+bladeRow(panel, rect, { count: 4, direction: 'rising' | 'hanging', gap, params, preset, between: 'plain' | 'leiwen' })
+frame(panel, rect, { width: mm | { t, b, l, r }, top: friezeOpts | 'plain' | 'bosses', bottom, sides: 'kui' | 'bosses' | 'plain',
+                     sideHeads: 'down' | 'up', line: true, params, preset, bosses: { radius, height, spacing, rows } })  → inner rect
+bowstrings(panel, rect, { count: 2, width: 1.5, height: 0.8, spacing, profile: 'ridge' | 'plateau', vertical })
+bossField(panel, rect, { radius, height, spacing, rows })   registers(rect, [{ name, h }])  inset(rect, m)
+bossRow(panel, a, b, { count, radius, height })   borderLine(panel, rect, { width, height, sides: 'tblr' })
+```
+Example — a zun neck/belly wall section (one mould sector, flange on its centre line):
+```js
+const R = kit.register(panel, rect, [
+  { weight: 0.2, frieze: { unit: 'kui', count: 2, facing: 'centre' } },
+  { weight: 0.62, motif: 'taotie', preset: 'T1-classic' },
+  { weight: 0.18, frieze: { unit: 'bird', count: 4, gap: 2 } },
+], { separator: { kind: 'bowstrings', count: 2, width: 1.4, spacing: 3.6 } })
+```
+The `frieze` atlas motif shows these as presets: `kui-frieze bird-frieze cicada-row whorl-kui eye-band
+neck-belly blade-row houmuwu-wall boss-belly fangyi-face` (sizes in its `presetPlaques`).
+
 ## geometry/surface.js — relief onto 3D
 
 ```js
@@ -259,11 +342,15 @@ const geo = buildSurface({
 // geo has position, normal, tangent (vec4), uv (panel UV for the maps)
 ```
 
-More options: `fade` (mm, default 1.5, or `{ u0, u1, v0, v1 }`) — displacement
+More options: `samples: { u: [...], v: [...] }` (explicit, sorted, non-uniform parameter values in [0,1] —
+lathe.js shares one θ column set across patches this way); `fade` (mm, default 1.5, or `{ u0, u1, v0, v1 }`) — displacement
 ramps to exactly 0 at the reliefRect border, so patches sharing a border curve
 are watertight (keep panel edges plain ground for that margin; a full lathe
 revolution passes `fade: { u0: 0, u1: 0, … }`); `normals: 'surface' | 'displaced'`;
 `maxVerts` (400k); `reliefScale`. `back.rims` lists borders to close (default all four).
+`panelMap(u, v, out)` (optional): a non-linear surface → panel map; `out = [pu, pv, weight]` arrives
+holding the reliefRect mapping, overwrite it (weight multiplies displacement — a fade along a slanted
+edge). fang/lid/handles use it for 1:1 ("true") panels on trapezoids, triangles and arches.
 
 **Normals:** the default `'surface'` keeps the smooth, undisplaced surface normal
 and lets the full-res normal map carry ALL relief slope; geometry carries only
@@ -282,14 +369,147 @@ measure them. Name parts in the plural the spec files use: `body`, `legs`,
 `handles`, `flanges`, `foot`, `lid`.
 
 ```js
+lathe({ profile, … })        // see § Bodies of revolution; the legacy single-Mesh call still works:
 lathe({ profile: [[r, y] | [r, y, 'corner'], …], material, part, segments, thickness, rims, relief, reliefRect, fade })
 latheSurface(profile) / profileCurve(profile)    // u = 0.5 faces +Z
-fangBody({ width, depth, height, flare, wall, material, density, panels: { front|back|left|right: { relief, material, reliefRect, fade } } })
-  // → Group; userData.walls[name] = { corners: [BL, BR, TL, TR], normal } for placing flanges
-flange({ from, to, out, height, thickness, notches: { every, depth, width }, hook, embed, material, part })
-columnarLeg({ height, radius, swell, waist, material })   loopHandle({ width, height, bar, thickness, material })
+fangBody({…}) columnLeg({…}) uprightHandle({…}) hippedLid({…}) roofKnob({…})   // see § Box bodies and parts
+flange({ from, to, out, height, thickness, notches: { every, depth, width }, hook, embed, material, part })   // + path, ends … (§ Bodies of revolution)
+columnarLeg({ height, radius, swell, waist, material })   loopHandle({ width, height, bar, thickness, material })   // legacy
 ringFoot({ radius, height, thickness, flare, material })
 ``` A decorated wall is always: surface patch + ReliefMap + PatinaMaterial.
+
+## Bodies of revolution, flanges, heads — profile.js, lathe.js, flange.js, heads.js (research/03 §1, §3–6)
+
+All mm, Y up, ground y = 0, azimuth θ in DEGREES: 0 = front (+Z), positive toward +X.
+
+```js
+const P = new Profile(points, { registers, ridges, mode: 'spline' | 'polyline', smooth, step: 0.15 })
+//   points bottom → top on the OUTER surface: [r, y] | [r, y, 'C'|'corner'|'S'|'L'] | [r, y, join, 'label'] | {r, y, join, name}
+//   'C' = carination: crease + split normals + band break; others: centripetal Catmull-Rom.
+//   registers { name: [y0, y1] | {y0, y1} | {s0, s1} | {from: label|y, to: label|y} }   (stored as arc ranges)
+//   ridges [{ y | s, count, width, height, spacing, shape: 'round'|'flat'|'v'|'step' }]   bowstrings 弦纹 as real outline
+P.at(s, side?) → { s, r, y, nr, ny, tr, ty }   P.length   P.sAtY(y, { from: 'bottom'|'top' })   P.rAtY(y)
+P.register(name)  P.setRegister(name, spec)  P.addRidges(spec)  P.breaks()  P.samples(s0, s1, { maxAngle, maxLen })
+P.offset(d | (s, y) => d, { smooth }) → [[r, y, s]…] inward core   P.scaled(k)   P.points   P.bounds { yMin, yMax, rMax }
+profile(points | Profile, opts)          // pass-through helper
+profileFromTable([[r_mm, y_mm], …], { scale, height, flipY, corners: 'auto' | [indices], cornerAngle: 32, window: 2.5, smooth: 0.8, ground: true })
+//   dense measured silhouettes (either direction): auto corners, Gaussian smoothing between them, polyline mode
+```
+
+```js
+const body = lathe({
+  profile,                         // Profile or points
+  sectors: 4 | { count, center } | { bounds: [deg…] },   // default mould sectors; sector k centred at center + k·360/count
+  registers: { name: { y0,y1 | s0,s1 | from,to | (omit: a register named on the Profile),
+                       sectors?, relief?: ReliefMap | ReliefMap[] | (sectorIndex, size) => ReliefMap | null, fade?, material? } },
+  wall: 3 | (s, y) => mm,          lip: { thickness: 1.6·wall, length, shape: 'round'|'flat', bulge },
+  floor: { y, thickness, dome } | null (inner floor; default: flat base for r0 > 0, follow the profile for round bottoms),
+  foot: { wall, hollow: true },    holes: [{ shape: 'cross'|'rect', azimuth, y, arm, width, w, h }],
+  tolerance: { seed, ovality: 0.005–0.015, rim: 0.003–0.01 (p-p fraction of H), lean: deg },   // §5, foot stays on y = 0
+  oval: 1 (major:minor plan ratio, you/hu: Z = X / oval), ridges, density: 1 (verts/mm on decorated cells), quality, chord: 0.05, fade: 1.5,
+  material, interiorMaterial, materialFor: (relief, register) => Material, part: 'body' })
+// → Group (userData.part), children by role: outer (plain cells merged), panel:<register> (one mesh per distinct
+//   ReliefMap — return the SAME map for identical sectors), lip, inner, foot-inner, foot-ring | base, holes.
+// Plain cells stay cheap (adaptive rows); every cell shares one θ column set and its band-edge rows: watertight.
+```
+`size` (the relief callback's 2nd argument, also `body.userData.lathe.registers[name].sectors[k]`):
+`{ register, sector, sectors, theta0, theta1, center (deg), width (mm at mid-arc), height (arc mm), widthTop,
+widthBottom, rTop, rBottom, rMid, widthAt(yArc), toPanel([x, y], W = width), fromPanel([px, py], W), map(pts, W) }`.
+Panels map ANGLE-linearly: on a flaring register the panel is a fan (stretched by `widthAt(y) / width`, as Shang
+blades widen with the trumpet). To draw something at TRUE size — straight-sided blades of a given true taper, a
+round boss that stays round — author it in developed-surface mm (x from the sector centre line) and pass the
+points through `size.toPanel` (or `kit.shapes.mapShape(shape, size.toPanel)`).
+
+`body.userData.lathe` (LatheInfo): `{ profile, height, length, registers, sectors, floorY, wallAt(s), deform(v),
+frame(thetaDeg, s, side?) → { p, n (out), d (up the wall), b (= d × n), r, y }, sAtY(y), range(spec) → [s0, s1],
+meridian(thetaDeg, rangeSpec) → path }`. Frames include the cast deformation.
+
+```js
+flange({ path | from,to,out, height: mm | (f ∈ [0,1]) => mm, thickness, embed, taper: 3 (deg), bevel, waver: 0.5, seed,
+         notches: { shape: 'square'|'score'|'T'|'L'|'hook'|'none', pitch (alias every), depth (× height), width (mm), pattern },
+         ends: { start, end },   // 'square' | 'taper' | { type: 'step'|'hook'|'spur'|'beak'|'taper', length, height, sweep, under }
+         hook (legacy ≡ ends.end beak), incise: 'auto', material, part: 'flanges' }) → Mesh
+//   'score' = the dense ladder (Met gu 1985.214.4); 'T'/'L' = F1 notches + scored faces; 'hook' = F2 beaks.
+//   'step' overhangs the register end (gu drum); 'spur' curls out (gu foot); 'hook' rises past a rim.
+//   Integer number of full segments per span; incised grooves → ReliefMap on both faces (incise needs a PatinaMaterial).
+latheFlanges(body, { azimuths: [deg…], ranges: [register | {y0,y1} | {s0,s1} | { range, …overrides }], gap: 1.5, seed, …flangeOpts })
+//   one flange per azimuth × range, following the wall, broken at register boundaries → Mesh[] (add them yourself)
+flangeOutline(opts) → { points (CCW, σ along path, t outward), grooves, segments }   edgePath(from, to, out) → path
+```
+
+```js
+animalHead({ kind: 'bovine'|'ram'|'buffalo'|'tiger', width (face mm), projection (× width), droop (deg), hornSize, hornCurl,
+             eyeSize, ears, embed (mm), seed, quality, material, part: 'heads' }) → Mesh   // local +Z out of the wall, +Y up
+mountOnLathe(body, head, { azimuth, y | s, pitch (deg, + = down), follow (0 radial … 1 wall normal), lift })
+headSDF(params) / meshSDF(sdf, { voxel, clipZ })   // the field and the surface-nets mesher, for other sculpture
+```
+A head on a sloping shoulder: `follow: 1, pitch: 0` lays the horns on the wall; `droop` points the snout out and down.
+Studies: `src/artifacts/_study-lathe.js` (gu after Met 1985.214.4, zun after Met 43.25.1; not registered).
+
+## Box bodies and parts — fang.js, legs.js, handles.js, lid.js (research/03 §1.1, §1.10, §3, §5, §6)
+
+All mm, Y up, front +Z. Every part with relief slots has a `…Layout(opts)` twin that returns the panel
+sizes (mm) BEFORE building, so panels are authored 1:1: lay out → bake panels (with onProgress between)
+→ build. A relief slot takes a `ReliefMap` or `{ relief, material?, fade?, density?, map? }`; the
+material defaults to a cached `PatinaMaterial({ relief })`. Side keys everywhere: `front | right | back |
+left`, falling back to `long` (front/back) / `short` (left/right) / `all`. Seen from outside, panel x
+runs left → right, y up (lids: eave at y = 0).
+
+```js
+const L = kit.fangLayout(opts)            // L.sides.front.cells[row][col] = { w, h, wMax, wBottom, wTop, outline, s0, s1, y0, y1 }
+                                          // L.foot.sides.front = { w, h, notch: { w, h, outline }, panelOutline }
+kit.fangBody({
+  width, depth, height,                   // outer wall at the bottom (or at the top with at: 'top'); height = underside → wall top
+  at: 'bottom'|'top', taper: deg | { x, z },   // walls lean out (+) going up; or top: { width, depth }; legacy flare
+  bulge: mm | { x, z }, bulgeAt: 0.5, profile: (t) => ({ dx, dz }),   // belly; extra outline offset by height fraction
+  cornerRadius: 0,                        // 0 = sharp arris (flanged Anyang); > 0 = rounded corners on their own patches
+  wall: 8, innerRadius: wall/2, floor: { thickness, round },     // inner skin = plain offset; floor + fillet
+  rim: { kind: 'slab' | 'plain' | false, height, overhang, inner, round },   // slab = thick everted ledge (fangding)
+  grid: { rows: [mm | { weight }…] TOP→BOTTOM, cols: [mm at mid height | { weight }…] } | { long: {…}, short: {…} },
+  cells: { long: [[spec…] per row], short: … },   // null = plain (cheap); spec.map: 'stretch' (default) | 'true'
+  relief: (cell) => spec,                 // or a callback per cell
+  foot: { height, inset, flare, thickness, cornerRadius,  // ring foot below the body (the body then starts at foot.height)
+          notch: { width: mm | ≤1 frac, height: mm | ≤1 frac, shape: 'arch' | 'rect', spring, round } | { long: …, short: … },
+          relief: { long: spec, short: spec } },   // one 'true' panel per foot side; faded around the notch
+  cast: true | { seed, sag: 0.003 (× face span), rim: mm p-p, wave: mm, waveLength: mm, skew: deg },
+  material, interiorMaterial, density: 1 (verts/mm on décor cells), plainDensity: 0.06, panels (legacy 1 cell/side),
+}) → Group (part 'body'; foot = child Group part 'foot')
+```
+Cells: `'stretch'` panel = `cell.w × cell.h` (face width at the cell's mid height; stretched on a taper,
+as Shang carvers did); `'true'` panel = `cell.wMax × cell.h`, mapped 1:1 in mm, the trapezoid is
+`cell.outline` (panel mm) and displacement fades along its slanted sides. Rows are physical mm along the
+wall (h = arc length). Keep 1.5 mm of plain ground at cell borders (watertight seams).
+`userData`: `walls[side] = { corners: [BL, BR, TL, TR], normal, axis: [bottom, top], registers: [[y0, y1]] (group y),
+columns, cells }`, `corners['front-right' | 'right-back' | 'back-left' | 'left-front'] = { bottom, top, out }`
+(arris line), `rim = { kind, y (rim top), wallTop, outer {a, b}, inner {a, b} }`, `floorY`, `footHeight`,
+`at(side, s, y, d = 0)` (point on the base wall, d mm outward), `rimTop(side, s, f)` (f 0 = outer edge → 1 inner),
+`legSeat(corner, inset)`, `layout`; foot: `corners`, `axes[side] = { bottom (notch top), top, normal }`.
+All points include the cast deformation (in the group frame) — flanges placed from them sit on the wall.
+
+```js
+kit.columnLeg({ height, radius, taper: 0, entasis: 0.04, entasisAt: 0.7,
+  foot: { swell, height, step }, top: { flare, height }, collar: { from, to?, amount, shoulder },
+  rings: { count, at, width, spacing, height },                      // bowstrings (y ≤ 1 = fraction)
+  relief: { map, zone: [y0, y1] mm, arc: 180°, facing: deg (0 = +Z, 90 = +X), fade, material },
+  hollow: { wall, open: 'bottom' | 'none' }, flange: { …kit.flange opts },   // flange on the facing axis
+  splay: { angle, toward: [x, z] }, cast: { seed, splay: ±deg, length: ±frac, twist: ±deg }, embed: 8 })
+  → Group 'legs' standing on y = 0 (position it); userData { radius(y), axis: { bottom, top, out }, panel }
+kit.legPanelSize({ …same opts, zone, arc }) → { w, h, rMid }   kit.legRadius(opts) → r(y)
+kit.bladeLeg({ height, chord, thickness, tipChord, outCurve, splay })   // jue/jia; first pass
+kit.uprightHandle({ width, height (above the rim), bar, barTop, depth, radius, aperture: { radius },
+  lean: deg, channel: { width, depth }, embed, root: { width, height, rise, outset, inset },
+  faces: { outer, edge, back, root }, cast: { seed, lean, height } })
+  → Group 'handles' in its own frame: arch in XY, rim top y = 0, OUTER face +Z (rotate +Z away from the vessel)
+kit.handleLayout(opts) → { outer: { w, h, outline: { outer, inner } }, edge: { w (unrolled length), h }, root: { w, h } }
+kit.hippedLid({ width, depth (eave line), rise | slope, ridge (≤ 1 frac | mm), concave: 0…0.4,
+  skirt: { height, overhang, fascia }, thickness, seat: { depth, clearance, thickness },
+  faces: { long, short }, knob: { …roofKnob opts } })
+  → Group 'lid' standing on y = 0 (put it at body.userData.rim.y); userData { hips: [pts]×4, midlines[side], ridge, top, knob }
+kit.hippedLidLayout(opts) → { faces[side] = { w, h, outline, shape }, rise, top, ridge }
+kit.roofKnob({ width, depth, rise | slope, ridge, concave, skirt, post: { height, width, depth, waist }, faces })
+```
+Flanges along lid hips / leg axes / corners currently use the straight `flange()`; curved
+(concave hip, bulged corner) anchors are returned as polylines for the path flange when it lands.
 
 ## material/patina.js
 
@@ -302,42 +522,57 @@ import { patina, PATINA_PRESETS, setPatina } from './kit'
 setPatina(PATINA_PRESETS['excavated-green'])   // or setPatina({ malachite: 0.8 })
 ```
 
-Parameters (all 0..1 unless noted; `research/02-…` is authoritative for colours):
+Parameters (all 0..1 unless noted; `research/02-…` is authoritative for colours).
+Groups `Alloy` / `Corrosion` / `Surface` (the drawer is generated from `PATINA_PARAMS`):
 
 ```
-tin            alloy colour: 0 copper-red → 0.5 golden bronze → 1 silvery high-tin
-polish         roughness of bare metal
-tarnish        thin dark oxide film on the metal
-cuprite        red-brown Cu₂O layer under everything
-malachite      green carbonate crust        (+ malachiteHue, malachiteScale mm)
-azurite        blue carbonate patches
-chloride       pale powdery "bronze disease" spots
-tinOxide       smooth grey-green/black noble "water patina"
-earth          burial soil packed in recesses (+ earthColor)
-inlay          black pigment paste in the sunk lines (as-made appearance)
-crevice        how strongly corrosion prefers recesses
-wear           how far high points are rubbed back to cuprite → metal
-patchScale     mm — size of corrosion territories (low-freq 3D noise in object space)
-age            master dial: 0 = out of the mould in 1200 BC → 1 = out of the ground in 1939
-seed
+age            master dial: 0 = out of the mould in 1200 BC → 1 = out of the ground in 1939.
+               Layers arrive in order: tarnish → cuprite → noble sheet → malachite → azurite /
+               chlorides / soil / lime. Every preset is its look AT age 1.
+Alloy      tin 0–0.30 (Sn wt; F0 from the research table, 0.12 ≈ Houmuwu warm gold) · lead 0–0.25
+           (greys / dulls) · polish (relief tops 0.40 → 0.12 roughness; recesses stay as-cast 0.47)
+           · tarnish (gold → brown-gold film)
+Corrosion  cuprite (liver/oxblood, F0 0.18, shows through thin crust, rims, wear) · tinOxide (Type I
+           noble sheet) + tinOxideTone 0–2 (black 黑漆古 · olive · grey 水银古) · malachite (Type II
+           crust) + malachiteHue (blue-green → yellow-green), malachiteTone (dark compact → pale
+           earthy), malachiteScale mm (botryoid size), crust mm (thickness: flattens the relief
+           normal map, adds lumps) · azurite 0–0.5 (thresholded islands, never teal) · chloride
+           (pale pustules over pits, dark ring, clustered low / in creases) · soot (low body, fire)
+           · crevice · patchScale mm (territories, domain-warped) · mottleScale mm
+Surface    earth + earthColor · calcite (lime film: pales and greys the crust) · burialSide (one side
+           lay in the soil) · recessDirt · wax (museum sheen) · inlay (black paste in sunk lines:
+           the as-made look) · wear (erases soil → crust → noble → cuprite → burnished metal on
+           arrises, rims, handles) · seed
 ```
+
+Presets: `as-cast`, `excavated-green` (Houmuwu), `malachite-crust` (Freer F1915.136),
+`olive-museum` (Met fangyi / zun / gu), `water-black` (Met fanglei 55.160), `azurite-bloom`,
+`bronze-disease`, `heirloom`.
 
 Also exported: `patina` (the shared `{ value }` uniforms), `getPatina()`,
-`PATINA_PARAMS` (metadata the drawer is generated from: group, label, min/max/step,
-default), `setPatinaMode('beauty' | 'clay' | 'height')` (a shared uniform, no recompile).
-Constructor options: `{ relief, cavityAttribute, cavity (constant fallback), normalStrength }`.
-Noise runs in **world space, mm** (the app never moves a vessel), so corrosion
-territories run continuously across separately built parts, and is faded out
-below ~2 px so it never sparkles. Each layer is one GLSL function
-(`layerCuprite`, `layerMalachite`, …) returning a coverage from a shared `Surf`
-struct. Without a relief map, arrises come from screen-space curvature so flange
-and handle edges still wear.
+`PATINA_PARAMS` (group, label, min/max/step, default, unit, hint),
+`setPatinaMode('beauty' | 'clay' | 'height' | 'mask')` (shared uniform, no recompile; `mask` =
+the top layer per pixel in false colour, unlit: gold metal / white worn metal, red cuprite,
+violet noble, black inlay+soot, green malachite, blue azurite, cyan chloride, yellow soil,
+pink lime; darker = thicker crust), and `setPatinaVessel(object3D | { min: [x,y,z], max })`.
 
-The fragment shader gets: object-space position (mm) for 3D noise, the relief
-`dataTexture` (height / cavity / edge / groove) when present, a vertex `cavity`
-attribute otherwise, and the normal. Layers stack physically: metal → cuprite →
-carbonates → soil; wear removes from the top down; thick crust flattens the
-normal map (encrustation softens the line work) and adds its own lumpy bump.
+**Vessel space.** Noise runs in mm in the space of the vessel root: the stage calls
+`setPatinaVessel(root)` in `setContent`, which stores the root's inverse world matrix and its
+bbox. So territories run continuously across separately built parts, stay glued if the root is
+turned, and scales are physical on a 25 cm fangyi and a 1.3 m ding alike (territory size gets a
+mild `(H/300 mm)^0.3` bias). The bbox also gives height-above-base (soot, soil at the foot) and
+the vertical axis (faces turned toward it count as sheltered). Fields: territories (patchScale,
+warped fbm) · second territory (azurite, noble-vs-crust split) · mottle (mottleScale) · speckle
+and botryoids (malachiteScale, Worley); each band fades to its mean below ~1.5 px.
+
+Constructor options: `{ relief, cavityAttribute, cavity = 0.8 (constant for plain meshes),
+interior = 0 (1 for a bowl's inside / inner wall: more soil, no wear), normalStrength }`.
+Plain meshes (legs, handles, flanges) get a cavity estimate from signed screen-space curvature
+(convex arris → edge/wear, concave crease → recess), undersides and inward faces; the inner wall
+of a decorated panel (uv = -1) is treated as interior. Each layer is one GLSL function
+(`layerCuprite`, `layerNoble`, `layerMalachite`, `layerAzurite`, `layerSoil`, `layerSoot`,
+`layerWear`) over a shared `Surf` struct. Dielectric products carry their own F0 (cuprite 0.18,
+SnO₂ 0.075, malachite 0.065).
 
 ## Artifact contract — `src/artifacts/<id>.js`
 

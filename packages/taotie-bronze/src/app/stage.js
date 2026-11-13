@@ -5,9 +5,13 @@
 
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { setPatinaMode } from '../kit/index.js'
+import { setPatinaMode, setPatinaVessel } from '../kit/index.js'
 
-const BG = new THREE.Color('#0f0e0c')
+const BG = new THREE.Color('#0b0a09')
+// tone mapping: ACES rolls the as-cast gold highlights off without clipping;
+// exposure < 1 keeps saturated malachite from going neon
+const TONE = THREE.ACESFilmicToneMapping
+const EXPOSURE = 1.0
 const DEG = Math.PI / 180
 
 export class Stage {
@@ -16,8 +20,8 @@ export class Stage {
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
     renderer.outputColorSpace = THREE.SRGBColorSpace
-    renderer.toneMapping = THREE.ACESFilmicToneMapping
-    renderer.toneMappingExposure = 1.05
+    renderer.toneMapping = TONE
+    renderer.toneMappingExposure = EXPOSURE
     renderer.shadowMap.enabled = true
     renderer.shadowMap.type = THREE.PCFSoftShadowMap
     this.renderer = renderer
@@ -64,64 +68,119 @@ export class Stage {
 
   // ---------------------------------------------------------- environment
   /**
-   * A tiny hand-built photo studio, PMREM-filtered: a big warm softbox high
-   * front-right (the key's reflection), a cool strip at the left, a dim warm
-   * card behind, in a near-black room. Bronze is a mirror under its patina;
-   * these shapes are what the relief arrises catch as crisp highlights.
+   * A museum vitrine at night, built procedurally and PMREM-filtered (no HDR
+   * files): a near-black gallery; the vitrine's warm ceiling light box above
+   * and a big warm softbox front-upper-left (the key's own reflection); a row
+   * of small ceiling spots (the glints polished metal shows); a cool tall
+   * window strip back-right and a dim warm wall card behind (rim); the glass
+   * edges as faint verticals; a dark plinth below. Bronze is a mirror under
+   * its patina: these shapes are what the arrises catch. A second, neutral
+   * grey copy lights clay mode.
    */
   _buildEnvironment() {
-    const env = new THREE.Scene()
-    const room = new THREE.Mesh(new THREE.BoxGeometry(20, 12, 20), new THREE.MeshBasicMaterial({ color: 0x2a231c, side: THREE.BackSide }))
-    room.position.y = 3
-    env.add(room)
-    const card = (w, h, color, k, pos, look) => {
-      const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(color).multiplyScalar(k), side: THREE.DoubleSide }))
-      m.position.set(...pos)
-      m.lookAt(...look)
-      env.add(m)
+    const build = (neutral) => {
+      const env = new THREE.Scene()
+      const tint = (c) => {
+        const k = new THREE.Color(c)
+        return neutral ? k.setScalar(0.2126 * k.r + 0.7152 * k.g + 0.0722 * k.b) : k
+      }
+      const basic = (c, k) => new THREE.MeshBasicMaterial({ color: tint(c).multiplyScalar(k), side: THREE.DoubleSide })
+      // the room: vertical gradient walls (dark floor → slightly lit ceiling) via vertex colours
+      const roomGeo = new THREE.SphereGeometry(16, 32, 16)
+      const cols = []
+      const pos = roomGeo.attributes.position
+      const lo = tint('#14110e'), mid = tint('#3a3128'), hi = tint('#4a3f33')
+      for (let i = 0; i < pos.count; i++) {
+        const y = pos.getY(i) / 16
+        const c = y < 0 ? lo.clone().lerp(mid, y + 1) : mid.clone().lerp(hi, Math.min(1, y * 1.4))
+        cols.push(c.r, c.g, c.b)
+      }
+      roomGeo.setAttribute('color', new THREE.Float32BufferAttribute(cols, 3))
+      env.add(new THREE.Mesh(roomGeo, new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.BackSide })))
+      const card = (w, h, color, k, p, look, geo) => {
+        const m = new THREE.Mesh(geo || new THREE.PlaneGeometry(w, h), basic(color, k))
+        m.position.set(...p)
+        m.lookAt(...look)
+        env.add(m)
+        return m
+      }
+      card(7, 4.5, '#ffdcb0', 5.5, [-5.5, 7, 6], [0, 0.5, 0]) // key softbox, front-upper-left
+      card(9, 6, '#ffe6c8', 1.4, [0, 9.5, 0], [0, 0, 0]) // vitrine ceiling light box
+      for (let i = 0; i < 5; i++) card(0.5, 0.5, '#fff0dc', 14, [-6 + i * 3, 11, -3 + (i % 2) * 5], [0, 0, 0]) // ceiling spots
+      card(1.3, 8, '#b9cde6', 2.2, [8, 4, -6], [0, 2, 0]) // cool window strip, back-right
+      card(6, 2.2, '#ffcf98', 0.9, [-2, 3.5, -10], [0, 2, 0]) // warm wall card behind
+      card(5, 4, '#ffd9b4', 1.6, [9, 3, 5], [0, 1.5, 0]) // right fill card
+      card(6, 4, '#ffe0c0', 1.4, [-10, 3, -1], [0, 1.5, 0]) // left wall wash
+      for (const x of [-7.5, 7.5]) card(0.08, 12, '#e8e0d4', 1.2, [x, 3, 7.5], [x, 3, 0]) // vitrine glass edges
+      card(10, 10, '#211d18', 1, [0, -2.5, 0], [0, 0, 0]) // plinth / floor bounce
+      card(18, 7, '#6a5a48', 2.2, [0, 3, 13], [0, 3, 0]) // the gallery behind the viewer: dim warm wall
+      card(3.5, 2.2, '#ffe4c0', 3, [2.5, 4.5, 11], [0, 1.5, 0]) // a lit label / doorway glow behind the viewer
+      const pmrem = new THREE.PMREMGenerator(this.renderer)
+      const tex = pmrem.fromScene(env, 0.015).texture
+      pmrem.dispose()
+      return tex
     }
-    card(8, 4, '#ffe2bd', 6, [4, 6.5, 5], [0, 0, 0]) // key softbox
-    card(6, 2.5, '#ffd9b0', 2.2, [-5, 2.5, 7], [0, 1, 0]) // front-left fill card
-    card(1.2, 7, '#bfd4ea', 2.4, [-8.5, 3, 1], [0, 1, 0]) // cool strip
-    card(5, 1.4, '#ffd2a0', 1.2, [-1, 4, -9], [0, 1, 0]) // back card
-    card(14, 14, '#3a3128', 0.9, [0, -2.9, 0], [0, 0, 0]) // floor bounce
-    const pmrem = new THREE.PMREMGenerator(this.renderer)
-    this.envMap = pmrem.fromScene(env, 0.02).texture
-    pmrem.dispose()
+    this.envMap = build(false)
+    this.envNeutral = build(true)
     this.scene.environment = this.envMap
   }
 
   _buildRoom() {
     // floor + backdrop meet in the same final colour, so the vitrine has no
     // horizon. three mixes fog in AFTER tone mapping, so the backdrop must skip
-    // tone mapping too or ACES would crush it darker than the fogged floor.
+    // tone mapping too or the tone curve would crush it darker than the fogged floor.
     this.backdrop = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), new THREE.MeshBasicMaterial({ color: BG, side: THREE.BackSide, fog: false, depthWrite: false, toneMapped: false }))
     this.backdrop.renderOrder = -1
     this.scene.add(this.backdrop)
-    this.floor = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshStandardMaterial({ color: '#1b1814', roughness: 0.96, metalness: 0, envMapIntensity: 0.25 }))
+    this.floor = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshStandardMaterial({ color: '#141210', roughness: 0.97, metalness: 0, envMapIntensity: 0.2 }))
     this.floor.rotation.x = -Math.PI / 2
     this.floor.receiveShadow = true
     this.scene.add(this.floor)
-    this.plinth = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: '#2a2621', roughness: 0.92, metalness: 0, envMapIntensity: 0.35 }))
+    // matte dark plinth: fine felt/lacquered-wood top, darker sides
+    const top = new THREE.MeshStandardMaterial({ color: '#2b2722', roughness: 0.9, metalness: 0, envMapIntensity: 0.3 })
+    const side = new THREE.MeshStandardMaterial({ color: '#1a1714', roughness: 0.93, metalness: 0, envMapIntensity: 0.25 })
+    this.plinth = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), [side, side, top, side, side, side])
     this.plinth.receiveShadow = true
     this.plinth.castShadow = true
     this.scene.add(this.plinth)
+    // contact shadow: soft occlusion where the vessel meets the plinth (the key's
+    // shadow map alone leaves feet and foot rings floating)
+    const c = document.createElement('canvas')
+    c.width = c.height = 128
+    const g = c.getContext('2d')
+    const grd = g.createRadialGradient(64, 64, 0, 64, 64, 64)
+    grd.addColorStop(0, 'rgba(0,0,0,0.75)')
+    grd.addColorStop(0.45, 'rgba(0,0,0,0.42)')
+    grd.addColorStop(1, 'rgba(0,0,0,0)')
+    g.fillStyle = grd
+    g.fillRect(0, 0, 128, 128)
+    const tex = new THREE.CanvasTexture(c)
+    tex.colorSpace = THREE.SRGBColorSpace
+    this.contact = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, toneMapped: false, fog: false }))
+    this.contact.rotation.x = -Math.PI / 2
+    this.contact.renderOrder = 1
+    this.scene.add(this.contact)
     this._fog = new THREE.Fog(BG, 1000, 5000)
     this.scene.fog = this._fog
   }
 
   _buildLights() {
-    this.key = new THREE.SpotLight('#ffd7a6', 4.4, 0, 0.5, 0.75, 0)
+    // warm tungsten-halogen key spot, front-upper-left: rakes across the relief
+    this.key = new THREE.SpotLight('#ffe4c4', 4.2, 0, 0.5, 0.6, 0)
     this.key.castShadow = true
     this.key.shadow.mapSize.set(2048, 2048)
     this.key.shadow.bias = -0.0002
+    this.key.shadow.radius = 4
     this.scene.add(this.key, this.key.target)
-    this.fill = new THREE.DirectionalLight('#8ea6c4', 0.35)
+    // cool, weak fill from the front-right
+    this.fill = new THREE.DirectionalLight('#9fb4cf', 0.3)
     this.scene.add(this.fill, this.fill.target)
-    this.rim = new THREE.SpotLight('#cfdcef', 2.2, 0, 0.45, 0.9, 0)
+    // soft rim from behind so the silhouette lifts off the near-black ground
+    this.rim = new THREE.SpotLight('#dfe6f0', 2.6, 0, 0.45, 0.95, 0)
     this.scene.add(this.rim, this.rim.target)
-    this.ambient = new THREE.HemisphereLight('#3a3631', '#0c0b0a', 0.25)
+    this.ambient = new THREE.HemisphereLight('#3a3631', '#0c0b0a', 0.3)
     this.scene.add(this.ambient)
+    this._lightLook = { key: this.key.color.clone(), fill: this.fill.color.clone(), rim: this.rim.color.clone() }
   }
 
   // ------------------------------------------------------------- content
@@ -134,6 +193,7 @@ export class Stage {
       this.scene.add(object)
       object.updateMatrixWorld(true)
       this.box = new THREE.Box3().setFromObject(object)
+      setPatinaVessel(object)
     }
     this._layoutRoom()
     this.dirty = true
@@ -155,22 +215,29 @@ export class Stage {
     this.backdrop.scale.setScalar(R * 40)
     this.backdrop.position.copy(c)
 
-    const aim = new THREE.Vector3(c.x, b.min.y + size.y * 0.42, c.z)
+    // contact shadow: the vessel's footprint, a little larger, on the plinth top
+    this.contact.scale.set(size.x * 1.25 + 20, size.z * 1.25 + 20, 1)
+    this.contact.position.set(c.x, b.min.y + 0.3, c.z)
+
+    const aim = new THREE.Vector3(c.x, b.min.y + size.y * 0.45, c.z)
     const dir = (az, el) => new THREE.Vector3(Math.sin(az * DEG) * Math.cos(el * DEG), Math.sin(el * DEG), Math.cos(az * DEG) * Math.cos(el * DEG))
     const d = R * 4.2
     if (this.rig === 'raking') {
       // light grazing across the plaque from the upper left: relief by shadow
       this.key.position.copy(aim).addScaledVector(dir(-74, 22), d)
       this.key.angle = Math.atan((R * 1.6) / d)
-      this.key.intensity = 6.5
+      this.key.intensity = 5.2
       this.rim.intensity = 0.6
-      this.fill.intensity = 0.18
+      this.fill.intensity = 0.2
+      this.contact.visible = false
     } else {
-      this.key.position.copy(aim).addScaledVector(dir(32, 48), d)
-      this.key.angle = Math.atan((R * 2.1) / d)
-      this.key.intensity = 4.4
-      this.rim.intensity = 2.2
-      this.fill.intensity = 0.35
+      // vitrine: key front-upper-left, high enough to rake down across horizontal registers
+      this.key.position.copy(aim).addScaledVector(dir(-38, 42), d)
+      this.key.angle = Math.atan((R * 1.9) / d)
+      this.key.intensity = 4.2
+      this.rim.intensity = 3.2
+      this.fill.intensity = 1.2
+      this.contact.visible = true
     }
     this.key.target.position.copy(aim)
     const sc = this.key.shadow.camera
@@ -179,10 +246,10 @@ export class Stage {
     sc.updateProjectionMatrix()
     this.key.shadow.normalBias = R * 0.0015
     this.key.shadow.needsUpdate = true
-    this.rim.position.copy(aim).addScaledVector(dir(200, 38), d)
+    this.rim.position.copy(aim).addScaledVector(dir(165, 32), d)
     this.rim.angle = Math.atan((R * 1.5) / d)
     this.rim.target.position.copy(aim)
-    this.fill.position.copy(aim).addScaledVector(dir(-120, 20), d)
+    this.fill.position.copy(aim).addScaledVector(dir(60, 12), d)
     this.fill.target.position.copy(aim)
   }
 
@@ -258,16 +325,23 @@ export class Stage {
   }
 
   // --------------------------------------------------------------- modes
-  /** beauty | clay | height | silhouette */
+  /** beauty | clay | height | silhouette | mask (patina layer coverages, false colour) */
   setMode(mode) {
     this.mode = mode
     const lit = mode === 'beauty' || mode === 'clay'
+    const clay = mode === 'clay'
     setPatinaMode(mode === 'silhouette' ? 'beauty' : mode)
-    this.renderer.toneMapping = lit ? THREE.ACESFilmicToneMapping : THREE.NoToneMapping
+    this.renderer.toneMapping = lit ? TONE : THREE.NoToneMapping
+    this.renderer.toneMappingExposure = clay ? 1 : EXPOSURE
     this.scene.overrideMaterial = mode === 'silhouette' ? (this._white ??= new THREE.MeshBasicMaterial({ color: 0xffffff })) : null
     for (const o of [this.floor, this.plinth, this.backdrop]) o.visible = lit
+    this.contact.visible = lit && this.rig !== 'raking'
     for (const l of [this.key, this.fill, this.rim, this.ambient]) l.visible = lit
-    this.scene.environment = lit ? this.envMap : null
+    // clay: the same raking geometry, but neutral white light and a grey room
+    this.key.color.copy(clay ? new THREE.Color('#ffffff') : this._lightLook.key)
+    this.fill.color.copy(clay ? new THREE.Color('#d8d8d8') : this._lightLook.fill)
+    this.rim.color.copy(clay ? new THREE.Color('#ffffff') : this._lightLook.rim)
+    this.scene.environment = lit ? (clay ? this.envNeutral : this.envMap) : null
     this.scene.fog = lit ? this._fog : null
     this.scene.background = lit ? BG : new THREE.Color(0x000000)
     this.dirty = true

@@ -23,6 +23,7 @@
 import * as THREE from 'three'
 
 const _out = { pos: new THREE.Vector3(), nrm: new THREE.Vector3() }
+const _pm = [0, 0, 1]
 
 /**
  * @param {object} o
@@ -35,6 +36,9 @@ const _out = { pos: new THREE.Vector3(), nrm: new THREE.Vector3() }
  * @param {'surface'|'displaced'} [o.normals]
  * @param {number} [o.maxVerts]
  * @param {number} [o.reliefScale] multiplies displacement (1 = mm as baked)
+ * @param {(u:number, v:number, out:number[]) => void} [o.panelMap] optional non-linear surface→panel map:
+ *   out = [pu, pv, weight] arrives holding the reliefRect mapping; overwrite it (weight multiplies displacement,
+ *   e.g. a fade along a slanted trapezoid edge). Used by fang/lid/handles for 1:1 ("true") panel mapping.
  * @returns {THREE.BufferGeometry}
  */
 export function buildSurface({
@@ -47,12 +51,15 @@ export function buildSurface({
   normals = 'surface',
   maxVerts = 400000,
   reliefScale = 1,
+  panelMap = null,
+  samples = null, // { u?: number[], v?: number[] } explicit sorted parameter values in [0,1] (non-uniform grid; lathe.js)
 }) {
   // ---- resolution
   const lenU = maxLength(surface, true)
   const lenV = maxLength(surface, false)
   let nu, nv
-  if (Array.isArray(segments)) [nu, nv] = segments
+  if (samples?.u && samples?.v) { nu = samples.u.length - 1; nv = samples.v.length - 1; maxVerts = Infinity }
+  else if (Array.isArray(segments)) [nu, nv] = segments
   else {
     const d = segments.density ?? 1
     nu = Math.max(1, Math.ceil(lenU * d))
@@ -67,6 +74,10 @@ export function buildSurface({
   const W = nu + 1
   const N = W * (nv + 1)
   const spacing = Math.max(lenU / nu, lenV / nv)
+  const sU = samples?.u && samples?.v ? samples.u : null
+  const sV = samples?.u && samples?.v ? samples.v : null
+  const uAt = (i) => (sU ? sU[i] : i / nu)
+  const vAt = (j) => (sV ? sV[j] : j / nv)
 
   // ---- base surface
   const base = new Float32Array(N * 3)
@@ -75,7 +86,7 @@ export function buildSurface({
     for (let i = 0; i <= nu; i++) {
       const k = (j * W + i) * 3
       _out.nrm.set(0, 0, 0)
-      surface(i / nu, j / nv, _out)
+      surface(uAt(i), vAt(j), _out)
       base[k] = _out.pos.x; base[k + 1] = _out.pos.y; base[k + 2] = _out.pos.z
       bn[k] = _out.nrm.x; bn[k + 1] = _out.nrm.y; bn[k + 2] = _out.nrm.z
     }
@@ -103,10 +114,16 @@ export function buildSurface({
     for (let i = 0; i <= nu; i++) {
       const n = j * W + i
       const k = n * 3
-      const u = i / nu
-      const v = j / nv
-      const pu = (u - R.u0) / (R.u1 - R.u0)
-      const pv = (v - R.v0) / (R.v1 - R.v0)
+      const u = uAt(i)
+      const v = vAt(j)
+      let pu = (u - R.u0) / (R.u1 - R.u0)
+      let pv = (v - R.v0) / (R.v1 - R.v0)
+      let pw = 1
+      if (panelMap) {
+        _pm[0] = pu; _pm[1] = pv; _pm[2] = 1
+        panelMap(u, v, _pm)
+        pu = _pm[0]; pv = _pm[1]; pw = _pm[2]
+      }
       uv[n * 2] = relief ? pu : u
       uv[n * 2 + 1] = relief ? pv : v
       let d = 0
@@ -115,7 +132,7 @@ export function buildSurface({
         const h = relief.heightMM
         const fu = Math.min(ramp(pu * w, f.u0), ramp((1 - pu) * w, f.u1))
         const fv = Math.min(ramp(pv * h, f.v0), ramp((1 - pv) * h, f.v1))
-        d = macro.sample(pu, pv) * fu * fv * reliefScale
+        d = macro.sample(pu, pv) * fu * fv * pw * reliefScale
       }
       pos[k] = base[k] + bn[k] * d
       pos[k + 1] = base[k + 1] + bn[k + 1] * d
