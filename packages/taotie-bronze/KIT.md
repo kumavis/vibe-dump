@@ -41,9 +41,13 @@ src/kit/
     edt.js              exact Euclidean distance transform (Felzenszwalb)
     bake.js             height → normal map, cavity/edge map, THREE textures
     leiwen.js           thunder-pattern ground fill
+    shapes.js           smoothPath / polyPath — Catmull-Rom → Bézier path helpers for motifs
     motifs/
       taotie.js         the parametric mask
+      ground.js         leiwen on its own (atlas entry 'leiwen')
       kui.js cicada.js blade.js whorl.js boss.js bands.js …
+      list.js           ONE LINE PER MOTIF, alphabetical: export { default as taotie } from './taotie.js'
+      schema.js         motifDefaults(schema)
       index.js          registry: MOTIFS[name] = { draw(panel, rect, params), params schema, presets }
     compose.js          register / panel layout helpers (mirror, repeat, frieze)
   geometry/
@@ -57,7 +61,13 @@ src/kit/
     noise.glsl.js       3D simplex / worley / fbm chunks
   util/
     rng.js              seeded PRNG (mulberry32) — no Math.random anywhere in the kit
+    canvas.js           createCanvas(w, h): the one Canvas2D factory (OffscreenCanvas → <canvas>);
+                        setCanvasFactory(fn) swaps it (workers, node-canvas)
 ```
+
+Status: `util/*`, `relief/{edt,panel,bake}.js`, `geometry/surface.js` and
+`material/*` are production. Every other module opens with a `STATUS: first
+pass` comment: keep its exported signature, replace the internals.
 
 ## relief/panel.js — `ReliefPanel`
 
@@ -75,10 +85,21 @@ p.sink(draw, { depth: 0.5, shoulder: 0.25, profile: 'u' | 'v' })
 //   same, but subtracts. Strokes drawn with ctx.lineWidth in mm are the usual input
 //   (incised lines, leiwen grooves).
 p.add(draw, opts) // additive variant (lines raised on top of a plateau: thread relief)
-p.mask(draw)      // returns a Float32 coverage mask without touching the field
-p.fillGround(leiwenOpts, { avoid: mask | 'raised', margin: 0.6 })
-p.mirrorX()       // copy left half onto right half (bilateral symmetry about x = width/2)
-p.bake(opts) → ReliefMap
+//   Shoulder defaults: plateau 0.5 mm, sink 0.25 mm; dome / ridge / v default to
+//   "all the way to the medial axis" (the deepest inside point of THAT call), so
+//   draw domes of different sizes in separate calls, or pass `shoulder` as the radius.
+//   The shoulder lies INSIDE the drawn outline: the outline is the footprint at the ground.
+//   `profile` may also be a function (s_mm, w_mm) → 0..1; built-ins live in PROFILES.
+//   draw() is called once, against a recording proxy (a low-res probe finds the
+//   bbox, the recording is replayed full-res into that bbox only). So draw may
+//   consume randomness, but must not call setTransform/resetTransform — use
+//   save/translate/rotate/scale/restore.
+p.mask(draw)      // → { data: Float32Array (cols×rows, row 0 = bottom), cols, rows, ppmm }, field untouched
+p.fillGround(leiwenOpts, { avoid: mask | 'raised', margin: 0.6, rect })   // rect defaults to the whole panel
+p.mirrorX(rect?)  // copy left half of rect (default: whole panel) onto its right half
+p.heightAt(x, y)  // mm
+p.bake(opts) → ReliefMap   // snapshot (arrays copied): the panel may keep drawing
+// fields: width/height (mm), cols/rows (px), ppmm, field (Float32 mm), groove (Float32 0..1), rng (Rng)
 ```
 
 `ReliefMap` = `{ width, height, widthMM, heightMM, ppmm, data: Float32Array (mm), min, max }`
@@ -88,7 +109,14 @@ plus lazily-built THREE textures:
 - `normalTexture` — tangent-space normal from the full-res field (Sobel, in mm so slopes are physically right)
 - `dataTexture` — **R** height01, **G** cavity (0 deep recess → 1 fully exposed; a wide-blur minus field measure),
   **B** edge/convexity (1 on sharp raised arrises, where wear polishes first), **A** groove mask (1 inside sunk lines — drives inlay paste)
-- `macro(sizeMM)` — a low-passed copy for geometric displacement (fine leiwen stays in the normal map)
+- `macro(sizeMM)` — a low-passed copy for geometric displacement (fine leiwen stays in the normal map):
+  `{ cols, rows, data, sample(u, v) }`, cached per size
+- also: `sample(u, v)` (mm, bilinear), `channels()` → the four masks as Float32Arrays,
+  `setAnisotropy(n)` (static default `ReliefMap.anisotropy`, raised by the app), `dispose()`
+
+Textures are RGBA8 `DataTexture`s, `NoColorSpace`, mip-mapped, clamp-to-edge;
+row 0 = panel bottom = v 0, so no flip anywhere. The groove channel is exact,
+not inferred: `sink()` records its own coverage.
 
 Rule: **the same ReliefMap drives geometry displacement, the normal map, and the
 patina masks.** Corrosion collecting in the leiwen is not painted; it falls out
@@ -115,13 +143,23 @@ motif; cells vary in size; nothing is clipped mid-stroke at a motif edge
 
 ## relief/motifs — the unit vocabulary
 
-Every motif module exports `{ name, schema, presets, draw(panel, rect, params) }`
+Every motif module default-exports `{ name, label, schema, presets, draw(panel, rect, params), plaque?: { w, h }, symmetric?, ground? }`
+(registered by one line in `motifs/list.js`)
 where `rect = { x, y, w, h }` in panel mm, and `schema` is a plain object the
 Motif Atlas UI can turn into controls: `{ horn: { type: 'enum', options: [...], default }, eyeSize: { type: 'range', min, max, step, default }, … }`.
 Shapes are authored as bezier/polyline paths in a **normalised half-mask space**
 (x: 0 at the central axis → 1 at the panel edge; y: 0 bottom → 1 top), so a
 motif stretches to any panel aspect ratio the way the originals do. `draw`
 renders the left half and the panel mirrors it.
+
+`compose.drawMotif(panel, motif, rect, params, { preset, ground, margin })` is
+the one call artifacts and the atlas use: resolve params (schema defaults ←
+preset ← overrides, `group` params deep-merged) → `draw` (left half) →
+leiwen on the left half (`ground: false`, or a motif's `ground: false`, skips
+it) → `mirrorX(rect)` (a motif with `symmetric: false` draws the whole rect).
+Schema entry types: `range {min,max,step,default,unit?}`, `enum {options,default}`,
+`bool {default}`, `group {fields}`; each may carry a `label`.
+Registry API: `MOTIFS`, `registerMotif(m)`, `getMotif(name)`, `resolveMotifParams(name, overrides, preset)`.
 
 Taotie parameters (the grammar document in `research/01-…` is authoritative for
 shapes and proportions):
@@ -149,12 +187,40 @@ const geo = buildSurface({
   reliefRect: { u0, v0, u1, v1 }, // where on the surface the panel sits
   back: { thickness: 4 } | null,  // optional inner wall
 })
-// geo has position, normal (recomputed after displacement), uv (panel UV for the maps), uv1 optional
+// geo has position, normal, tangent (vec4), uv (panel UV for the maps)
 ```
+
+More options: `fade` (mm, default 1.5, or `{ u0, u1, v0, v1 }`) — displacement
+ramps to exactly 0 at the reliefRect border, so patches sharing a border curve
+are watertight (keep panel edges plain ground for that margin; a full lathe
+revolution passes `fade: { u0: 0, u1: 0, … }`); `normals: 'surface' | 'displaced'`;
+`maxVerts` (400k); `reliefScale`. `back.rims` lists borders to close (default all four).
+
+**Normals:** the default `'surface'` keeps the smooth, undisplaced surface normal
+and lets the full-res normal map carry ALL relief slope; geometry carries only
+silhouette and cast shadow. Recomputing normals from the displaced mesh would
+count every plateau shoulder twice. `'displaced'` exists for bodies without a map.
+
+**Parametrisation:** u runs left → right seen from outside, v upward, so
+dP/du × dP/dv points outward; panel x follows u, panel y follows v. Leave
+`out.nrm` untouched to have it derived from the grid (`quadSurface(p00, p10, p01, p11)` does).
+Size the panel (mm) to the patch it covers, so the normal map's slopes are real.
+The inner wall and rims get uv = (-1, -1), i.e. the panel's corner pixel: keep it plain.
 
 `lathe.js`, `fang.js`, `parts.js` are built on top of this and return
 `THREE.Mesh`/`Group` with `.userData.part = '<name>'` so the metrics tool can
-measure them. A decorated wall is always: surface patch + ReliefMap + PatinaMaterial.
+measure them. Name parts in the plural the spec files use: `body`, `legs`,
+`handles`, `flanges`, `foot`, `lid`.
+
+```js
+lathe({ profile: [[r, y] | [r, y, 'corner'], …], material, part, segments, thickness, rims, relief, reliefRect, fade })
+latheSurface(profile) / profileCurve(profile)    // u = 0.5 faces +Z
+fangBody({ width, depth, height, flare, wall, material, density, panels: { front|back|left|right: { relief, material, reliefRect, fade } } })
+  // → Group; userData.walls[name] = { corners: [BL, BR, TL, TR], normal } for placing flanges
+flange({ from, to, out, height, thickness, notches: { every, depth, width }, hook, embed, material, part })
+columnarLeg({ height, radius, swell, waist, material })   loopHandle({ width, height, bar, thickness, material })
+ringFoot({ radius, height, thickness, flare, material })
+``` A decorated wall is always: surface patch + ReliefMap + PatinaMaterial.
 
 ## material/patina.js
 
@@ -187,6 +253,17 @@ age            master dial: 0 = out of the mould in 1200 BC → 1 = out of the g
 seed
 ```
 
+Also exported: `patina` (the shared `{ value }` uniforms), `getPatina()`,
+`PATINA_PARAMS` (metadata the drawer is generated from: group, label, min/max/step,
+default), `setPatinaMode('beauty' | 'clay' | 'height')` (a shared uniform, no recompile).
+Constructor options: `{ relief, cavityAttribute, cavity (constant fallback), normalStrength }`.
+Noise runs in **world space, mm** (the app never moves a vessel), so corrosion
+territories run continuously across separately built parts, and is faded out
+below ~2 px so it never sparkles. Each layer is one GLSL function
+(`layerCuprite`, `layerMalachite`, …) returning a coverage from a shared `Surf`
+struct. Without a relief map, arrises come from screen-space curvature so flange
+and handle edges still wear.
+
 The fragment shader gets: object-space position (mm) for 3D noise, the relief
 `dataTexture` (height / cavity / edge / groove) when present, a vertex `cavity`
 attribute otherwise, and the normal. Layers stack physically: metal → cuprite →
@@ -214,6 +291,16 @@ export default {
 }
 ```
 
+- `await onProgress(fraction, label)` both reports and yields to the event loop —
+  call it between panels. Target: < 10 s at q = 1 in headless SwiftShader.
+- A view may also carry `target: [x, y, z]` (mm); `fit` then frames `fit × R`
+  (R = half the bbox diagonal) around it instead of the whole bbox. Azimuth 0 =
+  front (+Z), positive turns toward +X; `fit` 1 puts the bbox exactly at the frame edge.
+- `order` (optional number) sorts the vessel list; the demo uses 99.
+- Registration: one line in `src/artifacts/index.js`, alphabetical:
+  `export { default as houmuwuDing } from './houmuwu-ding.js'`.
+- Reference material lives in `reference/<id>/`: photos named by each view's `ref`, and `spec.json`.
+
 ## Verification hooks (the app must honour these)
 
 URL parameters, read once at boot:
@@ -226,14 +313,36 @@ URL parameters, read once at boot:
 &ui=0                hide all chrome, no auto-rotate, deterministic
 &q=<quality>         build quality
 &tab=vessels|atlas
+&motif=<name>&preset=<motif preset>   atlas subject (with tab=atlas)
 ```
 
 `window.__taotie = { ready: Promise, artifacts: [ids], views(id), metrics() }` where
 `metrics()` returns, in mm, the overall bounding box and the bounding box of every
 `userData.part`. `document.documentElement.dataset.ready = '1'` once the first
-frame of a fully built vessel is on screen.
+frame of a fully built vessel (or, with `tab=atlas`, plaque) is on screen; it
+drops to `'0'` while a new subject builds, and reads `'error'` if boot failed.
 
-`tools/shoot.mjs` renders artifact × view × mode to `tools/shots/` and, where a
-view has a `ref`, writes a side-by-side `compare-<view>.jpg` with the reference
-photo from `reference/<id>/`. `tools/metrics.mjs` checks measured proportions
-against `reference/<id>/spec.json`.
+Tool hooks on the same object (each resolves after a rendered frame):
+`show(id, view?)`, `setView(name)`, `setMode(m)`, `setPatina(presetName | values)`,
+`showMotif(name, preset?)`, `frame()`; plus `motifs`, `motifPresets(name)`,
+`viewRefs(id)`, `atlasStats()`, `timings`, `kit`, `stage`. `metrics()` returns
+`{ id, overall: { min, max, w, h, d }, parts: { <part>: { …, count } }, buildMs }`,
+`count` being the number of separate part roots (four legs → 4).
+
+Tools (build first: `npm run build --workspace @vibe-dump/taotie-bronze`;
+Chromium from `$CHROMIUM_PATH`, else `/opt/pw-browsers/chromium`):
+
+```
+npm run shots   -- [--a id] [--view v,…] [--mode beauty,clay] [--patina p,…] [--q 1] [--atlas] [--ui [--phone]] [--out dir]
+npm run metrics -- [--a id] [--json]
+npm run check                      # vite build + tools/smoke.mjs (every artifact, view, mode, motif preset)
+node tools/bench.mjs               # 4096×2048 panel draw + bake timing
+```
+
+`tools/shoot.mjs` renders artifact × view × mode to `tools/shots/<id>/<view>-<mode>.png`
+(1400×1050, DPR 1, `ui=0`) and, where a view has a `ref`, writes a side-by-side
+`compare-<view>.jpg` with the reference photo from `reference/<id>/`.
+`tools/metrics.mjs` checks measured proportions against `reference/<id>/spec.json`:
+`{ "ratios": { "<name>": { "expr": "parts.legs.h / overall.h", "expected": 0.38, "tol": 0.03 } } }`.
+`expr` is never eval'd: a number or a dotted path into `metrics()`, optionally one
+operator (`/ * + -`) and a second operand.

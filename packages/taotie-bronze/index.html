@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f0e0c" />
+    <link rel="icon" href="data:," />
+    <title>Taotie Bronze 饕餮 — procedural late-Shang ritual bronzes</title>
+    <link rel="stylesheet" href="./src/style.css" />
+  </head>
+  <body data-tab="vessels">
+    <div id="stage">
+      <canvas id="gl" aria-label="3D view of the bronze"></canvas>
+      <div class="vignette" aria-hidden="true"></div>
+      <div id="heightmap" hidden><canvas></canvas><span class="caption">raw height field · black = ground − · white = highest relief</span></div>
+    </div>
+    <div id="progress" aria-hidden="true"><i></i><span></span></div>
+
+    <header id="masthead" class="chrome">
+      <div class="wordmark"><span class="wm-en">Taotie Bronze</span><span class="wm-zh">饕餮</span></div>
+      <nav class="tabs" role="tablist">
+        <button role="tab" data-tab="vessels" aria-selected="true">Vessels</button>
+        <button role="tab" data-tab="atlas" aria-selected="false">Motif Atlas</button>
+      </nav>
+    </header>
+
+    <!-- Vessels tab -->
+    <nav id="vessel-list" class="chrome vessels-only" aria-label="Vessels"></nav>
+    <section id="label" class="chrome vessels-only" aria-live="polite"></section>
+
+    <!-- Motif Atlas tab -->
+    <div id="atlas-top" class="chrome atlas-only">
+      <div class="row"><span class="cap">Motif</span><div id="motif-picker" class="chips"></div></div>
+      <div class="row"><span class="cap">Preset</span><div id="motif-presets" class="chips"></div></div>
+      <div class="row"><span class="cap">Show</span><div class="chips" id="atlas-view"><button data-v="plaque" class="on">Lit plaque</button><button data-v="height">Height map</button></div></div>
+    </div>
+    <aside id="atlas-controls" class="chrome atlas-only" aria-label="Motif parameters">
+      <h2 class="cap">Parameters</h2>
+      <div id="motif-params"></div>
+      <p id="atlas-stats" class="fine"></p>
+    </aside>
+
+    <!-- Patina drawer (both tabs) -->
+    <aside id="drawer" class="chrome open" aria-label="Patina">
+      <button id="drawer-toggle" class="drawer-head" aria-expanded="true"><span class="cap">Patina</span><span class="state" id="drawer-preset"></span><span class="chev" aria-hidden="true"></span></button>
+      <div class="drawer-body" id="drawer-body"></div>
+    </aside>
+
+    <div id="fallback" hidden>
+      <strong>WebGL unavailable</strong>
+      <span>This vitrine needs a WebGL2-capable browser.</span>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+{
+  "name": "@vibe-dump/taotie-bronze",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "shots": "node tools/shoot.mjs",
+    "metrics": "node tools/metrics.mjs",
+    "check": "vite build && node tools/smoke.mjs"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "Taotie Bronze",
+    "description": "A night-lit museum vitrine of procedurally recast late-Shang ritual bronzes: taotie masks, leiwen thunder-spirals and a burial patina you can age from fresh casting to excavated green.",
+    "tags": [
+      "art",
+      "tool"
+    ],
+    "status": "wip",
+    "models": [
+      "Fable 5.2",
+      "Opus 5.5"
+    ],
+    "thinking": "unknown"
+  }
+}
