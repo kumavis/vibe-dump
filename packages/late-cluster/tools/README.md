@@ -324,25 +324,23 @@ are easy to confuse. In the final cast every voice's nearest neighbour is at lea
 | larry | host | 0 / 0 | 104 (107) | 1.0 | 0.16 | breath 0.12, tension 0.5 | pete 1.54 |
 | al | bass | 0 / 0 | 84 (79) | 0.95 | 0.14 | tension 0.45, fry 0.2 (gravel) | abel 2.31 |
 | abel | low, fast, breathy | 0 / 0 | 92 (101) | 1.26 | 0.24 | breath 0.55, tension 0.35, bright 0.1 | larry 2.02 |
-| void | pure machine | 0.6 / 0 | 100 (100) | 0.88 | 0.08 | tension 0.75, bright 0.65, breath 0, drift 0 | pete 2.42 |
 | pete | percussion | 0.65 / 0.4 | 115 (119) | 1.05 | 0.18 | tension 0.55, bright 0.4 | larry 1.54 |
 | hy | bandleader | 0.35 / 0 | 135 (143) | 0.95 | 0.2 | breath 0.3, tension 0.42, bright 0.12 (warm) | dee 1.79 |
 | norvid | dry, clipped, croaky | 0.25 / 0.15 | 160 (138) | 1.2 | 0.1 | tension 0.66, rough 0.5, fry 0.2, bright 0.5 | pete 1.92 |
 | dee | alto | 0.9 / 0.1 | 155 (159) | 1.0 | 0.18 | breath 0.18, tension 0.45, bright 0.25 | borjev 1.52 |
 | borjev | small odd bot | 0.1 / 0.4 | 178 (175) | 0.95 | 0.05 | tension 0.62, rough 0.6, bright 0.3, drift 40 | dee 1.52 |
 | eppy | shouty sports | 0.15 / 0.2 | 165 (189) | 1.16 | 0.36 | tension 0.68, bright 0.55 | borjev 1.82 |
-| sibyl | announcer | 1 / 0 | 196 (207) | 1.04 | 0.2 | breath 0.2 | prerat 1.56 |
-| prerat | soft, quick, breathy | 0.5 / 0.4 | 225 (231) | 1.15 | 0.2 | breath 0.6, tension 0.38 | sibyl 1.56 |
+| sibyl | announcer | 1 / 0 | 196 (207) | 1.04 | 0.2 | breath 0.2 | borjev 1.79 |
 | samantha | broadcast | 1 / 0.15 | 228 (253) | 1.08 | 0.32 | breath 0.08, bright 0.5 | bot 1.84 |
 | bot | chirpy, flat | 0.5 / 0.4 | 275 (274) | 1.18 | 0.06 | tension 0.7, bright 0.6 | samantha 1.84 |
 
 Rate and accent separate voices too: the table's distance doesn't measure them. Abel at 1.26
-and void at 0.88 sound very different even at the same pitch.
+and Larry at 1.0 sound very different at nearly the same pitch (101 and 107 Hz).
 
 Whisper (base.en) on the two test sentences: every voice gets "Good evening, and welcome back
 to the show." 8/8. The harder "…the feed knows what I had for breakfast?" scores 7–10 of 13
 for every voice, the host included, so that is the G2P and engine rather than any one voice.
-Overall scores are 71–86 % per voice: al 86, prerat 86, hy 81, eppy 81, void 81, borjev 81,
+Overall scores are 71–86 % per voice: al 86, hy 81, eppy 81, borjev 81,
 larry 76, sibyl 76, dee 76, pete 76, bot 76, abel 76, norvid 71, samantha 71.
 
 To add a guest, find an open spot. Gaps left: about 120–130 Hz with a neutral male body, about
@@ -376,7 +374,6 @@ These were tested on Larry in "Next up, X, live.", with the IPA and what Whisper
 | catoid | `cat-oid` | kætɔɪd | as-is gives /keɪɾɔɪd/ ("Kay-toyed") |
 | Top Chicken | as-is | tɑptʃɪkən | correct. Whisper mishears "top" as "tap" |
 | Nx | `En-Ex` | ɛnɛks | as-is gives /nks/ |
-| prer.at | `prayer-at` | pɹɛɹət | as-is splits at the dot ("purr. at") |
 | Abelian | `a-bee-lee-an` | əbiliən | as-is gives /eɪbɛlɪæn/ |
 | AI | `ay-eye` | eɪaɪ | as-is gives "eye" |
 | skeet | as-is | skit | in the dictionary |
@@ -455,6 +452,105 @@ spellings (scat: `bah`, `dah`, `doo`, `wah`). Tested so far: Larry
 **Intelligibility check** (optional): `bun tools/analyze.ts voices --wav /tmp/v --whisper` runs
 a local `whisper` if one is installed. In the full demo mix, Whisper base.en recovers nearly
 every line, including the sung ones under the band, and the closing line under applause.
+
+---
+
+## Rendering video (`video.mjs`)
+
+Renders the show to mp4 for posting: frame-exact and offline, never a screen recording. Run it
+with node (not bun), from the package directory. Output goes to `video/`, which is gitignored.
+The scene list and the clip numbers (`01-…`) come from `src/rundown.js` at run time. Re-render
+only the segments that changed, then rebuild the full files with `--full --bluesky`. Rename
+clips by hand if the order changed.
+
+```sh
+node tools/video.mjs --all --bluesky    # every clip + late-cluster-full.mp4 + late-cluster-bluesky.mp4
+node tools/video.mjs --all              # every clip (01-…, numbered by the rundown) + late-cluster-full.mp4
+node tools/video.mjs song               # one clip (or several ids)
+node tools/video.mjs --full             # rebuild late-cluster-full.mp4 from the clips already in video/
+node tools/video.mjs --bluesky          # rebuild only the posting cut, from the clips (second generation)
+node tools/video.mjs cold-open --frames 90   # a 3 s test → video/test-01-cold-open.mp4
+```
+
+Options: `--jobs 3` (segments in parallel, each in its own browser), `--scale 1.5` (stage backing
+store: 1.5 gives 1920×1080, 1 gives 1280×720), `--crf 16`, `--preset slow`, `--out dir`. Temp
+files go to `$TMPDIR`. On an M3 Max, `--all --jobs 4` takes about 8 minutes.
+
+**The posting cut** (`--bluesky`; tune it with `--max-mb 280 --max-seconds 600 --out-name
+late-cluster-bluesky.mp4`) is the whole episode for Bluesky, which allows 10 minutes and
+300 MB. The CRF-16 master is too big for that. The cut is a two-pass x264 encode at the video
+bitrate that fits the size limit: the limit less 2 % for the container, less 192 kb/s for the
+AAC. If the result comes out over the limit, pass 2 is re-run at a lower bitrate. It refuses an
+episode at or over `--max-seconds`.
+
+With `--all --bluesky`, each segment also writes a lossless (x264 `-qp 0`) copy of the same
+yuv420p frames to the temp folder. The posting cut is encoded from those, so it is a first
+generation like the master. That takes about 1 GB per minute of temp space while it runs. A
+`--bluesky` without `--all` re-encodes the CRF-16 clips instead, and says so.
+
+**The YouTube build** is for platforms that show their own subtitles.
+
+```sh
+node tools/video.mjs --youtube          # late-cluster-youtube.mp4 (+ .srt, .vtt): no burned-in captions
+node tools/video.mjs --subs             # only late-cluster-youtube.srt / .vtt (about 10 s, no pictures)
+node tools/video.mjs song --no-captions # a clip without captions → video/07-song-nocaps.mp4
+```
+
+`--youtube` re-renders every segment with the stage's caption system off, using
+`stage.draw(show, { captions: false })`, the same switch as the app's CC button. It then
+assembles the full episode like the master: CRF 16, the same audio, the same per-clip frame
+counts. The normal clips and full files are untouched, and still have captions. Turning
+captions off removes two things:
+- the caption bar: the speaker tag and the line with its lit word;
+- the `[ LAUGHTER ]` / `[ APPLAUSE ]` box that replaces it when nobody is talking.
+
+Everything a segment draws itself stays: chyrons, post cards, the APPLAUSE/LAUGH sign, the
+BUILT counter, the disclaimer footer and the song's on-stage lyric lines. With the caption bar
+gone, a chyron sits at its lower position (y 560 rather than 478), as it does in the app with
+captions off.
+
+The subtitles come from the caption system itself, not from `cues.json` alone. While each
+segment is stepped, the tool records what the caption bar would show on every frame:
+- the line, with the speaker's display name and kind;
+- the laugh caption.
+
+That way segments' own overrides are included, such as the song hiding the bar for its sung
+lyrics. Runs of identical frames become cues. A line counts as shown while the bar is more than
+half faded in, which is roughly t0 to t1 + 0.55 s. The full-file times use the rendered frame
+counts, so nothing drifts. The conventions:
+- **Speakers:** `NAME:` (cast display name) at a segment's first line, whenever the speaker
+  changes, and after more than 5 s without a line.
+- **Song:** `♪ … ♪` for sung lines.
+- **Sounds:** `[LAUGHTER]` / `[APPLAUSE]`. Back-to-back sound captions merge into
+  `[APPLAUSE AND LAUGHTER]`.
+- **Layout:** at most 2 lines of 42 characters. A longer line is split into several cues at its
+  word timings.
+- **Timing:** cues don't overlap, and last at least 0.7 s unless the next cue starts first. A
+  line too short to read that runs straight into the next shares a two-line cue with it.
+- **Format:** UTF-8, SRT and VTT.
+
+Output: H.264 High, yuv420p, tagged bt709, 30 fps CFR, AAC-LC stereo 48 kHz 192 kb/s,
+`+faststart`. Only the stage is rendered (captions on): no title card, end card or transport bar.
+
+How it works:
+- **Stepping.** The show is stateful: eased head turns, face springs, blinks, glances, airflow
+  particles and shot pushes. Seeking with `?freeze` is not the same as playing through. So each
+  segment is stepped continuously from t = 0. The page boots in `?seg=title&freeze=1` mode,
+  which runs no frame loop and seeds `Math.random`, so renders are reproducible. Then the tool
+  builds the segment's `Show` from the app's own modules and calls what `app.js`'s `tick()`
+  calls: `setup`, `resetMotion()` at the cut, then `show.frame(n/30, 1/30)` and
+  `stage.draw(show)` for every frame. It needs no hooks in the app.
+- **Pixels.** `getImageData` per frame is POSTed to the tool's Vite dev server as a Blob (a typed
+  array body is about 100× slower), then piped into ffmpeg/libx264.
+- **Audio.** The shipped mp3 is decoded with ffmpeg, which honours the LAME gapless header, so
+  sample 0 is t = 0. This is the same alignment the page gets from `audioLead()`.
+- **Length.** Each segment is `round(duration·30)` frames, so every clip is within half a frame
+  of its `cues.json` duration. The count doesn't depend on the other segments, so a clip stays
+  valid when another segment changes. Only its `01-…` number can change, if the rundown order
+  does. Each clip's audio is trimmed or padded to that length at the tail, by less than a frame.
+  The full episode concatenates the clips' video streams and encodes one continuous audio
+  stream, the segments' PCM back to back. Audio and video cut together and there is no AAC
+  priming or padding at the cuts, so nothing drifts.
 
 ---
 

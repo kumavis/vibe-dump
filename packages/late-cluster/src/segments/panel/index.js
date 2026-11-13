@@ -23,19 +23,14 @@ export default {
     { at: 0, shot: 'desk' },
     { at: 'welcome', after: 0.4, shot: 'desk', zoom: 1.45, push: 1.4 },
     { at: 'enter', shot: 'panel', guests: GUESTS },
-    { at: 'claims', shot: 'panel-cu', who: 'norvid', size: 440, look: 'larry' },
     { at: 'reply', shot: 'ots', pip: 'abel', pipLabel: 'ABEL · LIVE' },
     { at: 'under', shot: 'panel-cu', who: 'abel', size: 440, look: 'larry' },
     { at: 'what', shot: 'panel', guests: GUESTS },
     { at: 'like', shot: 'panel-cu', who: 'norvid', size: 440, look: 'larry' },
     { at: 'another', shot: 'desk', look: 'norvid' },
-    { at: 'heur', shot: 'panel', guests: GUESTS },
-    { at: 'stats', shot: 'ots', pip: 'norvid', pipLabel: 'NORVID · LIVE' },
-    { at: 'stats-out', shot: 'panel', guests: GUESTS },
+    { at: 'real', shot: 'panel', guests: GUESTS },
     { at: 'museum', shot: 'panel-cu', who: 'norvid', size: 400, look: 'larry' },
     { at: 'goodnews', shot: 'panel', guests: GUESTS }, // widened in direct()
-    { at: 'through', shot: 'desk', zoom: 1.5, look: 'abel' },
-    { at: 'foresight', shot: 'panel-cu', who: 'abel', size: 440, look: 'larry' },
     { at: 'classic', shot: 'desk', look: 'camera' },
     { at: 'concept2', shot: 'panel-cu', who: 'norvid', size: 420, look: 'larry' },
     { at: 'already', shot: 'panel', guests: GUESTS }, // widened in direct()
@@ -68,7 +63,7 @@ export default {
     abel.prop({ side: MACHINE_SIDE, unveil: show.progress('unveil', 1.1), run: show.since('release') > 0 ? 1 : 0.35 * show.clamp(show.since('exhibit')) })
 
     // the build moments: pull back so the machine (on the floor beside Abel) and Larry share the frame
-    const wideBuild = show.between('goodnews', 'through') || show.between('already', 'duck')
+    const wideBuild = show.between('goodnews', 'classic') || show.between('already', 'duck')
     if (wideBuild) show.camera({ x: 1470, y: 712, zoom: 0.98 })
     // "my beautiful city": the whole skyline window, where the crow is headed
     if (show.between('city', 'buddy')) show.camera({ x: 1580, y: 545, zoom: 0.95 })
@@ -89,11 +84,9 @@ export default {
       ;(sp === 'norvid' ? abel : norvid).lookAt(sp)
     }
     if (show.line('assign').active || show.since('assign') > 0 && show.since('goodnews') < 0) norvid.lookAt('abel')
-    if (show.between('reply', 'under') || show.between('stats', 'stats-out')) larry.lookAt('camera')
+    if (show.between('reply', 'under')) larry.lookAt('camera')
     if (show.line('like').active) norvid.lookAt('camera')
-    if (show.line('heur').active) norvid.lookAt('camera').nod(0.06)
-    if (show.line('claims').active) norvid.nod(0.08)
-    if (show.between('unveil', 'through')) { norvid.lookAt('abel'); larry.lookAt('abel') }
+    if (show.between('unveil', 'classic')) { norvid.lookAt('abel'); larry.lookAt('abel') }
     if (show.between('release', 'pop')) { norvid.lookAt('larry'); abel.lookAt('larry') }
     if (show.between('exhibit', 'exhibit-out') && show.speaker !== 'abel') larry.lookAt('camera')
     if (show.between('thankyou', 'claim2')) { larry.lookAt('camera') }
@@ -111,7 +104,7 @@ export default {
     show.set.crow = show.since('city') > CROW_HOME ? 'circling' : false  // (assigned every frame: seek-safe)
 
     // lower thirds (guests carry the PUPPET · PARODY tag automatically)
-    show.chyron('norvid', { from: show.at('enter') + 0.7, to: 'coffee' })
+    show.chyron('norvid', { from: show.at('enter') + 0.7, to: 'reply' })
     show.chyron('abel', { from: show.at('under') + 0.2, to: 'what' })
     show.chyron('borjev', { from: show.at('pop') + 0.5, to: show.at('optin') + 0.3 })
     if (show.since('claim2') > 0.8) show.chyron({ name: 'The Late Cluster', title: 'Back after this. If the crow allows it.', color: show.P.gold }, { from: show.at('claim2') + 0.8, to: show.duration })
@@ -122,7 +115,6 @@ export default {
     const pn = show.panel
     // ---- ots graphics
     if (pn && show.between('reply', 'under')) replyChart(ctx, show, pn)
-    if (pn && show.between('stats', 'stats-out')) bronzeChart(ctx, show, pn)
     // the crow while it is behind Larry's head
     drawCrow(ctx, show, false)
     void draw; void P
@@ -131,9 +123,8 @@ export default {
   drawFront(ctx, t, show) {
     const { draw, P } = show
 
-    // ---- CLAIM / HEURISTIC stamps (on what's being labelled)
-    stampOn(ctx, show, 'larry', 'claim1', 'CLAIM', { until: 'coffee', dy: 0.42, rot: -0.14, color: P.red })
-    stampOn(ctx, show, 'larry', 'heur', 'HEURISTIC', { until: 'stats', dy: 0.42, rot: 0.1, color: P.violet, size: 36 })
+    // ---- CLAIM stamps (on what's being labelled)
+    stampOn(ctx, show, 'larry', 'claim1', 'CLAIM', { until: 'reply', dy: 0.42, rot: -0.14, color: P.red })
     if (show.since('claim2') > -0.2) {
       const age = show.since('claim2')
       draw.stamp(ctx, 640, 120, 'CLAIM', { age, rot: -0.12, size: 64, color: P.red })
@@ -298,36 +289,6 @@ function replyChart(ctx, show, pn) {
   // the alligator, lurking under the slice
   const g = show.clamp((u - 2.2) / 0.6)
   if (g > 0) draw.gator(ctx, cx + 30, cy + r + 34 - 8 * g, { scale: 0.42, jaw: 0.3 + 0.3 * Math.sin(show.t * 3), facing: 1 })
-}
-
-/** "496 posts with that word. You placed third." */
-function bronzeChart(ctx, show, pn) {
-  const { draw, P } = show
-  const u = show.since('stats')
-  const x = pn.x + 36
-  draw.label(ctx, 'WHO WRITES "SIMCLUSTER" UNUSUALLY OFTEN', x, pn.y + 46, { size: 17, color: P.sky, ls: 0.15 })
-  draw.label(ctx, 'A "WORDS OF BLUESKY" MAP, OCTOBER 2026', x, pn.y + 70, { size: 13, color: P.blueMid, ls: 0.3 })
-  // the count, then the podium
-  const n = draw.countUp(496, show.clamp((u - 0.3) / 1.6))
-  draw.label(ctx, n, x, pn.y + 140, { size: 50, color: P.violet, weight: 'm' })
-  draw.label(ctx, 'NORVID POSTS WITH THE WORD', x, pn.y + 168, { size: 15, color: P.white, ls: 0.2 })
-  draw.label(ctx, 'OF 1,704 IN THE SEARCH INDEX · 29% · THE MOST BY FAR', x, pn.y + 192, { size: 13, color: P.blueMid, ls: 0.2, alpha: show.clamp((u - 1.2) / 0.5) })
-  const rise = show.clamp((u - 1.6) / 1.0)
-  const tops = draw.podium3(ctx, pn.x + 210, pn.y + pn.h - 26, 300, { labels: ['1', '2', '3'], rise })
-  if (rise > 0.6) {
-    draw.label(ctx, '?', tops[0][0], tops[0][1] - 16, { size: 30, align: 'center', color: P.blueMid })
-    draw.label(ctx, '?', tops[1][0], tops[1][1] - 16, { size: 30, align: 'center', color: P.blueMid })
-    draw.crow(ctx, tops[2][0], tops[2][1] - 18, { scale: 0.8, perched: true, facing: -1 })
-  }
-  const b = show.clamp((u - 3.0) / 0.4)
-  if (b > 0) {
-    const mx = tops[2][0], my = tops[2][1] - 74
-    draw.seg(ctx, mx - 8, my - 30, mx, my - 16, P.coral, 1.6, { alpha: b })
-    draw.seg(ctx, mx + 8, my - 30, mx, my - 16, P.coral, 1.6, { alpha: b })
-    draw.ring(ctx, mx, my, 16, P.coral, 2, { hot: true, alpha: b })
-    draw.label(ctx, '3', mx, my + 6, { size: 16, align: 'center', color: P.coral, alpha: b, weight: 'm' })
-    draw.label(ctx, 'BRONZE', mx, my - 38, { size: 14, align: 'center', color: P.coral, ls: 0.25, alpha: b })
-  }
 }
 
 /** build one: "this interview, but it's a museum exhibit" — Larry in a glass case with a placard */

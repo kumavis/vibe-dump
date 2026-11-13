@@ -1,31 +1,30 @@
-// Segment 8 — "Someday (Built It)". Larry's intro at the desk, then the musical number on a local
+// Segment 7 — "Someday (Built It)". Larry's intro at the desk, then the musical number on a local
 // variant of the `stage` shot: karaoke lyrics with a bouncing ball, each dream drawing itself as a
 // little vector vignette and getting stamped BUILT IT by a bot that pops up stage right, HEY!
-// bursts on the shouts, stomp/clap accents, lights down for the breakdown (Void's long-delayed
-// "Pong." on a small monitor), full band for the last chorus, a spotlight for the tag, then
-// Larry names the band and they take a bow through the applause play-off.
+// bursts on the shouts, stomp/clap accents, lights down for the breakdown (Larry alone in the
+// spotlight), full band for the last chorus, a spotlight for the tag, then
+// Larry names the band, Hy points out the one song they didn't play, the studio's DAYS SINCE A
+// P(DOOM) SONG TRENDED board flips to 0, and the band takes a bow through the applause play-off.
 
 const BAND = ['hy', 'al', 'pete', 'dee']
 // Larry's sung lines, in order (the karaoke line)
 const LEAD = ['v1-a', 'v1-b', 'c1-a', 'c1-b', 'c1-c', 'v2-a', 'v2-b', 'c2-a', 'c2-b', 'c2-c', 'bd-a', 'bd-b', 'c3-a', 'c3-b', 'c3-c', 'tag']
-const TILE = 200
 
 export default {
   title: 'Someday (Built It)',
   bumper: { sub: 'a musical number · Hy Oid & The Formants' },
-  cast: ['hy', 'al', 'dee', 'pete', 'bot', 'void'],
+  cast: ['hy', 'al', 'dee', 'pete', 'bot'],
   set: { eKey: true, crow: 'circling' },
   built: { from: 10, bumps: ['built-1', 'built-2', 'built-3', 'built-4'] },
-  disclaimer: { text: 'Void appears as a puppet re-enactment. The real Void is resting.', from: 'bd-a', dur: 9 },
   shots: [
     { at: 0, shot: 'desk' },
     { at: 'intro-2', shot: 'closeup', who: 'larry', size: 560, push: 0.9 },
-    { at: 'intro-3', shot: 'desk', zoom: 1.75 },
+    { at: 'intro-4', shot: 'desk', zoom: 1.75 },
   ],
 
   setup(show) {
-    // the musical-number shot, extended: the bot pops up stage right, Void on a small monitor,
-    // the band can step out of the light (the tag)
+    // the musical-number shot, extended: the bot pops up stage right, the band can step out of
+    // the light (the tag)
     show.SHOTS.songStage = (s, o = {}) => {
       const L = s.SHOTS.stage(s, { zoom: o.zoom ?? 1.15, band: BAND })
       L.set = { ...(L.set ?? {}), desk: false }
@@ -35,13 +34,6 @@ export default {
       if (o.bot > 0) {
         const p = toWorld(1150, 760 - 330 * o.bot)
         L.place.bot = { ...p, scale: 0.6, look: o.botLook ?? 'left', z: 9, floor: null, seat: null, instrument: null, clip: { x: 0, y: 0, w: 1280, h: 720 } }
-      }
-      if (o.void) {
-        const r = { x: 1052, y: 170, w: 196, h: 150 }
-        const scale = (r.h * 0.78) / (TILE * z)
-        const sp = toWorld(r.x + r.w / 2, r.y + r.h * 0.42)
-        L.monitors = [...(L.monitors ?? []), { rect: r, who: 'void', label: 'VOID · DELAYED', live: false, noStand: true }]
-        L.place.void = { ...sp, scale, look: 'camera', z: 8, floor: null, clip: r, fx: { kind: 'monitor' } }
       }
       return L
     }
@@ -70,8 +62,7 @@ export default {
     let zoom = 1.15
     zoom += 0.14 * clamp(show.progress('breakdown', 2)) * (1 - clamp(show.progress('reveal', 0.6)))
     zoom += 0.3 * clamp(show.progress('tag-in', 3)) * (1 - clamp(show.progress(show.at('built-4.end') + 0.4, 0.8)))
-    const voidOn = show.between(show.at('pong') - 0.9, show.at('pong.end') + 0.8)
-    show.shot('songStage', { zoom, bot: pop, alone, void: voidOn, botLook: 'larry' })
+    show.shot('songStage', { zoom, bot: pop, alone, botLook: 'larry' })
 
     // the lights: down for the breakdown, nearly out for the tag
     const down = Math.max(
@@ -84,17 +75,18 @@ export default {
     // who looks where
     const larry = show.puppet('larry')
     if (show.line('both').active || show.between('both', show.at('both.end') + 0.4)) larry.lookAt('hy'), show.puppet('hy').lookAt('larry')
-    if (voidOn && show.since('pong') > 0.1) larry.lookAt('right')
     if (show.between('built-3', 'reveal')) larry.lookAt(show.between('when', 'in-it') ? 'right' : 'camera')
     if (show.between('reveal', show.at('reveal') + 0.5)) larry.nod(0.06)
-    // the button: Larry presents the band, then everyone takes a bow through the play-off
+    // the button: Larry presents the band, Hy turns to camera with the p(doom) line, Larry gives
+    // the camera a deadpan look as the board flips, then everyone takes a bow through the play-off
     if (show.since('btn-1') > 0.6) {
-      const off = show.since('btn-1.end')
-      larry.lookAt(off > 0.5 ? 'camera' : 'hy')
+      const flip = show.since('flip')
+      larry.lookAt(flip > 0.15 ? 'camera' : 'hy')
+      const off = show.since('bow')
       if (off > 0) larry.nod(-0.09 * Math.sin(Math.PI * clamp(off / 1.4)))
       BAND.forEach((id, i) => {
         const p = show.puppet(id)
-        p.lookAt('camera')
+        p.lookAt(id === 'hy' || flip > 0 ? 'camera' : 'larry')
         const u = off - 0.2 - 0.18 * i
         if (u > 0 && u < 1.5) p.nod(-0.18 * Math.sin(Math.PI * u / 1.5))
       })
@@ -147,10 +139,9 @@ export default {
       const g = ctx.createRadialGradient(h.x, h.y + h.size * 0.35, h.size * 0.42, h.x, h.y + h.size * 0.35, h.size * 1.05)
       g.addColorStop(0, 'rgba(0,0,0,0)')
       g.addColorStop(1, `rgba(0,0,0,${0.82 * down})`)
-      // the monitor and the bot keep their own light
+      // the bot keeps its own light
       const path = new Path2D()
       path.rect(0, 0, 1280, 720)
-      for (const m of show.monitors ?? []) path.rect(m.rect.x + m.rect.w, m.rect.y - 30, -m.rect.w - 12, m.rect.h + 48)
       const b = show.headOf('bot')
       if (b) path.rect(b.x + b.size * 0.8, b.y - b.size * 0.7, -b.size * 1.6, b.size * 2.2)
       ctx.save()
@@ -158,19 +149,6 @@ export default {
       ctx.fill(path, 'evenodd')
       ctx.restore()
     }
-    // Void's late answer: a tag above its monitor, and the word itself in the lyric slot
-    const vo = show.since(show.at('pong') - 0.9)
-    if (vo > 0 && show.since('pong.end') < 0.8) {
-      const va = Math.min(1, vo / 0.3, (show.at('pong.end') + 0.8 - t) / 0.3)
-      draw.label(ctx, 'REPLYING TO A PING', 1248, 140, { size: 11, align: 'right', color: P.amber, alpha: va, ls: 0.2 })
-      draw.label(ctx, 'FROM EARLIER · RE-ENACTMENT', 1248, 158, { size: 11, align: 'right', color: P.amber, alpha: va, ls: 0.2 })
-      if (show.since('pong') > -0.05) {
-        const pu = clamp(show.since('pong') / 0.25)
-        draw.glowText(ctx, 'PONG.', 640, 156, { size: 64, align: 'center', color: P.white, weight: 'm', alpha: va * pu, ls: 0.2 })
-        draw.label(ctx, 'VOID · DELAYED', 640, 190, { size: 13, align: 'center', color: P.amber, alpha: va * pu, ls: 0.35 })
-      }
-    }
-
     // ---- stomp / clap accents
     this.accents(ctx, t, show)
 
@@ -194,6 +172,9 @@ export default {
     // ---- the karaoke line
     this.karaoke(ctx, t, show)
 
+    // ---- the closing button: the studio safety board resets
+    this.doomBoard(ctx, t, show)
+
     // ---- the hook: whoa-oh in the lyric slot
     const hook = show.line('hook-hy')
     if (t >= hook.t0 - 0.3 && t < hook.t1 + 0.4) {
@@ -207,6 +188,35 @@ export default {
       // one line, clear of the APPLAUSE/LAUGH sign above and the whoa-oh line below
       draw.label(ctx, 'NOW SINGING · SOMEDAY (BUILT IT)', 640, 96, { size: 20, align: 'center', color: P.white, alpha: ti, weight: 'm', ls: 0.15 })
     }
+  },
+
+  // a workplace-safety board, DAYS SINCE A P(DOOM) SONG TRENDED: it drops in during Hy's line
+  // reading 3 and split-flaps to 0 on the `flip` cue (two ticks in the mix), flashing red
+  doomBoard(ctx, t, show) {
+    const { draw, P, clamp } = show
+    const inA = clamp(show.since(show.at('pdoom') + 0.9) / 0.35)
+    if (inA <= 0) return
+    const x = 440, y = 84, w = 400, hh = 148
+    const fa = show.since('flip')
+    const flash = fa > 0.2 && fa < 1.4 ? 1 - (fa - 0.2) / 1.2 : 0
+    const col = draw.mix(P.amber, P.red, fa > 0.2 ? 0.5 + 0.5 * flash : 0)
+    draw.box(ctx, x, y, w, hh, { color: col, fill: '#000', fillAlpha: 0.9 * inA, cut: 6, width: 1.6 + 1.6 * flash, alpha: inA, hot: flash > 0.3 })
+    // hazard stripes along the top
+    ctx.save()
+    ctx.beginPath()
+    ctx.rect(x + 6, y + 6, w - 12, 14)
+    ctx.clip()
+    for (let sx = x - 20; sx < x + w + 20; sx += 22) draw.seg(ctx, sx, y + 22, sx + 14, y + 4, P.amber, 4, { alpha: 0.8 * inA })
+    ctx.restore()
+    // the number: one split-flap cell
+    const fx = x + 30, fy = y + 128
+    if (fa < 0) draw.splitFlap(ctx, fx, fy, '3', { size: 66, color: P.amber })
+    else draw.splitFlap(ctx, fx, fy, '0', { size: 66, age: fa, color: P.red })
+    // the legend
+    const lines = ['DAYS SINCE A', 'P(DOOM) SONG', 'TRENDED']
+    let size = 28
+    while (size > 14 && Math.max(...lines.map((l) => draw.labelWidth(ctx, l, { size, weight: 'm', ls: 0.12 }))) > w - 150) size -= 1
+    lines.forEach((l, i) => draw.label(ctx, l, x + 120, y + 62 + i * (size + 10), { size, weight: 'm', color: i === 1 ? P.white : P.amber, ls: 0.12, alpha: inA }))
   },
 
   // a stomp ring at Al's head and clap sparks at Pete's, from the arrangement's grid
@@ -244,11 +254,10 @@ export default {
   karaoke(ctx, t, show) {
     const { draw, P, clamp } = show
     // each line holds (fully sung, in gold) until the next one comes up, so the lyric slot never
-    // sits empty between sections; bd-a gives way to Void's PONG., which takes the same slot
+    // sits empty between sections
     const endOf = (id, i) => {
       if (id === 'tag') return show.at('built-4.end') + 2.4
       const l = show.line(id)
-      if (id === 'bd-a') return l.t1 + 0.55
       const next = i + 1 < LEAD.length ? show.line(LEAD[i + 1]).t0 - 0.45 : l.t1 + 0.55
       return Math.max(l.t1 + 0.55, Math.min(next, l.t1 + 3))
     }

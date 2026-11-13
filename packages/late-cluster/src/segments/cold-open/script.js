@@ -55,19 +55,15 @@ export default {
                 [71, 0.5], [72, 0.5], [74, 0.5], [72, 0.5], [71, 0.5], [71, 1.5]] },
       { who: ['hy', 'al', 'dee'], shout: 'hey', beats: [7], vol: 0.8 },
     ] } },
-    // bars 7–12: a quiet bed under the guest list
+    // bars 7–10: a quiet bed under the guest list (I · IV · V · V: it parks on the dominant for the drumroll)
     { music: { id: 'bed', bpm: 120, gap: 0, tracks: [
-      { who: 'pete', id: 'bed-beat', beat: 'B . . . | ! . t . | B . . . | ! . t . ', loops: 6, vol: 0.16 },
-      { who: 'al', id: 'bed-bass', beat: 'm:43 . . . | m:43 . . . | m:43 . . . | m:43 . . . | m:48 . . . | m:48 . . . | m:48 . . . | m:48 . . . | m:50 . . . | m:50 . . . | m:50 . . . | m:50 . . . ', loops: 2, vol: 0.16 },
+      { who: 'pete', id: 'bed-beat', beat: 'B . . . | ! . t . | B . . . | ! . t . ', loops: 4, vol: 0.16 },
+      { who: 'al', id: 'bed-bass', beat: 'm:43 . . . | m:43 . . . | m:43 . . . | m:43 . . . | m:48 . . . | m:48 . . . | m:48 . . . | m:48 . . . | m:50 . . . | m:50 . . . | m:50 . . . | m:50 . . . | m:50 . . . | m:50 . . . | m:50 . . . | m:50 . . . ', loops: 1, vol: 0.16 },
     ] } },
-    { wait: -10 }, { wait: -2 },
+    { wait: -8 },
     { say: 'sibyl', id: 'samantha', text: 'Tonight! Samantha, with the weather!', gap: 0.15, rate: 0.95, vol: 1.15 },
-    { say: 'sibyl', id: 'panel', text: 'On the panel: norvid, and Abel!', rate: 0.95, vol: 1.15 },
-    { say: 'sibyl', id: 'void', text: 'On a decelerated clock... Void.', rate: 0.88, vol: 1.15 },
-    { wait: 0.6 },
-    { cue: 'void-late' },
-    { sfx: 'tick-1', hold: 0, vol: 0.7 },
-    { say: 'sibyl', id: 'band', text: 'Music by Hy Oid, and The Formants!', as: 'Music by High Oyd, and the Formants!', gap: 0.5, rate: 0.95, vol: 1.15 },
+    { say: 'sibyl', id: 'panel', text: 'On the panel: norvid, and Abel!', gap: 0.3, rate: 0.95, vol: 1.15 },
+    { say: 'sibyl', id: 'band', text: 'Music by Hy Oid, and The Formants!', as: 'Music by High Oyd, and the Formants!', gap: 0.3, rate: 0.95, vol: 1.15 },
     { sfx: 'woo', at: -0.2, hold: 0, vol: 0.45 },
 
     // the big finish

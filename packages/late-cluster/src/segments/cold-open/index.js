@@ -1,7 +1,7 @@
 // Cold open: "Built it." — a post asks for a talk show, a bot builds it, the lights snap on and
 // Larry finds himself hosting it (his tuxedo drawing itself on as he talks); then the titles: the
 // logo over the skyline window, the Formants' theme, and Sibyl Ant's announce lighting one skyline
-// node per guest (Void's a beat late), ending on "Larry… Nx!" and the walk to the monologue mark.
+// node per guest as she names them, ending on "Larry… Nx!" and the walk to the monologue mark.
 //
 // Preview: /?seg=cold-open   ·   frames: node tools/shoot.mjs cold-open 1.5 5 6.9 …
 import { logo } from '../../stage/chrome.js'
@@ -36,7 +36,7 @@ export default {
   guests: [],
   drift: true,
   defaultShot: 'desk',
-  disclaimer: { text: 'Tonight’s guests are puppets playing posting personas. Parody.', from: 'samantha', dur: 10.5 },
+  disclaimer: { text: 'Tonight’s guests are puppets playing posting personas. Parody.', from: 'samantha', dur: 8 },
 
   // the counter only appears once something has been built: direct() hides it until the bump
   built: BUILT,
@@ -73,13 +73,12 @@ export default {
     const P = show.P
     this.nodes = [
       { id: 'samantha', name: 'SAMANTHA', role: 'THE WEATHER', at: pick(1300, 450), color: '#34e0ff', dy: -62 },
-      { id: 'norvid', name: 'NORVID', role: 'THE PANEL', at: pick(1430, 500), color: '#9a6bff', dy: -92 },
-      { id: 'abel', name: 'ABEL', role: 'THE PANEL', at: pick(1560, 455), color: '#3fd17a', dy: -62 },
-      { id: 'void', name: 'VOID', role: 'PUPPET RE-ENACTMENT', at: pick(1700, 505), color: '#d8dde3', dy: -96 },
-      { id: 'band', name: 'HY OID & THE FORMANTS', role: 'MUSIC', at: pick(1845, 450), color: P.magenta, dy: -62 },
+      { id: 'norvid', name: 'NORVID', role: 'THE PANEL', at: pick(1480, 500), color: '#9a6bff', dy: -92 },
+      { id: 'abel', name: 'ABEL', role: 'THE PANEL', at: pick(1665, 455), color: '#3fd17a', dy: -62 },
+      { id: 'band', name: 'HY OID & THE FORMANTS', role: 'MUSIC', at: pick(1845, 500), color: P.magenta, dy: -92 },
     ]
     this.home = { x: 1590, y: 300 } // Larry's node: high over the city
-    // when each node lights: on its name, Void's a beat late
+    // when each node lights: on its name
     const word = (id, w) => {
       const L = show.line(id)
       const hit = L.words?.find((x) => x[2].toLowerCase().startsWith(w))
@@ -89,7 +88,6 @@ export default {
       samantha: word('samantha', 'samantha'),
       norvid: word('panel', 'norvid'),
       abel: word('panel', 'abel'),
-      void: show.at('void-late'),
       band: word('band', 'hy'),
     }
     this.nxAt = show.at('nx')
@@ -128,7 +126,7 @@ export default {
     show.chyron({ name: '6 minutes later', title: 'meanwhile, in the simcluster', color: show.P.amber }, { from: 'later', to: show.at('built') + 0.1 })
     show.chyron({ name: 'Hy Oid & The Formants', title: 'The house band', handle: '@formants.band', color: show.P.magenta }, { from: show.at('hook') + 0.5, dur: 3.5 })
     show.chyron('sibyl', { from: show.at('roll') + 0.3, dur: 3.4 })
-    show.chyron({ name: 'Larry Nx', title: 'Your host · six minutes old', color: '#ffc861' }, { from: show.at('nx') + 1.6, to: show.duration })
+    show.chyron({ name: 'Larry Nx', title: 'Your host · six minutes old', color: '#ffc861' }, { from: show.at('nx') + 1.6, to: 'end' }) // off before the last frame (the next scene hard-cuts from it)
   },
 
   drawBack(ctx, t, show) {

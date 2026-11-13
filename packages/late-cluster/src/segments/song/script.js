@@ -1,8 +1,9 @@
-// Segment 8 — "Someday (Built It)": the stomp-clap-hey number. One joke told as a song: an earnest
+// Segment 7 — "Someday (Built It)": the stomp-clap-hey number. One joke told as a song: an earnest
 // someday-we'll-build-a-place anthem in a scene that can't say anything hypothetically.
 // All mouths: Larry lead, Al stomps (kick), Pete claps/hats, Hy + Dee whoa-oh hook, harmonies, shouts.
-// The song is split into music blocks at the stop bars so the spoken lines (bot "Built it.", Void's
-// late "Pong.") can sit in the silences; the block gaps are tuned so each stop lasts about a bar.
+// The song is split into music blocks at the stop bars so the spoken lines (bot "Built it.") can sit
+// in the silences; the block gaps are tuned so each stop lasts about a bar. The breakdown's mid-stop
+// is just a breath: c2 comes back in exactly two beats after c1 ends, on the grid.
 // Render: bun tools/render.ts song --whisper
 
 const BPM = 112
@@ -55,7 +56,6 @@ export default {
       as: 'Folks, in the sim-cluster, a dream lasts about six minutes.' },
     { say: 'larry', id: 'intro-2', vol: 1.25, text: 'Then somebody ships it.', gap: 0.35 },
     { sfx: 'laugh', at: 0.05 },
-    { say: 'larry', id: 'intro-3', vol: 1.25, text: 'Here is a song about dreaming.' },
     { say: 'larry', id: 'intro-4', vol: 1.25, text: 'Better sing it fast.', gap: 0.3 },
     { sfx: 'chuckle', at: 0.0, hold: 0.25 },
     { cue: 'band-in', at: 0.05 },
@@ -117,13 +117,8 @@ export default {
         notes: [[57, 1], [54, 1], [52, 0.5], [50, 1], [0, 0.5], [50, 0.5], [52, 0.5], [54, 0.5], [57, 0.5], [54, 0.5], [52, 0.5], [54, 1]] },
     ] } },
 
-    // ---- a beat of silence, then Void's answer to a ping from much earlier in the show
-    { wait: 0.55 },
-    { say: 'void', id: 'pong', vol: 1.25, text: 'Pong.', gap: 0, intonation: 'flat' },
-    { cue: 'pong-end' },
-
-    // ---- block C2: Larry carries on regardless (bars 23–24)
-    { music: { id: 'c2', bpm: BPM, gap: 0.7, tracks: [
+    // ---- block C2: after a two-beat breath, Larry finishes the thought (bars 23–24)
+    { music: { id: 'c2', bpm: BPM, gap: 2 * 60 / BPM, tracks: [
       { who: 'al', beat: 'B . . . | . . . . | . . . . | . . . . | . . . . | . . . . | . . . . | . . . .', vol: KICK * 0.8 },
       { who: 'pete', beat: '. . . . | . . . . | . . . . | . . . . | ! . . . | . . . . | . . . . | . . . .', vol: HAND * 0.8 },
       { who: 'hy', id: 'pad-hy-2', lyrics: 'oh', notes: [[59, 8]], vol: 0.35 },
@@ -160,11 +155,21 @@ export default {
     { wait: 0.6 },
     { say: 'bot', id: 'built-4', vol: 1.25, text: 'Built it.', gap: 0, rate: 0.9 },
     { sfx: 'biglaugh', at: 0.2, hold: 0.35 },
-    { sfx: 'applause-long', at: -0.6, hold: 0.17 },
+    { sfx: 'applause-long', at: -0.6, hold: 0.05 },
 
-    // ---- button: Larry names the band, then the play-off (sting under a fresh wave of applause)
+    // ---- button: Larry names the band; Hy notes what the song never got around to, and the
+    // studio's safety counter resets (DAYS SINCE A P(DOOM) SONG TRENDED: 3 → 0)
     { say: 'larry', id: 'btn-1', vol: 1.25, text: 'Hy Oid and the Formants, everybody!', as: 'High Oid and the Formants, everybody!' },
+    { say: 'hy', id: 'pdoom', vol: 1.25, text: "And we didn't even play upping my p(doom).",
+      as: "And we didn't even play upping my pee-ee-doom.", gap: 0.25, rate: 0.92 },
+    { cue: 'flip', at: 0.3 },
+    { sfx: 'tick', at: 0.3, hold: 0 },
+    { sfx: 'tick', at: 0.28, hold: 0 },
+    { sfx: 'groan', at: 0.15, hold: 0.5 },
+    // ---- the play-off: the room comes round, sting under a fresh wave of applause, the band bows
+    { sfx: 'laugh', at: -0.25, hold: 0.18 },
+    { cue: 'bow' },
     { sfx: 'sting', at: 0.05, hold: 0 },
-    { sfx: 'applause', at: -0.3, hold: 1 },
+    { sfx: 'applause', at: -0.6, hold: 1 },
   ],
 }

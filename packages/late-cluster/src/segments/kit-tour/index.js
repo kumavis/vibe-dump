@@ -8,8 +8,8 @@ export default {
   title: 'Kit tour',
   duration: 60,
   bumper: false,
-  cast: ['samantha', 'void', 'norvid', 'abel', 'prerat', 'borjev', 'eppy', 'bot', 'sibyl', 'hy', 'al', 'dee', 'pete'],
-  guests: ['norvid', 'abel', 'prerat', 'samantha', 'void'],
+  cast: ['samantha', 'norvid', 'abel', 'borjev', 'eppy', 'bot', 'sibyl', 'hy', 'al', 'dee', 'pete'],
+  guests: ['norvid', 'abel', 'samantha', 'borjev'],
   disclaimer: { text: 'Guests are puppets playing posting personas. No real accounts were harmed.', from: 0, dur: 5 },
   // the episode-long runner: n = from + bumps passed
   built: { from: 3, bumps: [T(1) + 1, T(5) + 1, T(7) + 2] },
@@ -17,17 +17,17 @@ export default {
 
   shots: [
     { at: 0, shot: 'ots', who: 'samantha', pip: 'larry' },
-    { at: T(1), shot: 'remote', guest: 'void', label: 'Void · decelerated clock' },
+    { at: T(1), shot: 'remote', guest: 'samantha', label: 'Remote guest · demo feed' },
     { at: T(2), shot: 'remote2', guests: ['norvid', 'abel'] },
     { at: T(3), shot: 'podium' },
     { at: T(4), shot: 'deskWith', with: 'bot' },
     { at: T(5), shot: 'sports', ticker: 'Top Chicken retains crown · Limbo bar lowered again · Seal still balancing' },
     { at: T(6), shot: 'stage' },
     { at: T(7), shot: 'panel', guests: ['norvid', 'abel'], pop: 'borjev' },
-    { at: T(8), shot: 'guest', guest: 'prerat' },
+    { at: T(8), shot: 'guest', guest: 'norvid' },
     { at: T(9), shot: 'desk' },
     { at: T(11), shot: 'wide' },
-    { at: T(12), shot: 'closeup', who: 'void' },
+    { at: T(12), shot: 'closeup', who: 'abel' },
   ],
 
   setup(show) {
@@ -41,8 +41,8 @@ export default {
       show.shot('panel', { guests: ['norvid', 'abel'], pop: 'borjev', popUp: show.tween(t, T(7) + 0.5, T(7) + 1.2, 0, 1, 'outBack') })
       show.puppet('abel').prop({ unveil: show.progress(T(7) + 1.5, 1.2) })
     }
-    // the archival hologram flickers out mid-sentence
-    if (t >= T(8) && t < T(9)) show.puppet('prerat').fx('hologram', { amount: show.tween(t, T(8) + 2.6, T(8) + 3.4, 1, 0), flicker: 0.8 })
+    // the hologram effect: a guest flickers out mid-sentence
+    if (t >= T(8) && t < T(9)) show.puppet('norvid').fx('hologram', { amount: show.tween(t, T(8) + 2.6, T(8) + 3.4, 1, 0), flicker: 0.8 })
     // shake and scale gags
     if (t >= T(9) && t < T(11)) {
       show.set.eKey = true
@@ -52,15 +52,15 @@ export default {
     if (t >= T(11) && t < T(12)) show.set.crow = 'circling'
     // the line-up: free placement with show.camera + puppet().place (head sizes side by side)
     if (t >= T(13)) {
-      const ids = ['larry', 'eppy', 'bot', 'samantha', 'norvid', 'abel', 'void', 'prerat', 'borjev']
+      const ids = ['larry', 'eppy', 'bot', 'samantha', 'norvid', 'abel', 'borjev']
       show.shot('wide', { band: false }).camera({ x: 1000, y: 640, zoom: 0.92 })
-      ids.forEach((id, i) => show.puppet(id).place({ x: 440 + i * 140, y: 600, scale: 1, look: 'camera', floor: 960, z: 5, seat: null, instrument: null, clip: null, fx: null }))
+      ids.forEach((id, i) => show.puppet(id).place({ x: 580 + i * 140, y: 600, scale: 1, look: 'camera', floor: 960, z: 5, seat: null, instrument: null, clip: null, fx: null }))
       show.set.desk = show.set.chair = show.set.couch = false
     }
     // chyrons: guests get the PUPPET · PARODY tag automatically
     show.chyron('samantha', { from: 0.6, dur: 3 })
-    show.chyron('void', { from: T(1) + 0.4, dur: 3 })
-    show.chyron('prerat', { from: T(8) + 0.3, dur: 3 })
+    show.chyron({ id: 'samantha', title: 'Remote guest · demo' }, { from: T(1) + 0.4, dur: 3 })
+    show.chyron('norvid', { from: T(8) + 0.3, dur: 3 })
     show.chyron('eppy', { from: T(5) + 0.4, dur: 3 })
   },
 
@@ -91,7 +91,7 @@ export default {
 
   drawFront(ctx, t, show) {
     const { draw, P } = show
-    if (t >= T(6) && t < T(7)) draw.glowText(ctx, 'WE POST INTO THE VOID', 640, 110, { size: 42, align: 'center', color: P.magenta, weight: 'm', ls: 0.1 })
+    if (t >= T(6) && t < T(7)) draw.glowText(ctx, 'SIM CLUSTER, SIM CLUSTER', 640, 110, { size: 42, align: 'center', color: P.magenta, weight: 'm', ls: 0.1 })
     if (t >= T(2) && t < T(3)) draw.stamp(ctx, 640, 470, 'CLAIM', { age: show.since(T(2) + 1.2), rot: -0.15 })
     if (t >= T(3) && t < T(4)) {
       const h = show.headOf('sibyl')

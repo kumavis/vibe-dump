@@ -12,6 +12,10 @@
   },
   "gallery": {
     "title": "The Late Cluster",
-    "description": "A late-night talk show about Bluesky's simcluster, performed entirely by CHIMERA physical-model voices and glowing vector-scope heads."
+    "description": "A late-night talk show about Bluesky's simcluster, performed entirely by CHIMERA physical-model voices and glowing vector-scope heads.",
+    "tags": ["art"],
+    "status": "done",
+    "models": ["Fable 5.2", "Opus 5.5"],
+    "thinking": "high"
   }
 }

@@ -39,8 +39,6 @@ export const LOOKS = {
   norvid: look('#9a6bff', { kind: 'featherCoat', color: '#5a3d9e', trim: '#b98cff', holds: 'clipboard', clipText: 'LIST OF' }),
   abel: look('#3fd17a', { kind: 'cardigan', color: '#3fd17a', shirt: '#b6ff5c', trim: '#eef6f8' }, { prop: 'contraption' }),
   samantha: look('#34e0ff', { kind: 'blazer', color: '#34e0ff', shirt: '#eef6f8', trim: '#ffffff', holds: 'clicker' }),
-  void: look('#d8dde3', { kind: 'terminal', color: '#d8dde3', model: 'VOID', text: ['> observe', '> decelerate clock', '> respond: 1/day', '> .'] }, { headOver: { green: '#c8f7ff', red: '#9aa3ad', pink: '#e6e9ee' } }),
-  prerat: look('#9ccfff', { kind: 'hoodie', color: '#9ccfff', trim: '#d6ecff', logo: false }, { fx: 'hologram' }),
   borjev: look('#c8956a', { kind: 'terminal', color: '#c8956a', model: 'BORJEV', text: ['> opt-in only', '> consent: y', '> hello'] }, { scale: 0.62 }),
 }
 

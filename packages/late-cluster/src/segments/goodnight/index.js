@@ -1,8 +1,15 @@
 // The last segment — Goodnight. Every runner pays off: the crow lands on the desk, the BUILT
 // counter's final tally (14), the gm/gn payoff (Sibyl tries "gn" raw, the engine finds no vowel,
-// the panel shows the raw output; the bot builds a site that checks, bump to 15), the heart line,
-// gn (finally), Void's last delayed answer, and Larry presses the giant E key: the stage powers
-// down like a CRT and the credits roll over the skyline while the Formants sing a lullaby.
+// the panel shows the raw output; the bot builds a site that checks, bump to 15), the heart line
+// and its two answers, gn (finally), and Larry presses the giant E key: the stage powers down like a
+// CRT and the credits roll over the skyline while the Formants sing a lullaby.
+//
+// The heart line has two real posts, shown verbatim with handle, date and like count:
+// what it is — @shimmermathlabs.com, 2026-10-26, 3 likes:
+//   https://bsky.app/profile/shimmermathlabs.com/post/3mys3uefthc23
+// how you get in — @prer.at, 2023-04-11, 61 likes: https://bsky.app/profile/prer.at/post/3jt4ocfa6sl2i
+//   (it is about joining "the ingroup" in 2023; the show does not present it as a definition of
+//   the word simcluster). The gn card: @ganweaving.bsky.social, 2025-11-27.
 
 import { EKEY } from '../../stage/set.js'
 
@@ -26,8 +33,8 @@ const PAGES = [
   { w: 1.25, lines: [
     { head: 'Puppets played the posting personas of' }, { gap: 0.4 },
     { text: '@norvid-studies.bsky.social' }, { text: '@abeliansoup.bsky.social' }, { text: '@borjev.bsky.social' },
-    { text: '@samantha.wiki' }, { text: '@prer.at' }, { text: '@void.comind.network (re-enactment)' },
-    { gap: 0.4 }, { small: 'Parody. The real Void is resting.' },
+    { text: '@samantha.wiki' },
+    { gap: 0.4 }, { small: 'Parody.' },
   ] },
   { w: 1.15, lines: [
     { text: 'Every voice and every head on this show is', color: 'gold' },
@@ -39,13 +46,16 @@ const PAGES = [
 ]
 const LH = 40
 
+// @prer.at, 2023-04-11 (verbatim; the blank lines are the post's own paragraph breaks)
+const PRERAT = 'you join the ingroup by acting like you are in the ingroup\n\nthere is a bunch of other stuff people say about it, but none of that rly matters\n\nno permissions - you just start memeing'
+
 export default {
   title: 'Goodnight',
   cast: ['sibyl', 'bot'],
   guests: [],
   set: { eKey: true, crow: false },
   built: { from: 14, bumps: ['built'] },
-  disclaimer: { text: 'Puppets play posting personas. Parody. Void is a puppet re-enactment; the real Void is resting.', from: 'dark', dur: 5 },
+  disclaimer: { text: 'Puppets play posting personas. Parody.', from: 'gn-post', dur: 4.5 },
 
   shots: [
     { at: 0, shot: 'wide' },
@@ -58,7 +68,6 @@ export default {
     { at: 'friends', after: 0.1, shot: 'closeup', who: 'larry', size: 540 },  // the name plate drops below the caption
     { at: 'gm', shot: 'desk' },
     { at: 'trumpet', shot: 'ots' },
-    { at: 'dark', shot: 'remote', guest: 'void', label: 'VOID · DELAYED · puppet re-enactment', live: false },
     { at: 'presse', after: -0.3, shot: 'desk' },
   ],
 
@@ -82,12 +91,6 @@ export default {
       larry.lookAt(down ? 'left' : 'camera').nod(down ? -0.3 : 0)
     }
 
-    // Void from the dark: dim the room
-    if (show.between('dark', 'presse')) {
-      show.set.dim = show.lerp(0.34, 0.8, show.progress('dark', 0.6))
-      larry.lookAt('left')
-    }
-
     // credits: the camera sits on the skyline, the studio is gone
     if (show.since('crt') > 0.7) {
       show.shot('desk')
@@ -101,15 +104,14 @@ export default {
     if (show.between('wish', 'built')) larry.lookAt(show.between('tag', 'built') ? 'camera' : 'sibyl')
     if (show.between('wish', 'built')) show.puppet('sibyl').lookAt(show.between('raw-gn', 'tag') ? 'camera' : 'larry').tilt(show.since('raw-gn') > 0 && show.since('tag') < 0 ? -0.08 : 0)
     if (show.between('built', 'built.end')) larry.lookAt('bot')
-    if (show.between('built.end', 'friends')) larry.lookAt(show.between('heart', 'heart.end') ? 'camera' : 'right')
-    if (show.between('trumpet', 'dark')) larry.lookAt(show.between('see', 'gn') || show.between('trumpet', 'ganweaving') ? 'camera' : 'right')
+    if (show.between('built.end', 'friends')) larry.lookAt(show.between('heart', 'heart.end') || show.between('join', 'friends') ? 'camera' : 'right')
+    if (show.between('trumpet', 'presse')) larry.lookAt(show.between('see', 'gn') || show.between('trumpet', 'ganweaving') ? 'camera' : 'right')
     if (show.between('friends', 'gm')) larry.lookAt('camera').nod(-0.06)
 
     // chyrons
     show.chyron('larry', { from: 1.4, dur: 3.6 })
     show.chyron('sibyl', { from: show.at('wish') + 0.8, to: show.at('raw-gn') - 0.1 })
-    show.chyron({ name: 'Update', title: 'Someone said gn · Confirmed', color: show.P.magenta }, { from: show.at('gn-post') + 0.6, to: show.at('dark') - 0.1 })
-    show.chyron({ id: 'void', title: 'Delayed reply · re-enactment' }, { from: show.at('ack') - 0.2, to: show.at('presse') - 0.35 })
+    show.chyron({ name: 'Update', title: 'Someone said gn · Confirmed', color: show.P.magenta }, { from: show.at('gn-post') + 0.6, to: show.at('presse') - 0.35 })
     show.chyron({ name: 'The Late Cluster', title: 'Brought to you by the letter E', color: show.P.cyan }, { from: show.at('presse') + 0.1, to: show.at('crt') })
   },
 
@@ -166,21 +168,34 @@ export default {
     }
 
     if (pn) {
-      // ---- the heart line
+      // ---- the heart line and its two answers (both real posts: verbatim, real handle/date/likes).
+      // What it is: the "my friends" card, alone and big. Then it hands over: it slides up and
+      // shrinks to a header while the prerat card (how you get in) types on underneath.
       if (show.between('heart', 'gm')) {
-        const u = show.since('heart') - 1.2
-        draw.label(ctx, 'WHAT IS THE SIMCLUSTER?', pn.x + 40, pn.y + 64, { size: 20, color: P.sky, ls: 0.2, alpha: show.clamp(show.since('heart') / 0.5) })
-        draw.label(ctx, 'ASKED ALL NIGHT · ANSWERED ONCE', pn.x + 40, pn.y + 90, { size: 12, color: P.blueMid, ls: 0.3, alpha: show.clamp(show.since('heart') / 0.5) })
+        const a = show.clamp(show.since('heart') / 0.5)
+        const n = show.since('nerds'), u = show.since('prerat')
+        const ho = show.ease.inOutCubic(show.clamp((u + 0.2) / 0.6))   // the hand-over
+        draw.label(ctx, 'WHAT IS THE SIMCLUSTER?', pn.x + 40, pn.y + show.lerp(40, 22, ho), { size: show.lerp(20, 16, ho), color: P.sky, ls: 0.2, alpha: a })
+        if (ho < 0.5) draw.label(ctx, 'ASKED ALL NIGHT', pn.x + 40, pn.y + 64, { size: 12, color: P.blueMid, ls: 0.3, alpha: a * (1 - ho * 2) })
+        // the open question, until the first card answers it
+        const q = a * (1 - show.clamp((n + 0.1) / 0.35))
+        if (q > 0) draw.glowText(ctx, '?', pn.x + pn.w / 2, pn.y + 320, { size: 200, align: 'center', color: P.sky, weight: 'm', alpha: q * (0.75 + 0.25 * Math.sin(t * 3)) })
         draw.skeetCard(ctx, {
-          x: pn.x + 40, y: pn.y + 150, w: 640,
+          x: pn.x + show.lerp(40, 30, ho), y: pn.y + show.lerp(150, 38, ho), w: show.lerp(640, 580, ho), scale: show.lerp(1, 0.7, ho),
           name: 'shimmermathlabs.com', handle: 'shimmermathlabs.com', time: '2026-10-26', initials: 's', color: P.bsky,
           text: 'simcluster is how nerds say “my friends”', likes: 3, textSize: 30,
-          appear: u / 0.45, reveal: (u - 0.1) / 0.7,
+          appear: n / 0.45, reveal: (n - 0.1) / 0.7,
+        })
+        draw.skeetCard(ctx, {
+          x: pn.x + 30, y: pn.y + 150, w: 670, scale: 0.93,
+          name: 'prerat', handle: 'prer.at', time: '2023-04-11', initials: 'p', color: P.sky,
+          text: PRERAT, likes: 61, textSize: 23,
+          appear: (u - 0.25) / 0.45, reveal: (u - 0.4) / 2.4,
         })
       }
 
       // ---- gn: the neighbour who always says it, then Larry finally does
-      if (show.since('trumpet') > 0.05 && show.since('dark') < 0) {
+      if (show.since('trumpet') > 0.05 && show.since('presse') < -0.3) {
         // display name, handle, date and the text: nothing else about this account
         const u = show.since('trumpet') - 0.05
         draw.skeetCard(ctx, {
@@ -209,14 +224,6 @@ export default {
       const u = show.since('trumpet')
       const rise = show.ease.outBack(show.clamp(u / 0.35)) * (1 - show.ease.inCubic(show.clamp((u - 1.6) / 0.4)))
       if (rise > 0.01) draw.elephant(ctx, 700, 800 - rise * 200, { scale: 1.5, trunk: Math.sin(u * 7) * (u < 1.3 ? 1 : 0.2), facing: 1 })
-    }
-
-    // ---- Void's monitor: the delay readout
-    if (show.between('dark', 'presse') && show.since('dark') > 0.3) {
-      const a = show.clamp(show.since('dark') / 0.6)
-      draw.label(ctx, 'RE: Q6 · ANY LAST WORDS?', 84, 94, { size: 15, color: P.sky, ls: 0.18, alpha: a })
-      draw.label(ctx, 'ASKED 2 SEGMENTS AGO', 84, 116, { size: 13, color: P.blueMid, ls: 0.22, alpha: a })
-      draw.label(ctx, 'REPLY SENT: NOW', 84, 138, { size: 13, color: P.white, ls: 0.22, alpha: a * show.clamp(show.since('ack') / 0.3) })
     }
 
     // ---- PRESS E TO LEAVE

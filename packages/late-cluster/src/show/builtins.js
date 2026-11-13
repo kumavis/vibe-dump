@@ -7,7 +7,7 @@ import { noise1, clamp, unlerp, ease } from '../kit/ease.js'
 import { CAST } from '../cast.js'
 
 /** the TONIGHT list when the rundown's segments aren't made yet */
-export const TONIGHT_FALLBACK = ['Samantha with the weather', 'norvid & Abel', 'Void, live via decelerated clock', 'music from Hy Oid & The Formants']
+export const TONIGHT_FALLBACK = ['Samantha with the weather', 'norvid & Abel', 'music from Hy Oid & The Formants']
 
 export function titleModule(titles = []) {
   return {
@@ -30,7 +30,7 @@ export function titleModule(titles = []) {
       if (titles.length) {
         label(ctx, 'TONIGHT', 98, 478, { size: 17, color: P.sky, ls: 0.5, weight: 'm' })
         seg(ctx, 98, 490, 330, 490, P.sky, 1.2, { alpha: 0.6 })
-        // the whole rundown (nine segments) in two numbered columns, five then four, short titles
+        // the whole rundown (eight segments) in two numbered columns, four and four, short titles
         // (before any ':'), ending above the START button (y 632); room for ten at most
         const short = titles.slice(0, 10).map((tt) => String(tt).split(':')[0].trim().toUpperCase())
         const rows = Math.ceil(short.length / 2)
