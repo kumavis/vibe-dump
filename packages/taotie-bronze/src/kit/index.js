@@ -40,5 +40,6 @@ export {
   setPatinaVessel,
   PATINA_PARAMS,
   PATINA_PRESETS,
+  PATINA_PRESET_GROUPS,
   PATINA_MODES,
 } from './material/patina.js'

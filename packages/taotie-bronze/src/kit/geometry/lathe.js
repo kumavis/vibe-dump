@@ -310,6 +310,19 @@ function vesselLathe({
         }
         map = reliefCache.get(key)
       }
+      // register `map: 'true'`: the panel is laid on the surface 1:1 in developed mm (x from the sector
+      // centre line), `mapWidth` mm wide (default: the widest the sector gets) — not angle-linearly
+      let panelMap = null
+      if (map && reg.spec.map === 'true') {
+        const S = info.registers[reg.name].sectors[k]
+        const Wt = reg.spec.mapWidth ?? Math.max(S.widthBottom, S.widthTop, S.width)
+        const tc = (A + B) / 2
+        panelMap = (u, v, out) => {
+          const t = A + Math.min(1, Math.max(0, u)) * (B - A)
+          const s = b0 + Math.min(1, Math.max(0, v)) * (b1 - b0)
+          out[0] = 0.5 + ((t - tc) * P.at(s).r) / Wt
+        }
+      }
       const geo = buildSurface({
         surface: surf,
         samples: { u: uS, v: vS },
@@ -317,6 +330,7 @@ function vesselLathe({
         reliefRect: map ? { u0: 0, u1: 1, v0: (reg.s0 - b0) / (b1 - b0), v1: (reg.s1 - b0) / (b1 - b0) } : undefined,
         fade: reg?.spec?.fade ?? fade,
         normals: 'surface',
+        panelMap,
       })
       if (holeList.length) {
         const sAt = (j) => b0 + vS[j] * (b1 - b0)

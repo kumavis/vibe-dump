@@ -166,14 +166,14 @@ export class Stage {
 
   _buildLights() {
     // warm tungsten-halogen key spot, front-upper-left: rakes across the relief
-    this.key = new THREE.SpotLight('#ffe4c4', 4.2, 0, 0.5, 0.6, 0)
+    this.key = new THREE.SpotLight('#ffeedf', 4.2, 0, 0.5, 0.6, 0)
     this.key.castShadow = true
     this.key.shadow.mapSize.set(2048, 2048)
     this.key.shadow.bias = -0.0002
     this.key.shadow.radius = 4
     this.scene.add(this.key, this.key.target)
     // cool, weak fill from the front-right
-    this.fill = new THREE.DirectionalLight('#9fb4cf', 0.3)
+    this.fill = new THREE.DirectionalLight('#c3cbd6', 0.3)
     this.scene.add(this.fill, this.fill.target)
     // soft rim from behind so the silhouette lifts off the near-black ground
     this.rim = new THREE.SpotLight('#dfe6f0', 2.6, 0, 0.45, 0.95, 0)

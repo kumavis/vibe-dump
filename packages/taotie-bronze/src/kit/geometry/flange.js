@@ -75,7 +75,10 @@ export function flange(o) {
   const e = embed ?? Math.max(0.6, Math.min(thickness * 0.6, 2))
   const endSpec = { start: normEnd(ends.start), end: normEnd(ends.end ?? (hook > 0 ? { type: 'beak', length: hook } : 'square')) }
 
-  const outline = flangeOutline({ length: L, height: hFn, notches, ends: endSpec, embed: e, waver, rng: rng.fork('outline') })
+  // o.outline (optional): a measured side silhouette instead of the generated one — a CCW polygon of
+  // [σ (mm along the path, may run past 0 / L), t (mm out from the wall, root at −embed)]; o.grooves:
+  // its incisions ([[σ, t]…]…), default = one line following the crest at a 1.5 mm inset
+  const outline = o.outline ? customOutline(o.outline, o.grooves) : flangeOutline({ length: L, height: hFn, notches, ends: endSpec, embed: e, waver, rng: rng.fork('outline') })
   const pts = outline.points
 
   // ---- frames along the path (sampled, interpolated; extrapolated past the ends)
@@ -325,15 +328,19 @@ export function flangeOutline({ length: L, height, notches, ends, embed: e, wave
   const inset = Math.min(1.5, H0 * 0.18)
   if (shape === 'score') {
     // the ladder: a groove parallel to the crest below the notch floors, rungs from each notch down to it
-    const line = []
-    const s0 = Math.max(0, sBot), s1 = Math.min(L, sTop)
-    const n = Math.max(2, Math.ceil((s1 - s0) / 1.5))
-    for (let i = 0; i <= n; i++) {
-      const s = s0 + ((s1 - s0) * i) / n
-      line.push([s, hc(s) - d(s) - inset * 0.8])
+    // (notches.rungs 'full': no crest line, every rung runs from its notch down to the root — Met gu 1985.214.4)
+    const full = N.rungs === 'full'
+    if (!full) {
+      const line = []
+      const s0 = Math.max(0, sBot), s1 = Math.min(L, sTop)
+      const n = Math.max(2, Math.ceil((s1 - s0) / 1.5))
+      for (let i = 0; i <= n; i++) {
+        const s = s0 + ((s1 - s0) * i) / n
+        line.push([s, hc(s) - d(s) - inset * 0.8])
+      }
+      grooves.push(line)
     }
-    grooves.push(line)
-    for (const c of cuts) grooves.push([[c, hc(c) - d(c)], [c, hc(c) - d(c) - inset * 0.8]])
+    for (const c of cuts) grooves.push([[c, hc(c) - d(c)], [c, full ? Math.min(0.4, hc(c) * 0.1) : hc(c) - d(c) - inset * 0.8]])
   } else if (shape !== 'none') {
     // follow the crest (and its notches) at the inset
     const off = offsetPolygon(pts, inset)
@@ -356,7 +363,24 @@ export function flangeOutline({ length: L, height, notches, ends, embed: e, wave
       if (tTop - tBot > inset) grooves.push([[sx, tTop], [sx, tBot]])
     })
   }
-  return { points: pts, grooves, segments, cuts, width, depth, pitch, shape }
+  return { points: pts, grooves, segments, cuts, width, depth, pitch, shape, groove: N.groove }
+}
+
+/** flange({ outline }) — a caller-supplied CCW side outline; grooves follow its crest unless given. */
+function customOutline(points, grooves) {
+  const pts = points.map(([s, t]) => [s, t])
+  if (grooves) return { points: pts, grooves, segments: [] }
+  let tMax = 0
+  for (const [, t] of pts) tMax = Math.max(tMax, t)
+  const inset = Math.min(1.5, tMax * 0.18)
+  const out = []
+  let cur = []
+  for (const [s, t] of offsetPolygon(pts, inset)) {
+    if (t > Math.max(inset, 0.3 * tMax)) cur.push([s, t])
+    else if (cur.length) { if (cur.length > 1) out.push(cur); cur = [] }
+  }
+  if (cur.length > 1) out.push(cur)
+  return { points: pts, grooves: out, segments: [] }
 }
 
 /**
@@ -407,7 +431,7 @@ function bakeGrooves(outline, { w, h, sMin, e, thickness, seed }) {
   const ppmm = Math.min(8, 1000 / w, 500 / h)
   const p = new ReliefPanel({ width: w, height: h, ppmm, seed })
   const k = Math.min(1.3, Math.max(0.7, thickness / 4))
-  const g = 0.55 * k
+  const g = outline.groove?.width ?? 0.55 * k // notches.groove { width, depth } (mm) overrides the default incision
   p.sink((ctx) => {
     ctx.lineWidth = g
     ctx.lineCap = 'round'
@@ -417,7 +441,7 @@ function bakeGrooves(outline, { w, h, sMin, e, thickness, seed }) {
       line.forEach(([s, t], i) => (i ? ctx.lineTo(s - sMin, t + e) : ctx.moveTo(s - sMin, t + e)))
       ctx.stroke()
     }
-  }, { depth: 0.35 * k, profile: 'u' })
+  }, { depth: outline.groove?.depth ?? 0.35 * k, profile: 'u' })
   return p.bake()
 }
 

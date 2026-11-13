@@ -37,78 +37,92 @@ export const PATINA_PARAMS = {
   lead: { group: 'Alloy', label: 'Lead (Pb wt)', min: 0, max: 0.25, step: 0.005, default: 0.03, hint: 'greys and dulls the metal' },
   polish: { group: 'Alloy', label: 'Polish', min: 0, max: 1, step: 0.01, default: 0.6, hint: 'abraded fields / relief tops: roughness 0.40 → 0.12; recesses stay as-cast' },
   tarnish: { group: 'Alloy', label: 'Tarnish', min: 0, max: 1, step: 0.01, default: 0.5, hint: 'thin oxide film: gold → brown-gold' },
-  // Corrosion
-  cuprite: { group: 'Corrosion', label: 'Cuprite', min: 0, max: 1, step: 0.01, default: 0.7, hint: 'red-brown Cu₂O on the metal, shows where the crust is thin or worn' },
-  tinOxide: { group: 'Corrosion', label: 'Noble patina', min: 0, max: 1, step: 0.01, default: 0.2, hint: 'Type I tin-oxide sheet territories (water patina)' },
-  tinOxideTone: { group: 'Corrosion', label: 'Noble tone', min: 0, max: 2, step: 0.01, default: 1, hint: '0 black 黑漆古 · 1 olive · 2 grey 水银古' },
-  malachite: { group: 'Corrosion', label: 'Malachite', min: 0, max: 1, step: 0.01, default: 0.6 },
-  malachiteHue: { group: 'Corrosion', label: 'Malachite hue', min: 0, max: 1, step: 0.01, default: 0.45, hint: 'blue-green → yellow-green' },
-  malachiteTone: { group: 'Corrosion', label: 'Malachite tone', min: 0, max: 1, step: 0.01, default: 0.5, hint: 'dark compact wet-looking → pale earthy crust' },
-  malachiteScale: { group: 'Corrosion', label: 'Crust grain', min: 0.5, max: 8, step: 0.1, default: 2, unit: 'mm', hint: 'botryoidal dome size' },
-  crust: { group: 'Corrosion', label: 'Crust thickness', min: 0, max: 4, step: 0.05, default: 1, unit: 'mm', hint: 'thick crust fills the line work' },
-  azurite: { group: 'Corrosion', label: 'Azurite', min: 0, max: 0.5, step: 0.01, default: 0.05 },
-  chloride: { group: 'Corrosion', label: 'Chloride', min: 0, max: 1, step: 0.01, default: 0.08, hint: 'bronze disease: pale powdery pustules over pits' },
-  soot: { group: 'Corrosion', label: 'Soot', min: 0, max: 1, step: 0.01, default: 0, hint: 'tenorite/soot on the lower body and legs (fire)' },
-  crevice: { group: 'Corrosion', label: 'Crevice bias', min: 0, max: 1, step: 0.01, default: 0.7, hint: 'how strongly crust prefers recesses' },
-  patchScale: { group: 'Corrosion', label: 'Territory size', min: 20, max: 200, step: 1, default: 70, unit: 'mm' },
-  mottleScale: { group: 'Corrosion', label: 'Mottle size', min: 3, max: 40, step: 0.5, default: 12, unit: 'mm' },
+  // Carbonates & blue — malachite, the blue-green (chrysocolla-like) phase and azurite are
+  // separate minerals in separate territories: the balance moves area between them, it never
+  // hue-rotates one colour
+  malachite: { group: 'Carbonates & blue', key: true, label: 'Carbonate crust', min: 0, max: 1, step: 0.01, default: 0.6, hint: 'how much of the surface the copper carbonates take' },
+  carbonate: { group: 'Carbonates & blue', key: true, label: 'Carbonate balance', min: 0, max: 1, step: 0.01, default: 0, hint: '0 malachite green · 0.5 pale blue-green / turquoise phase · 1 azurite blue — by territory, never a teal blend' },
+  azurite: { group: 'Carbonates & blue', key: true, label: 'Azurite', min: 0, max: 0.6, step: 0.01, default: 0.05, hint: 'blue islands on top of / among the carbonates' },
+  azuriteDepth: { group: 'Carbonates & blue', label: 'Depth of blue', min: 0, max: 1, step: 0.01, default: 0.5, hint: 'pale powdery sky blue → deep crystalline ultramarine' },
+  azuriteScale: { group: 'Carbonates & blue', label: 'Azurite patch', min: 3, max: 60, step: 0.5, default: 14, unit: 'mm' },
+  blueHabitat: { group: 'Carbonates & blue', label: 'Blue lives in', min: 0, max: 1, step: 0.01, default: 0.5, hint: '0 recesses and grooves · 1 open crust patches' },
+  turquoiseTone: { group: 'Carbonates & blue', label: 'Blue-green tone', min: 0, max: 1, step: 0.01, default: 0.3, hint: 'the turquoise / chrysocolla-like phase: pale chalky → deep sea blue-green' },
+  malachiteHue: { group: 'Carbonates & blue', label: 'Malachite hue', min: 0, max: 1, step: 0.01, default: 0.45, hint: 'blue-green → yellow-green' },
+  malachiteTone: { group: 'Carbonates & blue', label: 'Malachite tone', min: 0, max: 1, step: 0.01, default: 0.5, hint: 'dark compact wet-looking → pale earthy crust' },
+  islands: { group: 'Carbonates & blue', label: 'Film ↔ islands', min: 0, max: 1, step: 0.01, default: 0.6, hint: '0 thin translucent films that fade out · 1 sharp-edged crust islands' },
+  malachiteScale: { group: 'Carbonates & blue', label: 'Crust grain', min: 0.5, max: 8, step: 0.1, default: 2, unit: 'mm', hint: 'botryoidal dome size' },
+  crust: { group: 'Carbonates & blue', label: 'Crust thickness', min: 0, max: 4, step: 0.05, default: 1, unit: 'mm', hint: 'thick crust fills the line work' },
+  // Other corrosion
+  tinOxide: { group: 'Other corrosion', key: true, label: 'Noble patina', min: 0, max: 1, step: 0.01, default: 0.2, hint: 'Type I tin-oxide skin territories (water patina): dark, smooth, keeps the cast surface' },
+  tinOxideTone: { group: 'Other corrosion', label: 'Noble tone', min: 0, max: 2, step: 0.01, default: 1, hint: '0 black 黑漆古 · 1 olive · 2 grey 水银古' },
+  cuprite: { group: 'Other corrosion', label: 'Cuprite', min: 0, max: 1, step: 0.01, default: 0.7, hint: 'red-brown Cu₂O on the metal, shows where the crust is thin or worn' },
+  chloride: { group: 'Other corrosion', label: 'Chloride', min: 0, max: 1, step: 0.01, default: 0.08, hint: 'bronze disease: pale powdery pustules over pits' },
+  soot: { group: 'Other corrosion', label: 'Soot', min: 0, max: 1, step: 0.01, default: 0, hint: 'tenorite/soot on the lower body and legs (fire)' },
+  crevice: { group: 'Other corrosion', label: 'Crevice bias', min: 0, max: 1, step: 0.01, default: 0.7, hint: 'how strongly crust prefers recesses' },
+  patchScale: { group: 'Other corrosion', label: 'Territory size', min: 20, max: 200, step: 1, default: 70, unit: 'mm' },
+  mottleScale: { group: 'Other corrosion', label: 'Mottle size', min: 3, max: 40, step: 0.5, default: 12, unit: 'mm' },
   // Surface
+  dulling: { group: 'Surface', key: true, label: 'Dulling', min: 0, max: 1, step: 0.01, default: 0, hint: 'dust, old wax and fine soil in the pores grey every mineral colour down' },
+  tops: { group: 'Surface', key: true, label: 'Relief tops', min: 0, max: 1, step: 0.01, default: 0, hint: 'relief tops rubbed clean: darker, warmer, smoother skin — the décor reads' },
   earth: { group: 'Surface', label: 'Burial soil', min: 0, max: 1, step: 0.01, default: 0.3 },
   earthColor: { group: 'Surface', label: 'Soil colour', type: 'color', default: '#8f7048' },
   calcite: { group: 'Surface', label: 'Calcareous film', min: 0, max: 1, step: 0.01, default: 0.15, hint: 'whitish lime dusting that pales the crust' },
+  streaks: { group: 'Surface', label: 'Streaks & tide line', min: 0, max: 1, step: 0.01, default: 0, hint: 'runs of groundwater down the walls, one pale tide line' },
   burialSide: { group: 'Surface', label: 'Burial side', min: 0, max: 1, step: 0.01, default: 0.3, hint: 'one side lay in the soil' },
   recessDirt: { group: 'Surface', label: 'Recess dirt', min: 0, max: 1, step: 0.01, default: 0.3 },
+  interiorTone: { group: 'Surface', label: 'Interior skin', min: 0, max: 1, step: 0.01, default: 0.3, hint: 'inside the vessel: dark grey-brown → pale green corroded skin' },
   wax: { group: 'Surface', label: 'Museum wax', min: 0, max: 1, step: 0.01, default: 0 },
   inlay: { group: 'Surface', label: 'Black inlay', min: 0, max: 1, step: 0.01, default: 0, hint: 'paste in the sunk lines (as made)' },
-  wear: { group: 'Surface', label: 'Wear', min: 0, max: 1, step: 0.01, default: 0.2, hint: 'erases from the top down on arrises' },
+  wear: { group: 'Surface', key: true, label: 'Wear', min: 0, max: 1, step: 0.01, default: 0.2, hint: 'erases from the top down on arrises' },
   seed: { group: 'Surface', label: 'Seed', min: 0, max: 99, step: 1, default: 7 },
 }
 
 /**
- * Presets, calibrated against photographs (research/02 §4). Each is a complete
- * look AT age = 1; the age dial then walks it back to the as-cast metal.
+ * Presets, calibrated against photographs (research/02 §4 and each vessel's dossier, the
+ * dossier winning). Each is a complete look AT age = 1; the age dial walks it back to the
+ * as-cast metal. Parameters a preset leaves out take their PATINA_PARAMS default.
+ * Grouped for the drawer by PATINA_PRESET_GROUPS.
  */
 export const PATINA_PRESETS = {
+  // ---- looks
   // fresh from the mould: warm golden bronze, black paste in the line work
   'as-cast': {
     age: 1, tin: 0.14, lead: 0.03, polish: 0.65, tarnish: 0.12, cuprite: 0, tinOxide: 0, malachite: 0, azurite: 0, chloride: 0, soot: 0,
     earth: 0, calcite: 0, recessDirt: 0.15, wax: 0, inlay: 0.85, wear: 0, crust: 0,
   },
-  // Houmuwu: pale grey-green / blue-green mottling over brown, cuprite flecks
+  // a generic Anyang excavation: dark, quiet grey-olive skin; pale green packed into the
+  // recesses and a few crusted territories; red-brown where the crust is thin; tops rubbed dark
   'excavated-green': {
-    age: 1, tin: 0.12, lead: 0.03, polish: 0.4, tarnish: 0.6, cuprite: 0.9, tinOxide: 0.7, tinOxideTone: 1.9, malachite: 0.74, malachiteHue: 0.0, malachiteTone: 0.62,
-    malachiteScale: 2.5, crust: 1.1, azurite: 0.04, chloride: 0.12, soot: 0.1, crevice: 0.7, patchScale: 60, mottleScale: 8,
-    earth: 0.32, earthColor: '#8a7354', calcite: 0.85, burialSide: 0.3, recessDirt: 0.3, wax: 0, inlay: 0, wear: 0.15,
+    age: 1, tin: 0.13, lead: 0.04, polish: 0.4, tarnish: 0.7, cuprite: 0.75, tinOxide: 0.7, tinOxideTone: 0.85,
+    malachite: 0.5, carbonate: 0.15, azurite: 0.03, azuriteScale: 10, blueHabitat: 0.3, turquoiseTone: 0.15,
+    malachiteHue: 0.45, malachiteTone: 0.5, islands: 0.55, malachiteScale: 2, crust: 0.6,
+    chloride: 0.08, soot: 0.05, crevice: 0.85, patchScale: 70, mottleScale: 10,
+    earth: 0.1, earthColor: '#7d6a50', calcite: 0.25, streaks: 0.35, burialSide: 0.3, recessDirt: 0.2, interiorTone: 0.3,
+    wax: 0, inlay: 0, wear: 0.2, dulling: 0.45, tops: 0.5,
   },
   // Freer F1915.136: vivid, thick, waxy emerald crust; red-brown on arrises
   'malachite-crust': {
     age: 1, tin: 0.14, lead: 0.03, polish: 0.4, tarnish: 0.6, cuprite: 0.9, tinOxide: 0, tinOxideTone: 1, malachite: 0.95, malachiteHue: 0.42, malachiteTone: 0.12,
-    malachiteScale: 1.6, crust: 0.9, azurite: 0.05, chloride: 0.03, soot: 0, crevice: 0.6, patchScale: 60, mottleScale: 10,
-    earth: 0.08, earthColor: '#6e5b42', calcite: 0, burialSide: 0.2, recessDirt: 0.45, wax: 0.45, inlay: 0, wear: 0.3,
+    malachiteScale: 1.6, crust: 0.9, islands: 0.8, azurite: 0.05, chloride: 0.03, soot: 0, crevice: 0.6, patchScale: 60, mottleScale: 10,
+    earth: 0.08, earthColor: '#6e5b42', calcite: 0, burialSide: 0.2, recessDirt: 0.45, wax: 0.45, inlay: 0, wear: 0.3, dulling: 0.2, tops: 0.3,
   },
-  // Met fangyi / zun / gu: cleaned and waxed: smooth olive-grey, green in recesses
+  // cleaned and waxed Western-collection look: smooth olive-grey, green in recesses
   'olive-museum': {
-    age: 1, tin: 0.14, lead: 0.05, polish: 0.5, tarnish: 0.8, cuprite: 0.45, tinOxide: 0.88, tinOxideTone: 1.25, malachite: 0.42, malachiteHue: 0.4,
-    malachiteScale: 1.5, crust: 0.25, azurite: 0.02, chloride: 0.02, soot: 0, crevice: 0.95, patchScale: 80, mottleScale: 9,
-    earth: 0.1, earthColor: '#6b5a42', calcite: 0.12, burialSide: 0.1, recessDirt: 0.55, wax: 0.6, inlay: 0, wear: 0.25,
+    age: 1, tin: 0.14, lead: 0.05, polish: 0.5, tarnish: 0.8, cuprite: 0.45, tinOxide: 0.88, tinOxideTone: 1.25, malachite: 0.35, malachiteHue: 0.4,
+    malachiteTone: 0.55, malachiteScale: 1.5, crust: 0.2, islands: 0.4, azurite: 0.02, chloride: 0.02, soot: 0, crevice: 0.95, patchScale: 80, mottleScale: 9,
+    earth: 0.1, earthColor: '#6b5a42', calcite: 0.12, burialSide: 0.1, recessDirt: 0.55, wax: 0.6, inlay: 0, wear: 0.25, dulling: 0.2, tops: 0.2, streaks: 0.15,
   },
   // 黑漆古 / Met fanglei 55.160: glossy black noble skin, red-brown blotches, lime streaks
   'water-black': {
     age: 1, tin: 0.16, lead: 0.02, polish: 0.7, tarnish: 0.9, cuprite: 0.7, tinOxide: 0.8, tinOxideTone: 0, malachite: 0.08, malachiteHue: 0.35,
-    malachiteScale: 1.5, crust: 0.1, azurite: 0, chloride: 0.03, soot: 0, crevice: 0.6, patchScale: 110, mottleScale: 16,
-    earth: 0.05, earthColor: '#5a4a38', calcite: 0.12, burialSide: 0.2, recessDirt: 0.4, wax: 0.3, inlay: 0, wear: 0.15,
-  },
-  // carbonate-rich burial: azurite islands through the malachite (never a teal blend)
-  'azurite-bloom': {
-    age: 1, tin: 0.13, lead: 0.04, polish: 0.4, tarnish: 0.6, cuprite: 0.9, tinOxide: 0, tinOxideTone: 1, malachite: 0.85, malachiteHue: 0.4,
-    malachiteScale: 2.2, crust: 1.2, azurite: 0.35, chloride: 0.1, soot: 0, crevice: 0.7, patchScale: 70, mottleScale: 12,
-    earth: 0.25, earthColor: '#8a7354', calcite: 0.2, burialSide: 0.3, recessDirt: 0.3, wax: 0, inlay: 0, wear: 0.15,
+    malachiteScale: 1.5, crust: 0.1, islands: 0.5, azurite: 0, chloride: 0.03, soot: 0, crevice: 0.6, patchScale: 110, mottleScale: 16,
+    earth: 0.05, earthColor: '#5a4a38', calcite: 0.12, streaks: 0.4, burialSide: 0.2, recessDirt: 0.4, wax: 0.3, inlay: 0, wear: 0.15, dulling: 0.15,
   },
   // active chlorides: pale chalky bluish-green pustules in pits, clustered low and on seams
   'bronze-disease': {
     age: 1, tin: 0.13, lead: 0.05, polish: 0.4, tarnish: 0.7, cuprite: 0.8, tinOxide: 0.55, tinOxideTone: 1.2, malachite: 0.45, malachiteHue: 0.45,
     malachiteScale: 2, crust: 0.6, azurite: 0.03, chloride: 0.7, soot: 0, crevice: 0.8, patchScale: 70, mottleScale: 10,
-    earth: 0.15, earthColor: '#7a6548', calcite: 0.1, burialSide: 0.3, recessDirt: 0.45, wax: 0, inlay: 0, wear: 0.15,
+    earth: 0.15, earthColor: '#7a6548', calcite: 0.1, burialSide: 0.3, recessDirt: 0.45, wax: 0, inlay: 0, wear: 0.15, dulling: 0.3, tops: 0.3,
   },
   // kept above ground and handled: warm metal on every high point, near-black recesses
   'heirloom': {
@@ -116,6 +130,91 @@ export const PATINA_PRESETS = {
     malachiteScale: 1.5, crust: 0.15, azurite: 0, chloride: 0, soot: 0.05, crevice: 0.9, patchScale: 80, mottleScale: 12,
     earth: 0, calcite: 0, burialSide: 0, recessDirt: 0.8, wax: 0.3, inlay: 0.2, wear: 0.75,
   },
+
+  // ---- blue
+  // the classic "fresh from a wet tomb": pale turquoise / blue-green crust over red cuprite
+  'blue-green-excavated': {
+    age: 1, tin: 0.13, lead: 0.04, polish: 0.4, tarnish: 0.7, cuprite: 0.9, tinOxide: 0.35, tinOxideTone: 1.3,
+    malachite: 0.82, carbonate: 0.52, azurite: 0.06, azuriteDepth: 0.35, azuriteScale: 10, blueHabitat: 0.35, turquoiseTone: 0.12,
+    malachiteHue: 0.3, malachiteTone: 0.75, islands: 0.45, malachiteScale: 2.2, crust: 0.9,
+    chloride: 0.1, soot: 0, crevice: 0.75, patchScale: 65, mottleScale: 10,
+    earth: 0.3, earthColor: '#8a7354', calcite: 0.35, streaks: 0.3, burialSide: 0.3, recessDirt: 0.15, interiorTone: 0.4,
+    wax: 0, inlay: 0, wear: 0.15, dulling: 0.3, tops: 0.5,
+  },
+  // strong deep-blue crystalline islands on green and brown (display variety; > 25 % blue is rare)
+  'azurite-bloom': {
+    age: 1, tin: 0.13, lead: 0.04, polish: 0.4, tarnish: 0.6, cuprite: 0.9, tinOxide: 0.3, tinOxideTone: 1,
+    malachite: 0.8, carbonate: 0.65, azurite: 0.28, azuriteDepth: 0.8, azuriteScale: 18, blueHabitat: 0.8, turquoiseTone: 0.5,
+    malachiteHue: 0.42, malachiteTone: 0.45, islands: 0.85, malachiteScale: 2.2, crust: 1.2,
+    chloride: 0.08, soot: 0, crevice: 0.7, patchScale: 70, mottleScale: 12,
+    earth: 0.25, earthColor: '#8a7354', calcite: 0.2, streaks: 0.2, burialSide: 0.3, recessDirt: 0.25, interiorTone: 0.3,
+    wax: 0, inlay: 0, wear: 0.15, dulling: 0.15, tops: 0.35,
+  },
+
+  // ---- vessels (calibrated against reference/<id>/ photographs and dossier §d)
+  // Houmuwu (NMC): thin grey-green skin, fine red-and-green mottle on the fields, pale grey-green
+  // plateaus, near-black grooves, darker olive legs, small pale blue-green crust spots
+  'houmuwu': {
+    age: 1, tin: 0.12, lead: 0.04, polish: 0.4, tarnish: 0.6, cuprite: 0.9, tinOxide: 0.55, tinOxideTone: 1.75,
+    malachite: 0.75, carbonate: 0.3, azurite: 0.02, azuriteScale: 8, blueHabitat: 0.3, turquoiseTone: 0.1,
+    malachiteHue: 0.25, malachiteTone: 0.72, islands: 0.15, malachiteScale: 2.5, crust: 0.6,
+    chloride: 0.08, soot: 0.05, crevice: 0.75, patchScale: 120, mottleScale: 10,
+    earth: 0.25, earthColor: '#857256', calcite: 0.35, streaks: 0.2, burialSide: 0.3, recessDirt: 0.45, interiorTone: 0.35,
+    wax: 0.1, inlay: 0, wear: 0.22, dulling: 0.25, tops: 0.1,
+  },
+  // Met 1974.268.2: an even waxed olive-grey-brown noble skin, near-black recesses, pale crests,
+  // red-brown only in slots and low on the foot, green as sparse specks; pale green interior
+  'met-fangyi': {
+    age: 1, tin: 0.14, lead: 0.05, polish: 0.5, tarnish: 0.8, cuprite: 0.6, tinOxide: 0.9, tinOxideTone: 1.2,
+    malachite: 0.08, carbonate: 0.05, azurite: 0, malachiteHue: 0.45, malachiteTone: 0.5, islands: 0.5, malachiteScale: 1, crust: 0.1,
+    chloride: 0.02, soot: 0, crevice: 0.35, patchScale: 80, mottleScale: 6,
+    earth: 0.15, earthColor: '#5c4630', calcite: 0.15, streaks: 0.1, burialSide: 0.05, recessDirt: 0.7, interiorTone: 0.75,
+    wax: 0.55, inlay: 0, wear: 0.3, dulling: 0.12, tops: 0,
+  },
+  // Met 43.25.1: silver-grey 水银古 skin, black inlay in every groove, blue-green malachite speckle
+  'met-zun': {
+    age: 1, tin: 0.14, lead: 0.05, polish: 0.45, tarnish: 0.8, cuprite: 0.3, tinOxide: 0.95, tinOxideTone: 1.65,
+    malachite: 0.4, carbonate: 0.2, azurite: 0.04, azuriteDepth: 0.4, azuriteScale: 6, blueHabitat: 0.5, turquoiseTone: 0.5,
+    malachiteHue: 0.3, malachiteTone: 0.4, islands: 0.75, malachiteScale: 1.2, crust: 0.12,
+    chloride: 0, soot: 0, crevice: 0.6, patchScale: 60, mottleScale: 6,
+    earth: 0.12, earthColor: '#706557', calcite: 0.4, streaks: 0.1, burialSide: 0.1, recessDirt: 0.4, interiorTone: 0.2,
+    wax: 0.4, inlay: 0.9, wear: 0.3, dulling: 0.3, tops: 0,
+  },
+  // Met 1985.214.4: grey-olive trumpet, silvery décor bands with brown-black leiwen, pale crust
+  // islands and emerald spots on the ring and lip
+  'met-gu': {
+    age: 1, tin: 0.14, lead: 0.05, polish: 0.6, tarnish: 0.8, cuprite: 0.35, tinOxide: 0.9, tinOxideTone: 1.2,
+    malachite: 0.2, carbonate: 0.05, azurite: 0, malachiteHue: 0.45, malachiteTone: 0.5, islands: 0.6, malachiteScale: 1.2, crust: 0.2,
+    chloride: 0, soot: 0, crevice: 0.5, patchScale: 45, mottleScale: 6,
+    earth: 0.1, earthColor: '#6b5a42', calcite: 0.2, streaks: 0.1, burialSide: 0.05, recessDirt: 0.7, interiorTone: 0.3,
+    wax: 0.55, inlay: 0, wear: 0.3, dulling: 0.12, tops: 0,
+  },
+  // Nezu fangyi (owner's photo): dark olive-black handled skin, dark lustrous high points, pale
+  // grey-green powder in the leiwen and on every up-facing ledge, warm red-brown low on the belly
+  'nezu-olive': {
+    age: 0.95, tin: 0.15, lead: 0.05, polish: 0.5, tarnish: 0.9, cuprite: 0.5, tinOxide: 0.82, tinOxideTone: 0.35,
+    malachite: 0.22, carbonate: 0.05, azurite: 0.02, malachiteHue: 0.35, malachiteTone: 0.85, islands: 0.15, malachiteScale: 1.5, crust: 0.15,
+    chloride: 0.15, soot: 0, crevice: 0.95, patchScale: 60, mottleScale: 10,
+    earth: 0.1, earthColor: '#6a6458', calcite: 0.15, streaks: 0.15, burialSide: 0.2, recessDirt: 0.1, interiorTone: 0.2,
+    wax: 0.2, inlay: 0, wear: 0.1, dulling: 0.65, tops: 0.6,
+  },
+  // the owner's bluer reading of the Nezu vessel: the same dark skin, blue-green and azurite
+  // powder bound to the recesses (the real powder is pale grey-green — this is a request)
+  'nezu-blue': {
+    age: 1, tin: 0.15, lead: 0.05, polish: 0.45, tarnish: 0.85, cuprite: 0.4, tinOxide: 0.82, tinOxideTone: 0.35,
+    malachite: 0.5, carbonate: 0.7, azurite: 0.28, azuriteDepth: 0.35, azuriteScale: 8, blueHabitat: 0.05, turquoiseTone: 0.3,
+    malachiteHue: 0.12, malachiteTone: 0.75, islands: 0.25, malachiteScale: 1.2, crust: 0.2,
+    chloride: 0.2, soot: 0, crevice: 0.95, patchScale: 55, mottleScale: 10,
+    earth: 0.06, earthColor: '#5f6460', calcite: 0.15, streaks: 0.15, burialSide: 0.2, recessDirt: 0.05, interiorTone: 0.2,
+    wax: 0.2, inlay: 0, wear: 0.1, dulling: 0.4, tops: 0.6,
+  },
+}
+
+/** How the drawer groups the preset chips. Every key of PATINA_PRESETS appears once. */
+export const PATINA_PRESET_GROUPS = {
+  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive'],
+  Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
+  Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
 }
 
 const U = (name) => 'u' + name[0].toUpperCase() + name.slice(1)
@@ -193,7 +292,7 @@ export class PatinaMaterial extends THREE.MeshStandardMaterial {
    * @param {import('../relief/bake.js').ReliefMap|null} [o.relief]
    * @param {boolean} [o.cavityAttribute] read a per-vertex `cavity` attribute (0 recess → 1 exposed)
    * @param {number} [o.cavity] constant cavity for plain meshes (0 recess → 1 exposed), default 0.8
-   * @param {number} [o.interior] 0..1: this mesh is an inside surface (bowl, inner wall): more soil, sulfide-dark, no wear
+   * @param {number} [o.interior] 0..1: this mesh is an inside surface (bowl, inner wall): one calm corroded skin (interiorTone), no speckle, no wear
    * @param {number} [o.normalStrength] scales the relief normal map
    */
   constructor({ relief = null, cavityAttribute = false, cavity = 0.8, interior = 0, normalStrength = 1, ...params } = {}) {
@@ -300,9 +399,13 @@ struct Surf {
   float groove;  // 1 inside sunk line work
   float rec;     // recess preference after crevice bias, 0..1
   float inside;  // 0..1 interior / sheltered (inward-facing, interior flag)
+  float calm;    // 0..1 a true interior surface (per-mesh hint): one quiet corroded skin
   float burial;  // -1..1 facing the side that lay in the soil
   float T;       // territory field 0..1 (patchScale, domain-warped)
   float T2;      // second, independent territory field 0..1 (azurite, noble-vs-crust split)
+  float K;       // territory KIND, 0..1, constant per warped cell: sharp-edged regions that differ in kind
+  float A;       // azurite field 0..1 (azuriteScale, warped)
+  float st;      // gravity streaks ~-1..1 (vertical runs), LOD-faded to 0
   float M;       // mottle 0..1 (mottleScale)
   float G;       // speckle 0..1 (≈ grain size), LOD-faded to 0.5
   float B;       // botryoidal dome height 0..1 (malachiteScale), LOD-faded
@@ -320,6 +423,7 @@ float tt_lod(float scaleMM, float px) { return 1.0 - smoothstep(0.25, 0.75, px /
 vec3 tt_pal(vec3 dark, vec3 mid, vec3 light, float t) {
   return t < 0.5 ? mix(dark, mid, t * 2.0) : mix(mid, light, t * 2.0 - 1.0);
 }
+float tt_lum(vec3 c) { return dot(c, vec3(0.2126, 0.7152, 0.0722)); }
 
 // research/02 §1.2: F0 vs Sn wt, linear, rows every 5 %
 vec3 tt_metalF0(float sn, float pb) {
@@ -335,11 +439,12 @@ vec3 tt_metalF0(float sn, float pb) {
   return mix(c, vec3(l) * 0.92, clamp(pb * 2.0, 0.0, 0.5));
 }
 
-// §2.5 noble patina palettes, tone 0 black · 1 olive · 2 grey; t = dark → light
+// §2.5 noble patina palettes, tone 0 black · 1 olive · 2 grey; t = dark → light.
+// Olive is the research's olive / green-grey (#39402F · #5C6448 · #838B6A): brown-olive, not green.
 vec3 tt_nobleColor(float tone, float t) {
   vec3 blk = tt_pal(vec3(0.006, 0.007, 0.006), vec3(0.014, 0.017, 0.012), vec3(0.030, 0.037, 0.024), t);
-  vec3 olv = tt_pal(vec3(0.032, 0.046, 0.032), vec3(0.085, 0.115, 0.075), vec3(0.185, 0.235, 0.165), t);
-  vec3 gry = tt_pal(vec3(0.070, 0.090, 0.085), vec3(0.145, 0.180, 0.172), vec3(0.300, 0.355, 0.335), t);
+  vec3 olv = tt_pal(vec3(0.036, 0.042, 0.026), vec3(0.098, 0.110, 0.066), vec3(0.215, 0.235, 0.150), t);
+  vec3 gry = tt_pal(vec3(0.070, 0.082, 0.076), vec3(0.150, 0.170, 0.160), vec3(0.315, 0.345, 0.320), t);
   return tone < 1.0 ? mix(blk, olv, tone) : mix(olv, gry, tone - 1.0);
 }
 
@@ -351,35 +456,75 @@ vec3 tt_malachiteColor(float hue, float t) {
   return hue < 0.5 ? mix(bg, gr, hue * 2.0) : mix(gr, yg, hue * 2.0 - 1.0);
 }
 
+// the blue-green phase (chrysocolla / basic copper salts, Houmuwu's "#8fc0bf pale blue-green"):
+// tone 0 pale chalky turquoise → 1 deep sea blue-green. Its own mineral, not a malachite hue.
+vec3 tt_turquoiseColor(float tone, float t) {
+  vec3 pale = tt_pal(vec3(0.080, 0.160, 0.160), vec3(0.170, 0.310, 0.300), vec3(0.330, 0.500, 0.490), t);
+  vec3 deep = tt_pal(vec3(0.008, 0.055, 0.068), vec3(0.030, 0.150, 0.180), vec3(0.120, 0.330, 0.370), t);
+  return mix(pale, deep, tone);
+}
+
+// §2.4 azurite: depth 0 pale powdery sky blue → 0.5 the research's azure → 1 deep crystalline ultramarine
+vec3 tt_azuriteColor(float depth, float t) {
+  vec3 pale = tt_pal(vec3(0.090, 0.170, 0.330), vec3(0.200, 0.320, 0.560), vec3(0.380, 0.520, 0.740), t);
+  vec3 mid = tt_pal(vec3(0.012, 0.036, 0.162), vec3(0.026, 0.098, 0.392), vec3(0.144, 0.287, 0.631), t);
+  vec3 deep = tt_pal(vec3(0.005, 0.018, 0.100), vec3(0.014, 0.052, 0.260), vec3(0.070, 0.165, 0.480), t);
+  return depth < 0.5 ? mix(pale, mid, depth * 2.0) : mix(mid, deep, depth * 2.0 - 1.0);
+}
+
 float layerCuprite(Surf S, float amt) {
   // a near-continuous film on the metal: territory only thins it at low amounts
   return tt_cover(amt, 0.5 * S.T + 0.3 * S.M + 0.2 * S.rec + 0.08 * (S.G - 0.5), 0.18);
 }
 
 float layerNoble(Surf S, float amt) {
-  // Type I sheet: broad smooth territories, indifferent to relief, better on the exterior
-  float f = 0.62 * (1.0 - S.T) + 0.28 * S.T2 + 0.1 * S.M - 0.15 * S.inside;
+  // Type I sheet: broad smooth territories, indifferent to relief, better on the exterior;
+  // kind-0 cells are noble-skin territories, kind-2 cells crust territories
+  float kNob = 1.0 - tt_ss(0.25, 0.4, S.K);
+  float f = 0.5 * (1.0 - S.T) + 0.22 * S.T2 + 0.24 * (S.M - 0.5) + 0.12 - 0.15 * S.inside + 0.2 * kNob - 0.12 * tt_ss(0.62, 0.75, S.K);
   return tt_cover(amt, f, 0.12);
 }
 
+// the carbonate-crust field: territories + strong recess preference, up-facing and burial-side
+// bias, thinner on convex arrises, a kind bias (crust cells take more), fractal-edged boundaries
+float malachiteField(Surf S) {
+  return 0.42 * S.T + 0.78 * S.rec * (0.3 + 0.7 * uCrevice) + 0.12 * max(S.up, 0.0)
+       + 0.15 * uBurialSide * S.burial - 0.3 * S.edge + 0.22 * (S.M - 0.5) + 0.06 * (S.G - 0.5) + 0.1 * S.inside
+       + 0.16 * (tt_ss(0.62, 0.75, S.K) - 0.5) - 0.3 * (1.0 - S.rec) * uCrevice
+       + 0.38 * tt_ss(0.66, 0.74, S.K) * tt_ss(0.3, 0.75, S.T); // a few crust territories on open walls
+}
+// crust ISLANDS: sharp-edged, a little dependent on the cell kind
 float layerMalachite(Surf S, float amt) {
-  // Type II crust: territories + strong recess preference, up-facing and burial-side bias,
-  // thinner on convex arrises; mottled, fractal-edged boundaries
-  float f = 0.5 * S.T + 0.6 * S.rec * (0.4 + 0.6 * uCrevice) + 0.12 * max(S.up, 0.0)
-          + 0.15 * uBurialSide * S.burial - 0.3 * S.edge + 0.22 * (S.M - 0.5) + 0.06 * (S.G - 0.5) + 0.1 * S.inside;
-  return tt_cover(amt, f, 0.1);
+  float soft = mix(0.12, 0.022, uIslands);
+  return tt_cover(amt * mix(0.55, 1.0, uIslands), malachiteField(S), soft);
+}
+// thin FILM: gradual, translucent, wider than the islands
+float layerCarbonateFilm(Surf S, float amt) {
+  return tt_cover(min(amt * 1.35, 1.0), malachiteField(S) + 0.1 * S.st, 0.32) * mix(0.62, 0.3, uIslands);
+}
+
+// which carbonate a crust pixel is: 1 = the blue-green phase, 0 = malachite. Per territory
+// (warped cells + territory field), thresholded, never a blend; habitat 0 pulls it into recesses
+float layerBlueGreen(Surf S, float frac) {
+  float hab = uBlueHabitat;
+  float f = 0.5 * S.K + 0.28 * S.T2 + 0.14 * S.M + 0.08 * (S.G - 0.5)
+          + mix(0.55 * (S.rec - 0.45), 0.0, hab);
+  return tt_cover(frac, f, 0.03);
 }
 
 float layerAzurite(Surf S, float amt) {
-  // discrete islands from a thresholded low-frequency field — not cavity-driven
-  float f = 0.72 * S.T2 + 0.2 * S.M + 0.08 * S.inside + 0.04 * (S.G - 0.5);
-  return tt_cover(amt * 0.7, f, 0.025);
+  // discrete islands from a thresholded warped field at the azurite patch scale; habitat
+  // 0 binds them to the recesses / grooves, 1 lets them sit as open crust patches
+  float hab = uBlueHabitat;
+  float f = 0.62 * S.A + 0.16 * S.T2 + 0.12 * S.M + 0.08 * S.inside + 0.05 * (S.G - 0.5)
+          + mix(0.6 * (S.rec - 0.5), 0.0, hab) - mix(0.25 * S.edge, 0.0, hab);
+  return tt_cover(amt, f, 0.025);
 }
 
 float layerSoil(Surf S, float amt) {
   // packed into recesses, onto up-facing ledges, the burial side, underside and interior
   float f = 0.75 * S.rec + 0.22 * max(S.up, 0.0) * (1.0 - S.edge) + 0.3 * uBurialSide * max(S.burial, 0.0)
-          + 0.35 * S.inside + 0.3 * max(-S.up, 0.0) * (1.0 - tt_ss(0.0, 0.25, S.hgt)) + 0.2 * (S.M - 0.5) - 0.25 * S.edge;
+          + 0.35 * S.inside * (1.0 - S.calm) + 0.3 * max(-S.up, 0.0) * (1.0 - tt_ss(0.0, 0.25, S.hgt)) + 0.2 * (S.M - 0.5) - 0.25 * S.edge;
   return tt_cover(amt, f, 0.09);
 }
 
@@ -430,6 +575,7 @@ float ttF0 = 0.04;
   vec2 rad = S.p.xz - axis.xz;
   float inward = max(0.0, -dot(normalize(S.n.xz + 1e-5), normalize(rad + 1e-5))) * length(S.n.xz);
   S.inside = clamp(max(uInterior, inward * 0.55 * tt_ss(0.2, 0.6, S.hgt)), 0.0, 1.0);
+  S.calm = clamp(uInterior, 0.0, 1.0);
 
   bool plain = true;
   #ifdef PATINA_RELIEF
@@ -448,6 +594,7 @@ float ttF0 = 0.04;
     S.h01 = 0.5; S.edge = 0.0; S.groove = 0.0;
     #ifdef PATINA_RELIEF
       S.inside = max(S.inside, 0.7); // the inner wall of a decorated panel (uv = -1)
+      S.calm = max(S.calm, 0.7);
     #endif
   }
   S.edge = max(S.edge, gEdge);
@@ -462,59 +609,91 @@ float ttF0 = 0.04;
   vec3 w = tt_warp(S.p / (tS * 1.6) + so);
   S.T = clamp(0.5 + 0.75 * fbm3(S.p / tS + 0.4 * w - so), 0.0, 1.0);
   S.T2 = clamp(0.5 + 0.8 * snoise(S.p / (tS * 0.55) + 1.4 * w + so.zxy), 0.0, 1.0);
+  // territory kind: warped Voronoi cells (~0.5 territory across), one value per cell — sharp,
+  // folded borders between regions that are different in kind (noble skin / cuprite film / crust)
   float mS = max(uMottleScale, 1.0);
   S.M = clamp(0.5 + 0.75 * tt_lod(mS, S.px) * fbm2(S.p / mS + 0.6 * w * (tS / mS) * 0.08 + so.yzx), 0.0, 1.0);
+  float aS = max(uAzuriteScale, 1.0);
+  S.A = clamp(0.5 + 0.85 * snoise(S.p / aS + 0.5 * w + so.zyx * 1.3), 0.0, 1.0);
+  // gravity: runs ~6 mm wide, ~120 mm long, straight down the walls
+  S.st = tt_lod(6.0, S.px) * snoise(vec3(S.p.x / 6.0, S.p.y / 120.0, S.p.z / 6.0) + so.yxz);
   float gS = max(uMalachiteScale, 0.3);
   float gLod = tt_lod(gS, S.px);
   S.G = clamp(0.5 + 0.6 * gLod * snoise(S.p / (gS * 0.6) - so), 0.0, 1.0);
   vec2 wb = worley8(S.p / gS + so.zyx);
   S.B = mix(0.5, clamp(1.0 - wb.x * wb.x * 1.6, 0.0, 1.0), gLod);
+  // (looked up through the mottle, the second territory and the grain so the cell borders
+  // are ragged at every scale instead of Voronoi-straight)
+  S.K = worley8(S.p / (tS * 0.5) + 0.7 * w + vec3(0.9 * (S.M - 0.5), 0.7 * (S.T2 - 0.5), 0.45 * (S.G - 0.5) + 0.5 * (S.M - 0.5)) + so.xzy).y;
+  // an interior is one quiet skin: no speckle, mottle only at territory scale
+  S.M = mix(S.M, 0.5 + 0.4 * (S.T - 0.5), 0.8 * S.calm);
+  S.G = mix(S.G, 0.5, 0.9 * S.calm);
+  S.B = mix(S.B, 0.5, 0.9 * S.calm);
+  S.st *= 1.0 - S.calm;
 
   // ---- the master dial: each layer arrives at its own point in the burial
   float a = clamp(uAge, 0.0, 1.0);
   float aT = tt_ss(0.0, 0.25, a);    // use-life tarnish
   float aC = tt_ss(0.08, 0.5, a);    // early cuprite
   float aN = tt_ss(0.3, 0.8, a);     // noble sheet
-  float aM = tt_ss(0.35, 0.92, a);   // carbonate crust
-  float aL = tt_ss(0.6, 1.0, a);     // late: azurite, chlorides, soil, lime
+  float aM = tt_ss(0.35, 0.92, a);   // carbonate crust and film
+  float aL = tt_ss(0.6, 1.0, a);     // late: azurite, blue-green phase, chlorides, soil, lime, streaks
   float aW = tt_ss(0.05, 0.6, a);    // handling / cleaning
 
+  // ---- carbonate balance: area moves malachite → blue-green phase → azurite
+  float bal = clamp(uCarbonate, 0.0, 1.0);
+  float fracBG = (0.85 * tt_ss(0.0, 0.5, bal) - 0.15 * tt_ss(0.6, 1.0, bal)) * aL;
+  float azAmt = clamp(uAzurite * (0.5 + 0.5 * bal) + 0.45 * tt_ss(0.5, 1.0, bal), 0.0, 0.85) * aL;
+
   float cCup = layerCuprite(S, uCuprite * aC);
+  // a buried bronze has no bare metal under its patina: wherever a noble skin or carbonates
+  // formed, the metal beneath them is corroded too (shows as the veiled brown skin, not gold)
+  cCup = max(cCup, clamp(max(0.95 * uTinOxide * aN, 0.85 * uMalachite * aM), 0.0, 1.0));
   float cNob = layerNoble(S, uTinOxide * aN);
   float cMalR = layerMalachite(S, uMalachite * aM);
-  float cAz = layerAzurite(S, uAzurite * aL) * tt_ss(0.0, 0.5, cMalR + 0.4);
+  float cFilm = layerCarbonateFilm(S, uMalachite * aM) * (1.0 - cMalR);
+  float cBG = layerBlueGreen(S, fracBG);           // phase selector within the carbonates
+  // azurite needs carbonate water: islands on the crust, or (recess-bound) in the grooves
+  float azHost = clamp(cMalR + 0.6 * cFilm + 0.5 * S.rec * (1.0 - uBlueHabitat) + 0.3, 0.0, 1.0);
+  float cAz = layerAzurite(S, azAmt) * tt_ss(0.15, 0.6, azHost);
   float cSoot = layerSoot(S, uSoot * aL);
-  float cSoil = layerSoil(S, uEarth * aL);
+  float cSoil = layerSoil(S, uEarth * aL) * (1.0 - 0.75 * S.calm);
   // chloride pustules: Poisson clusters (mottle × territory), denser low on the body,
   // at creases and on the burial side; each a spot of the crust-grain size over a pit
   float clus = tt_ss(0.6, 0.9, 0.55 * S.M + 0.45 * S.T2 + 0.25 * (1.0 - S.hgt) + 0.2 * gCrease + 0.1 * S.burial);
   vec2 wc = worley8(S.p / max(gS * 1.6, 0.6) - so.yxz);
   float spotR = 0.08 + 0.2 * uChloride;
-  float cChlRaw = uChloride * aL * clus * step(wc.y, 0.15 + 0.45 * uChloride);
+  float cChlRaw = uChloride * aL * clus * step(wc.y, 0.15 + 0.45 * uChloride) * (1.0 - S.calm);
   float cChl = cChlRaw * (1.0 - tt_ss(spotR, spotR + 0.12, wc.x)) * gLod;
   float pitRing = cChlRaw * (tt_ss(spotR, spotR + 0.08, wc.x) - tt_ss(spotR + 0.1, spotR + 0.3, wc.x)) * gLod;
-  // calcareous film: whitish dusting within soil territories and on up-facing crust
-  float cCal = uCalcite * aL * clamp(tt_ss(0.35, 0.8, 0.6 * S.M + 0.4 * S.T2 + 0.25 * max(S.up, 0.0) + 0.2 * S.rec) * 0.75, 0.0, 1.0);
+  // calcareous film: whitish dusting within soil territories, on up-facing crust, along the runs
+  // — mostly sharp crusty islands (amount ≈ area), plus a faint general dust
+  float calF = 0.45 * S.M + 0.3 * S.T2 + 0.2 * max(S.up, 0.0) + 0.15 * S.rec + 0.1 * uStreaks * S.st + 0.05 * (S.G - 0.5);
+  float cCal = clamp(tt_cover(uCalcite * aL * 0.8, calF + 0.15, 0.05) * 0.9 + 0.2 * uCalcite * aL * tt_ss(0.3, 0.8, calF), 0.0, 1.0);
 
   // occlusion: crust occludes the noble sheet (alternatives per territory); cuprite rim
   // where a malachite island thins out
   cNob *= 1.0 - cMalR;
   float malRim = tt_ss(0.02, 0.2, cMalR) - tt_ss(0.25, 0.6, cMalR);
 
+  // ---- relief tops rubbed clean (handling / old cleaning): darker, warmer skin on the plateaus
+  float topK = plain ? 0.6 * S.edge : tt_ss(0.55, 0.9, S.h01) * tt_ss(0.55, 0.9, S.cav);
+  topK *= uTops * aW * (1.0 - S.calm);
+
   // ---- wear / cleaning erase, top down (§3.4.9)
   float e = layerWear(S, uWear * aW);
   float kSoil = 1.0 - tt_ss(0.0, 0.15, e);
-  float kCrust = 1.0 - tt_ss(0.1, 0.4, e);
+  float kCrust = (1.0 - tt_ss(0.1, 0.4, e)) * (1.0 - 0.85 * topK);
   float kNoble = 1.0 - tt_ss(0.35, 0.65, e);
   float kCup = 1.0 - tt_ss(0.6, 0.9, e);
-  cSoil *= kSoil; cCal *= kSoil;
-  float cMal = cMalR * kCrust; cAz *= kCrust; cChl *= kCrust;
+  cSoil *= kSoil * (1.0 - topK); cCal *= kSoil * (1.0 - 0.7 * topK);
+  float cMal = cMalR * kCrust; cFilm *= kCrust; cAz *= kCrust; cChl *= kCrust;
   cNob *= kNoble;
   cCup = max(cCup, malRim * uCuprite * aC * 0.8) * kCup;
 
   // crust thickness, mm: malachite deeper in recesses, botryoidal; soil lumps; chloride powder
   float tMal = cMal * uCrust * (0.3 + 0.7 * S.rec) * (0.55 + 0.45 * S.B);
-  float tAz = cAz * uCrust * 0.7 * (0.6 + 0.4 * S.B);
+  float tAz = cAz * uCrust * 0.7 * (0.6 + 0.4 * S.B) * mix(0.5, 1.0, uAzuriteDepth);
   float tSoil = cSoil * (0.4 + 1.6 * S.rec) * (0.6 + 0.4 * S.M);
   float thick = max(max(tMal, tAz), tSoil) + cChl * 0.25;
 
@@ -532,54 +711,89 @@ float ttF0 = 0.04;
   float f0 = 0.04;
 
   // ---- inlay paste in the sunk lines (on the metal, under all corrosion)
-  float cInl = uInlay * tt_ss(0.25, 0.7, S.groove);
+  // (the sunk ground of a relief panel holds paste too, where the bake marks no groove)
+  float cInl = uInlay * max(tt_ss(0.25, 0.7, S.groove), plain ? 0.0 : tt_ss(0.5, 0.8, 1.0 - S.cav));
   col = mix(col, vec3(0.007, 0.006, 0.005) * (0.8 + 0.4 * S.G), cInl);
   rough = mix(rough, 0.6, cInl); metal = mix(metal, 0.0, cInl);
   cCup *= 1.0 - cInl * 0.85; cNob *= 1.0 - cInl * 0.85;
+  cMal *= 1.0 - cInl * 0.7; cFilm *= 1.0 - cInl * 0.8; cAz *= 1.0 - cInl * 0.5;
 
   // ---- L1 cuprite: liver / oxblood, compact & sub-metallic sheen (F0 ≈ 0.2)
   float cupT = clamp(0.45 * S.M + 0.35 * S.G + 0.3 * (1.0 - S.rec) - 0.1, 0.0, 1.0);
-  vec3 cupCol = tt_pal(vec3(0.050, 0.012, 0.008), vec3(0.105, 0.026, 0.016), vec3(0.190, 0.052, 0.030), cupT * 0.8);
+  vec3 cupCol = tt_pal(vec3(0.042, 0.012, 0.008), vec3(0.080, 0.024, 0.015), vec3(0.135, 0.045, 0.027), cupT * 0.8);
   cupCol = mix(cupCol, cupCol * vec3(0.7, 0.62, 0.62), S.rec); // darker, browner in recesses
   col = mix(col, cupCol, cCup); rough = mix(rough, mix(0.38, 0.62, S.G), cCup); metal = mix(metal, 0.0, cCup); f0 = mix(f0, 0.18, cCup);
 
-  // ---- L2 noble tin-oxide sheet: glossy, conformal, lighter on high points
-  float nobT = clamp(0.3 + 0.22 * S.M + 0.35 * (1.0 - S.rec) * S.h01 * 1.4 - 0.25 * S.rec, 0.0, 1.0);
+  // ---- L2 noble tin-oxide sheet: glossy, conformal, lighter on high points; gravity runs
+  float nobT = clamp(0.36 + 0.12 * (S.M - 0.5) + 0.5 * (1.0 - S.rec) * (S.h01 - 0.4) - 0.25 * S.rec + 0.12 * (S.T2 - 0.5) - 0.12 * uStreaks * aL * S.st, 0.0, 1.0);
   vec3 nobCol = tt_nobleColor(uTinOxideTone, nobT);
   col = mix(col, nobCol, cNob); rough = mix(rough, 0.2 + 0.12 * S.rec + 0.06 * S.M, cNob); metal = mix(metal, 0.0, cNob); f0 = mix(f0, 0.075, cNob);
+  // outside the sheet a thinner, browner skin still veils the cuprite: warm brown, not raw red
+  float veil = (1.0 - cNob) * cCup * uTinOxide * aN * (0.65 - 0.35 * S.rec) * (0.6 + 0.4 * S.M);
+  col = mix(col, nobCol * 0.75 + cupCol * 0.45, veil); rough = mix(rough, 0.32, veil);
 
   // ---- L3 soot / tenorite low on the body
   col = mix(col, vec3(0.022, 0.018, 0.014), cSoot * 0.85); rough = mix(rough, 0.8, cSoot * 0.85); metal = mix(metal, 0.0, cSoot * 0.85);
 
-  // ---- L4 malachite: dark in recesses & under thin crust, banded light on domes
+  // ---- L4 carbonates. Malachite: dark & compact under thin crust, banded light on domes,
+  // a paler powder packed in the recesses. The blue-green phase replaces it per territory.
   float band = tt_ridged(S.p / (gS * 2.2) + w * 0.6);
-  float malT = clamp(0.5 + 0.4 * (S.M - 0.5) + 0.12 * (S.B - 0.5) * tt_ss(0.0, 0.8, uCrust) + 0.12 * (band - 0.5) - 0.42 * S.rec + 0.45 * (S.T - 0.5) - 0.06 + 0.7 * (uMalachiteTone - 0.5), 0.0, 1.0);
+  float malT = clamp(0.5 + 0.4 * (S.M - 0.5) + 0.12 * (S.B - 0.5) * tt_ss(0.0, 0.8, uCrust) + 0.12 * (band - 0.5) + 0.12 * S.rec + 0.3 * (S.T - 0.5) - 0.1 + 0.7 * (uMalachiteTone - 0.5), 0.0, 1.0);
   vec3 malCol = tt_malachiteColor(uMalachiteHue, malT);
+  vec3 tqCol = tt_turquoiseColor(uTurquoiseTone, clamp(malT + 0.08 + 0.15 * (S.G - 0.5), 0.0, 1.0));
+  vec3 carbCol = mix(malCol, tqCol, cBG);
   // thin crust lets the cuprite through: red-brown show-through
   float thin = 1.0 - tt_ss(0.05, 0.45, tMal + 0.25 * cMal * (1.0 - uCrust * 0.3));
-  malCol = mix(malCol, cupCol + malCol * 0.25, thin * 0.5 * uCuprite);
-  col = mix(col, malCol, cMal);
-  rough = mix(rough, mix(0.45, 0.8, tt_ss(0.2, 2.0, uCrust)) - 0.1 * S.B, cMal); metal = mix(metal, 0.0, cMal); f0 = mix(f0, 0.065, cMal);
+  carbCol = mix(carbCol, cupCol + carbCol * 0.25, thin * 0.5 * uCuprite);
+  // the film: a thin translucent stain over whatever is below — darkens and tints, no body
+  vec3 filmCol = mix(col, col * 0.55 + mix(malCol, tqCol, cBG) * 0.45, 0.85);
+  col = mix(col, filmCol, cFilm); rough = mix(rough, rough + 0.12, cFilm);
+  col = mix(col, carbCol, cMal);
+  rough = mix(rough, mix(0.45, 0.8, tt_ss(0.2, 2.0, uCrust)) - 0.1 * S.B + 0.12 * cBG, cMal); metal = mix(metal, 0.0, max(cMal, cFilm * 0.6)); f0 = mix(f0, 0.065, cMal);
 
-  // ---- L5 azurite islands: thresholded, never blended into teal
-  vec3 azCol = tt_pal(vec3(0.012, 0.036, 0.162), vec3(0.026, 0.098, 0.392), vec3(0.144, 0.287, 0.631), clamp(0.35 + 0.5 * (S.B - 0.5) + 0.4 * (S.M - 0.5), 0.0, 1.0));
-  col = mix(col, azCol, cAz); rough = mix(rough, 0.55, cAz); metal = mix(metal, 0.0, cAz); f0 = mix(f0, 0.06, cAz);
+  // ---- L5 azurite islands: thresholded, never blended into teal. Deep = crystalline, glassy
+  float azT = clamp(0.4 + 0.5 * (S.B - 0.5) + 0.4 * (S.M - 0.5) + 0.25 * (S.G - 0.5) - 0.2 * S.rec, 0.0, 1.0);
+  vec3 azCol = tt_azuriteColor(uAzuriteDepth, azT);
+  col = mix(col, azCol, cAz);
+  rough = mix(rough, mix(0.85, 0.32, uAzuriteDepth) + 0.15 * (S.G - 0.5) * uAzuriteDepth, cAz); metal = mix(metal, 0.0, cAz); f0 = mix(f0, mix(0.04, 0.075, uAzuriteDepth), cAz);
 
   // ---- L6 chlorides: pale chalky bluish green over a pit, dark ring of cuprite
   col = mix(col, cupCol * 0.55, pitRing * 0.8);
   vec3 chlCol = tt_pal(vec3(0.159, 0.423, 0.238), vec3(0.314, 0.597, 0.381), vec3(0.546, 0.761, 0.597), S.G);
   col = mix(col, chlCol, cChl); rough = mix(rough, 0.97, cChl); metal = mix(metal, 0.0, cChl);
 
+  // ---- L7 relief tops: rubbed to a darker, warmer, smoother skin
+  vec3 topCol = mix(col, col * vec3(0.62, 0.52, 0.42) + cupCol * 0.35, 0.8);
+  col = mix(col, topCol, topK * 0.75); rough = mix(rough, rough * 0.75, topK);
+
   // ---- L8 soil and calcareous film
   vec3 soilCol = uEarthColor * uEarthColor; // sRGB pick → ~linear
   soilCol = mix(soilCol * 0.62, mix(soilCol, vec3(0.644, 0.509, 0.301), 0.4), clamp(S.M * 0.8 + 0.4 * (S.G - 0.5), 0.0, 1.0));
   col = mix(col, soilCol, cSoil); rough = mix(rough, 0.95, cSoil); metal = mix(metal, 0.0, cSoil); f0 = mix(f0, 0.04, cSoil);
-  vec3 calCol = tt_pal(vec3(0.509, 0.462, 0.361), vec3(0.694, 0.644, 0.533), vec3(0.855, 0.815, 0.716), S.G);
-  float calA = cCal * (0.35 + 0.45 * cSoil) * (1.0 - cChl);
+  vec3 calCol = tt_pal(vec3(0.470, 0.455, 0.400), vec3(0.640, 0.630, 0.585), vec3(0.820, 0.810, 0.770), S.G);
+  float calA = cCal * (0.5 + 0.35 * cSoil) * (1.0 - cChl);
   // lime film: lightens and greys what it sits on rather than painting it beige
-  float lumC = dot(col, vec3(0.2126, 0.7152, 0.0722));
+  float lumC = tt_lum(col);
   vec3 film = mix(calCol * 0.7, mix(col, vec3(lumC), 0.55) * 1.5 + vec3(lumC) * 0.6, 0.65);
   col = mix(col, film, calA); rough = mix(rough, 0.88, calA); metal = mix(metal, 0.0, calA);
+
+  // ---- gravity: darker runs down the walls, one pale tide line where the water stood
+  float runs = uStreaks * aL * (1.0 - S.inside) * tt_ss(0.25, 0.85, S.st) * (0.5 + 0.5 * tt_ss(-0.2, 0.6, S.T2 - 0.3 + S.M * 0.6));
+  col *= 1.0 - 0.28 * runs * (1.0 - metal);
+  float tideH = 0.22 + 0.3 * fract(uSeed * 0.618);
+  float tide = uStreaks * aL * (1.0 - tt_ss(0.0, 0.012, abs(S.hgt - tideH + 0.03 * (S.M - 0.5)))) * (1.0 - S.inside) * (0.4 + 0.6 * S.M);
+  col = mix(col, mix(col, vec3(tt_lum(col)) * 1.6 + calCol * 0.12, 0.7), tide * 0.6 * (1.0 - metal));
+
+  // ---- an interior: one calm corroded skin — dark grey-brown → pale green (interiorTone)
+  vec3 skin = mix(vec3(0.030, 0.029, 0.023), vec3(0.090, 0.120, 0.080), uInteriorTone) * (0.8 + 0.45 * S.T + 0.15 * S.T2);
+  skin = mix(skin, cupCol * 0.6, 0.12 * (1.0 - uInteriorTone));
+  float skinK = S.calm * tt_ss(0.2, 0.7, a) * 0.85;
+  col = mix(col, skin, skinK); rough = mix(rough, 0.78, skinK); metal = mix(metal, 0.0, skinK); f0 = mix(f0, 0.045, skinK);
+
+  // ---- dulling: dust, old wax and fine soil in the pores grey the minerals down
+  float dull = uDulling * a * (1.0 - metal);
+  float lumD = tt_lum(col);
+  col = mix(col, vec3(lumD) * vec3(1.0, 1.01, 0.95), dull * 0.72);
 
   // ---- dirt and wax in recesses on cleaned pieces (§3.4.10), museum wax sheen
   float dirt = uRecessDirt * pow(S.rec, 1.5) * (1.0 - cSoil);
@@ -594,11 +808,13 @@ float ttF0 = 0.04;
       m = mix(m, vec3(0.75, 0.10, 0.05), cCup);                                       // cuprite red
       m = mix(m, vec3(0.55, 0.25, 0.75), cNob);                                       // noble sheet violet
       m = mix(m, vec3(0.05, 0.05, 0.05), max(cInl, cSoot * 0.85));                    // inlay / soot black
-      m = mix(m, vec3(0.10, 0.80, 0.25), cMal);                                       // malachite green
+      m = mix(m, vec3(0.35, 0.55, 0.35), cFilm);                                      // carbonate film grey-green
+      m = mix(m, mix(vec3(0.10, 0.80, 0.25), vec3(0.10, 0.75, 0.70), cBG), cMal);     // malachite green / blue-green phase teal
       m = mix(m, vec3(0.10, 0.30, 1.00), cAz);                                        // azurite blue
       m = mix(m, vec3(0.20, 1.00, 1.00), cChl);                                       // chloride cyan
       m = mix(m, vec3(1.00, 0.85, 0.10), cSoil);                                      // soil yellow
       m = mix(m, vec3(1.00, 0.70, 0.80), calA);                                       // calcite pink
+      m = mix(m, vec3(0.45, 0.30, 0.20), skinK);                                      // interior skin brown
       m *= 0.55 + 0.45 * clamp(1.0 - thick * 0.25, 0.0, 1.0);                         // darker = thicker crust
       totalEmissiveRadiance = m;
       col = vec3(0.0); rough = 1.0; metal = 0.0;

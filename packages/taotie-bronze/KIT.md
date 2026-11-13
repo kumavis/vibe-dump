@@ -401,7 +401,8 @@ const body = lathe({
   profile,                         // Profile or points
   sectors: 4 | { count, center } | { bounds: [deg…] },   // default mould sectors; sector k centred at center + k·360/count
   registers: { name: { y0,y1 | s0,s1 | from,to | (omit: a register named on the Profile),
-                       sectors?, relief?: ReliefMap | ReliefMap[] | (sectorIndex, size) => ReliefMap | null, fade?, material? } },
+                       sectors?, relief?: ReliefMap | ReliefMap[] | (sectorIndex, size) => ReliefMap | null, fade?, material?,
+                       map?: 'true' (panel laid 1:1 in developed mm from the sector centre line, not angle-linearly), mapWidth?: mm (panel width for 'true'; default the widest arc) } },
   wall: 3 | (s, y) => mm,          lip: { thickness: 1.6·wall, length, shape: 'round'|'flat', bulge },
   floor: { y, thickness, dome } | null (inner floor; default: flat base for r0 > 0, follow the profile for round bottoms),
   foot: { wall, hollow: true },    holes: [{ shape: 'cross'|'rect', azimuth, y, arm, width, w, h }],
@@ -426,9 +427,11 @@ meridian(thetaDeg, rangeSpec) → path }`. Frames include the cast deformation.
 
 ```js
 flange({ path | from,to,out, height: mm | (f ∈ [0,1]) => mm, thickness, embed, taper: 3 (deg), bevel, waver: 0.5, seed,
-         notches: { shape: 'square'|'score'|'T'|'L'|'hook'|'none', pitch (alias every), depth (× height), width (mm), pattern },
+         notches: { shape: 'square'|'score'|'T'|'L'|'hook'|'none', pitch (alias every), depth (× height), width (mm), pattern,
+                    rungs: 'full' (score: rungs run crest → root, no crest line), groove: { width, depth } (mm, face incisions) },
          ends: { start, end },   // 'square' | 'taper' | { type: 'step'|'hook'|'spur'|'beak'|'taper', length, height, sweep, under }
-         hook (legacy ≡ ends.end beak), incise: 'auto', material, part: 'flanges' }) → Mesh
+         hook (legacy ≡ ends.end beak), incise: 'auto', material, part: 'flanges',
+         outline: [[σ, t]…] (optional measured silhouette, CCW, root at t = −embed; replaces notches/ends), grooves }) → Mesh
 //   'score' = the dense ladder (Met gu 1985.214.4); 'T'/'L' = F1 notches + scored faces; 'hook' = F2 beaks.
 //   'step' overhangs the register end (gu drum); 'spur' curls out (gu foot); 'hook' rises past a rim.
 //   Integer number of full segments per span; incised grooves → ReliefMap on both faces (incise needs a PatinaMaterial).
@@ -523,31 +526,42 @@ setPatina(PATINA_PRESETS['excavated-green'])   // or setPatina({ malachite: 0.8 
 ```
 
 Parameters (all 0..1 unless noted; `research/02-…` is authoritative for colours).
-Groups `Alloy` / `Corrosion` / `Surface` (the drawer is generated from `PATINA_PARAMS`):
+Groups `Alloy` / `Carbonates & blue` / `Other corrosion` / `Surface` (the drawer is generated
+from `PATINA_PARAMS`; entries with `key: true` are also shown open under "Main"):
 
 ```
 age            master dial: 0 = out of the mould in 1200 BC → 1 = out of the ground in 1939.
-               Layers arrive in order: tarnish → cuprite → noble sheet → malachite → azurite /
-               chlorides / soil / lime. Every preset is its look AT age 1.
+               Layers arrive in order: tarnish → cuprite → noble sheet → carbonates → azurite /
+               blue-green phase / chlorides / soil / lime / streaks. Every preset is its look AT age 1.
 Alloy      tin 0–0.30 (Sn wt; F0 from the research table, 0.12 ≈ Houmuwu warm gold) · lead 0–0.25
            (greys / dulls) · polish (relief tops 0.40 → 0.12 roughness; recesses stay as-cast 0.47)
            · tarnish (gold → brown-gold film)
-Corrosion  cuprite (liver/oxblood, F0 0.18, shows through thin crust, rims, wear) · tinOxide (Type I
-           noble sheet) + tinOxideTone 0–2 (black 黑漆古 · olive · grey 水银古) · malachite (Type II
-           crust) + malachiteHue (blue-green → yellow-green), malachiteTone (dark compact → pale
-           earthy), malachiteScale mm (botryoid size), crust mm (thickness: flattens the relief
-           normal map, adds lumps) · azurite 0–0.5 (thresholded islands, never teal) · chloride
-           (pale pustules over pits, dark ring, clustered low / in creases) · soot (low body, fire)
-           · crevice · patchScale mm (territories, domain-warped) · mottleScale mm
-Surface    earth + earthColor · calcite (lime film: pales and greys the crust) · burialSide (one side
-           lay in the soil) · recessDirt · wax (museum sheen) · inlay (black paste in sunk lines:
-           the as-made look) · wear (erases soil → crust → noble → cuprite → burnished metal on
-           arrises, rims, handles) · seed
+Carbonates malachite (carbonate crust amount) · carbonate (BALANCE: 0 malachite green · 0.5 the pale
+ & blue    blue-green chrysocolla-like phase · 1 azurite blue — moves AREA between separate minerals
+           per territory, never a hue-rotate / teal blend) · azurite 0–0.6 (islands) · azuriteDepth
+           (pale powdery sky → deep crystalline ultramarine; also roughness/F0) · azuriteScale mm ·
+           blueHabitat (0 recess / groove-bound → 1 open crust patches; applies to both blue phases)
+           · turquoiseTone (the blue-green phase: pale chalky → deep) · malachiteHue (blue-green →
+           yellow-green) · malachiteTone (dark compact → pale earthy) · islands (0 thin translucent
+           films → 1 sharp-edged crust islands) · malachiteScale mm (botryoid size) · crust mm
+           (thickness: flattens the relief normal map, adds lumps)
+Other      tinOxide (Type I noble skin; no bare metal is left under it) + tinOxideTone 0–2 (black
+           黑漆古 · olive · grey 水银古) · cuprite (liver/oxblood, F0 0.18; outside the noble sheet it
+           shows veiled warm brown) · chloride (pale pustules over pits, dark ring) · soot · crevice
+           · patchScale mm (territories, domain-warped) · mottleScale mm
+Surface    dulling (dust / old wax greys every mineral colour) · tops (relief tops rubbed to a darker,
+           warmer, smoother skin) · earth + earthColor · calcite (lime: mostly sharp crusty islands
+           plus a faint dust) · streaks (gravity runs down the walls + one pale tide line) ·
+           burialSide · recessDirt · interiorTone (interior = one calm corroded skin: dark grey-brown
+           → pale green) · wax · inlay (black paste in sunk lines AND the sunk ground of relief
+           panels) · wear (erases soil → crust → noble → cuprite → burnished metal) · seed
 ```
 
-Presets: `as-cast`, `excavated-green` (Houmuwu), `malachite-crust` (Freer F1915.136),
-`olive-museum` (Met fangyi / zun / gu), `water-black` (Met fanglei 55.160), `azurite-bloom`,
-`bronze-disease`, `heirloom`.
+Presets (`PATINA_PRESET_GROUPS` groups them for the drawer):
+Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive` · Looks `excavated-green`
+(generic dark Anyang excavation), `olive-museum`, `malachite-crust` (Freer F1915.136),
+`water-black` (Met fanglei 55.160), `bronze-disease`, `heirloom`, `as-cast` · Blue `nezu-blue`,
+`blue-green-excavated`, `azurite-bloom`. A preset is applied over the PATINA_PARAMS defaults.
 
 Also exported: `patina` (the shared `{ value }` uniforms), `getPatina()`,
 `PATINA_PARAMS` (group, label, min/max/step, default, unit, hint),
@@ -562,16 +576,17 @@ bbox. So territories run continuously across separately built parts, stay glued 
 turned, and scales are physical on a 25 cm fangyi and a 1.3 m ding alike (territory size gets a
 mild `(H/300 mm)^0.3` bias). The bbox also gives height-above-base (soot, soil at the foot) and
 the vertical axis (faces turned toward it count as sheltered). Fields: territories (patchScale,
-warped fbm) · second territory (azurite, noble-vs-crust split) · mottle (mottleScale) · speckle
+warped fbm) · second territory (noble-vs-crust split) · territory KIND (warped, ragged Voronoi cells:
+noble-skin / cuprite / crust regions with sharp borders) · azurite field (azuriteScale) · gravity streaks · mottle (mottleScale) · speckle
 and botryoids (malachiteScale, Worley); each band fades to its mean below ~1.5 px.
 
 Constructor options: `{ relief, cavityAttribute, cavity = 0.8 (constant for plain meshes),
-interior = 0 (1 for a bowl's inside / inner wall: more soil, no wear), normalStrength }`.
+interior = 0 (1 for a bowl's inside / inner wall: one calm corroded skin per interiorTone, no speckle, no wear), normalStrength }`.
 Plain meshes (legs, handles, flanges) get a cavity estimate from signed screen-space curvature
 (convex arris → edge/wear, concave crease → recess), undersides and inward faces; the inner wall
 of a decorated panel (uv = -1) is treated as interior. Each layer is one GLSL function
-(`layerCuprite`, `layerNoble`, `layerMalachite`, `layerAzurite`, `layerSoil`, `layerSoot`,
-`layerWear`) over a shared `Surf` struct. Dielectric products carry their own F0 (cuprite 0.18,
+(`layerCuprite`, `layerNoble`, `layerMalachite`, `layerCarbonateFilm`, `layerBlueGreen`, `layerAzurite`,
+`layerSoil`, `layerSoot`, `layerWear`) over a shared `Surf` struct. Dielectric products carry their own F0 (cuprite 0.18,
 SnO₂ 0.075, malachite 0.065).
 
 ## Artifact contract — `src/artifacts/<id>.js`
