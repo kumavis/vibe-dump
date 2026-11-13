@@ -41,9 +41,9 @@ src/kit/
     edt.js              exact Euclidean distance transform (Felzenszwalb)
     bake.js             height → normal map, cavity/edge map, THREE textures
     leiwen.js           thunder-pattern ground fill
-    shapes.js           smoothPath / polyPath — Catmull-Rom → Bézier path helpers for motifs
+    shapes.js           the band-ends-in-a-hook vocabulary (Turtle, fillet, curls, hooks, bands) + halfMaskFrame
     motifs/
-      taotie.js         the parametric mask
+      taotie.js         the parametric mask (schema, presets, draw) — components in taotie/parts.js, renderer in taotie/render.js
       ground.js         leiwen on its own (atlas entry 'leiwen')
       kui.js cicada.js blade.js whorl.js boss.js bands.js …
       list.js           ONE LINE PER MOTIF, alphabetical: export { default as taotie } from './taotie.js'
@@ -187,20 +187,63 @@ Schema entry types: `range {min,max,step,default,unit?}`, `enum {options,default
 `bool {default}`, `group {fields}`; each may carry a `label`.
 Registry API: `MOTIFS`, `registerMotif(m)`, `getMotif(name)`, `resolveMotifParams(name, overrides, preset)`.
 
-Taotie parameters (the grammar document in `research/01-…` is authoritative for
-shapes and proportions):
+### relief/shapes.js — primitives for motif authors (research/01 §2.2)
+
+Pure geometry: `[x, y]` arrays in whatever mm frame you draw in; nothing touches a panel.
+
+```js
+new Turtle([x, y], headingDeg)          // a band's control polygon, carver-style
+  .fwd(mm).turn(deg, filletR).to([x, y], r?).head(deg, r)
+  .curl({ dir: ±1, size: a | [a, b], pitch, turns, r })   // inward squared/round spiral
+  .spine(step) → dense filleted polyline
+fillet(pts, r | [r…], { closed })        // squared-round corners;  resample, trim, subPath, polyLength, normals, headingAt
+spline(pts)  arcPts(c, r, a0, a1)  cScroll(c, R, { start, sweep, dir, shrink })
+sqSpiral(c, { pitch, turns, dir, rCorner, startHeading })   hookSpine(base, heading, len, { curl, radius, dir })
+sScroll(a, b, R)  lens(c, L, H, rot)  wobble(pts, rng, ampMM, wavelengthMM)   // hand-cut irregularity
+taper(w0, w1)  tail(w, frac, end)      // width laws t∈[0,1] → mm
+band(pts, w | fn, capA, capB)  poly(pts)  circle(c, r)  ellipse(c, rx, ry, rot)  rrect(c, w, h, r, rot)
+drawShape(ctx, shape, grow?)  strokeLine(ctx, pts, w)  mapShape(shape, f)
+halfMaskFrame(rect, { faceW, spread, reserve, invert, taper })
+  // creature space: origin at the bottom of the axis, x OUTWARD (author a right half);
+  // { s (face module = min(H, hw/faceW) mm), P(x,y), X, Y, u(v) = v·s, warp, widthAt, toPanel, apply(ctx) }
+```
+Caps: `'round' | 'flat' | 'square' | 'point'`. Also on the kit surface as `kit.shapes.*`.
+
+### Taotie (research/01 is authoritative)
+
+Layout: anchors are y = fraction of panel height, x = face units (× s × spread); band widths,
+eye and curl radii scale with s (slightly more on tall panels). So a 1:2 gu waist stretches,
+a 4:1 frieze grows a longer body / more quills; `lineWeight` and `echoInset` stay in mm.
 
 ```
-style        'relief' (Loehr V: mask raised above leiwen) | 'flush' (Loehr IV: same plane, told apart by line density)
-horn         'c' | 'ram' | 'buffalo' | 'bottle' | 'kui' | 't' | 'coiled' …
-eye          'chen' (臣-shaped, canthus hooks) | 'oval' | 'round'
-eyeSize, pupil ('slit' | 'dot'), brow, ear, crest (forehead lozenge)
-nose         'ridge' | 'flange' (a real L3 flange sits here — leave the slot) | 'plain'
-jaw          'hooked' | 'split' | 'fanged'
-body         'none' | 'band' | 'kui' (split-body: two profile dragons) | 'dissolved'
-tail, leg, claw, quills (dorsal hook row)
-relief       { motif: mm, boss: mm, groove: mm }   // level heights
-lineWeight   mm — incised line work on the plateaus
+style        'relief' (Loehr V) | 'flush' (IV: motif lifted 0.12 mm, outlined by a groove; ground tells it apart)
+carving      'dense' (V-a: 2 contour echoes + centre lines) | 'sparse' (V-b: 1 echo) | 'none'
+nose         'ridge' (ladder ticks) | 'plain' | 'flange' (narrow plain strip for an L3 flange) | 'stack' | 'none'
+nostril      'scroll' | 'bulb' | 'none'          crest  'lozenge' | 'shield' | 'cicada' | 'hooks' | 'none'
+eye          'chen' 臣 | 'oval' | 'round' | 'square' (fangyi boss);  eyeSize, eyeX, eyeY;  pupil 'slit' | 'dot' | 'ring' | 'none'
+brow         'none' | 'band' | 'hooked' | 'kui' | 'L' (Γ beside the eye, fangyi/gu)
+horn         'c' 'ram' 'buffalo' 'bottle' 't' 'kui' 'coiled' 'knob' 'antler' 'crook' 'zigzag' 'leaf' | 'none';  hornSize, hornTip (L2 lift)
+ear          'leaf' | 'c' | 'none' (drawn only when there is no body)
+jaw          'hooked' | 'double' | 'split' (+ lower jaw) | 'fanged' | 'none';  lipY, mouthCorner, jawTurns
+body         'band' | 'kui' (T8 split-body: two profile kui) | 'dissolved' (every part an island, gap ≥ 0.03 s) | 'none'
+tail 'up'|'down'|'forked'|'spiral'   leg (bool)   claw 2–3   quills 0–6
+edge         'none' | 'scrolls' (corner column of C islands) | 'kui' (vertical kui, head down)
+square 0–1 (云纹 → 雷纹 corners)  bandWidth ×  spread ×  taper (−: narrow at bottom, +: at top)  invert (lid)
+crown (V-b doming)  irregularity  seed  lineWeight mm  echoInset mm  relief { motif, boss, groove } mm
+```
+Presets: `T1-classic … T10-blade` (§2.14) and vessel matches `houmuwu-frieze`, `houmuwu-leg`,
+`fangyi-body`, `fangyi-lid`, `zun-belly`, `zun-foot`, `gu-waist`, `gu-foot`. `presetPlaques[preset]`
+gives the panel size (mm) each was matched at. Booleans from the first-pass schema (`ear`, `crest`,
+`quills`) are still accepted.
+
+Hand placement — every component is `taotieParts.<part>(C, opts)` (`nose crest nostril jaw fangs
+lowerJaw eye brow horn ear body quills leg kuiHead edge fragments`); opts override params, e.g.
+`eye(C, { at: [0.3, 0.48], eye: 'oval', size: 1.2 })`, `horn(C, { horn: 'buffalo', size: 1.2, rootX: 0.2 })`:
+
+```js
+const C = kit.taotieContext(panel, rect, kit.resolveMotifParams('taotie', overrides, 'fangyi-body'))
+kit.taotieParts.eye(C); kit.taotieParts.horn(C, { horn: 'ram' }); …    // or kit.buildTaotie(C) for the preset's layout
+kit.renderTaotie(panel, C)                                              // then fillGround(left half) + mirrorX(rect), as drawMotif does
 ```
 
 ## geometry/surface.js — relief onto 3D

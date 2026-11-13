@@ -1,7 +1,12 @@
-// GLSL noise chunks for the patina shader. All are evaluated in object/vessel
-// space in millimetres, so a corrosion territory has a physical size (a 60 mm
-// malachite patch is 60 mm on a 130 mm gu and on a 1.3 m ding alike) and
-// patterns run continuously across part seams the way burial chemistry did.
+// GLSL noise chunks for the patina shader. All are evaluated in VESSEL space in
+// millimetres (see patina.js: positions are taken through the shared vessel
+// matrix), so a corrosion territory has a physical size — a 60 mm malachite
+// patch is 60 mm on a 25 cm fangyi and on a 1.3 m ding alike — patterns run
+// continuously across separately built parts, and they stay glued to the
+// vessel if it is turned.
+//
+// Budget (SwiftShader screenshots): one patina pixel costs ~10 simplex taps and
+// two 8-cell Worley lookups. Keep new layers on the fields already computed.
 
 // 3D simplex noise — Ashima Arts / Stefan Gustavson (MIT). Returns ~[-1, 1].
 export const simplex3 = /* glsl */ `
@@ -54,9 +59,9 @@ float snoise(vec3 v) {
 }
 `
 
-// Fractal sums. Fixed octave counts keep the shader cheap enough for
-// SwiftShader screenshots; corrosion has no detail finer than ~3 octaves at
-// the scales we render anyway.
+// Fractal sums and domain warping. Mineral territories are not clouds: their
+// outlines are fractal and folded, which is what warping the lookup by a
+// second, coarser field produces. fbm3/fbm2 keep their old names.
 export const fbm = /* glsl */ `
 float fbm3(vec3 p) {
   float s = 0.0, a = 0.5;
@@ -66,11 +71,21 @@ float fbm3(vec3 p) {
 float fbm2(vec3 p) {
   return (0.6667 * snoise(p) + 0.3333 * snoise(p * 2.07 + 11.3));
 }
+// a smooth vector field ~[-1, 1]^3 (3 taps) for domain warping
+vec3 tt_warp(vec3 p) {
+  return vec3(snoise(p), snoise(p + vec3(31.7, -12.3, 7.9)), snoise(p + vec3(-19.1, 23.9, -41.3)));
+}
+// ridged fbm: thin bright veins / banding (2 taps)
+float tt_ridged(vec3 p) {
+  float a = 1.0 - abs(snoise(p));
+  float b = 1.0 - abs(snoise(p * 2.11 + 5.3));
+  return (a * a * 0.65 + b * b * 0.35);
+}
 `
 
-// Hash + 3D Worley F1 (distance to nearest feature point, cell units).
-// Pustules of chloride "bronze disease" and azurite rosettes are point-seeded
-// growths, which is exactly what a cellular field looks like.
+// Hash + Worley F1. worley3 is the full 27-cell search (kept for compatibility);
+// worley8 searches the 8 nearest cells with damped jitter: ~3× cheaper, near
+// enough for pustules, botryoidal domes and pits.
 export const worley = /* glsl */ `
 vec3 tt_hash33(vec3 p) {
   p = fract(p * vec3(0.1031, 0.1030, 0.0973));
@@ -89,6 +104,21 @@ float worley3(vec3 p) {
     d = min(d, dot(r, r));
   }
   return sqrt(d);
+}
+// returns (F1 distance, cell id hash 0..1)
+vec2 worley8(vec3 p) {
+  vec3 b = floor(p - 0.5);
+  float d = 8.0, id = 0.0;
+  for (int z = 0; z <= 1; z++)
+  for (int y = 0; y <= 1; y++)
+  for (int x = 0; x <= 1; x++) {
+    vec3 c = b + vec3(float(x), float(y), float(z));
+    vec3 h = tt_hash33(c);
+    vec3 r = c + 0.5 + (h - 0.5) * 0.85 - p;
+    float dd = dot(r, r);
+    if (dd < d) { d = dd; id = h.x; }
+  }
+  return vec2(sqrt(d), id);
 }
 `
 
