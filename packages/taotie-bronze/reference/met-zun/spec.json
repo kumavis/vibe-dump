@@ -12,7 +12,7 @@
     "headLow":        { "expr": "parts.heads.min.1 / overall.h", "expected": 0.625, "tol": 0.02 },
     "headShare":      { "expr": "parts.heads.h / overall.h",    "expected": 0.085, "tol": 0.02 },
     "headFrontReach": { "expr": "parts.heads.max.2 / overall.h", "expected": 0.335, "tol": 0.025 },
-    "headSpan":       { "expr": "parts.heads.w / overall.w",    "expected": 0.75,  "tol": 0.06 },
+    "headSpan":       { "expr": "parts.heads.w / overall.w",    "expected": 0.68,  "tol": 0.05, "note": "revised from 0.75: with heads at 0 and +-120 deg the span is set by the side heads snouts (0.866 x reach); in front.jpg they reach about as far as the belly flange tips" },
     "flangeCount":    { "expr": "parts.flanges.count",          "expected": 15,    "tol": 0 },
     "flangeBottom":   { "expr": "parts.flanges.min.1 / overall.h", "expected": 0.075, "tol": 0.015 },
     "flangeTop":      { "expr": "parts.flanges.max.1 / overall.h", "expected": 0.703, "tol": 0.02 },

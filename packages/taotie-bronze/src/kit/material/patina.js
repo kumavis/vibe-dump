@@ -53,7 +53,7 @@ export const PATINA_PARAMS = {
   malachiteScale: { group: 'Carbonates & blue', label: 'Crust grain', min: 0.5, max: 8, step: 0.1, default: 2, unit: 'mm', hint: 'botryoidal dome size' },
   crust: { group: 'Carbonates & blue', label: 'Crust thickness', min: 0, max: 4, step: 0.05, default: 1, unit: 'mm', hint: 'thick crust fills the line work' },
   // Other corrosion
-  tinOxide: { group: 'Other corrosion', key: true, label: 'Noble patina', min: 0, max: 1, step: 0.01, default: 0.2, hint: 'Type I tin-oxide skin territories (water patina): dark, smooth, keeps the cast surface' },
+  tinOxide: { group: 'Other corrosion', label: 'Noble patina', min: 0, max: 1, step: 0.01, default: 0.2, hint: 'Type I tin-oxide skin territories (water patina): dark, smooth, keeps the cast surface' },
   tinOxideTone: { group: 'Other corrosion', label: 'Noble tone', min: 0, max: 2, step: 0.01, default: 1, hint: '0 black 黑漆古 · 1 olive · 2 grey 水银古' },
   cuprite: { group: 'Other corrosion', label: 'Cuprite', min: 0, max: 1, step: 0.01, default: 0.7, hint: 'red-brown Cu₂O on the metal, shows where the crust is thin or worn' },
   chloride: { group: 'Other corrosion', label: 'Chloride', min: 0, max: 1, step: 0.01, default: 0.08, hint: 'bronze disease: pale powdery pustules over pits' },
@@ -62,7 +62,8 @@ export const PATINA_PARAMS = {
   patchScale: { group: 'Other corrosion', label: 'Territory size', min: 20, max: 200, step: 1, default: 70, unit: 'mm' },
   mottleScale: { group: 'Other corrosion', label: 'Mottle size', min: 3, max: 40, step: 0.5, default: 12, unit: 'mm' },
   // Surface
-  dulling: { group: 'Surface', key: true, label: 'Dulling', min: 0, max: 1, step: 0.01, default: 0, hint: 'dust, old wax and fine soil in the pores grey every mineral colour down' },
+  matte: { group: 'Surface', key: true, label: 'Matte (dry skin)', min: 0, max: 1, step: 0.01, default: 0, hint: 'micro-pitted, dusty excavated skin: no broad glossy highlights. 0 keeps each layer’s own sheen (as-cast, heirloom)' },
+  dulling: { group: 'Surface', label: 'Dulling', min: 0, max: 1, step: 0.01, default: 0, hint: 'dust, old wax and fine soil in the pores grey every mineral colour down' },
   tops: { group: 'Surface', key: true, label: 'Relief tops', min: 0, max: 1, step: 0.01, default: 0, hint: 'relief tops rubbed clean: darker, warmer, smoother skin — the décor reads' },
   earth: { group: 'Surface', label: 'Burial soil', min: 0, max: 1, step: 0.01, default: 0.3 },
   earthColor: { group: 'Surface', label: 'Soil colour', type: 'color', default: '#8f7048' },
@@ -192,12 +193,13 @@ export const PATINA_PRESETS = {
   // Nezu fangyi (owner's photo): dark olive-black handled skin, dark lustrous high points, pale
   // grey-green powder in the leiwen and on every up-facing ledge, warm red-brown low on the belly
   'nezu-olive': {
-    age: 0.95, tin: 0.15, lead: 0.05, polish: 0.5, tarnish: 0.9, cuprite: 0.5, tinOxide: 0.82, tinOxideTone: 0.35,
-    malachite: 0.22, carbonate: 0.05, azurite: 0.02, malachiteHue: 0.35, malachiteTone: 0.85, islands: 0.15, malachiteScale: 1.5, crust: 0.15,
-    chloride: 0.15, soot: 0, crevice: 0.95, patchScale: 60, mottleScale: 10,
-    earth: 0.1, earthColor: '#6a6458', calcite: 0.15, streaks: 0.15, burialSide: 0.2, recessDirt: 0.1, interiorTone: 0.2,
-    wax: 0.2, inlay: 0, wear: 0.1, dulling: 0.65, tops: 0.6,
+    age: 1, tin: 0.15, lead: 0.06, polish: 0.35, tarnish: 0.9, cuprite: 0.5, tinOxide: 0.85, tinOxideTone: 1.35,
+    malachite: 0.3, carbonate: 0.15, azurite: 0, malachiteHue: 0.35, malachiteTone: 0.9, islands: 0.1, malachiteScale: 1.5, crust: 0.12,
+    chloride: 0.1, soot: 0, crevice: 0.95, patchScale: 60, mottleScale: 10,
+    earth: 0.15, earthColor: '#6a6458', calcite: 0.3, streaks: 0.1, burialSide: 0.15, recessDirt: 0.15, interiorTone: 0.2,
+    wax: 0.1, inlay: 0, wear: 0.15, dulling: 0.75, tops: 0.15, matte: 0.75,
   },
+
   // the owner's bluer reading of the Nezu vessel: the same dark skin, blue-green and azurite
   // powder bound to the recesses (the real powder is pale grey-green — this is a request)
   'nezu-blue': {
@@ -524,7 +526,8 @@ float layerAzurite(Surf S, float amt) {
 float layerSoil(Surf S, float amt) {
   // packed into recesses, onto up-facing ledges, the burial side, underside and interior
   float f = 0.75 * S.rec + 0.22 * max(S.up, 0.0) * (1.0 - S.edge) + 0.3 * uBurialSide * max(S.burial, 0.0)
-          + 0.35 * S.inside * (1.0 - S.calm) + 0.3 * max(-S.up, 0.0) * (1.0 - tt_ss(0.0, 0.25, S.hgt)) + 0.2 * (S.M - 0.5) - 0.25 * S.edge;
+          + 0.35 * S.inside * (1.0 - S.calm) + 0.3 * max(-S.up, 0.0) * (1.0 - tt_ss(0.0, 0.25, S.hgt)) + 0.2 * (S.M - 0.5) - 0.25 * S.edge
+          + 0.22 * (1.0 - tt_ss(0.02, 0.16, S.hgt)) * (1.0 - S.inside); // an earthy accretion low on the foot
   return tt_cover(amt, f, 0.09);
 }
 
@@ -575,7 +578,8 @@ float ttF0 = 0.04;
   vec2 rad = S.p.xz - axis.xz;
   float inward = max(0.0, -dot(normalize(S.n.xz + 1e-5), normalize(rad + 1e-5))) * length(S.n.xz);
   S.inside = clamp(max(uInterior, inward * 0.55 * tt_ss(0.2, 0.6, S.hgt)), 0.0, 1.0);
-  S.calm = clamp(uInterior, 0.0, 1.0);
+  // (a cup seen through the mouth passes interior ≈ 0.45: that is already mostly the calm skin)
+  S.calm = clamp(uInterior * 1.8, 0.0, 1.0);
 
   bool plain = true;
   #ifdef PATINA_RELIEF
@@ -626,7 +630,7 @@ float ttF0 = 0.04;
   // are ragged at every scale instead of Voronoi-straight)
   S.K = worley8(S.p / (tS * 0.5) + 0.7 * w + vec3(0.9 * (S.M - 0.5), 0.7 * (S.T2 - 0.5), 0.45 * (S.G - 0.5) + 0.5 * (S.M - 0.5)) + so.xzy).y;
   // an interior is one quiet skin: no speckle, mottle only at territory scale
-  S.M = mix(S.M, 0.5 + 0.4 * (S.T - 0.5), 0.8 * S.calm);
+  S.M = mix(S.M, 0.5 + 0.2 * (S.T - 0.5), 0.9 * S.calm);
   S.G = mix(S.G, 0.5, 0.9 * S.calm);
   S.B = mix(S.B, 0.5, 0.9 * S.calm);
   S.st *= 1.0 - S.calm;
@@ -785,10 +789,12 @@ float ttF0 = 0.04;
   col = mix(col, mix(col, vec3(tt_lum(col)) * 1.6 + calCol * 0.12, 0.7), tide * 0.6 * (1.0 - metal));
 
   // ---- an interior: one calm corroded skin — dark grey-brown → pale green (interiorTone)
-  vec3 skin = mix(vec3(0.030, 0.029, 0.023), vec3(0.090, 0.120, 0.080), uInteriorTone) * (0.8 + 0.45 * S.T + 0.15 * S.T2);
-  skin = mix(skin, cupCol * 0.6, 0.12 * (1.0 - uInteriorTone));
-  float skinK = S.calm * tt_ss(0.2, 0.7, a) * 0.85;
-  col = mix(col, skin, skinK); rough = mix(rough, 0.78, skinK); metal = mix(metal, 0.0, skinK); f0 = mix(f0, 0.045, skinK);
+  // (only a slow, low-contrast breathing of the tone: no territories, no speckle; a little
+  // paler on up-facing floors where fine silt settled, darker deep down)
+  vec3 skin = mix(vec3(0.026, 0.025, 0.020), vec3(0.075, 0.098, 0.068), uInteriorTone) * (0.9 + 0.16 * S.T + 0.06 * S.T2 + 0.08 * max(S.up, 0.0));
+  skin = mix(skin, cupCol * 0.55, 0.1 * (1.0 - uInteriorTone));
+  float skinK = S.calm * tt_ss(0.2, 0.7, a) * 0.92;
+  col = mix(col, skin, skinK); rough = mix(rough, 0.8, skinK); metal = mix(metal, 0.0, skinK); f0 = mix(f0, 0.045, skinK);
 
   // ---- dulling: dust, old wax and fine soil in the pores grey the minerals down
   float dull = uDulling * a * (1.0 - metal);
@@ -799,6 +805,13 @@ float ttF0 = 0.04;
   float dirt = uRecessDirt * pow(S.rec, 1.5) * (1.0 - cSoil);
   col *= 1.0 - 0.7 * dirt; rough = min(1.0, rough + 0.3 * dirt);
   rough = mix(rough, min(rough, 0.34), uWax * (1.0 - metal) * (1.0 - cChl)); f0 += 0.02 * uWax * (1.0 - metal);
+
+  // ---- matte: an excavated skin is micro-pitted and dusty — a soft sheen at most, never a
+  // broad glossy highlight. Raises the roughness floor (wax included), more in recesses;
+  // even metal rubbed bare stays satin; dielectric F0 eased toward 0.045
+  float mt = clamp(uMatte, 0.0, 1.0) * tt_ss(0.1, 0.6, a);
+  rough = mix(rough, max(rough, mix(0.6, 0.82, S.rec) + 0.06 * (S.G - 0.5)), mt * (1.0 - 0.35 * metal));
+  f0 = mix(f0, min(f0, 0.05), 0.6 * mt);
 
   ttF0 = f0;
   if (uPatinaMode > 0.5) {
