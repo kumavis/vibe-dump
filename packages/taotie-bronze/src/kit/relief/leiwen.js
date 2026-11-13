@@ -27,14 +27,14 @@
 import { nearestFeature } from './edt.js'
 
 export const LEIWEN_DEFAULTS = {
-  pitch: 1.6, // mm, centre-to-centre of adjacent grooves
+  pitch: 1.3, // mm, centre-to-centre of adjacent grooves (research §1.3: 1.0–1.4 typical on 20–40 cm vessels)
   line: 0.5, // groove width as a fraction of pitch (line ≈ gap)
   cell: 'auto', // [min, max] spiral cell side in mm; 'auto' = [4.2, 7.8] × pitch (typical: the middle, ±15 %)
   turns: 'auto', // or a number: caps cell size at (2·turns + 1)·pitch
   roundness: 0.15, // 0 = squared 雷纹 (still a 0.12 p casting fillet) → 1 = round 云纹
   jitter: 0.08, // hand-cut irregularity (fraction of pitch; also ±1.5° per 0.08 of cell skew)
   mode: 'sunk', // 'sunk' grooves | 'thread' raised lines
-  depth: 0.45, // mm, groove depth (or thread height)
+  depth: 0.4, // mm, groove depth (or thread height)
   fillers: true, // C-hooks / contour lines in slivers too narrow for a spiral
   pairs: 0.75, // probability a 1.6–3.2 aspect cell becomes an S/mirror pair (else one long spiral)
   hand: 'alternate', // 'alternate' | 'random' | 'left' | 'right' — spiral handedness
@@ -79,6 +79,7 @@ export function leiwenFill(panel, region = {}, opts = {}) {
   if (o.debugOut) o.debugOut.gridMs = now() - t0
   const strokes = []
   if (grid && o.echo > 0) echoLines(grid, o, strokes)
+  if (grid && o.fillers) sliverLines(grid, o, strokes)
   const units = grid ? pack(grid, o, rng) : []
   if (o.debugOut) for (const u of units) o.debugOut.push(u)
   const stats = { cells: units.length, spirals: 0, pairs: 0, fillers: 0, ms: 0, planMs: 0 }
@@ -106,7 +107,32 @@ export function leiwenFillMask(panel, include, opts = {}, { rect, margin = 0.5, 
   const inc = typeof include === 'function' ? panel.mask(include) : include
   let lv = level
   if (lv === undefined && inc?.data) lv = modeHeight(panel, inc.data)
-  return leiwenFill(panel, { rect, include: inc, level: lv, avoid, margin }, opts)
+  // work only on the mask's bounding box (plus room for the margin), so a
+  // per-plateau call on a big panel stays cheap
+  const pitch = opts.pitch ?? LEIWEN_DEFAULTS.pitch
+  const r = rect ?? (inc?.data ? maskBox(panel, inc.data, margin + 2 * pitch) : undefined)
+  if (r === null) return { cells: 0, spirals: 0, pairs: 0, fillers: 0, ms: 0, planMs: 0 }
+  return leiwenFill(panel, { rect: r, include: inc, level: lv, avoid, margin }, opts)
+}
+
+/** Bounding box (mm) of mask coverage ≥ 0.5, padded and clamped to the panel; null if empty. */
+function maskBox(panel, data, pad) {
+  const { cols, rows, ppmm } = panel
+  let x0 = cols, x1 = -1, y0 = rows, y1 = -1
+  for (let y = 0; y < rows; y++) {
+    const row = y * cols
+    for (let x = 0; x < cols; x++) {
+      if (data[row + x] < 0.5) continue
+      if (x < x0) x0 = x
+      if (x > x1) x1 = x
+      if (y < y0) y0 = y
+      if (y > y1) y1 = y
+    }
+  }
+  if (x1 < 0) return null
+  const ax = Math.max(0, x0 / ppmm - pad), ay = Math.max(0, y0 / ppmm - pad)
+  const bx = Math.min(panel.width, (x1 + 1) / ppmm + pad), by = Math.min(panel.height, (y1 + 1) / ppmm + pad)
+  return { x: ax, y: ay, w: bx - ax, h: by - ay }
 }
 
 // ------------------------------------------------------------------ grid
@@ -128,7 +154,8 @@ function buildGrid(panel, rect, region, o) {
 
   const { cols, rows, ppmm, field } = panel
   const toMask = (m) => (typeof m === 'function' ? panel.mask(m).data : m && m.data ? m.data : null)
-  const avoid = region.avoid === undefined ? 'raised' : region.avoid
+  // a `level` fill (a plateau top) is raised by definition: no 'raised' avoid by default
+  const avoid = region.avoid === undefined ? (region.level != null ? null : 'raised') : region.avoid
   const avoidData = avoid === 'raised' ? null : toMask(avoid)
   const raised = avoid === 'raised'
   const inc = toMask(region.include)
@@ -166,7 +193,7 @@ function buildGrid(panel, rect, region, o) {
   for (let k = 0; k < N; k++) if (nf.dist2[k] <= m2) blocked[k] = 1
   for (let k = 0; k < N; k++) if (!blocked[k]) free++
   if (free < 9) return null
-  return { gw, gh, h, ox, oy, blocked, hit, m }
+  return { gw, gh, h, ox, oy, blocked, hit, m, nf }
 }
 
 // --------------------------------------------------------------- packing
@@ -180,7 +207,18 @@ function pack(grid, o, rng) {
   // contour orientation field: direction to the nearest obstacle, taken mod 90°
   // (as an angle ×4) and smoothed, so a corner snaps to one of its walls and a
   // curved edge turns its cells smoothly.
-  const nf0 = nearestFeature(blocked, gw, gh)
+  // distance to the free region's edge: reuse the erosion pass (raw distance
+  // − margin, same nearest pixel) unless echo lines moved the edge
+  let nf0
+  if (grid.dirty) nf0 = nearestFeature(blocked, gw, gh)
+  else {
+    const d2 = new Float32Array(N)
+    for (let k = 0; k < N; k++) {
+      const d = Math.sqrt(grid.nf.dist2[k]) - grid.m
+      d2[k] = d > 0 ? d * d : 0
+    }
+    nf0 = { dist2: d2, nearest: grid.nf.nearest }
+  }
   const c4 = new Float32Array(N), s4 = new Float32Array(N)
   const nxA = new Float32Array(N), nyA = new Float32Array(N)
   const D0 = new Float32Array(N)
@@ -213,19 +251,16 @@ function pack(grid, o, rng) {
   // leaves radial wedges no carver would have cut.
   const wsum = new Float32Array(N)
   for (let k = 0; k < N; k++) if (!blocked[k]) wsum[k] = Math.hypot(c4[k], s4[k])
-  const cc = new Float32Array(c4), sc = new Float32Array(s4)
+  const cc = c4, sc = s4
   const R2 = Math.max(2, Math.round((cmin * 0.5) / h))
   boxBlur(cc, gw, gh, R2, blocked)
   boxBlur(sc, gw, gh, R2, blocked)
   boxBlur(wsum, gw, gh, R2, blocked)
-  const R = Math.max(1, Math.round((1.2 * p) / h))
-  boxBlur(c4, gw, gh, R, blocked)
-  boxBlur(s4, gw, gh, R, blocked)
   const follow = Math.max(0, Math.min(1, o.follow))
   const theta0 = (k) => {
     const coh = wsum[k] > 1e-6 ? Math.hypot(cc[k], sc[k]) / wsum[k] : 1
     const t = Math.max(0, Math.min(1, (coh - 0.8) / 0.13))
-    return (follow * t * Math.atan2(s4[k], c4[k])) / 4
+    return (follow * t * Math.atan2(sc[k], cc[k])) / 4
   }
 
   const occ = new Uint8Array(blocked) // 1 blocked, 2 claimed
@@ -255,7 +290,7 @@ function pack(grid, o, rng) {
   }
 
   /** Grow an oriented rectangle from anchor (ax, ay). */
-  const fit = (ax, ay, theta, nx, ny, T, maxLen, absorb = 0) => {
+  const fit = (ax, ay, theta, nx, ny, [Tu, Tv], maxLen, absorb = 0) => {
     let ux = Math.cos(theta), uy = Math.sin(theta)
     // choose the frame rotation whose +v points along n (away from the obstacle)
     let best = -2, bu = [ux, uy]
@@ -293,14 +328,15 @@ function pack(grid, o, rng) {
     const stuck = [false, false, false, false] // v1, u1, u0, v0
     for (let guard = 0; guard < 4000; guard++) {
       let moved = false
-      if (!stuck[0] && v1 - v0 < T) { if (tryV(1)) moved = true; else stuck[0] = true }
-      if (!stuck[1] && u1 - u0 < T) { if (tryU(1)) moved = true; else stuck[1] = true }
-      if (!stuck[2] && u1 - u0 < T) { if (tryU(-1)) moved = true; else stuck[2] = true }
-      if (!stuck[3] && v1 - v0 < T) { if (tryV(-1)) moved = true; else stuck[3] = true }
+      if (!stuck[0] && v1 - v0 < Tv) { if (tryV(1)) moved = true; else stuck[0] = true }
+      if (!stuck[1] && u1 - u0 < Tu) { if (tryU(1)) moved = true; else stuck[1] = true }
+      if (!stuck[2] && u1 - u0 < Tu) { if (tryU(-1)) moved = true; else stuck[2] = true }
+      if (!stuck[3] && v1 - v0 < Tv) { if (tryV(-1)) moved = true; else stuck[3] = true }
       if (!moved) break
     }
     // phase 2: a strip — the short side is pinned, so run along the long one
     let eu = u1 - u0, ev = v1 - v0
+    const T = Math.min(Tu, Tv)
     if (Math.min(eu, ev) < T * 0.85) {
       const alongU = eu >= ev
       for (let guard = 0; guard < 4000; guard++) {
@@ -371,7 +407,17 @@ function pack(grid, o, rng) {
   const absorbLen = minSpiral * 0.9
   // one typical cell size with ±15 % hand variation (§3.1), inside [cmin, cmax]
   const typical = o.cellTypical ?? (cmin + cmax) / 2
-  const target = () => Math.min(cmax, Math.max(cmin, typical * (1 + rng.jitter(0.15))))
+  // Per-axis targets, so rows do not line up like a tiled meander: each side
+  // varies on its own, and some cells are laid out long (they become pairs).
+  const clampC = (v) => Math.min(cmax, Math.max(cmin, v))
+  const target = () => {
+    let tu = clampC(typical * (1 + rng.jitter(0.22)))
+    let tv = clampC(typical * (1 + rng.jitter(0.22)))
+    const e = rng.next()
+    if (e < 0.22) tu = typical * rng.range(1.6, 2.5)
+    else if (e < 0.34) tv = typical * rng.range(1.6, 2.5)
+    return [tu, tv]
+  }
   const handFor = (parent) => {
     if (o.hand === 'left') return 1
     if (o.hand === 'right') return -1
@@ -466,7 +512,7 @@ function pack(grid, o, rng) {
       const ownId = f >= 0 ? own[f] : -1
       const theta = Math.sqrt(nf0.dist2[k]) * h < cmin * 0.6 ? theta0(k) : ownId >= 0 ? units[ownId].theta : 0
       const parent = ownId >= 0 ? units[ownId].hand : null
-      const r = fit(x, y, theta + skew(), nx, ny, sweep === 0 ? target() : cmin, cmax * 4, absorbLen)
+      const r = fit(x, y, theta + skew(), nx, ny, sweep === 0 ? target() : [cmin, cmin], cmax * 4, absorbLen)
       place(r, handFor(parent), sweep === 0 ? minSpiral : o.fillers ? minFiller : minSpiral)
     }
   }
@@ -495,7 +541,7 @@ function echoLines(grid, o, strokes) {
       for (let it = 0; it < 3; it++) pts = smooth(pts, chain.closed)
       let run = []
       const flush = () => {
-        if (run.length > 1 && polyLen(run) >= 2.5 * p) strokes.push({ pts: run.map(([x, y]) => [ox + (x + 0.5) * h, oy + (y + 0.5) * h]), radius: 0 })
+        if (run.length > 1 && polyLen(run) * h >= 2.5 * p) strokes.push({ pts: run.map(([x, y]) => [ox + (x + 0.5) * h, oy + (y + 0.5) * h]), radius: 0 })
         run = []
       }
       for (const pt of pts) {
@@ -508,6 +554,76 @@ function echoLines(grid, o, strokes) {
   // the spirals start one pitch beyond the last echo line
   const lim = m + (o.echo * p) / h
   for (let k = 0; k < N; k++) if (D[k] < lim) blocked[k] = 1
+  grid.dirty = true
+}
+
+/**
+ * Slivers (research/01 §3.2): where the free region is too narrow for a
+ * spiral, the carver ran grooves parallel to its walls instead — iso-lines of
+ * the distance to every boundary (frame included), kept only in the thin parts
+ * and only where the opposite wall's lines stay a pitch away. Those parts are
+ * then closed to the packer. Lines end cleanly where the strip widens.
+ */
+function sliverLines(grid, o, strokes) {
+  const { gw, gh, h, ox, oy, blocked } = grid
+  const N = gw * gh
+  const p = o.pitch
+  const nf = nearestFeature(blocked, gw, gh)
+  const D = new Float32Array(N)
+  for (let k = 0; k < N; k++) D[k] = blocked[k] ? 0 : Math.sqrt(nf.dist2[k])
+  // local half-width: max of D over a neighbourhood a little wider than a spiral
+  const r = Math.max(2, Math.round((1.8 * p) / h))
+  const M = maxFilter(D, gw, gh, r)
+  const thinHW = (1.35 * p) / h // half-width below which no 2.6 p spiral fits
+  const thin = new Uint8Array(N)
+  let any = false
+  for (let k = 0; k < N; k++) if (!blocked[k] && M[k] < thinHW) { thin[k] = 1; any = true }
+  if (!any) return
+  const P = (x, y) => [ox + (x + 0.5) * h, oy + (y + 0.5) * h]
+  const at = (A, x, y) => A[Math.min(gh - 1, Math.max(0, Math.round(y))) * gw + Math.min(gw - 1, Math.max(0, Math.round(x)))]
+  for (let k = 0; k < 3; k++) {
+    const level = (p / 2 + k * p) / h
+    for (const chain of isoChains(D, gw, gh, level)) {
+      let pts = chain
+      for (let it = 0; it < 3; it++) pts = smooth(pts, chain.closed)
+      let run = []
+      const flush = () => {
+        if (run.length > 1 && polyLen(run) * h >= 2.2 * p) strokes.push({ pts: run.map(([x, y]) => P(x, y)), radius: 0 })
+        run = []
+      }
+      for (const pt of pts) {
+        const ok = at(thin, pt[0], pt[1]) && level <= at(M, pt[0], pt[1]) - (0.45 * p) / h
+        if (ok) run.push(pt)
+        else flush()
+      }
+      flush()
+    }
+  }
+  for (let k = 0; k < N; k++) if (thin[k]) blocked[k] = 1
+  grid.dirty = true
+}
+
+/** Separable square max filter of radius r. */
+function maxFilter(a, w, h, r) {
+  const tmp = new Float32Array(w * h), out = new Float32Array(w * h)
+  for (let y = 0; y < h; y++) {
+    const row = y * w
+    for (let x = 0; x < w; x++) {
+      let m = 0
+      const x0 = Math.max(0, x - r), x1 = Math.min(w - 1, x + r)
+      for (let i = x0; i <= x1; i++) if (a[row + i] > m) m = a[row + i]
+      tmp[row + x] = m
+    }
+  }
+  for (let x = 0; x < w; x++) {
+    for (let y = 0; y < h; y++) {
+      let m = 0
+      const y0 = Math.max(0, y - r), y1 = Math.min(h - 1, y + r)
+      for (let j = y0; j <= y1; j++) if (tmp[j * w + x] > m) m = tmp[j * w + x]
+      out[y * w + x] = m
+    }
+  }
+  return out
 }
 
 function polyLen(pts) {
@@ -668,7 +784,7 @@ function emitUnit(r, o, rng, strokes, stats) {
 function layout(s, x, y, W, H, hand, depth) {
   const { p, o, rng } = s
   const short = Math.min(W, H), long = Math.max(W, H)
-  if (short < 3 * p * 0.97) {
+  if (short < 2.6 * p) {
     if (o.fillers) filler(s, x, y, W, H)
     return
   }
@@ -788,9 +904,8 @@ function filler(s, x, y, W, H) {
   const short = Math.min(W, H), long = Math.max(W, H)
   const horiz = W >= H
   const P = (u, v) => (horiz ? [x + u, y + v] : [x + v, y + u])
-  if (long < 2 * p) return
   const span = short - p
-  if (span >= 0.8 * p && long >= 3 * p) {
+  if (span >= 0.6 * p && long >= 2.2 * p) {
     // C / U hook: two lines q apart, closed at one end, curling in at the other
     const q = span
     const L = p / 2, R = long - p / 2, B = p / 2, T = short - p / 2
@@ -799,7 +914,8 @@ function filler(s, x, y, W, H) {
       ? [P(R - k, T), P(L, T), P(L, B), P(R, B)]
       : [P(L + k, T), P(R, T), P(R, B), P(L, B)]
     stroke(s, pts, q)
-  } else if (long >= 3.5 * p) {
+  } else if (long - p >= 0.9 * p) {
+    // one contour line (or, in a tiny cell, a short stub — never a dot)
     const v = short / 2
     stroke(s, [P(p / 2, v), P(long - p / 2, v)], p)
   } else return

@@ -1,223 +1,252 @@
-// STATUS: first pass — a recognisable basic mask (eyes, horns, nose ridge,
-// jaw, brows, body band). The grammar specialist replaces the shapes with ones
-// built from research/01-…; keep the export shape { name, schema, presets, draw }.
+// The taotie mask (饕餮纹 / 兽面纹), late Shang, Anyang — research/01 §2, §3.3, §7, §8.
 //
-// The taotie is a frontal animal face that is also two profile animals meeting
-// nose to nose. The mould carver laid it out from the centre line, so it is
-// authored here as a half mask in normalised space and mirrored:
-//   x: 0 at the central axis → 1 at the panel edge, y: 0 bottom → 1 top.
-// Positions are normalised (so a mask stretches to any band the way the
-// originals do); band widths and eye radii are fractions of the band HEIGHT,
-// because a wide panel gets a longer body, not fatter features.
+// A taotie is two profile creatures meeting at the central axis (a flange or a
+// mould seam) that together read as one frontal face. It is built here the way
+// the mould carver built it: as a RIGHT half laid out from the axis, component
+// by component, in the normalised half-mask space of shapes.halfMaskFrame, then
+// mirrored (compose.drawMotif paints the left half, packs leiwen around it and
+// mirrors the panel).
+//
+// Every component is its own function in ./taotie/parts.js, exported here as
+// `taotieParts`, so an artifact can lay a specific vessel's mask out by hand:
+//
+//   import { taotieContext, taotieParts as T, renderTaotie } from '…/motifs/taotie.js'
+//   const C = taotieContext(panel, rect, resolveMotifParams('taotie', overrides, 'fangyi-body'))
+//   T.eye(C, { eye: 'square' }); T.horn(C, { horn: 'ram', size: 1.2 }); T.jaw(C); T.edge(C)
+//   renderTaotie(panel, C)            // then panel.fillGround(…) + panel.mirrorX(rect) as compose does
+//
+// Proportions: anchors are fractions of the panel height (y) and of a face
+// module s = min(H, hw / 0.66) (x), while band widths, eye and curl radii are
+// multiples of s. So a tall gu-waist panel stretches the face's layout without
+// fattening its bands, and a 4:1 frieze grows a longer body with more quills
+// instead of a bigger face. Line work (lineWeight, echoInset) is in mm and
+// does not change with panel size.
 
-import { smoothPath } from '../shapes.js'
+import { taotieContext, Sheet, HORN_TYPES } from './taotie/parts.js'
+import * as parts from './taotie/parts.js'
+import { renderTaotie } from './taotie/render.js'
+
+export { taotieContext, renderTaotie, Sheet, HORN_TYPES }
+
+/** Every component, callable on its own: part(C, opts). */
+export const taotieParts = {
+  nose: parts.nose,
+  crest: parts.crest,
+  nostril: parts.nostril,
+  jaw: parts.jaw,
+  fangs: parts.fangs,
+  lowerJaw: parts.lowerJaw,
+  eye: parts.eye,
+  brow: parts.brow,
+  horn: parts.horn,
+  ear: parts.ear,
+  body: parts.body,
+  quills: parts.quills,
+  leg: parts.leg,
+  kuiHead: parts.kuiHead,
+  edge: parts.edge,
+  fragments: parts.fragments,
+}
+
+const E = (options, def, label) => ({ type: 'enum', options, default: def, label })
+const R = (min, max, step, def, label, unit) => ({ type: 'range', min, max, step, default: def, label, ...(unit ? { unit } : {}) })
 
 export const schema = {
-  style: { type: 'enum', options: ['relief', 'flush'], default: 'relief', label: 'Style' },
-  horn: { type: 'enum', options: ['c', 'ram', 'buffalo', 'bottle', 't'], default: 'c', label: 'Horn' },
-  eye: { type: 'enum', options: ['chen', 'oval', 'round'], default: 'chen', label: 'Eye' },
-  eyeSize: { type: 'range', min: 0.6, max: 1.5, step: 0.05, default: 1, label: 'Eye size' },
-  pupil: { type: 'enum', options: ['slit', 'dot'], default: 'slit', label: 'Pupil' },
-  brow: { type: 'enum', options: ['band', 'hooked', 'none'], default: 'hooked', label: 'Brow' },
-  ear: { type: 'bool', default: true, label: 'Ear' },
-  crest: { type: 'bool', default: true, label: 'Crest' },
-  nose: { type: 'enum', options: ['ridge', 'flange', 'plain'], default: 'ridge', label: 'Nose' },
-  jaw: { type: 'enum', options: ['hooked', 'split', 'fanged'], default: 'hooked', label: 'Jaw' },
-  body: { type: 'enum', options: ['band', 'kui', 'dissolved', 'none'], default: 'band', label: 'Body' },
+  style: E(['relief', 'flush'], 'relief', 'Style (V relief / IV flush)'),
+  carving: E(['dense', 'sparse', 'none'], 'dense', 'Plateau line work (V-a / V-b)'),
+  // face
+  nose: E(['ridge', 'plain', 'flange', 'stack', 'none'], 'ridge', 'Nose'),
+  nostril: E(['scroll', 'bulb', 'none'], 'scroll', 'Nostrils'),
+  crest: E(['lozenge', 'shield', 'cicada', 'hooks', 'none'], 'lozenge', 'Forehead crest'),
+  eye: E(['chen', 'oval', 'round', 'square'], 'chen', 'Eye'),
+  eyeSize: R(0.6, 1.6, 0.05, 1, 'Eye size'),
+  eyeX: R(0.18, 0.36, 0.01, 0.27, 'Eye x (face units)'),
+  eyeY: R(0.3, 0.62, 0.01, 0.5, 'Eye height'),
+  pupil: E(['slit', 'dot', 'ring', 'none'], 'slit', 'Pupil'),
+  brow: E(['none', 'band', 'hooked', 'kui', 'L'], 'none', 'Brow'),
+  horn: E(HORN_TYPES.concat('none'), 'c', 'Horn'),
+  hornSize: R(0.6, 1.5, 0.05, 1, 'Horn size'),
+  hornTip: R(0, 1, 0.05, 0, 'Horn tip high relief'),
+  ear: E(['leaf', 'c', 'none'], 'leaf', 'Ear (when no body)'),
+  jaw: E(['hooked', 'double', 'split', 'fanged', 'none'], 'hooked', 'Jaw'),
+  lipY: R(0.08, 0.36, 0.01, 0.15, 'Lip height'),
+  mouthCorner: R(0.25, 0.7, 0.01, 0.38, 'Mouth corner x'),
+  jawTurns: R(0.5, 1.6, 0.05, 0.85, 'Jaw curl turns'),
+  // body
+  body: E(['band', 'kui', 'dissolved', 'none'], 'band', 'Body'),
+  tail: E(['up', 'down', 'forked', 'spiral'], 'up', 'Tail'),
   leg: { type: 'bool', default: true, label: 'Leg & claw' },
-  quills: { type: 'bool', default: true, label: 'Dorsal quills' },
-  lineWeight: { type: 'range', min: 0.3, max: 1.6, step: 0.05, default: 0.7, label: 'Line weight', unit: 'mm' },
+  claw: R(2, 3, 1, 3, 'Claw toes'),
+  quills: R(0, 6, 1, 3, 'Dorsal quills'),
+  edge: E(['none', 'scrolls', 'kui'], 'none', 'Outer edge filler'),
+  // proportion & hand
+  square: R(0, 1, 0.05, 0.55, 'Squareness (云纹 → 雷纹)'),
+  bandWidth: R(0.6, 2, 0.05, 1, 'Band width'),
+  spread: R(0.7, 1.4, 0.05, 1, 'Face spread'),
+  taper: R(-0.6, 0.95, 0.05, 0, 'Panel taper'),
+  invert: { type: 'bool', default: false, label: 'Inverted (lid)' },
+  crown: R(0, 0.5, 0.05, 0, 'Plateau crown (V-b)'),
+  irregularity: R(0, 2, 0.1, 1, 'Hand irregularity'),
+  seed: R(0, 99, 1, 0, 'Seed'),
+  lineWeight: R(0.3, 1.6, 0.05, 0.6, 'Line weight', 'mm'),
+  echoInset: R(0.6, 3, 0.05, 1.4, 'Contour echo inset', 'mm'),
   relief: {
     type: 'group',
     label: 'Relief levels',
     fields: {
-      motif: { type: 'range', min: 0.2, max: 4, step: 0.1, default: 1.4, label: 'Motif (L1)', unit: 'mm' },
-      boss: { type: 'range', min: 0.5, max: 8, step: 0.1, default: 3.2, label: 'Boss (L2)', unit: 'mm' },
-      groove: { type: 'range', min: 0.1, max: 1.2, step: 0.05, default: 0.45, label: 'Groove', unit: 'mm' },
+      motif: R(0.2, 6, 0.1, 1.5, 'Motif (L1)', 'mm'),
+      boss: R(0.5, 10, 0.1, 3.4, 'Boss (L2)', 'mm'),
+      groove: R(0.1, 1.2, 0.05, 0.45, 'Groove', 'mm'),
     },
   },
 }
 
+/**
+ * Presets: the canonical Anyang configurations (research/01 §2.14, T1–T10)
+ * and named matches for the masks on the four vessels we recreate.
+ */
 export const presets = {
-  'yinxu-relief': {},
-  'erligang-flush': { style: 'flush', horn: 'c', eye: 'oval', body: 'dissolved', quills: false, leg: false, lineWeight: 1.1, relief: { motif: 0.35, boss: 1.2, groove: 0.5 } },
-  'ram-horned': { horn: 'ram', jaw: 'fanged', brow: 'band' },
-  'buffalo': { horn: 'buffalo', eyeSize: 1.2, body: 'kui', crest: false },
-  'bottle-horn': { horn: 'bottle', eye: 'round', pupil: 'dot', body: 'none', leg: false, quills: false },
+  // ---- §2.14 canonical configurations
+  'T1-classic': {},
+  'T2-ram': { horn: 'ram', square: 0.65, quills: 2 },
+  'T3-ox-heavy': {
+    horn: 'buffalo', eye: 'round', pupil: 'ring', crest: 'shield', body: 'none', ear: 'none', jaw: 'fanged', nostril: 'bulb',
+    carving: 'sparse', crown: 0.3, hornTip: 0.6, bandWidth: 1.25, square: 0.3, relief: { motif: 2.4, boss: 5 },
+  },
+  'T4-bottle-horn': { horn: 'bottle', body: 'none', ear: 'none', edge: 'kui' },
+  'T5-kui-horn': { horn: 'kui', crest: 'hooks', body: 'none', ear: 'leaf' },
+  'T6-t-horn': { horn: 't', body: 'none', ear: 'none', edge: 'kui', brow: 'band' },
+  'T7-dissolved': { body: 'dissolved', horn: 'zigzag', nose: 'plain', brow: 'band', square: 0.75, quills: 2 },
+  'T8-two-kui': { body: 'kui', horn: 't', nose: 'flange', crest: 'none', eye: 'chen', quills: 2, square: 0.7 },
+  'T9-flat-band': { style: 'flush', horn: 'c', lineWeight: 0.7, bandWidth: 1.2, relief: { motif: 0.4, boss: 1.4, groove: 0.45 } },
+  'T10-blade': { taper: 0.92, body: 'none', ear: 'none', horn: 'c', hornSize: 0.8, nose: 'plain', crest: 'none', spread: 0.85 },
+
+  // ---- the four vessels
+  // Houmuwu ding: border frieze of the walls — two long kui meeting at the
+  // central flange, squared hooks, round boss eye with a sunk pupil
+  'houmuwu-frieze': {
+    body: 'kui', horn: 't', nose: 'flange', crest: 'none', eye: 'round', pupil: 'dot', eyeSize: 0.85, tail: 'up', quills: 2, leg: true, claw: 2,
+    square: 0.85, bandWidth: 1.15, lineWeight: 1.0, echoInset: 2.0, relief: { motif: 2.6, boss: 5, groove: 0.75 },
+  },
+  // Houmuwu ding: the mask on the top of each leg, centred on its corner flange —
+  // heavy rounded C-horn, oval boss eye with ring, big nostril scroll; V-b sculptural
+  'houmuwu-leg': {
+    body: 'none', horn: 'c', hornSize: 1.0, hornTip: 0.5, nose: 'flange', crest: 'none', eye: 'oval', pupil: 'ring', eyeSize: 1.15, ear: 'none', nostril: 'none',
+    jaw: 'double', lipY: 0.24, mouthCorner: 0.42, jawTurns: 1.15,
+    carving: 'sparse', crown: 0.35, square: 0.12, bandWidth: 1.55, lineWeight: 1.1, echoInset: 2.4, relief: { motif: 3.6, boss: 7.5, groove: 0.8 },
+  },
+  // Met fangyi 1974.268.2, body faces: a dissolved mask — big squared inward horn
+  // across the top, rounded-square slit boss eye well out from the flange, a Γ
+  // beside it, the squared jaw spiral below, a column of scroll islands outside
+  'fangyi-body': {
+    body: 'dissolved', horn: 'ram', hornSize: 1.15, nose: 'none', crest: 'none', nostril: 'none', eye: 'square', pupil: 'slit', eyeSize: 1.1,
+    eyeX: 0.36, eyeY: 0.47, brow: 'L', jaw: 'hooked', lipY: 0.3, mouthCorner: 0.62, jawTurns: 1.3, ear: 'none', edge: 'scrolls',
+    square: 0.92, bandWidth: 1.6, spread: 0.92, lineWeight: 0.55, echoInset: 1.1, relief: { motif: 1.6, boss: 3.2, groove: 0.4 },
+  },
+  // Met fangyi 1974.268.2, lid: the same mask upside down on the hip-roof
+  // trapezoid (narrow at the ridge, which is the mask's mouth end)
+  'fangyi-lid': {
+    body: 'dissolved', horn: 'ram', hornSize: 1.1, nose: 'none', crest: 'none', nostril: 'none', eye: 'square', pupil: 'slit', eyeX: 0.36, eyeY: 0.5,
+    brow: 'L', jaw: 'hooked', lipY: 0.27, mouthCorner: 0.55, jawTurns: 1.1, ear: 'none', edge: 'scrolls', invert: true, taper: -0.3,
+    square: 0.92, bandWidth: 1.6, spread: 0.95, lineWeight: 0.55, echoInset: 1.1, relief: { motif: 1.5, boss: 3, groove: 0.4 },
+  },
+  // Met zun 43.25.1, belly: flat squared bands on leiwen (Style IV), a small round
+  // boss eye set low, big inward-curled squared horns, body fragments outside
+  'zun-belly': {
+    style: 'flush', body: 'dissolved', horn: 'ram', hornSize: 1.15, nose: 'flange', crest: 'none', eye: 'round', pupil: 'none', eyeSize: 0.62,
+    eyeX: 0.3, eyeY: 0.42, jaw: 'hooked', lipY: 0.2, mouthCorner: 0.45, nostril: 'none', brow: 'L', quills: 1, leg: false,
+    square: 0.92, bandWidth: 1.3, lineWeight: 0.55, relief: { motif: 0.4, boss: 1.8, groove: 0.4 },
+  },
+  // Met zun 43.25.1, foot: tall squared horns rising beside the eyes and hooking
+  // over to the axis, small round boss eyes, scroll column outside; flaring panel
+  'zun-foot': {
+    style: 'flush', body: 'none', horn: 'crook', nose: 'flange', crest: 'none', eye: 'round', pupil: 'none', eyeSize: 0.62, eyeX: 0.3, eyeY: 0.4,
+    jaw: 'hooked', lipY: 0.17, nostril: 'none', ear: 'none', edge: 'scrolls', taper: 0.18, square: 0.92, bandWidth: 1.3, spread: 0.9,
+    lineWeight: 0.5, relief: { motif: 0.4, boss: 1.6, groove: 0.35 },
+  },
+  // Met gu 1985.214.4, waist (腹): a tall narrow mask between flanges, round boss
+  // eyes low, crook horns stretched up the panel
+  'gu-waist': {
+    body: 'none', horn: 'crook', nose: 'flange', crest: 'none', eye: 'round', pupil: 'dot', eyeSize: 0.8, eyeX: 0.3, eyeY: 0.36,
+    jaw: 'hooked', lipY: 0.12, nostril: 'none', ear: 'none', square: 0.9, bandWidth: 1.05, carving: 'sparse', lineWeight: 0.45, echoInset: 0.9,
+    relief: { motif: 0.8, boss: 2, groove: 0.3 },
+  },
+  // Met gu 1985.214.4, foot (圈足): trapezoid narrowing upward; a crook horn rising
+  // beside the eye and hooking over to the axis, rounded-square boss eye with a
+  // dot pupil, C-ear, squared jaw spiral; broad flat bands, low relief
+  'gu-foot': {
+    style: 'flush', body: 'none', horn: 'crook', nose: 'flange', crest: 'none', eye: 'square', pupil: 'dot', eyeSize: 0.85, eyeX: 0.33, eyeY: 0.47,
+    jaw: 'hooked', lipY: 0.2, mouthCorner: 0.5, jawTurns: 1.2, nostril: 'none', ear: 'c', taper: 0.3, square: 0.95, bandWidth: 1.3,
+    lineWeight: 0.45, relief: { motif: 0.35, boss: 1.6, groove: 0.3 },
+  },
+}
+
+/** A plaque size (mm) that shows each preset at the aspect of the panel it was matched on. */
+export const presetPlaques = {
+  'houmuwu-frieze': { w: 320, h: 80 },
+  'houmuwu-leg': { w: 170, h: 130 },
+  'fangyi-body': { w: 150, h: 120 },
+  'fangyi-lid': { w: 190, h: 100 },
+  'zun-belly': { w: 200, h: 100 },
+  'zun-foot': { w: 150, h: 100 },
+  'gu-waist': { w: 60, h: 66 },
+  'gu-foot': { w: 90, h: 64 },
+  'T8-two-kui': { w: 280, h: 80 },
+  'T10-blade': { w: 80, h: 160 },
+}
+
+/** Legacy / loose values → the current vocabulary (booleans from the first-pass schema). */
+export function normalizeParams(p) {
+  const q = { ...p }
+  if (q.ear === true) q.ear = 'leaf'
+  if (q.ear === false) q.ear = 'none'
+  if (q.crest === true) q.crest = 'lozenge'
+  if (q.crest === false) q.crest = 'none'
+  if (q.quills === true) q.quills = 3
+  if (q.quills === false) q.quills = 0
+  q.relief = { motif: 1.5, boss: 3.4, groove: 0.45, ...(q.relief || {}) }
+  for (const [k, s] of Object.entries(schema)) if (q[k] === undefined && s.type !== 'group') q[k] = s.default
+  return q
+}
+
+/**
+ * Lay out the whole mask from params into C.sheet (no drawing).
+ * The order matters: later parts fit themselves around earlier ones' marks.
+ */
+export function buildTaotie(C) {
+  const T = taotieParts
+  const p = C.p
+  if (p.body === 'kui') {
+    if (p.nose !== 'none') T.nose(C, { nose: p.nose, from: 0.3, to: 0.72, width: 0.55 })
+    T.kuiHead(C)
+    T.horn(C, { rootX: 0.25 })
+    if (!T.body(C)) T.ear(C)
+  } else {
+    T.crest(C)
+    T.nose(C)
+    T.nostril(C)
+    T.jaw(C)
+    T.eye(C)
+    T.brow(C)
+    T.horn(C)
+    const hasBody = T.body(C)
+    if (!hasBody) T.ear(C)
+    if (hasBody && p.body === 'dissolved') T.fragments(C)
+  }
+  T.edge(C)
+  return C
 }
 
 /**
  * Draw the LEFT half of a taotie into rect (panel mm). The caller mirrors
  * (compose.drawMotif does: draw → ground → mirrorX(rect)).
  */
-export function draw(panel, rect, p) {
-  const H = rect.h
-  const cx = rect.x + rect.w / 2
-  const hw = rect.w / 2
-  const P = (nx, ny) => [cx - nx * hw, rect.y + ny * H]
-  const flush = p.style === 'flush'
-  const lvl = p.relief
-  const motifH = flush ? Math.min(lvl.motif, 0.4) : lvl.motif
-  const band = 0.085 * H // width of a motif band
-  const shoulder = Math.max(0.25, Math.min(band * 0.22, motifH * 0.6))
-
-  const bands = [] // [points, width] stroked plateaus
-  const fills = [] // closed point lists, filled plateaus
-  const domes = [] // [centre, radius]
-  const lines = [] // [points] incised centre lines
-
-  // --- nose: a vertical bridge on the axis, flaring into nostrils at the bottom
-  if (p.nose === 'ridge' || p.nose === 'plain') {
-    const top = p.nose === 'ridge' ? 0.78 : 0.62
-    fills.push([P(0, 0.14), P(0.11, 0.14), P(0.13, 0.22), P(0.075, 0.3), P(0.06, top), P(0, top + 0.03)])
-    lines.push([P(0.03, 0.32), P(0.03, top - 0.05)])
-  }
-
-  // --- crest: forehead lozenge on the axis
-  if (p.crest) fills.push([P(0, 0.79), P(0.065, 0.87), P(0, 0.95)])
-
-  // --- eye
-  const E = P(0.27, 0.55)
-  const r = 0.12 * H * p.eyeSize
-  const socket = []
-  if (p.eye === 'chen') {
-    // 臣-shaped: long almond, inner canthus hooking down toward the nose,
-    // outer corner lifting toward the ear
-    const ex = (dx, dy) => [E[0] - dx * r, E[1] + dy * r] // +dx = outward
-    socket.push(
-      ex(-1.9, -0.75), ex(-1.55, -0.1), ex(-1.1, 0.55), ex(0, 0.9), ex(1.1, 0.75), ex(1.85, 0.45),
-      ex(1.55, 0.05), ex(0.9, -0.6), ex(0, -0.85), ex(-1.0, -0.6), ex(-1.45, -0.55),
-    )
-  } else {
-    const rx = p.eye === 'oval' ? 1.45 : 1.05
-    for (let i = 0; i < 20; i++) {
-      const a = (i / 20) * Math.PI * 2
-      socket.push([E[0] + Math.cos(a) * r * rx, E[1] + Math.sin(a) * r * (p.eye === 'oval' ? 0.85 : 1.05)])
-    }
-  }
-  fills.push(socket)
-  domes.push([E, r * 0.62])
-
-  // --- brow
-  if (p.brow !== 'none') {
-    const b = [P(0.07, 0.73), P(0.2, 0.79), P(0.34, 0.79), P(0.44, 0.74)]
-    if (p.brow === 'hooked') b.push(P(0.47, 0.66), P(0.43, 0.62))
-    bands.push([b, band * 0.75])
-    lines.push(b)
-  }
-
-  // --- horns rise from the forehead
-  const horn = HORNS[p.horn] || HORNS.c
-  horn(P, band, bands, fills, lines)
-
-  // --- ear, behind the eye
-  if (p.ear) fills.push([P(0.46, 0.5), P(0.53, 0.6), P(0.57, 0.72), P(0.52, 0.66), P(0.45, 0.58)])
-
-  // --- upper jaw: runs out under the eye and curls back
-  const jaw = [P(0.1, 0.3), P(0.24, 0.31), P(0.38, 0.3), P(0.45, 0.24), P(0.43, 0.14), P(0.35, 0.13)]
-  bands.push([jaw, band])
-  lines.push(jaw.slice(0, 5))
-  if (p.jaw === 'split') {
-    const lower = [P(0.12, 0.15), P(0.24, 0.1), P(0.3, 0.05)]
-    bands.push([lower, band * 0.7])
-  }
-  if (p.jaw === 'fanged') {
-    for (const fx of [0.16, 0.27]) fills.push([P(fx - 0.035, 0.27), P(fx + 0.035, 0.27), P(fx + 0.005, 0.15)])
-  }
-
-  // --- body: the profile animal running out to the panel edge
-  if (p.body === 'band' || p.body === 'kui') {
-    const tailUp = p.body === 'band'
-    const body = [P(0.5, 0.46), P(0.66, 0.5), P(0.82, 0.52), P(0.92, 0.55)]
-    body.push(tailUp ? P(0.96, 0.7) : P(0.97, 0.4), tailUp ? P(0.9, 0.78) : P(0.9, 0.32))
-    bands.push([body, band * 0.9])
-    lines.push(body.slice(0, 4))
-    if (p.body === 'kui') domes.push([P(0.86, 0.6), r * 0.3])
-    if (p.quills) {
-      for (let i = 0; i < 4; i++) {
-        const qx = 0.58 + i * 0.09
-        bands.push([[P(qx, 0.6), P(qx + 0.03, 0.7), P(qx + 0.075, 0.71)], band * 0.45])
-      }
-    }
-  } else if (p.body === 'dissolved') {
-    // Loehr's "dissolved" style: the body broken into floating hooks
-    const rng = panel.rng.fork('taotie:dissolved')
-    for (let i = 0; i < 5; i++) {
-      const x = 0.55 + i * 0.085 + rng.jitter(0.01)
-      const y = i % 2 ? 0.62 : 0.4
-      bands.push([[P(x, y), P(x + 0.05, y + 0.06), P(x + 0.02, y + 0.12)], band * 0.55])
-    }
-  }
-  if (p.leg && p.body !== 'none') {
-    const leg = [P(0.6, 0.46), P(0.62, 0.3), P(0.6, 0.18), P(0.68, 0.12), P(0.73, 0.18)]
-    bands.push([leg, band * 0.8])
-  }
-
-  // ---- render: L1 plateaus, then L2 domes on top, then incised line work
-  panel.raise((ctx) => {
-    for (const pts of fills) {
-      smoothPath(ctx, pts, true)
-      ctx.fill()
-    }
-    for (const [pts, w] of bands) {
-      ctx.lineWidth = w
-      smoothPath(ctx, pts, false)
-      ctx.stroke()
-    }
-  }, { height: motifH, shoulder, profile: 'plateau' })
-
-  panel.raise((ctx) => {
-    for (const [c, rr] of domes) {
-      ctx.beginPath()
-      ctx.arc(c[0], c[1], rr, 0, Math.PI * 2)
-      ctx.fill()
-    }
-  }, { height: flush ? lvl.boss * 0.4 : lvl.boss, profile: 'dome' })
-
-  const lw = p.lineWeight * (flush ? 1.2 : 1)
-  panel.sink((ctx) => {
-    ctx.lineWidth = lw
-    for (const pts of lines) {
-      smoothPath(ctx, pts, false)
-      ctx.stroke()
-    }
-    // pupil, cut into the eyeball
-    const [ex, ey] = E
-    ctx.beginPath()
-    if (p.pupil === 'dot') ctx.arc(ex, ey, r * 0.16, 0, Math.PI * 2)
-    else ctx.ellipse(ex, ey, r * 0.42, r * 0.1, 0, 0, Math.PI * 2)
-    ctx.fill()
-  }, { depth: lvl.groove, shoulder: lw * 0.35, profile: 'u' })
+export function draw(panel, rect, params) {
+  const p = normalizeParams(params)
+  const C = taotieContext(panel, rect, p)
+  buildTaotie(C)
+  renderTaotie(panel, C)
+  return C
 }
 
-// Horn builders: (P, band, bands, fills, lines) push shapes for the left horn.
-const HORNS = {
-  // C-horn: rises outward and curls down, opening toward the eye
-  c(P, band, bands, fills, lines) {
-    const pts = [P(0.1, 0.86), P(0.24, 0.94), P(0.38, 0.95), P(0.47, 0.9), P(0.47, 0.82), P(0.4, 0.8)]
-    bands.push([pts, band * 1.05])
-    lines.push(pts.slice(0, 5))
-  },
-  // ram: a tight inward coil
-  ram(P, band, bands, fills, lines) {
-    const pts = [P(0.1, 0.86), P(0.28, 0.95), P(0.44, 0.92), P(0.48, 0.83), P(0.42, 0.78), P(0.37, 0.83), P(0.4, 0.87)]
-    bands.push([pts, band * 0.95])
-    lines.push(pts.slice(0, 4))
-  },
-  // buffalo: a broad crescent sweeping up and out to a point
-  buffalo(P, band, bands, fills) {
-    fills.push([P(0.08, 0.82), P(0.3, 0.86), P(0.5, 0.9), P(0.6, 0.99), P(0.47, 0.97), P(0.28, 0.95), P(0.1, 0.92)])
-  },
-  // bottle: an upright bottle-shaped plateau
-  bottle(P, band, bands, fills, lines) {
-    fills.push([P(0.13, 0.8), P(0.27, 0.8), P(0.25, 0.86), P(0.29, 0.93), P(0.24, 0.99), P(0.15, 0.99), P(0.1, 0.93), P(0.14, 0.86)])
-    lines.push([P(0.2, 0.83), P(0.2, 0.95)])
-  },
-  // T: a bar on a short post
-  t(P, band, bands) {
-    bands.push([[P(0.18, 0.8), P(0.18, 0.92)], band])
-    bands.push([[P(0.08, 0.95), P(0.3, 0.95)], band * 0.9])
-  },
-}
-
-export default { name: 'taotie', label: 'Taotie mask', schema, presets, draw, plaque: { w: 240, h: 120 } }
+export default { name: 'taotie', label: 'Taotie mask', schema, presets, presetPlaques, draw, plaque: { w: 240, h: 120 } }

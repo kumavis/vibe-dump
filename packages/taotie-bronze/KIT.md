@@ -124,22 +124,48 @@ of the cavity channel.
 
 ## relief/leiwen.js
 
-`leiwenFill(panel, region, opts)` packs squared spirals into an arbitrary region:
+Contour-following packer (research/01 §3). Free region → advancing front of
+oriented rectangles (each takes the local wall direction mod 90° where the wall
+is straight, else squares up to the frame; grows until it touches its
+neighbours; slivers too thin for another cell are absorbed) → one unit per cell:
+squared spiral (pitch adapted ±15 % so turns fit), S-/mirror pair (aspect
+1.6–3.2), chain (> 3.2), C-hook / stub fillers; thin strips get contour-parallel
+grooves instead. All strokes go through ONE `panel.sink` (or `panel.add`).
 
 ```js
-{ pitch: 1.6,          // mm centre-to-centre of adjacent grooves (line ≈ gap)
-  cell: [6, 14],       // spiral cell size range in mm
-  turns: 'auto',
-  roundness: 0.25,     // 0 = hard square corners, 1 = round
-  jitter: 0.08,        // hand-cut irregularity
-  mode: 'sunk' | 'thread',   // grooves cut in, or thread-relief lines standing up
-  depth: 0.45,
-  fillers: true }      // T-hooks / triangles / C-scrolls in slivers too small for a spiral
+leiwenFill(panel, region, opts) → { cells, spirals, pairs, fillers, ms, planMs }
+// region: { rect?: {x,y,w,h} (default whole panel),
+//           avoid?: 'raised' (field > 0.05) | mask {data} | draw(ctx) | null   (default 'raised'; null when `level` is set)
+//           include?: mask {data} | draw(ctx)   only fill where coverage ≥ 0.5
+//           level?: mm                          only where field ≈ level (a plateau top; skips shoulders and bosses)
+//           margin?: mm (0.6)                   clear land between any boundary and the nearest groove EDGE }
+leiwenFillMask(panel, include, opts, { rect?, margin = 0.5, level?, avoid = null })
+//   secondary fill ON a plateau: include = mask or draw(ctx) of the plateau; level defaults to the
+//   most common height under it (the flat top); works on the mask's bbox only. Taotie: call it after raise().
+leiwenOptions(opts) → resolved options      LEIWEN_DEFAULTS
+panel.fillGround(opts, { avoid, margin, rect }) is leiwenFill on the ground.
+
+opts: { pitch: 1.3,       // mm centre-to-centre (§1.3: 1.0–1.4 on 20–40 cm vessels; ≈ 0.004 × vessel H, 0.8–3)
+  line: 0.5,              // groove width / pitch (line ≈ gap)
+  cell: 'auto',           // [min, max] mm; auto = [4.2, 7.8] × pitch, typical = middle ±22 %
+  turns: 'auto',          // number → caps cell size at (2·turns + 1.2)·pitch
+  roundness: 0.15,        // 0 squared 雷纹 (keeps a 0.12 p casting fillet) → 1 round 云纹
+  jitter: 0.08,           // vertex jitter (× pitch) and ±1.5° cell skew per 0.08
+  mode: 'sunk' | 'thread', depth: 0.4,
+  fillers: true,          // C-hooks, stubs, contour lines in slivers
+  pairs: 0.75,            // chance a 1.6–3.2 aspect cell is an S/mirror pair (else one long spiral)
+  hand: 'alternate' | 'random' | 'left' | 'right',   // neighbours alternate; mirrorX flips the right half
+  eyes: 0,                // chance a ≥ 6 p spiral gets an eye ring at its centre
+  echo: 0,                // contour-echo grooves around every motif outline before the spirals (1–2 typical)
+  follow: 1,              // 0 = all cells squared to the frame, 1 = follow straight walls
+  seed: 0 }
 ```
 
-Quality bar: no visible grid; spirals follow the contour of the neighbouring
-motif; cells vary in size; nothing is clipped mid-stroke at a motif edge
-(inset the region by `margin` first, then clip).
+Atlas presets (`motifs/ground.js`): `fine` (1.0 mm), `standard` (1.3), `monumental`
+(2.4 mm, 0.9 deep — Houmuwu scale), `thread-relief`, `cloud` (rounded 云纹), `leftover`
+(dummy raised motifs: contour-following ground + echo + secondary fill on the plateau tops).
+`ground.leiwenParams(params)` maps the atlas schema (cell sizes in pitches) to leiwen opts.
+Cost: a 4096×2048 panel at 60 % free, pitch 1 mm: ~0.9 s planning + ~1.5 s for the one sink.
 
 ## relief/motifs — the unit vocabulary
 

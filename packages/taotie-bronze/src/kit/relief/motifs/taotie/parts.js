@@ -79,19 +79,20 @@ export function taotieContext(panel, rect, p) {
     dissolved: p.body === 'dissolved',
     sq: clamp(p.square ?? 0.5, 0, 1),
     u: (v) => v * f.s,
-    /** base face band width (mm): ~0.068 s, never thinner than the line work can carve */
-    bw: Math.max(f.s * 0.068 * (p.bandWidth ?? 1), minBand),
+    /** base face band width (mm): ~0.082 of the mass module, never thinner than the line work can carve.
+     *  The mass module grows a little past s on tall panels so a gu-waist mask keeps broad bands. */
+    bw: Math.max(Math.sqrt(f.s * Math.min(f.H, 1.6 * f.s)) * 0.082 * (p.bandWidth ?? 1) * (p.body === 'kui' ? 1.4 : 1), minBand),
     /** jittered anchor: x face units, y fraction of H (research/01 §8.1: ±0.01–0.02) */
     A(x, y, j = 0.008) {
       return [f.X(x + rng.jitter(j * irr)), f.Y(y + rng.jitter(j * irr * 0.8))]
     },
     /** corner radius for a band of width w: squared-round (0.45 w) → round (≥ 2.5 w) */
     rc(w, round = 2.6) {
-      return lerp(w * round, w * 0.42, C.sq)
+      return lerp(w * round, w * 0.12, C.sq)
     },
     /** spiral/curl corner radius: round curls take the whole segment */
     rcurl(w) {
-      return C.sq > 0.85 ? w * 0.45 : lerp(w * 9, w * 0.45, C.sq * C.sq)
+      return C.sq > 0.85 ? w * 0.2 : lerp(w * 9, w * 0.2, C.sq * C.sq)
     },
     wob(pts, amp = 0.08) {
       return wobble(pts, rng, amp * irr, Math.max(6, f.s * 0.12))
@@ -119,13 +120,29 @@ export function taotieContext(panel, rect, p) {
 
 // ------------------------------------------------------------------ helpers
 
+/** A full almond (not a thin lens): rounded belly, pointed-but-soft corners, slightly flatter lower lid. */
+function almond(c, L, Hh, rot = 0) {
+  const pts = []
+  const n = 72
+  for (let i = 0; i < n; i++) {
+    const t = (i / n) * Math.PI * 2
+    const x = Math.cos(t)
+    const sy = Math.sin(t)
+    const k = sy >= 0 ? 1 : 0.85 // lower lid flatter
+    const y = sy * k * Math.pow(Math.max(0, 1 - x * x), 0.15) * (0.92 + 0.08 * Math.abs(sy))
+    pts.push([x * L * 0.5, y * Hh * 0.5])
+  }
+  const r = (rot * Math.PI) / 180, cs = Math.cos(r), sn = Math.sin(r)
+  return pts.map(([x, y]) => [c[0] + x * cs - y * sn, c[1] + x * sn + y * cs])
+}
+
 /** Where the creature's y bands sit (fractions of H), adapted to the jaw / body configuration. */
 function levels(C) {
   const p = C.p
   const split = p.jaw === 'split'
   return {
-    lip: split ? 0.21 : 0.15,
-    nostril: split ? 0.32 : 0.28,
+    lip: split ? Math.max(0.21, p.lipY ?? 0) : p.lipY ?? 0.15,
+    nostril: (split ? Math.max(0.21, p.lipY ?? 0) : p.lipY ?? 0.15) + 0.13,
     eye: p.eyeY ?? 0.5,
     hornRoot: 0.735,
     top: 0.955,
@@ -141,9 +158,11 @@ export function nose(C, o = {}) {
   const kind = pick(o, 'nose', C)
   if (kind === 'none') return
   const L = levels(C)
-  const nw = (o.width ?? 0.8) * C.bw
-  const y0 = C.f.Y(o.from ?? L.nostril - 0.035)
-  const y1 = C.marks.crestBottom ?? C.f.Y(o.to ?? 0.8)
+  const flange = kind === 'flange'
+  // a flange slot is a narrow plain strip the L3 flange's root sits on, running the mask's height
+  const nw = flange ? Math.max((o.width ?? 0.42) * C.bw, 3.2) : (o.width ?? 0.8) * C.bw
+  const y0 = C.f.Y(o.from ?? (flange ? L.lip : L.nostril - 0.035))
+  const y1 = C.marks.crestBottom ?? C.f.Y(o.to ?? (flange ? 0.92 : 0.8))
   C.marks.noseHalf = nw
   if (kind === 'stack') {
     const unit = C.u(0.12)
@@ -232,7 +251,7 @@ export function nostril(C, o = {}) {
   }
   const xm = C.f.X(o.reach ?? 0.16)
   const a = clamp(C.u(0.085), w * 1.4, C.f.Y(0.42) - y)
-  const t = new Turtle([x0, y], 0).to([xm, y]).curl({ dir: 1, size: [a, Math.max(w * 1.6, xm - x0 - w * 0.9)], pitch: w * 1.55, turns: 0.85, r: C.rcurl(w) })
+  const t = new Turtle([x0, y], 0).to([xm, y]).curl({ dir: 1, size: [Math.max(w * 2, Math.min(a, C.u(0.075))), Math.max(w * 2, Math.min(C.u(0.08), xm - x0 - w * 0.9))], pitch: w * 1.4, turns: o.turns ?? 0.6, r: C.rcurl(w) })
   C.band('nostril', t.spine(), w, 'flat', 'square')
 }
 
@@ -243,10 +262,10 @@ export function jaw(C, o = {}) {
   const L = levels(C)
   const y = C.f.Y(o.y ?? L.lip)
   const w = C.bw * (o.width ?? 1.05)
-  const xm = C.f.X(o.corner ?? 0.38)
+  const xm = Math.min(C.f.X(o.corner ?? C.p.mouthCorner ?? 0.38), C.f.hw - C.edgeW - w)
   const x0 = C.dissolved ? (C.marks.noseHalf ?? C.bw) + C.u(0.03) : 0
-  const down = clamp(C.u(0.1), w * 1.2, y - w * 0.55)
-  const t = new Turtle([x0, y], 0).to([xm, y]).curl({ dir: -1, size: [down, Math.min(C.u(0.17), xm - x0 - w)], pitch: w * 1.55, turns: 0.85, r: C.rcurl(w) })
+  const down = clamp(Math.max(C.u(0.1), (y - w * 0.6) * 0.85), w * 1.2, y - w * 0.55)
+  const t = new Turtle([x0, y], 0).to([xm, y]).curl({ dir: -1, size: [down, Math.max(w * 1.5, Math.min(C.u(0.17), (xm - x0) * 0.6))], pitch: w * 1.5, turns: o.turns ?? C.p.jawTurns ?? 0.85, r: C.rcurl(w) })
   C.band('lip', t.spine(), w, 'flat', 'square')
   C.marks.mouthCorner = [xm, y]
   if (kind === 'double') {
@@ -297,9 +316,9 @@ export function eye(C, o = {}) {
   const w = C.bw * 0.95
   let rp // pupil boss radius
   if (kind === 'chen') {
-    const La = C.u(0.27) * es, Ha = C.u(0.13) * es
+    const La = C.u(0.32) * es, Ha = C.u(0.17) * es
     const tilt = o.tilt ?? 8
-    const al = lens(E, La, Ha, tilt)
+    const al = almond(E, La, Ha, tilt)
     C.sheet.add('eye', poly(al))
     const rad = (tilt * Math.PI) / 180
     const inner = [E[0] - Math.cos(rad) * La * 0.47, E[1] - Math.sin(rad) * La * 0.47]
@@ -312,7 +331,7 @@ export function eye(C, o = {}) {
     // outer tail, ending in a small down-hook
     const tout = new Turtle(outer, tilt * 0.6).fwd(C.u(0.08) * es).turn(-95, C.rc(w * 0.8)).fwd(w * 0.7)
     C.band('eye', tout.spine(), w * 0.88, 'flat', 'square')
-    rp = C.u(0.054) * es
+    rp = C.u(0.07) * es
     C.sheet.bosses.push({ shape: circle(E, rp), base: 'plateau', r: rp })
     C.marks.eyeTop = E[1] + Ha * 0.5
     C.marks.eyeOuter = outer[0] + C.u(0.08) * es
@@ -320,10 +339,11 @@ export function eye(C, o = {}) {
     const bw = C.u(0.2) * es, bh = C.u(0.155) * es
     const r = Math.min(bw, bh) * 0.32
     C.sheet.bosses.push({ shape: rrect(E, bw, bh, r, 0), base: 'ground', r: Math.min(bw, bh) * 0.5 })
-    // the boss sits in a socket of plateau that reads as a raised frame
-    C.sheet.add('eye', rrect(E, bw + w * 0.9, bh + w * 0.9, r + w * 0.45, 0))
+    // fangyi / gu: the boss stands straight out of the leiwen; `socket: true` frames it in plateau
+    const sk = o.socket ? w * 0.45 : 0
+    if (o.socket) C.sheet.add('eye', rrect(E, bw + w * 0.9, bh + w * 0.9, r + w * 0.45, 0))
     rp = bh * 0.42
-    C.marks.eyeTop = E[1] + bh * 0.5 + w * 0.45
+    C.marks.eyeTop = E[1] + bh * 0.5 + sk
     C.marks.eyeOuter = E[0] + bw * 0.5
     if (pupil === 'slit') C.sheet.cuts.push(rrect(E, bw * 0.42, Math.max(C.lw * 1.3, bh * 0.1), C.lw * 0.6))
     else if (pupil === 'dot') C.sheet.cuts.push(circle(E, Math.max(C.lw, bh * 0.12)))
@@ -348,8 +368,7 @@ export function eye(C, o = {}) {
   if (pupil === 'slit') C.sheet.cuts.push(rrect(E, rp * 2.3, Math.max(C.lw * 1.25, rp * 0.18), C.lw * 0.6))
   else if (pupil === 'dot') C.sheet.cuts.push(circle(E, Math.max(C.lw * 0.9, rp * 0.3)))
   else if (pupil === 'ring') {
-    C.sheet.grooves.push({ pts: arcPts(E, rp * 0.62, 0, 360), boss: true })
-    C.sheet.cuts.push(circle(E, Math.max(C.lw * 0.8, rp * 0.18)))
+    C.sheet.grooves.push({ pts: arcPts(E, rp * 0.6, 0, 360), boss: true })
   }
   C.marks.eye = E
   return E
@@ -364,8 +383,15 @@ export function brow(C, o = {}) {
   const x0 = Math.max(C.f.X(0.09), (C.marks.noseHalf ?? 0) + (C.dissolved ? C.u(0.04) : w * 0.2))
   const x1 = C.f.X(o.reach ?? 0.42)
   if (kind === 'L') {
-    const t = new Turtle([x0, yb + w * 0.3], 0).to([C.f.X(0.24), yb + w * 0.3]).turn(-90, C.rc(w)).fwd(Math.max(w, yb - (C.marks.eyeTop ?? yb) - w * 0.2))
+    // fangyi / gu: a Γ standing between the flange and the eye — a bar over the
+    // eye's inner corner dropping beside it
+    const E = C.marks.eye ?? C.A(0.27, 0.5)
+    const yT = (C.marks.eyeTop ?? E[1]) + w * 0.9
+    const xb = Math.max((C.marks.noseHalf ?? 0) + w * 0.9, C.f.X(0.07))
+    const t = new Turtle([lerp(xb, E[0], 0.75), yT], 180).to([xb, yT]).turn(90, C.rc(w)).fwd(Math.max(w, yT - E[1] + C.u(0.02)))
     C.band('brow', t.spine(), w, 'square', 'square')
+    C.marks.browTop = yT + w * 0.5
+    return
   } else {
     const t = new Turtle([x0, yb], 8).to([lerp(x0, x1, 0.55), yb + C.u(0.02)], 0).to([x1, yb + C.u(0.012)], C.rc(w))
     if (kind === 'hooked') t.curl({ dir: 1, size: [C.u(0.05), C.u(0.05)], pitch: w * 1.5, turns: 0.6, r: C.rcurl(w) })
@@ -396,26 +422,28 @@ export function horn(C, o = {}) {
   const root = o.root ? C.A(o.root[0], o.root[1], 0.004) : [Math.max(C.f.X(xr), C.dissolved ? (C.marks.noseHalf ?? 0) + C.u(0.05) : 0), rootY]
   const top = Math.min(C.f.Y(0.985), C.H - C.bw * 0.15) // horn band top edge
   const w = C.bw * (o.width ?? 1.3)
+  C.marks.hornRoot = root[1]
   const P = fn(C, { root, top, w, hs, o })
-  if (P && C.p.hornTip > 0) C.sheet.tips.push({ shape: band(subPath(P, polyLength(P) * 0.55, polyLength(P)), w * 0.9, 'round', 'round'), lift: C.p.hornTip })
+  if (P && C.p.hornTip > 0) C.sheet.tips.push({ shape: band(subPath(P, polyLength(P) * 0.7, polyLength(P)), w * 0.62, 'round', 'round'), lift: C.p.hornTip })
 }
 
 const HORNS = {
   // H1: up from the root, over the top, down the outer side, the tip curling OUTWARD
   c(C, { root, top, w, hs }) {
     const yT = top - w / 2
-    const xo = Math.min(C.f.X(0.46 * hs), C.xmax(yT) - w * 1.6)
+    const cs = Math.min(Math.max(C.u(0.1), w * 2.3), (C.xmax(yT) - root[0]) * 0.38)
+    const xo = Math.max(root[0] + w * 2, Math.min(C.f.X(0.46 * hs), C.xmax(yT) - cs - w * 0.6))
     const t = new Turtle(root, 72).to([C.f.X(0.17), yT]).to([xo, yT], C.rc(w, 3)).turn(-90, C.rc(w))
-    t.fwd(Math.max(w * 0.6, yT - C.f.Y(0.82) - w)).curl({ dir: 1, size: [C.u(0.07), C.u(0.08)], pitch: w * 1.5, turns: 0.9, r: C.rcurl(w) })
+    t.fwd(Math.max(w * 0.4, yT - C.f.Y(0.84) - w)).curl({ dir: 1, size: [cs, cs * 0.95], pitch: w * 1.3, turns: 1.1, r: C.rcurl(w) })
     return C.band('horn', t.spine(), tail(w, 0.25, 0.75), 'flat', 'square')
   },
   // H2: up, over, down the outer side, curling back IN toward the axis (the big squared horn of fangyi / zun)
-  ram(C, { root, top, w, hs }) {
+  ram(C, { root, top, w, hs, o }) {
     const yT = top - w / 2
     const xo = Math.min(C.f.X(0.5 * hs), C.xmax(yT) - w * 0.7)
     const yb = Math.max(root[1] - w * 0.2, C.f.Y(0.73))
     const t = new Turtle(root, 85).to([root[0] + w * 0.1, yT]).to([xo, yT], C.rc(w, 2)).turn(-90, C.rc(w))
-    t.fwd(Math.max(w, yT - yb)).curl({ dir: -1, size: [Math.max(w * 2.2, xo - root[0] - w * 2.4), Math.max(w * 1.6, (yT - yb) * 0.62)], pitch: w * 1.5, turns: 1.1, r: C.rcurl(w) })
+    t.fwd(Math.max(w, yT - yb)).curl({ dir: -1, size: [Math.max(w * 2.2, (xo - root[0]) * 0.58), Math.max(w * 1.8, (yT - yb) * 0.62)], pitch: w * 1.38, turns: o.turns ?? 1.25, r: C.rcurl(w) })
     return C.band('horn', t.spine(), tail(w, 0.3, 0.8), 'flat', 'square')
   },
   // H3: a heavy crescent sweeping up and out to a point, tip turning back
@@ -423,14 +451,14 @@ const HORNS = {
     const pts = spline([
       [root[0] - w * 0.4, root[1]], C.A(0.3, 0.775), C.A(0.5 * hs, 0.84), [Math.min(C.f.X(0.64 * hs), C.xmax(top) - w), top - w * 0.6], [Math.min(C.f.X(0.58 * hs), C.xmax(top) - w * 1.6), top - w * 0.15],
     ])
-    const P = C.band('horn', pts, taper(w * 1.55, w * 0.15), 'flat', 'point')
+    const P = C.band('horn', pts, (t) => w * (1.6 - 1.45 * Math.pow(t, 1.6)), 'flat', 'point')
     return P
   },
   // H4: a vertical bottle — narrow neck at the root, swelling body, small cap
   bottle(C, { root, top, w, hs }) {
     const x = root[0], y0 = root[1] - w * 0.2, y1 = top
     const h = y1 - y0
-    const neck = C.u(0.03) * hs, belly = C.u(0.07) * hs
+    const neck = Math.max(C.u(0.04), w * 0.4) * hs, belly = Math.max(C.u(0.1), w) * hs
     const lean = C.u(0.015)
     const prof = [[0, neck], [0.22, neck], [0.45, belly * 0.95], [0.7, belly], [0.88, belly * 0.75], [1, belly * 0.35]]
     const right = prof.map(([t, r]) => [x + r + lean * t, y0 + t * h])
@@ -457,8 +485,8 @@ const HORNS = {
     const y = top - w * 0.55
     const x0 = root[0] + w * 0.3
     const x1 = Math.min(C.f.X(0.72 * hs), C.xmax(y) - w * 1.2)
-    const bodyW = w * 0.75
-    const t = new Turtle([x0, y], 0).to([x1, y]).curl({ dir: 1, size: [w * 1.5, w * 1.6], pitch: bodyW * 1.5, turns: 0.75, r: C.rcurl(bodyW) })
+    const bodyW = w
+    const t = new Turtle([x0, y], 0).to([x1, y]).curl({ dir: -1, size: [w * 2.2, w * 2.4], pitch: bodyW * 1.4, turns: 0.75, r: C.rcurl(bodyW) })
     C.band('horn', t.spine(), bodyW, 'square', 'square')
     // head: a blunt block at the front with an eye and an up-curled snout
     C.sheet.add('horn', rrect([x0 + w * 0.2, y - w * 0.15], w * 1.6, w * 1.3, w * 0.35))
@@ -495,6 +523,18 @@ const HORNS = {
       C.band('horn', hookSpine(b, 125, C.u(0.06) * hs, { curl: 50, radius: C.u(0.04), dir: -1 }), taper(w * 0.7, w * 0.25), 'flat', 'point', { centre: false })
     }
     return stem
+  },
+  // crook: rises beside the eye's OUTER end, runs back over the top toward the
+  // axis and hooks down into a spiral there (the squared horn of gu and zun feet)
+  crook(C, { root, top, w, hs }) {
+    const yT = top - w / 2
+    const E = C.marks.eye ?? C.A(0.27, 0.5)
+    const xr = Math.min((C.marks.eyeOuter ?? E[0] + C.u(0.1)) + w * 0.1, C.f.hw - C.edgeW - w * 0.8)
+    const y0 = (C.marks.eyeTop ?? E[1]) + w * (C.dissolved ? 1.2 : 0.4)
+    const xi = Math.max((C.marks.noseHalf ?? 0) + w * 1.2, C.f.X(0.07))
+    const t = new Turtle([xr, y0], 90).to([xr, yT]).turn(90, C.rc(w)).to([xi, yT])
+    t.curl({ dir: 1, size: [Math.max(w * 1.6, (yT - y0) * 0.7 * hs), Math.max(w * 1.6, (xr - xi) * 0.55)], pitch: w * 1.5, turns: 1.2, r: C.rcurl(w) })
+    return C.band('horn', t.spine(), w, 'square', 'square')
   },
   // H10: squared Z — out, up, out, down-hook
   zigzag(C, { root, top, w, hs }) {
@@ -562,8 +602,8 @@ export function body(C, o = {}) {
   const wB = C.bw * (o.width ?? 1.55)
   if (x1 - x0 < C.u(0.26)) return false
   const tailKind = pick(o, 'tail', C)
-  const tailR = Math.min(C.u(0.13), (C.H - yc) * 0.45)
-  const xt = x1 - Math.max(wB * 1.6, tailR * 0.9)
+  const tailR = Math.min(C.u(0.17), C.H - yc - wB * 0.6)
+  const xt = x1 - wB * 0.5
   const segs = []
   if (kind === 'dissolved') {
     // the body broken into two segments that float on the ground
@@ -577,9 +617,9 @@ export function body(C, o = {}) {
   const t = new Turtle([xs, yc], 0).to([xt, yc])
   if (tailKind === 'up' || tailKind === 'spiral') {
     const round = tailKind === 'spiral'
-    t.curl({ dir: 1, size: [Math.min(tailR * 1.25, C.H - yc - wB * 0.7), Math.max(wB * 1.5, (x1 - xt) * 1.5)], pitch: wB * 1.45, turns: round ? 1.6 : 1.05, r: round ? wB * 6 : C.rcurl(wB) })
+    t.curl({ dir: 1, size: [tailR, Math.min(C.u(0.13), (x1 - x0) * 0.3)], pitch: wB * 1.4, turns: round ? 1.5 : 0.8, r: round ? wB * 6 : C.rcurl(wB) })
   } else if (tailKind === 'down') {
-    t.curl({ dir: -1, size: [Math.min(tailR * 1.2, yc - wB), Math.max(wB * 1.5, (x1 - xt) * 1.5)], pitch: wB * 1.45, turns: 1.05, r: C.rcurl(wB) })
+    t.curl({ dir: -1, size: [Math.min(C.u(0.17), yc - wB), Math.min(C.u(0.13), (x1 - x0) * 0.3)], pitch: wB * 1.4, turns: 0.8, r: C.rcurl(wB) })
   } else {
     t.fwd(Math.max(0, x1 - xt - wB * 1.4))
   }
@@ -635,7 +675,7 @@ export function leg(C, o = {}) {
   for (let i = 0; i < toes; i++) {
     const base = [xl - w * 0.2, foot + w * 0.25 - i * tw * 1.05]
     if (base[1] < tw * 0.6) break
-    C.band(id, hookSpine(base, 180, C.u(0.035 + 0.012 * (toes - i)), { curl: 100, radius: C.u(0.022), dir: 1 }), taper(tw, tw * 0.3), 'flat', 'point', { centre: false })
+    C.band(id, hookSpine(base, 180, C.u(0.045 + 0.015 * (toes - i)), { curl: 100, radius: C.u(0.026), dir: 1 }), taper(tw, tw * 0.3), 'flat', 'point', { centre: false })
   }
   C.band(id, hookSpine([xl + w * 0.3, foot - w * 0.2], -20, C.u(0.025), { curl: 80, radius: C.u(0.02), dir: -1 }), taper(tw * 0.8, tw * 0.3), 'flat', 'point', { centre: false })
 }
@@ -651,7 +691,7 @@ export function leg(C, o = {}) {
 export function kuiHead(C, o = {}) {
   const w = C.bw
   const ey = o.eyeY ?? 0.56
-  eye(C, { at: [0.25, ey], eye: C.p.eye === 'chen' ? 'chen' : C.p.eye })
+  eye(C, { at: [0.25, ey], eye: C.p.eye, size: (o.eyeSize ?? C.p.eyeSize) * 1.2 })
   const E = C.marks.eye
   const yU = Math.min(E[1] - C.u(0.09), C.f.Y(0.42))
   const x0 = C.dissolved ? C.u(0.06) : C.u(0.035)
@@ -677,8 +717,8 @@ export function edge(C, o = {}) {
   if (!kind || kind === 'none') return
   const w = C.bw * 0.9
   if (kind === 'scrolls') {
-    const y0 = C.f.Y(0.05), y1 = C.f.Y(0.97)
-    const unit = Math.max(C.u(0.17), w * 4)
+    const y0 = C.f.Y(0.05), y1 = Math.min(C.f.Y(0.97), (C.marks.hornRoot ?? C.H) - C.u(0.02))
+    const unit = Math.max(C.u(0.15), w * 3.4)
     const n = Math.max(2, Math.floor((y1 - y0) / unit))
     const h = (y1 - y0) / n
     for (let i = 0; i < n; i++) {
@@ -688,15 +728,15 @@ export function edge(C, o = {}) {
       const xl = xr - colW
       const id = 'edge' + i
       const R = Math.min(colW, h) * 0.32
-      if (i % 2 === 0) {
-        // a squared C opening toward the face
-        const t = new Turtle([xl + R * 0.4, yc + h * 0.34 - w * 0.5], 0).to([xr - w * 0.5, yc + h * 0.34 - w * 0.5]).turn(-90, C.rc(w)).fwd(Math.max(w, h * 0.68 - w * 1.4)).curl({ dir: -1, size: [colW * 0.62, h * 0.38], pitch: w * 1.5, turns: 0.8, r: C.rcurl(w) })
-        C.band(id, t.spine(), w, 'square', 'square')
-      } else {
-        // a hook pair: up-curl over a down-curl (S)
-        const t = new Turtle([xr - w * 0.5, yc - h * 0.32], 180).to([xl + w * 0.6, yc - h * 0.32]).turn(-90, C.rc(w)).fwd(0).turn(0).to([xl + w * 0.6, yc + h * 0.3], C.rc(w)).turn(-90, C.rc(w)).fwd(colW * 0.55).curl({ dir: -1, size: [h * 0.3, colW * 0.35], pitch: w * 1.5, turns: 0.6, r: C.rcurl(w) })
-        C.band(id, t.spine(), w, 'square', 'square')
-      }
+      // a squared C opening toward the face (even) or away from it (odd), its
+      // free end turned in as a hook — the fangyi corner column
+      const yt = yc + h * 0.5 - w * 0.75, yb2 = yc - h * 0.5 + w * 0.75
+      const inward = i % 2 === 0
+      const xa = inward ? xl + w * 0.5 : xr - w * 0.5
+      const xb = inward ? xr - w * 0.5 : xl + w * 0.5
+      const t = new Turtle([xa, yt], inward ? 0 : 180).to([xb, yt]).turn(inward ? -90 : 90, C.rc(w)).to([xb, yb2]).turn(inward ? -90 : 90, C.rc(w))
+        .fwd(Math.max(w, Math.abs(xb - xa) * 0.62)).turn(inward ? -90 : 90, C.rc(w)).fwd(Math.max(w * 0.6, (yt - yb2) * 0.42))
+      C.band(id, t.spine(), w, 'square', 'square')
     }
     return
   }
@@ -705,17 +745,26 @@ export function edge(C, o = {}) {
     const yTop = C.f.Y(0.94), yBot = C.f.Y(0.2)
     const xr = C.xmax(yTop) - w * 0.7
     if (xr - xl < C.u(0.16)) return
-    const xk = lerp(xl, xr, 0.55)
-    const wB = w * 1.2
-    // body down from a tail curl at the top to a head at the bottom (head down)
-    const t = new Turtle([xk, yBot + C.u(0.08)], 90).to([xk, yTop - C.u(0.06)]).curl({ dir: 1, size: [C.u(0.06), Math.max(wB * 1.5, xk - xl)], pitch: wB * 1.45, turns: 0.75, r: C.rcurl(wB) })
-    C.band('sidekui', t.spine(), tail(wB, 0.3, 0.7), 'square', 'square')
-    // head block, eye, snout hook toward the face
-    C.sheet.add('sidekui', rrect([xk, yBot], Math.max(wB * 2, C.u(0.12)), C.u(0.12), wB * 0.5))
-    C.sheet.bosses.push({ shape: circle([xk + wB * 0.3, yBot + C.u(0.01)], wB * 0.5), base: 'plateau', r: wB * 0.5 })
-    C.band('sidekui', hookSpine([xk - C.u(0.05), yBot - C.u(0.05)], 180, C.u(0.04), { curl: 120, radius: C.u(0.03), dir: 1 }), w * 0.8, 'flat', 'round', { centre: false })
-    // a leg/claw toward the face
-    C.band('sidekui', hookSpine([xk - wB * 0.4, lerp(yBot, yTop, 0.45)], 200, C.u(0.06), { curl: 90, radius: C.u(0.03), dir: 1 }), taper(w, w * 0.4), 'flat', 'point', { centre: false })
+    const colW = xr - xl
+    const xk = lerp(xl, xr, 0.5)
+    const wB = Math.min(w * 1.25, colW * 0.32)
+    const headH = Math.max(wB * 2.6, C.u(0.16))
+    const yHead = Math.max(wB * 0.7, C.f.Y(0.06))
+    // body: up from the head, tail turning over toward the face and down
+    const t = new Turtle([xk, yHead + headH * 0.8], 90).to([xk, yTop - wB * 0.5]).curl({ dir: 1, size: [Math.max(wB * 2.2, colW * 0.55), Math.max(wB * 2, C.u(0.1))], pitch: wB * 1.4, turns: 0.85, r: C.rcurl(wB) })
+    C.band('sidekui', t.spine(), tail(wB, 0.3, 0.75), 'square', 'square')
+    // head (snout down): a block with a boss eye, the upper jaw hooking toward
+    // the face, the lower jaw hooking outward
+    const hc = [xk, yHead + headH * 0.5]
+    C.sheet.add('sidekui', rrect(hc, Math.min(colW, wB * 2.6), headH, wB * 0.6))
+    C.sheet.bosses.push({ shape: circle([hc[0], hc[1] + headH * 0.08], wB * 0.55), base: 'plateau', r: wB * 0.55 })
+    C.band('sidekui', hookSpine([hc[0] - wB * 0.6, yHead + wB * 0.3], 200, Math.max(wB * 0.8, colW * 0.25), { curl: 110, radius: wB * 0.8, dir: 1 }), wB * 0.85, 'flat', 'square', { centre: false })
+    // a leg with a forward claw, from the middle of the body
+    const ly = lerp(yHead + headH, yTop, 0.45)
+    C.band('sidekui', hookSpine([xk - wB * 0.3, ly], 180, Math.max(wB, colW * 0.35), { curl: 100, radius: wB * 0.7, dir: 1 }), taper(wB * 0.9, wB * 0.35), 'flat', 'point', { centre: false })
+    for (let k = 0; k < 2; k++) {
+      C.band('sidekui', hookSpine([xk + wB * 0.4, lerp(ly, yTop, 0.25 + k * 0.3)], 15, wB * 0.9, { curl: 100, radius: wB * 0.5, dir: 1 }), taper(wB * 0.75, wB * 0.3), 'flat', 'point', { centre: false })
+    }
     C.marks.sideKui = xl
   }
 }

@@ -279,9 +279,9 @@ export class Turtle {
     this.r[this.r.length - 1] = r
     return this
   }
-  /** straight to an absolute point; the vertex left behind gets radius r */
-  to(p, r = 0) {
-    this.r[this.r.length - 1] = r
+  /** straight to an absolute point; the vertex left behind gets radius r (default: keep what turn() gave it) */
+  to(p, r) {
+    if (r !== undefined) this.r[this.r.length - 1] = r
     const [x, y] = this.pos
     this.h = Math.atan2(p[1] - y, p[0] - x) / D2R
     this.v.push([p[0], p[1]])
@@ -516,37 +516,36 @@ function drawBand(ctx, s, grow) {
     polyPath(ctx, pts, false)
     ctx.stroke()
   } else {
-    // variable width: one quad per segment with shared vertex normals
+    // variable width: a dense brush of discs in ONE path (nonzero union, so no
+    // antialiased seams between pieces and no holes where the inner side folds)
     const L = polyLength(pts)
-    const nrm = normals(pts)
+    let wmin = Infinity
+    for (let i = 0; i <= 8; i++) wmin = Math.min(wmin, Math.max(0.3, wAt(i / 8)))
+    const P = resample(pts, Math.max(0.08, Math.min(0.35, wmin * 0.12)))
+    const PL = polyLength(P)
     let acc = 0
-    const ws = pts.map((p, i) => {
-      if (i) acc += Math.hypot(p[0] - pts[i - 1][0], p[1] - pts[i - 1][1])
-      let t = L > 0 ? acc / L : 0
+    ctx.beginPath()
+    for (let i = 0; i < P.length; i++) {
+      if (i) acc += Math.hypot(P[i][0] - P[i - 1][0], P[i][1] - P[i - 1][1])
+      const t = PL > 0 ? acc / PL : 0
       let w = wAt(t)
-      if (s.capA === 'point') w *= Math.min(1, t * L / Math.max(0.5, wAt(0) * 1.2))
-      if (s.capB === 'point') w *= Math.min(1, (1 - t) * L / Math.max(0.5, wAt(1) * 1.2))
-      return Math.max(0, w / 2 + grow)
-    })
-    for (let i = 1; i < pts.length; i++) {
-      const a = pts[i - 1], b = pts[i], na = nrm[i - 1], nb = nrm[i], wa = ws[i - 1], wb = ws[i]
-      if (wa <= 0 && wb <= 0) continue
-      ctx.beginPath()
-      ctx.moveTo(a[0] + na[0] * wa, a[1] + na[1] * wa)
-      ctx.lineTo(b[0] + nb[0] * wb, b[1] + nb[1] * wb)
-      ctx.lineTo(b[0] - nb[0] * wb, b[1] - nb[1] * wb)
-      ctx.lineTo(a[0] - na[0] * wa, a[1] - na[1] * wa)
-      ctx.closePath()
-      ctx.fill()
+      if (s.capA === 'point') w *= Math.min(1, (t * L) / Math.max(0.5, wAt(0) * 1.2))
+      if (s.capB === 'point') w *= Math.min(1, ((1 - t) * L) / Math.max(0.5, wAt(1) * 1.2))
+      const r = w / 2 + grow
+      if (r <= 0.02) continue
+      ctx.moveTo(P[i][0] + r, P[i][1])
+      ctx.arc(P[i][0], P[i][1], r, 0, Math.PI * 2)
     }
-    // round joins on tight bends, where the outer side of two quads would gap
-    for (let i = 1; i < pts.length - 1; i++) {
-      const d = nrm[i - 1][0] * nrm[i + 1][0] + nrm[i - 1][1] * nrm[i + 1][1]
-      if (d < 0.985 && ws[i] > 0) {
-        ctx.beginPath()
-        ctx.arc(pts[i][0], pts[i][1], ws[i], 0, Math.PI * 2)
-        ctx.fill()
-      }
+    ctx.fill()
+    // flat ends: the brush is round-ended by nature; square it off with a butt stroke of the end width
+    for (const [atStart, cap] of [[true, s.capA], [false, s.capB]]) {
+      if (cap === 'round' || cap === 'point') continue
+      const w = wAt(atStart ? 0 : 1) + grow * 2
+      const end = atStart ? P.slice(0, 3) : P.slice(-3)
+      ctx.lineWidth = w
+      ctx.lineCap = 'butt'
+      polyPath(ctx, end, false)
+      ctx.stroke()
     }
   }
   const capR = (i, w) => {
