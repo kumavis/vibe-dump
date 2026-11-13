@@ -3,13 +3,16 @@
 // wait for the verification hooks. SwiftShader is slow — timeouts are generous.
 import { chromium } from 'playwright'
 import { existsSync } from 'node:fs'
-import { dirname, join } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { startStaticServer } from '../../../scripts/static-server.mjs'
 
 export const HERE = dirname(fileURLToPath(import.meta.url))
 export const PKG = join(HERE, '..')
-export const DIST = join(PKG, 'dist')
+// TAOTIE_DIST lets several people build and shoot the same source tree at once
+// without clobbering each other's output: `vite build --outDir .work/<me>/dist`
+// then `TAOTIE_DIST=.work/<me>/dist node tools/shoot.mjs …`.
+export const DIST = process.env.TAOTIE_DIST ? resolve(process.env.TAOTIE_DIST) : join(PKG, 'dist')
 
 export function args(argv = process.argv.slice(2)) {
   const out = { _: [] }

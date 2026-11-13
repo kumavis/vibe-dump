@@ -4,7 +4,7 @@
 //
 //   npm run build --workspace @vibe-dump/taotie-bronze
 //   node tools/shoot.mjs [--a id] [--view name] [--mode beauty,clay] [--patina preset]
-//                        [--q 1] [--out dir] [--atlas] [--ui] [--phone]
+//                        [--q 1] [--out dir] [--atlas [--motif a,b]] [--ui] [--phone]
 //
 // Output: tools/shots/<id>/<view>-<mode>[-<patina>].png
 //         tools/shots/<id>/compare-<view>.jpg   (views with a `ref`, if reference/<id>/<ref> exists)
@@ -96,7 +96,8 @@ async function shootAtlas() {
   mkdirSync(dir, { recursive: true })
   const { page, errors } = await s.open({ ui: '0', q, tab: 'atlas' })
   await s.waitReady(page)
-  const motifs = await page.evaluate(() => window.__taotie.motifs)
+  const only = opt.motif ? String(opt.motif).split(',') : null
+  const motifs = (await page.evaluate(() => window.__taotie.motifs)).filter((m) => !only || only.includes(m))
   for (const m of motifs) {
     const presets = await page.evaluate((n) => window.__taotie.motifPresets(n), m)
     for (const p of presets.length ? presets : [null]) {
