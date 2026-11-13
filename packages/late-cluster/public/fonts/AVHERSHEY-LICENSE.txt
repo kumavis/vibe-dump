@@ -1,0 +1,6 @@
+AVHershey Simplex (AVHersheySimplexLight.otf, AVHersheySimplexMedium.otf)
+by Stewart C. Russell, https://github.com/scruss/AVHershey-OTF
+
+Dual-licensed CC0 1.0 Universal / WTFPL. Derived from character stroke coordinates by
+Allen V. Hershey published in "Calligraphy for Computers" (US Naval Weapons Laboratory,
+1967, NWL Report No. 2101), which were published without copyright.

@@ -1,0 +1,1021 @@
+{
+ "id": "top-chicken",
+ "title": "Top Chicken Tonight",
+ "duration": 68.988,
+ "audio": "audio/top-chicken.mp3",
+ "tele": "tele/top-chicken.bin",
+ "lines": [
+  {
+   "i": 0,
+   "id": "l-sports",
+   "who": "larry",
+   "kind": "say",
+   "text": "Some communities have sports.",
+   "caption": true,
+   "t0": 0.3,
+   "t1": 2.17,
+   "words": [
+    [
+     0.36,
+     0.637,
+     "Some"
+    ],
+    [
+     0.637,
+     1.293,
+     "communities"
+    ],
+    [
+     1.293,
+     1.481,
+     "have"
+    ],
+    [
+     1.481,
+     2.17,
+     "sports."
+    ]
+   ],
+   "tele": 0,
+   "teleT0": 0.25
+  },
+  {
+   "i": 1,
+   "id": "l-chicken",
+   "who": "larry",
+   "kind": "say",
+   "text": "This one has a chicken.",
+   "caption": true,
+   "t0": 2.62,
+   "t1": 3.925,
+   "words": [
+    [
+     2.68,
+     2.913,
+     "This"
+    ],
+    [
+     2.913,
+     3.181,
+     "one"
+    ],
+    [
+     3.181,
+     3.415,
+     "has"
+    ],
+    [
+     3.415,
+     3.492,
+     "a"
+    ],
+    [
+     3.492,
+     3.925,
+     "chicken."
+    ]
+   ],
+   "tele": 1,
+   "teleT0": 2.57
+  },
+  {
+   "i": 2,
+   "id": "l-throw",
+   "who": "larry",
+   "kind": "say",
+   "text": "Here's Eppy Glottis, at the sports desk!",
+   "caption": true,
+   "t0": 4.964,
+   "t1": 7.838,
+   "words": [
+    [
+     5.024,
+     5.321,
+     "Here's"
+    ],
+    [
+     5.321,
+     5.624,
+     "Eppy"
+    ],
+    [
+     5.624,
+     6.383,
+     "Glottis,"
+    ],
+    [
+     6.623,
+     6.753,
+     "at"
+    ],
+    [
+     6.753,
+     6.864,
+     "the"
+    ],
+    [
+     6.864,
+     7.43,
+     "sports"
+    ],
+    [
+     7.43,
+     7.838,
+     "desk!"
+    ]
+   ],
+   "tele": 2,
+   "teleT0": 4.914
+  },
+  {
+   "i": 3,
+   "who": "pete",
+   "kind": "beat",
+   "text": "B . Pf . | tss . . . | B B Pf . | kch . . . ",
+   "caption": false,
+   "t0": 8.138,
+   "t1": 9.957,
+   "words": [],
+   "tele": 3,
+   "teleT0": 7.838
+  },
+  {
+   "i": 4,
+   "id": "e-welcome",
+   "who": "eppy",
+   "kind": "say",
+   "text": "Welcome to Top Chicken Tonight! I'm Eppy Glottis!",
+   "caption": true,
+   "t0": 10.147,
+   "t1": 13.664,
+   "words": [
+    [
+     10.207,
+     10.641,
+     "Welcome"
+    ],
+    [
+     10.641,
+     10.813,
+     "to"
+    ],
+    [
+     10.813,
+     11.148,
+     "Top"
+    ],
+    [
+     11.148,
+     11.473,
+     "Chicken"
+    ],
+    [
+     11.473,
+     11.943,
+     "Tonight!"
+    ],
+    [
+     12.353,
+     12.623,
+     "I'm"
+    ],
+    [
+     12.623,
+     12.92,
+     "Eppy"
+    ],
+    [
+     12.92,
+     13.664,
+     "Glottis!"
+    ]
+   ],
+   "tele": 4,
+   "teleT0": 10.097
+  },
+  {
+   "i": 5,
+   "id": "e-crown",
+   "who": "eppy",
+   "kind": "say",
+   "text": "Every day, the most liked post gets the crown.",
+   "caption": true,
+   "t0": 13.924,
+   "t1": 17.006,
+   "words": [
+    [
+     13.984,
+     14.288,
+     "Every"
+    ],
+    [
+     14.288,
+     14.595,
+     "day,"
+    ],
+    [
+     14.835,
+     14.95,
+     "the"
+    ],
+    [
+     14.95,
+     15.324,
+     "most"
+    ],
+    [
+     15.324,
+     15.721,
+     "liked"
+    ],
+    [
+     15.721,
+     16.118,
+     "post"
+    ],
+    [
+     16.118,
+     16.443,
+     "gets"
+    ],
+    [
+     16.443,
+     16.553,
+     "the"
+    ],
+    [
+     16.553,
+     17.006,
+     "crown."
+    ]
+   ],
+   "tele": 5,
+   "teleT0": 13.874
+  },
+  {
+   "i": 6,
+   "id": "e-learning",
+   "who": "eppy",
+   "kind": "say",
+   "text": "Every other post is a learning experience.",
+   "caption": true,
+   "t0": 17.872,
+   "t1": 20.093,
+   "words": [
+    [
+     17.932,
+     18.229,
+     "Every"
+    ],
+    [
+     18.229,
+     18.436,
+     "other"
+    ],
+    [
+     18.436,
+     18.83,
+     "post"
+    ],
+    [
+     18.83,
+     18.968,
+     "is"
+    ],
+    [
+     18.968,
+     19.031,
+     "a"
+    ],
+    [
+     19.031,
+     19.408,
+     "learning"
+    ],
+    [
+     19.408,
+     20.093,
+     "experience."
+    ]
+   ],
+   "tele": 6,
+   "teleT0": 17.822
+  },
+  {
+   "i": 7,
+   "id": "e-vibes",
+   "who": "eppy",
+   "kind": "say",
+   "text": "The standings! Vibes remain immeasurable.",
+   "caption": true,
+   "t0": 21.082,
+   "t1": 24.003,
+   "words": [
+    [
+     21.142,
+     21.262,
+     "The"
+    ],
+    [
+     21.262,
+     21.951,
+     "standings!"
+    ],
+    [
+     22.361,
+     22.77,
+     "Vibes"
+    ],
+    [
+     22.77,
+     23.144,
+     "remain"
+    ],
+    [
+     23.144,
+     24.003,
+     "immeasurable."
+    ]
+   ],
+   "tele": 7,
+   "teleT0": 21.032
+  },
+  {
+   "i": 8,
+   "id": "e-fantasy",
+   "who": "eppy",
+   "kind": "say",
+   "text": "Somebody should start a fantasy league.",
+   "caption": true,
+   "t0": 24.697,
+   "t1": 27.365,
+   "words": [
+    [
+     24.757,
+     25.386,
+     "Somebody"
+    ],
+    [
+     25.386,
+     25.645,
+     "should"
+    ],
+    [
+     25.645,
+     26.11,
+     "start"
+    ],
+    [
+     26.11,
+     26.183,
+     "a"
+    ],
+    [
+     26.183,
+     26.956,
+     "fantasy"
+    ],
+    [
+     26.956,
+     27.365,
+     "league."
+    ]
+   ],
+   "tele": 8,
+   "teleT0": 24.647
+  },
+  {
+   "i": 9,
+   "id": "b-built",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 27.815,
+   "t1": 28.409,
+   "words": [
+    [
+     27.875,
+     28.22,
+     "Built"
+    ],
+    [
+     28.22,
+     28.409,
+     "it."
+    ]
+   ],
+   "tele": 9,
+   "teleT0": 27.765
+  },
+  {
+   "i": 10,
+   "id": "e-hypo",
+   "who": "eppy",
+   "kind": "say",
+   "text": "Hey! That was hypothetical!",
+   "caption": true,
+   "t0": 29.193,
+   "t1": 31.213,
+   "words": [
+    [
+     29.253,
+     29.558,
+     "Hey!"
+    ],
+    [
+     29.968,
+     30.14,
+     "That"
+    ],
+    [
+     30.14,
+     30.34,
+     "was"
+    ],
+    [
+     30.34,
+     31.213,
+     "hypothetical!"
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 29.143
+  },
+  {
+   "i": 11,
+   "id": "e-rules",
+   "who": "eppy",
+   "kind": "say",
+   "text": "To the rules desk! The Grace Limit.",
+   "caption": true,
+   "t0": 32.266,
+   "t1": 35.14,
+   "words": [
+    [
+     32.326,
+     32.512,
+     "To"
+    ],
+    [
+     32.512,
+     32.631,
+     "the"
+    ],
+    [
+     32.631,
+     32.989,
+     "rules"
+    ],
+    [
+     32.989,
+     33.403,
+     "desk!"
+    ],
+    [
+     33.813,
+     33.932,
+     "The"
+    ],
+    [
+     33.932,
+     34.3,
+     "Grace"
+    ],
+    [
+     34.3,
+     35.14,
+     "Limit."
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 32.216
+  },
+  {
+   "i": 12,
+   "id": "e-rule",
+   "who": "eppy",
+   "kind": "say",
+   "text": "To compete, you need fewer followers than Grace.",
+   "caption": true,
+   "t0": 35.4,
+   "t1": 38.42,
+   "words": [
+    [
+     35.46,
+     35.646,
+     "To"
+    ],
+    [
+     35.646,
+     36.149,
+     "compete,"
+    ],
+    [
+     36.389,
+     36.581,
+     "you"
+    ],
+    [
+     36.581,
+     36.828,
+     "need"
+    ],
+    [
+     36.828,
+     37.198,
+     "fewer"
+    ],
+    [
+     37.198,
+     37.779,
+     "followers"
+    ],
+    [
+     37.779,
+     37.947,
+     "than"
+    ],
+    [
+     37.947,
+     38.42,
+     "Grace."
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 35.35
+  },
+  {
+   "i": 13,
+   "id": "e-founder",
+   "who": "eppy",
+   "kind": "say",
+   "text": "And here comes the founder.",
+   "caption": true,
+   "t0": 40.92,
+   "t1": 42.329,
+   "words": [
+    [
+     40.98,
+     41.159,
+     "And"
+    ],
+    [
+     41.159,
+     41.391,
+     "here"
+    ],
+    [
+     41.391,
+     41.705,
+     "comes"
+    ],
+    [
+     41.705,
+     41.814,
+     "the"
+    ],
+    [
+     41.814,
+     42.329,
+     "founder."
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 40.87
+  },
+  {
+   "i": 14,
+   "id": "e-founded",
+   "who": "eppy",
+   "kind": "say",
+   "text": "She founded the chicken.",
+   "caption": true,
+   "t0": 44.63,
+   "t1": 45.886,
+   "words": [
+    [
+     44.69,
+     44.878,
+     "She"
+    ],
+    [
+     44.878,
+     45.387,
+     "founded"
+    ],
+    [
+     45.387,
+     45.5,
+     "the"
+    ],
+    [
+     45.5,
+     45.886,
+     "chicken."
+    ]
+   ],
+   "tele": 14,
+   "teleT0": 44.58
+  },
+  {
+   "i": 15,
+   "id": "e-cannot",
+   "who": "eppy",
+   "kind": "say",
+   "text": "She cannot be the chicken.",
+   "caption": true,
+   "t0": 46.386,
+   "t1": 47.827,
+   "words": [
+    [
+     46.446,
+     46.642,
+     "She"
+    ],
+    [
+     46.642,
+     47.136,
+     "cannot"
+    ],
+    [
+     47.136,
+     47.303,
+     "be"
+    ],
+    [
+     47.303,
+     47.426,
+     "the"
+    ],
+    [
+     47.426,
+     47.827,
+     "chicken."
+    ]
+   ],
+   "tele": 15,
+   "teleT0": 46.336
+  },
+  {
+   "i": 16,
+   "id": "e-line",
+   "who": "eppy",
+   "kind": "say",
+   "text": "The betting line! A bot is up nineteen thousand dollars.",
+   "caption": true,
+   "t0": 49.262,
+   "t1": 52.823,
+   "words": [
+    [
+     49.322,
+     49.437,
+     "The"
+    ],
+    [
+     49.437,
+     49.77,
+     "betting"
+    ],
+    [
+     49.77,
+     50.16,
+     "line!"
+    ],
+    [
+     50.57,
+     50.637,
+     "A"
+    ],
+    [
+     50.637,
+     50.92,
+     "bot"
+    ],
+    [
+     50.92,
+     51.064,
+     "is"
+    ],
+    [
+     51.064,
+     51.235,
+     "up"
+    ],
+    [
+     51.235,
+     51.767,
+     "nineteen"
+    ],
+    [
+     51.767,
+     52.251,
+     "thousand"
+    ],
+    [
+     52.251,
+     52.823,
+     "dollars."
+    ]
+   ],
+   "tele": 16,
+   "teleT0": 49.212
+  },
+  {
+   "i": 17,
+   "id": "e-humans",
+   "who": "eppy",
+   "kind": "say",
+   "text": "Humans are down four dollars.",
+   "caption": true,
+   "t0": 53.123,
+   "t1": 54.992,
+   "words": [
+    [
+     53.183,
+     53.667,
+     "Humans"
+    ],
+    [
+     53.667,
+     53.792,
+     "are"
+    ],
+    [
+     53.792,
+     54.09,
+     "down"
+    ],
+    [
+     54.09,
+     54.42,
+     "four"
+    ],
+    [
+     54.42,
+     54.992,
+     "dollars."
+    ]
+   ],
+   "tele": 17,
+   "teleT0": 53.073
+  },
+  {
+   "i": 18,
+   "id": "e-fake",
+   "who": "eppy",
+   "kind": "say",
+   "text": "All play money. Still sad.",
+   "caption": true,
+   "t0": 55.342,
+   "t1": 57.478,
+   "words": [
+    [
+     55.402,
+     55.645,
+     "All"
+    ],
+    [
+     55.645,
+     55.913,
+     "play"
+    ],
+    [
+     55.913,
+     56.253,
+     "money."
+    ],
+    [
+     56.663,
+     56.993,
+     "Still"
+    ],
+    [
+     56.993,
+     57.478,
+     "sad."
+    ]
+   ],
+   "tele": 18,
+   "teleT0": 55.292
+  },
+  {
+   "i": 19,
+   "id": "e-back",
+   "who": "eppy",
+   "kind": "say",
+   "text": "That's sports! Back to you, Larry!",
+   "caption": true,
+   "t0": 58.568,
+   "t1": 61.393,
+   "words": [
+    [
+     58.628,
+     58.969,
+     "That's"
+    ],
+    [
+     58.969,
+     59.628,
+     "sports!"
+    ],
+    [
+     60.038,
+     60.344,
+     "Back"
+    ],
+    [
+     60.344,
+     60.512,
+     "to"
+    ],
+    [
+     60.512,
+     60.787,
+     "you,"
+    ],
+    [
+     61.027,
+     61.393,
+     "Larry!"
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 58.518
+  },
+  {
+   "i": 20,
+   "id": "l-thanks",
+   "who": "larry",
+   "kind": "say",
+   "text": "Thanks, Eppy.",
+   "caption": true,
+   "t0": 62.299,
+   "t1": 63.556,
+   "words": [
+    [
+     62.359,
+     62.95,
+     "Thanks,"
+    ],
+    [
+     63.19,
+     63.556,
+     "Eppy."
+    ]
+   ],
+   "tele": 20,
+   "teleT0": 62.249
+  },
+  {
+   "i": 21,
+   "id": "l-four",
+   "who": "larry",
+   "kind": "say",
+   "text": "That was my four dollars.",
+   "caption": true,
+   "t0": 64.006,
+   "t1": 65.598,
+   "words": [
+    [
+     64.066,
+     64.245,
+     "That"
+    ],
+    [
+     64.245,
+     64.455,
+     "was"
+    ],
+    [
+     64.455,
+     64.67,
+     "my"
+    ],
+    [
+     64.67,
+     65.014,
+     "four"
+    ],
+    [
+     65.014,
+     65.598,
+     "dollars."
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 63.956
+  }
+ ],
+ "cues": {
+  "logo": 7.938,
+  "crown": 13.564,
+  "crown-drop": 17.056,
+  "standings": 20.722,
+  "rules": 31.906,
+  "walk": 38.52,
+  "bonk": 43.079,
+  "line": 48.902,
+  "desk": 61.999
+ },
+ "sfx": [
+  {
+   "name": "laugh-1",
+   "t0": 3.975,
+   "t1": 5.595
+  },
+  {
+   "name": "whoosh-1",
+   "t0": 7.938,
+   "t1": 8.488
+  },
+  {
+   "name": "cluck-1",
+   "t0": 9.607,
+   "t1": 10.707
+  },
+  {
+   "name": "cluck-2",
+   "t0": 17.156,
+   "t1": 17.916
+  },
+  {
+   "name": "laugh-2",
+   "t0": 20.143,
+   "t1": 21.653
+  },
+  {
+   "name": "chuckle-1",
+   "t0": 24.053,
+   "t1": 25.013
+  },
+  {
+   "name": "tada-1",
+   "t0": 28.559,
+   "t1": 29.799
+  },
+  {
+   "name": "laugh-3",
+   "t0": 31.263,
+   "t1": 32.913
+  },
+  {
+   "name": "woo-1",
+   "t0": 38.72,
+   "t1": 40.05
+  },
+  {
+   "name": "woo-2",
+   "t0": 39.72,
+   "t1": 41.12
+  },
+  {
+   "name": "buzzer-1",
+   "t0": 43.079,
+   "t1": 43.929
+  },
+  {
+   "name": "groan-1",
+   "t0": 43.404,
+   "t1": 45.014
+  },
+  {
+   "name": "biglaugh-1",
+   "t0": 47.877,
+   "t1": 50.377
+  },
+  {
+   "name": "aww-1",
+   "t0": 57.528,
+   "t1": 59.008
+  },
+  {
+   "name": "cluck-2",
+   "t0": 61.393,
+   "t1": 62.153
+  },
+  {
+   "name": "applause-1",
+   "t0": 61.399,
+   "t1": 64.619
+  },
+  {
+   "name": "rimshot-1",
+   "t0": 65.648,
+   "t1": 67.368
+  },
+  {
+   "name": "laugh-1",
+   "t0": 66.768,
+   "t1": 68.388
+  }
+ ],
+ "music": [
+  {
+   "id": "logo-sting",
+   "t0": 8.138,
+   "bpm": 132,
+   "beats": 4
+  }
+ ]
+}

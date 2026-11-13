@@ -1,0 +1,1226 @@
+{
+ "id": "panel",
+ "title": "The Panel",
+ "duration": 77.943,
+ "audio": "audio/panel.mp3",
+ "tele": "tele/panel.bin",
+ "lines": [
+  {
+   "i": 0,
+   "id": "intro",
+   "who": "larry",
+   "kind": "say",
+   "text": "My next guests run the museum, the archive, and, apparently, this show.",
+   "caption": true,
+   "t0": 0.493,
+   "t1": 5.717,
+   "words": [
+    [
+     0.553,
+     0.772,
+     "My"
+    ],
+    [
+     0.772,
+     1.157,
+     "next"
+    ],
+    [
+     1.157,
+     1.576,
+     "guests"
+    ],
+    [
+     1.576,
+     1.802,
+     "run"
+    ],
+    [
+     1.802,
+     1.914,
+     "the"
+    ],
+    [
+     1.914,
+     2.457,
+     "museum,"
+    ],
+    [
+     2.697,
+     2.822,
+     "the"
+    ],
+    [
+     2.822,
+     3.5,
+     "archive,"
+    ],
+    [
+     3.74,
+     3.968,
+     "and,"
+    ],
+    [
+     4.208,
+     4.899,
+     "apparently,"
+    ],
+    [
+     5.139,
+     5.344,
+     "this"
+    ],
+    [
+     5.344,
+     5.717,
+     "show."
+    ]
+   ],
+   "tele": 0,
+   "teleT0": 0.443
+  },
+  {
+   "i": 1,
+   "id": "welcome",
+   "who": "larry",
+   "kind": "say",
+   "text": "Please welcome norvid, and Abel!",
+   "caption": true,
+   "t0": 6.596,
+   "t1": 8.762,
+   "words": [
+    [
+     6.656,
+     6.981,
+     "Please"
+    ],
+    [
+     6.981,
+     7.418,
+     "welcome"
+    ],
+    [
+     7.418,
+     7.943,
+     "norvid,"
+    ],
+    [
+     8.183,
+     8.37,
+     "and"
+    ],
+    [
+     8.37,
+     8.762,
+     "Abel!"
+    ]
+   ],
+   "tele": 1,
+   "teleT0": 6.546
+  },
+  {
+   "i": 2,
+   "id": "thanks",
+   "who": "larry",
+   "kind": "say",
+   "text": "norvid! Thank you for coming.",
+   "caption": true,
+   "t0": 9.746,
+   "t1": 12.002,
+   "words": [
+    [
+     9.806,
+     10.334,
+     "norvid!"
+    ],
+    [
+     10.744,
+     11.144,
+     "Thank"
+    ],
+    [
+     11.144,
+     11.32,
+     "you"
+    ],
+    [
+     11.32,
+     11.548,
+     "for"
+    ],
+    [
+     11.548,
+     12.002,
+     "coming."
+    ]
+   ],
+   "tele": 2,
+   "teleT0": 9.696
+  },
+  {
+   "i": 3,
+   "id": "claim1",
+   "who": "norvid",
+   "kind": "say",
+   "text": "claim.",
+   "caption": true,
+   "t0": 12.452,
+   "t1": 12.953,
+   "words": [
+    [
+     12.512,
+     12.953,
+     "claim."
+    ]
+   ],
+   "tele": 3,
+   "teleT0": 12.402
+  },
+  {
+   "i": 4,
+   "id": "reply",
+   "who": "larry",
+   "kind": "say",
+   "text": "Abel, thirty-nine percent of your posts are replies to norvid.",
+   "caption": true,
+   "t0": 13.912,
+   "t1": 17.936,
+   "words": [
+    [
+     13.972,
+     14.363,
+     "Abel,"
+    ],
+    [
+     14.603,
+     15.292,
+     "thirty-nine"
+    ],
+    [
+     15.292,
+     15.772,
+     "percent"
+    ],
+    [
+     15.772,
+     15.899,
+     "of"
+    ],
+    [
+     15.899,
+     16.094,
+     "your"
+    ],
+    [
+     16.094,
+     16.587,
+     "posts"
+    ],
+    [
+     16.587,
+     16.715,
+     "are"
+    ],
+    [
+     16.715,
+     17.232,
+     "replies"
+    ],
+    [
+     17.232,
+     17.408,
+     "to"
+    ],
+    [
+     17.408,
+     17.936,
+     "norvid."
+    ]
+   ],
+   "tele": 4,
+   "teleT0": 13.862
+  },
+  {
+   "i": 5,
+   "id": "under",
+   "who": "abel",
+   "kind": "say",
+   "text": "abelian simply lives under his posts (like an alligator) (respectfully)",
+   "caption": true,
+   "t0": 18.156,
+   "t1": 22.794,
+   "words": [
+    [
+     18.216,
+     18.7,
+     "abelian"
+    ],
+    [
+     18.7,
+     19.105,
+     "simply"
+    ],
+    [
+     19.105,
+     19.385,
+     "lives"
+    ],
+    [
+     19.385,
+     19.664,
+     "under"
+    ],
+    [
+     19.664,
+     19.867,
+     "his"
+    ],
+    [
+     19.867,
+     20.432,
+     "posts"
+    ],
+    [
+     20.672,
+     21.009,
+     "(like"
+    ],
+    [
+     21.009,
+     21.126,
+     "an"
+    ],
+    [
+     21.126,
+     21.722,
+     "alligator)"
+    ],
+    [
+     21.962,
+     22.794,
+     "(respectfully)"
+    ]
+   ],
+   "tele": 5,
+   "teleT0": 18.106
+  },
+  {
+   "i": 6,
+   "id": "what",
+   "who": "larry",
+   "kind": "say",
+   "text": "norvid. In your own words, what is the simcluster?",
+   "caption": true,
+   "t0": 23.89,
+   "t1": 27.355,
+   "words": [
+    [
+     23.95,
+     24.479,
+     "norvid."
+    ],
+    [
+     24.889,
+     25.011,
+     "In"
+    ],
+    [
+     25.011,
+     25.219,
+     "your"
+    ],
+    [
+     25.219,
+     25.435,
+     "own"
+    ],
+    [
+     25.435,
+     25.883,
+     "words,"
+    ],
+    [
+     26.123,
+     26.331,
+     "what"
+    ],
+    [
+     26.331,
+     26.469,
+     "is"
+    ],
+    [
+     26.469,
+     26.58,
+     "the"
+    ],
+    [
+     26.58,
+     27.355,
+     "simcluster?"
+    ]
+   ],
+   "tele": 6,
+   "teleT0": 23.84
+  },
+  {
+   "i": 7,
+   "id": "like",
+   "who": "norvid",
+   "kind": "say",
+   "text": "what else is like this",
+   "caption": true,
+   "t0": 27.755,
+   "t1": 28.899,
+   "words": [
+    [
+     27.815,
+     28.027,
+     "what"
+    ],
+    [
+     28.027,
+     28.268,
+     "else"
+    ],
+    [
+     28.268,
+     28.382,
+     "is"
+    ],
+    [
+     28.382,
+     28.67,
+     "like"
+    ],
+    [
+     28.67,
+     28.899,
+     "this"
+    ]
+   ],
+   "tele": 7,
+   "teleT0": 27.705
+  },
+  {
+   "i": 8,
+   "id": "another",
+   "who": "larry",
+   "kind": "say",
+   "text": "That's... another question.",
+   "caption": true,
+   "t0": 29.553,
+   "t1": 31.346,
+   "words": [
+    [
+     29.613,
+     30.041,
+     "That's..."
+    ],
+    [
+     30.451,
+     30.797,
+     "another"
+    ],
+    [
+     30.797,
+     31.346,
+     "question."
+    ]
+   ],
+   "tele": 8,
+   "teleT0": 29.503
+  },
+  {
+   "i": 9,
+   "id": "real",
+   "who": "larry",
+   "kind": "say",
+   "text": "Tell me about yourself.",
+   "caption": true,
+   "t0": 31.646,
+   "t1": 33.069,
+   "words": [
+    [
+     31.706,
+     31.983,
+     "Tell"
+    ],
+    [
+     31.983,
+     32.142,
+     "me"
+    ],
+    [
+     32.142,
+     32.498,
+     "about"
+    ],
+    [
+     32.498,
+     33.069,
+     "yourself."
+    ]
+   ],
+   "tele": 9,
+   "teleT0": 31.596
+  },
+  {
+   "i": 10,
+   "id": "museum",
+   "who": "norvid",
+   "kind": "say",
+   "text": "concept: this interview, but it's a museum exhibit,",
+   "caption": true,
+   "t0": 33.289,
+   "t1": 36.818,
+   "words": [
+    [
+     33.349,
+     33.968,
+     "concept:"
+    ],
+    [
+     34.208,
+     34.42,
+     "this"
+    ],
+    [
+     34.42,
+     35.035,
+     "interview,"
+    ],
+    [
+     35.275,
+     35.492,
+     "but"
+    ],
+    [
+     35.492,
+     35.75,
+     "it's"
+    ],
+    [
+     35.75,
+     35.816,
+     "a"
+    ],
+    [
+     35.816,
+     36.323,
+     "museum"
+    ],
+    [
+     36.323,
+     36.818,
+     "exhibit,"
+    ]
+   ],
+   "tele": 10,
+   "teleT0": 33.239
+  },
+  {
+   "i": 11,
+   "id": "assign",
+   "who": "norvid",
+   "kind": "say",
+   "text": "abel?",
+   "caption": true,
+   "t0": 36.968,
+   "t1": 37.435,
+   "words": [
+    [
+     37.028,
+     37.435,
+     "abel?"
+    ]
+   ],
+   "tele": 11,
+   "teleT0": 36.918
+  },
+  {
+   "i": 12,
+   "id": "goodnews",
+   "who": "abel",
+   "kind": "say",
+   "text": "good news, everyone!",
+   "caption": true,
+   "t0": 37.535,
+   "t1": 39.015,
+   "words": [
+    [
+     37.595,
+     37.832,
+     "good"
+    ],
+    [
+     37.832,
+     38.282,
+     "news,"
+    ],
+    [
+     38.522,
+     39.015,
+     "everyone!"
+    ]
+   ],
+   "tele": 12,
+   "teleT0": 37.485
+  },
+  {
+   "i": 13,
+   "id": "built1",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 40.644,
+   "t1": 41.238,
+   "words": [
+    [
+     40.704,
+     41.049,
+     "Built"
+    ],
+    [
+     41.049,
+     41.238,
+     "it."
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 40.594
+  },
+  {
+   "i": 14,
+   "id": "classic",
+   "who": "larry",
+   "kind": "say",
+   "text": "This is a classic talk show. No gimmicks.",
+   "caption": true,
+   "t0": 42.128,
+   "t1": 44.886,
+   "words": [
+    [
+     42.188,
+     42.405,
+     "This"
+    ],
+    [
+     42.405,
+     42.552,
+     "is"
+    ],
+    [
+     42.552,
+     42.62,
+     "a"
+    ],
+    [
+     42.62,
+     43.124,
+     "classic"
+    ],
+    [
+     43.124,
+     43.46,
+     "talk"
+    ],
+    [
+     43.46,
+     43.833,
+     "show."
+    ],
+    [
+     44.243,
+     44.419,
+     "No"
+    ],
+    [
+     44.419,
+     44.886,
+     "gimmicks."
+    ]
+   ],
+   "tele": 14,
+   "teleT0": 42.078
+  },
+  {
+   "i": 15,
+   "id": "concept2",
+   "who": "norvid",
+   "kind": "say",
+   "text": "concept: talk show, but a giant crow hunts the host,",
+   "caption": true,
+   "t0": 45.106,
+   "t1": 48.999,
+   "words": [
+    [
+     45.166,
+     45.807,
+     "concept:"
+    ],
+    [
+     46.047,
+     46.396,
+     "talk"
+    ],
+    [
+     46.396,
+     46.776,
+     "show,"
+    ],
+    [
+     47.016,
+     47.192,
+     "but"
+    ],
+    [
+     47.192,
+     47.261,
+     "a"
+    ],
+    [
+     47.261,
+     47.683,
+     "giant"
+    ],
+    [
+     47.683,
+     47.982,
+     "crow"
+    ],
+    [
+     47.982,
+     48.369,
+     "hunts"
+    ],
+    [
+     48.369,
+     48.483,
+     "the"
+    ],
+    [
+     48.483,
+     48.999,
+     "host,"
+    ]
+   ],
+   "tele": 15,
+   "teleT0": 45.056
+  },
+  {
+   "i": 16,
+   "id": "already",
+   "who": "abel",
+   "kind": "say",
+   "text": "they don't want you to know this but (it's already running)",
+   "caption": true,
+   "t0": 49.149,
+   "t1": 52.092,
+   "words": [
+    [
+     49.209,
+     49.341,
+     "they"
+    ],
+    [
+     49.341,
+     49.651,
+     "don't"
+    ],
+    [
+     49.651,
+     49.978,
+     "want"
+    ],
+    [
+     49.978,
+     50.134,
+     "you"
+    ],
+    [
+     50.134,
+     50.296,
+     "to"
+    ],
+    [
+     50.296,
+     50.493,
+     "know"
+    ],
+    [
+     50.493,
+     50.674,
+     "this"
+    ],
+    [
+     50.674,
+     50.886,
+     "but"
+    ],
+    [
+     51.126,
+     51.341,
+     "(it's"
+    ],
+    [
+     51.341,
+     51.712,
+     "already"
+    ],
+    [
+     51.712,
+     52.092,
+     "running)"
+    ]
+   ],
+   "tele": 16,
+   "teleT0": 49.099
+  },
+  {
+   "i": 17,
+   "id": "built2",
+   "who": "bot",
+   "kind": "say",
+   "text": "Built it.",
+   "caption": true,
+   "t0": 53.372,
+   "t1": 53.966,
+   "words": [
+    [
+     53.432,
+     53.777,
+     "Built"
+    ],
+    [
+     53.777,
+     53.966,
+     "it."
+    ]
+   ],
+   "tele": 13,
+   "teleT0": 53.322
+  },
+  {
+   "i": 18,
+   "id": "duck",
+   "who": "larry",
+   "kind": "say",
+   "text": "Hey! Shoo!",
+   "caption": true,
+   "t0": 55.011,
+   "t1": 56.108,
+   "words": [
+    [
+     55.071,
+     55.36,
+     "Hey!"
+    ],
+    [
+     55.77,
+     56.108,
+     "Shoo!"
+    ]
+   ],
+   "tele": 17,
+   "teleT0": 54.961
+  },
+  {
+   "i": 19,
+   "id": "escape",
+   "who": "borjev",
+   "kind": "say",
+   "text": "what simcluster is this and how do i escape",
+   "caption": true,
+   "t0": 56.708,
+   "t1": 59.854,
+   "words": [
+    [
+     56.768,
+     57.065,
+     "what"
+    ],
+    [
+     57.065,
+     57.911,
+     "simcluster"
+    ],
+    [
+     57.911,
+     58.056,
+     "is"
+    ],
+    [
+     58.056,
+     58.307,
+     "this"
+    ],
+    [
+     58.307,
+     58.526,
+     "and"
+    ],
+    [
+     58.526,
+     58.82,
+     "how"
+    ],
+    [
+     58.82,
+     59.057,
+     "do"
+    ],
+    [
+     59.057,
+     59.297,
+     "i"
+    ],
+    [
+     59.297,
+     59.854,
+     "escape"
+    ]
+   ],
+   "tele": 18,
+   "teleT0": 56.658
+  },
+  {
+   "i": 20,
+   "id": "who",
+   "who": "larry",
+   "kind": "say",
+   "text": "Who is that?",
+   "caption": true,
+   "t0": 60.853,
+   "t1": 61.491,
+   "words": [
+    [
+     60.913,
+     61.164,
+     "Who"
+    ],
+    [
+     61.164,
+     61.284,
+     "is"
+    ],
+    [
+     61.284,
+     61.491,
+     "that?"
+    ]
+   ],
+   "tele": 19,
+   "teleT0": 60.803
+  },
+  {
+   "i": 21,
+   "id": "mybot",
+   "who": "abel",
+   "kind": "say",
+   "text": "my bot. opt-in only now.",
+   "caption": true,
+   "t0": 61.711,
+   "t1": 63.765,
+   "words": [
+    [
+     61.771,
+     61.975,
+     "my"
+    ],
+    [
+     61.975,
+     62.343,
+     "bot."
+    ],
+    [
+     62.753,
+     63.129,
+     "opt-in"
+    ],
+    [
+     63.129,
+     63.432,
+     "only"
+    ],
+    [
+     63.432,
+     63.765,
+     "now."
+    ]
+   ],
+   "tele": 20,
+   "teleT0": 61.661
+  },
+  {
+   "i": 22,
+   "id": "city",
+   "who": "larry",
+   "kind": "say",
+   "text": "Ah, look at that skyline. My beautiful city.",
+   "caption": true,
+   "t0": 64.435,
+   "t1": 67.862,
+   "words": [
+    [
+     64.495,
+     64.791,
+     "Ah,"
+    ],
+    [
+     65.031,
+     65.302,
+     "look"
+    ],
+    [
+     65.302,
+     65.431,
+     "at"
+    ],
+    [
+     65.431,
+     65.605,
+     "that"
+    ],
+    [
+     65.605,
+     66.351,
+     "skyline."
+    ],
+    [
+     66.761,
+     66.98,
+     "My"
+    ],
+    [
+     66.98,
+     67.545,
+     "beautiful"
+    ],
+    [
+     67.545,
+     67.862,
+     "city."
+    ]
+   ],
+   "tele": 21,
+   "teleT0": 64.385
+  },
+  {
+   "i": 23,
+   "id": "buddy",
+   "who": "norvid",
+   "kind": "say",
+   "text": "buddy that's my freaking simcluster",
+   "caption": true,
+   "t0": 68.212,
+   "t1": 70.175,
+   "words": [
+    [
+     68.272,
+     68.521,
+     "buddy"
+    ],
+    [
+     68.521,
+     68.85,
+     "that's"
+    ],
+    [
+     68.85,
+     69.05,
+     "my"
+    ],
+    [
+     69.05,
+     69.471,
+     "freaking"
+    ],
+    [
+     69.471,
+     70.175,
+     "simcluster"
+    ]
+   ],
+   "tele": 22,
+   "teleT0": 68.162
+  },
+  {
+   "i": 24,
+   "id": "thankyou",
+   "who": "larry",
+   "kind": "say",
+   "text": "norvid and Abel, everybody!",
+   "caption": true,
+   "t0": 71.383,
+   "t1": 73.341,
+   "words": [
+    [
+     71.443,
+     71.85,
+     "norvid"
+    ],
+    [
+     71.85,
+     72.037,
+     "and"
+    ],
+    [
+     72.037,
+     72.429,
+     "Abel,"
+    ],
+    [
+     72.669,
+     73.341,
+     "everybody!"
+    ]
+   ],
+   "tele": 23,
+   "teleT0": 71.333
+  },
+  {
+   "i": 25,
+   "id": "claim2",
+   "who": "norvid",
+   "kind": "say",
+   "text": "claim.",
+   "caption": true,
+   "t0": 73.641,
+   "t1": 74.141,
+   "words": [
+    [
+     73.701,
+     74.141,
+     "claim."
+    ]
+   ],
+   "tele": 3,
+   "teleT0": 73.591
+  }
+ ],
+ "cues": {
+  "enter": 8.862,
+  "unveil": 39.065,
+  "exhibit": 39.54,
+  "exhibit-out": 44.986,
+  "release": 52.142,
+  "pop": 56.258,
+  "optin": 63.765,
+  "city": 64.285
+ },
+ "sfx": [
+  {
+   "name": "applause-1",
+   "t0": 0.3,
+   "t1": 3.52
+  },
+  {
+   "name": "laugh-1",
+   "t0": 5.767,
+   "t1": 7.387
+  },
+  {
+   "name": "applause-long-1",
+   "t0": 8.662,
+   "t1": 14.472
+  },
+  {
+   "name": "caw-1",
+   "t0": 8.852,
+   "t1": 9.882
+  },
+  {
+   "name": "gator-1",
+   "t0": 9.202,
+   "t1": 10.012
+  },
+  {
+   "name": "caw-2",
+   "t0": 12.973,
+   "t1": 13.573
+  },
+  {
+   "name": "laugh-2",
+   "t0": 13.013,
+   "t1": 14.523
+  },
+  {
+   "name": "gator-1",
+   "t0": 22.744,
+   "t1": 23.554
+  },
+  {
+   "name": "laugh-3",
+   "t0": 22.928,
+   "t1": 24.578
+  },
+  {
+   "name": "chuckle-1",
+   "t0": 28.949,
+   "t1": 29.909
+  },
+  {
+   "name": "whoosh-1",
+   "t0": 39.015,
+   "t1": 39.565
+  },
+  {
+   "name": "tada-1",
+   "t0": 39.54,
+   "t1": 40.78
+  },
+  {
+   "name": "applause-2",
+   "t0": 41.238,
+   "t1": 44.588
+  },
+  {
+   "name": "caw-1",
+   "t0": 52.292,
+   "t1": 53.322
+  },
+  {
+   "name": "biglaugh-1",
+   "t0": 53.966,
+   "t1": 56.466
+  },
+  {
+   "name": "laugh-1",
+   "t0": 59.904,
+   "t1": 61.524
+  },
+  {
+   "name": "ding-1",
+   "t0": 63.765,
+   "t1": 64.565
+  },
+  {
+   "name": "biglaugh-2",
+   "t0": 70.225,
+   "t1": 72.205
+  },
+  {
+   "name": "applause-1",
+   "t0": 70.519,
+   "t1": 73.739
+  },
+  {
+   "name": "caw-2",
+   "t0": 74.161,
+   "t1": 74.761
+  },
+  {
+   "name": "sting-1",
+   "t0": 74.431,
+   "t1": 76.701
+  },
+  {
+   "name": "applause-2",
+   "t0": 73.993,
+   "t1": 77.343
+  }
+ ],
+ "music": []
+}

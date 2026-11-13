@@ -1,0 +1,21 @@
+{
+  "name": "@vibe-dump/late-cluster",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "gallery": {
+    "title": "The Late Cluster",
+    "description": "A late-night talk show about Bluesky's simcluster, performed entirely by CHIMERA physical-model voices and glowing vector-scope heads.",
+    "tags": ["art"],
+    "status": "done",
+    "models": ["Fable 5.2", "Opus 5.5"],
+    "thinking": "high"
+  }
+}

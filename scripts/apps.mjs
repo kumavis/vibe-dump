@@ -148,6 +148,11 @@ export async function discoverApps() {
   // An app whose date could not be read sorts to the end — which is most of
   // them in a shallow clone, where `git log` cannot see far enough back. The
   // gallery build refuses to ship that; see the check it makes.
-  apps.sort((a, b) => (b.updated ?? '').localeCompare(a.updated ?? '') || a.title.localeCompare(b.title))
+  //
+  // Compared as instants, not as strings: `%aI` keeps each author's own UTC
+  // offset, and the history mixes `Z` with -10:00, +09:00 and -07:00, so two ISO
+  // strings up to a day apart can sort the wrong way round as text.
+  const when = (app) => (app.updated ? Date.parse(app.updated) : -Infinity)
+  apps.sort((a, b) => when(b) - when(a) || a.title.localeCompare(b.title))
   return apps
 }
