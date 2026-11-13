@@ -414,6 +414,7 @@ function pack(grid, o, rng) {
     let tu = clampC(typical * (1 + rng.jitter(0.22)))
     let tv = clampC(typical * (1 + rng.jitter(0.22)))
     const e = rng.next()
+    if (o.maxAspect) return [tu, tv] // opts.maxAspect (optional): no cells laid out long
     if (e < 0.22) tu = typical * rng.range(1.6, 2.5)
     else if (e < 0.34) tv = typical * rng.range(1.6, 2.5)
     return [tu, tv]
@@ -789,6 +790,17 @@ function layout(s, x, y, W, H, hand, depth) {
     return
   }
   const asp = long / short
+  if (o.maxAspect && asp > o.maxAspect) {
+    // opts.maxAspect (optional, e.g. 1.3): every cell cut into near-square spirals, no pairs or long spirals
+    const n = Math.round(asp)
+    if (n <= 1 || long / n < 2.6 * p) { spiral(s, x, y, W, H, hand); return }
+    for (let i = 0; i < n; i++) {
+      const a = (long * i) / n, b = (long * (i + 1)) / n
+      if (W >= H) spiral(s, x + a, y, b - a, H, i % 2 ? -hand : hand)
+      else spiral(s, x, y + a, W, b - a, i % 2 ? -hand : hand)
+    }
+    return
+  }
   if (asp < 1.6 || depth > 2) {
     spiral(s, x, y, W, H, hand)
     return

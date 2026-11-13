@@ -10,7 +10,7 @@
 // boss eyes, squared spiral terminals, on a squared leiwen ground at 1.9 mm pitch.
 // The left half is drawn with the axis on the mid flange and mirrored.
 
-import { LEVELS, GROUND, style, sheet, sq, render, hookRow, rect, inset } from './draw.js'
+import { LEVELS, GROUND, style, sheet, sq, render, rect, inset, sqSpiralBox } from './draw.js'
 
 const P = style(LEVELS.wall)
 
@@ -49,8 +49,8 @@ export function wallPanel(kit, cell, { kind, ppmm, seed }) {
 
   // ---- motifs (left half; axis = cx)
   const k = kind === 'short'
-  topKui(kit, panel, cells.friezeTop, { short: k, seed: seed + 1 })
-  bottomKui(kit, panel, cells.friezeBot, { short: k, seed: seed + 2 })
+  friezeKui(kit, panel, cells.friezeTop, { short: k, seed: seed + 1, top: true })
+  friezeKui(kit, panel, cells.friezeBot, { short: k, seed: seed + 2, top: false })
   oxHead(kit, panel, cells.cornerTop, { seed: seed + 3 })
   cornerTaotie(kit, panel, cells.cornerBot, { seed: seed + 4 })
   columnKui(kit, panel, cells.column, { seed: seed + 5 })
@@ -76,130 +76,134 @@ export function wallPanel(kit, cell, { kind, ppmm, seed }) {
 }
 
 // --------------------------------------------------------------------------
-// Top-frieze kui (dossier §c.3 table): head at the flange, eye boss ≈ 50 from
-// the axis at 0.45 of the band, squared C crest above, a ∩ jaw beside the
-// flange, a straight body with C-hook quills above and below, and a large
-// squared tail spiral at the outer end.
+// Frieze kui (dossier §c.3 table; detail-frieze-top-centre.jpg, rubbing): the head at
+// the mid flange — a HEAVY squared C crest (≈ 75 × 45, curling inward) over a round boss
+// eye 45–55 from the axis; below it a short ∩ jaw whose inner leg touches the flange
+// (top frieze) or clawed legs and a snout curling down at the flange foot (bottom
+// frieze). A broad straight body (15–18) runs outward fringed with small C-hook quills,
+// and ends in a LARGE 3-turn squared tail spiral filling the band height at the outer
+// end. Plateau widths are the dossier's: crest / jaw bands 10–12, body 16–17.
 
-function topKui(kit, panel, r, { short, seed }) {
-  const L = r.w // axis at local x = L
-  const S = sheet(kit, r, { seed })
+const BAND = 11 // crest / jaw / spiral band width (mm)
+const BODY = 16.5 // kui body band (mm)
+
+/** Half a frieze: `top` (∩ jaw) or bottom (clawed legs + snout). y from the band's bottom. */
+function friezeKui(kit, panel, r, { short, seed, top }) {
+  const L = r.w // the axis is at local x = L
+  const h = r.h
+  const S = sheet(kit, r, { seed, wobble: 0.35 })
   const A = (dx) => L - dx // distance from the axis → local x
-  // eye: just below the crest, ≈ 48 from the axis
-  S.boss([A(48), 54], 9.5, { kind: 'round', base: 'ground', pupil: 'none' })
-  // crest: a big squared C over the eye, opening downward, the outer foot curling inward,
-  // and a second squared scroll (the "G") nested in it from the axis side
-  S.band(sq(kit, [[A(12), 66], [A(12), 112], [A(108), 112], [A(108), 68], [A(74), 68], [A(74), 92], [A(90), 92]], 8), 13.2)
-  S.band(sq(kit, [[A(30), 68], [A(30), 94], [A(54), 94], [A(54), 82]], 4), 9.6)
-  // jaw ∩ beside the flange, feet flaring
-  S.band(sq(kit, [[A(98), 6], [A(86), 6], [A(86), 36], [A(22), 36], [A(22), 8], [A(12), 8]], 7), 12.0)
-  // body: a heavy straight band from behind the head to the tail spiral
-  const tail = short ? 68 : 86 // tail spiral size (mm)
-  const bx = A(108)
-  const x0 = 4 + tail
-  S.band([[bx + 8, 74], [x0, 74]], 19, 'flat')
-  // the head's second scroll beside the crest (outer side), over the body
-  S.band(sq(kit, [[A(118), 86], [A(118), 112], [A(150), 112], [A(150), 94], [A(134), 94]], 5), 10.8)
-  // tail: big squared spiral below-left, attached by the body bar
-  const d = 24
-  S.band(sq(kit, [[x0 + 2, 74], [10, 74], [10, 8], [4 + tail, 8], [4 + tail, 52], [10 + d, 52], [10 + d, 27], [4 + tail - d, 27], [4 + tail - d, 38]], 6), 15.6)
-  // quills: a few squared C-hooks hanging under the body
-  hookRow(kit, S, x0 + 20, bx - 12, 64, short ? 2 : 4, { up: -1, h: 22, back: 12, w: 7, dir: 1 })
-  render(kit, panel, S, P, r)
-}
-
-// Bottom-frieze kui: same head, eye a little lower; legs with claws toward the
-// flange and a trunk that curls down at the flange foot instead of the ∩ jaw.
-function bottomKui(kit, panel, r, { short, seed }) {
-  const L = r.w
-  const S = sheet(kit, r, { seed })
-  const A = (dx) => L - dx
-  S.boss([A(48), 58], 9.5, { kind: 'round', base: 'ground', pupil: 'none' })
-  // crest
-  S.band(sq(kit, [[A(13), 74], [A(13), 114], [A(100), 114], [A(100), 76], [A(66), 76], [A(66), 96], [A(80), 96]], 7), 12.0)
-  S.band(sq(kit, [[A(30), 76], [A(30), 98], [A(50), 98]], 4), 8.4)
-  // trunk: down beside the flange, curling at the foot
-  S.taper(sq(kit, [[A(30), 46], [A(30), 18], [A(14), 18], [A(14), 28], [A(22), 28]], 5), 10.8, 7.2, 0.5)
-  // body
-  const tail = short ? 64 : 82
-  const bx = A(64)
-  const x0 = 4 + tail
-  S.band([[bx, 66], [x0, 66]], 15, 'flat')
-  S.band(sq(kit, [[A(64), 66], [A(64), 52], [A(40), 52]], 5), 9) // jowl to the eye
-  const d = 22
-  S.band(sq(kit, [[x0 + 2, 66], [10, 66], [10, 112], [4 + tail, 112], [4 + tail, 80], [10 + d, 80], [10 + d, 98], [4 + tail - d, 98], [4 + tail - d, 90]], 5), 14.4)
-  // legs: down from the body, claws hooked toward the flange
-  const legs = short ? [A(118)] : [A(122), A(220)]
-  for (const lx of legs) {
-    S.taper(sq(kit, [[lx, 60], [lx, 16], [lx + 18, 16], [lx + 18, 24]], 4), 13.2, 7.2, 0.55)
-    S.taper(sq(kit, [[lx - 2, 22], [lx - 2, 6], [lx + 10, 6]], 3), 7.2, 4.2, 0.5)
+  const tail = short ? 66 : 84 // tail spiral (mm square)
+  const xT = 5 + tail // inner side of the tail spiral (local x)
+  const yB = 60 // body centre line
+  const yC = h - 9 // crest top centre line
+  // crest: heavy squared C over the eye, opening toward the axis-bottom, curling inward
+  S.band(sq(kit, [[A(28), yC - 40], [A(28), yC], [A(106), yC], [A(106), yC - 42], [A(66), yC - 42], [A(66), yC - 16], [A(88), yC - 16], [A(88), yC - 28]], 4), BAND)
+  // eye: domed boss, ≈ 48 from the axis
+  S.boss([A(48), top ? 54 : 50], 9, { kind: 'round', base: 'ground', pupil: 'none' })
+  if (top) {
+    // ∩ jaw beside the flange: inner leg on the flange, feet hooked inward
+    S.band(sq(kit, [[A(56), 9], [A(68), 9], [A(68), 37], [A(14), 37], [A(14), 7]], 4), BAND)
+    // jowl from the jaw back into the body
+    S.band(sq(kit, [[A(68), 24], [A(96), 24], [A(96), yB]], 4), BAND - 1)
+  } else {
+    // snout: down beside the flange from under the eye, curling outward at the foot
+    S.band(sq(kit, [[A(34), 36], [A(14), 36], [A(14), 9], [A(40), 9], [A(40), 21]], 4), BAND)
+    // two short legs off the body, claws hooked toward the flange
+    const legs = short ? [A(132)] : [A(132), A(214)]
+    for (const lx of legs) {
+      S.taper(sq(kit, [[lx, yB - 4], [lx, 20], [lx + 20, 20]], 4), 12, 8, 0.6)
+      for (const cx of [lx + 4, lx + 16]) S.taper(sq(kit, [[cx, 16], [cx + 3, 8], [cx + 9, 9]], 2), 6, 3.5, 0.3)
+    }
   }
-  hookRow(kit, S, x0 + 8, bx - 8, 74, short ? 3 : 6, { up: 1, h: 15, back: 9, w: 5.5, dir: -1 })
+  // body: a broad straight band from behind the head to the tail spiral
+  S.band([[A(100), yB], [xT, yB]], BODY, 'flat')
+  // tail: a large 3-turn squared spiral filling the band height at the outer end
+  const bh = Math.min(h - 16, tail * 1.12) // a near-square spiral, against the band edge away from the body
+  const box = top ? [5, h - 8 - bh, xT, h - 8] : [5, 8, xT, 8 + bh]
+  const sp = sqSpiralBox(box, short ? 11.5 : 14.5, 3, { flipY: !top })
+  S.band(sq(kit, [[xT + 6, yB], [xT, yB], ...sp], 4), short ? 9.5 : BAND)
+  // quills: small squared C-hooks fringing the body above (and below, top frieze)
+  const q0 = xT + 14
+  quillRow(kit, S, q0, A(114), yB + BODY / 2 - 1, short ? 2 : 5, 1, 22)
+  if (top) quillRow(kit, S, q0, A(106), yB - BODY / 2 + 1, short ? 2 : 4, -1, 20)
   render(kit, panel, S, P, r)
 }
 
-// Upper corner: ox-head 牛首 half-mask, axis on the arris (local x = 0):
-// broad crescent horn with transverse ribbing across the top, curving away from
-// the corner; round boss eye ≈ 42 from the arris; short ∩ jaw with a hooked fang.
+/** n small squared C-hooks standing on the body edge at y, rising `dir`·len, curled back toward the tail. */
+function quillRow(kit, S, x0, x1, y, n, dir, len) {
+  const step = (x1 - x0) / Math.max(1, n)
+  const L = Math.max(14, Math.min(34, len))
+  for (let i = 0; i < n; i++) {
+    const x = x0 + step * (i + 0.62)
+    const w = Math.min(12, step * 0.4)
+    S.taper(sq(kit, [[x, y], [x, y + dir * L], [x - w, y + dir * L], [x - w, y + dir * (L - 8)]], 2.5), 8, 5, 0.5)
+  }
+}
+
+// Upper corner: ox-head 牛首 half-mask, axis on the arris (local x = 0; the same drawing
+// on both faces, so the two halves are mirror images about the corner flange): a broad
+// ribbed crescent horn ≈ 45 tall across the whole square, its tip upturned at the outer
+// side; boss eye ≈ 42 from the arris; ∩ jaw with a hooked fang; a C ear outside the eye.
 function oxHead(kit, panel, r, { seed }) {
-  const S = sheet(kit, r, { seed })
-  const h = r.h
-  // crescent: lower edge sags, upper edge rises to an upturned tip at the outer side
+  const S = sheet(kit, r, { seed, wobble: 0.3 })
+  const h = r.h, w = r.w
   const top = [], bot = []
-  for (let i = 0; i <= 24; i++) {
-    const t = i / 24
-    const x = 3 + t * (r.w - 10)
-    top.push([x, h - 6 - 12 * Math.sin(Math.PI * t * 0.5) * (1 - t) + 2 * t])
-    bot.push([x, h - 30 - 10 * Math.sin(Math.PI * t) + 22 * t * t])
+  const n = 24
+  for (let i = 0; i <= n; i++) {
+    const t = i / n
+    const x = 3 + t * (w - 9)
+    top.push([x, h - 5 - 3 * Math.sin(Math.PI * t)])
+    bot.push([x, h - 52 + 16 * Math.sin(Math.PI * t * 0.5) + 26 * t * t * t])
   }
-  const tip = top[top.length - 1]
-  S.poly([...top, [tip[0] + 2, tip[1] + 2], ...bot.reverse()])
-  // transverse ribbing (comb-like incisions)
-  for (let i = 2; i < 23; i += 2) {
-    const a = top[i], c = bot[24 - i]
-    S.line([[a[0] + 0.5, a[1] - 3.5], [c[0] - 0.5, c[1] + 3.5]], 1.1)
+  S.poly([...top, ...bot.slice().reverse()])
+  // transverse ribbing (7 comb-like incisions across the crescent)
+  for (let k = 1; k <= 7; k++) {
+    const i = Math.round((k / 8) * n)
+    S.line([[top[i][0] - 1.5, top[i][1] - 3.5], [bot[i][0] + 1.5, bot[i][1] + 3.5]], 1.5)
   }
-  // eye and its socket band
-  S.boss([42, h * 0.5], 7.8, { kind: 'round', base: 'ground', pupil: 'none' })
-  S.band(sq(kit, [[16, h * 0.5 + 16], [64, h * 0.5 + 16], [64, h * 0.5 - 2], [56, h * 0.5 - 2]], 4), 8.4)
-  // ear: C out at the side
-  S.band(sq(kit, [[r.w - 10, h * 0.5 + 18], [r.w - 30, h * 0.5 + 18], [r.w - 30, h * 0.5 - 10], [r.w - 10, h * 0.5 - 10], [r.w - 10, h * 0.5 + 2]], 4), 8.4)
-  // jaw ∩ with a hooked fang
-  S.band(sq(kit, [[6, h * 0.36], [62, h * 0.36], [62, 10], [50, 10], [50, 18]], 4), 9.6)
-  S.taper(sq(kit, [[30, h * 0.36], [30, 16], [22, 16]], 3), 8.4, 4.2, 0.5)
+  S.boss([42, h * 0.42], 8.5, { kind: 'round', base: 'ground', pupil: 'none' })
+  // brow over the eye, from the arris
+  S.band(sq(kit, [[4, h * 0.42 + 15], [60, h * 0.42 + 15], [60, h * 0.42 - 4]], 4), 9)
+  // ear: hollow C outside the eye
+  S.band(sq(kit, [[w - 10, h * 0.42 + 12], [w - 32, h * 0.42 + 12], [w - 32, h * 0.42 - 14], [w - 10, h * 0.42 - 14], [w - 10, h * 0.42 - 2]], 4), 9)
+  // ∩ jaw with a hooked fang
+  S.band(sq(kit, [[4, 30], [66, 30], [66, 8], [52, 8], [52, 16]], 4), 10)
+  S.taper(sq(kit, [[28, 30], [28, 12], [18, 12]], 3), 9, 5, 0.5)
   render(kit, panel, S, P, r)
 }
 
-// Lower corner: taotie half-mask — squared C horn, round boss eye, hooked jaw.
+// Lower corner: taotie half-mask on the arris — heavy squared C horn, boss eye, hooked jaw.
 function cornerTaotie(kit, panel, r, { seed }) {
-  const S = sheet(kit, r, { seed })
-  const h = r.h
-  S.band(sq(kit, [[8, h - 44], [8, h - 10], [r.w - 14, h - 10], [r.w - 14, h - 44], [r.w - 48, h - 44], [r.w - 48, h - 26], [r.w - 34, h - 26]], 6), 12.0)
-  S.boss([42, h * 0.47], 8.5, { kind: 'round', base: 'ground', pupil: 'none' })
-  S.band(sq(kit, [[16, h * 0.47 + 14], [62, h * 0.47 + 14], [62, h * 0.47 - 6]], 4), 8.4)
-  S.band(sq(kit, [[6, h * 0.3], [70, h * 0.3], [70, 10], [40, 10], [40, 22], [54, 22]], 5), 10.8)
-  S.band(sq(kit, [[r.w - 12, h * 0.6], [r.w - 12, 10]], 3), 8.4)
+  const S = sheet(kit, r, { seed, wobble: 0.3 })
+  const h = r.h, w = r.w
+  S.band(sq(kit, [[6, h - 44], [6, h - 10], [w - 12, h - 10], [w - 12, h - 50], [w - 46, h - 50], [w - 46, h - 30], [w - 30, h - 30]], 4), BAND)
+  S.boss([40, h * 0.5], 8.5, { kind: 'round', base: 'ground', pupil: 'none' })
+  S.band(sq(kit, [[4, h * 0.5 + 15], [58, h * 0.5 + 15], [58, h * 0.5 - 4]], 4), 9)
+  S.band(sq(kit, [[4, 36], [72, 36], [72, 9], [40, 9], [40, 22], [54, 22]], 4), BAND)
+  S.band(sq(kit, [[w - 12, h * 0.56], [w - 12, 10]], 3), 9)
   render(kit, panel, S, P, r)
 }
 
-// Side column: one vertical K5 kui, head UP at the top facing the corner (axis
-// at local x = 0): eye ≈ 35 from the corner side at 0.33 of the height from the
-// top, crest above, jaw toward the corner, body descending in squared hooks to
-// a big squared tail spiral at ≈ 0.8 down.
+// Side column: ONE vertical K5 kui, head UP facing the corner (arris at local x = 0):
+// heavy squared crest in the top third, boss eye at 0.33 of the height from the top
+// ≈ 35 from the corner side, ⊐ jaw opening toward the corner, then the body descends
+// along the field side into a large 3-turn squared tail spiral at 0.65–0.95 down.
 function columnKui(kit, panel, r, { seed }) {
-  const S = sheet(kit, r, { seed })
+  const S = sheet(kit, r, { seed, wobble: 0.35 })
   const h = r.h, w = r.w
   const ey = h * 0.67
-  S.boss([36, ey], 8.8, { kind: 'round', base: 'ground', pupil: 'none' })
-  // crest: squared C above the eye, opening down, curling in
-  S.band(sq(kit, [[16, ey + 20], [16, h - 8], [w - 12, h - 8], [w - 12, ey + 18], [w - 44, ey + 18], [w - 44, ey + 38], [w - 30, ey + 38]], 6), 12.0)
-  // jaw: ⊐ opening toward the corner, lower end hooked
-  S.band(sq(kit, [[6, ey - 18], [62, ey - 18], [62, ey - 52], [8, ey - 52], [8, ey - 40], [22, ey - 40]], 5), 10.8)
-  // body: down the inner side, then the big squared tail spiral at the bottom
-  const d = 22
-  S.band(sq(kit, [[w - 26, ey + 4], [w - 26, h * 0.38], [12, h * 0.38], [12, 8], [w - 10, 8], [w - 10, h * 0.3 - 4], [12 + d, h * 0.3 - 4], [12 + d, 8 + d], [w - 10 - d, 8 + d], [w - 10 - d, 36]], 5), 14.4)
-  // quills / claws on the body's back, pointing up
-  hookRow(kit, S, 30, w - 40, h * 0.38 + 7, 2, { up: 1, h: 13, back: 8, w: 5.5, dir: 1 })
+  // crest: squared C above the eye, curling inward
+  S.band(sq(kit, [[w - 16, ey + 20], [w - 16, h - 8], [12, h - 8], [12, ey + 30], [w - 50, ey + 30], [w - 50, ey + 50], [w - 34, ey + 50]], 4), BAND)
+  S.boss([35, ey], 8.8, { kind: 'round', base: 'ground', pupil: 'none' })
+  // jaw: ⊐ opening toward the corner, lower lip hooked
+  S.band(sq(kit, [[6, ey - 17], [64, ey - 17], [64, ey - 50], [10, ey - 50], [10, ey - 38]], 4), BAND - 1)
+  // body down the field side into the tail spiral
+  const box = [8, 8, w - 16, Math.min(h * 0.36, w - 10)]
+  const sp = sqSpiralBox(box, 13, 3)
+  S.band(sq(kit, [[w - 16, ey + 22], ...sp], 4), BAND)
+  // a claw off the body toward the corner, under the jaw
+  S.taper(sq(kit, [[w - 16, ey - 66], [44, ey - 66], [44, ey - 78]], 3), 9, 5.5, 0.6)
   render(kit, panel, S, P, r)
 }
 

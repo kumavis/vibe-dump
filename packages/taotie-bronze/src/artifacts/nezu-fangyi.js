@@ -14,13 +14,13 @@
 
 import * as THREE from 'three'
 import { renderSheets } from './nezu-fangyi/relief.js'
-import { bellySheet, neckSheet, footSheet, lidBroadSheet, lidNarrowSheet, knobSheet } from './nezu-fangyi/decor.js'
+import { bellySheet, neckSheet, footSheet, lidBroadSheet, lidNarrowSheet, knobSheet, KNOB_FIELD } from './nezu-fangyi/decor.js'
 import { H, LV, PLAN, bellyX, bellyZ, polyPath, segmentOutline, FLANGE_POLY, densify, flangeGrooves, buildKnob, block, rectPoint } from './nezu-fangyi/form.js'
 
 const SIDES = ['front', 'right', 'back', 'left']
 const LID_CONCAVE = -0.06 // straight to slightly convex slopes, crisp at the eave (no bell-cast)
 const SN = [[0, 0, 1], [1, 0, 0], [0, 0, -1], [-1, 0, 0]]
-const BELLY_BORDER = 6.6 // plain lower border of the belly (0.14 → 0.16 H)
+const BELLY_BORDER = 7.0 // plain lower border of the belly (0.14 → 0.16 H), curling under
 
 export default {
   id: 'nezu-fangyi',
@@ -90,10 +90,12 @@ export default {
       const cell = bellyL.sides[side].cells[0][0]
       const p = new kit.ReliefPanel({ width: cell.w, height: cell.h, ppmm, seed: s })
       const hw = cell.w / 2, v0 = BELLY_BORDER, Hf = cell.h - v0 - 1.0
-      const sheet = bellySheet(kit, { hw, v0, Hf, kind, L1: 3.3, seed: s })
+      const corner = kind === 'broad' ? 4.2 : 3.6 // clear of the corner flange
+      // V-b: 3 mm flat-topped plateaus with rounded shoulders and ONE 0.6 mm incised line; slit eye bosses 5 mm in all
+      const sheet = bellySheet(kit, { hw: hw - corner, v0, Hf, kind, L1: 3.0, seed: s })
       renderSheets(kit, p, [{ sheet, xc: hw }], {
-        L1: 3.3, shoulder: 0.95, groove: { w: 0.95, d: 0.7 }, ground: ground(0.9), seed: s,
-        fields: [{ x: 1.2, y: v0 - 0.6, w: hw - 1.2 - (kind === 'broad' ? 4.2 : 3.6), h: Hf + 0.6 }],
+        L1: 3.0, shoulder: 1.25, groove: { w: 0.65, d: 0.5 }, ground: ground(0.9), seed: s,
+        fields: [{ x: 1.2, y: v0 - 0.6, w: hw - 1.2 - corner, h: Hf + 0.6 }],
       })
       return p.bake()
     }
@@ -115,8 +117,8 @@ export default {
     }
     await onProgress(0.24, 'neck frieze')
     const neckV0 = (0.40 - 0.39) * H + 1.0
-    panels.neckLong = friezePanel(neckL.sides.front.cells[0][0], neckSheet, { v0: neckV0, top: 1.0, slot: 5.8, L1: 1.5, s: seed + 3 })
-    panels.neckShort = friezePanel(neckL.sides.right.cells[0][0], neckSheet, { v0: neckV0, top: 1.0, slot: 4.8, L1: 1.5, s: seed + 4 })
+    panels.neckLong = friezePanel(neckL.sides.front.cells[0][0], neckSheet, { v0: neckV0, top: 1.0, slot: 5.8, L1: 1.3, s: seed + 3 })
+    panels.neckShort = friezePanel(neckL.sides.right.cells[0][0], neckSheet, { v0: neckV0, top: 1.0, slot: 4.8, L1: 1.3, s: seed + 4 })
     await onProgress(0.34, 'foot frieze')
     panels.footLong = friezePanel(footL.sides.front.cells[0][0], footSheet, { v0: 1.0, top: 1.0, slot: 5.2, L1: 1.2, s: seed + 5 })
     panels.footShort = friezePanel(footL.sides.right.cells[0][0], footSheet, { v0: 1.0, top: 1.0, slot: 4.8, L1: 1.2, s: seed + 6 })
@@ -172,7 +174,9 @@ export default {
       const sheet = knobSheet(kit, { kind, halfAt, slant, border: 3, seed: s })
       renderSheets(kit, p, [{ sheet, xc: h0 }], {
         L1: 1.25, shoulder: 0.45, groove: { w: 0.5, d: 0.32 }, ground: ground(0.72, 0.3), seed: s,
-        fields: [{ x: 3 + (h0 - h1), y: 3, w: h1 - 3, h: slant - 6 }, { x: 3 + (h0 - h1) * 0.5, y: 3, w: h0 - 3 - (h0 - h1) * 0.5, h: slant * 0.5 - 3 }],
+        fields: kind === 'long'
+          ? [{ x: h0 - KNOB_FIELD.u - 0.6, y: KNOB_FIELD.v0 * slant - 0.6, w: KNOB_FIELD.u + 0.6, h: (KNOB_FIELD.v1 - KNOB_FIELD.v0) * slant + 1.2 }]
+          : [{ x: 3 + (h0 - h1), y: 3, w: h1 - 3, h: slant - 6 }, { x: 3 + (h0 - h1) * 0.5, y: 3, w: h0 - 3 - (h0 - h1) * 0.5, h: slant * 0.5 - 3 }],
       })
       return p.bake()
     }
@@ -247,9 +251,10 @@ export default {
     const regs = {
       foot: { body: footFrieze, y0: 13.0, y1: 40.5 },
       belly: { body: belly, y0: LV.foot, y1: LV.belly },
-      neck: { body: neckBody, y0: LV.belly + 5.3, y1: LV.neck },
+      // the belly caps stand ≈ 6 mm above the belly top: the neck segments start above them, a 3 mm gap between
+      neck: { body: neckBody, y0: LV.belly + 9, y1: LV.neck },
     }
-    const proj = { foot: { corner: 10, centre: 10 }, belly: { corner: 14, centre: 14 }, neck: { corner: 9, centre: 10 } }
+    const proj = { foot: { corner: 11, centre: 10.5 }, belly: { corner: 14, centre: 14 }, neck: { corner: 9, centre: 10 } }
     for (const [name, r] of Object.entries(regs)) {
       for (let k = 0; k < 4; k++) {
         // corner flanges (45°, F2 hooked, 6 mm thick)
@@ -267,8 +272,8 @@ export default {
           // broad face: one rectangular block 9 × 26 mm
           F({ path: pf, outline: [[-1.6, -2.2], [L + 0.4, -2.2], [L + 0.4, 6.2], [-1.6, 6.2]], thickness: 9, embed: 2.2, taper: 1.5, carve: 'contour' })
         } else {
-          // broad face foot tab: a bar dropping below the frieze to a rounded block on the plinth ledge
-          F({ path: pf, outline: [[-0.8, -2.2], [L + 4.8, -2.2], [L + 4.8, 4.6], [10, 4.6], [8.6, 6.1], [6.8, 6.6], [0.8, 6.6], [-0.4, 5.6], [-0.8, 3.5]], thickness: 8, embed: 2.2 })
+          // broad face foot: a low block over the frieze, then a rounded tab hanging below it onto the plinth ledge
+          F({ path: pf, outline: [[-1.4, -2.2], [L + 4.8, -2.2], [L + 4.8, 4.2], [10.8, 4.2], [9.8, 7.4], [8.2, 9.2], [5, 9.8], [1, 9.4], [-0.6, 8.2], [-1.4, 6]], thickness: 8, embed: 2.2, carve: false })
         }
       }
     }
@@ -289,8 +294,15 @@ export default {
       const hip = lid.userData.hips[k].map((p) => lidY(p.clone()))
       const ph = polyPath(hip, hip.map((_, i) => faceN(k, i / 12).add(faceN((k + 1) % 4, i / 12)).normalize()))
       const L = ph.length
-      // a straight thick bar lying on the hip; past the eave corner it ends in a squared hook turned down
-      F({ path: ph, outline: [[-8, -3], [L, -3], [L, 7.5], [-15, 7.5], [-15, -7.5], [-9.5, -7.5], [-9.5, -3.5]], thickness: 8, embed: 3, taper: 1, carve: 'contour' })
+      // a broad plate on the hip, 7 mm thick: its projection grows from 4 mm at the ridge to 10.5 at the eave on a
+      // convex curve (the photo's lid outline bows like a bell), incised T/L hooks on its flanks; past the eave
+      // corner it ends in a point stabbing down, 13–15 mm beyond the corner
+      const crest = []
+      for (let i = 0; i <= 12; i++) {
+        const f = 1 - i / 12 // σ from the ridge down to the eave
+        crest.push([f * L, 4 + 6.5 * (1 - f * f)])
+      }
+      F({ path: ph, outline: [[-11, -3], [L, -3], ...crest, [-4.5, 10.6], [-9.5, 9.2], [-13, 5.4], [-15, 0], [-14.5, -7.5], [-12, -5.5], [-11, -3.4]], thickness: 7, embed: 3, taper: 1 })
       const mid = lid.userData.midlines[SIDES[k]].map(lidY)
       const pm = polyPath(mid, mid.map((_, i) => faceN(k, i / 12)))
       const Lm = pm.length
@@ -307,15 +319,19 @@ export default {
     for (const sx of [1, -1]) {
       const a = V(sx * (PLAN.post[0] + 0.4), LV.apex, 0), b = V(sx * (PLAN.ridgeHalf + 8), LV.apex, 0)
       const Lb = a.distanceTo(b)
-      const m = F({ from: a, to: b, out: V(0, 1, 0), outline: [[0, -3], [Lb - 2.5, -3], [Lb + 0.5, 1.5], [Lb + 1.6, 7.5], [Lb + 1.2, 13], [Lb - 3.2, 13], [Lb - 7.5, LV.beam], [0, LV.beam]], thickness: 8, embed: 3, taper: 1.5, carve: 'contour' })
+      // one continuous plank: 12 mm on the apex (≈ 8 showing above the slopes), its end sweeping up ≈ 6 mm
+      const m = F({ from: a, to: b, out: V(0, 1, 0), outline: [[0, -3], [Lb - 3, -3], [Lb + 1, 2.5], [Lb + 2.8, 9.5], [Lb + 3.4, LV.beam + 6], [Lb - 3.4, LV.beam + 6], [Lb - 10, LV.beam + 0.4], [Lb - 16, LV.beam], [0, LV.beam]], thickness: 8, embed: 3, taper: 1.5, carve: 'contour' })
       m.userData.part = 'lid'
     }
     // knob: plain corner ridges whose eave tips hook down and in
     for (let k = 0; k < 4; k++) {
-      const { from, to } = knob.userData.hip(k)
+      // flat strips (5 mm wide, 1.8 proud) following the concave hips; past the eave corner an open loop ≈ 6.5 mm
+      // long hooking down and in
+      const hp = knob.userData.hipPts(k)
       const out = V(SN[k][0] + SN[(k + 1) % 4][0], 0.55, SN[k][2] + SN[(k + 1) % 4][2]).normalize()
-      const L = from.distanceTo(to)
-      F({ from, to, out, outline: [[-1, -1.2], [L, -1.2], [L, 2.4], [0, 2.4], [-2.4, 1.9], [-4.6, 0], [-5.4, -2.8], [-4.3, -4.8], [-2.6, -4.2], [-3.4, -2.6], [-2.1, -1.6]], thickness: 3.2, embed: 1.2, taper: 2, carve: false })
+      const path = polyPath(hp, hp.map(() => out))
+      const L = path.length
+      F({ path, outline: [[-1, -1.2], [L, -1.2], [L, 1.6], [0, 1.6], [-3, 1.5], [-5.4, 0.5], [-6.8, -1.6], [-6.6, -4.4], [-5, -6.2], [-3, -6], [-2.4, -4.8], [-3.6, -4.4], [-4.6, -3.2], [-4.4, -1.2], [-2.6, -0.4]], thickness: 6.5, embed: 1.2, taper: 1, carve: false })
     }
 
     await onProgress(1, 'done')

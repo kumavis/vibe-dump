@@ -16,11 +16,11 @@ const H = 1330
 const LEG_H = 465 // ground → body underside
 const WALL_H = 520 // underside → wall top (985)
 const RIM_H = 58 // rim slab 985 → 1043
-const RIM_OV = 28 // slab overhang beyond the wall face
-const TOP_W = 1042, TOP_D = 731 // wall outer face at the top, under the rim
+const RIM_OV = 34 // slab overhang beyond the wall face (photos: the rim stands 15–20 beyond the corner-flange crests)
+const TOP_W = 1030, TOP_D = 719 // wall outer face at the top, under the rim (rim outer stays 1098 × 787)
 const TAPER = { x: 2.2, z: 0.5 } // end walls lean 2.2°, long walls 0.5° (out going up)
 const WALL_T = 60 // published wall thickness
-const HANDLE = { width: 290, height: H - LEG_H - WALL_H - RIM_H, bar: 84, barTop: 90, depth: 100, radius: 25, aperture: 18, x: 492 }
+const HANDLE = { width: 290, height: H - LEG_H - WALL_H - RIM_H, bar: 84, barTop: 90, depth: 100, radius: 32, aperture: 18, x: 492 }
 const LEG = { r: 80, x: 420, z: 260 } // dossier ±429 ±15; 420 keeps the shaft flush with the end wall's foot (§b.4)
 
 export default {
@@ -47,21 +47,25 @@ export default {
     'three-quarter-left-low': { azimuth: -27, elevation: 3, fov: 40, fit: 1.0, ref: 'three-quarter-left-low.jpg' },
     'three-quarter-right': { azimuth: 44, elevation: 5, fov: 50, fit: 0.9, ref: 'three-quarter-right.jpg' },
     'three-quarter-right-b': { azimuth: 43, elevation: 5, fov: 40, fit: 1.05, ref: 'three-quarter-right-b.jpg' },
-    'side-low': { azimuth: 70, elevation: 2, fov: 45, fit: 0.95, ref: 'side-low.jpg' },
+    'side-low': { azimuth: 70, elevation: 0, fov: 45, fit: 0.97, ref: 'side-low.jpg' },
     'short-wall': { azimuth: 90, elevation: 2, fov: 30, fit: 0.32, target: [500, 725, 0], ref: 'detail-short-wall.jpg' },
     'frieze-top-centre': { azimuth: 0, elevation: 4, fov: 20, fit: 0.2, target: [0, 900, 395], ref: 'detail-frieze-top-centre.jpg' },
     'frieze-bottom-centre': { azimuth: 90, elevation: 1, fov: 22, fit: 0.24, target: [490, 520, 0], ref: 'detail-frieze-bottom-centre.jpg' },
-    'handle-front': { azimuth: 90, elevation: 1, fov: 20, fit: 0.24, target: [520, 1150, 0], ref: 'detail-handle-front.jpg' },
-    handle: { azimuth: 90, elevation: 1, fov: 18, fit: 0.22, target: [520, 1140, 0], ref: 'detail-handle.jpg' },
-    'handle-roots': { azimuth: 90, elevation: 1, fov: 20, fit: 0.22, target: [520, 990, 0], ref: 'detail-handle-roots.jpg' },
-    leg: { azimuth: 45, elevation: 2, fov: 22, fit: 0.22, target: [429, 300, 260], ref: 'detail-leg.jpg' },
-    'leg-b': { azimuth: -8, elevation: 2, fov: 22, fit: 0.22, target: [-429, 290, 280], ref: 'detail-leg-b.jpg' },
-    'leg-c': { azimuth: 45, elevation: 2, fov: 22, fit: 0.22, target: [429, 300, 260], ref: 'detail-leg-c.jpg' },
-    'leg-d': { azimuth: 45, elevation: 2, fov: 22, fit: 0.22, target: [429, 300, 260], ref: 'detail-leg-d.jpg' },
+    // handle views: the photos look up from below the rim top. stage.js clamps elevation at ≈ 1.15°,
+    // so the camera is kept low by a low target and a short distance (wider fov) instead.
+    'handle-front': { azimuth: 90, elevation: 0, fov: 36, fit: 0.37, target: [520, 1010, 0], ref: 'detail-handle-front.jpg' },
+    handle: { azimuth: 90, elevation: 0, fov: 34, fit: 0.36, target: [520, 1012, 0], ref: 'detail-handle.jpg' },
+    'handle-roots': { azimuth: 90, elevation: 0, fov: 20, fit: 0.22, target: [520, 985, 0], ref: 'detail-handle-roots.jpg' },
+    // legs: each photo has its own side of the +X+Z (or −X+Z) leg; the mask axis is at az ≈ ±59°
+    leg: { azimuth: 12, elevation: 1, fov: 22, fit: 0.24, target: [429, 300, 260], ref: 'detail-leg.jpg' },
+    'leg-b': { azimuth: -10, elevation: 1, fov: 22, fit: 0.24, target: [-429, 290, 260], ref: 'detail-leg-b.jpg' },
+    'leg-c': { azimuth: 18, elevation: 0, fov: 24, fit: 0.3, target: [429, 280, 260], ref: 'detail-leg-c.jpg' },
+    'leg-d': { azimuth: 100, elevation: 1, fov: 22, fit: 0.28, target: [429, 290, 260], ref: 'detail-leg-d.jpg' },
     'front-ortho': { azimuth: 0, elevation: 0, fov: 14, fit: 1.08 },
     'side-ortho': { azimuth: 90, elevation: 0, fov: 14, fit: 1.08 },
     top: { azimuth: 20, elevation: 62, fov: 30, fit: 1.08 },
     'corner-masks': { azimuth: -45, elevation: 3, fov: 22, fit: 0.36, target: [-521, 725, 366] },
+    'handle-face': { azimuth: 90, elevation: 2, fov: 20, fit: 0.19, target: [560, 1190, 0] },
     'frieze-long': { azimuth: -8, elevation: 4, fov: 24, fit: 0.42, target: [-250, 900, 395] },
   },
 
@@ -98,23 +102,38 @@ export default {
     const flanges = []
     for (const [i, c] of Object.values(U.corners).entries()) {
       flanges.push(kit.flange({
-        from: lift(c.bottom), to: lift(c.top), out: c.out, height: 30, thickness: 20, embed: 4, taper: 2, bevel: 2.5,
+        from: lift(c.bottom), to: lift(c.top), out: c.out, height: 24, thickness: 17, embed: 4, taper: 2, bevel: 2.5,
         notches: { shape: 'square', pitch: 40, depth: 0.5, width: 10 }, waver: 0.6, seed: seed + i, material: plain,
       }))
     }
     for (const [i, side] of ['front', 'right', 'back', 'left'].entries()) {
       const w = U.walls[side]
       const at = (y) => lift(U.at(side, 0.5, y))
-      // top: through the top frieze and ≈ 40 mm into the field, beaked top end
-      const yTopFlange = WALL_H - FRAME.topPlain - FRAME.top - 40
+      // top: a 15 mm bar from the wall top through the top frieze, a crossbar at the frieze's
+      // lower border, then a rounded stub ≈ 40 mm into the field; the TOP end hooks outward
+      // as a small beak just under the rim (detail-frieze-top-centre.jpg, detail-handle-roots.jpg)
+      const yFr = WALL_H - FRAME.topPlain - FRAME.top
+      const yTopFlange = yFr - 40
+      const Lf = WALL_H - yTopFlange
+      const e = 3
       flanges.push(kit.flange({
-        from: at(yTopFlange), to: at(WALL_H), out: w.normal, height: 20, thickness: 24, embed: 3, bevel: 1.8,
-        notches: { shape: 'square', pitch: 60, depth: 0.3, width: 7 }, ends: { end: { type: 'beak', length: 10 }, start: 'taper' },
-        seed: seed + 10 + i, material: plain,
+        from: at(yTopFlange), to: at(WALL_H), out: w.normal, height: 20, thickness: 15, embed: e, bevel: 1.6, seed: seed + 10 + i, material: plain,
+        outline: [
+          [0, -e], [Lf, -e], [Lf, 27], [Lf - 5, 32], [Lf - 14, 32], [Lf - 20, 26], [Lf - 16, 23], [Lf - 22, 20],
+          [Lf * 0.55 + 4, 20], [Lf * 0.55 + 3, 15], [Lf * 0.55 - 3, 15], [Lf * 0.55 - 4, 20],
+          [12, 20], [6, 18.5], [2, 15], [0, 9],
+        ],
+      }))
+      // crossbar ≈ 30 wide on the frieze's lower border
+      const span = 15 / Math.hypot(w.corners[1].x - w.corners[0].x, w.corners[1].z - w.corners[0].z)
+      const yc = yFr + FRAME.border / 2
+      flanges.push(kit.flange({
+        from: lift(U.at(side, 0.5 - span, yc)), to: lift(U.at(side, 0.5 + span, yc)), out: w.normal, height: 10, thickness: 8, embed: 3, bevel: 1.2,
+        notches: { shape: 'none' }, ends: { start: 'taper', end: 'taper' }, seed: seed + 15 + i, material: plain,
       }))
       // bottom: within the bottom frieze, segmented into blocks at ≈ 23 mm pitch
       flanges.push(kit.flange({
-        from: at(2), to: at(FRAME.bottom), out: w.normal, height: 18, thickness: 22, embed: 3, bevel: 1.8,
+        from: at(2), to: at(FRAME.bottom), out: w.normal, height: 18, thickness: 17, embed: 3, bevel: 1.8,
         notches: { shape: 'square', pitch: 25, depth: 0.75, width: 5 }, seed: seed + 20 + i, material: plain,
       }))
     }
@@ -124,9 +143,9 @@ export default {
     await onProgress(0.62, 'leg masks')
     const zone = [252, LEG_H - 2]
     const legOpts = {
-      height: LEG_H, radius: LEG.r, taper: 0, entasis: 0, foot: { swell: 3 / LEG.r, height: 157, step: true },
-      top: { flare: 0.06, height: 24 }, collar: { from: 246, amount: 7, shoulder: 4 },
-      rings: { count: 3, at: 200, width: 8, spacing: 28, height: 3 }, hollow: { wall: 25, open: 'bottom' }, embed: 5,
+      height: LEG_H, radius: LEG.r, taper: 0, entasis: 0, foot: { swell: 3.5 / LEG.r, height: 157, step: true },
+      top: { flare: 0.05, height: 24 }, collar: { from: 246, amount: 2, shoulder: 4 },
+      rings: { count: 3, at: 200, width: 10, spacing: 28, height: 3, soft: true }, hollow: { wall: 25, open: 'bottom' }, embed: 5,
     }
     const arc = 210
     const lp = kit.legPanelSize({ ...legOpts, zone, arc })
@@ -139,7 +158,7 @@ export default {
       const leg = kit.columnLeg({
         ...legOpts, material: plain, density: 0.45 * Math.sqrt(q),
         relief: { map: legMap, zone, arc, facing, material: legMat },
-        flange: { from: zone[0] + 2, to: zone[1] - 4, height: 32, thickness: 24, embed: 4, bevel: 2.5, part: 'legs', notches: { shape: 'square', pitch: 42, depth: 0.4, width: 12 } },
+        flange: { from: zone[0] + 2, to: zone[1] - 4, height: 24, thickness: 16, embed: 4, bevel: 2.5, part: 'legs', notches: { shape: 'square', pitch: 42, depth: 0.4, width: 12 } },
         cast: { seed: seed + 30 + i, splay: 0.4, length: 0.002, twist: 1 },
       })
       leg.position.set(sx * LEG.x, 0, sz * LEG.z)

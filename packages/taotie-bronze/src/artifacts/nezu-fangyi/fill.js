@@ -40,7 +40,7 @@ export function hookSpineAt(kit, c, a, p, ang, dir, { round = false, turns = 1.2
  * scrolls), keep: [{u0,u1,v0,v1}] areas to leave empty, max }
  */
 export function fillHooks(kit, S, region, o = {}) {
-  const { rMin = 3, rMax = 7, gap = 1.1, wMin = 2, wMax = 3.6, seed = 1, round = 0.35, keep = [], max = 60, wScale = 0.36, line = true, inside = null } = o
+  const { rMin = 3, rMax = 7, gap = 1.1, wMin = 2, wMax = 3.6, seed = 1, round = 0.35, keep = [], max = 60, wScale = 0.36, line = true, inside = null, wFloor = wMin } = o
   const rnd = kit.mulberry32(seed)
   const g = 0.5
   const { u0, u1, v0, v1 } = region
@@ -128,9 +128,14 @@ export function fillHooks(kit, S, region, o = {}) {
     // the free disk is bd (to the nearest OCCUPIED edge, which already includes `gap`)
     const rho = Math.min(bd, rMax)
     const c = [u0 + ((best % nx) + 0.5) * g, v0 + (Math.floor(best / nx) + 0.5) * g]
-    const w = Math.min(wMax, Math.max(wMin, rho * wScale))
+    let w = Math.min(wMax, Math.max(wMin, rho * wScale))
     const isRound = rnd() < round
-    const a = isRound ? rho - w / 2 : (rho - w / 2) * 0.86
+    let a = isRound ? rho - w / 2 : (rho - w / 2) * 0.86
+    if (a < w * 0.9 && wFloor < w) {
+      // a tight gap: a narrower band (down to wFloor) still makes a hook there
+      w = Math.max(wFloor, rho * 0.55)
+      a = isRound ? rho - w / 2 : (rho - w / 2) * 0.86
+    }
     const p = w + Math.max(0.9, 0.28 * w)
     const ang = Math.floor(rnd() * 4) * 90
     const dir = (n + Math.floor(rnd() * 2)) % 2 === 0 ? 1 : -1

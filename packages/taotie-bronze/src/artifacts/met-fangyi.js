@@ -11,7 +11,7 @@
 
 import * as THREE from 'three'
 import { renderSheets, leftHalf } from './met-fangyi/relief.js'
-import { mainSheet, friezeSheet, footSheet, lidLongSheet, lidEndSheet, knobLongSheet, knobEndSheet } from './met-fangyi/decor.js'
+import { mainSheet, friezeSheet, footSheet, lidLongSheet, lidEndSheet, knobLines } from './met-fangyi/decor.js'
 
 const H = 254
 const FOOT_H = 33 // foot band (its own part): ground → top of the lower separator's middle
@@ -25,7 +25,7 @@ const SKIRT = 4.8
 const RISE = 56.5 // eave line (167.6) → ridge line
 const CONVEX = -0.5 // kit `concave` < 0: steep at the eave (≈ 59°), ≈ 29° at the ridge — the cushion roof
 const RIDGE = 100 // ridge length (mm)
-const KNOB = { width: 27, depth: 21.7, ridge: 16, rise: 16, skirt: 2.5, post: { height: 10.9, width: 12, depth: 7.2, waist: 0.04 }, embed: 2.6 }
+const KNOB = { width: 27, depth: 21.7, ridge: 16, rise: 15.4, skirt: 3.1, convex: -0.6, post: { height: 10.9, width: 12, depth: 7.2, waist: 0.04 }, embed: 2.6 }
 const FLANGE_NOTCH = { shape: 'score', pitch: 4, depth: 0.7, width: 1.2 }
 
 const tanT = Math.tan((TAPER * Math.PI) / 180)
@@ -48,19 +48,19 @@ export default {
     'Reconstructed from the Met’s three photographs: the walls, lid, flanges and décor are measured, but the inside (floor height, lid seat, the cast clan sign) and the hidden back faces are inferred.',
   defaultPatina: 'met-fangyi',
   views: {
-    'three-quarter': { azimuth: 21, elevation: 8, fov: 26, fit: 1.32, ref: 'three-quarter.jpg' },
+    'three-quarter': { azimuth: 23, elevation: 8, fov: 26, fit: 1.32, ref: 'three-quarter.jpg' },
     side: { azimuth: 90, elevation: 5, fov: 26, fit: 1.3, ref: 'side.jpg' },
-    front: { azimuth: 0, elevation: 4, fov: 26, fit: 1.08 },
-    top: { azimuth: 20, elevation: 62, fov: 26, fit: 1.08 },
+    front: { azimuth: 0, elevation: 4, fov: 26, fit: 1.25 },
+    top: { azimuth: 20, elevation: 62, fov: 26, fit: 1.25 },
     'detail-face-short': { azimuth: 90, elevation: 3, fov: 26, fit: 0.33, target: [68, 81, 0], ref: 'detail-face-short.jpg' },
     'detail-face-long': { azimuth: 21, elevation: 8, fov: 26, fit: 0.36, target: [0, 81, 52], ref: 'detail-face-long.jpg' },
-    'detail-frieze-short': { azimuth: 90, elevation: 3, fov: 26, fit: 0.26, target: [69, 145, 0], ref: 'detail-frieze-short.jpg' },
-    'detail-frieze-long': { azimuth: 21, elevation: 8, fov: 26, fit: 0.33, target: [0, 145, 52], ref: 'detail-frieze-long.jpg' },
-    'detail-foot-short': { azimuth: 90, elevation: 4, fov: 26, fit: 0.26, target: [66, 18, 0], ref: 'detail-foot-short.jpg' },
-    'detail-foot-long': { azimuth: 21, elevation: 9, fov: 26, fit: 0.33, target: [0, 18, 50], ref: 'detail-foot-long.jpg' },
+    'detail-frieze-short': { azimuth: 90, elevation: 3, fov: 26, fit: 0.2, target: [69, 145, 0], ref: 'detail-frieze-short.jpg' },
+    'detail-frieze-long': { azimuth: 21, elevation: 8, fov: 26, fit: 0.27, target: [0, 145, 52], ref: 'detail-frieze-long.jpg' },
+    'detail-foot-short': { azimuth: 90, elevation: 4, fov: 26, fit: 0.2, target: [66, 17, 0], ref: 'detail-foot-short.jpg' },
+    'detail-foot-long': { azimuth: 21, elevation: 9, fov: 26, fit: 0.27, target: [0, 17, 50], ref: 'detail-foot-long.jpg' },
     'detail-lid-end': { azimuth: 90, elevation: 6, fov: 26, fit: 0.33, target: [60, 208, 0], ref: 'detail-lid-end.jpg' },
     'detail-lid-long': { azimuth: 21, elevation: 10, fov: 26, fit: 0.36, target: [0, 208, 25], ref: 'detail-lid-long.jpg' },
-    'detail-flanges': { azimuth: 21, elevation: 8, fov: 26, fit: 0.27, target: [70, 125, 0], ref: 'detail-flanges.jpg' },
+    'detail-flanges': { azimuth: 65, elevation: 8, fov: 26, fit: 0.32, target: [68, 128, 0], ref: 'detail-flanges.jpg' },
     'detail-knob': { azimuth: 21, elevation: 10, fov: 26, fit: 0.14, target: [0, 240, 0], ref: 'detail-knob.jpg' },
   },
 
@@ -140,19 +140,24 @@ export default {
       panels.lidEnd = p.bake()
     }
     await onProgress(0.68, 'knob')
-    const knobPanel = (w, h, sheetFn, s) => {
+    // knob roof (detail-knob): flush line work only — a plain face with incised scrolls and ring eyes
+    const knobPanel = (w, h, eyes, s) => {
       const p = new kit.ReliefPanel({ width: w, height: h, ppmm: Math.max(ppmm, 9), seed: s })
-      renderSheets(kit, p, [{ sheet: sheetFn(w, h), P: leftHalf(w / 2, 0) }], {
-        seed: s, halfRect: { x: 0, y: 0, w: w / 2, h },
-        ground: { pitch: 0.7, line: 0.5, depth: 0.25, roundness: 0.1, jitter: 0.05 },
-        carve: { pitch: 0.95, line: 0.44, depth: 0.22, rMax: 1.6, rMin: 0.9, gap: 0.3, margin: 0.3 },
-        groove: { width: 0.5, depth: 0.35 },
-      })
+      p.sink((ctx) => {
+        ctx.lineWidth = 0.45
+        ctx.lineCap = 'round'
+        ctx.lineJoin = 'round'
+        for (const l of knobLines(w, h, { eyes })) {
+          ctx.beginPath()
+          l.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)))
+          ctx.stroke()
+        }
+      }, { depth: 0.35, profile: 'u' })
       return p.bake()
     }
-    const kr = roofModel(KNOB.width, KNOB.depth, KNOB.ridge, KNOB.rise, 0, 0)
-    panels.knobLong = knobPanel(KNOB.width, kr.arc(0, 1), knobLongSheet, seed + 7)
-    panels.knobEnd = knobPanel(KNOB.depth, kr.arc(1, 1), knobEndSheet, seed + 8)
+    const kr = roofModel(KNOB.width, KNOB.depth, KNOB.ridge, KNOB.rise, KNOB.convex, 0)
+    panels.knobLong = knobPanel(KNOB.width, kr.arc(0, 1), true, seed + 7)
+    panels.knobEnd = knobPanel(KNOB.depth, kr.arc(1, 1), false, seed + 8)
 
     // ---------------------------------------------------------------- body
     await onProgress(0.78, 'casting')
@@ -182,7 +187,7 @@ export default {
     lid.position.y = LID_Y
     object.add(lid)
     const knob = kit.roofKnob({
-      width: KNOB.width, depth: KNOB.depth, rise: KNOB.rise, ridge: KNOB.ridge / KNOB.width, skirt: { height: KNOB.skirt },
+      width: KNOB.width, depth: KNOB.depth, rise: KNOB.rise, ridge: KNOB.ridge / KNOB.width, concave: KNOB.convex, skirt: { height: KNOB.skirt },
       post: KNOB.post, embed: KNOB.embed, material: plain, part: 'knob',
       faces: { long: { relief: panels.knobLong, density: 3 * Math.sqrt(q), fade: 0.4 }, short: { relief: panels.knobEnd, density: 3 * Math.sqrt(q), fade: 0.4 } },
     })
@@ -195,7 +200,8 @@ export default {
     const F = (o) => {
       if (o.comb) {
         const L = o.path ? o.path.length : o.from.distanceTo(o.to)
-        o = { ...o, outline: combOutline(L, o.height, o.embed, o.comb), grooves: [] }
+        const c = combOutline(L, o.height, o.embed, o.comb)
+        o = { ...o, outline: c.outline, grooves: c.grooves, grooveStyle: { width: 1.2, depth: Math.min(1.1, o.thickness * 0.24) } }
       }
       const m = kit.flange({ notches: FLANGE_NOTCH, material: plain, waver: 0.35, seed: seed + flanges.length * 13, ...o })
       flanges.push(m)
@@ -218,15 +224,16 @@ export default {
     // lid: hips over the corners (step-out tab at the eave), slope midlines over the face centres
     const lidXf = (p) => p.add(new THREE.Vector3(0, LID_Y, 0))
     for (let k = 0; k < 4; k++) {
-      F({ path: roof.hipPath(k, lidXf), height: 6, thickness: 4, taper: 7, embed: 2.2, comb: { tab: [3.4, 1.4] } })
+      F({ path: roof.hipPath(k, lidXf), height: 6, thickness: 4, taper: 7, embed: 2.2, comb: { tab: [3.4, 1.4], hook: 0 } })
       F({ path: roof.midPath(k, lidXf, k % 2 === 0 ? 0.975 : roof.vOfY(214 - LID_Y)), // end-slope flange stops ~9 mm below the apex (detail-lid-end)
-         height: 6, thickness: 4.5, taper: 8, embed: 1.8, bevel: 0.8, comb: {} })
+         // detail-lid-long / detail-lid-end: round-crested bars carrying the same ladder as the body flanges
+         height: 5.2, thickness: 5, taper: 6, embed: 1.8, bevel: 1.3, comb: { nick: 0.6 } })
     }
     // ridge: two crenellated segments either side of the knob post
     const yR = LID_Y + roof.top
     for (const sx of [-1, 1]) {
       const a = new THREE.Vector3(sx * (KNOB.post.width / 2 + 0.6), yR, 0), b = new THREE.Vector3(sx * RIDGE / 2, yR, 0)
-      F({ from: sx > 0 ? a : b, to: sx > 0 ? b : a, out: new THREE.Vector3(0, 1, 0), height: 6.2, thickness: 5, taper: 4, embed: 2.6, notches: { shape: 'square', pitch: 5.4, depth: 0.55, width: 1.5 } })
+      F({ from: sx > 0 ? a : b, to: sx > 0 ? b : a, out: new THREE.Vector3(0, 1, 0), height: 6.2, thickness: 5, taper: 4, embed: 2.6, comb: { nick: 0.5, depth: 0.45, hook: 0 } }) // detail-knob: a near-continuous block, narrow notches, incised faces
     }
 
     await onProgress(1, 'done')
@@ -235,27 +242,31 @@ export default {
 }
 
 /**
- * The comb flange's side outline (detail-flanges.jpg, side.jpg): transverse slots at a 4 mm pitch,
- * 1.2 mm wide, cut in from the crest ~70 % of the projection; each slot turns DOWN at its inner end
- * (an L-shaped "⌐" cut, the hook the photographs show on every tooth), leaving a continuous spine
- * on the wall. Square ends with a softened top corner; `tab: [len, extra]` = the step-out at the eave.
- * CCW polygon in (σ along the path, t outward), root at −embed.
+ * The comb flange's side outline and face incisions (detail-flanges.jpg, side.jpg, detail-lid-end.jpg):
+ * a continuous strip finely scored at a 4 mm pitch. In silhouette the crest is only nicked (`nick` mm
+ * deep, a slightly chamfered notch `w` wide, so the teeth are ~2.8 mm and never read as cubes); the
+ * slot itself is a 1.2 mm groove cut into both faces from the crest down `depth` × the projection,
+ * turning DOWN at its inner end (the "⌐" hook every slot shows), leaving a continuous spine on the wall.
+ * `tab: [len, extra]` = the step-out at the eave. Returns { outline (CCW, σ along the path, t outward,
+ * root at −embed), grooves }.
  */
-function combOutline(L, H, embed, { pitch = 4, w = 1.2, depth = 0.7, hook = 1.1, tab = null } = {}) {
+function combOutline(L, H, embed, { pitch = 4, w = 1.2, depth = 0.72, hook = 1.1, nick = 0.8, tab = null } = {}) {
   const D = depth * H
   const n = Math.max(2, Math.round(L / pitch))
   const seg = L / n
   const pts = [[0, -embed], [L, -embed], [L, H - 0.9], [L - 0.9, H]]
+  const grooves = []
   for (let k = n - 1; k >= 1; k--) {
     const c = k * seg
+    pts.push([c + w / 2, H], [c + w / 2 - 0.25, H - nick], [c - w / 2 + 0.25, H - nick], [c - w / 2, H])
     const hk = Math.min(hook, seg - w - 1.2)
-    pts.push([c + w / 2, H], [c + w / 2, H - D], [c - w / 2 - hk, H - D], [c - w / 2 - hk, H - D + w], [c - w / 2, H - D + w], [c - w / 2, H])
+    grooves.push(hk > 0 ? [[c, H - nick * 0.5], [c, H - D], [c - hk, H - D]] : [[c, H - nick * 0.5], [c, H - D]])
   }
   if (tab) {
     const [tl, te] = tab
     pts.push([Math.min(tl, seg - w / 2 - 0.2), H], [Math.min(tl, seg - w / 2 - 0.2), H + te], [0, H + te])
   } else pts.push([0.6, H], [0, H - 0.6])
-  return pts
+  return { outline: pts, grooves }
 }
 
 /**

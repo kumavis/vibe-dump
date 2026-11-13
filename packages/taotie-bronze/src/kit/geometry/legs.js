@@ -39,7 +39,7 @@ export function legRadius({
     const w = rings.width ?? r0 * 0.12
     const sp = rings.spacing ?? w * 2.2
     const yc = (rings.at ?? 0.5) <= 1 ? (rings.at ?? 0.5) * h : rings.at
-    for (let i = 0; i < rings.count; i++) ringList.push({ y: yc + (i - (rings.count - 1) / 2) * sp, w, hh: rings.height ?? r0 * 0.06 })
+    for (let i = 0; i < rings.count; i++) ringList.push({ y: yc + (i - (rings.count - 1) / 2) * sp, w, hh: rings.height ?? r0 * 0.06, soft: !!rings.soft })
   }
   return (y) => {
     const t = clamp(y / h, 0, 1)
@@ -61,7 +61,7 @@ export function legRadius({
     }
     for (const g of ringList) {
       const d = Math.abs(y - g.y) / (g.w / 2)
-      if (d < 1) r += g.hh * Math.sqrt(1 - d * d)
+      if (d < 1) r += g.hh * (g.soft ? 0.5 + 0.5 * Math.cos(Math.PI * d) : Math.sqrt(1 - d * d)) // soft: worn rib, no undercut
     }
     // flare into the body underside (fillet 0.15–0.3 × leg diameter)
     const ft2 = (y - (h - tp.height)) / tp.height
@@ -93,7 +93,7 @@ export function legPanelSize(o) {
  * @param {{swell, height, step?}} [o.foot]   swelling foot (height ≤ 1 = fraction); step: a sleeve edge instead of a swell
  * @param {{flare, height}} [o.top]          flare into the underside
  * @param {{from, to?, amount, shoulder?}} [o.collar]   raised band for the mask zone (y ≤ 1 = fraction of height)
- * @param {{count, at, width, spacing, height}} [o.rings]   bowstring ridges (Houmuwu: 3 below the mask)
+ * @param {{count, at, width, spacing, height, soft?}} [o.rings]   bowstring ridges (Houmuwu: 3 below the mask); soft: cosine rib instead of a half-round
  * @param {{map: ReliefMap, zone: [y0, y1] mm, arc: deg = 180, facing: deg = 0, fade, material, density}} [o.relief]
  *        the panel is wrapped over `arc` degrees centred on `facing` (0 = +Z, 90 = +X); panel x follows the
  *        surface left → right seen from outside, panel y up; size it with legPanelSize()

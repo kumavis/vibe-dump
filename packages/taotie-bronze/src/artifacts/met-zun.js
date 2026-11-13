@@ -20,7 +20,9 @@ const H = 400
 const NOSES = [0, 120, 240]
 const SEAMS = [60, 180, 300]
 const ALL6 = [0, 60, 120, 180, 240, 300]
-const T_NOTCH = { shape: 'T', pitch: 13.5, depth: 0.35, width: 2.6 }
+// narrow plain slots (slot/pitch ≈ 0.18) cut 0.35 p deep, continued down both faces as
+// scored lines (detail-belly-mask.jpg, detail-foot-mask.jpg): no stepped heads
+const T_NOTCH = { shape: 'score', rungs: 'full', pitch: 13.5, depth: 0.35, width: 2.4 }
 
 export default {
   id: 'met-zun',
@@ -40,19 +42,29 @@ export default {
     'The outline, flanges and heads are measured from the Met’s photographs; the hidden interior (floor height, wall thickness), the exact line of every mask band and the décor on the unphotographed back are inferred.',
   defaultPatina: 'met-zun',
   views: {
-    'three-quarter': { azimuth: -60, elevation: 13, fov: 20, fit: 1.08, ref: 'three-quarter.jpg' },
-    front: { azimuth: 0, elevation: 12, fov: 20, fit: 1.08, ref: 'front.jpg' },
+    // full views: camera on the photographs' own stations (≈ 1.9 m from the axis, dossier §b.1)
+    'three-quarter': { azimuth: -60, elevation: 13, fov: 20.2, fit: 1.13, ref: 'three-quarter.jpg' },
+    front: { azimuth: 0, elevation: 11.5, fov: 20.3, fit: 1.26, ref: 'front.jpg' },
     side: { azimuth: 90, elevation: 4, fov: 20, fit: 1.2 },
+    back: { azimuth: 180, elevation: 12, fov: 20, fit: 1.2 },
     top: { azimuth: 0, elevation: 68, fov: 20, fit: 1.2 },
-    'belly-mask': { azimuth: 0, elevation: 12, fov: 7, fit: 0.22, target: [0, 196, 0], ref: 'detail-belly-mask.jpg' },
-    'belly-seam': { azimuth: -60, elevation: 13, fov: 7, fit: 0.22, target: [0, 196, 0], ref: 'detail-belly-seam.jpg' },
-    'shoulder-head': { azimuth: 0, elevation: 10, fov: 7, fit: 0.24, target: [0, 268, 0], ref: 'detail-shoulder-head.jpg' },
-    'neck-blades': { azimuth: 0, elevation: 6, fov: 7, fit: 0.25, target: [0, 340, 0], ref: 'detail-neck-blades.jpg' },
-    'foot-front': { azimuth: 0, elevation: 15, fov: 7, fit: 0.4, target: [0, 65, 0], ref: 'detail-foot-front.jpg' },
-    'foot-mask': { azimuth: 0, elevation: 16, fov: 18, fit: 0.29, target: [0, 85, 0], ref: 'detail-foot-mask.jpg' },
-    'foot-seam': { azimuth: -60, elevation: 15, fov: 7, fit: 0.4, target: [0, 65, 0], ref: 'detail-foot-seam.jpg' },
-    'shoulder-seam': { azimuth: -60, elevation: 10, fov: 7, fit: 0.24, target: [0, 280, 0], ref: 'detail-shoulder-seam.jpg' },
-    'belly-half': { azimuth: 30, elevation: 12, fov: 7, fit: 0.24, target: [55, 190, 95], ref: 'detail-belly-half.jpg' },
+    // clean décor close-ups (no photograph): raking three-quarter light on the flat bands
+    'detail-belly': { azimuth: 24, elevation: 8, fov: 18, fit: 0.3, target: [0, 200, 0] },
+    'detail-head': { azimuth: 35, elevation: 20, fov: 18, fit: 0.13, target: [0, 258, 112] },
+    'detail-foot': { azimuth: -22, elevation: 10, fov: 18, fit: 0.3, target: [0, 75, 0] },
+    // detail views: the crop boxes of SOURCES.md re-projected through the photo's camera station
+    // (≈ 1.9 m, narrow fov ⇒ the photographs' perspective), then target/fit refined by overlay
+    'belly-mask': { azimuth: 0, elevation: 11.6, fov: 3.6, fit: 0.26, target: [3, 185, 0], ref: 'detail-belly-mask.jpg' },
+    'belly-half': { azimuth: -1.8, elevation: 11.6, fov: 3.25, fit: 0.194, target: [70, 182, 0], ref: 'detail-belly-half.jpg' },
+    'belly-seam': { azimuth: -60, elevation: 12.2, fov: 3.6, fit: 0.26, target: [1, 190, 2], ref: 'detail-belly-seam.jpg' },
+    'shoulder-head': { azimuth: 0, elevation: 9, fov: 3.6, fit: 0.245, target: [0, 260, 0], ref: 'detail-shoulder-head.jpg' },
+    'shoulder-seam': { azimuth: -60, elevation: 9.7, fov: 3.6, fit: 0.215, target: [0, 262, 0], ref: 'detail-shoulder-seam.jpg' },
+    'neck-blades': { azimuth: 0, elevation: 5, fov: 4.4, fit: 0.26, target: [0, 336, 0], ref: 'detail-neck-blades.jpg' },
+    'neck-seam': { azimuth: -60, elevation: 7.8, fov: 3.85, fit: 0.230, target: [0, 316, 0], ref: 'detail-neck-seam.jpg' },
+    'foot-front': { azimuth: 0, elevation: 15.6, fov: 4.6, fit: 0.282, target: [9, 43, 0], ref: 'detail-foot-front.jpg' },
+    'foot-seam': { azimuth: -60, elevation: 16.3, fov: 4.6, fit: 0.32, target: [4, 50, 8], ref: 'detail-foot-seam.jpg' },
+    'foot-mask': { azimuth: 0, elevation: 18, fov: 14.5, fit: 0.43, target: [0, 62, 0], ref: 'detail-foot-mask.jpg' },
+    waist: { azimuth: 0, elevation: 13.4, fov: 2.1, fit: 0.107, target: [0, 128, 84], ref: 'detail-waist.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
@@ -123,17 +135,28 @@ export default {
     }))
     for (const f of flanges) object.add(f)
     // neck: hairline seam ridges through the kui band (part of the body)
+    // a 1 mm bead that follows the concave neck point by point and stops at the blade
+    // border (y 315). kit.flange's generated outline has only two root points, so on a
+    // CONCAVE wall its root edge is a chord standing off the wall (a knife fin); a
+    // caller outline with a dense root keeps the bead on the wall.
+    const [rs0, rs1] = info.range({ y0: 283, y1: 315 })
+    const RL = rs1 - rs0, re = 0.8
+    const beadOutline = []
+    for (let i = 0, n = Math.ceil(RL / 0.8); i <= n; i++) beadOutline.push([(RL * i) / n, -re])
+    beadOutline.push([RL, 0.2], [RL - 1.2, 0.85])
+    for (let i = 0, n = Math.ceil((RL - 2) / 0.8); i <= n; i++) beadOutline.push([RL - 2 - ((RL - 2) * i) / n, 1.0])
+    beadOutline.push([0, 1.0])
     const ridges = kit.latheFlanges(body, {
-      azimuths: SEAMS, ranges: [{ range: { y0: 283, y1: 326 } }], gap: 0, seed: seed + 14,
-      height: 1.1, thickness: 1.9, embed: 0.8, taper: 6, bevel: 0.35, waver: 0.2, notches: { shape: 'none' }, material: plain, part: 'body',
-      ends: { end: { type: 'taper', length: 4 } },
+      azimuths: SEAMS, ranges: [{ range: { y0: 283, y1: 315 } }], gap: 0, seed: seed + 14,
+      height: 1.0, thickness: 1.8, embed: re, taper: 6, bevel: 0.3, waver: 0.15, material: plain, part: 'body',
+      outline: beadOutline, grooves: [],
     })
     for (const r of ridges) body.add(r)
 
     // ---------------------------------------------------------------- heads
     await onProgress(0.88, 'heads')
     const voxel = Math.max(0.32, 0.5 / Math.sqrt(q))
-    const headGeo = kit.meshSDF(zunHeadSDF({ wallR: 160, droop: 78, muzzle: 17, scale: 1.06, embed: 4 }), { voxel })
+    const headGeo = kit.meshSDF(zunHeadSDF({ wallR: 160, slope: 41, embed: 4 }), { voxel })
     const headMat = new kit.PatinaMaterial()
     const heads = []
     for (const az of NOSES) {
@@ -152,7 +175,6 @@ export default {
       object.add(h)
       heads.push(h)
     }
-    void info
 
     await onProgress(1, 'done')
     return { object, parts: { body, flanges, heads }, panels }
@@ -166,6 +188,21 @@ export default {
  * above it, so the last 15 mm are lowered by the lip thickness (H stays 400).
  */
 function outerProfile(points) {
+  // The waist as the photographs show it (front.jpg, detail-waist.jpg): a concave neck
+  // ≈ 17 mm tall between the foot décor top (y 120) and a TIGHT belly underside — a
+  // near-horizontal shelf at y ≈ 138 turning up through a small quarter-round into the
+  // belly wall — so the plain waist shows at the photographs' 12–13° elevation instead
+  // of hiding under a long shallow bowl (profile.json's 128–152 points read the
+  // silhouette, where the underside's flatness is invisible).
+  const WAIST = [
+    [77.4, 124], [76.9, 128], [76.9, 132], [77.4, 135.2], [79.2, 137.2],
+    [83.5, 138.3], [88.5, 138.9], [91.8, 139.8], [93.8, 141.6], [95.0, 144.2], [96.4, 147.8],
+  ]
+  // the carination: a broad worn arris (R ≈ 3, detail-shoulder-seam.jpg), not a crisp crease
+  points = points.flatMap((p) => (p[3] === 'carination' ? [[116.0, 251.6], [115.6, 255.3], [113.9, 257.2]] : [p]))
+  points = points.filter((p) => !(p[1] > 120 && p[1] < 152))
+  const at = points.findIndex((p) => p[1] >= 152)
+  points.splice(at, 0, ...WAIST.map((p) => (p[2] === undefined ? [p[0], p[1]] : p)))
   return points.map((p) => {
     const y = p[1]
     if (y <= 385) return p

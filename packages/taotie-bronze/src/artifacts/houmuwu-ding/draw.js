@@ -8,11 +8,15 @@
 export const LEVELS = {
   wall: { motif: 3, boss: 7.5, groove: 0.8 }, // L1 plateau 3 mm, eye bosses 7–8 above the ground, grooves 0.8
   leg: { motif: 6.5, boss: 10, groove: 0.9 }, // V-b sculptural leg masks, 6–10 mm
-  handle: { motif: 5, boss: 9, groove: 0.8 }, // tigers 5–8 mm proud
+  handle: { motif: 6, boss: 9, groove: 0.9 }, // tigers 5–8 mm proud
 }
 
-/** Leiwen ground: 1.9 mm pitch, squared, 0.8 mm deep (dossier §c.7). */
-export const GROUND = { pitch: 1.9, line: 0.5, roundness: 0.1, depth: 0.8, jitter: 0.07, cell: [7, 17], fillers: true, pairs: 0.7 }
+/**
+ * Leiwen ground: 1.9 mm pitch, squared, ≈ 0.9 mm deep (dossier §c.7). Discrete square
+ * whorls of 4–5 turns (cells ≈ 12–22 mm, the turn cap keeps them whorls rather than a
+ * maze), few S-pairs; slightly wide grooves so the ground reads dark at vessel distance.
+ */
+export const GROUND = { pitch: 1.9, line: 0.54, roundness: 0.1, depth: 1.0, jitter: 0.06, cell: [11, 22], turns: 5, fillers: true, pairs: 0.2 }
 
 /** Style V-a, sparse: flat plateau, ONE incised contour line inset ≈ 2.2 mm, ≈ 0.8 wide. */
 export function style(relief, extra = {}) {
@@ -46,6 +50,24 @@ export function hookRow(kit, S, x0, x1, y, n, { up = 1, h = 13, back = 8, w = 5,
     const x = x0 + step * (i + 0.5)
     S.band(sq(kit, [[x, y], [x, y + up * h], [x + dir * back, y + up * h], [x + dir * back, y + up * (h - 6)]], 2.5), w)
   }
+}
+
+/**
+ * Squared spiral polyline turning inward inside the box [x0, y0, x1, y1]: starts at the
+ * top-right corner heading left (anticlockwise), one side shorter by `p` each half turn.
+ * flipX / flipY mirror it inside the box (start at top-left / bottom-right …).
+ */
+export function sqSpiralBox([x0, y0, x1, y1], p, turns, { flipX = false, flipY = false } = {}) {
+  const pts = []
+  for (let i = 0; i < turns; i++) {
+    const a = x0 + i * p, b = y0 + i * p, c = x1 - i * p, d = y1 - i * p
+    if (c - a < p * 0.6 || d - b < p * 0.6) break
+    if (i === 0) pts.push([c, d])
+    pts.push([a, d], [a, b], [c, b], [c, d - p])
+  }
+  const last = pts[pts.length - 1], prev = pts[pts.length - 2]
+  if (last && prev) last[1] = Math.max(last[1], prev[1] + p * 0.9)
+  return pts.map(([x, y]) => [flipX ? x0 + x1 - x : x, flipY ? y0 + y1 - y : y])
 }
 
 /** Rectangle helpers. */

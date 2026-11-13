@@ -16,9 +16,9 @@ export const LV = {
   mouth: 174.6, // mouth band top
   lid: 174.9, // eaves underside (0.530 H)
   fascia: 9, // the plain eaves lip: a vertical band under the slopes (photo; dossier 0.53–0.566 H)
-  apex: 266, // roof apex (the ridge beams stand on it to 0.825 H)
-  beam: 7, // ridge beam above the apex
-  knobBase: 271.5, // post top of the beams (0.825 H)
+  apex: 261, // roof apex (the ridge beams stand on it to ≈ 0.825 H)
+  beam: 12, // ridge beam above the apex: a heavy plank, ≈ 8 mm of it showing above the slopes
+  knobBase: 273, // post top of the beams (0.825 H)
   knobEave: 285.5, // knob eaves (0.865 H)
   top: 330,
 }
@@ -32,17 +32,20 @@ export const PLAN = {
   mouth: [84.5, 72],
   eave: [93.2, 79.7], // 1.06 W: the photograph's eaves read wider than the dossier's 1.04
   ridgeHalf: 65.5,
-  knobEave: [32.5, 22.3], // the photograph shows a smaller knob than the dossier (≈ 0.37 W, not 0.42 W)
-  knobTop: [19.5, 13.5],
-  post: [11.5, 9],
+  knobEave: [37, 25.5], // dossier §b.4: eaves 74 mm tip to tip (0.42 W)
+  knobTop: [22.5, 15.5],
+  post: [15, 12], // stout: ≈ 0.4–0.5 of the knob eaves in the photograph (dossier 26 mm, review ≈ 30)
 }
 
 // belly bulge, dossier §b.5: s, half-W (x), half-D (z)
+// The bulge (offset over the bottom edge) is taken at 0.85 of the dossier's: the belly wall then peaks at 185 mm
+// (1.05 W, inside the dossier's ±0.04), and the part box with its relief at ≈ 194 mm.
+const BELLY_K = 0.85
 const BELLY = [
   [0, 84.2, 71.9], [0.05, 86.3, 73.7], [0.1, 87.5, 74.8], [0.2, 89.5, 76.5], [0.3, 91.1, 77.9], [0.4, 92.5, 79.0],
   [0.5, 93.3, 79.8], [0.6, 93.9, 80.3], [0.7, 94.1, 80.4], [0.8, 94.0, 80.3], [0.87, 93.4, 79.9], [0.93, 92.8, 79.3],
   [0.97, 92.3, 78.8], [1.0, 91.9, 78.5],
-]
+].map(([s, x, z]) => [s, 84.2 + (x - 84.2) * BELLY_K, 71.9 + (z - 71.9) * BELLY_K])
 
 /** smooth (Catmull-Rom, non-uniform) interpolation through a table column */
 function smoothTable(rows, col) {
@@ -124,16 +127,19 @@ export function densify(pts, step = 1.2) {
 
 /** dossier §b.6 polylines [p, s] */
 export const FLANGE_POLY = {
-  // belly: the dossier's cap hook and rectangular tooth, plus the second, smaller notch the photograph shows
-  // on the left narrow-face flange below the tooth
-  belly: [[0, 1.03], [1.05, 1.03], [1.05, 0.96], [0.95, 0.94], [0.95, 0.80], [1.25, 0.80], [1.25, 0.66], [0.95, 0.64], [0.93, 0.56], [1.06, 0.555], [1.05, 0.46], [0.88, 0.45], [0.78, 0.30], [0.60, 0.12], [0.45, 0.00], [0.35, -0.05], [0.0, 0.02]],
-  neck: [[0, 0], [1, 0], [1, 0.50], [0.7, 0.52], [0.7, 0.60], [1, 0.62], [1, 0.96], [1.2, 1.0], [1.2, 1.06], [0, 1.06]],
-  foot: [[0, 1], [1.15, 1], [1.15, 0.9], [0.85, 0.85], [0.85, 0.55], [1.05, 0.53], [1.05, 0.40], [0.85, 0.38], [0.85, 0.12], [1.1, 0.05], [0.9, -0.10], [0.0, -0.10]],
+  // belly: a Γ cap whose arm springs out ≈ 1.4× the blade, standing ≈ 6 mm above the belly top with an upturned tip
+  // (the widest point of the silhouette in the photograph), a notch, ONE bold tooth, then the edge curves in to a point
+  belly: [[0, 1.07], [1.36, 1.07], [1.42, 1.12], [1.48, 1.11], [1.45, 0.99], [1.02, 0.96], [0.92, 0.94], [0.92, 0.83], [1.24, 0.81], [1.24, 0.67], [0.95, 0.65], [0.90, 0.50], [0.78, 0.30], [0.60, 0.12], [0.45, 0.00], [0.35, -0.05], [0.0, 0.02]],
+  // neck: a deep notch at mid height and a top hook springing out and up above the neck top
+  neck: [[0, 0], [1, 0], [1, 0.46], [0.62, 0.50], [0.62, 0.62], [1, 0.66], [1, 0.92], [1.38, 0.96], [1.45, 1.08], [1.3, 1.10], [0, 1.07]],
+  // foot: top arm hooking out, a mid tooth between deep notches, a lower hook dropping onto the plinth ledge
+  foot: [[0, 1], [1.3, 1], [1.3, 0.88], [0.78, 0.84], [0.78, 0.57], [1.12, 0.54], [1.12, 0.40], [0.78, 0.37], [0.78, 0.15], [1.2, 0.06], [1.0, -0.05], [0.0, -0.05]],
 }
 
 // ------------------------------------------------------------------ the knob (miniature hipped roof on a post)
 
 const SN = [[0, 0, 1], [1, 0, 0], [0, 0, -1], [-1, 0, 0]]
+const KNOB_BOW = 2.2 // mm: the knob roof's slightly concave sides
 const ST = [[1, 0, 0], [0, 0, -1], [-1, 0, 0], [0, 0, 1]]
 /** point on side k of a rectangle (half extents a (x), b (z)) at s ∈ [0, 1] left → right from outside, height y */
 export function rectPoint(k, a, b, s, y) {
@@ -144,7 +150,7 @@ export function rectPoint(k, a, b, s, y) {
 }
 
 /** a trapezoid patch from (a0, b0, y0) to (a1, b1, y1) on side k, panel mapped 1:1 (eave width × slant) */
-export function trapezoid(kit, k, r0, r1, { relief = null, material, density = 1, fade = 0.6, part, name }) {
+export function trapezoid(kit, k, r0, r1, { relief = null, material, density = 1, fade = 0.6, part, name, bow = 0 }) {
   const [a0, b0, y0] = r0, [a1, b1, y1] = r1
   const even = (k & 1) === 0
   const h0 = even ? a0 : b0, h1 = even ? a1 : b1
@@ -152,7 +158,13 @@ export function trapezoid(kit, k, r0, r1, { relief = null, material, density = 1
   const slant = Math.hypot(y1 - y0, d1 - d0)
   const W = 2 * h0
   const kap = slant / Math.hypot(slant, h0 - h1)
-  const surface = kit.quadSurface(rectPoint(k, a0, b0, 0, y0), rectPoint(k, a0, b0, 1, y0), rectPoint(k, a1, b1, 0, y1), rectPoint(k, a1, b1, 1, y1))
+  const quad = kit.quadSurface(rectPoint(k, a0, b0, 0, y0), rectPoint(k, a0, b0, 1, y0), rectPoint(k, a1, b1, 0, y1), rectPoint(k, a1, b1, 1, y1))
+  // bow > 0: the slope sags inward by bow·sin(πv) mm (concave sides flaring to the eaves); a function of position
+  // only, so neighbouring faces keep their shared hip exactly
+  const surface = !bow ? quad : (u, v, out) => {
+    quad(u, v, out)
+    bowPoint(out.pos, bow, v, a0 + (a1 - a0) * v, b0 + (b1 - b0) * v)
+  }
   const geo = kit.buildSurface({
     surface,
     segments: relief ? { density } : [6, 2],
@@ -173,6 +185,14 @@ export function trapezoid(kit, k, r0, r1, { relief = null, material, density = 1
   m.userData.part = part
   m.castShadow = m.receiveShadow = true
   return m
+}
+
+/** pull a point on a rectangle (half extents a, b) inward by bow·sin(πv) (both axes, so the hips stay shared) */
+export function bowPoint(p, bow, v, a, b) {
+  const d = bow * Math.sin(Math.PI * Math.min(1, Math.max(0, v)))
+  p.x -= (d * p.x) / a
+  p.z -= (d * p.z) / b
+  return p
 }
 
 /** a plain rectangle loft between two levels (a, b, y) — all four sides */
@@ -218,7 +238,7 @@ export function buildKnob(kit, { material, faces, density }) {
   g.add(...loftBand(kit, [ea, eb, yE], [ea, eb, yF], { material, part, name: 'knob-fascia' }))
   for (let k = 0; k < 4; k++) {
     const relief = k % 2 === 0 ? faces?.long : faces?.short
-    g.add(trapezoid(kit, k, [ea, eb, yF], [ta, tb, yT], { relief, material, density, part, name: `knob-roof-${k}` }))
+    g.add(trapezoid(kit, k, [ea, eb, yF], [ta, tb, yT], { relief, material, density, part, name: `knob-roof-${k}`, bow: KNOB_BOW }))
   }
   // raised rim and the dished top
   g.add(...loftBand(kit, [ta, tb, yT], [ta, tb, LV.top], { material, part, name: 'knob-rim-out' }))
@@ -230,6 +250,15 @@ export function buildKnob(kit, { material, faces, density }) {
     // the hip (corner) line of the roof between side k and k+1: eave corner → top corner
     const c = rectPoint(k, ea, eb, 1, yF), t = rectPoint(k, ta, tb, 1, yT)
     return { from: c, to: t }
+  }
+  // the same hip following the concave slopes (12 segments)
+  g.userData.hipPts = (k) => {
+    const pts = []
+    for (let i = 0; i <= 12; i++) {
+      const v = i / 12, a = ea + (ta - ea) * v, b = eb + (tb - eb) * v
+      pts.push(bowPoint(rectPoint(k, a, b, 1, yF + (yT - yF) * v), KNOB_BOW, v, a, b))
+    }
+    return pts
   }
   return g
 }

@@ -78,7 +78,8 @@ export function flange(o) {
   // o.outline (optional): a measured side silhouette instead of the generated one — a CCW polygon of
   // [σ (mm along the path, may run past 0 / L), t (mm out from the wall, root at −embed)]; o.grooves:
   // its incisions ([[σ, t]…]…), default = one line following the crest at a 1.5 mm inset
-  const outline = o.outline ? customOutline(o.outline, o.grooves) : flangeOutline({ length: L, height: hFn, notches, ends: endSpec, embed: e, waver, rng: rng.fork('outline') })
+  // o.grooveStyle (optional, with o.outline): { width, depth } mm of those incisions (default 0.55 / 0.35 × thickness/4)
+  const outline = o.outline ? { ...customOutline(o.outline, o.grooves), ...(o.grooveStyle ? { groove: o.grooveStyle } : {}) } : flangeOutline({ length: L, height: hFn, notches, ends: endSpec, embed: e, waver, rng: rng.fork('outline') })
   const pts = outline.points
 
   // ---- frames along the path (sampled, interpolated; extrapolated past the ends)

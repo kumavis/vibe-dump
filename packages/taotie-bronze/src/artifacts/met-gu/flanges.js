@@ -12,7 +12,7 @@ import * as THREE from 'three'
 const DEG = Math.PI / 180
 
 /** Waist drum: rectangular slab 52 × 6.7 mm, flush with the drum ends, rounded corners. */
-const WAIST = { y0: 94.5, y1: 146.5, root: 21.45, proj: 6.7, corner: 1.8, thickness: 4.5 }
+const WAIST = { y0: 94.5, y1: 146.5, root: 21.45, proj: 6.7, corner: 2.0, thickness: 4.5 }
 
 /** Foot: crest silhouette (r, y) bottom → top: spur underside → blunt tip → concave sweep → square top at the foot top. */
 const FOOT_CREST = [
@@ -20,7 +20,8 @@ const FOOT_CREST = [
   [41.6, 35.0], [39.3, 38.4], [37.3, 41.9], [35.2, 47.4], [33.6, 53.3], [31.8, 59.0], [30.4, 64.5], [29.7, 70.0], [29.4, 75.7], [29.3, 78.0],
 ]
 
-const SCORE = { shape: 'score', pitch: 3.7, width: 0.75, rungs: 'full', groove: { width: 0.85, depth: 0.42 } }
+// grooves 1.1 mm between ≈ 2.6 mm flat lands; the crest is only nicked (a deep notch read as a staircase of plates)
+const SCORE = { shape: 'score', pitch: 3.7, width: 0.9, rungs: 'full', groove: { width: 1.1, depth: 0.4 } }
 
 /**
  * A planar path from samples [{ s, r, y, a }] (σ mm, root radius/height, n tilt above the horizontal in rad)
@@ -126,18 +127,21 @@ export function guFlanges(kit, body, P, { seed = 1985 } = {}) {
   const rc = W.corner
   const wHeight = (f) => {
     const dEnd = Math.min(f * Lw, (1 - f) * Lw)
-    return dEnd >= rc ? W.proj : W.proj - rc + Math.sqrt(Math.max(0, rc * rc - (rc - dEnd) ** 2))
+    const base = dEnd >= rc ? W.proj : W.proj - rc + Math.sqrt(Math.max(0, rc * rc - (rc - dEnd) ** 2))
+    // a slight rounded swelling at the top end (dossier §b.4)
+    const t = Math.max(0, 1 - Math.abs((1 - f) * Lw - 4.5) / 4.5)
+    return base + 0.35 * t * t * (3 - 2 * t)
   }
   const foot = footGeometry(kit, P)
   let n = 0
   for (const az of [0, 90, 180, 270]) {
     out.push(kit.flange({
       path: meridianPath(info, az, wSamples), height: wHeight, thickness: W.thickness, embed: 1.8, taper: 3, waver: 0.35,
-      notches: { ...SCORE, depth: 0.32 / W.proj }, seed: seed + 17 * n++,
+      notches: { ...SCORE, depth: 0.2 / W.proj }, bevel: 0.4, seed: seed + 17 * n++,
     }))
     out.push(kit.flange({
       path: meridianPath(info, az, foot.samples), height: foot.height, thickness: 5.0, embed: 1.4, taper: 3, waver: 0.3,
-      notches: { ...SCORE, depth: 0.32 / 8 }, seed: seed + 17 * n++,
+      notches: { ...SCORE, depth: 0.2 / 13 }, bevel: 0.4, seed: seed + 17 * n++,
     }))
   }
   for (const f of out) f.userData.part = 'flanges'

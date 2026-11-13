@@ -18,9 +18,11 @@ const DEG = Math.PI / 180
 
 // profile.json (r, y, join, label), bottom → top, outer surface, flanges excluded
 const PROFILE = [
-  [46.5, 0.0, 'C', 'footBottom'], [47.1, 6.0], [47.7, 12.0], [48.3, 17.5, 'C', 'ringTop'], [47.0, 18.3], [44.5, 19.8], [42.0, 21.6],
-  [39.5, 23.4], [36.8, 25.5, null, 'footDecorBottom'], [34.0, 27.6], [32.4, 30.5], [30.4, 35.5], [28.6, 42.0], [27.0, 47.5], [25.4, 53.3],
-  [24.2, 58.5], [23.2, 64.5], [22.5, 70.0], [22.0, 75.5], [21.8, 78.2, 'C', 'footTop'], [19.6, 78.6, 'C'],
+  // apron: a short dished ledge continuing the bell's concave sweep; the décor starts on it at y ≈ 21
+  // (detail-foot-front.jpg puts the bottom leiwen row ≈ 6 mm lower than the dossier's 25.5 — photo wins)
+  [46.5, 0.0, 'C', 'footBottom'], [47.1, 6.0], [47.7, 12.0], [48.3, 17.5, 'C', 'ringTop'], [46.4, 18.1], [44.4, 18.9], [42.6, 19.9],
+  [41.0, 21.1, null, 'footDecorBottom'], [39.4, 22.5], [37.9, 24.0], [36.4, 25.8], [34.4, 27.7], [32.4, 30.5], [30.4, 35.5], [28.6, 42.0], [27.0, 47.5], [25.4, 53.3],
+  [24.2, 58.5], [23.2, 64.5], [22.5, 70.0], [22.0, 75.5], [21.6, 77.4], [21.1, 78.3, 'C', 'footTop'], [19.6, 78.6, 'C'],
   [19.6, 79.6], [20.6, 80.5], [19.6, 81.5], [19.6, 83.0], [20.6, 84.0], [19.6, 85.0], [19.6, 87.0], [20.6, 88.0], [19.6, 89.0],
   [19.6, 94.6, 'C', 'collarTop'], [21.7, 95.0, 'C', 'drumBottom'], [21.6, 105.0], [21.5, 120.0], [21.4, 135.0], [21.4, 146.4, 'C', 'drumTop'],
   [18.5, 146.8, 'C', 'neckBottom'], [18.4, 153.0], [18.3, 160.0], [18.2, 171.5, null, 'bandTop'], [18.2, 185.0], [18.4, 198.0], [18.7, 205.0],
@@ -29,7 +31,36 @@ const PROFILE = [
   [83.6, 307.8, 'C', 'lipBottom'], [85.0, 308.6], [85.0, 311.0, 'L', 'rim'],
 ]
 
-const BLADE_W = 28 // true-mapped blade panel width (mm): the 22.6 mm blade and a plain margin
+// The detail photographs are CROPS of three exposures. A crop view keeps its exposure's camera POSITION
+// (the stage puts a target view's camera at target + dir(az, el) · fit·R / tan(fov/2)) and only re-aims and
+// narrows the lens, so the perspective of every detail matches its photograph.
+const R_BOX = 197.4 // half the bbox diagonal (171.3 × 312.9 × 169.3): a target view frames fit × R_BOX
+const SIDE_VIEW = { azimuth: 89, elevation: 17, fov: 26, fit: 0.99, target: [0, 172, 0] }
+const LEFT_VIEW = { azimuth: -97, elevation: 18, fov: 21, fit: 0.97, target: [0, 166, 0] }
+const FOOT_VIEW = { azimuth: -4, elevation: 21, fov: 12, fit: 0.346, target: [3.5, 30, 0] }
+function camPos(v) {
+  const dist = (v.fit * R_BOX) / Math.tan((v.fov * DEG) / 2)
+  const a = v.azimuth * DEG, e = v.elevation * DEG
+  return [v.target[0] + dist * Math.sin(a) * Math.cos(e), v.target[1] + dist * Math.sin(e), v.target[2] + dist * Math.cos(a) * Math.cos(e)]
+}
+// the cast axis leans 0.8° toward −Z (lathe tolerance below): a crop centred on the axis at height y aims there
+const LEAN = Math.tan(0.8 * DEG)
+function crop(parent, { fit, target: [x, y, z], ref }) {  // ref stays a literal `ref:` for tools/refs.mjs
+  const target = [x, y, +(z - LEAN * y).toFixed(2)]
+  const p = camPos(parent)
+  const d = p.map((c, i) => c - target[i])
+  const dist = Math.hypot(...d)
+  const r1 = (x) => +x.toFixed(2)
+  return {
+    azimuth: r1(Math.atan2(d[0], d[2]) / DEG), elevation: r1(Math.asin(d[1] / dist) / DEG),
+    fov: r1((2 * Math.atan((fit * R_BOX) / dist)) / DEG), fit, target, ref,
+  }
+}
+
+// true-mapped blade panel width (mm). The blade itself is ≈ 27.8 at the neck (photo) → 22.6 under the ogive, but the
+// panel must span the whole sector arc at the lip (±66 mm): the patina reads uv.x < −0.5 as an inner wall, and a
+// narrower panel turned the trumpet beside the blade apex into dark hard-edged wedges.
+const BLADE_W = 70
 
 /** The author's view of one lathe register sector, computed before the lathe exists (same as lathe's `size`). */
 function regSize(P, s0, s1, angDeg) {
@@ -59,29 +90,32 @@ export default {
     'the cup floor and the least legible passages of décor (the foot’s upper band, the neck creatures) are inferred.',
   defaultPatina: 'met-gu',
   views: {
-    'three-quarter': { azimuth: 48, elevation: 17, fov: 26, fit: 1.1 },
-    side: { azimuth: 89, elevation: 17, fov: 26, fit: 0.98, target: [0, 166, 0], ref: 'side.jpg' },
-    'side-left': { azimuth: -97, elevation: 18, fov: 21, fit: 0.97, target: [0, 166, 0], ref: 'side-left.jpg' },
+    'three-quarter': { azimuth: 38, elevation: 14, fov: 24, fit: 1.0 },
+    side: { ...SIDE_VIEW, ref: 'side.jpg' },
+    'side-left': { ...LEFT_VIEW, ref: 'side-left.jpg' },
     front: { azimuth: 0, elevation: 17, fov: 23, fit: 1.17 },
+    elevation: { azimuth: 90, elevation: 4, fov: 23, fit: 1.12 },
     top: { azimuth: 45, elevation: 68, fov: 26, fit: 1.05 },
-    'detail-foot-front': { azimuth: 0, elevation: 21, fov: 12, fit: 0.33, target: [0, 40, 0], ref: 'detail-foot-front.jpg' },
-    'detail-foot-halfmask': { azimuth: 0, elevation: 21, fov: 12, fit: 0.17, target: [-16, 48, 21], ref: 'detail-foot-halfmask.jpg' },
-    'detail-foot-seam': { azimuth: 89, elevation: 17, fov: 26, fit: 0.26, target: [0, 50, 0], ref: 'detail-foot-seam.jpg' },
-    'detail-foot-ring': { azimuth: 89, elevation: 17, fov: 26, fit: 0.11, target: [0, 16, 0], ref: 'detail-foot-ring.jpg' },
-    'detail-waist': { azimuth: 89, elevation: 17, fov: 26, fit: 0.185, target: [0, 119, 0], ref: 'detail-waist.jpg' },
-    'detail-waist-b': { azimuth: -97, elevation: 18, fov: 21, fit: 0.18, target: [0, 119, 0], ref: 'detail-waist-b.jpg' },
-    'detail-flange-ladder': { azimuth: 89, elevation: 17, fov: 26, fit: 0.17, target: [0, 112, 25], ref: 'detail-flange-ladder.jpg' },
-    'detail-collar': { azimuth: 0, elevation: 18, fov: 12, fit: 0.07, target: [0, 92, 0], ref: 'detail-collar.jpg' },
-    'detail-neck-band': { azimuth: 89, elevation: 17, fov: 26, fit: 0.09, target: [0, 160, 0], ref: 'detail-neck-band.jpg' },
-    'detail-neck-band-b': { azimuth: -97, elevation: 18, fov: 21, fit: 0.09, target: [0, 160, 0], ref: 'detail-neck-band-b.jpg' },
-    'detail-blade': { azimuth: 89, elevation: 17, fov: 26, fit: 0.34, target: [0, 236, 0], ref: 'detail-blade.jpg' },
-    'detail-rim-lip': { azimuth: 89, elevation: 17, fov: 26, fit: 0.32, target: [0, 300, 0], ref: 'detail-rim-lip.jpg' },
+    'foot-three-quarter': { azimuth: 40, elevation: 18, fov: 20, fit: 0.32, target: [0, 46, 0] },
+    'waist-three-quarter': { azimuth: 30, elevation: 10, fov: 20, fit: 0.2, target: [0, 125, 0] },
+    'detail-foot-front': { ...FOOT_VIEW, ref: 'detail-foot-front.jpg' },
+    'detail-foot-halfmask': crop(FOOT_VIEW, { fit: 0.17, target: [-16, 48, 21], ref: 'detail-foot-halfmask.jpg' }),
+    'detail-foot-seam': crop(SIDE_VIEW, { fit: 0.23, target: [0, 26, 0], ref: 'detail-foot-seam.jpg' }),
+    'detail-foot-ring': crop(SIDE_VIEW, { fit: 0.125, target: [46, 14, 0], ref: 'detail-foot-ring.jpg' }),
+    'detail-waist': crop(SIDE_VIEW, { fit: 0.158, target: [0, 118.5, 0], ref: 'detail-waist.jpg' }),
+    'detail-waist-b': crop(LEFT_VIEW, { fit: 0.17, target: [0, 116.5, 0], ref: 'detail-waist-b.jpg' }),
+    'detail-flange-ladder': crop(SIDE_VIEW, { fit: 0.2, target: [0, 106, -22], ref: 'detail-flange-ladder.jpg' }),
+    'detail-collar': crop(FOOT_VIEW, { fit: 0.07, target: [0, 83, 0], ref: 'detail-collar.jpg' }),
+    'detail-neck-band': crop(SIDE_VIEW, { fit: 0.052, target: [0, 158, 0], ref: 'detail-neck-band.jpg' }),
+    'detail-neck-band-b': crop(LEFT_VIEW, { fit: 0.068, target: [0, 158, 0], ref: 'detail-neck-band-b.jpg' }),
+    'detail-blade': crop(SIDE_VIEW, { fit: 0.356, target: [0, 236, 0], ref: 'detail-blade.jpg' }),
+    'detail-rim-lip': crop(SIDE_VIEW, { fit: 0.12, target: [70, 312, 0], ref: 'detail-rim-lip.jpg' }),
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
     const q = Math.max(0.25, quality)
     const ppmm = 9 * Math.sqrt(q) // 0.75 mm leiwen wants ≥ 8 px/mm
-    const P = new kit.Profile(PROFILE)
+    const P = new kit.Profile(PROFILE, { ridges: [{ y: 17.0, count: 1, width: 0.9, height: 0.4, shape: 'round' }] }) // ring-top arris bead
     const S = (x) => (typeof x === 'string' ? P.resolveS(x) : P.sAtY(x))
     const panels = {}
     const bake = (p) => p.bake()
@@ -124,7 +158,7 @@ export default {
     const body = kit.lathe({
       profile: P,
       wall: 2.3,
-      lip: { thickness: 3.0, shape: 'flat' },
+      lip: { thickness: 3.4, shape: 'flat', bulge: 0 }, // 3.4: the inner skin meets the flat top without a step (no inner bead)
       floor: { y: 104, thickness: 3.5 },
       foot: { wall: 2.7 },
       sectors: 4,

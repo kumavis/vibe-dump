@@ -10,39 +10,101 @@
 //     and the axial strip has its own Γ arm above it.
 // u = mm outward from the centre flange, v = mm up from the bottom of the field.
 
-import { Sheet, rect } from './relief.js'
+import { Sheet, rect, offsetPoly, filletOpen } from './relief.js'
+
+const fl = (pts, r) => filletOpen(pts, r)
 
 const BASE = 51 // half-width (mm) of the short face the compositions were measured on
+const HORN_BOX = [13.7, 53.0, 45.6, 82.1]
+const JAW_BOX = [12.8, 3.0, 31.6, 15.8]
+
+/** Re-fit a one-island generator from its canonical box into a box; flipV for the inverted lid masks. */
+function fitIsland(gen, box, u0, v0, u1, v1, flipV) {
+  const S = new Sheet()
+  gen(S)
+  const [a0, b0, a1, b1] = box
+  const sx = (u1 - u0) / (a1 - a0), sy = (v1 - v0) / (b1 - b0)
+  const is = S.map(([u, v]) => [u0 + (u - a0) * sx, flipV ? v1 - (v - b0) * sy : v0 + (v - b0) * sy]).islands[0]
+  const k = Math.min(1, Math.min(sx, sy))
+  is.r = is.r.map((r) => r * k)
+  return is
+}
+
+/** The canonical horn (mainSheet) re-fitted into a box; tickStep mm: ticks all round the band rim. */
+function hornIsland(u0, v0, u1, v1, { flipV = false, tickStep = 0 } = {}) {
+  const is = fitIsland(hornInto, HORN_BOX, u0, v0, u1, v1, flipV)
+  if (tickStep > 0) {
+    // transverse ticks ~1.3 mm long on the band rim, every tickStep mm (detail-lid-long / -end)
+    is.lines = is.lines.slice(0, 2)
+    const vt = flipV ? v0 : v1, dv = flipV ? -1 : 1
+    for (let u = u0 + 4; u <= u1 - 4; u += tickStep) is.lines.push([[u, vt - dv * 0.35], [u, vt - dv * 1.6]])
+    for (let v = v0 + 4; v <= v1 - 4; v += tickStep) {
+      is.lines.push([[u1 - 0.35, v], [u1 - 1.6, v]])
+      is.lines.push([[u0 + 0.35, v], [u0 + 1.6, v]])
+    }
+  }
+  return is
+}
+/** The canonical jaw S-hook re-fitted into a box (flipV: curling toward the ridge on the lid). */
+const jawIsland = (u0, v0, u1, v1, { flipV = false } = {}) => fitIsland(jawInto, JAW_BOX, u0, v0, u1, v1, flipV)
+
+function hornInto(S) {
+  // Coordinates re-read from detail-face-short.jpg (u = (x − 605)/11.3, v = (1062 − y)/10.8, right half).
+  // horn: a rounded-square C band ~3.8 mm wide. It rises from a root beside the axis strip (its lower
+  // inner leg runs down to v 53 and turns out), crosses the top, comes down the outer side and hooks
+  // back inward along the bottom into a squared spiral in the outer-lower quarter. Two grooves cut the
+  // band: A = its inner edge all the way round, B = the outer edge of the hook where it leaves the
+  // outline. Everything the band encloses is plateau packed with round spirals (2 big, 4–6 small).
+  S.island({
+    pts: [[13.7, 53.0], [26.1, 53.0], [26.1, 60.4], [45.6, 60.4], [45.6, 82.1], [13.7, 82.1]],
+    r: [2.4, 2.0, 1.0, 4.5, 6, 6], rim: 0,
+    lines: [
+      fl([[26.6, 56.8], [17.6, 56.8], [17.6, 78.3], [41.8, 78.3], [41.8, 64.2], [31.6, 64.2], [31.6, 68.6]], [2.2, 3.4, 3.4, 2.2, 1.4]),
+      fl([[27.9, 60.0], [27.9, 72.0], [38.4, 72.0], [38.4, 67.2], [35.0, 67.2]], [2.4, 2.0, 1.2]),
+      // short ticks across the band (detail-face-short: three on the top, two on the inner leg)
+      ...[24.5, 31, 37.5].map((u) => [[u, 81.7], [u, 80.2]]),
+      ...[63, 70].map((v) => [[14.1, v], [15.6, v]]),
+    ],
+    spirals: { rMin: 1.3, rMax: 4.5 },
+  })
+}
+function jawInto(S) {
+  // jaw: a bracket from beside the axis whose outer block winds into a squared spiral (the mouth
+  // corner); a notch from below opens the S, small spirals ride along its top band
+  S.island({
+    pts: [[12.8, 3.0], [18.4, 3.0], [18.4, 7.0], [21.6, 7.0], [21.6, 3.0], [31.6, 3.0], [31.6, 15.8], [12.8, 15.8]],
+    r: [2.2, 1.2, 0.6, 0.6, 1.2, 3.2, 3.4, 1.8], rim: 0,
+    lines: [fl([[20.0, 7.2], [20.0, 11.8], [28.4, 11.8], [28.4, 6.2], [24.4, 6.2], [24.4, 9.2]], [1.6, 1.6, 1.4, 1.0])],
+    spirals: { rMin: 1.3, rMax: 3 },
+  })
+}
+
+/** A C island: rounded box opening toward the axis (u0 side) between v = n0 and n1, `d` mm deep. */
+function cIsland(u0, v0, u1, v1, n0, n1, d) {
+  return [[u0, v0], [u1, v0], [u1, v1], [u0, v1], [u0, n1], [u0 + d, n1], [u0 + d, n0], [u0, n0]]
+}
 
 /** Main register: head-only dissolved taotie with squared ram horns (dossier §c.1). */
 export function mainSheet(halfW, H = 93.3) {
   const S = new Sheet()
-  // horn: a rounded square C — wide top block over an inner lobe that drops beside the axis;
-  // the band entering from the lower edge curls inward into a squared spiral (outer part)
+  hornInto(S)
+  // brow: a bar out from beside the axis strip whose outer end turns down into a pointed hook (Γ)
   S.island({
-    pts: [[15.5, 53.5], [28.5, 53.5], [28.5, 63], [47.2, 63], [47.2, 84.6], [15.5, 84.6]],
-    r: [3.6, 2.6, 1.4, 4, 4.6, 4.2], rim: 1.9, ticks: { sides: 'to', step: 5.2 },
-    spiral: { at: [30.9, 63.1], heading: 90, lead: 15.2, dir: -1, size: [12.6, 12.4], pitch: 2.75, turns: 1.75, r: 1.3 },
+    pts: [[16.4, 45.8], [25.6, 45.8], [26.8, 42.2], [29.8, 43.9], [29.8, 49.4], [16.4, 49.4]], r: [1.2, 0.8, 0.3, 1.8, 2.2, 1.6], rim: 0,
+    lines: [fl([[17.6, 47.6], [27.9, 47.6], [27.9, 45.2]], [1])], carve: false,
   })
-  // brow: a bar out from beside the axis strip, its outer end turned down (between horn and eye)
-  S.island({ pts: [[16.5, 46.2], [28, 46.2], [28, 43.2], [31.6, 43.2], [31.6, 51.6], [16.5, 51.6]], r: [1.6, 1.2, 1.2, 1.4, 1.8, 1.6], rim: 1.15 })
   // eye: rounded-square domed boss with a horizontal slit pupil, sitting low
-  S.boss({ c: [23.6, 33.6], w: 13.2, h: 10.6, r: 3.6, height: 3.0, slit: [4.2, 1.2], shoulder: 5 })
+  S.boss({ c: [23.6, 33.6], w: 13.2, h: 10.6, r: 3.6, height: 2.8, slit: [4.2, 1.2] })
   // axial strip beside the flange: C-spiral chain, T cap (scored) at the top, Γ arm, foot turned out
   S.island({
     pts: [[3.2, 1.6], [12.2, 1.6], [12.2, 10.2], [9.6, 10.2], [9.6, 53.4], [10.6, 53.4], [10.6, 49.6], [13.6, 49.6], [13.6, 58.4], [9.6, 58.4], [9.6, 88.6], [3.2, 88.6]],
     r: [1, 1.4, 1, 0.8, 0.6, 0.8, 1.2, 1.2, 0.8, 0.8, 1.2, 1],
     lines: [81.6, 83.1, 84.6, 86.1, 87.4].map((v) => [[3.9, v], [8.9, v]]),
   })
-  // outer edge: two C islands opening toward the axis
-  S.island({ pts: rect(35.2, 33.4, 45.6, 48.6), r: 3, rim: 1.25, spiral: { at: [35.2, 38], heading: 0, lead: 2.6, dir: 1, size: [8.2, 5.4], pitch: 2.3, turns: 1.5, r: 0.9 } })
-  S.island({ pts: rect(34.6, 4.6, 44.8, 26.2), r: 3, rim: 1.25, spiral: { at: [34.6, 20], heading: 0, lead: 2.6, dir: -1, size: [12.4, 5.6], pitch: 2.3, turns: 1.5, r: 0.9 } })
-  // jaw: upper-lip bracket from beside the axis, the mouth corner curling in
-  S.island({
-    pts: [[14, 7.2], [25, 7.2], [25, 3.6], [32.8, 3.6], [32.8, 21.4], [14, 21.4]],
-    r: [2.4, 1.4, 1.6, 3, 3.4, 2.8], rim: 1.5,
-    spiral: { at: [19.6, 7.3], heading: 90, lead: 5.2, dir: -1, size: [9.6, 6.6], pitch: 2.4, turns: 1.75, r: 1 },
-  })
+  // outer edge: two C islands opening toward the axis, a spiral curled in each lobe
+  S.island({ pts: cIsland(33.2, 30.7, 42.6, 46.0, 35.6, 39.8, 3.8), r: [3, 3.2, 3.6, 3.2, 1.2, 0.8, 0.8, 1.2], rim: 0, spirals: { rMin: 1.5, rMax: 3.4 } })
+  S.island({ pts: cIsland(34.1, 3.4, 43.4, 21.9, 9.8, 14.0, 3.9), r: [3, 3.2, 3.6, 3.4, 1.2, 0.8, 0.8, 1.2], rim: 0, spirals: { rMin: 1.5, rMax: 3.6 } })
+  jawInto(S)
   // re-fit to this face: the axial strip keeps its width, the rest stretches to the field
   const u1 = halfW - 3.3
   const k = (u1 - 13.6) / (BASE - 3.3 - 13.6)
@@ -68,41 +130,55 @@ export function mainSheet(halfW, H = 93.3) {
   return out
 }
 
-/** Top frieze: one kui per half facing the centre flange (dossier §c.2, detail-frieze-*). */
+/**
+ * Top frieze: one kui per half facing the centre flange (dossier §c.2), re-drawn from
+ * detail-frieze-short.jpg: the upper jaw hooks down against the flange ("7"), the head with its
+ * square-ring eye boss sits ~20 mm out under a small crest, ONE continuous body band runs outward
+ * at 0.55–0.85 of the field into a big squared C-tail that fills the outer end and opens downward,
+ * and under it a leg band of linked spiral hooks. Every band top is cut with spirals.
+ * Authored on the end face (field edge u 47.7); the long face stretches the body outward of u 25.
+ */
 export function friezeSheet(halfW, H = 28.6) {
   const u1 = halfW - 3.3
-  const d = halfW - BASE // the long face's extra length goes into the body
-  const hs = Math.max(0, d) * 0.16 // the head moves out a little on the long face
   const S = new Sheet()
-  // crest band over the head, its outer end rounded
-  S.island({ pts: rect(9.8 + hs, 22.6, 24.6 + hs, 26.9), r: [1.2, 2.2, 2.2, 1.2], rim: 0.9 })
-  // head block, square-ring eye boss on it
-  S.island({ pts: rect(14.6 + hs, 12.8, 26.6 + hs, 21.9), r: 2.2, rim: 0.9 })
-  S.boss({ c: [20.6 + hs, 17.4], w: 6.8, h: 4.6, r: 1.7, height: 2.75, ring: 0.3, slit: [2.6, 0.9], shoulder: 1.6 })
+  const t = H - 2.4, b = 2.6
+  const E = 47.7 - 0.8 // outer end of the composition on the end face
+  // small hooked crest over the head
+  S.island({ pts: [[11, t - 3.2], [17.4, t - 3.2], [17.4, t - 1.4], [19.6, t - 1.4], [19.6, t], [11, t]], r: [1.2, 0.8, 0.6, 0.8, 1.2, 1.6], carve: false,
+    lines: [fl([[12.2, t - 1.6], [16.4, t - 1.6]], 0.5)] })
   // upper jaw: runs to the flange and hooks down ("7")
-  S.island({ pts: [[5.4, 9.2], [9.2, 9.2], [9.2, 16.8], [13.8 + hs, 16.8], [13.8 + hs, 21.6], [5.4, 21.6]], r: [1.2, 1.2, 0.8, 1.2, 1.6, 1.6], rim: 0.9 })
-  // lower jaw: an L dropping to the bottom border, its end curled
-  S.island({ pts: rect(18 + hs, 2.4, 26.6 + hs, 11.9), r: 2, rim: 0.9, spiral: { at: [18 + hs, 6.4], heading: 0, lead: 2.2, dir: 1, size: [5.4, 4.2], pitch: 2.1, turns: 1.5, r: 0.8 } })
-  // claw: a round spiral island under the jaw
-  S.island({ pts: rect(8.6 + hs * 0.5, 2.4, 16.8 + hs * 0.6, 8.8), r: 3, rim: 0.9, spiral: { at: [8.6 + hs * 0.5, 5.2], heading: 0, lead: 2, dir: 1, size: [5, 3.6], pitch: 1.9, turns: 1.5, r: 0.8 } })
-  // body band running outward
-  S.island({ pts: rect(27.6 + hs, 14.4, 37 + d, 22.6), r: 2, rim: 0.9 })
-  // big down-curled squared tail at the outer end
-  S.island({ pts: rect(38 + d, 11.4, u1 - 0.9, 25.2), r: 3.2, rim: 1.2, spiral: { at: [38 + d, 15.2], heading: 0, lead: 2.6, dir: 1, size: [7.6, 7.4], pitch: 2.4, turns: 1.75, r: 1.1 } })
-  // leg band below the body, with a C at its outer end
-  S.island({ pts: rect(27.6 + hs, 2.4, 39.6 + d, 13.3), r: 2, rim: 0.9 })
-  S.island({ pts: rect(40.6 + d, 2.4, u1 - 0.9, 10.4), r: 2.4, rim: 0.9, spiral: { at: [40.6 + d, 6.6], heading: 0, lead: 1.8, dir: -1, size: [4.6, 3.4], pitch: 1.9, turns: 1.25, r: 0.8 } })
-  S.field(rect(3.2, 0, u1, H))
-  return S
+  S.island({ pts: [[4.2, 12.6], [8.6, 12.6], [8.6, 17.4], [13.4, 17.4], [13.4, t - 4.4], [4.2, t - 4.4]], r: [1.6, 1.4, 0.8, 1.2, 1.6, 1.6],
+    lines: [fl([[6.4, 13.2], [6.4, 19.6], [11.4, 19.6]], 1)], spirals: { rMin: 1.2, rMax: 2.2 } })
+  // head block with the square-ring eye boss
+  S.island({ pts: rect(14.6, 12.8, 25.0, t - 4.4), r: 2.4, carve: false })
+  S.boss({ c: [19.8, 17.6], w: 6.8, h: 5.0, r: 1.7, height: 2.6, ring: 0.3, slit: [2.6, 0.9] })
+  // body + tail, one island: the body band leaves the head at v 15.4–22.6 and runs out into a squared
+  // C-tail (u 33 → the end) that opens downward, its outer leg curling back in at the bottom
+  S.island({
+    pts: [[25.6, 15.4], [32.6, 15.4], [32.6, 8.0], [36.8, 8.0], [36.8, 13.4], [41.6, 13.4], [41.6, 10.2], [E, 8.0], [E, t], [25.6, t - 3.6]],
+    r: [1.4, 0.8, 1.8, 1.6, 0.8, 0.8, 2.6, 4.2, 5, 1.6],
+    lines: [fl([[25.8, 19.0], [37.6, 19.0], [37.6, 16.8], [E - 4.2, 16.8], [E - 4.2, 11.4]], [1.4, 1.2, 1.6])],
+    spirals: { rMin: 1.3, rMax: 3.4 },
+  })
+  // lower jaw / mouth beside the flange, curling up
+  S.island({ pts: rect(4.2, b, 9.8, 11.4), r: 2, spirals: { rMin: 1.2, rMax: 2.6 } })
+  // leg band: a chain of linked spiral hooks under the head and body (one band, coils cut along it)
+  S.island({ pts: rect(11.2, b, 31.0, 11.4), r: [2, 2.4, 2.4, 2], spirals: { rMin: 1.4, rMax: 3.4 } })
+  S.island({ pts: rect(38.6, b, E, 7.0), r: 2, lines: [fl([[40.0, 4.8], [E - 1.6, 4.8], [E - 1.6, 6.2]], 0.8)], carve: false })
+  // the long face: the body stretches, the head stays by the flange
+  const k = (u1 - 25) / (47.7 - 25)
+  const out = S.map(([u, v]) => [u <= 25 ? u : 25 + (u - 25) * k, v])
+  out.field(rect(3.2, 0, u1, H))
+  return out
 }
 
 /**
- * Foot frieze: a kui per half (dossier §c.3), re-read from detail-foot-long.jpg, where it is clearest:
- * upper jaw hooking down beside the flange, the head with its square eye boss just above the notch
- * corner, a small beaked crest riding on the body, the body and leg bands running outward full of
- * C-spirals, and the largest island of all, a big squared down-curled tail at the outer end.
- * The leg band turns down beside the notch jamb. Authored on the long face (outer field edge u 62);
- * the end face squeezes it outward of the flange. nh = half the notch plus its frame; nv = notch
+ * Foot frieze: a kui per half (dossier §c.3), re-read from detail-foot-long.jpg (u = (x − 680)/9.3):
+ * squared jaw hooks beside the flange and over the notch corner, ONE eye (an oval ring boss with an
+ * oval hollow pupil, no slit) ~26 mm out, a flat beaked bird-like head with a tiny ring eye riding
+ * above-out of it, a body band running out to a big squared tail that curls down and in at the outer
+ * corner, and a leg band of linked hooks along the bottom. Authored on the long face (outer field edge
+ * u 62); the end face squeezes it outward of the flange. nh = half the notch plus its frame; nv = notch
  * top in field v.
  */
 export function footSheet(halfW, nh, nv, H = 27.3) {
@@ -110,67 +186,67 @@ export function footSheet(halfW, nh, nv, H = 27.3) {
   const L = 62 // field edge the composition was read at
   const S = new Sheet()
   const top = H - 1.9
-  // upper jaw: a bar along the top from the flange, its inner end hooking down and curling
+  // upper jaw: a bar along the top from the flange
+  S.island({ pts: rect(3.6, Math.max(nv + 1.6, 16.6), 9.4, top), r: 1.4, lines: [fl([[5.4, top - 1], [5.4, nv + 3.2]], 1)], carve: false })
+  // jaw hook: a C opening toward the flange, a spiral in each lobe
+  S.island({ pts: cIsland(10.6, Math.max(nv + 1.4, 13.0), 22.6, top, 17.4, 20.6, 4.4), r: [2.2, 2.6, 3, 2.4, 1, 0.6, 0.6, 1], spirals: { rMin: 1.2, rMax: 2.8 } })
+  // lower jaw beside the notch jamb: a squared hook (ᒣ) pointing at the notch
   S.island({
-    pts: [[3.6, 16.2], [8.6, 16.2], [8.6, 20.4], [18.2, 20.4], [18.2, top], [3.6, top]], r: [1.2, 1.2, 0.8, 1.4, 1.8, 1.4], rim: 0.9,
-    spiral: { at: [6.1, 16.3], heading: 90, lead: 3.6, dir: -1, size: [6.4, 4.6], pitch: 1.9, turns: 1.5, r: 0.7 },
+    pts: [[nh + 0.9, 2.4], [nh + 5.2, 2.4], [nh + 5.2, 6.8], [24.6, 6.8], [24.6, 11.4], [nh + 0.9, 11.4]], r: [1, 1, 0.6, 1.6, 1.8, 1.2],
+    lines: [fl([[nh + 3.0, 3.0], [nh + 3.0, 9.0], [23.0, 9.0]], 1)], carve: false,
   })
-  // lower jaw: below it, above the notch, a bracket curling back toward the flange
+  // the eye: oval ring boss with an oval hollow pupil
+  S.boss({ c: [27.2, 14.6], w: 5.4, h: 6.2, r: 2.4, height: 2.3, ring: 0.3, pupil: [1.5, 2.5], n: 2.2 })
+  // the flat beaked bird head with a tiny ring eye
   S.island({
-    pts: rect(3.6, nv + 1.4, 17.8, 14.8), r: 1.6, rim: 0.9,
-    spiral: { at: [17.8, nv + 4.6], heading: 180, lead: 2.2, dir: 1, size: [7.4, 3.4], pitch: 1.8, turns: 1.25, r: 0.7 },
+    pts: [[30.8, 18.6], [33.4, 16.0], [39.4, 15.4], [41.0, 18.6], [39.4, 23.2], [33.4, 21.6]], r: [0.4, 1, 1.2, 1.2, 1.2, 1],
+    lines: [ring([36.6, 18.8], 1.0)], carve: false,
   })
-  // head plateau with the square eye boss
-  S.island({ pts: rect(19.6, 8.4, 30.4, 19), r: 2.4, rim: 0.9 })
-  S.boss({ c: [25, 13.6], w: 6, h: 5.4, r: 2, height: 2.6, ring: 0.3, slit: [2.2, 0.8], shoulder: 2.6 })
-  // body band over the head
-  S.island({ pts: rect(19.6, 20.4, 30.4, top), r: 1.6, rim: 0.9 })
-  // small beaked crest (a bird-like head with a ring eye) riding on the body
-  S.island({ pts: [[31.8, 15.6], [38.6, 15.6], [40.2, 18.2], [40.2, top], [31.8, top]], r: [1.4, 1.2, 1, 1.6, 1.6], rim: 0.85 })
-  S.boss({ c: [35.4, 20.4], w: 3.2, h: 3.2, r: 1.5, height: 2.1, ring: 0.3, shoulder: 1.3 })
-  // body runs on outward into the tail
-  S.island({ pts: rect(41.6, 16.8, 46.4, top), r: 1.4, rim: 0.8 })
-  // claw band right of the head
-  S.island({ pts: rect(31.8, 8.4, 46.4, 14.2), r: 1.8, rim: 0.9 })
-  // leg band along the bottom, its inner end turning up beside the notch jamb
-  S.island({ pts: [[nh + 0.9, 2.4], [46.4, 2.4], [46.4, 7], [nh + 4.8, 7], [nh + 4.8, nv + 0.2], [nh + 0.9, nv + 0.2]], r: [1, 1.6, 1.6, 0.8, 1, 1], rim: 0.9 })
-  // the big squared tail, curling down and in
+  // body band running out to the tail
+  S.island({ pts: rect(30.6, 8.2, 48.4, 12.8), r: 2, spirals: { rMin: 1.2, rMax: 2.0 } })
+  // leg band along the bottom running out under the tail, coils cut along it
+  S.island({ pts: rect(27.0, 2.4, L - 0.9, 7.8), r: [1.6, 2.4, 2.4, 1.6], spirals: { rMin: 1.3, rMax: 2.6 } })
+  // the big squared tail, ~15 × 15: over the top, down the outer side, curling back in at the bottom
   S.island({
-    pts: rect(47.8, 2.4, L - 0.9, top), r: 3.6, rim: 1.2,
-    spiral: { at: [47.8, 15.4], heading: 0, lead: 3.4, dir: -1, size: [9.6, 11], pitch: 2.5, turns: 1.75, r: 1.1 },
+    pts: rect(46.8, 9.2, L - 0.9, top), r: [2.4, 3, 5, 3.6],
+    lines: [fl([[50.6, 9.4], [50.6, top - 3.8], [L - 4.8, top - 3.8], [L - 4.8, 13.2], [54.4, 13.2], [54.4, 17.2]], [1.6, 2.2, 2.0, 1.2])],
+    spirals: { rMin: 1.3, rMax: 2.8 },
   })
   // re-fit outward of the flange to this face (the end face is ~16 mm narrower)
   const k = (u1 - 3.2) / (L - 3.2)
-  const out = S.map(([u, v]) => [u <= nh + 5 && v < nv + 0.5 ? u : 3.2 + (u - 3.2) * k, v])
+  const out = S.map(([u, v]) => [u <= nh + 5.4 && v < nv + 0.5 ? u : 3.2 + (u - 3.2) * k, v])
+  // the photographs show ~1.5–2 mm of leiwen between the bands: narrow every island a little
+  for (const is of out.islands) is.pts = offsetPoly(is.pts, 0.4)
   out.field([[3.2, nv], [nh, nv], [nh, 0], [u1, 0], [u1, H], [3.2, H]])
   return out
+}
+
+/** A closed circle polyline (ring groove). */
+function ring(c, r) {
+  const pts = []
+  for (let i = 0; i <= 24; i++) pts.push([c[0] + r * Math.cos((i / 24) * Math.PI * 2), c[1] + r * Math.sin((i / 24) * Math.PI * 2)])
+  return pts
 }
 
 /**
  * Lid long slope: the body mask inverted (horns at the eave, jaws toward the ridge), re-fitted
  * to the trapezoid (dossier §c.4, detail-lid-long). s = slant mm from the eave; halfAt(s) = the
- * slope's half width at s; sTop = slant length.
+ * slope's half width at s; sTop = slant length. Same generators as the body: the horn is the C band
+ * with its hook and packed spirals, now ticked all round its rim; the jaw is the S-hook.
  */
 export function lidLongSheet(halfAt, sTop) {
   const S = new Sheet()
   const edge = (s) => halfAt(s) - 4.4
-  // horn: rounded rectangle at the eave, curl in its outer part opening toward the ridge
-  S.island({
-    pts: rect(17.6, 4.4, Math.min(58, edge(26) - 0.5), 26.4), r: 4.4, rim: 1.9, ticks: { sides: 'tbo', step: 5 },
-    spiral: { at: [31.6, 26.3], heading: -90, lead: 14.2, dir: 1, size: [Math.min(13, edge(26) - 33.5 - 3.8), 11.6], pitch: 2.7, turns: 1.75, r: 1.3 },
-  })
-  // brow under the eye, outer end turned up
-  S.island({ pts: [[20.6, 28.6], [37.6, 28.6], [37.6, 36.2], [34.4, 36.2], [34.4, 32.4], [20.6, 32.4]], r: [1.4, 1.6, 1.4, 1, 1, 1.4], rim: 1.05 })
-  S.boss({ c: [28.6, 38.4], w: 10.6, h: 8.2, r: 2.9, height: 2.7, slit: [3.6, 1.1], shoulder: 3.8 })
-  // edge C islands (outer), the lower one beside the eye, the upper one near the ridge
-  S.island({ pts: rect(40.2, 30.4, Math.min(51, edge(44) - 0.4), 44.6), r: 2.8, rim: 1.15, spiral: { at: [40.2, 40], heading: 0, lead: 2.4, dir: -1, size: [7, 5.4], pitch: 2.2, turns: 1.5, r: 0.9 } })
-  S.island({ pts: rect(34.6, 48.2, Math.min(45.6, edge(62) - 0.4), 62.2), r: 2.8, rim: 1.15, spiral: { at: [34.6, 52.6], heading: 0, lead: 2.4, dir: 1, size: [6.4, 5.2], pitch: 2.2, turns: 1.5, r: 0.9 } })
-  // jaw bracket toward the ridge, curling in
-  S.island({
-    pts: [[13.4, 61.4], [24.4, 61.4], [24.4, Math.min(65.6, sTop - 4.8)], [31.6, Math.min(65.6, sTop - 4.8)], [31.6, 46.4], [13.4, 46.4]],
-    r: [2.2, 1.2, 1.6, 2.8, 3, 2.4], rim: 1.4,
-    spiral: { at: [18.8, 61.3], heading: -90, lead: 4.2, dir: 1, size: [8.6, 5.8], pitch: 2.3, turns: 1.75, r: 1 },
-  })
+  S.islands.push(hornIsland(17.6, 4.4, Math.min(58, edge(27) - 0.5), 27.4, { flipV: true, tickStep: 3 }))
+  // brow under the eye, outer end turned up into a hook
+  S.island({ pts: [[20.6, 29.4], [35.2, 29.4], [37.8, 31.4], [37.8, 36.4], [34.8, 36.6], [34.4, 33.0], [20.6, 33.0]], r: [1.4, 1.6, 1.4, 1, 0.3, 1, 1.4], carve: false,
+    lines: [fl([[21.8, 31.2], [36.0, 31.2], [36.0, 34.2]], 1)] })
+  S.boss({ c: [28.6, 39.4], w: 10.6, h: 8.2, r: 2.9, height: 2.6, slit: [3.6, 1.1] })
+  // edge C islands (outer), opening toward the axis
+  S.island({ pts: cIsland(40.2, 30.4, Math.min(51, edge(44) - 0.4), 45.0, 35.4, 39.0, 3.4), r: [2.8, 3, 3.2, 2.8, 1, 0.6, 0.6, 1], spirals: { rMin: 1.2, rMax: 3 } })
+  S.island({ pts: cIsland(35.0, 48.2, Math.min(46.6, edge(62) - 0.4), 62.4, 53.4, 56.8, 3.4), r: [2.8, 3, 3.2, 2.8, 1, 0.6, 0.6, 1], spirals: { rMin: 1.2, rMax: 3 } })
+  // jaw S-hook toward the ridge, curling back on itself
+  S.islands.push(jawIsland(13.4, 46.4, 32.0, Math.min(63.4, sTop - 5.2), { flipV: true }))
   // axial strip beside the midline flange: Γ arm hooking up, scored cap at the eave
   const st = Math.min(68, sTop - 4.2)
   S.island({
@@ -195,16 +271,13 @@ export function lidLongSheet(halfAt, sTop) {
 export function lidEndSheet(halfAtY, sOfY, yTop) {
   const S = new Sheet()
   const edge = (y) => halfAtY(y) - 4.2
-  // horn: its outer side follows the hip
-  S.island({
-    pts: [[10.8, 173.2], [edge(173.2) - 0.6, 173.2], [edge(190.4) - 0.6, 190.4], [10.8, 190.4]], r: [3, 2.4, 3, 3.4], rim: 1.6, ticks: { sides: 'b', step: 4.6 },
-    spiral: { at: [22.4, 190.3], heading: -90, lead: 6.4, dir: 1, size: [Math.max(6, edge(186) - 26.4), 9.4], pitch: 2.3, turns: 1.5, r: 1.1 },
-  })
-  S.island({ pts: rect(7.4, 191.9, 19.6, 195.3), r: 1.2, rim: 0.9 })
-  S.boss({ c: [14.4, 199.4], w: 8.2, h: 5.6, r: 2.2, height: 2.5, slit: [3, 1], shoulder: 1.9 })
-  S.island({ pts: rect(20.2, 194.6, Math.max(23.5, edge(203) - 0.4), 203.2), r: 2.2, rim: 0.9, spiral: { at: [20.2, 199.4], heading: 0, lead: 1.6, dir: -1, size: [3.4, 3], pitch: 1.8, turns: 1, r: 0.7 } })
-  // jaw hooks toward the apex
-  S.island({ pts: rect(7.4, 204.6, Math.min(19.4, edge(211.6) - 0.4), 211.6), r: 2, rim: 0.9, spiral: { at: [12, 211.5], heading: -90, lead: 2.2, dir: 1, size: [4.4, 3], pitch: 1.8, turns: 1.25, r: 0.7 } })
+  // horn: the C band with its hook, ticked round the rim; outer side kept inside the hip
+  S.islands.push(hornIsland(10.8, 173.2, Math.max(24, edge(188) - 0.6), 190.6, { flipV: true, tickStep: 3 }))
+  S.island({ pts: [[7.4, 191.9], [17.6, 191.9], [19.8, 193.4], [19.8, 196.4], [17.4, 196.4], [17.2, 195.3], [7.4, 195.3]], r: [1.2, 1.2, 1, 0.8, 0.3, 0.6, 1.2], carve: false })
+  S.boss({ c: [14.4, 199.6], w: 8.2, h: 5.8, r: 2.2, height: 2.4, slit: [3, 1] })
+  S.island({ pts: cIsland(20.2, 194.4, Math.max(25.5, edge(203) - 0.4), 203.6, 197.6, 200.4, 2.4), r: [2, 2.2, 2.2, 2, 0.8, 0.5, 0.5, 0.8], spirals: { rMin: 1.1, rMax: 2.4 } })
+  // jaw S-hook toward the apex
+  S.islands.push(jawIsland(7.2, 204.4, Math.max(16.5, Math.min(21.4, edge(211.6) - 0.4)), 212.2, { flipV: true }))
   // axial strip beside the end-slope flange, scored cap at the eave
   S.island({ pts: rect(3, 170.6, 6.6, 214.4), r: 0.9, lines: [171.8, 173, 174.2].map((y) => [[3.6, y], [6, y]]) })
   const field = []
@@ -216,28 +289,54 @@ export function lidEndSheet(halfAtY, sOfY, yTop) {
   return S.map(([u, y]) => [u, sOfY(y)])
 }
 
-/** Knob long face (stretched over the trapezoid): flat C-spirals 2 × 3 on leiwen. */
-export function knobLongSheet(w, h) {
-  const S = new Sheet()
-  const hw = w / 2
-  const cw = (hw - 2.2) / 1.5, rh = (h - 3.4) / 2
-  // centre column straddles the axis: author the half
-  for (let row = 0; row < 2; row++) {
-    const v0 = 1.8 + row * rh
-    S.island({ pts: rect(0.4, v0 + 0.3, cw * 0.5 - 0.3, v0 + rh - 0.3), r: 1, rim: 0 })
-    S.island({ pts: rect(cw * 0.5 + 0.3, v0 + 0.3, cw * 1.5 - 0.3, v0 + rh - 0.3), r: 1.6, rim: 0.6, spiral: { at: [cw * 0.5 + 0.3, v0 + rh * (row ? 0.35 : 0.65)], heading: 0, lead: 1, dir: row ? -1 : 1, size: [cw * 0.55, rh * 0.4], pitch: 1.2, turns: 1.25, r: 0.4 } })
+/**
+ * Knob roof faces (detail-knob.jpg): FLUSH line work, not raised tiles — one continuous mask of
+ * flowing scrolls with two ring eyes at the centre, cut ≤ 0.4 mm into a plain face, a plain eave fillet.
+ * Returns groove polylines in panel mm (whole face, symmetric), drawn by knobGrooves().
+ */
+export function knobLines(w, h, { eyes = true } = {}) {
+  const L = []
+  const cx = w / 2
+  const m = 1.3 // plain margin at the hips and the top
+  const eave = 2.4 // the thick plain eave fillet
+  // frame groove up the sides and across the top (no line along the eave)
+  L.push(fl([[m, eave], [m, h - m], [w - m, h - m], [w - m, eave]], 1))
+  const ey = eave + (h - eave) * 0.52, ex = Math.min(3.4, w * 0.13)
+  const keep = []
+  if (eyes) {
+    for (const sx of [-1, 1]) {
+      L.push(ring([cx + sx * ex, ey], 1.5))
+      L.push(ring([cx + sx * ex, ey], 0.45))
+      keep.push([cx + sx * ex, ey, 2.4])
+    }
+    // the nose lozenge between the eyes
+    L.push([[cx, ey + 1.6], [cx + 1.1, ey], [cx, ey - 1.8], [cx - 1.1, ey], [cx, ey + 1.6]])
+    keep.push([cx, ey, 1.9])
   }
-  S.boss({ c: [cw * 0.25, 1.8 + rh * 1.5], w: 2.2, h: 2.2, r: 1, height: 1.9, ring: 0.25, shoulder: 0.9 })
-  S.field(rect(0.2, 1.4, hw - 1.4, h - 1.2))
-  return S
+  // flowing scrolls packed edge to edge over the rest of the face, mirrored about the centre line
+  const step = 3.7, r = 1.6
+  for (let y = eave + 1.9; y <= h - m - 1.6; y += step * 0.86) {
+    const row = Math.round((y - eave) / step)
+    for (let x = cx + (row % 2 ? step / 2 : 0.0001); x <= w - m - 1.5; x += step) {
+      for (const sx of [1, -1]) {
+        const px = cx + sx * (x - cx)
+        if (sx < 0 && Math.abs(px - cx) < 0.5) continue
+        if (keep.some(([kx, ky, kr]) => Math.hypot(px - kx, y - ky) < kr + r)) continue
+        L.push(scroll([px, y], r, sx * (row % 2 ? 1 : -1)))
+      }
+    }
+  }
+  return L
 }
 
-/** Knob end (triangle, stretched): two ring eyes over a hook. */
-export function knobEndSheet(w, h) {
-  const S = new Sheet()
-  S.boss({ c: [2.6, h * 0.42], w: 2.6, h: 2.6, r: 1.25, height: 1.9, ring: 0.3, shoulder: 1 })
-  S.island({ pts: [[0.4, 1.8], [5.6, 1.8], [5.6, h * 0.3], [3.2, h * 0.3], [3.2, 4], [0.4, 4]], r: [0.6, 1, 0.8, 0.6, 0.6, 0.6], rim: 0 })
-  S.island({ pts: rect(0.4, h * 0.6, 2.4, h * 0.82), r: 0.8, rim: 0 })
-  S.field(rect(0.2, 1.4, w / 2 - 1.6, h - 1.2))
-  return S
+/** A small round scroll groove of ~1.75 turns (radius r), hand ±1. */
+function scroll(c, r, hand) {
+  const pts = []
+  const turns = 1.75, n = 60
+  for (let i = 0; i <= n; i++) {
+    const t = (i / n) * turns * Math.PI * 2
+    const rr = 0.3 + ((r - 0.3) * i) / n
+    pts.push([c[0] + rr * Math.cos(hand * t), c[1] + rr * Math.sin(hand * t)])
+  }
+  return pts
 }

@@ -163,6 +163,7 @@ opts: { pitch: 1.3,       // mm centre-to-centre (§1.3: 1.0–1.4 on 20–40 cm
   mode: 'sunk' | 'thread', depth: 0.4,
   fillers: true,          // C-hooks, stubs, contour lines in slivers
   pairs: 0.75,            // chance a 1.6–3.2 aspect cell is an S/mirror pair (else one long spiral)
+  maxAspect: undefined,   // optional, e.g. 1.3: no long cells; any cell beyond it is cut into near-square spirals
   hand: 'alternate' | 'random' | 'left' | 'right',   // neighbours alternate; mirrorX flips the right half
   eyes: 0,                // chance a ≥ 6 p spiral gets an eye ring at its centre
   echo: 0,                // contour-echo grooves around every motif outline before the spirals (1–2 typical)
@@ -433,7 +434,7 @@ flange({ path | from,to,out, height: mm | (f ∈ [0,1]) => mm, thickness, embed,
                     rungs: 'full' (score: rungs run crest → root, no crest line), groove: { width, depth } (mm, face incisions) },
          ends: { start, end },   // 'square' | 'taper' | { type: 'step'|'hook'|'spur'|'beak'|'taper', length, height, sweep, under }
          hook (legacy ≡ ends.end beak), incise: 'auto', material, part: 'flanges',
-         outline: [[σ, t]…] (optional measured silhouette, CCW, root at t = −embed; replaces notches/ends), grooves }) → Mesh
+         outline: [[σ, t]…] (optional measured silhouette, CCW, root at t = −embed; replaces notches/ends), grooves, grooveStyle: { width, depth } (mm, their incision) }) → Mesh
 //   'score' = the dense ladder (Met gu 1985.214.4); 'T'/'L' = F1 notches + scored faces; 'hook' = F2 beaks.
 //   'step' overhangs the register end (gu drum); 'spur' curls out (gu foot); 'hook' rises past a rim.
 //   Integer number of full segments per span; incised grooves → ReliefMap on both faces (incise needs a PatinaMaterial).
@@ -494,7 +495,7 @@ All points include the cast deformation (in the group frame) — flanges placed 
 ```js
 kit.columnLeg({ height, radius, taper: 0, entasis: 0.04, entasisAt: 0.7,
   foot: { swell, height, step }, top: { flare, height }, collar: { from, to?, amount, shoulder },
-  rings: { count, at, width, spacing, height },                      // bowstrings (y ≤ 1 = fraction)
+  rings: { count, at, width, spacing, height, soft },                // bowstrings (y ≤ 1 = fraction; soft: worn cosine rib, no undercut)
   relief: { map, zone: [y0, y1] mm, arc: 180°, facing: deg (0 = +Z, 90 = +X), fade, material },
   hollow: { wall, open: 'bottom' | 'none' }, flange: { …kit.flange opts },   // flange on the facing axis
   splay: { angle, toward: [x, z] }, cast: { seed, splay: ±deg, length: ±frac, twist: ±deg }, embed: 8 })
