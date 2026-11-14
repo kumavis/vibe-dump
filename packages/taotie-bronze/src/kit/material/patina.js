@@ -70,7 +70,7 @@ export const PATINA_PARAMS = {
   lowerBody: { group: 'Other corrosion', label: 'Lower body', min: 0, max: 1, step: 0.01, default: 0, hint: 'legs and foot below the lower-body height: darker and greener skin (Houmuwu legs)' },
   lowerHeight: { group: 'Other corrosion', label: 'Lower body height', min: 0, max: 1, step: 0.01, default: 0.35, hint: 'fraction of the vessel height where the lower-body skin fades out' },
   lowerColor: { group: 'Other corrosion', label: 'Lower body tint', type: 'color', default: '#a1bea3', hint: 'multiplies the lower-body skin: green-grey darkens and greens it (Houmuwu legs), a warm tint gives a red-brown foot band (Met fangyi)' },
-  plainTone: { group: 'Other corrosion', label: 'Plain parts tone', min: 0.3, max: 1.5, step: 0.01, default: 1, hint: 'multiplies the skin on plain, undecorated surfaces (knob stem, neck band, plain fields): < 1 darker than the décor (Nezu)' },
+  plainTone: { group: 'Other corrosion', label: 'Plain parts tone', min: 0.2, max: 1.5, step: 0.01, default: 1, hint: 'multiplies the skin on plain, undecorated surfaces (knob stem, neck band, plain fields): < 1 darker than the décor (Nezu)' },
   upperTone: { group: 'Other corrosion', label: 'Upper body tone', min: 0.4, max: 1.4, step: 0.01, default: 1, hint: 'multiplies the skin above the upper-body height: < 1 a darker lid (fangyi) or trumpet (gu) than the body' },
   upperHeight: { group: 'Other corrosion', label: 'Upper body height', min: 0, max: 1, step: 0.01, default: 0.65, hint: 'fraction of the vessel height where the upper-body tone starts' },
   rimCalm: { group: 'Other corrosion', label: 'Calm rim & handles', min: 0, max: 1, step: 0.01, default: 0, hint: 'the upper part of the vessel (above ~60 % of its height): plain parts (rim, handles) and up-facing faces lose the wall mottle: one worn skin; plain parts anywhere (flanges, legs) also lose the fine speckle' },
@@ -244,15 +244,15 @@ export const PATINA_PRESETS = {
   // Nezu fangyi (owner's photo): warm olive-brown handled skin, plateaus a little lighter than a
   // DARK ground, almost no powder (it lives only in fine grooves), warm cuprite showing low
   'nezu-olive': {
-    age: 1, tin: 0.15, lead: 0.06, polish: 0.35, tarnish: 0.9, cuprite: 0.7, cupriteTone: 0.4, tinOxide: 0.88,
+    age: 1, tin: 0.15, lead: 0.06, polish: 0.55, tarnish: 0.9, cuprite: 0.7, cupriteTone: 0.4, tinOxide: 0.88,
     tinOxideTone: 0.8, malachite: 0, carbonate: 0.1, azurite: 0, malachiteHue: 0.6, malachiteTone: 0.8,
-    islands: 0.1, malachiteScale: 1.5, crust: 0.1, chloride: 0, soot: 0, crevice: 0.6, patchScale: 60,
+    islands: 0.1, malachiteScale: 1.5, crust: 0.1, chloride: 0, soot: 0.25, crevice: 1, patchScale: 60,
     mottleScale: 14, patchiness: 0.9, softness: 0.8, drift: 0.2, earth: 0, earthColor: '#8a8270', calcite: 0,
-    streaks: 0.1, burialSide: 0.15, recessDirt: 0.35, interiorTone: 0.2, wax: 0, inlay: 0, inlayGround: 0.1,
+    streaks: 0.1, burialSide: 0.15, recessDirt: 0.8, interiorTone: 0.2, wax: 0, inlay: 0, inlayGround: 0.1,
     wear: 0.1, dulling: 0, tops: 0.15, matte: 1, nobleWarmth: 0.75, topsTone: 0.25, ledgeMatte: 1,
-    nobleRelief: 0.3, tint: '#f6efe0', upperTone: 0.72, upperHeight: 0.62, speckle: 0.08, speckleScale: 1.5,
+    nobleRelief: 1, tint: '#c8cac4', upperTone: 0.55, upperHeight: 0.62, speckle: 0.08, speckleScale: 1.5,
     speckleColor: '#6e4535', crustIsles: 0.25, crustScale: 6, crustColor: '#686656', crustPlace: 1,
-    plainTone: 0.35, lowerHeight: 0.15, grain: 0.8,
+    plainTone: 0.2, lowerHeight: 0.15, grain: 0.8,
   },
 
   // the owner's bluer reading of the Nezu vessel: the same warm dark skin and light plateaus,
