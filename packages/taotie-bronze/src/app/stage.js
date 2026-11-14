@@ -9,10 +9,10 @@ import { setPatinaMode, setPatinaVessel } from '../kit/index.js'
 
 const BG = new THREE.Color('#0b0a09')
 // tone mapping: ACES rolls the as-cast gold highlights off without clipping;
-// exposure < 1 keeps saturated malachite from going neon, and keeps the matte
-// (rough, diffuse) excavated skins as dark as they photograph
+// exposure 1 (round 4, was 0.85): with the soft ambient and the view-following rig the
+// excavated skins now come out at the levels the studio photographs measure
 const TONE = THREE.ACESFilmicToneMapping
-const EXPOSURE = 0.85
+const EXPOSURE = 1.0
 const DEG = Math.PI / 180
 
 export class Stage {
@@ -107,7 +107,7 @@ export class Stage {
         env.add(m)
         return m
       }
-      card(7, 4.5, '#fff0e2', 5.5, [-5.5, 7, 6], [0, 0.5, 0]) // key softbox, front-upper-left
+      card(7, 4.5, '#fff0e2', 3.5, [-5.5, 7, 6], [0, 0.5, 0]) // key softbox, front-upper-left (3.5: its reflection paled every up-tilted lid)
       card(9, 6, '#fff0e0', 0.8, [0, 9.5, 0], [0, 0, 0]) // vitrine ceiling light box (dim: up-facing faces must not wash out)
       for (let i = 0; i < 5; i++) card(0.5, 0.5, '#fff0dc', 14, [-6 + i * 3, 11, -3 + (i % 2) * 5], [0, 0, 0]) // ceiling spots
       card(1.3, 8, '#b9cde6', 2.2, [8, 4, -6], [0, 2, 0]) // cool window strip, back-right
@@ -175,13 +175,13 @@ export class Stage {
     this.key.shadow.bias = -0.0002
     this.key.shadow.radius = 4
     this.scene.add(this.key, this.key.target)
-    // cool, weak fill from the front-right
-    this.fill = new THREE.DirectionalLight('#c3cbd6', 0.3)
+    // fill from the front-right (round 4b: neutral, was cool #c3cbd6 — it cast the shade side teal)
+    this.fill = new THREE.DirectionalLight('#d6d4ce', 0.3)
     this.scene.add(this.fill, this.fill.target)
     // soft rim from behind so the silhouette lifts off the near-black ground
     this.rim = new THREE.SpotLight('#dfe6f0', 2.6, 0, 0.45, 0.95, 0)
     this.scene.add(this.rim, this.rim.target)
-    this.ambient = new THREE.HemisphereLight('#363533', '#0c0b0a', 0.3)
+    this.ambient = new THREE.HemisphereLight('#7d7a74', '#5a5651', 1.0) // studio photographs: a broad soft ambient, no black shade side
     this.scene.add(this.ambient)
     this._lightLook = { key: this.key.color.clone(), fill: this.fill.color.clone(), rim: this.rim.color.clone() }
   }
@@ -225,6 +225,9 @@ export class Stage {
     const aim = new THREE.Vector3(c.x, b.min.y + size.y * 0.45, c.z)
     const dir = (az, el) => new THREE.Vector3(Math.sin(az * DEG) * Math.cos(el * DEG), Math.sin(el * DEG), Math.cos(az * DEG) * Math.cos(el * DEG))
     const d = R * 4.2
+    // the vitrine rig turns with the named view (a studio photograph is lit from the camera's side:
+    // a side or end view must not be lit from behind); the raking rig stays put
+    const la = this.rig === 'raking' ? 0 : this._lightAz || 0
     if (this.rig === 'raking') {
       // light grazing across the plaque from the upper left: relief by shadow
       this.key.position.copy(aim).addScaledVector(dir(-74, 22), d)
@@ -235,11 +238,11 @@ export class Stage {
       this.contact.visible = false
     } else {
       // vitrine: key front-upper-left, high enough to rake down across horizontal registers
-      this.key.position.copy(aim).addScaledVector(dir(-36, 34), d)
-      this.key.angle = Math.atan((R * 1.9) / d)
+      this.key.position.copy(aim).addScaledVector(dir(la - 36, 24), d)
+      this.key.angle = Math.atan((R * 2.4) / d)
       this.key.intensity = 4.2
       this.rim.intensity = 3.2
-      this.fill.intensity = 1.5
+      this.fill.intensity = 2.4
       this.contact.visible = true
     }
     this.key.target.position.copy(aim)
@@ -249,10 +252,10 @@ export class Stage {
     sc.updateProjectionMatrix()
     this.key.shadow.normalBias = R * 0.0015
     this.key.shadow.needsUpdate = true
-    this.rim.position.copy(aim).addScaledVector(dir(165, 32), d)
+    this.rim.position.copy(aim).addScaledVector(dir(la + 165, 32), d)
     this.rim.angle = Math.atan((R * 1.5) / d)
     this.rim.target.position.copy(aim)
-    this.fill.position.copy(aim).addScaledVector(dir(60, 12), d)
+    this.fill.position.copy(aim).addScaledVector(dir(la + 50, 18), d)
     this.fill.target.position.copy(aim)
   }
 
@@ -263,6 +266,10 @@ export class Stage {
    */
   setView(v = {}) {
     const { azimuth = 25, elevation = 12, fov = 30 } = v
+    if (this.rig !== 'raking' && this._lightAz !== azimuth) {
+      this._lightAz = azimuth
+      this._layoutRoom()
+    }
     const fit = (v.fit ?? 1.1) * this.fitScale
     const cam = this.camera
     cam.fov = fov

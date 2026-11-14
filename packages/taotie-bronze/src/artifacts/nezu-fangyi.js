@@ -14,7 +14,7 @@
 
 import * as THREE from 'three'
 import { renderSheets } from './nezu-fangyi/relief.js'
-import { bellySheet, neckSheet, footSheet, lidBroadSheet, lidNarrowSheet, knobSheet, KNOB_FIELD } from './nezu-fangyi/decor.js'
+import { bellySheet, neckSheet, footSheet, lidBroadSheet, lidNarrowSheet, knobSheet } from './nezu-fangyi/decor.js'
 import { H, LV, PLAN, bellyX, bellyZ, polyPath, segmentOutline, FLANGE_POLY, densify, flangeGrooves, buildKnob, block, rectPoint } from './nezu-fangyi/form.js'
 
 const SIDES = ['front', 'right', 'back', 'left']
@@ -45,7 +45,9 @@ export default {
     // the target sits off-axis because the phone frame is an off-centre crop
     // fit/target tightened (was 1.125): the vessel fills ≈ 80 % of the landscape frame's height (photo: 74 % of its
     // portrait frame, but ≈ 77 % of its width, which a landscape frame can only answer by going bigger)
-    'three-quarter': { azimuth: -27.5, elevation: 9.8, fov: 36, fit: 1.035, target: [30, 144, 18], ref: 'three-quarter.jpg' },
+    // round 4: −32° — at −27.5 the plinth's narrow face spanned 0.29 of the broad face against the photo's 0.37–0.38
+    // (an azimuth sweep put 0.375 at −32°)
+    'three-quarter': { azimuth: -32, elevation: 9.8, fov: 36, fit: 1.035, target: [30, 144, 18], ref: 'three-quarter.jpg' },
     front: { azimuth: 0, elevation: 8, fov: 30, fit: 1.1 },
     side: { azimuth: -90, elevation: 8, fov: 30, fit: 1.1 },
     top: { azimuth: -25, elevation: 58, fov: 30, fit: 1.1 },
@@ -101,7 +103,7 @@ export default {
       // V-b: 3 mm flat-topped plateaus with rounded shoulders and ONE 0.6 mm incised line; slit eye bosses 5 mm in all
       const sheet = bellySheet(kit, { hw: hw - corner, v0, Hf, kind, L1: 3.0, seed: s })
       renderSheets(kit, p, [{ sheet, xc: hw }], {
-        L1: 3.0, shoulder: 1.0, groove: { w: 0.65, d: 0.5 }, ground: ground(0.9), seed: s,
+        L1: 3.0, shoulder: 0.65, groove: { w: 0.65, d: 0.5 }, ground: ground(0.9), seed: s,
         fields: [{ x: 1.2, y: v0 - 0.6, w: hw - 1.2 - corner, h: Hf + 0.6 }],
       })
       return p.bake()
@@ -181,9 +183,8 @@ export default {
       const sheet = knobSheet(kit, { kind, halfAt, slant, border: 3, seed: s })
       renderSheets(kit, p, [{ sheet, xc: h0 }], {
         L1: 1.25, shoulder: 0.45, groove: { w: 0.5, d: 0.32 }, ground: ground(0.72, 0.3), seed: s,
-        fields: kind === 'long'
-          ? [{ x: h0 - KNOB_FIELD.u - 0.6, y: KNOB_FIELD.v0 * slant - 0.6, w: KNOB_FIELD.u + 0.6, h: (KNOB_FIELD.v1 - KNOB_FIELD.v0) * slant + 1.2 }]
-          : [{ x: 3 + (h0 - h1), y: 3, w: h1 - 3, h: slant - 6 }, { x: 3 + (h0 - h1) * 0.5, y: 3, w: h0 - 3 - (h0 - h1) * 0.5, h: slant * 0.5 - 3 }],
+        // round 4: both faces fill the trapezoid inside a 3 mm border (review: the long face had a wide plain margin)
+        fields: [{ x: 3 + (h0 - h1), y: 3, w: h1 - 3, h: slant - 6 }, { x: 3 + (h0 - h1) * 0.5, y: 3, w: h0 - 3 - (h0 - h1) * 0.5, h: slant * 0.5 - 3 }],
       })
       return p.bake()
     }
@@ -262,7 +263,8 @@ export default {
       // the belly caps stand ≈ 6 mm above the belly top: the neck segments start above them, a 3 mm gap between
       neck: { body: neckBody, y0: LV.belly + 9, y1: LV.neck },
     }
-    const proj = { foot: { corner: 11, centre: 10.5 }, belly: { corner: 14, centre: 14 }, neck: { corner: 9, centre: 10 } }
+    // round 4: belly 14 → 16 mm (dossier 14 [est]); the photo's far-side caps reach further past the wall than ours did
+    const proj = { foot: { corner: 11, centre: 10.5 }, belly: { corner: 16, centre: 16 }, neck: { corner: 9, centre: 10 } }
     for (const [name, r] of Object.entries(regs)) {
       for (let k = 0; k < 4; k++) {
         // corner flanges (45°, F2 hooked, 6 mm thick)
@@ -308,11 +310,11 @@ export default {
       const crest = []
       for (let i = 0; i <= 12; i++) {
         const f = 1 - i / 12 // σ from the ridge down to the eave
-        crest.push([f * L, 4 + 6.5 * (1 - f * f)])
+        crest.push([f * L, 6 + 4.5 * (1 - f * f)]) // round 4: a heavier plank all the way up (review: 7 × 7 mm bar)
       }
       // photo: past the eave corner the crest keeps its convex run down to a point at about eave level; behind the
       // point the underside steps back in one small squared notch (no hook, no droop below the eave)
-      F({ path: ph, outline: [[-9.5, -3], [L, -3], ...crest, [-4.5, 10.3], [-9, 9.1], [-12.5, 7.2], [-14, 5.4], [-10.6, 4.6], [-10.6, 2.0], [-9.5, 1.2]], thickness: 7, embed: 3, taper: 1 })
+      F({ path: ph, outline: [[-9.5, -3], [L, -3], ...crest, [-4.5, 10.3], [-9, 9.1], [-12.5, 7.2], [-14, 5.4], [-10.6, 4.6], [-10.6, 2.0], [-9.5, 1.2]], thickness: 8, embed: 3, taper: 1, carve: 'contour' }) // review: no continuous key-fret, one faint contour line
       const mid = lid.userData.midlines[SIDES[k]].map(lidY)
       const pm = polyPath(mid, mid.map((_, i) => faceN(k, i / 12)))
       const Lm = pm.length
@@ -342,7 +344,8 @@ export default {
       const out = V(SN[k][0] + SN[(k + 1) % 4][0], 0.55, SN[k][2] + SN[(k + 1) % 4][2]).normalize()
       const path = polyPath(hp, hp.map(() => out))
       const L = path.length
-      F({ path, outline: [[-1, -1.2], [L, -1.2], [L, 1.6], [0, 1.6], [-3, 1.5], [-5.4, 0.5], [-6.8, -1.6], [-6.6, -4.4], [-5, -6.2], [-3, -6], [-2.4, -4.8], [-3.6, -4.4], [-4.6, -3.2], [-4.4, -1.2], [-2.6, -0.4]], thickness: 6.5, embed: 1.2, taper: 1, carve: false })
+      // round 4 (review): a prouder flat bar (2.6 mm) and a larger open loop (≈ 9 mm) at the eave
+      F({ path, outline: [[-1, -1.2], [L, -1.2], [L, 2.6], [0, 2.6], [-4, 2.4], [-7.2, 1.0], [-9, -1.8], [-8.8, -5.8], [-6.6, -8.2], [-3.8, -8], [-3, -6.3], [-4.7, -5.8], [-6, -4.2], [-5.8, -1.6], [-3.4, -0.4]], thickness: 6.5, embed: 1.2, taper: 1, carve: false })
     }
 
     await onProgress(1, 'done')

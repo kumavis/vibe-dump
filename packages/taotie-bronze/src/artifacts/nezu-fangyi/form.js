@@ -40,7 +40,9 @@ export const PLAN = {
 // belly bulge, dossier §b.5: s, half-W (x), half-D (z)
 // The bulge (offset over the bottom edge) is taken at 0.85 of the dossier's: the belly wall then peaks at 185 mm
 // (1.05 W, inside the dossier's ±0.04), and the part box with its relief at ≈ 194 mm.
-const BELLY_K = 0.85
+// round 4: back to the dossier's full bulge (×1.0; round 3 had ×0.85) — the photo's silhouette is ≈ 5 % wider than
+// the render's, the shortfall all on the far (right) side, where the belly and its corner flanges set the outline
+const BELLY_K = 1.0
 const BELLY = [
   [0, 84.2, 71.9], [0.05, 86.3, 73.7], [0.1, 87.5, 74.8], [0.2, 89.5, 76.5], [0.3, 91.1, 77.9], [0.4, 92.5, 79.0],
   [0.5, 93.3, 79.8], [0.6, 93.9, 80.3], [0.7, 94.1, 80.4], [0.8, 94.0, 80.3], [0.87, 93.4, 79.9], [0.93, 92.8, 79.3],

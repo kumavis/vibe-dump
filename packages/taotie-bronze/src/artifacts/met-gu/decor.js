@@ -136,74 +136,87 @@ export function paintFoot(kit, panel, size, { pitch = 0.75, seed = 1 } = {}) {
  * `variant` 'B' adds the fan of short vertical grooves inside the jaw scroll (taotie B only).
  */
 export function paintWaist(kit, panel, size, { pitch = 0.85, seed = 2, variant = 'A' } = {}) {
-  const { Turtle, band, rrect, circle, drawShape } = kit.shapes
+  const { Turtle, band, rrect, drawShape } = kit.shapes
   const W = panel.width, Hp = panel.height
   const cx = W / 2
   const hw = W / 2
   const o = 1.5 // décor starts 1.5 mm inside the drum ends
   const P = ([X, v]) => [cx - X, v + o]
-  const bw = 3.5
-  const R = 1.0
+  const bw = 3.0 // flat band (detail-waist-b.jpg: ≈ 3 mm silver bands, one echo groove down the middle)
+  const R = 1.5 // rounded corners: the waist bands turn more softly than the foot's
   const bands = []
-  const coils = []
-  const B = (t, w = bw) => bands.push(band(t.spine(0.3).map(P), w, 'square', 'square'))
-  const coil = (X, v, r, a0, dir) => { bands.push(circle(P([X, v]), r)); coils.push([P([X, v]), r, a0, dir]) }
+  const B = (t, w = bw) => bands.push(band(t.spine(0.25).map(P), w, 'square', 'square'))
   const xs = hw - FLANGE_HALF // seam-side limit (X)
 
-  // jaw: big squared C/G scroll under the eye; hooked tail toward the nose, the scroll runs out toward the
-  // seam, rises, and turns back into a round coil (≈ 5 mm) at x ≈ 24, v ≈ 8
-  B(new Turtle([9.8, 9.2], 270).to([6.6, 9.2]).turn(-90, 0.8).to([6.6, 3.0]).turn(90, R).to([28.8, 3.0]).turn(90, R)
-    .to([28.8, 10.8]).turn(90, R).to([22.6, 10.8]))
-  coil(23.6, 8.1, 2.5, Math.PI / 2, 1)
-  // eye socket band around the boss
-  const eye = [16.0, 16.5]
-  bands.push(rrect(P(eye), 9.6, 8.6, 2.4))
-  // crook horn: a broad band rising from above the eye, along the top border toward the nose,
-  // ending in a round coil against the nose flange at the top
-  B(new Turtle([18.8, 21.6], 90).to([18.8, 44.6]).turn(90, R).to([9.6, 44.6]))
-  coil(7.2, 42.2, 3.0, Math.PI / 2, 1)
-  // the drop along the nose flange below the horn spiral (brow / nose side), hooking toward the eye
-  B(new Turtle([5.4, 38.2], 270).to([5.4, 21.6]).turn(90, R).to([10.4, 21.6]).turn(90, 0.7).fwd(1.8), 3.0)
+  // jaw: a big squared C/G scroll under the eye, the BAND itself winding in (no disc coil): a hooked tail
+  // drops beside the nose flange, the bottom bar runs out toward the seam, rises, comes back over the
+  // top toward the axis, drops, and winds out again into the centre of the G (spiral on the seam side)
+  B(new Turtle([10.4, 10.6], 180).to([7.0, 10.6]).turn(90, R).to([7.0, 2.5]).turn(90, R).to([29.4, 2.5]).turn(90, 2.6).to([29.4, 10.9]).turn(90, 2.6)
+    .to([16.8, 10.9]).turn(90, 1.8).to([16.8, 6.6]).turn(90, 1.8).to([24.4, 6.6]).turn(90, 1.2).fwd(1.4))
+  // eye: a small oval dome, the only proud element (≈ 6 × 5.5, ≈ 1.8 high)
+  const eye = [16.0, 16.4]
+  // crook horn: a broad band rising from above the eye's outer half, up under the top border, over toward
+  // the nose, down beside the nose flange and back out into a squared spiral at the top beside the flange
+  B(new Turtle([19.6, 20.6], 90).to([19.6, 45.0]).turn(90, R).to([5.6, 45.0]).turn(90, R).to([5.6, 37.0]).turn(90, R)
+    .to([10.8, 37.0]).turn(90, 0.9).to([10.8, 40.6]).turn(90, 0.6).fwd(1.6))
+  // brow: from below the horn spiral down the nose side and in toward the eye's top
+  B(new Turtle([5.6, 33.0], 270).to([5.6, 21.0]).turn(90, R).to([12.6, 21.0]).turn(90, 0.8).fwd(1.6), 2.8)
 
   const paint = (ctx) => { for (const s of bands) drawShape(ctx, s) }
-  flushBands(panel, paint, { lift: 0.35, lw: 0.52, groove: 0.44, echo: bw / 2, shoulder: 0.05 })
-  incise(panel, coils.map(([c, r, a0, dir]) => coilLine(c, r - 0.6, { a0, dir, turns: 1.7, r1: 0.3 })), { width: 0.44, depth: 0.32 })
+  flushBands(panel, paint, { lift: 0.3, lw: 0.48, groove: 0.42, echo: bw / 2, shoulder: 0.05 })
 
-  const eyeDraw = (ctx) => drawShape(ctx, rrect(P(eye), 6.0, 5.5, 2.3))
-  domeBoss(panel, eyeDraw, { height: 2.0, radius: 2.9, wall: 0.45 })
+  const eyeDraw = (ctx) => drawShape(ctx, rrect(P(eye), 5.5, 5.1, 2.4))
+  domeBoss(panel, eyeDraw, { height: 1.8, radius: 2.55, wall: 0.7 })
+  // its ring groove (the boss sits in a sunk outline, as every raised unit here)
+  incise(panel, [rrectLine(P(eye), 6.4, 6.0, 2.8)], { width: 0.42, depth: 0.3 })
 
-  // framed spirals: 2 inside the horn loop, 3 against the seam flange
+  // framed spirals: 2 in the horn loop, 3 against the seam flange (≈ 8 × 9, 3–4 turns at the leiwen pitch)
   const cells = []
   const cellRects = []
   const cellsIn = (X0, v0, w, h, opts) => {
     const [x, y] = P([X0 + w, v0])
-    cells.push(...framedRow(x, y, w, h, { minPitch: pitch, turns: 3, ...opts }))
+    cells.push(...framedRow(x, y, w, h, { minPitch: pitch, turns: 3.5, ...opts }))
     cellRects.push([x, y, w, h])
   }
-  cellsIn(8.6, 23.6, 7.4, 15.6, { count: 2, vertical: true, gap: 0.7, turns: 2.2 })
-  cellsIn(22.6, 17.2, xs - 22.6, 30.2, { count: 3, vertical: true, gap: 0.8, turns: 2.3 })
-  // B: fang / claw marks inside the jaw scroll
+  cellsIn(8.6, 23.4, 8.2, 11.6, { count: 2, vertical: true, gap: 0.6, turns: 2.6 })
+  const sx = 22.4
+  cellsIn(sx, 19.2, Math.min(8.4, xs - sx - 0.2), 28.2, { count: 3, vertical: true, gap: 0.7, turns: 3.5 })
+  // B: fang / claw marks inside the jaw scroll, between its tail and its inner winding
   if (variant === 'B') {
     const lines = []
-    for (let i = 0; i < 5; i++) {
-      const X = 9.4 + i * 1.75
-      lines.push([P([X, 5.0]), P([X, 9.0])])
+    for (let i = 0; i < 4; i++) {
+      const X = 9.6 + i * 1.6
+      lines.push([P([X, 4.4]), P([X, 8.6])])
     }
     incise(panel, lines, { width: 0.45, depth: 0.32 })
-    const [x, y] = P([18.6, 4.6])
-    cellRects.push([x, y, 10.4, 5.0])
+    const [x, y] = P([15.2, 4.0])
+    cellRects.push([x, y, 6.6, 5.0])
   }
-  incise(panel, cells, { width: pitch * 0.52, depth: 0.3 })
+  incise(panel, cells, { width: pitch * 0.5, depth: 0.3 })
 
   const avoid = (ctx) => {
     paint(ctx)
-    eyeDraw(ctx)
+    drawShape(ctx, rrect(P(eye), 6.4, 6.0, 2.8))
     for (const [x, y, w, h] of cellRects) ctx.fillRect(x, y, w, h)
   }
-  kit.leiwenFill(panel, { rect: { x: cx - xs, y: o, w: xs - FLANGE_HALF, h: Hp - 2 * o }, avoid, margin: 0.5 }, {
-    pitch, line: 0.5, depth: 0.3, roundness: 0.08, jitter: 0.05, cell: [2.8, 5.0], turns: 2, pairs: 0.3, fillers: false, follow: 0.25, seed,
+  // fine leiwen packs every leftover (fillers on: the narrow gaps between bands get C-hooks / stubs)
+  kit.leiwenFill(panel, { rect: { x: cx - xs, y: o, w: xs - FLANGE_HALF, h: Hp - 2 * o }, avoid, margin: 0.4 }, {
+    pitch, line: 0.5, depth: 0.3, roundness: 0.08, jitter: 0.05, cell: [2.0, 4.6], turns: 2, pairs: 0.3, fillers: true, follow: 0.25, seed,
   })
   panel.mirrorX()
+}
+
+/** Closed rounded-rectangle polyline (for an incised ring around a boss). */
+function rrectLine([cx, cy], w, h, r) {
+  const pts = []
+  const hx = w / 2 - r, hy = h / 2 - r
+  const C = [[hx, hy, 0], [-hx, hy, 90], [-hx, -hy, 180], [hx, -hy, 270]]
+  for (const [x, y, a0] of C) for (let i = 0; i <= 6; i++) {
+    const a = ((a0 + (i / 6) * 90) * Math.PI) / 180
+    pts.push([cx + x + r * Math.cos(a), cy + y + r * Math.sin(a)])
+  }
+  pts.push(pts[0])
+  return pts
 }
 
 // ===================================================================== neck band
@@ -227,7 +240,7 @@ export function paintNeck(kit, panel, { pitch = 0.9, seed = 3 } = {}) {
   // head: a squared hood over the two ring eyes, open toward the snout
   bands.push(band(new Turtle([W - 13.4, 3.2], 0).to([W - 1.6, 3.2]).turn(90, 1.0).to([W - 1.6, 10.2]).turn(90, 1.0).to([W - 7.6, 10.2]).spine(0.3), 1.6, 'square', 'square'))
   const paint = (ctx) => { for (const s of bands) drawShape(ctx, s) }
-  flushBands(panel, paint, { lift: 0.18, lw: 0.38, groove: 0.28 })
+  flushBands(panel, paint, { lift: 0.06, lw: 0.38, groove: 0.28 }) // flush: no raised (silvered) tops in this frieze
   // two ring eyes (Ø 3.4), one with a dot pupil
   const ringPaint = (ctx) => {
     for (const x of [W - 4.3, W - 9.6]) {
@@ -236,7 +249,7 @@ export function paintNeck(kit, panel, { pitch = 0.9, seed = 3 } = {}) {
       ctx.fill()
     }
   }
-  panel.raise(ringPaint, { height: 0.35, shoulder: 0.2, profile: 'plateau' })
+  panel.raise(ringPaint, { height: 0.06, shoulder: 0.1, profile: 'plateau' })
   panel.sink((ctx) => {
     ctx.lineWidth = 0.38
     for (const x of [W - 4.3, W - 9.6]) {

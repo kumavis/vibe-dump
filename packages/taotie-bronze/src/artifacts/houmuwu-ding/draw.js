@@ -16,7 +16,7 @@ export const LEVELS = {
  * whorls of 4–5 turns (cells ≈ 12–22 mm, the turn cap keeps them whorls rather than a
  * maze), few S-pairs; slightly wide grooves so the ground reads dark at vessel distance.
  */
-export const GROUND = { pitch: 1.9, line: 0.54, roundness: 0.18, depth: 1.0, jitter: 0.07, cell: [9, 19], turns: 5, fillers: true, pairs: 0.2, maxAspect: 1.7 }
+export const GROUND = { pitch: 1.9, line: 0.54, roundness: 0.18, depth: 1.0, jitter: 0.07, cell: [12, 22], turns: 5, fillers: true, pairs: 0.1, maxAspect: 1.6 }
 
 /** Style V-a, sparse: flat plateau, ONE incised contour line inset ≈ 2.2 mm, ≈ 0.8 wide. */
 export function style(relief, extra = {}) {

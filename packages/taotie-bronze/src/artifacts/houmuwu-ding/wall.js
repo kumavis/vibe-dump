@@ -76,17 +76,32 @@ export function wallPanel(kit, cell, { kind, ppmm, seed }) {
 }
 
 // --------------------------------------------------------------------------
-// Frieze kui (dossier §c.3 table; detail-frieze-top-centre.jpg, rubbing): the head at
-// the mid flange is a HEAVY rounded crest block (≈ 100 × 50) whose C is read from two
-// spirals incised into it, over a round boss eye ≈ 42 from the axis; below it a ∩ jaw
-// whose inner leg stands on the flange (top frieze) or clawed legs and a snout curling at
-// the flange foot (bottom frieze), and a cheek curl hanging off the body. A broad body
-// (≈ 20) runs outward with a slight jog, fringed by IRREGULAR quills — a seeded mix of
-// round curls, squared hooks and T-stubs of varying height — and ends in a 2-turn
-// rounded-square tail spiral (≈ 66 long face, 54 short) that does not dominate the band.
+// Frieze kui (dossier §c.3 table; detail-frieze-top-centre.jpg, rubbing). Relief grammar
+// (round-4 review): every element is a FLAT plateau at one height (3 mm) with near-vertical
+// sides. Broad masses — the crest block and the body (≈ 2× the band width) — carry ONE inset
+// contour groove; narrow bands (jaw, quills, curls, tail spiral, ≈ 9–10 mm) are left plain,
+// as on the bronze (a groove 2 mm inside a 10 mm band reads as a piped double line).
+// The head at the mid flange: a SOLID crest block (≈ 100 × 50) with a notch in its lower
+// edge and two spirals incised into it, a round boss eye ≈ 35 from the axis, below it a ∩ jaw
+// (top frieze) or clawed legs and a snout curling at the flange foot (bottom frieze). The body
+// runs outward fringed above and below by a row of small squared C-hook quills and ends in a
+// 3-turn squared tail spiral (≈ 80 long face, 62 short).
 
-const BAND = 12 // crest / jaw / spiral band width (mm)
-const BODY = 20 // kui body band (mm)
+const BAND = 9.5 // crest / jaw / spiral band width (mm), photo 8–10
+const BODY = 19 // kui body band (mm), photo 15–18; ≈ 2× BAND
+const EYE = 8.5 // eye boss radius (Ø 17, photo 16–20)
+
+/** Narrow-band style: flat plateau, no contour groove. */
+const PN = style(LEVELS.wall, { carving: 'none' })
+
+/** Two sheets over one rect: broad (one contour groove) and narrow (plain flat top). */
+function sheets(kit, r, o) {
+  return { B: sheet(kit, r, o), N: sheet(kit, r, { ...o, seed: (o.seed || 1) + 1000 }) }
+}
+function renderBoth(kit, panel, { B, N }, r) {
+  render(kit, panel, N, PN, r)
+  render(kit, panel, B, P, r)
+}
 
 /** A round curl continuing a stem that arrives at p heading `heading`°; dir +1 curls left (CCW), −1 right. */
 function curl(kit, p, R, { heading = 90, dir = 1, sweep = 300, shrink = 0.3 } = {}) {
@@ -95,108 +110,90 @@ function curl(kit, p, R, { heading = 90, dir = 1, sweep = 300, shrink = 0.3 } = 
   return kit.shapes.cScroll(c, R, { start: heading - dir * 90, sweep, dir, shrink, step: 0.6 }).slice(1)
 }
 
-/**
- * Irregular quills standing on a body edge at y, pointing `dir` (+1 up, −1 down), from x0 (tail
- * side) toward x1 (head side), each turning back toward the tail. Seeded mix of curls, hooks, T-stubs.
- */
-function quills(kit, S, rng, x0, x1, y, dir, maxL) {
-  let x = x0 + rng.range(3, 9)
-  while (x < x1 - 10) {
-    const L = maxL * rng.range(0.65, 1)
-    const w = rng.range(8.5, 12)
-    const t = rng.next()
-    if (t < 0.45) {
-      const R = Math.min(rng.range(5, 8.5), L * 0.4)
-      if (x + w / 2 > x1) break
-      const p = [x, y + dir * (L - R)]
-      S.taper([[x, y], p, ...curl(kit, p, R, { heading: dir > 0 ? 90 : -90, dir, sweep: rng.range(240, 330) })], w, w * 0.55, 0.45)
-      x += 2 * R + w + rng.range(14, 26)
-    } else if (t < 0.8) {
-      const b = rng.range(10, 18)
-      S.taper(sq(kit, [[x + b, y], [x + b, y + dir * L], [x, y + dir * L], [x, y + dir * (L - rng.range(6, 11))]], rng.range(2.5, 5)), w, w * 0.6, 0.5)
-      x += b + w + rng.range(14, 26)
-    } else {
-      const b = rng.range(6, 10), yy = y + dir * L * 0.75
-      S.band([[x + b, y], [x + b, yy]], w * 0.9)
-      S.band(sq(kit, [[x, yy - dir * 5], [x, yy], [x + b * 1.8, yy]], 3), w * 0.8)
-      x += b * 1.8 + w + rng.range(14, 26)
-    }
+/** Closed squared-round polygon. */
+function sqc(kit, pts, r = 6) {
+  return kit.shapes.resample(kit.shapes.fillet(pts, r, { closed: true }), 0.8)
+}
+
+/** A row of n small squared C-hooks standing on y, pointing up (+1) / down (−1), each turned back toward −x. */
+function hookRow(kit, S, x0, x1, y, n, { up = 1, h = 17, back = 11, w = 6.5, drop = 7 } = {}) {
+  if (n < 1 || x1 - x0 < back + w) return
+  const step = (x1 - x0) / n
+  for (let i = 0; i < n; i++) {
+    const x = x0 + step * (i + 0.5) + back / 2
+    S.band(sq(kit, [[x, y - up * 2], [x, y + up * h], [x - back, y + up * h], [x - back, y + up * (h - drop)]], 2.5), w, 'flat')
   }
 }
 
 /**
- * Heavy crest: a thick squared C band (≈ 11) — up the axis side, across the top, down the far
- * side, back along the bottom curling up inward — holding a second curl that hangs from the top
- * bar and turns away from the axis (detail-frieze-top-centre.jpg). X(d) maps distance from the
- * axis side to local x; sgn = +1 when the axis side is at small x.
+ * Solid crest block: a squared-round plate (d0 → d1 from the axis side, y0 → y1) with a notch in
+ * its lower edge, two spirals incised into it (detail-frieze-top-centre.jpg). X(d) maps distance from
+ * the axis side to local x.
  */
-function crestBlock(kit, S, X, sgn, d0, d1, y0, y1, w = 11) {
-  const hw = w / 2
-  const toAxis = sgn < 0 ? 0 : 180
-  const endD = d0 + (d1 - d0) * 0.5
-  const R = Math.min(9, (y1 - y0 - 2 * w) * 0.42)
-  S.band(sq(kit, [[X(d0 + hw), y0 + w + 2], [X(d0 + hw), y1 - hw], [X(d1 - hw), y1 - hw], [X(d1 - hw), y0 + hw], [X(endD), y0 + hw]], 9), w)
-  S.taper([[X(endD), y0 + hw], [X(endD - 2), y0 + hw], ...curl(kit, [X(endD - 2), y0 + hw], R, { heading: toAxis, dir: -sgn, sweep: 300 })], w, w * 0.55, 0.3)
-  const xi = X(d0 + (d1 - d0) * 0.24)
-  const yc = (y0 + y1) / 2 + 2
-  S.taper([[xi, y1 - hw], [xi, yc], ...curl(kit, [xi, yc], Math.min(7, R), { heading: -90, dir: sgn, sweep: 290 })], w - 2, 5, 0.4)
+function crestBlock(kit, B, X, d0, d1, y0, y1) {
+  const D = d1 - d0, n0 = d0 + D * 0.44, n1 = n0 + 12, nh = Math.min(15, (y1 - y0) * 0.32)
+  B.poly(sqc(kit, [[X(d0), y0], [X(n0), y0], [X(n0), y0 + nh], [X(n1), y0 + nh], [X(n1), y0], [X(d1), y0], [X(d1), y1], [X(d0), y1]], 7))
+  // one incised squared C following the block 6 mm inside its edge, open at the notch, both ends
+  // curling up into the block (the crest reads as a C-scroll, not as two round eyes)
+  const e = 6.5, yb = y0 + e, yt = y1 - e, R = Math.min(9, (y1 - y0) * 0.2)
+  const s1 = Math.sign(X(1) - X(0)) || 1
+  const cL = kit.shapes.cScroll([X(n0 - e - R), yb + R], R, { start: -90, sweep: 420, dir: s1, shrink: 0.18, step: 0.5 })
+  const cR = kit.shapes.cScroll([X(n1 + e + R), yb + R], R, { start: -90, sweep: 420, dir: -s1, shrink: 0.18, step: 0.5 })
+  const path = [...cL.slice().reverse(), [X(d0 + e), yb], [X(d0 + e), yt], [X(d1 - e), yt], [X(d1 - e), yb], ...cR]
+  B.line(kit.shapes.resample(kit.shapes.fillet(path, 5), 0.6), 1.4)
 }
 
 /** Half a frieze: `top` (∩ jaw) or bottom (clawed legs + snout). y from the band's bottom. */
 function friezeKui(kit, panel, r, { short, seed, top }) {
   const L = r.w // the axis is at local x = L
   const h = r.h
-  const S = sheet(kit, r, { seed, wobble: 0.55 })
+  const SS = sheets(kit, r, { seed, wobble: 0.5 })
+  const { B, N } = SS
   const rng = new kit.Rng(seed * 7 + 3)
   const A = (dx) => L - dx // distance from the axis → local x
-  const tail = short ? 54 : 66 // tail spiral (mm square)
+  const tail = short ? 62 : 80 // tail spiral (mm square)
   const xT = 7 + tail // inner side of the tail spiral (local x)
   const yB = top ? 55 : 59 // body centre line
   const jog = top ? 3 : -3
-  // CREST: heavy block over the eye, beside the flange
-  const c0 = top ? 68 : 71, c1 = top ? h - 6 : h - 11
-  crestBlock(kit, S, A, -1, 9, 108, c0, c1)
-  // eye: domed boss ≈ 42 from the axis
-  S.boss([A(35), top ? 55 : 57], 9.5, { kind: 'round', base: 'ground', pupil: 'none' })
+  // CREST: solid block over the eye, beside the flange
+  const c0 = top ? 70 : 73, c1 = top ? h - 8 : h - 11
+  crestBlock(kit, B, A, 10, 104, c0, c1)
+  // eye: domed boss ≈ 35 from the axis
+  B.boss([A(35), top ? 55 : 57], EYE, { kind: 'round', base: 'ground', pupil: 'none' })
   // cheek: a curl hanging off the body behind the jaw, turning toward the flange
-  S.taper([[A(94), yB - 4], [A(94), 30], ...curl(kit, [A(94), 30], 8, { heading: -90, dir: 1, sweep: 290 })], 11, 6, 0.4)
+  N.taper([[A(94), yB - 6], [A(94), 30], ...curl(kit, [A(94), 30], 7.5, { heading: -90, dir: 1, sweep: 290 })], BAND, 6, 0.4)
   if (top) {
     // ∩ jaw beside the flange: inner leg on the flange, the outer foot curling outward
-    S.band(sq(kit, [[A(64), 16], [A(64), 36], [A(20), 36], [A(20), 12], [A(13), 9]], 8), BAND - 1)
-    S.taper([[A(64), 17], ...curl(kit, [A(64), 15], 6, { heading: -90, dir: -1, sweep: 270 })], 10, 5.5, 0.3)
+    N.band(sq(kit, [[A(64), 16], [A(64), 36], [A(20), 36], [A(20), 12], [A(13), 9]], 8), BAND)
+    N.taper([[A(64), 17], ...curl(kit, [A(64), 15], 6, { heading: -90, dir: -1, sweep: 270 })], BAND, 5.5, 0.3)
   } else {
     // snout: down beside the flange under the eye, curling outward at the flange foot
-    S.band(sq(kit, [[A(30), 40], [A(14), 40], [A(14), 18]], 6), BAND)
-    S.taper([[A(14), 19], ...curl(kit, [A(14), 17], 7, { heading: -90, dir: -1, sweep: 290 })], 11, 6, 0.3)
+    N.band(sq(kit, [[A(30), 40], [A(14), 40], [A(14), 18]], 6), BAND)
+    N.taper([[A(14), 19], ...curl(kit, [A(14), 17], 7, { heading: -90, dir: -1, sweep: 290 })], BAND, 6, 0.3)
     // short legs off the body, claws hooked toward the flange
     const legs = short ? [A(140)] : [A(142), A(222)]
     for (const lx of legs) {
-      S.taper(sq(kit, [[lx, yB - 6], [lx, 22], [lx + 17, 22]], 6), 13, 9.5, 0.5)
-      S.taper([[lx + 17, 22], ...curl(kit, [lx + 19, 22], 5, { heading: 0, dir: -1, sweep: 240 })], 8, 4.5, 0.2)
-      S.taper(sq(kit, [[lx + 1, 22], [lx + 1, 10], [lx + 11, 10]], 3), 8.5, 4.5, 0.4)
+      N.taper(sq(kit, [[lx, yB - 6], [lx, 22], [lx + 17, 22]], 6), 12, 9, 0.5)
+      N.taper([[lx + 17, 22], ...curl(kit, [lx + 19, 22], 5, { heading: 0, dir: -1, sweep: 240 })], 7.5, 4.5, 0.2)
+      N.taper(sq(kit, [[lx + 1, 22], [lx + 1, 10], [lx + 11, 10]], 3), 8, 4.5, 0.4)
     }
   }
-  // body: broad, with a slight jog half-way
+  // body: broad, flat, with a slight jog part-way (one contour groove)
   const xm = (A(100) + xT) / 2 + rng.jitter(15)
-  S.band(sq(kit, [[A(100), yB], [xm + 5, yB], [xm - 5, yB + jog], [xT, yB + jog]], 5), BODY, 'flat')
-  // tail: a 2-turn rounded-square spiral at the outer end (the leiwen is packed inside it)
+  B.band(sq(kit, [[A(102), yB], [xm + 5, yB], [xm - 5, yB + jog], [xT - 4, yB + jog]], 5), BODY, 'flat')
+  // tail: a 3-turn squared spiral at the outer end (the leiwen is packed in its gaps)
   const yt = yB + jog
-  const box = top ? [6, 11, xT, 11 + tail] : [6, h - 13 - tail, xT, h - 13]
-  const sp = sqSpiralBox(box, short ? 15 : 17, 2, { flipY: !top })
-  S.band(sq(kit, [[xT + 8, yt], [xT, yt], ...sp], 7), BAND)
-  // a hook filling the corner the spiral leaves
-  if (top) S.band(sq(kit, [[7, h - 10], [xT - 8, h - 10], [xT - 8, h - 26], [xT - 26, h - 26]], 5), 10)
-  else S.band(sq(kit, [[7, 9], [xT - 8, 9], [xT - 8, 25], [xT - 26, 25]], 5), 10)
-  // quills: irregular, above and below the body
-  const yu = yt + BODY / 2 - 1, yd = yB - BODY / 2 + 1
-  if (top) {
-    quills(kit, S, rng, xT + 6, A(114), yu, 1, Math.min(42, c1 - yu - 2))
-    quills(kit, S, rng, xT + 6, A(112), yd, -1, yd - 10)
-  } else {
-    quills(kit, S, rng, xT + 6, A(114), yB + BODY / 2 - 1, 1, Math.min(40, c1 - yB - BODY / 2 - 1))
-    quills(kit, S, rng, xT + 6, (short ? A(140) : A(222)) - 14, yt - BODY / 2 + 1, -1, yt - BODY / 2 - 9)
-  }
-  render(kit, panel, S, P, r)
+  const box = top ? [6, 10, xT, 10 + tail] : [6, h - 12 - tail, xT, h - 12]
+  const sp = sqSpiralBox(box, short ? 11.5 : 14, 3, { flipY: !top })
+  N.band(sq(kit, [[xT + 6, yt], [xT, yt], ...sp], 5), short ? 7.5 : 8.5)
+  // quills: a row of small squared C-hooks above and below the body
+  const yu = yt + BODY / 2, yd = yt - BODY / 2
+  const pitch = 28
+  const upEnd = A(112)
+  hookRow(kit, N, xT + 4, upEnd, yu, Math.max(1, Math.round((upEnd - xT - 4) / pitch)), { up: 1, h: Math.min(18, c1 - yu - 12) })
+  const dnEnd = top ? A(104) : (short ? A(140) : A(222)) - 12
+  hookRow(kit, N, xT + 4, dnEnd, yd, Math.max(1, Math.round((dnEnd - xT - 4) / pitch)), { up: -1, h: Math.min(16, yd - 14) })
+  renderBoth(kit, panel, SS, r)
 }
 
 // Upper corner: ox-head 牛首 half-mask, axis on the arris (local x = 0; the same drawing
@@ -204,7 +201,8 @@ function friezeKui(kit, panel, r, { short, seed, top }) {
 // ribbed crescent horn ≈ 45 tall across the whole square, its tip upturned at the outer
 // side; boss eye ≈ 42 from the arris; ∩ jaw with a hooked fang; a C ear outside the eye.
 function oxHead(kit, panel, r, { seed }) {
-  const S = sheet(kit, r, { seed, wobble: 0.45 })
+  const SS = sheets(kit, r, { seed, wobble: 0.45 })
+  const { B, N } = SS
   const h = r.h, w = r.w
   const top = [], bot = []
   const n = 24
@@ -214,83 +212,91 @@ function oxHead(kit, panel, r, { seed }) {
     top.push([x, h - 5 - 3 * Math.sin(Math.PI * t)])
     bot.push([x, h - 52 + 16 * Math.sin(Math.PI * t * 0.5) + 26 * t * t * t])
   }
-  S.poly([...top, ...bot.slice().reverse()])
+  B.poly([...top, ...bot.slice().reverse()])
   // transverse ribbing (7 comb-like incisions across the crescent)
   for (let k = 1; k <= 7; k++) {
     const i = Math.round((k / 8) * n)
-    S.line([[top[i][0] - 1.5, top[i][1] - 3.5], [bot[i][0] + 1.5, bot[i][1] + 3.5]], 1.9)
+    B.line([[top[i][0] - 1.5, top[i][1] - 3.5], [bot[i][0] + 1.5, bot[i][1] + 3.5]], 1.9)
   }
-  S.boss([42, h * 0.42], 9.5, { kind: 'round', base: 'ground', pupil: 'none' })
+  B.boss([42, h * 0.42], EYE, { kind: 'round', base: 'ground', pupil: 'none' })
   // brow over the eye, from the arris
-  S.band(sq(kit, [[4, h * 0.42 + 15], [60, h * 0.42 + 15], [60, h * 0.42 - 4]], 6), 11)
+  N.band(sq(kit, [[4, h * 0.42 + 15], [60, h * 0.42 + 15], [60, h * 0.42 - 4]], 6), BAND)
   // ear: hollow C outside the eye
-  S.band(sq(kit, [[w - 10, h * 0.42 + 12], [w - 32, h * 0.42 + 12], [w - 32, h * 0.42 - 14], [w - 10, h * 0.42 - 14], [w - 10, h * 0.42 - 2]], 6), 11)
+  N.band(sq(kit, [[w - 10, h * 0.42 + 12], [w - 32, h * 0.42 + 12], [w - 32, h * 0.42 - 14], [w - 10, h * 0.42 - 14], [w - 10, h * 0.42 - 2]], 6), BAND)
   // ∩ jaw with a hooked fang
-  S.band(sq(kit, [[4, 30], [66, 30], [66, 12]], 6), 12)
-  S.taper([[66, 13], ...curl(kit, [66, 11], 6, { heading: -90, dir: 1, sweep: 280 })], 11, 6, 0.3)
-  S.taper(sq(kit, [[28, 30], [28, 13], [17, 13]], 4), 11, 6, 0.5)
-  render(kit, panel, S, P, r)
+  N.band(sq(kit, [[4, 30], [66, 30], [66, 12]], 6), BAND + 1)
+  N.taper([[66, 13], ...curl(kit, [66, 11], 6, { heading: -90, dir: 1, sweep: 280 })], BAND, 6, 0.3)
+  N.taper(sq(kit, [[28, 30], [28, 13], [17, 13]], 4), BAND, 6, 0.5)
+  renderBoth(kit, panel, SS, r)
 }
 
 // Lower corner: taotie half-mask on the arris — heavy squared C horn, boss eye, hooked jaw.
 function cornerTaotie(kit, panel, r, { seed }) {
-  const S = sheet(kit, r, { seed, wobble: 0.45 })
+  const SS = sheets(kit, r, { seed, wobble: 0.45 })
+  const { B, N } = SS
   const h = r.h, w = r.w
-  S.band(sq(kit, [[6, h - 46], [6, h - 11], [w - 13, h - 11], [w - 13, h - 52], [w - 46, h - 52], [w - 46, h - 32], [w - 30, h - 32]], 6), BAND + 1)
-  S.boss([40, h * 0.5], 9, { kind: 'round', base: 'ground', pupil: 'none' })
-  S.band(sq(kit, [[4, h * 0.5 + 15], [58, h * 0.5 + 15], [58, h * 0.5 - 4]], 5), 10)
-  S.band(sq(kit, [[4, 36], [72, 36], [72, 12]], 6), BAND)
-  S.taper([[72, 13], ...curl(kit, [72, 11], 7, { heading: -90, dir: 1, sweep: 280 })], 11, 6, 0.3)
-  S.band(sq(kit, [[w - 13, h * 0.56], [w - 13, 10]], 3), 10)
-  render(kit, panel, S, P, r)
+  // horn: a solid squared C block over the eye (grooved), its tail curling in
+  B.poly(sqc(kit, [[6, h - 48], [6, h - 8], [w - 10, h - 8], [w - 10, h - 54], [w - 50, h - 54], [w - 50, h - 36], [w - 30, h - 36], [w - 30, h - 26], [24, h - 26], [24, h - 48]], 5))
+  B.boss([40, h * 0.5], EYE, { kind: 'round', base: 'ground', pupil: 'none' })
+  N.band(sq(kit, [[4, h * 0.5 + 14], [58, h * 0.5 + 14], [58, h * 0.5 - 4]], 5), BAND)
+  N.band(sq(kit, [[4, 36], [72, 36], [72, 12]], 6), BAND + 1)
+  N.taper([[72, 13], ...curl(kit, [72, 11], 7, { heading: -90, dir: 1, sweep: 280 })], BAND, 6, 0.3)
+  N.band(sq(kit, [[w - 13, h * 0.5], [w - 13, 10]], 3), BAND)
+  renderBoth(kit, panel, SS, r)
 }
 
 // Side column: ONE vertical K5 kui, head UP facing the corner (arris at local x = 0):
-// a heavy crest block in the top third, boss eye at 0.33 of the height from the top
+// a solid crest block in the top third, boss eye at 0.33 of the height from the top
 // ≈ 35 from the corner side, ⊐ jaw opening toward the corner, a claw curl off the
-// body, then the body descends along the field side into a 2-turn tail spiral.
+// body, then the broad body descends along the field side into a 3-turn tail spiral.
 function columnKui(kit, panel, r, { seed }) {
-  const S = sheet(kit, r, { seed, wobble: 0.5 })
+  const SS = sheets(kit, r, { seed, wobble: 0.5 })
+  const { B, N } = SS
   const h = r.h, w = r.w
   const ey = h * 0.67
   const c0 = ey + 16
-  crestBlock(kit, S, (d) => d, 1, 8, w - 12, c0, h - 6)
-  S.boss([34, ey], 9.5, { kind: 'round', base: 'ground', pupil: 'none' })
+  crestBlock(kit, B, (d) => d, 8, w - 10, c0, h - 7)
+  B.boss([34, ey], EYE, { kind: 'round', base: 'ground', pupil: 'none' })
   // jaw: ⊐ opening toward the corner, the lower lip curling up
-  S.band(sq(kit, [[7, ey - 17], [62, ey - 17], [62, ey - 44]], 7), BAND)
-  S.taper([[62, ey - 44], [20, ey - 44], ...curl(kit, [18, ey - 44], 6, { heading: 180, dir: -1, sweep: 260 })], BAND, 6, 0.6)
+  N.band(sq(kit, [[7, ey - 17], [62, ey - 17], [62, ey - 44]], 7), BAND)
+  N.taper([[62, ey - 44], [20, ey - 44], ...curl(kit, [18, ey - 44], 6, { heading: 180, dir: -1, sweep: 260 })], BAND, 6, 0.6)
   // body down the field side into the tail spiral
-  const tb = w - 30
-  const box = [8, 8, w - 20, 8 + tb]
-  const sp = sqSpiralBox(box, 17, 2)
-  S.band([[w - 20, c0 + 4], [w - 20, 8 + tb]], BODY - 2)
-  S.band(sq(kit, [[w - 20, 8 + tb + 6], ...sp], 7), BAND)
-  // claw / quill curls off the body toward the corner
-  S.taper([[w - 26, ey - 62], [42, ey - 62], ...curl(kit, [40, ey - 62], 6.5, { heading: 180, dir: 1, sweep: 280 })], 11, 6, 0.55)
-  render(kit, panel, S, P, r)
+  const tb = w - 26
+  const box = [8, 8, w - 18, 8 + tb]
+  const sp = sqSpiralBox(box, 14, 3)
+  B.band([[w - 21, c0 + 2], [w - 21, 8 + tb + 4]], BODY, 'flat')
+  N.band(sq(kit, [[w - 18, 8 + tb + 8], ...sp], 5), 8.5)
+  // claw / quill hooks off the body toward the corner
+  for (const yy of [ey - 64, ey - 86]) N.band(sq(kit, [[w - 28, yy], [40, yy], [40, yy + 9]], 3), 7, 'flat')
+  renderBoth(kit, panel, SS, r)
 }
 
 // Short-face fields: old cracks / repair seams running across the plain panel
 // (dossier §b.7, §d) — thin irregular sunk lines.
 function repairCracks(kit, panel, field, seed) {
   const rng = new kit.Rng(seed + 77)
-  const lines = []
-  for (let c = 0; c < 3; c++) {
-    let x = field.x + field.w * (0.15 + 0.3 * c + rng.jitter(0.06)), y = field.y + field.h * rng.range(0.55, 0.95)
+  const walk = (x, y, hd, n, turn) => {
     const pts = [[x, y]]
-    let hd = rng.range(-1.2, -0.6)
-    for (let i = 0; i < 40; i++) {
-      hd += rng.jitter(0.35)
-      x += Math.cos(hd) * 6
-      y += Math.sin(hd) * 6
-      if (y < field.y + 6 || x < field.x + 4 || x > field.x + field.w - 4) break
+    for (let i = 0; i < n; i++) {
+      const step = rng.range(3, 9)
+      const a = hd + rng.jitter(turn) // jagged: every segment kinks independently around the mean heading
+      x += Math.cos(a) * step
+      y += Math.sin(a) * step
+      if (y < field.y + 6 || y > field.y + field.h - 4 || x < field.x + 4 || x > field.x + field.w - 4) break
       pts.push([x, y])
+      if (rng.next() < 0.08) hd += rng.jitter(0.5)
     }
-    lines.push(pts)
+    return pts
   }
+  const lines = [
+    // ≈ 350 mm, roughly horizontal, just under the top frieze
+    walk(field.x + field.w * rng.range(0.2, 0.3), field.y + field.h - rng.range(18, 30), rng.jitter(0.08), 60, 0.9),
+    // a diagonal near the right side column
+    walk(field.x + field.w - rng.range(30, 60), field.y + field.h - rng.range(10, 25), -2.0 + rng.jitter(0.15), 30, 0.8),
+  ]
   panel.add((ctx) => {
     ctx.lineWidth = 0.9
-    ctx.lineJoin = 'round'
+    ctx.lineJoin = 'miter'
     for (const pts of lines) {
       ctx.beginPath()
       pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])))

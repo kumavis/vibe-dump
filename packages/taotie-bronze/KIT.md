@@ -554,6 +554,13 @@ Other      tinOxide (Type I noble skin; no bare metal is left under it) + tinOxi
            · chloride (pale pustules over pits, dark ring) · soot · crevice
            · patchScale mm (territories, domain-warped) · mottleScale mm · patchiness (1 broad
            territories / crust islands · 0 every layer breaks up at the mottle size: fine speckle, no blotches)
+           · softness (0 crisp layer edges · 1 every cover edge feathers, the grain and its glints drop to a
+           whisper and the cell-id territory kind becomes a continuous field: low-contrast mottle, no dots)
+           · drift (slow lightness / warmth drift at the territory size, 50–200 mm) · nobleRelief (−1..1,
+           default 1: how much paler the noble skin is on raised décor; −1 darker plateaus) · lowerBody +
+           lowerHeight + lowerColor (skin below that fraction of the height multiplied by the tint: green-grey
+           legs, a warm foot band) · rimCalm (above ~60 % of the height, plain parts and up-facing faces lose
+           the wall mottle)
 Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad glossy highlights;
            0 = each layer's own sheen, kept only by as-cast / heirloom) · dulling (dust / old wax greys
            every mineral colour) · tops (relief tops — real mm above the L0 ground — rubbed to a darker,
@@ -561,7 +568,7 @@ Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad gl
            a map with nothing raised — a flange's incised faces — has no tops, and plain meshes never go pale)
            · earth + earthColor (recesses, ledges, an accretion low on the foot) · calcite (lime: mostly sharp crusty islands
            plus a faint dust) · streaks (gravity runs down the walls + one pale tide line) ·
-           burialSide · recessDirt · interiorTone (interior = one calm corroded skin: dark grey-brown
+           burialSide · recessDirt · ledgeMatte (up-facing ledges fully matte: no grazing sheen) · interiorTone (interior = one calm corroded skin: dark grey-brown
            → pale green) · wax · inlay (black paste in sunk lines AND the sunk ground of relief
            panels) · inlayGround (paste fills the whole sunk ground of the décor, over the corrosion:
            light bands on black, Met zun) · wear (erases soil → crust → noble → cuprite → burnished metal) · seed

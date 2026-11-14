@@ -20,7 +20,7 @@ const RIM_OV = 34 // slab overhang beyond the wall face (photos: the rim stands 
 const TOP_W = 1030, TOP_D = 719 // wall outer face at the top, under the rim (rim outer stays 1098 × 787)
 const TAPER = { x: 2.2, z: 0.5 } // end walls lean 2.2°, long walls 0.5° (out going up)
 const WALL_T = 60 // published wall thickness
-const HANDLE = { width: 290, height: H - LEG_H - WALL_H - RIM_H, bar: 84, barTop: 90, depth: 100, radius: 32, aperture: 18, x: 492 }
+const HANDLE = { width: 290, height: H - LEG_H - WALL_H - RIM_H, bar: 84, barTop: 90, depth: 100, radius: 36, aperture: 30, x: 492 }
 const LEG = { r: 80, x: 420, z: 260 } // dossier ±429 ±15; 420 keeps the shaft flush with the end wall's foot (§b.4)
 
 /** Corner-flange silhouette [σ, t] (CCW, root at t = −e): crest p, narrow wedge slots ≈ 8 wide × 10–13 deep. */
@@ -64,10 +64,10 @@ export default {
     'short-wall': { azimuth: 90, elevation: 2, fov: 30, fit: 0.32, target: [500, 725, 0], ref: 'detail-short-wall.jpg' },
     'frieze-top-centre': { azimuth: 0, elevation: 4, fov: 20, fit: 0.2, target: [0, 900, 395], ref: 'detail-frieze-top-centre.jpg' },
     'frieze-bottom-centre': { azimuth: 90, elevation: 1, fov: 22, fit: 0.24, target: [490, 520, 0], ref: 'detail-frieze-bottom-centre.jpg' },
-    // handle views: the photos look up from below the rim top. stage.js clamps elevation at ≈ 1.15°,
-    // so the camera is kept low by a low target and a short distance (wider fov) instead.
-    'handle-front': { azimuth: 90, elevation: 0, fov: 36, fit: 0.37, target: [520, 1010, 0], ref: 'detail-handle-front.jpg' },
-    handle: { azimuth: 90, elevation: 0, fov: 34, fit: 0.36, target: [520, 1012, 0], ref: 'detail-handle.jpg' },
+    // handle views: framed on the handle (≈ 480 mm frame, rim top ≈ 0.31 up the frame, as in the photos).
+    // The photos look up from just below the rim top; stage.js cannot go below ≈ 0°, so the rim top shows.
+    'handle-front': { azimuth: 90, elevation: 0, fov: 24, fit: 0.32, target: [520, 1046, 0], ref: 'detail-handle-front.jpg' },
+    handle: { azimuth: 90, elevation: 0, fov: 24, fit: 0.33, target: [520, 1048, 0], ref: 'detail-handle.jpg' },
     'handle-roots': { azimuth: 90, elevation: 0, fov: 20, fit: 0.22, target: [520, 985, 0], ref: 'detail-handle-roots.jpg' },
     // legs: each photo has its own side of the +X+Z (or −X+Z) leg; the mask axis is at az ≈ ±59°
     leg: { azimuth: 12, elevation: 1, fov: 22, fit: 0.24, target: [429, 300, 260], ref: 'detail-leg.jpg' },
@@ -136,7 +136,8 @@ export default {
         from: at(yTopFlange), to: at(WALL_H), out: w.normal, height: 20, thickness: 15, embed: e, bevel: 1.6, seed: seed + 10 + i, material: plain,
         outline: [
           [0, -e], [Lf, -e], [Lf, 27], [Lf - 5, 32], [Lf - 14, 32], [Lf - 20, 26], [Lf - 16, 23], [Lf - 22, 20],
-          [Lf * 0.55 + 4, 20], [Lf * 0.55 + 3, 15], [Lf * 0.55 - 3, 15], [Lf * 0.55 - 4, 20],
+          [Lf * 0.62 + 4, 20], [Lf * 0.62 + 3, 11], [Lf * 0.62 - 3, 11], [Lf * 0.62 - 4, 20],
+          [Lf * 0.42 + 4, 20], [Lf * 0.42 + 3, 12], [Lf * 0.42 - 3, 12], [Lf * 0.42 - 4, 20],
           [12, 20], [6, 18.5], [2, 15], [0, 9],
         ],
       }))
@@ -150,7 +151,7 @@ export default {
       // bottom: within the bottom frieze, segmented into blocks at ≈ 23 mm pitch
       flanges.push(kit.flange({
         from: at(2), to: at(FRAME.bottom), out: w.normal, height: 18, thickness: 17, embed: 3, bevel: 1.8,
-        notches: { shape: 'square', pitch: 25, depth: 0.75, width: 5 }, seed: seed + 20 + i, material: plain,
+        notches: { shape: 'square', pitch: 23, depth: 0.85, width: 6 }, seed: seed + 20 + i, material: plain,
       }))
     }
     for (const f of flanges) object.add(f)
