@@ -12,7 +12,7 @@ const BG = new THREE.Color('#0b0a09')
 // exposure 1 (round 4, was 0.85): with the soft ambient and the view-following rig the
 // excavated skins now come out at the levels the studio photographs measure
 const TONE = THREE.ACESFilmicToneMapping
-const EXPOSURE = 1.0
+const EXPOSURE = 1.15 // round 4c: 1.0 → 1.15, the studio-lit photographs read 10–20 % brighter on four of five vessels
 const DEG = Math.PI / 180
 
 export class Stage {
@@ -181,7 +181,7 @@ export class Stage {
     // soft rim from behind so the silhouette lifts off the near-black ground
     this.rim = new THREE.SpotLight('#dfe6f0', 2.6, 0, 0.45, 0.95, 0)
     this.scene.add(this.rim, this.rim.target)
-    this.ambient = new THREE.HemisphereLight('#7d7a74', '#5a5651', 1.0) // studio photographs: a broad soft ambient, no black shade side
+    this.ambient = new THREE.HemisphereLight('#7d7a74', '#5a5651', 1.45) // studio photographs: a broad soft ambient, no black shade side (round 4c: 1.0 → 1.45, the shade side and the tall vessels' upper bodies read black)
     this.scene.add(this.ambient)
     this._lightLook = { key: this.key.color.clone(), fill: this.fill.color.clone(), rim: this.rim.color.clone() }
   }

@@ -94,13 +94,18 @@ const EYE = 8.5 // eye boss radius (Ø 17, photo 16–20)
 /** Narrow-band style: flat plateau, no contour groove. */
 const PN = style(LEVELS.wall, { carving: 'none' })
 
-/** Two sheets over one rect: broad (one contour groove) and narrow (plain flat top). */
+/** V-a carved plateau: one contour echo, then 1.9 mm squared spirals packed on the top
+ *  (the kui bodies in detail-frieze-top-centre.jpg carry spirals, like the ground). */
+const PS = style(LEVELS.wall, { carving: 'spirals', spiralPitch: 1.9, lineWeight: 0.8 })
+
+/** Sheets over one rect: broad (one contour groove), narrow (plain flat top), carved (spirals on top). */
 function sheets(kit, r, o) {
-  return { B: sheet(kit, r, o), N: sheet(kit, r, { ...o, seed: (o.seed || 1) + 1000 }) }
+  return { B: sheet(kit, r, o), N: sheet(kit, r, { ...o, seed: (o.seed || 1) + 1000 }), V: sheet(kit, r, { ...o, seed: (o.seed || 1) + 2000 }) }
 }
-function renderBoth(kit, panel, { B, N }, r) {
+function renderBoth(kit, panel, { B, N, V }, r) {
   render(kit, panel, N, PN, r)
   render(kit, panel, B, P, r)
+  if (V && V.plateau.length) render(kit, panel, V, PS, r)
 }
 
 /** A round curl continuing a stem that arrives at p heading `heading`°; dir +1 curls left (CCW), −1 right. */
@@ -116,12 +121,17 @@ function sqc(kit, pts, r = 6) {
 }
 
 /** A row of n small squared C-hooks standing on y, pointing up (+1) / down (−1), each turned back toward −x. */
-function hookRow(kit, S, x0, x1, y, n, { up = 1, h = 17, back = 11, w = 6.5, drop = 7 } = {}) {
-  if (n < 1 || x1 - x0 < back + w) return
+function hookRow(kit, S, x0, x1, y, n, { up = 1, h: h0 = 17, back: b0 = 11, w = 6.5, drop = 7, curlIn = 0, rng = null } = {}) {
+  if (n < 1 || x1 - x0 < b0 + w) return
   const step = (x1 - x0) / n
   for (let i = 0; i < n; i++) {
-    const x = x0 + step * (i + 0.5) + back / 2
-    S.band(sq(kit, [[x, y - up * 2], [x, y + up * h], [x - back, y + up * h], [x - back, y + up * (h - drop)]], 2.5), w, 'flat')
+    // hand-cut irregularity: each hook's reach and height vary a little (the photo's quills are not a comb)
+    const h = rng ? h0 - rng.range(0, 5) : h0, back = rng ? b0 + rng.jitter(3) : b0
+    const x = x0 + step * (i + 0.5) + back / 2 + (rng ? rng.jitter(2.5) : 0)
+    const pts = [[x, y - up * 2], [x, y + up * h], [x - back, y + up * h], [x - back, y + up * (h - drop)]]
+    // squared C: the free end turns back in under the top bar (a C-hook, not a ⌐ stub)
+    if (curlIn) pts.push([x - back + curlIn, y + up * (h - drop)])
+    S.band(sq(kit, pts, 2.5), w, 'flat')
   }
 }
 
@@ -157,7 +167,10 @@ function friezeKui(kit, panel, r, { short, seed, top }) {
   const jog = top ? 3 : -3
   // CREST: solid block over the eye, beside the flange
   const c0 = top ? 70 : 73, c1 = top ? h - 8 : h - 11
-  crestBlock(kit, B, A, 10, 104, c0, c1)
+  if (top) crestBlock(kit, B, A, 10, 104, c0, c1)
+  // bottom frieze: the crest is an open squared spiral hook (≈ 10 mm band, leiwen inside), not a
+  // solid block (detail-frieze-bottom-centre.jpg)
+  else B.band(sq(kit, sqSpiralBox([A(100), c0, A(12), c1], 15, 2), 5), 10.5, 'flat')
   // eye: domed boss ≈ 35 from the axis
   B.boss([A(35), top ? 55 : 57], EYE, { kind: 'round', base: 'ground', pupil: 'none' })
   // cheek: a curl hanging off the body behind the jaw, turning toward the flange
@@ -180,7 +193,7 @@ function friezeKui(kit, panel, r, { short, seed, top }) {
   }
   // body: broad, flat, with a slight jog part-way (one contour groove)
   const xm = (A(100) + xT) / 2 + rng.jitter(15)
-  B.band(sq(kit, [[A(102), yB], [xm + 5, yB], [xm - 5, yB + jog], [xT - 4, yB + jog]], 5), BODY, 'flat')
+  SS.V.band(sq(kit, [[A(102), yB], [xm + 5, yB], [xm - 5, yB + jog], [xT - 4, yB + jog]], 5), BODY, 'flat')
   // tail: a 3-turn squared spiral at the outer end (the leiwen is packed in its gaps)
   const yt = yB + jog
   const box = top ? [6, 10, xT, 10 + tail] : [6, h - 12 - tail, xT, h - 12]
@@ -188,11 +201,13 @@ function friezeKui(kit, panel, r, { short, seed, top }) {
   N.band(sq(kit, [[xT + 6, yt], [xT, yt], ...sp], 5), short ? 7.5 : 8.5)
   // quills: a row of small squared C-hooks above and below the body
   const yu = yt + BODY / 2, yd = yt - BODY / 2
-  const pitch = 28
+  // broad squared C-hooks (≈ 9 mm bands, one contour groove), nearly touching, as in the photo
+  const pitch = 30
+  const qo = { w: 9, back: 17, drop: 13, curlIn: 8, rng }
   const upEnd = A(112)
-  hookRow(kit, N, xT + 4, upEnd, yu, Math.max(1, Math.round((upEnd - xT - 4) / pitch)), { up: 1, h: Math.min(18, c1 - yu - 12) })
+  hookRow(kit, B, xT + 4, upEnd, yu, Math.max(1, Math.round((upEnd - xT - 4) / pitch)), { ...qo, up: 1, h: Math.min(26, h - 6 - yu - 5) })
   const dnEnd = top ? A(104) : (short ? A(140) : A(222)) - 12
-  hookRow(kit, N, xT + 4, dnEnd, yd, Math.max(1, Math.round((dnEnd - xT - 4) / pitch)), { up: -1, h: Math.min(16, yd - 14) })
+  hookRow(kit, B, xT + 4, dnEnd, yd, Math.max(1, Math.round((dnEnd - xT - 4) / pitch)), { ...qo, up: -1, h: Math.min(24, yd - 9) })
   renderBoth(kit, panel, SS, r)
 }
 
@@ -261,11 +276,13 @@ function columnKui(kit, panel, r, { seed }) {
   N.band(sq(kit, [[7, ey - 17], [62, ey - 17], [62, ey - 44]], 7), BAND)
   N.taper([[62, ey - 44], [20, ey - 44], ...curl(kit, [18, ey - 44], 6, { heading: 180, dir: -1, sweep: 260 })], BAND, 6, 0.6)
   // body down the field side into the tail spiral
-  const tb = w - 26
-  const box = [8, 8, w - 18, 8 + tb]
-  const sp = sqSpiralBox(box, 14, 3)
-  B.band([[w - 21, c0 + 2], [w - 21, 8 + tb + 4]], BODY, 'flat')
-  N.band(sq(kit, [[w - 18, 8 + tb + 8], ...sp], 5), 8.5)
+  // tail: a compact 2-turn spiral tucked into the bottom corner (photo columns have no dominant box);
+  // the body carries spirals on its plateau like the frieze bodies
+  const tb = 58
+  const box = [w - 24 - tb, 8, w - 24, 8 + tb]
+  const sp = sqSpiralBox(box, 13, 2)
+  SS.V.band([[w - 21, c0 + 2], [w - 21, 8 + tb + 4]], BODY, 'flat')
+  N.band(sq(kit, [[w - 24, 8 + tb + 8], ...sp], 5), 8.5)
   // claw / quill hooks off the body toward the corner
   for (const yy of [ey - 64, ey - 86]) N.band(sq(kit, [[w - 28, yy], [40, yy], [40, yy + 9]], 3), 7, 'flat')
   renderBoth(kit, panel, SS, r)

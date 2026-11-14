@@ -560,7 +560,13 @@ Other      tinOxide (Type I noble skin; no bare metal is left under it) + tinOxi
            default 1: how much paler the noble skin is on raised décor; −1 darker plateaus) · lowerBody +
            lowerHeight + lowerColor (skin below that fraction of the height multiplied by the tint: green-grey
            legs, a warm foot band) · rimCalm (above ~60 % of the height, plain parts and up-facing faces lose
-           the wall mottle)
+           the wall mottle; plain parts anywhere also lose the fine speckle)
+Grain &    speckle + speckleScale/Color/Decor (mm-scale stipple of a second mineral) · crustIsles +
+crust      crustScale/Color/Place (pale earthy crust patches, multi-octave; with softness the edges feather
+           over several mm and they favour up-facing flats over arrises) · pustules + pustuleScale/Color
+           (crisp emerald, lodged in recesses and edges, never on plateau tops, kept saturated through
+           dulling) · grain (soft 2.5 + 9 mm lightness / hue / roughness breathing, no threshold: plain
+           walls stop reading flat; two simplex taps) · tint (multiplies the whole skin: last hue correction)
 Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad glossy highlights;
            0 = each layer's own sheen, kept only by as-cast / heirloom) · dulling (dust / old wax greys
            every mineral colour) · tops (relief tops — real mm above the L0 ground — rubbed to a darker,

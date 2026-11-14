@@ -66,8 +66,10 @@ export default {
     'frieze-bottom-centre': { azimuth: 90, elevation: 1, fov: 22, fit: 0.24, target: [490, 520, 0], ref: 'detail-frieze-bottom-centre.jpg' },
     // handle views: framed on the handle (≈ 480 mm frame, rim top ≈ 0.31 up the frame, as in the photos).
     // The photos look up from just below the rim top; stage.js cannot go below ≈ 0°, so the rim top shows.
-    'handle-front': { azimuth: 90, elevation: 0, fov: 24, fit: 0.32, target: [520, 1046, 0], ref: 'detail-handle-front.jpg' },
-    handle: { azimuth: 90, elevation: 0, fov: 24, fit: 0.33, target: [520, 1048, 0], ref: 'detail-handle.jpg' },
+    // round 4: re-solved on the handle itself (handle ≈ 0.6 of the frame height, rim near the bottom edge);
+    // stage.js clamps elevation at ≈ +1°, so the photos' slight upward look cannot be matched
+    'handle-front': { azimuth: 90, elevation: 1, fov: 24, fit: 0.235, target: [540, 1150, 0], ref: 'detail-handle-front.jpg' },
+    handle: { azimuth: 90, elevation: 1, fov: 24, fit: 0.245, target: [540, 1150, 0], ref: 'detail-handle.jpg' },
     'handle-roots': { azimuth: 90, elevation: 0, fov: 20, fit: 0.22, target: [520, 985, 0], ref: 'detail-handle-roots.jpg' },
     // legs: each photo has its own side of the +X+Z (or −X+Z) leg; the mask axis is at az ≈ ±59°
     leg: { azimuth: 12, elevation: 1, fov: 22, fit: 0.24, target: [429, 300, 260], ref: 'detail-leg.jpg' },

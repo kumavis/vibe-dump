@@ -26,8 +26,10 @@ const FOOT_CREST = [
   [39.4, 38.2], [41.6, 35.0], [43.5, 32.8], [45.4, 30.9], [47.6, 29.3], [49.8, 28.1], [51.3, 27.5],
 ]
 // the blunt tip (rounded, ≈ 2.8 mm tall, its point a little below the crest line) and the underside
-const FOOT_TIP = [[52.2, 27.0], [52.65, 26.2], [52.7, 25.3], [52.3, 24.6], [51.4, 24.3]]
-const FOOT_UNDER = [[49.0, 24.25], [46.0, 24.1], [43.0, 23.9], [40.6, 23.65]]
+// side.jpg (r4): the tip is a blunt squared end ≈ 4.5 mm tall whose lower corner droops a little below the
+// underside, not a wedge thinning to a point — the underside runs level, then turns down into the tip
+const FOOT_TIP = [[52.3, 27.2], [52.85, 26.5], [53.0, 25.3], [52.95, 23.9], [52.6, 23.0], [51.8, 22.7], [50.8, 22.85]]
+const FOOT_UNDER = [[49.0, 23.2], [46.0, 23.35], [43.0, 23.45], [40.6, 23.5]]
 
 // ladder: 3.7 mm pitch, ≈ 1.1 mm grooves ≈ 0.8 mm deep between ≈ 2.6 mm flat lands; the crest only nicked
 const PITCH = 3.7

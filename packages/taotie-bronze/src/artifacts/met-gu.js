@@ -57,6 +57,45 @@ function crop(parent, { fit, target: [x, y, z], ref }) {  // ref stays a literal
   }
 }
 
+// A crop view solved from the crop box itself (reference/met-gu/SOURCES.md gives each detail as w×h+x+y in
+// ORIGINAL exposure pixels). M maps exposure px (× s, the 1800 px downscale) to the parent view's render px
+// (1400 × 1050), measured on the silhouettes: scale k [x, y], and an anchor + axis slope in each image
+// (p = [x, y, dx/dy] in the photo, r = the same in the render). The crop centre becomes a ray from the parent
+// camera; match 'h' gives the render the photo's vertical scale (the compare sheet pairs them at equal
+// height), 'w' its horizontal extent (the subject spans the frame as in the photo), 'g' their geometric mean.
+// side.jpg ↔ side: rim, waist-flange top and ring bottom as vertical anchors (ys: [photo y, render y]; the scale
+// drifts 0.59 → 0.61 down the vessel)
+const MAP_SIDE = { s: 0.45, k: [0.6, 0.59], p: [682, 275, 0.01], r: [711.5, 156, -0.01386], ys: [[275, 156], [1002, 585], [1682, 1000]] }
+const MAP_FOOT = { s: 0.45, k: [0.817, 0.8], p: [887, 165, 0], r: [671, 162, 0] } // detail-foot-front.jpg ↔ its view: collar
+function shotCrop(parent, M, [w, h, x, y], { match = 'h', ref } = {}) {
+  const X = (x + w / 2) * M.s, Y = (y + h / 2) * M.s
+  let ry = M.r[1] + (Y - M.p[1]) * M.k[1]
+  if (M.ys) {
+    const i = Y < M.ys[1][0] ? 0 : 1, [a, b] = [M.ys[i], M.ys[i + 1]]
+    ry = a[1] + ((Y - a[0]) * (b[1] - a[1])) / (b[0] - a[0])
+  }
+  const rx = M.r[0] + (ry - M.r[1]) * M.r[2] + (X - (M.p[0] + (Y - M.p[1]) * M.p[2])) * M.k[0]
+  const sw = w * M.s * M.k[0] * 0.75, sh = h * M.s * M.k[1] // render px of the 1050 px height
+  const span = match === 'w' ? sw : match === 'g' ? Math.sqrt(sw * sh) : sh // 'g': between the two, for a wide strip
+  const P = camPos(parent)
+  const a = parent.azimuth * DEG, e = parent.elevation * DEG
+  const d = [Math.sin(a) * Math.cos(e), Math.sin(e), Math.cos(a) * Math.cos(e)] // toward the camera
+  const rl = Math.hypot(d[2], d[0])
+  const right = [d[2] / rl, 0, -d[0] / rl] // up × d
+  const up = [d[1] * right[2] - d[2] * right[1], d[2] * right[0] - d[0] * right[2], d[0] * right[1] - d[1] * right[0]]
+  const pp = Math.tan((parent.fov * DEG) / 2) / 525
+  let ray = [0, 1, 2].map((i) => -d[i] + right[i] * (rx - 700) * pp - up[i] * (ry - 525) * pp)
+  const rn = Math.hypot(...ray)
+  ray = ray.map((c) => c / rn)
+  const t = Math.hypot(...P.map((c, i) => c - parent.target[i])) / -(ray[0] * d[0] + ray[1] * d[1] + ray[2] * d[2])
+  const tanN = (Math.tan((parent.fov * DEG) / 2) * span) / 1050
+  const r2 = (v) => +v.toFixed(2)
+  return {
+    azimuth: r2(Math.atan2(-ray[0], -ray[2]) / DEG), elevation: r2(Math.asin(-ray[1]) / DEG), fov: r2((2 * Math.atan(tanN)) / DEG),
+    fit: +((tanN * t) / R_BOX).toFixed(4), target: P.map((c, i) => r2(c + ray[i] * t)), ref,
+  }
+}
+
 // true-mapped blade panel width (mm). The blade itself is ≈ 27.8 at the neck (photo) → 22.6 under the ogive, but the
 // panel must span the whole sector arc at the lip (±66 mm): the patina reads uv.x < −0.5 as an inner wall, and a
 // narrower panel turned the trumpet beside the blade apex into dark hard-edged wedges.
@@ -101,15 +140,16 @@ export default {
     'detail-foot-front': { ...FOOT_VIEW, ref: 'detail-foot-front.jpg' },
     'detail-foot-halfmask': crop(FOOT_VIEW, { fit: 0.17, target: [-16, 48, 21], ref: 'detail-foot-halfmask.jpg' }),
     'detail-foot-seam': crop(SIDE_VIEW, { fit: 0.212, target: [0, 25, 0], ref: 'detail-foot-seam.jpg' }),
-    'detail-foot-ring': { azimuth: 89, elevation: 15, fov: 14, fit: 0.095, target: [44, 14, -0.6], ref: 'detail-foot-ring.jpg' },
+    // the foot-ring, flange-ladder, collar, neck-band and rim-lip crops: solved from their crop boxes (shotCrop)
+    'detail-foot-ring': shotCrop(SIDE_VIEW, MAP_SIDE, [1000, 420, 1050, 3350], { match: 'h', ref: 'detail-foot-ring.jpg' }),
     'detail-waist': crop(SIDE_VIEW, { fit: 0.158, target: [0, 118.5, 0], ref: 'detail-waist.jpg' }),
     'detail-waist-b': crop(LEFT_VIEW, { fit: 0.17, target: [0, 116.5, 0], ref: 'detail-waist-b.jpg' }),
-    'detail-flange-ladder': crop(SIDE_VIEW, { fit: 0.12, target: [0, 108, 24], ref: 'detail-flange-ladder.jpg' }),
-    'detail-collar': crop(FOOT_VIEW, { fit: 0.105, target: [0, 88.5, 0], ref: 'detail-collar.jpg' }),
-    'detail-neck-band': crop(SIDE_VIEW, { fit: 0.104, target: [0, 161, 0], ref: 'detail-neck-band.jpg' }),
+    'detail-flange-ladder': shotCrop(SIDE_VIEW, MAP_SIDE, [300, 700, 1220, 2250], { match: 'h', ref: 'detail-flange-ladder.jpg' }),
+    'detail-collar': shotCrop(FOOT_VIEW, MAP_FOOT, [1300, 520, 1300, 0], { match: 'g', ref: 'detail-collar.jpg' }),
+    'detail-neck-band': shotCrop(SIDE_VIEW, MAP_SIDE, [420, 260, 1340, 1990], { match: 'w', ref: 'detail-neck-band.jpg' }),
     'detail-neck-band-b': crop(LEFT_VIEW, { fit: 0.104, target: [0, 161, 0], ref: 'detail-neck-band-b.jpg' }),
     'detail-blade': crop(SIDE_VIEW, { fit: 0.356, target: [0, 236, 0], ref: 'detail-blade.jpg' }),
-    'detail-rim-lip': crop(SIDE_VIEW, { fit: 0.125, target: [0, 302, 0], ref: 'detail-rim-lip.jpg' }),
+    'detail-rim-lip': shotCrop(SIDE_VIEW, MAP_SIDE, [1900, 420, 550, 430], { match: 'h', ref: 'detail-rim-lip.jpg' }),
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {

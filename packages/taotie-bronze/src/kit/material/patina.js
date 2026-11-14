@@ -73,7 +73,7 @@ export const PATINA_PARAMS = {
   plainTone: { group: 'Other corrosion', label: 'Plain parts tone', min: 0.3, max: 1.5, step: 0.01, default: 1, hint: 'multiplies the skin on plain, undecorated surfaces (knob stem, neck band, plain fields): < 1 darker than the décor (Nezu)' },
   upperTone: { group: 'Other corrosion', label: 'Upper body tone', min: 0.4, max: 1.4, step: 0.01, default: 1, hint: 'multiplies the skin above the upper-body height: < 1 a darker lid (fangyi) or trumpet (gu) than the body' },
   upperHeight: { group: 'Other corrosion', label: 'Upper body height', min: 0, max: 1, step: 0.01, default: 0.65, hint: 'fraction of the vessel height where the upper-body tone starts' },
-  rimCalm: { group: 'Other corrosion', label: 'Calm rim & handles', min: 0, max: 1, step: 0.01, default: 0, hint: 'the upper part of the vessel (above ~60 % of its height): plain parts (rim, handles) and up-facing faces lose the wall mottle: one worn skin' },
+  rimCalm: { group: 'Other corrosion', label: 'Calm rim & handles', min: 0, max: 1, step: 0.01, default: 0, hint: 'the upper part of the vessel (above ~60 % of its height): plain parts (rim, handles) and up-facing faces lose the wall mottle: one worn skin; plain parts anywhere (flanges, legs) also lose the fine speckle' },
   // Grain & crust (round 4b): the mm-scale texture of a real excavated skin. Each is thresholded
   // (hard-edged up close) and filtered to its mean coverage once its grain drops under a pixel,
   // so at vessel distance it reads as a mixed tone, never as dots
@@ -88,6 +88,7 @@ export const PATINA_PARAMS = {
   pustules: { group: 'Grain & crust', label: 'Malachite pustules', min: 0, max: 1, step: 0.01, default: 0, hint: 'saturated emerald pustules (2–10 mm) in clusters, weighted to the rim lip, the foot and recesses' },
   pustuleScale: { group: 'Grain & crust', label: 'Pustule size', min: 2, max: 14, step: 0.5, default: 5, unit: 'mm' },
   pustuleColor: { group: 'Grain & crust', label: 'Pustule colour', type: 'color', default: '#2e7658' },
+  grain: { group: 'Grain & crust', label: 'Skin grain', min: 0, max: 1, step: 0.01, default: 0, hint: 'soft multi-scale breathing of lightness, hue and roughness at 2–10 mm on every surface (no dots): plain walls stop reading as dead-flat paint' },
   tint: { group: 'Grain & crust', label: 'Skin tint', type: 'color', default: '#ffffff', hint: 'multiplies the whole corroded skin: a last hue correction (white = none)' },
   // Surface
   matte: { group: 'Surface', key: true, label: 'Matte (dry skin)', min: 0, max: 1, step: 0.01, default: 0, hint: 'micro-pitted, dusty excavated skin: no broad glossy highlights. 0 keeps each layer’s own sheen (as-cast, heirloom)' },
@@ -189,15 +190,16 @@ export const PATINA_PRESETS = {
   // 10–40 mm blended into it (softness 1: no dots), a slow tone drift, friezes darker than the plain
   // field (nobleRelief < 0, black grooves), legs darker and greener (lowerBody), calm rim and handles
   'houmuwu': {
-    age: 1, tin: 0.12, lead: 0.04, polish: 0.3, tarnish: 0.6, cuprite: 1, cupriteTone: 0.4, tinOxide: 0.7,
-    tinOxideTone: 1.6, malachite: 0, carbonate: 0.4, azurite: 0, azuriteScale: 8, blueHabitat: 0.3,
+    age: 1, tin: 0.12, lead: 0.04, polish: 0.3, tarnish: 0.6, cuprite: 1, cupriteTone: 0.25, tinOxide: 0.7,
+    tinOxideTone: 1.45, malachite: 0, carbonate: 0.4, azurite: 0, azuriteScale: 8, blueHabitat: 0.3,
     turquoiseTone: 0.2, malachiteHue: 0.3, malachiteTone: 0.5, islands: 0, malachiteScale: 1, crust: 0.2,
-    chloride: 0, soot: 0.1, crevice: 0.5, patchScale: 110, mottleScale: 30, patchiness: 0.3, softness: 1,
-    drift: 0.5, lowerBody: 0.7, lowerHeight: 0.38, lowerColor: '#b0b8a4', rimCalm: 0.8, earth: 0.15,
-    earthColor: '#857256', calcite: 0, streaks: 0.15, burialSide: 0.2, recessDirt: 1, interiorTone: 0.35, wax: 0,
-    inlay: 1, wear: 0.1, dulling: 0.1, tops: 0.3, matte: 1, topsTone: 0.3, ledgeMatte: 0.5, nobleRelief: -1,
-    speckle: 0.5, speckleScale: 3, speckleColor: '#7a5446', speckleDecor: 0.85, crustIsles: 0.3, crustScale: 5,
-    crustColor: '#8d9c95', crustPlace: 0.65, plainTone: 1.15, tint: '#e2e6e6',
+    chloride: 0, soot: 0, crevice: 0.5, patchScale: 110, mottleScale: 30, patchiness: 0.3, softness: 1,
+    drift: 0.5, lowerBody: 0.9, lowerHeight: 0.38, lowerColor: '#bcc4b0', rimCalm: 0.8, earth: 0,
+    earthColor: '#857256', calcite: 0, streaks: 0.15, burialSide: 0.2, recessDirt: 0.6, interiorTone: 0.35,
+    wax: 0, inlay: 0.7, wear: 0.1, dulling: 0.1, tops: 0.15, matte: 1, topsTone: 0, ledgeMatte: 0.5,
+    nobleRelief: -1, speckle: 0.42, speckleScale: 1.6, speckleColor: '#c07078', speckleDecor: 0.5,
+    crustIsles: 0.2, crustScale: 14, crustColor: '#b8a8a4', crustPlace: 0.65, plainTone: 1.0, tint: '#bfeee4',
+    grain: 1,
   },
   // Met 1974.268.2: one even olive yellow-green-brown noble skin (lid only a little lighter),
   // dark recesses without verdigris, red-brown in slots and low on the foot, sparse green specks
@@ -205,12 +207,12 @@ export const PATINA_PRESETS = {
     age: 1, tin: 0.14, lead: 0.05, polish: 0.4, tarnish: 0.8, cuprite: 0.8, cupriteTone: 0.3, tinOxide: 0.95,
     tinOxideTone: 1.0, malachite: 0, carbonate: 0.05, azurite: 0, malachiteHue: 0.7, malachiteTone: 0.4,
     islands: 0.3, malachiteScale: 1, crust: 0.1, chloride: 0, soot: 0, crevice: 0.9, patchScale: 80,
-    mottleScale: 14, patchiness: 0.6, softness: 0.8, drift: 0.25, earth: 0.15, earthColor: '#6a4a2c', calcite: 0,
-    streaks: 0.1, burialSide: 0.05, recessDirt: 0.7, interiorTone: 0.6, wax: 0.1, inlay: 0, wear: 0.1,
-    dulling: 0.05, tops: 0.4, nobleWarmth: 0.35, matte: 1, topsTone: 0.05, ledgeMatte: 1, lowerBody: 0.35,
-    lowerHeight: 0.1, lowerColor: '#d89a78', upperTone: 0.85, upperHeight: 0.66, speckle: 0.13,
-    speckleScale: 1.2, speckleColor: '#3c4630', pustules: 0.03, pustuleScale: 3, pustuleColor: '#3e5a36',
-    tint: '#fbf8e8',
+    mottleScale: 14, patchiness: 0.6, softness: 0.8, drift: 0.25, earth: 0.05, earthColor: '#6a4a2c', calcite: 0,
+    streaks: 0.1, burialSide: 0.05, recessDirt: 0.9, interiorTone: 0.6, wax: 0.1, inlay: 0, wear: 0.1,
+    dulling: 0.05, tops: 0.25, nobleWarmth: 0.35, matte: 1, topsTone: 0.05, ledgeMatte: 1, lowerBody: 0.35,
+    lowerHeight: 0.1, lowerColor: '#d89a78', upperTone: 0.9, upperHeight: 0.66, speckle: 0.13, speckleScale: 1.2,
+    speckleColor: '#3c4630', pustules: 0.06, pustuleScale: 3, pustuleColor: '#3e5a36', tint: '#dfe8cc',
+    grain: 0.8, crustIsles: 0, crustScale: 6, crustColor: '#5a3426', crustPlace: 0, nobleRelief: 0.2,
   },
   // Met 43.25.1: silver-grey 水银古 bands on a black-filled ground (inlayGround), fine blue-green
   // malachite and chalky speckle, no khaki
@@ -221,47 +223,48 @@ export const PATINA_PRESETS = {
     malachiteScale: 1.5, crust: 0.15, chloride: 0, soot: 0, crevice: 0.6, patchScale: 40, mottleScale: 22,
     patchiness: 0.6, softness: 0.75, drift: 0.4, earth: 0.05, earthColor: '#9a978c', calcite: 0.05, streaks: 0.1,
     burialSide: 0.1, recessDirt: 0.6, interiorTone: 0.5, wax: 0, inlay: 1, inlayGround: 0.65, wear: 0.2,
-    dulling: 0.8, tops: 1, nobleWarmth: 0, matte: 1, topsTone: 1, ledgeMatte: 1, tint: '#d4e6f2', speckle: 0.15,
-    speckleScale: 1.5, speckleColor: '#3d5a48', crustIsles: 0.25, crustScale: 8, crustColor: '#8e928a',
-    crustPlace: 0.8, pustules: 0.6, pustuleScale: 7, pustuleColor: '#2e7658', lowerBody: 1, lowerHeight: 0.1,
-    lowerColor: '#cccccc',
+    dulling: 0.8, tops: 0.85, nobleWarmth: 0, matte: 1, topsTone: 1, ledgeMatte: 1, tint: '#d4e6f2', speckle: 0,
+    speckleScale: 1.5, speckleColor: '#3d5a48', crustIsles: 0.15, crustScale: 14, crustColor: '#a2a69e',
+    crustPlace: 0.8, pustules: 0.15, pustuleScale: 5, pustuleColor: '#2a6e50', lowerBody: 1, lowerHeight: 0.1,
+    lowerColor: '#cccccc', plainTone: 1.12, grain: 0.5,
   },
   // Met 1985.214.4: grey-olive trumpet, neutral silvery décor bands with dark leiwen, a dark
   // green-black mottled ring with emerald spots and small pale crust islands
   'met-gu': {
     age: 1, tin: 0.14, lead: 0.05, polish: 0.4, tarnish: 0.4, cuprite: 0.4, cupriteTone: 0.3, tinOxide: 0.9,
-    tinOxideTone: 1.3, malachite: 0.02, carbonate: 0.05, azurite: 0, malachiteHue: 0.45, malachiteTone: 0.3,
+    tinOxideTone: 1.8, malachite: 0.02, carbonate: 0.05, azurite: 0, malachiteHue: 0.45, malachiteTone: 0.3,
     islands: 0.5, malachiteScale: 1.2, crust: 0.2, chloride: 0, soot: 0.3, crevice: 0.9, patchScale: 45,
-    mottleScale: 14, patchiness: 1, softness: 0.8, drift: 0.2, earth: 0.1, earthColor: '#6b5a42', calcite: 0.05,
+    mottleScale: 14, patchiness: 1, softness: 1, drift: 0.2, earth: 0.1, earthColor: '#6b5a42', calcite: 0.05,
     streaks: 0.45, burialSide: 0.05, recessDirt: 0.9, interiorTone: 0.6, wax: 0, inlay: 0.85, inlayGround: 0.15,
-    wear: 0.2, dulling: 0.25, tops: 0.6, nobleWarmth: 0.1, matte: 1, topsTone: 1, ledgeMatte: 1, lowerBody: 0.7,
-    lowerHeight: 0.07, lowerColor: '#6a6e62', upperTone: 0.7, upperHeight: 0.55, tint: '#f4fae0', speckle: 0.14,
-    speckleScale: 1.5, speckleColor: '#7d4a3e', crustIsles: 0.35, crustScale: 7, crustColor: '#77775c',
-    crustPlace: 0.9, pustules: 0.2, pustuleScale: 4, pustuleColor: '#2e6f4a',
+    wear: 0.2, dulling: 0.25, tops: 1.0, nobleWarmth: 0.1, matte: 1, topsTone: 1, ledgeMatte: 1, lowerBody: 0.7,
+    lowerHeight: 0.1, lowerColor: '#7a7468', upperTone: 0.5, upperHeight: 0.55, tint: '#c4d0b8', speckle: 0.14,
+    speckleScale: 1.5, speckleColor: '#7d4a3e', crustIsles: 0.18, crustScale: 10, crustColor: '#8a8578',
+    crustPlace: 0.9, pustules: 0.12, pustuleScale: 4, pustuleColor: '#2e6f4a', grain: 0.5,
   },
   // Nezu fangyi (owner's photo): warm olive-brown handled skin, plateaus a little lighter than a
   // DARK ground, almost no powder (it lives only in fine grooves), warm cuprite showing low
   'nezu-olive': {
     age: 1, tin: 0.15, lead: 0.06, polish: 0.35, tarnish: 0.9, cuprite: 0.7, cupriteTone: 0.4, tinOxide: 0.88,
-    tinOxideTone: 0.65, malachite: 0, carbonate: 0.1, azurite: 0, malachiteHue: 0.6, malachiteTone: 0.8,
+    tinOxideTone: 0.8, malachite: 0, carbonate: 0.1, azurite: 0, malachiteHue: 0.6, malachiteTone: 0.8,
     islands: 0.1, malachiteScale: 1.5, crust: 0.1, chloride: 0, soot: 0, crevice: 0.6, patchScale: 60,
     mottleScale: 14, patchiness: 0.9, softness: 0.8, drift: 0.2, earth: 0, earthColor: '#8a8270', calcite: 0,
-    streaks: 0.1, burialSide: 0.15, recessDirt: 0.95, interiorTone: 0.2, wax: 0, inlay: 0, inlayGround: 0.3,
-    wear: 0.1, dulling: 0, tops: 1, matte: 1, nobleWarmth: 1, topsTone: 0.3, ledgeMatte: 1, nobleRelief: 0.3,
-    tint: '#eef4ea', upperTone: 0.8, upperHeight: 0.62, speckle: 0.08, speckleScale: 1.5,
-    speckleColor: '#6e4535', crustIsles: 0.4, crustScale: 6, crustColor: '#5d5f50', crustPlace: 1,
-    plainTone: 0.5, lowerHeight: 0.15,
+    streaks: 0.1, burialSide: 0.15, recessDirt: 0.35, interiorTone: 0.2, wax: 0, inlay: 0, inlayGround: 0.1,
+    wear: 0.1, dulling: 0, tops: 0.15, matte: 1, nobleWarmth: 0.75, topsTone: 0.25, ledgeMatte: 1,
+    nobleRelief: 0.3, tint: '#f6efe0', upperTone: 0.72, upperHeight: 0.62, speckle: 0.08, speckleScale: 1.5,
+    speckleColor: '#6e4535', crustIsles: 0.25, crustScale: 6, crustColor: '#686656', crustPlace: 1,
+    plainTone: 0.35, lowerHeight: 0.15, grain: 0.8,
   },
 
   // the owner's bluer reading of the Nezu vessel: the same warm dark skin and light plateaus,
   // blue-green and azurite powder bound to the recesses (the real powder is pale grey-green — this is a request)
   'nezu-blue': {
-    age: 1, tin: 0.15, lead: 0.05, polish: 0.45, tarnish: 0.85, cuprite: 0.6, cupriteTone: 0.3, tinOxide: 0.95, tinOxideTone: 0.6,
-    malachite: 0.3, carbonate: 0.6, azurite: 0.12, azuriteDepth: 0.6, azuriteScale: 8, blueHabitat: 0.05, turquoiseTone: 0.6,
-    malachiteHue: 0.12, malachiteTone: 0.55, islands: 0.25, malachiteScale: 1.2, crust: 0.2,
-    chloride: 0.03, soot: 0, crevice: 0.9, patchScale: 55, mottleScale: 10, patchiness: 0.8, softness: 0.7,
-    earth: 0.05, earthColor: '#5f6460', calcite: 0, streaks: 0.15, burialSide: 0.2, recessDirt: 0.3, interiorTone: 0.2,
-    wax: 0.05, inlay: 0, wear: 0.1, dulling: 0.35, tops: 0.8, nobleWarmth: 0.8, matte: 0.5, topsTone: 0.6, ledgeMatte: 1,
+    age: 1, tin: 0.15, lead: 0.05, polish: 0.45, tarnish: 0.85, cuprite: 0.6, cupriteTone: 0.3, tinOxide: 0.95,
+    tinOxideTone: 0.6, malachite: 0.3, carbonate: 0.6, azurite: 0.12, azuriteDepth: 0.6, azuriteScale: 8,
+    blueHabitat: 0.05, turquoiseTone: 0.6, malachiteHue: 0.12, malachiteTone: 0.55, islands: 0.25,
+    malachiteScale: 1.2, crust: 0.2, chloride: 0.03, soot: 0, crevice: 0.9, patchScale: 55, mottleScale: 10,
+    patchiness: 0.8, softness: 0.7, earth: 0.05, earthColor: '#5f6460', calcite: 0, streaks: 0.15,
+    burialSide: 0.2, recessDirt: 0.3, interiorTone: 0.2, wax: 0.05, inlay: 0, wear: 0.1, dulling: 0.35,
+    tops: 0.8, nobleWarmth: 0.8, matte: 0.5, topsTone: 0.6, ledgeMatte: 1,
   },
 }
 
@@ -922,23 +925,31 @@ float ttF0 = 0.04;
     float sl = 1.0 - tt_ss(0.5, 1.5, S.px / sS);
     float fine = 0.5 + 0.5 * (0.7 * snoise(S.p / sS + so.zxy) + 0.3 * sl * snoise(S.p / (sS * 0.45) - so.yzx));
     float dens = 0.75 * fbm2(S.p / (sS * 6.0) + so) + 0.25 * (S.M - 0.5) * 2.0; // clumps 10–40 mm
-    float loc = clamp(uSpeckle * aL * (1.0 + 1.5 * dens) * (1.0 - uSpeckleDecor * decorD) * (1.0 - 0.6 * S.rec) * (1.0 - 0.8 * hiZ), 0.0, 1.0);
-    cSpk = mix(loc, tt_ss(1.0 - loc - 0.07, 1.0 - loc + 0.07, fine), sl);
+    // (round 4c: thinner on the lower body — it read as a red camouflage on the Houmuwu legs —
+    // and, with softness, a feathered stipple that blends rather than a hard-edged dot)
+    float loc = clamp(uSpeckle * aL * (1.0 + 1.5 * dens) * (1.0 - uSpeckleDecor * decorD) * (1.0 - 0.6 * S.rec) * (1.0 - 0.8 * hiZ) * (1.0 - 0.75 * loZ * uLowerBody) * (plain ? 1.0 - 0.8 * clamp(uRimCalm, 0.0, 1.0) : 1.0), 0.0, 1.0);
+    float sw = mix(0.07, 0.15, soft);
+    cSpk = mix(loc, tt_ss(1.0 - loc - sw, 1.0 - loc + sw, fine), sl) * mix(1.0, 0.8, soft);
     vec3 sc = uSpeckleColor * (0.8 + 0.4 * fine);
     col = mix(col, sc, cSpk); rough = mix(rough, 0.85, cSpk); metal = mix(metal, 0.0, cSpk); f0 = mix(f0, 0.05, cSpk);
   }
   if (uCrustIsles > 0.001) {
     float cS = max(uCrustScale, 1.0);
     float il = 1.0 - tt_ss(0.35, 1.2, S.px / cS);
-    float fi = 0.5 + 0.5 * (0.75 * snoise(S.p / cS + 0.25 * w - so.zyx) + 0.25 * il * snoise(S.p / (cS * 0.5) + so.xzy));
+    // (round 4c: multi-octave — patches 0.5–3× the island size — and, with softness, a feathered
+    // edge several mm wide: a bloom that fades into the skin, not a camouflage cut-out)
+    float fi = 0.5 + 0.5 * (0.55 * snoise(S.p / cS + 0.25 * w - so.zyx) + 0.3 * snoise(S.p / (cS * 2.7) + so.yzx) + 0.2 * il * snoise(S.p / (cS * 0.45) + so.xzy));
     float pl = clamp(uCrustPlace, 0.0, 1.0);
     float wLo = clamp(0.15 + 0.8 * S.rec + 0.5 * decorD, 0.0, 1.0);
-    float wHi = clamp(0.1 + 0.6 * S.edge + 0.35 * (1.0 - decorD) * (plain ? 1.0 : 0.5) + hiZ * (1.0 - S.inside) + loZ, 0.0, 1.0);
+    // (lives on up-facing flats — ledges, steps, the lid's lower edge — more than on raised arrises:
+    // arris weighting traced plateau rims with lines of green)
+    float wHi = clamp(0.1 + mix(0.6, 0.2, soft) * S.edge + 0.45 * soft * tt_ss(0.35, 0.8, S.up) * (1.0 - S.edge) + 0.35 * (1.0 - decorD) * (plain ? 1.0 : 0.5) + hiZ * (1.0 - S.inside) + loZ, 0.0, 1.0);
     // clustered: crusted territories (~5 islands across) and clean ones between them
     float clu = tt_ss(0.2, 0.7, 0.5 + 0.5 * snoise(S.p / (cS * 5.0) + so.yxz) + 0.35 * (S.T2 - 0.5));
     float loc = clamp(uCrustIsles * aL * tt_ss(0.25, 0.7, mix(wLo, wHi, pl)) * 1.8 * clu * (1.0 - 0.6 * cInl), 0.0, 0.95);
-    cIsl = mix(loc, tt_ss(1.0 - loc - 0.025, 1.0 - loc + 0.025, fi), il);
-    float ct = clamp(0.5 + 1.4 * (fi - 0.5) + 0.3 * (S.G - 0.5), 0.0, 1.0);
+    float iw = mix(0.025, 0.2, soft);
+    cIsl = mix(loc * mix(1.0, 0.8, soft), tt_ss(1.0 - loc - iw, 1.0 - loc + iw, fi) * mix(1.0, 0.85, soft), il);
+    float ct = clamp(0.5 + mix(1.4, 0.6, soft) * (fi - 0.5) + 0.3 * (S.G - 0.5), 0.0, 1.0);
     vec3 cc = uCrustColor * (0.78 + 0.4 * ct);
     col = mix(col, cc, cIsl); rough = mix(rough, 0.97, cIsl); metal = mix(metal, 0.0, cIsl); f0 = mix(f0, 0.035, cIsl);
   }
@@ -946,13 +957,24 @@ float ttF0 = 0.04;
     float pS = max(uPustuleScale, 1.0);
     float pl2 = 1.0 - tt_ss(0.4, 1.3, S.px / pS);
     vec2 wp = worley8(S.p / pS + 0.15 * w + so.yzx);
-    float clu = tt_ss(0.35, 0.75, 0.5 + 0.5 * snoise(S.p / (pS * 7.0) - so.zxy) + 0.5 * hiZ + 0.35 * loZ + 0.25 * S.rec - 0.15);
-    float loc = clamp(uPustules * aL * 2.2 * clu, 0.0, 1.0);
+    // (round 4c: lodged in recesses and along flange / rim edges, never on a plateau top like a decal)
+    float clu = tt_ss(0.35, 0.75, 0.5 + 0.5 * snoise(S.p / (pS * 7.0) - so.zxy) + 0.5 * hiZ + 0.35 * loZ + 0.45 * S.rec + 0.25 * S.edge - 0.25);
+    float loc = clamp(uPustules * aL * 2.2 * clu * (1.0 - 0.85 * (plain ? 0.0 : tt_ss(0.04, 0.22, hMM) * (1.0 - S.edge))), 0.0, 1.0);
     float rr = 0.3 + 0.12 * snoise(S.p / (pS * 0.4));
     float disc = (1.0 - tt_ss(rr - 0.06, rr + 0.06, wp.x)) * step(wp.y, loc);
     cPus = mix(loc * 0.28, disc, pl2);
     vec3 pc = uPustuleColor * (0.75 + 0.5 * clamp(1.0 - wp.x / max(rr, 0.05), 0.0, 1.0));
-    col = mix(col, pc, cPus); rough = mix(rough, 0.6, cPus); metal = mix(metal, 0.0, cPus); f0 = mix(f0, 0.06, cPus);
+    col = mix(col, pc, cPus); rough = mix(rough, 0.8, cPus); metal = mix(metal, 0.0, cPus); f0 = mix(f0, 0.06, cPus);
+  }
+  // ---- grain (round 4c): the soft, multi-scale breathing of a real skin — 2.5 mm and 9 mm octaves of
+  // lightness, a little warm↔cool hue at 9 mm, roughness following the grain. Smooth noise, no
+  // threshold: it can never read as dots, and it fades to its mean under a pixel. Two simplex taps.
+  if (uGrain > 0.001) {
+    float g1 = tt_lod(2.5, S.px) * snoise(S.p / 2.5 + so.yzx * 1.7);
+    float g2 = tt_lod(9.0, S.px) * snoise(S.p / 9.0 - so.zxy * 1.3);
+    float gk = uGrain * a * (1.0 - S.calm) * (1.0 - 0.7 * cInl);
+    col *= (1.0 + gk * (0.2 * g1 + 0.2 * g2)) * (vec3(1.0) + gk * 0.08 * g2 * vec3(1.0, -0.15, -0.9));
+    rough += gk * 0.1 * g1;
   }
 
   // ---- slow tone drift (50–200 mm): lightness and warmth breathe across the skin
@@ -960,7 +982,7 @@ float ttF0 = 0.04;
   col *= (1.0 + 0.9 * dr * (Tb - 0.5)) * mix(vec3(1.0), vec3(1.08, 1.0, 0.88), dr * clamp(1.6 * (T2b - 0.5), -1.0, 1.0));
 
   // ---- dulling: dust, old wax and fine soil in the pores grey the minerals down
-  float dull = uDulling * a * (1.0 - metal);
+  float dull = uDulling * a * (1.0 - metal) * (1.0 - 0.8 * cPus); // (crystalline pustules stay saturated: round 4c)
   float lumD = tt_lum(col);
   col = mix(col, vec3(lumD) * vec3(1.0, 1.01, 0.985), dull * 0.72);
 

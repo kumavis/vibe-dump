@@ -157,8 +157,9 @@ export function paintWaist(kit, panel, size, { pitch = 0.85, seed = 2, variant =
   const eye = [16.0, 16.4]
   // crook horn: a broad band rising from above the eye's outer half, up under the top border, over toward
   // the nose, down beside the nose flange and back out into a squared spiral at the top beside the flange
-  B(new Turtle([19.6, 20.6], 90).to([19.6, 45.0]).turn(90, R).to([5.6, 45.0]).turn(90, R).to([5.6, 37.0]).turn(90, R)
-    .to([10.8, 37.0]).turn(90, 0.9).to([10.8, 40.6]).turn(90, 0.6).fwd(1.6))
+  // (r4: the leg moved out to X 21.4 and widened to 3.4 — detail-waist.jpg's horn is the broad mass of the quadrant)
+  B(new Turtle([21.4, 20.6], 90).to([21.4, 45.0]).turn(90, R).to([5.6, 45.0]).turn(90, R).to([5.6, 37.0]).turn(90, R)
+    .to([10.8, 37.0]).turn(90, 0.9).to([10.8, 40.6]).turn(90, 0.6).fwd(1.6), 3.4)
   // brow: from below the horn spiral down the nose side and in toward the eye's top
   B(new Turtle([5.6, 33.0], 270).to([5.6, 21.0]).turn(90, R).to([12.6, 21.0]).turn(90, 0.8).fwd(1.6), 2.8)
 
@@ -178,9 +179,11 @@ export function paintWaist(kit, panel, size, { pitch = 0.85, seed = 2, variant =
     cells.push(...framedRow(x, y, w, h, { minPitch: pitch, turns: 3.5, ...opts }))
     cellRects.push([x, y, w, h])
   }
-  cellsIn(8.6, 23.4, 8.2, 11.6, { count: 2, vertical: true, gap: 0.6, turns: 2.6 })
-  const sx = 22.4
-  cellsIn(sx, 19.2, Math.min(8.4, xs - sx - 0.2), 28.2, { count: 3, vertical: true, gap: 0.7, turns: 3.5 })
+  cellsIn(8.6, 23.4, 9.4, 11.6, { count: 2, vertical: true, gap: 0.6, turns: 2.6 })
+  // seam column: detail-waist.jpg shows 4–5 small framed spirals ≈ 5.5 × 6 mm stacked beside the seam flange
+  // (the dossier's 8 × 9 boxes read as a grid of big empty squares — photo wins)
+  const sx = xs - 6.2
+  cellsIn(sx, 19.2, 6.0, 28.2, { count: 4, vertical: true, gap: 0.6, turns: 2.2 })
   // B: fang / claw marks inside the jaw scroll, between its tail and its inner winding
   if (variant === 'B') {
     const lines = []
