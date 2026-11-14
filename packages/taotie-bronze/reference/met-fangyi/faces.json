@@ -1,0 +1,98 @@
+{
+  "vessel": "met-fangyi",
+  "note": "Flat faces of the Met fangyi (KIT.md § Flat faces). Points are [photo px in the ORIGINAL, then vessel mm x, y, z]. Vessel space is the model's: front = +Z long face, wall leans out 1.4° (z = 47.0 + 0.0247·y on the long faces, x = 65.3 + 0.0247·y on the ends). Corner points are the VISIBLE face edges beside the corner flanges (1.8 mm inside the arris).",
+  "sources": {
+    "DP151396": { "file": "three-quarter.jpg", "original": "https://images.metmuseum.org/CRDImages/as/original/DP151396.jpg", "size": [2882, 3842], "note": "azimuth ≈ +21°, elevation ≈ 8°" },
+    "DP151398": { "file": "side.jpg", "original": "https://images.metmuseum.org/CRDImages/as/original/DP151398.jpg", "size": [3000, 4000], "note": "+X end, near head-on, slight roll (rim joint falls 30 px left → right)" }
+  },
+  "faces": {
+    "face-long": {
+      "label": "long face (+Z), whole body, rim to ground",
+      "fit": "least-squares fit of the points: rms 0.97 mm, max 1.45 mm (tools/faces.mjs --rectify prints it)",
+      "source": "DP151396",
+      "center": [0, 81, 49.0], "normal": [0, -0.0247, 1], "up": [0, 1, 0.0247],
+      "width": 152, "height": 166, "ppmm": 8,
+      "points": [
+        [603, 1637, -67.4, 162.2, 51.0],
+        [1221, 1667, 0, 162.2, 51.0],
+        [1838, 1698, 67.4, 162.2, 51.0],
+        [688, 3157, -63.5, 0, 47.0],
+        [1242.5, 3232.5, 0, 0, 47.0],
+        [1863, 3297, 63.5, 0, 47.0]
+      ],
+      "trust": "good: a 21° oblique of a flat wall; register borders come out straight and level, the eye bosses sit at ±31 mm (0.4 mm asymmetry), notch 15 × 14 mm. Flanges are out of the plane and smear sideways (crest ≈ 2.3 mm left of the root). The far (left) half is sampled at ≈ 8.5 px/mm, the near half at ≈ 10."
+    },
+    "face-long-frieze": {
+      "label": "long face, top frieze (y 126–164)",
+      "fit": "least-squares fit of the points: rms 0.97 mm, max 1.45 mm (tools/faces.mjs --rectify prints it)",
+      "source": "DP151396", "points": "face-long",
+      "center": [0, 145, 50.6], "normal": [0, -0.0247, 1], "up": [0, 1, 0.0247],
+      "width": 152, "height": 38, "ppmm": 8,
+      "trust": "as face-long"
+    },
+    "face-long-main": {
+      "label": "long face, main taotie register (y 31–131)",
+      "fit": "least-squares fit of the points: rms 0.97 mm, max 1.45 mm (tools/faces.mjs --rectify prints it)",
+      "source": "DP151396", "points": "face-long",
+      "center": [0, 81, 49.0], "normal": [0, -0.0247, 1], "up": [0, 1, 0.0247],
+      "width": 152, "height": 100, "ppmm": 8,
+      "trust": "as face-long"
+    },
+    "face-long-foot": {
+      "label": "long face, foot frieze and notch (y −2–36)",
+      "fit": "least-squares fit of the points: rms 0.97 mm, max 1.45 mm (tools/faces.mjs --rectify prints it)",
+      "source": "DP151396", "points": "face-long",
+      "center": [0, 17, 47.4], "normal": [0, -0.0247, 1], "up": [0, 1, 0.0247],
+      "width": 152, "height": 38, "ppmm": 8,
+      "trust": "as face-long"
+    },
+    "face-lid-long": {
+      "label": "lid, long slope (+Z), eave to ridge — the chord plane of a convex slope",
+      "fit": "least-squares fit of the points: rms 0.85 mm, max 1.03 mm (tools/faces.mjs --rectify prints it)",
+      "source": "DP151396",
+      "center": [0, 195.85, 25.5], "normal": [0, 0.670, 0.742], "up": [0, 0.742, -0.670],
+      "width": 146, "height": 82, "ppmm": 8,
+      "points": [
+        [598, 1583, -67.4, 167.6, 51.0],
+        [1222, 1611, 0, 167.6, 51.0],
+        [1850, 1643, 67.4, 167.6, 51.0],
+        [998, 1000, -50, 224.1, 0],
+        [1427, 1000, 0, 224.1, 0],
+        [1856, 1000, 50, 224.1, 0]
+      ],
+      "trust": "fair: the slope is convex (≈ 5 mm proud of its chord at mid-slope) and seen ≈ 40° off its normal, so mid-slope features are displaced up to ≈ 2–3 mm toward the ridge; the ridge line sits under the ridge flanges and was placed by eye (± 1.5 mm)."
+    },
+    "face-end": {
+      "label": "end face (+X), whole body, rim to ground",
+      "fit": "least-squares fit of the points: rms 0.18 mm, max 0.35 mm (tools/faces.mjs --rectify prints it)",
+      "source": "DP151398",
+      "center": [67.3, 81, 0], "normal": [1, -0.0247, 0], "up": [0.0247, 1, 0],
+      "width": 118, "height": 166, "ppmm": 8,
+      "points": [
+        [901, 1588, 69.3, 162.2, 49.2],
+        [1479, 1602, 69.3, 162.2, 0],
+        [2048, 1618, 69.3, 162.2, -49.2],
+        [968, 3396, 65.3, 0, 45.2],
+        [1477, 3399, 65.3, 0, 0],
+        [1968, 3398, 65.3, 0, -45.2]
+      ],
+      "trust": "very good: a near-orthographic view at ≈ 11.5 px/mm; only the bottom-left corner sits behind its flange and was placed to ± 1 mm."
+    },
+    "face-lid-end": {
+      "label": "lid, end triangle (+X) — the chord plane of a convex slope",
+      "fit": "least-squares fit of the points: rms 1.85 mm, max 2.63 mm (tools/faces.mjs --rectify prints it)",
+      "source": "DP151398",
+      "center": [59.75, 195.85, 0], "normal": [0.945, 0.326, 0], "up": [-0.326, 0.945, 0],
+      "width": 108, "height": 66, "ppmm": 8,
+      "points": [
+        [901, 1541, 69.5, 167.6, 49.2],
+        [1480, 1555, 69.5, 167.6, 0],
+        [2048, 1569, 69.5, 167.6, -49.2],
+        [1150, 1220, 59.75, 195.85, 23.5],
+        [1790, 1220, 59.75, 195.85, -23.5],
+        [1488, 912, 50, 224.1, 0]
+      ],
+      "trust": "fair: the end slope is convex, its hips are arcs in the photograph (≈ 4 mm out of a straight line), so the flattening is a least-squares compromise; seen ≈ 15° off its normal."
+    }
+  }
+}

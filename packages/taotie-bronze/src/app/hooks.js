@@ -62,10 +62,28 @@ export function meshStatsText(object) {
   return `${n(s.triangles)} triangles · ${n(s.vertices)} vertices · ${s.meshes} meshes`
 }
 
+/**
+ * Flat-face hooks (KIT.md § Flat faces), added when the app passes its stage:
+ * setFace(face, { fit, fov, light }) frames an arbitrary face rectangle head-on (not a named view);
+ * faceView() → the current face frame or null.
+ */
+function faceHooks(api) {
+  const stage = api.stage
+  if (!stage?.setView) return {}
+  return {
+    async setFace(face, opts = {}) {
+      stage.setAutoRotate?.(false)
+      stage.setView({ ...opts, face })
+      await stage.frame()
+    },
+    faceView: () => stage.faceView ?? null,
+  }
+}
+
 export function installHooks(api) {
   let resolveReady
   const ready = new Promise((r) => (resolveReady = r))
-  window.__taotie = { ready, ...api }
+  window.__taotie = { ready, ...faceHooks(api), ...api }
   return {
     markReady() {
       document.documentElement.dataset.ready = '1'

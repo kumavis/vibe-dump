@@ -14,7 +14,10 @@
 
 import * as THREE from 'three'
 import { renderSheets } from './nezu-fangyi/relief.js'
-import { bellySheet, neckSheet, footSheet, lidBroadSheet, lidNarrowSheet, knobSheet } from './nezu-fangyi/decor.js'
+import { drawBelly } from './nezu-fangyi/belly.js'
+import { drawFoot } from './nezu-fangyi/foot.js'
+import { drawLidBroad } from './nezu-fangyi/lid.js'
+import { neckSheet, lidNarrowSheet, knobSheet } from './nezu-fangyi/decor.js'
 import { H, LV, PLAN, bellyX, bellyZ, polyPath, segmentOutline, FLANGE_POLY, densify, flangeGrooves, buildKnob, block, rectPoint } from './nezu-fangyi/form.js'
 
 const SIDES = ['front', 'right', 'back', 'left']
@@ -55,6 +58,12 @@ export default {
     'detail-lid': { azimuth: -14, elevation: 24, fov: 30, fit: 0.32, target: [0, 222, 40] },
     'detail-flanges': { azimuth: -58, elevation: 8, fov: 30, fit: 0.36, target: [-80, 95, 50] },
     'detail-knob': { azimuth: -22, elevation: 8, fov: 30, fit: 0.16, target: [0, 304, 0] },
+    // flat faces (KIT.md § Flat faces): head-on, framed on a face rectangle in mm; ref = the flattened photograph
+    // (reference/nezu-fangyi/faces.json → tools/faces.mjs --rectify)
+    'face-belly': { face: { center: [0, 87.45, 75.2], normal: [0, -0.0797, 0.9968], up: [0, 0.9968, 0.0797], width: 200, height: 90 }, ref: 'faces/face-belly.jpg' },
+    'face-neck-frieze': { face: { center: [0, 144.65, 73.5], normal: [0, 0, 1], up: [0, 1, 0], width: 184, height: 34 }, ref: 'faces/face-neck-frieze.jpg' },
+    'face-foot-frieze': { face: { center: [0, 34.35, 70.5], normal: [0, 0, 1], up: [0, 1, 0], width: 180, height: 27 }, ref: 'faces/face-foot-frieze.jpg' },
+    'face-lid-broad': { face: { center: [0, 222.45, 39.85], normal: [0, 0.7187, 0.6953], up: [0, 0.6953, -0.7187], width: 196, height: 116 }, ref: 'faces/face-lid-broad.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
@@ -95,17 +104,13 @@ export default {
     const lidL = kit.hippedLidLayout(lidOpts)
 
     // ---------------------------------------------------------------- belly panels (one per face kind, reused front/back, left/right)
+    const stats = {}
     const bellyPanel = async (side, kind, s) => {
       const cell = bellyL.sides[side].cells[0][0]
       const p = new kit.ReliefPanel({ width: cell.w, height: cell.h, ppmm, seed: s })
-      const hw = cell.w / 2, v0 = BELLY_BORDER, Hf = cell.h - v0 - 1.0
       const corner = kind === 'broad' ? 4.2 : 3.6 // clear of the corner flange
-      // V-b: 3 mm flat-topped plateaus with rounded shoulders and ONE 0.6 mm incised line; slit eye bosses 5 mm in all
-      const sheet = bellySheet(kit, { hw: hw - corner, v0, Hf, kind, L1: 3.0, seed: s })
-      renderSheets(kit, p, [{ sheet, xc: hw }], {
-        L1: 3.0, shoulder: 0.65, groove: { w: 0.65, d: 0.5 }, ground: ground(0.9), seed: s,
-        fields: [{ x: 1.2, y: v0 - 0.6, w: hw - 1.2 - corner, h: Hf + 0.6 }],
-      })
+      // round 5: TRACED off the flattened photograph (nezu-fangyi/belly.js); V-b 3 mm plateaus, one incised line each
+      drawBelly(kit, p, { cell, corner, L1: 3.0, ground: ground(0.85), seed: s, stats: (stats[kind] = {}) })
       return p.bake()
     }
     await onProgress(0.02, 'belly · broad face')
@@ -129,8 +134,14 @@ export default {
     panels.neckLong = friezePanel(neckL.sides.front.cells[0][0], neckSheet, { v0: neckV0, top: 1.0, slot: 5.8, L1: 1.3, s: seed + 3 })
     panels.neckShort = friezePanel(neckL.sides.right.cells[0][0], neckSheet, { v0: neckV0, top: 1.0, slot: 4.8, L1: 1.3, s: seed + 4 })
     await onProgress(0.34, 'foot frieze')
-    panels.footLong = friezePanel(footL.sides.front.cells[0][0], footSheet, { v0: 1.0, top: 1.0, slot: 5.2, L1: 1.2, s: seed + 5 })
-    panels.footShort = friezePanel(footL.sides.right.cells[0][0], footSheet, { v0: 1.0, top: 1.0, slot: 4.8, L1: 1.2, s: seed + 6 })
+    // round 5: TRACED off the flattened photograph (nezu-fangyi/foot.js)
+    const footPanel = (cell, slot, s, kind) => {
+      const p = new kit.ReliefPanel({ width: cell.w, height: cell.h, ppmm, seed: s })
+      drawFoot(kit, p, { cell, slot, L1: 1.4, ground: ground(0.85, 0.35), seed: s, stats: (stats['foot-' + kind] = {}) })
+      return p.bake()
+    }
+    panels.footLong = footPanel(footL.sides.front.cells[0][0], 5.2, seed + 5, 'broad')
+    panels.footShort = footPanel(footL.sides.right.cells[0][0], 4.8, seed + 6, 'narrow')
 
     // ---------------------------------------------------------------- lid slopes
     const halfFrom = (f) => {
@@ -148,14 +159,9 @@ export default {
     let lidZones
     {
       const f = lidL.faces.front
-      const halfAt = halfFrom(f)
       const p = new kit.ReliefPanel({ width: f.w, height: f.h, ppmm, seed: seed + 7 })
-      const { sheet, zones } = lidBroadSheet(kit, { slant: f.h, halfAt, margin: 4.6, slot: 4.6, seed: seed + 7 })
-      lidZones = zones
-      renderSheets(kit, p, [{ sheet, xc: f.w / 2 }], {
-        L1: 2.5, shoulder: 0.85, groove: { w: 0.75, d: 0.5 }, ground: ground(0.9), seed: seed + 7,
-        fields: [{ x: 0, y: zones.vm0 - 0.5, w: f.w / 2 - 4, h: zones.Hm + 0.5 }, { x: 0, y: zones.vf0, w: f.w / 2 - 4, h: zones.Hu }],
-      })
+      // round 5: TRACED off the flattened photograph (nezu-fangyi/lid.js); zones from the photo
+      lidZones = drawLidBroad(kit, p, { f, slot: 4.6, L1: 2.5, ground: ground(0.9), seed: seed + 7, stats: (stats.lid = {}) })
       panels.lidLong = p.bake()
     }
     await onProgress(0.56, 'lid · narrow slopes')
@@ -349,6 +355,7 @@ export default {
     }
 
     await onProgress(1, 'done')
+    object.userData.decorStats = stats
     return { object, parts: { base, foot, belly, neck, lid, knob, flanges }, panels }
   },
 }

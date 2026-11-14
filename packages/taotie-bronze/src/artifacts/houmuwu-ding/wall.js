@@ -11,6 +11,7 @@
 // The left half is drawn with the axis on the mid flange and mirrored.
 
 import { LEVELS, GROUND, style, sheet, sq, render, rect, inset, sqSpiralBox } from './draw.js'
+import { tracedFrieze, tracedColumn, tracedOxHead, tracedCornerTaotie } from './trace.js'
 
 const P = style(LEVELS.wall)
 
@@ -49,11 +50,12 @@ export function wallPanel(kit, cell, { kind, ppmm, seed }) {
 
   // ---- motifs (left half; axis = cx)
   const k = kind === 'short'
-  friezeKui(kit, panel, cells.friezeTop, { short: k, seed: seed + 1, top: true })
-  friezeKui(kit, panel, cells.friezeBot, { short: k, seed: seed + 2, top: false })
-  oxHead(kit, panel, cells.cornerTop, { seed: seed + 3 })
-  cornerTaotie(kit, panel, cells.cornerBot, { seed: seed + 4 })
-  columnKui(kit, panel, cells.column, { seed: seed + 5 })
+  // round 5: the friezes and columns are TRACED from the flattened faces (trace.js)
+  tracedFrieze(kit, panel, cells.friezeTop, { short: k, seed: seed + 1, top: true })
+  tracedFrieze(kit, panel, cells.friezeBot, { short: k, seed: seed + 2, top: false })
+  tracedOxHead(kit, panel, cells.cornerTop, { seed: seed + 3 })
+  tracedCornerTaotie(kit, panel, cells.cornerBot, { seed: seed + 4 })
+  tracedColumn(kit, panel, cells.column, { seed: seed + 5 })
 
   // ---- leiwen ground in each band, with plain margins: 3 mm between cells,
   // a 7 mm raised border on the field side, a plain strip each side of the mid flange

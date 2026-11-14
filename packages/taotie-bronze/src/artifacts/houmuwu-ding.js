@@ -82,6 +82,14 @@ export default {
     'corner-masks': { azimuth: -45, elevation: 3, fov: 22, fit: 0.36, target: [-521, 725, 366] },
     'handle-face': { azimuth: 90, elevation: 2, fov: 20, fit: 0.19, target: [560, 1190, 0] },
     'frieze-long': { azimuth: -8, elevation: 4, fov: 24, fit: 0.42, target: [-250, 900, 395] },
+    // flat faces (KIT.md § Flat faces): head-on, framed on a face rectangle in mm; ref = the flattened photograph
+    // (reference/houmuwu-ding/faces.json → tools/faces.mjs --rectify)
+    'face-long': { face: { center: [0, 725, 357.2], normal: [0, -0.0087, 1], up: [0, 1, 0.0087], width: 1100, height: 545 }, ref: 'faces/face-long.jpg' },
+    'face-long-top-frieze': { face: { center: [0, 920, 358.9], normal: [0, -0.0087, 1], up: [0, 1, 0.0087], width: 1100, height: 140 }, ref: 'faces/face-long-top-frieze.jpg' },
+    'face-long-bottom-frieze': { face: { center: [0, 528, 355.5], normal: [0, -0.0087, 1], up: [0, 1, 0.0087], width: 1100, height: 140 }, ref: 'faces/face-long-bottom-frieze.jpg' },
+    'face-long-column': { face: { center: [-455, 725, 357.2], normal: [0, -0.0087, 1], up: [0, 1, 0.0087], width: 160, height: 545 }, ref: 'faces/face-long-column.jpg' },
+    'face-short': { face: { center: [506.9, 725, 0], normal: [1, -0.0385, 0], up: [0.0385, 1, 0], width: 800, height: 545 }, ref: 'faces/face-short.jpg' },
+    'face-rubbing-long': { face: { center: [0, 725, 357.2], normal: [0, -0.0087, 1], up: [0, 1, 0.0087], width: 1100, height: 545 }, ref: 'faces/face-rubbing-long.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {

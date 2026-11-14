@@ -1,0 +1,18 @@
+{
+  "note": "Met 49.135.2 rectangular fangding (12th–11th c. BCE). Published H 229, W 152, D 178 mm (Met API 22.9 / 15.2 / 17.8 cm) — W and D are flange-to-flange spans; the LONG face carries the published D. Proportions measured on the originals DP140736 (front.jpg, long face head-on, 0.0903 mm/px from the overall height) and DP140737 (side.jpg, short face head-on, 0.181 mm/px); see dossier.md. Axes: long axis X (handles on the ±X short sides), front (+Z) = a long face. Parts: body = walls + floor + slab rim (no flanges, legs, handles); flanges = 4 corner (45°) + 4 face-centre flanges; legs = 4 roots; handles = 2 roots.",
+  "dimensions": { "h": 229, "w": 182, "d": 151, "publishedW": 152, "publishedD": 178, "legH": 98.5, "rimTopY": 186.5, "weight": null },
+  "ratios": {
+    "silhouetteW":   { "expr": "overall.w / overall.h",          "expected": 0.795, "tol": 0.025 },
+    "plan":          { "expr": "overall.d / overall.w",          "expected": 0.83,  "tol": 0.035 },
+    "rimLong":       { "expr": "parts.body.w / overall.h",       "expected": 0.761, "tol": 0.02 },
+    "rimShort":      { "expr": "parts.body.d / overall.h",       "expected": 0.615, "tol": 0.025 },
+    "bodyBottom":    { "expr": "parts.body.min.1 / overall.h",   "expected": 0.43,  "tol": 0.015 },
+    "rimLevel":      { "expr": "parts.body.max.1 / overall.h",   "expected": 0.814, "tol": 0.012 },
+    "legsFromGround":{ "expr": "parts.legs.min.1",               "expected": 0,     "tol": 1.5 },
+    "legSpan":       { "expr": "parts.legs.w / overall.w",       "expected": 0.748, "tol": 0.03 },
+    "handleTop":     { "expr": "parts.handles.max.1 / overall.h", "expected": 1.0,  "tol": 0.006 },
+    "handleSpan":    { "expr": "parts.handles.w / overall.w",    "expected": 0.918, "tol": 0.03 },
+    "flangeTop":     { "expr": "parts.flanges.max.1 / overall.h", "expected": 0.755, "tol": 0.015 },
+    "flangeBottom":  { "expr": "parts.flanges.min.1 / overall.h", "expected": 0.448, "tol": 0.015 }
+  }
+}

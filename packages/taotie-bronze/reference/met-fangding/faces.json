@@ -1,0 +1,64 @@
+{
+  "vessel": "met-fangding",
+  "blur": 0.5,
+  "note": "Flat faces of the Met fangding 49.135.2 (KIT.md § Flat faces). Points are [photo px in the ORIGINAL, then vessel mm x, y, z]. Model frame: legs on y = 0, vertical walls, long walls at z = ±65.5, short walls at x = ±81; décor fields: long frieze x ±75 × y 152.9–172.8, long mask x ±74.5 × y 103.1–148.9; short frieze ±58.8, short mask ±58 (same heights). Points are the outer corners of the two décor fields (their border fillets), read off the originals at 1:1 with a 10 px grid.",
+  "sources": {
+    "DP140736": { "file": "front.jpg", "original": "https://images.metmuseum.org/CRDImages/as/original/DP140736.jpg", "size": [4000, 3000], "note": "long face near head-on, camera at mid-body height, ≈ 11 px/mm on the wall" },
+    "DP140737": { "file": "side.jpg", "original": "https://images.metmuseum.org/CRDImages/as/original/DP140737.jpg", "size": [2000, 1500], "note": "short face near head-on, ≈ 5.5 px/mm on the wall; which short face (±X) is not recorded, taken as +X" }
+  },
+  "faces": {
+    "face-long": {
+      "label": "long face (+Z), whole body wall with the corner flanges, rim to underside",
+      "source": "DP140736",
+      "center": [0, 140, 65.5], "normal": [0, 0, 1], "up": [0, 1, 0],
+      "width": 192, "height": 92, "ppmm": 10,
+      "points": [
+        [1180, 862, -75, 172.8, 65.5],
+        [2850, 880, 75, 172.8, 65.5],
+        [1193, 1128, -74.5, 148.9, 65.5],
+        [2845, 1145, 74.5, 148.9, 65.5],
+        [1200, 1645, -74.5, 103.1, 65.5],
+        [2842, 1640, 74.5, 103.1, 65.5]
+      ],
+      "trust": "good for the décor field (a flat wall photographed nearly head-on); the corner flanges stand at 45° out of the plane and smear outward, the rim slab is 5 mm proud of it",
+      "fit": "see --rectify output"
+    },
+    "face-long-main": {
+      "label": "long face, main taotie register (y 101–151)",
+      "source": "DP140736", "points": "face-long",
+      "center": [0, 126, 65.5], "normal": [0, 0, 1], "up": [0, 1, 0],
+      "width": 154, "height": 50, "ppmm": 10,
+      "trust": "as face-long"
+    },
+    "face-long-frieze": {
+      "label": "long face, upper frieze (y 151–175)",
+      "source": "DP140736", "points": "face-long",
+      "center": [0, 163, 65.5], "normal": [0, 0, 1], "up": [0, 1, 0],
+      "width": 154, "height": 24, "ppmm": 10,
+      "trust": "as face-long"
+    },
+    "face-short": {
+      "label": "short face (+X), whole body wall with the corner flanges",
+      "source": "DP140737",
+      "center": [81, 140, 0], "normal": [1, 0, 0], "up": [0, 1, 0],
+      "width": 160, "height": 92, "ppmm": 6,
+      "points": [
+        [697, 432, 81, 172.8, 58.8],
+        [1347, 422, 81, 172.8, -58.8],
+        [700, 557, 81, 148.9, 58],
+        [1340, 545, 81, 148.9, -58],
+        [707, 812, 81, 103.1, 58],
+        [1335, 805, 81, 103.1, -58]
+      ],
+      "trust": "good layout from a 2000 px photo (≈ 5.5 px/mm): the leiwen is only just resolved",
+      "fit": "see --rectify output"
+    },
+    "face-short-main": {
+      "label": "short face, main taotie register (y 101–151)",
+      "source": "DP140737", "points": "face-short",
+      "center": [81, 126, 0], "normal": [1, 0, 0], "up": [0, 1, 0],
+      "width": 122, "height": 50, "ppmm": 6,
+      "trust": "as face-short"
+    }
+  }
+}

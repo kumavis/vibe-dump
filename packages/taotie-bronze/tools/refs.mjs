@@ -41,6 +41,18 @@ const clean = (s) =>
 
 /** Credit line for reference/<id>/<file>. */
 export function creditFor(id, file) {
+  // a flattened face (reference/<id>/faces/<face>.jpg, KIT.md § Flat faces) carries its source photograph's credit
+  const face = /^faces\/(.+)\.jpg$/.exec(file)
+  const fj = join(PKG, 'reference', id, 'faces.json')
+  if (face && existsSync(fj)) {
+    try {
+      const d = JSON.parse(readFileSync(fj, 'utf8'))
+      const src = d.sources?.[d.faces?.[face[1]]?.source]
+      if (src?.file) return creditFor(id, src.file) + ' · flattened to a head-on face'
+    } catch {
+      /* fall through to the folder's credit */
+    }
+  }
   const p = join(PKG, 'reference', id, 'SOURCES.md')
   if (!existsSync(p)) return `reference/${id}/${file}`
   const md = readFileSync(p, 'utf8')

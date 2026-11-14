@@ -228,6 +228,19 @@ export const PATINA_PRESETS = {
     crustPlace: 0.8, pustules: 0.15, pustuleScale: 5, pustuleColor: '#2a6e50', lowerBody: 1, lowerHeight: 0.1,
     lowerColor: '#cccccc', plainTone: 1.12, grain: 0.5,
   },
+  // Met 49.135.2 fangding: pale grey-green plateaus and plain bands on a black-filled leiwen ground,
+  // emerald malachite specks and small crusts on plain parts, red-brown cuprite blotches (rim, legs)
+  'met-fangding': {
+    age: 1, tin: 0.14, lead: 0.05, polish: 0.4, tarnish: 0.25, cuprite: 0.85, cupriteTone: 0.2, tinOxide: 0.7,
+    tinOxideTone: 1.1, malachite: 0.42, carbonate: 0.1, azurite: 0, azuriteScale: 10, blueHabitat: 0.5,
+    turquoiseTone: 0.4, malachiteHue: 0.3, malachiteTone: 0.3, islands: 0.6, malachiteScale: 1.4, crust: 0.2,
+    chloride: 0, soot: 0, crevice: 0.6, patchScale: 45, mottleScale: 16, patchiness: 0.8, softness: 0.7,
+    drift: 0.3, earth: 0.08, earthColor: '#7a5a40', calcite: 0.04, streaks: 0.1, burialSide: 0.1, recessDirt: 0.6,
+    interiorTone: 0.45, wax: 0, inlay: 1, inlayGround: 0.7, wear: 0.15, dulling: 0.55, tops: 0.8, nobleWarmth: 0.1,
+    matte: 1, topsTone: 1, ledgeMatte: 1, tint: '#bed2be', speckle: 0.06, speckleScale: 1.4, speckleColor: '#7a4a38',
+    crustIsles: 0.14, crustScale: 4, crustColor: '#2f8a5a', crustPlace: 0.7, pustules: 0.06, pustuleScale: 3,
+    pustuleColor: '#1f8a52', lowerBody: 0.6, lowerHeight: 0.35, lowerColor: '#c8bca8', plainTone: 0.9, grain: 0.6,
+  },
   // Met 1985.214.4: grey-olive trumpet, neutral silvery décor bands with dark leiwen, a dark
   // green-black mottled ring with emerald spots and small pale crust islands
   'met-gu': {
@@ -241,6 +254,20 @@ export const PATINA_PRESETS = {
     speckleScale: 1.5, speckleColor: '#7d4a3e', crustIsles: 0.18, crustScale: 10, crustColor: '#8a8578',
     crustPlace: 0.9, pustules: 0.12, pustuleScale: 4, pustuleColor: '#2e6f4a', grain: 0.5,
   },
+  // Met gui 62.217: dark grey-green skin with soft pale-green malachite territories and small
+  // red-brown cuprite blotches (rim, foot), dark brown dirt in the leiwen, silvery worn bands
+  'met-gui': {
+    age: 1, tin: 0.14, lead: 0.06, polish: 0.35, tarnish: 0.5, cuprite: 0.75, cupriteTone: 0.3, tinOxide: 0.85,
+    tinOxideTone: 1.15, malachite: 0.32, carbonate: 0.06, azurite: 0, malachiteHue: 0.5, malachiteTone: 0.6,
+    islands: 0.1, malachiteScale: 2.5, crust: 0.1, chloride: 0, soot: 0, crevice: 0.9, patchScale: 30,
+    mottleScale: 15, patchiness: 0.85, softness: 0.95, drift: 0.3, earth: 0.15, earthColor: '#6a4428', calcite: 0,
+    streaks: 0.05, burialSide: 0.05, recessDirt: 1, interiorTone: 0.55, wax: 0.05, inlay: 0, wear: 0.15,
+    dulling: 0.15, tops: 0.55, nobleWarmth: 0.25, matte: 1, topsTone: 0.35, ledgeMatte: 1, lowerBody: 0.25,
+    lowerHeight: 0.18, lowerColor: '#b9a88e', speckle: 0, speckleScale: 1.3, speckleColor: '#6a3a30',
+    crustIsles: 0, crustScale: 8, crustColor: '#7fa060', crustPlace: 0.6, pustules: 0, pustuleScale: 3,
+    pustuleColor: '#3f7a40', tint: '#c2c6aa', grain: 0.7, nobleRelief: 0.35,
+  },
+
   // Nezu fangyi (owner's photo): warm olive-brown handled skin, plateaus a little lighter than a
   // DARK ground, almost no powder (it lives only in fine grooves), warm cuprite showing low
   'nezu-olive': {
@@ -270,7 +297,7 @@ export const PATINA_PRESETS = {
 
 /** How the drawer groups the preset chips. Every key of PATINA_PRESETS appears once. */
 export const PATINA_PRESET_GROUPS = {
-  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive'],
+  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
 }

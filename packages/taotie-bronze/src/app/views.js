@@ -7,8 +7,8 @@ import { el } from './ui.js'
 import { refLoader, refCredit } from './refs.js'
 
 /** A close-up: a named detail, or a view framing a small part of the vessel. */
-export const isDetailView = (name, v) => /^detail/.test(name) || (v?.fit ?? 1) < 0.6
-const pretty = (name) => name.replace(/^detail-/, '').replace(/-/g, ' ')
+export const isDetailView = (name, v) => /^detail/.test(name) || (v?.fit ?? 1) < 0.6 || !!v?.face // flat-face views (KIT.md § Flat faces) live with the details
+const pretty = (name) => name.replace(/^detail-/, '').replace(/^face-/, 'flat ').replace(/-/g, ' ') // face-long → 'flat long' (≠ detail-face-long)
 
 export function createViewBar({ chipsEl, detailEl, detailToggle, compareToggle, figure, onView, onLayout }) {
   let artifact = null

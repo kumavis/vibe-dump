@@ -70,7 +70,7 @@ export class Sheet {
 }
 
 /** Round-shouldered plateau: steep at the foot, a quarter-round arris (V-b, cast and burnished). */
-const shoulderProfile = (s, w) => {
+export const shoulderProfile = (s, w) => {
   if (s <= 0) return 0
   if (s >= w) return 1
   const t = s / w

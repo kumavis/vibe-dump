@@ -42,11 +42,14 @@ src/kit/
     bake.js             height → normal map, cavity/edge map, THREE textures
     leiwen.js           thunder-pattern ground fill
     shapes.js           the band-ends-in-a-hook vocabulary (Turtle, fillet, curls, hooks, bands) + halfMaskFrame
+    rounded.js          TRACED vocabulary: fat round-cornered strokes, plates, decorated plateau tops, pillow eyes (§ Rounded bands)
+    lozenge.js          lattice grounds: diagonal lozenges / 回 squares, nested · squared · spiral · dot cells (§ Rounded bands)
     motifs/
       taotie.js         the parametric mask (schema, presets, draw) — components in taotie/parts.js, renderer in taotie/render.js
       ground.js         leiwen on its own (atlas entry 'leiwen')
       kui.js cicada.js blade.js whorl.js boss.js bands.js bird.js eyeband.js snake.js silkworm.js scales.js
                         companion motifs (§ Companion motifs); _strokes.js = their Pen/Sheet/renderer
+      rounded.js lozenge.js pillow.js   atlas sheets of the traced vocabulary (§ Rounded bands)
       frieze.js         composed friezes & registers as atlas plaques (compose.js demos)
       list.js           ONE LINE PER MOTIF, alphabetical: export { default as taotie } from './taotie.js'
       schema.js         motifDefaults(schema)
@@ -296,6 +299,103 @@ silkworm facing segments bend girth          scales  scale mm  open 'down'|'up' 
 creature: `kit.companions` exposes `makeFrame(rect, { rot, flip })`, `Pen` (fd / arc / to / spiral / curl),
 `Sheet` (band / taper / poly / circle / rrect / boss / line / groundLine) and `renderSheet(panel, sheet, p, { clip })`;
 `buildKui(S, A, p)`, `buildCicada`, `buildBird` are exported from their modules.
+
+### Rounded bands — the traced vocabulary (relief/rounded.js, relief/lozenge.js; research/04)
+
+The older strokes tie a band's outer corner to its inner one (R ± w/2) and read as squared typography.
+On the bronzes a horn, brow or body is a FAT flat-topped plateau: outer corners round (≈ 0.4–0.6 × band
+width), inner corners nearly square (≈ 0.1–0.2 ×), width swelling and tapering, ends blunt-rounded,
+pointed or rolled; and its top is drawn on (sunk contour line, chain of spirals, lines, scales, leiwen,
+ticks in the margin). Draw these by TRACING: read control points in mm off a flattened face
+(§ Flat faces) — recipe and worked example in research/04 § How to trace a face. All mm, panel frame, y up.
+
+```js
+const band = kit.roundStroke(ctrl, opts)      // a band along a centre line through control points (corners sharp)
+const block = kit.roundPlate({ c, w, h, r | round, rot, …deco })   // rounded-rectangle block (curl block, eye surround)
+const blob = kit.roundPoly(pts, { round: mm | [per vertex], …deco })  // any traced closed outline
+kit.carve(panel, [band, block, …], opts) → { spirals: [{ c, r }], grooves, ms }   // raise the union + cut every top in ONE sink
+kit.pillowBoss(panel, opts)                   // the convex pillow eye with slit pupil (writes the field directly, max)
+kit.lozengeFill(panel, region, opts) → { cells, clipped, ms }   // lattice ground; region as leiwenFill
+kit.elementContour(el, inset) → closed polyline   kit.paintElements(els, grow) → draw(ctx)   kit.pillowOutline(o)
+```
+
+**roundStroke(ctrl, opts)** — `ctrl` [[x, y]…] the band's centre line. `width`: mm | [mm per control
+point] | t → mm (swell / taper; linear between control points). `round` (0.5) OUTER corner radius ×
+local width, `inner` (0.15) INNER corner radius × width — numbers or per-vertex arrays (0 = square,
+1 = a full round of one band width). `start` / `end`: `'blunt'` (default; flat end, corners
+`capRound` × w, 0.3) | `'flat'` | `'round'` | `'point'` (pinches the end width to 0) | `'spiral'` (the
+centre line rolls on into an Archimedean coil). `spiral` / `startSpiral`: `{ turns 1.25, gap mm
+(0.16 w: the sunk gap between turns), dir +1 rolls to the left of travel / −1 right, taper (end width ×),
+R (first radius, mm) }`. A stroke may carry its own `contour`, `fill`, `ticks` (they override carve's).
+To hold a value (width, inset) along a whole segment, add a collinear control point (no corner there).
+```js
+const horn = kit.roundStroke([[50, 58], [50, 83], [17, 83], [17, 63], [23, 63]], { width: [9.4, 11, 10.4, 6.4, 6.4],
+  round: 0.5, inner: 0.18, end: 'flat', contour: { inset: [0.6, 2.5], line: 0.5 }, ticks: { side: 'right', pitch: 4.2 },
+  fill: { kind: 'spirals', line: 0.5, pitch: 0.95, gap: 0.3, square: 0.3, tail: false, min: 3.6 } })
+```
+
+**carve(panel, elements, opts)** — `height` (1.2 mm plateau), `shoulder` (height × 0.35; pass ≈ w/2 for
+a domed, rounded-section band — the Nezu horns), `depth` (0.35 mm grooves), `irregularity` (hand wobble
+±0.05 mm per unit), `seed`, `raise: false` (decorate tops raised elsewhere). Decoration, per element
+or for all:
+- `contour: { inset: mm | [left, right] (each a number or per-control-point array), line: mm } | false` —
+  the thin sunk line inside the edge (left/right of the direction of travel: a C drawn
+  counter-clockwise has its INSIDE on the left).
+- `fill: { kind, line, pitch, gap, … }`: `'spirals'` (a chain of round spirals along the band, evenly
+  spread and as big as the band allows, then largest-first into corners and swells; `size`/`min` Ø mm,
+  `pitch` line spacing, `gap` land between neighbours, `square` 0…1 rounded-square spirals, `tail`
+  `'merge'` (the outer turn leaves the contour) | `'radial'` | false, `hand` 'left'|'right'|alternate,
+  `lead`, `chain: false`, `joints: true` = a cross line between consecutive spirals: the jointed kui body)
+  · `'lines'` (parallel to the centre line, `pitch`; on a rolled end they follow the coil)
+  · `'coil'` (plates: a concentric squared-round spiral, `pitch`, `offset` [dx, dy] of its centre, `rings`, `hand`)
+  · `'scales'` (staggered arches along the band, `pitch`) · `'leiwen'` (leiwenFillMask inside the contour: `pitch`,
+  `lineFrac`, `margin`, `leiwen: {…}` extra opts) · `'none'`.
+- `ticks: { side: 'left' | 'right' | 'both' | 'outer', pitch, line, length (default: to the contour), skipEnds }` —
+  the short cross notches in the outer margin (Met fangyi horns).
+```js
+const tail = kit.roundStroke([[58, 16], [24, 16]], { width: 8, end: 'spiral', spiral: { turns: 0.9, dir: -1, R: 6.6 } })
+kit.carve(panel, [tail], { height: 1.2, contour: { inset: 0.8, line: 0.45 },
+  fill: { kind: 'spirals', line: 0.45, pitch: 0.9, joints: true } })     // a jointed kui body ending in a rolled tail
+```
+
+**pillowBoss(panel, opts)** — `c`, `w`, `h` (mm), `round` (0.45; superellipse 0 ≈ square … 1 ellipse),
+`height` (2 mm), `crown` (0.5; 0 flat top … 1 fully domed), `base` (mm or `'field'`: sit on what is
+there, e.g. a plateau), `rot` (deg), `tilt`, `slit: { len (0.32 w), width, depth, rot, offset: [dx, dy] } |
+false`, `ring: { gap, line, depth } | false` (a sunk ring round it). Draw it after carve() so the
+ground packer avoids it.
+```js
+kit.pillowBoss(panel, { c: [45.1, 36.5], w: 14.4, h: 13.5, round: 0.42, height: 2.4, crown: 0.9,
+  slit: { len: 4.8, width: 0.95, depth: 0.7, offset: [-0.5, -0.9] } })   // Met fangyi main-mask eye
+kit.leiwenFill(panel, { margin: 0.5 }, { pitch: 0.72, cell: [6, 11], pairs: 0, maxAspect: 1.35 })   // its big-cell ground
+```
+
+**lozengeFill(panel, region, opts)** — `region` exactly as leiwenFill (`rect`, `avoid` 'raised' | mask |
+draw, `include`, `level`, `margin`). A regular lattice laid over the field and cut off by the motif.
+opts (`LOZENGE_DEFAULTS`): `lattice` 'diagonal' (lozenges, diagonals along x / y) | 'square' (回);
+`size` mm or [w, h] (lozenge diagonals / square sides); `fill` 'nested' (concentric rings, mitred — they
+line up into diagonals) | 'squared' (a squared spiral in the cell's frame) | 'spiral' (round spiral) |
+'dot' | 'plain'; `pitch` (0.9 mm), `line` (0.48 × pitch), `depth`, `outline` (lattice lines), `levels` (2:
+a cell the motif cuts is halved into 4, this deep), `clip` (last-level cut cells are cut off at the margin,
+else left plain), `minFree`, `roundness`, `jitter`, `offset` [dx, dy] (lattice phase), `mode` 'sunk' | 'thread', `seed`.
+```js
+kit.lozengeFill(panel, { rect, margin: 0.6 }, { size: 19, fill: 'nested', pitch: 1.0, levels: 1 })   // Met gui lower field
+kit.lozengeFill(panel, { rect }, { size: [9, 7], fill: 'spiral', levels: 0 })                       // lozenge-and-spiral
+kit.lozengeFill(panel, { rect }, { lattice: 'square', size: 9, fill: 'squared', pitch: 0.75 })      // 回 lattice
+```
+
+Atlas: `rounded` (presets `met-fangyi-horn` and `met-fangyi-eye` — tracings of face-long-main at 1:1 in its
+face mm, data in `MET_FANGYI_HORN` / `MET_FANGYI_EYE`; `shapes` C · G · S · J · pointed hook; `fills` one C
+band cut five ways; `met-fangding-band`, by eye), `lozenge` (`met-gui-nested lozenge-spiral lozenge-dot
+lozenge-nested-fine square-squared square-nested`), `pillow` (`met-fangyi met-fangyi-kui met-gui
+met-fangding ringed`).
+
+**Cost.** carve = one `raise` + one `sink` for ALL contour / spiral / line / scale / tick grooves of the
+call (+ one leiwenFillMask per element with `fill.kind 'leiwen'`) — no more per-pixel work than a
+companion motif's renderSheet. Planning is vector work on the outlines: the Met fangyi horn ≈ 0.1 s;
+a 300 × 50 mm Houmuwu-scale band with 53 spirals ≈ 0.3 s (+ 0.5–0.7 s for its raise and sink on a
+2040 × 720 panel). pillowBoss writes its bbox only (4 samples / px). lozengeFill: one ≈ 0.2 mm planning
+grid (as leiwen) + one sink; a 340 × 120 mm panel at 6 px/mm ≈ 0.4 s. No texture-size cost: every unit
+renders at whatever ppmm the panel has (phones: 2048 cap).
 
 ## relief/compose.js — laying out a mould section
 
@@ -581,7 +681,7 @@ Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad gl
 ```
 
 Presets (`PATINA_PRESET_GROUPS` groups them for the drawer):
-Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive` · Looks `excavated-green`
+Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui` · Looks `excavated-green`
 (generic dark Anyang excavation), `olive-museum`, `malachite-crust` (Freer F1915.136),
 `water-black` (Met fanglei 55.160), `bronze-disease`, `heirloom`, `as-cast` · Blue `nezu-blue`,
 `blue-green-excavated`, `azurite-bloom`. A preset is applied over the PATINA_PARAMS defaults.
@@ -635,6 +735,8 @@ export default {
 
 - `await onProgress(fraction, label)` both reports and yields to the event loop —
   call it between panels. Target: < 10 s at q = 1 in headless SwiftShader.
+- A view may instead be a **face view**: `face: { center, normal, up, width, height }` (vessel mm) looks
+  head-on at that rectangle — see § Flat faces.
 - A view may also carry `target: [x, y, z]` (mm); `fit` then frames `fit × R`
   (R = half the bbox diagonal) around it instead of the whole bbox. Azimuth 0 =
   front (+Z), positive turns toward +X; `fit` 1 puts the bbox exactly at the frame edge.
@@ -676,6 +778,7 @@ drops to `'0'` while a new subject builds, and reads `'error'` if boot failed.
 
 Tool hooks on the same object (each resolves after a rendered frame):
 `show(id, view?)`, `setView(name)`, `setMode(m)`, `setPatina(presetName | values)`,
+`setFace(face, { fit, fov, light }?)` (frame any face rectangle head-on, § Flat faces), `faceView()`,
 `showMotif(name, preset?)`, `frame()`, `setCompare(on)`; plus `motifs`, `motifPresets(name)`, `layout()`,
 `viewRefs(id)`, `atlasStats()`, `timings`, `kit`, `stage`. `metrics()` returns
 `{ id, overall: { min, max, w, h, d }, parts: { <part>: { …, count } }, buildMs }`,
@@ -689,6 +792,7 @@ npm run shots   -- [--a id] [--view v,…] [--mode beauty,clay] [--patina p,…]
                    [--atlas [--motif m,…] [--preset p,…]] [--ui [--phone] [--size name,…]] [--out dir]
 npm run metrics -- [--a id] [--all] [--json]      # PASS/FAIL table; exit 1 on any failure
 node tools/refs.mjs [--check]      # regenerate src/app/refs.js after adding a view `ref`
+node tools/faces.mjs --a id [--face f,…] [--rectify] [--list] [--views]   # flat faces: photo | model, § Flat faces
 npm run check                      # vite build + tools/smoke.mjs (every artifact, view, mode, motif preset)
 node tools/bench.mjs               # 4096×2048 panel draw + bake timing
 ```
@@ -703,3 +807,114 @@ adds 390×844, 430×932 and 844×390 (touch, DPR 2) with label / list / sheet / 
 `{ "ratios": { "<name>": { "expr": "parts.legs.h / overall.h", "expected": 0.38, "tol": 0.03 } } }`.
 `expr` is never eval'd: a number or a dotted path into `metrics()`, optionally one
 operator (`/ * + -`) and a second operand.
+
+## Flat faces — tracing the décor from the photographs (`tools/faces.mjs`)
+
+Compare a photographed face of a bronze with the model's same face **element by element, head-on, at
+the same scale**: the photograph is warped (homography) to an orthographic image of the face plane in
+mm, the model is rendered down the same face normal at the same pixel size, and the two are put side by
+side with the model's relief edges drawn over the photograph. Draw décor by tracing these, not from memory.
+
+**What exists** (`node tools/faces.mjs --list`): `met-fangyi` face-long, face-long-frieze, face-long-main,
+face-long-foot, face-lid-long, face-end, face-lid-end (8 px/mm, best: face-end); `nezu-fangyi` face-belly,
+face-neck-frieze, face-foot-frieze, face-lid-broad (6 px/mm from a ≈ 3.5 px/mm phone photo); `houmuwu-ding`
+face-long, face-long-top-frieze, face-long-bottom-frieze, face-long-column, face-short, face-rubbing-long
+(2 px/mm); `met-fangding` face-long, face-long-main, face-long-frieze (10 px/mm, 0.17 mm rms), face-short,
+face-short-main (6 px/mm); `met-gui` face-front, face-mask, face-neck, face-foot (8 px/mm; a ROUND vessel: the
+plane is taken down the photograph's own 4°-elevated line of sight, so photo and model foreshorten alike; 0.86 mm rms).
+Each face's `trust` and `fit` in faces.json say how far to believe it.
+
+### reference/<id>/faces.json
+
+```jsonc
+{
+  "vessel": "met-fangyi",
+  "blur": 0.5,                       // optional: similarity blur, mm (default 0.5; ≥ leiwen pitch / 2 — soft photos want more)
+  "sources": {                       // photographs the faces are cut from
+    "DP151396": {
+      "file": "three-quarter.jpg",   // the committed copy in reference/<id>/ (always used if the original is absent)
+      "original": "https://…/DP151396.jpg",   // full-size original, fetched into .work/originals/ (never committed)
+      "size": [2882, 3842],          // ORIGINAL px — every point below is in original px
+      "fileScale": 0.4685,           // optional: committed px = original px × fileScale (default file width / size[0])
+      "fileOffset": [0, 0]           // optional: for a committed crop, its top-left in original px
+    }
+  },
+  "faces": {
+    "face-long": {                   // = the artifact view name (face-…)
+      "label": "long face (+Z), whole body",
+      "source": "DP151396",
+      "center": [0, 81, 49.0],       // the face rectangle, vessel mm (model space: Y up, front +Z)
+      "normal": [0, -0.0247, 1],     // outward; need not be unit
+      "up": [0, 1, 0.0247],          // projected onto the plane; right = up × normal (u runs left → right seen from outside)
+      "width": 152, "height": 166,   // mm, centred on `center`
+      "ppmm": 8,                     // output scale; the long side is capped at 2400 px (`maxSide`) — px/mm drops to fit
+      "points": [[603, 1637, -67.4, 162.2, 51.0], …],   // [photo x, photo y (original px), vessel x, y, z mm]; ≥ 4, no 3 collinear
+                                     // or "face-long": reuse another face's points (a sub-rectangle of the same plane)
+      "flat": false,                 // true: an already flat image (a rubbing); points are [px, py, u, v] in face mm from `center`
+      "light": { "elevation": 35, "azimuth": 135 },   // optional raking key (see below)
+      "blur": 0.5,                   // optional per-face similarity blur
+      "trust": "free text: how far to believe it", "fit": "rms / max residual of the points"
+    }
+  }
+}
+```
+
+Points must lie **in the face plane** (or within a few mm of it): register borders, rim / foot lines,
+notch jambs, the root of a face-centre flange, field corners. Never a flange crest, a corner flange
+standing out at 45°, or a décor element you are trying to check. The fit is least squares, so 6 points
+(three across the top, three across the bottom, including the centre axis) beat 4: `--rectify` prints
+the rms / max residual in mm, and per point (`--verbose`, or automatically above 1.5 mm) so a misread
+point shows. Then LOOK at the flattened image: register borders straight and level, the centre flange
+vertical at x = width/2, the two eyes of a mask at ± the same u. Move points until they are.
+Curved faces (a bulging belly, a convex lid slope) are flattened onto their chord plane: say in `trust`
+how far the surface leaves it.
+
+### The view property and hooks
+
+A named view with `face` is a face view (`src/artifacts/<id>.js`, generate the lines with `--views`):
+
+```js
+'face-long': { face: { center: [0, 81, 49], normal: [0, -0.0247, 1], up: [0, 1, 0.0247], width: 152, height: 166 },
+               ref: 'faces/face-long.jpg' },          // optional: fit (1), fov (1°), light { elevation, azimuth }
+```
+
+`stage.setView` puts a 1° lens ≈ 57 × the frame height away on the face normal (an orthographic view to
+< 0.05 % across ± 15 mm of relief), `camera.up` = the face's up, and frames width × height exactly
+(fit 1, letterboxed to the canvas; the UI's usual margin applies with chrome on). The key light then
+rakes in from the face's **upper left, 35° above the plane** (`light.azimuth` is in the plane: 0 right,
+90 up, 135 upper left), a weak fill from the lower right, no rim — relief reads the way museum
+photographs show it, in clay and beauty alike. Face views sit in the app's Details row labelled
+"flat …"; their `ref` (a path under reference/<id>/, `faces/<face>.jpg`) shows in Compare like any other
+reference photo (run `node tools/refs.mjs` after adding refs; the credit is the source photo's).
+Hooks: `window.__taotie.setFace(face, opts)` frames any face rectangle (not a named view);
+`faceView()` returns the current face frame `{ center, normal, up, right, width, height }` or null.
+
+### tools/faces.mjs
+
+```
+node tools/faces.mjs --list [--a id]                list faces: size, px/mm, source, flat image ✓, view ✓
+node tools/faces.mjs --a id --rectify [--face f,…] [--originals dir] [--fetch] [--verbose]
+                       write reference/<id>/faces/<face>.jpg (JPEG q88) from faces.json + the originals in
+                       .work/originals/ (--fetch downloads missing ones; else the committed copy, scaled)
+node tools/faces.mjs --a id --views                 print the `views` lines for the artifact
+TAOTIE_DIST=.work/<me>/dist node tools/faces.mjs --a id [--face f,…] [--out dir] [--q 1]
+                       render every face in clay + height at the flattened photo's pixel size →
+                       <out>/<id>/<face>-clay.png, -height.png, <face>-compare.jpg
+                       (photograph | model clay | model relief edges in magenta over the desaturated photo),
+                       faces-sheet.jpg (all of them) and similarity.json; prints the similarity per face
+```
+
+`<out>` defaults to `.work/faces/`. **Similarity** = normalised cross-correlation of the gradient
+magnitude of the photo's luminance and of the model's height render, both blurred at `blur` mm
+(σ; then 2σ on the gradient), over the pixels where the model has relief. It is a trend indicator
+for one face across iterations — never compare it between faces or vessels, never optimise it on its
+own (soft, dark photos — the Nezu neck — score near or below zero whatever the model does). The image
+work is `tools/faces_img.py` (python3 + PIL + numpy).
+
+**Adding a face for a new vessel:** (1) put the source photo in reference/<id>/ (committed copy) and its
+original URL in `sources`; (2) choose the plane from the model (the probe `window.__taotie.stage.content`
+userData — `walls[side].corners`, lid `hips` / `midlines` — gives exact numbers) and a rectangle a few mm
+larger than the decorated field; (3) read 6 in-plane landmarks off the original at 1:1 (crop with a pixel
+grid); (4) `--rectify`, read the residuals, LOOK, iterate; (5) `--views` → paste into the artifact,
+`node tools/refs.mjs`, build; (6) `tools/faces.mjs --a id` and read the compare sheets.
+

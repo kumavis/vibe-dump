@@ -257,6 +257,83 @@ export class Stage {
     this.rim.target.position.copy(aim)
     this.fill.position.copy(aim).addScaledVector(dir(la + 50, 18), d)
     this.fill.target.position.copy(aim)
+    if (this._face && this.rig !== 'raking') this._layoutFaceLights(d)
+  }
+
+  /**
+   * Face-view lighting: the key rakes in from the face's upper left, `face.light.elevation`° (default 35)
+   * above the face plane, as museum photographs of décor are lit; a weak fill from the lower right;
+   * no rim (nothing to lift off a background seen square on).
+   */
+  _layoutFaceLights(d) {
+    const f = this._face
+    const el = (f.light?.elevation ?? 35) * DEG
+    const az = (f.light?.azimuth ?? 135) * DEG // in the face plane: 0 = right, 90 = up, 135 = upper left
+    const c = f.center
+    const inPlane = f.right.clone().multiplyScalar(Math.cos(az)).addScaledVector(f.up, Math.sin(az))
+    const key = inPlane.multiplyScalar(Math.cos(el)).addScaledVector(f.normal, Math.sin(el)).normalize()
+    this.key.position.copy(c).addScaledVector(key, d)
+    this.key.target.position.copy(c)
+    this.key.angle = Math.atan((this.R * 2.4) / d)
+    const fill = f.right.clone().multiplyScalar(0.5).addScaledVector(f.up, -0.3).addScaledVector(f.normal, 0.8).normalize()
+    this.fill.position.copy(c).addScaledVector(fill, d)
+    this.fill.target.position.copy(c)
+    this.fill.intensity = 0.8
+    this.rim.intensity = 0
+    this.contact.visible = false
+    const sc = this.key.shadow.camera
+    sc.near = d * 0.4
+    sc.far = d * 2
+    sc.updateProjectionMatrix()
+    this.key.shadow.needsUpdate = true
+  }
+
+  /**
+   * A flat-face view: `face: { center, normal, up, width, height }` (vessel mm). A very long lens
+   * (fov 1°, ≈ 57 × the frame height away: < 0.05 % scale change across ±15 mm of relief) on the
+   * face normal, framed exactly on the width × height rectangle (fit 1; letterboxed to the canvas).
+   * camera.up follows the face's up, so a sloping lid face comes out upright.
+   */
+  _setFaceView(v) {
+    const F = v.face
+    const n = new THREE.Vector3(...F.normal).normalize()
+    const up0 = new THREE.Vector3(...(F.up || [0, 1, 0]))
+    const up = up0.addScaledVector(n, -up0.dot(n)).normalize()
+    const right = new THREE.Vector3().crossVectors(up, n).normalize()
+    const center = new THREE.Vector3(...F.center)
+    this._face = { center, normal: n, up, right, width: F.width, height: F.height, light: F.light || v.light }
+    const fov = v.fov ?? 1
+    const fit = (v.fit ?? 1) * this.fitScale
+    const cam = this.camera
+    cam.fov = fov
+    const { w, h } = this._effectiveSize()
+    const perPx = Math.tan((fov * DEG) / 2) / (this.height / 2)
+    const tanV = perPx * (h / 2)
+    const tanH = perPx * (w / 2)
+    const dist = Math.max(F.width / 2 / tanH, F.height / 2 / tanV) * fit
+    cam.up.copy(up)
+    cam.position.copy(center).addScaledVector(n, dist)
+    this.controls.target.copy(center)
+    const R = this.R || 100
+    cam.near = Math.max(1, dist - R * 3)
+    cam.far = dist + R * 6
+    cam.updateProjectionMatrix()
+    this.controls.minDistance = dist * 0.05
+    this.controls.maxDistance = dist * 3
+    this.controls.maxPolarAngle = Math.PI
+    this.controls.update()
+    cam.lookAt(center)
+    this._fog.near = dist + R * 1.4
+    this._fog.far = dist + R * 9
+    this._layoutRoom()
+    this._applyViewOffset()
+    this.dirty = true
+  }
+
+  /** The current face view's frame (vessel mm), or null. */
+  get faceView() {
+    const f = this._face
+    return f && { center: f.center.toArray(), normal: f.normal.toArray(), up: f.up.toArray(), right: f.right.toArray(), width: f.width, height: f.height }
   }
 
   // --------------------------------------------------------------- views
@@ -265,6 +342,13 @@ export class Stage {
    * fit = 1 puts the bounding box exactly at the frame edge; >1 adds air.
    */
   setView(v = {}) {
+    // flat faces (KIT.md § Flat faces): a face view looks straight down the face normal
+    if (v.face) return this._setFaceView(v)
+    if (this._face) {
+      this._face = null
+      this.camera.up.set(0, 1, 0)
+      this._lightAz = undefined // force the vitrine rig back
+    }
     const { azimuth = 25, elevation = 12, fov = 30 } = v
     if (this.rig !== 'raking' && this._lightAz !== azimuth) {
       this._lightAz = azimuth

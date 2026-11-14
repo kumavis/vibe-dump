@@ -126,8 +126,10 @@ function hookPts(kit, at, len, w, h, dir) {
  */
 export function neckSheet(kit, { hw, v0, Hn, slot, seed = 1 }) {
   const S = new Sheet()
-  const w = 0.165 * Hn
-  const gap = 1.6
+  // round 5 (flattened photo face-neck-frieze): the units are fat and touch — bands ≈ 0.21 of the band height
+  // (was 0.165), the crowd fillers fatter, channels ≈ 1 mm
+  const w = 0.21 * Hn
+  const gap = 1.0
   const span = hw - slot - 2.6
   const Wu = (span - gap) / 2
   const sp = (pts) => kit.shapes.spline(pts, 0.3)
@@ -157,7 +159,7 @@ export function neckSheet(kit, { hw, v0, Hn, slot, seed = 1 }) {
     for (const x of [0.38, 0.62]) S.band(sp(M([[x, 0.15], [x - 0.01, 0.04], [x - 0.07, 0.03]])), w * 0.8, { capA: 'flat', capB: 'round', line: false })
   }
   // the crowd of short hooks in what is left
-  fillHooks(kit, S, { u0: slot + 0.6, u1: hw - 2.2, v0: v0 - 0.2, v1: v0 + Hn + 0.2 }, { rMin: 2.0, rMax: 3.6, gap: 0.7, wMin: 2.2, wMax: 3.0, seed, round: 0.6, max: 24, wScale: 0.5, curls: true })
+  fillHooks(kit, S, { u0: slot + 0.6, u1: hw - 2.2, v0: v0 - 0.2, v1: v0 + Hn + 0.2 }, { rMin: 1.8, rMax: 3.6, gap: 0.55, wMin: 2.6, wMax: 3.6, seed, round: 0.6, max: 30, wScale: 0.62, curls: true })
   return S
 }
 

@@ -6,12 +6,12 @@
 // the wall and notched on every face; a convex hipped lid with a long ridge and
 // near-gable ends; a miniature hipped-roof knob on a plain post; 18 comb flanges
 // (4 pitch slots) running unbroken through the registers.
-// Décor: hand-placed dissolved islands (met-fangyi/decor.js) on 0.82 mm leiwen,
-// rendered by met-fangyi/relief.js.
+// Décor (round 5): TRACED off the flattened photographs (reference/met-fangyi/faces/) in face mm and
+// drawn with the kit's rounded vocabulary — met-fangyi/traced.js; the knob's line work is decor.js.
 
 import * as THREE from 'three'
-import { renderSheets, leftHalf } from './met-fangyi/relief.js'
-import { mainSheet, friezeSheet, footSheet, lidLongSheet, lidEndSheet, knobLines } from './met-fangyi/decor.js'
+import { knobLines } from './met-fangyi/decor.js'
+import { renderTraced, bodyFace, refit, MAIN_LONG, FRIEZE_LONG, FOOT_LONG, END_FIT, END_EYE, END_HORN, LID_LONG_FIT, LID_LONG_EYE, LID_END_FIT, LID_END_EYE, LID_END_DROP } from './met-fangyi/traced.js'
 
 const H = 254
 const FOOT_H = 33 // foot band (its own part): ground → top of the lower separator's middle
@@ -44,7 +44,7 @@ export default {
   dimensions: { h: 254, w: 152, d: 114 },
   blurb:
     'A small wine container built like a roofed shrine: a straight box flaring slightly upward, its foot cut by a notch on every face, under a cushioned hipped roof crowned by a miniature roof on a post. ' +
-    'Eighteen finely toothed flanges run unbroken from the notched foot to the ridge, and every mask part — squared ram horns, low slit-eyed bosses, hooked jaws — floats as a separate island on thunder spirals under one millimetre in pitch. ' +
+    'Eighteen finely toothed flanges run unbroken from the notched foot to the ridge, and every mask part — fat round-cornered G-shaped horns whose flat tops are cut with chains of small spirals, pillow-shaped bosses with slit pupils, hooked jaws — floats as a separate island on big squared thunder spirals. ' +
     'Reconstructed from the Met’s three photographs: the walls, lid, flanges and décor are measured, but the inside (floor height, lid seat, the cast clan sign) and the hidden back faces are inferred.',
   defaultPatina: 'met-fangyi',
   views: {
@@ -63,6 +63,15 @@ export default {
     'detail-lid-long': { azimuth: 21, elevation: 10, fov: 26, fit: 0.36, target: [0, 208, 25], ref: 'detail-lid-long.jpg' },
     'detail-flanges': { azimuth: 65, elevation: 8, fov: 26, fit: 0.32, target: [68, 128, 0], ref: 'detail-flanges.jpg' },
     'detail-knob': { azimuth: 21, elevation: 10, fov: 26, fit: 0.14, target: [0, 240, 0], ref: 'detail-knob.jpg' },
+    // flat faces (KIT.md § Flat faces): head-on, framed on a face rectangle in mm; ref = the flattened photograph
+    // (reference/met-fangyi/faces.json → tools/faces.mjs --rectify)
+    'face-long': { face: { center: [0, 81, 49], normal: [0, -0.0247, 1], up: [0, 1, 0.0247], width: 152, height: 166 }, ref: 'faces/face-long.jpg' },
+    'face-long-frieze': { face: { center: [0, 145, 50.6], normal: [0, -0.0247, 1], up: [0, 1, 0.0247], width: 152, height: 38 }, ref: 'faces/face-long-frieze.jpg' },
+    'face-long-main': { face: { center: [0, 81, 49], normal: [0, -0.0247, 1], up: [0, 1, 0.0247], width: 152, height: 100 }, ref: 'faces/face-long-main.jpg' },
+    'face-long-foot': { face: { center: [0, 17, 47.4], normal: [0, -0.0247, 1], up: [0, 1, 0.0247], width: 152, height: 38 }, ref: 'faces/face-long-foot.jpg' },
+    'face-lid-long': { face: { center: [0, 195.85, 25.5], normal: [0, 0.67, 0.742], up: [0, 0.742, -0.67], width: 146, height: 82 }, ref: 'faces/face-lid-long.jpg' },
+    'face-end': { face: { center: [67.3, 81, 0], normal: [1, -0.0247, 0], up: [0.0247, 1, 0], width: 118, height: 166 }, ref: 'faces/face-end.jpg' },
+    'face-lid-end': { face: { center: [59.75, 195.85, 0], normal: [0.945, 0.326, 0], up: [-0.326, 0.945, 0], width: 108, height: 66 }, ref: 'faces/face-lid-end.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
@@ -86,16 +95,30 @@ export default {
     const lay = kit.fangLayout(bodyOpts)
 
     // ---------------------------------------------------------------- body panels (one per face kind)
+    // traced from the flattened photographs (met-fangyi/traced.js): the long face 1:1 in face mm
     const bodyPanel = (side, s) => {
       const cell = lay.sides[side].cells[0][0]
       const p = new kit.ReliefPanel({ width: cell.w, height: cell.h, ppmm, seed: s })
       const hw = cell.w / 2
-      const P = leftHalf(hw, 0)
-      const shift = (sheet, dv) => sheet.map(([u, v]) => [u, v + dv])
-      renderSheets(kit, p, [
-        { sheet: shift(mainSheet(hw, 93.3), 34.4 - FOOT_H), P },
-        { sheet: shift(friezeSheet(hw, 28.6), 130.4 - FOOT_H), P },
-      ], { seed: s, halfRect: { x: 0, y: 0, w: hw, h: cell.h } })
+      const long = side === 'front'
+      const half0 = (long ? W0 : D0) / 2
+      const halfAt = (Y) => half0 + (Y - FOOT_H) * tanT
+      const face = (faceW, dy) => bodyFace({ faceW, dy, halfAt, hw, y0: FOOT_H }).P
+      // the end face: the same elements, each re-fitted to its box on face-end.jpg (traced.js END_FIT);
+      // its frieze kui keeps head and jaw (eye at u 24 against 22.7) and shortens the body and tail
+      // (×0.6 outward of the eye: tail edge at u 48 against 62.4) — face-end.jpg, grid/s-endfr.png
+      const endMain = refit(MAIN_LONG, END_FIT, { pillow: END_EYE }).map((e) => (e.name === 'horn' ? END_HORN : e))
+      const endFrieze = refit(FRIEZE_LONG, {}, { rest: ([x, y]) => { const u = 76 - x; return [59 - (u <= 22.7 ? 24 - (22.7 - u) * 0.95 : 24 + (u - 22.7) * 0.6), y + 128] } })
+      renderTraced(kit, p, long ? [
+        { specs: MAIN_LONG, P: face(152, 31) },
+        { specs: FRIEZE_LONG, P: face(152, 126) },
+      ] : [
+        { specs: endMain, P: face(118, -2) },
+        { specs: endFrieze, P: face(118, -2) },
+      ], {
+        seed: s, halfRect: { x: 0, y: 0, w: hw, h: cell.h },
+        fields: [[3.3, 34.0 - FOOT_H, hw - 6.5, 93.7], [3.3, 129.8 - FOOT_H, hw - 6.5, 27.6]],
+      })
       return p.bake()
     }
     await onProgress(0.02, 'long face')
@@ -108,9 +131,18 @@ export default {
       const f = lay.foot.sides[side]
       const p = new kit.ReliefPanel({ width: f.w, height: FOOT_H, ppmm, seed: s })
       const hw = f.w / 2
+      const long = side === 'front'
       const n = f.notch
-      const sheet = footSheet(hw + 0.4, n.w / 2 + 1.6, n.h + 1.6 - 4.4, 27.3).map(([u, v]) => [u, v + 4.4])
-      renderSheets(kit, p, [{ sheet, P: leftHalf(hw, 0) }], { seed: s, halfRect: { x: 0, y: 0, w: hw, h: FOOT_H } })
+      const half0 = (long ? W0 : D0) / 2
+      const halfAt = (Y) => half0 + (Y - FOOT_H) * tanT
+      // face-long-foot.jpg: the field runs from y 3.8 to 29.6 (vessel), stepping over the notch and its frame
+      const nh = n.w / 2 + 1.4, nv = n.h + 1.4
+      const field = [[3.3, 3.8], [hw - nh, 3.8], [hw - nh, nv], [hw - 3.2, nv], [hw - 3.2, 29.6], [3.3, 29.6]]
+      // the end face: the same kui closed up outward of the notch jaw (u ≤ 12 kept)
+      const specs = long ? FOOT_LONG : refit(FOOT_LONG, {}, { rest: ([x, y]) => { const u = 76 - x; return [59 - (u <= 12 ? u : 12 + (u - 12) * 0.7), y] } })
+      renderTraced(kit, p, [{ specs, P: bodyFace({ faceW: long ? 152 : 118, dy: -2, halfAt, hw, y0: 0 }).P }], {
+        seed: s, halfRect: { x: 0, y: 0, w: hw, h: FOOT_H }, fields: [field],
+      })
       return p.bake()
     }
     await onProgress(0.36, 'foot')
@@ -124,20 +156,40 @@ export default {
     const roof = roofModel(LW, LD, RIDGE, RISE, CONVEX, SKIRT)
     const ll = kit.hippedLidLayout(lidOpts)
     await onProgress(0.5, 'lid slopes')
+    // lid slopes: the traced body mask, upside down, re-fitted to the flattened lid faces (traced.js
+    // LID_*). A face point (chord plane, face mm) → its height on the roof → slant s on the 1:1 panel.
+    const lidFace = (k, f, { cy, upY, fyc, xc }) => ([fx, fy]) => {
+      const v = roof.vOfY(cy + (fy - fyc) * upY - LID_Y)
+      return [f.w / 2 + (fx - xc), roof.arc(k, v)]
+    }
+    const lidField = (f, halfAtS) => {
+      const pts = [[f.w / 2 - 3.2, 3]]
+      for (let i = 0; i <= 14; i++) {
+        const sv = 3 + ((f.h - 5.4) * i) / 14
+        pts.push([Math.min(f.w / 2 - 3.4, f.w / 2 - (halfAtS(sv) - 3.4)), sv])
+      }
+      pts.push([f.w / 2 - 3.2, f.h - 2.4])
+      return pts
+    }
     {
       const f = ll.faces.front
       const p = new kit.ReliefPanel({ width: f.w, height: f.h, ppmm, seed: seed + 5 })
       const halfAt = (s) => roof.level(roof.vOfS(0, s)).a
-      renderSheets(kit, p, [{ sheet: lidLongSheet(halfAt, f.h), P: leftHalf(f.w / 2, 0) }], { seed: seed + 5, halfRect: { x: 0, y: 0, w: f.w / 2, h: f.h } })
+      const specs = refit(MAIN_LONG, LID_LONG_FIT, { pillow: LID_LONG_EYE })
+      renderTraced(kit, p, [{ specs, P: lidFace(0, f, { cy: 195.85, upY: 0.742, fyc: 41, xc: 73 }) }], {
+        seed: seed + 5, halfRect: { x: 0, y: 0, w: f.w / 2, h: f.h }, fields: [lidField(f, halfAt)],
+      })
       panels.lidLong = p.bake()
     }
     await onProgress(0.6, 'lid ends')
     {
       const f = ll.faces.right
       const p = new kit.ReliefPanel({ width: f.w, height: f.h, ppmm, seed: seed + 6 })
-      const vOfY = (y) => roof.vOfY(y - LID_Y)
-      const sheet = lidEndSheet((y) => roof.level(vOfY(y)).b, (y) => roof.arc(1, vOfY(y)), LID_Y + roof.top)
-      renderSheets(kit, p, [{ sheet, P: leftHalf(f.w / 2, 0) }], { seed: seed + 6, halfRect: { x: 0, y: 0, w: f.w / 2, h: f.h } })
+      const halfAt = (s) => roof.level(roof.vOfS(1, s)).b
+      const specs = refit(MAIN_LONG.filter((e) => !LID_END_DROP.includes(e.name)), LID_END_FIT, { pillow: LID_END_EYE })
+      renderTraced(kit, p, [{ specs, P: lidFace(1, f, { cy: 195.85, upY: 0.945, fyc: 33, xc: 54 }) }], {
+        seed: seed + 6, halfRect: { x: 0, y: 0, w: f.w / 2, h: f.h }, fields: [lidField(f, halfAt)],
+      })
       panels.lidEnd = p.bake()
     }
     await onProgress(0.68, 'knob')
