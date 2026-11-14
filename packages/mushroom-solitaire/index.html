@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f8f5e9" />
+  <meta name="description" content="A cozy little solitaire garden, featuring Lani’s hand-drawn mushroom playing cards. Play, take your time, and let a little joy grow." />
+  <title>Mushroom Solitaire · a little patch of patience</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🍄%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="masthead">
+      <a class="brand" href="./" aria-label="Mushroom Solitaire home"><span class="brand-art" aria-hidden="true">🍄</span><span>mushroom<span class="brand-sub">S O L I T A I R E</span></span></a>
+      <div class="nav"><span class="handmade">a small game, a happy place <span>✳</span></span><button id="sound" class="icon-button" aria-label="Turn sound on" aria-pressed="false"></button><button id="help" class="help-button"><span>?</span> How to play</button></div>
+    </header>
+    <main>
+      <section class="intro" aria-label="Welcome">
+        <div class="little-label"><span></span> WELCOME TO YOUR LITTLE GARDEN <span></span></div>
+        <h1>A little patch of <em>patience.</em><svg class="title-spark" viewBox="0 0 35 42" aria-hidden="true"><path d="M16 26 8 16M22 20l2-14M26 29l8-6"/></svg></h1>
+        <p>Shuffle the day away. One happy little mushroom at a time.</p>
+      </section>
+      <section class="game" aria-label="Solitaire garden">
+        <div class="game-bar"><div class="game-label"><span class="seed-icon">✿</span> THE MUSHROOM PATCH <span class="mode">draw one</span></div><div class="stats"><div><span>TIME</span><strong id="time">0:00</strong></div><i></i><div><span>MOVES</span><strong id="moves">0</strong></div><i></i><div><span>GATHERED</span><strong><span id="gathered">0</span><small> / 52</small></strong></div></div></div>
+        <div class="table-surface">
+          <div class="table" id="table">
+            <div class="top-row"><div class="stock-area"><div id="stock" class="pile stock" data-type="stock"></div><span class="pile-label" id="stock-label">PICK A CARD</span></div><div class="waste-area"><div id="waste" class="pile" data-type="waste"></div><span class="pile-label">YOUR PICK</span></div><div class="top-spacer"></div><div class="foundations" id="foundations"></div></div>
+            <div class="tableau" id="tableau"></div>
+          </div>
+          <div class="garden-note" id="message" role="status" aria-live="polite">A fresh little start. Let’s see what grows.</div>
+          <div class="board-flower flower-one" aria-hidden="true">✿</div><div class="board-flower flower-two" aria-hidden="true">✳</div>
+        </div>
+        <div class="toolbar"><div class="tools"><button id="undo" disabled><span aria-hidden="true">↶</span> Undo <kbd>Z</kbd></button><button id="hint"><span aria-hidden="true">☀</span> Hint <kbd>H</kbd></button><button id="collect"><span aria-hidden="true">✧</span> Gather</button></div><button id="new-game" class="new-game"><span aria-hidden="true">⤨</span> New game</button></div>
+      </section>
+      <div class="below-board"><span><span class="tiny-flower">✿</span> No rush. Good things take a little thyme.</span><span>Tap to select · tap to move · double-tap to gather</span></div>
+    </main>
+    <footer><span class="footer-line"></span><span>Hand-drawn cards by <strong>Lani</strong> <span class="heart">♡</span> played with a little love.</span><span class="footer-line"></span></footer>
+  </div>
+  <dialog id="dialog"><div class="dialog-inner" id="dialog-content"></div></dialog>
+  <div id="confetti" aria-hidden="true"></div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
