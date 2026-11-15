@@ -97,32 +97,28 @@ export default {
 }
 
 /** the museum mount as Gary Todd's photographs show it: a clear bar lying across the front of the plate just above
- *  the shoulders (detail-mount.jpg), carried by two slim uprights outside the shoulders, and a low clear block the
+ *  the shoulders (detail-mount.jpg), carried by two clear uprights behind the plate, and a low clear block the
  *  blade rests in. Kept thin and pale: it must not hide the blade. How the bar is held at its ends is not visible (I). */
 function makeStand() {
   const g = new THREE.Group()
   g.userData.part = 'stand'
   const clear = new THREE.MeshStandardMaterial({ color: 0xdfe6e6, roughness: 0.08, metalness: 0, transparent: true, opacity: 0.22, depthWrite: false })
-  const metal = new THREE.MeshStandardMaterial({ color: 0x9aa0a0, roughness: 0.35, metalness: 0.8 })
   const rodY = LIFT + 275 + 4.6
   const rodZ = Z + 4.6
-  const rod = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.2, 300, 24), clear)
+  const rod = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.2, 210, 24), clear)
   rod.rotation.z = Math.PI / 2
   rod.position.set(0, rodY, rodZ)
   g.add(rod)
-  // uprights behind the plate, each with a short arm forward (outside the shoulders) to the bar's end
-  const backZ = -14
+  // two clear uprights BEHIND the plate (inside the shoulders, so the plate hides them from the front), each with a
+  // short clear arm forward over the shoulder to the bar. Clear acrylic like the museum's mount; no metal.
+  const backZ = -12
   for (const s of [1, -1]) {
-    const up = new THREE.Mesh(new THREE.CylinderGeometry(3, 3, rodY, 16), metal)
-    up.position.set(s * 146, rodY / 2, backZ)
+    const up = new THREE.Mesh(new THREE.BoxGeometry(10, rodY + 4, 6), clear)
+    up.position.set(s * 88, (rodY + 4) / 2, backZ)
     g.add(up)
-    const arm = new THREE.Mesh(new THREE.CylinderGeometry(2.2, 2.2, rodZ - backZ, 12), metal)
-    arm.rotation.x = Math.PI / 2
-    arm.position.set(s * 146, rodY, (rodZ + backZ) / 2)
+    const arm = new THREE.Mesh(new THREE.BoxGeometry(10, 6, rodZ - backZ + 4), clear)
+    arm.position.set(s * 88, rodY + 7, (rodZ + backZ) / 2)
     g.add(arm)
-    const foot = new THREE.Mesh(new THREE.CylinderGeometry(9, 9, 2, 24), metal)
-    foot.position.set(s * 146, 1, backZ)
-    g.add(foot)
   }
   // the clear block under the blade (in front of and behind the edge: a cradle with a slot)
   const blockGeo = new THREE.BoxGeometry(170, LIFT + 6, 14)
@@ -134,6 +130,6 @@ function makeStand() {
   const base = new THREE.Mesh(new THREE.BoxGeometry(170, LIFT - 1.2, THICK.blade + 2), clear)
   base.position.set(0, (LIFT - 1.2) / 2, 0)
   g.add(base)
-  g.traverse((o) => { if (o.isMesh) { o.castShadow = o.material === metal; o.receiveShadow = true; o.renderOrder = o.material === clear ? 2 : 0 } })
+  g.traverse((o) => { if (o.isMesh) { o.castShadow = false; o.receiveShadow = true; o.renderOrder = o.material === clear ? 2 : 0 } })
   return g
 }
