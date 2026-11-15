@@ -66,6 +66,7 @@ src/kit/
     handles.js          uprightHandle 立耳 (relief on outer face / edge / root blocks, channel, lean)
     lid.js              hippedLid (four relief slopes, skirt, seat) + roofKnob
     parts.js            legacy columnarLeg / loopHandle, ringFoot; re-exports legs/handles/lid
+    plate.js            plate(): flat cast plates (yue / ge blades, plaques): outline + true through-holes, thickness, relief both faces
   material/
     patina.js           PatinaMaterial + PATINA_PRESETS + shared uniforms
     noise.glsl.js       3D simplex / worley / fbm chunks
@@ -617,6 +618,28 @@ kit.roofKnob({ width, depth, rise | slope, ridge, concave, skirt, post: { height
 Flanges along lid hips / leg axes / corners currently use the straight `flange()`; curved
 (concave hip, bulged corner) anchors are returned as polylines for the path flange when it lands.
 
+## Plates — plate.js (blades, plaques: not vessels)
+
+```js
+kit.plate({ outline: [[x, y]…], holes: [[[x, y]…]…],      // mm in the plate's own frame (x right, y up), any winding
+  thickness: mm | (x, y) => mm,                           // full thickness, symmetric about z = 0 (taper, edge bevel)
+  front: { relief: ReliefMap, rect: { x, y, w, h }, scale, mirror },   // where the panel lies, plate mm
+  back: { relief: 'front' | ReliefMap, rect, mirror: true },          // mirror: read the panel at −x (reads right way round from behind)
+  spacing: 6,        // target edge length on plain fields (mm)
+  reliefSpacing: 1.2,// where a map's height CHANGES (shoulders, domes, grooves; flat tops stay coarse)
+  refine: (x, y) => mm,   // extra sizing (e.g. along a bevel); the minimum wins
+  crease: 35, material, part: 'body', maxTriangles: 400000 }) → Mesh
+// userData.plate = { triangles, vertices, boundaryLoops, ms, thicknessAt(x, y), surfaceAt(x, y, side ±1) }
+```
+Built: earcut of outline + holes (collinear points dropped) → Delaunay flips ⇄ longest-edge (LEPP) bisection, so
+the outline and every opening stay EXACT (boundary edges are only split at their midpoints); front at z = +t/2 + relief,
+back at −t/2 − relief; one wall strip along every boundary edge (smooth along curves, creased at corners > `crease`°),
+reading the face map at its own boundary point (same patina as the land beside it). Normals are the base (thickness)
+surface's — a bevel shades as one — and the normal map carries the relief, as buildSurface's 'surface' normals.
+Draw any raised element a little PAST the opening it frames, so the cut wall runs straight up its band. The plate
+lies in XY, front +Z: position it yourself. Worked example: `src/artifacts/yachou-yue.js` (a 345 mm blade with a sculpted face:
+≈ 119 k triangles at q 1 / 71 k at q 0.5, whole build ≈ 2.7 s / 1.8 s in headless SwiftShader).
+
 ## material/patina.js
 
 `new PatinaMaterial({ relief: reliefMap | null })` — a `MeshStandardMaterial`
@@ -681,7 +704,7 @@ Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad gl
 ```
 
 Presets (`PATINA_PRESET_GROUPS` groups them for the drawer):
-Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui` · Looks `excavated-green`
+Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui`, `yachou-yue` · Looks `excavated-green`
 (generic dark Anyang excavation), `olive-museum`, `malachite-crust` (Freer F1915.136),
 `water-black` (Met fanglei 55.160), `bronze-disease`, `heirloom`, `as-cast` · Blue `nezu-blue`,
 `blue-green-excavated`, `azurite-bloom`. A preset is applied over the PATINA_PARAMS defaults.
@@ -821,7 +844,8 @@ face-neck-frieze, face-foot-frieze, face-lid-broad (6 px/mm from a ≈ 3.5 px/mm
 face-long, face-long-top-frieze, face-long-bottom-frieze, face-long-column, face-short, face-rubbing-long
 (2 px/mm); `met-fangding` face-long, face-long-main, face-long-frieze (10 px/mm, 0.17 mm rms), face-short,
 face-short-main (6 px/mm); `met-gui` face-front, face-mask, face-neck, face-foot (8 px/mm; a ROUND vessel: the
-plane is taken down the photograph's own 4°-elevated line of sight, so photo and model foreshorten alike; 0.86 mm rms).
+plane is taken down the photograph's own 4°-elevated line of sight, so photo and model foreshorten alike; 0.86 mm rms); `yachou-yue`
+face-front, face-mask (5 / 8 px/mm from a 3840 px CC0 photo of a flat plate; 1.7 mm rms: the axe is not symmetric — its slotted sides, mouth, ears and brow slits are traced per side off face-front).
 Each face's `trust` and `fit` in faces.json say how far to believe it.
 
 ### reference/<id>/faces.json

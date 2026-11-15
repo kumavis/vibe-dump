@@ -293,11 +293,26 @@ export const PATINA_PRESETS = {
     burialSide: 0.2, recessDirt: 0.3, interiorTone: 0.2, wax: 0.05, inlay: 0, wear: 0.1, dulling: 0.35,
     tops: 0.8, nobleWarmth: 0.8, matte: 0.5, topsTone: 0.6, ledgeMatte: 1,
   },
+  // Shandong Museum 亚醜钺 (Gary Todd's photographs, the museum's own press image): a dark olive-green skin,
+  // finely granular all over (no broad blotches), small sparse bright-green spots, the worn tops of the face
+  // a little paler and browner, the recesses round the face (mouth, brow lids, eye bevels) nearly black;
+  // the tang a browner cast
+  'yachou-yue': {
+    age: 1, tin: 0.15, lead: 0.06, polish: 0.2, tarnish: 0.6, cuprite: 0.45, cupriteTone: 0.1, tinOxide: 0.9,
+    tinOxideTone: 0.45, malachite: 0.62, carbonate: 0.08, azurite: 0, malachiteHue: 0.25, malachiteTone: 0.12,
+    turquoiseTone: 0.7, islands: 0.15, malachiteScale: 0.9, crust: 0.25, chloride: 0, soot: 0, crevice: 1,
+    patchScale: 70, mottleScale: 5, patchiness: 0.25, softness: 0.45, drift: 0.35, earth: 0.2, earthColor: '#2b2f27',
+    calcite: 0, streaks: 0, burialSide: 0.1, recessDirt: 1, interiorTone: 0.3, wax: 0.05, inlay: 0, wear: 0.08,
+    dulling: 0.2, tops: 1, topsTone: 0.85, nobleWarmth: 0.55, matte: 1, ledgeMatte: 1,
+    speckle: 0.09, speckleScale: 1.0, speckleColor: '#3a8a5a', speckleDecor: 0.3, pustules: 0.06, pustuleScale: 2.5,
+    pustuleColor: '#2f9a5e', crustIsles: 0, grain: 0.95, tint: '#5c6b56', nobleRelief: 0.8,
+    upperTone: 0.85, upperHeight: 0.86,
+  },
 }
 
 /** How the drawer groups the preset chips. Every key of PATINA_PRESETS appears once. */
 export const PATINA_PRESET_GROUPS = {
-  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui'],
+  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
 }

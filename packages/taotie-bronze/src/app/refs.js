@@ -107,6 +107,16 @@ export const REF_URLS = import.meta.glob(
     "../../reference/nezu-fangyi/faces/face-lid-broad.jpg",
     "../../reference/nezu-fangyi/faces/face-neck-frieze.jpg",
     "../../reference/nezu-fangyi/three-quarter.jpg",
+    "../../reference/yachou-yue/detail-eye-ear.jpg",
+    "../../reference/yachou-yue/detail-face.jpg",
+    "../../reference/yachou-yue/detail-inscription.jpg",
+    "../../reference/yachou-yue/detail-mount.jpg",
+    "../../reference/yachou-yue/detail-mouth.jpg",
+    "../../reference/yachou-yue/detail-slots.jpg",
+    "../../reference/yachou-yue/faces/face-front.jpg",
+    "../../reference/yachou-yue/faces/face-mask.jpg",
+    "../../reference/yachou-yue/front.jpg",
+    "../../reference/yachou-yue/three-quarter.jpg",
   ],
   // eager: only the URL strings are in the bundle; a photograph is fetched when compare shows it
   { query: '?url', import: 'default', eager: true },
@@ -215,7 +225,17 @@ export const REF_CREDITS = {
   "nezu-fangyi/faces/face-foot-frieze.jpg": "photograph by the project owner, Nezu Museum, 2026 · owner's own photograph, used with permission for this project · flattened to a head-on face",
   "nezu-fangyi/faces/face-lid-broad.jpg": "photograph by the project owner, Nezu Museum, 2026 · owner's own photograph, used with permission for this project · flattened to a head-on face",
   "nezu-fangyi/faces/face-neck-frieze.jpg": "photograph by the project owner, Nezu Museum, 2026 · owner's own photograph, used with permission for this project · flattened to a head-on face",
-  "nezu-fangyi/three-quarter.jpg": "photograph by the project owner, Nezu Museum, 2026 · owner's own photograph, used with permission for this project"
+  "nezu-fangyi/three-quarter.jpg": "photograph by the project owner, Nezu Museum, 2026 · owner's own photograph, used with permission for this project",
+  "yachou-yue/detail-eye-ear.jpg": "Gary Todd · CC0 1.0",
+  "yachou-yue/detail-face.jpg": "Gary Todd · CC0 1.0",
+  "yachou-yue/detail-inscription.jpg": "Gary Todd · CC0 1.0",
+  "yachou-yue/detail-mount.jpg": "Gary Todd · CC0 1.0 · Wikimedia Commons",
+  "yachou-yue/detail-mouth.jpg": "Gary Todd · CC0 1.0",
+  "yachou-yue/detail-slots.jpg": "Gary Todd · CC0 1.0",
+  "yachou-yue/faces/face-front.jpg": "Gary Todd · CC0 1.0 · Wikimedia Commons · flattened to a head-on face",
+  "yachou-yue/faces/face-mask.jpg": "Gary Todd · CC0 1.0 · Wikimedia Commons · flattened to a head-on face",
+  "yachou-yue/front.jpg": "Gary Todd · CC0 1.0 · Wikimedia Commons",
+  "yachou-yue/three-quarter.jpg": "Gary Todd · CC0 1.0 · Wikimedia Commons"
 }
 
 /** → () => Promise<url> for reference/<id>/<file>, or null when it was not bundled. */

@@ -32,6 +32,7 @@ export { fangLayout, fangSection, SIDES as FANG_SIDES, CORNERS as FANG_CORNERS }
 export { columnLeg, bladeLeg, legRadius, legPanelSize } from './geometry/legs.js'
 export { uprightHandle, handleLayout } from './geometry/handles.js'
 export { hippedLid, hippedLidLayout, roofKnob } from './geometry/lid.js'
+export { plate } from './geometry/plate.js'
 
 export {
   PatinaMaterial,

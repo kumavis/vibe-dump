@@ -1,0 +1,142 @@
+{
+ "vessel": "yachou-yue",
+ "blur": 0.6,
+ "sources": {
+  "GT10127648613": {
+   "file": "front.jpg",
+   "original": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Shang_Bronze_Yue_Axe_%2810127648613%29.jpg/3840px-Shang_Bronze_Yue_Axe_%2810127648613%29.jpg",
+   "size": [
+    3840,
+    2560
+   ],
+   "fileScale": 1,
+   "fileOffset": [
+    1050,
+    560
+   ]
+  }
+ },
+ "faces": {
+  "face-front": {
+   "label": "front face, whole plate",
+   "source": "GT10127648613",
+   "center": [
+    0,
+    175.5,
+    4.25
+   ],
+   "normal": [
+    0,
+    0,
+    1
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "width": 360,
+   "height": 336,
+   "ppmm": 5,
+   "points": [
+    [
+     1631,
+     651,
+     -68.5,
+     339,
+     4.25
+    ],
+    [
+     2260,
+     645,
+     68.5,
+     339,
+     4.25
+    ],
+    [
+     1411,
+     899,
+     -118,
+     287,
+     4.25
+    ],
+    [
+     2501,
+     896,
+     118,
+     287,
+     4.25
+    ],
+    [
+     1620,
+     899,
+     -70,
+     287,
+     4.25
+    ],
+    [
+     2267,
+     897,
+     70,
+     287,
+     4.25
+    ],
+    [
+     1150,
+     2012,
+     -172.5,
+     41.6,
+     4.25
+    ],
+    [
+     2745,
+     2005,
+     172.5,
+     41.6,
+     4.25
+    ],
+    [
+     1703,
+     1302,
+     -55.5,
+     196.5,
+     4.25
+    ],
+    [
+     2216,
+     1306,
+     55.5,
+     196.5,
+     4.25
+    ]
+   ],
+   "trust": "Gary Todd's CC0 photograph, head-on from a little above and right of the axis, plate in an acrylic mount (possibly leaning back a few degrees). The plate is flat, so every point is truly in-plane: tang and shoulder corners, blade tips, eye-hole centres. Relief stands 2-4.6 mm proud and shifts by parallax (< 0.5 mm). The 3840 px Commons thumbnail is the largest that could be fetched (original 4752 px).",
+   "fit": "see --rectify"
+  },
+  "face-mask": {
+   "label": "the openwork face",
+   "source": "GT10127648613",
+   "center": [
+    0,
+    182,
+    4.25
+   ],
+   "normal": [
+    0,
+    0,
+    1
+   ],
+   "up": [
+    0,
+    1,
+    0
+   ],
+   "width": 250,
+   "height": 156,
+   "ppmm": 8,
+   "points": "face-front",
+   "trust": "as face-front (a sub-rectangle of the same plane)",
+   "fit": "as face-front"
+  }
+ }
+}
