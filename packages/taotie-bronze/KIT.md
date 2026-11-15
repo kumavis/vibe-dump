@@ -638,7 +638,7 @@ reading the face map at its own boundary point (same patina as the land beside i
 surface's — a bevel shades as one — and the normal map carries the relief, as buildSurface's 'surface' normals.
 Draw any raised element a little PAST the opening it frames, so the cut wall runs straight up its band. The plate
 lies in XY, front +Z: position it yourself. Worked example: `src/artifacts/yachou-yue.js` (a 345 mm blade with a sculpted face:
-≈ 119 k triangles at q 1 / 71 k at q 0.5, whole build ≈ 2.7 s / 1.8 s in headless SwiftShader).
+≈ 141 k triangles at q 1 / 84 k at q 0.5, whole build ≈ 2.6 s / 1.7 s in headless SwiftShader).
 
 ## material/patina.js
 

@@ -24,8 +24,9 @@ export const SHOULDER_Y = 275
 export const TANG = { top: 327, halfTop: 68.5, halfBottom: 70 }
 export const H = TANG.top
 
-/** the side slots are TRACED (traced.js): seven a side, each a slit ≈ 3–4 mm high open to the edge that turns up or
- *  down into a hook at its inner end, leaving a comb of ≈ 17 mm tabs — not alike, and not alike left and right.
+/** the side slots are TRACED (traced.js) and rebuilt square from the trace: seven a side, each a straight slit ≈ 3–5 mm high
+ *  open to the edge, ending plain or in a square head that runs up and/or down, leaving a comb of ≈ 17 mm square-cornered
+ *  tabs — not alike, and not alike left and right.
  *  The traced stretch of each side edge runs between these heights; outside it the measured SIDE table holds. */
 export const SLOTS = [233, 211, 191, 169, 147, 126, 105]
 

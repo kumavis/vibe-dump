@@ -39,6 +39,11 @@ and a run-length labelling of the through-openings (bright background seen throu
 | mask axis vs plate axis | the face sits ≈ 1.6 mm right of the plate axis (eye-hole centres −53.95 / +57.19 in the flattened photo, after removing its own 0.5 mm offset of the plate); modelled so (`MASK_DX`) | M |
 
 ## c. Relief (heights over the plate face)
+
+> Superseded in part by the third redraw (see `src/artifacts/yachou-yue/relief.js`): the masses are now solid and
+> 5.5–8 mm proud (brow band 7.6, eye rings 7.2, crest 6.9–7.4, upper lip 8 → 6.4, lower lip 7.4), drawn per side in
+> plate mm; the mouth cut and side slots are rebuilt square from scans of the photograph. The heights below are the
+> earlier, lower reading and are kept for the positions and shapes they record.
 Sculptural, no ground pattern: broad FLAT-TOPPED masses with steep, rounded walls (not round tubes) on a plain
 plate. Heights are read from the low view (three-quarter.jpg) against the plate edge, ±1 mm; shapes traced on
 face-mask.jpg (8 px/mm) and checked on the owner's evenly lit head-on press image (private, never committed).
