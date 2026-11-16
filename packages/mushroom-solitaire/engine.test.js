@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { newGame, clone, canMove, move, draw, hints, validSave, won } from './engine.js'
+import { newGame, clone, canMove, move, draw, hints, validSave, won, deadEnd } from './engine.js'
 const card = (suit, rank, faceUp = true) => ({ id: `${suit}-${rank}`, suit, rank, faceUp })
 const empty = () => ({ stock: [], waste: [], tableau: Array.from({ length: 7 }, () => []), foundations: Array.from({ length: 4 }, () => []), moves: 0, seconds: 0 })
 
@@ -60,4 +60,30 @@ test('win detection and malformed save rejection', () => {
   assert.equal(validSave(null), false)
   s.foundations = Array.from({ length: 4 }, (_, suit) => Array.from({ length: 13 }, (_, i) => card(suit, i + 1)))
   assert.ok(won(s))
+})
+
+
+test('dead ends inspect the entire recyclable stock, including buried waste cards', () => {
+  const s = empty(); s.tableau[0] = [card(0, 9)]
+  s.stock = [card(1, 8, false), card(0, 3, false)]
+  assert.equal(deadEnd(s), false)
+  s.stock = [card(0, 3, false)]; s.waste = [card(1, 8), card(0, 4)]
+  assert.equal(deadEnd(s), false)
+  s.waste = [card(0, 4)]
+  assert.equal(deadEnd(s), true)
+})
+test('dead-end detection considers foundation pullbacks and movable sub-stacks', () => {
+  const s = empty(); s.foundations[1] = [card(1, 1), card(1, 2)]; s.tableau[0] = [card(0, 3)]
+  assert.equal(deadEnd(s), false, 'foundation pullback is a legal possibility')
+  assert.equal(hints(s)[0].from.type, 'foundation', 'hints can suggest a necessary pullback')
+  s.foundations = [[], [], [], []]; s.tableau[0] = [card(1, 8), card(0, 7)]; s.tableau[1] = [card(3, 8)]
+  assert.equal(deadEnd(s), false, 'a movable sub-stack keeps the game alive')
+})
+test('whole-King column swaps do not hide a dead end, and a win is never stuck', () => {
+  const s = empty(); s.tableau[0] = [card(0, 13)]
+  assert.equal(deadEnd(s), true)
+  s.stock = [card(1, 12, false)]
+  assert.equal(deadEnd(s), false)
+  const win = empty();win.foundations = Array.from({length:4},(_,suit)=>Array.from({length:13},(_,i)=>card(suit,i+1)))
+  assert.equal(deadEnd(win), false)
 })

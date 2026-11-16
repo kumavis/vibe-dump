@@ -1,6 +1,6 @@
 # Mushroom Solitaire
 
-A cozy, responsive, draw-one Klondike game using Lani’s original hand-drawn cards.
+A cozy, responsive, draw-one Klondike game using the supplied hand-drawn cards.
 The supplied sheets were sliced into individual cards, preserving the artwork.
 
 Run `npm run dev -w @vibe-dump/mushroom-solitaire` from the repository root.
@@ -34,3 +34,16 @@ The stock draws one card with unlimited recycling.
 
 All card assets and fonts are bundled locally. Fonts use the same OFL-licensed
 Fraunces and Inter assets included elsewhere in this repository.
+
+Cards sit directly on a textured grass field, with stable small rotations,
+slight stack offsets, and irregular paper edges. The yellow suit has stronger
+pip contrast and dark gold corner indices. All 53 card images preload and
+start decoding eagerly at startup. Drops use the pointed-at legal pile, a
+24px near-miss allowance, or meaningful overlap of the carried card; distant
+and illegal drops do not change the game.
+
+A conservative “No moves left” message appears only when there are no meaningful
+legal moves from the tableau, any recyclable stock/waste card, or a foundation
+pullback. Equivalent whole-King column swaps are ignored. This detects definite
+terminal positions; it does not prove that every other position is solvable.
+Undo and New game remain available, and stock contents are never revealed.

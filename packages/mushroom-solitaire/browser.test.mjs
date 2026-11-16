@@ -19,6 +19,19 @@ function fixture() {
   assert.ok(validSave(s))
   return s
 }
+function stuckFixture() {
+  const s = newGame(), all = [...s.stock, ...s.tableau.flat()]
+  const tops = [[0,13],[1,13],[2,13],[3,13],[0,10],[1,10],[2,10]].map(([suit,rank]) => {
+    const i = all.findIndex(c => c.suit === suit && c.rank === rank)
+    return { ...all.splice(i, 1)[0], faceUp: true }
+  })
+  s.stock = []; s.waste = []; s.tableau = tops.map(() => [])
+  all.forEach((c, i) => s.tableau[i % 7].push({ ...c, faceUp: false }))
+  tops.forEach((c, i) => s.tableau[i].push(c))
+  s.started = true; s.moves = 19
+  assert.ok(validSave(s))
+  return s
+}
 const read = page => page.evaluate(key => JSON.parse(localStorage.getItem(key)), KEY)
 const card = (page, id) => page.locator(`.card[data-id="${id}"]`)
 async function point(locator, top = false) {
@@ -40,13 +53,14 @@ for (const browserType of [webkit, chromium]) {
     const server = await startStaticServer(new URL('./dist/', import.meta.url).pathname)
     let browser
     try { browser = await browserType.launch() } catch (error) { await server.close(); throw error }
-    async function run(fn, options = {}) {
+    async function run(fn, options = {}, saved = null) {
       const context = await browser.newContext({ ...devices['iPad (gen 7)'], ...options })
       const page = await context.newPage(), errors = []
       page.on('pageerror', e => errors.push(e.message))
-      await page.addInitScript(({ key, state }) => {
-        if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify({ state, initial: state, history: [] }))
-      }, { key: KEY, state: fixture() })
+      const state = fixture()
+      await page.addInitScript(({ key, saved }) => {
+        if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(saved))
+      }, { key: KEY, saved: saved || { state, initial: state, history: [] } })
       try {
         await page.goto(server.url)
         await page.evaluate(() => document.fonts.ready)
@@ -55,6 +69,16 @@ for (const browserType of [webkit, chromium]) {
       } finally { await context.close() }
     }
     try {
+      await t.test('the full deck loads before interaction and the yellow indices have readable contrast', () => run(async page => {
+        await page.waitForFunction(() => new Set(performance.getEntriesByType('resource').filter(r => /\/cards\/.*\.jpg$/.test(r.name)).map(r => r.name)).size === 53)
+        assert.equal((await read(page)).state.moves, 0)
+        const contrast = await page.locator('.lemon-index').first().evaluate(el => {
+          const rgb = getComputedStyle(el).color.match(/[\d.]+/g).slice(0,3).map(Number).map(x => x / 255).map(x => x <= .04045 ? x / 12.92 : ((x + .055) / 1.055) ** 2.4)
+          return 1.05 / (.2126 * rgb[0] + .7152 * rgb[1] + .0722 * rgb[2] + .05)
+        })
+        assert.ok(contrast >= 4.5, 'corner ranks contrast against the pale card paper')
+        assert.equal(await page.locator('.masthead,.intro,footer').count(), 0)
+      }))
       await t.test('real touch taps draw once, select a stack, move, undo, and restore saved progress', () => run(async page => {
         await page.locator('#stock').tap()
         assert.equal((await read(page)).state.moves, 1, 'a tap must not also cause a duplicate click')
@@ -134,6 +158,37 @@ for (const browserType of [webkit, chromium]) {
         await page.waitForFunction(() => !document.querySelector('.drag-ghost'))
         assert.equal((await read(page)).state.moves, 0)
       }))
+      await t.test('near-miss and overlapping-card drops land on the highlighted legal destination', () => run(async page => {
+        const start = await point(card(page, '1-8'), true), t = await card(page, '0-9').boundingBox()
+        const gap = { x: t.x - 10, y: t.y + 25 }
+        await dispatch(page, 'pointerdown', start, { selector: '.card[data-id="1-8"]' })
+        await dispatch(page, 'pointermove', gap)
+        assert.equal(await page.locator('.drop-target').getAttribute('data-col'), '1')
+        await dispatch(page, 'pointerup', gap)
+        assert.equal((await read(page)).state.tableau[1].length, 3)
+        await page.locator('#undo').tap()
+        const waste = await card(page, '0-6').boundingBox(), target = await card(page, '3-7').boundingBox()
+        const grip = { x: waste.x + waste.width / 2, y: waste.y + waste.height - 10 }
+        const below = { x: target.x + target.width / 2, y: target.y + target.height + 45 }
+        await dispatch(page, 'pointerdown', grip, { selector: '.card[data-id="0-6"]' })
+        await dispatch(page, 'pointermove', below)
+        assert.equal(await page.locator('.drop-target').getAttribute('data-col'), '5')
+        await dispatch(page, 'pointerup', below)
+        assert.equal((await read(page)).state.tableau[5].at(-1).id, '0-6')
+        assert.equal((await read(page)).state.moves, 1)
+      }))
+      await t.test('a definite dead end is announced and Undo restores play', () => run(async page => {
+        assert.equal(await page.locator('.is-stuck').count(), 1)
+        assert.match(await page.locator('#message').textContent(), /No moves left/)
+        await page.locator('#hint').tap()
+        assert.match(await page.locator('#message').textContent(), /No moves left/)
+        assert.equal(await page.locator('.hinted').count(), 0)
+        await page.locator('#undo').tap()
+        assert.equal(await page.locator('.is-stuck').count(), 0)
+        assert.equal((await read(page)).state.moves, 0)
+        await page.locator('#stock').tap()
+        assert.equal((await read(page)).state.moves, 1)
+      }, {}, { state: stuckFixture(), initial: fixture(), history: [fixture()] }))
       await t.test('edge scrolling keeps long stacks reachable and stops when the gesture is cancelled', () => run(async page => {
         await page.evaluate(() => { document.body.style.paddingBottom = '1500px' })
         const start = await point(card(page, '1-8'), true)

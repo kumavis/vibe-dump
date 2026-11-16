@@ -54,6 +54,28 @@ export function draw(s) {
   return n
 }
 export const won = s => s.foundations.every(p => p.length === 13)
+export function deadEnd(s) {
+  if (won(s)) return false
+  const targets = [...s.foundations.map((_, col) => ({ type: 'foundation', col })), ...s.tableau.map((_, col) => ({ type: 'tableau', col }))]
+  const sources = [
+    ...s.tableau.flatMap((p, col) => p.flatMap((c, index) => c.faceUp ? [{ type: 'tableau', col, index }] : [])),
+    ...s.foundations.map((_, col) => ({ type: 'foundation', col })),
+  ]
+  for (const from of sources) for (const to of targets) {
+    // Moving a whole King column into another empty column only relabels
+    // equivalent columns; it cannot unlock another move.
+    if (from.type === 'tableau' && from.index === 0 && to.type === 'tableau' && !pile(s, to).length) continue
+    if (canMove(s, from, to)) return false
+  }
+  // Unlimited draw-one recycling eventually exposes every stock/waste card.
+  // Check all of them, without revealing or changing the player's game.
+  const probe = { ...s, waste: [] }
+  for (const c of [...s.stock, ...s.waste]) {
+    probe.waste = [{ ...c, faceUp: true }]
+    if (targets.some(to => canMove(probe, { type: 'waste' }, to))) return false
+  }
+  return true
+}
 export function hints(s) {
   const sources = [{ type: 'waste' }, ...s.tableau.flatMap((p, col) => p.map((c, index) => c.faceUp ? { type: 'tableau', col, index } : null).filter(Boolean))]
   const targets = [...s.foundations.map((_, col) => ({ type: 'foundation', col })), ...s.tableau.map((_, col) => ({ type: 'tableau', col }))]
@@ -63,6 +85,13 @@ export function hints(s) {
     if (from.type === 'tableau' && from.index === 0 && to.type === 'tableau' && !pile(s, to).length) continue
     const reveal = from.type === 'tableau' && from.index > 0 && !pile(s, from)[from.index - 1].faceUp
     result.push({ from, to, score: (reveal ? 5 : 0) + (to.type === 'foundation' ? 3 : 0) + (from.type === 'waste' ? 1 : 0) })
+  }
+  if (!result.length) for (let col = 0; col < 4; col++) {
+    const from = { type: 'foundation', col }
+    for (let dest = 0; dest < 7; dest++) {
+      const to = { type: 'tableau', col: dest }
+      if (canMove(s, from, to)) result.push({ from, to, score: -1 })
+    }
   }
   return result.sort((a, b) => b.score - a.score)
 }

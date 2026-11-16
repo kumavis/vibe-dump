@@ -1,8 +1,17 @@
-import { SUITS, label, rankName, newGame, clone, pile, movingCards, canMove, move, draw, won, hints, validSave } from './engine.js'
+import { SUITS, label, rankName, newGame, clone, pile, movingCards, canMove, move, draw, won, deadEnd, hints, validSave } from './engine.js'
+import { chooseDropTarget } from './drop-target.js'
 
 const $ = s => document.querySelector(s)
 const KEY = 'lani-mushroom-solitaire-v1'
-let state, initial, history = [], selected = null, sound = false, hintIndex = 0, drag = null, lastTap = null, scrollFrame, audioContext
+// Retain decoded images for the whole deck, including cards not yet on the
+// table. No request or decode needs to wait for the first draw/flip.
+const cardArt = ['back', ...SUITS.flatMap((_, suit) => Array.from({ length: 13 }, (_, i) => `${suit}-${i + 1}`))].map(id => {
+  const image = new Image()
+  image.loading = 'eager'; image.decoding = 'async'; image.src = `./cards/${id}.jpg`
+  image.decode().catch(() => {})
+  return image
+})
+let state, initial, history = [], selected = null, sound = false, hintIndex = 0, drag = null, lastTap = null, scrollFrame, audioContext, stuck = false
 try {
   const saved = JSON.parse(localStorage.getItem(KEY))
   if (saved && validSave(saved.state) && validSave(saved.initial)) {
@@ -13,7 +22,7 @@ if (!state) { state = newGame(); initial = clone(state) }
 const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 const suitIcon = suit => `<svg class="suit-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M19 25h10l3 17c-3 4-13 4-16 0z" fill="#f0e4c5"/><path d="M3 23C4 7 16 2 25 3c12 0 20 10 20 20 0 7-42 7-42 0" fill="${SUITS[suit].color}"/>${suit === 1 ? '<g fill="#fff5d9"><ellipse cx="14" cy="16" rx="5" ry="4"/><ellipse cx="32" cy="12" rx="4" ry="3"/><ellipse cx="29" cy="24" rx="5" ry="3"/></g>' : ''}</svg>`
 function save() { try { localStorage.setItem(KEY, JSON.stringify({ state, initial, history, sound })) } catch {} }
-function message(text) { $('#message').textContent = text }
+function message(text) { $('#message').textContent = stuck ? 'No moves left, even after recycling. Try Undo or a new game.' : text }
 function tone(high = false) {
   if (!sound) return
   try {
@@ -38,11 +47,29 @@ function cardElement(card, loc) {
   const b = document.createElement('button')
   b.className = `card ${card.faceUp ? 'face-up' : 'face-down'}`
   b.dataset.id = card.id
+  // Stable, small variations keep each physical card's character when moved.
+  const seed = card.rank * 37 + card.suit * 101
+  b.style.setProperty('--tilt', `${((seed % 19) - 9) * .12}deg`)
+  b.style.setProperty('--nudge-x', `${((seed % 7) - 3) * .45}px`)
+  b.style.setProperty('--nudge-y', `${((seed % 5) - 2) * .3}px`)
+  b.style.setProperty('--paper-radius', `${4 + seed % 3}px ${5 + seed % 4}px ${3 + seed % 4}px ${5 + seed % 3}px / ${5 + seed % 3}px ${3 + seed % 4}px ${5 + seed % 4}px ${4 + seed % 3}px`)
+  const cuts = [
+    'polygon(2% .8%,26% .3%,55% .7%,79% .2%,98% 1%,99.3% 3%,99.7% 26%,99.2% 55%,99.6% 79%,99% 98%,97% 99.3%,71% 99.7%,45% 99.2%,21% 99.7%,2% 99%,.7% 97%,.3% 72%,.8% 44%,.2% 23%,.8% 3%)',
+    'polygon(2% .5%,29% .8%,58% .2%,83% .6%,98% .7%,99.5% 3%,99.1% 33%,99.7% 60%,99.2% 84%,99% 98%,97% 99.5%,69% 99.1%,42% 99.6%,16% 99.2%,2% 99.3%,.4% 97%,.8% 68%,.2% 39%,.6% 17%,.7% 2%)',
+  ]
+  b.style.setProperty('--paper-cut', cuts[seed % cuts.length])
   b._loc = loc
   b.setAttribute('aria-label', card.faceUp ? label(card) : 'Face-down card')
   b.setAttribute('aria-pressed', 'false')
   if (!card.faceUp) { b.tabIndex = -1; b.setAttribute('aria-disabled', 'true') }
-  b.innerHTML = `<img src="./cards/${card.faceUp ? card.id : 'back'}.jpg" alt="" draggable="false">`
+  const art = cardArt[card.faceUp ? card.suit * 13 + card.rank : 0]
+  b.innerHTML = `<img src="${art.src}" alt="" draggable="false" loading="eager" decoding="async">`
+  if (card.faceUp && card.suit === 2) {
+    b.classList.add('lemon')
+    if (card.rank <= 10) b.classList.add('lemon-pips')
+    const rank = ({ 1: 'A', 11: 'J', 12: 'Q', 13: 'K' })[card.rank] || card.rank
+    b.insertAdjacentHTML('beforeend', `<span class="lemon-index" aria-hidden="true">${rank}${suitIcon(2)}</span><span class="lemon-index bottom" aria-hidden="true">${rank}${suitIcon(2)}</span>`)
+  }
   if (card.faceUp) {
     b.addEventListener('click', e => { e.stopPropagation(); if (e.detail !== 0 && performance.now() < suppressClickUntil) return; selectCard(loc) })
     b.addEventListener('dblclick', e => { e.preventDefault(); e.stopPropagation(); if (performance.now() >= suppressClickUntil) gather(loc) })
@@ -51,6 +78,9 @@ function cardElement(card, loc) {
   return b
 }
 function render() {
+  stuck = deadEnd(state)
+  $('.game').classList.toggle('is-stuck', stuck)
+  if (stuck) message('')
   $('#time').textContent = fmt(state.seconds); $('#moves').textContent = state.moves
   $('#gathered').textContent = state.foundations.flat().length; $('#undo').disabled = !history.length
   $('#collect').disabled = !hints(state).some(h => h.to.type === 'foundation')
@@ -73,9 +103,9 @@ function render() {
     foundations.append(p)
   }
   const tableau = $('#tableau'); tableau.replaceChildren()
-  const css = getComputedStyle(document.documentElement), step = parseFloat(css.getPropertyValue('--step')) || 25, back = parseFloat(css.getPropertyValue('--back-step')) || 18
+  const css = getComputedStyle(document.documentElement), step = parseFloat(css.getPropertyValue('--step')) || 25
   // Resolve responsive clamp() custom properties through a real element.
-  const probe = document.createElement('div'); probe.style.height = 'var(--step)'; document.body.append(probe); const realStep = probe.getBoundingClientRect().height || step; probe.remove()
+  const probe = document.createElement('div'); probe.style.height = 'var(--step)'; document.body.append(probe); const realStep = probe.getBoundingClientRect().height || step; probe.style.height = 'var(--back-step)'; const back = probe.getBoundingClientRect().height || 18; probe.remove()
   state.tableau.forEach((cards, col) => {
     const p = document.createElement('div'); p.className = 'column'; p.dataset.type = 'tableau'; p.dataset.col = col
     p.tabIndex = 0; p.setAttribute('role', 'button'); p.setAttribute('aria-label', `Column ${col + 1}${cards.length ? '' : ', empty, Kings welcome'}`)
@@ -121,6 +151,7 @@ function undo() {
 $('#undo').onclick = undo
 function hint() {
   document.querySelectorAll('.hinted').forEach(e => e.classList.remove('hinted'))
+  if (stuck) { message(''); return }
   const options = hints(state)
   if (!options.length) {
     if (state.stock.length || state.waste.length) { $('#stock').classList.add('hinted'); message(state.stock.length ? 'Pick from the orange deck for a fresh possibility.' : 'Tap the circle to turn the deck over and try again.') }
@@ -186,8 +217,13 @@ $('#table').addEventListener('pointerdown', e => {
   try { element.setPointerCapture(e.pointerId) } catch { /* The pointer may already have been cancelled. */ }
 })
 function dropTarget(x, y) {
-  const target = document.elementFromPoint(x, y)?.closest('[data-type]')
-  return target && ['foundation', 'tableau'].includes(target.dataset.type) ? target : null
+  if (!drag?.cards.length) return null
+  const left = x - drag.x, top = y - drag.y - (drag.pointerType === 'touch' ? 18 : 0)
+  const carried = { left, top, width: drag.rect.width, height: drag.rect.height, right: left + drag.rect.width, bottom: top + drag.rect.height }
+  const targets = [...document.querySelectorAll('.column,.foundation')].filter(el => canMove(state, drag.loc, { type: el.dataset.type, col: Number(el.dataset.col) })).map(el => ({
+    element: el, rect: el.getBoundingClientRect(), slot: (el.querySelector('.card:last-of-type') || el).getBoundingClientRect(),
+  }))
+  return chooseDropTarget({ x, y }, carried, targets)?.element || null
 }
 function highlightDropTarget() {
   document.querySelectorAll('.drop-target').forEach(e => e.classList.remove('drop-target'))
@@ -209,7 +245,8 @@ document.addEventListener('pointermove', e => {
   if (!drag.ghost && drag.moved && drag.cards.length) {
     lastTap = null
     const g = document.createElement('div'); g.className = 'drag-ghost'; g.style.width = `${drag.rect.width}px`
-    drag.cards.forEach(c => { const orig = document.querySelector(`[data-id="${c.id}"]`); if (orig) { const b = orig.cloneNode(true); b.classList.remove('selected'); b.style.top = `${orig.getBoundingClientRect().top - drag.rect.top}px`; b.tabIndex = -1; b.setAttribute('aria-hidden', 'true'); g.append(b); orig.classList.add('dragging-origin') } })
+    const first = document.querySelector(`[data-id="${drag.cards[0].id}"]`)
+    drag.cards.forEach(c => { const orig = document.querySelector(`[data-id="${c.id}"]`); if (orig) { const b = orig.cloneNode(true); b.classList.remove('selected'); b.style.top = `${orig.offsetTop - first.offsetTop}px`; b.style.height = `${orig.offsetHeight}px`; b.tabIndex = -1; b.setAttribute('aria-hidden', 'true'); g.append(b); orig.classList.add('dragging-origin') } })
     g.setAttribute('aria-hidden', 'true')
     document.body.append(g); drag.ghost = g
     scrollFrame = requestAnimationFrame(scrollDrag)
