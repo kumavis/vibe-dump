@@ -816,6 +816,7 @@ npm run shots   -- [--a id] [--view v,…] [--mode beauty,clay] [--patina p,…]
 npm run metrics -- [--a id] [--all] [--json]      # PASS/FAIL table; exit 1 on any failure
 node tools/refs.mjs [--check]      # regenerate src/app/refs.js after adding a view `ref`
 node tools/faces.mjs --a id [--face f,…] [--rectify] [--list] [--views]   # flat faces: photo | model, § Flat faces
+python3 tools/nometa.py [--strip]  # the owner's photographs (reference/nezu-*/) must carry no EXIF/XMP/ICC/comments; run before committing
 npm run check                      # vite build + tools/smoke.mjs (every artifact, view, mode, motif preset)
 node tools/bench.mjs               # 4096×2048 panel draw + bake timing
 ```
