@@ -47,3 +47,10 @@ legal moves from the tableau, any recyclable stock/waste card, or a foundation
 pullback. Equivalent whole-King column swaps are ignored. This detects definite
 terminal positions; it does not prove that every other position is solvable.
 Undo and New game remain available, and stock contents are never revealed.
+
+A drag commits the same legal destination that was highlighted during movement.
+Release events do not re-run hit testing with potentially stale coordinates.
+Active drags transfer pointer capture to the stable table; capture-transfer
+notifications from the source card are ignored, and desktop mouseup is a fallback
+for embedded hosts. Height-only viewport changes preserve the drag; a width
+change or actual cancellation still safely clears it.

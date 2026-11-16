@@ -209,7 +209,7 @@ $('#table').addEventListener('pointerdown', e => {
   const element = button || target, r = element.getBoundingClientRect()
   drag = { pointerId: e.pointerId, pointerType: e.pointerType, element, target,
     startX: e.clientX, startY: e.clientY, clientX: e.clientX, clientY: e.clientY,
-    x: e.clientX - r.left, y: e.clientY - r.top, loc, cards, rect: r, ghost: null, moved: false }
+    x: e.clientX - r.left, y: e.clientY - r.top, loc, cards, rect: r, ghost: null, moved: false, captureElement: element, drop: null }
   if (e.pointerType !== 'mouse') e.preventDefault()
   try { element.setPointerCapture(e.pointerId) } catch { /* The pointer may already have been cancelled. */ }
 })
@@ -226,7 +226,10 @@ function highlightDropTarget() {
   document.querySelectorAll('.drop-target').forEach(e => e.classList.remove('drop-target'))
   if (!drag?.ghost) return
   const target = dropTarget(drag.clientX, drag.clientY)
-  if (target && canMove(state, drag.loc, { type: target.dataset.type, col: Number(target.dataset.col) })) target.classList.add('drop-target')
+  // The preview and release share one destination. A pointerup can carry
+  // stale coordinates; never reject a move after showing it as accepted.
+  drag.drop = target ? { type: target.dataset.type, col: Number(target.dataset.col) } : null
+  if (target) target.classList.add('drop-target')
 }
 function scrollDrag() {
   if (!drag?.ghost) return
@@ -246,6 +249,10 @@ document.addEventListener('pointermove', e => {
     drag.cards.forEach(c => { const orig = document.querySelector(`[data-id="${c.id}"]`); if (orig) { const b = orig.cloneNode(true); b.classList.remove('selected'); b.style.top = `${orig.offsetTop - first.offsetTop}px`; b.style.height = `${orig.offsetHeight}px`; b.tabIndex = -1; b.setAttribute('aria-hidden', 'true'); g.append(b); orig.classList.add('dragging-origin') } })
     g.setAttribute('aria-hidden', 'true')
     document.body.append(g); drag.ghost = g
+    // Once this is a drag, keep capture on the stable table rather than a
+    // moving/replaceable card. Ordinary clicks still capture their button.
+    drag.captureElement = $('#table')
+    try { drag.captureElement.setPointerCapture(drag.pointerId) } catch {}
     scrollFrame = requestAnimationFrame(scrollDrag)
   }
   if (drag.ghost) { e.preventDefault(); drag.ghost.style.left = `${e.clientX - drag.x}px`; drag.ghost.style.top = `${e.clientY - drag.y - (drag.pointerType === 'touch' ? 18 : 0)}px`; highlightDropTarget() }
@@ -255,16 +262,17 @@ function cancelDrag() {
   cancelAnimationFrame(scrollFrame)
   d?.ghost?.remove()
   document.querySelectorAll('.dragging-origin,.drop-target').forEach(e => e.classList.remove('dragging-origin', 'drop-target'))
-  if (d?.element.hasPointerCapture(d.pointerId)) d.element.releasePointerCapture(d.pointerId)
+  if (d?.captureElement.hasPointerCapture(d.pointerId)) d.captureElement.releasePointerCapture(d.pointerId)
 }
-document.addEventListener('pointerup', e => {
-  if (!drag || e.pointerId !== drag.pointerId) return
+function finishPointer(e) {
+  if (!drag || (e.type === 'mouseup' ? drag.pointerType !== 'mouse' || e.button !== 0 : e.pointerId !== drag.pointerId)) return
   const d = drag
-  const target = d.ghost ? dropTarget(e.clientX, e.clientY) : d.target
+  const drop = d.drop, target = d.target
   cancelDrag()
   if (d.ghost) {
     e.preventDefault(); suppressClickUntil = performance.now() + 500
-    if (target) { selected = d.loc; destination({ type: target.dataset.type, col: Number(target.dataset.col) }) }
+    if (drop) { selected = d.loc; destination(drop) }
+    else message('No matching pile here. Build down by one and alternate light and dark mushrooms.')
     selected = null; paintSelection()
   } else if (d.pointerType !== 'mouse') {
     e.preventDefault(); suppressClickUntil = performance.now() + 500
@@ -283,8 +291,19 @@ document.addEventListener('pointerup', e => {
       else destination({ type: target.dataset.type, col: Number(target.dataset.col) })
     }
   }
-})
-function cancelPointer(e) { if (drag?.pointerId === e.pointerId) { lastTap = null; cancelDrag() } }
+}
+// Capture-phase release also works if a card or embedded host stops bubbling.
+window.addEventListener('pointerup', finishPointer, true)
+// Some embedded desktop hosts deliver mouseup without the paired pointerup.
+// The normal sequence is harmless: the pointer handler already cleared drag.
+window.addEventListener('mouseup', finishPointer, true)
+function cancelPointer(e) {
+  if (drag?.pointerId !== e.pointerId) return
+  // Transferring capture from the source button to the table fires a loss
+  // event on the button. That is not a cancelled gesture.
+  if (e.type === 'lostpointercapture' && e.target !== drag.captureElement) return
+  lastTap = null; cancelDrag()
+}
 document.addEventListener('pointercancel', cancelPointer)
 document.addEventListener('lostpointercapture', cancelPointer)
 window.addEventListener('blur', () => { lastTap = null; cancelDrag() })
@@ -295,8 +314,13 @@ document.addEventListener('keydown', e => {
   if (e.key.toLowerCase() === 'h') { e.preventDefault(); hint() }
   if (e.key === 'Escape') { selected = null; cancelDrag(); paintSelection(); message('Take your time. Your little garden is right here.') }
 })
-let resizeFrame
-window.addEventListener('resize', () => { lastTap = null; cancelDrag(); cancelAnimationFrame(resizeFrame); resizeFrame = requestAnimationFrame(render) })
+let resizeFrame, layoutWidth = document.documentElement.clientWidth
+window.addEventListener('resize', () => {
+  const width = document.documentElement.clientWidth
+  if (width === layoutWidth) return // Browser toolbar/height changes leave the table intact.
+  layoutWidth = width
+  lastTap = null; cancelDrag(); cancelAnimationFrame(resizeFrame); resizeFrame = requestAnimationFrame(render)
+})
 setInterval(() => { if (state.started && !won(state) && !document.hidden && !dialog.open) { state.seconds++; $('#time').textContent = fmt(state.seconds); if (state.seconds % 5 === 0) save() } }, 1000)
 window.addEventListener('pagehide', () => { cancelDrag(); save() })
 document.addEventListener('visibilitychange', () => { if (document.hidden) { lastTap = null; cancelDrag(); save() } })
