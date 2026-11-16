@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Roguelike Design Bible</title>
+<style>
+/* Base rules the claude.ai artifact host used to supply around this page. */
+:root {
+  color-scheme: light;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+</style>
+<style>
+/* Layout: a reference handbook. Wide: chapter list rail | centred reading column | section outline rail.
+   Below 1200px: sticky top bar, chapter list and outline open as drawers. */
+:root {
+  --paper: #edf1ee;      /* cool green-grey paper */
+  --paper-2: #e2e9e5;    /* rails, hover, current row */
+  --ink: #15302c;        /* dark blue-green ink */
+  --ink-2: #455b57;      /* secondary text */
+  --ink-3: #566a66;      /* citations, labels */
+  --rule: #c8d3ce;
+  --rule-2: #9fb1ab;
+  --accent: #b07414;     /* ochre: current marker, citation glyphs, focus */
+  --accent-ink: #855509; /* ochre when it has to be read as text */
+  --mark: #f0d591;
+  --mark-ink: #15302c;
+  --scrim: rgba(21, 48, 44, 0.38);
+
+  --f-body: "Source Serif 4", "Source Serif Pro", Georgia, Cambria, "Times New Roman", serif;
+  --f-ui: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --topbar-h: 56px;
+  --rail-l: 252px;
+  --rail-r: 224px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0d131a; --paper-2: #151e27; --ink: #d4ddd9; --ink-2: #a5b4b0; --ink-3: #8d9d99;
+    --rule: #222f39; --rule-2: #3a4b56; --accent: #e3a23b; --accent-ink: #edb75c;
+    --mark: #67501c; --mark-ink: #f4e8cc; --scrim: rgba(0, 0, 0, 0.6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0d131a; --paper-2: #151e27; --ink: #d4ddd9; --ink-2: #a5b4b0; --ink-3: #8d9d99;
+  --rule: #222f39; --rule-2: #3a4b56; --accent: #e3a23b; --accent-ink: #edb75c;
+  --mark: #67501c; --mark-ink: #f4e8cc; --scrim: rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+[hidden] { display: none !important; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--f-ui);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--paper);
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+[tabindex="-1"]:focus { outline: none; }
+
+.skip {
+  position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); top: -100px; z-index: 60;
+  background: var(--ink); color: var(--paper); padding: 8px 12px; font: 500 14px var(--f-ui);
+}
+.skip:focus { top: calc(env(safe-area-inset-top, 0px) + 8px); }
+
+/* ---------- top bar (narrow) ---------- */
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  height: var(--topbar-h);
+  display: flex; align-items: center; gap: 8px;
+  padding-left: max(12px, env(safe-area-inset-left, 0px));
+  padding-right: max(12px, env(safe-area-inset-right, 0px));
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+.tb-title { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; text-decoration: none; padding: 2px 4px; }
+.tb-book { font: 500 11px/1.3 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.tb-cur { font: 600 14px/1.3 var(--f-ui); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tb-cur .d { font-family: var(--f-mono); font-weight: 500; color: var(--ink-3); margin-right: 0.5ch; }
+.ibtn {
+  flex: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: 40px; height: 40px; padding: 0 10px;
+  border: 1px solid transparent; border-radius: 3px; background: transparent; cursor: pointer;
+  font: 500 13px var(--f-ui); color: var(--ink);
+}
+.ibtn:hover { background: var(--paper-2); }
+.ibtn[aria-expanded="true"] { border-color: var(--rule-2); }
+.ibtn svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+.msearch {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--topbar-h)); z-index: 19;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 10px;
+  background: var(--paper); border-bottom: 1px solid var(--rule);
+}
+
+/* ---------- shell ---------- */
+.shell {
+  max-width: 1480px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; grid-template-columns: minmax(0, 1fr);
+}
+main { min-width: 0; padding-block: 32px 112px; }
+
+/* ---------- rails ---------- */
+.rail { min-width: 0; }
+.rail-l {
+  display: flex; flex-direction: column; gap: 22px;
+}
+.brand { display: block; text-decoration: none; }
+.brand-t { display: block; font: 600 17px/1.25 var(--f-ui); letter-spacing: -0.005em; }
+.brand-s { display: block; margin-top: 3px; font: 400 11.5px/1.4 var(--f-mono); color: var(--ink-3); letter-spacing: 0.02em; }
+
+.label {
+  font: 500 11px/1.3 var(--f-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3);
+  margin: 0 0 6px;
+}
+.field { display: flex; flex-direction: column; }
+.field input[type="search"] {
+  width: 100%; height: 38px; padding: 0 10px;
+  font: 400 15px var(--f-ui); color: var(--ink);
+  background: var(--paper); border: 1px solid var(--rule-2); border-radius: 3px;
+}
+.field input[type="search"]::placeholder { color: var(--ink-3); }
+.field input[type="search"]:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+.hint { font: 400 11.5px/1.4 var(--f-mono); color: var(--ink-3); margin-top: 5px; }
+.hint kbd { font: inherit; border: 1px solid var(--rule-2); border-radius: 2px; padding: 0 4px; }
+
+.seg { display: inline-flex; border: 1px solid var(--rule-2); border-radius: 3px; overflow: hidden; }
+.seg button {
+  border: 0; background: transparent; cursor: pointer; padding: 6px 12px;
+  font: 500 13px var(--f-ui); color: var(--ink-2);
+}
+.seg button + button { border-left: 1px solid var(--rule-2); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.seg button:focus-visible { outline-offset: -3px; }
+
+.nav ol { list-style: none; margin: 0; padding: 0; }
+.nav ol + ol { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.nav a {
+  display: grid; grid-template-columns: 1.4ch 4.4ch minmax(0, 1fr); column-gap: 0.6ch; align-items: baseline;
+  padding: 4px 8px 4px 4px; border-radius: 2px;
+  text-decoration: none; color: var(--ink-2); font: 400 14px/1.35 var(--f-ui);
+}
+.nav a:hover { background: var(--paper-2); color: var(--ink); }
+.nav .mk { font: 600 14px/1 var(--f-mono); color: var(--accent); }
+.nav .d { font: 400 12px/1 var(--f-mono); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.nav a[aria-current="page"] { color: var(--ink); font-weight: 600; background: var(--paper-2); }
+.nav a[aria-current="page"] .d { color: var(--ink-2); }
+
+.outline-h { margin-bottom: 8px; }
+.outline ol { list-style: none; margin: 0; padding: 0; }
+.outline a {
+  display: block; padding: 3px 0 3px 12px; border-left: 2px solid var(--rule);
+  text-decoration: none; color: var(--ink-2); font: 400 13px/1.35 var(--f-ui);
+  text-wrap: pretty;
+}
+.outline a:hover { color: var(--ink); }
+.outline ol ol { display: none; }
+.outline li.open > ol { display: block; }
+.outline ol ol a { padding-left: 24px; font-size: 12.5px; color: var(--ink-3); }
+.outline a.active { color: var(--ink); border-left-color: var(--accent); font-weight: 500; }
+.outline ol ol a.active { color: var(--ink); }
+.outline-empty { font: 400 12.5px/1.45 var(--f-mono); color: var(--ink-3); }
+
+.drawer-head { display: none; }
+
+/* narrow: rails become drawers */
+@media (max-width: 1199.98px) {
+  .rail {
+    position: fixed; top: 0; bottom: 0; z-index: 40;
+    width: min(360px, 88vw); overflow-y: auto; overscroll-behavior: contain;
+    background: var(--paper);
+    padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 32px);
+    visibility: hidden;
+  }
+  .rail-l {
+    left: 0; border-right: 1px solid var(--rule);
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: 16px;
+  }
+  .rail-r {
+    right: 0; border-left: 1px solid var(--rule);
+    padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-left: 16px;
+  }
+  body.menu-open .rail-l, body.sections-open .rail-r { visibility: visible; }
+  .drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .rail-l .search-wide, .rail-r .outline-h { display: none; }
+  .scrim { position: fixed; inset: 0; z-index: 30; background: var(--scrim); }
+  h1, h2, h3, h4, [data-b] { scroll-margin-top: calc(var(--topbar-h) + 20px); }
+  body.msearch-open h1, body.msearch-open h2, body.msearch-open h3, body.msearch-open [data-b] { scroll-margin-top: calc(var(--topbar-h) + 80px); }
+}
+@media (min-width: 1200px) {
+  .topbar, .msearch, .scrim, .search-narrow { display: none !important; }
+  .shell { grid-template-columns: var(--rail-l) minmax(0, 1fr) var(--rail-r); column-gap: 44px; }
+  .rail {
+    position: sticky; top: env(safe-area-inset-top, 0px); align-self: start;
+    max-height: calc(100vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    overflow-y: auto; overscroll-behavior: contain;
+    padding-block: 32px 40px;
+    scrollbar-width: thin;
+  }
+  .rail-l { padding-right: 18px; border-right: 1px solid var(--rule); }
+  .rail-r { padding-left: 4px; }
+  h1, h2, h3, h4, [data-b] { scroll-margin-top: 28px; }
+}
+
+/* ---------- reading column ---------- */
+.col { max-width: 68ch; margin: 0 auto; font-family: var(--f-body); font-size: 17px; line-height: 1.65; }
+@media (min-width: 700px) { .col { font-size: 18px; } }
+.col p, .col ul, .col ol, .col blockquote { margin: 0 0 1em; }
+.col ul, .col ol { padding-left: 1.35em; }
+.col li { margin: 0 0 0.45em; padding-left: 0.15em; }
+.col li::marker { color: var(--ink-3); font-family: var(--f-mono); font-size: 0.85em; }
+.col strong { font-weight: 600; }
+.col code {
+  font-family: var(--f-mono); font-size: 0.84em; background: var(--paper-2);
+  padding: 0.05em 0.3em; border-radius: 2px; overflow-wrap: anywhere;
+}
+.col pre { overflow-x: auto; background: var(--paper-2); padding: 12px 14px; font-size: 0.85em; }
+.col hr { border: 0; border-top: 1px solid var(--rule); margin: 2em 0; }
+.col a:not(.cite) { color: var(--ink); text-decoration-color: var(--rule-2); text-underline-offset: 0.15em; }
+.col a:not(.cite):hover { text-decoration-color: var(--accent); }
+.col h1, .col h2, .col h3, .col h4 { font-family: var(--f-ui); text-wrap: balance; color: var(--ink); }
+.col h1 { font-size: 2.05rem; line-height: 1.15; font-weight: 600; letter-spacing: -0.012em; margin: 0 0 1.1rem; }
+.col h2 {
+  font-size: 1.45rem; line-height: 1.25; font-weight: 600; letter-spacing: -0.006em;
+  margin: 2.4em 0 0.75em; padding-top: 0.9em; border-top: 1px solid var(--rule);
+}
+.col h3 { font-size: 1.12rem; line-height: 1.3; font-weight: 600; margin: 1.9em 0 0.5em; }
+.col h4 { font-size: 1rem; margin: 1.6em 0 0.4em; }
+.col h2 + h3 { margin-top: 0.8em; }
+@media (max-width: 600px) { .col h1 { font-size: 1.7rem; } .col h2 { font-size: 1.28rem; } }
+
+.eyebrow {
+  font: 500 12px/1.4 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-3); margin: 0 0 10px; font-variant-numeric: tabular-nums;
+}
+
+blockquote {
+  margin: 1.6em 0; padding: 0.1em 0 0.1em 1.2em; border-left: 2px solid var(--rule-2);
+  font-style: italic; color: var(--ink);
+}
+blockquote p { margin: 0; }
+blockquote .qa {
+  display: block; margin-top: 0.5em; font-style: normal;
+  font-family: var(--f-ui); font-size: 0.8em; color: var(--ink-2);
+}
+blockquote .qa .cite { color: var(--ink-2); }
+
+/* citations */
+.cg-b {
+  font-family: var(--f-ui); font-size: 0.74em; line-height: 1.4; color: var(--ink-3);
+  font-style: normal; letter-spacing: 0;
+}
+.cite { color: var(--ink-3); text-decoration: none; border-radius: 2px; white-space: nowrap; }
+.cite:hover, .cite:focus-visible { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 0.15em; }
+.cite .t { font-family: var(--f-mono); font-size: 0.95em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cite .t::before { content: "\25B8"; content: "\25B8" / ""; color: var(--accent); margin: 0 0.12em 0 0.05em; font-size: 0.92em; }
+.cg-btn { display: none; }
+body.quiet .cg-b { display: none; }
+body.quiet .cg.open .cg-b { display: inline; }
+body.quiet .cg-btn {
+  display: inline-flex; align-items: center; justify-content: center; position: relative;
+  min-width: 1.75em; height: 1.45em; padding: 0 0.35em; margin: 0 0.1em 0 0.15em; vertical-align: 0.12em;
+  font: 500 0.66em/1 var(--f-mono); font-variant-numeric: tabular-nums;
+  color: var(--ink-2); background: var(--paper-2); border: 1px solid var(--rule-2); border-radius: 2px;
+  cursor: pointer;
+}
+body.quiet .cg-btn::after { content: ""; position: absolute; inset: -8px -4px; }
+body.quiet .cg-btn:hover { color: var(--accent-ink); border-color: var(--accent); }
+body.quiet .cg.open .cg-btn { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* sources list */
+.doc-sources ul { list-style: none; padding: 0; }
+.doc-sources li { padding: 0.55em 0 0.65em; margin: 0; border-bottom: 1px solid var(--rule); }
+.doc-sources li:last-child { border-bottom: 0; }
+.src-sp { display: block; font: 600 0.82em/1.35 var(--f-ui); color: var(--ink-2); }
+.src-t { display: block; line-height: 1.4; }
+.src-m { display: block; margin-top: 0.2em; font: 400 0.7em/1.5 var(--f-mono); color: var(--ink-3); }
+.src-m a:not(.cite) { color: var(--ink-2); }
+
+/* end-of-chapter navigation */
+.pn {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 3.5em; padding-top: 1.2em;
+  border-top: 1px solid var(--rule); font-family: var(--f-ui);
+}
+.pn a { display: flex; flex-direction: column; gap: 3px; padding: 8px 0; text-decoration: none; color: var(--ink); min-width: 0; }
+.pn a:hover .pn-t { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 0.15em; }
+.pn .pn-d { font: 500 12px/1.3 var(--f-mono); color: var(--ink-3); letter-spacing: 0.04em; }
+.pn .pn-t { font: 600 15px/1.35 var(--f-ui); text-wrap: balance; }
+.pn .next { text-align: right; grid-column: 2; }
+
+/* status */
+.status { font: 400 14px/1.6 var(--f-mono); color: var(--ink-2); padding: 48px 0; }
+.status p { margin: 0 0 14px; }
+.btn {
+  display: inline-flex; align-items: center; height: 36px; padding: 0 14px; cursor: pointer;
+  border: 1px solid var(--rule-2); border-radius: 3px; background: var(--paper); font: 500 14px var(--f-ui);
+}
+.btn:hover { background: var(--paper-2); }
+
+/* jump highlight */
+.jump { animation: jump 2.4s ease-out 1; border-radius: 2px; }
+@keyframes jump {
+  0%, 35% { background: var(--mark); box-shadow: 0 0 0 6px var(--mark); color: var(--mark-ink); }
+  100% { background: transparent; box-shadow: 0 0 0 6px transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jump { animation: none; background: var(--mark); box-shadow: 0 0 0 6px var(--mark); color: var(--mark-ink); }
+}
+
+/* ---------- home ---------- */
+.home h1 { font-size: 2.5rem; line-height: 1.1; letter-spacing: -0.02em; margin: 0.2em 0 0.45em; }
+@media (max-width: 600px) { .home h1 { font-size: 2rem; } }
+.lede { font-size: 1.12em; line-height: 1.6; margin: 0 0 1.1em; }
+.facts {
+  font: 400 13px/1.7 var(--f-mono); color: var(--ink-2); font-variant-numeric: tabular-nums;
+  margin: 0 0 2.2em; padding: 8px 0; border-block: 1px solid var(--rule);
+}
+.facts { display: flex; flex-wrap: wrap; }
+.facts span { white-space: nowrap; }
+.facts span:not(:last-child)::after { content: "·"; color: var(--ink-3); padding: 0 0.7ch; }
+.start { font-size: 1em; margin: 0 0 1.6em; }
+.start a { font-weight: 600; }
+.toc-h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.toc-h .label { margin: 0; }
+ol.toc { list-style: none; margin: 8px 0 2em; padding: 0; border-bottom: 1px solid var(--rule); }
+ol.toc li { margin: 0; padding: 0; }
+ol.toc a {
+  display: grid; grid-template-columns: 3ch minmax(0, 1fr) auto; column-gap: 14px; row-gap: 2px;
+  padding: 13px 4px 14px; border-top: 1px solid var(--rule);
+  text-decoration: none; color: var(--ink);
+}
+ol.toc a:hover { background: var(--paper-2); }
+ol.toc a:hover .tt { text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 0.15em; }
+.toc .n { grid-row: 1 / span 2; font: 500 14px/1.6 var(--f-mono); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.toc .tt { font: 600 16px/1.4 var(--f-ui); text-wrap: balance; }
+.toc .w { font: 400 13px/1.7 var(--f-mono); color: var(--ink-3); font-variant-numeric: tabular-nums; text-align: right; }
+.toc .ds { grid-column: 2 / span 2; font-size: 0.9em; line-height: 1.5; color: var(--ink-2); }
+.toc .here { font: 500 11px var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-ink); margin-left: 0.8ch; white-space: nowrap; }
+.also { font-size: 0.95em; color: var(--ink-2); }
+
+/* ---------- search ---------- */
+.sr-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+.sr-head h1 { font-size: 1.5rem; margin: 0; }
+.sr-status { font: 400 13px/1.6 var(--f-mono); color: var(--ink-2); margin: 0 0 1.4em; font-variant-numeric: tabular-nums; }
+.progress { height: 3px; background: var(--rule); margin: 0 0 1.2em; }
+.progress > span { display: block; height: 100%; background: var(--accent); width: 0; }
+.rg { margin: 0 0 1.8em; }
+.col .rg-h { border-top: 0; padding-top: 0; text-wrap: wrap; letter-spacing: 0; }
+.col .rg-h { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 0 0 4px; padding-bottom: 6px; border-bottom: 1px solid var(--rule); font: 600 15px/1.35 var(--f-ui); }
+.rg-h a { text-decoration: none; }
+.rg-h a:hover { text-decoration: underline; }
+.rg-h .d { font: 500 12px var(--f-mono); color: var(--ink-3); margin-right: 0.8ch; }
+.rg-n { font: 400 12px var(--f-mono); color: var(--ink-3); white-space: nowrap; font-variant-numeric: tabular-nums; }
+ol.hits { list-style: none; margin: 0; padding: 0; }
+ol.hits li { margin: 0; padding: 0; }
+.hit { display: block; padding: 9px 6px 10px; text-decoration: none; color: var(--ink); border-bottom: 1px solid var(--rule); }
+.hit:hover { background: var(--paper-2); }
+.hit-sec { display: block; font: 500 12.5px/1.4 var(--f-ui); color: var(--ink-3); margin-bottom: 2px; }
+.hit-snip { display: block; font-size: 0.9em; line-height: 1.5; }
+.hit-cites { display: block; font: 400 12px/1.4 var(--f-mono); color: var(--ink-3); margin-top: 3px; }
+mark { background: var(--mark); color: var(--mark-ink); padding: 0 0.08em; border-radius: 1px; }
+.more { margin-top: 8px; border: 0; background: none; padding: 4px 0; cursor: pointer; font: 500 13px var(--f-ui); color: var(--accent-ink); text-decoration: underline; text-underline-offset: 0.15em; }
+
+/* ---------- about ---------- */
+.about ul { padding-left: 1.2em; }
+.about li { margin-bottom: 0.8em; }
+</style>
+  <script type="module" crossorigin src="./assets/index-ReAMmtx8.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BlDx0-Uo.css">
+</head>
+<body>
+
+<a class="skip" href="#home" id="skip">Skip to text</a>
+
+<header class="topbar" id="topbar">
+  <button class="ibtn" id="btn-menu" type="button" aria-label="Chapters and search" aria-expanded="false" aria-controls="rail-l">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5.5h14M3 10h14M3 14.5h14"/></svg>
+  </button>
+  <a class="tb-title" href="#home" id="tb-title">
+    <span class="tb-book">Roguelike Design Bible</span>
+    <span class="tb-cur" id="tb-cur">Contents</span>
+  </a>
+  <button class="ibtn" id="btn-search" type="button" aria-label="Search the book" aria-expanded="false" aria-controls="msearch">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5"/><path d="M12.3 12.3 17 17"/></svg>
+  </button>
+  <button class="ibtn" id="btn-sections" type="button" aria-expanded="false" aria-controls="rail-r" hidden>Sections</button>
+</header>
+<div class="msearch" id="msearch" hidden>
+  <div class="field">
+    <label class="label" for="q-m">Search the whole book</label>
+    <input type="search" id="q-m" autocomplete="off" spellcheck="false" placeholder="e.g. permadeath">
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+
+<div class="shell">
+  <aside class="rail rail-l" id="rail-l" aria-label="Book">
+    <div class="drawer-head">
+      <span class="label" style="margin:0">Chapters</span>
+      <button class="ibtn" type="button" data-close>Close</button>
+    </div>
+    <a class="brand" href="#home">
+      <span class="brand-t">Roguelike Design Bible</span>
+      <span class="brand-s">Roguelike Celebration talks, 2016–2026</span>
+    </a>
+    <div class="field search-wide">
+      <label class="label" for="q">Search the whole book</label>
+      <input type="search" id="q" autocomplete="off" spellcheck="false" placeholder="e.g. permadeath">
+      <span class="hint">Press <kbd>/</kbd> to search, <kbd>Esc</kbd> to close</span>
+    </div>
+    <div class="search-narrow">
+      <button class="btn" type="button" id="btn-search-drawer">Search the book</button>
+    </div>
+    <div>
+      <p class="label" id="cites-label">Citations</p>
+      <div class="seg" role="group" aria-labelledby="cites-label">
+        <button type="button" id="cites-full" aria-pressed="true">Full</button>
+        <button type="button" id="cites-quiet" aria-pressed="false">Quiet</button>
+      </div>
+      <p class="hint" id="cites-hint">Speaker, year and time shown in the text.</p>
+    </div>
+    <nav class="nav" id="nav" aria-label="Chapters"></nav>
+  </aside>
+
+  <main id="main">
+    <div class="col home" id="view-home">
+      <p class="eyebrow">A handbook from Roguelike Celebration</p>
+      <h1 id="s-home" tabindex="-1">Roguelike Design Bible</h1>
+      <p class="lede">The Roguelike Design Bible is a working handbook for designing and building roguelikes, distilled from the talks given at Roguelike Celebration between 2016 and 2026. It tells you what practitioners recommend, what they warn against, and where they disagree, and every statement links to the moment in a talk where someone said it. It is written for people making roguelikes and roguelike-influenced games who have played the genre but have not watched the talks.</p>
+      <p class="facts"><span>311 talks</span><span>2016–2026</span><span>4,014 insights</span><span>about 6,800 citations</span><span>about 280,000 words</span></p>
+      <p class="start">Start with <a href="#ch00">chapter 00, Core principles</a>. It is the short version of the book: forty principles, the main disagreements, a design brief and reading paths through the other eighteen chapters.</p>
+      <div class="toc-h"><p class="label">Contents</p><p class="label">Words</p></div>
+      <ol class="toc" id="toc">
+        <li><a href="#ch00"><span class="n">00</span><span class="tt">Core principles<span class="here">start here</span></span><span class="w">8,602</span><span class="ds">The short version: forty principles, the main disagreements, a design brief for a new game and reading paths through the book.</span></a></li>
+        <li><a href="#ch01"><span class="n">01</span><span class="tt">What is a roguelike?</span><span class="w">6,098</span><span class="ds">What definitions of the genre are for, the core package of permadeath, generation and turns, and the roguelike as a layer on other genres.</span></a></li>
+        <li><a href="#ch02"><span class="n">02</span><span class="tt">History and lineage: where the conventions came from</span><span class="w">8,781</span><span class="ds">Where the genre's conventions came from, which of them began as technical constraints, and how old games are kept playable.</span></a></li>
+        <li><a href="#ch03"><span class="n">03</span><span class="tt">Death, difficulty and progression</span><span class="w">22,363</span><span class="ds">Why permadeath exists, what makes a death fair, how much should carry between runs, and how randomness, clocks, pacing and difficulty settings shape a run.</span></a></li>
+        <li><a href="#ch04"><span class="n">04</span><span class="tt">Learning and discovery</span><span class="w">16,352</span><span class="ds">How players come to understand a roguelike across runs, how to teach without spoiling discovery, and what to deliberately leave hidden.</span></a></li>
+        <li><a href="#ch05"><span class="n">05</span><span class="tt">Systems and emergence</span><span class="w">19,817</span><span class="ds">Building rules that combine: which systems to simulate, how many pieces to have, architectures that let everything interact, and what to do with exploits.</span></a></li>
+        <li><a href="#ch06"><span class="n">06</span><span class="tt">Combat and tactics</span><span class="w">8,709</span><span class="ds">The turn as a decision: verbs, the cost of actions, real time versus turns, readable threats, space, traps, non-violent tactics and shared turns.</span></a></li>
+        <li><a href="#ch07"><span class="n">07</span><span class="tt">Characters, items and builds</span><span class="w">13,576</span><span class="ds">Where character power lives, how upgrades are offered and connected into a build space, how much brokenness to allow, and how items and inventory earn their place.</span></a></li>
+        <li><a href="#ch08"><span class="n">08</span><span class="tt">Monsters, NPCs and AI</span><span class="w">7,414</span><span class="ds">Creature behaviour players can read and exploit, choosing a decision architecture, and NPC minds, agendas, relationships and conversation.</span></a></li>
+        <li><a href="#ch09"><span class="n">09</span><span class="tt">Level generation</span><span class="w">14,043</span><span class="ds">What a generated level is for, how layouts are built, planned, validated and furnished, and how levels join into a run.</span></a></li>
+        <li><a href="#ch10"><span class="n">10</span><span class="tt">Content generation</span><span class="w">19,105</span><span class="ds">Generating what players find in a level, from items and names to text, histories, quests, events and puzzles, and the meanings players read into it.</span></a></li>
+        <li><a href="#ch11"><span class="n">11</span><span class="tt">Generative methods</span><span class="w">23,002</span><span class="ds">The machinery under every generator, from seeds and noise to wave function collapse, solvers, grammars and language models, and how to check and steer it.</span></a></li>
+        <li><a href="#ch12"><span class="n">12</span><span class="tt">Narrative and worldbuilding</span><span class="w">22,905</span><span class="ds">How stories work inside a loop of death and restarts: emergent stories, authored story for replay, tone, setting, generated characters and plots.</span></a></li>
+        <li><a href="#ch13"><span class="n">13</span><span class="tt">Interface and accessibility</span><span class="w">12,943</span><span class="ds">Commands, automation, previews, messages, legibility of large simulations, letters versus tiles, and accessibility for players unlike the designer.</span></a></li>
+        <li><a href="#ch14"><span class="n">14</span><span class="tt">Art and audio</span><span class="w">13,122</span><span class="ds">Presentation as a budget and a language: characters and tiles, art on a small budget, juice, sound, and music written for repetition.</span></a></li>
+        <li><a href="#ch15"><span class="n">15</span><span class="tt">Architecture and tools</span><span class="w">18,687</span><span class="ds">Structuring code for content breadth, separating simulation from presentation, determinism, modding, and the tools that let a small team iterate.</span></a></li>
+        <li><a href="#ch16"><span class="n">16</span><span class="tt">Production and process</span><span class="w">17,083</span><span class="ds">How roguelikes get made: first projects, prototyping, cutting, estimating, playtesting, working with an audience and sustaining a long project.</span></a></li>
+        <li><a href="#ch17"><span class="n">17</span><span class="tt">Community and business</span><span class="w">14,054</span><span class="ds">Sharing runs, online play, modding and open development, reading feedback, and finding an audience, funding and selling a roguelike.</span></a></li>
+        <li><a href="#ch18"><span class="n">18</span><span class="tt">Beyond roguelikes</span><span class="w">11,689</span><span class="ds">Roguelike structure found in other forms, grafted onto other genres and carried off the screen onto paper, rooms and other media.</span></a></li>
+      </ol>
+      <p class="also"><a href="#sources">Sources</a> lists every talk with its link and the chapters that cite it. <a href="#about">About this book</a> explains how to read the citations, how the book was made and how far to trust it.</p>
+    </div>
+
+    <div class="col about" id="view-about" hidden>
+      <p class="eyebrow">About this book</p>
+      <h1 id="s-about" tabindex="-1">About the Roguelike Design Bible</h1>
+      <h2 id="s-how-to-read-the-citations" tabindex="-1">How to read the citations</h2>
+      <p>Each parenthetical link names the speaker and the year of the talk, for example (Brian Walker 2016, 12:34), and opens the talk on YouTube at the moment the point is made. A run of several links after one statement means several talks support it; where independent speakers converge, the text says so. Pull quotes in blockquotes are verbatim from the talk's transcript.</p>
+      <p>The <strong>Citations</strong> control beside the chapter list sets how they appear. <strong>Full</strong> shows every speaker, year and time in the text. <strong>Quiet</strong> folds each group into a small count of sources; select the count to show the links in place.</p>
+      <h2 id="s-how-it-was-made" tabindex="-1">How it was made, and how far to trust it</h2>
+      <ul>
+        <li><strong>Source.</strong> Every video on the Roguelike Celebration YouTube channel as of 12 November 2026. Transcripts exist for 319 of 323 videos (three stream recordings have no captions; one video is private). Captions are human-made for 144 talks, YouTube auto-generated for the rest, and local speech-to-text (Whisper) for six talks whose YouTube captions were unusable.</li>
+        <li><strong>Notes.</strong> Readers extracted 4,014 insights from 311 talks (298 separately published talks plus 13 talks from the 2026 Sunday stream that had not been published separately). Full-day stream recordings were otherwise left out because they repeat the individual talks. Every insight carries a verbatim quote that is machine-checked against the transcript.</li>
+        <li><strong>Chapters.</strong> 18 thematic chapters, about 270,000 words, about 6,800 citations. Each chapter was outlined, written in parts, assembled, then audited by an independent reader.</li>
+        <li><strong>Audit.</strong> 6,791 citations were checked against the insights they cite and 272 statements (about 4%) were corrected. 393 insights were re-read against the transcripts in context: 372 were judged faithful, 21 partly faithful, none unfaithful; the flagged insights were then corrected. So a small share of statements will still say slightly more or less than the speaker did; follow the link when it matters.</li>
+        <li><strong>Limits.</strong> Auto-generated captions mishear names and terms. The whole pipeline (transcript reading, synthesis, audit) was done by AI models (Claude) directed by a human, and no human has checked the chapters line by line against the videos. The bible reports what speakers said, which is not the same as what is true of every game. And it reflects who spoke at one conference.</li>
+      </ul>
+      <h2 id="s-credit" tabindex="-1">Credit</h2>
+      <p>The ideas in this bible belong to the speakers. Roguelike Celebration (<a href="https://roguelike.club" target="_blank" rel="noopener">roguelike.club</a>) hosts the talks. Quotations are short excerpts used for commentary, and every link goes to the original video.</p>
+    </div>
+
+    <div id="view-doc" hidden>
+      <div class="col status" id="doc-status" hidden></div>
+      <div id="doc-holder"></div>
+    </div>
+
+    <section class="col" id="view-search" hidden aria-labelledby="sr-title">
+      <div class="sr-head">
+        <h1 id="sr-title" tabindex="-1">Search</h1>
+        <button class="btn" type="button" id="sr-close">Close search</button>
+      </div>
+      <p class="sr-status" id="sr-status" aria-live="polite"></p>
+      <div class="progress" id="sr-progress" hidden><span></span></div>
+      <div id="sr-results"></div>
+    </section>
+  </main>
+
+  <aside class="rail rail-r" id="rail-r" aria-label="Sections">
+    <div class="drawer-head">
+      <span class="label" style="margin:0">Sections</span>
+      <button class="ibtn" type="button" data-close>Close</button>
+    </div>
+    <p class="label outline-h" id="outline-h">On this page</p>
+    <nav class="outline" id="outline" aria-labelledby="outline-h"></nav>
+  </aside>
+</div>
+
+</body>
+</html>
