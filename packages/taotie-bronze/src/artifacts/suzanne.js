@@ -3,10 +3,10 @@
 // Not a museum object: Blender's monkey head (the Blender Foundation's mascot), from the Khronos glTF
 // Sample Assets (CC0, © 2017 UX3D; reference/suzanne/SOURCES.md), committed as a 25 kB quantised cage by
 // tools/classics.mjs and Loop-subdivided at load. Her own features BECOME the mask (suzanne/decor.js):
-// the eyes — already convex bosses — get a slit pupil and a fat lid pinched to pointed canthi, the brows
-// turn into fat C-horns sweeping back over the forehead, a notched flange (kit.flange on a path sliced off
-// her centre line) runs down from the crown to the top of the nose, the ears carry big coiled bands, and
-// the forehead, crown and cheeks a fine leiwen ground with a kui on each cheek. The muzzle and mouth stay
+// the eyes — already convex bosses — stay wide open with a round sunk pupil inside one almond lid pointed at
+// both corners, the brows turn into fat C-horns ≈ 9 mm proud that coil back over the temples, a notched flange
+// (kit.flange on a path sliced off her centre line) runs from the crown down between the eyes, the ears carry big
+// coiled bands, and brow, forehead, temples and cheeks a fine leiwen ground up to one raised edge. The muzzle and mouth stay
 // hers. Relief arrives through kit.skin: a spherical projector for the face, a planar one per ear (the
 // left mirrored), the mesh refined only where a band displaces it; the bare head keeps a cavity-driven
 // patina. She sits on a short cast neck ring (a socle), her chin just clear of the plinth.
@@ -33,7 +33,7 @@ export default {
   dimensions: { h: 225, w: 304, d: 186 },
   blurb:
     'Suzanne is the monkey head built into the Blender 3D software as its test model and mascot; this cage is the CC0 copy UX3D made for the Khronos glTF sample models. ' +
-    'The Taotie Kit subdivided her and projected relief onto her own features, so her face becomes the mask: slit-pupilled eyes with pointed corners, brows turned into fat C-horns, a notched flange down the nose, spirals in her ears, and a fine leiwen ground — her muzzle and mouth left as they were.',
+    'The Taotie Kit subdivided her and projected relief onto her own features, so her face becomes the mask: staring eyes in pointed almond lids, brows turned into fat coiled horns, a notched flange down the nose, spirals in her ears, and a fine leiwen ground — her muzzle and mouth left as they were.',
   defaultPatina: 'suzanne',
   views: {
     front: { azimuth: 0, elevation: 4, fov: 26, fit: 1.05 },
@@ -91,7 +91,7 @@ export default {
     m = kit.refineMesh(m, { edge, where: kit.reliefWhere(regions, { size: 3, threshold: 0.06 }), maxVerts: q >= 1 ? 190000 : 80000 })
     await onProgress(0.7, 'cavity')
     kit.vertexNormals(m)
-    const cavity = kit.meshCavity(m, { obscurance: 1.4, curvature: 0.6, gamma: 1.2 })
+    const cavity = kit.meshCavity(m, { obscurance: 1.9, curvature: 0.6, gamma: 1.6 })
     await onProgress(0.8, 'dressing')
     const head = kit.skin(m, { regions, cavity, spacing: edge, part: 'body' })
     head.name = 'suzanne'
@@ -123,24 +123,22 @@ function centreFlange(kit, m, q) {
   // the head shell's centre section is the longest loop; keep its front-top part (one contiguous run)
   const loop = lines.sort((a, b) => b.length - a.length)[0]
   if (!loop) return null
-  const run = (y0, y1) => {
+  const run = (y0, y1, r = 3) => {
     const keep = (p) => p[1] <= y1 && p[1] >= y0 && p[2] > -25
     const k0 = loop.findIndex((p) => !keep(p))
     const rot = k0 > 0 ? loop.slice(k0).concat(loop.slice(0, k0)) : loop
     let pts = rot.filter(keep)
     if (pts.length < 8) return null
     if (pts[0][1] > pts[pts.length - 1][1]) pts.reverse()
-    return smoothPath(resamplePath(pts, 1.5), 3)
+    return smoothPath(smoothPath(resamplePath(pts, 1.5), r), r)
   }
   const material = new kit.PatinaMaterial({ cavity: 0.85 })
   const g = new THREE.Group()
   g.name = 'flange'
-  const specs = [
-    { y0: LIFT + 167, y1: LIFT + 214, height: (f) => 7.5 + 1.5 * Math.sin(Math.PI * f), pitch: 16 },
-    { y0: LIFT + 97, y1: LIFT + 158, height: (f) => 6 + 1.5 * Math.sin(Math.PI * f), pitch: 14 },
-  ]
+  // one continuous run, crown → top of the nose, the brow notch's step eased by heavy smoothing
+  const specs = [{ y0: LIFT + 97, y1: LIFT + 214, height: (f) => 7 + 2 * Math.sin(Math.PI * f), pitch: 15, smooth: 7 }]
   for (const sp of specs) {
-    const pts = run(sp.y0, sp.y1)
+    const pts = run(sp.y0, sp.y1, sp.smooth)
     if (!pts) continue
     g.add(kit.flange({
       path: pathFrame(pts, [0, LIFT + 140, -15]), height: sp.height, thickness: 6.5, taper: 4, waver: 0.3, seed: 11,

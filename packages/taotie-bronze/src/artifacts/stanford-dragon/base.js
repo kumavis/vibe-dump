@@ -74,7 +74,7 @@ export async function buildBase(kit, { quality = 1, onProgress = async () => {} 
     g.add(m)
   }
   const top = kit.buildSurface({ surface: kit.quadSurface([-X1, h, Z1], [X1, h, Z1], [-X1, h, -Z1], [X1, h, -Z1]), segments: [24, 12] })
-  const tm = new THREE.Mesh(top, new kit.PatinaMaterial({ cavity: 0.78 }))
+  const tm = new THREE.Mesh(top, new kit.PatinaMaterial({ cavity: 0.92 }))
   tm.name = 'base-top'
   tm.castShadow = tm.receiveShadow = true
   g.add(tm)

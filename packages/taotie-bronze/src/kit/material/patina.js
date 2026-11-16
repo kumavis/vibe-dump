@@ -327,12 +327,12 @@ export const PATINA_PRESETS = {
   // ground; the plain lower body between the blades pale grey-beige mottled with green; lid and collar near-black olive
   'nezu-fanglei-dasikong': {
     age: 1, tin: 0.15, lead: 0.07, polish: 0.3, tarnish: 0.6, cuprite: 0.55, cupriteTone: 0.3, tinOxide: 0.85,
-    tinOxideTone: 1.15, malachite: 0.42, carbonate: 0.12, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
+    tinOxideTone: 1.55, malachite: 0.42, carbonate: 0.12, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.5,
     turquoiseTone: 0.6, islands: 0.55, malachiteScale: 1.2, crust: 0.25, chloride: 0, soot: 0.05, crevice: 0.95,
     patchScale: 45, mottleScale: 7, patchiness: 0.8, softness: 0.55, drift: 0.3, earth: 0.3, earthColor: '#b3aa94',
     calcite: 0.12, streaks: 0.05, burialSide: 0.1, recessDirt: 0.85, interiorTone: 0.45, wax: 0, inlay: 0.25, inlayGround: 0.15,
-    wear: 0.12, dulling: 0.4, tops: 0.6, nobleWarmth: 0.35, matte: 1, topsTone: 0.3, ledgeMatte: 1, nobleRelief: 0.35,
-    tint: '#b9b8ac', upperTone: 0.6, upperHeight: 0.69, plainTone: 1.5, speckle: 0.03, speckleScale: 1.0, speckleColor: '#2f9a64',
+    wear: 0.12, dulling: 0.4, tops: 0.6, nobleWarmth: 0.55, matte: 1, topsTone: 0.3, ledgeMatte: 1, nobleRelief: 0.35,
+    tint: '#cdc9ba', upperTone: 0.6, upperHeight: 0.69, plainTone: 1.5, speckle: 0.03, speckleScale: 1.0, speckleColor: '#2f9a64',
     speckleDecor: 0.3, crustIsles: 0.14, crustScale: 6, crustColor: '#3f9a70', crustPlace: 0.5, pustules: 0,
     pustuleScale: 2.5, pustuleColor: '#22a060', grain: 0.6,
   },
@@ -430,14 +430,14 @@ export const PATINA_PRESETS = {
   // the open flanks, the crests of scales, spines and whiskers rubbed back to warm metal, pale crust islands
   // lodged on the up-facing back
   'stanford-dragon': {
-    age: 1, tin: 0.14, lead: 0.04, polish: 0.55, tarnish: 0.55, cuprite: 0.85, cupriteTone: 0.2, tinOxide: 0.7,
+    age: 1, tin: 0.11, lead: 0.04, polish: 0.45, tarnish: 0.8, cuprite: 0.85, cupriteTone: 0.2, tinOxide: 0.7,
     tinOxideTone: 0.85, malachite: 0.5, carbonate: 0.18, azurite: 0.03, azuriteScale: 8, blueHabitat: 0.2,
     turquoiseTone: 0.35, malachiteHue: 0.4, malachiteTone: 0.45, islands: 0.7, malachiteScale: 1.2, crust: 0.7,
     chloride: 0.04, soot: 0, crevice: 1, patchScale: 160, mottleScale: 4, patchiness: 1, softness: 0.3, drift: 0.2,
-    earth: 0.15, earthColor: '#6e5a40', calcite: 0.05, streaks: 0.05, burialSide: 0.15, recessDirt: 0.5,
-    interiorTone: 0.3, wax: 0.05, inlay: 0, wear: 0.9, dulling: 0.3, tops: 0.5, topsTone: 0.2, nobleWarmth: 0.35,
-    matte: 0.75, ledgeMatte: 0.6, nobleRelief: 0.8, crustIsles: 0.06, crustScale: 7, crustColor: '#8e927a',
-    crustPlace: 0.85, pustules: 0.03, pustuleScale: 3, pustuleColor: '#2e8a58', speckle: 0, speckleScale: 1.2,
+    earth: 0.15, earthColor: '#6e5a40', calcite: 0.01, streaks: 0.05, burialSide: 0.15, recessDirt: 0.5,
+    interiorTone: 0.3, wax: 0.05, inlay: 0, wear: 0.8, dulling: 0.3, tops: 0.5, topsTone: 0.2, nobleWarmth: 0.35,
+    matte: 0.75, ledgeMatte: 0.6, nobleRelief: 0.8, crustIsles: 0.02, crustScale: 18, crustColor: '#8e927a',
+    crustPlace: 0.85, pustules: 0.01, pustuleScale: 3, pustuleColor: '#2e8a58', speckle: 0, speckleScale: 1.2,
     speckleColor: '#7a4634', grain: 0.6,
   },
   // Suzanne as a taotie (projected relief on a polygon cage): a classic excavated Anyang skin — dark olive noble
@@ -445,9 +445,9 @@ export const PATINA_PRESETS = {
   // creases (eye sockets, round the muzzle, the ears' bowls), a little red-brown cuprite through the worn crests
   'suzanne': {
     age: 1, tin: 0.15, lead: 0.05, polish: 0.4, tarnish: 0.6, cuprite: 0.7, cupriteTone: 0.3, tinOxide: 0.85,
-    tinOxideTone: 1.0, malachite: 0.32, carbonate: 0.12, azurite: 0.02, azuriteScale: 10, blueHabitat: 0.3,
+    tinOxideTone: 1.0, malachite: 0.5, carbonate: 0.12, azurite: 0.02, azuriteScale: 10, blueHabitat: 0.3,
     turquoiseTone: 0.4, malachiteHue: 0.38, malachiteTone: 0.55, islands: 0.4, malachiteScale: 1.4, crust: 0.25,
-    chloride: 0.02, soot: 0, crevice: 1, patchScale: 90, mottleScale: 9, patchiness: 0.85, softness: 0.6, drift: 0.3,
+    chloride: 0.02, soot: 0, crevice: 1, patchScale: 160, mottleScale: 6, patchiness: 1, softness: 0.6, drift: 0.3,
     earth: 0.1, earthColor: '#6a5440', calcite: 0.03, streaks: 0.08, burialSide: 0.1, recessDirt: 0.6,
     interiorTone: 0.4, wax: 0.05, inlay: 0, inlayGround: 0, wear: 0.25, dulling: 0.35, tops: 0.8, topsTone: 0.7,
     nobleWarmth: 0.35, matte: 1, ledgeMatte: 1, nobleRelief: 0.7, tint: '#d8dccc', speckle: 0.03, speckleScale: 1.4,

@@ -8,7 +8,8 @@
 // Only the LEFT half of the face is authored (panel x < 128) and mirrored; the right ear reads the same
 // map through a mirrored projector.
 //
-// Reading of her face in face-panel mm: eyeball (a separate shell, already a convex boss) centre
+// Reading of her face in face-panel mm (the décor below: almond lids + round pupil pit, horns from the flange along
+// the brow to a coil over each temple, one raised field edge): eyeball (a separate shell, already a convex boss) centre
 // [89, 56], radius 27, its raised pupil disk radius 10.5; brow ridge from the centre notch [128, 77] up to
 // its peak [101, 100], out to [66, 96] and down to [46, 82]; nose bump at [128, 12], the muzzle below the
 // panel; forehead y 100–160, crown y 160–180; cheek y 4–32 under the eye, x 26–80.
@@ -43,56 +44,43 @@ const lerpW = (stops) => (t) => {
 /** the décor field's outer edge (left half, panel mm): over the crown, down the temple, along under the cheek */
 const FIELD = [[128, 168], [96, 167], [62, 160], [32, 146], [16, 120], [12, 84], [13, 44], [17, 25], [30, 16], [60, 15], [90, 16]]
 
-/** the face: C-horn brows, pointed canthi and a slit pupil, a kui on the cheek, a leiwen field with a bowstring edge */
+/** the face: wide-open eyes in an almond lid, fat C-horns coiled at the temples, a leiwen field with a raised edge */
 export function drawFace(kit, panel, { seed = 1 } = {}) {
-  const H = 4.2 // band height (mm): FAT and proud
-  const els = [
-    // the brow becomes a fat C-horn: it leaves the centre notch along her brow ridge over the eye, turns up at
-    // the temple, sweeps back across the forehead and rolls in on itself
-    smoothBand(kit, [[121, 89], [108, 99], [90, 104], [70, 103], [54, 101], [42, 112], [40, 129], [49, 145], [68, 154], [90, 155], [106, 147], [110, 134]],
-      lerpW([[0, 8], [0.12, 13], [0.38, 16], [0.55, 17.5], [0.8, 15], [1, 12.5]]),
-      { start: 'point', end: 'spiral', spiral: { turns: 1.05, dir: -1, R: 6.5 }, contour: { inset: 1.8, line: 0.6 }, ticks: { side: 'right', pitch: 5.5, line: 0.6, skipEnds: 2 } }),
-    // an inner hook inside the C, rolled up toward the horn's curl
-    smoothBand(kit, [[97, 119], [80, 117], [66, 123], [64, 134]], lerpW([[0, 6], [0.4, 9], [1, 8]]),
-      { start: 'blunt', end: 'spiral', spiral: { turns: 0.85, dir: -1, R: 4 } }),
-    // the canthi: fat spurs pinched to points, leaving the eyeball's rim — the inner one hooks down toward the nose
-    smoothBand(kit, [[114, 53], [120, 45], [119, 33]], lerpW([[0, 8.5], [0.4, 7], [1, 0.6]]), { start: 'round', end: 'point', contour: false }),
-    smoothBand(kit, [[64, 57], [54, 60], [45, 58]], lerpW([[0, 9], [1, 0.6]]), { start: 'round', end: 'point', contour: false }),
-    // the kui on the cheek (the flat of the face between the eye and the ear — the strip under the eye is too
-    // steep and narrow for one): upright, head down toward the eye's corner, tail rolled at the top, a leg, a quill
-    smoothBand(kit, [[29, 101], [28, 82], [28, 60], [29, 49]], lerpW([[0, 6.4], [1, 7.4]]), { start: 'spiral', startSpiral: { turns: 1, dir: 1, R: 3.8 }, end: 'blunt' }),
-    smoothBand(kit, [[34, 41], [38.5, 33], [36, 25.5]], lerpW([[0, 4.8], [1, 4]]), { end: 'spiral', spiral: { turns: 0.9, dir: -1, R: 2.6 }, contour: false }),
-    smoothBand(kit, [[24, 38], [21.5, 28]], lerpW([[0, 4], [1, 0.6]]), { end: 'point', contour: false }),
-    smoothBand(kit, [[23.5, 71], [18.5, 66], [18.5, 59]], lerpW([[0, 4], [1, 0.6]]), { end: 'point', contour: false }),
-    smoothBand(kit, [[33.5, 77], [39.5, 83], [39, 92]], lerpW([[0, 4.4], [1, 4]]), { end: 'spiral', spiral: { turns: 0.85, dir: 1, R: 2.4 }, contour: false }),
-  ]
-  kit.carve(panel, els, { height: H, shoulder: H * 0.6, depth: 0.45, seed, irregularity: 1, contour })
-
-  // the kui's round eye
-  kit.pillowBoss(panel, { c: [29, 43], w: 7.2, h: 7.2, round: 1, height: H + 1.3, crown: 0.8, slit: { len: 3.2, width: 0.8, depth: 0.6 }, ring: false })
-
-  // the slit pupil, sunk across her raised pupil disk
   const E = FACE.eye
-  panel.sink((ctx) => {
-    ctx.beginPath()
-    ctx.moveTo(E.c[0] - 9.5, E.c[1])
-    ctx.quadraticCurveTo(E.c[0], E.c[1] + 3.4, E.c[0] + 9.5, E.c[1])
-    ctx.quadraticCurveTo(E.c[0], E.c[1] - 3.4, E.c[0] - 9.5, E.c[1])
-    ctx.fill()
-  }, { depth: 1.8, shoulder: 1.2, profile: 'u' })
+  // 1) the horns — real volume (≈ 9 mm proud, a rounded section): each leaves the centre flange, sweeps out along
+  //    the brow above the eye and rolls back in a full coil over the temple, beside the eye
+  const horn = smoothBand(kit, [[122, 91], [107, 104], [86, 110], [64, 108], [46, 103], [32, 112], [26, 128], [33, 142], [49, 146], [59, 136], [55, 124]],
+    lerpW([[0, 9], [0.12, 12.5], [0.45, 14], [0.75, 13], [1, 11]]),
+    { start: 'blunt', capRound: 0.5, end: 'spiral', spiral: { turns: 0.7, dir: 1, R: 4.5 }, contour: { inset: 1.9, line: 0.65 } })
+  kit.carve(panel, [horn], { height: 9, shoulder: 5.5, depth: 0.5, seed, irregularity: 1 })
 
-  // a bowstring along the field's edge
-  const edge = kit.shapes.spline(FIELD, 0.8)
+  // 2) the eye: one almond lid round her eyeball dome, a long point dipping down toward the nose, a short one out
+  const H = 4.2
+  const els = [
+    smoothBand(kit, [[40, 61], [52, 77], [72, 87], [95, 89], [113, 80], [120, 63], [121, 40]], lerpW([[0, 0.8], [0.12, 6.5], [0.45, 8], [0.8, 7], [1, 0.6]]),
+      { start: 'point', end: 'point', contour: false }),
+    smoothBand(kit, [[40, 61], [52, 40], [72, 27], [96, 25], [111, 30], [119, 41]], lerpW([[0, 0.8], [0.15, 5.5], [0.6, 6.5], [1, 3]]),
+      { start: 'point', end: 'round', contour: false }),
+    // a hooked crest beside the flange, above the horns
+    smoothBand(kit, [[118, 119], [118, 160], [104, 172]], lerpW([[0, 8], [0.5, 9], [1, 8]]), { end: 'spiral', spiral: { turns: 0.9, dir: 1, R: 4.2 } }),
+  ]
+  kit.carve(panel, els, { height: H, shoulder: H * 0.6, depth: 0.45, seed: seed + 1, irregularity: 1, contour })
+
+  // 3) the pupil: a round pit in the centre of the dome, a quarter of its diameter, wide open
+  panel.sink((ctx) => { ctx.beginPath(); ctx.arc(E.c[0], E.c[1], E.r * 0.25 * 2 / 2 + 0.5, 0, Math.PI * 2); ctx.fill() }, { depth: 3, shoulder: 2.2, profile: 'u' })
+
+  // 4) the field's edge: one raised band along the hairline, down the temple, under the cheek and up the muzzle's edge
+  const edge = kit.shapes.spline(FIELD.concat([[99, 19], [107, 28], [123, 33]]), 0.8)
   panel.raise((ctx) => {
-    ctx.lineWidth = 2.6
+    ctx.lineWidth = 3.2
     ctx.lineCap = 'round'
     ctx.lineJoin = 'round'
     ctx.beginPath()
     edge.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)))
     ctx.stroke()
-  }, { height: 1.3, profile: 'dome' })
+  }, { height: 1.8, profile: 'dome' })
 
-  // the fine leiwen ground inside the field — never on the eyeball, the nose / muzzle, or the flange's root strip
+  // 5) the fine leiwen ground filling the whole field (brow, forehead, temple, cheek) up to the raised edges
   kit.leiwenFill(panel, {
     rect: { x: 0, y: 0, w: 123, h: FACE.height },
     avoid: 'raised',
@@ -100,9 +88,6 @@ export function drawFace(kit, panel, { seed = 1 } = {}) {
     include: (ctx) => {
       ctx.beginPath()
       edge.forEach(([x, y], i) => (i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)))
-      ctx.lineTo(98, 16)
-      ctx.lineTo(98, 20)
-      ctx.quadraticCurveTo(104, 31, 123, 32)
       ctx.lineTo(123, 168)
       ctx.closePath()
       ctx.moveTo(E.c[0] + E.r + 1.5, E.c[1])

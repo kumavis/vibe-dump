@@ -92,9 +92,9 @@ function blade(kit, M, { ax, hw, y0, y1, k = 1, mask = true, nose = [0, 0] }) {
       const Sx = (ctrl, o) => kit.roundStroke(ctrl.map(([u, y]) => U(s * u, y)), { ...o, spiral: o.spiral && { ...o.spiral, dir: o.spiral.dir * s } })
       // top frieze (y 186–204): two stacked bands, the upper turning down at its outer end, the lower rolled
       els.push(Sx([[5.5, -7.5], [44, -7.5], [44, -14]], { width: 4.6, ...ROUND, end: 'spiral', spiral: { turns: 0.8, dir: 1, R: 2.2 }, fill: NOFILL }))
-      els.push(Sx([[50, -18.5], [12, -18.5]], { width: 4.6, ...ROUND, end: 'spiral', spiral: { turns: 1, dir: 1, R: 2.4 }, fill: SPIRALS }))
+      els.push(Sx([[50, -18.5], [12, -18.5]], { width: 4.6, ...ROUND, end: 'spiral', spiral: { turns: 1, dir: 1, R: 2.4 }, fill: k > 0.95 ? { ...SPIRALS, min: 3.0 } : NOFILL }))
       // the "7" horn: across under the frieze, down the outer side, the end curling in
-      els.push(Sx([[5, -27.5], [38, -27.5], [38, -54]], { width: [7, 7.2, 6.2], ...ROUND, end: 'spiral', spiral: { turns: 0.9, dir: -1, R: 3.2 }, fill: { ...SPIRALS, min: 3.2 } }))
+      els.push(Sx([[5, -27.5], [38, -27.5], [38, -54]], { width: [7, 7.2, 6.2], ...ROUND, end: 'spiral', spiral: { turns: 0.9, dir: -1, R: 3.2 }, fill: k > 0.95 ? { ...SPIRALS, min: 3.6, chain: false } : NOFILL }))
       // eye coil inside the horn, cheek coil below it (low plates: the squared spirals read as cut into the ground)
       coils.push(kit.roundPlate({ c: U(s * 18, -40.5), w: 23 * k, h: 18, round: 0.22, fill: { ...COIL, hand: s > 0 ? 'right' : 'left' } }))
       coils.push(kit.roundPlate({ c: U(s * 16.5, -66), w: 25 * k, h: 24, round: 0.2, fill: { ...COIL, hand: s > 0 ? 'left' : 'right' } }))
@@ -211,7 +211,9 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
     const m = mainDesign(kit, M, s, kx, Qh), k = kuiDesign(kit, M, s, kx)
     mainEls.push(...m.els); kuiEls.push(...k.els); eyes.push(...m.eyes, ...k.eyes)
   }
+  lap('elements')
   kit.carve(p, [...blades.flatMap((b) => b.els), ...mainEls, ...kuiEls], { height: RELIEF.band, shoulder: RELIEF.shoulder, depth: RELIEF.groove, contour: CONTOUR, irregularity: 1, seed })
+  lap('carve main')
   kit.carve(p, blades.flatMap((b) => b.coils), { height: 0.7, shoulder: 0.4, depth: 0.42, contour: { inset: 0.5, line: 0.42 }, irregularity: 1, seed: seed + 7 })
   p.sink((ctx) => {
     ctx.lineWidth = 0.5; ctx.lineCap = 'round'; ctx.lineJoin = 'round'
@@ -260,7 +262,7 @@ export function bodyPanel(kit, { ppmm, seed, Qh, arc, kx = 1, lug = false, Hmax 
     // the low lug's hole (photo-34 / photo-03: a dark opening above the pendant head): a deep pocket in the wall
     // behind the lug's strap, so the cavity patina darkens it as the photographs show. The panel without it is the
     // back face (no lug: inferred), the same décor baked twice.
-    p.sink((ctx) => { const a = M([-16, 86.5]), b = M([16, 101]); ctx.beginPath(); ctx.roundRect ? ctx.roundRect(a[0], a[1], b[0] - a[0], b[1] - a[1], 4) : ctx.rect(a[0], a[1], b[0] - a[0], b[1] - a[1]); ctx.fill() }, { depth: 3.5, shoulder: 1.2, profile: 'u' })
+    p.sink((ctx) => { const a = M([-17, 85.5]), b = M([17, 100]); ctx.beginPath(); ctx.roundRect ? ctx.roundRect(a[0], a[1], b[0] - a[0], b[1] - a[1], 4) : ctx.rect(a[0], a[1], b[0] - a[0], b[1] - a[1]); ctx.fill() }, { depth: 6, shoulder: 1.5, profile: 'u' })
     lugRelief = p.bake()
   }
   lap('bake')

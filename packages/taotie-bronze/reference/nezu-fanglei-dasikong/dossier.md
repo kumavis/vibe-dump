@@ -35,7 +35,7 @@ camera (≈ ±3 % of H); **[est]** read obliquely, partly hidden or worn (≈ ±
    (z = 0.9 × its half width) before its height is read. Check: the model rendered from the same camera overlays the
    photograph's silhouette within ≈ 2–4 % except where noted in §e.
 2. **Levels [measured]** (y): base 0; centre blade tip 28 (the lug's pendant point 31); corner blades end ≈ 45;
-   lug hole 86–101, its strap ≈ 84; blade register top 207, fillet 207–212; main register 213–271 (border 271–275,
+   lug hole 86–100, the pendant's lip ≈ 86; blade register top 207, fillet 207–212; main register 213–271 (border 271–275,
    plain band 275–285); whorl-boss band 285–306.5; kui frieze 307–336 on the shoulder slope; two bowstrings 338–345;
    shoulder top 346, flat ledge to the collar 348; collar 348–397.5; lid lip 397.5–400; lid dome 400–466 (boss row
    403–420, mask 422–462); knob post 466–469, knob cap 469–485 (vertical sides), its low hipped top to ≈ 500.
@@ -53,9 +53,10 @@ camera (≈ ±3 % of H); **[est]** read obliquely, partly hidden or worn (≈ ±
    two fat curled horns form its crown, round bulging eyes under a brow, a heavy blunt snout thrusting out and down);
    the back head [inferred]. Two loop handles on ±X (photo-34 edges, photo-03 right): a beast head lying along the
    handle top, snout out to x ≈ 160 at y ≈ 330, short horns at its back; a round bar ≈ 11 mm thick loops down into
-   the wall at y ≈ 300. The low lug on the front (photo-34, photo-03): a U strap ≈ 34 mm across standing ≈ 17 mm out
-   at y ≈ 81–88 over a dark opening (the lug's hole, y 86–101), carrying a pendant head that tapers back into the wall
-   to a point at y ≈ 31 (C horns, eyes, a nose ridge).
+   the wall at y ≈ 300. The low lug on the front (photo-34, photo-03): a pendant head ≈ 34 mm across whose top lip
+   stands ≈ 17 mm out at y ≈ 86, under a dark opening (the lug's hole, y 86–100: modelled as a 6 mm pocket in the
+   wall), tapering back into the wall to a point at y ≈ 31 (C horns, eyes, a nose ridge). How the hole runs behind
+   the head is not visible [inferred: vertically, between head and wall].
 6. **Not visible**: both sides (±X faces), the back, the inside, the underside, the knob's back, any inscription.
    Sides and back repeat the front (without the lug) — **inferred**.
 

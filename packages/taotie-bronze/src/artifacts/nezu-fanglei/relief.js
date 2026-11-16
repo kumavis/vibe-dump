@@ -48,11 +48,18 @@ function faceToVessel(face, M) {
   return ([x, y]) => M([x - F.width / 2, F.center[1] + (y - F.height / 2) * k])
 }
 
+/** every traced register of a panel in ONE tracedPlates call (one raise, one sink, one top fill): outlines mapped first */
 function tracedRegisters(kit, panel, M, regs, seed) {
+  const plates = [], bosses = []
   for (const r of regs) {
-    const t = TRACED[r]
-    kit.tracedPlates(panel, t.data, { ...PLATES, map: faceToVessel(t.face, M), seed: seed + r.length })
+    const t = TRACED[r], map = faceToVessel(t.face, M)
+    for (const p of t.data.plates) plates.push({ outer: p.outer.map(map), holes: (p.holes || []).map((h) => h.map(map)) })
+    for (const b of t.data.bosses || []) {
+      const c = map(b.c), e = map([b.c[0] + b.r, b.c[1]])
+      bosses.push({ ...b, c, r: Math.hypot(e[0] - c[0], e[1] - c[1]) })
+    }
   }
+  return kit.tracedPlates(panel, plates, { ...PLATES, bosses, seed })
 }
 
 // Round 8 (fix pass): the bronze's band language — FAT bands (7.5–9.5 mm on the belly) with round outer corners,
