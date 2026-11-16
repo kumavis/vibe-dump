@@ -1,0 +1,170 @@
+{
+ "note": "face-lid (photo-34 flattened). Round r8-dsk-fix: the lid mask drawn BY BAND off the illumination-flattened face with a 5 mm grid on the cleaner LEFT half, mirrored about the flange (axis x 85). Fat stacked bands crowding the flange: (a) the top band from the flange out, rolled into a curl; (b) the second band out and down the outer side, rolled in toward the eye; (c) the raised block round the eye (the pillow eye itself is drawn in code); (d) the big C under it, from the flange out and back up, opening toward the flange. Flange masked (a separate mesh).",
+ "field": {
+  "box": [
+   30,
+   26,
+   140,
+   76
+  ]
+ },
+ "mask": [
+  {
+   "box": [
+    82.4,
+    0,
+    87.6,
+    81.2
+   ]
+  }
+ ],
+ "symmetry": {
+  "axis": 85,
+  "keep": "left"
+ },
+ "regions": [
+  {
+   "box": [
+    0,
+    0,
+    168,
+    81.2
+   ],
+   "mode": "off"
+  }
+ ],
+ "draw": [
+  {
+   "band": [
+    [
+     82.4,
+     70.3
+    ],
+    [
+     48.5,
+     70.3
+    ]
+   ],
+   "width": [
+    6.8,
+    7.4
+   ],
+   "bend": 0.4,
+   "end": {
+    "coil": {
+     "turns": 1.1,
+     "R": 4.0,
+     "dir": 1,
+     "gap": 0.9,
+     "tip": 0.6
+    }
+   },
+   "label": "(a) top band, rolled into a curl"
+  },
+  {
+   "band": [
+    [
+     82.4,
+     59.2
+    ],
+    [
+     49.5,
+     59.2
+    ],
+    [
+     49.5,
+     47.5
+    ]
+   ],
+   "width": [
+    6.4,
+    6.8,
+    6.0
+   ],
+   "bend": 0.4,
+   "end": {
+    "coil": {
+     "turns": 0.8,
+     "R": 3.0,
+     "dir": 1,
+     "gap": 0.7,
+     "tip": 0.6
+    }
+   },
+   "label": "(b) second band, down the outer side, rolled in"
+  },
+  {
+   "poly": [
+    [
+     57.5,
+     44.6
+    ],
+    [
+     80,
+     44.6
+    ],
+    [
+     80,
+     55.6
+    ],
+    [
+     57.5,
+     55.6
+    ]
+   ],
+   "round": 2.2,
+   "label": "(c) block round the eye"
+  },
+  {
+   "poly": [
+    [
+     67.5,
+     37.2
+    ],
+    [
+     82.4,
+     37.2
+    ],
+    [
+     82.4,
+     42.9
+    ],
+    [
+     67.5,
+     42.9
+    ]
+   ],
+   "round": 1.6,
+   "label": "(c') lip plate under the eye block, beside the C's hollow"
+  },
+  {
+   "band": [
+    [
+     82.4,
+     33.0
+    ],
+    [
+     52.5,
+     33.0
+    ],
+    [
+     52.5,
+     41.6
+    ],
+    [
+     64.5,
+     41.6
+    ]
+   ],
+   "width": [
+    6.4,
+    6.8,
+    6.0,
+    5.0
+   ],
+   "bend": 0.4,
+   "end": "round",
+   "label": "(d) big C under the eye"
+  }
+ ]
+}

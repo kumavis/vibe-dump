@@ -1,0 +1,343 @@
+{
+ "note": "nezu-you lid slope, RIGHT half, panel mm (x developed at each height, y arc above y 264.5; 80 tall, the half width falls from ~160 at the eave to ~75 at y 66). Positions from faces/dev-lid.jpg (lower 50 mm; the slope is seen almost edge-on in photo-31), shapes from photo-32 (the slope seen at ~42 deg): a big fat G rolling into a deep spiral (centre x 38) beside the strap, a ring-eyed boss (x 80), a spiral hook rolled low on the outer side and run out toward the ridge flange, hooks above.",
+ "centre": 0,
+ "borders": [
+  [
+   0.8,
+   2.6
+  ]
+ ],
+ "bands": [
+  {
+   "name": "the big G rolling into a deep spiral",
+   "c": [
+    [
+     24,
+     45
+    ],
+    [
+     12,
+     41
+    ],
+    [
+     9,
+     23
+    ],
+    [
+     14,
+     8
+    ],
+    [
+     36,
+     6
+    ],
+    [
+     50,
+     14
+    ],
+    [
+     50.5,
+     28
+    ],
+    [
+     41,
+     33.5
+    ],
+    [
+     33,
+     31
+    ]
+   ],
+   "w": [
+    6.6,
+    7.4,
+    8,
+    8,
+    8,
+    7.6,
+    7,
+    6.6,
+    6.2
+   ],
+   "round": 1,
+   "inner": 0.4,
+   "end": "spiral",
+   "spiral": {
+    "turns": 1.3,
+    "dir": 1,
+    "R": 4.6
+   }
+  },
+  {
+   "name": "the long band over the G toward the boss",
+   "c": [
+    [
+     16,
+     52.5
+    ],
+    [
+     44,
+     51.5
+    ],
+    [
+     70,
+     47.5
+    ]
+   ],
+   "w": [
+    6,
+    6.6,
+    5
+   ],
+   "start": "round",
+   "end": "point",
+   "smooth": true
+  },
+  {
+   "name": "upper hook beside the boss",
+   "c": [
+    [
+     48,
+     41.5
+    ],
+    [
+     64,
+     43
+    ],
+    [
+     73.5,
+     37.5
+    ]
+   ],
+   "w": [
+    6,
+    6.4,
+    5.6
+   ],
+   "end": "spiral",
+   "spiral": {
+    "turns": 1.1,
+    "dir": -1,
+    "R": 3.4
+   }
+  },
+  {
+   "name": "outer spiral hook, rolled low, run out toward the ridge flange",
+   "c": [
+    [
+     92,
+     12.5
+    ],
+    [
+     110,
+     13.5
+    ],
+    [
+     124,
+     17
+    ],
+    [
+     128.5,
+     25
+    ]
+   ],
+   "w": [
+    7,
+    7.4,
+    6.6,
+    5.6
+   ],
+   "start": "spiral",
+   "startSpiral": {
+    "turns": 1.3,
+    "dir": 1,
+    "R": 4.6
+   },
+   "end": "round",
+   "smooth": true
+  },
+  {
+   "name": "low hook between",
+   "c": [
+    [
+     56,
+     5.5
+    ],
+    [
+     71,
+     6
+    ],
+    [
+     78,
+     12.5
+    ]
+   ],
+   "w": [
+    5.4,
+    5.8,
+    5
+   ],
+   "end": "spiral",
+   "spiral": {
+    "turns": 1.0,
+    "dir": 1,
+    "R": 2.8
+   },
+   "smooth": true
+  },
+  {
+   "name": "hook over the boss, outer",
+   "c": [
+    [
+     112,
+     36
+    ],
+    [
+     96,
+     38.5
+    ],
+    [
+     86,
+     36
+    ],
+    [
+     84,
+     30.5
+    ]
+   ],
+   "w": [
+    5.6,
+    6.2,
+    6,
+    5.4
+   ],
+   "end": "spiral",
+   "spiral": {
+    "turns": 1.0,
+    "dir": 1,
+    "R": 2.8
+   },
+   "smooth": true
+  },
+  {
+   "name": "nose under the strap",
+   "c": [
+    [
+     5.5,
+     6
+    ],
+    [
+     5.5,
+     33
+    ]
+   ],
+   "w": [
+    6,
+    6
+   ],
+   "start": "round",
+   "end": "round"
+  },
+  {
+   "name": "high G toward the knob",
+   "c": [
+    [
+     12,
+     57
+    ],
+    [
+     12,
+     68
+    ],
+    [
+     36,
+     68.4
+    ],
+    [
+     40,
+     61.5
+    ],
+    [
+     32,
+     59.5
+    ]
+   ],
+   "w": [
+    6,
+    6.6,
+    6.4,
+    6,
+    5
+   ],
+   "round": 1,
+   "inner": 0.4,
+   "end": "spiral",
+   "spiral": {
+    "turns": 1.2,
+    "dir": 1,
+    "R": 3.0
+   }
+  },
+  {
+   "name": "high hook outer",
+   "c": [
+    [
+     50,
+     56
+    ],
+    [
+     62,
+     61
+    ],
+    [
+     70,
+     57
+    ]
+   ],
+   "w": [
+    5.6,
+    6,
+    5
+   ],
+   "end": "spiral",
+   "spiral": {
+    "turns": 1.1,
+    "dir": -1,
+    "R": 2.8
+   }
+  }
+ ],
+ "eyes": [
+  {
+   "c": [
+    79,
+    24
+   ],
+   "w": 15,
+   "h": 15,
+   "height": 4.4,
+   "crown": 0.55,
+   "pupil": {
+    "r": 2.8,
+    "depth": 2
+   },
+   "ring": {
+    "gap": 0.6,
+    "line": 0.7,
+    "depth": 0.5
+   }
+  }
+ ],
+ "spirals": [
+  {
+   "name": "the deep hole at the G's centre",
+   "c": [
+    31,
+    24.5
+   ],
+   "r": 1.2,
+   "turns": 0.5,
+   "w": 2.2
+  }
+ ]
+}

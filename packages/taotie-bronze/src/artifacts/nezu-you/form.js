@@ -50,7 +50,7 @@ export const BAIL = {
   width: 27, // across (X)
   thick: 7, // radial
   get zLeg() { return (101.6 * RK) / OVAL + 4.6 }, // centre line of the vertical legs (|z|): clear of the eave
-  y0: 205, // the strap's lower end, inside the pivot head
+  y0: 200, // the strap's lower end, inside the pivot head (between its horns)
   get yArc() { return LV.bail - this.thick / 2 - this.zLeg }, // centre of the top semicircle
 }
 
@@ -99,108 +99,137 @@ export function sdTube(px, py, pz, knots) {
   return d
 }
 
-// ------------------------------------------------------------------ knob: a ribbed bud on a short stem
+/** 2D distance to a thick circular arc: centre c, radius R, from angle a0 to a1 (rad, a1 > a0), half thickness h */
+function sdArc2(x, y, c, R, a0, a1, h) {
+  const dx = x - c[0], dy = y - c[1]
+  let a = Math.atan2(dy, dx)
+  while (a < a0) a += Math.PI * 2
+  if (a <= a1) return Math.abs(len2(dx, dy) - R) - h
+  const e0 = [c[0] + R * Math.cos(a0), c[1] + R * Math.sin(a0)], e1 = [c[0] + R * Math.cos(a1), c[1] + R * Math.sin(a1)]
+  return Math.min(len2(x - e0[0], y - e0[1]), len2(x - e1[0], y - e1[1])) - h
+}
+/** 2D distance to a segment, half thickness h */
+function sdSeg2(x, y, a, b, h) {
+  const bx = b[0] - a[0], by = b[1] - a[1], qx = x - a[0], qy = y - a[1]
+  const t = Math.min(1, Math.max(0, (qx * bx + qy * by) / (bx * bx + by * by)))
+  return len2(qx - bx * t, qy - by * t) - h
+}
+/** extrude a 2D distance between z0 and z1 with rounded edges r */
+function extrude(d2, z, z0, z1, r) {
+  const dz = Math.abs(z - (z0 + z1) / 2) - (z1 - z0) / 2
+  return len2(Math.max(d2 + r, 0), Math.max(dz + r, 0)) + Math.min(Math.max(d2 + r, dz + r), 0) - r
+}
+
+// ------------------------------------------------------------------ knob: a tall tiered bud on a waisted stem
 
 /**
- * photo-32 (≈ 5.1 px/mm there): the bud is ≈ 27 mm across and ≈ 25 mm tall, a fat closed bud whose
- * surface is ridged by ≈ 6 horizontal wavy ribs; it rises from a waisted stem ≈ 13 mm across off the
- * lid's crown. Seen from the front in photo-31 it hides behind the bail. Local frame: the lid apex at
- * y = 0. (The ribs read as roof tiles / petals; their exact count is from one photo.)
+ * photo-32: a TALL bud that widens upward to a broad, rounded top (≈ 29 mm across, ≈ 49 mm tall over the apex) on a
+ * waisted stem (≈ 12 mm), its flank cut into ≈ 7 crisp wavy tiers like overlapping scales. Seen from the front in photo-31 it
+ * hides behind the bail. Local frame: the lid apex at y = 0. (One photograph: the tier count is read off it.)
  */
 export function knobSDF() {
+  const R = (y) => {
+    if (y < 3) return 6.4 + 7 * Math.max(0, 1 - y / 3) ** 2 // flaring into the lid
+    if (y < 10) return 6.2 - 0.9 * Math.sin((Math.PI * (y - 3)) / 7) // the waisted stem
+    if (y < 33) { const t = (y - 10) / 23; return 6.2 + 6.4 * Math.sin((t * Math.PI) / 2) ** 0.8 } // the bud widens upward
+    return 0
+  }
   const sd = (x, y, z) => {
-    const zz = z
-    // stem: waisted, flaring into the lid
-    const r = len2(x, zz)
-    const t = Math.min(1, Math.max(0, y / 12))
-    const stemR = 7.2 - 1.6 * Math.sin(Math.PI * t) + 6 * Math.max(0, 1 - y / 3.5) ** 2
-    let d = Math.max(r - stemR, -y - 3, y - 14)
-    // bud: an egg, widest a third up, slightly pointed top
-    const by = y - 23.5
-    const ry = by > 0 ? 17 : 12.5
-    const egg = sdEllipsoid(x, by, zz, 12.8, ry, 12.8)
-    // ribs: ≈ 6 tiers, wavy (6 lobes round), shallow grooves
-    const ang = Math.atan2(zz, x)
-    const tier = (y - 10.5 + 0.9 * Math.sin(ang * 6)) / 4.3
-    const fr = tier - Math.floor(tier)
-    const groove = by > -11 && by < 12.5 ? 0.85 * Math.exp(-((fr - 0.08) ** 2) / 0.006) : 0
-    const bud = egg + groove
-    d = smin(d, bud, 3)
+    const r = len2(x, z)
+    // body of revolution up to y 33, then a rounded dome cap to y 42
+    let d = y < 33 ? Math.max(r - R(y), -y - 3) : Infinity
+    d = smin(d, sdEllipsoid(x, y - 32.5, z, 12.6, 9.5, 12.6), 2.2)
+    // ≈ 7 crisp wavy tiers on the flank (scales: each tier's lower edge overhangs the next)
+    if (y > 11 && y < 39) {
+      const ang = Math.atan2(z, x)
+      const tier = (y - 11 + 1.1 * Math.sin(ang * 7)) / 3.9
+      const fr = tier - Math.floor(tier)
+      d += 1.2 * Math.max(0, 1 - fr / 0.22) ** 2 * (y < 35 ? 1 : (39 - y) / 4)
+    }
     return d
   }
-  return { sd, bounds: { min: [-16, -3, -16], max: [16, 43, 16] } }
+  const k = 1.15 // photo-32: a tall bud, ≈ 0.14 of the lid's span across
+  return { sd: (x, y, z) => sd(x / k, y / k, z / k) * k, bounds: { min: [-19.5, -3.5, -19.5], max: [19.5, 50, 19.5] } }
 }
 
 // ------------------------------------------------------------------ lid horns (犄角) at the ends of the long axis
 
+/** 2D signed distance to a closed polygon */
+function sdPoly2(x, y, P) {
+  let d = Infinity, inside = false
+  for (let i = 0, j = P.length - 1; i < P.length; j = i++) {
+    const a = P[j], b = P[i]
+    const bx = b[0] - a[0], by = b[1] - a[1], qx = x - a[0], qy = y - a[1]
+    const t = Math.min(1, Math.max(0, (qx * bx + qy * by) / (bx * bx + by * by)))
+    d = Math.min(d, len2(qx - bx * t, qy - by * t))
+    if ((a[1] > y) !== (b[1] > y) && x < a[0] + ((y - a[1]) * bx) / by) inside = !inside
+  }
+  return inside ? -d : d
+}
+
 /**
- * photo-31: from the eave at each end a thick prong curves out and up past the eave (its tip ≈ 127 mm out,
- * ≈ 288 mm up; base on the eave ≈ 104–114 mm out, 243–256 up); ≈ 16 mm thick seen from the front, its outer
- * face flat, a small boss on it (photo-32, right horn). Built for the +X end in vessel space.
+ * photo-31 (both ends) and photo-32: each horn is a FLAT crescent BLADE in the vessel's XY plane, ≈ 8–9 mm thick
+ * (front to back), standing on the eave at the end of the long axis: a broad base, a convex outer edge rising to one tip
+ * (≈ 124 mm out, ≈ 286 mm up) and a concave inner edge sweeping back down to the lid; a small round boss on the face
+ * (photo-31 left horn, photo-32 right horn). Read off photo-31 at 4.8 px/mm with × 1.12 on x for the horn plane lying
+ * ≈ 110 mm behind the front face (dossier §b.1). Built for the +X end in vessel space.
  */
 export function hornSDF() {
-  const knots = [
-    [96, 252, 0, 8],
-    [104, 257, 0, 8.4],
-    [110.5, 263, 0, 8],
-    [114, 271, 0, 7.2],
-    [113.6, 279, 0, 6.2],
-    [109, 285, 0, 4.8],
-    [103, 287.6, 0, 3.6],
-  ]
+  const P = [[95, 249], [114, 250.5], [121.5, 260], [124.6, 273], [125, 286.2], [121.6, 286.8], [118.2, 278.5], [112.6, 271.2],
+    [105.6, 265.6], [99.4, 262.4], [95.5, 258.5]]
   const sd = (x, y, z) => {
-    // flatten the tube front-back: a blade 1.25× as wide (z) as thick (x) — photo-32's broad face
     x /= RK
-    let d = sdTube(x, y, z / 1.3, knots) * 1.0
-    // clip the inner side flat against the lid slope (the horn grows out of the eave)
+    let d = extrude(sdPoly2(x, y, P) + 0.6, z, -4.4, 4.4, 2.0)
+    // clip the inner side flat against the lid (the horn grows out of the eave)
     d = smax(d, -(x - 92), 2)
-    // a small round boss on the outer face (photo-32)
-    const bx = x - 120.4, by = y - 268, bz = z
-    d = smin(d, sdEllipsoid(bx, by, bz, 2.2, 4.6, 4.6), 1.5)
+    // a small round boss on each face
+    d = smin(d, sdEllipsoid(x - 113.5, y - 261, Math.abs(z) - 4.2, 3.6, 3.6, 2.1), 1.0)
     return d
   }
-  return { sd, bounds: { min: [86 * RK, 238, -16], max: [128 * RK, 296, 16] } }
+  return { sd, bounds: { min: [86 * RK, 240, -10], max: [129 * RK, 291, 10] } }
 }
 
 // ------------------------------------------------------------------ pivot heads (the bail's ends)
 
 /**
- * photo-31 (head-on, 4.75 px/mm): the head is ≈ 54 mm across the horns and ≈ 46 mm tall; two flat C-shaped
- * horns curl out and DOWN from the crown (their curls at the top corners, ≈ 18 mm across each), a lozenge
- * on the forehead, two bulging oval eyes ≈ 9 mm, a broad flat snout narrowing to ≈ 24 mm with two nostril
- * curls; it stands ≈ 22 mm proud of the neck. The strap runs into the top of the head. Local frame: +Z out of
- * the wall (z = 0 = wall surface), +Y up, centre of the face at y = 0.
+ * photo-31 (head-on, ≈ 5 px/mm at the head through the fitted camera): ≈ 47 mm across the horns and ≈ 40 mm tall
+ * (horn tops ≈ 204, lozenge ≈ 184, eyes ≈ 178.5, snout ≈ 166 mm up; mounted at y 190). Two FLAT ribbon
+ * C-horns (≈ 6.5 mm bands) leave the crown, run out along the top and curl OUT and DOWN, their tips hooking back in
+ * under a dark hollow; below them a trapezoid face plate (≈ 41 mm wide at the brow, narrowing down) carries a
+ * lozenge on the brow ABOVE two bulging round eyes (≈ 6.5 mm, at ± 10.5 mm, each under a hooked brow), and ends in a
+ * short broad snout. It stands ≈ 20 mm proud of the neck; the strap runs into the top of the head.
+ * Local frame: +Z out of the wall (z = 0 = wall surface), +Y up, centre of the face at y = 0.
  */
 export function pivotHeadSDF() {
   const sd = (x, y, z) => {
     const ax = Math.abs(x)
-    // face plate: broad and flat, wider at the brow, narrowing to the snout, leaning forward at the bottom
-    const lean = -0.16 * y
-    const w = 13.5 + 6 * Math.min(1, Math.max(0, (y + 6) / 20))
-    let d = sdRBox3(x, y + 1, z - 7.5 - lean, w, 18, 7.5 + Math.max(0, -y) * 0.1, 4.5)
-    d = smax(d, -z - 4, 1) // back plane, sunk 4 into the wall
-    // snout: a flat broad pad
-    d = smin(d, sdRBox3(x, y + 15.5, z - 14.5, 11.5, 5.5, 3.5, 3), 2.5)
-    // horns: thick FLAT C scrolls lying on the face plane: out of the crown, out and down, curling back in over the eye
-    const hk = []
-    for (let i = 0; i <= 14; i++) {
-      const t = i / 14, a = -0.3 + Math.PI * 1.55 * t
-      const R = 9.6 - 4.6 * t
-      hk.push([15 + R * Math.sin(a), 12.5 + R * Math.cos(a), 13, 5.2 - 1.8 * t])
-    }
-    // flattened ribbons (≈ 2:1), lying on the face plate
-    d = smin(d, sdTube(ax, y, 13 + (z - 13) * 1.9, hk) / 1.25, 1.6)
-    // eyes: oval bulges in a sunk socket
-    d = smax(d, -(sdEllipsoid(ax - 9.5, y - 1, z - 15.5, 6.4, 4.6, 2.6)), 0.8)
-    d = smin(d, sdEllipsoid(ax - 9.5, y - 1, z - 14.6, 4.4, 3.2, 2.4), 0.8)
-    // lozenge on the forehead
-    {
-      const lz = ax + Math.abs(y - 9) * 0.8 - 4.2
-      d = smin(d, Math.max(lz, Math.abs(z - 15.6) - 1.0), 1.0)
-    }
-    // nostril curls on the snout
-    d = smax(d, -(len2(ax - 5.5, y + 15.5) - 1.6) + Math.max(0, 17.5 - z) * 0.5, 0.6)
+    // face plate: a trapezoid slab, 41 wide at the brow → 22 at the snout, front face leaning out at the bottom
+    const w = 11 + 9.5 * Math.min(1, Math.max(0, (y + 23) / 22))
+    const plate2 = Math.max(ax - w, Math.abs(y + 11.8) - 11.8)
+    const front = 12.5 + Math.max(0, -y - 8) * 0.12
+    let d = extrude(plate2, z, -4, front, 3)
+    // short broad snout pad
+    d = smin(d, extrude(Math.max(ax - 10.5, Math.abs(y + 20.5) - 3.6), z, 0, front + 2.2, 2.4), 1.5)
+    // horns: flat C ribbons lying on the face plane above the plate, curling out and down, tip hooking back in
+    const hx = ax, hy = y
+    // (photo-31: each horn is a big domed lobe ≈ 22 × 16 mm, its tip hooking back in under a slot)
+    let h2 = sdSeg2(hx, hy, [7.5, 9.2], [15, 9.2], 5.2) // crown bar out from beside the strap
+    h2 = Math.min(h2, sdArc2(hx, hy, [16, 5], 4.6, -Math.PI * 0.6, Math.PI * 0.5, 5.4)) // the broad C, out and down
+    d = smin(d, extrude(h2, z, -3, 13, 4), 1.4)
+    // the strap's tongue runs down between the horns to the lozenge
+    d = smin(d, extrude(Math.max(ax - 6.5, Math.abs(y - 7) - 7.5), z, -3, 10.5, 1.5), 1.2)
+    // a dark slot hollow inside each C, opening inward
+    d = smax(d, -extrude(sdSeg2(hx, hy, [10, 5], [16.5, 5.4], 1.7), z, 6, 22, 0.8), 0.5)
+    // lozenge on the brow (raised), at the top of the plate between the horns
+    d = smin(d, Math.max(ax + Math.abs(y + 4.2) * 0.85 - 4.2, Math.abs(z - front - 0.4) - 1.6), 0.8)
+    // eyes: sunk sockets with bulging round eyeballs, BELOW the lozenge
+    d = smax(d, -sdEllipsoid(ax - 10.3, y + 11.5, z - front, 5.4, 4.6, 2.6), 0.8)
+    d = smin(d, sdEllipsoid(ax - 10.3, y + 11.5, z - front + 0.6, 3.4, 3.2, 2.8), 0.6)
+    // hooked brows over the eyes
+    d = smin(d, extrude(sdArc2(ax, y, [10.3, -11.5], 5.9, Math.PI * 0.12, Math.PI * 0.95, 0.9), z, front - 1, front + 1.2, 0.6), 0.5)
+    // nostrils
+    d = smax(d, -(len2(ax - 5, y + 21) - 1.7) + Math.max(0, front + 1.5 - z) * 0.5, 0.6)
     return d
   }
-  return { sd, bounds: { min: [-30, -27, -4.5], max: [30, 26, 28] } }
+  return { sd, bounds: { min: [-30, -28, -4.5], max: [30, 19, 23] } }
 }

@@ -97,3 +97,19 @@ grey-beige mottled green; collar and lid much darker, the collar near-black. Pre
 
 See the final report of round r8-dsk; in short: the décor is traced at control-point level (not pixel-traced), the
 sides and back are inferred repeats, the depth is inferred, the head and handles are SDF approximations.
+
+## Round r8-dsk-fix — changes against the blind review
+
+- **Lid dome re-measured** against `detail-lid` (same camera as photo-34): the photographed dome slopes almost
+  straight in from the eave (half width ≈ 91 → 45) to a small crown; the first reading's high, wide crown showed its
+  back edge from 10° above and read as a box. `LID` table re-read, crown 466 → 462 (INFERRED from the silhouette),
+  corner radius at the crown 31 → 21 (rounded hips). The lid mask now sits ≈ 5–8 mm low on the dome in `detail-lid`;
+  face-lid's chord plane was set for the old dome, so its similarity is no longer comparable.
+- **Shoulder ledge**: no flat deck (photo-03); the ledge now rises ≈ 5 mm as it runs in to the collar foot
+  (spec `shoulderTop` 0.696 → 0.711).
+- **Décor traced as plates**: `faces/face-{main,shoulder,lid}.trace.json` (hand-drawn bands off the
+  illumination-flattened faces, 5 mm grid, axes 117 / 114.5 / 85 face mm) → `.plates.json` → `kit.tracedPlates`.
+- **Handles** re-placed against `detail-handle`: top ≈ 332 (was ≈ 346), snout x ≈ 156 (was ≈ 164); bar Ø ≈ 10 mm.
+  The reviewer's "14 mm too high" was read off a silhouette overlay scaled on knob and foot; the 1:1 detail crop
+  gives ≈ 11 mm.
+- **Lug opening**: a 38 × 14.5 mm pocket, 13 mm deep, plain-floored, plus a black-tinted floor quad (beauty only).

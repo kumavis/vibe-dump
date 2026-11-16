@@ -36,15 +36,18 @@ partly hidden, dark or worn (≈ ±10 %); **[inferred]** not visible.
    "rounded-square"; **the photograph wins**: a rounded RECTANGLE, nearly 2 : 1 — the narrow sides carry the handles.
 3. **Levels [measured]** (y): foot plate 0–13 (it overhangs the foot band); foot band 13–66 (concave, a frieze 20–56);
    lower cartouches 71–162; horizontal strap 165–196 (diamond studs centred at 180); upper cartouches 197–283;
-   plain shoulder band 291–309; neck frieze 310–357; band of rising triangles 359–416; neck top 419; lid lip 419–425;
-   domed lid band 425–464 (cartouches 435–462); crown 464–500.
+   plain shoulder band 291–309; neck frieze 310–357; band of rising triangles 359–416; neck top 419; lid lip 419–421 (r8 fix: a thin
+   overhanging edge — photo-08 shows no plain band under the lid cartouches);
+   domed lid band 421–464 (cartouches 434–462); crown 464–500.
 4. **Half widths (x) [measured]** (silhouette, photo-08): foot band 107.5 @13 → 103.4 @50; belly 112 @72, 122.3 @88,
    125.2 @100, **126.7 @132 (widest: the lower cartouches)**, 124.6 @162, 118.8 @192, 114.3 @207, 107.8 @222,
    101.6 @237, 95.8 @252, 90.2 @267, 85.6 @282, 81.6 @297; neck 78.6 @310, 75.1 @340, **74.6 @358 (waist)**, 76.8 @388,
-   79.9 @419; lid 79.4 @425, 76.4 @440, 71.5 @448, 64 @455, 50 @463; crown 45.5 @465 flaring to 50.2 @500 (walls ≈ 3.6).
+   79.9 @419; lid 81.6 @421 (the lip overhangs the neck), 80.6 @428, 76.4 @440, 71.5 @448, 64 @455, 50 @463; crown 45.5 @465 flaring to 50.2 @500 (walls ≈ 3.6).
    Foot plate 117 × 66 (half), corner radius ≈ 12 [est].
-5. **Section [est]:** fat rounded corners, radius ≈ 0.7 × the half depth (≈ 49 on the belly): in photo-09 the corner
-   is a broad curve, the cartouches wrap round it, and the side studs stand on the silhouette in photo-08.
+5. **Section [est]:** rounded corners, radius ≈ 0.45 × the half depth (≈ 32 on the belly; r8 fix — it was 0.7, which
+   made the three-quarter view ≈ 10–13 % narrower and boxier than photo-09: the silhouette extent at 36° is
+   (a − r)·cos + (b − r)·sin + r, and the photograph's 0.55 × H needs the smaller radius). The cartouches still wrap
+   round the corner, and the side studs stand on the silhouette in photo-08 (≈ 2/3 as proud as the broad face's).
 6. **Sculpture [est]:** two animal heads on the narrow sides of the neck (y ≈ 320–372, ≈ 40 mm out from the wall): a
    broad skull, round eyes, two ears / horns standing up and back, a muzzle hanging down with a loop under the chin;
    a loose ring ≈ 75 mm across, bar ≈ 5.6 mm, hangs from it in a plane parallel to the side and rests on the upper
@@ -52,8 +55,11 @@ partly hidden, dark or worn (≈ ±10 %); **[inferred]** not visible.
    four-sided pyramid on the strap crossing (lozenge base ≈ 50 wide × 58 tall, ≈ 17 proud) and a three-sided one under
    the shoulder band (top edge ≈ 44 wide at y 290, apex on the wall at y ≈ 266, ≈ 13 proud: a level top facet); the side
    studs show on both silhouettes of photo-08 and on the right silhouette of photo-09.
-7. **Crown [est]:** an open flaring rectangular collar (its mouth seen in photo-09). photo-09 shows a cut-out in the
-   crown wall on the narrow side — **not modelled**.
+7. **Crown [est]:** an open flaring rectangular collar (its mouth seen in photo-09), near-black. Its rim is a saddle:
+   full height on the broad faces, rolling down round the corners in a quarter-round of ≈ 10 mm (the rounded upper
+   corners of photo-08's front view), the narrow side ≈ 10 mm lower, split by a deep U slot (photo-09) — modelled
+   (r8 fix) as a deformation of the crown loft. The flare is kept: photo-08 measures 345 px at the base and 410 px at
+   the rim (≈ 1.19), so the crown is NOT a near-vertical tablet.
 8. **Not visible:** the back, the left (−X) side face square-on, the inside, the underside, any inscription.
 
 ## c. Décor (relief heights in mm; traced on faces/dev-*.jpg — photo-08 developed onto the model surface)
@@ -82,6 +88,12 @@ rings near-black olive. Preset `nezu-fanghu`.
 
 ## e. Known differences (model vs photographs)
 
-See the final report of round 8 (r8-fanghu) and the compare images; in short: the ribbons read thinner and the
+Round 8 fix (r8-fanghu-fix): the upper cartouche bird was RETRACED (faces/dev-up.trace.json) over the groove network
+that `grooves.py` reads off faces/dev-up.jpg (Hessian line detector on shadowed and earth-filled grooves, the hollows by
+their earth-red colour; faces/dev-<zone>.grooves.json are those reads, kept as tracing evidence, not drawn); the lower
+cartouche got its earth-filled sunk columns and spiral hollows; the hollows of every zone are packed with ROUND coils
+(decor.js spiralFill), not squared leiwen; the band edges roll down into the channels. Note: the upper birds ARE a
+mirror pair, like the lower ones (photo-08 crop checked: the U crest is on the outer side of each field). Before that,
+see the final report of round 8 (r8-fanghu) and the compare images; in short: the ribbons read thinner and the
 channel network sparser than the photograph, the triangle and foot friezes are schematic, the crown cut-outs and
 the back are not modelled, scale is a guess.

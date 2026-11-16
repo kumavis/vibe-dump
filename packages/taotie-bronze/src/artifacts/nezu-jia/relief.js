@@ -11,6 +11,7 @@
 //   * the upper wall: the same grammar drawn FLAT — bands ≈ 0.5 mm proud carrying one sunk line, small eyes, a
 //     sparse leiwen ground — and above it tall ogive blades outlined by a raised double line.
 import { FRIEZE, BAND, BLADE_PLAIN, BLADE_FLANGED, LEGFACE, CAPFLANK, STEMFACE } from './trace.js'
+import { legFaceWidth } from './form.js'
 
 /** stroke / plate / poly data → kit elements, mirrored about x = cx (data x is measured from the centre line) */
 function elements(kit, data, cx, { mirror = true, sx = 1, sy = 1, dy = 0 } = {}) {
@@ -69,8 +70,19 @@ export function friezePanel(kit, size, { ppmm, seed }) {
   const els = elements(kit, D, cx, { sy })
   kit.carve(p, els, { height: D.height, shoulder: D.shoulder, depth: 0.32, contour: { inset: 1.0, line: 0.45 }, fill: { kind: 'none' }, seed })
   sinkLines(p, D.lines, cx, { sy, depth: 0.45 })
-  eyes(kit, p, D, cx, { sy })
+  // the socket: lifted a hair so the ground packer leaves it plain, then sunk deep, then the boss inside it
+  const sk = D.socket
+  const socket = (ctx) => {
+    for (const side of [1, -1]) {
+      const [x, y] = [cx + side * sk.c[0], sk.c[1] * sy]
+      const w = sk.w, h = sk.h * sy, r = sk.r
+      ctx.beginPath(); ctx.roundRect(x - w / 2, y - h / 2, w, h, r); ctx.fill()
+    }
+  }
+  if (sk) p.raise(socket, { height: 0.08, shoulder: 0.1 })
   kit.leiwenFill(p, { margin: 0.45 }, { pitch: D.pitch, depth: 0.32, line: 0.5, cell: [3.2, 6.5], pairs: 0.4, maxAspect: 1.8, seed: seed + 3 })
+  if (sk) p.sink(socket, { depth: sk.depth + 0.08, shoulder: 0.7, profile: 'u' })
+  eyes(kit, p, D, cx, { sy })
   return p.bake()
 }
 
@@ -84,7 +96,7 @@ export function bandPanel(kit, size, { ppmm, seed }) {
   kit.carve(p, els, { height: D.height, shoulder: 0.25, depth: 0.26, contour: { inset: 0.75, line: 0.4 }, fill: { kind: 'none' }, seed })
   sinkLines(p, D.lines, cx, { sx, sy, depth: 0.3 })
   eyes(kit, p, D, cx, { sx, sy })
-  kit.leiwenFill(p, { margin: 0.4 }, { pitch: D.pitch, depth: 0.28, line: 0.5, cell: [3, 6], pairs: 0.5, seed: seed + 3 })
+  kit.leiwenFill(p, { margin: 0.4 }, { pitch: D.pitch, depth: 0.28, line: 0.5, cell: [3, 6], pairs: 0.5, roundness: 0.45, seed: seed + 3 })
   return p.bake()
 }
 
@@ -136,25 +148,37 @@ export function bladePanel(kit, size, { ppmm, seed, flanged }) {
 export function legFacePanel(kit, { w, h }, { ppmm, seed, side = 'L' }) {
   const p = new kit.ReliefPanel({ width: w, height: h, ppmm, seed })
   const D = LEGFACE
-  // a column of small units near the apex edge
-  const els = []
   const X = (x) => (side === 'L' ? w - x : x) // data x = distance from the apex edge
-  for (const u of D.units) {
-    const y = u.y
-    for (const b of D.unit.bands) {
-      els.push(kit.roundStroke(b.c.map(([x, yy]) => [X(x * u.s), y + yy * u.s]), { width: b.w * u.s, round: 0.5, inner: 0.15, start: b.start ?? 'blunt', end: b.end ?? 'blunt', spiral: b.spiral && { ...b.spiral, dir: (b.spiral.dir ?? 1) * (side === 'L' ? -1 : 1) } }))
-    }
+  // round r8-fix (detail-leg, photo-22 centre leg): a column of DISTINCT framed cartouche units stacked close down
+  // the face beside the apex flange, each ≈ 0.6 of the face wide — a raised plate with an incised border and one
+  // squared coil, an eye boss in its inner corner — reading as clear relief at leg distance (they were tiny dots)
+  const units = []
+  for (let y = h - 9; y > 30; ) {
+    const fw = legFaceWidth(y)
+    const uw = Math.min(13.2, 0.6 * fw), uh = Math.max(6.5, Math.min(11, uw * 0.86))
+    units.push({ x: 1.3 + uw / 2, y: y - uh / 2, w: uw, h: uh })
+    y -= uh + 1.6
   }
-  kit.carve(p, els, { height: D.height, shoulder: 0.2, depth: 0.25, contour: { inset: 0.55, line: 0.32 }, fill: { kind: 'none' }, seed })
-  for (const u of D.units) {
-    for (const e of D.unit.eyes) kit.pillowBoss(p, { c: [X(e.c[0] * u.s), u.y + e.c[1] * u.s], w: e.w * u.s, h: e.h * u.s, round: 0.6, height: 0.9, crown: 0.8, slit: false })
-  }
-  // a frame line down the face beside the units
+  const els = units.map((u) => kit.roundPlate({ c: [X(u.x), u.y], w: u.w, h: u.h, r: Math.min(2.2, u.w * 0.18),
+    contour: { inset: 0.6, line: 0.36 }, fill: { kind: 'coil', pitch: 1.35, line: 0.42, offset: [(side === 'L' ? 1 : -1) * u.w * 0.12, 0] } }))
+  kit.carve(p, els, { height: D.height, shoulder: 0.35, depth: 0.3, seed })
+  for (const u of units) kit.pillowBoss(p, { c: [X(1.3 + u.w * 0.8), u.y + u.h * 0.22], w: u.w * 0.2, h: u.w * 0.17, round: 0.6, height: 0.6, crown: 0.8, base: 'field', slit: false })
+  const lo = units[units.length - 1].y - units[units.length - 1].h / 2 - 1
+  kit.leiwenFill(p, { margin: 0.35, rect: { x: side === 'L' ? w - 16 : 0.4, y: lo, w: 15.6, h: h - 2 - lo } }, { pitch: D.pitch, depth: 0.22, line: 0.5, cell: [2.4, 4.5], pairs: 0.4, seed: seed + 2 })
+  // round r8-fix: the long orange-brown strips on the outer faces (photo-21 both front legs, photo-22 right leg):
+  // core / cuprite showing in a shallow worn channel ≈ 5 mm wide, ≈ 0.6 of the face out from the apex edge, broken
+  // into two or three runs. Sunk so the earth / cuprite layers collect in it (the patina's cavity channel).
+  const runs = side === 'L' ? [[62, 112, 0.79], [124, 156, 0.82]] : [[44, 76, 0.8], [88, 142, 0.78]]
   p.sink((ctx) => {
-    ctx.lineWidth = 0.5
-    ctx.beginPath(); ctx.moveTo(X(D.frame), D.units[D.units.length - 1].y - 6); ctx.lineTo(X(D.frame), h - 2); ctx.stroke()
-  }, { depth: 0.3, shoulder: 0.15, profile: 'u' })
-  kit.leiwenFill(p, { margin: 0.35, rect: { x: side === 'L' ? w - D.frame + 0.4 : 0.4, y: D.units[D.units.length - 1].y - 6, w: D.frame - 0.8, h: h - 2 - (D.units[D.units.length - 1].y - 6) } }, { pitch: D.pitch, depth: 0.22, line: 0.5, cell: [2.4, 4.5], pairs: 0.4, seed: seed + 2 })
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'
+    for (const [y0, y1, f] of runs) {
+      for (let y = y0; y < y1; y += 4) {
+        const ya = y, yb = Math.min(y1, y + 4)
+        ctx.lineWidth = Math.min(4.4, 0.2 * legFaceWidth(ya))
+        ctx.beginPath(); ctx.moveTo(X(f * legFaceWidth(ya)), ya); ctx.lineTo(X(f * legFaceWidth(yb)), yb); ctx.stroke()
+      }
+    }
+  }, { depth: 1.1, shoulder: 1.2, profile: 'u' })
   return p.bake()
 }
 
@@ -166,7 +190,7 @@ export function capFlankPanel(kit, size, { ppmm, seed }) {
   const sx = size.w / D.w, sy = size.h / D.h
   kit.carve(p, elements(kit, D, cx, { sx, sy }), { height: D.height, shoulder: 0.3, depth: 0.25, contour: { inset: 0.6, line: 0.35 }, fill: { kind: 'none' }, seed })
   eyes(kit, p, D, cx, { sx, sy })
-  kit.leiwenFill(p, { margin: 0.4 }, { pitch: D.pitch, depth: 0.25, line: 0.5, cell: [2.6, 5], pairs: 0.5, seed: seed + 2 })
+  kit.leiwenFill(p, { margin: 0.4 }, { pitch: D.pitch, depth: 0.2, line: 0.5, cell: [2.6, 5], pairs: 0.5, roundness: 0.6, seed: seed + 2 })
   return p.bake()
 }
 

@@ -51,7 +51,9 @@ export default {
     'detail-handle-head': { azimuth: -62, elevation: 10, fov: 20, fit: 0.2, target: [-102, 270, 59] },
     'face-drum': { face: { center: [0, 203, 40], normal: [-0.0682, 0.2079, 0.9758], up: [0.0145, 0.9781, -0.2074], width: 132, height: 60 }, ref: 'faces/face-drum.jpg' },
     'face-upper': { face: { center: [0, 277, 45], normal: [-0.0698, 0, 0.9976], up: [0, 1, 0], width: 150, height: 88 }, ref: 'faces/face-upper.jpg' },
-    'detail-leg': { azimuth: 60, elevation: 4, fov: 22, fit: 0.46, target: [66, 95, 38] },
+    // (round r8-fix: the old target [66, 95, 38] left OrbitControls.update() returning true every frame — a
+    // never-idle render loop that starved the next page in tools/smoke.mjs; this one settles)
+    'detail-leg': { azimuth: 61, elevation: 5, fov: 22, fit: 0.46, target: [58, 100, 33.5] },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
@@ -112,7 +114,7 @@ export default {
     // slabs between the drum masks (photo-21 right edge: ≈ 12 mm proud, ≈ 9 thick, cut into ≈ 7 blocks)
     for (const f of kit.latheFlanges(body, {
       azimuths: AZ.slabs, ranges: [{ range: { y0: REG.frieze[0] - 1.5, y1: REG.frieze[1] + 1.5 } }], gap: 0, seed: seed + 7,
-      height: 11.5, thickness: 8.6, embed: 2, taper: 3, bevel: 0.9, waver: 0.35, notches: { shape: 'square', pitch: 7.4, depth: 0.22, width: 1.8 },
+      height: 11.5, thickness: 8.6, embed: 2, taper: 2, bevel: 0.7, waver: 0.08, notches: { shape: 'square', pitch: 7.0, depth: 0.3, width: 1.5 }, // ≈ 7 clean blocks
       material: plain, part: 'flanges',
     })) flanges.push(f)
     // the masks' noses: a low broad ridge scored as a ladder
@@ -121,15 +123,26 @@ export default {
       height: 2.8, thickness: 9.5, embed: 1.2, taper: 14, bevel: 0.8, waver: 0.2, notches: { shape: 'score', pitch: 2.4, depth: 0.32, width: 1.0 },
       material: plain, part: 'flanges',
     })) flanges.push(f)
-    // upper wall: waist → over the lip, hooked out at the top (photo-21 right silhouette)
+    // upper wall: waist → over the lip, hooked out at the top (photo-21 right silhouette). The trumpet bends hard in
+    // its top third and a single flange would fill the hull of that bend (one planar face polygon), so each runs in
+    // short lengths end to end.
+    const cuts = [REG.band[0] - 0.5, 252, 268, 280, 290, 299, 307, 314, 319.9]
+    const lipHook = { start: 'square', end: { type: 'hook', length: 3, height: 2.5 } }
     for (const az of AZ.upper) {
-      const ranges = az === AZ.handle
-        ? [{ range: { y0: REG.band[0] - 0.5, y1: 273.7 } }, { range: { y0: 291, y1: 319.9 }, ends: { start: 'square', end: { type: 'hook', length: 3, height: 2.5 } } }]
-        : [{ range: { y0: REG.band[0] - 0.5, y1: 319.9 }, ends: { start: 'square', end: { type: 'hook', length: 3, height: 2.5 } } }]
+      const ranges = []
+      for (let i = 0; i < cuts.length - 1; i++) {
+        let y0 = cuts[i], y1 = cuts[i + 1]
+        if (az === AZ.handle) { // the strap's upper arm meets the wall at 274–291
+          if (y0 >= 273.7 && y1 <= 291) continue
+          if (y0 < 273.7 && y1 > 273.7) y1 = 273.7
+          if (y0 < 291 && y1 > 291) y0 = 291
+        }
+        ranges.push(i === cuts.length - 2 ? { range: { y0, y1 }, ends: lipHook } : { range: { y0, y1 } })
+      }
       for (const f of kit.latheFlanges(body, {
         azimuths: [az], ranges, gap: 0, seed: seed + 9 + az,
-        height: (f) => 4.8 + 2.4 * f, thickness: 6.0, embed: 1.4, taper: 4, bevel: 0.6, waver: 0.4,
-        notches: { shape: 'T', pitch: 6.8, depth: 0.42, width: 2.0 }, material: plain, part: 'flanges',
+        height: 4.8, thickness: 7.2, embed: 1.4, taper: 3, bevel: 0.9, waver: 0.3,
+        notches: { shape: 'T', pitch: 7.0, depth: 0.3, width: 1.7 }, material: plain, part: 'flanges',
       })) flanges.push(f)
     }
     for (const f of flanges) object.add(f)

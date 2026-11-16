@@ -105,7 +105,7 @@ export function handleSDF() {
   // cartouches on the side faces: from under the head down the C
   const cart = []
   for (let a = 58; a < total - 12; a += 9.6) cart.push(a)
-  const coilA = squaredCoil(9.6, 2.3, 3)
+  const coilA = squaredCoil(7.2, 4.8, 1.75)
   const sd = (x, yv, z) => {
     // the photographs put the handle 116 mm tall (y 190 → 306): squeeze the drawing 1/1.12 about its middle
     const y = 236 + (yUnmap(yv) - 236) * 1.12
@@ -133,44 +133,71 @@ export function handleSDF() {
     d = smin(d, head(x, y, z, coilA), 2.2)
     return d
   }
-  return { sd, bounds: { min: [46, 182, -36], max: [133, 316, 36] } }
+  return { sd, bounds: { min: [46, 182, -36], max: [146, 316, 36] } }
 }
 
-/** the head on the outer corner, looking out (+x) and down; two upright square plates on its crown */
+/**
+ * The head on the outer corner (round r8-fix, re-drawn from photo-21 crop "handle" — profile — and photo-22 crop
+ * "handle head" — near frontal): a crown block on the strap's corner, and from it a LONG snout thrusting out and
+ * down, ≈ 1/3 of the strap's height, its tip ≈ 24 mm beyond the strap's outer face, ending in a flat squared
+ * muzzle; a lower jaw curls back under it into the strap. Brow and eyes are SURFACE décor on the face (a low
+ * boss in a sunk ring under a sunk brow curl), not button eyes. On the crown two upright square plates (≈ 24 ×
+ * 22 mm, sides vertical), splayed outward like ears, each with a raised border and ONE squared coil ending in a
+ * hooked centre.
+ */
 function head(x, y, z, coil) {
-  // skull block and cheeks
-  let d = sdRBox3(x - 111, y - 259.5, z, 8.0, 9.5, 11.5, 5.0)
-  // brow ridge across the face (x ≈ 118.6)
-  d = smin(d, sdRBox3(x - 117.6, y - 265.6, z, 2.2, 2.0, 11.0, 1.4), 1.2)
-  // snout: out and down, squared, ending in a broad flat muzzle
-  d = smin(d, sdRBox3(x - 121.2, y - 250.2, z, 6.4, 5.6, 8.0, 3.2), 2.6)
-  d = smin(d, sdRBox3(x - 125.8, y - 245.8, z, 2.6, 4.6, 7.4, 2.0), 1.6)
-  // nostril / mouth grooves on the muzzle
-  d = smax(d, -sdRBox3(x - 128.6, y - 243.2, z, 1.2, 0.45, 5.6, 0.3), 0.3)
-  for (const s of [-1, 1]) d = smax(d, -(len3(x - 128.2, y - 247.4, z - s * 3.6) - 1.1), 0.3)
-  // eyes: bulging, with a sunk ring
-  for (const s of [-1, 1]) {
-    const e = len3(x - 118.4, y - 259.4, z - s * 6.8) - 3.0
-    d = smin(d, e, 0.8)
-    d = smax(d, -(Math.abs(len2(y - 259.4, z - s * 6.8) - 3.7) - 0.35 + Math.max(0, 118.2 - x) * 2), 0.2)
+  // crown block on the strap corner
+  let d = sdRBox3(x - 111, y - 264.5, z, 7.6, 7.6, 12.6, 4.4)
+  // the snout: a tapered box from the crown (A) out and down to the muzzle (B)
+  const Ax = 113, Ay = 262.5, Bx = 139.5, By = 240.5
+  const Lx = Bx - Ax, Ly = By - Ay, L = Math.hypot(Lx, Ly)
+  const ux = Lx / L, uy = Ly / L, nx = -uy, ny = ux // n: the face side, out and up
+  const mx = (Ax + Bx) / 2, my = (Ay + By) / 2
+  const a = (x - mx) * ux + (y - my) * uy, b = (x - mx) * nx + (y - my) * ny
+  const f = Math.min(1, Math.max(0, a / L + 0.5)) // 0 crown → 1 muzzle
+  const hb = 8.4 - 2.2 * f, hz = 12.2 - 2.6 * f
+  d = smin(d, sdRBox3(a, b + 0.6 * f, z, L / 2, hb, hz, 3.0), 2.4)
+  // lower jaw: curls from under the muzzle back into the strap
+  d = smin(d, sdCone(x, y, z, [117, 241.5, 0], [133.5, 236.4, 0], 5.6, 4.0), 2.6)
+  d = smin(d, sdRBox3(x - 125, y - 238.6, z, 8.5, 3.0, 8.6, 2.4), 2.0)
+  // muzzle end: a flat face with two nostril pits and a mouth groove under it
+  const ea = a - L / 2 // ≤ 0 inside
+  // (no nostril pits: on photo-22 the muzzle front is flat, crossed by lines)
+  for (const k of [-1, 1]) d = smax(d, -Math.max(Math.abs(b - 1.0 + k * 2.4) - 0.5, -ea - 1.0, Math.abs(z) - 7.2), 0.25)
+  d = smax(d, -sdRBox3(x - 134.5, y - 235.8, z, 5.5, 0.55, 7.4, 0.4), 0.3)
+  // face décor (on the n side): eyes as low bosses in a sunk ring, a sunk brow curl over each, a ridge down the nose
+  const depthBelow = hb - b // > 0 under the face surface
+  if (depthBelow > -2 && depthBelow < 2.5) {
+    let g = 1e9
+    for (const sgn of [-1, 1]) {
+      const ea2 = a + L / 2 - 9.2, ez = z - sgn * 6.4
+      const r = len2(ea2 * 0.9, ez)
+      d = smin(d, len3(ea2 * 0.9, (b - (hb - 1.4)) * 1.3, ez) - 2.6, 0.6) // the boss: ≈ 1 mm proud
+      g = Math.min(g, Math.abs(r - 3.9) - 0.6) // sunk ring
+      // brow: a C-curl above-behind the eye, opening toward the muzzle
+      const bc = len2(a + L / 2 - 6.2, z - sgn * 8.6)
+      if (a + L / 2 - 6.2 < 1.5) g = Math.min(g, Math.abs(bc - 5.6) - 0.6)
+      // cheek line toward the muzzle
+      g = Math.min(g, dPoly([[ -L / 2 + 13, sgn * 9.4], [L / 2 - 6, sgn * 7.0]], a, z) - 0.55)
+    }
+    // ladder on the nose ridge
+    if (Math.abs(z) < 2.2 && a > -L / 2 + 13 && a < L / 2 - 3) g = Math.min(g, Math.abs(((a % 2.8) + 2.8) % 2.8 - 1.4) - 0.35)
+    d = smax(d, -Math.max(g, depthBelow - 1.3), 0.25)
   }
-  // ears: leaf-like lobes at the sides under the plates
-  for (const s of [-1, 1]) d = smin(d, sdEllipsoid(x - 110, y - 262, z - s * 13.6, 3.0, 4.4, 3.6), 1.5)
-  // the two square plates on the crown: upright, splayed 9° outward, faces toward +x, each cut with a squared coil
+  // the two square plates on the crown: upright, splayed 13° outward (tops out), faces toward +x
   for (const s of [-1, 1]) {
-    const cz = s * 14.6, cy = 280.6, cx = 108.8
-    const a = -s * 24 * Math.PI / 180
-    const ly = (y - cy) * Math.cos(a) - (z - cz) * Math.sin(a)
-    const lz = (y - cy) * Math.sin(a) + (z - cz) * Math.cos(a)
-    let p = sdRBox3(x - cx, ly, lz, 3.4, 13.2, 12.4, 3.4)
-    // coil on the outer (+x) face: sunk 0.8 mm
-    const g = dPoly(coil, lz * s, ly) - 0.7
-    const face = (cx + 3.4) - x
-    p = Math.max(p, -Math.max(g, face - 0.8))
-    // sunk border line just inside the plate edge
-    const bl = Math.abs(sdRBox2(lz, ly, 12.4 - 1.4, 13.2 - 1.4, 2.6)) - 0.38
-    p = Math.max(p, -Math.max(bl, face - 0.6))
-    d = smin(d, p, 1.4)
+    const cz = s * 15.0, cy = 284.2, cx = 109.6
+    const ang = s * 13 * Math.PI / 180
+    const ly = (y - cy) * Math.cos(ang) - (z - cz) * Math.sin(ang)
+    const lz = (y - cy) * Math.sin(ang) + (z - cz) * Math.cos(ang)
+    let pl = sdRBox3(x - cx, ly, lz, 3.3, 13.0, 12.0, 2.4)
+    const face = (cx + 3.3) - x
+    // raised border: the field inside it is sunk 0.9 mm, the coil stands back up to the face
+    const field = sdRBox2(lz, ly, 12.0 - 2.4, 13.0 - 2.4, 1.6)
+    const coilBand = dPoly(coil, lz * s, ly + 0.4) - 1.45
+    const sunk = Math.max(field, -coilBand)
+    pl = Math.max(pl, -Math.max(sunk, face - 0.9))
+    d = smin(d, pl, 1.6)
   }
   return d
 }

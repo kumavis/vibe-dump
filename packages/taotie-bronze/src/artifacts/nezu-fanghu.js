@@ -38,7 +38,8 @@ export default {
     // photo-08: assumed camera az 4.4°, el 6°, 965 mm from (0, 250, 0), vfov ≈ 38° (.work/r8-fanghu/solve/fit08.py)
     front: { azimuth: 4.4, elevation: 6, fov: 38, fit: 1.0, target: [0, 250, 0], ref: 'front.jpg' },
     // photo-09: az ≈ 38°, el ≈ 7.5°, ≈ 1.25 m (fit09.py; the twin at the left edge cropped out of the ref)
-    'three-quarter': { azimuth: 46, elevation: 8, fov: 38, fit: 1.05, target: [0, 250, 0], ref: 'three-quarter.jpg' },
+    // r8 fix: az 46 showed far more of the narrow side than photo-09 does; 36° with the closer, wider lens of the photo
+    'three-quarter': { azimuth: 36, elevation: 9, fov: 46, fit: 1.0, target: [0, 250, 0], ref: 'three-quarter.jpg' },
     side: { azimuth: 90, elevation: 6, fov: 26, fit: 1.08 },
     back: { azimuth: 180, elevation: 6, fov: 26, fit: 1.08 },
     top: { azimuth: 12, elevation: 70, fov: 28, fit: 1.05 },
@@ -113,22 +114,50 @@ export default {
     // the lid: lip ring over the neck top, the domed band (relief), the crown (an open flaring collar)
     const lidG = group('lid')
     const matLF = mat(lf.relief), matLS = mat(ls.relief)
-    lidG.add(ringLoft([ring(y1 - 0.2, bodyW(y1) - 0.6, Rb(y1)), ring(y1, bodyW(y1) + 1.1, Rb(y1) + 0.5), ring(LV.lip - 0.4, bodyW(y1) + 1.1, Rb(y1) + 0.5), ring(LV.lip, lidW(LV.lip), Rl(LV.lip))], plain))
+    // the lip: a thin edge overhanging the neck (a hard shadow line under it, photo-08), the dome rises straight off it
+    const Wl = lidW(LV.lip)
+    lidG.add(ringLoft([ring(y1 - 0.2, bodyW(y1) - 0.6, Rb(y1)), ring(y1 - 0.2, Wl - 0.9, Rl(LV.lip) - 0.4), ring(y1 + 0.3, Wl, Rl(LV.lip)), ring(LV.lip, Wl, Rl(LV.lip))], plain))
     for (let k = 0; k < 4; k++) {
       const p = k % 2 ? ls : lf
       lidG.add(loftSide(kit, { k, y0: LV.lip, y1: LV.lid, W: lidW, R: Rl, relief: p.relief, arc: k % 2 ? arcLS : arcLF, panelW: p.panelW, material: k % 2 ? matLS : matLF, density: dens * 1.2, fade: 0.8 }))
     }
     const cr = (y, w) => ring(y, w, CROWN.r * RHO * w)
     const wIn = (w) => w - CROWN.wall
-    lidG.add(ringLoft([ring(LV.lid, lidW(LV.lid), Rl(LV.lid)), cr(LV.lid + 0.4, CROWN.w0 + 0.8), cr(CROWN.y0 + 1.5, CROWN.w0), cr(CROWN.y0 + 14, CROWN.w0 + 2.6), cr(CROWN.y1 - 1.2, CROWN.w1), cr(CROWN.y1, CROWN.w1 - 0.8), cr(CROWN.y1, wIn(CROWN.w1) + 0.6)], plain))
-    const crownIn = new kit.PatinaMaterial({ interior: 1 })
-    lidG.add(ringLoft([cr(CROWN.y1, wIn(CROWN.w1) + 0.6), cr(CROWN.y1 - 1, wIn(CROWN.w1)), cr(CROWN.y0 + 3, wIn(CROWN.w0))], crownIn))
+    // the crown: near-black (photo-08/09), its rim a saddle — full height on the broad faces, rolling down round the
+    // corners (the rounded upper corners of the front view) to a lower narrow side split by a deep U slot (photo-09)
+    const crownMat = new kit.PatinaMaterial({ meshTint: '#2c2924', envMapIntensity: 0.3, cavity: 0.3 })
+    const crownIn = new kit.PatinaMaterial({ interior: 1, meshTint: '#3a352e', envMapIntensity: 0.3 })
+    const crownSaddle = (mesh) => {
+      const P = mesh.geometry.attributes.position, yb = CROWN.y0 + 4, Hc = CROWN.y1 - yb
+      for (let i = 0; i < P.count; i++) {
+        const y = P.getY(i)
+        if (y <= yb) continue
+        const x = P.getX(i), z = P.getZ(i)
+        const a = CROWN.w0 + ((CROWN.w1 - CROWN.w0) * (y - CROWN.y0)) / (CROWN.y1 - CROWN.y0)
+        const u = Math.min(1, Math.abs(x) / a), t = (y - yb) / Hc
+        const sm = (e0, e1, v) => { const k = Math.max(0, Math.min(1, (v - e0) / (e1 - e0))); return k * k * (3 - 2 * k) }
+        // a quarter-round corner of radius Rc in the front view: the narrow side stands Rc lower than the broad faces
+        const u0 = 0.78, Rc = (1 - u0) * a, dx = Math.max(0, Math.min(Rc, (u - u0) * a))
+        const side = (Rc - Math.sqrt(Rc * Rc - dx * dx)) / Math.max(1e-6, 1) + 1.2 * u * u // + a slightly convex rim
+        const slot = 0.5 * Hc * sm(0.9, 0.99, u) * Math.exp(-((z / 4.2) ** 6)) // the U slot in the narrow side
+        P.setY(i, y - t * (side + slot))
+      }
+      P.needsUpdate = true
+      mesh.geometry.computeVertexNormals()
+      return mesh
+    }
+    lidG.add(ringLoft([ring(LV.lid, lidW(LV.lid), Rl(LV.lid)), cr(LV.lid + 0.4, CROWN.w0 + 0.8), cr(CROWN.y0 + 1.5, CROWN.w0)], plain))
+    lidG.add(crownSaddle(ringLoft([cr(CROWN.y0 + 1.5, CROWN.w0), cr(CROWN.y0 + 8, CROWN.w0 + 1.4), cr(CROWN.y0 + 14, CROWN.w0 + 2.6), cr(CROWN.y0 + 22, CROWN.w0 + 3.6), cr(CROWN.y1 - 1.2, CROWN.w1), cr(CROWN.y1, CROWN.w1 - 0.8), cr(CROWN.y1, wIn(CROWN.w1) + 0.6)], crownMat)))
+    lidG.add(crownSaddle(ringLoft([cr(CROWN.y1, wIn(CROWN.w1) + 0.6), cr(CROWN.y1 - 1, wIn(CROWN.w1)), cr(CROWN.y0 + 22, wIn(CROWN.w0 + 3.6)), cr(CROWN.y0 + 8, wIn(CROWN.w0 + 1.4)), cr(CROWN.y0 + 3, wIn(CROWN.w0))], crownIn)))
     lidG.add(capMesh({ y: CROWN.y0 + 3, a: wIn(CROWN.w0), b: RHO * wIn(CROWN.w0), r: CROWN.r * RHO * wIn(CROWN.w0) }, crownIn, true))
     lap('meshes')
 
     // ---------------------------------------------------------------- sculpture
     await onProgress(0.84, 'handles, rings and studs')
-    const sMat = new kit.PatinaMaterial()
+    // photo-08/09: the handle heads, the rings and the crown are a near-black brown, the studs a little darker and
+    // smoother than the straps — per-mesh tints (the shared patina uniforms cannot tell parts apart)
+    const sMat = new kit.PatinaMaterial({ meshTint: '#8a8578' })
+    const darkMat = new kit.PatinaMaterial({ meshTint: '#4a4038', envMapIntensity: 0.45, cavity: 0.5 })
     const voxel = Math.max(0.55, 0.75 / Math.sqrt(q))
     const flipX = new THREE.Matrix4().makeScale(-1, 1, 1)
     const hGeo = kit.meshSDF(handleSDF(), { voxel })
@@ -145,22 +174,24 @@ export default {
     }
     flipWinding(hGeo2)
     const handles = [hGeo, hGeo2].map((g) => {
-      const m = new THREE.Mesh(g, sMat)
+      const m = new THREE.Mesh(g, darkMat)
       m.userData.part = 'handles'
       m.castShadow = m.receiveShadow = true
       object.add(m)
       return m
     })
-    const rings = [ringMesh(sMat, { segments: [Math.round(96 * Math.sqrt(q)), 16] })]
-    const r2 = ringMesh(sMat, { segments: [Math.round(96 * Math.sqrt(q)), 16] })
+    const rings = [ringMesh(darkMat, { segments: [Math.round(96 * Math.sqrt(q)), 16] })]
+    const r2 = ringMesh(darkMat, { segments: [Math.round(96 * Math.sqrt(q)), 16] })
     r2.position.x *= -1; r2.rotation.z *= -1
     rings.push(r2)
     for (const r of rings) { r.userData.part = 'rings'; object.add(r) }
     // studs: per side, a diamond on the strap crossing and a triangle under the shoulder band
     const studs = group('studs')
     for (let k = 0; k < 4; k++) {
-      studs.add(new THREE.Mesh(studGeometry(k, 'diamond', { cy: 180.5, w: 50, h: 58, height: 17 }), sMat))
-      studs.add(new THREE.Mesh(studGeometry(k, 'triangle', { cy: 266, top: 290.5, w: 44, height: 13 }), sMat))
+      // the narrow sides' studs stand less proud (photo-08: their silhouette bumps ≈ 2/3 of the broad face's)
+      const f = k % 2 ? 0.66 : 1
+      studs.add(new THREE.Mesh(studGeometry(k, 'diamond', { cy: 180.5, w: 50 * (k % 2 ? 0.85 : 1), h: 58 * (k % 2 ? 0.9 : 1), height: 17 * f }), sMat))
+      studs.add(new THREE.Mesh(studGeometry(k, 'triangle', { cy: 266, top: 290.5, w: 44 * (k % 2 ? 0.85 : 1), height: 13 * f }), sMat))
     }
     studs.traverse((o) => { if (o.isMesh) o.castShadow = o.receiveShadow = true })
     lap('sculpture')

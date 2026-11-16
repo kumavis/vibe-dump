@@ -141,3 +141,21 @@ lines and rounded squared spirals that follow their walls. Only the eyes and the
   therefore alternates three large and three small masks; the foot has three only.
 - **photo-26 vs photo-28 — shoulder flanges.** photo-26's side-on blocks seem to reach toward the neck; photo-28's
   end-on block is short and low. The model follows photo-28 (the more direct view).
+
+## Fix pass r8 (after the blind review)
+
+- **Décor re-traced** off photo-26 developed onto the belly panel (eyes at ±39.5 mm from the head flange, Ø 19.6; the
+  development's own x is offset 8.3 mm, the midpoint of its two eyes) and photo-28's development for the small mask
+  (eye lowered to 16.6 mm above the band foot, 31 mm from the divider). Drawn as seed lines — borders, the socket C, the
+  wavy line under the eye, the slanting socket side, quills, spiral cores, comma rows — whose parallels at the 2.1 mm
+  pitch fill the field (`src/artifacts/nezu-zun/echo.js`): no boxed compartments, no packer.
+- **Circle bands**: flat discs with a raised rim, a ring and three crescents; between them single-thread hooks round a
+  small ring (detail-circles.jpg).
+- **Heads**: bulbous rounded-trapezoid section narrowing downward, the snout running down from the horns and turning
+  up into a prow; the horns are coiled discs incised with a squared-round spiral, leaning out into a V.
+- **Shoulder lugs** lowered to ≈ 7 mm over the slope; lip thinned (the flare runs to the edge, rim Ø ≈ 358 mm);
+  foot flared ≈ 10 % to its base.
+- **Rejected from the review, with evidence**: the trumpet is not ≈ 12 % short and the belly not an upright barrel —
+  on compare-three-quarter the rim-to-shoulder / belly-width ratio is ≈ 0.47 on the photograph and ≈ 0.49 on the
+  model, and photo-26 and photo-28 both show the belly band tapering toward the foot; the camera solve (§b.1) stands.
+  The shoulder height also stands (photo-28 shows a sloping décor band about a third of the mask height tall).

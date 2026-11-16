@@ -1,0 +1,647 @@
+{
+ "note": "nezu-you belly mask, RIGHT half, panel mm: x = developed mm from the centre line, y = arc mm above y 57 (register 57-164.6, arc 122.7). Traced on faces/dev-belly.jpg (photo-31 developed onto the model's profile, the two halves averaged after a 4.5 mm centring / 3 mm tilt correction). Outer field x > 118 from photo-32 (oblique).",
+ "centre": 3,
+ "borders": [
+  [
+   118.8,
+   120.6
+  ]
+ ],
+ "polys": [
+  {
+   "name": "horn G: inner block + top bar + outer column, curling in to the island; the slot under the bar is the deep pocket",
+   "c": [
+    [
+     32,
+     73
+    ],
+    [
+     61,
+     73
+    ],
+    [
+     61,
+     95.5
+    ],
+    [
+     58,
+     99.5
+    ],
+    [
+     89,
+     104.6
+    ],
+    [
+     89,
+     101.2
+    ],
+    [
+     70,
+     99
+    ],
+    [
+     70,
+     77
+    ],
+    [
+     101,
+     76
+    ],
+    [
+     101,
+     113
+    ],
+    [
+     32,
+     113
+    ]
+   ],
+   "round": [
+    7,
+    4,
+    2,
+    1.2,
+    1,
+    0.8,
+    3.5,
+    5,
+    8,
+    9,
+    9
+   ]
+  },
+  {
+   "name": "outer body G-block beside the eye (a C open toward the eye)",
+   "c": [
+    [
+     80,
+     44
+    ],
+    [
+     115,
+     44
+    ],
+    [
+     115,
+     64.5
+    ],
+    [
+     80,
+     64.5
+    ],
+    [
+     80,
+     58.6
+    ],
+    [
+     106,
+     58.6
+    ],
+    [
+     106,
+     50.2
+    ],
+    [
+     80,
+     50.2
+    ]
+   ],
+   "round": [
+    5,
+    6,
+    6,
+    5,
+    1.2,
+    1.5,
+    1.5,
+    1.2
+   ]
+  }
+ ],
+ "bands": [
+  {
+   "name": "brow band under the horn",
+   "c": [
+    [
+     4,
+     57
+    ],
+    [
+     20,
+     64
+    ],
+    [
+     45,
+     67.4
+    ],
+    [
+     80,
+     69.2
+    ],
+    [
+     118,
+     71
+    ]
+   ],
+   "w": [
+    5,
+    6.6,
+    7.2,
+    7,
+    6
+   ],
+   "end": "point",
+   "smooth": true
+  },
+  {
+   "name": "upper-inner C hook",
+   "c": [
+    [
+     26,
+     105
+    ],
+    [
+     9,
+     103
+    ],
+    [
+     8,
+     86
+    ],
+    [
+     13,
+     79
+    ]
+   ],
+   "w": [
+    6.5,
+    7,
+    6.6,
+    6
+   ],
+   "end": "spiral",
+   "spiral": {
+    "turns": 0.95,
+    "dir": 1,
+    "R": 3.6
+   }
+  },
+  {
+   "name": "inner lancet beside the centre",
+   "c": [
+    [
+     5,
+     4
+    ],
+    [
+     6,
+     30
+    ],
+    [
+     10,
+     47
+    ],
+    [
+     17,
+     58
+    ]
+   ],
+   "w": [
+    5,
+    5.6,
+    5,
+    3.6
+   ],
+   "start": "round",
+   "end": "point",
+   "smooth": true
+  },
+  {
+   "name": "cheek arc round the eye",
+   "c": [
+    [
+     15,
+     3
+    ],
+    [
+     14.5,
+     26
+    ],
+    [
+     20,
+     45
+    ],
+    [
+     31,
+     61
+    ]
+   ],
+   "w": [
+    6,
+    6.6,
+    6,
+    4.2
+   ],
+   "start": "round",
+   "end": "point",
+   "smooth": true
+  },
+  {
+   "name": "inner quill under the eye",
+   "c": [
+    [
+     25,
+     3
+    ],
+    [
+     25.5,
+     17
+    ],
+    [
+     33,
+     28
+    ]
+   ],
+   "w": [
+    5.2,
+    5,
+    3.6
+   ],
+   "start": "round",
+   "end": "point",
+   "smooth": true
+  },
+  {
+   "name": "jaw under the eye, rolled up beside it",
+   "c": [
+    [
+     37,
+     18.5
+    ],
+    [
+     55,
+     15.5
+    ],
+    [
+     72,
+     18
+    ],
+    [
+     80,
+     26
+    ]
+   ],
+   "w": [
+    5,
+    6.2,
+    6.2,
+    5.4
+   ],
+   "end": "spiral",
+   "spiral": {
+    "turns": 1.0,
+    "dir": 1,
+    "R": 3.6
+   },
+   "smooth": true
+  },
+  {
+   "name": "low hook",
+   "c": [
+    [
+     33,
+     5.5
+    ],
+    [
+     50,
+     6.5
+    ],
+    [
+     64,
+     9
+    ]
+   ],
+   "w": [
+    4.6,
+    5,
+    4.4
+   ],
+   "end": "spiral",
+   "spiral": {
+    "turns": 0.85,
+    "dir": 1,
+    "R": 2.8
+   },
+   "smooth": true
+  },
+  {
+   "name": "lancet 1",
+   "c": [
+    [
+     88,
+     37
+    ],
+    [
+     102,
+     39.5
+    ],
+    [
+     118,
+     41.5
+    ]
+   ],
+   "w": [
+    4.6,
+    4,
+    2.6
+   ],
+   "end": "point",
+   "smooth": true
+  },
+  {
+   "name": "lancet 2",
+   "c": [
+    [
+     92,
+     29.5
+    ],
+    [
+     105,
+     31
+    ],
+    [
+     119,
+     33
+    ]
+   ],
+   "w": [
+    4.4,
+    3.8,
+    2.4
+   ],
+   "end": "point",
+   "smooth": true
+  },
+  {
+   "name": "lancet 3",
+   "c": [
+    [
+     90,
+     22
+    ],
+    [
+     104,
+     21.5
+    ],
+    [
+     119,
+     23.5
+    ]
+   ],
+   "w": [
+    4.2,
+    3.6,
+    2.4
+   ],
+   "end": "point",
+   "smooth": true
+  },
+  {
+   "name": "lancet 4",
+   "c": [
+    [
+     76,
+     9
+    ],
+    [
+     98,
+     10
+    ],
+    [
+     119,
+     13.5
+    ]
+   ],
+   "w": [
+    4.8,
+    4.2,
+    2.6
+   ],
+   "end": "point",
+   "smooth": true
+  },
+  {
+   "name": "photo-32: the tall side kui up the outer field",
+   "c": [
+    [
+     130,
+     17
+    ],
+    [
+     128,
+     106
+    ],
+    [
+     134,
+     118
+    ],
+    [
+     147,
+     116.6
+    ],
+    [
+     151,
+     104
+    ]
+   ],
+   "w": [
+    8,
+    9.6,
+    9,
+    8,
+    7
+   ],
+   "end": "spiral",
+   "spiral": {
+    "turns": 0.9,
+    "dir": 1,
+    "R": 3.8
+   },
+   "fill": "spirals",
+   "smooth": true
+  },
+  {
+   "name": "second hook toward the end flange",
+   "c": [
+    [
+     162,
+     15
+    ],
+    [
+     161,
+     70
+    ],
+    [
+     171,
+     81.6
+    ]
+   ],
+   "w": [
+    7,
+    7.4,
+    6.4
+   ],
+   "end": "spiral",
+   "spiral": {
+    "turns": 0.85,
+    "dir": -1,
+    "R": 3.4
+   },
+   "smooth": true
+  },
+  {
+   "name": "end bar",
+   "c": [
+    [
+     176,
+     93
+    ],
+    [
+     176,
+     116
+    ]
+   ],
+   "w": [
+    5.2,
+    5.2
+   ],
+   "start": "round",
+   "end": "round"
+  }
+ ],
+ "plates": [
+  {
+   "name": "the kui head under the rolled jaw",
+   "c": [
+    84,
+    30.5
+   ],
+   "w": 10,
+   "h": 10,
+   "r": 4.6
+  }
+ ],
+ "eyes": [
+  {
+   "c": [
+    54.5,
+    43
+   ],
+   "w": 36,
+   "h": 36,
+   "height": 6,
+   "crown": 0.6,
+   "pupil": {
+    "r": 3.2,
+    "depth": 2.6
+   }
+  },
+  {
+   "c": [
+    139,
+    111
+   ],
+   "w": 7.2,
+   "h": 7.2,
+   "height": 2.2,
+   "crown": 0.8,
+   "base": "field"
+  }
+ ],
+ "lines": [
+  {
+   "name": "socket line round the eye boss",
+   "circle": [
+    54.5,
+    43,
+    20.2
+   ],
+   "w": 0.85
+  }
+ ],
+ "spirals": [],
+ "cuts": [
+  {
+   "name": "the deep hooked channel dividing the horn's inner block (a G inside the block)",
+   "c": [
+    [
+     56,
+     98.6
+    ],
+    [
+     52.6,
+     94
+    ],
+    [
+     52.6,
+     83.5
+    ],
+    [
+     48.5,
+     79.6
+    ],
+    [
+     41.5,
+     80
+    ],
+    [
+     38.6,
+     84.5
+    ],
+    [
+     39.6,
+     90.5
+    ]
+   ],
+   "w": 2.8
+  },
+  {
+   "name": "the U channel coiling in the island",
+   "c": [
+    [
+     90.5,
+     96
+    ],
+    [
+     91,
+     84
+    ],
+    [
+     86,
+     80.6
+    ],
+    [
+     79.5,
+     81.4
+    ],
+    [
+     77,
+     87
+    ],
+    [
+     80,
+     92
+    ],
+    [
+     85,
+     91.5
+    ],
+    [
+     85.5,
+     87
+    ]
+   ],
+   "w": 2.2
+  }
+ ]
+}

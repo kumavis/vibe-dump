@@ -22,21 +22,30 @@ const clamp = (x, a, b) => Math.min(b, Math.max(a, x))
 const smooth = (t) => (t <= 0 ? 0 : t >= 1 ? 1 : t * t * (3 - 2 * t))
 const smax = (a, b, k) => { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.max(a, b) + h * h * k * 0.25 }
 
-export const AZ = { spout: 0, tail: 180, handle: 90, legs: [90, 210, 330], posts: [45, -45], flanges: [0, 180] }
+export const AZ = { spout: 0, tail: 180, handle: 90, legs: [90, 210, 330], posts: [50, -50], flanges: [0, 180] }
 
-// lower cup, bottom → band top ([r, y]); a round bottom, a straight band, a narrow plain fillet top and bottom
+// lower cup, bottom → band top ([r, y]); a near-hemispherical bottom (photo-02: the bowl hangs ≈ 34 mm below the band,
+// fix pass r8: was 23 mm, ≈ 8 mm too shallow against the landmark overlay), a straight band
 export const CUP = [
-  [0, 77.5], [8, 77.9], [15, 79.4], [21, 82.0], [26, 85.6], [29.8, 89.9], [32.4, 94.4], [33.8, 98.4], [34.2, 100.6],
+  [0.03, 69.0], [8, 69.7], [15, 72.2], [21, 75.9], [26, 80.6], [29.8, 86.0], [32.4, 91.7], [33.8, 97.2], [34.2, 100.6],
   [34.3, 102.2], [34.4, 121.0], [34.7, 140.0],
 ]
+/** height of the outer bowl surface at radius rho (rho < 34.2), else the band foot */
+export function bowlY(rho) {
+  for (let i = 1; i < CUP.length; i++) {
+    if (CUP[i][0] >= rho) { const f = (rho - CUP[i - 1][0]) / Math.max(1e-6, CUP[i][0] - CUP[i - 1][0]); return lerp(CUP[i - 1][1], CUP[i][1], clamp(f, 0, 1)) }
+  }
+  return CUP[CUP.length - 1][1]
+}
 export const REG = { band: [101, 140], upper: [140.5, 163] } // décor registers, y mm
 export const Y_C = 140 // where the swept upper wall starts (top of the band's upper fillet)
 export const RIM = {
   r0: 44, y0: 161, // side rim (θ ±60…±120): a gently flared lip
-  spout: { half: 14, tip: 95, y: 189, depth: 13, wall: 5 },
-  tail: { tip: 77, y: 193, baseAz: 27, pow: 1.15 },
-  soft: 14, // mm: soft max between circle / spout / tail outlines (rounded inner corners in plan)
-  lip: 2.6, // wall thickness at the rim
+  // the spout tongue narrows toward its tip (half-width halfRoot at the cup → half at the tip round); high walls
+  spout: { half: 9.5, halfRoot: 13.5, tip: 95, y: 189, depth: 13, dip: 6.5, wall: 5, pow: 0.65 },
+  tail: { tip: 77, y: 193, baseAz: 13, pow: 1.15 },
+  soft: 12, // mm: soft max between circle / spout / tail outlines (rounded inner corners in plan)
+  lip: 3.0, // wall thickness at the rim: a flat, slightly thickened edge (no rolled tube: fix pass r8)
 }
 
 // ---- plan outline of the rim: ρ(θ) as a soft union of circle, spout stadium and tail triangle
@@ -45,11 +54,14 @@ function rayStadium(az) {
   const s = Math.sin(az * DEG), c = Math.cos(az * DEG)
   if (c <= 0) return 0
   const zc = S.tip - S.half // centre of the tip round
-  // ray vs the round end
-  const b = zc * c, disc = b * b - (zc * zc - S.half * S.half)
-  const tRound = disc >= 0 ? b + Math.sqrt(disc) : 0
-  const tSide = Math.abs(s) > 1e-6 ? S.half / Math.abs(s) : Infinity
-  return tSide * c <= zc ? tSide : Math.max(tRound, 0)
+  const halfAt = (z) => lerp(S.halfRoot, S.half, clamp(z / zc, 0, 1))
+  const inside = (t) => { const x = t * s, z = t * c; return z <= zc ? Math.abs(x) <= halfAt(z) : Math.hypot(x, z - zc) <= S.half }
+  if (!inside(0.5)) return 0
+  // march out, then bisect the exit
+  let a = 0.5, b = 0.5
+  while (b < S.tip + 2 && inside(b)) { a = b; b += 1.5 }
+  for (let i = 0; i < 30; i++) { const m = (a + b) / 2; if (inside(m)) a = m; else b = m }
+  return a
 }
 function rayTail(az) {
   const T = RIM.tail
@@ -74,7 +86,7 @@ export function rimHeight(az, rho) {
   const S = RIM.spout, T = RIM.tail
   let y = RIM.y0
   // a smooth saddle: lowest at the sides (θ ±90), rising into spout and tail
-  if (z > 0) y += (S.y - RIM.y0) * Math.pow(clamp((z - 6) / (S.tip - 6), 0, 1), 1.05)
+  if (z > 0) y += (S.y - RIM.y0) * Math.pow(clamp((z - 6) / (S.tip - 6), 0, 1), S.pow)
   if (z < 0) y += (T.y - RIM.y0) * Math.pow(clamp((-z - 4) / (T.tip - 4), 0, 1), T.pow)
   return y + 0 * x
 }
@@ -120,7 +132,15 @@ export function meridian(az) {
   let M = F
   if (sp > 0) {
     const S = RIM.spout
-    const fl = (r) => Y_C + 3 + (r - rc) * ((S.y - S.depth - Y_C - 3) / (S.tip - S.wall - rc))
+    // fix pass r8: a U section, not a flat tray: the floor is lowest on the spout axis (the keel = the chin seen from
+    // outside, kept where the silhouette put it) and curls up toward each wall by S.dip (× (lateral / half-width)²)
+    const zc = S.tip - S.half, sa = Math.abs(Math.sin(az * DEG)), ca = Math.cos(az * DEG)
+    const fl = (r) => {
+      const y = Y_C + 3 + (r - rc) * ((S.y - S.depth - Y_C - 3) / (S.tip - S.wall - rc))
+      const z = r * ca, half = lerp(S.halfRoot, S.half, clamp(z / zc, 0, 1))
+      const u = clamp((r * sa) / half, 0, 1)
+      return y + S.dip * smooth((r - rc) / 14) * u * u
+    }
     const fEnd = Math.max(rc + 2, re - S.wall)
     const pts = [[rc, Y_C], [rc + 0.4, Y_C + 2.2], [rc + 1.6, fl(rc + 1.6)]]
     for (let r = rc + 4; r < fEnd; r += 3) pts.push([r, fl(r)])
@@ -211,7 +231,7 @@ export function bodySamples(q = 1) {
 // ----------------------------------------------------------------------------------------------------- LEGS
 // Three straight blade legs of triangular section, sharp edge outward, splayed ≈ 17°, tips nearly pointed
 // (photo-02: the near leg under the handle and the right leg at θ 210; the third, θ 330, is hidden behind them).
-export const LEG = { topY: 88, rhoTop: 24, rhoTip: 44, depthTop: 19, depthTip: 3.6, chordTop: 25, chordTip: 4.6, bow: 2.0, embed: 7 }
+export const LEG = { topY: 88, rhoTop: 24, rhoTip: 44, depthTop: 19, depthTip: 4.6, chordTop: 25, chordTip: 6.0, bow: 2.0, embed: 12, seat: 1.4 }
 export function legSection(y) {
   const t = clamp(y / LEG.topY, 0, 1.2)
   const a = lerp(LEG.rhoTip, LEG.rhoTop, t) + LEG.bow * Math.sin(Math.PI * clamp(t, 0, 1))
@@ -233,26 +253,38 @@ export function buildLeg(kit, { az, material, q = 1 }) {
   const ring = (s) => {
     // 3 corners: apex (out), back-left, back-right; 4 points per side, the corner pulled in by `round`
     const C = [[s.apex, 0], [s.back, s.half], [s.back, -s.half]]
+    // 8 points per side, flat faces, narrow corner fillets: the outward arris catches the light as a crisp line
     const pts = []
-    const rr = 0.18
+    const rr = [0.07, 0.16, 0.16]
     for (let i = 0; i < 3; i++) {
       const A = C[i], B = C[(i + 1) % 3]
-      for (let k = 0; k < 4; k++) {
-        const f = rr * 0.5 + (k / 4) * (1 - rr)
+      const ra = rr[i], rb = rr[(i + 1) % 3]
+      for (let k = 0; k < 8; k++) {
+        const f = ra * 0.5 + (k / 7) * (1 - ra * 0.5 - rb * 0.5)
         pts.push([lerp(A[0], B[0], f), lerp(A[1], B[1], f)])
       }
     }
     return pts
   }
-  const nr = 12
+  const nr = 24
+  // the leg's top is cut by the bowl: each section point stops LEG.seat mm inside the outer bowl surface (so the leg
+  // never shows through into the cup, fix pass r8)
+  const at = (u, y) => {
+    const R = ring(legSection(y))
+    const t = (1 - u) * nr, i = Math.floor(t) % nr, f = t - Math.floor(t)
+    const A = R[i], B = R[(i + 1) % nr]
+    return [lerp(A[0], B[0], f), lerp(A[1], B[1], f)]
+  }
   const geo = kit.buildSurface({
     surface: (u, v, o) => {
-      const y = v * yTop
-      const s = legSection(y)
-      const R = ring(s)
-      const t = (1 - u) * nr, i = Math.floor(t) % nr, f = t - Math.floor(t)
-      const A = R[i], B = R[(i + 1) % nr]
-      P(lerp(A[0], B[0], f), lerp(A[1], B[1], f), y, o.pos)
+      let y = v * yTop
+      let [rho, l] = at(u, y)
+      for (let k = 0; k < 3; k++) {
+        const yb = bowlY(Math.hypot(rho, l)) + LEG.seat
+        if (y <= yb) break
+        y = yb; [rho, l] = at(u, y)
+      }
+      P(rho, l, y, o.pos)
     },
     segments: [nr * 2, nv],
     normals: 'surface',
@@ -279,19 +311,27 @@ export function buildLeg(kit, { az, material, q = 1 }) {
 // (photo-02: the near post's cap is a plain cone, the far one shows a whorl on its top — modelled alike, the whorl
 // on both).
 export const POST = {
-  rho: 40.5, stemR: 4.4, base: 159, capY: 194,
-  cap: [[0, -0.4], [4.0, -0.4], [6.5, 0.1], [10.2, 0.6], [11.6, 1.0], [11.8, 1.8], [11.0, 2.6], [9.0, 4.2], [6.8, 5.8], [4.4, 7.0], [3.2, 7.4], [3.1, 9.8], [2.5, 10.6], [0, 10.8]],
+  rho: 40.5, stemR: 4.9, base: 159, capY: 195.6,
+  // fix pass r8: a LOW DOME (convex top, a thin rolled edge) and a short cylindrical flat-topped knob Ø 6.4 (photo-02)
+  cap: [[0, 0.2], [4.0, 0.2], [8.0, 0.0], [11.4, -0.5], [12.3, -0.2], [12.4, 0.5], [11.9, 1.4], [10.9, 2.5], [9.5, 3.5], [7.7, 4.4], [5.6, 5.0], [3.6, 5.35], [3.25, 5.4], [3.2, 8.4], [2.9, 8.9], [0.03, 9.0]],
 }
-export function postTop() { return POST.capY + 10.4 }
+export function postTop() { return POST.capY + 9.0 }
 
 // ----------------------------------------------------------------------------------------------------- HANDLE
 // The loop handle at θ 90: a flat strap ≈ 11 mm wide and 4.6 thick leaves the upper band at y ≈ 146, runs out
 // and round in a C to the band's foot at y ≈ 110; an animal head sits on its top outer corner: a flat brow plate
 // with two stubby horns, round eyes, a snout turned down onto the strap (photo-02 crop "handle").
-export const HANDLE_PATH = [
-  [32.8, 140.7], [41.0, 141.1], [46.5, 140.5], [53.1, 137.9], [57.1, 132.9], [59.1, 125.9], [59.5, 118.3], [58.5, 111.5],
-  [55.5, 106.3], [49.9, 103.1], [45.0, 101.9], [38.0, 101.9], [32.6, 102.5],
-]
+// fix pass r8: a bowed D loop (no straight arms, no square corners), reaching ρ ≈ 52.4 at mid height (the strap's
+// outer face at ≈ 54.9: the landmark overlay put the old loop ≈ 5 mm too far out)
+export const HANDLE_PATH = (() => {
+  const c = [32.8, 121.6], rx = 19.6, ry = 19.4, ex = 2.5, out = []
+  for (let i = 0; i <= 40; i++) {
+    const a = Math.PI / 2 - (i / 40) * Math.PI
+    const ca = Math.cos(a), sa = Math.sin(a)
+    out.push([c[0] + rx * Math.sign(ca) * Math.pow(Math.abs(ca), 2 / ex), c[1] + ry * Math.sign(sa) * Math.pow(Math.abs(sa), 2 / ex)])
+  }
+  return out
+})()
 
 // ----------------------------------------------------------------------------------------------------- LIP
 // The rim is a thick rounded lip (photo-02: a rolled edge ≈ 4 mm across on the spout walls and the tail), not the
@@ -321,4 +361,40 @@ export function buildLip(kit, { q = 1, material, thickness = 2.6, radius = 2.0 }
   const m = new THREE.Mesh(geo, material)
   m.name = 'lip'; m.userData.part = 'body'; m.castShadow = m.receiveShadow = true
   return m
+}
+
+// ----------------------------------------------------------------------------------------------------- TAIL RIBS
+// fix pass r8 (photo-02 crop 'tail'): a round raised rib runs along each side of the tail from its tip, down its
+// underside and onto the upper wall, reaching the band top at θ ≈ 163 (and 197, mirrored: INFERRED) — the tail's
+// strengthening rib and the "diagonal ridge under the tail" of face-upper are the same feature.
+export const TAIL_RIB = { az0: 160, az1: 179.4, t0: 0.0, t1: 0.94, w: 1.15, h: 1.25, bend: 1.2 }
+export function buildTailRibs(kit, { material, q = 1 }) {
+  const R = TAIL_RIB
+  const o = { pos: new THREE.Vector3(), nrm: new THREE.Vector3() }
+  const P = new THREE.Vector3(), T = new THREE.Vector3(), B = new THREE.Vector3(), P2 = new THREE.Vector3()
+  const meshes = []
+  for (const side of [1, -1]) {
+    const azAt = (s) => { const a = R.az0 + (R.az1 - R.az0) * (1 - Math.pow(1 - s, R.bend)); return side > 0 ? a : 360 - a }
+    // the rib hugs the tail's top edge from the tip for half its run, then drops down the wall to the band
+    const vAt = (s) => V_SPLIT + 0.004 + (R.t0 + (R.t1 - R.t0) * (1 - Math.pow(1 - s, 2.2))) * (1 - V_SPLIT - 0.004)
+    const geo = kit.buildSurface({
+      surface: (u, v, out) => {
+        const sU = side > 0 ? u : 1 - u
+        bodySurface(uOfAz(azAt(sU)), vAt(sU), o)
+        P.copy(o.pos)
+        bodyPoint(uOfAz(azAt(Math.min(1, sU + 0.01))), vAt(Math.min(1, sU + 0.01)), P2)
+        T.copy(P2).sub(bodyPoint(uOfAz(azAt(Math.max(0, sU - 0.01))), vAt(Math.max(0, sU - 0.01)), B)).normalize()
+        B.crossVectors(T, o.nrm).normalize()
+        const taper = 1 - 0.45 * sU, a = Math.PI * v
+        out.pos.copy(P).addScaledVector(B, Math.cos(a) * R.w * taper).addScaledVector(o.nrm, Math.sin(a) * R.h * taper - 0.35)
+      },
+      segments: [Math.round(140 * Math.sqrt(q)), 10],
+      normals: 'displaced',
+    })
+    geo.computeVertexNormals()
+    const m = new THREE.Mesh(geo, material)
+    m.name = 'tail-rib'; m.userData.part = 'body'; m.castShadow = m.receiveShadow = true
+    meshes.push(m)
+  }
+  return meshes
 }

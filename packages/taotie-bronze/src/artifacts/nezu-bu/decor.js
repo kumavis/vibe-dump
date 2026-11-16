@@ -129,61 +129,92 @@ const lines = (pitch = 1.25) => ({ kind: 'lines', line: 0.45, pitch })
 
 // ------------------------------------------------------------------ belly mask (register y 77 → 123.6, arc ≈ 47 mm)
 
-/** the mask, right half: centre ridge at x 0, divider flange at x ≈ 164 */
+/** the jaw row along the foot of the mask field: squared C-hooks with blunt rounded ends, alternating hands, packed
+ *  edge to edge from the ridge out under the horn (photo-06: the row runs on to ≈ ±105 mm and further into the turn) */
+function jawRow(x0, n, step, y0 = 2.2, y1 = 7.9, w = 3.1) {
+  const out = []
+  for (let k = 0; k < n; k++) {
+    const a = x0 + k * step, b = a + step - w - 1.1, m = (y0 + y1) / 2 + 0.3
+    out.push(k % 2 === 0
+      ? { c: [[a, y1], [a, y0], [b, y0], [b, m + 0.6], [a + (b - a) * 0.45, m + 0.6]], w, round: 0.55, inner: 0.15, end: 'round', fill: lines(1.2) }
+      : { c: [[b, y1], [a, y1], [a, y0], [b, y0], [b, m - 0.4]], w, round: 0.55, inner: 0.15, end: 'round', fill: lines(1.2) })
+  }
+  return out
+}
+
+/** the mask, right half: centre ridge at x 0, divider flange at x ≈ 164. Fix pass: every band re-measured on dev-mask
+ *  and a 4× enlargement of photo-06 — the bronze's bands are broad flat-topped plates ≈ 5–7 mm wide, crowded edge to
+ *  edge with ≈ 1.2–1.8 mm channels, so the widths below are the photo's and the ground shows only in the channels. */
 export const MASK = {
   centre: 2.4,
   bands: [
-    // nose column beside the ridge and the narrow band outside it (worn; read at x 5–22)
-    { c: [[11.8, 4.4], [11.8, 25], [11.8, 44.4]], w: [7, 7.6, 7.2], fill: lines(1.3) },
-    { c: [[20.8, 6], [20.8, 44.4]], w: 4, fill: lines(1.2) },
-    // the eye frame: a rounded-square G open at the bottom right, its top bar cut with lines (x 27–61.5, y 23.5–44)
-    { c: [[34, 23.4], [27, 23.4], [27, 33], [27, 43.8], [44, 43.8], [61.4, 43.8], [61.4, 31.5]], w: [4.6, 5.2, 5.2, 5.6, 5.6, 5.4, 5], round: 0.6, inner: 0.2, end: 'blunt', fill: lines(1.2) },
-    // the squared hook inside the frame, left of the eye
-    { c: [[32.4, 26.6], [32.4, 38], [39.4, 38], [39.4, 31.6], [36, 31.6]], w: 3.4, round: 0.5, inner: 0.15, end: 'round' },
-    // the cheek band under the eye, pointed toward the nose
-    { c: [[42, 20.8], [52, 22.8], [64.6, 23.6]], w: [2.6, 4.8, 5], start: 'point', fill: lines(1.2) },
+    // nose column beside the ridge and the band outside it (worn; read at x 5–23)
+    { c: [[11.2, 11.6], [11.2, 28], [11.2, 45]], w: [8.4, 8.6, 8.4], capRound: 0.15, fill: lines(1.3) },
+    { c: [[20.4, 11.6], [20.4, 45]], w: 5.4, capRound: 0.15, fill: lines(1.2) },
+    // the eye frame: a rounded-square G open at the bottom right, its top bar the full width of the field top
+    { c: [[34, 23.4], [26.4, 23.4], [26.4, 33], [26.4, 43.2], [44, 43.2], [61.6, 43.2], [61.6, 31.5]], w: [5.6, 6, 6, 6.2, 6.2, 6, 5.4], round: 0.6, inner: 0.2, end: 'blunt', fill: lines(1.2) },
+    // the squared spiral inside the frame, left of the eye
+    { c: [[32.2, 26.4], [32.2, 37.4], [40.8, 37.4], [40.8, 30.6], [36.6, 30.6]], w: 4, round: 0.5, inner: 0.15, end: 'round', fill: lines(1.1) },
+    // the cheek band under the eye, pointed toward the nose (pale on the photo)
+    { c: [[42.6, 21.4], [52, 23.4], [64.4, 24.8]], w: [3, 5.4, 5.6], start: 'point', fill: lines(1.2) },
+    // the lower border band of the face, under the nostril (x 22–64, y 9.5–12.6)
+    { c: [[23, 11], [44, 11], [64, 11]], w: 2.6, end: 'round' },
     // the vertical band between the frame and the horn
-    { c: [[67.8, 10.4], [67.8, 30], [67.8, 45.2]], w: 5, fill: lines(1.25) },
-    // the HORN: a rounded-square spiral of three laps (outer box x 72.5–127, y 11–45; ≈ 6.3 mm between laps)
-    { c: squareSpiral(72.8, 11, 127, 45, 6.3, 2.6), w: 5.1, round: 0.55, inner: 0.22, end: 'round', fill: lines(1.3) },
-    // the jaw row along the foot of the field: C-hooks curling in (x 4–70, y 1–10)
-    { c: [[5, 9.4], [5, 1.6], [19.5, 1.6], [19.5, 7], [11, 7]], w: 2.6, round: 0.5, inner: 0.15, end: 'round' },
-    { c: [[23, 9.4], [23, 1.6], [38.5, 1.6], [38.5, 9.4], [29, 9.4], [29, 5]], w: 2.6, round: 0.5, inner: 0.15, end: 'round' },
-    { c: [[41.5, 1.6], [41.5, 9.4], [53, 9.4], [53, 4], [46, 4]], w: 2.6, round: 0.5, inner: 0.15, end: 'round' },
-    { c: [[56, 9.4], [56, 1.6], [65.5, 1.6], [65.5, 6.6]], w: 2.6, round: 0.5, inner: 0.15, end: 'round' },
-    // INFERRED beyond the photograph's edge (x > 127): an upright band and a C-hook up to the divider flange
-    { c: [[134.4, 7], [134.4, 45]], w: 5, fill: lines(1.25) },
-    { c: [[150, 7.5], [141, 7.5], [141, 44.6], [158.4, 44.6], [158.4, 16], [150.6, 16]], w: 5, round: 0.55, inner: 0.2, end: 'round', fill: lines(1.3) },
+    { c: [[67.6, 13.4], [67.6, 30], [67.6, 44.4]], w: 5, fill: lines(1.25) },
+    // the HORN: a rounded-square spiral of broad laps (outer box x 72.4–127.4, y 10.6–45.4)
+    { c: squareSpiral(74.2, 13.4, 126.4, 43.2, 7.4, 2.3), w: 6, round: 0.55, inner: 0.22, end: 'round', fill: lines(1.3) },
+    // the pale bars under the horn (photo-06: the bright FLF-like bars between the horn's lowest lap and the jaw row)
+    { c: [[75.6, 15.6], [96, 15.6]], w: 3.6, end: 'blunt', capRound: 0.2, fill: lines(1.2) },
+    { c: [[100, 15.6], [121.6, 15.6], [124.6, 19]], w: 3.6, end: 'round', fill: lines(1.2) },
+    // jaw row along the foot of the field, x 3.6 → 128
+    ...jawRow(3.6, 8, 15.6),
+    // INFERRED beyond the photograph's edge (x > 128): an upright band and a C-hook up to the divider flange
+    { c: [[134.6, 2.6], [134.6, 44.2]], w: 6, fill: lines(1.25) },
+    { c: [[150, 3.2], [142, 3.2], [142, 43.2], [158.6, 43.2], [158.6, 14], [150, 14]], w: 6, round: 0.55, inner: 0.2, end: 'round', fill: lines(1.3) },
   ],
-  eyes: [{ c: [55.4, 34.4], w: 12.4, h: 11, round: 0.7, height: 3.4, crown: 0.85, socket: [7.6, 6.8] }],
-  pockets: [{ c: [34.6, 16.4], rx: 3.6, ry: 1.8, depth: 1.8 }],
-  plates: [{ c: [34.6, 16.4], w: 10.2, h: 6.2, r: 3, contour: false }], // the nostril's raised rim (pocket sunk into it)
+  eyes: [{ c: [54.8, 34.6], w: 10.8, h: 10.2, round: 1, height: 3.4, crown: 0.9, socket: [6.6, 6.2] }],
+  pockets: [{ c: [34.6, 16.6], rx: 3.8, ry: 1.9, depth: 1.8 }, { c: [55, 28], rx: 4.2, ry: 1.1, depth: 1.2 }],
+  plates: [{ c: [34.6, 16.6], w: 11.4, h: 7, r: 3.2, contour: false }], // the nostril's raised rim (pocket sunk into it)
 }
 
 // ------------------------------------------------------------------ shoulder (register y 127.4 → 158.6, arc ≈ 33.5 mm)
 
-/** a long-bodied dragon per half, head at the centre ridge (x 18–42), facing it */
+/** a long-bodied dragon per half, head by the centre ridge facing it. Re-traced (fix pass) off dev-shoulder and a 4×
+ *  enlargement of photo-06: the body is FAT (≈ 5–6 mm, domed, double-contoured) and rises from the neck right up to
+ *  the top border (peak ≈ x 70, its top edge ≈ 1 mm under the border), arcs over the first dotted disc, sweeps down
+ *  under the second and its tail curls up round it; a fat C-shaped crest curls back over the head; jaw, foreleg and
+ *  claws under the head; a lower limb runs under the first disc. */
 export const SHOULDER = {
   centre: 2.2,
   bands: [
-    // the body: from the neck over the first disc, down round it and back underneath (x 37–81)
-    { c: [[37.6, 18.4], [48.8, 19.9], [57, 23.1], [63.7, 24.9], [71, 23.6], [76.8, 20.4], [80.6, 15.7], [79, 10], [74, 7.2], [66.5, 6.4], [56, 7.4]], w: [5.4, 5, 4.8, 4.8, 4.8, 4.8, 4.6, 4.2, 3.8, 3.2, 2.2], round: 0.6, inner: 0.3, end: 'point' },
-    // the second sweep: off the top of the first loop, down and round the second disc (x 73–122)
-    { c: [[72, 25.4], [85, 19], [94.6, 13.8], [104, 10], [113, 8.2], [120.6, 9.4], [122, 14.8], [116, 21.3], [105, 24], [97, 22.6]], w: [3, 4.4, 4.6, 4.6, 4.4, 4.2, 4, 3.6, 3.2, 2.4], round: 0.6, inner: 0.3, end: 'round' },
-    // crest: a thin band off the top of the head curling over at the far end (x 6–25, y 25–32)
-    { c: [[25, 24.4], [15, 26.4], [8, 27.6], [6.2, 30], [9.6, 31.8], [14, 30.6]], w: [3.6, 3.4, 3.2, 3, 2.8, 2.4], round: 0.6, inner: 0.3, end: 'round' },
+    // the body: neck → up to the top border over disc 1 → down under disc 2 (x 36 → 112)
+    { c: [[35, 14.4], [41, 14.2], [46.4, 15.4], [51.4, 18.4], [56, 22.4], [61, 25.8], [66.4, 27.6], [72, 27.8], [77.4, 26.4], [83, 23.4], [90, 19.2], [97, 15.4], [104, 12], [111, 9.6], [116, 9.4]],
+      w: [6.4, 6.4, 6.4, 6.2, 6.2, 6, 6, 6, 5.8, 5.6, 5.4, 5.2, 5, 4.6, 4.2], round: 0.6, inner: 0.3, end: 'blunt', fill: { kind: 'lines', line: 0.4, pitch: 1.6 } },
+    // the tail curling up round the right of disc 2 and back over its top
+    { c: [[115, 9.6], [120.4, 12], [122, 17], [119.4, 21.6], [113.4, 24.4], [106.6, 25]], w: [4.2, 4, 3.8, 3.6, 3.2, 2.6], round: 0.6, inner: 0.3, end: 'round' },
+    // crest: a fat C open toward the body — lower arm from the head out to the left, round, upper arm back over it
+    { c: [[25, 21.4], [18, 21.6], [11.6, 22.2], [8.2, 25.4], [10.4, 28.8], [17, 29.4], [25, 29.2], [31, 28.6]],
+      w: [4.4, 4.6, 4.6, 4.8, 4.8, 4.6, 4.2, 3.2], round: 0.6, inner: 0.25, end: 'point' },
     // upper snout curling down in front of the head
-    { c: [[25, 14.2], [19.8, 13.8], [16.4, 12.2], [16.6, 9.8]], w: [3.8, 3.6, 3.2, 2.6], end: 'round' },
-    // lower jaw / foreleg: along the bottom, rolled up at its tail end
-    { c: [[15, 8.8], [22.6, 7.8], [32, 7.2], [37.4, 8], [38.6, 10.6], [36, 11.4]], w: [3, 3.6, 3.6, 3.4, 3.2, 2.6], end: 'round' },
-    // INFERRED (x > 122, the photograph turns away): the tail curling up before the divider flange
-    { c: [[124, 24.6], [134, 26], [142, 22], [143, 13.2], [137.6, 10.4]], w: [2.6, 3.2, 3.2, 3, 2.6], end: 'spiral', spiral: { turns: 0.6, dir: -1, R: 2.6 } },
+    { c: [[25, 14.2], [19.4, 14.4], [16, 12.6], [16, 9.6], [19, 8.6]], w: [4.6, 4.4, 4, 3.6, 3], end: 'round' },
+    // jaw / foreleg along the bottom under the head, a claw hook at each end
+    { c: [[19.6, 5.4], [27, 4.6], [34, 4.8], [39.4, 6.6], [40.6, 10], [37.6, 11.6]], w: [3.8, 4.4, 4.4, 4.2, 3.8, 3], end: 'round' },
+    // two small curls in the jaw (photo-06: C-spirals under the head)
+    { c: [[22.6, 7.2], [24.6, 9.6], [27.6, 9.4], [28.4, 7.6]], w: 2.4, end: 'spiral', spiral: { turns: 0.7, dir: -1, R: 1.2 } },
+    { c: [[29.4, 7.4], [31.6, 9.8], [34.6, 9.6], [35.4, 7.8]], w: 2.4, end: 'spiral', spiral: { turns: 0.7, dir: -1, R: 1.2 } },
+    // the lower limb running under disc 1, curling up round its left (x 45 → 66)
+    { c: [[45.6, 8.2], [53, 7.6], [60, 7.2], [65.6, 7.6], [69.8, 6.6]], w: [3.6, 4.2, 4.2, 4, 3.2], end: 'round' },
+    // the body's second outline: a narrower band hugging its underside from the neck over disc 1 and down (photo-06:
+    // the dragon is double-outlined — two parallel rounded ridges with a groove between)
+    { c: [[47.2, 11.6], [50.4, 12.6], [53.8, 14.4], [58, 17.6], [62.6, 20.6], [67.4, 22.2], [72, 22.4], [77, 21.2], [82.6, 18.4], [89, 14.4], [95.4, 11], [101, 8.4]], w: [2.2, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.6, 2.4, 2.2], round: 0.6, inner: 0.3, end: 'round' },
+    // INFERRED beyond the photograph (x > 124): a tail-hook before the divider flange
+    { c: [[128, 25.4], [138, 26.4], [145, 22.6], [146, 14.6], [140.6, 11.4]], w: [3.6, 4, 4, 3.6, 3], end: 'spiral', spiral: { turns: 0.6, dir: -1, R: 2.6 } },
   ],
-  plates: [{ c: [31, 16.4], w: 14.6, h: 12, r: 5, contour: { inset: 0.8, line: 0.45 } }], // the head
-  eyes: [{ c: [28.6, 17.6], w: 5.6, h: 5, round: 1, height: 1.4, crown: 0.8, base: 'field', socket: [3.8, 3.4] }],
+  plates: [{ c: [30.4, 16], w: 13.6, h: 11, r: 5.4, contour: { inset: 0.8, line: 0.45 } }], // the head
+  eyes: [{ c: [29.2, 17.2], w: 5.2, h: 4.8, round: 1, height: 1.4, crown: 0.8, base: 'field', socket: [3.6, 3.3] }],
   discs: [
-    { c: [70.6, 15.4], r: 6.8, height: 1.1, ring: 8.2, dots: [[-2.2, 1.6], [1.4, 2.4], [2.8, -0.4], [0.2, -0.6], [-2.6, -1.8], [0.8, -3]] },
-    { c: [99.4, 18.2], r: 5.6, height: 1, ring: 7, dots: [[-1.8, 1.2], [1.4, 1.8], [2, -1], [-0.4, -0.6], [-1.6, -2.2]] },
+    { c: [71.2, 13.8], r: 6.2, height: 1.3, ring: 7.2, dots: [[-2.2, 1.6], [1.4, 2.4], [2.8, -0.4], [0.2, -0.6], [-2.6, -1.8], [0.8, -3]] },
+    { c: [99.6, 18.8], r: 5.8, height: 1.2, ring: 7.1, dots: [[-1.8, 1.2], [1.4, 1.8], [2, -1], [-0.4, -0.6], [-1.6, -2.2]] },
   ],
 }
 
@@ -210,6 +241,9 @@ function cartouche(x0, x1, y0, y1, units) {
   return t
 }
 export const FOOT = {
+  // the raised frames round the openings (photo-06: squarish, ≈ 6 × 5 mm openings in a frame ≈ 1.5 mm wide, centred
+  // ≈ 17 mm from the flange): [x0, y0, x1, y1] mm, the opening itself is the lathe's hole
+  frames: [[12.6, 11.4, 21.6, 19.2]],
   threads: [
     // top row (y 20.6–33.6): long cartouches of paired squared hooks
     ...cartouche(2.6, 25, 20.6, 33.6, [[13.6, 27.1, 18, 10.4]]),
@@ -218,20 +252,19 @@ export const FOOT = {
     ...cartouche(67.4, 84, 20.6, 33.6, [[72.6, 27.1, 8.4, 10.4, 1.7, 1], [79.2, 27.1, 7.8, 10.4, 1.7, -1]]),
     ...cartouche(85.4, 104, 20.6, 33.6, [[94.7, 27.1, 16.4, 10.4]]),
     ...cartouche(105.4, 122, 20.6, 33.6, [[110.6, 27.1, 8.4, 10.4, 1.7, 1], [117.2, 27.1, 7.8, 10.4, 1.7, -1]]), // INFERRED from here on
-    // middle row (y 11.6–19.6): the opening's frame beside the flange, then cartouches
-    { c: [[9.8, 11.4], [22.4, 11.4], [22.4, 19.8], [9.8, 19.8]], closed: true },
-    ...cartouche(24.2, 49, 11.6, 19.6, [[30.4, 15.6, 10, 6.4, 1.6, 1], [42.8, 15.6, 10, 6.4, 1.6, -1]]),
-    ...cartouche(50.4, 66, 11.6, 19.6, [[58.2, 15.6, 13.4, 6.4, 1.6]]),
+    // middle row (y 11.6–19.6): the opening (its raised frame is drawn by renderThreads from FOOT.frames), then
+    // cartouches of hooks (photo-06: a long one x 25–47 holding C-hooks and a squared spiral, irregular)
+    ...cartouche(24.2, 47.6, 11.6, 19.6, [[29.6, 15.6, 8.6, 6.4, 1.6, 1], [37.4, 15.6, 6.4, 6.4, 1.6, -1], [44, 15.6, 5.4, 6.4, 1.5, 1]]),
+    ...cartouche(49, 66, 11.6, 19.6, [[54.4, 15.6, 9.4, 6.4, 1.6, -1], [62, 15.6, 6.2, 6.4, 1.5]]),
     ...cartouche(67.4, 84, 11.6, 19.6, [[75.7, 15.6, 14.4, 6.4, 1.6, -1]]),
-    ...cartouche(85.4, 104, 11.6, 19.6, [[94.7, 15.6, 16, 6.4, 1.6]]),
+    ...cartouche(85.4, 104, 11.6, 19.6, [[90.4, 15.6, 8.4, 6.4, 1.6], [99.4, 15.6, 7.6, 6.4, 1.6, -1]]),
     ...cartouche(105.4, 122, 11.6, 19.6, [[113.7, 15.6, 14.4, 6.4, 1.6, -1]]),
-    // bottom row (y 0.6–10.6): squared spirals in boxes, the pale band of the photograph
+    // bottom row (y 0.6–10.6): the continuous band of small squared spirals (≈ 10 mm units, alternating hands, short
+    // divider threads between them); by the flange a square of concentric turns
     ...cartouche(1.6, 21, 0.6, 10.6, [[11.3, 5.6, 16.4, 8.6]]),
-    ...cartouche(22.4, 49, 0.6, 10.6, [[29, 5.6, 10.4, 8.6, 1.7, 1], [42.4, 5.6, 10.4, 8.6, 1.7, -1]]),
-    ...cartouche(50.4, 58.4, 0.6, 10.6, [[54.4, 5.6, 6.4, 8.6]]),
-    ...cartouche(59.8, 84, 0.6, 10.6, [[65.6, 5.6, 9.4, 8.6, 1.7, 1], [78, 5.6, 9.4, 8.6, 1.7, -1]]),
-    ...cartouche(85.4, 104, 0.6, 10.6, [[94.7, 5.6, 16, 8.6]]),
-    ...cartouche(105.4, 122, 0.6, 10.6, [[113.7, 5.6, 14.4, 8.6, 1.7, -1]]),
+    { c: [[22.6, 0.6], [124, 0.6]] }, { c: [[22.6, 10.6], [124, 10.6]] },
+    ...Array.from({ length: 10 }, (_, k) => ({ c: rectSpiral(27.8 + k * 10, 5.6, 7.8, 7.6, 1.55, k % 2 ? -1 : 1) })),
+    ...Array.from({ length: 10 }, (_, k) => ({ c: [[22.6 + k * 10, k % 2 ? 10.6 : 0.6], [22.6 + k * 10, k % 2 ? 3.4 : 7.8]] })),
   ],
 }
 
@@ -255,6 +288,14 @@ export function renderThreads(kit, panel, data, o = {}) {
     ctx.lineWidth = tw * 1.1
     for (const y of [0.15, panel.height - 0.6]) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke() }
   }, { height: th, shoulder: tw * 0.42, profile: 'plateau' })
+  // the openings' frames: a broader, higher raised ring than the threads
+  if (data.frames) panel.add((ctx) => {
+    ctx.lineJoin = 'round'; ctx.lineWidth = 1.7
+    for (const side of [1, -1]) for (const [x0, y0, x1, y1] of data.frames) {
+      const a = W / 2 + side * x0, b = W / 2 + side * x1
+      ctx.strokeRect(Math.min(a, b), y0, Math.abs(b - a), y1 - y0)
+    }
+  }, { height: th * 1.6, shoulder: 0.6, profile: 'plateau' })
   // the free ground inside the cartouches: a thread spiral filler (the packer, raised mode)
   kit.leiwenFill(panel, { avoid: 'raised', margin: 0.45 }, { pitch: 1.7, line: 0.42, mode: 'thread', depth: th * 0.8, cell: [3.4, 6], pairs: 0.3, roundness: 0.1, seed: (o.seed ?? 0) + 5 })
 }
@@ -266,14 +307,16 @@ export function renderThreads(kit, panel, data, o = {}) {
 export const LIDM = {
   centre: 3,
   bands: [
-    // the frame round the mask's eye (x 7–36, y 8–28)
-    { c: [[22, 8.6], [7.4, 8.6], [7.4, 27.6], [36, 27.6], [36, 14.4], [28.6, 14.4]], w: [3.4, 3.8, 3.8, 3.8, 3.6, 3], round: 0.6, inner: 0.2, end: 'round', fill: lines(1.2) },
-    // the horn: an outward G (x 40–92, y 7–29)
-    { c: squareSpiral(40.4, 7.4, 92, 29, 5.6, 1.6), w: 3.8, round: 0.55, inner: 0.22, end: 'round', fill: lines(1.25) },
-    // INFERRED, out to the divider flange: a C-hook
-    { c: [[110, 6.6], [97, 6.6], [97, 25], [113, 25], [113, 14]], w: 3.4, round: 0.55, inner: 0.2, end: 'round' },
+    // fix pass: ONE big rounded frame per half beside the front flange (photo-06 / detail-knob: ≈ 50 mm wide), open
+    // at its lower outer corner, holding the eye and a hooked inner band (x 6–56, y 8–28)
+    { c: [[30, 8.4], [6.8, 8.4], [6.8, 27.8], [55.6, 27.8], [55.6, 14.6], [46, 14.6]], w: [3.6, 4, 4, 4, 3.8, 3.2], round: 0.7, inner: 0.22, end: 'round', fill: lines(1.2) },
+    { c: [[30, 13.4], [30, 22.6], [48, 22.6], [48, 19.2]], w: 3, round: 0.6, inner: 0.2, end: 'round' },
+    // the horn: a curving G running out toward the side flange (x 60–94, y 7–29)
+    { c: squareSpiral(61, 7.4, 94, 29, 5.6, 1.5), w: 3.8, round: 0.95, inner: 0.35, end: 'round', fill: lines(1.25) },
+    // INFERRED, out to the side flange: a C-hook
+    { c: [[112, 6.6], [99, 6.6], [99, 25], [115, 25], [115, 14]], w: 3.4, round: 0.7, inner: 0.25, end: 'round' },
   ],
-  eyes: [{ c: [20.6, 19.6], w: 9.4, h: 8, round: 0.75, height: 2.6, crown: 0.85, socket: [5.8, 5] }],
+  eyes: [{ c: [18.4, 18.4], w: 9, h: 8, round: 0.9, height: 2.6, crown: 0.85, socket: [5.6, 5] }],
 }
 
 // ------------------------------------------------------------------ panels
@@ -290,7 +333,7 @@ export const maskPanel = (kit, size, o) => make(kit, size, o, (panel) => {
 
 export const shoulderPanel = (kit, size, o) => make(kit, size, o, (panel) => {
   // domed, rounded-section bands (shoulder ≈ half the width); the ground: contour echoes, spirals only in leftovers
-  renderBands(kit, panel, SHOULDER, { seed: o.seed, height: 2.2, shoulder: 2.2, depth: 0.36, contour: { inset: 0.8, line: 0.4 }, ground: { pitch: 1.15, depth: 0.26, line: 0.45, echo: 9, cell: [4.2, 7.4], pairs: 0.4, follow: 1 } })
+  renderBands(kit, panel, SHOULDER, { seed: o.seed, height: 2.2, shoulder: 2.2, depth: 0.36, contour: { inset: 0.8, line: 0.4 }, ground: { pitch: 1.25, depth: 0.24, line: 0.42, echo: 4, cell: [4.2, 7.4], pairs: 0.4, follow: 1 } })
 })
 
 export const footPanel = (kit, size, o) => make(kit, size, o, (panel) => renderThreads(kit, panel, FOOT, { seed: o.seed }))

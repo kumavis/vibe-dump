@@ -44,6 +44,7 @@ src/kit/
     shapes.js           the band-ends-in-a-hook vocabulary (Turtle, fillet, curls, hooks, bands) + halfMaskFrame
     rounded.js          TRACED vocabulary: fat round-cornered strokes, plates, decorated plateau tops, pillow eyes (§ Rounded bands)
     lozenge.js          lattice grounds: diagonal lozenges / 回 squares, nested · squared · spiral · dot cells (§ Rounded bands)
+    coilboss.js         coilBoss: the coiled-serpent boss 盘蛇枚 of Eastern Zhou bells (dome of stepped turns, hatching, beast head) (§ Coiled-serpent boss)
     plates.js           tracedPlates: traced OUTLINES (tools/trace.py) → solid plates: shoulder, contour lines, sunk centre, top fill, bosses (§ Traced plates)
     ribbon.js           cutRibbons: the Western Zhou CUT style — channel centre lines, spiral hollows, ringed eyes cut into one flat level (§ Ribbon relief)
     panchi.js           panchiBand: Eastern Zhou stamped interlace — one pattern-block unit tiled in rows of round ribs + knobs; plainCord, ropeCord (§ Panchi interlace)
@@ -52,6 +53,7 @@ src/kit/
       ground.js         leiwen on its own (atlas entry 'leiwen')
       kui.js cicada.js blade.js whorl.js boss.js bands.js bird.js eyeband.js snake.js silkworm.js scales.js
                         companion motifs (§ Companion motifs); _strokes.js = their Pen/Sheet/renderer
+      coilboss.js       atlas sheet of relief/coilboss.js (presets nezu-bo, plain-coil, row)
       rounded.js lozenge.js pillow.js   atlas sheets of the traced vocabulary (§ Rounded bands)
       phoenix.js straps.js              Western Zhou: the ribbon bird (cutRibbons) and crossing straps with pyramidal studs (§ Ribbon relief)
       panchi.js         Eastern Zhou: tiled panchi interlace between twisted / plain cords (§ Panchi interlace)
@@ -405,6 +407,26 @@ a 300 × 50 mm Houmuwu-scale band with 53 spirals ≈ 0.3 s (+ 0.5–0.7 s for i
 grid (as leiwen) + one sink; a 340 × 120 mm panel at 6 px/mm ≈ 0.4 s. No texture-size cost: every unit
 renders at whatever ppmm the panel has (phones: 2048 cap).
 
+### Coiled-serpent boss (relief/coilboss.js)
+
+The 枚 of a Spring and Autumn bell: a serpent wound ≈ 2 turns into a low dome, each turn a rounded ridge stepped up on
+the last with a sunk gap between, the inner turns hatched by close oblique ribs, a small beast head (eyes, brows,
+ears, snout, mouth) on the crown just below the centre. Writes the field directly (max), its bbox only.
+
+```js
+kit.coilBoss(panel, { c, r: 18, height: 0.7 r, turns: 2.1, gap: 0.16 (× pitch), ridge: 0.13 (× height), start: 200 (deg),
+  hand: ±1, rot: deg, striate: { pitch: 0.75, depth: 0.22, slant: 0.9, from: 0.55 } | false,
+  head: { at: [-0.04, -0.14] (× r), w: 0.56, h: 0.46, height: 0.2 } | false, base: mm | 'field' })  → { c, r, height }
+// optional, defaults keep the round boss above: apron: { depth: 1.5 (× r, centre → bottom), end: 0.72 (× r), drop: 0.45 }
+//   (the DROP-shaped boss of the Nezu bo: the dome runs down into a smooth tongue that reaches the ledge below),
+//   foot: 'plain' (no sunk step outside the outer turn; the tail swells in from nothing), mirror: true,
+//   head.style: 'tiger' (a larger frontal tiger mask centred on the crown: ears, brow, eyes, projecting muzzle, mouth)
+kit.coilBossProfile(rho, height)   // the bare dome at a fraction of the radius
+```
+As TRUE geometry (it stands 10–15 mm proud): bake a small panel per variant and displace a disc footprint lying on the
+wall with it — re-aim the footprint's tangent frame at the panel axes, or a dome shades as a bowl. Worked example:
+`src/artifacts/nezu-bo/bosses.js`. Atlas: `coilboss`.
+
 ### Traced plates — décor as solid masses (relief/plates.js)
 
 The bronzes are broad raised PLATES with narrow channels of ground between them, not pipes on a wide ground. Draw
@@ -442,7 +464,7 @@ a list of channel CENTRE LINES (not plate outlines), traced off a photograph dev
 kit.cutRibbons(panel, spec, { map, mirror, axis, depth: 1.1, shoulder: 0.42 (× w), widen: 1, minW: 0, smooth: 2,
   border: { w: 2, d: 1.5 } | false, lift: { h, shoulder } | null, hollow: { d: 1.2, shoulder: 0.35 },
   leiwen: { pitch: 0.9, … } | false, boss: { height: 2.4, crown: 0.8, dot: 0.7 }, seed })  → { channels, hollows, bosses, ms }
-// spec = { field?: { rrect: [x0, y0, x1, y1], r: mm | [inner-top, outer-top, outer-bottom, inner-bottom] },
+// spec = { field?: { rrect: [x0, y0, x1, y1], r: mm | [inner-top, outer-top, outer-bottom, inner-bottom] } | { poly: [[x, y]…], round: 3 (closed Chaikin passes) },
 //          channels: [{ line: [[x, y]…], w (surface width mm), d?, sharp? }], hollows: [{ poly, d?, leiwen? }],
 //          raised: [{ poly, h? }], bosses: [{ c, r, ring? }] }   (= reference/nezu-fanghu/faces/dev-<zone>.trace.json)
 kit.rrectPath([x0, y0, x1, y1], r) → closed polyline     kit.smoothLine(pts, n) → Chaikin-smoothed open polyline
@@ -460,20 +482,24 @@ Cost: the Nezu fanghu's front panel (1095 × 2040 px, ≈ 140 channels, 2 sides 
 
 ### Panchi interlace — Eastern Zhou pattern-block décor (relief/panchi.js)
 
-Spring and Autumn bronzes are covered by ONE carved unit pressed into the mould again and again, row after row: FAT
-round bands (≈ 2.5–3 mm, domed, ≈ 1.5 mm proud) with blunt knobs on every free end, beads where bodies meet, narrow
-channels of plain ground between them — no plateaus, no leiwen. A unit is authored in its own mm frame (w × h, y up)
+Spring and Autumn bronzes are covered by ONE carved unit pressed into the mould again and again, row after row: round-
+shouldered bands (the Nezu hu: ≈ 2.2 mm, ≈ 1.7 mm proud, centre lines ≈ 4.4 mm apart — measured on the developed
+photograph, the drawing is dense rather than fat) with blunt knobs on every free end, pellets on loop apices and where
+bodies meet, narrow channels of plain ground between them, rows interlocking — no plateaus, no leiwen. A unit is authored in its own mm frame (w × h, y up)
 as centre-line polylines; panchiBand tiles it.
 ```js
 kit.panchiBand(panel, rect, { unit: 'nezu-hu' | { w, h, ribs: [{ pts, r (fillet mm | per vertex), caps: [start, end]
     'knob' | 'round' | 'flat' }], beads: [[x, y, r]] }, rows: [{ h | weight, count | cell (mm), mirror, flip,
     shift (× cell) }] (TOP → bottom), rowWidth: (yRowCentre) => mm (a row's own developed width: count = round(width /
     unit.w), so cells narrow up a shoulder), centre (panel x of a cell boundary; default rect centre), rib 1.5, height 1,
-    shoulder (rib / 2 = round section; less = flatter top), knob 1.25, knobHeight, jitter 0.12 (mm per impression: the
-    same impression index comes back at the same cell round the vessel), clip: true, seed })  → { rows, ms }
+    profile 'dome' | 'plateau' (the ribs' section), shoulder (rib / 2 = round section; less = flatter top), knob 1.25,
+    knobHeight, jitter 0.12 (mm per impression: the same impression index comes back at the same cell round the vessel),
+    wobble 0 (mm: each rib's centre line drifts, per impression), wavelength 7 (mm), swell 0 (± fraction of the rib width
+    per rib and impression), clip: true, seed })  → { rows, ms }
 kit.plainCord(panel, { x0, x1, y, width 2, height 1.1 })                         // 弦纹, a domed band
 kit.ropeCord(panel, { x0, x1, y, width 3, height 1.4, pitch 2.4, slant 50°, depth, line })   // 绹纹, slanted strands
-kit.PANCHI_UNITS['nezu-hu']   // 48 × 17.6 mm, read off photo-11 developed onto the hu's bands (reference/nezu-hu/faces/dev-*.jpg)
+kit.PANCHI_UNITS['nezu-hu']   // 48 × 17.6 mm, read off photo-11 developed onto the hu's bands (reference/nezu-hu/faces/dev-*.jpg):
+                              // ∩ loops with apex pellets, U loops, inward hooks, a C with a tongue; stems run on to the row border
 ```
 On a lathe, lay the band on two sectors with `map: 'true'` and pass `rowWidth: size.widthAt` and `centre: size.width / 2`:
 each row then holds a whole number of cells per half turn and both sectors share one panel without a seam. Cost: ONE
@@ -853,7 +879,9 @@ Other      tinOxide (Type I noble skin; no bare metal is left under it) + tinOxi
            default 1: how much paler the noble skin is on raised décor; −1 darker plateaus) · lowerBody +
            lowerHeight + lowerColor (skin below that fraction of the height multiplied by the tint: green-grey
            legs, a warm foot band) · rimCalm (above ~60 % of the height, plain parts and up-facing faces lose
-           the wall mottle; plain parts anywhere also lose the fine speckle)
+           the wall mottle; plain parts anywhere also lose the fine speckle) · soilGroove (default 0 = unchanged;
+           1 keeps the earth out of the relief map's groove channel — sunk lines and pockets — so inlay / dark
+           corrosion shows there: dark pockets in a pale earthy ground, Nezu jue)
 Grain &    speckle + speckleScale/Color/Decor (mm-scale stipple of a second mineral) · crustIsles +
 crust      crustScale/Color/Place (pale earthy crust patches, multi-octave; with softness the edges feather
            over several mm and they favour up-facing flats over arrises) · pustules + pustuleScale/Color
@@ -874,7 +902,7 @@ Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad gl
 ```
 
 Presets (`PATINA_PRESET_GROUPS` groups them for the drawer):
-Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui`, `yachou-yue`, `nezu-fanglei`, `nezu-fanghe`, `nezu-jia`, `nezu-zun`, `nezu-jue`, `nezu-bu`, `nezu-fanglei-dasikong`, `nezu-fanghu`, `nezu-hu` · Looks `excavated-green`
+Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui`, `yachou-yue`, `nezu-fanglei`, `nezu-fanghe`, `nezu-jia`, `nezu-zun`, `nezu-jue`, `nezu-bu`, `nezu-fanglei-dasikong`, `nezu-fanghu`, `nezu-hu`, `nezu-bo` · Looks `excavated-green`
 (generic dark Anyang excavation), `olive-museum`, `malachite-crust` (Freer F1915.136),
 `water-black` (Met fanglei 55.160), `bronze-disease`, `heirloom`, `as-cast` · Blue `nezu-blue`,
 `blue-green-excavated`, `azurite-bloom` · Classics `stanford-dragon` (cavity-driven corrosion on a scan),
@@ -899,7 +927,8 @@ and botryoids (malachiteScale, Worley); each band fades to its mean below ~1.5 p
 
 Constructor options: `{ relief, cavityAttribute, cavity = 0.8 (constant for plain meshes),
 interior = 0 (1 for a bowl's inside / inner wall: one calm corroded skin per interiorTone, no speckle, no wear; ≥ 0.55 is already fully calm), normalStrength,
-skin = false }`. `cavityAttribute: true` reads a per-vertex `cavity` (0 recess → 1 exposed) on plain meshes; add `skin: true`
+skin = false, meshTint = none }`. `meshTint` (a colour) multiplies this one mesh's beauty colour — the shared uniforms cannot tell parts
+apart (cuprite-red flanges on the Nezu zun); set later via `material.local.uMeshTint.value`. `cavityAttribute: true` reads a per-vertex `cavity` (0 recess → 1 exposed) on plain meshes; add `skin: true`
 (a mesh dressed by skin.js, § Skins) and the attribute also deepens a relief panel's own cavity (min), marks crests
 (cavity > 0.8) as arrises for wear, stands in for relief height on bare regions, and quiets the per-triangle screen-space
 curvature that a dense scan turns into facet noise. Both are compile-time defines: a material without them compiles the
@@ -1029,13 +1058,14 @@ face-front, face-mask (5 / 8 px/mm from a 3840 px CC0 photo of a flat plate; 1.7
 face-shoulder, face-main, face-second, face-low, face-foot, face-collar, face-lid (6 px/mm from a ≈ 3.6 px/mm phone photo; one face PER REGISTER on its chord plane, points from a camera solved on photo-37); `nezu-fanghe`
 face-front, face-side (4 / 3 px/mm from phone photos 25 and 42 of vessel A; lobed faces flattened onto the CORNER plane, landmarks = corner-flange roots at the register borders); `nezu-jia`
 face-drum, face-upper (7 / 6 px/mm from ≈ 4.6 px/mm phone photo 21, a ROUND vessel shot from ≈ 0.4 m: chord planes down the photo's line of sight, 2.3 / 0.9 mm rms); `nezu-you`
-face-belly, face-neck, face-skirt, face-foot, face-lid, face-strap (6 / 8 px/mm from ≈ 4.8 px/mm phone photo 31, round plan, chord planes down its line of sight; points are model surface points through the camera fitted to the outline, 0.2–1.8 mm rms); `nezu-zun`
+face-belly, face-neck, face-skirt, face-foot, face-lid, face-strap (6 / 8 px/mm from ≈ 4.8 px/mm phone photo 31, round plan, chord planes down its line of sight; points are model surface points through the camera fitted to the outline, 0.2–1.8 mm rms; `faces/dev-*.jpg` = the photo developed onto each register's panel, both halves averaged, the images `trace/*.json` was read off); `nezu-zun`
 face-belly, face-circles, face-foot (6–7 px/mm from ≈ 4 px/mm phone photo 26) and face-divider (5 px/mm, photo 28): round plan, chord planes down each photo's line of sight, points through cameras fitted to the outlines (0.5–0.9 mm rms); `nezu-jue`
 face-band, face-upper (8 px/mm from ≈ 9 px/mm phone photo 02, one plane through the cup at θ 128 down the line of sight of a camera solved on 8 landmarks, ≈ 2 mm); `nezu-bu`
 face-belly, face-shoulder, face-foot, face-lid (6 px/mm from ≈ 4 px/mm phone photo 06, round plan, chord planes down its line of sight, points through the camera fitted to the outline, 0.2–0.6 mm rms; `faces/dev-*.jpg` are the same photo developed onto each register's panel, the images the décor was traced from); `nezu-fanglei-dasikong`
 face-lid, face-collar, face-shoulder, face-main, face-blades (5–6 px/mm from ≈ 3.3–3.8 px/mm phone photo 34, chord planes per zone, points through an ASSUMED camera (el 10°, ≈ 0.9 m) fitted to two centre-line points, ≈ 2–4 mm); `nezu-fanghu`
 face-lower, face-upper, face-strap, face-neck, face-foot, face-lid (6–7 px/mm from ≈ 3.2 px/mm phone photo 08, chord planes per zone, points through an ASSUMED camera (el 6°, az 4.4°, 965 mm) fitted to 11 silhouette rows + 4 centre-line landmarks, 7.9 px rms; `faces/dev-*.jpg` are the same photo developed onto the model's curved surface, the images the décor was traced from); `nezu-hu`
-face-shoulder, face-body, face-neck (5–6 px/mm from ≈ 3.6 px/mm phone photo 11, a round hu seen from 7.8° by an almost orthographic camera fitted to the rim, base and silhouette rings (≈ 5 px rms); chord planes down its line of sight, points through that camera, 0.1 mm rms; `faces/dev-*.jpg` = the photo developed onto each band, the images the panchi unit was traced from).
+face-shoulder, face-body, face-neck (5–6 px/mm from ≈ 3.6 px/mm phone photo 11, a round hu seen from 7.8° by an almost orthographic camera fitted to the rim, base and silhouette rings (≈ 5 px rms); chord planes down its line of sight, points through that camera, 0.1 mm rms; `faces/dev-*.jpg` = the photo developed onto each band, the images the panchi unit was traced from); `nezu-bo`
+face-panel, face-band, face-band2, face-field, face-bosses, face-crown (4–7 px/mm from ≈ 3–3.6 px/mm phone photos 18 and 19, an oval bell: chord planes down each photo's line of sight, the crown on its own plane; points are exact plane points through two cameras fitted jointly with the section and 25 boss centres, 9.5 px rms; `faces/dev-*.jpg` are the photos developed onto the half-face panel, the images the décor was traced from).
 Each face's `trust` and `fit` in faces.json say how far to believe it.
 
 ### reference/<id>/faces.json

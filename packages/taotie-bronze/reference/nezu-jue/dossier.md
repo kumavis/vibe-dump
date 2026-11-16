@@ -37,7 +37,7 @@ mm cells, the usual size on 20 cm vessels. Treat every absolute size as ± 20 %.
 | item | value |
 | --- | --- |
 | leg tips | on a circle ρ ≈ 44 (solve 43–46), y 0 |
-| bowl bottom | y ≈ 77 (round, below the band by ≈ 25 mm) |
+| bowl bottom | y ≈ 69 (near-hemispherical, ≈ 32 mm below the band; fix pass r8 — was 77, ≈ 8 mm too high against a landmark overlay of the side silhouette on photo-02) |
 | band (décor field incl. borders) | y 101 → 140 (39 mm; the flange ends 102 → 139.5) |
 | upper wall | band top → side rim at y ≈ 161, flaring from r 34.7 to ≈ 44 (concave) |
 | spout | tip ρ ≈ 95 (solve 89–101), rim at the tip y ≈ 189, channel ≈ 28 mm wide outside (I ± 4), ≈ 13 mm deep |
@@ -88,3 +88,21 @@ mm cells, the usual size on 20 cm vessels. Treat every absolute size as ± 20 %.
 face-band (62 × 48 mm, 8 px/mm) and face-upper (62 × 30): one plane through the band at θ 128 seen down the
 photograph's line of sight; fit 0.09 mm rms on 8 points (model surface points projected through the camera, so
 the fit only checks consistency: the real error is the camera's ≈ 2 mm). Trust: θ 105–170.
+
+## Fix pass r8 (what changed and why)
+- Bowl near-hemispherical, bottom y 69 (was 77): a landmark overlay (side silhouette fitted to photo-02 on the leg
+  tips, spout and tail tips) put the old bowl ≈ 8 mm too high. spec.json bowlBottom 0.365 → 0.335.
+- Posts at ±50 (was ±45: the overlay put the far post ≈ 4 mm toward the spout); caps are low domes with a rolled edge
+  and a short cylindrical knob; ONLY the far cap (θ −50) carries the whorl, as fat raised commas (the near cap reads
+  plain in the photograph). Stems Ø 9.8 (the far stem measures ≈ 10–11 mm).
+- No rolled lip tube: the lip is the wall's own flat 3 mm edge. Spout plan tapers (27 → 19 mm wide) and its section is
+  a U (floor curls up 6.5 mm to each wall; the keel stays where the silhouette put it). Tail narrower (base ±13°) with
+  a round rib down each side from the tip to the band top at θ ≈ 160 / 200 (the second INFERRED).
+- Handle: a bowed D loop reaching ρ ≈ 55 (≈ 5 mm less), rounder strap, a small head with a flat plate and two stubby
+  horns. Legs: crisper outward arris, blunter tips, tops cut by the bowl (nothing shows inside the cup).
+- Band: no top spiral border (the bottom one stays: the photograph shows squared spirals under the jaw); outer column
+  broken by its outward C hook; nose column carries spirals; the filler behind the handle is two large G hooks round
+  deep pockets; squared (right-angled) spirals in chains along every band, rounder outer corners, deeper pockets.
+  Triangle: one heavy border and a thick cross figure.
+- The dark hole over the handle (θ ≈ 93–109, y ≈ 146–154) is now modelled as a deep pocket; the preset keeps earth out
+  of grooves and pockets (patina soilGroove), so it and the curl pockets read dark.

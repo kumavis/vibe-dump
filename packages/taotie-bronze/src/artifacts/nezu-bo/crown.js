@@ -28,26 +28,43 @@ function curl(c, r0, r1, a0, turns, n = 64) {
 }
 const seg = (...pts) => pts
 
-/** the left half (X < 0), crown mm: X from the axis, Y above the top; each { pts, w } is a strap centre line */
+/**
+ * The left half (X < 0), crown mm: X from the axis, Y above the top. Traced on faces/face-crown.jpg (photo-18
+ * rectified onto the crown's own plane, 4 px/mm): fat flat masses with small openings —
+ *   straps { pts, w } (centre lines), discs { c, r, hole: { c, r } } (the curls: a round mass with its eye pierced),
+ *   grooves { pts } (the incised spirals on the curls and on the arch's two heads).
+ */
 export const CROWN = {
-  loop: { outer: [52, 117], inner: [31.5, 89], r: [13, 5] }, // outer half-width / top, inner half-width / top, corner radii
+  // round-8 fix: re-read on faces/face-crown.jpg with a 10 mm grid (crown X from the axis, Y above the top):
+  // loop outer −54 / 112, window −31 / 85, outer corners ≈ 13 mm, a plain bevelled bar (no incised border)
+  loop: { outer: [53.5, 112], inner: [31, 85], r: [13, 5] },
   straps: [
-    // the arched dragon: from its foot beside the loop leg, up, over, and down beside the axis (≈ 11.5 mm strap)
-    { pts: seg([-67, -3], [-67, 30], [-63, 42], [-52, 47.5], [-24, 47.5], [-13, 42], [-10, 32], [-10, -3]), w: 11.6 },
-    // its head rolled into a curl at the outer shoulder, and a second curl on its crown (outer Ø ≈ 14 mm)
-    { pts: curl([-55, 50], 4.4, 1.2, 200, -0.9), w: [7.4, 4.6] },
-    { pts: curl([-31.5, 52], 4.4, 1.2, 190, -0.9), w: [7.4, 4.6] },
-    // the small curl at its foot inside the arch
-    { pts: curl([-38.5, 3.5], 6.5, 2.2, 10, 0.62), w: [8.6, 5] },
-    // the outer body: up beside the arch to the shoulder curl under the loop's corner
-    { pts: seg([-77, -3], [-77, 12], [-66, 24], [-60, 38], [-60, 70]), w: 11 },
-    { pts: curl([-64.5, 79], 5.4, 1.4, 0, 0.9), w: [9.6, 5.4] },
-    // the big middle spiral (outer Ø ≈ 34 mm), hung off the body at its waist
-    { pts: seg([-60, 33], [-74, 30]), w: 11 },
-    { pts: curl([-86, 45], 11.6, 6.6, -40, 0.8), w: [11.4, 6.4] },
-    // the big spiral at the foot (outer Ø ≈ 33 mm)
-    { pts: seg([-72, 4], [-88, 3]), w: 11 },
-    { pts: curl([-96, 21], 11, 6.4, -90, -0.8), w: [11.4, 6.4] },
+    // the arched dragon: a round-topped arch ≈ 20 mm wide over an opening ≈ 29 mm across (X −50 … −21, top Y 33)
+    { pts: [[-60, -4], ...curl([-35.5, 21], 24.5, 24.5, 180, -0.5, 32), [-11, -4]], w: 20 },
+    // the top curl's body running down on its outer side into the middle curl (X −75 … −62)
+    { pts: [[-68.5, 74], [-68.5, 46]], w: 13 },
+    // the top curl tied to the loop's shoulder
+    { pts: [[-62, 77], [-53, 79]], w: 11 },
+    // the middle curl into the column and down onto the big curl
+    { pts: [[-82, 50], [-69, 47]], w: 13 },
+    { pts: [[-87, 44], [-91, 34]], w: 12 },
+  ],
+  discs: [
+    { c: [-64.5, 76], r: 9.8 }, // the top curl (a rolled head, its eye not pierced)
+    { c: [-84, 54], r: 14, hole: { c: [-82.5, 51.5], r: 3.2 } }, // the middle curl
+    { c: [-96, 22.5], r: 19, hole: { c: [-94.5, 19.5], r: 4.6 } }, // the big curl at the foot
+    { c: [-39, 17], r: 10 }, // the small curl at the arch's foot, mostly behind the rim
+    { c: [-54, 49], r: 8 }, { c: [-33, 50], r: 8 }, // the two curled heads humping up out of the arch's top
+  ],
+  // the two curled heads on the arch's top (X −54, −34): raised rolled bosses, proud of the strap on both faces
+  heads: [{ c: [-54, 49], r: 7.6 }, { c: [-33, 50], r: 7.6 }],
+  // the rolled straps: a wide, deep spiral channel winding in from the curl's rim to its eye
+  grooves: [
+    { c: [-54, 49], r0: 6.2, r1: 1.2, a0: 90, turns: 1.6 }, // the arch's two heads
+    { c: [-33, 50], r0: 6.2, r1: 1.2, a0: 90, turns: 1.6 },
+    { c: [-64.5, 76], r0: 7.4, r1: 1.6, a0: 270, turns: -1.7 },
+    { c: [-84, 54], r0: 10.6, r1: 4.6, a0: 0, turns: 1.4 },
+    { c: [-96, 22.5], r0: 14.6, r1: 6.4, a0: 180, turns: -1.4 },
   ],
 }
 
@@ -61,43 +78,55 @@ export function buildCrown(kit, { quality = 1, material, thickness = 13, loopThi
   const panel = new kit.ReliefPanel({ width: W, height: Hc, ppmm, maxSize: 2048 })
   const P = (x, y) => [x + ox, y + oy]
   const C = CROWN
-  const drawHalf = (ctx, sx, which) => {
+  const line = (ctx, pts, sx) => { ctx.beginPath(); pts.forEach(([x, y], i) => { const [px, py] = P(sx * x, y); if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py) }) }
+  const drawHalf = (ctx, sx) => {
     ctx.lineCap = 'round'; ctx.lineJoin = 'round'
-    if (which !== 'loop') {
-      for (const s of C.straps) {
-        if (Array.isArray(s.w)) {
-          // a tapering strap: short round-capped pieces, the width interpolated along the line
-          const n = s.pts.length - 1
-          for (let i = 0; i < n; i++) {
-            ctx.lineWidth = s.w[0] + ((s.w[1] - s.w[0]) * (i + 0.5)) / n
-            const [ax, ay] = P(sx * s.pts[i][0], s.pts[i][1]), [bx, by] = P(sx * s.pts[i + 1][0], s.pts[i + 1][1])
-            ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke()
-          }
-          continue
-        }
-        ctx.lineWidth = s.w
-        ctx.beginPath()
-        s.pts.forEach(([x, y], i) => { const [px, py] = P(sx * x, y); if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py) })
-        ctx.stroke()
-      }
+    for (const s of C.straps) {
+      if (Array.isArray(s.w)) {
+        // leg, back, leg of different widths: one stroke per segment, rounded corners filled by round joins
+        for (let i = 0; i < s.pts.length - 1; i++) { ctx.lineWidth = s.w[Math.min(i, s.w.length - 1)]; line(ctx, [s.pts[i], s.pts[i + 1]], sx); ctx.stroke() }
+      } else { ctx.lineWidth = s.w; line(ctx, s.pts, sx); ctx.stroke() }
     }
+    ctx.beginPath()
+    for (const d of C.discs) { const [px, py] = P(sx * d.c[0], d.c[1]); ctx.moveTo(px + d.r, py); ctx.arc(px, py, d.r, 0, Math.PI * 2) }
+    ctx.fill()
+  }
+  const drawHoles = (ctx) => {
+    // the curls' eyes are pierced (a mask of its own, subtracted in the distance field)
+    ctx.beginPath()
+    for (const sx of [1, -1]) for (const d of C.discs) if (d.hole) { const [px, py] = P(sx * d.hole.c[0], d.hole.c[1]); ctx.moveTo(px + d.hole.r, py); ctx.arc(px, py, d.hole.r, 0, Math.PI * 2) }
+    ctx.fill()
+  }
+  const drawGrooves = (ctx) => {
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = 1.7
+    for (const sx of [1, -1]) for (const g of C.grooves) { line(ctx, curl([g.c[0], g.c[1]], g.r0, g.r1, g.a0, g.turns), sx); ctx.stroke() }
   }
   const loopPath = (ctx) => {
+    // ONE outline: the legs stop at Y 42 inside the arches (photo-18: the arch openings show the background under
+    // them), so the loop is an ∩ — outer corners r[0], window corners r[1]
     const L = C.loop
-    const rr = (x0, y0, x1, y1, r) => {
-      ctx.moveTo(x0 + r, y0); ctx.lineTo(x1 - r, y0); ctx.arcTo(x1, y0, x1, y0 + r, r); ctx.lineTo(x1, y1 - r); ctx.arcTo(x1, y1, x1 - r, y1, r)
-      ctx.lineTo(x0 + r, y1); ctx.arcTo(x0, y1, x0, y1 - r, r); ctx.lineTo(x0, y0 + r); ctx.arcTo(x0, y0, x0 + r, y0, r); ctx.closePath()
-    }
-    const [a, b] = [P(-L.outer[0], -4), P(L.outer[0], L.outer[1])]
+    const yb = 42
+    const [ox0, oy0] = P(-L.outer[0], yb), [ox1, oy1] = P(L.outer[0], L.outer[1])
+    const [ix0] = P(-L.inner[0], yb), [ix1, iy1] = P(L.inner[0], L.inner[1])
+    const r0 = L.r[0], r1 = L.r[1]
     ctx.beginPath()
-    rr(a[0], a[1], b[0], b[1], L.r[0])
-    const [c, d] = [P(-L.inner[0], -20), P(L.inner[0], L.inner[1])]
-    // the window (a hole: even-odd), open at the bottom where the dragons' arches pass in front
-    rr(c[0], c[1], d[0], d[1], L.r[1])
-    ctx.fill('evenodd')
+    ctx.moveTo(ox0, oy0)
+    ctx.arcTo(ox0, oy1, ox1, oy1, r0)
+    ctx.arcTo(ox1, oy1, ox1, oy0, r0)
+    ctx.lineTo(ox1, oy0)
+    ctx.lineTo(ix1, oy0)
+    ctx.arcTo(ix1, iy1, ix0, iy1, r1)
+    ctx.arcTo(ix0, iy1, ix0, oy0, r1)
+    ctx.lineTo(ix0, oy0)
+    ctx.closePath()
+    ctx.fill()
   }
   // the dragons and the loop are two plates of different thickness: two masks
   const mD = panel.mask((ctx) => { drawHalf(ctx, 1); drawHalf(ctx, -1) })
+  const mG = panel.mask((ctx) => drawGrooves(ctx))
+  const sdG = kit.signedDistance(mG.data, mG.cols, mG.rows)
+  const mH = panel.mask((ctx) => drawHoles(ctx))
+  const sdH = kit.signedDistance(mH.data, mH.cols, mH.rows)
   const mL = panel.mask((ctx) => loopPath(ctx))
   const sdD = kit.signedDistance(mD.data, mD.cols, mD.rows)
   const sdL = kit.signedDistance(mL.data, mL.cols, mL.rows)
@@ -116,18 +145,32 @@ export function buildCrown(kit, { quality = 1, material, thickness = 13, loopThi
     return Math.hypot(Math.max(qx, 0), Math.max(qz, 0)) + Math.min(Math.max(qx, qz), 0) - rr
   }
   const groove = (din, z, T, inset, w, depth) => Math.max(Math.abs(din - inset) - w / 2, T / 2 - depth - Math.abs(z))
+  // the arch's curled heads stand proud of the strap on both faces (a low dome, ≈ 2.4 mm a side)
+  const headExtra = (x, y) => {
+    let e = 0
+    for (const sx of [1, -1]) for (const h of C.heads || []) {
+      const d = Math.hypot(x - sx * h.c[0], y - h.c[1]) / h.r
+      if (d < 1) e = Math.max(e, 2.4 * Math.sqrt(1 - d * d))
+    }
+    return e
+  }
   const sdf = {
     bounds: { min: [-123, -4, -loopThickness / 2 - 2], max: [123, 121, loopThickness / 2 + 2] },
     sd(x, y, z) {
-      const dD = look(sdD, x, y), dL = look(sdL, x, y)
-      let a = box(dD, z, thickness, 3.2)
-      if (dD > 1) a = Math.max(a, -groove(dD, z, thickness, 2.6, 0.9, 0.8))
-      let b = box(dL, z, loopThickness, 3.6)
-      if (dL > 1) b = Math.max(b, -groove(dL, z, loopThickness, 3, 0.9, 0.7))
+      const dD = Math.min(look(sdD, x, y), -look(sdH, x, y)), dL = look(sdL, x, y)
+      const T = thickness + 2 * headExtra(x, y)
+      let a = box(dD, z, T, 4.2)
+      if (dD > 1) {
+        a = Math.max(a, -groove(dD, z, T, 2.8, 1.0, 0.8))
+        const g = look(sdG, x, y) // the rolled spirals: a wide channel, deepest on its centre line
+        if (g > -1.2) a = Math.max(a, -Math.max(-g - 0.2, T / 2 - 2.1 - Math.abs(z) + Math.min(0, g) * 1.2))
+      }
+      // the loop: a plain bar with broad bevelled (rounded) edges
+      const b = box(dL, z, loopThickness, 6)
       return Math.min(a, b)
     },
   }
-  const geo = kit.meshSDF(sdf, { voxel: quality >= 1 ? 0.75 : 1.05 })
+  const geo = kit.meshSDF(sdf, { voxel: quality >= 1 ? 0.85 : 1.15 })
   const g = geo.isBufferGeometry ? geo : geo.geometry
   const mesh = new THREE.Mesh(g, material)
   mesh.userData.part = 'crown'

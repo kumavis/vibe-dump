@@ -17,7 +17,7 @@
 //   plainCord(panel, { x0, x1, y, width, height })                        a plain round cord (弦纹)
 //   PANCHI_UNITS  the traced units (mm), e.g. 'nezu-hu'
 
-import { fillet } from './shapes.js'
+import { fillet, wobble } from './shapes.js'
 import { Rng } from '../util/rng.js'
 
 /**
@@ -25,44 +25,71 @@ import { Rng } from '../util/rng.js'
  * caps: [start, end] 'knob' | 'round' | 'flat' }; `beads`: [[x, y, r?]] extra knobs (junctions, eyes).
  */
 export const PANCHI_UNITS = {
-  // Nezu Museum hu 90099 (reference/nezu-hu, photo-11 developed onto the shoulder band, faces/dev-shoulder.jpg):
-  // one impression ≈ 24 × 17.6 mm on the shoulder (rows of ≈ 17.6 mm; ≈ 48 mm repeat = the unit and its mirror).
-  // Read off the front rows of both bands (dev-shoulder / dev-body, 3.6 px/mm): FAT bands ≈ 2.8 mm wide with
-  // ≈ 1.5–2 mm channels between them (the bands, not the ground, cover most of the surface), loops ≈ 8–9 mm wide
-  // filling the row's height; the block ≈ 48 mm (the autocorrelation's second peak). Per impression: a C open to the
-  // right with a tongue from its back, an arch (∩) whose right limb hooks back inward with a stem hanging in its bay,
-  // an S-bodied serpent, a knobbed stub, a hooked bar over a bead; knobs on every free end.
-  'nezu-hu': {
-    w: 48,
-    h: 17.6,
-    ribs: [
-      { pts: [[9.6, 15.2], [2.0, 15.2], [2.0, 2.4], [9.6, 2.4]], r: [0, 2.3, 2.3, 0], caps: ['knob', 'knob'] },
-      { pts: [[2.0, 8.8], [7.4, 8.8]], r: 0, caps: ['round', 'knob'] },
-      { pts: [[13.8, 2.4], [13.8, 15.2], [22.2, 15.2], [22.2, 6.0], [19.2, 6.0]], r: [0, 2.3, 2.3, 1.6, 0], caps: ['knob', 'knob'] },
-      { pts: [[18.0, 15.2], [18.0, 10.4]], r: 0, caps: ['round', 'knob'] },
-      // the block's second half: an S-bodied serpent, a knobbed stub, a hooked bar (ᒣ) over a bead
-      { pts: [[26.0, 15.2], [33.0, 15.2], [33.0, 8.8], [28.0, 8.8], [28.0, 2.4], [33.6, 2.4]], r: [0, 2.3, 2.3, 2.3, 2.3, 0], caps: ['knob', 'knob'] },
-      { pts: [[37.6, 2.4], [37.6, 11.0]], r: 0, caps: ['knob', 'knob'] },
-      { pts: [[37.6, 15.2], [45.8, 15.2], [45.8, 4.8]], r: [0, 2.3, 0], caps: ['knob', 'knob'] },
-      // ties: the pieces are not separate glyphs but a few long bodies meandering through the block (the knobs at
-      // the joins become the beads seen where bodies meet)
-      { pts: [[9.6, 2.4], [13.8, 2.4]], r: 0, caps: ['round', 'round'] },
-      { pts: [[22.2, 15.2], [26.0, 15.2]], r: 0, caps: ['round', 'round'] },
-      { pts: [[33.6, 2.4], [37.6, 2.4]], r: 0, caps: ['round', 'round'] },
-    ],
-    beads: [[41.8, 8.6, 1.7]],
-  },
+  // Nezu Museum hu 90099 (reference/nezu-hu, photo-11 developed onto the bands: faces/dev-shoulder.jpg, dev-body.jpg).
+  // Second reading (r8 fix pass): measured at 6–8 px/mm on the developed front rows, the strands are SLENDER — ≈ 2 mm
+  // wide, round-shouldered with a narrow flat top, ≈ 1.3 mm proud — and the drawing is DENSE: vertical loops ≈ 8 mm
+  // wide (centre lines ≈ 4.4 mm apart, ≈ 11 uprights per 48 mm block) that fill the whole row height, ∩ loops
+  // crowned by a pellet at the apex, U loops with a pellet at the foot, legs that hook inward (G / spiral hooks),
+  // a C with a tongue in its mouth; knobs on every free end; short stems from the apex / foot pellets run on to the
+  // row border so the rows interlock (no gutter). The block (≈ 48 × 17.6 mm, autocorrelation) is the repeat; the
+  // shapes are a faithful-in-kind reading, not a line-for-line copy (the photograph resolves ≈ 3.6 px/mm).
+  'nezu-hu': (() => {
+    const c = (k) => 1.5 + 4.4 * k, b = 1.4, m1 = 6.4, m2 = 11.0, t = 16.0, T = 17.4, B = 0.2
+    return {
+      w: 48,
+      h: 17.6,
+      ribs: [
+        // 1 · ∩ whose right leg hooks inward, a stem hanging from the apex pellet, a stem up to the border
+        { pts: [[c(0), b], [c(0), t], [c(2), t], [c(2), m1], [c(1) - 0.4, m1]], r: [0, 2.0, 2.0, 1.0, 0], caps: ['knob', 'knob'] },
+        { pts: [[c(1), t], [c(1), m2 + 0.4]], r: 0, caps: ['flat', 'knob'] },
+        { pts: [[c(1), t], [c(1), T]], r: 0, caps: ['flat', 'round'] },
+        // 2 · U (left arm up to the border), right arm hooked inward, pellet at the foot with a stem down
+        { pts: [[c(3), T], [c(3), b], [c(5), b], [c(5), m2], [c(4) + 0.4, m2]], r: [0, 2.0, 2.0, 1.0, 0], caps: ['round', 'knob'] },
+        { pts: [[c(4), b], [c(4), B]], r: 0, caps: ['flat', 'round'] },
+        { pts: [[c(4), m1 - 0.6], [c(4), b]], r: 0, caps: ['knob', 'flat'] },
+        // 3 · C open to the right with a tongue in its mouth
+        { pts: [[c(7), t], [c(6), t], [c(6), b], [c(7), b]], r: [0, 2.0, 2.0, 0], caps: ['knob', 'knob'] },
+        { pts: [[c(6), (b + t) / 2], [c(7) + 0.6, (b + t) / 2]], r: 0, caps: ['flat', 'knob'] },
+        // 4 · ∩ whose right leg runs down and turns back up into the loop (a spiral hook), apex pellet + stem
+        { pts: [[c(8), b], [c(8), t], [c(10), t], [c(10), b], [c(9), b], [c(9), m2 - 0.4]], r: [0, 2.0, 2.0, 1.6, 1.0, 0], caps: ['knob', 'knob'] },
+        { pts: [[c(9), t], [c(9), T]], r: 0, caps: ['flat', 'round'] },
+        // links: bodies are joined, not separate glyphs — a bar with a pellet between loops 1 and 2, an arm from
+        // the C's back over to loop 4, a spur from loop 4 reaching into the next block
+        { pts: [[c(2), m2], [c(3), m2]], r: 0, caps: ['flat', 'flat'] },
+        { pts: [[c(6), m2 + 0.2], [c(5) + 2.1, m2 + 0.2]], r: 0, caps: ['flat', 'knob'] },
+        { pts: [[c(7), b], [c(8), b]], r: 0, caps: ['flat', 'flat'] },
+        { pts: [[c(10), m2 - 1.0], [c(10) + 1.9, m2 - 1.0]], r: 0, caps: ['flat', 'knob'] },
+      ],
+      beads: [[c(1), t, 1.45], [c(4), b, 1.45], [c(9), t, 1.45], [c(3), T - 0.2, 1.3], [(c(2) + c(3)) / 2, m2, 1.4], [(c(7) + c(8)) / 2, b, 1.3]],
+    }
+  })(),
 }
 
 
+/** polyline resampled to ≤ step mm segments (ends kept) */
+function densify(pts, step) {
+  const out = [pts[0]]
+  for (let i = 1; i < pts.length; i++) {
+    const [ax, ay] = pts[i - 1], [bx, by] = pts[i]
+    const n = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / step))
+    for (let k = 1; k <= n; k++) out.push([ax + ((bx - ax) * k) / n, ay + ((by - ay) * k) / n])
+  }
+  return out
+}
+
 /** a unit's ribs and beads mapped into one cell: x0 (left), y0 (bottom), sx, sy (scale), mirror, jitter offset */
-function placeUnit(U, x0, y0, sx, sy, mirror, flip, dx, dy) {
+function placeUnit(U, x0, y0, sx, sy, mirror, flip, dx, dy, hand = null) {
   const X = (x) => x0 + dx + (mirror ? U.w - x : x) * sx
   const Y = (y) => y0 + dy + (flip ? U.h - y : y) * sy
   const ribs = U.ribs.map((rb) => {
-    const pts = rb.pts.map(([x, y]) => [X(x), Y(y)])
+    let pts = rb.pts.map(([x, y]) => [X(x), Y(y)])
     const r = Array.isArray(rb.r) ? rb.r.map((v) => v * Math.min(sx, sy)) : (rb.r || 0) * Math.min(sx, sy)
-    return { pts: rb.r ? fillet(pts, r, { step: 0.25 }) : pts, caps: rb.caps || ['round', 'round'], w: rb.w || 1 }
+    pts = rb.r ? fillet(pts, r, { step: 0.25 }) : pts
+    let w = rb.w || 1
+    // optional hand variation per impression (o.wobble, o.swell): the carver's line drifts, the band breathes
+    if (hand && hand.wobble > 0) pts = wobble(densify(pts, 1.0), hand.rng, hand.wobble, hand.wavelength)
+    if (hand && hand.swell > 0) w *= 1 + (hand.rng.next() - 0.5) * 2 * hand.swell
+    return { pts, caps: rb.caps || ['round', 'round'], w }
   })
   const beads = (U.beads || []).map(([x, y, r]) => [X(x), Y(y), r])
   return { ribs, beads }
@@ -77,14 +104,16 @@ function placeUnit(U, x0, y0, sx, sy, mirror, flip, dx, dy) {
  *   centre: panel x of a cell boundary (default rect centre: the pattern is symmetric about the sector centre line)
  *   rowWidth: (yRowCentre) => mm — width of the row's surface (a tapering shoulder: the row's own arc); the cell
  *     is rowWidth / count, and drawing is clipped to [centre ± rowWidth/2]
- *   rib 1.5 (mm)  height 1.0 (mm)  shoulder (rib/2: a round section; less = a flatter top)  knob 1.25 (radius mm)  knobHeight 1.3  gap: rows' top/bottom margin scale (1)
- *   jitter 0.12 (mm per impression)  seed
+ *   rib 1.5 (mm)  height 1.0 (mm)  profile 'dome' (ribs' section; 'plateau' = flat top, round shoulder)  shoulder (rib/2: a round section; less = a flatter top)  knob 1.25 (radius mm)  knobHeight 1.3  gap: rows' top/bottom margin scale (1)
+ *   jitter 0.12 (mm per impression)  wobble 0 (mm: each rib's centre line drifts, per impression) wavelength 7 (mm)
+ *   swell 0 (± fraction of the rib width, per rib and impression)  seed
  */
 export function panchiBand(panel, rect, o = {}) {
   const t0 = performance.now()
   const U = typeof o.unit === 'string' || !o.unit ? PANCHI_UNITS[o.unit || 'nezu-hu'] : o.unit
   const rib = o.rib ?? 1.5, height = o.height ?? 1.0, shoulder = o.shoulder ?? rib * 0.5
   const knob = o.knob ?? 1.25, knobHeight = o.knobHeight ?? height * 1.3
+  const profile = o.profile ?? 'dome'
   const jitter = o.jitter ?? 0.12
   const centre = o.centre ?? rect.x + rect.w / 2
   const rowsIn = o.rows || [{ weight: 1 }]
@@ -111,7 +140,8 @@ export function panchiBand(panel, rect, o = {}) {
       const kk = ((k % count) + count) % count
       const jr = new Rng((o.seed ?? 7) * 7919 + rows.length * 104729 + kk * 31)
       const dx = (jr.next() - 0.5) * 2 * jitter, dy = (jr.next() - 0.5) * 2 * jitter
-      const P = placeUnit(U, centre + shift + k * cell, y0, sx, sy, !!r.mirror, !!r.flip, dx, dy)
+      const hand = o.wobble || o.swell ? { rng: jr, wobble: o.wobble || 0, wavelength: o.wavelength ?? 7, swell: o.swell || 0 } : null
+      const P = placeUnit(U, centre + shift + k * cell, y0, sx, sy, !!r.mirror, !!r.flip, dx, dy, hand)
       ribs.push(...P.ribs)
       beads.push(...P.beads)
     }
@@ -136,7 +166,7 @@ export function panchiBand(panel, rect, o = {}) {
       ctx.stroke()
     }
     ctx.restore()
-  }, { height, profile: 'dome', shoulder })
+  }, { height, profile, shoulder })
   // knobs on the free ends and beads: a second, taller dome
   panel.raise((ctx) => {
     ctx.save()

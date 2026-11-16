@@ -81,6 +81,24 @@ function dense(pts, step = 1.5, closed = false) {
   return out
 }
 
+/** the cartouche outline: field.rrect ([x0, y0, x1, y1] + r) or field.poly (a closed polygon, corners rounded by
+ *  `round` closed Chaikin passes, default 3) — a traced field that widens down a swelling belly is not a rectangle */
+function fieldPath(field) {
+  if (field.poly) {
+    let P = field.poly
+    for (let it = 0; it < (field.round ?? 3); it++) {
+      const Q = []
+      for (let i = 0; i < P.length; i++) {
+        const a = P[i], b = P[(i + 1) % P.length]
+        Q.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]], [0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]])
+      }
+      P = Q
+    }
+    return P
+  }
+  return rrectPath(field.rrect, field.r || 0)
+}
+
 export function cutRibbons(panel, spec, opts = {}) {
   const t0 = performance.now()
   const {
@@ -98,13 +116,14 @@ export function cutRibbons(panel, spec, opts = {}) {
   }
   const chans = spec.channels || []
   // ---- lift: the cartouche interior raised as one cushion (its edge a rounded shoulder) before anything is cut
-  if (lift && spec.field && spec.field.rrect) {
-    const path = rrectPath(spec.field.rrect, spec.field.r || 0)
+  const hasField = spec.field && (spec.field.rrect || spec.field.poly)
+  if (lift && hasField) {
+    const path = fieldPath(spec.field)
     panel.raise((ctx) => { for (const s of sides) { stroke(ctx, dense(path, 1.5, true).map(M(s)), true); ctx.fill() } }, { height: lift.h ?? 1, shoulder: lift.shoulder ?? 1.2, profile: 'plateau' })
   }
   // ---- the cartouche border (a wider, deeper channel)
-  if (border && spec.field && spec.field.rrect) {
-    const path = rrectPath(spec.field.rrect, spec.field.r || 0)
+  if (border && hasField) {
+    const path = fieldPath(spec.field)
     panel.sink((ctx) => {
       ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = border.w
       for (const s of sides) { stroke(ctx, dense(path, 1.5, true).map(M(s)), true); ctx.stroke() }

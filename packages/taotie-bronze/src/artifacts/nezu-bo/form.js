@@ -10,17 +10,17 @@
 // A(y): half the length of the section, read off photo-18's silhouette row by row (the ends lie at z = 0, so the
 //   silhouette IS the end line) with the camera's depth change top → bottom divided out (dossier §b). The body
 //   widens from the top to about the middle of the boss zone and is near-straight below, swelling ≈ 1 % above the mouth.
-// K = depth / length of the section: 0.78, from the camera fit on photo-18 (mouth and top rings, dossier §b) —
+// K = depth / length of the section: 0.92, from the joint camera fit on both photographs (dossier §b.1–2) —
 //   the least certain number here (±0.08).
 
 export const H = 450 // body: mouth (y 0) to the flat top
-export const K = 0.78
-export const PINCH = { s: 0.12, n: 8 }
+export const K = 0.92
+export const PINCH = { s: 0.15, n: 8 }
 export const WALL = 7 // wall thickness at the mouth (inferred: the photographs show the mouth only edge-on)
 export const TOP = 12 // thickness of the top plate (inferred)
 
 /** half-length of the section (mm) at height y: measured rows (dossier §b.2) */
-const HALF = [[0, 175.6], [30, 175.8], [105, 176.6], [170, 176.6], [232, 176], [299, 172.5], [344, 168.2], [373, 164.8], [418, 158.2], [450, 149.6]]
+const HALF = [[0, 175.6], [30, 175.8], [105, 176.6], [170, 176.6], [232, 176], [299, 173.4], [344, 170.0], [373, 167.3], [418, 162.1], [450, 155.4]]
 
 export function halfLength(y) {
   const T = HALF
@@ -109,21 +109,22 @@ export function faceTheta(face, side, f) {
   return face > 0 ? side * th : Math.PI + side * th
 }
 
-// ------------------------------------------------------------------ the décor layout (body y, mm; dossier §c)
-// Read on photo-18 along the inner boss column and converted to heights through the fitted camera (§b): rows of
-// bosses and bands of interlace are regularised to their mean (the photograph's residual perspective made the
-// lower ones read 5–10 % taller).
+// ------------------------------------------------------------------ the décor layout (body y, panel x; dossier §c)
+// Read off photo-19 and photo-18 DEVELOPED onto the half-face panel through the fitted cameras
+// (reference/nezu-bo/faces/dev-*.jpg, 4–8 px/mm, ruled every 10 mm): the borders of every register, the boss centres
+// (also fitted with the cameras: x 59.7 / 139.4 / 213.0, rows 192 / 294 / 400), the panel's frame (a trapezoid,
+// half-width 30.5 at the top → 32 at the foot), the edge strip.
 export const LAYOUT = {
-  mouth: [0, 14], // plain margin above the mouth
-  field: [14, 147], // the broad lower field (鼓部): large interlace
-  border: [150.5, 162], // the broad raised border over the field
-  rows: [[162, 220], [266, 324], [370, 428]], // three rows of three coiled bosses per half-face (枚)
-  bands: [[224, 262], [328, 366]], // two bands of interlace between them (篆)
-  ledges: [[220, 224], [262, 266], [324, 328], [366, 370], [428, 432]], // raised strips framing them
-  topBand: [432, 450], // the band of interlocking S-links round the top
-  panel: { half: 38, y: [158, 432] }, // the central panel (钲), panel mm
-  frame: 3.6, // the raised frame strips (mm)
-  end: [232, PANEL_W], // the vertical strip along the edge (panel x)
-  bosses: { x: [64, 133, 202], r: 17, height: 11 },
-  split: 149, // lower patch [0, split] (field + mouth), upper patch [split, H]: the seam lies in the plain gap under the border
+  mouth: [0, 18], // plain margin above the mouth (the lowest row of the field is worn almost flat)
+  field: [18, 144.5], // the broad lower field (鼓部): large interlace
+  border: [147.5, 161.5], // the broad raised border over the field
+  rows: [[161.5, 215], [267, 319], [370, 432]], // three rows of three coiled bosses per half-face (枚)
+  bands: [[222, 261], [326, 361.5]], // two bands of interlace between them (篆)
+  ledges: [[215, 222], [261, 267], [319, 326], [361.5, 370], [432, 437.5]], // raised strips framing them (with their shadowed foot)
+  topBand: [437.5, 450], // the band of twisted pairs round the top
+  panel: { top: 30.5, bottom: 32, y: [161.5, 432] }, // the central panel (钲): frame outer edge, panel mm
+  frame: 4.8, // the raised frame strips (mm): the panel's dark side frames ≈ 5 mm (face-panel)
+  end: [243, PANEL_W], // the vertical strip along the edge (panel x)
+  bosses: { x: [59.5, 139.5, 213], y: [189, 293, 401], r: 19, height: 13 },
+  split: 146, // lower patch [0, split] (field + mouth), upper patch [split, H]: the seam lies in the plain gap under the border
 }

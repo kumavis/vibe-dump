@@ -21,8 +21,8 @@ export const LV = {
   shoulder: 309, //     plain band 291–309 (the vertical straps start here, a triangle stud under it)
   frieze: 357, //       neck frieze 310–356: confronted birds either side of a centre line
   neck: 419, //         triangle band 359–416, then a fillet to the neck top
-  lip: 425, //          lid lip ring 419–425
-  lid: 464, //          lid band (domed) 425–464: bird cartouches
+  lip: 421, //          lid lip 419–421: a crisp thin overhanging edge (photo-08: no plain band under the cartouches)
+  lid: 464, //          lid band (domed) 421–464: bird cartouches, rising straight off the lip
   top: 500, //          crown (open, flaring) 464–500
 }
 
@@ -32,7 +32,7 @@ const BODY = [[13, 107.5], [20, 106.2], [35, 104.4], [50, 103.4], [62, 103.6], [
   [237, 101.6], [252, 95.8], [267, 90.2], [282, 85.6], [297, 81.6], [310, 78.6], [325, 76.4], [340, 75.1], [358, 74.6],
   [373, 75.3], [388, 76.8], [403, 78.6], [413, 79.6], [419, 79.9]]
 // the lid: lip ring + domed band (W at the outer surface)
-const LID = [[425, 79.4], [432, 78.6], [440, 76.4], [448, 71.5], [455, 64], [460, 56], [463, 50], [464.5, 47.5]]
+const LID = [[421, 81.6], [424, 81.3], [428, 80.6], [434, 78.9], [440, 76.4], [448, 71.5], [455, 64], [460, 56], [463, 50], [464.5, 47.5]]
 export const PLATE = { w: 117, d: 0.564 * 117, r: 12, h: 13 }
 export const CROWN = { y0: 464, y1: 500, w0: 45.5, w1: 50.2, wall: 3.6, r: 0.42 }
 
@@ -53,8 +53,10 @@ function monotone(rows) {
 }
 export const bodyW = monotone(BODY)
 export const lidW = monotone(LID)
-/** corner radius: fat rounded corners (photo-09: the fields wrap round them), 0.7 × the half depth */
-export const bodyR = (y) => 0.7 * RHO * bodyW(y)
+/** corner radius: rounded corners the fields wrap round. r8 fix: 0.7 × the half depth made the three-quarter view
+ *  (photo-09) ≈ 10–13 % too narrow and boxy — the belly's silhouette extent at 36° is (a − r)cos + (b − r)sin + r, and the
+ *  photograph's 0.55 × H needs r ≈ 0.45 × the half depth (the front-right corner reads as a soft but definite edge there) */
+export const bodyR = (y) => 0.45 * RHO * bodyW(y)
 export const lidR = (y) => 0.6 * RHO * lidW(y)
 
 // ------------------------------------------------------------------ rounded-rectangle section

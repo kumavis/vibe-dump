@@ -36,17 +36,17 @@ export default {
   views: {
     // photo-31: the phone ≈ 1 m away at about the lid's height (fitted to the outline, dossier §b.1)
     front: { azimuth: 0, elevation: 5.5, fov: 24, fit: 0.86, target: [0, 195, 0], ref: 'front.jpg' },
-    // photo-32: from the front right, higher (≈ 18° at the foot)
-    'three-quarter': { azimuth: 33, elevation: 16, fov: 24, fit: 0.86, target: [0, 192, 0], ref: 'three-quarter.jpg' },
+    // photo-32: from the front right, higher (≈ 18° at the foot); azimuth from where the pivot head lands (≈ 42°)
+    'three-quarter': { azimuth: 42, elevation: 16, fov: 24, fit: 0.86, target: [0, 192, 0], ref: 'three-quarter.jpg' },
     end: { azimuth: 90, elevation: 6, fov: 24, fit: 0.9, target: [0, 195, 0] },
     back: { azimuth: 180, elevation: 6, fov: 24, fit: 0.9, target: [0, 195, 0] },
     top: { azimuth: 0, elevation: 88, fov: 24, fit: 0.9, target: [0, 200, 0] },
-    'detail-mask': { azimuth: 0, elevation: 9, fov: 24, fit: 0.27, target: [58, 116, 105], ref: 'detail-mask.jpg' },
+    'detail-mask': { azimuth: 0, elevation: 9, fov: 24, fit: 0.2, target: [60, 106, 106], ref: 'detail-mask.jpg' },
     'detail-eye': { azimuth: 0, elevation: 10, fov: 24, fit: 0.12, target: [46, 99, 118], ref: 'detail-eye.jpg' },
     'detail-head': { azimuth: 0, elevation: 6, fov: 24, fit: 0.17, target: [0, 192, 100], ref: 'detail-head.jpg' },
     'detail-strap': { azimuth: 0, elevation: 2, fov: 24, fit: 0.36, target: [0, 285, 110], ref: 'detail-strap.jpg' },
     'detail-lid': { azimuth: 40, elevation: 18, fov: 24, fit: 0.36, target: [0, 290, 0], ref: 'detail-lid.jpg' },
-    'detail-foot': { azimuth: 0, elevation: 14, fov: 24, fit: 0.3, target: [0, 34, 80], ref: 'detail-foot.jpg' },
+    'detail-foot': { azimuth: 0, elevation: 14, fov: 24, fit: 0.19, target: [0, 30, 84], ref: 'detail-foot.jpg' },
     // flat faces (KIT.md § Flat faces; reference/nezu-you/faces.json): down photo-31's own line of sight
     'face-belly': { face: { center: [0, 110, 108], normal: [0, 0.0958, 0.9954], up: [0, 0.9954, -0.0958], width: 250, height: 118 }, ref: 'faces/face-belly.jpg' },
     'face-neck': { face: { center: [0, 188, 88], normal: [0, 0.0958, 0.9954], up: [0, 0.9954, -0.0958], width: 200, height: 42 }, ref: 'faces/face-neck.jpg' },
@@ -92,10 +92,12 @@ export default {
     await onProgress(0.5, 'flanges')
     const fl = (azimuths, y0, y1, o) => kit.latheFlanges(body, { azimuths, ranges: [{ range: { y0, y1 } }], gap: 0, seed: seed + y0, material: plain, part: 'flanges', taper: 4, waver: 0.3, ...o })
     const flanges = [
-      ...fl([90, 270], LV.belly[0] - 1, LV.belly[1] + 1, { height: 8, thickness: 7, embed: 2, notches: { shape: 'square', pitch: 17, depth: 0.6, width: 3.4 } }),
-      ...fl([0, 180], LV.belly[0] + 1, LV.belly[1] - 14, { height: 7, thickness: 7, embed: 2, notches: { shape: 'square', pitch: 11, depth: 0.5, width: 2.4 } }),
-      ...fl([90, 270], LV.neck[0], LV.neck[1] + 2, { height: 7.5, thickness: 7, embed: 2, notches: { shape: 'square', pitch: 12.5, depth: 0.55, width: 3 } }),
-      ...fl([0, 90, 180, 270], LV.footFrieze[0], LV.footFrieze[1], { height: 5, thickness: 6, embed: 2, notches: { shape: 'square', pitch: 9.5, depth: 0.5, width: 2.2 } }),
+      // photo-31: big slotted BLOCKS (≈ 5–6 per belly end, 3 on the neck, 2 on the skirt), not fine teeth
+      ...fl([90, 270], LV.belly[0] - 1, LV.belly[1] + 1, { height: 8.5, thickness: 7, embed: 2, notches: { shape: 'square', pitch: 24, depth: 0.85, width: 2.8, pattern: [''] } }),
+      // the centre strip: narrow, pierced by small slits
+      ...fl([0, 180], LV.belly[0] + 1, LV.belly[1] - 14, { height: 6, thickness: 5, embed: 2, notches: { shape: 'square', pitch: 13, depth: 0.4, width: 1.5 } }),
+      ...fl([90, 270], LV.neck[0], LV.neck[1] + 2, { height: 8, thickness: 7, embed: 2, notches: { shape: 'square', pitch: 12.5, depth: 0.85, width: 2.8, pattern: [''] } }),
+      ...fl([0, 90, 180, 270], LV.footFrieze[0], LV.footFrieze[1], { height: 5.5, thickness: 6, embed: 2, notches: { shape: 'square', pitch: 13, depth: 0.8, width: 2.4, pattern: [''] } }),
     ]
     for (const f of flanges) object.add(f)
 
@@ -125,14 +127,14 @@ export default {
           return { p: pp, n, d: dd, b: new THREE.Vector3().crossVectors(dd, n) }
         },
       }
-      const f = kit.flange({ path, height: (t) => 12.5 - 3 * t, thickness: 6.5, embed: 2.5, taper: 4, waver: 0.3, seed: seed + 40 + sx, notches: { shape: 'square', pitch: 13, depth: 0.45, width: 3.2 }, material: plain, part: 'flanges' })
+      const f = kit.flange({ path, height: (t) => 12.5 - 3 * t, thickness: 6.5, embed: 2.5, taper: 4, waver: 0.3, seed: seed + 40 + sx, notches: { shape: 'square', pitch: 23, depth: 0.82, width: 3, pattern: [''] }, material: plain, part: 'flanges' })
       object.add(f)
     }
 
     // skirt flanges at the ends, under the horns
     for (const sx of [1, -1]) {
       const f = kit.flange({ from: new THREE.Vector3(sx * 92.8 * RK, LV.skirt[0], 0), to: new THREE.Vector3(sx * 93.2 * RK, LV.skirt[1], 0), out: new THREE.Vector3(sx, 0, 0),
-        height: 8, thickness: 7, embed: 2, taper: 4, waver: 0.3, seed: seed + 50 + sx, notches: { shape: 'square', pitch: 13.5, depth: 0.55, width: 3 }, material: plain, part: 'flanges' })
+        height: 8, thickness: 7, embed: 2, taper: 4, waver: 0.3, seed: seed + 50 + sx, notches: { shape: 'square', pitch: 13.5, depth: 0.85, width: 2.8, pattern: [''] }, material: plain, part: 'flanges' })
       object.add(f)
     }
 

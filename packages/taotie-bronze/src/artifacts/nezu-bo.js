@@ -71,21 +71,32 @@ export default {
   collection: 'Nezu Museum, Tokyo',
   accession: '90120 (number on the gallery label; exhibit 18)',
   designation: 'Not stated on the label',
-  dimensions: { h: 568, w: 353, d: 280, inferred: true, note: 'inferred (±20 %): the label gives no dimensions; scale from the incised-line pitch of the interlace and the boss size (dossier §b.3). H to the top of the crown (body 450); W across the edges, D across the faces (bosses included). Proportions are measured on the two photographs through fitted cameras.' },
+  dimensions: { h: 563, w: 353, d: 325, inferred: true, note: 'inferred (±20 %): the label gives no dimensions; scale from the incised-line pitch of the interlace and the boss size (dossier §b.3). H to the top of the crown (body 450); W across the edges, D across the faces (333 with the bosses). Proportions are measured on the two photographs through fitted cameras.' },
   blurb:
     'A large bell of pointed-oval section, made to hang mouth-down from its openwork crown of interlaced dragons and be struck from outside. Each face has a central panel flanked by three rows of three bosses, each a serpent coiled on itself with a small beast head, between bands of interlace; below a broad border the striking field is covered with interlaced dragons whose flat bodies are cut by fine parallel lines. ' +
     'Reconstructed from two of the project owner’s photographs: the size is inferred, and the back repeats the front.',
   defaultPatina: 'nezu-bo',
   views: {
-    front: { azimuth: 0, elevation: 3.5, fov: 55.6, fit: 0.76, target: [0, 298, 133], ref: 'front.jpg' },
-    'three-quarter': { azimuth: -40, elevation: 8, fov: 30, fit: 1.0, target: [0, 270, 0] },
-    end: { azimuth: 90, elevation: 6, fov: 28, fit: 1.08, target: [0, 280, 0] },
-    top: { azimuth: 0, elevation: 80, fov: 28, fit: 1.0, target: [0, 450, 0] },
-    'detail-crown': { azimuth: 0, elevation: 4, fov: 20, fit: 0.36, target: [0, 505, 0] },
-    'detail-boss': { azimuth: 12, elevation: 3, fov: 12, fit: 0.07, target: [-64, 400, 132] },
-    'detail-band': { azimuth: 10, elevation: 4, fov: 14, fit: 0.2, target: [-90, 347, 125] },
-    'detail-panel': { azimuth: 0, elevation: 4, fov: 18, fit: 0.42, target: [0, 295, 137] },
-    'detail-field': { azimuth: 0, elevation: 14, fov: 16, fit: 0.3, target: [0, 80, 137] },
+    // the photographs' own camera stations (dossier §b.1: one pinhole camera per photograph, fitted together with the
+    // section, the panel frame and the 25 boss centres, 9.5 px rms); the frames are the whole photographs
+    front: { azimuth: 0.07, elevation: 8.35, fov: 49.93, fit: 0.9575, target: [17.6, 273.3, 0], ref: 'front.jpg' },
+    'three-quarter': { azimuth: -30.08, elevation: 14.3, fov: 43.63, fit: 1.0722, target: [14.1, 239.5, 8.2], ref: 'three-quarter.jpg' },
+    end: { azimuth: -90, elevation: 6, fov: 28, fit: 1.08, target: [0, 285, 0] },
+    top: { azimuth: 0, elevation: 80, fov: 28, fit: 1.0, target: [0, 460, 0] },
+    // details: the crop boxes of SOURCES.md re-aimed through the same stations (the crown is lifted to the stage's
+    // lowest elevation, 1.2°: photo-18 looks UP at it by 9.5°)
+    'detail-crown': { azimuth: 1.31, elevation: 1.2, fov: 10.39, fit: 0.1872, target: [1.2, 513, 2], ref: 'detail-crown.jpg' },
+    'detail-boss': { azimuth: -25.22, elevation: 13.18, fov: 5.15, fit: 0.1022, target: [-120.2, 293.2, 99.6], ref: 'detail-boss.jpg' },
+    'detail-band': { azimuth: -26.3, elevation: 9.7, fov: 9.38, fit: 0.1838, target: [-107.2, 346.1, 108.7], ref: 'detail-band.jpg' },
+    'detail-panel': { azimuth: 1.6, elevation: 7.97, fov: 16.05, fit: 0.2293, target: [1.8, 300.7, 159.2], ref: 'detail-panel.jpg' },
+    'detail-field': { azimuth: -26.92, elevation: 25.22, fov: 8.49, fit: 0.1791, target: [-103.3, 102.1, 120.9], ref: 'detail-field.jpg' },
+    // flat faces (KIT.md § Flat faces; reference/nezu-bo/faces.json): chord planes down each photograph's line of sight
+    'face-panel': { face: { center: [0, 297, 159.63], normal: [0.0305, 0.1446, 0.989], up: [-0.0045, 0.9895, -0.1445], width: 170, height: 290 }, ref: 'faces/face-panel.jpg' },
+    'face-band': { face: { center: [-107.11, 344, 109.02], normal: [-0.4368, 0.1709, 0.8832], up: [0.0758, 0.9853, -0.1532], width: 230, height: 62 }, ref: 'faces/face-band.jpg' },
+    'face-band2': { face: { center: [-110.72, 242, 112.69], normal: [-0.4231, 0.2861, 0.8597], up: [0.1263, 0.9582, -0.2567], width: 230, height: 62 }, ref: 'faces/face-band2.jpg' },
+    'face-field': { face: { center: [-100.18, 82, 123.33], normal: [-0.4094, 0.4443, 0.7968], up: [0.2031, 0.8959, -0.3952], width: 230, height: 140 }, ref: 'faces/face-field.jpg' },
+    'face-crown': { face: { center: [0, 505, 0], normal: [0, 0, 1], up: [0, 1, 0], width: 250, height: 128 }, ref: 'faces/face-crown.jpg' },
+    'face-bosses': { face: { center: [-103.55, 401, 105.4], normal: [-0.4426, 0.1034, 0.8907], up: [0.046, 0.9946, -0.0926], width: 230, height: 62 }, ref: 'faces/face-bosses.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
@@ -156,7 +167,8 @@ export default {
     object.add(bosses)
 
     await onProgress(0.85, 'crown')
-    const crown = buildCrown(kit, { quality: q, material: new kit.PatinaMaterial() })
+    // the crown is near-black and glossy in both photographs, darker than the body's grey-olive skin: a per-mesh tint
+    const crown = buildCrown(kit, { quality: q, material: new kit.PatinaMaterial({ meshTint: '#262521', interior: 0.6 }) })
     crown.position.y = H
     object.add(crown)
 

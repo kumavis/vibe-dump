@@ -12,7 +12,7 @@
 // whorls on the cap tops.
 
 import * as THREE from 'three'
-import { AZ, REG, RIM, bodySurface, bodySamples, buildLeg, bodyPoint, buildLip, V_SPLIT } from './nezu-jue/form.js'
+import { AZ, REG, RIM, bodySurface, bodySamples, buildLeg, bodyPoint, buildTailRibs, V_SPLIT } from './nezu-jue/form.js'
 import { buildHandle, buildPost } from './nezu-jue/sculpture.js'
 import { bandPanel, whorlPanel, PANEL } from './nezu-jue/relief.js'
 
@@ -87,7 +87,8 @@ export default {
     const object = new THREE.Group()
     object.name = 'nezu-jue'
     object.add(body)
-    body.add(buildLip(kit, { q, material: plain, thickness: RIM.lip }))
+    // the lip is the wall's own flat edge (RIM.lip thick); the tail carries a rib along each side (fix pass r8)
+    for (const m of buildTailRibs(kit, { material: plain, q })) body.add(m)
 
     await onProgress(0.6, 'flanges')
     const flanges = []
@@ -96,7 +97,7 @@ export default {
       const f = kit.flange({
         from: new THREE.Vector3(s * 34.1, REG.band[0] + 0.6, c * 34.1), to: new THREE.Vector3(s * 34.3, REG.band[1] - 0.4, c * 34.3), out: new THREE.Vector3(s, 0, c),
         height: 3.4, thickness: 3.0, embed: 1.0, taper: 4, bevel: 0.5, waver: 0.3, seed: seed + az,
-        notches: { shape: 'square', pitch: 3.7, depth: 0.42, width: 1.5 }, material: plain, part: 'flanges',
+        notches: { shape: 'square', pitch: 2.75, depth: 0.36, width: 1.0 }, material: plain, part: 'flanges',
       })
       flanges.push(f); object.add(f)
     }
@@ -106,7 +107,8 @@ export default {
 
     await onProgress(0.8, 'posts')
     const capMat = new kit.PatinaMaterial({ relief: panels.whorl })
-    const posts = AZ.posts.map((az) => { const g = buildPost(kit, { az, q, material: plain, capMaterial: capMat, whorl: panels.whorl }); object.add(g); return g })
+    // the near cap (θ +50) is a plain dome in photo-02; the far one (θ −50) carries the whorl
+    const posts = AZ.posts.map((az) => { const g = buildPost(kit, { az, q, material: plain, capMaterial: capMat, whorl: az < 0 ? panels.whorl : null }); object.add(g); return g })
 
     await onProgress(0.9, 'handle')
     const handle = buildHandle(kit, { q, material: new kit.PatinaMaterial() })

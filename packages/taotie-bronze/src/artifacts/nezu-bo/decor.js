@@ -135,43 +135,92 @@ export function renderEls(panel, els, o = {}) {
 // ------------------------------------------------------------------ the units (authored in a local cell frame)
 
 /**
- * A dragon head, authored in a 26 × 22 mm inner box (origin bottom-left), facing +x, crest up
- * (photo-19 band 1, detail-band.jpg: the solid head with its ringed eye, a crest stalk running up through the gap in
- * its frame to the band's edge with a knob beside it, a snout curling up and back, a neck hook under it, a C-curl on
- * the cheek, one sunk curl on the jowl)
+ * A PROFILE dragon head, authored in a 30 × 20 mm box (origin bottom-left), snout to the LEFT (−x), traced on
+ * faces/dev-band.jpg (photo-19 developed, 8 px/mm; band 1, units 1 and 4): a solid dark mass ≈ 25 × 17 mm with a
+ * ringed eye in its middle; at its left the snout rolls up and back into a fat C-curl; a sunk curl on the jowl; a
+ * raised ear curl at the back; the crest a solid stalk running up to the ledge with a knob beside it (or, on units 2
+ * and 5, a hook turning back over the head); a neck stalk with a knob dropping to the frame below.
  */
-function headUnit() {
+function headUnit({ hook = false } = {}) {
   const E = emptyEls()
-  E.masses.push(chaikin([[4, 5], [10, 4.2], [16.5, 4.6], [19.6, 7.6], [19.8, 13], [15, 16.2], [8.5, 16.6], [4.2, 14.6], [2.6, 10]], 2))
-  E.solids.push({ pts: [[9.6, 15], [9.6, 30]], w: 3.6, crest: true }) // crest stalk, run on past the box (clipped by the band)
-  E.knobs.push({ c: [6.1, 19.6], r: 1.95 })
-  E.solids.push({ pts: roundCorners([[18.6, 10.4], [23.2, 11.4], [24.6, 15.2], [22.4, 17.6], [19.8, 16.6]], 1.6), w: 3.3 }) // snout
-  E.solids.push({ pts: roundCorners([[11.6, 5], [11.6, 1.5], [17.4, 1.5], [17.4, 3.6]], 1.4), w: 3 }) // neck hook
-  E.solids.push({ pts: roundCorners([[4.4, 8.2], [1.4, 8.4], [1.2, 12.6], [3.6, 13.2]], 1.1), w: 2.6 }) // cheek C
-  E.eyes.push({ c: [9.4, 10.2], r: 2.5 })
-  E.lines.push({ pts: roundCorners([[14, 6.8], [17, 7.2], [17, 11], [14.6, 11.3]], 1.2), w: 0.6 })
+  E.masses.push(chaikin([[7, 4.2], [15, 3], [24, 3.4], [29, 7], [29.4, 13.6], [25.4, 18.6], [16, 19.6], [9.6, 18.4], [6.4, 15], [5, 9.6]], 2))
+  // the snout: a fat C rolled up and back, opening to the right
+  E.solids.push({ pts: roundCorners([[9.6, 17.2], [2.2, 17.4], [1.4, 9.4], [6.4, 6.2], [9.4, 8.6], [7.8, 11.6]], [0, 3.6, 3.4, 2.4, 1.6, 0]), w: 3.8 })
+  // the ear: a raised curl at the back of the head
+  E.solids.push({ pts: roundCorners([[24.6, 9], [29.4, 9.4], [30.4, 14.4], [27, 15.8], [25.6, 13.2]], [0, 2, 2, 1.4, 0]), w: 2.8 })
+  if (hook) {
+    // crest hook: up to the ledge, then back over the head and down
+    E.solids.push({ pts: roundCorners([[16.6, 18], [16.6, 25.6], [26.4, 25.6], [26.4, 22]], 1.6), w: 3.8, crest: true })
+  } else {
+    E.solids.push({ pts: [[16.6, 18], [16.6, 32]], w: 4.2, crest: true }) // crest stalk, run on past the box (clipped by the band)
+    E.knobs.push({ c: [11.8, 23.2], r: 2.3 })
+  }
+  // the neck: a stalk dropping from the jaw to the frame below, a knob where it leaves the head
+  E.solids.push({ pts: [[10.6, 6], [10.6, -9]], w: 3.8 })
+  E.knobs.push({ c: [10.6, 1.4], r: 2.6 })
+  E.eyes.push({ c: [16.8, 11.6], r: 2.7, line: 0.85 })
+  E.lines.push({ pts: curlPts([21.6, 7.2], 2.8, 0.6, 180, -1.1, 24), w: 0.7 })
+  E.lines.push({ pts: roundCorners([[3.6, 15.4], [3.6, 10.6], [6.4, 9.4]], 1.6), w: 0.6 })
   return E
 }
 const HEAD = headUnit()
+const HEAD_HOOK = headUnit({ hook: true })
 
 /**
- * One unit: a three-ribbed G-frame (a rounded rectangle left open over the crest, its two free ends turning in) round
- * a head — cell [0, L] × [0, T] (local mm). open: 'top' | 'bottom' (the gap, and the crest, on that side);
- * face: +1 the snout toward +s, −1 toward −s. Neighbouring units keep their own frames: the bands show the ribbons
- * running in pairs between heads.
+ * One band unit as the bronze draws it (faces/dev-band.jpg): a fat three-ribbed G-frame OPEN AT THE TOP — down the
+ * outer sides, along the bottom, its two top arms turning in (the left arm stops short of the crest, the right one hooks
+ * down into the cell) — with a second, narrower ribbon nested inside it along the bottom and the right side that rolls
+ * into a hook under the ear, and a solid profile head filling the upper middle. Cell [0, L] × [0, T] (local mm).
+ * open: 'top' | 'bottom' (the gap, and the crest, on that side); face: +1 the snout toward +s, −1 toward −s.
  */
-function gUnit(L, T, { w = 6.4, open = 'top', face = 1 } = {}) {
+function gUnit(L, T, { w = 6.4, open = 'top', face = 1, hook = false, nested = true, head = 1, nest2 = false } = {}) {
   const E = emptyEls()
-  const h = w / 2, m = 0.7
-  const bx = w + m, by = w + m
-  const sx = (L - 2 * bx) / 26, sy = (T - 2 * by) / 22
-  const gx0 = bx + 5.2 * sx, gx1 = bx + 14 * sx
-  const ret = Math.min(3.6, T * 0.12)
-  E.ribbons.push({ pts: roundCorners([[gx1, T - h - ret], [gx1, T - h], [L - h, T - h], [L - h, h], [h, h], [h, T - h], [gx0, T - h], [gx0, T - h - ret]], [0, 1.6, 4.2, 4.2, 4.2, 4.2, 1.6, 0]), w })
-  merge(E, mapEls(HEAD, ([x, y]) => [bx + x * sx, by + y * sy]))
-  const fs = face > 0 ? (p) => p : ([x, y]) => [L - x, y]
+  const h = w / 2
+  const r = Math.min(4.6, w * 0.7)
+  // author with the snout to the LEFT; face > 0 mirrors at the end
+  E.ribbons.push({ pts: roundCorners([[0.36 * L, T - h], [h, T - h], [h, h], [L - h, h], [L - h, T - h], [0.66 * L, T - h], [0.66 * L, T - h - Math.min(4.2, T * 0.13)]], [0, r, r, r, r, 1.6, 0]), w })
+  if (nested) {
+    const w2 = w * 0.82, d = w + 0.9 + w2 / 2
+    const yTop = Math.min(T - d, 0.58 * T)
+    E.ribbons.push({ pts: roundCorners([[d, 0.44 * T], [d, d], [L - d, d], [L - d, yTop], [L - d - 4.2, yTop + 1.4], [L - d - 5.6, yTop - 1.8]], [0, r * 0.8, r * 0.8, 2.2, 1.6, 0]), w: w2 })
+  }
+  if (nest2) {
+    // a third ribbon nested inside the second (the lower field: the frames run in threes)
+    const w3 = w * 0.75, d = w + 0.9 + w * 0.82 + 0.9 + w3 / 2
+    E.ribbons.push({ pts: roundCorners([[d, 0.4 * T], [d, d], [L - d, d], [L - d, 0.48 * T]], [0, r * 0.6, r * 0.6, 0]), w: w3 })
+  }
+  // head = scale of the head in the cell (1 on the bands; smaller in the field, where the frames dominate)
+  const sx = (0.58 * L * head) / 30, sy = (0.56 * T * head) / 20
+  const ox = (0.2 + 0.58 * (1 - head) * 0.5) * L, oy = (0.22 + (nest2 ? 0.08 : 0)) * T + 0.56 * T * (1 - head) * 0.6
+  merge(E, mapEls(hook ? HEAD_HOOK : HEAD, ([x, y]) => [ox + x * sx, oy + y * sy]))
+  const fs = face < 0 ? (p) => p : ([x, y]) => [L - x, y]
   const ft = open === 'top' ? (p) => p : ([x, y]) => [x, T - y]
   return mapEls(E, (p) => ft(fs(p)))
+}
+
+/**
+ * The ring between units 2 and 4 (faces/dev-band.jpg, X 113–129): not a plain ellipse but two bodies crossing — a
+ * pointed oval of two arcs, each running on past the crossings at top and bottom, one over, one under.
+ */
+function crossedRing(cx, yb, T, { w = 6, half = 12.4 } = {}) {
+  const E = emptyEls()
+  const mid = yb + T / 2, a = T / 2 - w / 2 - 0.4
+  // an arc through (cx ∓ half, mid) and (cx, mid ± a): centre on the axis line y = mid at cx ± c
+  const c = (a * a - half * half) / (2 * half)
+  const R = half + c
+  for (const sgn of [-1, 1]) {
+    // sgn −1: the left arc (bulging left, centre right of the axis); +1 the right arc
+    const cc = [cx - sgn * c, mid]
+    const th = Math.atan2(a, c) * 1.2
+    const pts = []
+    for (let i = 0; i <= 48; i++) {
+      const t = -th + (2 * th * i) / 48
+      const ang = sgn < 0 ? Math.PI - t : t
+      pts.push([cc[0] + R * Math.cos(ang), cc[1] + R * Math.sin(ang)])
+    }
+    E.ribbons.push({ pts, w, layer: sgn < 0 ? 0 : 1 })
+  }
+  return E
 }
 
 // ------------------------------------------------------------------ panel drawing
@@ -206,8 +255,54 @@ function guilloche(x0, x1, yc, amp, period, w, { vertical = false, phase = 0 } =
 }
 
 /**
- * The upper zone: ledges, the central panel (one column of meander cells per half), the two interlace bands, the
- * boss rows (plain), the edge strip, the top band. Panel y = body y − y0.
+ * The top band (photo-18, the band under the top's edge): a chain of interlocked C-hooks — per unit (pitch P) one
+ * ribbon runs along the top edge and rolls down round the right of its C into the band, the other (the same turned
+ * 180°) runs along the bottom edge and rolls up round the left; the two Cs hook into each other. Three-ribbed ribbons
+ * filling the band's height (≈ 12 mm), so they read as the bronze's fat interlinked S-links.
+ */
+function hookChain(x0, x1, yb, Hb, P, w) {
+  const E = emptyEls()
+  const mid = yb + Hb / 2, top = yb + Hb - w / 2 - 0.2, bot = yb + w / 2 + 0.2
+  const R0 = Hb / 2 - w / 2 - 0.2
+  for (let k = -1; x0 + k * P < x1 + P; k++) {
+    const ox = x0 + k * P
+    const cA = [ox + 0.6 * P, mid], cB = [ox + 0.4 * P, mid]
+    const arcA = curlPts(cA, R0, R0 * 0.55, 90, -0.8, 40)
+    const A = [[ox - 0.1 * P, top], [cA[0] - 0.4, top], ...arcA]
+    const B = A.map(([x, y]) => [2 * (ox + 0.5 * P) - x, 2 * mid - y])
+    E.ribbons.push({ pts: roundCorners(A.slice(0, 3), 1).concat(A.slice(3)), w, layer: 0 })
+    E.ribbons.push({ pts: roundCorners(B.slice(0, 3), 1).concat(B.slice(3)), w, layer: 1 })
+  }
+  return E
+}
+
+/** a curl centre line: radius r0 → r1 over `turns` from angle a0 (deg), anticlockwise for turns > 0 */
+function curlPts(c, r0, r1, a0, turns, n = 48) {
+  return Array.from({ length: n + 1 }, (_, i) => {
+    const t = i / n, a = ((a0 + t * turns * 360) * Math.PI) / 180, r = r0 + (r1 - r0) * t
+    return [c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)]
+  })
+}
+
+/**
+ * A scroll cell of the central panel (photo-18 developed, faces/dev-upper-18.jpg: the top cell and the fifth): the
+ * column's ribbon sweeps in from the outer side and rolls into a big round curl, a small solid hook in its eye.
+ */
+function scrollUnit(L, T, { w = 6.2, face = 1, flip = false } = {}) {
+  const E = emptyEls()
+  const R = Math.min(L, T) / 2 - w / 2 - 0.6
+  const c = [L / 2, T / 2]
+  const pts = [[L - w / 2, 0.4], [L - w / 2, T / 2 - R * 0.2], ...curlPts(c, R, R * 0.28, 0, 1.15, 72)]
+  E.ribbons.push({ pts: roundCorners(pts.slice(0, 3), 3).concat(pts.slice(3)), w })
+  E.knobs.push({ c: [c[0] + R * 0.18, c[1] - R * 0.1], r: 2.2 })
+  const fs = face > 0 ? (p) => p : ([x, y]) => [L - x, y]
+  const ft = flip ? ([x, y]) => [x, T - y] : (p) => p
+  return mapEls(E, (p) => ft(fs(p)))
+}
+
+/**
+ * The upper zone: ledges, the central panel (one column of units per half), the two interlace bands, the boss rows
+ * (plain), the edge strip, the top band. Panel y = body y − y0.
  */
 export function upperPanel(kit, { ppmm, seed, y0 }) {
   const Hh = H - y0
@@ -215,57 +310,73 @@ export function upperPanel(kit, { ppmm, seed, y0 }) {
   const Y = (y) => y - y0
   const P = LAYOUT.panel, F = LAYOUT.frame
   const xEnd0 = LAYOUT.end[0], xEnd1 = PANEL_W - 1.6
+  const pHalf = (y) => P.bottom + ((P.top - P.bottom) * (y - P.y[0])) / (P.y[1] - P.y[0]) // the panel's frame edge at body y
 
-  // --- ledges and frames (L3-ish: 2.2 mm proud, rounded)
-  const led = LAYOUT.ledges.map(([a, b], i) => (i === LAYOUT.ledges.length - 1 ? [1.6, Y(a), xEnd1, Y(b)] : [P.half - 0.5, Y(a), xEnd0 + 0.6, Y(b)]))
-  const frames = [
-    [P.half - F, Y(P.y[0]), P.half, Y(P.y[1])], // the central panel's side frame
-    [xEnd0 - 0.2, Y(LAYOUT.border[1]) - 1, xEnd0 + F - 0.2, Y(LAYOUT.ledges[4][1])], // the inner frame of the edge strip
-  ]
-  strips(panel, [...led, ...frames], 2.2, 1.1)
+  // --- ledges and frames: raised strips (2.2 mm proud, rounded), each ledge ≈ 5 mm with its shadowed foot below
+  const led = LAYOUT.ledges.map(([a, b], i) => {
+    const top = b, bot = Math.max(a, b - 5.2)
+    return i === LAYOUT.ledges.length - 1 ? [1.6, Y(bot), xEnd1, Y(top)] : [pHalf((a + b) / 2) - 0.5, Y(bot), xEnd0 + 0.6, Y(top)]
+  })
+  strips(panel, [...led, [xEnd0 - 0.2, Y(LAYOUT.border[1]) - 1, xEnd0 + F - 0.2, Y(LAYOUT.ledges[4][1] - 1)]], 2.2, 1.1)
+  // the panel's side frame follows the trapezoid
+  panel.raise((ctx) => {
+    ctx.beginPath()
+    const [ya, yb] = P.y
+    ctx.moveTo(pHalf(ya) - F, Y(ya) - 1); ctx.lineTo(pHalf(ya), Y(ya) - 1); ctx.lineTo(pHalf(yb), Y(yb)); ctx.lineTo(pHalf(yb) - F, Y(yb)); ctx.closePath()
+    ctx.fill()
+  }, { height: 2.2, shoulder: 1.1 })
   // the broad border over the lower field: a heavier rounded band
-  strips(panel, [[1.6, Y(LAYOUT.border[0]), xEnd1, Y(LAYOUT.border[1])]], 2.8, 2.4)
+  strips(panel, [[1.6, Y(LAYOUT.border[0]), xEnd1, Y(LAYOUT.border[1])]], 2.8, 2.6)
 
-  // --- the interlace bands (篆): per half, from the panel outward: unit, unit, the O ring, unit, unit
-  //     (photo-19 band 1: the unit by the panel and the third face the centre, the second faces out; gaps alternate)
   const els = emptyEls()
+  // --- the interlace bands (篆), traced on photo-19 developed (faces/dev-band.jpg): per half, from the panel outward
+  //     five units and the O ring; every unit's frame is open at the top where its crest runs up to the ledge
+  //     (round-8 fix: every snout looks toward the centre; units 2 and 5 carry the crest hook; open G-frames, the
+  //     neighbours' sides bridged over the top; the ring is two crossing bodies)
+  const UNITS = [[33, 79, -1, false], [79.5, 113, -1, true], null, [129, 170.5, -1, false], [171, 217, -1, true], [217.5, 242.4, -1, false]]
   for (const [b0, b1] of LAYOUT.bands) {
-    const yb = Y(b0) + 0.5, T = b1 - b0 - 1.0
-    const xa = P.half + 0.5, xb = xEnd0 - 0.5
-    const ring = 22
-    const L = (xb - xa - ring) / 4
-    const spec = [['top', -1], ['bottom', 1], null, ['top', -1], ['bottom', -1]]
-    let x = xa
-    for (const sp of spec) {
-      if (!sp) {
-        // the O ring: two bodies looping through each other, over the units' sides
-        els.ribbons.push({ pts: ellipsePts([x + ring / 2, yb + T / 2], ring / 2 + 2.4, T / 2 - 3.2, 72), w: 6.4, layer: 1, closed: true })
-        x += ring
+    const yb = Y(b0) + 0.4, T = b1 - b0 - 0.8
+    for (const u of UNITS) {
+      if (!u) {
+        merge(els, crossedRing(122.4, yb, T, { w: 6.2, half: 10.6 }))
         continue
       }
-      merge(els, mapEls(gUnit(L, T, { open: sp[0], face: sp[1] }), ([s, t]) => [x + s, yb + t]))
-      x += L
+      const [xa, xb, face, hook] = u
+      merge(els, mapEls(gUnit(xb - xa, T, { open: 'top', face, w: 6.6, hook, head: 1.12 }), ([s, t]) => [xa + s, yb + t]))
     }
   }
-  // --- the central panel: a column of upright units, gaps alternating, heads facing alternately
+  for (const [b0, b1] of LAYOUT.bands) {
+    // the neighbours' outer sides joined over the top (an inverted U): the frames hook into each other
+    const yt = Y(b1) - 0.4 - 3.3
+    for (const [x1, x2] of [[79, 79.5], [170.5, 171], [217, 217.5]]) {
+      els.ribbons.push({ pts: roundCorners([[x1 - 3.3, yt - 6], [x1 - 3.3, yt], [x2 + 3.3, yt], [x2 + 3.3, yt - 6]], 3.2), w: 6.6 })
+    }
+  }
+  // --- the central panel: a column of upright units, the frames' gaps alternating; the top cell and the fifth are
+  //     scroll cells (photo-18 developed)
   {
-    const xa = 1.4, xb = P.half - F - 0.3
-    const ya = Y(LAYOUT.border[1]) + 0.6, yb = Y(LAYOUT.ledges[4][0]) - 0.4
+    const ya = LAYOUT.border[1] + 0.8, yb = LAYOUT.ledges[4][0] - 0.5
     const n = 7, Lc = (yb - ya) / n
     for (let k = 0; k < n; k++) {
-      const u = gUnit(xb - xa, Lc, { w: 6.0, open: k % 2 ? 'bottom' : 'top', face: k % 2 ? 1 : -1 })
-      merge(els, mapEls(u, ([s, t]) => [xa + s, yb - (k + 1) * Lc + t]))
+      const yTop = yb - k * Lc, yBot = yTop - Lc
+      const xb = Math.min(pHalf(yTop), pHalf(yBot)) - F - 0.3, xa = 1.4
+      const u = k === 0 || k === 4
+        ? scrollUnit(xb - xa, Lc, { face: k === 0 ? -1 : 1, flip: k === 4 })
+        : gUnit(xb - xa, Lc, { w: 6.2, open: k % 2 ? 'bottom' : 'top', face: k % 2 ? 1 : -1 })
+      merge(els, mapEls(u, ([s, t]) => [xa + s, Y(yBot) + t]))
     }
   }
   // --- the edge strip and the top band: twisted pairs
   const xs0 = xEnd0 + F + 0.4, xs1 = xEnd1 - 0.4
   merge(els, guilloche(Y(LAYOUT.border[1]) + 1, Y(LAYOUT.ledges[4][0]), (xs0 + xs1) / 2, (xs1 - xs0) / 2 - 2.1, 21, 4.0, { vertical: true }))
   const tb = LAYOUT.topBand
-  merge(els, guilloche(0.8, xEnd1, Y((tb[0] + tb[1]) / 2) - 0.2, 4.4, 26, 5.2, { phase: 3 }))
+  merge(els, hookChain(0.8, xEnd1, Y(tb[0]) + 0.3, tb[1] - tb[0] - 2.0, 27, 4.2))
   const clip = (ctx) => {
     // bands and panel interiors only: keep the décor off the ledges, the frames and the panel edges
-    for (const [b0, b1] of LAYOUT.bands) ctx.rect(P.half + 0.2, Y(b0) + 0.2, xEnd0 - P.half - 0.4, b1 - b0 - 0.4)
-    ctx.rect(1.6, Y(LAYOUT.border[1]) + 0.2, P.half - F - 1.8, Y(LAYOUT.ledges[4][0]) - Y(LAYOUT.border[1]) - 0.4)
+    for (const [b0, b1] of LAYOUT.bands) ctx.rect(pHalf(b1) + 0.2, Y(b0) + 0.2, xEnd0 - pHalf(b1) - 0.4, b1 - b0 - 0.4)
+    const [ya, yb] = P.y
+    ctx.moveTo(1.6, Y(LAYOUT.border[1]) + 0.2); ctx.lineTo(pHalf(ya) - F - 0.2, Y(LAYOUT.border[1]) + 0.2)
+    ctx.lineTo(pHalf(yb) - F - 0.2, Y(LAYOUT.ledges[4][0]) - 0.2); ctx.lineTo(1.6, Y(LAYOUT.ledges[4][0]) - 0.2); ctx.closePath()
     ctx.rect(xs0 - 0.6, Y(LAYOUT.border[1]) + 0.2, xs1 - xs0 + 1.2, Y(LAYOUT.ledges[4][0]) - Y(LAYOUT.border[1]) - 0.4)
     ctx.rect(1.6, Y(tb[0]) + 0.2, xEnd1 - 1.6, tb[1] - tb[0] - 1.8)
   }
@@ -273,49 +384,28 @@ export function upperPanel(kit, { ppmm, seed, y0 }) {
   return panel
 }
 
-/**
- * The lower field (鼓部): a lattice of interlocking G-hooks of three-ribbed ribbons with a head in every bay,
- * rows offset by half a tile (photo-19 detail-field.jpg). Tile ≈ 36 × 34 mm.
- */
-function fieldTile() {
-  const E = emptyEls()
-  const w = 5.6, r = 2.6
-  // two squared hooks pin-wheeled about the tile centre (18, 17), each rolling in one lap
-  const hookA = [[2.8, 36], [2.8, 2.8], [17.2, 2.8], [17.2, 15.2], [9.2, 15.2], [9.2, 9.2]]
-  const hookB = hookA.map(([x, y]) => [36 - x, 34 - y])
-  E.ribbons.push({ pts: roundCorners(hookA, r), w })
-  E.ribbons.push({ pts: roundCorners(hookB, r), w })
-  // heads in the two bays (top-left and bottom-right), facing out of the bay
-  const bay = (f) => {
-    const h = emptyEls()
-    h.masses.push(chaikin([[6.2, 20.4], [13.8, 20.2], [15.6, 23.4], [14.6, 28.2], [9.8, 29.6], [6, 28.4], [5.2, 24]], 2))
-    h.solids.push({ pts: roundCorners([[14.4, 25.6], [17.6, 26.2], [17.8, 29.4], [15.6, 30.2]], 1.2), w: 2.8 })
-    h.solids.push({ pts: [[9.6, 29], [9.6, 31.2]], w: 2.8 })
-    h.eyes.push({ c: [9.6, 24.8], r: 2.2 })
-    h.lines.push({ pts: roundCorners([[12.6, 22], [13.6, 23.8], [12.2, 25.6]], 0.8), w: 0.55 })
-    return mapEls(h, f)
-  }
-  merge(E, bay(([x, y]) => [x, y]))
-  merge(E, bay(([x, y]) => [36 - x, 34 - y]))
-  return E
-}
-const TILE = fieldTile()
 
 export function lowerPanel(kit, { ppmm, seed, height }) {
   const panel = new kit.ReliefPanel({ width: PANEL_W, height, ppmm, seed })
   const [f0, f1] = LAYOUT.field
-  const els = emptyEls()
-  const TW = 36, TH = 34
+  // units ≈ 46 × 41 mm (photo-19 developed, faces/dev-lower-19.jpg: units ≈ 45–55 mm wide in three rows and a worn fourth)
+  const TW = 46, TH = (f1 - f0) / 3.1
+  const fresh = emptyEls(), worn = emptyEls()
   const rowsN = Math.ceil((f1 - f0) / TH)
   for (let j = 0; j < rowsN; j++) {
     const yb = f1 - (j + 1) * TH
     const shift = (j % 2) * TW * 0.5
     for (let i = -1; i * TW < PANEL_W + TW; i++) {
       const xb = 0.4 + i * TW + shift
-      const mirror = (i + j) % 2 !== 0
-      merge(els, mapEls(TILE, ([x, y]) => [xb + (mirror ? TW - x : x), yb + y]))
+      // round-8 fix: the field is drawn in the bands' own vocabulary at a larger module (photo-19 detail-field: open
+      // G-frames hooking into each other, a solid profile head with a ringed eye in every frame), the frames opening
+      // up and down by turns and the heads looking left and right by turns, rows offset by half a unit
+      const t = mapEls(gUnit(TW - 0.6, TH - 0.6, { w: 5.2, open: (i + j) % 2 ? 'bottom' : 'top', face: (i + j) % 2 ? 1 : -1, hook: (i + 2 * j) % 3 === 1, head: 0.62, nest2: true }), ([x, y]) => [xb + x, yb + y])
+      merge(yb + TH * 0.5 < 52 ? worn : fresh, t)
     }
   }
-  renderEls(panel, els, { height: 1.0, depth: 0.42, groove: 0.55, clip: (ctx) => ctx.rect(1.6, f0, PANEL_W - 3.2, f1 - f0) })
+  // the lowest row is worn almost flat on the bronze (photo-18 / 19): drawn lower and shallower
+  renderEls(panel, fresh, { height: 1.0, depth: 0.42, groove: 0.55, clip: (ctx) => ctx.rect(1.6, f0, PANEL_W - 3.2, f1 - f0) })
+  renderEls(panel, worn, { height: 0.55, depth: 0.28, groove: 0.55, shoulder: 0.5, clip: (ctx) => ctx.rect(1.6, f0, PANEL_W - 3.2, f1 - f0) })
   return panel
 }

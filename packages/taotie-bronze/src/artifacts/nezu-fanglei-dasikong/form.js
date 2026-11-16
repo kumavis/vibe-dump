@@ -38,7 +38,11 @@ export const LV = {
 const BODY = [[0, 77.5], [5.5, 78.7], [23.5, 84.1], [58.6, 94.8], [92.7, 105.5], [125.1, 114.5], [156.3, 122.6], [186.4, 129.9], [201.2, 133.6],
   [215.5, 136.4], [229.9, 139.8], [243.6, 141.2], [257.1, 141.9], [270.4, 141.9], [283.5, 140.9], [296.5, 139.6], [309.3, 137.1], [322, 133.3],
   [334.3, 124.6], [341, 115], [344.6, 106.5], [346, 100.5]]
-const LID = [[400, 88.5], [411.9, 85.4], [425.1, 82], [438.4, 77.3], [451.8, 70.8], [458.9, 61], [463.5, 51], [466, 40]]
+// round r8-dsk-fix: re-measured against detail-lid (photo-34, same camera): the photographed dome slopes almost
+// STRAIGHT in from the eave (half width ≈ 91 → 45 over its height) to a small crown that sits ≈ 10 mm lower than the
+// first reading (the knob post shows under the cap). Seen from 10° above, a high flat crown shows its back edge and
+// reads as a box: so the crown is lower (462) and narrower, the slope nearly conical.
+const LID = [[400, 88.5], [406, 86.5], [414, 83], [422, 77.5], [430, 71], [438, 64], [445, 57], [451, 50], [456, 43], [459.5, 36], [461.5, 30], [462, 25]]
 export const COLLAR = 87
 
 function monotone(rows) {
@@ -62,7 +66,7 @@ export const lidW = monotone(LID)
 export const bodyR = (y) => 0.15 * bodyW(y) + 10
 export const lidR = (y) => {
   const t = Math.min(1, Math.max(0, (y - LV.eave) / (LV.lidTop - LV.eave)))
-  return 7 + 24 * t * t
+  return 7 + 14 * t * t // r8-dsk-fix: 24 → 14 at the crown: flatter slopes meeting in rounded hips (detail-lid)
 }
 
 // ------------------------------------------------------------------ rounded-rectangle section

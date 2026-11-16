@@ -11,13 +11,14 @@
 /** register heights (mm) */
 export const LV = {
   base: [0, 7.4], // plain base band, a little flared, with a groove at its top
-  foot: [7.4, 58.1], // the plain convex foot ring
-  body: [63.4, 221.2], // the lower interlace band (nine rows of panchi units)
+  foot: [7.4, 58.1], // the plain convex foot ring (its undercut top edge at ≈ 57–59)
+  body: [68.4, 221.2], // the lower interlace band (nine rows of panchi units); r8 fix: its lower edge read again
+  // on the front centre line against the render through the same camera, 5 mm higher than first read
   cords: [221.2, 238.2], // two plain cords and a twisted rope between the bands
   shoulder: [238.2, 309.1], // the upper interlace band (four rows)
   rope: 312.6, // the twisted rope at the foot of the neck
   neck: [314, 425], // the plain neck (an incised inscription on the front)
-  lip: [425, 448.3], // the everted lip band
+  lip: [440, 448.3], // the everted lip band (a crisp lower edge at 440; the flare below it is neck)
   rim: 448.3,
 }
 
@@ -27,16 +28,18 @@ export const BODY = [
   [131.5, 1.8],
   [131.3, 5.5],
   [130.3, 7.4],
-  [132.5, 9.1],
-  [136.1, 13.8],
-  [138.5, 20.4],
-  [139.6, 28.8],
-  [139.3, 37.2],
-  [137.8, 46.8],
-  [135.6, 54.0],
-  [134.6, 58.1],
-  [136.3, 60.2],
-  [139.7, 63.1],
+  // the foot ring (r8 fix pass: re-read against photo-11's silhouette — widest at mid-ring, 0.58 H, and undercut
+  // under the belly, 0.536 H at the junction; the previous reading was ≈ 2 % narrow and ≈ 3 % full there)
+  [133.0, 9.1],
+  [137.4, 13.8],
+  [140.4, 20.4],
+  [141.8, 28.8],
+  [141.3, 37.2],
+  [139.2, 46.0],
+  [135.6, 52.6],
+  [131.6, 57.0],
+  [132.0, 59.4],
+  [136.6, 62.6],
   [145.6, 68.3],
   [150.5, 73.9],
   [154.9, 82.4],
@@ -83,8 +86,10 @@ export const BODY = [
   [108.2, 426.2],
   [110.9, 429.1],
   [112.1, 433.2],
-  [113.5, 437.5],
-  [115.9, 442.3],
-  [118.1, 445.9],
+  [113.4, 437.0],
+  // the everted lip BAND (photo-11: a crisp lower edge ≈ 8 mm under the rim, the band leaning out above it)
+  [114.6, 439.6, 'corner'],
+  [117.3, 440.4],
+  [118.5, 444.4],
   [119.3, 448.3],
 ]

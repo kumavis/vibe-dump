@@ -46,7 +46,7 @@ function polyQuery(path, cum, x, y) {
 }
 
 const PATH = densify(HANDLE_PATH, 1.2)
-const STRAP = { half: 2.4, halfZ: 5.6, r: 1.6 }
+const STRAP = { half: 2.5, halfZ: 5.5, r: 2.2 } // a rounded strap ≈ 11 × 5 mm (fix pass r8: rounder section)
 
 export function handleSDF() {
   const cum = [0]
@@ -55,32 +55,24 @@ export function handleSDF() {
     const q = polyQuery(PATH, cum, x, y)
     // the strap: flat outer face, thickness swelling a little toward the bottom end
     let d = sdRBox2(q.d, z, STRAP.half + (q.side < 0 ? 0 : 0), STRAP.halfZ, STRAP.r)
-    // a shallow sunk line down the middle of the outer face (both edges stand as low ribs)
-    const outer = q.side > 0 ? STRAP.half - q.d : 9
-    if (outer < 0.8 && q.a > 22 && q.a < cum[cum.length - 1] - 8) d = smax(d, -(Math.max(Math.abs(z) - 2.2, outer - 0.45)), 0.3)
+    // (fix pass r8: no sunk line down the face: the photograph's strap is plain)
     d = smin(d, head(x, y, z), 1.4)
     return d
   }
   return { sd, bounds: { min: [30, 96, -12], max: [70, 154, 12] } }
 }
 
-/** the head on the loop's top outer corner, looking out (+x) and a little down */
+/** the head on the loop's top (fix pass r8, photo-02 crop 'handle'): a small rounded block no wider than the strap's
+ *  shoulders, a FLAT plate laid across its top with two stubby horns standing on it, small eye bulges and a short snout
+ *  turned down onto the strap — not a face block */
 function head(x, y, z) {
-  // skull/brow block
-  let d = sdRBox3(x - 54.1, y - 139.3, z, 5.0, 3.6, 6.4, 2.2)
-  // snout, out and down
-  d = smin(d, sdRBox3(x - 58.7, y - 136.1, z, 3.2, 3.6, 4.6, 2.0), 1.6)
-  // the flat crown plate (photo: a table-like slab across the top) and its two stubby horns
-  d = smin(d, sdRBox3(x - 52.7, y - 143.3, z, 6.0, 1.0, 7.0, 0.8), 0.8)
-  for (const s of [-1, 1]) d = smin(d, sdRBox3(x - 55.9, y - 145.1, z - s * 4.2, 2.3, 1.6, 2.2, 1.2), 0.6)
-  // eyes: round bulges with a sunk ring
+  let d = sdRBox3(x - 43.2, y - 141.4, z, 3.8, 3.4, 5.6, 2.6)
+  d = smin(d, sdRBox3(x - 46.2, y - 138.6, z, 1.6, 2.0, 3.0, 1.3), 1.2)
+  d = smin(d, sdRBox3(x - 43.0, y - 145.2, z, 3.9, 0.8, 4.8, 0.7), 0.7)
   for (const s of [-1, 1]) {
-    const e = len3(x - 57.9, y - 140.1, z - s * 3.6) - 1.7
-    d = smin(d, e, 0.5)
-    d = smax(d, -(Math.abs(len2(y - 140.1, z - s * 3.6) - 2.2) - 0.25 + Math.max(0, 57.5 - x) * 2), 0.2)
+    d = smin(d, sdRBox3(x - 43.2, y - 146.6, z - s * 2.6, 1.5, 1.0, 1.5, 0.9), 0.5)
+    d = smin(d, len3(x - 46.6, y - 141.9, z - s * 2.5) - 1.05, 0.4)
   }
-  // mouth groove across the snout
-  d = smax(d, -sdRBox3(x - 61.7, y - 134.3, z, 0.9, 0.35, 3.4, 0.2), 0.2)
   return d
 }
 
@@ -120,7 +112,7 @@ export function buildPost(kit, { az, q = 1, material, capMaterial, whorl }) {
     const f = Math.min(1, Math.max(0, (s - cum[j]) / (cum[j + 1] - cum[j])))
     return [P[j][0] + (P[j + 1][0] - P[j][0]) * f, P[j][1] + (P[j + 1][1] - P[j][1]) * f]
   }
-  const Rmax = 11.9
+  const Rmax = 12.8 // half the whorl panel (relief.js WHORL.S / 2)
   const geo = kit.buildSurface({
     surface: (u, v, o) => {
       const th = u * Math.PI * 2
@@ -135,7 +127,7 @@ export function buildPost(kit, { az, q = 1, material, capMaterial, whorl }) {
       // plan position over the cap → panel (square, Rmax·2 mm); only the sloping top (y above the rim edge)
       o[0] = 0.5 + (r * Math.sin(th)) / (2 * Rmax)
       o[1] = 0.5 + (r * Math.cos(th)) / (2 * Rmax)
-      o[2] = y > 2.0 && r < 11 ? 1 : 0
+      o[2] = y > 1.1 && r < 11.6 && r > 3.6 ? 1 : 0
     },
     fade: 0,
   })

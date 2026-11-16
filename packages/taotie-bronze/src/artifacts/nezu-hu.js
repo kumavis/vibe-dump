@@ -12,7 +12,7 @@
 
 import * as THREE from 'three'
 import { LV, BODY } from './nezu-hu/form.js'
-import { bodyPanel, shoulderPanel } from './nezu-hu/decor.js'
+import { bodyPanel, shoulderPanel, neckPanel } from './nezu-hu/decor.js'
 import { handleSDF } from './nezu-hu/handles.js'
 
 export default {
@@ -71,6 +71,11 @@ export default {
       shoulder: {
         y0: LV.cords[1], y1: 316, map: 'true', fade: { u0: 0, u1: 0, v0: 1.2, v1: 1.2 },
         relief: (k, size) => (panels.shoulder ??= shoulderPanel(kit, profile, size, { ppmm, seed: seed + 1 })),
+      },
+      // the neck: plain but for the incised inscription on the front (front sector only; the back is plain)
+      neck: {
+        y0: 316, y1: 422, map: 'true', fade: { u0: 0, u1: 0, v0: 1.2, v1: 1.2 },
+        relief: (k, size) => (k === 0 ? (panels.neck ??= neckPanel(kit, profile, size, { ppmm: ppmm * 0.9, seed: seed + 2 })) : null),
       },
     }
     const body = kit.lathe({

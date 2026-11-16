@@ -5,19 +5,24 @@
 // (no dimension on the label): scale from the thread-line pitch. Units mm, Y up, front (+Z) = a shoulder head and
 // the mask-centre flange below it.
 //
-// Form (nezu-zun/form.js): a broad-shouldered zun — a tall plain trumpet mouth ending in an upright lip band, a
+// Form (nezu-zun/form.js): a broad-shouldered zun — a tall plain trumpet mouth flaring out to a thin edge, a
 // cylindrical neck with three bowstrings, a sloping shoulder with three animal heads in the round (snouts running
 // out over the belly) and three hooked slab flanges between them, a narrow collar, a rolled belly top with small
 // square studs, the bulging belly, a high foot with three bowstrings, three cross-shaped openings and a frieze.
 // Six notched flanges on the belly and on the foot.
 // Décor (nezu-zun/decor.js): THREAD RELIEF traced off the developed photographs — a large mask under each head and
-// a small one on each divider flange, between bands of domed discs; a mask per 120° on the foot.
+// a small one on each divider flange, between bands of domed discs; a mask per 120° on the foot. Fix pass r8: the
+// belly and foot are drawn as seed lines whose parallels fill the field (nezu-zun/echo.js), the heads are bulbous
+// with coiled horns, the shoulder lugs low, the flanges cuprite-tinted.
 
 import * as THREE from 'three'
 import { LV, BODY, RIDGES, AZ, headSDF, SHOULDER_FLANGE, SHOULDER_FLANGE_T } from './nezu-zun/form.js'
 import { bellyPanel, circUpPanel, circLowPanel, footPanel, collarPanel, shoulderPanel } from './nezu-zun/decor.js'
 
-const T_NOTCH = { shape: 'T', pitch: 11, depth: 0.55, width: 3 }
+// fix pass r8: shallower, narrower notches — face-on the bronze's flange reads as a broad flat strip with small dark
+// slots, not a comb of blocks
+const FLANGE_TINT = '#dcae9a'
+const T_NOTCH = { shape: 'T', pitch: 11, depth: 0.32, width: 2 }
 
 export default {
   id: 'nezu-zun',
@@ -43,16 +48,18 @@ export default {
     // about rim height (the lip nearly edge-on), turned 55° to look at a divider flange between two heads
     // (the stage clamps elevation to ≥ ≈ 1.15°, so photo-26's 5° upward look cannot be had: the camera is put at its
     // height, ≈ 111 mm, looking level — the same surfaces show, the subject sits a little high in the frame)
-    front: { azimuth: 2.4, elevation: 1.2, fov: 56, fit: 1.145, target: [0, 97, 0], ref: 'front.jpg' },
+    // fix pass r8: framed to the photograph's scale (photo-26's own vertical fov ≈ 49°, the vessel filling ≈ 70 % of
+    // the frame) with the camera level at mid height — the 5° upward look still cannot be had (stage clamp)
+    front: { azimuth: 2.4, elevation: 1.2, fov: 49, fit: 0.85, target: [0, 168, 0], ref: 'front.jpg' },
     'three-quarter': { azimuth: 53.8, elevation: 11.3, fov: 24.91, fit: 0.632, target: [125, 195, 72], ref: 'three-quarter.jpg' },
     side: { azimuth: 90, elevation: 6, fov: 30, fit: 1.12, target: [0, 175, 0] },
     top: { azimuth: 0, elevation: 82, fov: 30, fit: 1.1, target: [0, 200, 0] },
     // details: the crop boxes of SOURCES.md re-projected through the same stations
     'detail-head': { azimuth: 47.6, elevation: 8.7, fov: 4.72, fit: 0.131, target: [138, 219, -80], ref: 'detail-head.jpg' },
     'detail-head-front': { azimuth: 2.4, elevation: 1.2, fov: 7.31, fit: 0.1, target: [8, 209, 192], ref: 'detail-head-front.jpg' },
-    'detail-mask': { azimuth: 2.3, elevation: 1.2, fov: 15.32, fit: 0.231, target: [7, 145, 137], ref: 'detail-mask.jpg' },
+    'detail-mask': { azimuth: 2.3, elevation: 1.2, fov: 15.32, fit: 0.158, target: [7, 145, 137], ref: 'detail-mask.jpg' },
     'detail-eye': { azimuth: -1, elevation: 1.2, fov: 3.85, fit: 0.058, target: [37, 137, 129], ref: 'detail-eye.jpg' },
-    'detail-circles': { azimuth: -1.9, elevation: 1.2, fov: 6.54, fit: 0.098, target: [45, 179, 138], ref: 'detail-circles.jpg' },
+    'detail-circles': { azimuth: -1.9, elevation: 1.2, fov: 6.54, fit: 0.045, target: [45, 179, 138], ref: 'detail-circles.jpg' },
     'detail-foot': { azimuth: 2.2, elevation: 6.3, fov: 13.42, fit: 0.222, target: [6, 48, 86], ref: 'detail-foot.jpg' },
     'detail-opening': { azimuth: 60, elevation: 4, fov: 24, fit: 0.1, target: [72, 82, 42] },
     // flat faces (KIT.md § Flat faces; reference/nezu-zun/faces.json): chord planes down the photographs' lines of sight
@@ -94,7 +101,7 @@ export default {
     const body = kit.lathe({
       profile, sectors: { count: 3, center: 0 }, registers, holes,
       wall: (s, y) => (y < 90 ? 4 : y < 280 ? 4.5 : 3.6),
-      lip: { thickness: 5, length: 8, shape: 'round' },
+      lip: { thickness: 2.6, length: 4, shape: 'round' },
       floor: { y: 93, thickness: 5, dome: 2 }, foot: { wall: 4 },
       tolerance: { seed: 7, ovality: 0.006, rim: 0.012, lean: 0 },
       density: 0.68, quality: q, material: plain, part: 'body',
@@ -103,7 +110,9 @@ export default {
 
     // ---------------------------------------------------------------- flanges
     await onProgress(0.6, 'flanges')
-    const fl = (azimuths, y0, y1, o) => kit.latheFlanges(body, { azimuths, ranges: [{ range: { y0, y1 } }], gap: 0, seed: seed + y0, material: plain, part: 'flanges', taper: 3, waver: 0.3, bevel: 0.6, ...o })
+    // the flanges are distinctly red-brown on the photographs (cuprite showing on the worn arrises): a per-mesh tint
+    const flangeMat = new kit.PatinaMaterial({ meshTint: FLANGE_TINT })
+    const fl = (azimuths, y0, y1, o) => kit.latheFlanges(body, { azimuths, ranges: [{ range: { y0, y1 } }], gap: 0, seed: seed + y0, material: flangeMat, part: 'flanges', taper: 3, waver: 0.3, bevel: 0.6, ...o })
     const flanges = [
       // belly: six, from the lower circle band to the upper band's foot, ≈ 11 mm proud, T-notched every ≈ 11 mm
       ...fl(AZ.all6, 104, 174, { height: 11, thickness: 9.5, embed: 2, notches: T_NOTCH }),
@@ -121,6 +130,8 @@ export default {
       m.userData.part = 'flanges'
       flanges.push(m)
     }
+    // flange() makes its own PatinaMaterial for incised faces: tint those too (the shoulder slabs stay body-coloured)
+    for (const f of flanges.slice(0, 12)) f.traverse((m) => { if (m.isMesh && m.material?.local?.uMeshTint) m.material.local.uMeshTint.value.set(FLANGE_TINT) })
     for (const f of flanges) object.add(f)
 
     // studs: small square knobs on the rolled belly top (two seen, at ±45°; four assumed)

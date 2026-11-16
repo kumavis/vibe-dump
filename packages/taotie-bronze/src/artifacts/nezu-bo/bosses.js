@@ -9,32 +9,70 @@
 import * as THREE from 'three'
 import { halfLength, ARC_END, PANEL_W, faceTheta, pointAt, normalAt, LAYOUT } from './form.js'
 
-const VARIANTS = [
-  { rot: 0, hand: 1, start: 200 },
-  { rot: -28, hand: 1, start: 160 },
-  { rot: 22, hand: -1, start: 230 },
+// one map per ROW: the apron of each row runs down to just past the top of the ledge (or border) under it
+// (photo-18 / 19: every boss is a drop — the coiled dome with a smooth tongue hanging to the ledge, lapping it)
+const ROW_BOTTOM = [160.6, 266, 369] // body y where each row's apron ends
+const ROWS = [
+  { hand: 1, start: 268, rot: 0 },
+  { hand: 1, start: 272, rot: 0 },
+  { hand: 1, start: 270, rot: 0 },
 ]
 
 export function bossMaps(kit, { quality = 1, seed = 1 } = {}) {
   const B = LAYOUT.bosses
   const ppmm = 12 * Math.sqrt(quality)
-  const size = 2 * B.r + 2
-  return VARIANTS.map((v, i) => {
-    const panel = new kit.ReliefPanel({ width: size, height: size, ppmm, seed: seed + i })
-    kit.coilBoss(panel, { c: [size / 2, size / 2], r: B.r, height: B.height, turns: 2.1, rot: v.rot, hand: v.hand, start: v.start })
-    return panel.bake()
+  return ROWS.map((v, i) => {
+    const depth = (B.y[i] - ROW_BOTTOM[i]) / B.r
+    const W = 2 * B.r + 2, Hp = B.r * (1 + depth) + 2
+    const panel = new kit.ReliefPanel({ width: W, height: Hp, ppmm, seed: seed + i })
+    const c = [W / 2, 1 + B.r * depth]
+    kit.coilBoss(panel, {
+      c, r: B.r, height: B.height, turns: 2.0, rot: v.rot, hand: v.hand, start: v.start, gap: 0.12, ridge: 0.12,
+      foot: 'plain', apron: { depth, end: 0.8, drop: 0.5 },
+      striate: { pitch: 1.05, depth: 0.32, slant: 1.1, from: 0.05 },
+      head: { style: 'tiger', at: [0, 0.0], w: 0.66, h: 0.58, height: 0.42 },
+    })
+    // the foot of a 13 mm dome reads as a deep recess to the default cavity measure (a pale ring of earth round every
+    // boss); the photographs show clean metal there: a gentler large-scale cavity
+    const map = panel.bake({ cavity: { kSmall: 0.6, kLarge: 5 } })
+    map.userData = { c, depth }
+    return map
   })
+}
+
+/** the boss outline (unit radius, centre origin, y up): the dome and its apron — inside test */
+function insideDrop(x, y, depth, end) {
+  if (x * x + y * y < 1) return true
+  if (y > 0.2) return false
+  const Dc = depth - end
+  for (let k = 0; k <= 16; k++) {
+    const t = k / 16, rr = 1 + (end - 1) * t
+    if (Math.hypot(x, y + t * Dc) < rr) return true
+  }
+  return false
 }
 
 /**
  * One boss: panel coordinates (px from the face centre line, body y), face ±1, side ±1.
- * The footprint is laid in TRUE mm round its centre: Δpx = Δx_true · PANEL_W / (A(y) · ARC_END).
+ * The footprint is laid in TRUE mm round its centre: Δpx = Δx_true · PANEL_W / (A(y) · ARC_END). It is a polar grid
+ * out to the drop's outline, sunk 1.2 mm into the wall so the zero-height rim never shows as a seam.
  */
-export function bossMesh(kit, { face, side, px, y, map, material, quality = 1 }) {
+export function bossMesh(kit, { face, side, px, y, map, material, quality = 1, mirror = false }) {
   const B = LAYOUT.bosses
-  const Rb = B.r + 0.6
-  const size = map.widthMM
-  const nA = Math.round(72 * Math.sqrt(quality)), nR = Math.round(26 * Math.sqrt(quality))
+  const W = map.widthMM, Hp = map.heightMM
+  const { c, depth } = map.userData
+  const mx = mirror ? -1 : 1
+  const nA = Math.round(80 * Math.sqrt(quality)), nR = Math.round(28 * Math.sqrt(quality))
+  // outline radius per angle (unit r), a little outside the drop so the foot is caught
+  const rMax = new Float64Array(nA + 1)
+  for (let i = 0; i <= nA; i++) {
+    const a = (i / nA) * Math.PI * 2, ca = Math.cos(a), sa = Math.sin(a)
+    let lo = 0.5, hi = depth + 0.2
+    for (let k = 0; k < 24; k++) { const m = (lo + hi) / 2; if (insideDrop(m * ca, m * sa, depth, 0.8)) lo = m; else hi = m }
+    rMax[i] = lo + 0.6 / B.r
+  }
+  const radiusAt = (u) => { const f = u * nA, i = Math.min(nA - 1, Math.floor(f)), t = f - i; return (rMax[i] * (1 - t) + rMax[i + 1] * t) * B.r }
+  const sinkMM = 1.2
   const posAt = (dx, dy) => {
     const yy = y + dy
     const k = PANEL_W / (halfLength(yy) * ARC_END)
@@ -42,23 +80,23 @@ export function bossMesh(kit, { face, side, px, y, map, material, quality = 1 })
     const th = faceTheta(face, side, f)
     return { p: pointAt(th, yy), n: normalAt(th, yy) }
   }
+  const polar = (u, v) => { const a = u * Math.PI * 2, r = radiusAt(u) * (1 - v); return [r * Math.cos(a), r * Math.sin(a)] }
   const surface = (u, v, out) => {
-    // u: angle, v: 0 at the rim → 1 at the centre
-    const a = u * Math.PI * 2, r = Rb * (1 - v)
-    const { p, n } = posAt(r * Math.cos(a), r * Math.sin(a))
-    out.pos.set(p[0], p[1], p[2])
+    const [dx, dy] = polar(u, v)
+    const { p, n } = posAt(dx, dy)
+    out.pos.set(p[0] - n[0] * sinkMM, p[1] - n[1] * sinkMM, p[2] - n[2] * sinkMM)
     out.nrm.set(n[0], n[1], n[2])
   }
   const panelMap = (u, v, o) => {
-    const a = u * Math.PI * 2, r = Rb * (1 - v)
-    o[0] = 0.5 + (r * Math.cos(a)) / size
-    o[1] = 0.5 + (r * Math.sin(a)) / size
+    const [dx, dy] = polar(u, v)
+    o[0] = (c[0] + mx * dx) / W
+    o[1] = (c[1] + dy) / Hp
     o[2] = 1
   }
   const geo = kit.buildSurface({ surface, segments: [nA, nR], relief: map, panelMap, fade: 0, maxVerts: 1e6 })
   // the grid runs round and in, the panel runs east and up: re-aim the tangent frame at the panel axes
-  // (else the normal map's slopes turn with the polar grid and a dome shades as a bowl)
-  const e0 = posAt(-0.5, 0).p, e1 = posAt(0.5, 0).p, n0 = posAt(0, -0.5).p, n1 = posAt(0, 0.5).p
+  // (else the normal map's slopes turn with the polar grid and a dome shades as a bowl); a mirrored map: east flips
+  const e0 = posAt(-0.5 * mx, 0).p, e1 = posAt(0.5 * mx, 0).p, n0 = posAt(0, -0.5).p, n1 = posAt(0, 0.5).p
   const E = [e1[0] - e0[0], e1[1] - e0[1], e1[2] - e0[2]], N = [n1[0] - n0[0], n1[1] - n0[1], n1[2] - n0[2]]
   const nrm = geo.attributes.normal.array, tan = geo.attributes.tangent.array
   for (let i = 0, k = 0; k < tan.length; i += 3, k += 4) {
@@ -83,10 +121,11 @@ export function buildBosses(kit, { maps, materials, quality = 1 }) {
   let n = 0
   for (const face of [1, -1]) {
     for (const side of [1, -1]) {
-      LAYOUT.rows.forEach(([y0, y1], ri) => {
+      B.y.forEach((by, ri) => {
         B.x.forEach((px, ci) => {
-          const vi = (ri * 3 + ci + (side > 0 ? 0 : 1) + (face > 0 ? 0 : 2)) % maps.length
-          const m = bossMesh(kit, { face, side, px, y: (y0 + y1) / 2, map: maps[vi], material: materials[vi], quality })
+          // each row has its own map (apron length); neighbours alternate the coil's hand by mirroring it
+          const mirror = (ci + (side > 0 ? 0 : 1)) % 2 === 1
+          const m = bossMesh(kit, { face, side, px, y: by, map: maps[ri], material: materials[ri], quality, mirror })
           group.add(m)
           n++
         })

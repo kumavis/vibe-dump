@@ -1,0 +1,15 @@
+{
+  "note": "nezu-you lid skirt frieze, RIGHT half, panel mm (x developed, y arc above y 216; 27 tall). Traced on faces/dev-skirt.jpg (photo-31 sees the skirt from below its eave: the outer third is read through heavy distortion). The strap covers |x| < 13.5. Squared-spiral G-hook units near the strap, then a kui body ending in a big rolled curl (the round 'eye' ~ 15 mm across, x ~ 60).",
+  "centre": 6,
+  "borders": [[1, 2.6], [24.6, 26.2]],
+  "bands": [
+    { "name": "head G", "c": [[16, 9.5], [16, 22.4], [29, 22.6], [30.5, 15.5], [24.5, 14]], "w": [5, 5.2, 5, 4.8, 4.2], "end": "spiral", "spiral": { "turns": 0.9, "dir": 1, "R": 2.2 } },
+    { "name": "second G", "c": [[34, 12], [34, 22.4], [47, 22.6], [48.5, 15.5], [42.5, 14]], "w": [4.8, 5, 5, 4.8, 4.2], "end": "spiral", "spiral": { "turns": 0.9, "dir": 1, "R": 2.2 } },
+    { "name": "front body", "c": [[17, 7], [36, 7.2], [49, 8]], "w": [5, 5, 4.4], "start": "round", "end": "round" },
+    { "name": "kui body ending in the big curl", "c": [[112, 8], [62, 9.6]], "w": [5.2, 5.2], "start": "round", "end": "spiral", "spiral": { "turns": 1.35, "dir": -1, "R": 6.2 } },
+    { "name": "outer G 1", "c": [[78, 15], [78, 22.6], [93, 22.6], [94.5, 15.5]], "w": [4.8, 5, 5, 4.4], "end": "spiral", "spiral": { "turns": 0.9, "dir": -1, "R": 2.2 } },
+    { "name": "outer G 2", "c": [[100, 15], [100, 22.6], [115, 22.6], [116.5, 15.5]], "w": [4.8, 5, 5, 4.4], "end": "spiral", "spiral": { "turns": 0.9, "dir": -1, "R": 2.2 } },
+    { "name": "tail hook", "c": [[120, 7], [131, 7.4], [135, 14]], "w": [4.6, 4.6, 4], "end": "spiral", "spiral": { "turns": 0.9, "dir": 1, "R": 2.2 } }
+  ],
+  "eyes": [ { "c": [61.5, 15.8], "w": 4.4, "h": 4.4, "height": 1.8, "crown": 0.8, "base": "field" } ]
+}

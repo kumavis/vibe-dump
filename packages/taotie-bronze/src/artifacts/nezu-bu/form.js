@@ -13,7 +13,7 @@ export const LV = {
   base: [0, 19], // plain base band of the ring foot (pale, flaring a little)
   foot: [19, 54.4], // foot frieze: hooked units + two openings per mask (upper), a chain of squared spirals (lower)
   footSplit: 29.6, // the line between the two foot rows
-  holes: 34, // centre height of the foot openings (±11° either side of the 0° / 180° flanges)
+  holes: 34, // centre height of the foot openings (±12.5° either side of the 0° / 180° flanges)
   collar: [54.4, 64.2], // plain convex ring at the top of the foot
   mask: [77, 123.6], // belly taotie (between the underside and the divider band)
   divider: [123.6, 127.4], // the narrow plain band between the mask and the shoulder frieze
@@ -85,15 +85,18 @@ export const LID = [
   [0.01, 227.6],
 ]
 
-/** the bud knob in the round: [r, y] bottom → tip (photo-06: stem Ø ≈ 13 mm, bud Ø ≈ 24 mm widest a third up) */
+/** the bud knob in the round: [r, y] bottom → tip. photo-06 read on a 1:1 gridded crop (3.44 px/mm at the lid): an
+ *  inverted drop — the tip at 281.5, straight-sided ogive flanks to the widest Ø ≈ 26 mm ≈ 22 mm below the tip, then a
+ *  round bulb closing quickly into the neck (Ø ≈ 15 mm at y ≈ 247.5), which flows on as the two posts */
 export const KNOB = [
-  [0.01, 250.6], [5.6, 250.6], [8, 251.4], [10.4, 253.4],
-  [12.6, 257.2], [13.4, 261.4], [12.8, 265.8], [11.0, 270.2], [8.0, 274.8], [4.4, 278.8], [1.6, 281], [0.01, 281.5],
+  [0.01, 246.6], [6.6, 246.6], [7.6, 247.6], [8.8, 249.2], [10.6, 251.2], [12.2, 253.8], [13.0, 256.6], [13.1, 259.6],
+  [12.5, 262.6], [11.3, 266.2], [9.6, 270], [7.4, 273.8], [5, 277.2], [2.6, 279.9], [1, 281.1], [0.01, 281.5],
 ]
-
-/** the knob's stem: TWO posts side by side (photo-06: a gap between them, the front lid flange running up to the
- *  near one), each [x, z, r] mm from the axis, from the crown (y 225) into the bud's base (y 252) */
-export const POSTS = [[-6.2, 0, 4.4], [6.2, 0, 4.4]]
+/** the stem: TWO posts side by side (photo-06: each ≈ 7 mm wide, a hairline slot ≈ 1.2 mm between them, together
+ *  ≈ 15 mm = the bud's neck; the front lid flange runs up to them), each [x, z, r] mm from the axis, from the crown
+ *  (y 224.6) into the bud's neck (y 248) */
+export const POSTS = [[-3.8, 0, 3.65], [3.8, 0, 3.65]]
+export const POST_TOP = 248.4
 export const RIDGES = [
   { y: 160.6, count: 1, width: 1.6, height: 0.6, shape: 'round' }, // the raised line over the shoulder frieze
   { y: 170.2, count: 1, width: 1.8, height: 0.7, shape: 'round' }, // the ridge at the foot of the lip
@@ -104,7 +107,7 @@ export const AZ = {
   masks: [0, 180], // the belly / lid / foot mask centres: low beaded ridges (body), flanges (lid, foot)
   dividers: [90, 270], // the tall hooked flanges between the masks
   all4: [0, 90, 180, 270],
-  holes: [-11, 11, 169, 191], // foot openings: two per mask, flanking its flange
+  holes: [-12.5, 12.5, 167.5, 192.5], // foot openings: two per mask, flanking its flange (photo-06: ≈ 17 mm off it)
 }
 
 /** radius of the body profile at height y (linear between points; first match from the bottom) */
@@ -145,3 +148,35 @@ export function hookTeeth(L, { height = 12, pitch = 9.5, slot = 0.26, depth = 0.
   for (let i = top.length - 1; i >= 0; i--) pts.push(top[i])
   return pts
 }
+
+/** a per-pitch tooth shape [[u, t/H]…] (u 0 → 1 along one pitch) repeated n times between optional plain ends → CCW
+ *  outline [σ, t] for kit.flange({ outline }); the root runs at −embed */
+function repeatTeeth(L, unit, { height: H, pitch, embed = 2, startT = 0.6, endT = 0.4, endRound = 0 }) {
+  const n = Math.max(1, Math.round(L / pitch))
+  const p = L / n
+  const top = [[0, startT * H]]
+  for (let k = 0; k < n; k++) for (const [u, t] of unit) if (k * p + u * p > 0.05 && k * p + u * p < L - 0.05) top.push([k * p + u * p, t * H])
+  if (endRound > 0) top.push([L - endRound * 0.4, endT * H + endRound * 0.25])
+  top.push([L, endT * H])
+  const pts = [[0, -embed], [L, -embed]]
+  for (let i = top.length - 1; i >= 0; i--) pts.push(top[i])
+  return pts
+}
+
+/** the DIVIDER flanges (photo-06, both in profile; gridded 1:1 crop of the left one): a solid spine ≈ 0.58 of the
+ *  height, blocky teeth ≈ 0.72 of the pitch tall standing out from it, each tooth's upper outer corner rising in a
+ *  short beak that curls back over the narrow slot above it; the slot widens inward to a rounded floor (C-shaped) */
+export const DIVIDER_TOOTH = [
+  [0.0, 0.6], [0.015, 0.84], [0.07, 0.97], [0.17, 1.0], [0.6, 1.0], [0.7, 1.05], [0.79, 1.03], [0.82, 0.95],
+  [0.78, 0.87], [0.7, 0.83], [0.73, 0.68], [0.8, 0.59], [0.9, 0.57], [0.97, 0.58],
+]
+export const dividerTeeth = (L, o) => repeatTeeth(L, DIVIDER_TOOTH, { startT: 0.62, endT: 0.32, endRound: 4, ...o })
+
+/** the LID flanges (photo-06: the right one in profile, gridded 1:1 crop): three chunky teeth on a low body, deep
+ *  slots between them; each tooth a stem carrying a T-shaped bird head — a crest notch on top, the hooked beak
+ *  pointing up the lid toward the knob (+σ) and curling down over the next slot, the back of the head overhanging */
+export const LID_TOOTH = [
+  [0.0, 0.08], [0.12, 0.08], [0.13, 0.58], [0.04, 0.64], [0.02, 0.84], [0.1, 1.0], [0.38, 1.0], [0.43, 0.86],
+  [0.53, 0.86], [0.59, 1.04], [0.86, 1.03], [0.99, 0.88], [0.97, 0.72], [0.88, 0.68], [0.84, 0.6], [0.84, 0.08],
+]
+export const lidTeeth = (L, o) => repeatTeeth(L, LID_TOOTH, { startT: 0.2, endT: 0.08, ...o })

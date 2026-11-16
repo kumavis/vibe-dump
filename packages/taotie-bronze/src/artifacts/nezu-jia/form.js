@@ -29,21 +29,30 @@ export const AZ = {
 // drawn on a 153.6 / 217.6 / 304 layout; yMap carries it (and the handle) onto the measured one.
 export const yMap = (y) => (y <= 217.6 ? 172 + (y - 153.6) * 0.9 : 229.6 + (y - 217.6) * 1.065)
 export const yUnmap = (y) => (y <= 229.6 ? 153.6 + (y - 172) / 0.9 : 217.6 + (y - 229.6) / 1.065)
-const RAW_PROFILE = [
+const RAW_LOWER = [
   [0, 153.6], [18, 154.1], [34, 155.4], [45, 157.2], [51.5, 159.4], [55.2, 162.2, null, 'drumBottom'],
   [57.1, 167.0], [58.0, 175.0], [58.35, 187.0], [58.3, 197.0], [57.9, 207.0], [57.3, 213.6, null, 'drumTop'], [56.9, 216.6, 'C', 'ledgeOut'],
-  [52.6, 217.6, 'C', 'waist'], [51.6, 220.2], [51.3, 227.0], [51.5, 234.0], [52.2, 241.0], [53.2, 246.5], [54.4, 251.0],
-  [55.7, 255.3], [57.4, 259.6], [59.6, 264.2], [62.4, 269.2], [65.8, 274.3], [69.8, 279.5], [74.4, 284.8],
-  [79.4, 290.0], [83.9, 294.6], [86.6, 298.0], [87.6, 300.6, null, 'lipBottom'], [88.0, 304.0, 'L', 'rim'],
+  [52.6, 217.6, 'C', 'waist'],
 ]
-export const PROFILE = RAW_PROFILE.map(([r, y, ...rest]) => [r, +yMap(y).toFixed(2), ...rest])
+// Upper wall in FINAL mm (round r8-fix, photo-21 left silhouette below the handle): a concave trumpet — it stands
+// almost vertical at r ≈ 51.5 for the first ≈ 30 mm above the waist, then flares ever faster in the top third
+// into a rolled lip band ≈ 6 mm deep (near-vertical outer face just under the rim).
+const UPPER = [
+  [51.6, 232.4], [51.3, 238.0], [51.3, 246.0], [51.6, 254.0], [52.3, 261.0], [53.6, 267.0], [55.8, 272.6],
+  [59.0, 278.2], [63.2, 283.8], [68.3, 289.4], [74.0, 295.0], [79.6, 300.6], [84.0, 306.0], [86.6, 310.6],
+  [87.5, 314.0, null, 'lipBottom'], [87.9, 318.0], [88.0, 321.6, 'L', 'rim'],
+]
+export const PROFILE = [
+  ...RAW_LOWER.map(([r, y, ...rest]) => [r, +yMap(y).toFixed(2), ...rest]),
+  ...UPPER,
+]
 export const RIM_Y = 321.6
 export const BOTTOM_Y = 172
 // décor registers (y, mm) — dossier § Registers
 export const REG = {
   frieze: [181.5, 225.4], // the lower-section mask frieze: 3 masks × 120°
   band: [232.8, 270.0], // the waist band under the blades: 6 masks × 60°
-  blades: [270.0, 317.0], // twelve rising blades × 30°
+  blades: [270.0, 319.6], // twelve rising blades × 30° (round r8-fix: tips ≈ 2 mm under the lip, photo-21)
 }
 
 export function withNormals(pos) {
@@ -76,9 +85,9 @@ export const LEG = {
   top: BOTTOM_Y + 2, // leg y where it meets the bottom (it runs on `embed` mm into the body)
   embed: 7,
   apexTop: 54.5, apexTip: 84,
-  depthTop: 28, depthTip: 4.5,
-  chordTop: 46, chordTip: 5,
-  bow: 8.0, // mm the outer edge bows out at mid-length (the legs read as slightly sabre-curved)
+  depthTop: 23, depthTip: 4.0,
+  chordTop: 36, chordTip: 4.2,
+  bow: 0, // (round r8-fix: replaced by the tusk curve in legSection)
   channel: { width: 0.36, depth: 2.6 }, // × chord, mm
 }
 
@@ -86,9 +95,11 @@ export const LEG = {
 export function legSection(y) {
   const L = LEG
   const t = clamp(y / L.top, 0, 1.2) // 1 at the bottom of the body, 0 at the tip
-  const a = lerp(L.apexTip, L.apexTop, Math.pow(Math.min(1, t), 1.08)) + L.bow * Math.sin(Math.PI * clamp(t, 0, 1)) - (t > 1 ? (t - 1) * 6 : 0)
-  const d = lerp(L.depthTip, L.depthTop, Math.pow(Math.min(1, t), 0.6))
-  const c = lerp(L.chordTip, L.chordTop, Math.pow(Math.min(1, t), 0.45))
+  // round r8-fix: a tusk — the apex line drops nearly straight from under the drum and kicks outward toward the
+  // tip (photo-21 both front legs, photo-22 right leg), rather than bowing evenly
+  const a = L.apexTop + (L.apexTip - L.apexTop) * Math.pow(1 - Math.min(1, t), 1.55) + L.bow * Math.sin(Math.PI * clamp(t, 0, 1)) - (t > 1 ? (t - 1) * 6 : 0)
+  const d = lerp(L.depthTip, L.depthTop, Math.pow(Math.min(1, t), 0.7))
+  const c = lerp(L.chordTip, L.chordTop, Math.pow(Math.min(1, t), 0.72))
   return { apex: a, back: a - d, half: c / 2, depth: d }
 }
 /** width of one outer face at y (mm) */
@@ -190,8 +201,8 @@ export function buildLeg(kit, { az, faces = {}, material, q = 1, seed = 1 }) {
   }
   path.length = Ltot
   const fl = kit.flange({
-    path, height: (f) => lerp(2.4, 3.6, f), thickness: 3.0, embed: 1.2, taper: 6, bevel: 0.5, waver: 0.4, seed,
-    notches: { shape: 'square', pitch: 6.2, depth: 0.5, width: 2.2 }, ends: { start: 'taper', end: 'square' },
+    path, height: (f) => lerp(1.5, 2.4, f), thickness: 3.2, embed: 1.0, taper: 6, bevel: 0.6, waver: 0.3, seed,
+    notches: { shape: 'square', pitch: 6.2, depth: 0.32, width: 1.6 }, ends: { start: 'taper', end: 'square' },
     material, part: 'legs',
   })
   g.add(fl)
@@ -200,19 +211,22 @@ export function buildLeg(kit, { az, faces = {}, material, q = 1, seed = 1 }) {
 }
 
 // ----------------------------------------------------------------------------------------------------- POSTS
-// Two posts on the rim (photo-21 crop, photo-22): a square-section stem ≈ 24 × 19 mm standing 27 mm clear of the
+// Two posts on the rim (photo-21 crop, photo-22): a square-section stem ≈ 18 × 15 mm (r8-fix; was 24 × 19) standing ≈ 29 mm clear of the
 // rim, under a BELL-shaped cap ≈ 70 mm tall: a flat-bottomed skirt Ø ≈ 48, concave flanks waisting to Ø ≈ 29
 // ≈ 46 mm up, a small flared lip (Ø 36) and a low dome on top. Four notched flanges run down the bell at the
 // stem's corners; between them each flank carries a mask (dark sunk ground, raised bands).
 export const POST = {
-  r: 82.5, // stem centre radius (it stands on the lip, overhanging inward)
-  stem: { w: 24, d: 19, top: 351.6 }, // tangential × radial; y where the cap starts
+  r: 79.5, // stem centre radius: just inside the lip (photo-22)
+  stem: { w: 18, d: 15, top: 350.4 }, // ≈ 0.35 × the cap skirt on both photographs // tangential × radial; y where the cap starts
+  // round r8-fix, re-measured on photo-22 (left cap, ≈ 16° off) and photo-21 (near cap): an hourglass bell — a flat
+  // skirt Ø ≈ 48 with a short rim, flanks pinched in hard to a waist ≈ 0.45 × the skirt at ≈ 55–70 % of the height
+  // (the corner flanges add ≈ 2.6 mm to the silhouette there), a flared lip Ø ≈ 37 and a low dome.
   cap: [
-    [11, 0], [25.0, 0, 'C', 'skirt'], [25.3, 2.0], [23.6, 4.4, 'C', 'flankBottom'], [20.8, 7.8], [18.6, 11.8], [17.1, 17],
-    [16.0, 24], [15.3, 32], [14.9, 40], [14.9, 46], [15.3, 51], [16.5, 55.5, null, 'flankTop'], [18.5, 58.6], [19.2, 60.4, 'C', 'lip'],
-    [17.8, 61.8, 'C'], [15.6, 63.2], [11.2, 64.6], [5.2, 65.5], [0, 65.8],
+    [9, 0], [24.6, 0, 'C', 'skirt'], [24.9, 2.5], [23.0, 4.6, 'C', 'flankBottom'], [20.4, 8.1], [18.6, 12.4], [15.9, 17.8],
+    [13.4, 24.2], [11.5, 31.0], [10.7, 37.4], [10.6, 43.3], [11.0, 49.2], [12.1, 54.0], [13.8, 57.6, null, 'flankTop'], [16.0, 60.0], [17.6, 61.6, 'C', 'lip'],
+    [15.8, 62.8, 'C'], [14.6, 64.4], [11.8, 66.8], [6.6, 68.8], [0, 69.6],
   ],
-  flank: [4.4, 55.5], // cap y range carrying the décor
+  flank: [4.6, 57.6], // cap y range carrying the décor
 }
 
 /** revolve a Profile between s0 and s1 over θ ∈ [a0, a1] (deg, local: 0 = the post's +out) */
@@ -246,7 +260,7 @@ export function buildPost(kit, { az, relief = {}, material, decorMaterials = {},
   g.userData.part = 'posts'
   const add = (m) => { m.userData.part = 'posts'; g.add(m); return m }
   // stem: four faces, y from inside the lip (309) to inside the cap
-  const S = POST.stem, y0 = RIM_Y - 7, y1 = S.top + 3
+  const S = POST.stem, y0 = RIM_Y - 3.5, y1 = S.top + 3
   const hw = S.w / 2, hd = S.d / 2
   const faces = [ // [x0,z0] → [x1,z1] left → right seen from outside, plus which relief
     { a: [-hw, hd], b: [hw, hd], key: 'out' },
@@ -280,27 +294,34 @@ export function buildPost(kit, { az, relief = {}, material, decorMaterials = {},
   }
   add(capPatch(kit, P, 0, sF0, -180, 180, null, q, material, capFrame, 'cap-skirt', 'posts'))
   add(capPatch(kit, P, sF1, P.length, -180, 180, null, q, material, capFrame, 'cap-top', 'posts'))
-  // flanges down the bell at the stem's corners (local 45° + 90k)
+  // flanges down the bell at the stem's corners (local 45° + 90k). The kit's flange triangulates its face as one
+  // planar polygon and fills the hull of a strongly bent path (the hourglass flank), so each flange is cast in six
+  // short runs along the profile, end to end: their crests follow the waist and flare at skirt and lip.
+  const s0 = P.sAtY(6.2), s1 = P.sAtY(60.8, { from: 'top' })
+  const runs = 6, runL = (s1 - s0) / runs
+  const capH = (f) => 2.5 + 1.6 * Math.pow(1 - f, 2.5) + 1.4 * Math.pow(f, 6)
   for (let k = 0; k < 4; k++) {
     const th = (45 + 90 * k) * DEG
-    const s0 = P.sAtY(5.4), s1 = P.sAtY(59.4, { from: 'top' })
-    const path = {
-      length: s1 - s0,
-      frame(sig) {
-        const at = P.at(s0 + clamp(sig, -2, s1 - s0 + 2))
-        const p = capFrame(at.r * Math.sin(th), at.y, at.r * Math.cos(th), new THREE.Vector3())
-        const radial = new THREE.Vector3(lat.x * Math.sin(th) + out.x * Math.cos(th), 0, lat.z * Math.sin(th) + out.z * Math.cos(th))
-        const n = radial.clone().multiplyScalar(at.nr).add(new THREE.Vector3(0, at.ny, 0)).normalize()
-        const d = radial.clone().multiplyScalar(at.tr).add(new THREE.Vector3(0, at.ty, 0)).normalize()
-        return { p, n, d, b: new THREE.Vector3().crossVectors(d, n) }
-      },
+    const radial = new THREE.Vector3(lat.x * Math.sin(th) + out.x * Math.cos(th), 0, lat.z * Math.sin(th) + out.z * Math.cos(th))
+    for (let j = 0; j < runs; j++) {
+      const a0 = s0 + j * runL
+      const path = {
+        length: runL,
+        frame(sig) {
+          const at = P.at(a0 + clamp(sig, -1, runL + 1))
+          const p = capFrame(at.r * Math.sin(th), at.y, at.r * Math.cos(th), new THREE.Vector3())
+          const n = radial.clone().multiplyScalar(at.nr).add(new THREE.Vector3(0, at.ny, 0)).normalize()
+          const d = radial.clone().multiplyScalar(at.tr).add(new THREE.Vector3(0, at.ty, 0)).normalize()
+          return { p, n, d, b: new THREE.Vector3().crossVectors(d, n) }
+        },
+      }
+      const fl = kit.flange({
+        path, height: (f) => capH((j + f) / runs), thickness: 2.8, embed: 1.0, taper: 6, bevel: 0.4, waver: 0.3, seed: seed + k * 10 + j,
+        notches: { shape: 'square', pitch: 4.4, depth: 0.32, width: 1.5 }, ends: { start: 'square', end: 'square' },
+        material, part: 'posts',
+      })
+      add(fl)
     }
-    const fl = kit.flange({
-      path, height: (f) => lerp(4.6, 3.6, f), thickness: 2.8, embed: 1.0, taper: 6, bevel: 0.4, waver: 0.5, seed: seed + k,
-      notches: { shape: 'square', pitch: 4.6, depth: 0.3, width: 1.6 }, ends: { start: 'square', end: 'taper' },
-      material, part: 'posts',
-    })
-    add(fl)
   }
   return g
 }

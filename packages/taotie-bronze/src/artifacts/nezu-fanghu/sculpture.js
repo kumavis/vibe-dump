@@ -53,21 +53,21 @@ export function handleSDF() {
   const sd0 = (u, y, z) => {
     // root block on the wall
     let d = sdRBox3(u - 4, y - 349, z, 8, 12, 10, 4)
-    // skull: a broad rounded block standing out from the wall, its face turned down
-    d = smin(d, sdEllipsoid(u - 17, y - 350, z, 13, 11, 10), 4)
-    // muzzle: hanging DOWN from the skull's outer end (photo-08: the face's front is near vertical)
-    d = smin(d, sdEllipsoid(u - 23, y - 336, z, 8.5, 10, 8), 3.5)
-    d = smin(d, sdTube(u, y, z, [[24, 343, 0, 6.8], [26.5, 333, 0, 6.2], [24.5, 326.5, 0, 5.4]]), 3)
+    // r8 fix (photo-09, the +X head in near profile): a LONG head — flat-topped skull running out from the wall,
+    // the muzzle hanging down at its far end, bulging round eyes, two short ear stubs standing UPRIGHT at the back
+    d = smin(d, sdEllipsoid(u - 19.5, y - 350, z, 15.5, 10.5, 9.5), 4)
+    d = smin(d, sdEllipsoid(u - 26.5, y - 337, z, 8.5, 10, 7.6), 3.5)
+    d = smin(d, sdTube(u, y, z, [[27.5, 343, 0, 6.6], [30, 333, 0, 6.0], [28, 326.5, 0, 5.2]]), 3)
     // the loop under the chin: back from the muzzle to the wall (the ring hangs through it)
-    d = smin(d, sdTube(u, y, z, [[22, 325, 0, 3.8], [14, 320.5, 0, 3.6], [5, 322.5, 0, 3.9], [1, 328, 0, 4.4]]), 2)
+    d = smin(d, sdTube(u, y, z, [[25, 325, 0, 3.8], [15, 320.5, 0, 3.6], [5, 322.5, 0, 3.9], [1, 328, 0, 4.4]]), 2)
     // nostrils at the muzzle tip
-    for (const sg of [-1, 1]) d = smax(d, -(len3(u - 28, y - 327.5, z - sg * 3) - 1.5), 0.6)
+    for (const sg of [-1, 1]) d = smax(d, -(len3(u - 31.5, y - 327.5, z - sg * 3) - 1.5), 0.6)
     for (const sg of [-1, 1]) {
-      // ears / horns: standing up and back toward the wall
-      d = smin(d, sdTube(u, y, z, [[16, 357, sg * 6.5, 4.4], [13, 362.5, sg * 8, 3.6], [9, 366, sg * 8.5, 2.6], [6, 367, sg * 8, 1.8]]), 2.2)
-      // eyes: round bosses on the flanks of the skull
-      d = smin(d, len3(u - 21, y - 348.5, z - sg * 8.4) - 2.8, 1.2)
-      d = smax(d, -(len3(u - 21.2, y - 348.5, z - sg * 11.0) - 1.0), 0.3)
+      // ear stubs: upright, at the back of the skull
+      d = smin(d, sdTube(u, y, z, [[10.5, 356, sg * 6, 4.2], [10, 363, sg * 6.4, 3.4], [9.5, 368.5, sg * 6.6, 2.6]]), 2.2)
+      // eyes: big round bulging bosses in a sunk ring on the flanks of the skull
+      d = smin(d, len3(u - 22.5, y - 348, z - sg * 8.2) - 3.4, 1.2)
+      d = smax(d, -(len3(u - 22.7, y - 348, z - sg * 11.4) - 1.0), 0.3)
     }
     return d
   }

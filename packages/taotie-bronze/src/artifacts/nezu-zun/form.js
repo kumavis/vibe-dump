@@ -27,12 +27,14 @@ export const LV = {
 
 /** outer profile, bottom → top, [r, y] mm */
 export const BODY = [
-  [88.7, 0, 'corner'],
-  [89.3, 1.4],
-  [89.3, 4],
-  [88.9, 14],
-  [87.6, 30],
-  [86.2, 45],
+  // fix pass r8: the foot flares a little more toward its base (detail-foot: ≈ 10 % wider at the base than at the
+  // frieze top, against ≈ 5 % before)
+  [90.6, 0, 'corner'],
+  [91.2, 1.4],
+  [91.2, 4],
+  [90.6, 14],
+  [88.6, 30],
+  [86.6, 45],
   [85.0, 56],
   [84.6, 60],
   [84.1, 68],
@@ -78,10 +80,10 @@ export const BODY = [
   [154.6, 312.6],
   [164.6, 318.6],
   [171, 325.4],
-  [173.6, 333],
-  [174.8, 340],
-  [176.6, 345.6],
-  [177.4, 347.5],
+  [174.4, 333],
+  [176.6, 340],
+  [178.2, 345.6],
+  [178.8, 347.5], // fix pass r8: the flare runs on to the edge (no upright lip band)
 ]
 
 export const RIDGES = [
@@ -152,19 +154,25 @@ export function rAt(y) {
  * spread to ≈ ±27 mm and rise to y ≈ 240. Ears / horn edges are toothed on photo-28's left head (worn).
  */
 export function headSDF() {
-  // side profile of the head, radial z (mm from the axis) → top y, bottom y, half-width: thick at the neck, the top
-  // sweeping down in a concave line, the snout tapering and its tip turning up like a prow (photo-28)
+  // fix pass r8 (detail-head, detail-head-front): a BULBOUS head, not a plank. Side profile (radial z → top, bottom,
+  // half-width at the top): a thick root on the shoulder, the top dropping in a concave sweep and rising again into
+  // a rounded prow at the tip; the section is a rounded trapezoid, wider at the top (photo-26: ≈ 26 mm across the top
+  // of the snout end, narrowing downward). The horns are two coiled discs at the back of the head, their incised
+  // faces turned out and down, leaning outward so that from the front they spread in a V behind the snout and from
+  // the side each reads as a big round coil standing ≈ 25 mm over the snout line (photo-28's heads).
   const LOFT = [
-    // z,   top,   bottom, half-width
-    [104, 253.0, 224.0, 20.0],
-    [116, 250.0, 213.0, 19.6],
-    [130, 243.0, 207.6, 17.6],
-    [144, 234.0, 205.0, 15.6],
-    [158, 227.0, 204.0, 14.2],
-    [170, 223.8, 204.4, 13.4],
-    [178, 225.0, 206.6, 12.8],
-    [183.5, 228.0, 211.0, 11.6],
+    // z,   top,   bottom, half-width (top): the snout runs DOWN from the horns (≈ 25°) and its tip turns up (a prow)
+    [104, 248.0, 222.0, 17.0],
+    [116, 245.0, 211.0, 17.2],
+    [130, 238.6, 205.4, 16.2],
+    [144, 231.6, 203.0, 15.0],
+    [156, 226.4, 202.6, 14.2],
+    [166, 223.4, 203.4, 13.8],
+    [174, 223.0, 205.8, 13.4],
+    [180, 226.0, 209.6, 12.8],
+    [184, 230.4, 214.6, 12.0],
   ]
+  const ZT = 184.5
   const lerpL = (z, k) => {
     if (z <= LOFT[0][0]) return LOFT[0][k]
     for (let i = 0; i < LOFT.length - 1; i++) {
@@ -173,40 +181,58 @@ export function headSDF() {
     }
     return LOFT[LOFT.length - 1][k]
   }
-  const sl = Math.atan2(240 - 214, 133 - 104) // the shoulder slope ≈ 41.9°
-  const cs = Math.cos(sl), sn = Math.sin(sl)
+  // horn disc frame (right horn; the left mirrors in |x|): centre, outward face normal n, in-plane axes e1, e2
+  const HC = [18.4, 238.4, 120]
+  const nrm = (v) => { const l = Math.hypot(v[0], v[1], v[2]); return v.map((c) => c / l) }
+  const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]
+  const n = nrm([0.7, -0.62, 0.36])
+  const e1 = nrm(cross([0, 1, 0], n)) // horizontal-ish in the face
+  const e2 = cross(n, e1)
+  const HR = 11.2, HT = 4.6
   const sd = (x, y, z) => {
     const ax = Math.abs(x)
-    const zc = Math.min(Math.max(z, 100), 183.5)
-    const top = lerpL(zc, 1), bot = lerpL(zc, 2), hw = lerpL(zc, 3)
-    const rr = 3.2 // edge rounding
-    const q1 = Math.max(y - top, bot - y, z - 183.5, 98 - z) + rr
+    const zc = Math.min(Math.max(z, 100), ZT)
+    const top = lerpL(zc, 1), bot = lerpL(zc, 2), hwTop = lerpL(zc, 3)
+    // trapezoid section: half-width shrinks toward the bottom
+    const f = Math.min(1, Math.max(0, (y - bot) / Math.max(1, top - bot)))
+    const hw = hwTop * (0.56 + 0.44 * f)
+    const rr = 6.4 // fat rounding: a bulbous mass
+    const q1 = Math.max(y - top, bot - y, z - ZT, 98 - z) + rr
     const q2 = ax - hw + rr
     let d = Math.hypot(Math.max(q1, 0), Math.max(q2, 0)) + Math.min(Math.max(q1, q2), 0) - rr
-    // the snout's end rounded off in plan
-    // the snout's end: rounded off in plan and tapering downward (photo-26: a rounded trapezoid)
-    d = smax(d, len2(ax * (0.9 + 0.012 * Math.max(0, 224 - y)), Math.max(0, z - 172)) - 13.6, 3)
-    // horns: flat rounded-square plates lying on the slope either side of the brow, ≈ 2.5 mm proud of the head,
-    // their tops incised with a squared spiral (photo-28: the coil on top of each head near the neck)
+    // the prow: rounded off in plan
+    d = smax(d, len2(ax * 0.92, Math.max(0, z - 168)) - 15.6, 5)
+    // a broad swelling over the brow, between the horns
+    d = smin(d, sdEllipsoid(ax, y - 232, z - 126, 12, 7, 14), 4)
+    // horns: coiled discs, domed outer face incised with a rounded-square spiral
     {
-      const zr = z - 104, yr = y - 240
-      const u = zr * cs - yr * sn, v = zr * sn + yr * cs
-      const pu = u - 13, px = ax - 12.4, pv = v - 20.6
-      const plate = sdRBox3(px, pu, pv, 11.2, 11.8, 3.4, 4.2)
-      d = smin(d, plate, 1.6)
-      const cheb = Math.max(Math.abs(px), Math.abs(pu) / 1.05)
-      const ph = cheb / 2.5 - Math.floor(cheb / 2.5)
-      const groove = Math.abs(ph - 0.5) * 2.5 - 0.42
-      if (cheb < 10.4) d = smax(d, Math.min(-groove, pv - 2.4), 0.3)
+      const px = ax - HC[0], py = y - HC[1], pz = z - HC[2]
+      const u = px * e1[0] + py * e1[1] + pz * e1[2]
+      const v = px * e2[0] + py * e2[1] + pz * e2[2]
+      const w = px * n[0] + py * n[1] + pz * n[2]
+      const rho = Math.hypot(u, v)
+      const tt = HT * (1 - 0.3 * Math.min(1, (rho / HR) ** 2)) // domed face
+      const qa = rho - HR + 2.4, qb = Math.abs(w + 0.6) - tt + 2.4
+      const disc = Math.hypot(Math.max(qa, 0), Math.max(qb, 0)) + Math.min(Math.max(qa, qb), 0) - 2.4
+      d = smin(d, disc, 2.6)
+      // the spiral: a squared-round coil (superellipse radius), pitch 2.4 mm, cut ≈ 0.8 mm into the outer face
+      if (w > 0 && rho < HR - 1.2) {
+        const ang = Math.atan2(v, u)
+        const sq = Math.pow(Math.pow(Math.abs(u), 4) + Math.pow(Math.abs(v), 4), 0.25)
+        const ph = sq / 2.4 + ang / (2 * Math.PI)
+        const fr = ph - Math.floor(ph)
+        const groove = Math.abs(fr - 0.5) * 2.4 - 0.5
+        d = smax(d, Math.min(-groove, w - (tt - 1.4)), 0.35)
+      }
     }
-    // eyes: oval beads on the sides of the head, behind the snout
-    d = smin(d, sdEllipsoid(ax - 15.4, y - 221.5, z - 147, 2.8, 3.8, 5.4), 1.2)
-    d = smax(d, -sdEllipsoid(ax - 16.8, y - 221.5, z - 147, 1.6, 1.1, 3.2), 0.5)
+    // eyes: small oval beads on the sides of the head, under the horns
+    d = smin(d, sdEllipsoid(ax - 13.6, y - 222.5, z - 142, 2.6, 3.4, 4.8), 1.2)
+    d = smax(d, -sdEllipsoid(ax - 15.2, y - 222.5, z - 142, 1.4, 1.0, 3.0), 0.5)
     // back: sink into the body
     d = smax(d, -(z - 96), 2)
     return d
   }
-  return { sd, bounds: { min: [-34, 198, 96], max: [34, 266, 188] } }
+  return { sd, bounds: { min: [-36, 196, 96], max: [36, 262, 190] } }
 }
 
 // ------------------------------------------------------------------ shoulder flange (an L-shaped slab)
@@ -218,7 +244,9 @@ export function headSDF() {
  * the slab's buried part goes below the slope surface.
  */
 export const SHOULDER_FLANGE = [
-  [112, 233], [116, 232.4], [128, 231], [140, 229.8], [147.6, 229], [148.6, 226.4], [148.4, 214],
-  [147, 208.4], [143.4, 205.4], [140.6, 206.4], [141.6, 209.6], [139.8, 211.6], [128, 214], [112, 226],
+  // fix pass r8: a short LOW lug lying along the slope (≈ 7 mm proud of it) whose outer end hooks down over the
+  // collar onto the belly's rolled top (photo-28), not a tall block
+  [110, 238.6], [118, 232.8], [128, 224.8], [136, 218.6], [141.2, 214.6], [143.2, 211], [142.8, 207], [140.4, 205],
+  [137.8, 206.2], [138.4, 209], [134, 210.2], [128, 214], [112, 226.4],
 ]
 export const SHOULDER_FLANGE_T = 11

@@ -41,3 +41,4 @@ rectifications / developments) of `photo-11.jpg`, saved with PIL without EXIF/XM
 | `detail-neck.jpg` | the neck with its incised inscription (not a view ref) | `photo-11.jpg` | (380, 150, 1180, 620) |
 | `faces/face-shoulder.jpg` `face-body.jpg` `face-neck.jpg` | flat faces (KIT.md § Flat faces) | `photo-11.jpg` | warped by `faces.json` (`node tools/faces.mjs --a nezu-hu --rectify`) |
 | `faces/dev-shoulder.jpg` `dev-body.jpg` `dev-neck.jpg` | the photograph DEVELOPED onto each band (x = arc mm from the front centre line, y = arc mm up the wall from the band's foot; 6 px/mm) through the fitted camera — the tracing images | `photo-11.jpg` | resampled, `.work/r8-hu/develop.py` |
+| `inscription.json` | the neck inscription as a 0.25 mm raster of incised strokes (not a transcription), modelled as sunk lines on the front of the neck | `photo-11.jpg` | developed onto the neck (x −110…110 mm, y 318…422 mm) and filtered, `.work/r8-hu-fix/inscr.py` |

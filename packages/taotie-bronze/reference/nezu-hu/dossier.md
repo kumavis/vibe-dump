@@ -106,3 +106,23 @@ near-black with a fine pale speckle; the handles greener at the joints. Preset `
 Only the photograph exists. The research (research/01–04) is about Anyang décor and does not cover Eastern Zhou
 pattern-block interlace: its relief grammar (flat plateaus, leiwen ground) does NOT apply here; the photograph wins
 (round ribs, plain ground).
+
+## r8 fix pass — re-readings (photo-11 wins where it disagrees with the first reading)
+
+- **Panchi strands.** Measured on the developed photograph (6–8 px/mm) and on the detail crops: strands ≈ 2–2.2 mm,
+  round-shouldered, centre lines ≈ 4.4 mm apart (the dominant stroke period of photo and render now agree within 5 %).
+  The blind review's "4–4.5 mm flat strands, 75 % plate" is not what the photograph shows; the unit was redrawn denser
+  (∩ loops with apex pellets, U loops, inward hooks, a C with a tongue, stems that interlock the rows) rather than fatter.
+- **Cords.** The rope's strands are ≈ 5–5.5 mm long (not 2.5); the plain cords are flat ledges.
+- **Belly décor lower edge** raised 5 mm (63.4 → 68.4) after overlaying the render on the photograph through the same
+  camera. The silhouette rows confirm the foot ring is widest at mid-ring (0.58 H) and undercut at its top (0.536 H):
+  it does NOT flare to the base (the review's claim); the profile was widened ≈ 2 % at the ring and pinched ≈ 3 % at
+  the junction.
+- **Lip.** A crisp lower edge at y ≈ 440, an 8 mm everted band above it.
+- **Handles.** Re-read on a 5 mm handle-plane grid: a fat tube arch (14–17 mm) over the loop into the head; a C-volute
+  at the shoulder; a broad foreleg strap down-left to a paw at (111, 281); a broad body strap down-right into a small
+  rolled tail volute (142, 265.5); an open squared tail loop (x 116–137, y 244.5–267.5). The loop's foot is at y ≈ 245,
+  not 252 (spec.json `handleFoot` updated to 0.546). Thickness across is still a guess.
+- **Inscription.** About 8 columns at ≈ 22 mm on the front of the neck, characters ≈ 8–12 mm. Modelled from
+  `inscription.json`, a raster extracted from the photograph (not transcribed; some false strokes from patina edges,
+  some strokes lost where the photograph is soft, mostly in the lowest 25 mm).

@@ -125,3 +125,31 @@ if a better photograph ever shows one.)
 - **photo-31 vs photo-32 — bail height:** with the bail upright, photo-31's strap reaches 389 mm (consistent with
   every other row of its outline). In photo-32 the crown sits only ≈ 18 mm above the knob, which would put it near
   365 mm: the bail is probably swung slightly toward the camera there (it pivots). The model shows it upright.
+
+## f. Round r8-fix: what changed and why (photo-31 developed, photo-32)
+
+The décor is now read off `faces/dev-*.jpg` — photo-31 developed onto each register's OWN panel (developed mm × arc mm),
+both halves averaged — and kept as data in `trace/*.json` (right half, panel mm; `src/artifacts/nezu-you/decor.js`
+renders them). Corrections to §b–§c, each from the photographs:
+
+- **Centring.** The fitted camera puts every left-half element ≈ 9 mm further out than its right twin: the vessel's
+  axis in photo-31 sits ≈ 4.5 mm (≈ 6 px) left of where the camera puts x = 0. Positions below are the average.
+- **Belly eye:** centre 54.5 mm out (not 46), 43 up the register; boss Ø ≈ 36, pupil a plain pit Ø ≈ 6.5 (not a
+  hollow in a crater). The reviewer's ± 55 mm is right; his Ø 33 is the boss without its socket ring (Ø ≈ 40).
+- **Belly horn:** a G of three masses — a broad inner block (32–61 mm out) divided by a deep hooked channel, a top
+  bar to 101 mm out with a deep slot under it, an outer column rolling in to a coiled island (70–92) — 72–113 up.
+- **Curved bands** (brow, cheek arcs, lancets, jaw) are smooth curves (Catmull-Rom through the traced points).
+- **Friezes:** one long generic kui per half was wrong: neck = fat G-curls with spiral ends over bodies with rolled
+  tails (no quill row); skirt = squared G-hooks then a body ending in a big rolled curl (≈ 15 mm, x ≈ 60); foot =
+  six dense ≈ 18 mm units (G-curl, hooked jaw, quill) per half, bands ≈ 4 mm.
+- **Lid slope:** a big fat G rolling into a deep spiral beside the strap (centre ≈ 31 mm out), ONE ring-eyed boss at
+  ≈ 79 mm (the "inner boss" of §c was the G's spiral hole), a spiral hook run out to the ridge flange, hooks above.
+- **Pivot head:** two big domed C-horn lobes (≈ 22 × 16 mm each, a slot inside), a trapezoid face plate, lozenge
+  at y ≈ 184, eyes at y ≈ 178.5 (± 10.3 mm), snout ≈ 166; horn tops ≈ 204 (through the fitted camera, ≈ 5 px/mm).
+- **Lid horns:** flat crescent BLADES in the XY plane, ≈ 9 mm thick front to back, one tip (≈ 124 mm out, 286 up),
+  a concave inner edge, a boss on each face (photo-31 left horn, photo-32 right horn).
+- **Knob:** taller (≈ 49 mm over the apex), widening upward to a rounded top ≈ 29 mm across, ≈ 7 wavy tiers.
+- **Flanges:** big blocks cut by narrow full-depth slots (belly ends ≈ 5, neck 3, skirt 2, foot 2, lid ridges ≈ 4–5),
+  no incised T on the faces; the face-centre strip narrower (5 mm) with small slits.
+- **Strap:** the lower dragon's body ≈ 8–9 mm, plain-topped, swinging once across, a tail rolled low on the left; a
+  leaf-shaped head under the boss at ≈ 110 mm along the strap (y ≈ 310); the ground there is ROUND spirals.

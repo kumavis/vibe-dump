@@ -57,7 +57,7 @@ export default {
   views: {
     // photo-34: az ≈ 3.5°, el ≈ 10°, ≈ 0.9 m (vfov ≈ 38°) — an ASSUMED camera, .work/r8-dsk/solve/cam.py
     front: { azimuth: 3.5, elevation: 10, fov: 38, fit: 0.92, target: [0, 250, 0], ref: 'front.jpg' },
-    'front-high': { azimuth: -14, elevation: 22, fov: 38, fit: 1.05, target: [0, 245, 0], ref: 'front-high.jpg' },
+    'front-high': { azimuth: 14, elevation: 12, fov: 38, fit: 0.97, target: [0, 245, 0], ref: 'front-high.jpg' },
     'three-quarter': { azimuth: 40, elevation: 12, fov: 26, fit: 1.08 },
     side: { azimuth: 90, elevation: 8, fov: 26, fit: 1.08 },
     back: { azimuth: 180, elevation: 8, fov: 26, fit: 1.08 },
@@ -119,7 +119,9 @@ export default {
 
     // ---------------------------------------------------------------- casting
     await onProgress(0.72, 'casting')
-    const mat = (relief) => new kit.PatinaMaterial({ relief })
+    const mat = (relief, meshTint) => new kit.PatinaMaterial({ relief, meshTint })
+    // photo-34 / photo-03: the collar is near-black, the lid and knob darker than the body (per-mesh tints, beauty only)
+    const TINT = { collar: '#4c4d49', lid: '#8d8e88' }
     const bodyG = group('body')
     const matB = [mat(pf.lugRelief), mat(ps.relief), mat(pf.relief)]
     for (let k = 0; k < 4; k++) {
@@ -130,32 +132,35 @@ export default {
     // the ledge: from the shoulder top in to the collar, a small round at its outer edge
     const wTop = bodyW(LV.shoulder)
     const ring = (y, a, r) => ({ y, a, b: RHO * a, r })
-    const led = ringLoft([ring(LV.shoulder, wTop, Rb(LV.shoulder)), ring(LV.shoulder + 1.2, wTop - 1.8, Rb(LV.shoulder) - 1.6), ring(348, wTop - 5, Rb(LV.shoulder) - 4), ring(348, COLLAR, 3)], ledge)
+    // (r8-dsk-fix: photo-03 shows no broad flat deck — the shoulder keeps rounding up and in to a short narrow ledge
+    // at the collar foot, so the ledge now rises ≈ 5 mm as it runs in)
+    const led = ringLoft([ring(LV.shoulder, wTop, Rb(LV.shoulder)), ring(LV.shoulder + 2.2, wTop - 3.2, Rb(LV.shoulder) - 2.4), ring(LV.shoulder + 4.2, COLLAR + 4.5, 6), ring(LV.shoulder + 5, COLLAR + 1.2, 4), ring(LV.shoulder + 5, COLLAR - 1, 3)], ledge)
     bodyG.add(led)
 
     const collarG = group('collar')
-    const matC = [mat(panels.collarLong), mat(panels.collarShort)]
+    const matC = [mat(panels.collarLong, TINT.collar), mat(panels.collarShort, TINT.collar)]
     for (let k = 0; k < 4; k++) {
       collarG.add(loftSide(kit, { k, y0: 348, y1: LV.collar, W: () => COLLAR, R: () => 3, relief: k % 2 ? panels.collarShort : panels.collarLong, arc: (y) => y - 348, panelW: collarW(k % 2), material: matC[k % 2], density: dens, fade: 0.8 }))
     }
 
     const lidG = group('lid')
-    const matL = [mat(pl.relief), mat(plS.relief)]
+    const matL = [mat(pl.relief, TINT.lid), mat(plS.relief, TINT.lid)]
+    const lidPlain = new kit.PatinaMaterial({ meshTint: TINT.lid })
     for (let k = 0; k < 4; k++) {
       const p = k % 2 ? plS : pl
       lidG.add(loftSide(kit, { k, y0: LV.eave, y1: LV.lidTop, W: lidW, R: Rl, relief: p.relief, arc: arcL0, panelW: p.panelW, material: matL[k % 2], density: dens * 1.2, fade: 0.8 }))
     }
     // the lid's lip: it sits on the collar top and overhangs it a little
-    lidG.add(ringLoft([ring(LV.collar, COLLAR + 0.6, 4), ring(LV.collar + 0.3, lidW(LV.eave) + 0.6, Rl(LV.eave)), ring(LV.eave, lidW(LV.eave) + 0.6, Rl(LV.eave)), ring(LV.eave, lidW(LV.eave), Rl(LV.eave))], plain))
-    lidG.add(capMesh({ y: LV.collar, a: COLLAR + 0.6, b: RHO * (COLLAR + 0.6), r: 4 }, plain, false))
-    lidG.add(capMesh({ y: LV.lidTop, a: lidW(LV.lidTop), b: RHO * lidW(LV.lidTop), r: Rl(LV.lidTop) }, plain, true))
+    lidG.add(ringLoft([ring(LV.collar, COLLAR + 0.6, 4), ring(LV.collar + 0.3, lidW(LV.eave) + 0.6, Rl(LV.eave)), ring(LV.eave, lidW(LV.eave) + 0.6, Rl(LV.eave)), ring(LV.eave, lidW(LV.eave), Rl(LV.eave))], lidPlain))
+    lidG.add(capMesh({ y: LV.collar, a: COLLAR + 0.6, b: RHO * (COLLAR + 0.6), r: 4 }, lidPlain, false))
+    lidG.add(capMesh({ y: LV.lidTop, a: lidW(LV.lidTop), b: RHO * lidW(LV.lidTop), r: Rl(LV.lidTop) }, lidPlain, true))
 
     // knob: a little hipped roof on a thick vertical-sided cap, on a short post (photo-34: 39 mm across)
     const knob = kit.roofKnob({
       width: 40, depth: 35, rise: 7, ridge: 0.7,
       skirt: { height: 0.5, fascia: 17 },
       post: { height: LV.knob - LV.lidTop + 0.5, width: 15, depth: 13.5, waist: 0 },
-      material: plain, part: 'knob', embed: 6,
+      material: lidPlain, part: 'knob', embed: 6,
     })
     knob.position.y = LV.lidTop - 0.5
     object.add(knob)
@@ -165,7 +170,7 @@ export default {
     for (const k of [0, 2]) { // front and back only: the side slopes' silhouettes in photo-34 show none
       const pts = [], outs = []
       for (let i = 0; i <= 16; i++) {
-        const y = 424 + (463.5 - 424) * (i / 16)
+        const y = 424 + (LV.lidTop - 2.5 - 424) * (i / 16)
         const a = lidW(y), dz = RHO * a
         const c = k === 0 ? V(0, y, dz) : k === 1 ? V(a, y, 0) : k === 2 ? V(0, y, -dz) : V(-a, y, 0)
         // outward: horizontal side normal tilted by the slope
@@ -177,7 +182,7 @@ export default {
         pts.push(c); outs.push(n)
       }
       const path = polyPath(pts, outs)
-      const m = kit.flange({ path, height: (f) => 7.5 + 2.5 * f, thickness: 5.5, notches: null, ends: { start: 'taper', end: 'square' }, embed: 2.5, taper: 2, bevel: 0.8, waver: 0.2, seed: seed + k, material: plain, part: 'flanges' })
+      const m = kit.flange({ path, height: (f) => 7.5 + 2.5 * f, thickness: 6.6, notches: null, ends: { start: 'taper', end: 'square' }, embed: 2.5, taper: 1, bevel: 0.35, waver: 0.2, seed: seed + k, material: lidPlain, part: 'flanges' })
       flanges.push(m); object.add(m)
     }
 
@@ -196,10 +201,16 @@ export default {
     const hGeo = kit.meshSDF(handleSDF(), { voxel })
     const handles = [mesh(hGeo, 'handles'), mesh(hGeo.clone().applyMatrix4(turn), 'handles')]
     const headGeo = kit.meshSDF(shoulderHeadSDF(), { voxel })
-    // detail-head against photo-34: the sculpted head reads ≈ 0.85 × the first reading — scale it about its seat
-    headGeo.translate(0, -320, -120).scale(0.85, 0.85, 0.85).translate(0, 320, 120)
     const heads = [mesh(headGeo, 'heads'), mesh(headGeo.clone().applyMatrix4(turn), 'heads')] // back: inferred
     const lug = mesh(kit.meshSDF(lugSDF(), { voxel: voxel * 0.8 }), 'lug')
+    // the lug's opening: the photographs show it BLACK (a hole into shadow). The pocket in the front panel gives the
+    // form; a black-tinted floor just above its bottom gives the tone in beauty (clay shows the pocket's honest floor)
+    {
+      const yC = 93.3, zW = RHO * bodyW(yC), n = new THREE.Vector3(0, -0.24, 0.97).normalize()
+      const floor = new THREE.Mesh(new THREE.PlaneGeometry(35, 12.4).rotateX(Math.asin(0.24)), new kit.PatinaMaterial({ meshTint: '#070605' }))
+      floor.position.set(0, yC, zW).addScaledVector(n, -11.6)
+      bodyG.add(floor)
+    }
 
     await onProgress(1, 'done')
     void H

@@ -7,12 +7,13 @@
 // Form (nezu-bu/form.js): a squat, broad-shouldered round jar — a ring foot with a plain flaring base band, a
 // two-row frieze and a plain collar; a wide belly over a sloping underside; a sloping shoulder and a thick rounded
 // lip; a domed lid with a projecting ledge and a bud knob on a stem. Two tall hooked flanges divide the body at
-// ±90° (shoulder and belly), low beaded ridges run down the mask centres (0°, 180°); four hooked flanges stand on
-// the lid and four on the foot. Two small openings flank each foot flange at the mask centres.
+// ±90° (shoulder and belly), low beaded ridges run down the mask centres (0°, 180°); four bird-headed flanges stand on
+// the lid; on the foot two hooked flanges (±90°) and two low beaded ridges (0°, 180°). Two small framed openings flank
+// each foot ridge at the mask centres.
 // Décor (nezu-bu/decor.js) is TRACED from photo-06 developed onto each register's panel (reference/nezu-bu/faces/).
 
 import * as THREE from 'three'
-import { LV, BODY, LID, KNOB, POSTS, RIDGES, AZ, hookTeeth } from './nezu-bu/form.js'
+import { LV, BODY, LID, KNOB, POSTS, POST_TOP, RIDGES, AZ, hookTeeth, dividerTeeth, lidTeeth } from './nezu-bu/form.js'
 import { roundShell, meridianPath, revolveSolid } from './nezu-bu/shell.js'
 import { maskPanel, shoulderPanel, footPanel, lidPanel } from './nezu-bu/decor.js'
 
@@ -42,14 +43,15 @@ export default {
     side: { azimuth: 90, elevation: 6, fov: 28, fit: 1.08, target: [0, 140, 0] },
     back: { azimuth: 180, elevation: 6, fov: 28, fit: 1.08, target: [0, 140, 0] },
     top: { azimuth: 0, elevation: 82, fov: 28, fit: 1.1, target: [0, 140, 0] },
-    // details: the crop boxes of SOURCES.md re-projected through the same station (the knob view is lifted to the
+    // details: the crop boxes of SOURCES.md re-projected through the same station; fit (fix pass) = the crop's HEIGHT
+    // in mm (≈ 4.1 px/mm on the belly, 3.44 at the lid) / 2 / R (R ≈ 217 mm): the stage fits the vertical extent (the knob view is lifted to the
     // stage's lowest elevation, 1.2°: the photograph looks up at it by ≈ 5°)
     'detail-knob': { azimuth: -2.7, elevation: 1.2, fov: 10.02, fit: 0.25, target: [29, 238, 1], ref: 'detail-knob.jpg' },
-    'detail-shoulder': { azimuth: -4.4, elevation: 3.1, fov: 9.4, fit: 0.2, target: [40, 152, 89], ref: 'detail-shoulder.jpg' },
-    'detail-mask': { azimuth: -5.1, elevation: 8, fov: 8.57, fit: 0.182, target: [45, 107, 94], ref: 'detail-mask.jpg' },
-    'detail-eye': { azimuth: -5.8, elevation: 7.6, fov: 3.77, fit: 0.081, target: [52, 110, 91], ref: 'detail-eye.jpg' },
-    'detail-flange': { azimuth: 9.8, elevation: 6, fov: 11.4, fit: 0.276, target: [-100, 118, 30], ref: 'detail-flange.jpg' },
-    'detail-foot': { azimuth: -1.7, elevation: 15.3, fov: 10.85, fit: 0.245, target: [15, 34, 77], ref: 'detail-foot.jpg' },
+    'detail-shoulder': { azimuth: -4.4, elevation: 3.1, fov: 9.4, fit: 0.13, target: [40, 148, 89], ref: 'detail-shoulder.jpg' },
+    'detail-mask': { azimuth: -5.1, elevation: 8, fov: 8.57, fit: 0.15, target: [45, 106, 94], ref: 'detail-mask.jpg' },
+    'detail-eye': { azimuth: -5.8, elevation: 7.6, fov: 3.77, fit: 0.072, target: [52, 110, 91], ref: 'detail-eye.jpg' },
+    'detail-flange': { azimuth: -3.5, elevation: 6, fov: 11.4, fit: 0.232, target: [-112, 111, 6], ref: 'detail-flange.jpg' }, // re-aimed (fix pass): on the left divider flange itself
+    'detail-foot': { azimuth: -1.7, elevation: 15.3, fov: 10.85, fit: 0.215, target: [15, 32, 77], ref: 'detail-foot.jpg' },
     // flat faces (KIT.md § Flat faces; reference/nezu-bu/faces.json): chord planes down photo-06's line of sight
     'face-belly': { face: { center: [0, 100, 104.67], normal: [0, 0.1568, 0.9876], up: [0, 0.9876, -0.1568], width: 220, height: 50 }, ref: 'faces/face-belly.jpg' },
     'face-shoulder': { face: { center: [0, 143, 100.89], normal: [0, 0.0722, 0.9974], up: [0, 0.9974, -0.0722], width: 220, height: 34 }, ref: 'faces/face-shoulder.jpg' },
@@ -78,7 +80,7 @@ export default {
       }
     }
     await onProgress(0.05, 'body')
-    const holes = AZ.holes.map((azimuth) => ({ shape: 'rect', azimuth, y: LV.holes, w: 8, h: 4.8 }))
+    const holes = AZ.holes.map((azimuth) => ({ shape: 'rect', azimuth, y: LV.holes + 0.3, w: 6.2, h: 5 }))
     const body = kit.lathe({
       profile, sectors: { count: 2, center: 0 }, registers, holes,
       wall: (s, y) => (y < 64 ? 3.6 : 4),
@@ -93,29 +95,34 @@ export default {
     await onProgress(0.55, 'flanges')
     const info = body.userData.lathe
     const flanges = []
+    // photo-06: the flanges read darker than the walls (dark olive; the lid's near-black)
+    const flangeMat = new kit.PatinaMaterial({ meshTint: '#70726a' })
+    const lidFlangeMat = new kit.PatinaMaterial({ meshTint: '#50524c' })
     const addFlange = (path, o) => {
-      const f = kit.flange({ path, thickness: 5.6, taper: 3, waver: 0.3, bevel: 0.6, material: plain, part: 'flanges', ...o })
+      const f = kit.flange({ path, thickness: 5.6, taper: 3, waver: 0.3, bevel: 0.6, material: flangeMat, part: 'flanges', ...o })
       object.add(f)
       flanges.push(f)
     }
     // dividers (±90°): shoulder + belly in one run, ≈ 13 mm proud, eleven hooked teeth
     for (const az of AZ.dividers) {
-      const [s0, s1] = info.range({ y0: 66.5, y1: 156 })
+      // photo-06: the top ends rounding into the shoulder at y ≈ 154 (no spike); blocky beaked teeth at ≈ 9.6 mm
+      const [s0, s1] = info.range({ y0: 66.5, y1: 154 })
       const path = info.meridian(az, { s0, s1 })
-      addFlange(path, { outline: hookTeeth(path.length, { height: 13, pitch: 9.6, slot: 0.24, depth: 0.5, beak: 0.12, embed: 2 }), seed: seed + az })
+      addFlange(path, { outline: dividerTeeth(path.length, { height: 13, pitch: 9.6, embed: 2 }), seed: seed + az })
     }
     // mask-centre ridges (0°, 180°): low, narrow, beaded
     for (const az of AZ.masks) {
       const [s0, s1] = info.range({ y0: 78, y1: 158 })
-      addFlange(info.meridian(az, { s0, s1 }), { height: 3.2, thickness: 3.4, embed: 1.5, bevel: 0.5, notches: { shape: 'square', pitch: 4.2, depth: 0.45, width: 1.3 }, seed: seed + 7 + az, incise: false })
+      addFlange(info.meridian(az, { s0, s1 }), { height: 3.2, thickness: 3.4, embed: 1.5, bevel: 0.5, notches: { shape: 'square', pitch: 4.2, depth: 0.6, width: 1.6 }, seed: seed + 7 + az, incise: false })
     }
-    // foot (0°, 90°, 180°, 270°): four teeth each
+    // foot: the side ones (±90°) four hooked teeth over the upper half (photo-06, y ≈ 34–63, in profile); the front and
+    // back ones (0°, 180°) a low narrow beaded ridge running down the frieze to the base band (fix pass: photo-06 /
+    // detail-foot show no teeth there)
     for (const az of AZ.all4) {
-      // photo-06: the side ones show four teeth over the upper half (y ≈ 34–63); the front one runs on, low, to the
-      // base band (seen end-on)
       const [s0, s1] = info.range({ y0: 21, y1: 63 })
       const path = info.meridian(az, { s0, s1 })
-      addFlange(path, { outline: hookTeeth(path.length, { height: 7.5, pitch: 7.6, embed: 2, depth: 0.55, startPlain: 13.5, lowHeight: 2.6 }), thickness: 5, seed: seed + 11 + az })
+      if (az % 180 === 0) addFlange(path, { height: 3, thickness: 3.4, embed: 1.5, bevel: 0.5, notches: { shape: 'square', pitch: 4.4, depth: 0.5, width: 1.4 }, seed: seed + 11 + az, incise: false, material: flangeMat })
+      else addFlange(path, { outline: hookTeeth(path.length, { height: 7.5, pitch: 7.6, embed: 2, depth: 0.55, startPlain: 13.5, lowHeight: 2.6 }), thickness: 5, seed: seed + 11 + az })
     }
 
     // ---------------------------------------------------------------- lid
@@ -136,7 +143,7 @@ export default {
       // photo-06 (the right one in profile): three chunky teeth, each topped by a bird head whose beak points to the knob
       const s0 = lidP.sAtY(195.2), s1 = lidP.sAtY(224.4)
       const path = meridianPath(lidP, az, s0, s1)
-      const f = kit.flange({ path, outline: hookTeeth(path.length, { height: 10, pitch: 14, slot: 0.45, embed: 2, depth: 0.85, beak: 0.2, nick: 0.32 }), thickness: 5, taper: 3, waver: 0.3, bevel: 0.6, seed: seed + 21 + az, material: plain, part: 'flanges' })
+      const f = kit.flange({ path, outline: lidTeeth(path.length, { height: 14, pitch: 19, embed: 2 }), thickness: 5.4, taper: 3, waver: 0.3, bevel: 0.6, seed: seed + 21 + az, material: lidFlangeMat, part: 'flanges' })
       object.add(f)
       flanges.push(f)
       lidFlanges.push(f)
@@ -144,13 +151,14 @@ export default {
 
     // ---------------------------------------------------------------- knob
     await onProgress(0.75, 'knob')
-    const knobMat = new kit.PatinaMaterial()
+    // photo-06: the knob is near-black and glossy-dull, darker than the lid (a per-mesh multiply, beauty only)
+    const knobMat = new kit.PatinaMaterial({ meshTint: '#4a4a46' })
     const knob = new THREE.Group()
     knob.userData.part = 'knob'
     knob.add(new THREE.Mesh(revolveSolid(KNOB, { segments: Math.round(40 * Math.sqrt(q)) }), knobMat))
     const postGeo = new THREE.CylinderGeometry(1, 1, 1, Math.round(16 * Math.sqrt(q)))
     for (const [x, z, r] of POSTS) {
-      const g = postGeo.clone().applyMatrix4(new THREE.Matrix4().makeScale(r, 252.6 - 224.6, r)).applyMatrix4(new THREE.Matrix4().makeTranslation(x, (252.6 + 224.6) / 2, z))
+      const g = postGeo.clone().applyMatrix4(new THREE.Matrix4().makeScale(r, POST_TOP - 224.6, r)).applyMatrix4(new THREE.Matrix4().makeTranslation(x, (POST_TOP + 224.6) / 2, z))
       knob.add(new THREE.Mesh(g, knobMat))
     }
     object.add(knob)

@@ -82,3 +82,26 @@ drum bulges ≈ 1.5 mm and turns under into a nearly flat bottom; a 4 mm ledge s
   ≈ 200° apart, ≈ 100° either side of the handle — the photographs win.
 - research/03 gives legs ≈ 0.36 H: here 0.41 of the height to the post tops (0.53 to the rim).
 - The lead's brief describes the lower body as "a lower bulge"; it is a short, nearly straight drum (bulge ≈ 1.5 mm).
+
+## Round r8-fix — corrections from the blind review (re-measured on the photographs)
+
+- **Post caps** (photo-22 left cap at 2×, photo-21 near cap): an hourglass bell, not a tapered drum. Silhouette (corner
+  flanges included) as a fraction of the skirt half-width: 1.0 at the skirt, 0.88 at 13 % of the height, 0.69 at 27 %,
+  0.54 at 47 %, 0.56 at 67 %, 0.62 at 78 %, the lip 0.76 at 84 %, then a low dome. Cap 69.6 mm tall over a Ø 49 skirt
+  (height / skirt 1.42 on photo-22). Body radius = silhouette − ≈ 2.6 mm of flange. Stems ≈ 0.35 × the skirt on both
+  photographs → 18 × 15 mm (the earlier 24 × 19 was too wide); they stand just inside the lip (r 79.5, outer face 7 mm
+  inside the rim edge, photo-22) and ≈ 29 mm clear of it.
+- **Upper wall**: photo-21's left silhouette under the handle stays at r ≈ 51 for ≈ 30 mm above the waist band and only
+  then flares — a concave trumpet. The profile above the waist is now given in final mm (form.js `UPPER`), with a
+  near-vertical rolled lip band 314–321.6.
+- **Handle head** (detail-handle, detail-handle-head): a long snout thrusting out and down ≈ 24 mm beyond the strap's outer
+  face, eyes and brow as surface décor; the two crown plates upright (sides vertical, splayed ≈ 13° outward, tops out),
+  each with a raised border and one squared coil. The earlier plates were concentric-square "diamonds".
+- **Legs**: blade root narrower (chord 36 mm, ≈ 0.15–0.2 D seen edge-on), a tusk curve (the apex line drops nearly straight,
+  then kicks out toward the tip), a lower notched edge flange, and a column of distinct framed cartouche units (each
+  ≈ 0.6 of the face wide, one squared coil + eye boss) as detail-leg shows. The orange strips on the outer faces are modelled
+  as shallow worn channels that collect the earth / cuprite layers.
+- **Drum mask**: six packed comb ribs running down below the eye, a sunk plain socket round the eye boss, the jaw C-hooks moved
+  out to ≈ ±20 mm (face-drum), a nose-side hook and a hook between the brow column and the body (raised cover 41 → 52 %).
+- Measured values in spec.json are unchanged (all seven ratios still pass); the wall flanges and the cap flanges are cast in
+  short runs because the kit's flange fills the hull of a strongly bent path.

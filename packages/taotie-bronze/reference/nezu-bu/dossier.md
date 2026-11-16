@@ -72,18 +72,24 @@ symmetric about the same 0° line. The back (180°) is assumed identical. [firm 
 
 ### b.5 Sculpted parts
 
-- **Divider flanges** (±90°, y ≈ 66–156): ≈ 13 mm proud, ≈ 11 blocky teeth at ≈ 9.6 mm pitch separated by narrow
-  slots, each tooth's upper end rising in a short beak (photo-06, both in profile). Thickness not visible (5.6 mm
-  assumed). [good / est]
+- **Divider flanges** (±90°, y ≈ 66–154): ≈ 13 mm proud, ≈ 11 blocky teeth at ≈ 9.6 mm pitch on a solid spine
+  (≈ 0.6 of the height); each tooth's upper outer corner rises in a short beak curling back over the narrow, C-shaped
+  slot above it; the top rounds off into the shoulder (no spike) (photo-06, both in profile; 1:1 gridded crop of the
+  left one). Thickness not visible (5.6 mm assumed). [good / est]
 - **Mask ridges** (0°, 180°, y ≈ 78–158 across mask and shoulder): low (≈ 3 mm), narrow (≈ 3 mm), cut into beads
   every ≈ 4 mm. [firm]
 - **Foot flanges** (0°, ±90°, 180°): the side ones show four teeth over the collar and the top of the frieze
-  (y ≈ 34–63); the front one runs on, low, to the base band. [good]
-- **Lid flanges** (0°, ±90°, 180°, from the ledge to r ≈ 22): three chunky teeth each, ≈ 10 mm proud, deep slots,
-  each topped by a bird head whose beak points toward the knob (the right one in profile). [good]
-- **Knob**: an ogival bud (lotus-bud shape) on two posts side by side; the front lid flange runs up to them. [firm]
-- **Openings**: four small rectangular openings ≈ 8 × 5 mm in the foot, at ±11° either side of each mask centre,
-  each in a raised frame. Whether they pierce the wall is not visible (dark): modelled as through-holes. [est]
+  (y ≈ 34–63); the front one (and the back, inferred) is a low narrow notched ridge running down the frieze to the
+  base band, no teeth (detail-foot). [good]
+- **Lid flanges** (0°, ±90°, 180°, from the ledge to r ≈ 22): three chunky teeth each, ≈ 12–14 mm proud on a very
+  low body, deep slots; each tooth a broad stem carrying a T-shaped bird head (crest notch on top, the hooked beak
+  pointing toward the knob and curling over the next slot) (the right one in profile, 1:1 gridded crop). [good]
+- **Knob**: an ogival bud on two posts side by side; the front lid flange runs up to them. Read on a 1:1 gridded crop
+  (3.44 px/mm at the lid): bud Ø ≈ 26 mm (90 px), widest ≈ 22 mm below the tip, straight-sided ogive above, a round
+  bulb below closing into a neck Ø ≈ 15 mm at ≈ 34 mm below the tip (bud h/w ≈ 1.3); the posts ≈ 7 mm wide each with
+  a hairline slot (≈ 1–1.5 mm) between them, together the neck's width. [firm / good]
+- **Openings**: four small squarish openings ≈ 6 × 5 mm in the foot, ≈ 17 mm (±12.5°) either side of each mask
+  centre, each in a raised frame ≈ 1.5 mm wide. Whether they pierce the wall is not visible (dark): modelled as through-holes. [est]
 
 ## c. Relief (read off the developed photograph, faces/dev-*.jpg)
 
