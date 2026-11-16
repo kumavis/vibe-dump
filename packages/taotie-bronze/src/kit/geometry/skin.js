@@ -1096,6 +1096,20 @@ export function sliceMesh(m, { point, normal }) {
 const MAGIC = 0x314d5454 // 'TTM1' little-endian
 
 /** Decode the compact binary → { positions (mm), indices, channel?: Float32Array 0..1 } */
+// Fetch a mesh binary written by encodeMesh. A host that will not serve .bin files gets the same
+// bytes as base64 text beside it (`<url>.txt`); tools/artifact.mjs writes that file and sets
+// data-mesh-text="1" on <html> to say so.
+export async function fetchMeshBytes(url) {
+  const asText = typeof document !== 'undefined' && document.documentElement.dataset.meshText === '1'
+  const res = await fetch(asText ? url + '.txt' : url)
+  if (!res.ok) throw new Error('mesh asset ' + res.status)
+  if (!asText) return res.arrayBuffer()
+  const bin = atob((await res.text()).trim())
+  const out = new Uint8Array(bin.length)
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i)
+  return out.buffer
+}
+
 export function decodeMesh(buffer) {
   const buf = buffer instanceof ArrayBuffer ? buffer : buffer.buffer.slice(buffer.byteOffset, buffer.byteOffset + buffer.byteLength)
   const dv = new DataView(buf)

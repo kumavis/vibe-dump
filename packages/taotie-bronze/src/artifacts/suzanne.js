@@ -48,9 +48,7 @@ export default {
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
     const q = Math.max(0.25, quality)
     await onProgress(0.02, 'loading the cage')
-    const res = await fetch(cageUrl)
-    if (!res.ok) throw new Error('suzanne: mesh asset ' + res.status)
-    let m = kit.decodeMesh(await res.arrayBuffer())
+    let m = kit.decodeMesh(await kit.fetchMeshBytes(cageUrl))
     // glTF: Y up, she faces +Z → mm, chin on y = LIFT, centred
     const b0 = kit.meshBounds(m)
     const k = HEIGHT / b0.size[1]

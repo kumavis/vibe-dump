@@ -817,6 +817,7 @@ const mesh = kit.skin(m, { regions: [{ relief, projectors: [p, …], scale?, mat
 kit.skinGeometry(m, { regions, cavity, spacing, threshold })   // the BufferGeometry alone (position, normal, uv, tangent, cavity, groups)
 kit.sliceMesh(m, { point, normal }) → polylines               // e.g. a flange path down a mask's centre line (kit.flange path)
 kit.encodeMesh(m, { channel }) / kit.decodeMesh(buffer)       // TTM1: u16 positions over the bbox + varint first-use index deltas
+kit.fetchMeshBytes(url)                                       // fetch such a binary; reads base64 text at <url>.txt when <html data-mesh-text="1"> (hosts that serve no .bin — tools/artifact.mjs)
 ```
 
 **Drawing for a projector.** A projector's panel is an ordinary ReliefPanel in the projector's own mm. Draw on the

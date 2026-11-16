@@ -46,9 +46,7 @@ export default {
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
     const q = Math.max(0.25, quality)
     await onProgress(0.02, 'loading the scan')
-    const res = await fetch(dragonUrl)
-    if (!res.ok) throw new Error('stanford-dragon: mesh asset ' + res.status)
-    let m = kit.decodeMesh(await res.arrayBuffer())
+    let m = kit.decodeMesh(await kit.fetchMeshBytes(dragonUrl))
     await onProgress(0.12, 'orienting')
     // the scan: metres, Y up, head toward −X → mm, head toward +X, centred on the base, feet on its top
     const b0 = kit.meshBounds(m)
