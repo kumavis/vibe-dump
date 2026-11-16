@@ -1,6 +1,6 @@
 // Nezu Museum jue 饕餮文爵 (90105) — a tripod pouring cup, Shang dynasty, 13th–11th c. BC. Reconstructed from the
 // project owner's ONE photograph (reference/nezu-jue/photo-02.jpg, three-quarter from behind the handle) via
-// reference/nezu-jue/dossier.md. The size is INFERRED (no dimension on the label): 214 mm to the tail tip.
+// reference/nezu-jue/dossier.md. The size is INFERRED (no dimension on the label): 206 mm to the post caps.
 // Units mm, Y up, front (+Z, θ 0) = the spout; the handle at θ 90 (+X), the tail at θ 180.
 //
 // Form (nezu-jue/form.js): a cup that is a body of revolution up to the band top and a swept upper wall above it,
@@ -12,7 +12,7 @@
 // whorls on the cap tops.
 
 import * as THREE from 'three'
-import { AZ, REG, RIM, bodySurface, bodySamples, buildLeg, postTop, CUP, uOfAz, azOfU, bodyPoint, V_SPLIT } from './nezu-jue/form.js'
+import { AZ, REG, RIM, bodySurface, bodySamples, buildLeg, bodyPoint, buildLip, V_SPLIT } from './nezu-jue/form.js'
 import { buildHandle, buildPost } from './nezu-jue/sculpture.js'
 import { bandPanel, whorlPanel, PANEL } from './nezu-jue/relief.js'
 
@@ -27,26 +27,30 @@ export default {
   findspot: 'Not stated on the label',
   collection: 'Nezu Museum, Tokyo',
   accession: '90105 (number on the gallery label; exhibit 2)',
-  designation: '',
-  dimensions: { h: 214, w: 186, d: 125, inferred: true, note: 'inferred: no dimension on the label; scale set by an assumed cup Ø of 69 mm (dossier § Scale), proportions measured on the one photograph' },
+  designation: 'none stated on the label',
+  dimensions: { h: 206, w: 172, d: 111, inferred: true, note: 'inferred: no dimension on the label; scale set by an assumed cup (band) Ø of 69 mm (dossier § Scale), proportions measured on the one photograph; h to the post caps, w spout tip → tail tip' },
   blurb:
     'A tripod pouring cup for warmed wine: a deep round-bottomed cup that sweeps up into a long open spout on one side and a pointed tail on the other, two capped posts at the root of the spout, a loop handle crowned by an animal head, and three splayed blade legs. ' +
     'Round the cup runs one band of masks drawn in broad raised bands that carry fine spirals on their tops, over a plain sunk ground; notched flanges mark their noses under the spout and the tail. ' +
     'Reconstructed from a single photograph by the project owner: the size is inferred, and the far side and the inside repeat the visible ones.',
   defaultPatina: 'nezu-jue',
   views: {
-    side: { azimuth: 122, elevation: 12, fov: 10, fit: 0.78, target: [6.5, 101.3, 0], ref: 'side.jpg' },
-    'side-hi': { azimuth: 124, elevation: 20, fov: 10, fit: 0.78, target: [6.5, 104, 0] },
-    front: { azimuth: 0, elevation: 8, fov: 28, fit: 1.05, target: [0, 112, 0] },
-    'three-quarter': { azimuth: 40, elevation: 14, fov: 28, fit: 1.05, target: [0, 112, 0] },
-    handle: { azimuth: 90, elevation: 8, fov: 28, fit: 1.05, target: [0, 112, 0] },
-    top: { azimuth: 90, elevation: 82, fov: 28, fit: 1.0, target: [0, 150, 0] },
-    'detail-band': { azimuth: 150, elevation: 8, fov: 20, fit: 0.32, target: [0, 132, -20] },
-    'detail-post-cap': { azimuth: 110, elevation: 30, fov: 20, fit: 0.14, target: [16.4, 208, 32.3] },
-    'detail-handle-head': { azimuth: 120, elevation: 14, fov: 20, fit: 0.2, target: [52, 140, 0] },
+    // the photograph's station (solved on 8 landmarks, dossier § Camera): θ 122, 12° up, ≈ 1.33 m, a 10° lens
+    side: { azimuth: 122, elevation: 12, fov: 10, fit: 0.8, target: [8.6, 101.9, 0], ref: 'side.jpg' },
+    front: { azimuth: 0, elevation: 10, fov: 26, fit: 1.05, target: [0, 104, 0] },
+    'three-quarter': { azimuth: 45, elevation: 14, fov: 26, fit: 1.05, target: [0, 104, 0] },
+    handle: { azimuth: 90, elevation: 8, fov: 26, fit: 1.05, target: [0, 104, 0] },
+    back: { azimuth: 270, elevation: 8, fov: 26, fit: 1.05, target: [0, 104, 0] },
+    top: { azimuth: 90, elevation: 80, fov: 26, fit: 0.9, target: [0, 150, 0] },
+    // details from the photograph's own station: each crop of photo-02 is the matching ref
+    'detail-band': { azimuth: 122, elevation: 12, fov: 10, fit: 0.179, target: [21, 120.5, -26], ref: 'detail-band.jpg' },
+    'detail-post-cap': { azimuth: 122, elevation: 12, fov: 10, fit: 0.107, target: [0, 195, 30], ref: 'detail-post-cap.jpg' },
+    'detail-handle': { azimuth: 122, elevation: 12, fov: 10, fit: 0.2, target: [48, 124, 8], ref: 'detail-handle.jpg' },
+    'detail-leg': { azimuth: 122, elevation: 12, fov: 10, fit: 0.358, target: [32, 48, 6], ref: 'detail-leg.jpg' },
+    'detail-tail': { azimuth: 122, elevation: 12, fov: 10, fit: 0.207, target: [5, 170, -52], ref: 'detail-tail.jpg' },
+    'detail-spout': { azimuth: 122, elevation: 12, fov: 10, fit: 0.248, target: [0, 178, 55], ref: 'detail-spout.jpg' },
     'face-band': { face: { center: [27.11, 120.75, -21.18], normal: [0.8295, 0.2079, -0.5183], up: [-0.1763, 0.9781, 0.1102], width: 62, height: 48 }, ref: 'faces/face-band.jpg' },
     'face-upper': { face: { center: [27.11, 152, -21.18], normal: [0.8295, 0.2079, -0.5183], up: [-0.1763, 0.9781, 0.1102], width: 62, height: 30 }, ref: 'faces/face-upper.jpg' },
-    'detail-leg': { azimuth: 130, elevation: 6, fov: 22, fit: 0.42, target: [36, 55, 0] },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
@@ -83,6 +87,7 @@ export default {
     const object = new THREE.Group()
     object.name = 'nezu-jue'
     object.add(body)
+    body.add(buildLip(kit, { q, material: plain, thickness: RIM.lip }))
 
     await onProgress(0.6, 'flanges')
     const flanges = []
@@ -112,4 +117,3 @@ export default {
   },
 }
 const _p = new THREE.Vector3()
-void CUP; void uOfAz; void azOfU; void postTop

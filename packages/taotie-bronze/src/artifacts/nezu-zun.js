@@ -53,6 +53,11 @@ export default {
     'detail-circles': { azimuth: -1.9, elevation: -7.4, fov: 6.54, fit: 0.098, target: [45, 179, 138], ref: 'detail-circles.jpg' },
     'detail-foot': { azimuth: 2.2, elevation: 6.3, fov: 13.42, fit: 0.222, target: [6, 48, 86], ref: 'detail-foot.jpg' },
     'detail-opening': { azimuth: 60, elevation: 4, fov: 24, fit: 0.1, target: [72, 82, 42] },
+    // flat faces (KIT.md § Flat faces; reference/nezu-zun/faces.json): chord planes down the photographs' lines of sight
+    'face-belly': { face: { center: [0, 142, 136.4], normal: [0.0526, -0.0586, 0.9969], up: [0.0031, 0.9983, 0.0585], width: 190, height: 64 }, ref: 'faces/face-belly.jpg' },
+    'face-circles': { face: { center: [0, 178.5, 145.05], normal: [0.0531, -0.1289, 0.9902], up: [0.0069, 0.9917, 0.1287], width: 170, height: 20 }, ref: 'faces/face-circles.jpg' },
+    'face-foot': { face: { center: [0, 35, 87.13], normal: [0.0478, 0.1308, 0.9903], up: [-0.0063, 0.9914, -0.1306], width: 170, height: 46 }, ref: 'faces/face-foot.jpg' },
+    'face-divider': { face: { center: [118.13, 142, 68.2], normal: [0.7818, 0.2512, 0.5707], up: [-0.2029, 0.9679, -0.1481], width: 190, height: 64 }, ref: 'faces/face-divider.jpg' },
   },
 
   async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
@@ -90,7 +95,7 @@ export default {
       lip: { thickness: 5, length: 8, shape: 'round' },
       floor: { y: 93, thickness: 5, dome: 2 }, foot: { wall: 4 },
       tolerance: { seed: 7, ovality: 0.006, rim: 0.012, lean: 0 },
-      density: 0.8, quality: q, material: plain, part: 'body',
+      density: 0.68, quality: q, material: plain, part: 'body',
     })
     object.add(body)
 

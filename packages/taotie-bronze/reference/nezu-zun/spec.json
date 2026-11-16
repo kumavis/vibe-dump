@@ -1,0 +1,15 @@
+{
+  "note": "Nezu Museum zun 饕餮文尊 (90075), Shang dynasty 12th–11th c. BC. Proportions MEASURED on the owner's photographs through cameras fitted to their outlines (photo-26 head-on at a shoulder head, 8.4 px rms; photo-28 at a divider flange, 18 px rms); ABSOLUTE SIZE INFERRED from the line pitch (≈ 9.5 px ↔ 2.1 mm), ±20 %. Expected values below are the measurements (dossier §b), not read off the model. Part names: body (foot + belly + shoulder + neck + mouth, one lathe), heads (three shoulder heads), flanges (6 belly + 6 foot + 3 shoulder slabs), studs. See dossier.md.",
+  "dimensions": { "h": 348, "w": 355, "d": 355, "inferred": true },
+  "ratios": {
+    "mouthWidth":   { "expr": "overall.w / overall.h",          "expected": 1.02,  "tol": 0.04 },
+    "bodyTop":      { "expr": "parts.body.max.1 / overall.h",   "expected": 1.0,   "tol": 0.02 },
+    "headTop":      { "expr": "parts.heads.max.1 / overall.h",  "expected": 0.72,  "tol": 0.04 },
+    "headUnder":    { "expr": "parts.heads.min.1 / overall.h",  "expected": 0.585, "tol": 0.03 },
+    "headReach":    { "expr": "parts.heads.d / overall.h",      "expected": 0.777, "tol": 0.05 },
+    "studLevel":    { "expr": "parts.studs.min.1 / overall.h",  "expected": 0.564, "tol": 0.03 },
+    "headCount":    { "expr": "parts.heads.count",              "expected": 3,     "tol": 0 },
+    "flangeCount":  { "expr": "parts.flanges.count",            "expected": 15,    "tol": 0 },
+    "flangeFoot":   { "expr": "parts.flanges.min.1 / overall.h","expected": 0.037, "tol": 0.015 }
+  }
+}

@@ -23,8 +23,11 @@ const FX = (u) => R * Math.asin(Math.max(-0.999, Math.min(0.999, u / R))) + 38 *
 const FY = (v) => 120.75 + v / 0.978 - PANEL.y0
 const KX = (u) => 1 / Math.sqrt(1 - Math.min(0.9, (u / R) ** 2)) // developed mm per face mm across the wall
 
-const SPIRALS = { kind: 'spirals', square: 0.85, pitch: 0.5, line: 0.26, gap: 0.24, min: 1.1, tail: false }
-const CONTOUR = { inset: 0.42, line: 0.3 }
+// the photograph's bands fill the field: the plain ground between them is only 1.5–2.5 mm wide; traced centre-line
+// widths came out ≈ 35 % thin against the flattened face, so they are widened here (checked on face-band-compare)
+const WIDEN = 1.35
+const SPIRALS = { kind: 'spirals', square: 0.9, pitch: 0.48, line: 0.25, gap: 0.22, min: 0.9, size: 3.0, tail: false }
+const CONTOUR = { inset: 0.36, line: 0.28 }
 
 /** the traced half → kit elements for both halves of a mask centred at cx */
 function maskElements(kit, cx) {
@@ -34,15 +37,16 @@ function maskElements(kit, cx) {
     const X = ([u, v]) => [cx - side * (NOSE.tail - FX(u)), FY(v)]
     for (const b of BAND.bands) {
       const um = b.c.reduce((s, q) => s + q[0], 0) / b.c.length
-      const k = Math.sqrt(KX(um))
+      const k = Math.sqrt(KX(um)) * WIDEN
       els.push(kit.roundStroke(b.c.map(X), {
         width: Array.isArray(b.w) ? b.w.map((w) => w * k) : b.w * k,
         round: b.round ?? 0.4, inner: b.inner ?? 0.12, start: b.start ?? 'blunt', end: b.end ?? 'blunt', capRound: 0.3,
         spiral: b.spiral && { ...b.spiral, dir: b.spiral.dir * side },
         ticks: b.ticks ? { side: 'both', pitch: 2.4, line: 0.32 } : undefined,
+        ...(b.fill === 'none' ? { fill: { kind: 'none' } } : {}),
       }))
     }
-    for (const q of BAND.plates) els.push(kit.roundPlate({ c: X(q.c), w: q.w * KX(q.c[0]), h: q.h / 0.978, r: q.r }))
+    for (const q of BAND.plates) els.push(kit.roundPlate({ c: X(q.c), w: q.w * KX(q.c[0]) + 0.6, h: q.h / 0.978 + 0.6, r: q.r }))
   }
   return els
 }
@@ -53,7 +57,7 @@ function fillerElements(kit, cx, sides = [1, -1]) {
     const X = ([x, y]) => [cx + side * x, FY(y)]
     for (const b of FILLER.bands) {
       els.push(kit.roundStroke(b.c.map(X), {
-        width: b.w, round: 0.4, inner: 0.12, start: b.start ?? 'blunt', end: b.end ?? 'blunt', capRound: 0.3,
+        width: b.w * WIDEN, round: 0.4, inner: 0.12, start: b.start ?? 'blunt', end: b.end ?? 'blunt', capRound: 0.3,
         spiral: b.spiral && { ...b.spiral, dir: b.spiral.dir * side },
       }))
     }
@@ -71,7 +75,7 @@ export function bandPanel(kit, { ppmm, seed }) {
   // the masks and the fillers: ONE carve (one raise + one sink for every contour and spiral groove)
   const els = [...maskElements(kit, NOSE.tail), ...maskElements(kit, NOSE.spout)]
   els.push(...fillerElements(kit, 0, [1]), ...fillerElements(kit, W, [-1]), ...fillerElements(kit, xOfAz(270)))
-  kit.carve(p, els, { height: BAND.height, shoulder: 0.35, depth: 0.28, irregularity: 0.6, seed, contour: CONTOUR, fill: SPIRALS })
+  kit.carve(p, els, { height: BAND.height, shoulder: 0.45, depth: 0.3, irregularity: 0.6, seed, contour: CONTOUR, fill: SPIRALS })
 
   // deep pockets inside the curls and the eye socket
   p.sink((ctx) => {
@@ -105,9 +109,8 @@ export function bandPanel(kit, { ppmm, seed }) {
   for (const az of [51, 129, 231, 309]) for (const e of T.eyes) {
     kit.pillowBoss(p, { c: [xOfAz(az) + e.c[0], ty0 + e.c[1]], w: e.w, h: e.h, round: 0.3, height: 0.7, crown: 0.6, slit: false })
   }
-  // the dark hole in the upper wall over the handle (photo-02: a loss or casting flaw, θ ≈ 100–110, y ≈ 148–155):
-  // shown as a deep pocket, not cut through
-  p.sink((ctx) => { ctx.beginPath(); ctx.ellipse(xOfAz(104.5), 151.6 - PANEL.y0, 5.6, 3.1, 0.12, 0, Math.PI * 2); ctx.fill() }, { depth: 2.2, shoulder: 0.8, profile: 'u' })
+  // the dark hole in the upper wall over the handle (photo-02, θ ≈ 100–110, y ≈ 148–155: a loss or casting flaw)
+  // is NOT modelled: a sunk pocket fills with the pale ground deposit and reads wrong, and a through-cut is not worth it
   return p.bake()
 }
 

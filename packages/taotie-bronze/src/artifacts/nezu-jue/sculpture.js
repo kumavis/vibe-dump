@@ -67,20 +67,20 @@ export function handleSDF() {
 /** the head on the loop's top outer corner, looking out (+x) and a little down */
 function head(x, y, z) {
   // skull/brow block
-  let d = sdRBox3(x - 54.1, y - 141.9, z, 5.0, 3.6, 6.4, 2.2)
+  let d = sdRBox3(x - 54.1, y - 139.3, z, 5.0, 3.6, 6.4, 2.2)
   // snout, out and down
-  d = smin(d, sdRBox3(x - 58.7, y - 138.7, z, 3.2, 3.6, 4.6, 2.0), 1.6)
+  d = smin(d, sdRBox3(x - 58.7, y - 136.1, z, 3.2, 3.6, 4.6, 2.0), 1.6)
   // the flat crown plate (photo: a table-like slab across the top) and its two stubby horns
-  d = smin(d, sdRBox3(x - 52.7, y - 145.9, z, 6.0, 1.0, 7.0, 0.8), 0.8)
-  for (const s of [-1, 1]) d = smin(d, sdRBox3(x - 55.9, y - 147.7, z - s * 4.2, 2.3, 1.6, 2.2, 1.2), 0.6)
+  d = smin(d, sdRBox3(x - 52.7, y - 143.3, z, 6.0, 1.0, 7.0, 0.8), 0.8)
+  for (const s of [-1, 1]) d = smin(d, sdRBox3(x - 55.9, y - 145.1, z - s * 4.2, 2.3, 1.6, 2.2, 1.2), 0.6)
   // eyes: round bulges with a sunk ring
   for (const s of [-1, 1]) {
-    const e = len3(x - 57.9, y - 142.7, z - s * 3.6) - 1.7
+    const e = len3(x - 57.9, y - 140.1, z - s * 3.6) - 1.7
     d = smin(d, e, 0.5)
-    d = smax(d, -(Math.abs(len2(y - 142.7, z - s * 3.6) - 2.2) - 0.25 + Math.max(0, 57.5 - x) * 2), 0.2)
+    d = smax(d, -(Math.abs(len2(y - 140.1, z - s * 3.6) - 2.2) - 0.25 + Math.max(0, 57.5 - x) * 2), 0.2)
   }
   // mouth groove across the snout
-  d = smax(d, -sdRBox3(x - 61.7, y - 136.9, z, 0.9, 0.35, 3.4, 0.2), 0.2)
+  d = smax(d, -sdRBox3(x - 61.7, y - 134.3, z, 0.9, 0.35, 3.4, 0.2), 0.2)
   return d
 }
 
@@ -104,7 +104,7 @@ export function buildPost(kit, { az, q = 1, material, capMaterial, whorl }) {
   const c = new THREE.Vector3(Math.sin(az * DEG) * rho, 0, Math.cos(az * DEG) * rho)
   const seg = Math.max(16, Math.round(32 * Math.sqrt(q)))
   // stem with a slight foot swelling where it grows out of the rim
-  const stemPts = [[0, base - 1.5], [POST.stemR + 1.8, base - 1.5], [POST.stemR + 1.4, base + 2.5], [POST.stemR + 0.3, base + 7], [POST.stemR, base + 12], [POST.stemR - 0.2, POST.capY + 1], [0, POST.capY + 1]]
+  const stemPts = [[0, base - 1.5], [POST.stemR + 0.9, base - 1.5], [POST.stemR + 0.7, base + 2.5], [POST.stemR + 0.2, base + 7], [POST.stemR, base + 12], [POST.stemR - 0.2, POST.capY + 1], [0, POST.capY + 1]]
   const stem = new THREE.Mesh(new THREE.LatheGeometry(stemPts.map(([r, y]) => new THREE.Vector2(r, y)), seg), material)
   stem.position.copy(c); stem.userData.part = 'posts'; stem.castShadow = stem.receiveShadow = true
   g.add(stem)

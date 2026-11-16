@@ -32,9 +32,9 @@ export const CUP = [
 export const REG = { band: [101, 140], upper: [140.5, 163] } // décor registers, y mm
 export const Y_C = 140 // where the swept upper wall starts (top of the band's upper fillet)
 export const RIM = {
-  r0: 44, y0: 163, // side rim (θ ±60…±120): a gently flared lip
-  spout: { half: 16.5, tip: 95, y: 189, depth: 9, wall: 6 },
-  tail: { tip: 77, y: 193, baseAz: 34, pow: 1.25 },
+  r0: 44, y0: 161, // side rim (θ ±60…±120): a gently flared lip
+  spout: { half: 14, tip: 95, y: 189, depth: 13, wall: 5 },
+  tail: { tip: 77, y: 193, baseAz: 27, pow: 1.15 },
   soft: 14, // mm: soft max between circle / spout / tail outlines (rounded inner corners in plan)
   lip: 2.6, // wall thickness at the rim
 }
@@ -73,8 +73,9 @@ export function rimHeight(az, rho) {
   const x = rho * Math.sin(az * DEG), z = rho * Math.cos(az * DEG)
   const S = RIM.spout, T = RIM.tail
   let y = RIM.y0
-  if (z > 0) y += (S.y - RIM.y0) * Math.pow(clamp((z - 24) / (S.tip - 24), 0, 1), 1.25)
-  if (z < 0) y += (T.y - RIM.y0) * Math.pow(clamp((-z - 22) / (T.tip - 22), 0, 1), T.pow)
+  // a smooth saddle: lowest at the sides (θ ±90), rising into spout and tail
+  if (z > 0) y += (S.y - RIM.y0) * Math.pow(clamp((z - 6) / (S.tip - 6), 0, 1), 1.05)
+  if (z < 0) y += (T.y - RIM.y0) * Math.pow(clamp((-z - 4) / (T.tip - 4), 0, 1), T.pow)
   return y + 0 * x
 }
 
@@ -291,3 +292,33 @@ export const HANDLE_PATH = [
   [32.8, 140.7], [41.0, 141.1], [46.5, 140.5], [53.1, 137.9], [57.1, 132.9], [59.1, 125.9], [59.5, 118.3], [58.5, 111.5],
   [55.5, 106.3], [49.9, 103.1], [45.0, 101.9], [38.0, 101.9], [32.6, 102.5],
 ]
+
+// ----------------------------------------------------------------------------------------------------- LIP
+// The rim is a thick rounded lip (photo-02: a rolled edge ≈ 4 mm across on the spout walls and the tail), not the
+// cut edge of a 2.6 mm sheet: a tube swept along the wall's top, centred on its mid-thickness.
+export function buildLip(kit, { q = 1, material, thickness = 2.6, radius = 2.0 }) {
+  const P = new THREE.Vector3()
+  const o = { pos: new THREE.Vector3(), nrm: new THREE.Vector3() }
+  const t = new THREE.Vector3(), b = new THREE.Vector3(), a1 = new THREE.Vector3(), a2 = new THREE.Vector3()
+  const nu = Math.round(420 * Math.sqrt(q)), nv = 10
+  const geo = kit.buildSurface({
+    surface: (u, v, out) => {
+      bodySurface(u, 1, o)
+      // centre: half the wall in from the outer top edge, then up the wall's own direction a little
+      bodyPoint(u, 1, a1); bodyPoint(u, 0.995, a2)
+      const d = a1.clone().sub(a2).normalize() // up the wall
+      P.copy(o.pos).addScaledVector(o.nrm, -thickness / 2).addScaledVector(d, radius * 0.2)
+      // ring in the plane (nrm, d)
+      const th = v * Math.PI * 2
+      const r = radius * (1 + 0.15 * Math.max(0, Math.cos(th)))
+      t.copy(o.nrm).multiplyScalar(Math.cos(th) * r)
+      b.copy(d).multiplyScalar(Math.sin(th) * r * 0.9)
+      out.pos.copy(P).add(t).add(b)
+      out.nrm.copy(o.nrm).multiplyScalar(Math.cos(th)).addScaledVector(d, Math.sin(th)).normalize()
+    },
+    segments: [nu, nv],
+  })
+  const m = new THREE.Mesh(geo, material)
+  m.name = 'lip'; m.userData.part = 'body'; m.castShadow = m.receiveShadow = true
+  return m
+}

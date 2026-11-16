@@ -40,8 +40,8 @@ function sdTrapezoid(px, py, r1, r2, he) {
  * A raised C band (horn) on a plane: ring of radius R, band half width w, open toward `openAng` (rad, in the
  * plane, 0 = +x) over ±`openHalf`; (u, v) in-plane, h = height above the plane (signed distance in 3D).
  */
-function cHorn(u, v, h, R, w, height, openAng, openHalf) {
-  const r = len2(u, v)
+function cHorn(u, v, h, R, w, height, openAng, openHalf, sq = 2) {
+  const r = sq === 2 ? len2(u, v) : Math.pow(Math.pow(Math.abs(u), sq) + Math.pow(Math.abs(v), sq), 1 / sq)
   let a = Math.atan2(v, u) - openAng
   a = Math.atan2(Math.sin(a), Math.cos(a))
   let d2 = Math.abs(r - R) - w
@@ -55,7 +55,8 @@ function cHorn(u, v, h, R, w, height, openAng, openHalf) {
 
 /** a fat C horn with a rolled spiral core: ring band + a domed core knob + an incised groove along the band */
 function fatHorn(u, v, h, R, w, height, openAng, openHalf) {
-  let d = cHorn(u, v, h, R, w, height, openAng, openHalf)
+  // a rounded-SQUARE C (p-norm 3.2): the photographed horns are C blocks with rounded corners, not rings
+  let d = cHorn(u, v, h, R, w, height, openAng, openHalf, 3.2)
   // the spiral core: a domed knob at the ring centre, the band's rolled end
   d = smin(d, smax(len2(u, v) - R * 0.62, Math.abs(h - height * 0.42) - height * 0.42, 0.8), 0.8)
   // a groove spiralling into the core
@@ -63,7 +64,7 @@ function fatHorn(u, v, h, R, w, height, openAng, openHalf) {
   const sp = Math.abs(((rr - R * 0.12 - (ang / (2 * Math.PI)) * R * 0.22) % (R * 0.22) + R * 0.22) % (R * 0.22) - R * 0.11) - 0.3
   d = smax(d, -smax(Math.max(sp, rr - R * 0.6), height * 0.84 - 0.45 - h, 0.2), 0.2)
   // incised line along the middle of the band (the bronze's contour line)
-  const g = Math.abs(len2(u, v) - R) - 0.35
+  const g = Math.abs(Math.pow(Math.pow(Math.abs(u), 3.2) + Math.pow(Math.abs(v), 3.2), 1 / 3.2) - R) - 0.35
   d = smax(d, -smax(g, height - 0.5 - h, 0.2), 0.25)
   return d
 }
@@ -78,22 +79,22 @@ const zig = (t, p) => Math.abs(((((t / p) % 1) + 1) % 1) - 0.5) * 2 // 0..1 tria
  * ≈ 6.5 mm thick) curls down and back into the wall at y ≈ 284. The −X handle is this one turned 180° about Y.
  */
 export function handleSDF() {
-  const cx = 124, cy = 306, rx = 34, ry = 21 // strap centre line: half ellipse on the outer side
+  const cx = 126, cy = 306, rx = 29, ry = 21 // strap centre line: half ellipse on the outer side
   const sd = (x, y, z) => {
     const u = (x - cx) / rx, v = (y - cy) / ry
     const r = len2(u, v)
     const k = rx + (ry - rx) * Math.abs(v / (r || 1))
     const dr = (r - 1) * k
-    let d = sdRBox2(dr, z, 4.4, 11.5, 2.4)
+    let d = sdRBox2(dr, z, 5.4, 11.5, 2.4)
     d = Math.max(d, shoulderHalf(clamp(y, 263, 325)) - 4 - x, cx - 6 - x)
     // the head: a flat slab, top face nearly level (tilted 6° up toward the snout), slightly wider at the muzzle
     const hx = x - 135, hy = y - 331.5
     const ca = Math.cos(0.1), sa = Math.sin(0.1)
     const ax = hx * ca + hy * sa, ay = -hx * sa + hy * ca
     const halfZ = 11.6 + 1.2 * clamp((ax + 25) / 55, 0, 1)
-    let head = sdRBox3(ax, ay, z, 30, 5.6, halfZ, 2.2)
+    let head = sdRBox3(ax + 2, ay, z, 26, 6.4, halfZ, 2.4)
     // muzzle: the outer end drops into a blunt snout
-    head = smin(head, sdRBox3(ax - 26, ay + 4.5, z, 5.5, 6.5, halfZ - 1.5, 2.6), 1.6)
+    head = smin(head, sdRBox3(ax - 22, ay + 4, z, 5.5, 7, halfZ - 1.5, 2.6), 1.6)
     // flat top: two spiral horns (raised rings) and eyes, all low relief on the top face
     for (const sg of [-1, 1]) {
       head = smin(head, cHorn(ax + 14, z - sg * 6.2, ay - 5.6, 4.6, 1.3, 1.3, sg > 0 ? -1.2 : 1.2, 0.9), 0.4)

@@ -49,7 +49,7 @@ export default {
     'detail-handle-side': { azimuth: -90, elevation: 10, fov: 20, fit: 0.28, target: [0, 330, 150], ref: 'detail-handle-side.jpg' },
     'detail-lobe': { azimuth: 22, elevation: 8, fov: 20, fit: 0.15, target: [62, 205, 110], ref: 'detail-lobe.jpg' },
     'detail-spout': { azimuth: 90, elevation: 16, fov: 20, fit: 0.3, target: [0, 600, -150], ref: 'detail-spout.jpg' },
-    'detail-lid': { azimuth: 24, elevation: 52, fov: 20, fit: 0.36, target: [-5, 470, 15], ref: 'detail-lid.jpg' }, // photo 44: over the handle-right corner
+    'detail-lid': { azimuth: 48, elevation: 42, fov: 20, fit: 0.36, target: [-5, 470, 15], ref: 'detail-lid.jpg' }, // photo 44: over the handle-right corner
     'detail-leg': { azimuth: 90, elevation: 10, fov: 20, fit: 0.32, target: [0, 90, 0], ref: 'detail-leg.jpg' },
     'face-front': { face: { center: [0, 212.5, 105], normal: [0, 0, 1], up: [0, 1, 0], width: 240, height: 185 }, ref: 'faces/face-front.jpg' },
     'face-side': { face: { center: [105, 212.5, 0], normal: [1, 0, 0], up: [0, 1, 0], width: 240, height: 185 }, ref: 'faces/face-side.jpg' },
@@ -103,7 +103,7 @@ export default {
     const upper = kit.fangBody({
       ...upperOpts,
       relief: (cell) => (cell.row === 0
-        ? (collarMap ? { relief: collarMap, map: 'stretch', fade: 1.2 } : null)
+        ? (collarMap ? { relief: collarMap, map: 'stretch', fade: 1.2, density: 0.35 * sq } : null)
         : { relief: cell.side === 'front' ? friezeMaps.front : friezeMaps.side, map: 'true', fade: 1.2 }),
     })
     upper.position.y = D.lobeTop

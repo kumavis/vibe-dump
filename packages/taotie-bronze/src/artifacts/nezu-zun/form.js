@@ -152,52 +152,61 @@ export function rAt(y) {
  * spread to ≈ ±27 mm and rise to y ≈ 240. Ears / horn edges are toothed on photo-28's left head (worn).
  */
 export function headSDF() {
-  // slope frame: the shoulder rises ≈ 41° from the collar (r 133, y 214) to the neck (r 104, y 240)
-  const sl = Math.atan2(240 - 214, 133 - 104) // ≈ 41.9°
+  // side profile of the head, radial z (mm from the axis) → top y, bottom y, half-width: thick at the neck, the top
+  // sweeping down in a concave line, the snout tapering and its tip turning up like a prow (photo-28)
+  const LOFT = [
+    // z,   top,   bottom, half-width
+    [104, 253.0, 224.0, 20.0],
+    [116, 250.0, 213.0, 19.6],
+    [130, 243.0, 207.6, 17.6],
+    [144, 234.0, 205.0, 15.6],
+    [158, 227.0, 204.0, 14.2],
+    [170, 223.8, 204.4, 13.4],
+    [178, 225.0, 206.6, 12.8],
+    [183.5, 228.0, 211.0, 11.6],
+  ]
+  const lerpL = (z, k) => {
+    if (z <= LOFT[0][0]) return LOFT[0][k]
+    for (let i = 0; i < LOFT.length - 1; i++) {
+      const a = LOFT[i], b = LOFT[i + 1]
+      if (z <= b[0]) { const t = (z - a[0]) / (b[0] - a[0]); const s = t * t * (3 - 2 * t); return a[k] + (b[k] - a[k]) * s }
+    }
+    return LOFT[LOFT.length - 1][k]
+  }
+  const sl = Math.atan2(240 - 214, 133 - 104) // the shoulder slope ≈ 41.9°
   const cs = Math.cos(sl), sn = Math.sin(sl)
   const sd = (x, y, z) => {
     const ax = Math.abs(x)
-    // --- snout: a long block from the brow out over the belly, its end a rounded trapezoid
-    const zt = 180 // tip
-    const zc = (zt + 132) / 2
-    const half = (zt - 132) / 2
-    const taper = 1 - 0.14 * Math.min(1, Math.max(0, (224 - y) / 22)) // narrower at the bottom
-    let d = sdRBox3(x / taper, y - 213, z - zc, 13.4, 11.2, half, 5.2)
-    // the tip turns up a little (prow): cut the underside on a rising line near the end, round the end face
-    d = smax(d, (201.5 + Math.max(0, z - 168) * 0.32) - y, 1.6)
-    // --- brow / forehead block climbing the slope to the neck
+    const zc = Math.min(Math.max(z, 100), 183.5)
+    const top = lerpL(zc, 1), bot = lerpL(zc, 2), hw = lerpL(zc, 3)
+    const rr = 3.2 // edge rounding
+    const q1 = Math.max(y - top, bot - y, z - 183.5, 98 - z) + rr
+    const q2 = ax - hw + rr
+    let d = Math.hypot(Math.max(q1, 0), Math.max(q2, 0)) + Math.min(Math.max(q1, q2), 0) - rr
+    // the snout's end rounded off in plan
+    // the snout's end: rounded off in plan and tapering downward (photo-26: a rounded trapezoid)
+    d = smax(d, len2(ax * (0.9 + 0.012 * Math.max(0, 224 - y)), Math.max(0, z - 172)) - 13.6, 3)
+    // horns: flat rounded-square plates lying on the slope either side of the brow, ≈ 2.5 mm proud of the head,
+    // their tops incised with a squared spiral (photo-28: the coil on top of each head near the neck)
     {
-      // in slope coordinates: u along the slope (out/down), v normal to it (up/out)
       const zr = z - 104, yr = y - 240
-      const u = zr * cs - yr * sn // 0 at the neck, + going down the slope
-      const v = zr * sn + yr * cs // height above the slope plane
-      const b = sdRBox3(x, u - 17, v - 8.5, 15, 17, 9.5, 5)
-      d = smin(d, b, 6)
-      // horns: flat rounded-square plates lying on the slope either side of the brow, standing ≈ 2.5 mm proud of
-      // it, their tops incised with a squared spiral (photo-28: the coil seen on top of each head near the neck)
-      const pu = u - 13.5, px = ax - 15.5, pv = v - 17.6
-      const plate = sdRBox3(px, pu, pv, 10.2, 10.6, 2.4, 2.6)
-      d = smin(d, plate, 1.4)
-      {
-        const cheb = Math.max(Math.abs(px) / 1.0, Math.abs(pu) / 1.04)
-        const ph = cheb / 2.5 - Math.floor(cheb / 2.5)
-        const groove = Math.abs(ph - 0.5) * 2.5 - 0.42 // < 0 inside a 0.84 mm wide ring line
-        const onTop = pv - 1.6 // only within the top 0.8 mm of the plate
-        if (cheb < 9.6) d = smax(d, Math.min(-groove, onTop), 0.3)
-      }
-      // keep everything above the slope plane (embedded 3 mm) and inside the neck line
-      d = smax(d, -(v + 3), 1.5)
+      const u = zr * cs - yr * sn, v = zr * sn + yr * cs
+      const pu = u - 13, px = ax - 12.4, pv = v - 20.6
+      const plate = sdRBox3(px, pu, pv, 11.2, 11.8, 3.4, 4.2)
+      d = smin(d, plate, 1.6)
+      const cheb = Math.max(Math.abs(px), Math.abs(pu) / 1.05)
+      const ph = cheb / 2.5 - Math.floor(cheb / 2.5)
+      const groove = Math.abs(ph - 0.5) * 2.5 - 0.42
+      if (cheb < 10.4) d = smax(d, Math.min(-groove, pv - 2.4), 0.3)
     }
-    // --- eyes: oval beads on the sides of the head, under the coils
-    d = smin(d, sdEllipsoid(ax - 12.2, y - 222.5, z - 148, 2.8, 4.2, 5.6), 1.2)
-    d = smax(d, -sdEllipsoid(ax - 13.2, y - 222.5, z - 148, 2.2, 1.3, 3.6), 0.5)
-    // --- nostrils on the end face
-    d = smax(d, (2.2 - len2(ax - 6.2, y - 208)) - Math.max(0, zt - 2.5 - z), 0.6)
+    // eyes: oval beads on the sides of the head, behind the snout
+    d = smin(d, sdEllipsoid(ax - 15.4, y - 221.5, z - 147, 2.8, 3.8, 5.4), 1.2)
+    d = smax(d, -sdEllipsoid(ax - 16.8, y - 221.5, z - 147, 1.6, 1.1, 3.2), 0.5)
     // back: sink into the body
     d = smax(d, -(z - 96), 2)
     return d
   }
-  return { sd, bounds: { min: [-34, 196, 96], max: [34, 262, 184] } }
+  return { sd, bounds: { min: [-34, 198, 96], max: [34, 266, 188] } }
 }
 
 // ------------------------------------------------------------------ shoulder flange (an L-shaped slab)
@@ -209,7 +218,7 @@ export function headSDF() {
  * the slab's buried part goes below the slope surface.
  */
 export const SHOULDER_FLANGE = [
-  [100, 240], [113, 236.6], [126, 234.2], [140, 231.6], [147.6, 230], [148.6, 227], [148.4, 214],
-  [147, 208.4], [143.4, 205.4], [140.6, 206.4], [141.6, 209.6], [139.8, 211.6], [128, 212], [98, 230],
+  [112, 233], [116, 232.4], [128, 231], [140, 229.8], [147.6, 229], [148.6, 226.4], [148.4, 214],
+  [147, 208.4], [143.4, 205.4], [140.6, 206.4], [141.6, 209.6], [139.8, 211.6], [128, 214], [112, 226],
 ]
 export const SHOULDER_FLANGE_T = 11

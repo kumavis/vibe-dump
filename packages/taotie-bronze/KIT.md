@@ -725,7 +725,7 @@ Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad gl
 ```
 
 Presets (`PATINA_PRESET_GROUPS` groups them for the drawer):
-Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui`, `yachou-yue`, `nezu-fanglei`, `nezu-fanghe`, `nezu-jia` · Looks `excavated-green`
+Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui`, `yachou-yue`, `nezu-fanglei`, `nezu-fanghe`, `nezu-jia`, `nezu-zun`, `nezu-jue` · Looks `excavated-green`
 (generic dark Anyang excavation), `olive-museum`, `malachite-crust` (Freer F1915.136),
 `water-black` (Met fanglei 55.160), `bronze-disease`, `heirloom`, `as-cast` · Blue `nezu-blue`,
 `blue-green-excavated`, `azurite-bloom`. A preset is applied over the PATINA_PARAMS defaults.
@@ -872,7 +872,9 @@ face-front, face-mask (5 / 8 px/mm from a 3840 px CC0 photo of a flat plate; 1.7
 face-shoulder, face-main, face-second, face-low, face-foot, face-collar, face-lid (6 px/mm from a ≈ 3.6 px/mm phone photo; one face PER REGISTER on its chord plane, points from a camera solved on photo-37); `nezu-fanghe`
 face-front, face-side (4 / 3 px/mm from phone photos 25 and 42 of vessel A; lobed faces flattened onto the CORNER plane, landmarks = corner-flange roots at the register borders); `nezu-jia`
 face-drum, face-upper (7 / 6 px/mm from ≈ 4.6 px/mm phone photo 21, a ROUND vessel shot from ≈ 0.4 m: chord planes down the photo's line of sight, 2.3 / 0.9 mm rms); `nezu-you`
-face-belly, face-neck, face-skirt, face-foot, face-lid, face-strap (6 / 8 px/mm from ≈ 4.8 px/mm phone photo 31, round plan, chord planes down its line of sight; points are model surface points through the camera fitted to the outline, 0.2–1.8 mm rms).
+face-belly, face-neck, face-skirt, face-foot, face-lid, face-strap (6 / 8 px/mm from ≈ 4.8 px/mm phone photo 31, round plan, chord planes down its line of sight; points are model surface points through the camera fitted to the outline, 0.2–1.8 mm rms); `nezu-zun`
+face-belly, face-circles, face-foot (6–7 px/mm from ≈ 4 px/mm phone photo 26) and face-divider (5 px/mm, photo 28): round plan, chord planes down each photo's line of sight, points through cameras fitted to the outlines (0.5–0.9 mm rms); `nezu-jue`
+face-band, face-upper (8 px/mm from ≈ 9 px/mm phone photo 02, one plane through the cup at θ 128 down the line of sight of a camera solved on 8 landmarks, ≈ 2 mm).
 Each face's `trust` and `fit` in faces.json say how far to believe it.
 
 ### reference/<id>/faces.json

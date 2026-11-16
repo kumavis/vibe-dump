@@ -89,6 +89,7 @@ function bellyDesign(kit, panel, M, s) {
     // the ear: a big rounded C at the corner whose end curls into a large spiral (photo x 100–125, y 215–240)
     S([[93, 246], [124, 246], [124, 217.5], [107, 217.5]], { width: 8.6, ...ROUND, end: 'spiral', spiral: { turns: 1.3, dir: -1, R: 5.6, gap: 0.9 }, fill: NEST }),
     B([112.5, 230], 15.5, 16, { round: 0.55, fill: COIL }), // the ear's spiral core
+    S([[88.5, 214], [88.5, 248], [97, 248]], { width: 6, ...ROUND, start: 'spiral', startSpiral: { turns: 1, dir: 1, R: 2.8 }, fill: NEST }), // the upright kui between horn and ear (photo x 84–97)
     S([[60, 196], [104, 196], [104, 182.5], [93, 182.5]], { width: 7.8, ...ROUND, end: 'spiral', spiral: { turns: 1, dir: -1, R: 3.6 }, fill: NEST }), // lower hook
     S([[47, 182], [47, 176], [18, 176], [18, 189], [38, 189]], { width: 7.4, ...ROUND, end: 'spiral', spiral: { turns: 1.1, dir: -1, R: 4.0 }, fill: NEST }), // the jaw under the eye
     S([[127, 181], [127, 206], [112, 206]], { width: 7, ...ROUND, end: 'spiral', spiral: { turns: 1, dir: 1, R: 3.4 }, fill: NEST }), // corner hook

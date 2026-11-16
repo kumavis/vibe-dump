@@ -314,11 +314,11 @@ export const PATINA_PRESETS = {
   'nezu-fanglei': {
     age: 1, tin: 0.15, lead: 0.06, polish: 0.3, tarnish: 0.5, cuprite: 0.9, cupriteTone: 0.3, tinOxide: 0.85,
     tinOxideTone: 1.1, malachite: 0.2, carbonate: 0.1, azurite: 0, malachiteHue: 0.35, malachiteTone: 0.6,
-    islands: 0.2, malachiteScale: 1.3, crust: 0.1, chloride: 0, soot: 0.05, crevice: 0.7, patchScale: 70,
+    islands: 0.2, malachiteScale: 1.3, crust: 0.1, chloride: 0, soot: 0.05, crevice: 0.85, patchScale: 70,
     mottleScale: 12, patchiness: 0.85, softness: 0.8, drift: 0.3, earth: 0.06, earthColor: '#6a5a44', calcite: 0.02,
-    streaks: 0.08, burialSide: 0.1, recessDirt: 0.6, interiorTone: 0.45, wax: 0, inlay: 0.2, inlayGround: 0.12,
-    wear: 0.15, dulling: 0.4, tops: 0.55, nobleWarmth: 0.2, matte: 1, topsTone: 0.35, ledgeMatte: 1, nobleRelief: 0.3,
-    tint: '#dde4d6', upperTone: 0.32, upperHeight: 0.645, speckle: 0.06, speckleScale: 1.4, speckleColor: '#7a4634',
+    streaks: 0.08, burialSide: 0.1, recessDirt: 0.85, interiorTone: 0.45, wax: 0, inlay: 0.35, inlayGround: 0.3,
+    wear: 0.15, dulling: 0.4, tops: 0.55, nobleWarmth: 0.2, matte: 1, topsTone: 0.6, ledgeMatte: 1, nobleRelief: 0.55,
+    tint: '#dde4d6', upperTone: 0.22, upperHeight: 0.64, speckle: 0.06, speckleScale: 1.4, speckleColor: '#7a4634',
     crustIsles: 0.04, crustScale: 5, crustColor: '#6f8a72', crustPlace: 0.7, pustules: 0, pustuleScale: 3,
     pustuleColor: '#4f7a62', lowerBody: 0.35, lowerHeight: 0.2, lowerColor: '#b8c4b0', plainTone: 0.8, grain: 0.6,
   },
@@ -375,17 +375,32 @@ export const PATINA_PRESETS = {
     tinOxideTone: 1.1, malachite: 0.32, carbonate: 0.12, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.55,
     turquoiseTone: 0.5, islands: 0.25, malachiteScale: 1.3, crust: 0.12, chloride: 0, soot: 0.04, crevice: 0.8,
     patchScale: 60, mottleScale: 11, patchiness: 0.85, softness: 0.75, drift: 0.3, earth: 0.06, earthColor: '#6a5040',
-    calcite: 0.02, streaks: 0.06, burialSide: 0.1, recessDirt: 0.55, interiorTone: 0.3, wax: 0, inlay: 0.1, inlayGround: 0.08,
-    wear: 0.18, dulling: 0.38, tops: 0.7, nobleWarmth: 0.3, matte: 1, topsTone: 0.65, ledgeMatte: 1, nobleRelief: 0.6,
-    tint: '#d8ddd0', upperTone: 0.28, upperHeight: 0.6, speckle: 0.05, speckleScale: 1.4, speckleColor: '#7a4634',
+    calcite: 0.02, streaks: 0.06, burialSide: 0.1, recessDirt: 0.85, interiorTone: 0.3, wax: 0, inlay: 0.1, inlayGround: 0.08,
+    wear: 0.18, dulling: 0.38, tops: 0.7, nobleWarmth: 0.5, matte: 1, topsTone: 0.65, ledgeMatte: 1, nobleRelief: 0.6,
+    tint: '#eef0e6', upperTone: 0.42, upperHeight: 0.6, speckle: 0.05, speckleScale: 1.4, speckleColor: '#7a4634',
     crustIsles: 0.08, crustScale: 6, crustColor: '#5f9a78', crustPlace: 0.6, pustules: 0.02, pustuleScale: 3,
     pustuleColor: '#3f9a6a', lowerBody: 0.25, lowerHeight: 0.28, lowerColor: '#bcc6b2', plainTone: 0.7, grain: 0.6,
+  },
+  // Nezu jue 90105 (owner's photo-02): a pale grey-green / buff skin, rough and granular all over; bright malachite
+  // patches on the spout, the upper wall and inside the cup; the décor bands red-brown (cuprite through a thin skin)
+  // over a pale buff earthy ground packed in the sunk field; legs and lower bowl buff-brown with green flecks; the
+  // far post's cap dark olive-grey
+  'nezu-jue': {
+    age: 1, tin: 0.15, lead: 0.08, polish: 0.2, tarnish: 0.5, cuprite: 0.95, cupriteTone: 0.55, tinOxide: 0.8,
+    tinOxideTone: 0.85, malachite: 0.4, carbonate: 0.18, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.55,
+    turquoiseTone: 0.55, islands: 0.35, malachiteScale: 0.7, crust: 0.25, chloride: 0, soot: 0.02, crevice: 0.7,
+    patchScale: 26, mottleScale: 3, patchiness: 0.6, softness: 0.5, drift: 0.2, earth: 0.7, earthColor: '#c4ae90',
+    calcite: 0.06, streaks: 0.04, burialSide: 0.1, recessDirt: 0.35, interiorTone: 0.7, wax: 0, inlay: 0, inlayGround: 0,
+    wear: 0.15, dulling: 0.35, tops: 1, nobleWarmth: 0.8, matte: 1, topsTone: 0, ledgeMatte: 1, nobleRelief: -0.2,
+    tint: '#f4f0e2', speckle: 0.2, speckleScale: 0.45, speckleColor: '#3a9a6e', speckleDecor: 0.4, crustIsles: 0.12,
+    crustScale: 5, crustColor: '#6fae86', crustPlace: 0.6, pustules: 0.05, pustuleScale: 2.2, pustuleColor: '#2fa070',
+    lowerBody: 0.8, lowerHeight: 0.46, lowerColor: '#e8d4bc', grain: 0.75,
   },
 }
 
 /** How the drawer groups the preset chips. Every key of PATINA_PRESETS appears once. */
 export const PATINA_PRESET_GROUPS = {
-  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun'],
+  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun', 'nezu-jue'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
 }

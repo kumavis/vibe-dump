@@ -248,8 +248,8 @@ export function handleSDF() {
         if (!open) d = Math.max(d, -ring)
       }
     }
-    // ---- head: cranium, snout (tipped down), brows, eyes, open lower jaw, teeth
-    {
+    // ---- head: cranium, snout (tipped down), brows, eyes, open lower jaw, teeth (bounded: y ≥ 335)
+    if (y > 335 && d > -6) {
       const [cy, cz] = HANDLE.head.c.slice(1)
       // cranium, tight under the eave, its back grown into the collar
       let dh = sdRBox(x, y - cy, z - (cz - 12), 35, 13, 30, 13)
@@ -283,8 +283,8 @@ export function handleSDF() {
       }
       d = smin(d, dh, 7)
     }
-    // ---- small crested head at the lowest outer bend, hooked tail under it
-    {
+    // ---- small crested head at the lowest outer bend, hooked tail under it (bounded)
+    if (y < 312 && y > 228 && z > 160 && Math.abs(x) < 34) {
       const hy = 275, hz = 194
       let dl = sdEll(x, y - hy, z - hz, 14, 11, 11)
       dl = smin(dl, sdRBox(x, y - (hy + 13), z - (hz + 5), 3.2, 9, 6, 2), 3) // crest
@@ -295,8 +295,8 @@ export function handleSDF() {
       dl = smin(dl, sdCapsule(x, y, z, [0, 242, 183], [0, 244, 174], 4), 2)
       d = smin(d, dl, 5)
     }
-    // ---- forequarters down the crease: chest, two forelegs with paws, the small studded head
-    {
+    // ---- forequarters down the crease: chest, two forelegs with paws, the small studded head (bounded)
+    if (y < 266) {
       const zc = creaseZ(Math.min(Math.max(y, Lo.y0), Lo.y1))
       const t = Math.min(1, Math.max(0, (Lo.y1 - y) / (Lo.y1 - Lo.y0)))
       const hx = Lo.half[0] - 6 * t

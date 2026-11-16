@@ -119,8 +119,8 @@ export default {
     panels.lidShort = lidPanel(kit, lidL.faces.right, { ...ctx, seed: seed + 9, kind: 'short' })
     await onProgress(0.62, 'knob')
     const knobOpts = {
-      width: 2 * PLAN.knob.eave, depth: 2 * PLAN.knob.depth, rise: LV.top - LV.knobEave - 6.5, ridge: PLAN.knob.ridge,
-      skirt: { height: 0.5, fascia: 6 }, // (kit.roofKnob lofts the fascia only when skirt.height > 0)
+      width: 2 * PLAN.knob.eave, depth: 2 * PLAN.knob.depth, rise: LV.top - LV.knobEave - 7.5, ridge: PLAN.knob.ridge,
+      skirt: { height: 0.5, fascia: 7 }, // (kit.roofKnob lofts the fascia only when skirt.height > 0)
       post: { height: LV.knobEave - LV.ridge, width: 2 * PLAN.knob.post[0], depth: 2 * PLAN.knob.post[1], waist: 0 }, // photo-37: a thick vertical-sided cap (≈ 1/3 of its height) with a low hipped top, on a straight square post
     }
     const knobL = kit.hippedLidLayout(knobOpts)

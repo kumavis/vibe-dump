@@ -55,12 +55,20 @@ before anything was measured. Two of the three are photographed; the third appea
 | photo-24 | B | spout face (−Z), elevated | wings; plumed band under the frieze |
 | photo-25 | A | handle face, lobes and frieze, close | notched horns at the top of the frame; same lobe masks as 42/45 |
 | photo-39 | A | −X side, ≈ 12° elevated | peg spout; jaw-headed handle |
-| photo-40 | A | three-quarter from the handle-left corner | peg spout; notched horns |
-| photo-41 | A | three-quarter from above, lid | peg spout; notched horn at the eave corner |
+| photo-40 | A? (see below) | three-quarter from the handle-left corner | peg spout; notched horns; LID MIRRORED vs 43/44 |
+| photo-41 | A? (see below) | three-quarter from above, lid | peg spout; notched horn at the eave corner; LID MIRRORED vs 43/44 |
 | photo-42 | A | +X side, ≈ 20° elevated | peg spout; jaw-headed handle |
 | photo-43 | A | three-quarter from above | peg spout |
 | photo-44 | A | lid from above, spout root | peg; lid décor |
 | photo-45 | A | handle face close-up: horns, head, frieze, upper lobe masks | notched horns |
+
+**Round 8 — a lid conflict.** Read with the handle face as +Z, photos 43 and 44 put the crenellated ridge on the
+−X side of the spine, the filling hole beyond the ridge's handle-side end and the spout root at the ridge's other end;
+photos 40 and 41 show the SAME layout MIRRORED (ridge, hole and spout on +X). Side photos 39 and 42 show the ridge on
+the cushion's top silhouette from both sides (so it is close to the spine) and, from +X, the toothed jaw plate in front
+— consistent with 43/44. Either 40/41 show the third vessel of the set (a mirror twin with the same peg spout and
+notched horns) or one pair was read wrongly; the model follows 39/42/43/44 (ridge x ≈ −28, hole x ≈ −22, spout
+root x ≈ −22), so its lid does not match the `three-quarter` reference (photo 40) on that point.
 
 **THE model is vessel A** (eight frames, including both side views, the handle close-ups and the lid). Vessel B
 is used as a labelled comparandum only for what A's frames do not show: A's spout (−Z) face is never seen head-on;

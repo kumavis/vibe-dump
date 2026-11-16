@@ -61,15 +61,16 @@ function rounded(kit, pts, r, closed) {
  */
 export function renderThreads(kit, panel, data, o = {}) {
   const W = panel.width, Hh = panel.height
-  const tw = o.thread?.w ?? 0.72
-  const th = o.thread?.h ?? 0.5
+  const tw = o.thread?.w ?? 1.0
+  const th = o.thread?.h ?? 0.7
   const sides = data.single ? [1] : [1, -1]
   const X = (side) => ([x, y]) => [W / 2 + side * x, y]
   const polys = []
   for (const side of sides) for (const t of data.threads || []) polys.push({ pts: rounded(kit, t.c.map(X(side)), t.r ?? 1.2, !!t.closed), closed: !!t.closed, w: t.w ?? tw })
-  // 1) every line in ONE call (one EDT). The Nezu zun's line work is INCISED: narrow dark grooves between wider
-  //    flat lands (photo-26: groove ≈ 0.7 mm at a 2.1 mm pitch), so the default is sunk; 'thread' raises them
-  const sunk = (o.mode ?? 'sunk') === 'sunk'
+  // 1) every line in ONE call (one EDT). The Nezu zun's line work is RAISED thread relief at about half duty: light
+  //    threads ≈ 1 mm wide at a ≈ 2.1 mm pitch, the narrow gaps between them dark with shadow and dirt (photo-26's
+  //    circle band shows the highlight on each thread unambiguously); mode 'sunk' cuts them instead
+  const sunk = (o.mode ?? 'thread') === 'sunk'
   const lineOp = (draw, h, w) => (sunk ? panel.sink(draw, { depth: h, shoulder: w * 0.3, profile: 'u' }) : panel.add(draw, { height: h, shoulder: w * 0.42, profile: 'plateau' }))
   lineOp((ctx) => {
     ctx.lineCap = 'round'; ctx.lineJoin = 'round'
@@ -86,7 +87,7 @@ export function renderThreads(kit, panel, data, o = {}) {
   for (const side of sides) {
     for (const d of data.discs || []) {
       const c = X(side)(d.c)
-      kit.pillowBoss(panel, { c, w: d.d, h: d.d, round: 1, height: d.h ?? 1.5, crown: d.crown ?? 0.42, slit: false, ring: false })
+      kit.pillowBoss(panel, { c, w: d.d, h: d.d, round: 1, height: d.h ?? 1.4, crown: d.crown ?? 0.3, slit: false, ring: false })
     }
     for (const b of data.bosses || []) {
       const c = X(side)(b.c)
@@ -96,12 +97,16 @@ export function renderThreads(kit, panel, data, o = {}) {
   // 3) small threads ON the discs (their inner ring and crescent): added after the domes
   const onTop = []
   for (const side of sides) for (const d of data.discs || []) {
-    if (d.ring !== false) onTop.push({ pts: circle(X(side)([d.c[0], d.c[1] + d.d * 0.12]), d.d * 0.17, 24), closed: true })
+    if (d.ring !== false) onTop.push({ pts: circle(X(side)([d.c[0], d.c[1] + d.d * 0.04]), d.d * 0.13, 24), closed: true })
     if (d.crescent !== false) {
+      // three comma hooks round the rim (a whorl), each a short arc curling inward
       const c = X(side)(d.c), R = d.d * 0.33
-      const arc = []
-      for (let i = 0; i <= 12; i++) { const a = Math.PI * (1.15 + 0.7 * (i / 12)); arc.push([c[0] + R * Math.cos(a), c[1] + R * Math.sin(a) + d.d * 0.02]) }
-      onTop.push({ pts: arc, closed: false })
+      for (let k = 0; k < 3; k++) {
+        const a0 = Math.PI * (1.5 + (2 * k) / 3) * side
+        const arc = []
+        for (let i = 0; i <= 10; i++) { const a = a0 + side * 1.1 * (i / 10); const rr = R * (1 - 0.18 * (i / 10)); arc.push([c[0] + rr * Math.cos(a), c[1] + rr * Math.sin(a)]) }
+        onTop.push({ pts: arc, closed: false })
+      }
     }
   }
   if (onTop.length) {
@@ -128,7 +133,7 @@ export function renderThreads(kit, panel, data, o = {}) {
     const parts = data.single ? [{ x: 0, w: W, hand: 'right' }] : [{ x: W / 2, w: W / 2, hand: 'right' }, { x: 0, w: W / 2, hand: 'left' }]
     for (const part of parts) {
       kit.leiwenFill(panel, { rect: { x: part.x, y: g.y0 ?? 0, w: part.w, h: (g.y1 ?? Hh) - (g.y0 ?? 0) }, avoid: { data: avoid }, margin: g.margin ?? 0.7 }, {
-        mode: sunk ? 'sunk' : 'thread', depth: th, pitch: g.pitch ?? 2.1, line: g.line ?? 0.34, cell: g.cell ?? [7, 16], pairs: g.pairs ?? 0.3,
+        mode: sunk ? 'sunk' : 'thread', depth: th, pitch: g.pitch ?? 2.1, line: g.line ?? 0.48, cell: g.cell ?? [7, 16], pairs: g.pairs ?? 0.3,
         maxAspect: g.maxAspect ?? 2.8, roundness: g.roundness ?? 0.55, jitter: 0.06, echo: g.echo ?? 2, follow: 1, hand: part.hand,
         seed: (o.seed ?? 0) + 7, fillers: true,
       })
@@ -207,28 +212,23 @@ export function bellyData(W) {
 
 // ------------------------------------------------------------------ circle bands
 
-/** discs every `pitch` mm from `x0` (0 = on the centre line), symmetric hooks between them */
+/** discs every `pitch` mm from `x0` (0 = on the centre line); between them a short upright and the packer's small
+ *  spirals (photo-26: the interstices are crowded with little hooks, not a fixed glyph) */
 function circleBand(W, H, { x0, pitch, d }) {
   const half = W / 2
   const discs = []
   const threads = []
   const yc = H / 2
   for (let x = x0; x <= half + 0.01; x += pitch) discs.push({ c: [x, yc], d })
-  // the hooks between: a pair of C-hooks back to back round a short upright, one above, one below
-  for (let x = x0 + pitch / 2; x <= half + 0.01; x += pitch) {
-    const a = d * 0.36, b = H * 0.26
-    for (const sx of [1, -1]) {
-      threads.push(T([[x + sx * 0.8, yc + b], [x + sx * a, yc + b], [x + sx * a, yc + 0.8], [x + sx * (a * 0.45), yc + 0.8]], { r: 1 }))
-      threads.push(T([[x + sx * 0.8, yc - b], [x + sx * a, yc - b], [x + sx * a, yc - 0.8], [x + sx * (a * 0.45), yc - 0.8]], { r: 1 }))
-    }
-    threads.push(T([[x, yc - b + 1.2], [x, yc + b - 1.2]], { r: 0 }))
-  }
+  for (let x = x0 + pitch / 2; x <= half + 0.01; x += pitch) threads.push(T([[x, yc - H * 0.3], [x, yc + H * 0.3]], { r: 0 }))
   return { discs, threads, borders: [0.7, H - 0.7], plain: [] }
 }
-/** UPPER circle band (16.5 mm): a disc over each flange (x 0, and the divider) and two between — 4 per 120°… per 60° */
-export const circUpData = (W, H) => circleBand(W, H, { x0: 0, pitch: W / 2 / 4, d: Math.min(13, H - 3.4) })
-/** LOWER circle band (13.5 mm, on the curving underside): discs offset half a step (the flange ends between them) */
-export const circLowData = (W, H) => circleBand(W, H, { x0: W / 2 / 8, pitch: W / 2 / 4, d: Math.min(12, H - 2.6) })
+/** UPPER circle band (16.5 mm): a disc over each flange and on a 32.6 mm pitch between (measured ≈ 32–34 mm),
+ *  so the divider falls half way between two discs and the band mirrors there */
+export const circUpData = (W, H) => circleBand(W, H, { x0: 0, pitch: W / 2 / 4.5, d: Math.min(15.4, H - 1.4) })
+/** LOWER circle band (13.5 mm, on the curving underside): the same pitch, offset half a step (the flange ends
+ *  between two discs) */
+export const circLowData = (W, H) => circleBand(W, H, { x0: W / 2 / 9, pitch: W / 2 / 4.5, d: Math.min(13.2, H - 1.2) })
 
 // ------------------------------------------------------------------ foot frieze (y 0 = 14 mm; 120° sector)
 
@@ -292,17 +292,17 @@ const panelOf = (kit, size, ppmm, seed) => new kit.ReliefPanel({ width: size.wid
 
 export function bellyPanel(kit, size, { ppmm, seed }) {
   const p = panelOf(kit, size, ppmm, seed)
-  renderThreads(kit, p, bellyData(size.width), { seed, ground: { pitch: 2.1, cell: [6, 16] } })
+  renderThreads(kit, p, bellyData(size.width), { seed, ground: { pitch: 2.1, cell: [8, 18], echo: 2, pairs: 0.45, maxAspect: 3.4 } })
   return p.bake()
 }
 export function circUpPanel(kit, size, { ppmm, seed }) {
   const p = panelOf(kit, size, ppmm, seed)
-  renderThreads(kit, p, circUpData(size.width, size.height), { seed, ground: { pitch: 1.9, cell: [4, 8], echo: 0 } })
+  renderThreads(kit, p, circUpData(size.width, size.height), { seed, ground: { pitch: 1.6, cell: [3.4, 6.4], echo: 0, roundness: 0.6 } })
   return p.bake()
 }
 export function circLowPanel(kit, size, { ppmm, seed }) {
   const p = panelOf(kit, size, ppmm, seed)
-  renderThreads(kit, p, circLowData(size.width, size.height), { seed, ground: { pitch: 1.9, cell: [4, 8], echo: 0 } })
+  renderThreads(kit, p, circLowData(size.width, size.height), { seed, ground: { pitch: 1.6, cell: [3.4, 6.4], echo: 0, roundness: 0.6 } })
   return p.bake()
 }
 export function footPanel(kit, size, { ppmm, seed }) {

@@ -24,7 +24,7 @@ export const LV = {
   fascia: 4, // lid eave edge
   rise: 70, // eave (388) → ridge: photo-37's flattened slope ends at ≈ 455–458 (photo-36 alone would read ≈ 90; dossier §b.2)
   ridge: 458,
-  knobEave: 485, // knob roof eave (post 458 → 485)
+  knobEave: 482, // knob roof eave (post 458 → 482); round 8: photo-37 shows the cap ≈ 0.55 × its width tall, a third of it vertical fascia
   top: 503,
 }
 
@@ -38,7 +38,7 @@ export const PLAN = {
   skirt: 85.5,
   eave: 88,
   ridgeHalf: 44, // round 8: face-lid's field still ±43 mm at 90 % of the slope, photo-36's ridge half ≈ 45–48 [est]
-  knob: { eave: 19.5, depth: 15, post: [8.5, 7.5], ridge: 0.45 },
+  knob: { eave: 19.5, depth: 15, post: [8.5, 7.5], ridge: 0.3 },
 }
 
 // half width of the belly and shoulder (front face plane z = half) — dossier §b.3, read off photo-37

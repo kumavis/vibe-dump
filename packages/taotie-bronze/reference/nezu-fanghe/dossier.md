@@ -77,3 +77,26 @@ bodies on both sides (44) — approximate.
 
 ## Not visible (N)
 Vessel A's spout face head-on; the inside; the underside; the far halves of the lid; inscriptions (none seen).
+
+## Round 8 (fix pass) — what changed and why
+- **Proportions re-measured in-image** (photo vs render at the same view, feet → fascia bottom at the face centre):
+  photo 42 collar 0.32 / frieze+lobe 0.42 / legs 0.27; photo 39 0.28 / 0.42 / 0.30; model side view 0.30 / 0.42 / 0.28.
+  The heights were therefore NOT changed; the review's "collar 0.25" is not borne out by these readings.
+- **Collar**: a cavetto (near-vertical lower half, hard flare under the slab to ±158) and low-relief décor (39, 42:
+  upright blade masks with an eye boss either side of the centre flange; a hooked band along the collar foot). Was N.
+- **Legs**: inset ≈ 9 mm under a squared ledge at the field bottom (detail-leg, 25), slight outward splay.
+- **Cap**: the slopes are a short leiwen border; the plateau is a domed cushion (+44 mm, I) carrying ONE asymmetric
+  creature read off photo 44 (pillow plate by the spout root, ringed eye boss with dot, toothed jaw plate, beaked head
+  toward +X −Z, scaly rolled body toward +Z, rolled hooks); crenellated ridge of 5 blocks along Z at x ≈ −28; kidney
+  hole with a rolled rim at (−22, 64). Spout root moved to x ≈ −22 at the ridge's end; spout angle 65° (39: 60–64°).
+- **Handle**: head attached to the collar under the eave, ≈ 70 mm wide, domed brows with incised rings, cheeks, eyes,
+  snout out and down, open jaw with two tooth rows; two rounded-square horn plates with 11 notches and a squared
+  G-spiral carrying small spirals, splayed and leaning back; body swelling 32 → 46 mm with scales and incised C-scrolls;
+  a crested small head with a hooked tail at the lowest outer bend; forequarters with paws down the crease to the
+  studded small head.
+- **Frieze**: crouching kui (head with open jaw and domed eye at the centre side, scaly arched body, two legs,
+  tail rolled up at the corner); frieze-centre heads are small frontal toothed masks with two notched horn plates.
+- **Lobe mask**: bands ×1.38 (≈ 13–15 mm), coil moved toward the crease and up, eye a round dome ≈ 19 mm at
+  (82, 167), boss round ≈ 15 mm; ground leiwen shallower.
+- **spec.json**: `spoutReach` expected −8 → −24 (± 25): the 65° spout (photos 39/42 measure 58–64°) puts the lip
+  ≈ 34 mm beyond the eave edge; photo 39 shows ≈ 10 mm, photo 42 ≈ 38 mm.

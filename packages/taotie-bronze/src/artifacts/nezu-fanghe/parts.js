@@ -80,7 +80,8 @@ export function cap(kit, { slopes, top, material, q }) {
     thickness: (x, y) => { const u = Math.min(1, Math.abs(x) / A), v = Math.min(1, Math.abs(y) / A); return 6 + 2 * D.dome * (1 - u * u * u) * (1 - v * v * v) },
     front: top ? { relief: top, rect: { x: -A, y: -A, w: 2 * A, h: 2 * A } } : undefined,
     spacing: 10,
-    reliefSpacing: q >= 1 ? 2.2 : 3.2,
+    reliefSpacing: q >= 1 ? 3 : 4,
+    maxTriangles: Math.round(80000 * q),
     material: top ? new kit.PatinaMaterial({ relief: top }) : material,
     part: 'lid',
   })
@@ -140,7 +141,7 @@ export function spout(kit, { relief, material, q, seed }) {
     out.pos.copy(base).addScaledVector(A, v * L).addScaledVector(out.nrm, rr)
   }
   const geo = kit.buildSurface({
-    surface, segments: { density: 0.8 * Math.sqrt(q) }, relief, fade: { u0: 0, u1: 0, v0: 2, v1: 2 },
+    surface, segments: { density: 0.55 * Math.sqrt(q) }, relief, fade: { u0: 0, u1: 0, v0: 2, v1: 2 },
     back: { thickness: r - SPOUT.bore, rims: ['v1'] },
   })
   const tube = new THREE.Mesh(geo, relief ? new kit.PatinaMaterial({ relief }) : material)
@@ -190,7 +191,7 @@ export function spout(kit, { relief, material, q, seed }) {
 export function handle(kit, { material, q, horn }) {
   const g = new THREE.Group()
   g.userData.part = 'handles'
-  const geo = kit.meshSDF(handleSDF(), { voxel: q >= 1 ? 1.3 : 1.8 })
+  const geo = kit.meshSDF(handleSDF(), { voxel: q >= 1 ? 1.4 : 1.9 })
   const m = new THREE.Mesh(geo, material)
   m.userData.part = 'handles'
   m.name = 'handle'
@@ -247,7 +248,7 @@ export function hornPlate(kit, { w, h, side = 1, thickness = 7, relief = null, m
  *  small notched horn plates above it, close to the wall (photos 39, 42 — the handle head in miniature) */
 export function friezeHeads(kit, { material, q, seed }) {
   const out = []
-  const geo = kit.meshSDF(friezeHeadSDF(), { voxel: q >= 1 ? 0.8 : 1.1 })
+  const geo = kit.meshSDF(friezeHeadSDF(), { voxel: q >= 1 ? 1.0 : 1.3 })
   for (const k of [1, 2, 3]) {
     const g = new THREE.Group()
     const m = new THREE.Mesh(geo, material)

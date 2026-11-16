@@ -1,0 +1,13 @@
+{
+  "note": "Nezu jue 90105. Proportions from ONE photograph (photo-02) through a camera solved on 8 landmarks (two leg tips, two post caps, spout and tail tips, the two ends of the tail flange; ≈ 16 px rms) at an INFERRED scale: cup (band) Ø 69 mm, band 37.5–39 mm tall (dossier § Scale). Part names: body (swept cup incl. lip), legs (3), posts (2: stem + cap), handles (loop + head), flanges (the two band flanges). Tolerances are wide: one photograph, the far side unseen, ±8 % on every span.",
+  "dimensions": { "h": 206, "w": 110, "d": 175, "bandDiameter": 69, "inferred": true },
+  "ratios": {
+    "bandShare":   { "expr": "parts.flanges.h / overall.h",   "expected": 0.18,  "tol": 0.02 },
+    "bandTop":     { "expr": "parts.flanges.max.1 / overall.h", "expected": 0.675, "tol": 0.025 },
+    "bowlBottom":  { "expr": "parts.body.min.1 / overall.h",  "expected": 0.365, "tol": 0.03 },
+    "tailTop":     { "expr": "parts.body.max.1 / overall.h",  "expected": 0.94,  "tol": 0.03 },
+    "rimLength":   { "expr": "parts.body.d / overall.h",      "expected": 0.84,  "tol": 0.07 },
+    "legSpan":     { "expr": "parts.legs.h / overall.h",      "expected": 0.46,  "tol": 0.04 },
+    "handleSpan":  { "expr": "parts.handles.h / parts.flanges.h", "expected": 1.2, "tol": 0.13 }
+  }
+}
