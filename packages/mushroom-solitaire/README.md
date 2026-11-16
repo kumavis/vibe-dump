@@ -36,8 +36,8 @@ All card assets and fonts are bundled locally. Fonts use the same OFL-licensed
 Fraunces and Inter assets included elsewhere in this repository.
 
 Cards sit directly on a textured grass field, with stable small rotations,
-slight stack offsets, and irregular paper edges. The yellow suit has stronger
-pip contrast and dark gold corner indices. All 53 card images preload and
+slight stack offsets, and irregular paper edges. The original yellow ink is selectively deepened, preserving the handwritten
+numbers and mushroom shapes without any added labels or stamps. All 53 card images preload and
 start decoding eagerly at startup. Drops use the pointed-at legal pile, a
 24px near-miss allowance, or meaningful overlap of the carried card; distant
 and illegal drops do not change the game.

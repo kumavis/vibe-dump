@@ -69,14 +69,14 @@ for (const browserType of [webkit, chromium]) {
       } finally { await context.close() }
     }
     try {
-      await t.test('the full deck loads before interaction and the yellow indices have readable contrast', () => run(async page => {
+      await t.test('the full deck preloads and yellow cards retain only the original artwork', () => run(async page => {
         await page.waitForFunction(() => new Set(performance.getEntriesByType('resource').filter(r => /\/cards\/.*\.jpg$/.test(r.name)).map(r => r.name)).size === 53)
         assert.equal((await read(page)).state.moves, 0)
-        const contrast = await page.locator('.lemon-index').first().evaluate(el => {
-          const rgb = getComputedStyle(el).color.match(/[\d.]+/g).slice(0,3).map(Number).map(x => x / 255).map(x => x <= .04045 ? x / 12.92 : ((x + .055) / 1.055) ** 2.4)
-          return 1.05 / (.2126 * rgb[0] + .7152 * rgb[1] + .0722 * rgb[2] + .05)
-        })
-        assert.ok(contrast >= 4.5, 'corner ranks contrast against the pale card paper')
+        const yellow = card(page, '2-7')
+        assert.equal(await yellow.locator('img').count(), 1)
+        assert.equal(await yellow.locator('span,svg').count(), 0, 'no replacement numbers or mushroom stamps')
+        assert.match(await yellow.locator('img').getAttribute('src'), /cards\/2-7\.jpg$/)
+        assert.match(await yellow.locator('img').evaluate(el => getComputedStyle(el).filter), /lemon-contrast/)
         assert.equal(await page.locator('.masthead,.intro,footer').count(), 0)
       }))
       await t.test('real touch taps draw once, select a stack, move, undo, and restore saved progress', () => run(async page => {

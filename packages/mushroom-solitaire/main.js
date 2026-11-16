@@ -66,9 +66,6 @@ function cardElement(card, loc) {
   b.innerHTML = `<img src="${art.src}" alt="" draggable="false" loading="eager" decoding="async">`
   if (card.faceUp && card.suit === 2) {
     b.classList.add('lemon')
-    if (card.rank <= 10) b.classList.add('lemon-pips')
-    const rank = ({ 1: 'A', 11: 'J', 12: 'Q', 13: 'K' })[card.rank] || card.rank
-    b.insertAdjacentHTML('beforeend', `<span class="lemon-index" aria-hidden="true">${rank}${suitIcon(2)}</span><span class="lemon-index bottom" aria-hidden="true">${rank}${suitIcon(2)}</span>`)
   }
   if (card.faceUp) {
     b.addEventListener('click', e => { e.stopPropagation(); if (e.detail !== 0 && performance.now() < suppressClickUntil) return; selectCard(loc) })
