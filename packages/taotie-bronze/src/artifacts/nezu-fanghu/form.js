@@ -53,9 +53,9 @@ function monotone(rows) {
 }
 export const bodyW = monotone(BODY)
 export const lidW = monotone(LID)
-/** corner radius: fat rounded corners (photo-09), 0.42 × the half depth */
-export const bodyR = (y) => 0.42 * RHO * bodyW(y)
-export const lidR = (y) => 0.42 * RHO * lidW(y)
+/** corner radius: fat rounded corners (photo-09: the fields wrap round them), 0.7 × the half depth */
+export const bodyR = (y) => 0.7 * RHO * bodyW(y)
+export const lidR = (y) => 0.6 * RHO * lidW(y)
 
 // ------------------------------------------------------------------ rounded-rectangle section
 
