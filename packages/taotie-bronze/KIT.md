@@ -818,6 +818,7 @@ node tools/refs.mjs [--check]      # regenerate src/app/refs.js after adding a v
 node tools/faces.mjs --a id [--face f,…] [--rectify] [--list] [--views]   # flat faces: photo | model, § Flat faces
 python3 tools/nometa.py [--strip]  # the owner's photographs (reference/nezu-*/) must carry no EXIF/XMP/ICC/comments; run before committing
 npm run check                      # vite build + tools/smoke.mjs (every artifact, view, mode, motif preset)
+node tools/smoke.mjs --q 0.5 --a id[,id]   # smoke only these artifacts (builders; the full run is the release check)
 node tools/bench.mjs               # 4096×2048 panel draw + bake timing
 ```
 

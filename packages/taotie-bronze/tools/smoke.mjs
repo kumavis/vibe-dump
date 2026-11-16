@@ -4,6 +4,7 @@
 //
 //   npm run check --workspace @vibe-dump/taotie-bronze     (build + this)
 //   node tools/smoke.mjs [--q 0.5]
+//   node tools/smoke.mjs --a id[,id]     only these artifacts (skips the motif pass; the full run is the release check)
 import { args, session } from './lib.mjs'
 import { generate } from './refs.mjs'
 import { readFileSync } from 'node:fs'
@@ -28,7 +29,11 @@ try {
 } catch (e) {
   fail('boot: ' + e.message)
 }
-const { artifacts, motifs } = await page.evaluate(() => ({ artifacts: window.__taotie.artifacts, motifs: window.__taotie.motifs }))
+const all = await page.evaluate(() => ({ artifacts: window.__taotie.artifacts, motifs: window.__taotie.motifs }))
+const only = opt.a ? String(opt.a).split(',') : null
+for (const id of only || []) if (!all.artifacts.includes(id)) fail(`--a ${id}: no such artifact`)
+const artifacts = only ? all.artifacts.filter((id) => only.includes(id)) : all.artifacts
+const motifs = only ? [] : all.motifs
 console.log(`${artifacts.length} artifact(s) · ${motifs.length} motif(s)`)
 
 for (const id of artifacts) {
