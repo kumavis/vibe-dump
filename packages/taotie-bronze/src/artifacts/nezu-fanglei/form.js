@@ -1,7 +1,8 @@
 // nezu-fanglei — form: the measured stack (dossier §b), the swelling belly and shoulder profile, flange
 // outlines and paths. Units mm, Y up, the foot stands on y = 0, front (+Z) = the face with the low lug.
 // H = 503 mm is INFERRED (scale argued in reference/nezu-fanglei/dossier.md §a.3); every proportion is
-// measured on photo-37 (front, camera ≈ 12° above the belly's mid height, its z-offsets corrected).
+// measured by solving the cameras of photo-37 (front: el ≈ 10°, ≈ 3.8 m, near-orthographic) and photo-36
+// (az ≈ 69°) against these numbers (.work/r7-lei/solve, dossier §b.1).
 
 import * as THREE from 'three'
 
@@ -9,37 +10,40 @@ export const H = 503
 
 /** register levels (y, mm) — dossier §b.2 */
 export const LV = {
-  base: 4.5, // plain base strip under the foot frieze
-  foot: 25, // foot top = belly underside
-  bellyBorder: 36, // plain border curling under the belly
-  narrow: 52, // narrow frieze (kui / snakes) 36 → 52
-  low: 101, // third register (lug mask, lozenge ground) 52 → 101
+  base: 4, // plain base strip under the foot frieze
+  foot: 21.5, // foot top = belly underside
+  bellyBorder: 35, // plain border curling under the belly
+  narrow: 50.5, // narrow frieze (kui / snakes) 35 → 50.5
+  low: 101, // third register (lug mask, lozenge ground) 50.5 → 101
   second: 178, // second register (lower taotie) 101 → 178
-  main: 266, // main mask register 178 → 266 = belly top = shoulder crease
-  shoulderField: [277, 323], // shoulder frieze field
-  shoulder: 331, // shoulder top = ledge = collar base
-  collar: 382, // collar top (lid skirt sits on it)
-  skirt: 11.5, // lid skirt height
+  main: 263, // main mask register 178 → 263 = belly top = shoulder crease
+  shoulderField: [273, 318], // shoulder frieze field
+  shoulder: 325, // shoulder top = ledge = collar base
+  collar: 376, // collar top (lid skirt sits on it)
+  skirt: 8, // lid skirt height
   fascia: 4, // lid eave edge
-  rise: 58, // eave → ridge
-  ridge: 455.5,
-  knobEave: 486, // knob roof eave (post 455.5 → 486)
+  rise: 70, // eave (388) → ridge: photo-37's flattened slope ends at ≈ 455–458 (photo-36 alone would read ≈ 90; dossier §b.2)
+  ridge: 458,
+  knobEave: 485, // knob roof eave (post 458 → 485)
   top: 503,
 }
 
-/** plan half widths (square section, x = z; the plan is INFERRED square) */
+/** plan: depth (z) : width (x) — photo-36 solved at azimuth ≈ 69° (dossier §b.1); the ±X faces are the narrow ones */
+export const RHO = 0.75
+
+/** plan half WIDTHS (x); every half depth (z) is RHO × these */
 export const PLAN = {
-  foot: 62,
-  collar: 85,
-  skirt: 84,
-  eave: 90,
-  ridgeHalf: 66,
-  knob: { eave: 19.5, depth: 17, post: [8.5, 7.5], ridge: 0.55 },
+  foot: 62.5,
+  collar: 85.5,
+  skirt: 85.5,
+  eave: 88,
+  ridgeHalf: 44, // round 8: face-lid's field still ±43 mm at 90 % of the slope, photo-36's ridge half ≈ 45–48 [est]
+  knob: { eave: 19.5, depth: 15, post: [8.5, 7.5], ridge: 0.45 },
 }
 
 // half width of the belly and shoulder (front face plane z = half) — dossier §b.3, read off photo-37
-const BELLY = [[25, 66], [36, 69.5], [52, 76], [70, 86.5], [101, 100.5], [140, 113.5], [178, 123.5], [220, 130.5], [250, 134], [266, 135]]
-const SHOULDER = [[266, 135], [280, 134.6], [300, 130.5], [316, 123.5], [324, 118.5], [331, 112.5]]
+const BELLY = [[21.5, 66.5], [35, 69.5], [50.5, 75.5], [70, 85.5], [101, 98.8], [125, 110.5], [150, 120.5], [178, 127.2], [215, 129.8], [245, 130.4], [263, 130.3]]
+const SHOULDER = [[263, 130.3], [276, 130.6], [294, 128], [310, 122], [319, 116], [325, 108.5]]
 
 function monotone(rows) {
   const xs = rows.map((r) => r[0]), ys = rows.map((r) => r[1])

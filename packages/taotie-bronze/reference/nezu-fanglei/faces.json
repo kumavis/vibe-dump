@@ -1,0 +1,493 @@
+{
+ "vessel": "nezu-fanglei",
+ "note": "Flat faces of the Nezu square lei, from the project owner's photo-37 (front, near head-on, ≈ 3.5 px/mm on the belly). Points are [photo px, vessel mm x, y, z]: each register's corners and centre, projected through a camera solved on 14 measured landmarks (.work/r7-lei/solve/gen_faces.py: az −0.6°, el 12.1°, roll −0.9°, f 13031 px at 3650 mm — a long lens) and shifted to the photographed centre line. The curved belly and shoulder are flattened PER REGISTER onto each register's chord plane.",
+ "blur": 0.8,
+ "sources": {
+  "p37": {
+   "file": "photo-37.jpg",
+   "size": [
+    1536,
+    2048
+   ],
+   "note": "the project owner's photograph, Nezu Museum, Tokyo, 2026; the committed file is the original"
+  }
+ },
+ "faces": {
+  "face-shoulder": {
+   "label": "front (+Z), shoulder frieze y 263–325 — chord plane",
+   "source": "p37",
+   "center": [
+    0,
+    294.0,
+    89.55
+   ],
+   "normal": [
+    0.0,
+    0.255,
+    0.9669
+   ],
+   "up": [
+    0.0,
+    0.9669,
+    -0.255
+   ],
+   "width": 265,
+   "height": 66.1,
+   "ppmm": 6,
+   "points": [
+    [
+     286.6,
+     794.7,
+     -108.5,
+     325,
+     81.38
+    ],
+    [
+     684.5,
+     800.3,
+     0,
+     325,
+     81.38
+    ],
+    [
+     1082.1,
+     805.9,
+     108.5,
+     325,
+     81.38
+    ],
+    [
+     203.0,
+     1028.4,
+     -130.3,
+     263,
+     97.73
+    ],
+    [
+     681.3,
+     1035.1,
+     0,
+     263,
+     97.73
+    ],
+    [
+     1159.2,
+     1041.8,
+     130.3,
+     263,
+     97.73
+    ]
+   ],
+   "trust": "fair: the shoulder rounds over (≈ 4 mm off its chord plane at mid height) and is seen from ≈ 10° above; the head hides the centre. Points from the camera solved on photo-37 (.work/r7-lei/solve), shifted to the photographed centre line.",
+   "fit": "see tools/faces.mjs --rectify"
+  },
+  "face-main": {
+   "label": "front (+Z), belly main mask register y 178–263",
+   "source": "p37",
+   "center": [
+    0,
+    220.5,
+    96.56
+   ],
+   "normal": [
+    0.0,
+    -0.0273,
+    0.9996
+   ],
+   "up": [
+    0.0,
+    0.9996,
+    0.0273
+   ],
+   "width": 265,
+   "height": 87.0,
+   "ppmm": 6,
+   "points": [
+    [
+     205.0,
+     1028.4,
+     -130.3,
+     263,
+     97.73
+    ],
+    [
+     683.3,
+     1035.1,
+     0,
+     263,
+     97.73
+    ],
+    [
+     1161.2,
+     1041.8,
+     130.3,
+     263,
+     97.73
+    ],
+    [
+     214.1,
+     1330.1,
+     -127.2,
+     178,
+     95.4
+    ],
+    [
+     678.3,
+     1336.5,
+     0,
+     178,
+     95.4
+    ],
+    [
+     1142.3,
+     1342.9,
+     127.2,
+     178,
+     95.4
+    ]
+   ],
+   "trust": "good: a nearly vertical register seen almost head-on (≈ 3.5 px/mm); points from the solved camera (residual ≈ 2–5 mm at the flanged corners).",
+   "fit": "see tools/faces.mjs --rectify"
+  },
+  "face-second": {
+   "label": "front (+Z), belly second register y 101–178 — chord plane",
+   "source": "p37",
+   "center": [
+    0,
+    139.5,
+    84.75
+   ],
+   "normal": [
+    0.0,
+    -0.2666,
+    0.9638
+   ],
+   "up": [
+    0.0,
+    0.9638,
+    0.2666
+   ],
+   "width": 258,
+   "height": 81.9,
+   "ppmm": 6,
+   "points": [
+    [
+     218.1,
+     1330.1,
+     -127.2,
+     178,
+     95.4
+    ],
+    [
+     682.3,
+     1336.5,
+     0,
+     178,
+     95.4
+    ],
+    [
+     1146.3,
+     1342.9,
+     127.2,
+     178,
+     95.4
+    ],
+    [
+     320.6,
+     1584.2,
+     -98.8,
+     101,
+     74.1
+    ],
+    [
+     677.5,
+     1589.0,
+     0,
+     101,
+     74.1
+    ],
+    [
+     1034.2,
+     1593.9,
+     98.8,
+     101,
+     74.1
+    ]
+   ],
+   "trust": "fair-good: the wall leans ≈ 15° (chord plane), seen head-on; the outer columns run behind the corner flanges.",
+   "fit": "see tools/faces.mjs --rectify"
+  },
+  "face-low": {
+   "label": "front (+Z), lowest register + narrow frieze y 35–101 — chord plane",
+   "source": "p37",
+   "center": [
+    0,
+    68.0,
+    63.11
+   ],
+   "normal": [
+    0.0,
+    -0.3159,
+    0.9488
+   ],
+   "up": [
+    0.0,
+    0.9488,
+    0.3159
+   ],
+   "width": 202,
+   "height": 71.6,
+   "ppmm": 6,
+   "points": [
+    [
+     321.6,
+     1584.2,
+     -98.8,
+     101,
+     74.1
+    ],
+    [
+     678.5,
+     1589.0,
+     0,
+     101,
+     74.1
+    ],
+    [
+     1035.2,
+     1593.9,
+     98.8,
+     101,
+     74.1
+    ],
+    [
+     425.7,
+     1794.5,
+     -69.5,
+     35,
+     52.12
+    ],
+    [
+     674.3,
+     1797.8,
+     0,
+     35,
+     52.12
+    ],
+    [
+     922.8,
+     1801.2,
+     69.5,
+     35,
+     52.12
+    ]
+   ],
+   "trust": "fair: the wall leans ≈ 18° and curls under at the bottom; the lug covers the centre 60 mm.",
+   "fit": "see tools/faces.mjs --rectify"
+  },
+  "face-foot": {
+   "label": "front (+Z), foot frieze y 0–21.5",
+   "source": "p37",
+   "center": [
+    0,
+    10.75,
+    46.88
+   ],
+   "normal": [
+    0.0,
+    -0.0,
+    1.0
+   ],
+   "up": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "width": 129,
+   "height": 23.5,
+   "ppmm": 6,
+   "points": [
+    [
+     453.4,
+     1836.3,
+     -62.5,
+     21.5,
+     46.88
+    ],
+    [
+     676.5,
+     1839.3,
+     0,
+     21.5,
+     46.88
+    ],
+    [
+     899.4,
+     1842.3,
+     62.5,
+     21.5,
+     46.88
+    ],
+    [
+     452.5,
+     1910.2,
+     -62.5,
+     0,
+     46.88
+    ],
+    [
+     675.3,
+     1913.2,
+     0,
+     0,
+     46.88
+    ],
+    [
+     898.0,
+     1916.2,
+     62.5,
+     0,
+     46.88
+    ]
+   ],
+   "trust": "fair: a small vertical band, dark, the lug snout and the foot flanges hide parts of it.",
+   "fit": "see tools/faces.mjs --rectify"
+  },
+  "face-collar": {
+   "label": "front (+Z), collar frieze y 325–376",
+   "source": "p37",
+   "center": [
+    0,
+    350.5,
+    64.12
+   ],
+   "normal": [
+    0.0,
+    -0.0,
+    1.0
+   ],
+   "up": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "width": 175,
+   "height": 53.0,
+   "ppmm": 6,
+   "points": [
+    [
+     393.0,
+     600.5,
+     -85.5,
+     376,
+     64.12
+    ],
+    [
+     706.0,
+     604.9,
+     0,
+     376,
+     64.12
+    ],
+    [
+     1018.8,
+     609.4,
+     85.5,
+     376,
+     64.12
+    ],
+    [
+     391.0,
+     783.7,
+     -85.5,
+     325,
+     64.12
+    ],
+    [
+     703.0,
+     788.1,
+     0,
+     325,
+     64.12
+    ],
+    [
+     1014.9,
+     792.6,
+     85.5,
+     325,
+     64.12
+    ]
+   ],
+   "trust": "fair: a flat vertical band in shade under the lid eave (dark, ≈ 3.5 px/mm).",
+   "fit": "see tools/faces.mjs --rectify"
+  },
+  "face-lid": {
+   "label": "lid, front slope (+Z), eave to ridge",
+   "source": "p37",
+   "center": [
+    0,
+    423.0,
+    33.0
+   ],
+   "normal": [
+    0,
+    0.686,
+    0.7276
+   ],
+   "up": [
+    0,
+    0.7276,
+    -0.686
+   ],
+   "width": 180,
+   "height": 98.2,
+   "ppmm": 6,
+   "points": [
+    [
+     593.0,
+     269.9,
+     -38,
+     458,
+     0
+    ],
+    [
+     730.3,
+     271.9,
+     0,
+     458,
+     0
+    ],
+    [
+     867.6,
+     273.9,
+     38,
+     458,
+     0
+    ],
+    [
+     405.5,
+     558.3,
+     -88,
+     388,
+     66
+    ],
+    [
+     728.0,
+     562.9,
+     0,
+     388,
+     66
+    ],
+    [
+     1050.4,
+     567.5,
+     88,
+     388,
+     66
+    ]
+   ],
+   "trust": "fair: the slope faces the camera ≈ 35° off its normal; points from the solved camera, shifted to the slope centre flange; the ridge ends are hidden by the hip-flange ears (± 3 mm).",
+   "fit": "see tools/faces.mjs --rectify"
+  }
+ }
+}

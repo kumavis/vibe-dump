@@ -308,11 +308,84 @@ export const PATINA_PRESETS = {
     pustuleColor: '#2f9a5e', crustIsles: 0.12, grain: 0.95, tint: '#4a7458', nobleRelief: 0.8,
     upperTone: 0.75, upperHeight: 0.86,
   },
+  // Nezu square lei 90081 (owner's photographs 36/37): a pale grey-green body (the raised bands paler and
+  // silvery-green, the leiwen ground darker grey-green), rust-brown cuprite patches across the upper belly and
+  // shoulder, small emerald specks low on the body; collar, lid and knob much darker, a near-black olive-brown
+  'nezu-fanglei': {
+    age: 1, tin: 0.15, lead: 0.06, polish: 0.3, tarnish: 0.5, cuprite: 0.9, cupriteTone: 0.3, tinOxide: 0.85,
+    tinOxideTone: 1.1, malachite: 0.2, carbonate: 0.1, azurite: 0, malachiteHue: 0.35, malachiteTone: 0.6,
+    islands: 0.2, malachiteScale: 1.3, crust: 0.1, chloride: 0, soot: 0.05, crevice: 0.7, patchScale: 70,
+    mottleScale: 12, patchiness: 0.85, softness: 0.8, drift: 0.3, earth: 0.06, earthColor: '#6a5a44', calcite: 0.02,
+    streaks: 0.08, burialSide: 0.1, recessDirt: 0.6, interiorTone: 0.45, wax: 0, inlay: 0.2, inlayGround: 0.12,
+    wear: 0.15, dulling: 0.4, tops: 0.55, nobleWarmth: 0.2, matte: 1, topsTone: 0.35, ledgeMatte: 1, nobleRelief: 0.3,
+    tint: '#dde4d6', upperTone: 0.32, upperHeight: 0.645, speckle: 0.06, speckleScale: 1.4, speckleColor: '#7a4634',
+    crustIsles: 0.04, crustScale: 5, crustColor: '#6f8a72', crustPlace: 0.7, pustules: 0, pustuleScale: 3,
+    pustuleColor: '#4f7a62', lowerBody: 0.35, lowerHeight: 0.2, lowerColor: '#b8c4b0', plainTone: 0.8, grain: 0.6,
+  },
+
+  // Nezu you 90086 (owner's photographs 31/32): a dark grey-green bronze skin with the raised bands worn to a pale
+  // grey-beige, bright malachite in broad soft territories over belly, lid and foot (green powder packed into the
+  // leiwen), small red-brown earth in the deep pockets, the lid top and neck darker and greener
+  'nezu-you': {
+    age: 1, tin: 0.15, lead: 0.06, polish: 0.3, tarnish: 0.55, cuprite: 0.5, cupriteTone: 0.3, tinOxide: 0.9,
+    tinOxideTone: 1.2, malachite: 0.42, carbonate: 0.08, azurite: 0, malachiteHue: 0.32, malachiteTone: 0.5,
+    islands: 0.3, malachiteScale: 1.4, crust: 0.18, chloride: 0, soot: 0, crevice: 0.95, patchScale: 40,
+    mottleScale: 9, patchiness: 0.85, softness: 0.65, drift: 0.35, earth: 0.14, earthColor: '#6a4a34', calcite: 0.02,
+    streaks: 0.05, burialSide: 0.1, recessDirt: 0.55, interiorTone: 0.5, wax: 0, inlay: 0, inlayGround: 0,
+    wear: 0.2, dulling: 0.35, tops: 1, nobleWarmth: 0.3, matte: 1, topsTone: 1, ledgeMatte: 1, nobleRelief: 1,
+    tint: '#cfcdbd', speckle: 0.06, speckleScale: 1.4, speckleColor: '#2f9a64', speckleDecor: 0.2, crustIsles: 0.16,
+    crustScale: 7, crustColor: '#3aa070', crustPlace: 0.4, pustules: 0.08, pustuleScale: 3, pustuleColor: '#22a060', grain: 0.6,
+  },
+  // Nezu jia 90067 (owner's photographs 21/22): a dark grey-olive skin densely freckled with bright malachite and
+  // blue-green specks (thickest on the drum and the legs), the raised bands worn grey-brown, red-brown cuprite and
+  // orange earth in the leg channels and deep pockets; the posts and caps a near-black olive with little green
+  'nezu-jia': {
+    age: 1, tin: 0.15, lead: 0.07, polish: 0.3, tarnish: 0.6, cuprite: 0.8, cupriteTone: 0.45, tinOxide: 0.85,
+    tinOxideTone: 1.0, malachite: 0.42, carbonate: 0.22, azurite: 0, malachiteHue: 0.25, malachiteTone: 0.45,
+    turquoiseTone: 0.55, islands: 0.3, malachiteScale: 1.1, crust: 0.2, chloride: 0, soot: 0.05, crevice: 0.9,
+    patchScale: 40, mottleScale: 5, patchiness: 0.55, softness: 0.6, drift: 0.3, earth: 0.22, earthColor: '#8a5a36',
+    calcite: 0.02, streaks: 0.05, burialSide: 0.1, recessDirt: 0.7, interiorTone: 0.45, wax: 0, inlay: 0, inlayGround: 0,
+    wear: 0.12, dulling: 0.4, tops: 0.75, nobleWarmth: 0.35, matte: 1, topsTone: 0.6, ledgeMatte: 1, nobleRelief: 0.8,
+    tint: '#c2ccbc', upperTone: 0.9, upperHeight: 0.76, speckle: 0.12, speckleScale: 0.7, speckleColor: '#2f9a6a',
+    speckleDecor: 0.6, crustIsles: 0.1, crustScale: 3, crustColor: '#3a9a72', crustPlace: 0.5, pustules: 0.06,
+    pustuleScale: 2.5, pustuleColor: '#22a066', lowerBody: 0.2, lowerHeight: 0.4, lowerColor: '#b4c2ae', grain: 0.6,
+  },
+  // Nezu fanghe, vessel A of the set (owner's photographs 25, 39–45): a grey-brown bronze skin under broad, bright
+  // malachite territories that cover most of the raised bands and fill the ground, the flange teeth and band edges
+  // worn back to grey-brown, earthy red-brown cuprite patches (lobes, legs, eave), green powder packed in the pockets
+  'nezu-fanghe': {
+    // round 8: matte grey-green / dark olive skin; pale dusty malachite packed in the recesses and the leiwen ground,
+    // in patches on the bands; red-brown cuprite through worn high points; no bright speckle (photos 39–45)
+    age: 1, tin: 0.15, lead: 0.08, polish: 0.25, tarnish: 0.6, cuprite: 0.85, cupriteTone: 0.3, tinOxide: 0.85,
+    tinOxideTone: 1.05, malachite: 0.8, carbonate: 0.2, azurite: 0, malachiteHue: 0.25, malachiteTone: 0.55,
+    turquoiseTone: 0.4, islands: 0.3, malachiteScale: 1.6, crust: 0.2, chloride: 0, soot: 0.04, crevice: 1,
+    patchScale: 70, mottleScale: 14, patchiness: 0.8, softness: 0.8, drift: 0.35, earth: 0.1, earthColor: '#6e4a34',
+    calcite: 0.02, streaks: 0.04, burialSide: 0.1, recessDirt: 0.75, interiorTone: 0.4, wax: 0, inlay: 0, inlayGround: 0,
+    wear: 0.2, dulling: 0.38, tops: 0.4, nobleWarmth: 0.6, matte: 1, topsTone: 0.35, ledgeMatte: 1, nobleRelief: 0.2,
+    tint: '#b4b2a0', speckle: 0.03, speckleScale: 1.6, speckleColor: '#7a4634', speckleDecor: 0.3, crustIsles: 0.06,
+    crustScale: 9, crustColor: '#6c9a80', crustPlace: 0.75, pustules: 0.015, pustuleScale: 3, pustuleColor: '#4e9478',
+    lowerBody: 0.2, lowerHeight: 0.2, lowerColor: '#b0b8a4', grain: 0.6,
+  },
+  // Nezu zun 90075 (owner's photographs 26/28): belly and foot a pale grey-green with the raised threads paler
+  // still, soft malachite territories (upper circle band, the mask's outer fields, the lower belly), rust-brown
+  // cuprite on the flanges and through the worn foot; above the collar — shoulder, neck, mouth — a near-black
+  // olive-brown, smooth, with a few paler grey-brown blotches on the flare
+  'nezu-zun': {
+    age: 1, tin: 0.15, lead: 0.07, polish: 0.3, tarnish: 0.55, cuprite: 0.95, cupriteTone: 0.35, tinOxide: 0.85,
+    tinOxideTone: 1.1, malachite: 0.32, carbonate: 0.12, azurite: 0, malachiteHue: 0.3, malachiteTone: 0.55,
+    turquoiseTone: 0.5, islands: 0.25, malachiteScale: 1.3, crust: 0.12, chloride: 0, soot: 0.04, crevice: 0.8,
+    patchScale: 60, mottleScale: 11, patchiness: 0.85, softness: 0.75, drift: 0.3, earth: 0.06, earthColor: '#6a5040',
+    calcite: 0.02, streaks: 0.06, burialSide: 0.1, recessDirt: 0.55, interiorTone: 0.3, wax: 0, inlay: 0.1, inlayGround: 0.08,
+    wear: 0.18, dulling: 0.38, tops: 0.7, nobleWarmth: 0.3, matte: 1, topsTone: 0.65, ledgeMatte: 1, nobleRelief: 0.6,
+    tint: '#d8ddd0', upperTone: 0.28, upperHeight: 0.6, speckle: 0.05, speckleScale: 1.4, speckleColor: '#7a4634',
+    crustIsles: 0.08, crustScale: 6, crustColor: '#5f9a78', crustPlace: 0.6, pustules: 0.02, pustuleScale: 3,
+    pustuleColor: '#3f9a6a', lowerBody: 0.25, lowerHeight: 0.28, lowerColor: '#bcc6b2', plainTone: 0.7, grain: 0.6,
+  },
 }
 
 /** How the drawer groups the preset chips. Every key of PATINA_PRESETS appears once. */
 export const PATINA_PRESET_GROUPS = {
-  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue'],
+  Vessels: ['houmuwu', 'met-fangyi', 'met-zun', 'met-gu', 'nezu-olive', 'met-fangding', 'met-gui', 'yachou-yue', 'nezu-fanglei', 'nezu-you', 'nezu-jia', 'nezu-fanghe', 'nezu-zun'],
   Looks: ['excavated-green', 'olive-museum', 'malachite-crust', 'water-black', 'bronze-disease', 'heirloom', 'as-cast'],
   Blue: ['nezu-blue', 'blue-green-excavated', 'azurite-bloom'],
 }

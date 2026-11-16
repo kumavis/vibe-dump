@@ -173,6 +173,9 @@ function vesselLathe({
 
   // ---- tolerance → deformation (applied to every vertex; foot stays on y = 0)
   const deform = makeDeform(tolerance, H, oval)
+  // oval plan (Z = X / oval): developed arc per unit radius from the front (θ = 0) to θ — the identity
+  // on a round body; 'true' panels and sector widths use it so a panel stays 1:1 round the oval
+  const ovalArc = oval === 1 ? (t) => t : ellipseArc(oval)
 
   // ---- holes (in θ, s)
   const holeList = holes.map((h) => parseHole(h, P, H))
@@ -230,7 +233,7 @@ function vesselLathe({
     info.registers[reg.name] = {
       name: reg.name, s0: reg.s0, s1: reg.s1, y0: reg.y0, y1: reg.y1, height: reg.length,
       rBottom: at0.r, rTop: at1.r, rMid: atm.r, rMax: rMx,
-      sectors: sc.map(([a, b], k) => panelSize(P, reg, k, sc.length, a, b)),
+      sectors: sc.map(([a, b], k) => panelSize(P, reg, k, sc.length, a, b, ovalArc)),
     }
   }
 
@@ -299,6 +302,7 @@ function vesselLathe({
         out.pos.set(q.r * sn, q.y, q.r * cs)
         deform(out.pos)
         out.nrm.set(q.nr * sn, q.ny, q.nr * cs)
+        if (oval !== 1) { out.nrm.z *= oval; out.nrm.normalize() } // inverse-transpose of the plan squash
       }
       let map = null
       if (decorated) {
@@ -320,7 +324,7 @@ function vesselLathe({
         panelMap = (u, v, out) => {
           const t = A + Math.min(1, Math.max(0, u)) * (B - A)
           const s = b0 + Math.min(1, Math.max(0, v)) * (b1 - b0)
-          out[0] = 0.5 + ((t - tc) * P.at(s).r) / Wt
+          out[0] = 0.5 + ((ovalArc(t) - ovalArc(tc)) * P.at(s).r) / Wt
         }
       }
       const geo = buildSurface({
@@ -589,6 +593,19 @@ function makeColumns(M, required) {
   return cols
 }
 
+/** oval plan (x = r sin t, z = r cos t / k): t → ∫₀ᵗ √(cos² + sin²/k²) dτ (signed, any t), tabulated */
+function ellipseArc(k) {
+  const N = 720, h = TAU / N, tab = new Float64Array(N + 1)
+  const f = (t) => Math.sqrt(Math.cos(t) ** 2 + Math.sin(t) ** 2 / (k * k))
+  for (let i = 1; i <= N; i++) tab[i] = tab[i - 1] + (h / 6) * (f((i - 1) * h) + 4 * f((i - 0.5) * h) + f(i * h))
+  const per = tab[N]
+  return (t) => {
+    const w = Math.floor(t / TAU), u = (t - w * TAU) / h
+    const i = Math.min(N - 1, Math.floor(u)), fr = u - i
+    return w * per + tab[i] + (tab[i + 1] - tab[i]) * fr
+  }
+}
+
 function makeDeform(tol, H, oval = 1) {
   if (!tol && oval === 1) return (v) => v
   if (!tol) return (v) => { v.z /= oval; return v }
@@ -641,8 +658,8 @@ function resolveRange(P, info, spec) {
  * toPanel (or map a shapes.js shape with `map`) and blades come out straight
  * and correctly tapered on the vessel.
  */
-function panelSize(P, reg, k, n, a, b) {
-  const ang = b - a
+function panelSize(P, reg, k, n, a, b, arc = (t) => t) {
+  const ang = arc(b) - arc(a)
   const at = (yArc) => P.at(reg.s0 + Math.min(Math.max(yArc, 0), reg.length))
   const widthAt = (yArc) => at(yArc).r * ang
   const width = widthAt(reg.length / 2)

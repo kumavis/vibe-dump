@@ -1,0 +1,169 @@
+{
+  "vessel": "nezu-fanghe",
+  "note": "Flat faces of the Nezu fanghe (KIT.md § Flat faces), from the project owner's phone photographs through the vitrine glass (1536 × 2048, no larger originals). Vessel frame: mm, Y up, front (+Z) = the HANDLE face. The lobed faces are not planes: each lobe bows ≈ 7 mm proud of the corner plane and the crease between two lobes runs ≈ 13 mm behind it, so every lobe face is flattened onto the CORNER plane (|x| or |z| = 105) and features away from the corners shift by up to a few mm with the camera's obliquity. Points are [photo px x, y, vessel x, y, z]: corner-flange roots at register borders (frieze top y 297, frieze/lobe border y 255, lobe bottom y 130) — the only in-plane landmarks these faces have.",
+  "blur": 1.2,
+  "sources": {
+    "p25": {
+      "file": "photo-25.jpg",
+      "size": [
+        1536,
+        2048
+      ],
+      "note": "handle (+Z) face, lobes and frieze, close, from the left; ≈ 4 px/mm"
+    },
+    "p42": {
+      "file": "photo-42.jpg",
+      "size": [
+        1536,
+        2048
+      ],
+      "note": "right (+X) face, handle on the left, ≈ 20° elevated, ≈ 2.3 px/mm"
+    },
+    "p45": {
+      "file": "photo-45.jpg",
+      "size": [
+        1536,
+        2048
+      ],
+      "note": "handle (+Z) face close-up: horns, head, frieze, upper lobe masks; ≈ 6 px/mm"
+    }
+  },
+  "faces": {
+    "face-front": {
+      "label": "handle face (+Z): frieze and lobe masks (y 120–305)",
+      "source": "p25",
+      "center": [
+        0,
+        212.5,
+        105
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "width": 240,
+      "height": 185,
+      "ppmm": 4,
+      "points": [
+        [
+          262,
+          885,
+          -105,
+          297,
+          105
+        ],
+        [
+          258,
+          1080,
+          -105,
+          255,
+          105
+        ],
+        [
+          262,
+          1650,
+          -105,
+          130,
+          105
+        ],
+        [
+          1362,
+          930,
+          105,
+          297,
+          105
+        ],
+        [
+          1352,
+          1118,
+          105,
+          255,
+          105
+        ],
+        [
+          1335,
+          1700,
+          105,
+          130,
+          105
+        ]
+      ],
+      "trust": "approximate: vessel A. Photo 25 is close and from the upper left, so the right lobe (x > 0) is read nearly head-on and is the tracing source; the left lobe is oblique and its lower part curves away from the corner plane (its eye lands ≈ 20 mm high). The handle's body covers the centre. Read on a 5 mm grid to ± 2 mm.",
+      "fit": "least-squares fit of the points: rms 0.69 mm, max 1.21 mm (tools/faces.mjs --rectify prints it)"
+    },
+    "face-side": {
+      "label": "right face (+X): frieze and lobe masks (y 120–305)",
+      "source": "p42",
+      "center": [
+        105,
+        212.5,
+        0
+      ],
+      "normal": [
+        1,
+        0,
+        0
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "width": 240,
+      "height": 185,
+      "ppmm": 3,
+      "points": [
+        [
+          528,
+          1185,
+          105,
+          297,
+          105
+        ],
+        [
+          528,
+          1285,
+          105,
+          255,
+          105
+        ],
+        [
+          525,
+          1580,
+          105,
+          130,
+          105
+        ],
+        [
+          1000,
+          1185,
+          105,
+          297,
+          -105
+        ],
+        [
+          1000,
+          1290,
+          105,
+          255,
+          -105
+        ],
+        [
+          995,
+          1565,
+          105,
+          130,
+          -105
+        ]
+      ],
+      "trust": "fair: vessel A, both lobes nearly symmetric in the flattening; ≈ 2.3 px/mm, soft. The V between the lobes and the crease are read here.",
+      "fit": "least-squares fit of the points: rms 1.27 mm, max 2.37 mm"
+    }
+  }
+}

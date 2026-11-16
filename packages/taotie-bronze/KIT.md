@@ -67,6 +67,7 @@ src/kit/
     lid.js              hippedLid (four relief slopes, skirt, seat) + roofKnob
     parts.js            legacy columnarLeg / loopHandle, ringFoot; re-exports legs/handles/lid
     plate.js            plate(): flat cast plates (yue / ge blades, plaques): outline + true through-holes, thickness, relief both faces
+    lobes.js            lobe() / lobedBody(): lobed bodies (li, he, jia): rounded-rect sock lofted into the legs, lobes overlap → real creases; one 1:1 panel over each lobe's two outer sides
   material/
     patina.js           PatinaMaterial + PATINA_PRESETS + shared uniforms
     noise.glsl.js       3D simplex / worley / fbm chunks
@@ -511,7 +512,7 @@ const body = lathe({
   floor: { y, thickness, dome } | null (inner floor; default: flat base for r0 > 0, follow the profile for round bottoms),
   foot: { wall, hollow: true },    holes: [{ shape: 'cross'|'rect', azimuth, y, arm, width, w, h }],
   tolerance: { seed, ovality: 0.005–0.015, rim: 0.003–0.01 (p-p fraction of H), lean: deg },   // §5, foot stays on y = 0
-  oval: 1 (major:minor plan ratio, you/hu: Z = X / oval), ridges, density: 1 (verts/mm on decorated cells), quality, chord: 0.05, fade: 1.5,
+  oval: 1 (major:minor plan ratio, you/hu: Z = X / oval; normals, 'true' panels and sector widths follow the oval's developed arc), ridges, density: 1 (verts/mm on decorated cells), quality, chord: 0.05, fade: 1.5,
   material, interiorMaterial, materialFor: (relief, register) => Material, part: 'body' })
 // → Group (userData.part), children by role: outer (plain cells merged), panel:<register> (one mesh per distinct
 //   ReliefMap — return the SAME map for identical sectors), lip, inner, foot-inner, foot-ring | base, holes.
@@ -618,6 +619,26 @@ kit.roofKnob({ width, depth, rise | slope, ridge, concave, skirt, post: { height
 Flanges along lid hips / leg axes / corners currently use the straight `flange()`; curved
 (concave hip, bulged corner) anchors are returned as polylines for the path flange when it lands.
 
+## Lobed bodies — lobes.js (li 鬲, he 盉, jia 斝)
+
+```js
+kit.lobedBody({ section: (y) => ({ x0, x1, z0, z1, r: [outer, frontInner, inner, sideInner] | r, bulge: { front, side } | mm }),
+  y0: 0, y1, rows: [y…] | step, columns: 160, count: 4,            // 4 = square plan (copies rotated 90°), 3 = tripod
+  relief: { map, y0, y1, width, split, fade } | [spec per lobe], material, part })  → Group of lobe() groups
+kit.lobe({ …same, one lobe })  → Group { 'lobe' sock (relief material), 'sole' (foot cap) }, userData.lobe { section(y), at(y, u) }
+kit.lobeSection(spec) → { pts, cum, L, sOuter, sFront, sSide }      kit.lobePanelSize(section, y) → { front, side, width, split }
+```
+The +X +Z lobe is authored; its OUTER corner is (x1, z1) (a crisp arris for a flange: small `r[0]`), its front side
+z = z1 and side x = x1 may bow out by `bulge`. Above the crotch give x0 = z0 < 0 (the lobe runs past the centre
+plane) and a large front-inner radius: the mirror lobes intersect on the centre plane and the crease is that
+intersection (depth ≈ r − √(r² − (r − |x0|)²)); below the apex x0 > 0 and the inner sides become the soffit of the
+V / arch between the legs; at the bottom the section is the leg. The panel is laid 1:1 in developed mm over the two
+outer sides, piecewise-linear so the front crease is panel x 0, the outer corner `split` and the side crease
+`width` (cut off where the lobe has parted: the front-inner corner's mid point). Draw the half-mask on [0, split]
+with its axis at x 0 and `panel.mirrorX()` (the lobe panel is symmetric about the corner). Columns are dense on the
+décor arc, sparse round the hidden inner sides. Worked example: `src/artifacts/nezu-fanghe.js` (+ `nezu-fanghe/form.js`
+`lobeSectionAt`): four lobes ≈ 1.2 s at q 1 with a 1125 × 645 px panel.
+
 ## Plates — plate.js (blades, plaques: not vessels)
 
 ```js
@@ -704,7 +725,7 @@ Surface    matte (dry, micro-pitted excavated skin: roughness floor, no broad gl
 ```
 
 Presets (`PATINA_PRESET_GROUPS` groups them for the drawer):
-Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui`, `yachou-yue` · Looks `excavated-green`
+Vessels `houmuwu`, `met-fangyi`, `met-zun`, `met-gu`, `nezu-olive`, `met-fangding`, `met-gui`, `yachou-yue`, `nezu-fanglei`, `nezu-fanghe`, `nezu-jia` · Looks `excavated-green`
 (generic dark Anyang excavation), `olive-museum`, `malachite-crust` (Freer F1915.136),
 `water-black` (Met fanglei 55.160), `bronze-disease`, `heirloom`, `as-cast` · Blue `nezu-blue`,
 `blue-green-excavated`, `azurite-bloom`. A preset is applied over the PATINA_PARAMS defaults.
@@ -847,7 +868,11 @@ face-long, face-long-top-frieze, face-long-bottom-frieze, face-long-column, face
 (2 px/mm); `met-fangding` face-long, face-long-main, face-long-frieze (10 px/mm, 0.17 mm rms), face-short,
 face-short-main (6 px/mm); `met-gui` face-front, face-mask, face-neck, face-foot (8 px/mm; a ROUND vessel: the
 plane is taken down the photograph's own 4°-elevated line of sight, so photo and model foreshorten alike; 0.86 mm rms); `yachou-yue`
-face-front, face-mask (5 / 8 px/mm from a 3840 px CC0 photo of a flat plate; 1.7 mm rms: the axe is not symmetric — its slotted sides, mouth, ears and brow slits are traced per side off face-front).
+face-front, face-mask (5 / 8 px/mm from a 3840 px CC0 photo of a flat plate; 1.7 mm rms: the axe is not symmetric — its slotted sides, mouth, ears and brow slits are traced per side off face-front); `nezu-fanglei`
+face-shoulder, face-main, face-second, face-low, face-foot, face-collar, face-lid (6 px/mm from a ≈ 3.6 px/mm phone photo; one face PER REGISTER on its chord plane, points from a camera solved on photo-37); `nezu-fanghe`
+face-front, face-side (4 / 3 px/mm from phone photos 25 and 42 of vessel A; lobed faces flattened onto the CORNER plane, landmarks = corner-flange roots at the register borders); `nezu-jia`
+face-drum, face-upper (7 / 6 px/mm from ≈ 4.6 px/mm phone photo 21, a ROUND vessel shot from ≈ 0.4 m: chord planes down the photo's line of sight, 2.3 / 0.9 mm rms); `nezu-you`
+face-belly, face-neck, face-skirt, face-foot, face-lid, face-strap (6 / 8 px/mm from ≈ 4.8 px/mm phone photo 31, round plan, chord planes down its line of sight; points are model surface points through the camera fitted to the outline, 0.2–1.8 mm rms).
 Each face's `trust` and `fit` in faces.json say how far to believe it.
 
 ### reference/<id>/faces.json

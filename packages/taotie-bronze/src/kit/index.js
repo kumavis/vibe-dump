@@ -33,6 +33,7 @@ export { columnLeg, bladeLeg, legRadius, legPanelSize } from './geometry/legs.js
 export { uprightHandle, handleLayout } from './geometry/handles.js'
 export { hippedLid, hippedLidLayout, roofKnob } from './geometry/lid.js'
 export { plate } from './geometry/plate.js'
+export { lobe, lobedBody, lobeSection, lobePanelSize } from './geometry/lobes.js'
 
 export {
   PatinaMaterial,

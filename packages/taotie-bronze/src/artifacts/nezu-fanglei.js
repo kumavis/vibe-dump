@@ -1,0 +1,261 @@
+// Nezu Museum square lei 饕餮文方罍 (90081) — Shang dynasty, 12th–11th c. BC. Reconstructed from the project
+// owner's two photographs (reference/nezu-fanglei/photo-37.jpg front, photo-36.jpg three-quarter from the right)
+// via reference/nezu-fanglei/dossier.md. H = 503 mm is INFERRED (no dimension on the label). Units mm, Y up,
+// front (+Z) = the face with the low lug; the loop handles are on ±X.
+//
+// Form (nezu-fanglei/form.js): a short square foot, a belly swelling up to broad shoulders (widest just under
+// the shoulder crease), a shoulder rounding in to a flat ledge, a square collar, a hipped-roof lid with a skirt
+// and a roof-shaped knob on a post. Thick slotted flanges on every corner of foot, belly, shoulder, collar and lid
+// hips; slender centre flanges. Sculpture (nezu-fanglei/sculpture.js): two shoulder loop handles with heads,
+// frontal heads on the front/back shoulder, the low lug. Décor (nezu-fanglei/relief.js) is TRACED from the
+// flattened faces of photo-37 (reference/nezu-fanglei/faces/, trace.py → nezu-fanglei/trace-data.js).
+
+import * as THREE from 'three'
+import { H, LV, PLAN, RHO, bellyHalf, shoulderHalf, polyPath, toothed, slotRow, flankMarks } from './nezu-fanglei/form.js'
+import { handleSDF, shoulderHeadSDF, lugSDF } from './nezu-fanglei/sculpture.js'
+import { bellyPanel, shoulderPanel, collarPanel, footPanel, lidPanel, knobPanel } from './nezu-fanglei/relief.js'
+
+const SIDES = ['front', 'right', 'back', 'left']
+const SN = [[0, 0, 1], [1, 0, 0], [0, 0, -1], [-1, 0, 0]]
+
+export default {
+  id: 'nezu-fanglei',
+  order: 8,
+  title: 'Square Lei with Taotie Design',
+  titleZh: '饕餮文方罍',
+  type: 'fanglei',
+  date: '12th–11th century BC',
+  period: 'Shang dynasty (Anyang period, by style)',
+  findspot: 'Not stated on the label',
+  collection: 'Nezu Museum, Tokyo',
+  accession: '90081 (number on the gallery label; exhibit 13)',
+  designation: 'none stated on the label',
+  dimensions: { h: 503, w: 261, d: 196, inferred: true, note: 'INFERRED: H assumed 503 mm (typical square lei 45–60 cm); proportions solved from the two photographs; w, d = body without flanges and handles' },
+  blurb:
+    'A tall square wine jar whose walls swell from a narrow foot to broad shoulders, closed by a hipped-roof lid with a little roof on a post for its knob. ' +
+    'Slotted flanges run down every corner and face; masks with round boss eyes and fat hooked horns fill the belly in two registers over a fine thunder-pattern ground, ' +
+    'loop handles with animal heads ride the shoulders, a horned head juts from the front shoulder, and a lug low on the front would have let the jar be tipped to pour. ' +
+    'Reconstructed from two of the project owner’s photographs: the height is inferred, and the back and left faces repeat the visible ones.',
+  defaultPatina: 'nezu-fanglei',
+  views: {
+    // solved from the photographs (.work/r7-lei/solve): photo-37 az ≈ 3°, el ≈ 10°, ≈ 3.8 m (long lens: fov ≈ 9°);
+    // photo-36 az ≈ 69°, el ≈ 5–7°
+    front: { azimuth: 3, elevation: 10, fov: 10, fit: 0.98, target: [0, 252, 0], ref: 'front.jpg' },
+    'three-quarter': { azimuth: 69, elevation: 6, fov: 10, fit: 0.98, target: [0, 252, 0], ref: 'three-quarter.jpg' },
+    side: { azimuth: 90, elevation: 6, fov: 26, fit: 1.08 },
+    back: { azimuth: 180, elevation: 8, fov: 26, fit: 1.08 },
+    top: { azimuth: 20, elevation: 70, fov: 28, fit: 1.05 },
+    'detail-shoulder-head': { azimuth: 0, elevation: 10, fov: 12, fit: 0.16, target: [0, 297, 100], ref: 'detail-shoulder-head.jpg' },
+    'detail-belly-mask': { azimuth: 0, elevation: 10, fov: 12, fit: 0.42, target: [0, 222, 97], ref: 'detail-belly-mask.jpg' },
+    'detail-eye': { azimuth: 0, elevation: 10, fov: 12, fit: 0.08, target: [-37, 205, 98], ref: 'detail-eye.jpg' },
+    'detail-handle': { azimuth: 0, elevation: 10, fov: 12, fit: 0.15, target: [138, 306, 0], ref: 'detail-handle.jpg' },
+    'detail-lug': { azimuth: 0, elevation: 10, fov: 12, fit: 0.16, target: [0, 66, 100], ref: 'detail-lug.jpg' },
+    'detail-lid-face': { azimuth: 0, elevation: 10, fov: 12, fit: 0.32, target: [0, 425, 40], ref: 'detail-lid-face.jpg' },
+    'detail-knob': { azimuth: 0, elevation: 10, fov: 12, fit: 0.1, target: [0, 488, 0], ref: 'detail-knob.jpg' },
+    'detail-flange': { azimuth: 0, elevation: 10, fov: 12, fit: 0.26, target: [-118, 165, 92], ref: 'detail-flange.jpg' },
+    'detail-foot': { azimuth: 0, elevation: 10, fov: 12, fit: 0.2, target: [0, 18, 50], ref: 'detail-foot.jpg' },
+    'detail-collar': { azimuth: 0, elevation: 10, fov: 12, fit: 0.24, target: [0, 352, 64], ref: 'detail-collar.jpg' },
+    // flat faces (KIT.md § Flat faces): head-on on a register's chord plane; ref = the flattened photo-37
+    // (reference/nezu-fanglei/faces.json → tools/faces.mjs --rectify). The tracing instrument for relief.js.
+    'face-shoulder': { face: { center: [0, 294, 89.55], normal: [0, 0.255, 0.9669], up: [0, 0.9669, -0.255], width: 265, height: 66.1 }, ref: 'faces/face-shoulder.jpg' },
+    'face-main': { face: { center: [0, 220.5, 96.56], normal: [0, -0.0273, 0.9996], up: [0, 0.9996, 0.0273], width: 265, height: 87 }, ref: 'faces/face-main.jpg' },
+    'face-second': { face: { center: [0, 139.5, 84.75], normal: [0, -0.2666, 0.9638], up: [0, 0.9638, 0.2666], width: 258, height: 81.9 }, ref: 'faces/face-second.jpg' },
+    'face-low': { face: { center: [0, 68, 63.11], normal: [0, -0.3159, 0.9488], up: [0, 0.9488, 0.3159], width: 202, height: 71.6 }, ref: 'faces/face-low.jpg' },
+    'face-foot': { face: { center: [0, 10.75, 46.88], normal: [0, 0, 1], up: [0, 1, 0], width: 129, height: 23.5 }, ref: 'faces/face-foot.jpg' },
+    'face-collar': { face: { center: [0, 350.5, 64.12], normal: [0, 0, 1], up: [0, 1, 0], width: 175, height: 53 }, ref: 'faces/face-collar.jpg' },
+    'face-lid': { face: { center: [0, 423, 33], normal: [0, 0.686, 0.7276], up: [0, 0.7276, -0.686], width: 180, height: 98.2 }, ref: 'faces/face-lid.jpg' },
+  },
+
+  async build(kit, { quality = 1, onProgress = async () => {} } = {}) {
+    const q = Math.max(0.25, quality)
+    const ppmm = 4.4 * Math.sqrt(q)
+    const dens = 0.75 * Math.sqrt(q)
+    const seed = 90081
+    const plain = new kit.PatinaMaterial()
+    const ledge = new kit.PatinaMaterial({ cavity: 0.5 })
+    const object = new THREE.Group()
+    object.name = 'nezu-fanglei'
+    const panels = {}
+    const V = (x, y, z) => new THREE.Vector3(x, y, z)
+
+    // ---------------------------------------------------------------- layouts
+    const b0 = bellyHalf(LV.foot)
+    const bellyOpts = {
+      width: 2 * b0, depth: 2 * RHO * b0, height: LV.main - LV.foot, wall: 7, floor: { thickness: 5 }, rim: false,
+      profile: (t) => { const h = bellyHalf(LV.foot + t * (LV.main - LV.foot)); return { dx: h - b0, dz: RHO * (h - b0) } }, material: plain, part: 'belly', cast: false, density: dens, plainDensity: 0.08,
+    }
+    const s0 = shoulderHalf(LV.main)
+    const shoulderOpts = {
+      width: 2 * s0, depth: 2 * RHO * s0, height: LV.shoulder - LV.main, wall: RHO * (s0 - PLAN.collar) - 4, floor: false, rim: { kind: 'plain', round: 1.2 },
+      profile: (t) => { const h = shoulderHalf(LV.main + t * (LV.shoulder - LV.main)); return { dx: h - s0, dz: RHO * (h - s0) } }, material: plain, part: 'shoulder', cast: false, density: dens, plainDensity: 0.08,
+    }
+    const collarOpts = { width: 2 * PLAN.collar, depth: 2 * RHO * PLAN.collar, height: LV.collar - LV.shoulder, wall: 6, floor: false, rim: { kind: 'plain' }, material: plain, part: 'collar', cast: false, density: dens }
+    const footOpts = { width: 2 * PLAN.foot, depth: 2 * RHO * PLAN.foot, height: LV.foot, wall: 6, floor: { thickness: 4 }, rim: false, material: plain, part: 'foot', cast: false, density: dens }
+    const lidOpts = {
+      width: 2 * PLAN.eave, depth: 2 * RHO * PLAN.eave, rise: LV.rise, ridge: 2 * PLAN.ridgeHalf, concave: 0,
+      skirt: { height: LV.skirt, overhang: PLAN.eave - PLAN.skirt, fascia: LV.fascia }, thickness: 4,
+    }
+    const bellyL = kit.fangLayout(bellyOpts), shoulderL = kit.fangLayout(shoulderOpts), collarL = kit.fangLayout(collarOpts), footL = kit.fangLayout(footOpts)
+    const lidL = kit.hippedLidLayout(lidOpts)
+
+    // ---------------------------------------------------------------- relief panels (traced, nezu-fanglei/relief.js)
+    const ctx = { ppmm, seed, q }
+    const side = { ...ctx, kx: RHO, ppmm: ppmm * 0.7 } // the narrow faces: seen less, a lighter panel
+    await onProgress(0.02, 'belly · broad face (traced)')
+    panels.bellyLong = await bellyPanel(kit, bellyL.sides.front.cells[0][0], ctx)
+    await onProgress(0.2, 'belly · narrow face')
+    panels.bellyShort = await bellyPanel(kit, bellyL.sides.right.cells[0][0], { ...side, seed: seed + 1 })
+    await onProgress(0.36, 'shoulder frieze')
+    panels.shoulderLong = shoulderPanel(kit, shoulderL.sides.front.cells[0][0], { ...ctx, seed: seed + 2 })
+    panels.shoulderShort = shoulderPanel(kit, shoulderL.sides.right.cells[0][0], { ...side, seed: seed + 3 })
+    await onProgress(0.44, 'collar frieze')
+    panels.collarLong = collarPanel(kit, collarL.sides.front.cells[0][0], { ...ctx, seed: seed + 4 })
+    panels.collarShort = collarPanel(kit, collarL.sides.right.cells[0][0], { ...side, seed: seed + 5 })
+    await onProgress(0.5, 'foot frieze')
+    panels.footLong = footPanel(kit, footL.sides.front.cells[0][0], { ...ctx, seed: seed + 6 })
+    panels.footShort = footPanel(kit, footL.sides.right.cells[0][0], { ...side, seed: seed + 7 })
+    await onProgress(0.55, 'lid slopes')
+    panels.lidLong = lidPanel(kit, lidL.faces.front, { ...ctx, seed: seed + 8, kind: 'long' })
+    panels.lidShort = lidPanel(kit, lidL.faces.right, { ...ctx, seed: seed + 9, kind: 'short' })
+    await onProgress(0.62, 'knob')
+    const knobOpts = {
+      width: 2 * PLAN.knob.eave, depth: 2 * PLAN.knob.depth, rise: LV.top - LV.knobEave - 6.5, ridge: PLAN.knob.ridge,
+      skirt: { height: 0.5, fascia: 6 }, // (kit.roofKnob lofts the fascia only when skirt.height > 0)
+      post: { height: LV.knobEave - LV.ridge, width: 2 * PLAN.knob.post[0], depth: 2 * PLAN.knob.post[1], waist: 0 }, // photo-37: a thick vertical-sided cap (≈ 1/3 of its height) with a low hipped top, on a straight square post
+    }
+    const knobL = kit.hippedLidLayout(knobOpts)
+    panels.knobLong = knobPanel(kit, knobL.faces.front, { ...ctx, seed: seed + 10, kind: 'long' })
+    panels.knobShort = knobPanel(kit, knobL.faces.right, { ...ctx, seed: seed + 11, kind: 'short' })
+
+    // ---------------------------------------------------------------- casting the stack
+    await onProgress(0.68, 'casting')
+    const cell = (relief) => (relief ? [[{ relief, map: 'true', fade: 1.0, density: dens }]] : null)
+    const cells = (name) => ({ long: cell(panels[name + 'Long']), short: cell(panels[name + 'Short']) })
+    const foot = kit.fangBody({ ...footOpts, cells: cells('foot') })
+    const belly = kit.fangBody({ ...bellyOpts, cells: cells('belly') })
+    belly.position.y = LV.foot
+    const shoulder = kit.fangBody({ ...shoulderOpts, cells: cells('shoulder') })
+    shoulder.position.y = LV.main
+    shoulder.traverse((m) => { if (m.isMesh && /^rim/.test(m.name)) m.material = ledge })
+    const collar = kit.fangBody({ ...collarOpts, cells: cells('collar') })
+    collar.position.y = LV.shoulder
+    object.add(foot, belly, shoulder, collar)
+
+    const lid = kit.hippedLid({
+      ...lidOpts, material: plain, density: dens,
+      faces: { long: panels.lidLong && { relief: panels.lidLong, density: dens, fade: 0.8 }, short: panels.lidShort && { relief: panels.lidShort, density: dens, fade: 0.8 } },
+    })
+    lid.position.y = LV.collar
+    object.add(lid)
+    const knob = kit.roofKnob({
+      ...knobOpts, material: plain, part: 'knob', embed: 10,
+      faces: { long: panels.knobLong && { relief: panels.knobLong, density: 2 * dens }, short: panels.knobShort && { relief: panels.knobShort, density: 2 * dens } },
+    })
+    knob.position.y = LV.ridge
+    object.add(knob)
+
+    // ---------------------------------------------------------------- flanges
+    await onProgress(0.76, 'flanges')
+    const flanges = []
+    const F = (o) => {
+      const m = kit.flange({ material: plain, waver: 0.25, taper: 2, bevel: 1.0, grooveStyle: { width: 0.8, depth: 0.4 }, seed: seed + flanges.length * 13, ...o })
+      flanges.push(m)
+      object.add(m)
+      return m
+    }
+    // a path up a body wall: corner of side k (s = 1) or face centre (s = 0.5), world y0 → y1
+    const wallPath = (body, k, s, y0, y1, out, n = 24) => {
+      const pts = [], outs = []
+      for (let i = 0; i <= n; i++) {
+        const y = y0 + ((y1 - y0) * i) / n
+        const p = body.userData.at(SIDES[k], s, y - body.position.y)
+        p.y += body.position.y
+        pts.push(p)
+        outs.push(out.clone())
+      }
+      return polyPath(pts, outs)
+    }
+    const diag = (k) => V(SN[k][0] + SN[(k + 1) % 4][0], 0, SN[k][2] + SN[(k + 1) % 4][2]).normalize()
+    const face = (k) => V(...SN[k])
+    const slotted = (L, p, n, opts = {}) => {
+      const slots = slotRow(opts.a ?? 0, opts.b ?? L, n)
+      const outline = toothed(L, p, { slots, ...opts })
+      const sB = opts.bottom ? -(opts.bottom.over ?? 0) : 0, sT = opts.top ? L + (opts.top.over ?? 0) : L
+      return { outline, grooves: opts.marks === false ? [] : flankMarks(L, p, slots, { sB, sT }) }
+    }
+    for (let k = 0; k < 4; k++) {
+      // belly corners: 23 mm slabs, 17 slots, a squared cap standing above the belly top (photo-37)
+      {
+        const path = wallPath(belly, k, 1, 40, LV.main, diag(k))
+        F({ path, ...slotted(path.length, 23, 17, { w: 2.6, dep: 9, top: { over: 0, up: 1.5, len: 10 } }), thickness: 8, embed: 2.5 }) // 23 mm: photo-37 shows ≈ 20 mm of it in x at 45°
+      }
+      // shoulder corners: slotted, the top end hooking up past the ledge
+      {
+        // photo-37: a separate slab with a clear gap above the belly flange's squared cap, standing further out, 3 slots, its top hooking up past the ledge
+        const path = wallPath(shoulder, k, 1, LV.main + 7, LV.shoulder, diag(k), 12)
+        F({ path, ...slotted(path.length, 22, 3, { w: 2.6, dep: 9, bottom: { over: 0, up: 0, len: 5 }, top: { over: 16, up: 4, len: 12 } }), thickness: 8, embed: 2.5 })
+      }
+      // collar corners and centres
+      {
+        const from = collar.userData.at(SIDES[k], 1, 0).add(V(0, LV.shoulder, 0)), to = collar.userData.at(SIDES[k], 1, LV.collar - LV.shoulder).add(V(0, LV.shoulder, 0))
+        const L = from.distanceTo(to)
+        F({ from, to, out: diag(k), ...slotted(L, 8.5, 2, { w: 2.2, dep: 4.5 }), thickness: 6.5, embed: 2 })
+        const fc = collar.userData.at(SIDES[k], 0.5, 0).add(V(0, LV.shoulder, 0)), tc = collar.userData.at(SIDES[k], 0.5, LV.collar - LV.shoulder).add(V(0, LV.shoulder, 0))
+        F({ from: fc, to: tc, out: face(k), ...slotted(L, 6, 1, { w: 2, dep: 3, marks: false }), thickness: 5.5, embed: 2 })
+      }
+      // foot corners and centres (short tabs)
+      {
+        const from = foot.userData.at(SIDES[k], 1, LV.base), to = foot.userData.at(SIDES[k], 1, LV.foot - 0.5)
+        F({ from, to, out: diag(k), ...slotted(from.distanceTo(to), 7, 1, { w: 2, dep: 3.5, marks: false }), thickness: 6, embed: 2 })
+        const fc = foot.userData.at(SIDES[k], 0.5, LV.base), tc = foot.userData.at(SIDES[k], 0.5, LV.foot - 0.5)
+        if (k !== 0) F({ from: fc, to: tc, out: face(k), ...slotted(fc.distanceTo(tc), 5, 1, { w: 2, dep: 2.5, marks: false }), thickness: 5, embed: 2 })
+      }
+      // belly centre flanges: slender ribs with small slots; the front one stops above the lug (photo-37),
+      // the others run on through the low register (inferred)
+      {
+        const y0 = k === 0 ? LV.low - 2 : LV.narrow
+        const path = wallPath(belly, k, 0.5, y0, LV.main + 1, face(k))
+        F({ path, ...slotted(path.length, 7, Math.round(path.length / 13), { w: 1.8, dep: 2.4, marks: false }), thickness: 6.5, embed: 2 })
+      }
+    }
+    // lid: hip flanges (slotted, rising past the ridge as ears, a point past the eave corner) and slope centre bars
+    const rise = LV.rise, A = PLAN.eave, rh = PLAN.ridgeHalf
+    const nFront = V(0, RHO * A, rise).normalize(), nSide = V(rise, A - rh, 0).normalize()
+    const slopeN = (k) => (k === 0 ? nFront.clone() : k === 2 ? V(0, nFront.y, -nFront.z) : k === 1 ? nSide.clone() : V(-nSide.x, nSide.y, 0))
+    for (let k = 0; k < 4; k++) {
+      const hip = lid.userData.hips[k].map((p) => p.clone().add(V(0, LV.collar, 0)))
+      const from = hip[0], to = hip[hip.length - 1]
+      const out = slopeN(k).add(slopeN((k + 1) % 4)).normalize()
+      const L = from.distanceTo(to)
+      F({ from, to, out, ...slotted(L, 13, 7, { w: 2.6, dep: 6, top: { over: 2, up: 6, len: 9 }, bottom: { over: 7, up: 0, len: 6 } }), thickness: 9.5, bevel: 0.5, embed: 3 })
+      const mid = lid.userData.midlines[SIDES[k]].map((p) => p.clone().add(V(0, LV.collar, 0)))
+      const mf = mid[0], mt = mid[mid.length - 1]
+      const Lm = mf.distanceTo(mt)
+      F({ from: mf, to: mt, out: slopeN(k), outline: toothed(Lm, 3.6, { slots: slotRow(8, Lm - 6, 5), w: 1.6, dep: 1.4, bottom: { over: 3, up: 0, len: 4 } }), thickness: 8.5, bevel: 0.5, embed: 2.5, grooves: [] }) // a flat slotted bar (photo-37)
+    }
+
+    // ---------------------------------------------------------------- sculpture
+    await onProgress(0.84, 'handles and heads')
+    const voxel = Math.max(0.6, 0.78 / Math.sqrt(q))
+    const sMat = new kit.PatinaMaterial()
+    const mesh = (geo, part) => {
+      const m = new THREE.Mesh(geo, sMat)
+      m.userData.part = part
+      m.castShadow = m.receiveShadow = true
+      object.add(m)
+      return m
+    }
+    const hGeo = kit.meshSDF(handleSDF(), { voxel })
+    const handles = [mesh(hGeo, 'handles')]
+    const hGeo2 = hGeo.clone().applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI))
+    handles.push(mesh(hGeo2, 'handles'))
+    const headGeo = kit.meshSDF(shoulderHeadSDF(), { voxel })
+    const heads = [mesh(headGeo, 'heads')]
+    heads.push(mesh(headGeo.clone().applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI)), 'heads')) // back: inferred
+    const lug = mesh(kit.meshSDF(lugSDF(), { voxel: voxel * 0.85 }), 'lug')
+
+    await onProgress(1, 'done')
+    void H; void face
+    return { object, parts: { foot, belly, shoulder, collar, lid, knob, flanges, handles, heads, lug }, panels }
+  },
+}
