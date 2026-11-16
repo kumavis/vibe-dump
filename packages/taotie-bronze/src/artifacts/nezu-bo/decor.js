@@ -135,56 +135,43 @@ export function renderEls(panel, els, o = {}) {
 // ------------------------------------------------------------------ the units (authored in a local cell frame)
 
 /**
- * A dragon head in its cell — authored for a 38 × 33 mm cell, frame on top, opening at the bottom, facing +s.
- * (photo-19 band 1, detail-band.jpg: the solid head with its ringed eye, a crest stalk to the frame with a knob
- * beside it, a snout curling up and back, a neck stalk to the open side ending in a hook, a C-curl on the cheek)
+ * A dragon head, authored in a 26 × 22 mm inner box (origin bottom-left), facing +x, crest up
+ * (photo-19 band 1, detail-band.jpg: the solid head with its ringed eye, a crest stalk running up through the gap in
+ * its frame to the band's edge with a knob beside it, a snout curling up and back, a neck hook under it, a C-curl on
+ * the cheek, one sunk curl on the jowl)
  */
 function headUnit() {
   const E = emptyEls()
-  E.masses.push(chaikin([[11.5, 10.2], [17, 9.2], [23.5, 9.6], [27, 12.6], [27.2, 18.4], [22, 21.2], [15.5, 21.6], [11.4, 19.6], [9.8, 15]], 2))
-  E.solids.push({ pts: [[16.6, 19.5], [16.6, 27.5]], w: 3.6 }) // crest stalk up to the frame
-  E.knobs.push({ c: [13, 24.8], r: 1.9 }) // the knob beside it
-  E.solids.push({ pts: roundCorners([[25.5, 16.5], [30.4, 17.6], [31.6, 21.4], [29.4, 23.6], [26.8, 22.4]], 1.6), w: 3.2 }) // snout
-  E.solids.push({ pts: roundCorners([[18.4, 10.5], [18.4, 4.2], [24.6, 4.2], [24.6, 6.6]], 1.6), w: 3.2 }) // neck hook
-  E.solids.push({ pts: roundCorners([[11.6, 13.6], [7.8, 13.8], [7.6, 18], [10.2, 18.6]], 1.2), w: 2.6 }) // cheek C
-  E.eyes.push({ c: [16.2, 15.4], r: 2.5 })
-  E.lines.push({ pts: roundCorners([[21, 12.2], [24.2, 12.6], [24.2, 16.4], [21.6, 16.6]], 1.2), w: 0.6 })
-  E.lines.push({ pts: [[29.2, 20.2], [28, 20.6]], w: 0.55 })
+  E.masses.push(chaikin([[4, 5], [10, 4.2], [16.5, 4.6], [19.6, 7.6], [19.8, 13], [15, 16.2], [8.5, 16.6], [4.2, 14.6], [2.6, 10]], 2))
+  E.solids.push({ pts: [[9.6, 15], [9.6, 30]], w: 3.6, crest: true }) // crest stalk, run on past the box (clipped by the band)
+  E.knobs.push({ c: [6.1, 19.6], r: 1.95 })
+  E.solids.push({ pts: roundCorners([[18.6, 10.4], [23.2, 11.4], [24.6, 15.2], [22.4, 17.6], [19.8, 16.6]], 1.6), w: 3.3 }) // snout
+  E.solids.push({ pts: roundCorners([[11.6, 5], [11.6, 1.5], [17.4, 1.5], [17.4, 3.6]], 1.4), w: 3 }) // neck hook
+  E.solids.push({ pts: roundCorners([[4.4, 8.2], [1.4, 8.4], [1.2, 12.6], [3.6, 13.2]], 1.1), w: 2.6 }) // cheek C
+  E.eyes.push({ c: [9.4, 10.2], r: 2.5 })
+  E.lines.push({ pts: roundCorners([[14, 6.8], [17, 7.2], [17, 11], [14.6, 11.3]], 1.2), w: 0.6 })
   return E
 }
 const HEAD = headUnit()
 
 /**
- * A run of meander cells along s ∈ [0, n·L], across t ∈ [0, T]: the frame ribbon is ONE polyline turning at the
- * cell borders (∩ ∪ ∩ …), a head in every cell (∪ cells turned 180°).
- * @returns elements in the local (s, t) frame
+ * One unit: a three-ribbed G-frame (a rounded rectangle left open over the crest, its two free ends turning in) round
+ * a head — cell [0, L] × [0, T] (local mm). open: 'top' | 'bottom' (the gap, and the crest, on that side);
+ * face: +1 the snout toward +s, −1 toward −s. Neighbouring units keep their own frames: the bands show the ribbons
+ * running in pairs between heads.
  */
-function meanderRun(n, L, T, { w = 6.6, first = 'top', layer = 0, heads = true, r = 3.2, extend = [0, 0] } = {}) {
+function gUnit(L, T, { w = 6.4, open = 'top', face = 1 } = {}) {
   const E = emptyEls()
-  const lo = w / 2, hi = T - w / 2
-  const pts = []
-  let top = first === 'top'
-  for (let k = 0; k <= n; k++) {
-    const s = k * L
-    const a = top ? lo : hi, b = top ? hi : lo
-    if (k === 0 && extend[0] > 0) pts.push([s - extend[0], a]) // enter along the open side's level
-    pts.push([s, a], [s, b])
-    if (k === n && extend[1] > 0) pts.push([s + extend[1], b])
-    top = !top
-  }
-  // the horizontal between verticals k and k+1 runs at the level the vertical k ended on
-  E.ribbons.push({ pts: roundCorners(pts, r), w, layer })
-  if (heads) {
-    for (let k = 0; k < n; k++) {
-      const cellTop = (first === 'top') === (k % 2 === 0) // frame horizontal on top of this cell
-      const sx = L / 38, sy = T / 33
-      const f = cellTop
-        ? ([x, y]) => [k * L + x * sx, y * sy]
-        : ([x, y]) => [k * L + L - x * sx, T - y * sy] // turned 180°
-      merge(E, mapEls(HEAD, f))
-    }
-  }
-  return E
+  const h = w / 2, m = 0.7
+  const bx = w + m, by = w + m
+  const sx = (L - 2 * bx) / 26, sy = (T - 2 * by) / 22
+  const gx0 = bx + 5.2 * sx, gx1 = bx + 14 * sx
+  const ret = Math.min(3.6, T * 0.12)
+  E.ribbons.push({ pts: roundCorners([[gx1, T - h - ret], [gx1, T - h], [L - h, T - h], [L - h, h], [h, h], [h, T - h], [gx0, T - h], [gx0, T - h - ret]], [0, 1.6, 4.2, 4.2, 4.2, 4.2, 1.6, 0]), w })
+  merge(E, mapEls(HEAD, ([x, y]) => [bx + x * sx, by + y * sy]))
+  const fs = face > 0 ? (p) => p : ([x, y]) => [L - x, y]
+  const ft = open === 'top' ? (p) => p : ([x, y]) => [x, T - y]
+  return mapEls(E, (p) => ft(fs(p)))
 }
 
 // ------------------------------------------------------------------ panel drawing
@@ -239,28 +226,36 @@ export function upperPanel(kit, { ppmm, seed, y0 }) {
   // the broad border over the lower field: a heavier rounded band
   strips(panel, [[1.6, Y(LAYOUT.border[0]), xEnd1, Y(LAYOUT.border[1])]], 2.8, 2.4)
 
-  // --- the interlace bands (篆): per half, from the panel outward: cell, cell, the O ring, cell, cell
+  // --- the interlace bands (篆): per half, from the panel outward: unit, unit, the O ring, unit, unit
+  //     (photo-19 band 1: the unit by the panel and the third face the centre, the second faces out; gaps alternate)
   const els = emptyEls()
   for (const [b0, b1] of LAYOUT.bands) {
-    const yb = Y(b0) + 0.6, T = b1 - b0 - 1.2
-    const xa = P.half + 0.6 + 3.3, xb = xEnd0 - 0.6 - 3.3
-    const ring = 25
+    const yb = Y(b0) + 0.5, T = b1 - b0 - 1.0
+    const xa = P.half + 0.5, xb = xEnd0 - 0.5
+    const ring = 22
     const L = (xb - xa - ring) / 4
-    const run1 = meanderRun(2, L, T, { first: 'top', extend: [0, 0] })
-    const run2 = meanderRun(2, L, T, { first: 'bottom', extend: [0, 0] })
-    merge(els, mapEls(run1, ([s, t]) => [xa + s, yb + t]))
-    merge(els, mapEls(run2, ([s, t]) => [xa + 2 * L + ring + s, yb + t]))
-    // the O ring: two bodies looping through each other, over the meander ends
-    const cx = xa + 2 * L + ring / 2, cy = yb + T / 2
-    els.ribbons.push({ pts: ellipsePts([cx, cy], ring / 2 + 0.6, T / 2 - 3.3, 72), w: 6.6, layer: 1, closed: true })
+    const spec = [['top', -1], ['bottom', 1], null, ['top', -1], ['bottom', -1]]
+    let x = xa
+    for (const sp of spec) {
+      if (!sp) {
+        // the O ring: two bodies looping through each other, over the units' sides
+        els.ribbons.push({ pts: ellipsePts([x + ring / 2, yb + T / 2], ring / 2 + 2.4, T / 2 - 3.2, 72), w: 6.4, layer: 1, closed: true })
+        x += ring
+        continue
+      }
+      merge(els, mapEls(gUnit(L, T, { open: sp[0], face: sp[1] }), ([s, t]) => [x + s, yb + t]))
+      x += L
+    }
   }
-  // --- the central panel: one column of meander cells running DOWN (s along −y), the head turned with it
+  // --- the central panel: a column of upright units, gaps alternating, heads facing alternately
   {
-    const xa = 1.2, xb = P.half - F - 0.4
-    const ya = Y(LAYOUT.border[1]) + 0.8 + 3.1, yb = Y(LAYOUT.ledges[4][0]) - 0.4 - 3.1
-    const n = 7, L = (yb - ya) / n, T = xb - xa
-    const run = meanderRun(n, L, T, { first: 'top', w: 6.2 })
-    merge(els, mapEls(run, ([s, t]) => [xa + t, yb - s]))
+    const xa = 1.4, xb = P.half - F - 0.3
+    const ya = Y(LAYOUT.border[1]) + 0.6, yb = Y(LAYOUT.ledges[4][0]) - 0.4
+    const n = 7, Lc = (yb - ya) / n
+    for (let k = 0; k < n; k++) {
+      const u = gUnit(xb - xa, Lc, { w: 6.0, open: k % 2 ? 'bottom' : 'top', face: k % 2 ? 1 : -1 })
+      merge(els, mapEls(u, ([s, t]) => [xa + s, yb - (k + 1) * Lc + t]))
+    }
   }
   // --- the edge strip and the top band: twisted pairs
   const xs0 = xEnd0 + F + 0.4, xs1 = xEnd1 - 0.4

@@ -32,23 +32,22 @@ const seg = (...pts) => pts
 export const CROWN = {
   loop: { outer: [52, 117], inner: [31.5, 89], r: [13, 5] }, // outer half-width / top, inner half-width / top, corner radii
   straps: [
-    // the arched dragon: from its foot beside the loop leg, up, over, and down to the axis side
-    { pts: seg([-66, -3], [-66, 34], [-62, 45], [-50, 49.5], [-24, 49.5], [-13, 44], [-10.5, 33], [-10.5, -3]), w: 10.5 },
-    // its head rolled into a curl at the outer shoulder
-    { pts: curl([-56, 47], 7.2, 1.6, 200, -0.95), w: 6.2 },
-    // and a curl on its crown
-    { pts: curl([-31, 50], 7, 1.6, 180, -0.95), w: 6.2 },
+    // the arched dragon: from its foot beside the loop leg, up, over, and down beside the axis (≈ 11.5 mm strap)
+    { pts: seg([-67, -3], [-67, 30], [-63, 42], [-52, 47.5], [-24, 47.5], [-13, 42], [-10, 32], [-10, -3]), w: 11.6 },
+    // its head rolled into a curl at the outer shoulder, and a second curl on its crown (outer Ø ≈ 14 mm)
+    { pts: curl([-55, 50], 4.4, 1.2, 200, -0.9), w: [7.4, 4.6] },
+    { pts: curl([-31.5, 52], 4.4, 1.2, 190, -0.9), w: [7.4, 4.6] },
     // the small curl at its foot inside the arch
-    { pts: curl([-39, 4.5], 9, 2.6, 0, 0.7), w: 7.4 },
+    { pts: curl([-38.5, 3.5], 6.5, 2.2, 10, 0.62), w: [8.6, 5] },
     // the outer body: up beside the arch to the shoulder curl under the loop's corner
-    { pts: seg([-74, -3], [-74, 16], [-62, 28], [-58, 40], [-58, 70]), w: 9.6 },
-    { pts: curl([-64.5, 79], 9, 2, 0, 0.92), w: 8 },
-    // the big middle spiral, hung off the body at its waist
-    { pts: seg([-60, 34], [-72, 30]), w: 9 },
-    { pts: curl([-86, 45], 15.5, 3.4, -60, 0.95), w: 9.8 },
-    // the big spiral at the foot
-    { pts: seg([-74, 6], [-86, 4]), w: 9.4 },
-    { pts: curl([-96, 22], 17, 3.8, -90, -0.95), w: 10 },
+    { pts: seg([-77, -3], [-77, 12], [-66, 24], [-60, 38], [-60, 70]), w: 11 },
+    { pts: curl([-64.5, 79], 5.4, 1.4, 0, 0.9), w: [9.6, 5.4] },
+    // the big middle spiral (outer Ø ≈ 34 mm), hung off the body at its waist
+    { pts: seg([-60, 33], [-74, 30]), w: 11 },
+    { pts: curl([-86, 45], 11.6, 6.6, -40, 0.8), w: [11.4, 6.4] },
+    // the big spiral at the foot (outer Ø ≈ 33 mm)
+    { pts: seg([-72, 4], [-88, 3]), w: 11 },
+    { pts: curl([-96, 21], 11, 6.4, -90, -0.8), w: [11.4, 6.4] },
   ],
 }
 
@@ -66,6 +65,16 @@ export function buildCrown(kit, { quality = 1, material, thickness = 13, loopThi
     ctx.lineCap = 'round'; ctx.lineJoin = 'round'
     if (which !== 'loop') {
       for (const s of C.straps) {
+        if (Array.isArray(s.w)) {
+          // a tapering strap: short round-capped pieces, the width interpolated along the line
+          const n = s.pts.length - 1
+          for (let i = 0; i < n; i++) {
+            ctx.lineWidth = s.w[0] + ((s.w[1] - s.w[0]) * (i + 0.5)) / n
+            const [ax, ay] = P(sx * s.pts[i][0], s.pts[i][1]), [bx, by] = P(sx * s.pts[i + 1][0], s.pts[i + 1][1])
+            ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke()
+          }
+          continue
+        }
         ctx.lineWidth = s.w
         ctx.beginPath()
         s.pts.forEach(([x, y], i) => { const [px, py] = P(sx * x, y); if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py) })
